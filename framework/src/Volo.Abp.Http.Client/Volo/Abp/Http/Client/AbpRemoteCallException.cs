@@ -28,6 +28,14 @@ namespace Volo.Abp.Http.Client
             : base(error.Message)
         {
             Error = error;
+
+            if (error.Data != null)
+            {
+                foreach (var dataKey in error.Data.Keys)
+                {
+                    Data[dataKey] = error.Data[dataKey];
+                }
+            }
         }
     }
 }

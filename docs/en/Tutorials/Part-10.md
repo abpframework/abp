@@ -376,6 +376,8 @@ namespace Acme.BookStore.Books
 
         public override async Task<BookDto> GetAsync(Guid id)
         {
+            await CheckGetPolicyAsync();
+
             //Prepare a query to join books and authors
             var query = from book in Repository
                 join author in _authorRepository on book.AuthorId equals author.Id
@@ -397,6 +399,8 @@ namespace Acme.BookStore.Books
         public override async Task<PagedResultDto<BookDto>>
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
+            await CheckGetListPolicyAsync();
+
             //Prepare a query to join books and authors
             var query = from book in Repository
                 join author in _authorRepository on book.AuthorId equals author.Id
@@ -495,6 +499,8 @@ namespace Acme.BookStore.Books
 
         public override async Task<BookDto> GetAsync(Guid id)
         {
+            await CheckGetPolicyAsync();
+
             var book = await Repository.GetAsync(id);
             var bookDto = ObjectMapper.Map<Book, BookDto>(book);
 
@@ -507,6 +513,8 @@ namespace Acme.BookStore.Books
         public override async Task<PagedResultDto<BookDto>> 
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
+            await CheckGetListPolicyAsync();
+
             //Set a default sorting, if not provided
             if (input.Sorting.IsNullOrWhiteSpace())
             {
@@ -915,6 +923,149 @@ You can run the application and try to create a new book or update an existing b
 
 {{else if UI=="NG"}}
 
-***Angular UI is being prepared...***
+### The Book List
+
+Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:
+
+````js
+<ngx-datatable-column
+  [name]="'::Author' | abpLocalization"
+  prop="authorName"
+></ngx-datatable-column>
+````
+
+When you run the application, you can see the *Author* column on the table:
+
+![bookstore-books-with-authorname-angular](images/bookstore-books-with-authorname-angular.png)
+
+### Create/Edit Forms
+
+The next step is to add an Author selection (dropdown) to the create/edit forms. The final UI will look like the one shown below:
+
+![bookstore-angular-author-selection](images/bookstore-angular-author-selection.png)
+
+Added the Author dropdown as the first element in the form.
+
+Open the `/src/app/book/book.component.ts` and and change the content as shown below:
+
+````js
+import { ListService, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit } from '@angular/core';
+import { BookService, BookDto, bookTypeOptions, AuthorLookupDto } from '@proxy/books';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-book',
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.scss'],
+  providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
+})
+export class BookComponent implements OnInit {
+  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+
+  form: FormGroup;
+
+  selectedBook = {} as BookDto;
+
+  authors$: Observable<AuthorLookupDto[]>;
+
+  bookTypes = bookTypeOptions;
+
+  isModalOpen = false;
+
+  constructor(
+    public readonly list: ListService,
+    private bookService: BookService,
+    private fb: FormBuilder,
+    private confirmation: ConfirmationService
+  ) {
+    this.authors$ = bookService.getAuthorLookup().pipe(map((r) => r.items));
+  }
+
+  ngOnInit() {
+    const bookStreamCreator = (query) => this.bookService.getList(query);
+
+    this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
+      this.book = response;
+    });
+  }
+
+  createBook() {
+    this.selectedBook = {} as BookDto;
+    this.buildForm();
+    this.isModalOpen = true;
+  }
+
+  editBook(id: string) {
+    this.bookService.get(id).subscribe((book) => {
+      this.selectedBook = book;
+      this.buildForm();
+      this.isModalOpen = true;
+    });
+  }
+
+  buildForm() {
+    this.form = this.fb.group({
+      authorId: [this.selectedBook.authorId || null, Validators.required],
+      name: [this.selectedBook.name || null, Validators.required],
+      type: [this.selectedBook.type || null, Validators.required],
+      publishDate: [
+        this.selectedBook.publishDate ? new Date(this.selectedBook.publishDate) : null,
+        Validators.required,
+      ],
+      price: [this.selectedBook.price || null, Validators.required],
+    });
+  }
+
+  save() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    const request = this.selectedBook.id
+      ? this.bookService.update(this.selectedBook.id, this.form.value)
+      : this.bookService.create(this.form.value);
+
+    request.subscribe(() => {
+      this.isModalOpen = false;
+      this.form.reset();
+      this.list.get();
+    });
+  }
+
+  delete(id: string) {
+    this.confirmation.warn('::AreYouSureToDelete', 'AbpAccount::AreYouSure').subscribe((status) => {
+      if (status === Confirmation.Status.confirm) {
+        this.bookService.delete(id).subscribe(() => this.list.get());
+      }
+    });
+  }
+}
+````
+
+* Added imports for the `AuthorLookupDto`, `Observable` and `map`.
+* Added `authors$: Observable<AuthorLookupDto[]>;` field after the `selectedBook`.
+* Added `this.authors$ = bookService.getAuthorLookup().pipe(map((r) => r.items));` into the constructor.
+* Added ` authorId: [this.selectedBook.authorId || null, Validators.required],` into the `buildForm()` function.
+
+Open the `/src/app/book/book.component.html` and add the following form group just before the book name form group:
+
+````html
+<div class="form-group">
+  <label for="author-id">Author</label><span> * </span>
+  <select class="form-control" id="author-id" formControlName="authorId">
+    <option [ngValue]="null">Select author</option>
+    <option [ngValue]="author.id" *ngFor="let author of authors$ | async">
+      {%{{{ author.name }}}%}
+    </option>
+  </select>
+</div>
+````
+
+That's all. Just run the application and try to create or edit an author.
 
 {{end}}

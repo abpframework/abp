@@ -15,3 +15,9 @@ export function createTokenParser(format: string) {
     }, {} as Record<string, string[]>);
   };
 }
+
+export function interpolate(text: string, params: string[]) {
+  return text
+    .replace(/(['"]?\{\s*(\d+)\s*\}['"]?)/g, (_, match, digit) => params[digit] ?? match)
+    .replace(/\s+/g, ' ');
+}

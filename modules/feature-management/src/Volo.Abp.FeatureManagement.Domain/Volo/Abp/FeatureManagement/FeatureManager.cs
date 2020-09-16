@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
@@ -14,15 +15,18 @@ namespace Volo.Abp.FeatureManagement
         protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
         protected List<IFeatureManagementProvider> Providers => _lazyProviders.Value;
         protected FeatureManagementOptions Options { get; }
+        protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
         private readonly Lazy<List<IFeatureManagementProvider>> _lazyProviders;
 
         public FeatureManager(
             IOptions<FeatureManagementOptions> options,
             IServiceProvider serviceProvider,
-            IFeatureDefinitionManager featureDefinitionManager)
+            IFeatureDefinitionManager featureDefinitionManager,
+            IStringLocalizerFactory stringLocalizerFactory)
         {
             FeatureDefinitionManager = featureDefinitionManager;
+            StringLocalizerFactory = stringLocalizerFactory;
             Options = options.Value;
 
             //TODO: Instead, use IHybridServiceScopeFactory and create a scope..?
@@ -57,7 +61,8 @@ namespace Volo.Abp.FeatureManagement
                 .Select(x => new FeatureNameValue(x.Name, x.Value)).ToList();
         }
 
-        public async Task<FeatureNameValueWithGrantedProvider> GetOrNullWithProviderAsync(string name, string providerName, string providerKey, bool fallback = true)
+        public async Task<FeatureNameValueWithGrantedProvider> GetOrNullWithProviderAsync(string name,
+            string providerName, string providerKey, bool fallback = true)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(providerName, nameof(providerName));
@@ -65,7 +70,8 @@ namespace Volo.Abp.FeatureManagement
             return await GetOrNullInternalAsync(name, providerName, providerKey, fallback);
         }
 
-        public async Task<List<FeatureNameValueWithGrantedProvider>> GetAllWithProviderAsync(string providerName, string providerKey, bool fallback = true)
+        public async Task<List<FeatureNameValueWithGrantedProvider>> GetAllWithProviderAsync(string providerName,
+            string providerKey, bool fallback = true)
         {
             Check.NotNull(providerName, nameof(providerName));
 
@@ -127,6 +133,11 @@ namespace Volo.Abp.FeatureManagement
             Check.NotNull(providerName, nameof(providerName));
 
             var feature = FeatureDefinitionManager.Get(name);
+
+            if (!feature.ValueType.Validator.IsValid(value))
+            {
+                throw new FeatureValueInvalidException(feature.DisplayName.Localize(StringLocalizerFactory));
+            }
 
             var providers = Enumerable
                 .Reverse(Providers)

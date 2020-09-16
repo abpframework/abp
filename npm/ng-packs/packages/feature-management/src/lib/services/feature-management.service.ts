@@ -7,6 +7,9 @@ import { FeatureManagement } from '../models';
 @Injectable({
   providedIn: 'root',
 })
+/**
+ * @deprecated Use FeaturesService instead. To be deleted in v4.0.
+ */
 export class FeatureManagementService {
   apiName = 'FeatureManagement';
 

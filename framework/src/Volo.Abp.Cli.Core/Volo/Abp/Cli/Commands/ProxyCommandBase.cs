@@ -24,6 +24,7 @@ namespace Volo.Abp.Cli.Commands
             var defaultValue = prompt ? null : "__default";
 
             var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long) ?? defaultValue;
+            var apiName = commandLineArgs.Options.GetOrNull(Options.ApiName.Short, Options.ApiName.Long) ?? defaultValue;
             var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long) ?? defaultValue;
             var target = commandLineArgs.Options.GetOrNull(Options.Target.Short, Options.Target.Long) ?? defaultValue;
 
@@ -32,6 +33,11 @@ namespace Volo.Abp.Cli.Commands
             if (module != null)
             {
                 commandBuilder.Append($" --module {module}");
+            }
+
+            if (apiName != null)
+            {
+                commandBuilder.Append($" --api-name {apiName}");
             }
 
             if (source != null)
@@ -100,6 +106,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Options:");
             sb.AppendLine("");
             sb.AppendLine("-m|--module <module-name>          (default: 'app') The name of the backend module you wish to generate proxies for.");
+            sb.AppendLine("-a|--api-name <module-name>        (default: 'default') The name of the API endpoint defined in the /src/environments/environment.ts.");
             sb.AppendLine("-s|--source <source-name>          (default: 'defaultProject') Angular project name to resolve the root namespace & API definition URL from.");
             sb.AppendLine("-t|--target <target-name>          (default: 'defaultProject') Angular project name to place generated code in.");
             sb.AppendLine("-p|--prompt                        Asks the options from the command line prompt (for the missing options)");
@@ -120,6 +127,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "m";
                 public const string Long = "module";
+            }
+
+            public static class ApiName
+            {
+                public const string Short = "a";
+                public const string Long = "api-name";
             }
 
             public static class Source

@@ -1,13 +1,15 @@
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
 import { RestService } from '../services/rest.service';
 import { ConfigState } from '../states/config.state';
+
+export const oAuthStorage = localStorage;
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -25,10 +27,16 @@ export abstract class AuthFlowStrategy {
   constructor(protected injector: Injector) {
     this.store = injector.get(Store);
     this.oAuthService = injector.get(OAuthService);
-    this.oAuthConfig = injector.get(Store).selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
+    this.oAuthConfig = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
   }
 
   async init(): Promise<any> {
+    const shouldClear = shouldStorageClear(
+      this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.clientId')),
+      oAuthStorage,
+    );
+    if (shouldClear) clearOAuthStorage(oAuthStorage);
+
     this.oAuthService.configure(this.oAuthConfig);
     return this.oAuthService.loadDiscoveryDocument().catch(this.catchError);
   }
@@ -41,7 +49,14 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     return super
       .init()
       .then(() => this.oAuthService.tryLogin())
-      .then(() => this.oAuthService.setupAutomaticSilentRefresh());
+      .then(() => {
+        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
+          return Promise.resolve();
+        }
+
+        return this.oAuthService.refreshToken() as Promise<any>;
+      })
+      .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
 
   login() {
@@ -88,7 +103,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       )
       .pipe(
         tap(() => this.oAuthService.logOut()),
-        switchMap(() =>  this.store.dispatch(new GetAppConfiguration())),
+        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
       );
   }
 
@@ -103,3 +118,34 @@ export const AUTH_FLOW_STRATEGY = {
     return new AuthPasswordFlowStrategy(injector);
   },
 };
+
+function clearOAuthStorage(storage: OAuthStorage) {
+  const keys = [
+    'access_token',
+    'id_token',
+    'refresh_token',
+    'nonce',
+    'PKCE_verifier',
+    'expires_at',
+    'id_token_claims_obj',
+    'id_token_expires_at',
+    'id_token_stored_at',
+    'access_token_stored_at',
+    'granted_scopes',
+    'session_state',
+  ];
+
+  keys.forEach(key => storage.removeItem(key));
+}
+
+function shouldStorageClear(clientId: string, storage: OAuthStorage): boolean {
+  const key = 'abpOAuthClientId';
+  if (!storage.getItem(key)) {
+    storage.setItem(key, clientId);
+    return false;
+  }
+
+  const shouldClear = storage.getItem(key) !== clientId;
+  if (shouldClear) storage.setItem(key, clientId);
+  return shouldClear;
+}
