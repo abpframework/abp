@@ -1,8 +1,4 @@
-import {
-  GetTenantsInput,
-  TenantCreateDto,
-  TenantUpdateDto,
-} from '../proxy/tenant-management/models';
+import { GetTenantsInput, TenantCreateDto, TenantUpdateDto } from '../proxy/models';
 
 export class GetTenants {
   static readonly type = '[TenantManagement] Get Tenant';

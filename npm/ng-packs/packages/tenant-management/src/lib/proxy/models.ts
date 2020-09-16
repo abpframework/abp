@@ -17,6 +17,5 @@ export interface TenantDto extends ExtensibleEntityDto<string> {
   name: string;
 }
 
-// tslint:disable-next-line: no-empty-interface
 export interface TenantUpdateDto extends TenantCreateOrUpdateDtoBase {
 }

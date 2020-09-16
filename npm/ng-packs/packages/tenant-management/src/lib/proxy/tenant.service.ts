@@ -1,6 +1,6 @@
-import type { PagedResultDto } from '@abp/ng.core';
 import type { GetTenantsInput, TenantCreateDto, TenantDto, TenantUpdateDto } from './models';
 import { RestService } from '@abp/ng.core';
+import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class TenantService {
   create = (input: TenantCreateDto) =>
     this.restService.request<any, TenantDto>({
       method: 'POST',
-      url: '/api/multi-tenancy/tenants',
+      url: `/api/multi-tenancy/tenants`,
       body: input,
     },
     { apiName: this.apiName });
@@ -41,6 +41,7 @@ export class TenantService {
   getDefaultConnectionString = (id: string) =>
     this.restService.request<any, string>({
       method: 'GET',
+      responseType: 'text',
       url: `/api/multi-tenancy/tenants/${id}/default-connection-string`,
     },
     { apiName: this.apiName });
@@ -48,7 +49,7 @@ export class TenantService {
   getList = (input: GetTenantsInput) =>
     this.restService.request<any, PagedResultDto<TenantDto>>({
       method: 'GET',
-      url: '/api/multi-tenancy/tenants',
+      url: `/api/multi-tenancy/tenants`,
       params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
@@ -65,7 +66,7 @@ export class TenantService {
     this.restService.request<any, void>({
       method: 'PUT',
       url: `/api/multi-tenancy/tenants/${id}/default-connection-string`,
-      params: { defaultConnectionString },
+      params: { defaultConnectionString: defaultConnectionString },
     },
     { apiName: this.apiName });
 

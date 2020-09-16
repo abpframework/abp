@@ -13,7 +13,7 @@ import {
   GetTenants,
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
-import { GetTenantsInput, TenantDto } from '../../proxy/tenant-management/models';
+import { GetTenantsInput, TenantDto } from '../../proxy/models';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
 

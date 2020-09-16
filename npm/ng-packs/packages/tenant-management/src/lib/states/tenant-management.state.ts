@@ -10,8 +10,8 @@ import {
 } from '../actions/tenant-management.actions';
 import { TenantManagement } from '../models/tenant-management';
 import { Injectable } from '@angular/core';
-import { TenantService } from '../proxy/tenant-management/tenant.service';
-import { TenantDto } from '../proxy/tenant-management/models';
+import { TenantService } from '../proxy/tenant.service';
+import { TenantDto } from '../proxy/models';
 
 @State<TenantManagement.State>({
   name: 'TenantManagementState',
