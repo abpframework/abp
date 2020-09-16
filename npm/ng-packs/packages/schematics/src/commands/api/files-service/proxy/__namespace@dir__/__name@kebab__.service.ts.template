@@ -10,7 +10,9 @@ export class <%= name %>Service {
 
   <%= camel(signature.name) %> = (<%= serializeParameters(signature.parameters) %>) =>
     this.restService.request<<%= body.requestType %>, <%= body.responseType %>>({
-      method: '<%= body.method %>',
+      method: '<%= body.method %>',<% 
+      if (body.responseType === 'string') { %>
+      responseType: 'text',<% } %>
       url: `/<%= body.url %>`,<%
       if (body.params.length) { %>
       params: { <%= body.params.join(', ') %> },<% }

@@ -43,6 +43,8 @@ export function generateBarrelFromPath(tree: Tree, indexPath: string) {
     saveFile(
       indexPath + '/index.ts',
       _exports.join(`
-`),
+`) +
+        `
+`,
     );
 }

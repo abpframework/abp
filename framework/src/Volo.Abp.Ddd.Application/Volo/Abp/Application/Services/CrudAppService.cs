@@ -21,7 +21,7 @@ namespace Volo.Abp.Application.Services
     }
 
     public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput>
-        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto, TEntityDto>
+        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
