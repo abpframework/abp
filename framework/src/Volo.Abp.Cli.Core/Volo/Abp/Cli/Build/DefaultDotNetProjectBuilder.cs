@@ -9,7 +9,7 @@ namespace Volo.Abp.Cli.Build
 {
     public class DefaultDotNetProjectBuilder : IDotNetProjectBuilder, ITransientDependency
     {
-        public List<string> Build(List<DotNetProjectInfo> projects, int maxParallelBuildCount, string arguments)
+        public List<string> Build(List<DotNetProjectInfo> projects, string arguments)
         {
             var builtProjects = new ConcurrentBag<string>();
             var totalProjectCountToBuild = projects.Count;

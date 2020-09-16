@@ -35,11 +35,6 @@ namespace Volo.Abp.Cli.Commands
                 Options.WorkingDirectory.Long
             );
 
-            var maxParallelBuild = commandLineArgs.Options.GetOrNull(
-                Options.MaxParallelBuild.Short,
-                Options.MaxParallelBuild.Long
-            );
-
             var dotnetBuildArguments = commandLineArgs.Options.GetOrNull(
                 Options.DotnetBuildArguments.Short,
                 Options.DotnetBuildArguments.Long
@@ -59,13 +54,9 @@ namespace Volo.Abp.Cli.Commands
             Console.WriteLine("Finding changed projects...");
 
             var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
-            
-            Console.WriteLine(sw.ElapsedMilliseconds + " ms passed...");
-            sw.Restart();
 
             var buildSucceededProjects = DotNetProjectBuilder.Build(
                 changedProjectFiles,
-                string.IsNullOrEmpty(maxParallelBuild) ? 1 : Convert.ToInt32(maxParallelBuild),
                 dotnetBuildArguments ?? ""
             );
 
@@ -116,12 +107,6 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "wd";
                 public const string Long = "working-directory";
-            }
-
-            public static class MaxParallelBuild
-            {
-                public const string Short = "m";
-                public const string Long = "max-parallel-builds";
             }
 
             public static class DotnetBuildArguments
