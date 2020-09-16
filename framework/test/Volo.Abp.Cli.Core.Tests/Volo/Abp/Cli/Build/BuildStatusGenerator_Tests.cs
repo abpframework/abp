@@ -38,9 +38,9 @@ namespace Volo.Abp.Cli.Build
 
             var changedProjects = new List<DotNetProjectInfo>()
             {
-                new DotNetProjectInfo("volo", "project1.csproj")
+                new DotNetProjectInfo("volo", "project1.csproj", true)
             };
-            
+
             var builtProjects = new List<string>()
             {
                 "project1.csproj"
@@ -53,8 +53,8 @@ namespace Volo.Abp.Cli.Build
             var status = _buildStatusGenerator.Generate(buildConfig, changedProjects, builtProjects);
             status.CommitId.ShouldBe(lastCommitId);
         }
-        
-        
+
+
         [Fact]
         public void Should_Set_Repository_CommitId_When_All_Projects_Built_For_Child_Repository()
         {
@@ -71,9 +71,9 @@ namespace Volo.Abp.Cli.Build
 
             var changedProjects = new List<DotNetProjectInfo>()
             {
-                new DotNetProjectInfo("abp", "project1.csproj")
+                new DotNetProjectInfo("abp", "project1.csproj", true)
             };
-            
+
             var builtProjects = new List<string>()
             {
                 "project1.csproj"
@@ -86,7 +86,7 @@ namespace Volo.Abp.Cli.Build
             var status = _buildStatusGenerator.Generate(buildConfig, changedProjects, builtProjects);
             status.CommitId.ShouldBe(lastCommitId);
         }
-        
+
         [Fact]
         public void Should_Not_Set_Repository_CommitId_When_Building_Single_Solution()
         {
@@ -104,9 +104,9 @@ namespace Volo.Abp.Cli.Build
 
             var changedProjects = new List<DotNetProjectInfo>()
             {
-                new DotNetProjectInfo("volo", "project1.csproj")
+                new DotNetProjectInfo("volo", "project1.csproj", true)
             };
-            
+
             var builtProjects = new List<string>()
             {
                 "project1.csproj"

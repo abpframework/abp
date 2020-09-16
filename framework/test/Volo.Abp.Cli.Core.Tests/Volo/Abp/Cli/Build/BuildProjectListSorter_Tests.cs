@@ -22,50 +22,51 @@ namespace Volo.Abp.Cli.Build
             // F -> C
             // C -> G
             // Final build order must be: G, 
-            
+
             var repositoryName = "volo";
             var source = new List<DotNetProjectInfo>
             {
-                new DotNetProjectInfo(repositoryName, "A")
+                new DotNetProjectInfo(repositoryName, "A", true)
                 {
                     Dependencies = new List<DotNetProjectInfo>()
                     {
-                        new DotNetProjectInfo(repositoryName, "B"),
-                        new DotNetProjectInfo(repositoryName, "C")
+                        new DotNetProjectInfo(repositoryName, "B", true),
+                        new DotNetProjectInfo(repositoryName, "C", true)
                     }
                 },
-                new DotNetProjectInfo(repositoryName, "B")
+                new DotNetProjectInfo(repositoryName, "B", true)
                 {
                     Dependencies = new List<DotNetProjectInfo>()
                     {
-                        new DotNetProjectInfo(repositoryName, "D")
+                        new DotNetProjectInfo(repositoryName, "D", true)
                     }
                 },
-                new DotNetProjectInfo(repositoryName, "D")
+                new DotNetProjectInfo(repositoryName, "D", true)
                 {
                     Dependencies = new List<DotNetProjectInfo>()
                     {
-                        new DotNetProjectInfo(repositoryName, "F")
+                        new DotNetProjectInfo(repositoryName, "F", true)
                     }
                 },
-                new DotNetProjectInfo(repositoryName, "F")
+                new DotNetProjectInfo(repositoryName, "F", true)
                 {
                     Dependencies = new List<DotNetProjectInfo>()
                     {
-                        new DotNetProjectInfo(repositoryName, "C")
+                        new DotNetProjectInfo(repositoryName, "C", true)
                     }
                 },
-                new DotNetProjectInfo(repositoryName, "C")
+                new DotNetProjectInfo(repositoryName, "C", true)
                 {
                     Dependencies = new List<DotNetProjectInfo>()
                     {
-                        new DotNetProjectInfo(repositoryName, "G")
+                        new DotNetProjectInfo(repositoryName, "G", true)
                     }
                 },
-                new DotNetProjectInfo(repositoryName, "G")
+                new DotNetProjectInfo(repositoryName, "G", true)
             };
 
-            var sortedDependencies = _buildProjectListSorter.SortByDependencies(source, new DotNetProjectInfoEqualityComparer());
+            var sortedDependencies =
+                _buildProjectListSorter.SortByDependencies(source, new DotNetProjectInfoEqualityComparer());
             sortedDependencies.Count.ShouldBe(6);
             sortedDependencies[0].CsProjPath.ShouldBe("G");
             sortedDependencies[1].CsProjPath.ShouldBe("C");

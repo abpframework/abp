@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -14,7 +12,7 @@ namespace Volo.Abp.Cli.Build
         public List<string> Build(List<DotNetProjectInfo> projects, int maxParallelBuildCount, string arguments)
         {
             var builtProjects = new ConcurrentBag<string>();
-            var totalProjectCountToBuild = GetTotalProjectCountToBuild(projects);
+            var totalProjectCountToBuild = projects.Count;
             var buildingProjectIndex = 0;
 
             try
@@ -34,29 +32,6 @@ namespace Volo.Abp.Cli.Build
                     );
 
                     BuildInternal(project, arguments, builtProjects);
-
-                    if (!project.Dependencies.Any())
-                    {
-                        continue;
-                    }
-
-                    Parallel.ForEach(
-                        project.Dependencies,
-                        new ParallelOptions {MaxDegreeOfParallelism = maxParallelBuildCount},
-                        (projectDependency) =>
-                        {
-                            if (!builtProjects.Contains(project.CsProjPath))
-                            {
-                                buildingProjectIndex++;
-
-                                Console.WriteLine(
-                                    "Building....: " + " (" + buildingProjectIndex + "/" +
-                                    totalProjectCountToBuild + ")" + project.CsProjPath
-                                );
-
-                                BuildInternal(projectDependency, arguments, builtProjects);
-                            }
-                        });
                 }
             }
             catch (Exception e)
@@ -65,13 +40,6 @@ namespace Volo.Abp.Cli.Build
             }
 
             return builtProjects.ToList();
-        }
-
-        private int GetTotalProjectCountToBuild(List<DotNetProjectInfo> projects)
-        {
-            var mainCsProjPaths = projects.Select(e => e.CsProjPath).ToList();
-            var dependingCsProjPaths = projects.SelectMany(e => e.Dependencies).Select(e => e.CsProjPath).ToList();
-            return mainCsProjPaths.Union(dependingCsProjPaths).Distinct().Count();
         }
 
         private void BuildInternal(DotNetProjectInfo project, string arguments, ConcurrentBag<string> builtProjects)

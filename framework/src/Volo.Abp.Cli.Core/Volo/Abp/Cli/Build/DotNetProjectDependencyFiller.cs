@@ -33,7 +33,7 @@ namespace Volo.Abp.Cli.Build
                 var file = new FileInfo(project.CsProjPath);
                 var referenceProjectInfo = new FileInfo(Path.Combine(file.Directory.FullName, relativePath));
 
-                var referenceProject = new DotNetProjectInfo(project.RepositoryName, referenceProjectInfo.FullName);
+                var referenceProject = new DotNetProjectInfo(project.RepositoryName, referenceProjectInfo.FullName, false);
                 project.Dependencies.Add(referenceProject);
             }
         }

@@ -56,15 +56,15 @@ namespace Volo.Abp.Cli.Commands
             buildConfig.BuildName = buildName;
             buildConfig.ForceBuild = forceBuild;
 
-            var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
+            Console.WriteLine("Finding changed projects...");
 
-            var sortedProjects = BuildProjectListSorter.SortByDependencies(
-                changedProjectFiles,
-                new DotNetProjectInfoEqualityComparer()
-            );
+            var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
+            
+            Console.WriteLine(sw.ElapsedMilliseconds + " ms passed...");
+            sw.Restart();
 
             var buildSucceededProjects = DotNetProjectBuilder.Build(
-                sortedProjects,
+                changedProjectFiles,
                 string.IsNullOrEmpty(maxParallelBuild) ? 1 : Convert.ToInt32(maxParallelBuild),
                 dotnetBuildArguments ?? ""
             );
