@@ -44,17 +44,40 @@ namespace Volo.Abp.Cli.Build
                 return FindByRepository(buildConfig);
             }
 
-            return FindBySlnFile(buildConfig.GitRepository, buildConfig.SlFilePath);
+            return FindBySlnFile(buildConfig);
         }
 
-        private List<DotNetProjectInfo> FindAllProjects(GitRepository gitRepository)
+        private List<DotNetProjectInfo> FindAllProjects(DotNetProjectBuildConfig buildConfig)
         {
             var projects = new List<DotNetProjectInfo>();
 
-            AddProjectsOfRepository(gitRepository, projects);
+            AddProjectsOfRepository(buildConfig.GitRepository, projects);
+            
             _dotNetProjectDependencyFiller.Fill(projects);
+            
+            var allSortedProjectList = _buildProjectListSorter.SortByDependencies(
+                projects,
+                new DotNetProjectInfoEqualityComparer()
+            );
+            
+            FilterIgnoredDirectories(allSortedProjectList, buildConfig.GitRepository);
 
-            return projects;
+            return allSortedProjectList;
+        }
+
+        private void FilterIgnoredDirectories(List<DotNetProjectInfo> projects, GitRepository gitRepository)
+        {
+            foreach (var ignoredDirectory in gitRepository.IgnoredDirectories)
+            {
+                projects = projects.Where(e =>
+                        !e.CsProjPath.StartsWith(Path.Combine(gitRepository.RootPath, ignoredDirectory)))
+                    .ToList();
+            }
+
+            foreach (var dependingRepository in gitRepository.DependingRepositories)
+            {
+                FilterIgnoredDirectories(projects, dependingRepository);
+            }
         }
 
         private void AddProjectsOfRepository(GitRepository gitRepository, List<DotNetProjectInfo> projects)
@@ -83,12 +106,8 @@ namespace Volo.Abp.Cli.Build
             );
 
             // Create a List which contains all csproj files and their 1-level dependencies
-            var allProjectList = FindAllProjects(buildConfig.GitRepository);
-            var allSortedProjectList = _buildProjectListSorter.SortByDependencies(
-                allProjectList,
-                new DotNetProjectInfoEqualityComparer()
-            );
-
+            var allSortedProjectList = FindAllProjects(buildConfig);
+            
             MarkProjectsForBuild(
                 buildConfig.GitRepository,
                 gitRepositoryBuildStatus,
@@ -119,18 +138,20 @@ namespace Volo.Abp.Cli.Build
                 );
             }
 
-            if (repository.DependingRepositories.Any())
+            if (!repository.DependingRepositories.Any())
             {
-                foreach (var dependingRepository in repository.DependingRepositories)
-                {
-                    var dependingRepositoryBuildStatus = repositoryBuildStatus?.GetChild(dependingRepository.Name);
-                    MarkProjectsForBuild(
-                        dependingRepository,
-                        dependingRepositoryBuildStatus,
-                        forceBuild,
-                        allProjectList
-                    );
-                }
+                return;
+            }
+
+            foreach (var dependingRepository in repository.DependingRepositories)
+            {
+                var dependingRepositoryBuildStatus = repositoryBuildStatus?.GetChild(dependingRepository.Name);
+                MarkProjectsForBuild(
+                    dependingRepository,
+                    dependingRepositoryBuildStatus,
+                    forceBuild,
+                    allProjectList
+                );
             }
         }
 
@@ -187,12 +208,12 @@ namespace Volo.Abp.Cli.Build
             }
         }
 
-        private List<DotNetProjectInfo> FindBySlnFile(GitRepository gitRepository, string slnFilePath)
+        private List<DotNetProjectInfo> FindBySlnFile(DotNetProjectBuildConfig buildConfig)
         {
             // Create a List which contains all csproj files and their 1-level dependencies
-            var allProjectList = FindAllProjects(gitRepository);
+            var allProjectList = FindAllProjects(buildConfig);
 
-            var slFine = new FileInfo(slnFilePath);
+            var slFine = new FileInfo(buildConfig.SlFilePath);
             var csProjFiles = slFine.Directory.GetFiles(
                     "*.csproj",
                     SearchOption.AllDirectories
@@ -201,7 +222,7 @@ namespace Volo.Abp.Cli.Build
 
             foreach (var csProjFile in csProjFiles)
             {
-                MarkDependantProjectsForBuild(gitRepository, csProjFile, allProjectList);
+                MarkDependantProjectsForBuild(buildConfig.GitRepository, csProjFile, allProjectList);
             }
 
             return _buildProjectListSorter.SortByDependencies(
@@ -246,57 +267,12 @@ namespace Volo.Abp.Cli.Build
                 {
                     continue;
                 }
-                
+
                 allProjectList.MarkForBuild(dependency.RepositoryName, dependency.CsProjPath);
 
                 AddProjectDependencies(gitRepository, dependency, allProjectList);
             }
         }
-
-        // private void AddAllCsProjFiles(
-        //     GitRepository repository,
-        //     List<DotNetProjectInfo> changedFiles,
-        //     GitRepositoryBuildStatus status)
-        // {
-        //     var allCsProjFiles = Directory.GetFiles(
-        //         repository.RootPath,
-        //         "*.csproj",
-        //         SearchOption.AllDirectories
-        //     ).ToList();
-        //
-        //     // Filter ignored directories
-        //     foreach (var ignoredDirectory in repository.IgnoredDirectories)
-        //     {
-        //         allCsProjFiles = allCsProjFiles.Where(e =>
-        //                 !e.StartsWith(Path.Combine(repository.RootPath, ignoredDirectory)))
-        //             .ToList();
-        //     }
-        //
-        //     // Filter already built files.
-        //     var lastCommitId = _gitRepositoryHelper.GetLastCommitId(repository);
-        //
-        //     foreach (var file in allCsProjFiles)
-        //     {
-        //         if (status == null)
-        //         {
-        //             changedFiles.Add(
-        //                 new DotNetProjectInfo(repository.Name, Path.Combine(repository.RootPath, file))
-        //             );
-        //
-        //             continue;
-        //         }
-        //
-        //         if (status.GetSelfOrChild(repository.Name).SucceedProjects
-        //             .Any(e => e.CsProjPath == file && e.CommitId == lastCommitId))
-        //         {
-        //             continue;
-        //         }
-        //
-        //         changedFiles.Add(
-        //             new DotNetProjectInfo(repository.Name, Path.Combine(repository.RootPath, file))
-        //         );
-        //     }
-        // }
 
         private void AddDependingProjectsToList(
             string repositoryName,
