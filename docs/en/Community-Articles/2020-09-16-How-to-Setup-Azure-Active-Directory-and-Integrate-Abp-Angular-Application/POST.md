@@ -86,11 +86,11 @@ Keep on mind that **App.SelfUrl** + **AzureAd.CallbackPath** will be used in Azu
 
 ## Setting up Azure Active Directory
 
-Navigate to Manage Azure Active Directory in [azure portal](https://portal.azure.com/). Go to App registrations on left side menu and hit New registration.
+Navigate to Manage Azure Active Directory in [azure portal](https://portal.azure.com/). Go to **App registrations** on left side menu and hit New registration.
 
 ![azure-app-registration](azure-app-registration.jpg)
 
-Enter a name for your application and register. **App.SelfUrl** + **AzureAd.CallbackPath** as redirect uri then register.
+Enter a name for your application and **App.SelfUrl** + **AzureAd.CallbackPath** as redirect uri then register.
 
 <img src="azure-app-register.JPG" alt="azure-app-register" style="zoom:75%;" />
 
