@@ -16,13 +16,13 @@ export class ApiInterceptor implements HttpInterceptor {
     return next
       .handle(
         request.clone({
-          setHeaders: this.getHeaders(request.headers),
+          setHeaders: this.getAdditionalHeaders(request.headers),
         }),
       )
       .pipe(finalize(() => this.store.dispatch(new StopLoader(request))));
   }
 
-  getHeaders(existingHeaders?: HttpHeaders) {
+  getAdditionalHeaders(existingHeaders?: HttpHeaders) {
     const headers = {} as any;
 
     const token = this.oAuthService.getAccessToken();
