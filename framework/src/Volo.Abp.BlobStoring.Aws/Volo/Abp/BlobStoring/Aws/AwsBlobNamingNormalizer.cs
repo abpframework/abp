@@ -11,7 +11,7 @@ namespace Volo.Abp.BlobStoring.Aws
         public virtual string NormalizeContainerName(string containerName)
         {
             // All letters in a container name must be lowercase.
-            containerName = containerName.ToLower();
+            containerName = containerName.ToLowerInvariant();
 
             // Container names can contain only letters, numbers, and the dash (-) character.
             containerName = Regex.Replace(containerName, "[^a-z0-9-]", string.Empty);

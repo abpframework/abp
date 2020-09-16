@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlobStoring.Aliyun
@@ -13,7 +14,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
         public virtual string NormalizeContainerName(string containerName)
         {
             // All letters in a container name must be lowercase.
-            containerName = containerName.ToLower();
+            containerName = containerName.ToLowerInvariant();
 
             // Container names can contain only letters, numbers, and the dash (-) character.
             containerName = Regex.Replace(containerName, "[^a-z0-9-]", string.Empty);
