@@ -4,7 +4,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Localization;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {
@@ -55,7 +54,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
         private Dictionary<string, string> GetResourceOrNull()
         {
-            var applicationConfigurationDto = AsyncHelper.RunSync(() => _applicationConfigurationClient.GetAsync());
+            var applicationConfigurationDto = _applicationConfigurationClient.Get();
 
             var resource = applicationConfigurationDto
                 .Localization.Values

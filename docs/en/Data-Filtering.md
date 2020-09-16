@@ -151,10 +151,20 @@ public class Book : AggregateRoot<Guid>, IIsActive
 
 ABP uses [EF Core's Global Query Filters](https://docs.microsoft.com/en-us/ef/core/querying/filters) system for the [EF Core Integration](Entity-Framework-Core.md). So, it is well integrated to EF Core and works as expected even if you directly work with `DbContext`.
 
-Best way to implement a custom filter is to override `CreateFilterExpression` method for your `DbContext`. Example:
+Best way to implement a custom filter is to override  `ShouldFilterEntity` and `CreateFilterExpression` method for your `DbContext`. Example:
 
 ````csharp
 protected bool IsActiveFilterEnabled => DataFilter?.IsEnabled<IIsActive>() ?? false;
+
+protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
+{
+    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
+    {
+        return true;
+    }
+
+    return base.ShouldFilterEntity<TEntity>(entityType);
+}
 
 protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
 {
@@ -174,7 +184,7 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 ````
 
 * Added a `IsActiveFilterEnabled` property to check if `IIsActive` is enabled or not. It internally uses the `IDataFilter` service introduced before.
-* Overrided the `CreateFilterExpression` method, checked if given entity implements the `IIsActive` interface and combines the expressions if necessary.
+* Overrided the `ShouldFilterEntity` and `CreateFilterExpression` methods, checked if given entity implements the `IIsActive` interface and combines the expressions if necessary.
 
 ### MongoDB
 

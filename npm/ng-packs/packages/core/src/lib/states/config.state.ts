@@ -128,6 +128,16 @@ export class ConfigState {
     return selector;
   }
 
+  static getLocalizationResource(resourceName: string) {
+    const selector = createSelector([ConfigState], (state: Config.State): {
+      [key: string]: string;
+    } => {
+      return state.localization.values[resourceName];
+    });
+
+    return selector;
+  }
+
   static getLocalization(
     key: string | Config.LocalizationWithDefault,
     ...interpolateParams: string[]

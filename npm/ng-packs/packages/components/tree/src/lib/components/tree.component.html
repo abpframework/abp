@@ -7,6 +7,7 @@
   [nzData]="nodes"
   [nzTreeTemplate]="treeTemplate"
   [nzExpandedKeys]="expandedKeys"
+  [nzExpandedIcon]="expandedIconTemplate?.template"
   (nzExpandChange)="onExpandedKeysChange($event)"
   (nzCheckBoxChange)="onCheckboxChange($event)"
   (nzOnDrop)="onDrop($event)"
@@ -18,7 +19,16 @@
     [title]="node.title"
     (click)="onSelectedNodeChange(node)"
   >
-    <span>{{ node.title }}</span>
+    <ng-container
+      *ngTemplateOutlet="
+        customNodeTemplate?.template || defaultNodeTemplate;
+        context: { $implicit: node }
+      "
+    ></ng-container>
+
+    <ng-template #defaultNodeTemplate>
+      <span>{{ node.title }}</span>
+    </ng-template>
 
     <div *ngIf="menu" class="ellipsis" ngbDropdown placement="bottom" container="body">
       <i class="fas fa-ellipsis-h" ngbDropdownToggle [class.dropdown-toggle]="false"></i>
