@@ -502,7 +502,7 @@ context.Services.AddAuthentication("Bearer")
 Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的配置如下所示:
 
 ````json
-"ReRoutes": [
+"Routes": [
   {
     "DownstreamPathTemplate": "/api/identity/{everything}",
     "DownstreamScheme": "http",
@@ -533,7 +533,7 @@ Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的�
 }
 ````
 
-`ReRoutes`是一个URL映射数组. `GlobalConfiguration`部分中的`BaseUrl`是该网关的URL(Ocelot需要知道自己的URL). 参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
+`Routes`是一个URL映射数组. `GlobalConfiguration`部分中的`BaseUrl`是该网关的URL(Ocelot需要知道自己的URL). 参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
 
 Ocelot是一个终结ASP.NET核心中间件,应该写成管道中的最后一项:
 
@@ -627,7 +627,7 @@ context.Services.AddAuthentication("Bearer")
 Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的配置如下所示:
 
 ```json
-"ReRoutes": [
+"Routes": [
   {
     "DownstreamPathTemplate": "/api/productManagement/{everything}",
     "DownstreamScheme": "http",
@@ -711,7 +711,7 @@ context.Services.AddAuthentication("Bearer")
 Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的配置如下所示:
 
 ```json
-"ReRoutes": [
+"Routes": [
   {
     "DownstreamPathTemplate": "/api/identity/{everything}",
     "DownstreamScheme": "http",
@@ -754,7 +754,7 @@ Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的�
 }
 ```
 
-`ReRoutes`配置涵盖了系统中的所有微服务. 参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
+`Routes`配置涵盖了系统中的所有微服务. 参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
 
 #### 其它
 
