@@ -115,9 +115,8 @@ Next time you hit login, you should be seeing login screen enabled Azure AD like
 # FAQ
 
 * I am getting errors when trying to login to AzureAD.
-* You can check [this article FAQ](../2020-04-27-Use-Azure-Active-Directory-Authentication-for-MVC-Razor-Page-Applications/POST.md) which covers many errors.
+  * You can check [this article FAQ](../2020-04-27-Use-Azure-Active-Directory-Authentication-for-MVC-Razor-Page-Applications/POST.md) which covers many errors.
 
 
 * But I don't want my users to see default login screen. I want my users to login **only** from AzureAD.
-
   * You can **mimic** this behaviour by customizing the login page and instantly trigger Azure AD provider click. For more info, you can check [this article](https://community.abp.io/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd).
