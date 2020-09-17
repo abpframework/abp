@@ -30,7 +30,9 @@ Some modules have been implemented;
 
 We've selected the [Blazorise](https://blazorise.com/) as a fundamental UI library for the Blazor UI. It already supports different HTML/CSS frameworks (like Bootstrap, Bulma, Ant Design...) and significantly increases the developer productivity.
 
-We also have a good news: **[Mladen Macanović](https://github.com/stsrki)**, the creator of the Blazorise, is **joining to the core ABP Framework team** in the next weeks. We are excited to work with him to bring the power of these two successfully projects together.
+![blazorise-github](blazorise-github.png)
+
+We also have a good news: **[Mladen Macanović](https://github.com/stsrki)**, the creator of the Blazorise, is **joining to the core ABP Framework team** in the next weeks. We are excited to work with him to bring the power of these two successful projects together.
 
 ### The Tutorial
 
@@ -209,9 +211,11 @@ abp suite update --preview
 
 ### The ABP Community
 
-**ABP Community** web site is constantly being improved. We will add "**commenting**" and "**rating**" features soon to increase the interactivity between the people.
+**ABP Community** web site is constantly being improved and new articles are added. We will add "**commenting**" and "**rating**" features to the articles soon to increase the interactivity between the people.
 
-If you have something to share with the ABP community or want to follow the project progress, please check the [community.abp.io](https://community.abp.io/)!
+![abp-community-20200917](abp-community-20200917.png)
+
+If you have something to share with the ABP community or want to follow the project progress, please check the **[community.abp.io](https://community.abp.io/)**!
 
 ### CMS Kit Project
 
