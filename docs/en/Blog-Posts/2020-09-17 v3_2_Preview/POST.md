@@ -197,11 +197,9 @@ We've added profile picture management for the account module, so a user can sel
 
 Created [features](https://docs.abp.io/en/abp/3.2/Features) and [settings](https://docs.abp.io/en/abp/3.2/Settings) to disable, enable or force to use 2FA on login for the tenants and users.
 
-TODO: Screenshot
-
 ### Upgrading the ABP Suite
 
-Use the following command to upgrade the ABP Suite to the latest preview version:
+You can use the following command to upgrade the ABP Suite to the latest preview version:
 
 ````
 abp suite update --preview
