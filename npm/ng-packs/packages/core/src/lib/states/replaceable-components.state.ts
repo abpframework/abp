@@ -1,11 +1,23 @@
-import { Injectable, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, isDevMode } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext } from '@ngxs/store';
 import snq from 'snq';
 import { AddReplaceableComponent } from '../actions/replaceable-components.actions';
 import { ReplaceableComponents } from '../models/replaceable-components';
-import { noop } from '../utils/common-utils';
+import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 
+function logDeprecationMsg() {
+  if (isDevMode()) {
+    console.warn(`
+     ReplacableComponentsState has been deprecated. Use ReplaceableComponentsService instead.
+     See the doc https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement
+     `);
+  }
+}
+
+// tslint:disable: max-line-length
+/**
+ * @deprecated To be deleted in v4.0. Use ReplaceableComponentsService instead. See the doc (https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement)
+ */
 @State<ReplaceableComponents.State>({
   name: 'ReplaceableComponentsState',
   defaults: { replaceableComponents: [] } as ReplaceableComponents.State,
@@ -16,6 +28,7 @@ export class ReplaceableComponentsState {
   static getAll({
     replaceableComponents,
   }: ReplaceableComponents.State): ReplaceableComponents.ReplaceableComponent[] {
+    logDeprecationMsg();
     return replaceableComponents || [];
   }
 
@@ -23,6 +36,7 @@ export class ReplaceableComponentsState {
     const selector = createSelector(
       [ReplaceableComponentsState],
       (state: ReplaceableComponents.State): ReplaceableComponents.ReplaceableComponent => {
+        logDeprecationMsg();
         return snq(() => state.replaceableComponents.find(component => component.key === key));
       },
     );
@@ -30,29 +44,15 @@ export class ReplaceableComponentsState {
     return selector;
   }
 
-  constructor(private ngZone: NgZone, private router: Router) {}
-
-  // TODO: Create a shared service for route reload and more
-  private reloadRoute() {
-    const { shouldReuseRoute } = this.router.routeReuseStrategy;
-    const setRouteReuse = (reuse: typeof shouldReuseRoute) => {
-      this.router.routeReuseStrategy.shouldReuseRoute = reuse;
-    };
-
-    setRouteReuse(() => false);
-    this.router.navigated = false;
-
-    this.ngZone.run(async () => {
-      await this.router.navigateByUrl(this.router.url).catch(noop);
-      setRouteReuse(shouldReuseRoute);
-    });
-  }
+  constructor(private service: ReplaceableComponentsService) {}
 
   @Action(AddReplaceableComponent)
   replaceableComponentsAction(
     { getState, patchState }: StateContext<ReplaceableComponents.State>,
     { payload, reload }: AddReplaceableComponent,
   ) {
+    logDeprecationMsg();
+
     let { replaceableComponents } = getState();
 
     const index = snq(
@@ -69,6 +69,6 @@ export class ReplaceableComponentsState {
       replaceableComponents,
     });
 
-    if (reload) this.reloadRoute();
+    this.service.add(payload, reload);
   }
 }

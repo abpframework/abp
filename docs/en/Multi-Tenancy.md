@@ -304,6 +304,7 @@ Volo.Abp.AspNetCore.MultiTenancy package adds following tenant resolvers to dete
 
 * **CurrentUserTenantResolveContributor**: Gets the tenant id from claims of the current user, if the current user has logged in. **This should always be the first contributor for security**.
 * **QueryStringTenantResolveContributor**: Tries to find current tenant id from query string parameter. Parameter name is "__tenant" by default.
+* **FormTenantResolveContributor**： Tries to find current tenant id from form parameter. Parameter name is "__tenant" by default.
 * **RouteTenantResolveContributor**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
 * **HeaderTenantResolveContributor**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
 * **CookieTenantResolveContributor**: Tries to find current tenant id from cookie values. Cookie name is "__tenant" by default.
@@ -369,3 +370,6 @@ options.AddDomainTenantResolver("{0}.mydomain.com");
 options.AddDomainTenantResolver("{0}.com");
 ````
 
+## See Also
+
+* [Features](Features.md)

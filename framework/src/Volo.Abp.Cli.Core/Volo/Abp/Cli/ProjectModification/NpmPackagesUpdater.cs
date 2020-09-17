@@ -236,7 +236,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
             }
 
-            if (version == currentVersion)
+            if (string.IsNullOrEmpty(version) || version == currentVersion)
             {
                 return false;
             }
@@ -274,6 +274,12 @@ namespace Volo.Abp.Cli.ProjectModification
             var newVersion = includeReleaseCandidates
                 ? versionList.First()
                 : versionList.FirstOrDefault(v => !SemanticVersion.Parse(v).IsPrerelease);
+
+            if (string.IsNullOrEmpty(newVersion))
+            {
+                _fileVersionStorage[package.Name] = newVersion;
+                return newVersion;
+            }
 
             var newVersionWithPrefix = $"~{newVersion}";
 

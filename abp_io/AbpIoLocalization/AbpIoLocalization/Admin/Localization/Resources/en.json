@@ -191,6 +191,9 @@
     "Enum:Status:2": "Approved",
     "Summary": "Summary",
     "AuthorName": "Author name",
-    "CoverImage": "Cover Image"
+    "CoverImage": "Cover Image",
+    "RemoveCacheConfirmationMessage": "Are you sure you remove the cache for \"{0}\" article?",
+    "SuccessfullyRemoved": "Successfully cleared",
+    "RemoveCache": "Remove Cache"
   }
 }

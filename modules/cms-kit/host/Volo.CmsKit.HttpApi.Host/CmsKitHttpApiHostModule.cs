@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using IdentityModel;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -108,12 +109,12 @@ namespace Volo.CmsKit
             AbpClaimTypes.Role = JwtClaimTypes.Role;
             AbpClaimTypes.Email = JwtClaimTypes.Email;
 
-            context.Services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
+            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "CmsKit";
+                    options.Audience = "CmsKit";
                 });
 
             Configure<AbpDistributedCacheOptions>(options =>

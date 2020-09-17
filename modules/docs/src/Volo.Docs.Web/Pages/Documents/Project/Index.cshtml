@@ -295,7 +295,7 @@
                             <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                                 <article class="docs-body">
 
-                                    @if (Model.DocumentLanguageIsDifferent)
+                                    @if (Model.DocumentLanguageCode != Model.LanguageCode)
                                     {
                                         <abp-alert alert-type="Warning" dismissible="true" class="mb-0">
                                             @L["DocumentNotFoundInSelectedLanguage"]

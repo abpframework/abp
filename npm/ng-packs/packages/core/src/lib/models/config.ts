@@ -22,10 +22,12 @@ export namespace Config {
     logoUrl?: string;
   }
 
-  export interface ApiConfig {
+  export type ApiConfig = {
     [key: string]: string;
     url: string;
-  }
+  } & Partial<{
+    rootNamespace: string;
+  }>;
 
   export interface Apis {
     [key: string]: ApiConfig;

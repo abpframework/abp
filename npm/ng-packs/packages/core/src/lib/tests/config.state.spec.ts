@@ -3,6 +3,7 @@ import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spect
 import { Store } from '@ngxs/store';
 import { of, ReplaySubject, timer } from 'rxjs';
 import { SetLanguage } from '../actions';
+import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
 import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
@@ -91,7 +92,7 @@ export const CONFIG_STATE_DATA = {
     userName: null,
     email: null,
     roles: [],
-  },
+  } as ApplicationConfiguration.CurrentUser,
   features: {
     values: {
       'Chat.Enable': 'True',
