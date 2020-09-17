@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
-            if (httpContext.Request == null || !httpContext.Request.Form.Any())
+            if (httpContext.Request == null || !httpContext.Request.HasFormContentType || !httpContext.Request.Form.Any())
             {
                 return null;
             }
