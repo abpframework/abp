@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.ObjectExtending;
@@ -32,6 +33,11 @@ namespace Volo.Abp.Data
 
             if (TypeHelper.IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
             {
+                if (typeof(TProperty) == typeof(Guid))
+                {
+                    return (TProperty)TypeDescriptor.GetConverter(typeof(TProperty)).ConvertFromInvariantString(value.ToString());
+                }
+
                 return (TProperty)Convert.ChangeType(value, typeof(TProperty), CultureInfo.InvariantCulture);
             }
 
@@ -39,8 +45,8 @@ namespace Volo.Abp.Data
         }
 
         public static TSource SetProperty<TSource>(
-            this TSource source, 
-            string name, 
+            this TSource source,
+            string name,
             object value,
             bool validate = true)
             where TSource : IHasExtraProperties

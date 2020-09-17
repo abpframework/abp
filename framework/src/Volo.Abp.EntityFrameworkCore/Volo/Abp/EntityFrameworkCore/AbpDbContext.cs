@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
@@ -339,7 +340,14 @@ namespace Volo.Abp.EntityFrameworkCore
                 {
                     if (TypeHelper.IsPrimitiveExtended(entryProperty.Metadata.ClrType, includeEnums: true))
                     {
-                        entryProperty.CurrentValue = Convert.ChangeType(entityProperty, entryProperty.Metadata.ClrType, CultureInfo.InvariantCulture);
+                        if (entryProperty.Metadata.ClrType == typeof(Guid))
+                        {
+                            entryProperty.CurrentValue = TypeDescriptor.GetConverter(entryProperty.Metadata.ClrType).ConvertFromInvariantString(entityProperty.ToString());
+                        }
+                        else
+                        {
+                            entryProperty.CurrentValue = Convert.ChangeType(entityProperty, entryProperty.Metadata.ClrType, CultureInfo.InvariantCulture);
+                        }
                     }
                 }
             }
