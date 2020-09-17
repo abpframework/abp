@@ -278,17 +278,8 @@ Run the `Acme.BookStore.DbMigrator` application to update the database:
 
 ![bookstore-dbmigrator-on-solution](images/bookstore-dbmigrator-on-solution.png)
 
-{{if DB == "EF"}}
 
 `.DbMigrator` is a console application that can be run to **migrate the database schema** and **seed the data** on **development** and **production** environments.
-
-{{end}}
-
-{{if DB == "Mongo"}}
-
-While MongoDB **doesn't require** a database schema migration, it is still good to run this application since it **seeds the initial data** on the database. This application can be used on **development** and **production** environments.
-
-{{end}}
 
 ## Create the Application Service
 
