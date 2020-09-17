@@ -181,19 +181,31 @@ Please try it and provide feedback to us. Thanks in advance.
 
 Angular UI for the [File Management](https://commercial.abp.io/modules/Volo.FileManagement) module is available with the version 3.2. You can add it to your solution using the ABP Suite.
 
-TODO: Screenshot
+![file-management-module-angular](file-management-module-angular.png)
 
 ### Profile Picture Management
 
-We've added profile picture management for the account module, so the user can pick an image as the profile picture.
+We've added profile picture management for the account module, so a user can select one of the options below for her profile picture;
 
-TODO: Screenshot
+* Use the default placeholder as the avatar.
+* Use [Gravatar](https://gravatar.com/) service to get the picture matching the email address of the user.
+* Upload a file as the profile picture.
+
+![account-profile-picture](account-profile-picture.jpg)
 
 ### Two Factor Authentication Features
 
 Created [features](https://docs.abp.io/en/abp/3.2/Features) and [settings](https://docs.abp.io/en/abp/3.2/Settings) to disable, enable or force to use 2FA on login for the tenants and users.
 
 TODO: Screenshot
+
+### Upgrading the ABP Suite
+
+Use the following command to upgrade the ABP Suite to the latest preview version:
+
+````
+abp suite update --preview
+````
 
 ## Other News
 
