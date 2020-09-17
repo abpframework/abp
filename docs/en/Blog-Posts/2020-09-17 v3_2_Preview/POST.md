@@ -56,15 +56,15 @@ abp new AbpBlazorDemo -u blazor
 
 Open the generated solution using the latest Visual Studio 2019. You will see a solution structure like the picture below:
 
-TODO
+TODO: Screenshot
 
 * Run the `.DbMigrator` project to create the database and seed the initial data.
 * Run the `HttpApi.Host` project for the server side.
 * Run the `.Blazor` project to start the Blazor UI.
 
-Use `admin` as the username as `1q2w3E*` as the password to login to the application.
+Use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
-TODO
+TODO: Screenshot
 
 ## What's New with the ABP Framework 3.2
 
@@ -86,15 +86,37 @@ See the [Kafka integration documentation](https://docs.abp.io/en/abp/latest/Dist
 
 ### Host Features
 
-TODO
+[ABP Feature System](https://docs.abp.io/en/abp/latest/Features) allows you to define features in your application. Then you can enable/disable a feature dynamically on the runtime. It is generally used in a [multi-tenant](https://docs.abp.io/en/abp/latest/Multi-Tenancy) system to restrict features for tenants, so you can charge extra money for some features in a SaaS application.
+
+In some cases, you may want to use the same features in the host side (host is you as you are managing the tenants). For this case, we've added a "**Manage Host Features**" button to the Tenant Management page so you can open a modal dialog to select the features for the host side.
+
+![host-features](host-features.png)
 
 ### AbpHttpClientBuilderOptions
 
-TODO
+ABP Framework provides a system to dynamically create C# proxies to consume HTTP APIs from your client applications. `AbpHttpClientBuilderOptions` is a new option class to configure the `HttpClient`s used by the proxy system.
 
-### Account Module: Profile Management Page Extensions
+**Example: Use the [Polly](https://github.com/App-vNext/Polly) library to retry up to 3 times for a failed HTTP request**
 
-TODO
+````csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<AbpHttpClientBuilderOptions>(options =>
+    {
+        options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) =>
+        {
+            clientBuilder.AddTransientHttpErrorPolicy(policyBuilder =>
+                policyBuilder.WaitAndRetryAsync(
+                    3,
+                    i => TimeSpan.FromSeconds(Math.Pow(2, i))
+                )
+            );
+        });
+    });
+}
+````
+
+See the issue [#5304](https://github.com/abpframework/abp/issues/5304) for the details.
 
 ### ABP Build Command
 
@@ -116,6 +138,59 @@ We will use this command to build the abp repository or a solution inside it. Ho
 * Improved the feature management modal for multi-tenant applications to group features on the UI and show hierarchically.
 * Added `--skip-cli-version-check` option to ABP CLI to improve the performance by bypassing the online version check.
 * Angular UI now redirect to MVC UI (the authentication server side) for profile management page, if the authorization code flow is used (which is the default).
+* Account module profile management page is now extensible. You can implement the `IProfileManagementPageContributor` interface and register it using the `ProfileManagementPageOptions` class.
 * Improvements and optimizations for the [Angular service proxy generation](https://blog.abp.io/abp/Introducing-the-Angular-Service-Proxy-Generation).
 
 And a lot of minor improvements and bug fixes. You can see [the milestone 3.2](https://github.com/abpframework/abp/milestone/39?closed=1) for all issues & PRs closed with this version.
+
+## What's New with the ABP Commercial 3.2
+
+### The Blazor UI
+
+The **experimental** Blazor UI is also available for the ABP Commercial. The [Lepton Theme](https://commercial.abp.io/themes) hasn't been implemented with this initial preview, however we are working on it with the highest priority.
+
+You can use the [ABP Suite](https://docs.abp.io/en/commercial/latest/abp-suite/index) or the following ABP CLI command to create a new solution with the Blazor UI:
+
+````bash
+abp new AbpBlazorDemo -u blazor -t app-pro
+````
+
+Please try it and provide feedback to us. Thanks in advance.
+
+### File Management Angular UI
+
+Angular UI for the [File Management](https://commercial.abp.io/modules/Volo.FileManagement) module is available with the version 3.2. You can add it to your solution using the ABP Suite.
+
+TODO: Screenshot
+
+### Profile Picture Management
+
+We've added profile picture management for the account module, so the user can pick an image as the profile picture.
+
+TODO: Screenshot
+
+### Two Factor Authentication Features
+
+Created [features](https://docs.abp.io/en/abp/latest/Features) and [settings](https://docs.abp.io/en/abp/latest/Settings) to disable, enable or force to use 2FA on login for the tenants and users.
+
+TODO: Screenshot
+
+## Other News
+
+### The ABP Community
+
+**ABP Community** web site is constantly being improved. We will add "**commenting**" and "**rating**" features soon to increase the interactivity between the people.
+
+If you have something to share with the ABP community or want to follow the project progress, please check the [community.abp.io](https://community.abp.io/)!
+
+### CMS Kit Project
+
+We are silently working on a project, named [CMS Kit](https://github.com/abpframework/abp/tree/dev/modules/cms-kit), for a few months. CMS Kit is a set of reusable CMS (Content Management System) components based on the ABP Framework. Some of the components currently being developed:
+
+* **Comments**; Allows users to comment under something (a blog post, a document, an image... etc).
+* **Reactions**; Allows users to give reactions to something (a comment, a picture... etc.) using simple emoji icons.
+* **Rating**; Allows users to rate some content from 1 to 5.
+* **Newsletter**; Allows you to put a newsletter box to your web site to collect emails from users.
+* **Contact**; Put a form to get message from the web site visitors.
+
+There are more planned components like articles, tags, votes, favorites, portfolio, image gallery, FAQ... etc. We will document and deploy these components when they get matured and ready to use. Some of them will be open source & free while some of them are paid (included in the [ABP Commercial](https://commercial.abp.io/) license).
