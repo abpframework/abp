@@ -16,7 +16,6 @@ namespace Volo.Abp.Identity
         protected ILookupNormalizer LookupNormalizer { get; }
         protected IdentityUserManager UserManager { get; }
         protected IdentityRoleManager RoleManager { get; }
-
         protected ICurrentTenant CurrentTenant { get; }
 
         public IdentityDataSeeder(
