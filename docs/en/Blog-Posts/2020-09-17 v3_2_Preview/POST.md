@@ -1,4 +1,4 @@
-# ABP Framework 3.2 RC with the new Blazor UI
+# ABP Framework & ABP Commercial 3.2 RC With The New Blazor UI
 
 We are extremely excited today to release the ABP Framework (and the ABP Commercial, as always) version `3.2.0-rc.1` (Release Candidate). This release includes an early preview version of the **Blazor UI** for the ABP.IO Platform.
 
