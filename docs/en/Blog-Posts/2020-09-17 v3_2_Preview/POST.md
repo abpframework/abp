@@ -8,7 +8,7 @@ While the Blazor UI **should be considered as experimental** for now, it is poss
 
 ### Fundamental Services
 
-Currently implemented some important framework features;
+Currently, implemented some important framework features;
 
 * **Authentication** through the MVC backend using the OpenId Connect authorization code flow. So, all the current login options (login, register, forgot password, external/social logins...) are supported.
 * **Authorization**, using the ABP Framework **permissions** as well as the standard authorization system.
@@ -17,24 +17,24 @@ Currently implemented some important framework features;
 * **Dynamic C# HTTP API proxies**, so you can directly consume your backend API by injecting the application service interfaces.
 * Some other **fundamental services** like `ISettingProvider`, `IFeatureChecker`, `ICurrentUser`...
 
-Also, the standard .net services are already available, like caching, logging, validation and much more. Since the ABP Framework is layered itself, all the non MVC UI related features are already available.
+Also, the standard .net services are already available, like caching, logging, validation and much more. Since the ABP Framework is layered itself, all the non MVC UI related features are already usable for the Blazor UI.
 
 ### Pre-Built Modules
 
-And some modules have been implemented;
+Some modules have been implemented;
 
 * **Identity** module is pre-installed and provides user**, role and permission management**.
 * **Profile management** page is implemented to allow to change password and personal settings.
 
 ### About the Blazorise Library
 
-We've selected the [Blazorise](https://blazorise.com/) as a fundamental UI library for the Blazor UI. It already support different HTML/CSS frameworks and significantly increases the developer productivity.
+We've selected the [Blazorise](https://blazorise.com/) as a fundamental UI library for the Blazor UI. It already supports different HTML/CSS frameworks (like Bootstrap, Bulma, Ant Design...) and significantly increases the developer productivity.
 
 We also have a good news: **[Mladen Macanović](https://github.com/stsrki)**, the creator of the Blazorise, is **joining to the core ABP Framework team** in the next weeks. We are excited to work with him to bring the power of these two successfully projects together.
 
 ### The Tutorial
 
-We are currently in progress of updating the web application development tutorial for the Blazor UI. Follow the [@abpframework](https://twitter.com/abpframework) Twitter account to get informed once it's done.
+We are currently in progress of updating the [web application development tutorial](https://docs.abp.io/en/abp/3.2/Tutorials/Part-1) for the Blazor UI. Follow the [@abpframework](https://twitter.com/abpframework) Twitter account to get informed once it's ready.
 
 ### Get started with the Blazor UI
 
@@ -70,13 +70,13 @@ Open the generated solution using the latest Visual Studio 2019. You will see a 
 
 > **A fix for the 3.2.0-rc.1**
 >
-> There is a bug in the `3.2.0-rc.1` that prevents HttpApi.Host project run properly, when you try to login to the application. Follow the steps explained in the [#5457](https://github.com/abpframework/abp/issues/5457) to fix for your solution, before ruuning it. It will be resolved with `3.2.0-rc.2`.
+> There is a bug in the `3.2.0-rc.1` that prevents `HttpApi.Host` project run properly, when you try to login to the application. **Follow the steps explained in the [#5457](https://github.com/abpframework/abp/issues/5457) for the `HttpApi.Host` project** to fix it for your solution, before running it. It will be resolved with the `3.2.0-rc.2`.
 
 #### Run the Application
 
-* Run the `.DbMigrator` project to create the database and seed the initial data.
+* Run the `DbMigrator` project to create the database and seed the initial data.
 * Run the `HttpApi.Host` project for the server side.
-* Run the `.Blazor` project to start the Blazor UI.
+* Run the `Blazor` project to start the Blazor UI.
 
 Use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
@@ -170,10 +170,12 @@ The **experimental** Blazor UI is also available for the ABP Commercial. The [Le
 You can use the [ABP Suite](https://docs.abp.io/en/commercial/latest/abp-suite/index) or the following ABP CLI command to create a new solution with the Blazor UI:
 
 ````bash
-abp new AbpBlazorDemo -u blazor -t app-pro
+abp new AbpBlazorDemo -u blazor -t app-pro --preview
 ````
 
 Please try it and provide feedback to us. Thanks in advance.
+
+> See the instructions in the *Get started with the Blazor UI* section above to properly create and run your application.
 
 ### File Management Angular UI
 
@@ -212,3 +214,7 @@ We are silently working on a project, named [CMS Kit](https://github.com/abpfram
 * **Contact**; Put a form to get message from the web site visitors.
 
 There are more planned components like articles, tags, votes, favorites, portfolio, image gallery, FAQ... etc. We will document and deploy these components when they get matured and ready to use. Some of them will be open source & free while some of them are paid (included in the [ABP Commercial](https://commercial.abp.io/) license).
+
+## Feedback
+
+Please try the ABP Framework 3.2.0 RC and [provide feedback](https://github.com/abpframework/abp/issues/new) to help us to release a more stable version. The planned release date for the [3.2.0 final](https://github.com/abpframework/abp/milestone/43) version is October 01.
