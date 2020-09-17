@@ -1,10 +1,10 @@
 # ABP Framework & ABP Commercial 3.2 RC With The New Blazor UI
 
-We are extremely excited today to release the ABP Framework (and the ABP Commercial, as always) version `3.2.0-rc.1` (Release Candidate). This release includes an early preview version of the **Blazor UI** for the ABP.IO Platform.
+We are extremely excited today to release the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/), as always) version `3.2.0-rc.1` (Release Candidate). This release includes an early preview version of the **Blazor UI** for the ABP.IO Platform.
 
 ## The Blazor UI
 
-While the Blazor UI should be considered as **experimental** for now, it is possible to develop your application today.
+While the Blazor UI **should be considered as experimental** for now, it is possible to start to develop your application today.
 
 ### Fundamental Services
 
@@ -15,7 +15,7 @@ Currently implemented some important framework features;
 * **Localization** just works like the MVC UI.
 * **Basic Theme** with top main menu.
 * **Dynamic C# HTTP API proxies**, so you can directly consume your backend API by injecting the application service interfaces.
-* Some other **fundamental services** like ISettingProvider, IFeatureChecker, ICurrentUser
+* Some other **fundamental services** like `ISettingProvider`, `IFeatureChecker`, `ICurrentUser`...
 
 Also, the standard .net services are already available, like caching, logging, validation and much more. Since the ABP Framework is layered itself, all the non MVC UI related features are already available.
 
@@ -40,23 +40,39 @@ We are currently in progress of updating the web application development tutoria
 
 If you want to try the Blazor UI today, follow the instructions below.
 
-First, install the the latest [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) preview version:
+#### Upgrade the ABP CLI
+
+> **Known issue**: When you upgrade the ABP CLI to `3.2.0-rc.1`, you won't be able to create new solutions with a stable version ([#5453](https://github.com/abpframework/abp/issues/5453)). Downgrade to `3.1.0` back after trying the preview version, if you want to create solutions with a stable version later.
+
+Install the latest [ABP CLI](https://docs.abp.io/en/abp/3.2/CLI) preview version:
 
 ````bash
 dotnet tool update Volo.Abp.Cli -g --version 3.2.0-rc.1
 ````
 
+#### Create a new Solution
+
 Then you can create a new solution using the *abp new* command:
 
 ````bash
-abp new AbpBlazorDemo -u blazor
+abp new AbpBlazorDemo -u blazor --preview
 ````
+
+Also specify the `-t app-pro` parameter if you are an ABP Commercial user.
 
 > See the ABP CLI documentation for the additional options, like MongoDB database or separated authentication server.
 
+#### Open the Solution
+
 Open the generated solution using the latest Visual Studio 2019. You will see a solution structure like the picture below:
 
-TODO: Screenshot
+![visual-studio-solution-with-blazor](visual-studio-solution-with-blazor.png)
+
+> **A fix for the 3.2.0-rc.1**
+>
+> There is a bug in the `3.2.0-rc.1` that prevents HttpApi.Host project run properly, when you try to login to the application. Follow the steps explained in the [#5457](https://github.com/abpframework/abp/issues/5457) to fix for your solution, before ruuning it. It will be resolved with `3.2.0-rc.2`.
+
+#### Run the Application
 
 * Run the `.DbMigrator` project to create the database and seed the initial data.
 * Run the `HttpApi.Host` project for the server side.
@@ -64,7 +80,9 @@ TODO: Screenshot
 
 Use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
-TODO: Screenshot
+Here, a screenshot from the role management page of the Blazor UI:
+
+![blazor-role-management](blazor-role-management.png)
 
 ## What's New with the ABP Framework 3.2
 
@@ -72,21 +90,21 @@ Beside the Blazor UI, there are a lot of issues have been closed with [the miles
 
 ### MongoDB ACID Transactions
 
-[MongoDB integration](https://docs.abp.io/en/abp/latest/MongoDB) now supports multi-document transactions that comes with the MongoDB 4.x.
+[MongoDB integration](https://docs.abp.io/en/abp/3.2/MongoDB) now supports multi-document transactions that comes with the MongoDB 4.x.
 
 > Transactions are disabled for automated integration tests coming with the application startup template, since the Mongo2Go library (we use in the test projects) has a problem with the transactions. We've sent a [Pull Request](https://github.com/Mongo2Go/Mongo2Go/pull/101) to fix it and will enable the transactions again when they merge & release it.
 >
-> If you are upgrading an existing solution and using MongoDB, please disable transactions for the test projects by following the [Unit Of Work](https://docs.abp.io/en/abp/latest/Unit-Of-Work) documentation.
+> If you are upgrading an existing solution and using MongoDB, please disable transactions for the test projects by following the [Unit Of Work](https://docs.abp.io/en/abp/3.2/Unit-Of-Work) documentation.
 
 ### Kafka Integration for the Distributed Event Bus
 
-ABP Framework's [distributed event system](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) has been [integrated to RabbitMQ](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus-RabbitMQ-Integration) before. By the version 3.2, it has a Kafka integration package, named [Volo.Abp.EventBus.Kafka](https://www.nuget.org/packages/Volo.Abp.EventBus.Kafka).
+ABP Framework's [distributed event system](https://docs.abp.io/en/abp/3.2/Distributed-Event-Bus) has been [integrated to RabbitMQ](https://docs.abp.io/en/abp/3.2/Distributed-Event-Bus-RabbitMQ-Integration) before. By the version 3.2, it has a Kafka integration package, named [Volo.Abp.EventBus.Kafka](https://www.nuget.org/packages/Volo.Abp.EventBus.Kafka).
 
-See the [Kafka integration documentation](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus-Kafka-Integration) to learn how to install and configure it.
+See the [Kafka integration documentation](https://docs.abp.io/en/abp/3.2/Distributed-Event-Bus-Kafka-Integration) to learn how to install and configure it.
 
 ### Host Features
 
-[ABP Feature System](https://docs.abp.io/en/abp/latest/Features) allows you to define features in your application. Then you can enable/disable a feature dynamically on the runtime. It is generally used in a [multi-tenant](https://docs.abp.io/en/abp/latest/Multi-Tenancy) system to restrict features for tenants, so you can charge extra money for some features in a SaaS application.
+[ABP Feature System](https://docs.abp.io/en/abp/3.2/Features) allows you to define features in your application. Then you can enable/disable a feature dynamically on the runtime. It is generally used in a [multi-tenant](https://docs.abp.io/en/abp/3.2/Multi-Tenancy) system to restrict features for tenants, so you can charge extra money for some features in a SaaS application.
 
 In some cases, you may want to use the same features in the host side (host is you as you are managing the tenants). For this case, we've added a "**Manage Host Features**" button to the Tenant Management page so you can open a modal dialog to select the features for the host side.
 
@@ -122,7 +140,7 @@ See the issue [#5304](https://github.com/abpframework/abp/issues/5304) for the d
 
 We are using **mono repository** approach and the [abp repository](https://github.com/abpframework/abp) has tens of solutions and hundreds of projects (the framework, modules, tooling, templates...) with all of them are referencing to each other.
 
-It gets a significant time to build the whole repository for every Git push. To **optimize** this process, we've created the **abp build** command in the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
+It gets a significant time to build the whole repository for every Git push. To **optimize** this process, we've created the **abp build** command in the [ABP CLI](https://docs.abp.io/en/abp/3.2/CLI):
 
 ````bash
 abp build
@@ -130,7 +148,7 @@ abp build
 
 We will use this command to build the abp repository or a solution inside it. However it is available to everyone in case of need.
 
-> **Most of the people will not need it**. If you need it, see the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document to learn all the details and options.
+> **Most of the people will not need it**. If you need it, see the [ABP CLI](https://docs.abp.io/en/abp/3.2/CLI) document to learn all the details and options.
 
 ### Other Features, Improvements and Changes
 
@@ -171,7 +189,7 @@ TODO: Screenshot
 
 ### Two Factor Authentication Features
 
-Created [features](https://docs.abp.io/en/abp/latest/Features) and [settings](https://docs.abp.io/en/abp/latest/Settings) to disable, enable or force to use 2FA on login for the tenants and users.
+Created [features](https://docs.abp.io/en/abp/3.2/Features) and [settings](https://docs.abp.io/en/abp/3.2/Settings) to disable, enable or force to use 2FA on login for the tenants and users.
 
 TODO: Screenshot
 
