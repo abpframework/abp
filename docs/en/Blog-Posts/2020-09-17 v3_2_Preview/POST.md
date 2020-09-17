@@ -23,7 +23,7 @@ Also, the standard .net services are already available, like caching, logging, v
 
 Some modules have been implemented;
 
-* **Identity** module is pre-installed and provides user**, role and permission management**.
+* **Identity** module is pre-installed and provides **user, role and permission management**.
 * **Profile management** page is implemented to allow to change password and personal settings.
 
 ### About the Blazorise Library
