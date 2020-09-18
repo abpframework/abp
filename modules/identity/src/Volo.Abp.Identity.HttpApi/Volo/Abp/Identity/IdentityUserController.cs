@@ -74,7 +74,7 @@ namespace Volo.Abp.Identity
         }
 
         [HttpGet]
-        [Route("by-username/{userName}")]
+        [Route("by-username/{username}")]
         public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
             return UserAppService.FindByUsernameAsync(username);
