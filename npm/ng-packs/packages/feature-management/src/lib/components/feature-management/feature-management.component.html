@@ -68,7 +68,7 @@
                         <option
                           *ngFor="
                             let item of feature.valueType.itemSource?.items;
-                            trackBy: track.by('key')
+                            trackBy: track.by('value')
                           "
                           [ngValue]="item.value"
                         >
