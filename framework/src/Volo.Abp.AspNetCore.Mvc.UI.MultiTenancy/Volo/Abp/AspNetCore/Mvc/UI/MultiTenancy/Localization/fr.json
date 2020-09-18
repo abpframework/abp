@@ -1,0 +1,12 @@
+{
+ "culture": "fr",
+ "texts": {
+  "GivenTenantIsNotAvailable": "Le locataire donné n'est pas disponible: {0}",
+  "Tenant": "Locataire",
+  "Switch": "commutateur",
+  "Name": "Nom",
+  "SwitchTenantHint": "Laissez le champ de nom vide pour passer du côté hôte.",
+  "SwitchTenant": "Changer de locataire",
+  "NotSelected": "Non séléctionné"
+ }
+}
