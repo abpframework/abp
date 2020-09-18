@@ -1,9 +1,8 @@
-import { TenantManagement } from '../models/tenant-management';
-import { ABP } from '@abp/ng.core';
+import { GetTenantsInput, TenantCreateDto, TenantUpdateDto } from '../proxy/models';
 
 export class GetTenants {
   static readonly type = '[TenantManagement] Get Tenant';
-  constructor(public payload?: ABP.PageQueryParams) {}
+  constructor(public payload?: GetTenantsInput) {}
 }
 
 export class GetTenantById {
@@ -13,12 +12,12 @@ export class GetTenantById {
 
 export class CreateTenant {
   static readonly type = '[TenantManagement] Create Tenant';
-  constructor(public payload: TenantManagement.AddRequest) {}
+  constructor(public payload: TenantCreateDto) {}
 }
 
 export class UpdateTenant {
   static readonly type = '[TenantManagement] Update Tenant';
-  constructor(public payload: TenantManagement.UpdateRequest) {}
+  constructor(public payload: TenantUpdateDto & { id: string }) {}
 }
 
 export class DeleteTenant {

@@ -35,6 +35,8 @@ namespace System
 
             Assert.Throws<FormatException>(() => "test".To<bool>());
             Assert.Throws<FormatException>(() => "test".To<int>());
+
+            "2260AFEC-BBFD-42D4-A91A-DCB11E09B17F".To<Guid>().ShouldBeOfType<Guid>().ShouldBe(new Guid("2260afec-bbfd-42d4-a91a-dcb11e09b17f"));
         }
 
         [Fact]
@@ -57,10 +59,10 @@ namespace System
         public void If_Tests()
         {
             var value = 0;
-            
+
             value = value.If(true, v => v + 1);
             value.ShouldBe(1);
-            
+
             value = value.If(false, v => v + 1);
             value.ShouldBe(1);
 

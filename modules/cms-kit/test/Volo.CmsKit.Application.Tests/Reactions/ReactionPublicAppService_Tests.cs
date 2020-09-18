@@ -60,14 +60,14 @@ namespace Volo.CmsKit.Reactions
             await _reactionPublicAppService.CreateAsync(
                 _cmsKitTestData.EntityType2,
                 _cmsKitTestData.EntityId2,
-                StandardReactions.Hooray
+                StandardReactions.Eyes
             );
 
             UsingDbContext(context =>
             {
                 var reaction = context.Set<UserReaction>().FirstOrDefault(x =>
                     x.CreatorId == _cmsKitTestData.User1Id &&
-                    x.ReactionName == StandardReactions.Hooray &&
+                    x.ReactionName == StandardReactions.Eyes &&
                     x.EntityId == _cmsKitTestData.EntityId2 &&
                     x.EntityType == _cmsKitTestData.EntityType2);
 

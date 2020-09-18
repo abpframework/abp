@@ -100,7 +100,7 @@
         },
         0 //adds as the first contributor
     );
-    
+
     $(function () {
         var _$wrapper = $('#TenantsWrapper');
 
@@ -127,6 +127,13 @@
         _$wrapper.find('button[name=CreateTenant]').click(function (e) {
             e.preventDefault();
             _createModal.open();
+        });
+
+        _$wrapper.find('button[name=ManageHostFeatures]').click(function (e) {
+            e.preventDefault();
+            _featuresModal.open({
+                providerName: 'T'
+            });
         });
     });
 })();

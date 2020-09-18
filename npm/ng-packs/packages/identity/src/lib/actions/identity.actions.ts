@@ -1,9 +1,16 @@
 import { Identity } from '../models/identity';
-import { ABP } from '@abp/ng.core';
+import { ABP, PagedAndSortedResultRequestDto } from '@abp/ng.core';
+import {
+  GetIdentityUsersInput,
+  IdentityRoleCreateDto,
+  IdentityRoleUpdateDto,
+  IdentityUserCreateDto,
+  IdentityUserUpdateDto,
+} from '../proxy/identity/models';
 
 export class GetRoles {
   static readonly type = '[Identity] Get Roles';
-  constructor(public payload?: ABP.PageQueryParams) {}
+  constructor(public payload?: PagedAndSortedResultRequestDto) {}
 }
 
 export class GetRoleById {
@@ -18,17 +25,17 @@ export class DeleteRole {
 
 export class CreateRole {
   static readonly type = '[Identity] Create Role';
-  constructor(public payload: Identity.RoleSaveRequest) {}
+  constructor(public payload: IdentityRoleCreateDto) {}
 }
 
 export class UpdateRole {
   static readonly type = '[Identity] Update Role';
-  constructor(public payload: Identity.RoleItem) {}
+  constructor(public payload: IdentityRoleUpdateDto & { id: string }) {}
 }
 
 export class GetUsers {
   static readonly type = '[Identity] Get Users';
-  constructor(public payload?: ABP.PageQueryParams) {}
+  constructor(public payload?: GetIdentityUsersInput) {}
 }
 
 export class GetUserById {
@@ -43,12 +50,12 @@ export class DeleteUser {
 
 export class CreateUser {
   static readonly type = '[Identity] Create User';
-  constructor(public payload: Identity.UserSaveRequest) {}
+  constructor(public payload: IdentityUserCreateDto) {}
 }
 
 export class UpdateUser {
   static readonly type = '[Identity] Update User';
-  constructor(public payload: Identity.UserSaveRequest & { id: string }) {}
+  constructor(public payload: IdentityUserUpdateDto & { id: string }) {}
 }
 
 export class GetUserRoles {

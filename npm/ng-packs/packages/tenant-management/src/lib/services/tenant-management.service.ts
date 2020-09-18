@@ -6,6 +6,9 @@ import { TenantManagement } from '../models/tenant-management';
 @Injectable({
   providedIn: 'root',
 })
+/**
+ * @deprecated Use TenantService instead. To be deleted in v4.0.
+ */
 export class TenantManagementService {
   apiName = 'AbpTenantManagement';
 
