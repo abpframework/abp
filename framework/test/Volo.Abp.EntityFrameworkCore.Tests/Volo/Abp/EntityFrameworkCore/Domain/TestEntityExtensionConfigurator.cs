@@ -25,6 +25,8 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                         "ZipCode"
                     ).MapEfCoreProperty<City, int>(
                         "Rank"
+                    ).MapEfCoreProperty<City, DateTime?>(
+                        "Established"
                     ).MapEfCoreProperty<City, Guid>(
                         "Guid"
                     );

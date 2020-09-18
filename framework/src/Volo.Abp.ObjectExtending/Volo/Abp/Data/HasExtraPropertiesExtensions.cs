@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
@@ -33,12 +34,18 @@ namespace Volo.Abp.Data
 
             if (TypeHelper.IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
             {
-                if (typeof(TProperty) == typeof(Guid))
+                var conversionType = typeof(TProperty);
+                if (TypeHelper.IsNullable(conversionType))
                 {
-                    return (TProperty)TypeDescriptor.GetConverter(typeof(TProperty)).ConvertFromInvariantString(value.ToString());
+                    conversionType = conversionType.GetFirstGenericArgumentIfNullable();
                 }
 
-                return (TProperty)Convert.ChangeType(value, typeof(TProperty), CultureInfo.InvariantCulture);
+                if (conversionType == typeof(Guid))
+                {
+                    return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString());
+                }
+
+                return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
             }
 
             throw new AbpException("GetProperty<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
