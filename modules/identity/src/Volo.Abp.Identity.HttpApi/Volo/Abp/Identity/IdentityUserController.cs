@@ -74,10 +74,10 @@ namespace Volo.Abp.Identity
         }
 
         [HttpGet]
-        [Route("by-username/{username}")]
-        public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
+        [Route("by-username/{userName}")]
+        public virtual Task<IdentityUserDto> FindByUsernameAsync(string userName)
         {
-            return UserAppService.FindByUsernameAsync(username);
+            return UserAppService.FindByUsernameAsync(userName);
         }
 
         [HttpGet]
