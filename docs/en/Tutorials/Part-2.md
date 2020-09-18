@@ -608,18 +608,20 @@ Open the `Books.razor` and replace the content as the following:
                   ShowPager="true"
                   PageSize="PageSize">
             <DataGridColumns>
-                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.Name)" Caption="@L["Name"].Value"></DataGridColumn>
-                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.Type)" Caption="@L["Type"].Value">
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.Name)" Caption="@L["Name"]"></DataGridColumn>
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.Type)" Caption="@L["Type"]">
                     <DisplayTemplate>
                         @L[$"Enum:BookType:{(int)context.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.PublishDate)" Caption="@L["PublishDate"].Value">
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.PublishDate)" Caption="@L["PublishDate"]">
                     <DisplayTemplate>
                         @context.PublishDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.CreationTime)" Caption="@L["CreationTime"].Value">
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.Price)" Caption="@L["Price"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.CreationTime)" Caption="@L["CreationTime"]">
                     <DisplayTemplate>
                         @context.CreationTime.ToLongDateString()
                     </DisplayTemplate>
