@@ -1237,11 +1237,123 @@ Open the `Books.razor` and add the following code to the end of the page:
 </Modal>
 ````
 
-`CreateModal` object, `CloseCreateModalAsync` and `CreateEntityAsync` method are defined by the base class. See the [Blazorise documentation](https://blazorise.com/docs/) if you want to understand the `Modal` and the other components.
+* `CreateModal` object, `CloseCreateModalAsync` and `CreateEntityAsync` method are defined by the base class. See the [Blazorise documentation](https://blazorise.com/docs/) if you want to understand the `Modal` and the other components.
 
 That's all. Run the application and try to add a new book:
 
 ![blazor-new-book-modal](images/blazor-new-book-modal.png)
+
+## Updating a Book
+
+Editing a books is similar to the creating a new book.
+
+### Actions Dropdown
+
+Open the `Books.razor` and add the following `DataGridColumn` section inside the `DataGridColumns` as the first item:
+
+````xml
+<DataGridColumn Width="150px" 
+                TItem="BookDto"
+                Field="@nameof(BookDto.Id)" 
+                Sortable="false" 
+                Caption="@L["Actions"]">
+    <DisplayTemplate>
+        <Dropdown>
+            <DropdownToggle Color="Color.Primary">
+                @L["Actions"]
+            </DropdownToggle>
+            <DropdownMenu>
+                <DropdownItem Clicked="() => OpenEditModalAsync(context.Id)">
+                    @L["Edit"]
+                </DropdownItem>
+            </DropdownMenu>
+        </Dropdown>
+    </DisplayTemplate>
+</DataGridColumn>
+````
+
+* `OpenEditModalAsync` is defined in the base class which takes the `Id` of the entity (book) to edit.
+
+This adds an "Actions" dropdown to all the books inside the `DataGrid` with an `Edit` action:
+
+![blazor-edit-book-action](images/blazor-edit-book-action.png)
+
+### Edit Modal
+
+We can now define a modal to edit the book. Add the following code to the end of the `Books.razor` page:
+
+````xml
+<Modal @ref="EditModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>@EditingEntity.Name</ModalTitle>
+            <CloseButton Clicked="CloseEditModalAsync" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>@L["Name"]</FieldLabel>
+                <TextEdit @bind-text="EditingEntity.Name" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["Type"]</FieldLabel>
+                <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                    @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <SelectItem TValue="BookType" Value="@((BookType)bookTypeValue)">
+                            @L[$"Enum:BookType:{bookTypeValue}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+            <Field>
+                <FieldLabel>@L["PublishDate"]</FieldLabel>
+                <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["Price"]</FieldLabel>
+                <NumericEdit TValue="float" @bind-Value="EditingEntity.Price" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary"
+                    Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+            <Button Color="Color.Primary"
+                    Clicked="UpdateEntityAsync">@L["Save"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+````
+
+### AutoMapper Configuration
+
+The base `BlazoriseCrudPage` uses the [object to object mapping](../Object-To-Object-Mapping.md) system to convert an incoming `BookDto` object to a `CreateUpdateBookDto` object. So, we need to define the mapping.
+
+Open the `BookStoreBlazorAutoMapperProfile` inside the `Acme.BookStore.Blazor` project and change the content as the following:
+
+````csharp
+using Acme.BookStore.Books;
+using AutoMapper;
+
+namespace Acme.BookStore.Blazor
+{
+    public class BookStoreBlazorAutoMapperProfile : Profile
+    {
+        public BookStoreBlazorAutoMapperProfile()
+        {
+            CreateMap<BookDto, CreateUpdateBookDto>();
+        }
+    }
+}
+````
+
+* We've just added the `CreateMap<BookDto, CreateUpdateBookDto>();` line to define the mapping.
+
+### Test the Editing Modal
+
+You can now run the application and try to edit a book.
+
+![blazor-edit-book-modal](images/blazor-edit-book-modal.png)
 
 {{end}}
 
