@@ -3,13 +3,13 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC", "Blazor", "NG"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }
 ````
 
-This tutorial explains how to create a new {{if UI == "MVC"}} ASP.NET Core MVC (Razor Pages) web {{else if UI == "NG"}} Angular {{end}} application using the startup template.
+This tutorial explains how to create a new web application using the [application startup template](Startup-Templates/Application.md).
 
 
 ## Setup Your Development Environment
@@ -20,11 +20,11 @@ First things first! Let's setup your development environment before creating the
 
 The following tools should be installed on your development machine:
 
-* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/). <sup id="a-editor">[1](#f-editor)</sup>
+* [Visual Studio 2019](https://visualstudio.microsoft.com/vs/) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/). <sup id="a-editor">[1](#f-editor)</sup>
 * [.NET Core 3.1+](https://www.microsoft.com/net/download/dotnet-core/)
 
-* [Node v12 or v14](https://nodejs.org/en/)
-* [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> or npm v6+ (installed with Node)
+* [Node v12 or v14](https://nodejs.org/)
+* [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> or npm v6+ (already installed with Node)
 {{ if Tiered == "Yes" }}
 
 * [Redis](https://redis.io/) (the startup solution uses the Redis as the [distributed cache](Caching.md)).
@@ -37,7 +37,7 @@ The following tools should be installed on your development machine:
 
 ### Install the ABP CLI
 
-[ABP CLI](./CLI.md) is a command line interface that is used to automate some common tasks for ABP based applications.
+[ABP CLI](./CLI.md) is a command line interface that is used to automate some common tasks for ABP based solutions.
 
 > ABP CLI is a free & open source tool for the ABP framework.
 
@@ -62,30 +62,20 @@ dotnet tool update -g Volo.Abp.Cli
 Use the `new` command of the ABP CLI to create a new project:
 
 ````shell
-abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}}
+abp new Acme.BookStore{{if UI == "NG"}} -u angular {{else if UI == "Blazor"}} -u blazor {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC"}} --tiered {{else}} --separate-identity-server{{end}}{{end}}
 ````
 
-{{ if UI == "NG" }}
-
-* `-u` argument specifies the UI framework, `angular` in this case.
-
 {{ if Tiered == "Yes" }}
+
+{{ if UI == "MVC" }}
+
+* `--tiered` argument is used to create N-tiered solution where authentication server, UI and API layers are physically separated.
+
+{{ else }}
 
 * `--separate-identity-server` argument is used to separate the identity server application from the API host application. If not specified, you will have a single endpoint on the server.
 
 {{ end }}
-
-{{ end }}
-
-{{ if DB == "Mongo" }}
-
-* `-d` argument specifies the database provider, `mongodb` in this case.
-
-{{ end }}
-
-{{ if Tiered == "Yes" && UI != "NG" }}
-
-* `--tiered` argument is used to create N-tiered solution where authentication server, UI and API layers are physically separated.
 
 {{ end }}
 
@@ -113,12 +103,20 @@ You will see the following solution structure when you open the `.sln` file in t
 
 {{else}}
 
-![vs-default-app-solution-structure](images/vs-app-solution-structure{{if Tiered == "Yes"}}-tiered{{end}}.png)
+{{if Tiered == "Yes"}}
+
+![vs-default-app-solution-structure](images/vs-app-solution-structure-tiered.png)
+
+{{else}}
+
+![vs-default-app-solution-structure](images/vs-app-solution-structure.png)
+
+{{end}}
 
 {{end}}
 
 {{ else if UI == "NG" }}
-There are three folders in the created solution:
+There are two folders in the created solution:
 
 ![](images/solution-files-non-mvc.png)
 
