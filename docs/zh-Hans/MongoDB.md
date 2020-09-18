@@ -237,12 +237,12 @@ public class BookService
 
 MongoDB在4.0版本开始支持事务, ABP在3.2版本加入了对MongoDb事务的支持. 如果你升级到3.2版本,需要将[MongoDbSchemaMigrator](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.MongoDB/MongoDb/MongoDbMyProjectNameDbSchemaMigrator.cs)添加到你的 `.MongoDB` 项目中.
 
-如果你在使用4.0版本之前的MongdoDB数据库,你需要手动禁用工作单元的事务:
+[启动模板](Startup-templates/Index.md)默认在 `.MongoDB` 项目中**禁用**了工作单元事务. 如果你的MongoDB服务器支持事务,你可以手动启用工作单元的事务:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
 {
-    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
 });
 ```
 
