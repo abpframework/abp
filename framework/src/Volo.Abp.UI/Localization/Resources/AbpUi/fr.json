@@ -38,7 +38,7 @@
   "Logout": "Se déconnecter",
   "Submit": "Soumettre",
   "Back": "Arrière",
-  "PagerSearch": "Chercher",
+  "PagerSearch": "Recherche",
   "PagerNext": "Prochain",
   "PagerPrevious": "précédent",
   "PagerFirst": "Première",
@@ -62,7 +62,7 @@
   "500Message": "Erreur Interne du Serveur",
   "GoHomePage": "Aller à la page d'accueil",
   "GoBack": "Retourner",
-  "Search": "Chercher",
+  "Search": "Recherche",
   "ItemWillBeDeletedMessageWithFormat": "{0} sera supprimé!",
   "ItemWillBeDeletedMessage": "Cet objet va être supprimé!"
  }
