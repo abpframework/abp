@@ -1,6 +1,7 @@
-import { TrackByService } from '@abp/ng.core';
+import { TrackByService, GetAppConfiguration } from '@abp/ng.core';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
 import { FeaturesService } from '../../proxy/feature-management/features.service';
@@ -60,7 +61,11 @@ export class FeatureManagementComponent
 
   modalBusy = false;
 
-  constructor(public readonly track: TrackByService, private service: FeaturesService) {}
+  constructor(
+    public readonly track: TrackByService,
+    protected service: FeaturesService,
+    protected store: Store,
+  ) {}
 
   openModal() {
     if (!this.providerName) {
@@ -107,6 +112,11 @@ export class FeatureManagementComponent
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.visible = false;
+
+        if (!this.providerKey) {
+          // to refresh host's features
+          this.store.dispatch(new GetAppConfiguration());
+        }
       });
   }
 }

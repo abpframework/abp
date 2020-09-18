@@ -165,6 +165,12 @@ And a lot of minor improvements and bug fixes. You can see [the milestone 3.2](h
 
 ## What's New with the ABP Commercial 3.2
 
+### Breaking Changes
+
+The new *profile picture management* feature uses the [BLOB storing](https://docs.abp.io/en/abp/3.2/Blob-Storing) system, so it needs a Storage Provider. The new **startup template comes with the [Database BLOB Provider](https://docs.abp.io/en/abp/3.2/Blob-Storing-Database) pre-installed**. You can change it if you want to use another BLOB provider (like Azure, AWS or a simple file system).
+
+**Existing solutions must configure a BLOB provider** after upgrading to the version 3.2. Follow the [BLOB Storing document](https://docs.abp.io/en/abp/3.2/Blob-Storing#blob-storage-providers) to configure the provider yourself.
+
 ### The Blazor UI
 
 The **experimental** Blazor UI is also available for the ABP Commercial. The [Lepton Theme](https://commercial.abp.io/themes) hasn't been implemented with this initial preview, however we are working on it with the highest priority.
