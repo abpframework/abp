@@ -566,7 +566,7 @@ context.Menu.AddItem(
         new ApplicationMenuItem(
             "BooksStore.Books",
             l["Menu:Books"],
-            url: "/Books"
+            url: "/books"
         )
     )
 );
@@ -580,7 +580,70 @@ When you click to the Books menu item under the Book Store parent, you are being
 
 ### Book List
 
-TODO
+We will use the [Blazorise library](https://blazorise.com/) as the UI component kit. It is a very powerful library that supports major HTML/CSS frameworks, including the Bootstrap.
+
+ABP Framework provides a generic base class, `BlazoriseCrudPageBase<...>`, to create CRUD style pages. This base class is compatible to the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `BlazoriseCrudPageBase` to automate the standard CRUD stuff.
+
+Open the `Books.razor` and replace the content as the following:
+
+````xml
+@page "/books"
+@using Volo.Abp.Application.Dtos
+@using Volo.Abp.BlazoriseUI
+@using Acme.BookStore.Books
+@using Acme.BookStore.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<BookStoreResource> L
+@inherits BlazoriseCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<Card>
+    <CardHeader>
+        <h2>@L["Books"]</h2>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="BookDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.Name)" Caption="@L["Name"].Value"></DataGridColumn>
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.Type)" Caption="@L["Type"].Value">
+                    <DisplayTemplate>
+                        @L[$"Enum:BookType:{(int)context.Type}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.PublishDate)" Caption="@L["PublishDate"].Value">
+                    <DisplayTemplate>
+                        @context.PublishDate.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto" Field="@nameof(BookDto.CreationTime)" Caption="@L["CreationTime"].Value">
+                    <DisplayTemplate>
+                        @context.CreationTime.ToLongDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+````
+
+* Inherited from the `BlazoriseCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
+* Injected `IStringLocalizer<BookStoreResource>` (as `L` object) and used for localization.
+
+> We will continue to benefit from the `BlazoriseCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call server side HTTP APIs in your Blazor applications.
+
+While the code above pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
+
+## Run the Final Application
+
+You can run the application! The final UI of this part is shown below:
+
+![blazor-bookstore-book-list](images/blazor-bookstore-book-list.png)
+
+This is a fully working, server side paged, sorted and localized table of books.
 
 {{end # UI }}
 
