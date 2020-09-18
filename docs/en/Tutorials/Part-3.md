@@ -1355,6 +1355,193 @@ You can now run the application and try to edit a book.
 
 ![blazor-edit-book-modal](images/blazor-edit-book-modal.png)
 
+## Deleting a Book
+
+Open the `Books.razor` page and add the following `DropdownItem` under the "Edit" action inside the "Actions" `DropdownMenu`:
+
+````xml
+<DropdownItem Clicked="() => DeleteEntityAsync(context)">
+    @L["Delete"]
+</DropdownItem>
+````
+
+* `DeleteEntityAsync` is defined in the base class.
+
+Run the application and try to delete a book.
+
+## Full CRUD UI Code
+
+Here the complete code to create the book management CRUD page, that has been developed in the last two parts:
+
+````xml
+@page "/books"
+@using Volo.Abp.Application.Dtos
+@using Volo.Abp.BlazoriseUI
+@using Acme.BookStore.Books
+@using Acme.BookStore.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<BookStoreResource> L
+@inherits BlazoriseCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<Card>
+    <CardHeader>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is6">
+                <h2>@L["Books"]</h2>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is6">
+                <Paragraph Alignment="TextAlignment.Right">
+                    <Button Color="Color.Primary"
+                            Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
+                </Paragraph>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="BookDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridColumn Width="150px" 
+                                TItem="BookDto"
+                                Field="@nameof(BookDto.Id)" 
+                                Sortable="false" 
+                                Caption="@L["Actions"]">
+                    <DisplayTemplate>
+                        <Dropdown>
+                            <DropdownToggle Color="Color.Primary">
+                                @L["Actions"]
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem Clicked="() => OpenEditModalAsync(context.Id)">
+                                    @L["Edit"]
+                                </DropdownItem>
+                                <DropdownItem Clicked="() => DeleteEntityAsync(context)">
+                                    @L["Delete"]
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Name)"
+                                Caption="@L["Name"]"></DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Type)"
+                                Caption="@L["Type"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:BookType:{(int) context.Type}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.PublishDate)"
+                                Caption="@L["PublishDate"]">
+                    <DisplayTemplate>
+                        @context.PublishDate.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Price)"
+                                Caption="@L["Price"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.CreationTime)"
+                                Caption="@L["CreationTime"]">
+                    <DisplayTemplate>
+                        @context.CreationTime.ToLongDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<Modal @ref="CreateModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>@L["NewBook"]</ModalTitle>
+            <CloseButton Clicked="CloseCreateModalAsync" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>@L["Name"]</FieldLabel>
+                <TextEdit @bind-text="NewEntity.Name" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["Type"]</FieldLabel>
+                <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                    @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <SelectItem TValue="BookType" Value="@((BookType)bookTypeValue)">
+                            @L[$"Enum:BookType:{bookTypeValue}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+            <Field>
+                <FieldLabel>@L["PublishDate"]</FieldLabel>
+                <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["Price"]</FieldLabel>
+                <NumericEdit TValue="float" @bind-Value="NewEntity.Price" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" 
+                    Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+            <Button Color="Color.Primary" 
+                    Clicked="CreateEntityAsync">@L["Save"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>@EditingEntity.Name</ModalTitle>
+            <CloseButton Clicked="CloseEditModalAsync" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>@L["Name"]</FieldLabel>
+                <TextEdit @bind-text="EditingEntity.Name" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["Type"]</FieldLabel>
+                <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                    @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <SelectItem TValue="BookType" Value="@((BookType)bookTypeValue)">
+                            @L[$"Enum:BookType:{bookTypeValue}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+            <Field>
+                <FieldLabel>@L["PublishDate"]</FieldLabel>
+                <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["Price"]</FieldLabel>
+                <NumericEdit TValue="float" @bind-Value="EditingEntity.Price" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary"
+                    Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+            <Button Color="Color.Primary"
+                    Clicked="UpdateEntityAsync">@L["Save"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+````
+
 {{end}}
 
 ## The Next Part
