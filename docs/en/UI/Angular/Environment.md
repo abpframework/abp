@@ -54,7 +54,7 @@ Everything else will be sent to `"https://localhost:8080"`
 
 * `rootNamespace` **(new)** : Root namespace of the related API. e.g. Acme.BookStore
 
-## Application
+## Application
 
 ```typescript
  export interface Application {
@@ -69,7 +69,7 @@ Everything else will be sent to `"https://localhost:8080"`
 * `baseUrl`: [For detailed information](./Multi-Tenancy.md#domain-tenant-resolver)
 
 
-## AuthConfig
+## AuthConfig
 
 For authentication, we use angular-oauth2-oidc. Please check their [docs](https://github.com/manfredsteyer/angular-oauth2-oidc) out
 
