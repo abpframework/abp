@@ -63,8 +63,8 @@
                 <div *ngSwitchCase="valueTypes.SelectionStringValueType">
                   <div class="form-group mb-0">
                     <label [htmlFor]="feature.name">{{ feature.displayName }}</label>
-                    <select class="form-control" [id]="feature.name" [(ngModel)]="feature.value">
-                      <ng-container *ngIf="feature.valueType.itemSource?.items?.length">
+                    <ng-container *ngIf="feature.valueType.itemSource?.items?.length">
+                      <select class="form-control" [id]="feature.name" [(ngModel)]="feature.value">
                         <option
                           *ngFor="
                             let item of feature.valueType.itemSource?.items;
@@ -77,8 +77,8 @@
                               | abpLocalization
                           }}</option
                         >
-                      </ng-container>
-                    </select>
+                      </select>
+                    </ng-container>
                     <ng-container
                       *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
                     ></ng-container>
