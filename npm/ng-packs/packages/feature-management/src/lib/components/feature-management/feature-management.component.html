@@ -1,4 +1,4 @@
-<abp-modal size="lg" [(visible)]="visible" [busy]="modalBusy">
+<abp-modal *ngIf="visible" size="lg" [(visible)]="visible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ 'AbpFeatureManagement::Features' | abpLocalization }}</h3>
   </ng-template>
@@ -15,7 +15,7 @@
         >
           <li
             *ngFor="let group of groups; trackBy: track.by('name')"
-            [ngbNavItem]="selectedGroupDisplayName"
+            [ngbNavItem]="group.displayName"
           >
             <a ngbNavLink>{{ group.displayName }}</a>
             <ng-template ngbNavContent>
@@ -64,16 +64,20 @@
                   <div class="form-group mb-0">
                     <label [htmlFor]="feature.name">{{ feature.displayName }}</label>
                     <select class="form-control" [id]="feature.name" [(ngModel)]="feature.value">
-                      <option [ngValue]=""></option>
-                      <option
-                        *ngFor="
-                          let prop of feature.valueType.properties | keyvalue;
-                          trackBy: track.by('key')
-                        "
-                        [ngValue]="prop.value"
-                      >
-                        {{ prop.key }}</option
-                      >
+                      <ng-container *ngIf="feature.valueType.itemSource?.items?.length">
+                        <option
+                          *ngFor="
+                            let item of feature.valueType.itemSource?.items;
+                            trackBy: track.by('key')
+                          "
+                          [ngValue]="item.value"
+                        >
+                          {{
+                            item.displayText?.resourceName + '::' + item.displayText?.name
+                              | abpLocalization
+                          }}</option
+                        >
+                      </ng-container>
                     </select>
                     <ng-container
                       *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
@@ -100,13 +104,16 @@
   </ng-template>
 
   <ng-template #abpFooter>
-    <ng-container *ngIf="groups.length">
-      <button #abpClose type="button" class="btn btn-secondary">
-        {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
-      </button>
-      <abp-button iconClass="fa fa-check" [disabled]="modalBusy" (click)="save()">
-        {{ 'AbpFeatureManagement::Save' | abpLocalization }}
-      </abp-button>
-    </ng-container>
+    <button #abpClose type="button" class="btn btn-secondary">
+      {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
+    </button>
+    <abp-button
+      *ngIf="groups.length"
+      iconClass="fa fa-check"
+      [disabled]="modalBusy"
+      (click)="save()"
+    >
+      {{ 'AbpFeatureManagement::Save' | abpLocalization }}
+    </abp-button>
   </ng-template>
 </abp-modal>
