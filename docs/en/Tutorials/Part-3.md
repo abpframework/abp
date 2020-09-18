@@ -1158,6 +1158,93 @@ Clicking the "Delete" action calls the `delete` method which then shows a confir
 
 {{end}}
 
+{{if UI == "Blazor"}}
+
+## Creating a New Book
+
+In this section, you will learn how to create a new modal dialog form to create a new book. Since we've inherited from the `BlazoriseCrudPage`, we only need to develop the view part.
+
+### Add "New Button" Button
+
+Open the `Books.razor` and replace the `<CardHeader>` section with the following code:
+
+````xml
+<CardHeader>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is6">
+            <h2>@L["Books"]</h2>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is6">
+            <Paragraph Alignment="TextAlignment.Right">
+                <Button Color="Color.Primary"
+                        Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
+            </Paragraph>
+        </Column>
+    </Row>
+</CardHeader>
+````
+
+This will change the card header by adding a "New book" button to the right side:
+
+![blazor-add-book-button](images/blazor-add-book-button.png)
+
+Now, we can add a modal that will be opened when we click to the button.
+
+### Book Creation Modal
+
+Open the `Books.razor` and add the following code to the end of the page:
+
+````xml
+<Modal @ref="CreateModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>@L["NewBook"]</ModalTitle>
+            <CloseButton Clicked="CloseCreateModalAsync" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>@L["Name"]</FieldLabel>
+                <TextEdit @bind-text="NewEntity.Name" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["Type"]</FieldLabel>
+                <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                    @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <SelectItem TValue="BookType" Value="@((BookType)bookTypeValue)">
+                            @L[$"Enum:BookType:{bookTypeValue}"]
+                        </SelectItem>
+                    }
+                </Select>
+            </Field>
+            <Field>
+                <FieldLabel>@L["PublishDate"]</FieldLabel>
+                <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["Price"]</FieldLabel>
+                <NumericEdit TValue="float" @bind-Value="NewEntity.Price" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" 
+                    Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+            <Button Color="Color.Primary" 
+                    Clicked="CreateEntityAsync">@L["Save"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+````
+
+`CreateModal` object, `CloseCreateModalAsync` and `CreateEntityAsync` method are defined by the base class. See the [Blazorise documentation](https://blazorise.com/docs/) if you want to understand the `Modal` and the other components.
+
+That's all. Run the application and try to add a new book:
+
+![blazor-new-book-modal](images/blazor-new-book-modal.png)
+
+{{end}}
+
 ## The Next Part
 
 See the [next part](Part-4.md) of this tutorial.
