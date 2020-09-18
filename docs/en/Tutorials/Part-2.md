@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider. 
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -115,7 +98,7 @@ We will use these dynamic proxy functions in the next sections to communicate to
 
 ## Localization
 
-Before starting to the UI development, we first want to prepare the localization texts (you normally do when needed while developing your application).
+Before starting to the UI development, we first want to prepare the localization texts (you normally do this when needed while developing your application).
 
 Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
 
@@ -341,9 +324,7 @@ You can run the application! The final UI of this part is shown below:
 
 This is a fully working, server side paged, sorted and localized table of books.
 
-{{end}}
-
-{{if UI == "NG"}}
+{{else if UI == "NG"}}
 
 ## Install NPM packages
 
@@ -551,7 +532,57 @@ Now you can see the final result on your browser:
 
 ![Book list final result](./images/bookstore-book-list.png)
 
-{{end}}
+{{else if UI == "Blazor"}}
+
+## Create a Books Page
+
+It's time to create something visible and usable! Right click to the `Pages` folder under the `Acme.BookStore.Blazor` project and add a new **razor component**, named `Books.razor`:
+
+![blazor-add-books-component](images/blazor-add-books-component.png)
+
+Replace the contents of this component as shown below:
+
+````html
+@page "/books"
+
+<h2>Books</h2>
+
+@code {
+
+}
+````
+
+### Add Books Page to the Main Menu
+
+Open the `BookStoreMenuContributor` class in the `Blazor` project add the following code to the end of the `ConfigureMainMenuAsync` method:
+
+````csharp
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/Books"
+        )
+    )
+);
+````
+
+Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
+
+![blazor-menu-bookstore](images/blazor-menu-bookstore.png)
+
+When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
+
+### Book List
+
+TODO
+
+{{end # UI }}
 
 ## The Next Part
 

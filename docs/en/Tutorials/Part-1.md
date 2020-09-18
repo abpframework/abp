@@ -200,7 +200,7 @@ Before updating the database, read the section below to learn how to seed some i
 
 > It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create seed data, but it is suggested to follow it to learn this useful ABP Framework feature.
 
-Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project and copy the following code:
+Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project by copying the following code:
 
 ```csharp
 using System;
@@ -400,7 +400,7 @@ namespace Acme.BookStore.Books
 
 ### BookAppService
 
-It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the Acme.BookStore.Application project:
+It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the `Acme.BookStore.Application` project:
 
 ````csharp
 using System;
@@ -440,7 +440,7 @@ ABP can [**automagically**](../API/Auto-API-Controllers.md) configures your appl
 
 ### Swagger UI
 
-The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. (Replace `<port>` with your own port number.)
+The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. Replace `<port>` with your own port number.
 
 You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints:
 
