@@ -49,13 +49,15 @@ Please do the following:
 
 ...and a customized download will start in a few seconds.
 
+To avoid IDE warnings, run `yarn` or `npm install` in the Angular root folder before you continue to the next section. It is not imperative but recommended.
+
 ## Angular Project Structure
 
-After creating a solution, open its "angular" directory in your IDE. Here is how the contents of the root folder looks like:
+After creating a solution, open its "angular" directory in your IDE. This is how the contents of the root folder looks like:
 
-<img alt="Angular project root folder structure" src="./images/quick-start---root-folder-structure.png" width="300" />
+<img alt="Angular project root folder structure" src="./images/quick-start---root-folder-structure.png" width="300px" style="max-width:100%" />
 
-Let's see what these folders and files are for:
+Here is what these folders and files are for:
 
 - **.vscode** has extension recommendations in it.
 - **e2e** is a separate app for possible end-to-end tests.
@@ -72,9 +74,9 @@ Let's see what these folders and files are for:
 - **tsconfig.json** and all other [tsconfig files](https://angular.io/guide/typescript-configuration) in general, include some TypeScript and Angular compile options.
 - **yarn.lock** enables installing consistent package versions across different devices so that working application build will not break because of a package update. Please read [Yarn documentation](https://classic.yarnpkg.com/en/docs/yarn-lock/) if you are interested in more information on the topic. If you have decided to use npm, please remove this file and keep the [package-lock.json](https://docs.npmjs.com/files/package-lock.json) instead.
 
-Now let's take a look at the contents of the source folder.
+Now let us take a look at the contents of the source folder.
 
-<img alt="Angular project source folder structure" src="./images/quick-start---source-folder-structure.png" width="300" />
+<img alt="Angular project source folder structure" src="./images/quick-start---source-folder-structure.png" width="300px" style="max-width:100%" />
 
 - **app** is the main directory you put your application files in. Any module, component, directive, service, pipe, guard, interceptor, etc. should be placed here. You are free to choose your own folder structure, but "folders reflecting your business features" is generally a fine practice.
 - **home** is a predefined module and acts as a welcome page. It also demonstrates how a feature-based folder structure may look like. More complex features will probably have sub-features, thus inner folders. You may change the home folder however you like.
@@ -91,6 +93,37 @@ Now let's take a look at the contents of the source folder.
 - **style.scss** is the default entry point for application styles. You can change this or add new entry points in _angular.json_.
 - **test.ts** helps the unit test runner discover and bootstrap spec files.
 
-Phew! So many files, right? Yet, most of them are typically not subject to change or even when they are so, the CLI tooling will do the job for you. The main focus should be on the **app** folder and its content.
+Phew! So many files, right? Yet, **most of them are typically not subject to change** or, even when they are so, the CLI tooling will do the job for you. The main focus should be on the app folder and its content.
 
 Next, we will take a look at the commands used to prepare, build, and serve our application.
+
+## How to Run the Angular Application
+
+Now that you know about the files and folders, we can get the application up and running.
+
+1. Make sure the [database migration is complete](https://docs.abp.io/en/abp/3.2/Getting-Started?UI=NG&DB=EF&Tiered=No#create-the-database) and the [API is up and running](https://docs.abp.io/en/abp/3.2/Getting-Started?UI=NG&DB=EF&Tiered=No#run-the-application).
+2. Run `yarn` or `npm install` if you have not already.
+3. Run `yarn start` or `npm start`. The first compilation may take a while. This will start a [live development server](#angular-live-development-server) and launch your default browser in the end.
+4. Visit the browser page that opens after the compilation <sup id="a-certificate-error">[1](#f-certificate-error)</sup>.
+
+<img alt="New ABP Angular project home page" src="./images/quick-start---new-project-home-page.png" width="744px" style="max-width:100%" />
+
+You may modify the behavior of the **start script** (in the package.json file) by changing the parameters passed to the `ng serve` command. For instance, if you do not want a browser window to open next time you run the script, remove `--open` from the end of it. Please check [ng serve documentation](https://angular.io/cli/serve) for all available options.
+
+### Angular Live Development Server
+
+The development server of Angular is based on [Webpack DevServer](https://webpack.js.org/configuration/dev-server/). It tracks changes to source files and syncs the browser window after an incremental re-compilation every time <sup id="a-dev-server">[2](#f-dev-server)</sup> you make one. Your experience will be like this:
+
+<img alt="Error caused by browser blocking access to backend" src="./images/quick-start---angular-live-development-server.gif" width="818px" style="max-width:100%" />
+
+Please keep in mind that you should not use this server in production. To provide the fastest experience, the compiler skips some heavy optimizations and the development server is simply not built for multiple clients. The next section will describe what to do.
+
+---
+
+<img alt="Error caused by browser blocking access to backend" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%" />
+
+<sup id="f-certificate-error"><b>1</b></sup> _If see the error above when you run the Angular app, your browser might be blocking access to the API because of the self-signed certificate. Visit that address and allow access to it (once). When you see the Swagger interface, you are good to go._ <sup>[↩](#a-certificate-error)</sup>
+
+<sup id="f-dev-server"><b>2</b></sup> _Sometimes, depending on the file changed, Webpack may miss the change and cannot reflect it in the browser. For example, tsconfig files are not being tracked. In such a case, please restart the development server._ <sup>[↩](#a-dev-server)</sup>
+
+---
