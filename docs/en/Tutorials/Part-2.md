@@ -633,11 +633,14 @@ Open the `Books.razor` and replace the content as the following:
 ````
 
 * Inherited from the `BlazoriseCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
+* `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base blass.
 * Injected `IStringLocalizer<BookStoreResource>` (as `L` object) and used for localization.
 
-> We will continue to benefit from the `BlazoriseCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call server side HTTP APIs in your Blazor applications.
-
 While the code above pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
+
+#### About the BlazoriseCrudPageBase
+
+We will continue to benefit from the `BlazoriseCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call server side HTTP APIs in your Blazor applications.
 
 ## Run the Final Application
 
