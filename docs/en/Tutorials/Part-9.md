@@ -493,7 +493,7 @@ That's all! You can run the application and try to edit an author.
 
 {{else if UI == "NG"}}
 
-## The Author List Page, Create & Delete Authors
+## The Author Management Page
 
 Run the following command line to create a new module, named `AuthorModule` in the root folder of the angular application:
 
@@ -834,7 +834,9 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 {{if UI == "Blazor"}}
 
+## The Author Management Page
 
+TODO
 
 {{end}}
 
