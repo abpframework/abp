@@ -36,11 +36,11 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 
 ## Introduction
 
-This part explains how to create a CRUD page for the `Author` entity introduced in previous parts.
+This part explains how to create a CRUD page for the `Author` entity introduced in the previous parts.
 
 {{if UI == "MVC"}}
 
-## The Book List Page
+## The Authors List Page
 
 Create a new razor page, `Index.cshtml` under the `Pages/Authors` folder of the `Acme.BookStore.Web` project and change the content as given below.
 
@@ -829,6 +829,10 @@ As you see, the admin role has no *Author Management* permissions yet. Click to 
 That's all! This is a fully working CRUD page, you can create, edit and delete authors.
 
 > **Tip**: If you run the `.DbMigrator` console application after defining a new permission, it automatically grants these new permissions to the admin role and you don't need to manually grant the permissions yourself.
+
+{{end}}
+
+{{if UI == "Blazor"}}
 
 {{end}}
 
