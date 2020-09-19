@@ -315,6 +315,64 @@ if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
 }
 ````
 
+You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return values. The final `BookStoreMenuContributor` class should be the following:
+
+````csharp
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Acme.BookStore.Localization;
+using Acme.BookStore.MultiTenancy;
+using Acme.BookStore.Permissions;
+using Volo.Abp.TenantManagement.Web.Navigation;
+using Volo.Abp.UI.Navigation;
+
+namespace Acme.BookStore.Web.Menus
+{
+    public class BookStoreMenuContributor : IMenuContributor
+    {
+        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        {
+            if (context.Menu.Name == StandardMenus.Main)
+            {
+                await ConfigureMainMenuAsync(context);
+            }
+        }
+
+        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        {
+            if (!MultiTenancyConsts.IsEnabled)
+            {
+                var administration = context.Menu.GetAdministration();
+                administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
+            }
+
+            var l = context.GetLocalizer<BookStoreResource>();
+
+            context.Menu.Items.Insert(0, new ApplicationMenuItem("BookStore.Home", l["Menu:Home"], "~/"));
+
+            var bookStoreMenu = new ApplicationMenuItem(
+                "BooksStore",
+                l["Menu:BookStore"],
+                icon: "fa fa-book"
+            );
+
+            context.Menu.AddItem(bookStoreMenu);
+
+            //CHECK the PERMISSION
+            if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
+            {
+                bookStoreMenu.AddItem(new ApplicationMenuItem(
+                    "BooksStore.Books",
+                    l["Menu:Books"],
+                    url: "/Books"
+                ));
+            }
+        }
+    }
+}
+````
+
 {{else if UI == "NG"}}
 
 ### Angular Guard Configuration
@@ -492,6 +550,102 @@ You can run and test the permissions. Remove a book related permission from the 
 However, ABP Framework caches the permissions of the current user in the client side. So, when you change a permission for yourself, you need to manually **refresh the page** to take the effect. If you don't refresh and try to use the prohibited action you get an HTTP 403 (forbidden) response from the server.
 
 > Changing a permission for a role or user immediately available on the server side. So, this cache system doesn't cause any security problem.
+
+### Menu Item
+
+Even we have secured all the layers of the book management page, it is still visible on the main menu of the application. We should hide the menu item if the current user has no permission.
+
+Open the `BookStoreMenuContributor` class, find the code block below:
+
+````csharp
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/books"
+        )
+    )
+);
+````
+
+And replace this code block with the following:
+
+````csharp
+var bookStoreMenu = new ApplicationMenuItem(
+    "BooksStore",
+    l["Menu:BookStore"],
+    icon: "fa fa-book"
+);
+
+context.Menu.AddItem(bookStoreMenu);
+
+//CHECK the PERMISSION
+if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
+{
+    bookStoreMenu.AddItem(new ApplicationMenuItem(
+        "BooksStore.Books",
+        l["Menu:Books"],
+        url: "/books"
+    ));
+}
+````
+
+You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return values. The final `BookStoreMenuContributor` class should be the following:
+
+````csharp
+using System.Threading.Tasks;
+using Acme.BookStore.Localization;
+using Acme.BookStore.Permissions;
+using Volo.Abp.UI.Navigation;
+
+namespace Acme.BookStore.Blazor
+{
+    public class BookStoreMenuContributor : IMenuContributor
+    {
+        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        {
+            if(context.Menu.DisplayName != StandardMenus.Main)
+            {
+                return;
+            }
+
+            var l = context.GetLocalizer<BookStoreResource>();
+
+            context.Menu.Items.Insert(
+                0,
+                new ApplicationMenuItem(
+                    "BookStore.Home",
+                    l["Menu:Home"],
+                    "/",
+                    icon: "fas fa-home"
+                )
+            );
+
+            var bookStoreMenu = new ApplicationMenuItem(
+                "BooksStore",
+                l["Menu:BookStore"],
+                icon: "fa fa-book"
+            );
+
+            context.Menu.AddItem(bookStoreMenu);
+
+            if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
+            {
+                bookStoreMenu.AddItem(new ApplicationMenuItem(
+                    "BooksStore.Books",
+                    l["Menu:Books"],
+                    url: "/books"
+                ));
+            }
+        }
+    }
+}
+````
 
 {{end}}
 
