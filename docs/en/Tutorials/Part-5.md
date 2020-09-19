@@ -128,6 +128,8 @@ Go to the *Administration -> Identity -> Roles* page, select *Permissions* actio
 
 Grant the permissions you want and save the modal.
 
+> **Tip**: New permissions are automatically granted to the admin role if you run the `Acme.BookStore.DbMigrator` application.
+
 ## Authorization
 
 Now, you can use the permissions to authorize the book management.
@@ -168,6 +170,8 @@ namespace Acme.BookStore.Books
 ````
 
 Added code to the constructor. Base `CrudAppService` automatically uses these permissions on the CRUD operations. This makes the **application service** secure, but also makes the **HTTP API** secure since this service is automatically used as an HTTP API as explained before (see [auto API controllers](../API/Auto-API-Controllers.md)).
+
+> You will see the declarative authorization, using the `[Authorize(...)]` attribute, later while developing the author management functionality.
 
 {{if UI == "MVC"}}
 
@@ -392,6 +396,99 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 
 * Added `abpPermission="BookStore.Books.Edit"` that hides the edit action if the current user has no editing permission.
 * Added `abpPermission="BookStore.Books.Delete"` that hides the delete action if the current user has no delete permission.
+
+{{end}}
+
+{{else if UI == "Blazor"}}
+
+### Authorize the Razor Component
+
+Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor` project and add an `Authorize` attribute just after the `@page` directive, as shown below:
+
+````html
+@page "/books"
+@attribute [Authorize(BookStorePermissions.Books.Default)]
+@using Acme.BookStore.Permissions
+@using Microsoft.AspNetCore.Authorization
+...
+````
+
+Adding this attribute prevents to enter this page if the current hasn't logged in or hasn't granted for the given permission. In case of attempt, the user is redirected to the login page.
+
+### Show/Hide the Actions
+
+The book management page has a *New Book* button and *Edit* and *Delete* actions for each book. We should hide these buttons/actions if the current user has not granted for the related permissions.
+
+#### Inject the IAuthorizationService
+
+Inject the `IAuthorizationService` into the `Books.razor`:
+
+````csharp
+@inject IAuthorizationService AuthorizationService
+````
+
+#### Get the Permissions On Initialization
+
+Add the following code block to the end of the `Books.razor` file:
+
+````csharp
+@code
+{
+    bool canCreateBook;
+    bool canEditBook;
+    bool canDeleteBook;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        canCreateBook =await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create);
+        canEditBook = await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Edit);
+        canDeleteBook = await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Delete);
+    }
+}
+````
+
+We will use these `bool` fields to check the permissions.
+
+#### Hide the New Book Button
+
+Wrap the *New Book* button by an `if` block as shown below:
+
+````xml
+@if (canCreateBook)
+{
+    <Button Color="Color.Primary"
+            Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
+}
+````
+
+#### Hide the Edit/Delete Actions
+
+As similar to the *New Book* button, we can use `if` blocks to conditionally show/hide the *Edit* and *Delete* actions:
+
+````xml
+@if (canEditBook)
+{
+    <DropdownItem Clicked="() => OpenEditModalAsync(context.Id)">
+        @L["Edit"]
+    </DropdownItem>
+}
+@if (canDeleteBook)
+{
+    <DropdownItem Clicked="() => DeleteEntityAsync(context)">
+        @L["Delete"]
+    </DropdownItem>
+}
+````
+
+#### About the Permission Caching
+
+You can run and test the permissions. Remove a book related permission from the admin role to see the related button/action disappears from the UI.
+
+However, ABP Framework caches the permissions of the current user in the client side. So, when you change a permission for yourself, you need to manually **refresh the page** to take the effect. If you don't refresh and try to use the prohibited action you get an HTTP 403 (forbidden) response from the server.
+
+> Changing a permission for a role or user immediately available on the server side. So, this cache system doesn't cause any security problem.
 
 {{end}}
 
