@@ -834,6 +834,8 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 {{if UI == "Blazor"}}
 
+
+
 {{end}}
 
 ## The Next Part
