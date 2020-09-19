@@ -6,16 +6,6 @@
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -55,7 +45,9 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 This part covers the **server side** tests. There are several test projects in the solution:
 
-![bookstore-test-projects-v2](./images/bookstore-test-projects-{{UI_Text}}.png)
+![bookstore-test-projects-v2](./images/bookstore-test-projects-mvc.png)
+
+> Test projects slightly differs based on your UI and Database selection. For example, if you select MongoDB, then the `Acme.BookStore.EntityFrameworkCore.Tests` will be `Acme.BookStore.MongoDB.Tests`.
 
 Each project is used to test the related project. Test projects use the following libraries for testing:
 
@@ -65,11 +57,11 @@ Each project is used to test the related project. Test projects use the followin
 
 {{if DB=="EF"}}
 
-> The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
+> The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
 
 {{else if DB=="Mongo"}}
 
-> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
+> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
 
 {{end}}
 
