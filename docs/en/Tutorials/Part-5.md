@@ -555,7 +555,7 @@ However, ABP Framework caches the permissions of the current user in the client 
 
 Even we have secured all the layers of the book management page, it is still visible on the main menu of the application. We should hide the menu item if the current user has no permission.
 
-Open the `BookStoreMenuContributor` class, find the code block below:
+Open the `BookStoreMenuContributor` class in the `Acme.BookStore.Blazor` project, find the code block below:
 
 ````csharp
 context.Menu.AddItem(

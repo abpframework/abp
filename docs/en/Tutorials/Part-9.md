@@ -836,7 +836,336 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 ## The Author Management Page
 
-TODO
+### The Authors Razor Component
+
+Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStore.Blazor` project with the following content:
+
+````xml
+@page "/authors"
+@using Acme.BookStore.Authors
+@using Acme.BookStore.Localization
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.ObjectMapping
+@inject IAuthorAppService AuthorAppService
+@inject IStringLocalizer<BookStoreResource> L
+@inject IAuthorizationService AuthorizationService
+@inject IUiMessageService UiMessageService
+@inject IObjectMapper ObjectMapper
+<Card>
+    <CardHeader>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is6">
+                <h2>@L["Authors"]</h2>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is6">
+                <Paragraph Alignment="TextAlignment.Right">
+                    @if (CanCreateAuthor)
+                    {
+                        <Button Color="Color.Primary"
+                                Clicked="OpenCreateAuthorModal">
+                            @L["NewAuthor"]
+                        </Button>
+                    }
+                </Paragraph>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="AuthorDto"
+                  Data="AuthorList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridColumn Width="150px"
+                                TItem="AuthorDto"
+                                Field="@nameof(AuthorDto.Id)"
+                                Sortable="false"
+                                Caption="@L["Actions"]">
+                    <DisplayTemplate>
+                        <Dropdown>
+                            <DropdownToggle Color="Color.Primary">
+                                @L["Actions"]
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                @if (CanEditAuthor)
+                                {
+                                    <DropdownItem Clicked="() => OpenEditAuthorModal(context)">
+                                        @L["Edit"]
+                                    </DropdownItem>
+                                }
+                                @if (CanDeleteAuthor)
+                                {
+                                    <DropdownItem Clicked="() => DeleteAuthorAsync(context)">
+                                        @L["Delete"]
+                                    </DropdownItem>
+                                }
+                            </DropdownMenu>
+                        </Dropdown>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="AuthorDto"
+                                Field="@nameof(AuthorDto.Name)"
+                                Caption="@L["Name"]"></DataGridColumn>
+                <DataGridColumn TItem="AuthorDto"
+                                Field="@nameof(AuthorDto.BirthDate)"
+                                Caption="@L["BirthDate"]">
+                    <DisplayTemplate>
+                        @context.BirthDate.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<Modal @ref="CreateAuthorModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>@L["NewAuthor"]</ModalTitle>
+            <CloseButton Clicked="CloseCreateAuthorModal" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>@L["Name"]</FieldLabel>
+                <TextEdit @bind-text="@NewAuthor.Name" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["BirthDate"]</FieldLabel>
+                <DateEdit TValue="DateTime" @bind-Date="@NewAuthor.BirthDate" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["ShortBio"]</FieldLabel>
+                <MemoEdit Rows="5" @bind-text="@NewAuthor.ShortBio" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary"
+                    Clicked="CloseCreateAuthorModal">
+                @L["Cancel"]
+            </Button>
+            <Button Color="Color.Primary"
+                    Clicked="CreateEntityAsync">
+                @L["Save"]
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditAuthorModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>@EditingAuthor.Name</ModalTitle>
+            <CloseButton Clicked="CloseEditAuthorModal" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>@L["Name"]</FieldLabel>
+                <TextEdit @bind-text="@EditingAuthor.Name" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["BirthDate"]</FieldLabel>
+                <DateEdit TValue="DateTime" @bind-Date="@EditingAuthor.BirthDate" />
+            </Field>
+            <Field>
+                <FieldLabel>@L["ShortBio"]</FieldLabel>
+                <MemoEdit Rows="5" @bind-text="@EditingAuthor.ShortBio" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary"
+                    Clicked="CloseEditAuthorModal">
+                @L["Cancel"]
+            </Button>
+            <Button Color="Color.Primary"
+                    Clicked="UpdateAuthorAsync">
+                @L["Save"]
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+````
+
+And create a new code behind file, `Authors.razor.cs`, under the `Pages` folder, with the following content:
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Acme.BookStore.Authors;
+using Acme.BookStore.Permissions;
+using Blazorise;
+using Blazorise.DataGrid;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
+
+namespace Acme.BookStore.Blazor.Pages
+{
+    public partial class Authors
+    {
+        private IReadOnlyList<AuthorDto> AuthorList { get; set; }
+
+        private int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
+        private int CurrentPage { get; set; }
+        private string CurrentSorting { get; set; }
+        private int TotalCount { get; set; }
+
+        private bool CanCreateAuthor { get; set; }
+        private bool CanEditAuthor { get; set; }
+        private bool CanDeleteAuthor { get; set; }
+
+        private CreateAuthorDto NewAuthor { get; set; }
+        private Guid EditingAuthorId { get; set; }
+        private UpdateAuthorDto EditingAuthor { get; set; }
+
+        private Modal CreateAuthorModal { get; set; }
+        private Modal EditAuthorModal { get; set; }
+
+        public Authors()
+        {
+            NewAuthor = new CreateAuthorDto();
+            EditingAuthor = new UpdateAuthorDto();
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await SetPermissionsAsync();
+            await GetAuthorsAsync();
+        }
+
+        private async Task SetPermissionsAsync()
+        {
+            CanCreateAuthor = await AuthorizationService
+                .IsGrantedAsync(BookStorePermissions.Authors.Create);
+            
+            CanEditAuthor = await AuthorizationService
+                .IsGrantedAsync(BookStorePermissions.Authors.Edit);
+            
+            CanDeleteAuthor = await AuthorizationService
+                .IsGrantedAsync(BookStorePermissions.Authors.Delete);
+        }
+
+        private async Task GetAuthorsAsync()
+        {
+            var result = await AuthorAppService.GetListAsync(
+                new GetAuthorListDto
+                {
+                    MaxResultCount = PageSize,
+                    SkipCount = CurrentPage * PageSize,
+                    Sorting = CurrentSorting
+                }
+            );
+
+            AuthorList = result.Items;
+            TotalCount = (int)result.TotalCount;
+        }
+
+        private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<AuthorDto> e)
+        {
+            CurrentSorting = e.Columns
+                .Where(c => c.Direction != SortDirection.None)
+                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
+                .JoinAsString(",");
+            CurrentPage = e.Page - 1;
+
+            await GetAuthorsAsync();
+
+            StateHasChanged();
+        }
+
+        private void OpenCreateAuthorModal()
+        {
+            NewAuthor = new CreateAuthorDto();
+            CreateAuthorModal.Show();
+        }
+
+        private void CloseCreateAuthorModal()
+        {
+            CreateAuthorModal.Hide();
+        }
+
+        private void OpenEditAuthorModal(AuthorDto author)
+        {
+            EditingAuthorId = author.Id;
+            EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
+            EditAuthorModal.Show();
+        }
+
+        private async Task DeleteAuthorAsync(AuthorDto author)
+        {
+            var confirmMessage = L["AuthorDeletionConfirmationMessage", author.Name];
+            if (!await UiMessageService.ConfirmAsync(confirmMessage))
+            {
+                return;
+            }
+
+            await AuthorAppService.DeleteAsync(author.Id);
+            await GetAuthorsAsync();
+        }
+
+        private void CloseEditAuthorModal()
+        {
+            EditAuthorModal.Hide();
+        }
+
+        protected virtual async Task CreateEntityAsync()
+        {
+            await AuthorAppService.CreateAsync(NewAuthor);
+            await GetAuthorsAsync();
+            CreateAuthorModal.Hide();
+        }
+
+        protected virtual async Task UpdateAuthorAsync()
+        {
+            await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
+            await GetAuthorsAsync();
+            EditAuthorModal.Hide();
+        }
+    }
+}
+````
+
+### Object Mapping
+
+Open the `BookStoreBlazorAutoMapperProfile.cs` in the `Acme.BookStore.Blazor` project and add the following mapping code in the constructor:
+
+````csharp
+CreateMap<AuthorDto, UpdateAuthorDto>();
+````
+
+You will need to declare a `using Acme.BookStore.Authors;` statement to the beginning of the file.
+
+### Add to the Main Menu
+
+Open the `BookStoreMenuContributor.cs` in the `Acme.BookStore.Blazor` project and add the following code to the end of the `ConfigureMainMenuAsync` method:
+
+````csharp
+if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
+{
+    bookStoreMenu.AddItem(new ApplicationMenuItem(
+        "BooksStore.Authors",
+        l["Menu:Authors"],
+        url: "/authors"
+    ));
+}
+````
+
+### Localizations
+
+We should complete the localizations we've used above. Open the `en.json` file under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project and add the following entries:
+
+````json
+"Menu:Authors": "Authors",
+"Authors": "Authors",
+"AuthorDeletionConfirmationMessage": "Are you sure to delete the author '{0}'?",
+"BirthDate": "Birth date",
+"NewAuthor": "New author"
+````
 
 {{end}}
 
