@@ -15,6 +15,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Account.Blazor;
+using Volo.Abp.AutoMapper;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
@@ -38,6 +39,7 @@ namespace MyCompanyName.MyProjectName.Blazor
             ConfigureRouter(context);
             ConfigureUI(builder);
             ConfigureMenu(context);
+            ConfigureAutoMapper(context);
         }
 
         private void ConfigureRouter(ServiceConfigurationContext context)
@@ -83,6 +85,14 @@ namespace MyCompanyName.MyProjectName.Blazor
             context.Services.AddTransient(sp => new HttpClient
             {
                 BaseAddress = new Uri(environment.BaseAddress)
+            });
+        }
+
+        private void ConfigureAutoMapper(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddMaps<MyProjectNameBlazorModule>();
             });
         }
 
