@@ -836,7 +836,7 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 ## The Author Management Page
 
-### The Authors Razor Component
+### Authors Razor Component
 
 Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStore.Blazor` project with the following content:
 
@@ -948,7 +948,7 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
                 @L["Cancel"]
             </Button>
             <Button Color="Color.Primary"
-                    Clicked="CreateEntityAsync">
+                    Clicked="CreateAuthorAsync">
                 @L["Save"]
             </Button>
         </ModalFooter>
@@ -990,7 +990,12 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 </Modal>
 ````
 
-And create a new code behind file, `Authors.razor.cs`, under the `Pages` folder, with the following content:
+* This code is similar to the `Books.razor`, except it doesn't inherit from the `BlazorisePageBase`, but uses its own implementation.
+* Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../API/Dynamic-CSharp-API-Clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
+* Injects the `IAuthorizationService` to check [permissions](../Authorization.md).
+* Injects the `IObjectMapper` for [object to object mapping](../Object-To-Object-Mapping.md).
+
+Create a new code behind file, `Authors.razor.cs`, under the `Pages` folder, with the following content:
 
 ````csharp
 using System;
@@ -1020,6 +1025,7 @@ namespace Acme.BookStore.Blazor.Pages
         private bool CanDeleteAuthor { get; set; }
 
         private CreateAuthorDto NewAuthor { get; set; }
+
         private Guid EditingAuthorId { get; set; }
         private UpdateAuthorDto EditingAuthor { get; set; }
 
@@ -1113,14 +1119,14 @@ namespace Acme.BookStore.Blazor.Pages
             EditAuthorModal.Hide();
         }
 
-        protected virtual async Task CreateEntityAsync()
+        private async Task CreateAuthorAsync()
         {
             await AuthorAppService.CreateAsync(NewAuthor);
             await GetAuthorsAsync();
             CreateAuthorModal.Hide();
         }
 
-        protected virtual async Task UpdateAuthorAsync()
+        private async Task UpdateAuthorAsync()
         {
             await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
             await GetAuthorsAsync();
@@ -1130,7 +1136,11 @@ namespace Acme.BookStore.Blazor.Pages
 }
 ````
 
+This class typically defines the properties and methods used by the `Authors.razor` page.
+
 ### Object Mapping
+
+`Authors` class uses the `IObjectMapper` in the `OpenEditAuthorModal` method. So, we need to define this mapping.
 
 Open the `BookStoreBlazorAutoMapperProfile.cs` in the `Acme.BookStore.Blazor` project and add the following mapping code in the constructor:
 
