@@ -50,21 +50,21 @@ public Guid AuthorId { get; set; }
 
 {{if DB=="EF"}}
 
-> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their entities (just like we will done below) which makes your application code simpler.
+> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (just like we will done below) which makes your application code simpler.
 
 {{end}}
 
 ## Database & Data Migration
 
-Added a new, required `AuthorId` property to the `Book` entity. But, what about the existing books on the database? They currently don't have `AuthorId`s and this will be a problem when we try to run the application.
+Added a new, required `AuthorId` property to the `Book` entity. But, **what about the existing books** on the database? They currently don't have `AuthorId`s and this will be a problem when we try to run the application.
 
-This is a typical migration problem and the decision depends on your case;
+This is a **typical migration problem** and the decision depends on your case;
 
 * If you haven't published your application to the production yet, you can just delete existing books in the database, or you can even delete the entire database in your development environment.
-* You can do it programmatically on data migration or seed phase.
+* You can update the existing data programmatically on data migration or seed phase.
 * You can manually handle it on the database.
 
-We prefer to **delete the database** {{if DB=="EF"}}(run the `Drop-Database` in the *Package Manager Console*){{end}} since this is just an example project and data loss is not important. Since this topic is not related to the ABP Framework, we don't go deeper for all the scenarios.
+We prefer to **delete the database** {{if DB=="EF"}}(you can run the `Drop-Database` in the *Package Manager Console*){{end}} since this is just an example project and data loss is not important. Since this topic is not related to the ABP Framework, we don't go deeper for all the scenarios.
 
 {{if DB=="EF"}}
 
@@ -91,6 +91,8 @@ Run the following command in the Package Manager Console (of the Visual Studio) 
 ````bash
 Add-Migration "Added_AuthorId_To_Book"
 ````
+
+> Ensure that the `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the Default project and the `Acme.BookStore.DbMigrator` is the startup project, as always.
 
 This should create a new migration class with the following code in its `Up` method:
 
@@ -206,6 +208,8 @@ namespace Acme.BookStore
 
 The only change is that we set the `AuthorId` properties of the `Book` entities.
 
+> Delete existing books or delete the database before executing the `DbMigrator`. See the *Database & Data Migration* section above for more info.
+
 {{if DB=="EF"}}
 
 You can now run the `.DbMigrator` console application to **migrate** the **database schema** and **seed** the initial data.
@@ -283,7 +287,7 @@ namespace Acme.BookStore.Books
 }
 ````
 
-This will be used in a new method will be added to the `IBookAppService`.
+This will be used in a new method that will be added to the `IBookAppService`.
 
 ### IBookAppService
 
@@ -1051,5 +1055,25 @@ Open the `/src/app/book/book.component.html` and add the following form group ju
 ````
 
 That's all. Just run the application and try to create or edit an author.
+
+{{end}}
+
+{{if UI == "Blazor"}}
+
+### The Book List
+
+It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor` project and add the following `DataGridColumn` definition just after the `Name` (book name) column:
+
+````xml
+<DataGridColumn TItem="BookDto"
+                Field="@nameof(BookDto.AuthorName)"
+                Caption="@L["Author"]"></DataGridColumn>
+````
+
+When you run the application, you can see the *Author* column on the table:
+
+![blazor-bookstore-book-list-with-authors](images/blazor-bookstore-book-list-with-authors.png)
+
+
 
 {{end}}
