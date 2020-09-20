@@ -1074,6 +1074,94 @@ When you run the application, you can see the *Author* column on the table:
 
 ![blazor-bookstore-book-list-with-authors](images/blazor-bookstore-book-list-with-authors.png)
 
+### Create Book Modal
 
+Add the following field to the `@code` section of the `Books.razor` file:
+
+````csharp
+IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
+````
+
+And fill it in the `OnInitializedAsync` method, by adding the following code to the end of the method:
+
+````csharp
+authorList = (await AppService.GetAuthorLookupAsync()).Items;
+````
+
+The final `@code` block should be the following:
+
+````csharp
+@code
+{
+    bool canCreateBook;
+    bool canEditBook;
+    bool canDeleteBook;
+
+    //ADDED A NEW FIELD
+    IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        canCreateBook = await 
+            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create);
+        canEditBook = await 
+            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Edit);
+        canDeleteBook = await 
+            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Delete);
+
+        //GET AUTHORS
+        authorList = (await AppService.GetAuthorLookupAsync()).Items;
+    }
+}
+````
+
+Finally, add the following `Field` definition into the `ModalBody` of the *Create* modal, as the first item, before the `Name` field:
+
+````xml
+<Field>
+    <FieldLabel>@L["Author"]</FieldLabel>
+    <Select TValue="Guid" @bind-SelectedValue="@NewEntity.AuthorId">
+        <SelectItem TValue="Guid" Value="Guid.Empty">@L["PickAnAuthor"]</SelectItem>
+        @foreach (var author in authorList)
+        {
+            <SelectItem TValue="Guid" Value="@author.Id">
+                @author.Name
+            </SelectItem>
+        }
+        </Select>
+</Field>
+````
+
+This requires to add a new localization key to the `en.json` file:
+
+````js
+"PickAnAuthor": "Pick an author"
+````
+
+You can run the application to see the *Author Selection* while creating a new book:
+
+![book-create-modal-with-author](images/book-create-modal-with-author.png)
+
+### Edit Book Modal
+
+Add the following `Field` definition into the `ModalBody` of the *Edit* modal, as the first item, before the `Name` field:
+
+````xml
+<Field>
+    <FieldLabel>@L["Author"]</FieldLabel>
+    <Select TValue="Guid" @bind-SelectedValue="@EditingEntity.AuthorId">
+        @foreach (var author in authorList)
+        {
+            <SelectItem TValue="Guid" Value="@author.Id">
+                @author.Name
+            </SelectItem>
+        }
+    </Select>
+</Field>
+````
+
+That's all. We are reusing the `authorList` defined for the *Create* modal.
 
 {{end}}
