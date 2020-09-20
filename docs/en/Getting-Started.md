@@ -115,6 +115,19 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 The solution has a layered structure (based on the [Domain Driven Design](Domain-Driven-Design.md)) and contains unit & integration test projects. See the [application template document](Startup-Templates/Application.md) to understand the solution structure in details. 
 
+{{ if DB == "Mongo" }}
+
+> The [startup template](Startup-templates/Index.md) **disabled** unit of work transaction in the `.MongoDB` project by default. If your MongoDB server supported transaction, you can enable the `transaction` of unit of work manually:
+
+  ```csharp
+  Configure<AbpUnitOfWorkDefaultOptions>(options =>
+  {
+      options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
+  });
+  ```
+
+{{ end }}
+
 ## Create the Database
 
 ### Connection String

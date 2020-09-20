@@ -279,12 +279,12 @@ public class BookService
 
 Starting from version 4.0, MongoDB supports transactions. ABP added support for MongoDB transactions in version 3.2. If you upgrade the project to version 3.2. You need add [MongoDbSchemaMigrator](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.MongoDB/MongoDb/MongoDbMyProjectNameDbSchemaMigrator.cs) to your `.MongoDB` project.
 
-If you are using MongoDB server version less then v4.0, you need disabled the `transaction` of unit of work manually:
+The [startup template](Startup-templates/Index.md) **disabled** unit of work transaction in the `.MongoDB` project by default. If your MongoDB server supported transaction, you can enable the `transaction` of unit of work manually:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
 {
-    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
 });
 ```
 
