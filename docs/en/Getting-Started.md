@@ -117,7 +117,9 @@ The solution has a layered structure (based on the [Domain Driven Design](Domain
 
 {{ if DB == "Mongo" }}
 
-> The [startup template](Startup-templates/Index.md) **disabled** unit of work transaction in the `.MongoDB` project by default. If your MongoDB server supported transaction, you can enable the `transaction` of unit of work manually:
+#### MongoDB Transactions
+
+The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
 
   ```csharp
   Configure<AbpUnitOfWorkDefaultOptions>(options =>
