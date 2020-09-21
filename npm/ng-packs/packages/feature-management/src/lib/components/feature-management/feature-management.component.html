@@ -23,20 +23,22 @@
               <hr class="mt-2 mb-3" />
 
               <div
-                class="row my-3"
+                class="mt-2"
                 *ngFor="let feature of features[group.name]; let i = index; trackBy: track.by('id')"
                 [ngStyle]="feature.style"
                 [ngSwitch]="feature.valueType?.name"
                 (keyup.enter)="save()"
               >
-                <div *ngSwitchCase="valueTypes.ToggleStringValueType">
+                <ng-container *ngSwitchCase="valueTypes.ToggleStringValueType">
                   <div class="custom-checkbox custom-control">
                     <input
                       class="custom-control-input"
                       type="checkbox"
                       [id]="feature.name"
                       [(ngModel)]="feature.value"
+                      (ngModelChange)="onCheckboxClick($event, feature)"
                     />
+
                     <label class="custom-control-label" [htmlFor]="feature.name">{{
                       feature.displayName
                     }}</label>
@@ -44,27 +46,32 @@
                       *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
                     ></ng-container>
                   </div>
-                </div>
-                <div *ngSwitchCase="valueTypes.FreeTextStringValueType">
-                  <div class="form-group mb-0">
+                </ng-container>
+                <ng-container *ngSwitchCase="valueTypes.FreeTextStringValueType">
+                  <div class="form-group">
                     <label [htmlFor]="feature.name">{{ feature.displayName }}</label>
                     <input
                       class="form-control"
                       type="text"
                       [id]="feature.name"
                       [(ngModel)]="feature.value"
+                      [abpFreeText]="feature"
                     />
 
                     <ng-container
                       *ngTemplateOutlet="descTmp; context: { $implicit: feature.description }"
                     ></ng-container>
                   </div>
-                </div>
-                <div *ngSwitchCase="valueTypes.SelectionStringValueType">
+                </ng-container>
+                <ng-container *ngSwitchCase="valueTypes.SelectionStringValueType">
                   <ng-container *ngIf="feature.valueType.itemSource?.items?.length">
-                    <div class="form-group mb-0">
+                    <div class="form-group">
                       <label [htmlFor]="feature.name">{{ feature.displayName }}</label>
-                      <select class="form-control" [id]="feature.name" [(ngModel)]="feature.value">
+                      <select
+                        class="form-control custom-select"
+                        [id]="feature.name"
+                        [(ngModel)]="feature.value"
+                      >
                         <option
                           *ngFor="
                             let item of feature.valueType.itemSource?.items;
@@ -83,8 +90,8 @@
                       ></ng-container>
                     </div>
                   </ng-container>
-                </div>
-                <div *ngSwitchDefault>{{ feature.displayName }}</div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>{{ feature.displayName }}</ng-container>
               </div>
             </ng-template>
           </li>
