@@ -282,9 +282,11 @@ MongoDB supports multi-document transactions starting from the version 4.0 and t
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
 {
-    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
 });
 ```
+
+> Or you can delete this code since this is already the default behavior.
 
 ### Advanced Topics
 
