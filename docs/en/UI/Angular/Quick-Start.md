@@ -182,10 +182,10 @@ Angular web applications run on the browser and require no server except for a [
 ```shell
 # please replace MyProjectName with your project name
 
-npx servor dist/MyProjectName index.html 8000 --browse
+npx servor dist/MyProjectName index.html 4200 --browse
 ```
 
-This command will download and start a simple static server, a browser window at `http://localhost:8000` will open, and the compiled output of your project will be served.
+This command will download and start a simple static server, a browser window at `http://localhost:4200` will open, and the compiled output of your project will be served.
 
 Of course, you need your application to run on an optimized web server and become available to everyone. This is quite straight-forward:
 
