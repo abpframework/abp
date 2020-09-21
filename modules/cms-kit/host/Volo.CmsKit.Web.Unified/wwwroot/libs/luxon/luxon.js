@@ -127,7 +127,11 @@ var luxon = (function (exports) {
     if (typeof o === "string") return _arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
+<<<<<<< HEAD
     if (n === "Map" || n === "Set") return Array.from(n);
+=======
+    if (n === "Map" || n === "Set") return Array.from(o);
+>>>>>>> rel-3.2
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
   }
 
@@ -282,12 +286,15 @@ var luxon = (function (exports) {
     month: s,
     day: n
   };
+<<<<<<< HEAD
   var DATE_MED_WITH_WEEKDAY = {
     year: n,
     month: s,
     day: n,
     weekday: s
   };
+=======
+>>>>>>> rel-3.2
   var DATE_FULL = {
     year: n,
     month: l,
@@ -670,6 +677,7 @@ var luxon = (function (exports) {
     return normalized;
   }
   function formatOffset(offset, format) {
+<<<<<<< HEAD
     var hours = Math.trunc(Math.abs(offset / 60)),
         minutes = Math.trunc(Math.abs(offset % 60)),
         sign = offset >= 0 ? "+" : "-";
@@ -683,6 +691,22 @@ var luxon = (function (exports) {
 
       case "techie":
         return "" + sign + padStart(hours, 2) + padStart(minutes, 2);
+=======
+    var hours = Math.trunc(offset / 60),
+        minutes = Math.abs(offset % 60),
+        sign = hours >= 0 && !Object.is(hours, -0) ? "+" : "-",
+        base = "" + sign + Math.abs(hours);
+
+    switch (format) {
+      case "short":
+        return "" + sign + padStart(Math.abs(hours), 2) + ":" + padStart(minutes, 2);
+
+      case "narrow":
+        return minutes > 0 ? base + ":" + minutes : base;
+
+      case "techie":
+        return "" + sign + padStart(Math.abs(hours), 2) + padStart(minutes, 2);
+>>>>>>> rel-3.2
 
       default:
         throw new RangeError("Value format " + format + " is out of range for property format");
@@ -835,9 +859,12 @@ var luxon = (function (exports) {
       case stringify(DATE_MED):
         return "LLL d, yyyy";
 
+<<<<<<< HEAD
       case stringify(DATE_MED_WITH_WEEKDAY):
         return "EEE, LLL d, yyyy";
 
+=======
+>>>>>>> rel-3.2
       case stringify(DATE_FULL):
         return "LLLL d, yyyy";
 
@@ -2945,7 +2972,11 @@ var luxon = (function (exports) {
 
 
   var offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/,
+<<<<<<< HEAD
       isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/,
+=======
+      isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,9}))?)?)?/,
+>>>>>>> rel-3.2
       isoTimeRegex = RegExp("" + isoTimeBaseRegex.source + offsetRegex.source + "?"),
       isoTimeExtensionRegex = RegExp("(?:T" + isoTimeRegex.source + ")?"),
       isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/,
@@ -2995,7 +3026,11 @@ var luxon = (function (exports) {
   } // ISO duration parsing
 
 
+<<<<<<< HEAD
   var isoDuration = /^-?P(?:(?:(-?\d{1,9})Y)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})W)?(?:(-?\d{1,9})D)?(?:T(?:(-?\d{1,9})H)?(?:(-?\d{1,9})M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
+=======
+  var isoDuration = /^-?P(?:(?:(-?\d{1,9})Y)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})W)?(?:(-?\d{1,9})D)?(?:T(?:(-?\d{1,9})H)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})(?:[.,](-?\d{1,9}))?S)?)?)$/;
+>>>>>>> rel-3.2
 
   function extractISODuration(match) {
     var s = match[0],
@@ -3183,7 +3218,10 @@ var luxon = (function (exports) {
   },
       casualMatrix = Object.assign({
     years: {
+<<<<<<< HEAD
       quarters: 4,
+=======
+>>>>>>> rel-3.2
       months: 12,
       weeks: 52,
       days: 365,
@@ -3198,7 +3236,10 @@ var luxon = (function (exports) {
       days: 91,
       hours: 91 * 24,
       minutes: 91 * 24 * 60,
+<<<<<<< HEAD
       seconds: 91 * 24 * 60 * 60,
+=======
+>>>>>>> rel-3.2
       milliseconds: 91 * 24 * 60 * 60 * 1000
     },
     months: {
@@ -3214,7 +3255,10 @@ var luxon = (function (exports) {
       daysInMonthAccurate = 146097.0 / 4800,
       accurateMatrix = Object.assign({
     years: {
+<<<<<<< HEAD
       quarters: 4,
+=======
+>>>>>>> rel-3.2
       months: 12,
       weeks: daysInYearAccurate / 7,
       days: daysInYearAccurate,
@@ -3768,6 +3812,10 @@ var luxon = (function (exports) {
           accumulated = {},
           vals = this.toObject();
       var lastUnit;
+<<<<<<< HEAD
+=======
+      normalizeValues(this.matrix, vals);
+>>>>>>> rel-3.2
 
       for (var _iterator2 = _createForOfIteratorHelperLoose(orderedUnits), _step2; !(_step2 = _iterator2()).done;) {
         var k = _step2.value;
@@ -4036,7 +4084,11 @@ var luxon = (function (exports) {
    * * **Accessors** Use {@link start} and {@link end} to get the start and end.
    * * **Interrogation** To analyze the Interval, use {@link count}, {@link length}, {@link hasSame}, {@link contains}, {@link isAfter}, or {@link isBefore}.
    * * **Transformation** To create other Intervals out of this one, use {@link set}, {@link splitAt}, {@link splitBy}, {@link divideEqually}, {@link merge}, {@link xor}, {@link union}, {@link intersection}, or {@link difference}.
+<<<<<<< HEAD
    * * **Comparison** To compare this Interval to another one, use {@link equals}, {@link overlaps}, {@link abutsStart}, {@link abutsEnd}, {@link engulfs}.
+=======
+   * * **Comparison** To compare this Interval to another one, use {@link equals}, {@link overlaps}, {@link abutsStart}, {@link abutsEnd}, {@link engulfs}
+>>>>>>> rel-3.2
    * * **Output** To convert the Interval into other representations, see {@link toString}, {@link toISO}, {@link toISODate}, {@link toISOTime}, {@link toFormat}, and {@link toDuration}.
    */
 
@@ -4157,6 +4209,7 @@ var luxon = (function (exports) {
           e = _split[1];
 
       if (s && e) {
+<<<<<<< HEAD
         var start, startIsValid;
 
         try {
@@ -4180,12 +4233,26 @@ var luxon = (function (exports) {
         }
 
         if (startIsValid) {
+=======
+        var start = DateTime.fromISO(s, opts),
+            end = DateTime.fromISO(e, opts);
+
+        if (start.isValid && end.isValid) {
+          return Interval.fromDateTimes(start, end);
+        }
+
+        if (start.isValid) {
+>>>>>>> rel-3.2
           var dur = Duration.fromISO(e, opts);
 
           if (dur.isValid) {
             return Interval.after(start, dur);
           }
+<<<<<<< HEAD
         } else if (endIsValid) {
+=======
+        } else if (end.isValid) {
+>>>>>>> rel-3.2
           var _dur = Duration.fromISO(s, opts);
 
           if (_dur.isValid) {
@@ -4253,7 +4320,11 @@ var luxon = (function (exports) {
     ;
 
     _proto.hasSame = function hasSame(unit) {
+<<<<<<< HEAD
       return this.isValid ? this.isEmpty() || this.e.minus(1).hasSame(this.s, unit) : false;
+=======
+      return this.isValid ? this.e.minus(1).hasSame(this.s, unit) : false;
+>>>>>>> rel-3.2
     }
     /**
      * Return whether this Interval has the same start and end DateTimes.
@@ -4841,7 +4912,11 @@ var luxon = (function (exports) {
     /**
      * Return an array of standalone week names.
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+<<<<<<< HEAD
      * @param {string} [length='long'] - the length of the weekday representation, such as "narrow", "short", "long".
+=======
+     * @param {string} [length='long'] - the length of the month representation, such as "narrow", "short", "long".
+>>>>>>> rel-3.2
      * @param {Object} opts - options
      * @param {string} [opts.locale] - the locale code
      * @param {string} [opts.numberingSystem=null] - the numbering system
@@ -4871,7 +4946,11 @@ var luxon = (function (exports) {
      * Format weekdays differ from standalone weekdays in that they're meant to appear next to more date information. In some languages, that
      * changes the string.
      * See {@link weekdays}
+<<<<<<< HEAD
      * @param {string} [length='long'] - the length of the weekday representation, such as "narrow", "short", "long".
+=======
+     * @param {string} [length='long'] - the length of the month representation, such as "narrow", "short", "long".
+>>>>>>> rel-3.2
      * @param {Object} opts - options
      * @param {string} [opts.locale=null] - the locale code
      * @param {string} [opts.numberingSystem=null] - the numbering system
@@ -5165,6 +5244,7 @@ var luxon = (function (exports) {
     };
   }
 
+<<<<<<< HEAD
   var NBSP = String.fromCharCode(160);
   var spaceOrNBSP = "( |" + NBSP + ")";
   var spaceOrNBSPRegExp = new RegExp(spaceOrNBSP, "g");
@@ -5179,6 +5259,15 @@ var luxon = (function (exports) {
     return s.replace(/\./g, "") // ignore dots that were made optional
     .replace(spaceOrNBSPRegExp, " ") // interchange space and nbsp
     .toLowerCase();
+=======
+  function fixListRegex(s) {
+    // make dots optional and also make them literal
+    return s.replace(/\./, "\\.?");
+  }
+
+  function stripInsensitivities(s) {
+    return s.replace(/\./, "").toLowerCase();
+>>>>>>> rel-3.2
   }
 
   function oneOf(strings, startIndex) {
@@ -5943,6 +6032,7 @@ var luxon = (function (exports) {
 
 
   function adjustTime(inst, dur) {
+<<<<<<< HEAD
     var oPre = inst.o,
         year = inst.c.year + Math.trunc(dur.years),
         month = inst.c.month + Math.trunc(dur.months) + Math.trunc(dur.quarters) * 3,
@@ -5957,6 +6047,26 @@ var luxon = (function (exports) {
       months: dur.months - Math.trunc(dur.months),
       weeks: dur.weeks - Math.trunc(dur.weeks),
       days: dur.days - Math.trunc(dur.days),
+=======
+    var _dur;
+
+    var keys = Object.keys(dur.values);
+
+    if (keys.indexOf("milliseconds") === -1) {
+      keys.push("milliseconds");
+    }
+
+    dur = (_dur = dur).shiftTo.apply(_dur, keys);
+    var oPre = inst.o,
+        year = inst.c.year + dur.years,
+        month = inst.c.month + dur.months + dur.quarters * 3,
+        c = Object.assign({}, inst.c, {
+      year: year,
+      month: month,
+      day: Math.min(inst.c.day, daysInMonth(year, month)) + dur.days + dur.weeks * 7
+    }),
+        millisToAdd = Duration.fromObject({
+>>>>>>> rel-3.2
       hours: dur.hours,
       minutes: dur.minutes,
       seconds: dur.seconds,
@@ -8064,6 +8174,7 @@ var luxon = (function (exports) {
         return DATE_MED;
       }
       /**
+<<<<<<< HEAD
        * {@link toLocaleString} format like 'Fri, Oct 14, 1983'
        * @type {Object}
        */
@@ -8074,6 +8185,8 @@ var luxon = (function (exports) {
         return DATE_MED_WITH_WEEKDAY;
       }
       /**
+=======
+>>>>>>> rel-3.2
        * {@link toLocaleString} format like 'October 14, 1983'
        * @type {Object}
        */
