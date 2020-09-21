@@ -58,11 +58,6 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
                 return;
             }
             
-            if (!await UiMessageService.ConfirmAsync(UiLocalizer["AreYouSure"]))
-            {
-                return;
-            }
-
             await ProfileAppService.ChangePasswordAsync(new ChangePasswordInput
             {
                 CurrentPassword = ChangePasswordModel.CurrentPassword,
@@ -73,12 +68,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
         }
 
         protected async Task UpdatePersonalInfoAsync()
-        {
-            if (!await UiMessageService.ConfirmAsync(UiLocalizer["AreYouSure"]))
-            {
-                return;
-            }
-            
+        {            
             await ProfileAppService.UpdateAsync(
                 ObjectMapper.Map<PersonalInfoModel, UpdateProfileDto>(PersonalInfoModel)
                 );

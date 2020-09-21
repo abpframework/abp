@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
+import { UpdatePermissionDto } from '../proxy/models';
 import { PermissionManagementState } from '../states/permission-management.state';
 
 type PermissionWithStyle = PermissionManagement.Permission & {
@@ -213,7 +214,7 @@ export class PermissionManagementComponent
       this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
     );
 
-    const changedPermissions: PermissionManagement.MinimumPermission[] = this.permissions
+    const changedPermissions: UpdatePermissionDto[] = this.permissions
       .filter(per =>
         unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted ===
         per.isGranted

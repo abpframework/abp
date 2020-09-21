@@ -29,7 +29,7 @@
         "$source": "argv",
         "index": 2
       },
-      "x-prompt": "Plese enter source Angular project for API definition URL & root namespace resolution. (default: workspace \"defaultProject\")"
+      "x-prompt": "Please enter source Angular project for API definition URL & root namespace resolution. (default: workspace \"defaultProject\")"
     },
     "target": {
       "description": "Target Angular project to place the generated code",
@@ -38,7 +38,7 @@
         "$source": "argv",
         "index": 3
       },
-      "x-prompt": "Plese enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
+      "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
     }
   },
   "required": []
