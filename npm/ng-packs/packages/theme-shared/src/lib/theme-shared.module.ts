@@ -29,6 +29,7 @@ import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
+import { FreeTextInputDirective } from './directives/free-text-input.directive';
 
 @NgModule({
   imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
@@ -51,6 +52,7 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
+    FreeTextInputDirective,
   ],
   exports: [
     NgxDatatableModule,
@@ -70,6 +72,7 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
+    FreeTextInputDirective,
   ],
   providers: [DatePipe],
   entryComponents: [
