@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.BlobStoring.FileSystem
 {
@@ -27,15 +29,18 @@ namespace Volo.Abp.BlobStoring.FileSystem
 
         protected virtual string Normalize(string fileName)
         {
-            var os = _iosPlatformProvider.GetCurrentOSPlatform();
-            if (os == OSPlatform.Windows)
+            using (CultureHelper.Use(CultureInfo.InvariantCulture))
             {
-                // A filename cannot contain any of the following characters: \ / : * ? " < > |
-                // In order to support the directory included in the blob name, remove / and \
-                fileName = Regex.Replace(fileName, "[:\\*\\?\"<>\\|]", string.Empty);
-            }
+                var os = _iosPlatformProvider.GetCurrentOSPlatform();
+                if (os == OSPlatform.Windows)
+                {
+                    // A filename cannot contain any of the following characters: \ / : * ? " < > |
+                    // In order to support the directory included in the blob name, remove / and \
+                    fileName = Regex.Replace(fileName, "[:\\*\\?\"<>\\|]", string.Empty);
+                }
 
-            return fileName;
+                return fileName;
+            }
         }
     }
 }

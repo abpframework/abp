@@ -288,8 +288,6 @@ namespace Volo.Docs.Pages.Documents.Project
             }
             else
             {
-                SetLatestVersionBranchName(versions);
-
                 LatestVersionInfo = new VersionInfoViewModel(
                     $"{DocsAppConsts.Latest}",
                     DocsAppConsts.Latest,

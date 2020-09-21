@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Linq;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
@@ -18,6 +19,8 @@ namespace Volo.Abp.Domain.Repositories
         public IDataFilter DataFilter { get; set; }
 
         public ICurrentTenant CurrentTenant { get; set; }
+
+        public IAsyncQueryableExecuter AsyncExecuter { get; set; }
 
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
@@ -50,12 +53,12 @@ namespace Volo.Abp.Domain.Repositories
         protected abstract IQueryable<TEntity> GetQueryable();
 
         public abstract Task<TEntity> FindAsync(
-            Expression<Func<TEntity, bool>> predicate, 
+            Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
 
         public async Task<TEntity> GetAsync(
-            Expression<Func<TEntity, bool>> predicate, 
+            Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {

@@ -1,4 +1,4 @@
-import { ListService } from '@abp/ng.core';
+import { ListService, PagedAndSortedResultRequestDto } from '@abp/ng.core';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -13,7 +13,7 @@ import {
   GetRoles,
   UpdateRole,
 } from '../../actions/identity.actions';
-import { Identity } from '../../models/identity';
+import { IdentityRoleDto } from '../../proxy/identity/models';
 import { IdentityState } from '../../states/identity.state';
 
 @Component({
@@ -23,14 +23,14 @@ import { IdentityState } from '../../states/identity.state';
 })
 export class RolesComponent implements OnInit {
   @Select(IdentityState.getRoles)
-  data$: Observable<Identity.RoleItem[]>;
+  data$: Observable<IdentityRoleDto[]>;
 
   @Select(IdentityState.getRolesTotalCount)
   totalCount$: Observable<number>;
 
   form: FormGroup;
 
-  selected: Identity.RoleItem;
+  selected: IdentityRoleDto;
 
   isModalVisible: boolean;
 
@@ -50,7 +50,7 @@ export class RolesComponent implements OnInit {
   };
 
   constructor(
-    public readonly list: ListService,
+    public readonly list: ListService<PagedAndSortedResultRequestDto>,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
@@ -77,7 +77,7 @@ export class RolesComponent implements OnInit {
   }
 
   add() {
-    this.selected = {} as Identity.RoleItem;
+    this.selected = {} as IdentityRoleDto;
     this.openModal();
   }
 

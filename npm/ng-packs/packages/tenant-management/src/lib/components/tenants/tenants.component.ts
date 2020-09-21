@@ -1,4 +1,4 @@
-import { ABP, ListService } from '@abp/ng.core';
+import { ABP, ListService, PagedResultDto } from '@abp/ng.core';
 import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
@@ -13,6 +13,7 @@ import {
   GetTenants,
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
+import { GetTenantsInput, TenantDto } from '../../proxy/models';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
 
@@ -29,12 +30,12 @@ interface SelectedModalContent {
 })
 export class TenantsComponent implements OnInit {
   @Select(TenantManagementState.get)
-  data$: Observable<ABP.BasicItem[]>;
+  data$: Observable<PagedResultDto<TenantDto>>;
 
   @Select(TenantManagementState.getTenantsTotalCount)
   totalCount$: Observable<number>;
 
-  selected: ABP.BasicItem;
+  selected: TenantDto;
 
   tenantForm: FormGroup;
 
@@ -99,7 +100,7 @@ export class TenantsComponent implements OnInit {
   };
 
   constructor(
-    public readonly list: ListService,
+    public readonly list: ListService<GetTenantsInput>,
     private confirmationService: ConfirmationService,
     private tenantService: TenantManagementService,
     private fb: FormBuilder,
@@ -165,7 +166,7 @@ export class TenantsComponent implements OnInit {
   }
 
   addTenant() {
-    this.selected = {} as ABP.BasicItem;
+    this.selected = {} as TenantDto;
     this.createTenantForm();
     this.openModal('AbpTenantManagement::NewTenant', this.tenantModalTemplate, 'saveTenant');
   }

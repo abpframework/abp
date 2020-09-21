@@ -67,6 +67,8 @@
     "Volo.Abp.Identity:010004": "There is already an organization unit with name {0}. Two units with same name can not be created in same level.",
     "Volo.Abp.Identity:010005": "Static roles can not be renamed.",
     "Volo.Abp.Identity:010006": "Static roles can not be deleted.",
+    "Volo.Abp.Identity:010007": "You can't change your two factor setting.",
+    "Volo.Abp.Identity:010008": "It's not allowed to change two factor setting.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organization unit membership count for a user",
     "Permission:IdentityManagement": "Identity management",
     "Permission:RoleManagement": "Role management",
@@ -76,6 +78,12 @@
     "Permission:ChangePermissions": "Change permissions",
     "Permission:UserManagement": "User management",
     "Permission:UserLookup": "User lookup",
+    "Feature:IdentityGroup": "Identity",
+    "Feature:TwoFactor": "Two Factor",
+    "Feature:TwoFactorDescription": "Two Factor",
+    "Feature:TwoFactor.Optional": "Optional",
+    "Feature:TwoFactor.Disabled": "Disabled",
+    "Feature:TwoFactor.Forced": "Forced",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Required length",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Required unique characters number",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "Required non-alphanumeric character",
@@ -103,6 +111,10 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Whether the phoneNumber can be confirmed by the user.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Whether a confirmed telephone number is required to sign in.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Whether the username can be updated by the user.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user.",
+    "DisplayName:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",
+    "Description:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",
+    "DisplayName:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor.",
+    "Description:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor."
   }
 }

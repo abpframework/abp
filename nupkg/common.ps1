@@ -29,9 +29,14 @@ $projects = (
     "framework/src/Volo.Abp.ApiVersioning.Abstractions",
     "framework/src/Volo.Abp.AspNetCore.Authentication.JwtBearer",
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
+    "framework/src/Volo.Abp.AspNetCore.Authentication.OpenIdConnect",
     "framework/src/Volo.Abp.AspNetCore",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme",
     "framework/src/Volo.Abp.AspNetCore.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Client",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.Client.Common",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Contracts",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
@@ -48,6 +53,7 @@ $projects = (
     "framework/src/Volo.Abp.Auditing",
     "framework/src/Volo.Abp.Authorization",
     "framework/src/Volo.Abp.Autofac",
+    "framework/src/Volo.Abp.Autofac.WebAssembly",
     "framework/src/Volo.Abp.AutoMapper",
     "framework/src/Volo.Abp.BackgroundJobs.Abstractions",
     "framework/src/Volo.Abp.BackgroundJobs",
@@ -56,6 +62,7 @@ $projects = (
     "framework/src/Volo.Abp.BackgroundJobs.Quartz",
     "framework/src/Volo.Abp.BackgroundWorkers",
     "framework/src/Volo.Abp.BackgroundWorkers.Quartz",
+    "framework/src/Volo.Abp.BlazoriseUI",
     "framework/src/Volo.Abp.BlobStoring",
     "framework/src/Volo.Abp.BlobStoring.FileSystem",
     "framework/src/Volo.Abp.BlobStoring.Aliyun",
@@ -94,6 +101,7 @@ $projects = (
     "framework/src/Volo.Abp.Http.Client",
     "framework/src/Volo.Abp.Http.Client.IdentityModel",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.Web",
+    "framework/src/Volo.Abp.Http.Client.IdentityModel.WebAssembly",
     "framework/src/Volo.Abp.Http",
     "framework/src/Volo.Abp.IdentityModel",
     "framework/src/Volo.Abp.Json",
@@ -133,6 +141,7 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.HttpApi",
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
+    "modules/account/src/Volo.Abp.Account.Blazor",
         
     # modules/audit-logging
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain",
@@ -193,6 +202,7 @@ $projects = (
     "modules/feature-management/src/Volo.Abp.FeatureManagement.HttpApi",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.MongoDB",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Web",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor",
 
     # modules/identity
     "modules/identity/src/Volo.Abp.Identity.Application.Contracts",
@@ -205,6 +215,7 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.HttpApi",
     "modules/identity/src/Volo.Abp.Identity.MongoDB",
     "modules/identity/src/Volo.Abp.Identity.Web",
+    "modules/identity/src/Volo.Abp.Identity.Blazor",
     "modules/identity/src/Volo.Abp.PermissionManagement.Domain.Identity",
     
     # modules/identityserver
@@ -224,6 +235,7 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.MongoDB",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Web",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor",
 
     # modules/setting-management
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain",
