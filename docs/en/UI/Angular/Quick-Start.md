@@ -78,18 +78,18 @@ Now let us take a look at the contents of the source folder.
 
 <img alt="Angular project source folder structure" src="./images/quick-start---source-folder-structure.png" width="300px" style="max-width:100%" />
 
-- **app** is the main directory you put your application files in. Any module, component, directive, service, pipe, guard, interceptor, etc. should be placed here. You are free to choose your own folder structure, but "folders reflecting your business features" is generally a fine practice.
+- **app** is the main directory you put your application files in. Any module, component, directive, service, pipe, guard, interceptor, etc. should be placed here. You are free to choose any folder structure, but [organizing Angular applications based on modules](https://angular.io/guide/module-types) is generally a fine practice.
 - **home** is a predefined module and acts as a welcome page. It also demonstrates how a feature-based folder structure may look like. More complex features will probably have sub-features, thus inner folders. You may change the home folder however you like.
 - **shared** is spared for reusable code that works for several modules. Some, including yours truly, may disagree with using a single module for all shared code, so consider adding standalone sub-modules inside this folder instead of adding everything into **shared.module.ts**.
 - **app-routing.module.ts** is where your top-level routes are defined. Angular is capable of [lazy loading feature modules](https://angular.io/guide/lazy-loading-ngmodules), so not all routes will be here. You may think of Angular routing as a tree and this file is the top of the tree.
 - **app.component.ts** is essentially the top component that holds the dynamic application layout.
-- **app.module.ts** is the root module that includes information about how parts of your application are related and what to run at the initiation of your application.
+- **app.module.ts** is the [root module](https://angular.io/guide/bootstrapping) that includes information about how parts of your application are related and what to run at the initiation of your application.
 - **route.provider.ts** is used for [modifying the menu](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu).
 - **assets** is for static files. A file (e.g. an image) placed in this folder will be available as is when the application is served.
 - **environments** includes one file per environment configuration. There are two configurations by default, but you may always introduce another one. These files are directly referred to in _angular.json_ and help you have different builds and application variables. Please refer to [configuring Angular application environments](https://angular.io/guide/build#configuring-application-environments) for details.
 - **index.html** is the HTML page served to visitors and will contain everything required to run your application. Servers should be configured to redirect every request to this page so that the Angular router can take over. Do not worry about how to add JavaScript and CSS files to it, because Angular CLI will do it automatically.
 - **main.ts** bootstraps and configures Angular application to run in the browser. It is production-ready, so forget about it.
-- **polyfill.ts** is where you can add polyfills if you want to support legacy browsers.
+- **polyfill.ts** is where you can add polyfills if you want to [support legacy browsers](https://angular.io/guide/browser-support).
 - **style.scss** is the default entry point for application styles. You can change this or add new entry points in _angular.json_.
 - **test.ts** helps the unit test runner discover and bootstrap spec files.
 
@@ -114,7 +114,7 @@ You may modify the behavior of the **start script** (in the package.json file) b
 
 The development server of Angular is based on [Webpack DevServer](https://webpack.js.org/configuration/dev-server/). It tracks changes to source files and syncs the browser window after an incremental re-compilation every time <sup id="a-dev-server">[2](#f-dev-server)</sup> you make one. Your experience will be like this:
 
-<img alt="Error caused by browser blocking access to backend" src="./images/quick-start---angular-live-development-server.gif" width="818px" style="max-width:100%" />
+<img alt="Angular Live Development Server compiles again on template change and removes a button from the page displayed by the browser." src="./images/quick-start---angular-live-development-server.gif" width="818px" style="max-width:100%" />
 
 Please keep in mind that you should not use this server in production. To provide the fastest experience, the compiler skips some heavy optimizations and the development server is simply not built for multiple clients. The next section will describe what to do.
 
@@ -122,8 +122,55 @@ Please keep in mind that you should not use this server in production. To provid
 
 <img alt="Error caused by browser blocking access to backend" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%" />
 
-<sup id="f-certificate-error"><b>1</b></sup> _If see the error above when you run the Angular app, your browser might be blocking access to the API because of the self-signed certificate. Visit that address and allow access to it (once). When you see the Swagger interface, you are good to go._ <sup>[↩](#a-certificate-error)</sup>
+<sup id="f-certificate-error"><b>1</b></sup> _If you see the error above when you run the Angular app, your browser might be blocking access to the API because of the self-signed certificate. Visit that address and allow access to it (once). When you see the Swagger interface, you are good to go._ <sup>[↩](#a-certificate-error)</sup>
 
 <sup id="f-dev-server"><b>2</b></sup> _Sometimes, depending on the file changed, Webpack may miss the change and cannot reflect it in the browser. For example, tsconfig files are not being tracked. In such a case, please restart the development server._ <sup>[↩](#a-dev-server)</sup>
 
 ---
+
+## How to Build the Angular Application
+
+An Angular application can have multiple [build targets](https://angular.io/guide/glossary#target), i.e. **configurations in angular.json** which define how [Architect](https://angular.io/guide/glossary#architect) will build applications and libraries. Usually, each build configuration has a separate environment variable file. Currently, the project has two: One for development and one for production.
+
+```js
+// this is what environment variables look like
+// can be found at /src/environments/environment.ts
+
+import { Config } from '@abp/ng.core';
+
+const baseUrl = 'http://localhost:4200';
+
+export const environment = {
+  production: false,
+  application: {
+    baseUrl,
+    name: 'MyProjectName',
+    logoUrl: '',
+  },
+  oAuthConfig: {
+    issuer: 'https://localhost:44381',
+    redirectUri: baseUrl,
+    clientId: 'MyProjectName_App',
+    responseType: 'code',
+    scope: 'offline_access MyProjectName',
+  },
+  apis: {
+    default: {
+      url: 'https://localhost:44381',
+      rootNamespace: 'MyCompanyName.MyProjectName',
+    },
+  },
+} as Config.Environment;
+```
+
+When you run the development server, variables defined in _environment.ts_ take effect. Similarly, in production mode, the default environment is replaced by _environment.prod.ts_ and completely different variables become effective. You may even [create a new build configuration](https://angular.io/guide/workspace-config#build-configs) and set [file replacements](https://angular.io/guide/build#configure-target-specific-file-replacements) to use a completely new environment. For now, we will start a production build:
+
+1. Open your terminal and navigate to the root Angular folder.
+2. Run `yarn` or `npm install` if you have not installed dependencies already.
+3. Run `yarn build:prod` or `npm run build:prod`.
+
+<img alt="Angular compiler optimizing the build using Terser" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%" />
+
+Depending on project size, the compilation may take a few minutes. When it is finished, the compiled output will be placed inside the _/dist_ folder. Voila! You have deployment-ready build artifacts.
+
+> The amount of optimization performed on the source is the main difference between a regular build and a production one. Production builds have a much smaller size and are more performant.
