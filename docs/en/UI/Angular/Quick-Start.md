@@ -196,7 +196,7 @@ Of course, you need your application to run on an optimized web server and becom
 In addition, you can [deploy your application to certain targets using the Angular CLI](https://angular.io/guide/deployment#automatic-deployment-with-the-cli). Here are some deploy targets:
 
 - [Azure](https://github.com/Azure/ng-deploy-azure#readme)
-- [Firebase](https://github.com/angular/angularfire#readme
+- [Firebase](https://github.com/angular/angularfire#readme)
 - [Netlify](https://github.com/ngx-builders/netlify-builder#readme)
 - [Vercel](https://github.com/vercel/ng-deploy-vercel#readme)
 - [GitHub Pages](https://github.com/angular-schule/angular-cli-ghpages/#readme)
