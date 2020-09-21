@@ -25,7 +25,7 @@ You have multiple options to initiate a new Angular project that works with ABP:
 
 ### 1. Using ABP CLI
 
-ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with an Angular frontend. Simply [install the ABP CLI](/CLI.md) and run the following command in your terminal:
+ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with an Angular frontend. Simply [install the ABP CLI](../../CLI.md) and run the following command in your terminal:
 
 ```shell
 abp new MyCompanyName.MyProjectName -csf -u angular
