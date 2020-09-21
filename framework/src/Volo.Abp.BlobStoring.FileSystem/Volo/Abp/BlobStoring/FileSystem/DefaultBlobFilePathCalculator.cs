@@ -12,26 +12,29 @@ namespace Volo.Abp.BlobStoring.FileSystem
         {
             CurrentTenant = currentTenant;
         }
-        
+
         public virtual string Calculate(BlobProviderArgs args)
         {
             var fileSystemConfiguration = args.Configuration.GetFileSystemConfiguration();
             var blobPath = fileSystemConfiguration.BasePath;
 
-            if (CurrentTenant.Id == null)
+            if (args.Configuration.IsMultiTenant)
             {
-                blobPath = Path.Combine(blobPath, "host");
-            }
-            else
-            {
-                blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
+                if (CurrentTenant.Id == null)
+                {
+                    blobPath = Path.Combine(blobPath, "host");
+                }
+                else
+                {
+                    blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
+                }
             }
 
             if (fileSystemConfiguration.AppendContainerNameToBasePath)
             {
                 blobPath = Path.Combine(blobPath, args.ContainerName);
             }
-            
+
             blobPath = Path.Combine(blobPath, args.BlobName);
 
             return blobPath;

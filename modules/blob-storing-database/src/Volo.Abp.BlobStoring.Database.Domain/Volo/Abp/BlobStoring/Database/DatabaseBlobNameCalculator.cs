@@ -1,13 +1,13 @@
 ﻿using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.BlobStoring.Minio
+namespace Volo.Abp.BlobStoring.Database
 {
-    public class DefaultMinioBlobNameCalculator : IMinioBlobNameCalculator, ITransientDependency
+    public class DatabaseBlobNameCalculator : IDatabaseBlobNameCalculator, ITransientDependency
     {
         protected ICurrentTenant CurrentTenant { get; }
 
-        public DefaultMinioBlobNameCalculator(ICurrentTenant currentTenant)
+        public DatabaseBlobNameCalculator(ICurrentTenant currentTenant)
         {
             CurrentTenant = currentTenant;
         }

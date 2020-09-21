@@ -14,6 +14,11 @@ namespace Volo.Abp.BlobStoring.Azure
 
         public virtual string Calculate(BlobProviderArgs args)
         {
+            if (!args.Configuration.IsMultiTenant)
+            {
+                return args.BlobName;
+            }
+
             return CurrentTenant.Id == null
                 ? $"host/{args.BlobName}"
                 : $"tenants/{CurrentTenant.Id.Value.ToString("D")}/{args.BlobName}";
