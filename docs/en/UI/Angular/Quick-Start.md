@@ -179,7 +179,7 @@ Depending on project size, the compilation may take a few minutes. When it is fi
 
 Angular web applications run on the browser and require no server except for a [static web server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_web_server) to deliver files to the client. To see that it works, please make sure the backend application is up and then run the following command in your terminal:
 
-```sh
+```shell
 # please replace MyProjectName with your project name
 
 npx servor dist/MyProjectName index.html 8000 --browse
