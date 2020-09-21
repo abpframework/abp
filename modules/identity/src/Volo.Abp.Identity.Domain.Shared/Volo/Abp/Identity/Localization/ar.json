@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
     "Menu:IdentityManagement": "إدارة الهوية",
@@ -61,9 +61,12 @@
     "Volo.Abp.Identity:UserNameNotFound": "المستخدم {0} غير موجود.",
     "Volo.Abp.Identity:UserNotInRole": "المستخدم ليس في الدور '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "كلمة المرور لا تتطابق مع كلمة مرور التأكيد.",
+    "Volo.Abp.Identity:010001": "لا يمكنك حذف حسابك الخاص!",
+    "Volo.Abp.Identity:010002": "لا يمكن تعيين أكثر من {MaxUserMembershipCount} وحدة تنظيمية للمستخدم!",
+    "Volo.Abp.Identity:010003": "لا يمكن تغيير كلمة مرور المستخدم الذي قام بتسجيل الدخول خارجيًا!",
     "Volo.Abp.Identity:010005": "لا يمكن إعادة تسمية الأدوار الثابتة.",
     "Volo.Abp.Identity:010006": "لا يمكن حذف الأدوار الثابتة.",
-    "Volo.Abp.Identity:010001": "لا يمكنك حذف حسابك الخاص!",
+    "Identity.OrganizationUnit.MaxUserMembershipCount": "العدد الأقصى المسموح به لعضوية الوحدة التنظيمية للمستخدم",
     "Permission:IdentityManagement": "إدارة الهوية",
     "Permission:RoleManagement": "إدارة الأدوار",
     "Permission:Create": "إنشاء",
