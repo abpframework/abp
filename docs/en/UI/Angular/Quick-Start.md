@@ -174,3 +174,33 @@ When you run the development server, variables defined in _environment.ts_ take 
 Depending on project size, the compilation may take a few minutes. When it is finished, the compiled output will be placed inside the _/dist_ folder. Voila! You have deployment-ready build artifacts.
 
 > The amount of optimization performed on the source is the main difference between a regular build and a production one. Production builds have a much smaller size and are more performant.
+
+## How to Deploy the Angular Application
+
+Angular web applications run on the browser and require no server except for a [static web server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_web_server) to deliver files to the client. To see that it works, please make sure the backend application is up and then run the following command in your terminal:
+
+```sh
+# please replace MyProjectName with your project name
+
+npx servor dist/MyProjectName index.html 8000 --browse
+```
+
+This command will download and start a simple static server, a browser window at `http://localhost:8000` will open, and the compiled output of your project will be served.
+
+Of course, you need your application to run on an optimized web server and become available to everyone. This is quite straight-forward:
+
+1. Create a new static web server instance. You can use a service like [Azure App Service](https://azure.microsoft.com/tr-tr/services/app-service/web/), [Firebase](https://firebase.google.com/docs/hosting), [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), or even [GitHub Pages](https://angular.io/guide/deployment#deploy-to-github-pages). You can also build a custom static web server. Using [NGINX](https://www.nginx.com/) in this case might be a good idea.
+2. Copy the files to the server (by CLI of the service provider, over SSH or FTP if not available).
+3. [Configure the server](https://angular.io/guide/deployment#server-configuration) to redirect all requests to the _index.html_ file. Some services do that automatically.
+
+In addition, you can [deploy your application to certain targets using the Angular CLI](https://angular.io/guide/deployment#automatic-deployment-with-the-cli). Here are some deploy targets:
+
+- [Azure](https://github.com/Azure/ng-deploy-azure#readme)
+- [Firebase](https://github.com/angular/angularfire#readme
+- [Netlify](https://github.com/ngx-builders/netlify-builder#readme)
+- [Vercel](https://github.com/vercel/ng-deploy-vercel#readme)
+- [GitHub Pages](https://github.com/angular-schule/angular-cli-ghpages/#readme)
+
+## What's Next?
+
+- [Environment](./Environment.md)
