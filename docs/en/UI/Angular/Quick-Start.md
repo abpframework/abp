@@ -31,7 +31,7 @@ ABP CLI is probably the most convenient and flexible way to initiate an ABP solu
 abp new MyCompanyName.MyProjectName -csf -u angular
 ```
 
-> To see further options in the CLI, please visit the [CLI manual](/CLI.md).
+> To see further options in the CLI, please visit the [CLI manual](../../CLI.md).
 
 This command will prepare a solution with an Angular and a .NET Core project in it. Please visit [Getting Started section](/Getting-Started.md?UI=NG&DB=EF&Tiered=No#abp-cli-commands-options) for further instructions on how to set up the backend of your solution.
 
