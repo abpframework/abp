@@ -21,7 +21,7 @@ namespace Volo.Abp.BlobStoring.Database
 
             return CurrentTenant.Id == null
                 ? $"host/{args.BlobName}"
-                : $"tenants/{CurrentTenant.Id.Value.ToString("D")}/{args.BlobName}";
+                : $"tenants/{args.BlobName}";
         }
     }
 }
