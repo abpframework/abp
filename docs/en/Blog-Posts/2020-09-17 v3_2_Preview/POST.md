@@ -112,6 +112,8 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 
 See the [Unit Of Work document](https://docs.abp.io/en/abp/3.2/Unit-Of-Work) to learn more about UOW and transactions.
 
+Also, add [this file](https://github.com/abpframework/abp/blob/rel-3.2/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.MongoDB/MongoDb/MongoDbMyProjectNameDbSchemaMigrator.cs) into your MongoDB project (remember to change `MongoDbMyProjectNameDbSchemaMigrator` and `IMyProjectNameDbSchemaMigrator` with your own project name).
+
 #### Integration Tests
 
 > Transactions are also **disabled for automated integration tests** coming with the application startup template, since the [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library (we use in the test projects) has a problem with the transactions. We've sent a [Pull Request](https://github.com/Mongo2Go/Mongo2Go/pull/101) to fix it and will enable the transactions again when they merge & release it.
