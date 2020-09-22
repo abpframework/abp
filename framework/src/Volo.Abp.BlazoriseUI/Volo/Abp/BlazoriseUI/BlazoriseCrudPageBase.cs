@@ -18,51 +18,155 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
 {
-    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey>
-        : BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, PagedAndSortedResultRequestDto>
-        where TAppService : ICrudAppService<TEntityDto, TKey>
-        where TEntityDto : IEntityDto<TKey>, new()
+    public abstract class BlazoriseCrudPageBase<
+            TAppService,
+            TEntityDto,
+            TKey>
+        : BlazoriseCrudPageBase<
+            TAppService,
+            TEntityDto,
+            TKey,
+            PagedAndSortedResultRequestDto>
+        where TAppService : ICrudAppService<
+            TEntityDto,
+            TKey>
+        where TEntityDto : class, IEntityDto<TKey>, new()
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput>
-        : BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TEntityDto>
-        where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput>
-        where TEntityDto : IEntityDto<TKey>, new()
+    public abstract class BlazoriseCrudPageBase<
+            TAppService,
+            TEntityDto,
+            TKey,
+            TGetListInput>
+        : BlazoriseCrudPageBase<
+            TAppService,
+            TEntityDto,
+            TKey,
+            TGetListInput,
+            TEntityDto>
+        where TAppService : ICrudAppService<
+            TEntityDto,
+            TKey,
+            TGetListInput>
+        where TEntityDto : class, IEntityDto<TKey>, new()
         where TGetListInput : new()
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput>
-        : BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
-        where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput>
+    public abstract class BlazoriseCrudPageBase<
+            TAppService,
+            TEntityDto,
+            TKey,
+            TGetListInput,
+            TCreateInput>
+        : BlazoriseCrudPageBase<
+            TAppService,
+            TEntityDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
+            TCreateInput>
+        where TAppService : ICrudAppService<
+            TEntityDto,
+            TKey,
+            TGetListInput,
+            TCreateInput>
         where TEntityDto : IEntityDto<TKey>
-        where TCreateInput : new()
+        where TCreateInput : class, new()
         where TGetListInput : new()
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput,
+    public abstract class BlazoriseCrudPageBase<
+            TAppService,
+            TEntityDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
             TUpdateInput>
-        : BlazoriseCrudPageBase<TAppService, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-        where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : BlazoriseCrudPageBase<
+            TAppService,
+            TEntityDto,
+            TEntityDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
+            TUpdateInput>
+        where TAppService : ICrudAppService<
+            TEntityDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
+            TUpdateInput>
         where TEntityDto : IEntityDto<TKey>
-        where TCreateInput : new()
-        where TUpdateInput : new()
+        where TCreateInput : class, new()
+        where TUpdateInput : class, new()
         where TGetListInput : new()
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<TAppService, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput,
-            TCreateInput, TUpdateInput>
-        : OwningComponentBase
-        where TAppService : ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput,
+    public abstract class BlazoriseCrudPageBase<
+            TAppService,
+            TGetOutputDto,
+            TGetListOutputDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
+            TUpdateInput>
+        : BlazoriseCrudPageBase<
+            TAppService,
+            TGetOutputDto,
+            TGetListOutputDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
+            TUpdateInput,
+            TGetListOutputDto,
+            TCreateInput,
+            TUpdateInput>
+        where TAppService : ICrudAppService<
+            TGetOutputDto,
+            TGetListOutputDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
             TUpdateInput>
         where TGetOutputDto : IEntityDto<TKey>
         where TGetListOutputDto : IEntityDto<TKey>
-        where TCreateInput : new()
-        where TUpdateInput : new()
+        where TCreateInput : class, new()
+        where TUpdateInput : class, new()
         where TGetListInput : new()
+    {
+    }
+
+    public abstract class BlazoriseCrudPageBase<
+            TAppService,
+            TGetOutputDto,
+            TGetListOutputDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
+            TUpdateInput,
+            TListViewModel,
+            TCreateViewModel,
+            TUpdateViewModel>
+        : OwningComponentBase
+        where TAppService : ICrudAppService<
+            TGetOutputDto,
+            TGetListOutputDto,
+            TKey,
+            TGetListInput,
+            TCreateInput,
+            TUpdateInput>
+        where TGetOutputDto : IEntityDto<TKey>
+        where TGetListOutputDto : IEntityDto<TKey>
+        where TCreateInput : class
+        where TUpdateInput : class
+        where TGetListInput : new()
+        where TListViewModel : IEntityDto<TKey>
+        where TCreateViewModel : class, new()
+        where TUpdateViewModel : class, new()
     {
         [Inject] protected TAppService AppService { get; set; }
         [Inject] protected IUiMessageService UiMessageService { get; set; }
@@ -74,10 +178,10 @@ namespace Volo.Abp.BlazoriseUI
         protected int CurrentPage;
         protected string CurrentSorting;
         protected int? TotalCount;
-        protected IReadOnlyList<TGetListOutputDto> Entities = Array.Empty<TGetListOutputDto>();
-        protected TCreateInput NewEntity;
+        protected IReadOnlyList<TListViewModel> Entities = Array.Empty<TListViewModel>();
+        protected TCreateViewModel NewEntity;
         protected TKey EditingEntityId;
-        protected TUpdateInput EditingEntity;
+        protected TUpdateViewModel EditingEntity;
         protected Modal CreateModal;
         protected Modal EditModal;
 
@@ -129,8 +233,8 @@ namespace Volo.Abp.BlazoriseUI
 
         protected BlazoriseCrudPageBase()
         {
-            NewEntity = new TCreateInput();
-            EditingEntity = new TUpdateInput();
+            NewEntity = new TCreateViewModel();
+            EditingEntity = new TUpdateViewModel();
         }
 
         protected override async Task OnInitializedAsync()
@@ -161,8 +265,18 @@ namespace Volo.Abp.BlazoriseUI
         {
             var input = await CreateGetListInputAsync();
             var result = await AppService.GetListAsync(input);
-            Entities = result.Items;
+            Entities = MapToListViewModel(result.Items);
             TotalCount = (int?) result.TotalCount;
+        }
+
+        private IReadOnlyList<TListViewModel> MapToListViewModel(IReadOnlyList<TGetListOutputDto> dtos)
+        {
+            if (typeof(TGetListOutputDto) == typeof(TListViewModel))
+            {
+                return dtos.As<IReadOnlyList<TListViewModel>>();
+            }
+
+            return ObjectMapper.Map<IReadOnlyList<TGetListOutputDto>, List<TListViewModel>>(dtos);
         }
 
         protected virtual Task<TGetListInput> CreateGetListInputAsync()
@@ -187,7 +301,7 @@ namespace Volo.Abp.BlazoriseUI
             return Task.FromResult(input);
         }
 
-        protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TGetListOutputDto> e)
+        protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TListViewModel> e)
         {
             CurrentSorting = e.Columns
                 .Where(c => c.Direction != SortDirection.None)
@@ -204,7 +318,7 @@ namespace Volo.Abp.BlazoriseUI
         {
             await CheckCreatePolicyAsync();
 
-            NewEntity = new TCreateInput();
+            NewEntity = new TCreateViewModel();
             CreateModal.Show();
         }
 
@@ -224,9 +338,29 @@ namespace Volo.Abp.BlazoriseUI
             EditModal.Show();
         }
 
-        protected virtual TUpdateInput MapToEditingEntity(TGetOutputDto entityDto)
+        protected virtual TUpdateViewModel MapToEditingEntity(TGetOutputDto entityDto)
         {
-            return ObjectMapper.Map<TGetOutputDto, TUpdateInput>(entityDto);
+            return ObjectMapper.Map<TGetOutputDto, TUpdateViewModel>(entityDto);
+        }
+
+        protected virtual TCreateInput MapToCreateInput(TCreateViewModel createViewModel)
+        {
+            if (typeof(TCreateInput) == typeof(TCreateViewModel))
+            {
+                return createViewModel.As<TCreateInput>();
+            }
+
+            return ObjectMapper.Map<TCreateViewModel, TCreateInput>(createViewModel);
+        }
+
+        protected virtual TUpdateInput MapToUpdateInput(TUpdateViewModel updateViewModel)
+        {
+            if (typeof(TUpdateInput) == typeof(TUpdateViewModel))
+            {
+                return updateViewModel.As<TUpdateInput>();
+            }
+
+            return ObjectMapper.Map<TUpdateViewModel, TUpdateInput>(updateViewModel);
         }
 
         protected virtual Task CloseEditModalAsync()
@@ -238,20 +372,24 @@ namespace Volo.Abp.BlazoriseUI
         protected virtual async Task CreateEntityAsync()
         {
             await CheckCreatePolicyAsync();
-            await AppService.CreateAsync(NewEntity);
+            var createInput = MapToCreateInput(NewEntity);
+            await AppService.CreateAsync(createInput);
             await GetEntitiesAsync();
             CreateModal.Hide();
         }
 
+
+
         protected virtual async Task UpdateEntityAsync()
         {
             await CheckUpdatePolicyAsync();
-            await AppService.UpdateAsync(EditingEntityId, EditingEntity);
+            var updateInput = MapToUpdateInput(EditingEntity);
+            await AppService.UpdateAsync(EditingEntityId, updateInput);
             await GetEntitiesAsync();
             EditModal.Hide();
         }
 
-        protected virtual async Task DeleteEntityAsync(TGetListOutputDto entity)
+        protected virtual async Task DeleteEntityAsync(TListViewModel entity)
         {
             await CheckDeletePolicyAsync();
 
@@ -264,7 +402,7 @@ namespace Volo.Abp.BlazoriseUI
             await GetEntitiesAsync();
         }
 
-        protected virtual string GetDeleteConfirmationMessage(TGetListOutputDto entity)
+        protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
         {
             return UiLocalizer["ItemWillBeDeletedMessage"];
         }
