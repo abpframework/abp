@@ -55,7 +55,7 @@ To avoid IDE warnings, run `yarn` or `npm install` in the Angular root folder be
 
 After creating a solution, open its "angular" directory in your IDE. This is how the contents of the root folder looks like:
 
-<img alt="Angular project root folder structure" src="./images/quick-start---root-folder-structure.png" width="300px" style="max-width:100%" />
+<img alt="Angular project root folder structure" src="./images/quick-start---root-folder-structure.png" width="300px" style="max-width:100%">
 
 Here is what these folders and files are for:
 
@@ -76,7 +76,7 @@ Here is what these folders and files are for:
 
 Now let us take a look at the contents of the source folder.
 
-<img alt="Angular project source folder structure" src="./images/quick-start---source-folder-structure.png" width="300px" style="max-width:100%" />
+<img alt="Angular project source folder structure" src="./images/quick-start---source-folder-structure.png" width="300px" style="max-width:100%">
 
 - **app** is the main directory you put your application files in. Any module, component, directive, service, pipe, guard, interceptor, etc. should be placed here. You are free to choose any folder structure, but [organizing Angular applications based on modules](https://angular.io/guide/module-types) is generally a fine practice.
 - **home** is a predefined module and acts as a welcome page. It also demonstrates how a feature-based folder structure may look like. More complex features will probably have sub-features, thus inner folders. You may change the home folder however you like.
@@ -106,7 +106,7 @@ Now that you know about the files and folders, we can get the application up and
 3. Run `yarn start` or `npm start`. The first compilation may take a while. This will start a [live development server](#angular-live-development-server) and launch your default browser in the end.
 4. Visit the browser page that opens after the compilation <sup id="a-certificate-error">[1](#f-certificate-error)</sup>.
 
-<img alt="New ABP Angular project home page" src="./images/quick-start---new-project-home-page.png" width="744px" style="max-width:100%" />
+<img alt="New ABP Angular project home page" src="./images/quick-start---new-project-home-page.png" width="744px" style="max-width:100%">
 
 You may modify the behavior of the **start script** (in the package.json file) by changing the parameters passed to the `ng serve` command. For instance, if you do not want a browser window to open next time you run the script, remove `--open` from the end of it. Please check [ng serve documentation](https://angular.io/cli/serve) for all available options.
 
@@ -114,13 +114,13 @@ You may modify the behavior of the **start script** (in the package.json file) b
 
 The development server of Angular is based on [Webpack DevServer](https://webpack.js.org/configuration/dev-server/). It tracks changes to source files and syncs the browser window after an incremental re-compilation every time <sup id="a-dev-server">[2](#f-dev-server)</sup> you make one. Your experience will be like this:
 
-<img alt="Angular Live Development Server compiles again on template change and removes a button from the page displayed by the browser." src="./images/quick-start---angular-live-development-server.gif" width="818px" style="max-width:100%" />
+<img alt="Angular Live Development Server compiles again on template change and removes a button from the page displayed by the browser." src="./images/quick-start---angular-live-development-server.gif" width="818px" style="max-width:100%">
 
 Please keep in mind that you should not use this server in production. To provide the fastest experience, the compiler skips some heavy optimizations and the development server is simply not built for multiple clients. The next section will describe what to do.
 
 ---
 
-<img alt="Error caused by browser blocking access to backend" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%" />
+<img alt="Error caused by browser blocking access to backend" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%">
 
 <sup id="f-certificate-error"><b>1</b></sup> _If you see the error above when you run the Angular app, your browser might be blocking access to the API because of the self-signed certificate. Visit that address and allow access to it (once). When you see the Swagger interface, you are good to go._ <sup>[↩](#a-certificate-error)</sup>
 
@@ -169,7 +169,7 @@ When you run the development server, variables defined in _environment.ts_ take 
 2. Run `yarn` or `npm install` if you have not installed dependencies already.
 3. Run `yarn build:prod` or `npm run build:prod`.
 
-<img alt="Angular compiler optimizing the build using Terser" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%" />
+<img alt="Angular compiler optimizing the build using Terser" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%">
 
 Depending on project size, the compilation may take a few minutes. When it is finished, the compiled output will be placed inside the _/dist_ folder. Voila! You have deployment-ready build artifacts.
 

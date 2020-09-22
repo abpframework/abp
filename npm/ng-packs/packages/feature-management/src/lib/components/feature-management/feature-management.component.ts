@@ -119,6 +119,70 @@ export class FeatureManagementComponent
         }
       });
   }
+
+  onCheckboxClick(val: boolean, feature: FeatureDto) {
+    if (val) {
+      this.checkToggleAncestors(feature);
+    } else {
+      this.uncheckToggleDescendants(feature);
+    }
+  }
+
+  private uncheckToggleDescendants(feature: FeatureDto) {
+    this.findAllDescendantsOfByType(feature, ValueTypes.ToggleStringValueType).forEach(node =>
+      this.setFeatureValue(node, false),
+    );
+  }
+
+  private checkToggleAncestors(feature: FeatureDto) {
+    this.findAllAncestorsOfByType(feature, ValueTypes.ToggleStringValueType).forEach(node =>
+      this.setFeatureValue(node, true),
+    );
+  }
+
+  private findAllAncestorsOfByType(feature: FeatureDto, type: ValueTypes) {
+    let parent = this.findParentByType(feature, type);
+    const ancestors = [];
+    while (parent) {
+      ancestors.push(parent);
+      parent = this.findParentByType(parent, type);
+    }
+    return ancestors;
+  }
+
+  private findAllDescendantsOfByType(feature: FeatureDto, type: ValueTypes) {
+    const descendants = [];
+    const queue = [feature];
+
+    while (queue.length) {
+      const node = queue.pop();
+      const newDescendants = this.findChildrenByType(node, type);
+      descendants.push(...newDescendants);
+      queue.push(...newDescendants);
+    }
+
+    return descendants;
+  }
+
+  private findParentByType(feature: FeatureDto, type: ValueTypes) {
+    return this.getCurrentGroup().find(
+      f => f.valueType.name === type && f.name === feature.parentName,
+    );
+  }
+
+  private findChildrenByType(feature: FeatureDto, type: ValueTypes) {
+    return this.getCurrentGroup().filter(
+      f => f.valueType.name === type && f.parentName === feature.name,
+    );
+  }
+
+  private getCurrentGroup() {
+    return this.features[this.selectedGroupDisplayName] ?? [];
+  }
+
+  private setFeatureValue(feature: FeatureDto, val: boolean) {
+    feature.value = val as any;
+  }
 }
 
 function mapFeatures(features: FeatureDto[], dir: LocaleDirection) {
