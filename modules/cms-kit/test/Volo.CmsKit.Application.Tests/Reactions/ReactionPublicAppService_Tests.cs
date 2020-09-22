@@ -65,13 +65,13 @@ namespace Volo.CmsKit.Reactions
 
             UsingDbContext(context =>
             {
-                var reaction = context.Set<UserReaction>().FirstOrDefault(x =>
+                var reaction = context.Set<UserReaction>().Where(x =>
                     x.CreatorId == _cmsKitTestData.User1Id &&
                     x.ReactionName == StandardReactions.Eyes &&
                     x.EntityId == _cmsKitTestData.EntityId2 &&
-                    x.EntityType == _cmsKitTestData.EntityType2);
+                    x.EntityType == _cmsKitTestData.EntityType2).ToList();
 
-                reaction.ShouldNotBeNull();
+                reaction.Count.ShouldBe(1);
             });
         }
 
