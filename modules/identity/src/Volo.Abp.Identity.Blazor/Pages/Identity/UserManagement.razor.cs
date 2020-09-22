@@ -8,7 +8,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public class UserManagementBase : BlazoriseCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
+    public abstract class UserManagementBase : BlazoriseCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
     {
         protected const string PermissionProviderName = "U";
 
