@@ -14,11 +14,17 @@
             }
 
             function registerCreateOfNewRating() {
-                $widget.find(".my-rating-5").each(function () {
+                $widget.find(".my-rating").each(function () {
                         var authenticated = $(this).attr("data-authenticated");
 
                         $(this).starRating({
                             initialRating: 0,
+                            starSize: 16,
+                            emptyColor: '#eee',
+                            hoverColor: '#ffc107',
+                            activeColor: '#ffc107',
+                            useGradient: false,
+                            strokeWidth: 0,
                             disableAfterRate: true,
                             useFullStars: true,
                             readOnly: authenticated === "True",

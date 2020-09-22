@@ -22,15 +22,26 @@
     </abp-card-body>
 </abp-card>
 
-@if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-{
-    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "1" })
-}
-@if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
-{
-    @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "1" })
-}
-<hr class="my-5" />
+<abp-row>
+    <abp-column size-md="_6">
+        @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(RatingViewComponent), new { entityType = "quote", entityId = "1" })
+        }
+    </abp-column>
+    <abp-column size-md="_6">
+        @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "1" })
+        }
+    </abp-column>
+    <abp-column size-md="_12">
+        @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "1" })
+        }
+    </abp-column>
+</abp-row>
 <abp-card>
     <abp-card-body class="p-5">
         <abp-blockquote class="text-center">
@@ -41,19 +52,23 @@
         </abp-blockquote>
     </abp-card-body>
 </abp-card>
-
-<hr>
-@if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
-{
-    @await Component.InvokeAsync(typeof(RatingViewComponent), new { entityType = "quote", entityId = "2" })
-}
-<hr>
-@if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-{
-    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "2" })
-}
-@if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
-{
-    @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "2" })
-}
-<hr class="my-5" />
+<abp-row>
+    <abp-column size-md="_6">
+        @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(RatingViewComponent), new { entityType = "quote", entityId = "2" })
+        }
+    </abp-column>
+    <abp-column size-md="_6">
+        @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "2" })
+        }
+    </abp-column>
+    <abp-column size-md="_12">
+        @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "2" })
+        }
+    </abp-column>
+</abp-row> 
