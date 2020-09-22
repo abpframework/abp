@@ -23,6 +23,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
@@ -37,7 +39,6 @@ using Volo.Blogging;
 using Volo.Blogging.Admin;
 using Volo.Blogging.Files;
 using Volo.BloggingTestApp.EntityFrameworkCore;
-using Volo.BloggingTestApp.MongoDB;
 
 namespace Volo.BloggingTestApp
 {
@@ -57,6 +58,7 @@ namespace Volo.BloggingTestApp
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(BlobStoringDatabaseDomainModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
@@ -133,6 +135,14 @@ namespace Volo.BloggingTestApp
             Configure<BlogFileOptions>(options =>
             {
                 options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
+            });
+
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers.ConfigureDefault(container =>
+                {
+                    container.UseDatabase();
+                });
             });
         }
 
