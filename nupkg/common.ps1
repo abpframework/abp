@@ -141,6 +141,7 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.HttpApi",
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
+    "modules/account/src/Volo.Abp.Account.Blazor",
         
     # modules/audit-logging
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain",

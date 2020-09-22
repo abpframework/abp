@@ -364,6 +364,8 @@
 
     datatables.defaultConfigurations.scrollX = true;
 
+    datatables.defaultConfigurations.responsive = true; 
+
     datatables.defaultConfigurations.language = function () {
         return {
             info: localize("PagerInfo"),

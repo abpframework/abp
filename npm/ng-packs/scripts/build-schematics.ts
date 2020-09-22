@@ -51,11 +51,6 @@ async function* copyPackageFiles(packageName: string) {
 (async () => {
   await fse.remove(`../dist/${PACKAGE_TO_BUILD}`);
 
-  await execa('yarn', ['install', '--ignore-scripts'], {
-    stdout: 'inherit',
-    cwd: `../packages/${PACKAGE_TO_BUILD}`,
-  });
-
   await execa(
     'tsc',
     ['-p', `packages/${PACKAGE_TO_BUILD}/tsconfig.json`, '--outDir', `dist/${PACKAGE_TO_BUILD}`],
