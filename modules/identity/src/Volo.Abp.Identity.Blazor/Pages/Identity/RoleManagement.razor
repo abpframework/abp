@@ -35,7 +35,7 @@
                     </DropdownToggle>
                     <DropdownMenu>
                         <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityRoleDto>().Id)">@L["Edit"]</DropdownItem>
-                        <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName,context.As<IdentityRoleDto>().Name)">@L["Permissions"]</DropdownItem>
+                        <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.As<IdentityRoleDto>().Name)">@L["Permissions"]</DropdownItem>
                         <DropdownDivider/>
                         <DropdownItem Clicked="() => DeleteEntityAsync(context.As<IdentityRoleDto>())">@L["Delete"]</DropdownItem>
                     </DropdownMenu>
