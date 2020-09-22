@@ -40,5 +40,15 @@ namespace Volo.Abp
 
             return value;
         }
+        public static string IsNumeric(
+            string value,
+            [InvokerParameterName][NotNull] string parameterName)
+        {
+            if (!value.IsNullOrEmpty() && !double.TryParse(value, out _))
+            {
+                throw new ArgumentException($"{parameterName} must be numeric!", parameterName);
+            }
+            return value;
+        }
     }
 }
