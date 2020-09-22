@@ -15,12 +15,12 @@ export const INPUT_TYPES = {
 };
 
 @Directive({
-  selector: 'input[abpFreeText]',
-  exportAs: 'inputAbpFreeText',
+  selector: 'input[abpFeatureManagementFreeText]',
+  exportAs: 'inputAbpFeatureManagementFreeText',
 })
 export class FreeTextInputDirective {
   _feature: FreeTextType;
-  @Input('abpFreeText') set feature(val: FreeTextType) {
+  @Input('abpFeatureManagementFreeText') set feature(val: FreeTextType) {
     this._feature = val;
     this.setInputType();
   }
