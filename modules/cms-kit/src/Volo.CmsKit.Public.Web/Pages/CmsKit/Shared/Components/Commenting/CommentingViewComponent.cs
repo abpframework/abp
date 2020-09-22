@@ -8,7 +8,6 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Comments;
-using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 {
@@ -16,7 +15,8 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
     [Widget(
         ScriptTypes = new[] {typeof(CommentingScriptBundleContributor)},
         StyleTypes = new[] {typeof(CommentingStyleBundleContributor)},
-        RefreshUrl = "/CmsKitPublicWidgets/Commenting"
+        RefreshUrl = "/CmsKitPublicWidgets/Commenting",
+        AutoInitialize = true
     )]
     public class CommentingViewComponent : AbpViewComponent
     {

@@ -115,4 +115,23 @@
         return publicApi;
     };
 
+    function autoInitWidgets($wrapper){
+        $wrapper.findWithSelf('.abp-widget-wrapper[data-widget-auto-init="true"]')
+            .each(function(){
+                var widgetManager = new abp.WidgetManager({
+                    wrapper: $(this),
+                });
+
+                widgetManager.init();
+            });
+    }
+
+    abp.dom.onNodeAdded(function(args){
+        autoInitWidgets(args.$el);
+    })
+
+    $(function(){
+        autoInitWidgets($('body'));
+    });
+
 })(jQuery);
