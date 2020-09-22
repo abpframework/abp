@@ -456,8 +456,6 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 * Added `abpPermission="BookStore.Books.Edit"` that hides the edit action if the current user has no editing permission.
 * Added `abpPermission="BookStore.Books.Delete"` that hides the delete action if the current user has no delete permission.
 
-{{end}}
-
 {{else if UI == "Blazor"}}
 
 ### Authorize the Razor Component
