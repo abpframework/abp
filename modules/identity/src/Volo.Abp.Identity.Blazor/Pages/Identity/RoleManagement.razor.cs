@@ -7,7 +7,7 @@ using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public abstract class RoleManagementBase : BlazoriseCrudPageBase<IIdentityRoleAppService,IdentityRoleDto, Guid, PagedAndSortedResultRequestDto, IdentityRoleCreateDto, IdentityRoleUpdateDto>
+    public abstract class RoleManagementBase : AbpCrudPageBase<IIdentityRoleAppService,IdentityRoleDto, Guid, PagedAndSortedResultRequestDto, IdentityRoleCreateDto, IdentityRoleUpdateDto>
     {
         protected const string PermissionProviderName = "R";
 

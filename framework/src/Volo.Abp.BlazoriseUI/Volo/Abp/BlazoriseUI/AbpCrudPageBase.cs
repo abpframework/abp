@@ -18,11 +18,11 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
 {
-    public abstract class BlazoriseCrudPageBase<
+    public abstract class AbpCrudPageBase<
             TAppService,
             TEntityDto,
             TKey>
-        : BlazoriseCrudPageBase<
+        : AbpCrudPageBase<
             TAppService,
             TEntityDto,
             TKey,
@@ -34,12 +34,12 @@ namespace Volo.Abp.BlazoriseUI
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<
+    public abstract class AbpCrudPageBase<
             TAppService,
             TEntityDto,
             TKey,
             TGetListInput>
-        : BlazoriseCrudPageBase<
+        : AbpCrudPageBase<
             TAppService,
             TEntityDto,
             TKey,
@@ -54,13 +54,13 @@ namespace Volo.Abp.BlazoriseUI
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<
+    public abstract class AbpCrudPageBase<
             TAppService,
             TEntityDto,
             TKey,
             TGetListInput,
             TCreateInput>
-        : BlazoriseCrudPageBase<
+        : AbpCrudPageBase<
             TAppService,
             TEntityDto,
             TKey,
@@ -78,14 +78,14 @@ namespace Volo.Abp.BlazoriseUI
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<
+    public abstract class AbpCrudPageBase<
             TAppService,
             TEntityDto,
             TKey,
             TGetListInput,
             TCreateInput,
             TUpdateInput>
-        : BlazoriseCrudPageBase<
+        : AbpCrudPageBase<
             TAppService,
             TEntityDto,
             TEntityDto,
@@ -106,7 +106,7 @@ namespace Volo.Abp.BlazoriseUI
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<
+    public abstract class AbpCrudPageBase<
             TAppService,
             TGetOutputDto,
             TGetListOutputDto,
@@ -114,7 +114,7 @@ namespace Volo.Abp.BlazoriseUI
             TGetListInput,
             TCreateInput,
             TUpdateInput>
-        : BlazoriseCrudPageBase<
+        : AbpCrudPageBase<
             TAppService,
             TGetOutputDto,
             TGetListOutputDto,
@@ -140,7 +140,7 @@ namespace Volo.Abp.BlazoriseUI
     {
     }
 
-    public abstract class BlazoriseCrudPageBase<
+    public abstract class AbpCrudPageBase<
             TAppService,
             TGetOutputDto,
             TGetListOutputDto,
@@ -231,7 +231,7 @@ namespace Volo.Abp.BlazoriseUI
             return reference;
         }
 
-        protected BlazoriseCrudPageBase()
+        protected AbpCrudPageBase()
         {
             NewEntity = new TCreateViewModel();
             EditingEntity = new TUpdateViewModel();
