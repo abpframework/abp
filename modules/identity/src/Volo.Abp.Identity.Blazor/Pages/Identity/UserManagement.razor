@@ -1,5 +1,5 @@
 ﻿@page "/identity/users"
-@attribute [Authorize]
+@attribute [Authorize(IdentityPermissions.Users.Default)]
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.Application.Dtos
@@ -7,6 +7,7 @@
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @inherits UserManagementBase
 @inject IStringLocalizer<IdentityResource> L
+@inject IAuthorizationService AuthorizationService
 
 @* ************************* PAGE HEADER ************************* *@
 <Row>
@@ -14,9 +15,12 @@
         <h1>@L["Users"]</h1>
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
-        <Paragraph Alignment="TextAlignment.Right">
-            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewUser"]</Button>
-        </Paragraph>
+        @if (canCreate)
+        {
+            <Paragraph Alignment="TextAlignment.Right">
+                <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewUser"]</Button>
+            </Paragraph>
+        }
     </Column>
 </Row>
 
@@ -28,21 +32,33 @@
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
-        <DataGridColumn Width="150px" TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.UserName)" Sortable="false" Caption="@L["Actions"].Value">
-            <DisplayTemplate>
-                <Dropdown>
-                    <DropdownToggle Color="Color.Primary">
-                        @L["Actions"]
-                    </DropdownToggle>
-                    <DropdownMenu>
-                        <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityUserDto>().Id)">@L["Edit"]</DropdownItem>
-                        <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName,context.As<IdentityUserDto>().Id.ToString())">@L["Permissions"]</DropdownItem>
-                        <DropdownDivider/>
-                        <DropdownItem Clicked="() => DeleteEntityAsync(context.As<IdentityUserDto>())">@L["Delete"]</DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>
-            </DisplayTemplate>
-        </DataGridColumn>
+        @if (canEdit || canDelete || canEditPermissions)
+        {
+            <DataGridColumn Width="150px" TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.UserName)" Sortable="false" Caption="@L["Actions"].Value">
+                <DisplayTemplate>
+                    <Dropdown>
+                        <DropdownToggle Color="Color.Primary">
+                            @L["Actions"]
+                        </DropdownToggle>
+                        <DropdownMenu>
+                            @if (canEdit)
+                            {
+                                <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityUserDto>().Id)">@L["Edit"]</DropdownItem>
+                            }
+                            @if (canEditPermissions)
+                            {
+                                <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName,context.As<IdentityUserDto>().Id.ToString())">@L["Permissions"]</DropdownItem>
+                            }
+                            @if (canDelete)
+                            {
+                                <DropdownDivider/>
+                                <DropdownItem Clicked="() => DeleteEntityAsync(context.As<IdentityUserDto>())">@L["Delete"]</DropdownItem>
+                            }
+                        </DropdownMenu>
+                    </Dropdown>
+                </DisplayTemplate>
+            </DataGridColumn>
+        }
         <DataGridColumn TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.UserName)" Caption="@L["UserName"].Value">
             <DisplayTemplate>
                 @(context.As<IdentityUserDto>().UserName)
@@ -202,3 +218,21 @@
 </Modal>
 
 <PermissionManagementModal @ref="PermissionManagementModal"/>
+
+@code
+{
+    bool canCreate;
+    bool canEdit;
+    bool canDelete;
+    bool canEditPermissions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        canCreate =await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.Create);
+        canEdit = await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.Update);
+        canDelete = await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.Delete);
+        canEditPermissions = await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
+    }
+}
