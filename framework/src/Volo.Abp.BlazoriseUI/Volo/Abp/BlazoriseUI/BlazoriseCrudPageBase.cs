@@ -4,13 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.DataGrid;
+using JetBrains.Annotations;
 using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.Authorization;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
@@ -20,7 +23,6 @@ namespace Volo.Abp.BlazoriseUI
         where TAppService : ICrudAppService<TEntityDto, TKey>
         where TEntityDto : IEntityDto<TKey>, new()
     {
-
     }
 
     public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput>
@@ -29,7 +31,6 @@ namespace Volo.Abp.BlazoriseUI
         where TEntityDto : IEntityDto<TKey>, new()
         where TGetListInput : new()
     {
-
     }
 
     public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput>
@@ -39,10 +40,10 @@ namespace Volo.Abp.BlazoriseUI
         where TCreateInput : new()
         where TGetListInput : new()
     {
-
     }
 
-    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput,
+            TUpdateInput>
         : BlazoriseCrudPageBase<TAppService, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntityDto : IEntityDto<TKey>
@@ -50,12 +51,13 @@ namespace Volo.Abp.BlazoriseUI
         where TUpdateInput : new()
         where TGetListInput : new()
     {
-
     }
 
-    public abstract class BlazoriseCrudPageBase<TAppService, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    public abstract class BlazoriseCrudPageBase<TAppService, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput,
+            TCreateInput, TUpdateInput>
         : OwningComponentBase
-        where TAppService : ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        where TAppService : ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput,
+            TUpdateInput>
         where TGetOutputDto : IEntityDto<TKey>
         where TGetListOutputDto : IEntityDto<TKey>
         where TCreateInput : new()
@@ -65,6 +67,7 @@ namespace Volo.Abp.BlazoriseUI
         [Inject] protected TAppService AppService { get; set; }
         [Inject] protected IUiMessageService UiMessageService { get; set; }
         [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
+        [Inject] protected IAuthorizationService AuthorizationService { get; set; }
 
         protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
@@ -77,6 +80,14 @@ namespace Volo.Abp.BlazoriseUI
         protected TUpdateInput EditingEntity;
         protected Modal CreateModal;
         protected Modal EditModal;
+
+        protected string CreatePolicyName { get; set; }
+        protected string UpdatePolicyName { get; set; }
+        protected string DeletePolicyName { get; set; }
+
+        public bool HasCreatePermission { get; set; }
+        public bool HasUpdatePermission { get; set; }
+        public bool HasDeletePermission { get; set; }
 
         protected Type ObjectMapperContext { get; set; }
 
@@ -124,7 +135,26 @@ namespace Volo.Abp.BlazoriseUI
 
         protected override async Task OnInitializedAsync()
         {
+            await SetPermissionsAsync();
             await GetEntitiesAsync();
+        }
+
+        protected virtual async Task SetPermissionsAsync()
+        {
+            if (CreatePolicyName != null)
+            {
+                HasCreatePermission = await AuthorizationService.IsGrantedAsync(CreatePolicyName);
+            }
+
+            if (UpdatePolicyName != null)
+            {
+                HasUpdatePermission = await AuthorizationService.IsGrantedAsync(UpdatePolicyName);
+            }
+
+            if (DeletePolicyName != null)
+            {
+                HasDeletePermission = await AuthorizationService.IsGrantedAsync(DeletePolicyName);
+            }
         }
 
         protected virtual async Task GetEntitiesAsync()
@@ -170,11 +200,12 @@ namespace Volo.Abp.BlazoriseUI
             StateHasChanged();
         }
 
-        protected virtual Task OpenCreateModalAsync()
+        protected virtual async Task OpenCreateModalAsync()
         {
+            await CheckCreatePolicyAsync();
+
             NewEntity = new TCreateInput();
             CreateModal.Show();
-            return Task.CompletedTask;
         }
 
         protected virtual Task CloseCreateModalAsync()
@@ -185,6 +216,8 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task OpenEditModalAsync(TKey id)
         {
+            await CheckUpdatePolicyAsync();
+
             var entityDto = await AppService.GetAsync(id);
             EditingEntityId = id;
             EditingEntity = MapToEditingEntity(entityDto);
@@ -204,6 +237,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task CreateEntityAsync()
         {
+            await CheckCreatePolicyAsync();
             await AppService.CreateAsync(NewEntity);
             await GetEntitiesAsync();
             CreateModal.Hide();
@@ -211,6 +245,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task UpdateEntityAsync()
         {
+            await CheckUpdatePolicyAsync();
             await AppService.UpdateAsync(EditingEntityId, EditingEntity);
             await GetEntitiesAsync();
             EditModal.Hide();
@@ -218,6 +253,8 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task DeleteEntityAsync(TGetListOutputDto entity)
         {
+            await CheckDeletePolicyAsync();
+
             if (!await UiMessageService.ConfirmAsync(GetDeleteConfirmationMessage(entity)))
             {
                 return;
@@ -230,6 +267,38 @@ namespace Volo.Abp.BlazoriseUI
         protected virtual string GetDeleteConfirmationMessage(TGetListOutputDto entity)
         {
             return UiLocalizer["ItemWillBeDeletedMessage"];
+        }
+
+        protected virtual async Task CheckCreatePolicyAsync()
+        {
+            await CheckPolicyAsync(CreatePolicyName);
+        }
+
+        protected virtual async Task CheckUpdatePolicyAsync()
+        {
+            await CheckPolicyAsync(UpdatePolicyName);
+        }
+
+        protected virtual async Task CheckDeletePolicyAsync()
+        {
+            await CheckPolicyAsync(DeletePolicyName);
+        }
+
+        /// <summary>
+        /// Calls IAuthorizationService.CheckAsync for the given <see cref="policyName"/>.
+        /// Throws <see cref="AbpAuthorizationException"/> if given policy was not granted for the current user.
+        ///
+        /// Does nothing if <see cref="policyName"/> is null or empty.
+        /// </summary>
+        /// <param name="policyName">A policy name to check</param>
+        protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)
+        {
+            if (string.IsNullOrEmpty(policyName))
+            {
+                return;
+            }
+
+            await AuthorizationService.CheckAsync(policyName);
         }
     }
 }
