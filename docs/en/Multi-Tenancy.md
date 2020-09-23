@@ -362,6 +362,12 @@ ABP Framework was designed to respect to the multi-tenancy in every aspect and m
 
 BLOB Storing, Caching, Data Filtering, Data Seeding, Authorization and all the other services are designed to properly work in a multi-tenant system.
 
+## The Tenant Management Module
+
+ABP Framework provides all the the infrastructure to create a multi-tenant application, but doesn't make any assumption about how you manage (create, delete...) your tenants.
+
+The [Tenant Management module](Modules/Tenant-Management.md) provides a basic UI to manage your tenants and set their connection strings. It is pre-configured for the [application startup template](Startup-Templates/Application.md).
+
 ## See Also
 
 * [Features](Features.md)
