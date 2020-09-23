@@ -1,4 +1,4 @@
-# Querying Lists Easily with ListService
+# Working with Lists
 
 `ListService` is a utility service to provide an easy pagination, sorting, and search implementation.
 
