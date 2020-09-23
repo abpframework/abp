@@ -132,11 +132,6 @@ namespace Volo.BloggingTestApp
                 options.DefaultThemeName = BasicTheme.Name;
             });
 
-            Configure<BlogFileOptions>(options =>
-            {
-                options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
-            });
-
             Configure<AbpBlobStoringOptions>(options =>
             {
                 options.Containers.ConfigureDefault(container =>

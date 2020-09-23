@@ -13,14 +13,11 @@ namespace Volo.Blogging.Files
     public class FileAppService : BloggingAppServiceBase, IFileAppService
     {
         protected IBlobContainer<BloggingFileContainer> BlobContainer { get; }
-        public BlogFileOptions Options { get; }
 
         public FileAppService(
-            IOptions<BlogFileOptions> options,
             IBlobContainer<BloggingFileContainer> blobContainer)
         {
             BlobContainer = blobContainer;
-            Options = options.Value;
         }
 
         public virtual async Task<RawFileDto> GetAsync(string name)
