@@ -105,4 +105,4 @@ export interface RemoteEnv {
 
 ## What's Next?
 
-* [Service Proxies](./Service-Proxies.md)
+* [Anatomy of a Feature Library](./Feature-Libraries.md)
