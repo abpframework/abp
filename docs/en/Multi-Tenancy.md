@@ -41,7 +41,7 @@ namespace MultiTenancyDemo.Products
 
 * `IMultiTenant` interface just defines a `TenantId` property.
 
-When you implement this interface, ABP Framework **automatically** [filters](Data-Filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries; a tenant can not access to data of another tenant.
+When you implement this interface, ABP Framework **automatically** [filters](Data-Filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries. A tenant can not access to data of another tenant by default.
 
 ### Why the TenantId Property is Nullable?
 
@@ -177,13 +177,17 @@ namespace MultiTenancyDemo.Products
 
 > Always use the `Change` method with a `using` statement like done in this example.
 
-## Determining Current Tenant
+## Determining the Current Tenant
 
-The first thing for a multi-tenant application is to determine the current tenant on the runtime. ABP Framework provides an extensible *Tenant Resolving* system for that purpose.
+The first thing for a multi-tenant application is to determine the current tenant on the runtime.
 
-### Default Tenant Resolvers
+ABP Framework provides an extensible **Tenant Resolving** system for that purpose. Tenant Resolving system then used in the **Multi-Tenancy Middleware** to determine the current tenant for the current HTTP request.
 
-The following resolvers are provided by default;
+### Tenant Resolvers
+
+#### Default Tenant Resolvers
+
+The following resolvers are provided and configured by default;
 
 * `CurrentUserTenantResolveContributor`: Gets the tenant id from claims of the current user, if the current user has logged in. **This should always be the first contributor for the security**.
 * `QueryStringTenantResolveContributor`: Tries to find current tenant id from query string parameters. The parameter name is `__tenant` by default.
@@ -192,13 +196,13 @@ The following resolvers are provided by default;
 * `HeaderTenantResolveContributor`: Tries to find current tenant id from HTTP headers. The header name is `__tenant` by default.
 * `CookieTenantResolveContributor`: Tries to find current tenant id from cookie values. The cookie name is `__tenant` by default.
 
-#### Problems with the NGINX
+##### Problems with the NGINX
 
 You may have problems with the `__tenant` in the HTTP Headers if you're using the [nginx](https://www.nginx.com/) as the reverse proxy server. Because it doesn't allow to use underscore and some other special characters in the HTTP headers and you may need to manually configure it. See the following documents please: 
 http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
 http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
 
-#### AbpAspNetCoreMultiTenancyOptions
+##### AbpAspNetCoreMultiTenancyOptions
 
 `__tenant` parameter name can be changed using `AbpAspNetCoreMultiTenancyOptions`.
 
@@ -213,7 +217,7 @@ services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 
 > However, we don't suggest to change this value since some clients may assume the the `__tenant` as the parameter name and they might need to manually configure then.
 
-### Domain/Subdomain Tenant Resolver
+#### Domain/Subdomain Tenant Resolver
 
 In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure the `AbpTenantResolveOptions` to add the domain tenant resolver.
 
@@ -230,7 +234,7 @@ Configure<AbpTenantResolveOptions>(options =>
 * Add this code to the `ConfigureServices` method of your [module](Module-Development-Basics.md).
 * This should be done in the *Web/API Layer* since the URL is a web related stuff.
 
-### Custom Tenant Resolvers
+#### Custom Tenant Resolvers
 
 You can add implement your custom tenant resolver and configure the `AbpTenantResolveOptions` in your module's `ConfigureServices` method as like below:
 
@@ -263,95 +267,31 @@ namespace MultiTenancyDemo.Web
 * A tenant resolver should set `context.TenantIdOrName` if it can determine it. If not, just leave it as is to allow the next resolver to determine it.
 * `context.ServiceProvider` can be used if you need to additional services to resolve from the [dependency injection](Dependency-Injection.md) system.
 
-## Avdanced Topics
+### Multi-Tenancy Middleware
 
-### Tenant Store
+Multi-Tenancy middleware is an ASP.NET Core request pipeline [middleware](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware) that determines the current tenant from the HTTP request and sets the `ICurrentTenant` properties.
 
-Volo.Abp.MultiTenancy package defines **ITenantStore** to abstract data source from the framework. You can implement ITenantStore to work with any data source (like a relational database) that stores information of your tenants.
-
-...
-
-##### Configuration Data Store
-
-There is a built in (and default) tenant store, named ConfigurationTenantStore, that can be used to store tenants using standard [configuration system](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) (with [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration) package). Thus, you can define tenants as hard coded or get from your appsettings.json file.
-
-###### Example: Define tenants as hard-coded
+Multi-Tenancy middleware is typically placed just under the [authentication](https://docs.microsoft.com/en-us/aspnet/core/security/authentication) middleware (`app.UseAuthentication()`):
 
 ````C#
-using System;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Data;
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpDefaultTenantStoreOptions>(options =>
-            {
-                options.Tenants = new[]
-                {
-                    new TenantConfiguration(
-                        Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"), //Id
-                        "tenant1" //Name
-                    ),
-                    new TenantConfiguration(
-                        Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"), //Id
-                        "tenant2" //Name
-                    )
-                    {
-                        //tenant2 has a seperated database
-                        ConnectionStrings =
-                        {
-                            {ConnectionStrings.DefaultConnectionStringName, "..."}
-                        }
-                    }
-                };
-            });
-        }
-    }
-}
+app.UseMultiTenancy();
 ````
 
-###### Example: Define tenants in appsettings.json
+> This middleware is already configured in the startup templates, so you normally don't need to manually add it.
 
-First create your configuration from your appsettings.json file as you always do.
+## Tenant Store
 
-````C#
-using System.IO;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
+`ITenantStore` is used to get the tenant configuration from a data source.
 
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var configuration = BuildConfiguration();
+### Tenant Management Module
 
-            Configure<AbpDefaultTenantStoreOptions>(configuration);
-        }
+The [tenant management module](Modules/Tenant-Management) is **included in the startup templates** and implements the `ITenantStore` interface to get the tenants and their configuration from a database. It also provides the necessary functionality and UI to manage the tenants and their connection strings.
 
-        private static IConfigurationRoot BuildConfiguration()
-        {
-            return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .Build();
-        }
-    }
-}
-````
+### Configuration Data Store
 
-Then add a "**Tenants**" section to your appsettings.json:
+**If you don't want to use the tenant management module**, the `DefaultTenantStore` is used as the `ITenantStore` implementation. It gets the tenant configurations from the [configuration system](Configuration.md) (`IConfiguration`). You can either configure the `AbpDefaultTenantStoreOptions` [options](Options.md) or set it in your `appsettings.json` file:
+
+**Example: Define tenants in appsettings.json**
 
 ````json
 "Tenants": [
@@ -363,95 +303,13 @@ Then add a "**Tenants**" section to your appsettings.json:
       "Id": "25388015-ef1c-4355-9c18-f6b6ddbaf89d",
       "Name": "tenant2",
       "ConnectionStrings": {
-        "Default": "...write tenant2's db connection string here..."
+        "Default": "...tenant2's db connection string here..."
       }
     }
   ]
 ````
 
-##### Volo.Abp... Package (TODO)
-
-TODO: This package implements ITenantStore using a real database...
-
-#### Tenant Information
-
-ITenantStore works with **TenantConfiguration** class that has several properties for a tenant:
-
-* **Id**: Unique Id of the tenant.
-* **Name**: Unique name of the tenant.
-* **ConnectionStrings**: If this tenant has dedicated database(s) to store it's data, then connection strings can provide database connection strings (it may have a default connection string and connection strings per modules - TODO: Add link to Abp.Data package document).
-
-A multi-tenant application may require additional tenant properties, but these are the minimal requirements for the framework to work with multiple tenants.
-
-#### Change Tenant By Code
-
-TODO...
-
-### Volo.Abp.AspNetCore.MultiTenancy Package
-
-Volo.Abp.AspNetCore.MultiTenancy package integrate multi-tenancy to ASP.NET Core applications. To install it to your project, run the following command on PMC:
-
-````
-Install-Package Volo.Abp.AspNetCore.MultiTenancy
-````
-
-Then you can add **AbpAspNetCoreMultiTenancyModule** dependency to your module:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.AspNetCore.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpAspNetCoreMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
-
-#### Multi-Tenancy Middleware
-
-Volo.Abp.AspNetCore.MultiTenancy package includes the multi-tenancy middleware...
-
-````C#
-app.UseMultiTenancy();
-````
-
-TODO:...
-
-#### Determining Current Tenant From Web Request
-
-### Related Packages
-
-TODO
-
-Volo.Abp.MultiTenancy package defines fundamental interfaces to make your code "multi-tenancy ready". So, install it to your project using the package manager console (PMC):
-
-````
-Install-Package Volo.Abp.MultiTenancy
-````
-
-> This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
-
-Then you can add **AbpMultiTenancyModule** dependency to your module:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
-
-> With the "Multi-tenancy ready" concept, we intent to develop our code to be compatible with multi-tenancy approach. Then it can be used in a multi-tenant application or not, depending on the requirements of the final application.
+> It is recommended to **use the Tenant Management module**, which is already pre-configured when you create a new application with the ABP startup templates.
 
 ## See Also
 
