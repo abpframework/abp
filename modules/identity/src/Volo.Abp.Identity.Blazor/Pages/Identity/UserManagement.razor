@@ -86,7 +86,7 @@
                 <CloseButton Clicked="CloseCreateModalAsync"/>
             </ModalHeader>
             <ModalBody>
-                <Tabs @bind-SelectedTab="@_createModalSelectedTab">
+                <Tabs @bind-SelectedTab="@CreateModalSelectedTab">
                     <Items>
                         <Tab Name="UserInformations">@L["UserInformations"]</Tab>
                         <Tab Name="Roles">@L["Roles"]</Tab>
@@ -160,7 +160,7 @@
             <ModalBody>
                 <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp"/>
 
-                <Tabs @bind-SelectedTab="@_editModalSelectedTab">
+                <Tabs @bind-SelectedTab="@EditModalSelectedTab">
                     <Items>
                         <Tab Name="UserInformations">@L["UserInformations"]</Tab>
                         <Tab Name="Roles">@L["Roles"]</Tab>
