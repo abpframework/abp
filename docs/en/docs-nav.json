@@ -443,6 +443,10 @@
                   "path": "UI/Angular/Environment.md"
                 },
                 {
+                  "text": "Anatomy of a Feature Library",
+                  "path": "UI/Angular/Feature-Libraries.md"
+                },
+                {
                   "text": "Service Proxies",
                   "path": "UI/Angular/Service-Proxies.md"
                 }
