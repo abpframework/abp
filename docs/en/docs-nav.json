@@ -477,7 +477,7 @@
               "text": "Utilities",
               "items": [
                 {
-                  "text": "RxJS Subscriptions",
+                  "text": "Managing RxJS Subscriptions",
                   "path": "UI/Angular/Subscription-Service.md"
                 },
                 {

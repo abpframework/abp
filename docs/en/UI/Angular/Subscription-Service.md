@@ -1,4 +1,4 @@
-# RxJS Subscriptions
+# Managing RxJS Subscriptions
 
 `SubscriptionService` is a utility service to provide an easy unsubscription from RxJS observables in Angular components and directives. Please see [why you should unsubscribe from observables on instance destruction](https://angular.io/guide/lifecycle-hooks#cleaning-up-on-instance-destruction).
 
