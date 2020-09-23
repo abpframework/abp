@@ -87,14 +87,37 @@ namespace Volo.Abp.Cli.ProjectModification
                 await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version);
                 await SolutionFileModifier.AddModuleToSolutionFileAsync(module, solutionFile);
                 await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
-
-                await HandleAngularProject(modulesFolderInSolution, solutionFile);
+                await AddAngularSourceCode(modulesFolderInSolution, solutionFile);
+            }
+            else
+            {
+                await AddAngularPackages(solutionFile, module);
             }
 
             ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
         }
 
-        private async Task HandleAngularProject(string modulesFolderInSolution, string solutionFilePath)
+        private async Task AddAngularPackages(string solutionFilePath, ModuleWithMastersInfo module)
+        {
+            var angularPath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(solutionFilePath)), "angular");
+
+            if (!Directory.Exists(angularPath))
+            {
+                return;
+            }
+
+            var angularPackages = module.NpmPackages?.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Angular)).ToList();
+
+            if (!angularPackages.IsNullOrEmpty())
+            {
+                foreach (var npmPackage in angularPackages)
+                {
+                    await ProjectNpmPackageAdder.AddAsync(angularPath, npmPackage, true);
+                }
+            }
+        }
+
+        private async Task AddAngularSourceCode(string modulesFolderInSolution, string solutionFilePath)
         {
             var angularPath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(solutionFilePath)), "angular");
 
