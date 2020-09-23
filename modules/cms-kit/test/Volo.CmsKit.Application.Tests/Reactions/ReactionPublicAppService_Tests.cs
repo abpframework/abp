@@ -32,6 +32,7 @@ namespace Volo.CmsKit.Reactions
         public async Task GetForSelectionAsync()
         {
             _currentUser.Id.Returns(_cmsKitTestData.User1Id);
+            _currentUser.IsAuthenticated.Returns(true);
 
             var reactions = await _reactionPublicAppService.GetForSelectionAsync(
                 _cmsKitTestData.EntityType2,

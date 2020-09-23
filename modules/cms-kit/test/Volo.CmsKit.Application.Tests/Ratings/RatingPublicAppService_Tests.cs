@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Ratings
             UsingDbContext(context =>
             {
                 var ratings = context.Set<Rating>().Where(x =>
-                    x.EntityId == _cmsKitTestData.EntityId1 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
+                    x.EntityId == _cmsKitTestData.EntityId2 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
 
                 ratings
                     .Any(c => c.Id == newRating.Id && c.CreatorId == newRating.CreatorId &&

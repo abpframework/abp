@@ -21,11 +21,11 @@ namespace Volo.CmsKit.Reactions
         {
             var reactions = await _reactionManager.GetReactionsAsync();
 
-            reactions.Count.ShouldBe(8);
+            reactions.Count.ShouldBe(12);
 
             var reactionsByEntityType = await _reactionManager.GetReactionsAsync(_cmsKitTestData.EntityType1);
 
-            reactionsByEntityType.Count.ShouldBe(8);
+            reactionsByEntityType.Count.ShouldBe(12);
         }
 
         [Fact]
