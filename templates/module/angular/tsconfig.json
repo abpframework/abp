@@ -1,23 +1,15 @@
-/*
-  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
-  It is not intended to be used to perform a compilation.
-
-  To learn more about this file see: https://angular.io/config/solution-tsconfig.
-*/
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./projects/my-project-name/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/my-project-name/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/dev-app/tsconfig.app.json"
-    },
-    {
-      "path": "./projects/dev-app/tsconfig.spec.json"
+  "extends": "./tsconfig.prod.json",
+  "compilerOptions": {
+    "paths": {
+      "@my-company-name/my-project-name": [
+        "projects/my-project-name/src/public-api.ts"
+      ],
+      "@my-company-name/my-project-name/config": [
+        "projects/my-project-name/config/src/public-api.ts"
+      ],
+      "@proxy": ["projects/my-project-name/src/lib/proxy/index.ts"],
+      "@proxy/*": ["projects/my-project-name/src/lib/proxy/*"]
     }
-  ]
+  }
 }
