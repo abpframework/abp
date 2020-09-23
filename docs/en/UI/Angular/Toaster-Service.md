@@ -156,4 +156,4 @@ Removes all open toasts.
 
 ## What's Next?
 
-- [Config State](./Config-State.md)
+- [Modifying the Menu](./Modifying-the-Menu.md)

@@ -1,4 +1,4 @@
-# How to Lazy Load Scripts and Styles
+# Lazy Loading Scripts & Styles
 
 You can use the `LazyLoadService` in @abp/ng.core package in order to lazy load scripts and styles in an easy and explicit way.
 
@@ -210,4 +210,4 @@ load(strategy: LoadingStrategy, retryTimes?: number, retryDelay?: number): Obser
 
 ## What's Next?
 
-- [DomInsertionService](./Dom-Insertion-Service.md)
+- [Projecting Angular Content](./Content-Projection-Service.md)
