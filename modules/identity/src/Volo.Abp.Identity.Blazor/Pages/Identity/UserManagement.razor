@@ -92,50 +92,52 @@
                         <Tab Name="Roles">@L["Roles"]</Tab>
                     </Items>
                     <Content>
-                        <TabPanel Name="UserInformations">
-                            <Field>
-                                <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                <TextEdit @bind-text="NewEntity.UserName"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
-                                <TextEdit @bind-text="NewEntity.Name"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
-                                <TextEdit @bind-text="NewEntity.Surname"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                                <TextEdit Role="TextRole.Password" @bind-text="NewEntity.Password"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
-                                <TextEdit @bind-text="NewEntity.Email"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
-                                <TextEdit @bind-text="NewEntity.PhoneNumber"/>
-                            </Field>
-                            <Field>
-                                <Check TValue="bool" @bind-checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
-                            </Field>
-                            <Field>
-                                <Check TValue="bool" @bind-checked="@NewEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
-                            </Field>
-                        </TabPanel>
-                        <TabPanel Name="Roles">
-                            @if (NewUserRoles != null)
-                            {
-                                @foreach (var role in NewUserRoles)
+                        <EditForm id="IdentityUserCreateForm" Model="@NewEntity" OnValidSubmit="CreateEntityAsync">
+                            <TabPanel Name="UserInformations">
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                                    <TextEdit @bind-text="NewEntity.UserName"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
+                                    <TextEdit @bind-text="NewEntity.Name"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
+                                    <TextEdit @bind-text="NewEntity.Surname"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
+                                    <TextEdit Role="TextRole.Password" @bind-text="NewEntity.Password"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                                    <TextEdit @bind-text="NewEntity.Email"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
+                                    <TextEdit @bind-text="NewEntity.PhoneNumber"/>
+                                </Field>
+                                <Field>
+                                    <Check TValue="bool" @bind-checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
+                                </Field>
+                                <Field>
+                                    <Check TValue="bool" @bind-checked="@NewEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
+                                </Field>
+                            </TabPanel>
+                            <TabPanel Name="Roles">
+                                @if (NewUserRoles != null)
                                 {
-                                    <Field>
-                                        <input type="hidden" @bind-value="@role.Name"/>
-                                        <Check TValue="bool" @bind-checked="@role.IsAssigned">@role.Name</Check>
-                                    </Field>
+                                    @foreach (var role in NewUserRoles)
+                                    {
+                                        <Field>
+                                            <input type="hidden" @bind-value="@role.Name"/>
+                                            <Check TValue="bool" @bind-checked="@role.IsAssigned">@role.Name</Check>
+                                        </Field>
+                                    }
                                 }
-                            }
-                        </TabPanel>
+                            </TabPanel>
+                        </EditForm>
                     </Content>
                 </Tabs>
             </ModalBody>
@@ -166,50 +168,52 @@
                         <Tab Name="Roles">@L["Roles"]</Tab>
                     </Items>
                     <Content>
-                        <TabPanel Name="UserInformations">
-                            <Field>
-                                <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                <TextEdit @bind-text="EditingEntity.UserName"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
-                                <TextEdit @bind-text="EditingEntity.Name"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
-                                <TextEdit @bind-text="EditingEntity.Surname"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                                <TextEdit Role="TextRole.Password" @bind-text="EditingEntity.Password"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
-                                <TextEdit @bind-text="EditingEntity.Email"/>
-                            </Field>
-                            <Field>
-                                <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
-                                <TextEdit @bind-text="EditingEntity.PhoneNumber"/>
-                            </Field>
-                            <Field>
-                                <Check TValue="bool" @bind-checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
-                            </Field>
-                            <Field>
-                                <Check TValue="bool" @bind-checked="EditingEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
-                            </Field>
-                        </TabPanel>
-                        <TabPanel Name="Roles">
-                            @if (EditUserRoles != null)
-                            {
-                                @foreach (var role in EditUserRoles)
+                        <EditForm id="IdentityUserEditForm" Model="@EditingEntity" OnValidSubmit="UpdateEntityAsync">
+                            <TabPanel Name="UserInformations">
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                                    <TextEdit @bind-text="EditingEntity.UserName"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
+                                    <TextEdit @bind-text="EditingEntity.Name"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
+                                    <TextEdit @bind-text="EditingEntity.Surname"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
+                                    <TextEdit Role="TextRole.Password" @bind-text="EditingEntity.Password"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                                    <TextEdit @bind-text="EditingEntity.Email"/>
+                                </Field>
+                                <Field>
+                                    <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
+                                    <TextEdit @bind-text="EditingEntity.PhoneNumber"/>
+                                </Field>
+                                <Field>
+                                    <Check TValue="bool" @bind-checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
+                                </Field>
+                                <Field>
+                                    <Check TValue="bool" @bind-checked="EditingEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
+                                </Field>
+                            </TabPanel>
+                            <TabPanel Name="Roles">
+                                @if (EditUserRoles != null)
                                 {
-                                    <Field>
-                                        <input type="hidden" @bind-value="@role.Name"/>
-                                        <Check TValue="bool" @bind-checked="@role.IsAssigned">@role.Name</Check>
-                                    </Field>
+                                    @foreach (var role in EditUserRoles)
+                                    {
+                                        <Field>
+                                            <input type="hidden" @bind-value="@role.Name"/>
+                                            <Check TValue="bool" @bind-checked="@role.IsAssigned">@role.Name</Check>
+                                        </Field>
+                                    }
                                 }
-                            }
-                        </TabPanel>
+                            </TabPanel>
+                        </EditForm>
                     </Content>
                 </Tabs>
             </ModalBody>
