@@ -13,9 +13,40 @@ There are two main side of a typical SaaS / Multi-tenant application:
 * A **Tenant** is a customer of the SaaS application that pays money to use the service.
 * **Host** is the company that owns the SaaS application and manages the system.
 
-We will use the Host and Tenant terms for that purpose in the rest of the document.
+The Host and the Tenant terms will be used for that purpose in the rest of the document.
 
-## IMultiTenant
+## Configuration
+
+### AbpMultiTenancyOptions: Enable/Disable Multi-Tenancy
+
+`AbpMultiTenancyOptions` is the main options class to **enable/disable the multi-tenancy** for your application.
+
+**Example: Enable multi-tenancy**
+
+```csharp
+Configure<AbpMultiTenancyOptions>(options =>
+{
+    options.IsEnabled = true;
+});
+```
+
+> Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](Startup-Templates/Application.md). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
+
+### Database Architecture
+
+ABP Framework supports all the following approaches to store the tenant data in the database;
+
+* **Single Database**: All tenants are stored in a single database.
+* **Database per Tenant**: Every tenant has a separate, dedicated database to store the data related to that tenant.
+* **Hybrid**: Some tenants share a single databases while some tenants may have their own databases.
+
+[Tenant management module](Modules/Tenant-Management.md) (which comes pre-installed with the startup projects) allows you to set a connection string for any tenant (as optional), so you can achieve any of the approaches.
+
+## Usage
+
+Multi-tenancy system is designed to **work seamlessly** and make your application code **multi-tenancy unaware** as much as possible.
+
+### IMultiTenant
 
 You should implement the `IMultiTenant` interface for your [entities](Entities.md) to make them **multi-tenancy ready**. 
 
@@ -43,7 +74,7 @@ namespace MultiTenancyDemo.Products
 
 When you implement this interface, ABP Framework **automatically** [filters](Data-Filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries. A tenant can not access to data of another tenant by default.
 
-### Why the TenantId Property is Nullable?
+#### Why the TenantId Property is Nullable?
 
 `IMultiTenant.TenantId` is **nullable**. When it is null that means the entity is owned by the **Host** side and not owned by a tenant. It is useful when you create a functionality in your system that is both used by the tenant and the host sides.
 
@@ -51,11 +82,11 @@ For example, `IdentityUser` is an entity defined by the [Identity Module](Module
 
 > **Tip**: If your entity is tenant-specific and has no meaning in the host side, you can force to not set `null` for the `TenantId` in the constructor of your entity.
 
-### When to set the TenantId?
+#### When to set the TenantId?
 
 ABP Framework doesn't set the `TenantId` for you (because of the cross tenant operations, ABP can not know the proper `TenantId` in some cases). So, you need to set it yourself **when you create a new multi-tenant entity**.
 
-#### Best Practice
+##### Best Practice
 
 We suggest to set the `TenantId` in the constructor and never allow to change it again. So, the `Product` class can be re-written as below:
 
@@ -124,11 +155,13 @@ namespace MultiTenancyDemo.Products
 
 * `DomainService` base class (and some common base classes in the ABP Framework) provides the `CurrentTenant`, so you directly use it. Otherwise, you need to [inject](Dependency-Injection.md) the `ICurrentTenant` service.
 
-## ICurrentTenant
+### ICurrentTenant
 
-`ICurrentTenant` is the main service to interact with the multi-tenancy infrastructure. `ApplicationService`, `DomainService`, `AbpController` and some other base classes already has pre-injected `CurrentTenant` properties. For other type of classes, you can inject the `ICurrentTenant` into your service.
+`ICurrentTenant` is the main service to interact with the multi-tenancy infrastructure.
 
-### Tenant Properties
+`ApplicationService`, `DomainService`, `AbpController` and some other base classes already has pre-injected `CurrentTenant` properties. For other type of classes, you can inject the `ICurrentTenant` into your service.
+
+#### Tenant Properties
 
 `ICurrentTenant` defines the following properties;
 
@@ -136,7 +169,7 @@ namespace MultiTenancyDemo.Products
 * `Name` (`string`): Name of the current tenant. Can be `null` if the current user is a host user or the tenant could not be determined from the request.
 * `IsAvailable` (`bool`): Returns `true` if the `Id` is not `null`.
 
-### Change the Current Tenant
+#### Change the Current Tenant
 
 ABP Framework automatically filters the resources (database, cache...) based on the `ICurrentTenant.Id`. However, in some cases you may want to perform an operation on behalf of a specific tenant, generally when you are in the host context.
 
@@ -174,10 +207,11 @@ namespace MultiTenancyDemo.Products
 
 * `Change` method can be used in a **nested way**. It restores the `CurrentTenant.Id` to the previous value after the `using` statement.
 * When you use `CurrentTenant.Id` inside the `Change` scope, you get the `tenantId` provided to the `Change` method. So, the repository also get this `tenantId` and can filter the database query accordingly.
+* Use `CurrentTenant.Change(null)` to change scope to the host context.
 
 > Always use the `Change` method with a `using` statement like done in this example.
 
-## Data Filtering: Disable the Multi-Tenancy Filter
+### Data Filtering: Disable the Multi-Tenancy Filter
 
 As mentioned before, ABP Framework handles data isolation between tenants using the [Data Filtering](Data-Filtering.md) system. In some cases, you may want to disable it and perform a query on all the data, without filtering for the current tenant.
 
@@ -222,15 +256,17 @@ See the [Data Filtering document](Data-Filtering.md) for more.
 
 > Note that this approach won't work if your tenants have **separate databases** since there is no built-in way to query from multiple database in a single database query. You should handle it yourself if you need it.
 
-## Determining the Current Tenant
+## Infrastructure
+
+### Determining the Current Tenant
 
 The first thing for a multi-tenant application is to determine the current tenant on the runtime.
 
 ABP Framework provides an extensible **Tenant Resolving** system for that purpose. Tenant Resolving system then used in the **Multi-Tenancy Middleware** to determine the current tenant for the current HTTP request.
 
-### Tenant Resolvers
+#### Tenant Resolvers
 
-#### Default Tenant Resolvers
+##### Default Tenant Resolvers
 
 The following resolvers are provided and configured by default;
 
@@ -241,13 +277,13 @@ The following resolvers are provided and configured by default;
 * `HeaderTenantResolveContributor`: Tries to find current tenant id from HTTP headers. The header name is `__tenant` by default.
 * `CookieTenantResolveContributor`: Tries to find current tenant id from cookie values. The cookie name is `__tenant` by default.
 
-##### Problems with the NGINX
+###### Problems with the NGINX
 
 You may have problems with the `__tenant` in the HTTP Headers if you're using the [nginx](https://www.nginx.com/) as the reverse proxy server. Because it doesn't allow to use underscore and some other special characters in the HTTP headers and you may need to manually configure it. See the following documents please: 
 http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
 http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
 
-##### AbpAspNetCoreMultiTenancyOptions
+###### AbpAspNetCoreMultiTenancyOptions
 
 `__tenant` parameter name can be changed using `AbpAspNetCoreMultiTenancyOptions`.
 
@@ -262,7 +298,7 @@ services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 
 > However, we don't suggest to change this value since some clients may assume the the `__tenant` as the parameter name and they might need to manually configure then.
 
-#### Domain/Subdomain Tenant Resolver
+##### Domain/Subdomain Tenant Resolver
 
 In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure the `AbpTenantResolveOptions` to add the domain tenant resolver.
 
@@ -279,7 +315,7 @@ Configure<AbpTenantResolveOptions>(options =>
 * Add this code to the `ConfigureServices` method of your [module](Module-Development-Basics.md).
 * This should be done in the *Web/API Layer* since the URL is a web related stuff.
 
-#### Custom Tenant Resolvers
+##### Custom Tenant Resolvers
 
 You can add implement your custom tenant resolver and configure the `AbpTenantResolveOptions` in your module's `ConfigureServices` method as like below:
 
@@ -312,7 +348,7 @@ namespace MultiTenancyDemo.Web
 * A tenant resolver should set `context.TenantIdOrName` if it can determine it. If not, just leave it as is to allow the next resolver to determine it.
 * `context.ServiceProvider` can be used if you need to additional services to resolve from the [dependency injection](Dependency-Injection.md) system.
 
-### Multi-Tenancy Middleware
+#### Multi-Tenancy Middleware
 
 Multi-Tenancy middleware is an ASP.NET Core request pipeline [middleware](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware) that determines the current tenant from the HTTP request and sets the `ICurrentTenant` properties.
 
@@ -324,15 +360,15 @@ app.UseMultiTenancy();
 
 > This middleware is already configured in the startup templates, so you normally don't need to manually add it.
 
-## Tenant Store
+### Tenant Store
 
 `ITenantStore` is used to get the tenant configuration from a data source.
 
-### Tenant Management Module
+#### Tenant Management Module
 
 The [tenant management module](Modules/Tenant-Management) is **included in the startup templates** and implements the `ITenantStore` interface to get the tenants and their configuration from a database. It also provides the necessary functionality and UI to manage the tenants and their connection strings.
 
-### Configuration Data Store
+#### Configuration Data Store
 
 **If you don't want to use the tenant management module**, the `DefaultTenantStore` is used as the `ITenantStore` implementation. It gets the tenant configurations from the [configuration system](Configuration.md) (`IConfiguration`). You can either configure the `AbpDefaultTenantStoreOptions` [options](Options.md) or set it in your `appsettings.json` file:
 
@@ -356,7 +392,7 @@ The [tenant management module](Modules/Tenant-Management) is **included in the s
 
 > It is recommended to **use the Tenant Management module**, which is already pre-configured when you create a new application with the ABP startup templates.
 
-## Other Multi-Tenancy Infrastructure
+### Other Multi-Tenancy Infrastructure
 
 ABP Framework was designed to respect to the multi-tenancy in every aspect and most of the times everything will work as expected.
 
