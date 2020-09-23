@@ -113,15 +113,17 @@
                 <CloseButton Clicked="CloseEditModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
-                <Field>
-                    <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                    <TextEdit @bind-text="EditingEntity.Name" />
-                </Field>
-                <Field>
-                    <Check TValue="bool" @bind-checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                    <Check TValue="bool" @bind-checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
-                </Field>
+                <EditForm id="IdentityRoleEditForm" Model="@EditingEntity" OnValidSubmit="UpdateEntityAsync">
+                    <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
+                    <Field>
+                        <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                        <TextEdit @bind-text="EditingEntity.Name" />
+                    </Field>
+                    <Field>
+                        <Check TValue="bool" @bind-checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                        <Check TValue="bool" @bind-checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                    </Field>
+                </EditForm>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
