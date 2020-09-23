@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Features;
 using Volo.Abp.Validation.StringValues;
 
@@ -11,6 +12,8 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
     public partial class FeatureManagementModal
     {
         [Inject] private IFeatureAppService FeatureAppService { get; set; }
+        
+        [Inject] protected IUiMessageService UiMessageService { get; set; }
 
         private Modal _modal;
         
@@ -19,7 +22,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         
         private List<FeatureGroupDto> _groups { get; set; }
 
-        private Dictionary<string, bool> ToggleValues;
+        private Dictionary<string, bool> _toggleValues;
         
         public async Task OpenAsync(string providerName, string providerKey)
         {
@@ -28,7 +31,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
 
             _groups = (await FeatureAppService.GetAsync(_providerName, _providerKey)).Groups;
 
-            ToggleValues = _groups
+            _toggleValues = _groups
                 .SelectMany(x => x.Features)
                 .Where(x => x.ValueType is ToggleStringValueType)
                 .ToDictionary(x => x.Name, x => bool.Parse(x.Value));
@@ -48,7 +51,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
                 Features = _groups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
                 {
                     Name = f.Name,
-                    Value = f.ValueType is ToggleStringValueType ? ToggleValues[f.Name].ToString() : f.Value
+                    Value = f.ValueType is ToggleStringValueType ? _toggleValues[f.Name].ToString() : f.Value
                 }).ToList()
             };
             
@@ -65,6 +68,18 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         public virtual bool IsDisabled(string providerName)
         {
             return providerName != _providerName && providerName != DefaultValueFeatureValueProvider.ProviderName;
+        }
+
+        private async Task OnFeatureValueChangedAsync(string value, FeatureDto feature)
+        {
+            if (feature.ValueType.Validator.IsValid(value))
+            {
+                feature.Value = value;
+            }
+            else
+            {
+                await UiMessageService.WarnAsync(L["Volo.Abp.FeatureManagement:InvalidFeatureValue", feature.DisplayName]);
+            }
         }
     }
 }
