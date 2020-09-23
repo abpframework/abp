@@ -177,6 +177,51 @@ namespace MultiTenancyDemo.Products
 
 > Always use the `Change` method with a `using` statement like done in this example.
 
+## Data Filtering: Disable the Multi-Tenancy Filter
+
+As mentioned before, ABP Framework handles data isolation between tenants using the [Data Filtering](Data-Filtering.md) system. In some cases, you may want to disable it and perform a query on all the data, without filtering for the current tenant.
+
+**Example: Get count of products in the database, including all the products of all the tenants.**
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Data;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Domain.Services;
+using Volo.Abp.MultiTenancy;
+
+namespace MultiTenancyDemo.Products
+{
+    public class ProductManager : DomainService
+    {
+        private readonly IRepository<Product, Guid> _productRepository;
+        private readonly IDataFilter _dataFilter;
+
+        public ProductManager(
+            IRepository<Product, Guid> productRepository,
+            IDataFilter dataFilter)
+        {
+            _productRepository = productRepository;
+            _dataFilter = dataFilter;
+        }
+
+        public async Task<long> GetProductCountAsync()
+        {
+            using (_dataFilter.Disable<IMultiTenant>())
+            {
+                return await _productRepository.GetCountAsync();
+            }
+        }
+    }
+}
+
+````
+
+See the [Data Filtering document](Data-Filtering.md) for more.
+
+> Note that this approach won't work if your tenants have **separate databases** since there is no built-in way to query from multiple database in a single database query. You should handle it yourself if you need it.
+
 ## Determining the Current Tenant
 
 The first thing for a multi-tenant application is to determine the current tenant on the runtime.
@@ -273,7 +318,7 @@ Multi-Tenancy middleware is an ASP.NET Core request pipeline [middleware](https:
 
 Multi-Tenancy middleware is typically placed just under the [authentication](https://docs.microsoft.com/en-us/aspnet/core/security/authentication) middleware (`app.UseAuthentication()`):
 
-````C#
+````csharp
 app.UseMultiTenancy();
 ````
 
@@ -310,6 +355,12 @@ The [tenant management module](Modules/Tenant-Management) is **included in the s
 ````
 
 > It is recommended to **use the Tenant Management module**, which is already pre-configured when you create a new application with the ABP startup templates.
+
+## Other Multi-Tenancy Infrastructure
+
+ABP Framework was designed to respect to the multi-tenancy in every aspect and most of the times everything will work as expected.
+
+BLOB Storing, Caching, Data Filtering, Data Seeding, Authorization and all the other services are designed to properly work in a multi-tenant system.
 
 ## See Also
 
