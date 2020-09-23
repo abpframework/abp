@@ -233,4 +233,4 @@ Please refer to `Config.Environment` type for all the properties you can pass to
 
 ## What's Next?
 
-- [Modifying the Menu](./Modifying-the-Menu.md)
+- [HTTP Requests](./Http-Requests)

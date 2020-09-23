@@ -1,4 +1,4 @@
-# Content Projection
+# Projecting Angular Content
 
 You can use the `ContentProjectionService` in @abp/ng.core package in order to project content in an easy and explicit way.
 
@@ -75,4 +75,4 @@ projectContent<T extends Type<any> | TemplateRef<any>>(
 
 ## What's Next?
 
-- [TrackByService](./Track-By-Service.md)
+- [Confirmation Popup](./Confirmation-Service.md)

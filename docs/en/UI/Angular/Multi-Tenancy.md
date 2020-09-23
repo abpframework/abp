@@ -132,4 +132,4 @@ The app sends the `__tenant` header that contains the current tenant id on each 
 
 ## What's Next?
 
-- [Confirmation Popup](./Confirmation-Service.md)
+- [RxJS Subscriptions](./Subscription-Service.md)
