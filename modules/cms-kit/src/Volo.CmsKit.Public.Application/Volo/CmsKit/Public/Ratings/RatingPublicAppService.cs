@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 using Volo.Abp.Users;
@@ -64,16 +62,6 @@ namespace Volo.CmsKit.Public.Ratings
             }
 
             await RatingRepository.DeleteAsync(rating.Id);
-        }
-
-        [Authorize]
-        public virtual async Task<RatingDto> GetCurrentUserRatingAsync(string entityType, string entityId)
-        {
-            var currentUserId = CurrentUser.GetId();
-
-            var rating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, currentUserId);
-
-            return ObjectMapper.Map<Rating, RatingDto>(rating);
         }
 
         public virtual async Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType,
