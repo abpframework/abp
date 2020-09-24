@@ -1,20 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <Import Project="..\..\..\..\configureawait.props" />
-    <Import Project="..\..\..\..\common.props" />
-    
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <RazorLangVersion>3.0</RazorLangVersion>
-        <RootNamespace>Volo.Abp.TenantManagement.Blazor</RootNamespace>
-    </PropertyGroup>
+  <Import Project="..\..\..\..\configureawait.props" />
+  <Import Project="..\..\..\..\common.props" />
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RazorLangVersion>3.0</RazorLangVersion>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.TenantManagement.HttpApi.Client\Volo.Abp.TenantManagement.HttpApi.Client.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.TenantManagement.HttpApi.Client\Volo.Abp.TenantManagement.HttpApi.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Pages\TenantManagement\TenantManagement.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

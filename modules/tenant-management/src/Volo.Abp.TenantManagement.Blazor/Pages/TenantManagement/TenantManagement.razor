@@ -1,0 +1,61 @@
+﻿@page "/tenant-management/tenants"
+@attribute [Authorize(TenantManagementPermissions.Tenants.Default)]
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.TenantManagement.Localization
+@inherits TenantManagementBase
+@inject IStringLocalizer<AbpTenantManagementResource> L
+
+@* ************************* PAGE HEADER ************************* *@
+<Row>
+    <Column ColumnSize="ColumnSize.Is6">
+        <h1>@L["Tenants"]</h1>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is6">
+        @if (HasCreatePermission)
+        {
+            <Paragraph Alignment="TextAlignment.Right">
+                <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewTenant"]</Button>
+            </Paragraph>
+        }
+    </Column>
+</Row>
+
+@* ************************* DATA GRID ************************* *@
+<DataGrid TItem="TenantDto"
+          Data="Entities"
+          ReadData="OnDataGridReadAsync"
+          TotalItems="TotalCount"
+          ShowPager="true"
+          PageSize="PageSize">
+    <DataGridColumns>
+        @if (ShouldShowEntityActions)
+        {
+            <DataGridColumn Width="150px" TItem="TenantDto" Field="@nameof(TenantDto.Name)" Sortable="false" Caption="@L["Actions"].Value">
+                <DisplayTemplate>
+                    <Dropdown>
+                        <DropdownToggle Color="Color.Primary">
+                            @L["Actions"]
+                        </DropdownToggle>
+                        <DropdownMenu>
+                            @if (HasUpdatePermission)
+                            {
+                                <DropdownItem Clicked="() => OpenEditModalAsync(context.As<TenantDto>().Id)">@L["Edit"]</DropdownItem>
+                            }
+                            @if (HasDeletePermission)
+                            {
+                                <DropdownDivider/>
+                                <DropdownItem Clicked="() => DeleteEntityAsync(context.As<TenantDto>())">@L["Delete"]</DropdownItem>
+                            }
+                        </DropdownMenu>
+                    </Dropdown>
+                </DisplayTemplate>
+            </DataGridColumn>
+        }
+        <DataGridColumn TItem="TenantDto" Field="@nameof(TenantDto.Name)" Caption="@L["TenantName"].Value">
+            <DisplayTemplate>
+                @(context.As<TenantDto>().Name)
+            </DisplayTemplate>
+        </DataGridColumn>
+    </DataGridColumns>
+</DataGrid>
