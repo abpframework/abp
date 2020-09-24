@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Volo.CmsKit.Public.Ratings
@@ -11,8 +9,6 @@ namespace Volo.CmsKit.Public.Ratings
         Task<RatingDto> CreateAsync(string entityType, string entityId, CreateUpdateRatingInput input);
 
         Task DeleteAsync(string entityType, string entityId);
-        
-        Task<RatingDto> GetCurrentUserRatingAsync(string entityType, string entityId);
 
         Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId);
     }
