@@ -17,10 +17,4 @@
     <ProjectReference Include="..\Volo.Abp.TenantManagement.HttpApi.Client\Volo.Abp.TenantManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="Pages\TenantManagement\TenantManagement.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-  </ItemGroup>
-
 </Project>

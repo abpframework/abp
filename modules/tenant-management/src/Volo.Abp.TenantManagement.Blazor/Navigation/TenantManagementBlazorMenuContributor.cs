@@ -6,16 +6,13 @@ namespace Volo.Abp.TenantManagement.Blazor.Navigation
 {
     public class TenantManagementBlazorMenuContributor : IMenuContributor
     {
-        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        public virtual async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
-            if (context.Menu.Name == StandardMenus.Main)
+            if (context.Menu.Name != StandardMenus.Main)
             {
-                await ConfigureMainMenu(context);
+                return;
             }
-        }
 
-        private async Task ConfigureMainMenu(MenuConfigurationContext context)
-        {
             var administrationMenu = context.Menu.GetAdministration();
 
             var l = context.GetLocalizer<AbpTenantManagementResource>();
@@ -25,7 +22,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Navigation
 
             if (await context.IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
             {
-                tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "TenantManagement/Tenants"));
+                tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "~/tenant-management/tenants"));
             }
         }
     }

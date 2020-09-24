@@ -59,3 +59,63 @@
         </DataGridColumn>
     </DataGridColumns>
 </DataGrid>
+
+@* ************************* CREATE MODAL ************************* *@
+@if (HasCreatePermission)
+{
+    <Modal @ref="CreateModal">
+        <ModalBackdrop/>
+        <ModalContent IsCentered="true">
+            <ModalHeader>
+                <ModalTitle>@L["NewTenant"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <EditForm id="TenantCreateForm" Model="@NewEntity" OnValidSubmit="CreateEntityAsync">
+                    <Field>
+                        <FieldLabel>@L["TenantName"]</FieldLabel>
+                        <TextEdit @bind-text="@NewEntity.Name"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["DisplayName:AdminEmailAddress"]</FieldLabel>
+                        <TextEdit @bind-text="@NewEntity.AdminEmailAddress"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["DisplayName:AdminPassword"]</FieldLabel>
+                        <TextEdit @bind-text="@NewEntity.AdminPassword"/>
+                    </Field>
+                </EditForm>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <Button form="TenantCreateForm" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+}
+
+@* ************************* EDIT MODAL ************************* *@
+@if (HasUpdatePermission)
+{
+    <Modal @ref="EditModal">
+        <ModalBackdrop/>
+        <ModalContent IsCentered="true">
+            <ModalHeader>
+                <ModalTitle>@L["Edit"]</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <EditForm id="TenantEditForm" Model="@EditingEntity" OnValidSubmit="UpdateEntityAsync">
+                    <Field>
+                        <FieldLabel>@L["TenantName"]</FieldLabel>
+                        <TextEdit @bind-text="@EditingEntity.Name"/>
+                    </Field>
+                </EditForm>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <Button form="TenantEditForm" Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+}
