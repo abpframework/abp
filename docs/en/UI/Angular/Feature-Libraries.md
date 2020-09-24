@@ -13,7 +13,7 @@ Each library has at least two modules:
 
 <!-- TODO: Insert info on CLI `add-module` command here when the schematic is ready. -->
 
-Manual consumption of a feature library has three steps:
+The manual setup of a feature library has three steps:
 
 ### 1. Install the Library
 
