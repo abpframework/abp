@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
-namespace MyCompanyName.MyProjectName.Blazor.Menus
+namespace Volo.Abp.TenantManagement.Blazor.Menus
 {
-    public class MyProjectNameMenuContributor : IMenuContributor
+    public class TenantManagementBlazorMenuContributor : IMenuContributor
     {
         public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {

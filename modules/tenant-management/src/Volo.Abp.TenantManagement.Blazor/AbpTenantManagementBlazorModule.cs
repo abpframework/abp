@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Blazor;
-using MyCompanyName.MyProjectName.Blazor.Menus;
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
+using Volo.Abp.TenantManagement.Blazor.Menus;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.TenantManagement.Blazor
@@ -25,7 +25,7 @@ namespace Volo.Abp.TenantManagement.Blazor
 
             Configure<AbpNavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+                options.MenuContributors.Add(new TenantManagementBlazorMenuContributor());
             });
 
             Configure<AbpRouterOptions>(options =>

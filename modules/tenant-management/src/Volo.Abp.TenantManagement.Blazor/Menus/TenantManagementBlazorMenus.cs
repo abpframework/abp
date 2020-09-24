@@ -1,6 +1,6 @@
-﻿namespace MyCompanyName.MyProjectName.Blazor.Menus
+﻿namespace Volo.Abp.TenantManagement.Blazor.Menus
 {
-    public class MyProjectNameMenus
+    public class TenantManagementBlazorMenus
     {
         private const string Prefix = "MyProjectName";
 
