@@ -105,4 +105,4 @@ export interface RemoteEnv {
 
 ## What's Next?
 
-* [Anatomy of a Feature Library](./Feature-Libraries.md)
+- [About Feature Libraries](./Feature-Libraries.md)

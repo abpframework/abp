@@ -1,4 +1,4 @@
-# Anatomy of a Feature Library
+# About Feature Libraries
 
 ABP has an ever-growing number of feature modules and [introducing a new one](../../Module-Development-Basics.md) is always possible. When the UI is Angular, these features have modular Angular libraries accompanying them.
 
