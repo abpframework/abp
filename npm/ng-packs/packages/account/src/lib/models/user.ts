@@ -14,7 +14,6 @@ export interface RegisterResponse {
   emailConfirmed: boolean;
   phoneNumber: string;
   phoneNumberConfirmed: boolean;
-  twoFactorEnabled: boolean;
   lockoutEnabled: boolean;
   lockoutEnd: string;
   concurrencyStamp: string;
