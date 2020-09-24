@@ -2,7 +2,7 @@
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
-using Volo.Abp.TenantManagement.Blazor.Menus;
+using Volo.Abp.TenantManagement.Blazor.Navigation;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.TenantManagement.Blazor
@@ -10,7 +10,7 @@ namespace Volo.Abp.TenantManagement.Blazor
     [DependsOn(
         typeof(AbpAutoMapperModule),
         typeof(AbpTenantManagementHttpApiClientModule)
-        )]
+    )]
     public class AbpTenantManagementBlazorModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
