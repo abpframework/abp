@@ -162,7 +162,6 @@ namespace Volo.Abp.Identity
                 (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
             }
 
-            (await UserManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
             (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
 
             user.Name = input.Name;
