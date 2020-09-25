@@ -250,7 +250,7 @@ describe('ConfigState', () => {
 
       const configuration = {
         setting: { values: { 'Abp.Localization.DefaultLanguage': 'tr;TR' } },
-        localization: { currentCulture: {} },
+        localization: { currentCulture: { cultureName: 'en' } },
       };
 
       const res$ = new ReplaySubject(1);
