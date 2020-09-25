@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.TenantManagement.Localization
+@using Volo.Abp.FeatureManagement.Blazor.Components
 @inherits TenantManagementBase
 @inject IStringLocalizer<AbpTenantManagementResource> L
 
@@ -48,7 +49,7 @@
                             }
                             @if (HasManageFeaturesPermission)
                             {
-                                <DropdownItem Clicked="() => OpenEditConnectionStringModalAsync(context.As<TenantDto>().Id)">@L["Features"]</DropdownItem>
+                                <DropdownItem Clicked="() => FeatureManagementModal.OpenAsync(FeatureProviderName, context.As<TenantDto>().Id.ToString())">@L["Features"]</DropdownItem>
                             }
                             @if (HasDeletePermission)
                             {
@@ -159,4 +160,9 @@
             </ModalFooter>
         </ModalContent>
     </Modal>
+}
+
+@if (HasManageFeaturesPermission)
+{
+    <FeatureManagementModal @ref="FeatureManagementModal"/>
 }

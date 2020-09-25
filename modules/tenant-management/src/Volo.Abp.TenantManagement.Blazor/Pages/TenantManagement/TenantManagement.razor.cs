@@ -3,16 +3,21 @@ using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlazoriseUI;
+using Volo.Abp.FeatureManagement.Blazor.Components;
 
 namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 {
     public abstract class TenantManagementBase 
         : AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
     {
+        protected const string FeatureProviderName = "T";
+        
         protected bool ShouldShowEntityActions;
         protected bool HasManageConnectionStringsPermission;
         protected bool HasManageFeaturesPermission;
 
+        protected FeatureManagementModal FeatureManagementModal;
+        
         protected Modal ManageConnectionStringModal;
 
         protected TenantInfoModel TenantInfo;
