@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
-using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.Modularity;
 
 namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
@@ -42,9 +41,10 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
             using (var scope = serviceProvider.CreateScope())
             {
-                await scope.ServiceProvider
-                    .GetRequiredService<ICachedApplicationConfigurationClient>()
-                    .InitializeAsync();
+                foreach (var service in scope.ServiceProvider.GetServices<IAsyncInitialize>())
+                {
+                    await service.InitializeAsync();
+                }
             }
         }
     }

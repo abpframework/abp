@@ -6,6 +6,11 @@ using Volo.Abp.Http.Client.DynamicProxying;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
+    [ExposeServices(
+        typeof(WebAssemblyCachedApplicationConfigurationClient),
+        typeof(ICachedApplicationConfigurationClient),
+        typeof(IAsyncInitialize)
+        )]
     public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
         protected IHttpClientProxy<IAbpApplicationConfigurationAppService> Proxy { get; }

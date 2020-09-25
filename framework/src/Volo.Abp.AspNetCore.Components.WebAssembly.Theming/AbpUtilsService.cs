@@ -23,9 +23,14 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
             return JsRuntime.InvokeVoidAsync("abp.utils.removeClassFromTag", tagName, className);
         }
 
-        public ValueTask<bool> HasClassOnTag(string tagName, string className)
+        public ValueTask<bool> HasClassOnTagAsync(string tagName, string className)
         {
             return JsRuntime.InvokeAsync<bool>("abp.utils.hasClassOnTag", tagName, className);
+        }
+
+        public ValueTask ReplaceLinkHrefByIdAsync(string linkId, string hrefValue)
+        {
+            return JsRuntime.InvokeVoidAsync("abp.utils.replaceLinkHrefById", linkId, hrefValue);
         }
     }
 }
