@@ -119,7 +119,7 @@ export const AUTH_FLOW_STRATEGY = {
   },
 };
 
-function clearOAuthStorage(storage: OAuthStorage) {
+export function clearOAuthStorage(storage: OAuthStorage = oAuthStorage) {
   const keys = [
     'access_token',
     'id_token',
