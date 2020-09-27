@@ -2,7 +2,7 @@ import { Injectable, Injector, NgZone, Optional, SkipSelf } from '@angular/core'
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { SetLanguage } from '../actions/session.actions';
 import { Config } from '../models/config';
 import { ConfigState } from '../states/config.state';
@@ -22,7 +22,10 @@ export class LocalizationService {
   }
 
   get languageChange(): Observable<SetLanguage> {
-    return this.actions.pipe(ofActionSuccessful(SetLanguage));
+    return this.actions.pipe(
+      ofActionSuccessful(SetLanguage),
+      filter((action: SetLanguage) => action.dispatchAppConfiguration !== false),
+    );
   }
 
   constructor(
