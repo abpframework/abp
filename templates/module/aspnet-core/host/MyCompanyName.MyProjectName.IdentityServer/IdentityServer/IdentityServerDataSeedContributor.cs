@@ -46,7 +46,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         [UnitOfWork]
         public virtual async Task SeedAsync(DataSeedContext context)
         {
-            using (_currentTenant.Change(context.TenantId))
+            using (_currentTenant.Change(context?.TenantId))
             {
                 await _identityResourceDataSeeder.CreateStandardResourcesAsync();
                 await CreateApiResourcesAsync();

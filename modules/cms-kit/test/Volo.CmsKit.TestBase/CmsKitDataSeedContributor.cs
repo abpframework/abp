@@ -41,7 +41,7 @@ namespace Volo.CmsKit
 
         public async Task SeedAsync(DataSeedContext context)
         {
-            using (_currentTenant.Change(context.TenantId))
+            using (_currentTenant.Change(context?.TenantId))
             {
                 await SeedUsersAsync();
 
