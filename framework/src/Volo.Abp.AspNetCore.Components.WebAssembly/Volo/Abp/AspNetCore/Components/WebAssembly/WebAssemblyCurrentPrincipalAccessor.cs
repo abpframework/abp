@@ -23,6 +23,11 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 
             var claims = new List<Claim>();
 
+            if (configuration.CurrentUser.Id != null)
+            {
+                claims.Add(new Claim(AbpClaimTypes.UserId,configuration.CurrentUser.Id.ToString()));
+            }
+
             if (!configuration.CurrentUser.UserName.IsNullOrWhiteSpace())
             {
                 claims.Add(new Claim(AbpClaimTypes.UserName,configuration.CurrentUser.UserName));
@@ -33,9 +38,29 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
                 claims.Add(new Claim(AbpClaimTypes.Email,configuration.CurrentUser.Email));
             }
 
-            if (configuration.CurrentUser.Id != null)
+            if (configuration.CurrentUser.EmailVerified)
             {
-                claims.Add(new Claim(AbpClaimTypes.UserId,configuration.CurrentUser.Id.ToString()));
+                claims.Add(new Claim(AbpClaimTypes.EmailVerified,"true"));
+            }
+
+            if (!configuration.CurrentUser.Name.IsNullOrWhiteSpace())
+            {
+                claims.Add(new Claim(AbpClaimTypes.Name,configuration.CurrentUser.Name));
+            }
+
+            if (!configuration.CurrentUser.PhoneNumber.IsNullOrEmpty())
+            {
+                claims.Add(new Claim(AbpClaimTypes.PhoneNumber,configuration.CurrentUser.PhoneNumber));
+            }
+
+            if (configuration.CurrentUser.PhoneNumberVerified)
+            {
+                claims.Add(new Claim(AbpClaimTypes.PhoneNumberVerified,"true"));
+            }
+
+            if (!configuration.CurrentUser.SurName.IsNullOrWhiteSpace())
+            {
+                claims.Add(new Claim(AbpClaimTypes.SurName,configuration.CurrentUser.SurName));
             }
 
             if (configuration.CurrentUser.TenantId != null)
