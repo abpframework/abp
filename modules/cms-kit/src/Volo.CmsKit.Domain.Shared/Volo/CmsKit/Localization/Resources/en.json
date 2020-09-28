@@ -1,0 +1,22 @@
+{
+  "culture": "en",
+  "texts": {
+    "PickYourReaction": "Pick your reaction",
+    "YourComment": "Your comment",
+    "YourReply": "Your reply",
+    "Comments": "Comments",
+    "Send": "Send",
+    "Delete": "Delete",
+    "Reply": "Reply",
+    "Update": "Update",
+    "Edit": "Edit",
+    "LoginToAddComment": "Login to add comment",
+    "LoginToReply": "Login to reply",
+    "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
+    "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display.",
+    "Undo": "Undo",
+    "RatingUndoMessage": "Your rating will be undo.",
+    "LoginToRate": "Login to rate",
+    "Star": "Star"
+  }
+}

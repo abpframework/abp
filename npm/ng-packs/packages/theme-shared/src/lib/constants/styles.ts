@@ -13,6 +13,10 @@ export default `
   text-align: right;
 }
 
+[dir=rtl] .data-tables-filter {
+  text-align: left;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -26,6 +30,11 @@ export default `
 
 .navbar .dropdown-menu {
   min-width: 215px;
+}
+
+.datatable-scroll {
+  margin-bottom: 5px !important;
+  width: unset !important;
 }
 
 .ui-table-scrollable-body::-webkit-scrollbar {
@@ -132,6 +141,9 @@ export default `
 .sorting_asc:after {
   opacity: .3;
 }
+.ngx-datatable.material {
+  box-shadow: none;
+}
 
 @keyframes fadeInTop {
   from {
@@ -155,3 +167,5 @@ export default `
 /* </animations */
 
 `;
+
+export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';

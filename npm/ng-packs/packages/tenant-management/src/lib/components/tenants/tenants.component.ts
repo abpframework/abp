@@ -1,6 +1,7 @@
-import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Confirmation, getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ABP, ListService, PagedResultDto } from '@abp/ng.core';
+import { eFeatureManagementComponents } from '@abp/ng.feature-management';
+import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -12,9 +13,9 @@ import {
   GetTenants,
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
+import { GetTenantsInput, TenantDto } from '../../proxy/models';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
-import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 
 interface SelectedModalContent {
   type: 'saveConnStr' | 'saveTenant';
@@ -25,15 +26,16 @@ interface SelectedModalContent {
 @Component({
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
+  providers: [ListService],
 })
 export class TenantsComponent implements OnInit {
   @Select(TenantManagementState.get)
-  data$: Observable<ABP.BasicItem[]>;
+  data$: Observable<PagedResultDto<TenantDto>>;
 
   @Select(TenantManagementState.getTenantsTotalCount)
   totalCount$: Observable<number>;
 
-  selected: ABP.BasicItem;
+  selected: TenantDto;
 
   tenantForm: FormGroup;
 
@@ -51,15 +53,7 @@ export class TenantsComponent implements OnInit {
 
   _useSharedDatabase: boolean;
 
-  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
-
-  loading = false;
-
   modalBusy = false;
-
-  sortOrder = '';
-
-  sortKey = '';
 
   featureManagementKey = eFeatureManagementComponents.FeatureManagement;
 
@@ -75,10 +69,10 @@ export class TenantsComponent implements OnInit {
     return this.defaultConnectionStringForm.get('defaultConnectionString').value;
   }
 
-  @ViewChild('tenantModalTemplate', { static: false })
+  @ViewChild('tenantModalTemplate')
   tenantModalTemplate: TemplateRef<any>;
 
-  @ViewChild('connectionStringModalTemplate', { static: false })
+  @ViewChild('connectionStringModalTemplate')
   connectionStringModalTemplate: TemplateRef<any>;
 
   get isDisabledSaveButton(): boolean {
@@ -106,6 +100,7 @@ export class TenantsComponent implements OnInit {
   };
 
   constructor(
+    public readonly list: ListService<GetTenantsInput>,
     private confirmationService: ConfirmationService,
     private tenantService: TenantManagementService,
     private fb: FormBuilder,
@@ -113,12 +108,7 @@ export class TenantsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.get();
-  }
-
-  onSearch(value: string) {
-    this.pageQuery.filter = value;
-    this.get();
+    this.hookToQuery();
   }
 
   private createTenantForm() {
@@ -176,7 +166,7 @@ export class TenantsComponent implements OnInit {
   }
 
   addTenant() {
-    this.selected = {} as ABP.BasicItem;
+    this.selected = {} as TenantDto;
     this.createTenantForm();
     this.openModal('AbpTenantManagement::NewTenant', this.tenantModalTemplate, 'saveTenant');
   }
@@ -242,7 +232,7 @@ export class TenantsComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
-        this.get();
+        this.list.get();
       });
   }
 
@@ -257,23 +247,13 @@ export class TenantsComponent implements OnInit {
       )
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteTenant(id)).subscribe(() => this.get());
+          this.store.dispatch(new DeleteTenant(id)).subscribe(() => this.list.get());
         }
       });
   }
 
-  onPageChange(page: number) {
-    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
-
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetTenants(this.pageQuery))
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe();
+  hookToQuery() {
+    this.list.hookToQuery(query => this.store.dispatch(new GetTenants(query))).subscribe();
   }
 
   onSharedDatabaseChange(value: boolean) {
@@ -294,5 +274,11 @@ export class TenantsComponent implements OnInit {
     setTimeout(() => {
       this.visibleFeatures = true;
     }, 0);
+  }
+
+  sort(data) {
+    const { prop, dir } = data.sorts[0];
+    this.list.sortKey = prop;
+    this.list.sortOrder = dir;
   }
 }

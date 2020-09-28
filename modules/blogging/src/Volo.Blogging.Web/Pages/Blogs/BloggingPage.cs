@@ -1,19 +1,17 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
-using Microsoft.AspNetCore.Mvc.Razor.Internal;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Blogging.Localization;
 using Markdig;
+using Volo.Abp.DependencyInjection;
+using Volo.Blogging.Localization;
 
 namespace Volo.Blogging.Pages.Blog
 {
-    public abstract class BloggingPage : AbpPage
+    public class BloggingPageHelper : ITransientDependency
     {
-        [RazorInject]
         public IHtmlLocalizer<BloggingResource> L { get; set; }
 
         public const string DefaultTitle = "Blog";
@@ -30,7 +28,7 @@ namespace Volo.Blogging.Pages.Blog
             return title;
         }
 
-        public string GetShortContent(string content) 
+        public string GetShortContent(string content)
         {
             var html = RenderMarkdownToHtmlAsString(content);
             var plainText = Regex.Replace(html, "<[^>]*>", "");
@@ -49,7 +47,7 @@ namespace Volo.Blogging.Pages.Blog
                 {
                     shortContent.Append($" {line}");
                 }
-                
+
                 if(shortContent.Length >= MaxShortContentLength)
                 {
                     return shortContent.ToString().Substring(0, MaxShortContentLength) + "...";

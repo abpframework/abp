@@ -1,0 +1,74 @@
+﻿@page
+@using Localization.Resources.AbpUi
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.GlobalFeatures
+@using Volo.CmsKit.GlobalFeatures
+@using Volo.CmsKit.Pages
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
+@model IndexModel
+@inject IStringLocalizer<AbpUiResource> Localizer
+<h1 class="text-center">CMS Kit DEMO</h1>
+
+<abp-card>
+    <abp-card-body class="p-5">
+        <abp-blockquote class="text-center">
+            <p class="h2 mb-4">
+                "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
+            </p>
+            <p class="m-0">- Martin Fowler</p>
+        </abp-blockquote>
+    </abp-card-body>
+</abp-card>
+
+<abp-row>
+    <abp-column size-md="_6">
+        @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(RatingViewComponent), new { entityType = "quote", entityId = "1" })
+        }
+    </abp-column>
+    <abp-column size-md="_6">
+        @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "1" })
+        }
+    </abp-column>
+    <abp-column size-md="_12">
+        @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "1" })
+        }
+    </abp-column>
+</abp-row>
+<abp-card>
+    <abp-card-body class="p-5">
+        <abp-blockquote class="text-center">
+            <p class="h2 mb-4">
+                "Writing code is very simple, but writing simple code is the hardest thing there is!"
+            </p>
+            <p class="m-0">   - Halil ibrahim Kalkan <small class="d-block text-muted">Inspired from Johan Cruyff</small></p>
+        </abp-blockquote>
+    </abp-card-body>
+</abp-card>
+<abp-row>
+    <abp-column size-md="_6">
+        @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(RatingViewComponent), new { entityType = "quote", entityId = "2" })
+        }
+    </abp-column>
+    <abp-column size-md="_6">
+        @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "2" })
+        }
+    </abp-column>
+    <abp-column size-md="_12">
+        @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+        {
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "2" })
+        }
+    </abp-column>
+</abp-row> 

@@ -1,9 +1,14 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Abp.Identity.Localization
-@model Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel
+@using Volo.Abp.Identity.Web.Pages.Identity.Users
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@model EditModalModel
 @inject IHtmlLocalizer<IdentityResource> L
+@inject IStringLocalizerFactory StringLocalizerFactory
 @{
     Layout = null;
 }
@@ -23,7 +28,24 @@
                     <abp-input asp-for="UserInfo.Email" />
                     <abp-input asp-for="UserInfo.PhoneNumber" />
                     <abp-input asp-for="UserInfo.LockoutEnabled" />
-                    <abp-input asp-for="UserInfo.TwoFactorEnabled" />
+
+                    @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.UserInfoViewModel>())
+                    {
+                        if (propertyInfo.Type.IsEnum)
+                        {
+                            <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                        label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"></abp-select>
+                        }
+                        else
+                        {
+                            <abp-input type="@propertyInfo.GetInputType()"
+                                       asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                       label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                       asp-format="@propertyInfo.GetInputFormatOrNull()"
+                                       value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.ExtraProperties[propertyInfo.Name])" />
+                        }
+                    }
+
                 </abp-tab>
                 <abp-tab title="@L["Roles"].Value">
                     @for (var i = 0; i < Model.Roles.Length; i++)

@@ -17,6 +17,7 @@
     "Error": "Error",
     "AreYouSure": "Are you sure?",
     "Cancel": "Cancel",
+    "Clear": "Clear",
     "Yes": "Yes",
     "No": "No",
     "Ok": "Ok",
@@ -47,6 +48,8 @@
     "PagerInfoEmpty": "Showing 0 to 0 of 0 entries",
     "PagerInfoFiltered": "(filtered from _MAX_ total entries)",
     "NoDataAvailableInDatatable": "No data available",
+    "Total": "total",
+    "Selected": "selected",
     "PagerShowMenuEntries": "Show _MENU_ entries",
     "DatatableActionDropdownDefaultText": "Actions",
     "ChangePassword": "Change password",
@@ -58,6 +61,10 @@
     "404Message": "Page not found",
     "500Message": "Internal Server Error",
     "GoHomePage": "Go to the homepage",
-    "GoBack": "Go back"
+    "GoBack": "Go back",
+    "Search": "Search",
+    "ItemWillBeDeletedMessageWithFormat": "{0} will be deleted!",
+    "ItemWillBeDeletedMessage": "This item will be deleted!",
+    "ManageYourAccount": "Manage your account"
   }
 }

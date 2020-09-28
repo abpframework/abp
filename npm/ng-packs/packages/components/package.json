@@ -1,0 +1,20 @@
+{
+  "name": "@abp/ng.components",
+  "version": "3.2.0-rc.2",
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
+  "peerDependencies": {
+    "@abp/ng.core": ">=3.2.0-rc.2",
+    "@ng-bootstrap/ng-bootstrap": ">=6.0.0"
+  },
+  "dependencies": {
+    "ng-zorro-antd": "^9.3.0",
+    "tslib": "^2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -26,9 +26,9 @@ public class Book : Entity<Guid>
 如果你的实体Id类型为 `Guid`,有一些好的实践可以实现:
 
 * 创建一个构造函数,获取ID作为参数传递给基类.
-  * 如果没有为GUID Id斌值,ABP框架会在保存时设置它,但是在将实体保存到数据库之前最好在实体上有一个有效的Id.
-* 如果使用带参数的构造函数创建实体,那么还要创建一个 `protected` 构造函数. 当数据库提供程序从数据库读取你的实体时(反序列化时)将使用它.
-* 不要使用 `Guid.NewGuid()` 来设置Id! 在创建实体的代码中使用[`IGuidGenerator`服务](Guid-Generation.md)传递Id参数. `IGuidGenerator`经过优化可以产生连续的GUID.这对于关系数据库中的聚集索引非常重要.
+  * 如果没有为GUID Id斌值,**ABP框架会在保存时设置它**,但是在将实体保存到数据库之前最好在实体上有一个有效的Id.
+* 如果使用带参数的构造函数创建实体,那么还要创建一个 `private` 或 `protected`  构造函数. 当数据库提供程序从数据库读取你的实体时(反序列化时)将使用它.
+* 不要使用 `Guid.NewGuid()` 来设置Id! 在创建实体的代码中**使用[`IGuidGenerator`服务](Guid-Generation.md)**传递Id参数. `IGuidGenerator`经过优化可以产生连续的GUID.这对于关系数据库中的聚集索引非常重要.
 
 示例实体:
 
@@ -225,6 +225,12 @@ ABP框架不强制你应用任何DDD规则或模式.但是,当你准备应用的
 ### 带有组合键的聚合根
 
 虽然这种聚合根并不常见(也不建议使用),但实际上可以按照与上面提到的跟实体相同的方式定义复合键.在这种情况下,要使用非泛型的`AggregateRoot`基类.
+
+### BasicAggregateRoot类
+
+`AggregateRoot` 类实现了 `IHasExtraProperties` 和 `IHasConcurrencyStamp` 接口,这为派生类带来了两个属性. `IHasExtraProperties` 使实体可扩展(请参见下面的 *额外的属性*部分) 和 `IHasConcurrencyStamp` 添加了由ABP框架管理的 `ConcurrencyStamp` 属性实现[乐观并发](https://docs.microsoft.com/zh-cn/ef/core/saving/concurrency). 在大多数情况下,这些是聚合根需要的功能.
+
+但是,如果你不需要这些功能,你的聚合根可以继承 `BasicAggregateRoot<TKey>`(或`BasicAggregateRoot`).
 
 ## 基类和接口的审计属性
 

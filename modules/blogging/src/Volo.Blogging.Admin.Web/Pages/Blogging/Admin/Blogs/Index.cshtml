@@ -1,0 +1,51 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Blogging.Admin
+@using Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
+@using Volo.Blogging
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@inherits Volo.Blogging.Admin.Pages.Blogging.BloggingAdminPage
+@model IndexModel
+@inject IHtmlLocalizer<BloggingResource> L
+@inject IAuthorizationService Authorization
+@{
+    ViewBag.PageTitle = "Blogs";
+}
+
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/Blogging/Admin/Blogs/index.js" />
+        <abp-script src="/Pages/Blogging/Admin/Blogs/create.js" />
+        <abp-script src="/Pages/Blogging/Admin/Blogs/edit.js" />
+    </abp-script-bundle>
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <h2>@L["Blogs"]</h2>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Blogs.Create))
+                {
+                    <abp-button icon="plus" text="@L["CreateANewBlog"].Value" button-type="Primary" id="CreateNewBlogButtonId"></abp-button>
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BlogsTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["Name"]</th>
+                    <th>@L["ShortName"]</th>
+                    <th>@L["CreationTime"]</th>
+                    <th>@L["Description"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

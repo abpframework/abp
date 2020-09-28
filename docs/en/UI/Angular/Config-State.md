@@ -127,6 +127,17 @@ const defaultLang = this.config.getSetting("Abp.Localization.DefaultLanguage");
 // 'en'
 ```
 
+### How to Get a Specific Feature From the Store
+
+You can use the `getFeature` method of `ConfigStateService` to get a specific feature from the configuration state. Here is an example:
+
+```js
+// this.config is instance of ConfigStateService
+
+const isChatEnabled = this.config.getFeature("Chat.Enable");
+// 'en'
+```
+
 ### How to Get a Specific Permission From the Store
 
 You can use the `getGrantedPolicy` method of `ConfigStateService` to get a specific permission from the configuration state. For that, you should pass a policy key as parameter to the method.
@@ -201,77 +212,6 @@ this.config.dispatchGetAppConfiguration();
 
 Note that **you do not have to call this method at application initiation**, because the application configuration is already being received from the server at start.
 
-### How to Patch Route Configuration
-
-The `dispatchPatchRouteByName` finds a route by its name and replaces its configuration in the `Store` with the new configuration passed as the second parameter.
-
-```js
-// this.config is instance of ConfigStateService
-
-const newRouteConfig: Partial<ABP.Route> = {
-  name: "Home",
-  path: "home",
-  children: [
-    {
-      name: "Dashboard",
-      path: "dashboard"
-    }
-  ]
-};
-
-this.config.dispatchPatchRouteByName("::Menu:Home", newRouteConfig);
-// returns a state stream which emits after dispatch action is complete
-```
-
-### How to Add a New Route Configuration
-
-The `dispatchAddRoute` adds a new route to the configuration state in the `Store`. For this, the route config should be passed as the parameter of the method.
-
-```js
-// this.config is instance of ConfigStateService
-
-const newRoute: ABP.Route = {
-  name: "My New Page",
-  iconClass: "fa fa-dashboard",
-  path: "page",
-  invisible: false,
-  order: 2,
-  requiredPolicy: "MyProjectName.MyNewPage"
-};
-
-this.config.dispatchAddRoute(newRoute);
-// returns a state stream which emits after dispatch action is complete
-```
-
-The `newRoute` will be placed as at root level, i.e. without any parent routes and its url will be stored as `'/path'`.
-
-If you want **to add a child route, you can do this:**
-
-```js
-import { eIdentityRouteNames } from '@abp/ng.identity';
-
-// this.config is instance of ConfigStateService
-
-const newRoute: ABP.Route = {
-  parentName: eIdentityRouteNames.IdentityManagement,
-  name: "My New Page",
-  iconClass: "fa fa-dashboard",
-  path: "page",
-  invisible: false,
-  order: 2,
-  requiredPolicy: "MyProjectName.MyNewPage"
-};
-
-this.config.dispatchAddRoute(newRoute);
-// returns a state stream which emits after dispatch action is complete
-```
-
-The `newRoute` will then be placed as a child of the parent route named `eIdentityRouteNames.IdentityManagement` and its url will be set as `'/identity/page'`.
-
-#### Route Configuration Properties
-
-Please refer to `ABP.Route` type for all the properties you can pass to `dispatchSetEnvironment` in its parameter. It can be found in the [common.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/common.ts#L27).
-
 ### How to Set the Environment
 
 The `dispatchSetEnvironment` places environment variables passed to it in the `Store` under the configuration state. Here is how it is used:
@@ -293,4 +233,4 @@ Please refer to `Config.Environment` type for all the properties you can pass to
 
 ## What's Next?
 
-- [Modifying the Menu](./Modifying-the-Menu.md)
+- [HTTP Requests](./Http-Requests)

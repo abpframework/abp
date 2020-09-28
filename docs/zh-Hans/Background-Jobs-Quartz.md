@@ -40,7 +40,7 @@ public class YourModule : AbpModule
 
 ## 配置
 
-Quartz是一个可配置的类库,对此ABP框架提供了 `AbpQuartzPreOptions`. 你可以在模块预配置此选项,ABP在初始化Quartz模块时将使用它. 例:
+Quartz是一个可配置的类库,对此ABP框架提供了 `AbpQuartzOptions`. 你可以在模块预配置此选项,ABP在初始化Quartz模块时将使用它. 例:
 
 ````csharp
 [DependsOn(
@@ -53,7 +53,7 @@ public class YourModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        PreConfigure<AbpQuartzPreOptions>(options =>
+        PreConfigure<AbpQuartzOptions>(options =>
         {
             options.Properties = new NameValueCollection
             {
@@ -70,4 +70,88 @@ public class YourModule : AbpModule
 }
 ````
 
-Quartz**默认**将作业与调度信息存储在**内存**中,示例中我们使用[选项模式](Options.md)的预配置将其更改为存储到数据库中. 有关Quartz的更多配置请参阅[Quartz文档](https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/index.html).
+从ABP3.1版本开始,我们在 `AbpQuartzOptions` 添加了 `Configurator` 用于配置Quartz. 例:
+
+````csharp
+[DependsOn(
+    //...other dependencies
+    typeof(AbpBackgroundJobsQuartzModule) //Add the new module dependency
+    )]
+public class YourModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigure<AbpQuartzOptions>(options =>
+        {
+            options.Configurator = configure =>
+            {
+                configure.UsePersistentStore(storeOptions =>
+                {
+                    storeOptions.UseProperties = true;
+                    storeOptions.UseJsonSerializer();
+                    storeOptions.UseSqlServer(configuration.GetConnectionString("Quartz"));
+                    storeOptions.UseClustering(c =>
+                    {
+                        c.CheckinMisfireThreshold = TimeSpan.FromSeconds(20);
+                        c.CheckinInterval = TimeSpan.FromSeconds(10);
+                    });
+                });
+            };
+        });
+    }
+}
+````
+
+> 你可以选择你喜爱的方式来配置Quaratz.
+
+Quartz**默认**将作业与调度信息存储在**内存**中,示例中我们使用[选项模式](Options.md)的预配置将其更改为存储到数据库中. 有关Quartz的更多配置请参阅[Quartz文档](https://www.quartz-scheduler.net/).
+
+## 异常处理
+
+### 默认异常处理策略
+
+当后台作业发生异常时ABP提供了**默认**异常处理策略,它会为你的作业重试3次,每次间隔3秒. 你可以通过 `AbpBackgroundJobQuartzOptions` 更改默认重试次数与间隔时间:
+
+```csharp
+[DependsOn(
+    //...other dependencies
+    typeof(AbpBackgroundJobsQuartzModule) //Add the new module dependency
+    )]
+public class YourModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpBackgroundJobQuartzOptions>(options =>
+        {
+            options.RetryCount = 1;
+            options.RetryIntervalMillisecond = 1000;
+        });
+    }
+}
+```
+
+### 自定义异常处理策略
+
+你可以通过 `AbpBackgroundJobQuartzOptions` 选项自定义异常处理策略:
+
+```csharp
+[DependsOn(
+    //...other dependencies
+    typeof(AbpBackgroundJobsQuartzModule) //Add the new module dependency
+    )]
+public class YourModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpBackgroundJobQuartzOptions>(options =>
+        {
+            options.RetryStrategy = async (retryIndex, executionContext, exception) =>
+            {
+                // customize exception handling
+            };
+        });
+    }
+}
+```

@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -51,17 +52,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string name,
             string type,
             string version = null,
-            string templateSource = null)
+            string templateSource = null,
+            bool includePreReleases = false)
         {
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
+            var latestVersion = version ?? await GetLatestSourceCodeVersionAsync(name, type, null, includePreReleases);
 
-            string latestVersion;
-
-#if DEBUG
-            latestVersion = await GetLatestSourceCodeVersionAsync(name, type, $"{CliUrls.WwwAbpIoProduction}api/download/{type}/get-version/");
-#else
-            latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
-#endif
             if (version == null)
             {
                 if (latestVersion == null)
@@ -69,12 +65,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Logger.LogWarning("The remote service is currently unavailable, please specify the version.");
                     Logger.LogWarning(string.Empty);
                     Logger.LogWarning("Find the following template in your cache directory: ");
-                    Logger.LogWarning("\t Template Name\tVersion");
+                    Logger.LogWarning("\tTemplate Name\tVersion");
 
                     var templateList = GetLocalTemplates();
                     foreach (var cacheFile in templateList)
                     {
-                        Logger.LogWarning($"\t {cacheFile.TemplateName}\t\t{cacheFile.Version}");
+                        Logger.LogWarning($"\t{cacheFile.TemplateName}\t\t{cacheFile.Version}");
                     }
 
                     Logger.LogWarning(string.Empty);
@@ -84,13 +80,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 version = latestVersion;
             }
 
-            string nugetVersion;
-
-#if DEBUG
-            nugetVersion = version;
-#else
-            nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
-#endif
+            var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
 
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {
@@ -121,7 +111,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Name = name,
                     Type = type,
                     TemplateSource = templateSource,
-                    Version = version
+                    Version = version,
+                    IncludePreReleases = includePreReleases
                 }
             );
 
@@ -133,7 +124,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
         }
 
-        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null)
+        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null, bool includePreReleases = false)
         {
             if (url == null)
             {
@@ -148,7 +139,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                         url,
                         new StringContent(
                             JsonSerializer.Serialize(
-                                new GetLatestSourceCodeVersionDto { Name = name }
+                                new GetLatestSourceCodeVersionDto { Name = name, IncludePreReleases = includePreReleases }
                             ),
                             Encoding.UTF8,
                             MimeTypes.Application.Json
@@ -182,7 +173,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                         url,
                         new StringContent(
                             JsonSerializer.Serialize(
-                                new GetTemplateNugetVersionDto { Name = name, Version = version }
+                                new GetTemplateNugetVersionDto { Name = name, Version = version}
                             ),
                             Encoding.UTF8,
                             MimeTypes.Application.Json
@@ -199,7 +190,6 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error occured while getting the NuGet version from {0} : {1}", url, ex.Message);
                 return null;
             }
         }
@@ -254,7 +244,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 stringBuilder.AppendLine(cacheFile);
             }
 
-            var matches = Regex.Matches(stringBuilder.ToString(), $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName})-(.+).zip");
+            var matches = Regex.Matches(stringBuilder.ToString(), $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName})-(.+).zip");
             foreach (Match match in matches)
             {
                 templateList.Add((match.Groups[1].Value, match.Groups[2].Value));
@@ -272,11 +262,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
             public string Type { get; set; }
 
             public string TemplateSource { get; set; }
+
+            public bool IncludePreReleases { get; set; }
         }
 
         public class GetLatestSourceCodeVersionDto
         {
             public string Name { get; set; }
+
+            public bool IncludePreReleases { get; set; }
         }
 
         public class GetTemplateNugetVersionDto
@@ -284,6 +278,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             public string Name { get; set; }
 
             public string Version { get; set; }
+
+            public bool IncludePreReleases { get; set; }
         }
 
         public class GetVersionResultDto

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 {
@@ -17,19 +19,17 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         public AssignedRoleViewModel[] Roles { get; set; }
 
         protected IIdentityUserAppService IdentityUserAppService { get; }
-        protected IIdentityRoleAppService IdentityRoleAppService { get; }
 
-        public CreateModalModel(IIdentityUserAppService identityUserAppService, IIdentityRoleAppService identityRoleAppService)
+        public CreateModalModel(IIdentityUserAppService identityUserAppService)
         {
             IdentityUserAppService = identityUserAppService;
-            IdentityRoleAppService = identityRoleAppService;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
             UserInfo = new UserInfoViewModel();
 
-            var roleDtoList = (await IdentityRoleAppService.GetAllListAsync()).Items;
+            var roleDtoList = (await IdentityUserAppService.GetAssignableRolesAsync()).Items;
 
             Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList);
 
@@ -53,33 +53,31 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             return NoContent();
         }
 
-        public class UserInfoViewModel
+        public class UserInfoViewModel : ExtensibleObject
         {
             [Required]
-            [StringLength(IdentityUserConsts.MaxUserNameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
             public string UserName { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxNameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
             public string Name { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxSurnameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
             public string Surname { get; set; }
 
             [Required]
-            [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
             [DisableAuditing]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
             public string Password { get; set; }
 
             [Required]
             [EmailAddress]
-            [StringLength(IdentityUserConsts.MaxEmailLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
             public string Email { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
             public string PhoneNumber { get; set; }
-
-            public bool TwoFactorEnabled { get; set; } = true;
 
             public bool LockoutEnabled { get; set; } = true;
         }

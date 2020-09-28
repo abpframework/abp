@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using NuGet.Versioning;
 using System.IO;
 using System.Linq;
@@ -24,30 +25,79 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
         }
 
-        public async Task UpdateSolutionAsync(string solutionPath, bool includePreviews = false, bool switchToStable = false)
+        public async Task UpdateSolutionAsync(string solutionPath, bool includePreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool checkAll = false)
         {
             var projectPaths = ProjectFinder.GetProjectFiles(solutionPath);
 
-            foreach (var filePath in projectPaths)
+            if (checkAll)
             {
-                await UpdateInternalAsync(filePath, includePreviews, switchToStable);
+                Task.WaitAll(projectPaths.Select(projectPath => UpdateInternalAsync(projectPath, includePreviews, includeReleaseCandidates, switchToStable)).ToArray());
+            }
+            else
+            {
+                var latestVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates : includeReleaseCandidates);
+                var latestReleaseCandidateVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates : true);
+                var latestVersionFromMyGet = await GetLatestVersionFromMyGet("Volo.Abp.Core");
+
+                async Task UpdateAsync(string filePath)
+                {
+                    var fileContent = File.ReadAllText(filePath);
+                    var updatedContent = await UpdateVoloPackagesAsync(fileContent,
+                        includePreviews,
+                        includeReleaseCandidates,
+                        switchToStable,
+                        latestVersionFromNuget,
+                        latestReleaseCandidateVersionFromNuget,
+                        latestVersionFromMyGet);
+
+                    File.WriteAllText(filePath, updatedContent);
+                }
+
+                Task.WaitAll(projectPaths.Select(UpdateAsync).ToArray());
             }
         }
 
-        public async Task UpdateProjectAsync(string projectPath, bool includePreviews = false, bool switchToStable = false)
+        public async Task UpdateProjectAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool checkAll = false)
         {
-            await UpdateInternalAsync(projectPath, includePreviews, switchToStable);
+            if (checkAll)
+            {
+                await UpdateInternalAsync(projectPath, includeNightlyPreviews, includeReleaseCandidates,  switchToStable);
+            }
+            else
+            {
+                var latestVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core");
+                var latestReleaseCandidateVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates : true);
+                var latestVersionFromMyGet = await GetLatestVersionFromMyGet("Volo.Abp.Core");
+
+                var fileContent = File.ReadAllText(projectPath);
+
+                var updatedContent = await UpdateVoloPackagesAsync(fileContent,
+                    includeNightlyPreviews,
+                    includeReleaseCandidates,
+                    switchToStable,
+                    latestVersionFromNuget,
+                    latestReleaseCandidateVersionFromNuget,
+                    latestVersionFromMyGet);
+
+                File.WriteAllText(projectPath, updatedContent);
+            }
         }
 
-        protected virtual async Task UpdateInternalAsync(string projectPath, bool includePreviews = false, bool switchToStable = false)
+        protected virtual async Task UpdateInternalAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false)
         {
             var fileContent = File.ReadAllText(projectPath);
-            var updatedContent = await UpdateVoloPackagesAsync(fileContent, includePreviews, switchToStable);
+            var updatedContent = await UpdateVoloPackagesAsync(fileContent, includeNightlyPreviews, includeReleaseCandidates, switchToStable);
 
             File.WriteAllText(projectPath, updatedContent);
         }
 
-        private async Task<string> UpdateVoloPackagesAsync(string content, bool includePreviews = false, bool switchToStable = false)
+        private async Task<string> UpdateVoloPackagesAsync(string content,
+            bool includeNightlyPreviews = false,
+            bool includeReleaseCandidates = false,
+            bool switchToStable = false,
+            SemanticVersion latestNugetVersion = null,
+            SemanticVersion latestNugetReleaseCandidateVersion = null,
+            string latestMyGetVersion = null)
         {
             string packageId = null;
 
@@ -79,9 +129,9 @@ namespace Volo.Abp.Cli.ProjectModification
 
                         Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, currentSemanticVersion);
 
-                        if (includePreviews || (currentVersion.Contains("-preview") && !switchToStable))
+                        if ((includeNightlyPreviews || (currentVersion.Contains("-preview") && !switchToStable)) && !includeReleaseCandidates)
                         {
-                            var latestVersion = await GetLatestVersionFromMyGet(packageId);
+                            var latestVersion = latestMyGetVersion ?? await GetLatestVersionFromMyGet(packageId);
 
                             if (currentVersion != latestVersion)
                             {
@@ -95,9 +145,17 @@ namespace Volo.Abp.Cli.ProjectModification
                         }
                         else
                         {
-                            var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId);
+                            SemanticVersion latestVersion;
+                            if (currentSemanticVersion.IsPrerelease && !switchToStable)
+                            {
+                                latestVersion = latestNugetReleaseCandidateVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: true);
+                            }
+                            else
+                            {
+                                latestVersion = latestNugetVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: includeReleaseCandidates);
+                            }
 
-                            if (latestVersion != null && (currentVersion.Contains("-preview") || currentSemanticVersion < latestVersion))
+                            if (latestVersion != null && (currentSemanticVersion < latestVersion || (currentSemanticVersion.IsPrerelease && switchToStable)))
                             {
                                 Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentSemanticVersion.ToString(), latestVersion.ToString());
                                 versionAttribute.Value = latestVersion.ToString();
@@ -109,7 +167,7 @@ namespace Volo.Abp.Cli.ProjectModification
                         }
                     }
 
-                    return await Task.FromResult(doc.OuterXml);
+                    return doc.OuterXml;
                 }
             }
             catch (Exception ex)

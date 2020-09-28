@@ -1,46 +1,37 @@
 # Custom Setting Page
 
-There are several settings tabs from different modules. You can add custom settings page to your project in 3 steps.
+There are several settings tabs from different modules. You can add a custom setting page to your project.
 
-1. Create a Component
+1. Create a component with the following command:
 
-```js
-import { Select } from '@ngxs/store';
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-your-custom-settings',
-  template: `
-    custom-settings works! 
-  `,
-})
-export class YourCustomSettingsComponent {
-  // Your component logic
-}
+```bash
+yarn ng generate component my-settings
 ```
 
-2. Add the `YourCustomSettingsComponent` to `declarations` and the `entryComponents` arrays in the `AppModule`.
-
-3. Open the `app.component.ts` and add the below content to the `ngOnInit`
+2. Open the `app.component.ts` and modify the file as shown below:
 
 ```js
-import { addSettingTab } from '@abp/ng.theme.shared';
-// ...
+import { Component } from '@angular/core';
+import { SettingTabsService } from '@abp/ng.core'; // imported SettingTabsService
+import { MySettingsComponent } from './my-settings/my-settings.component'; // imported MySettingsComponent
 
-ngOnInit() {
-  addSettingTab({
-    component: YourCustomSettingsComponent,
-    name: 'Type here the setting tab title (you can type a localization key, e.g: AbpAccount::Login',
-    order: 4,
-    requiredPolicy: 'type here a policy key'
-  });
+@Component(/* component metadata */)
+export class AppComponent {
+  constructor(private settingTabs: SettingTabsService) // injected MySettingsComponent
+  {
+    // added below
+    settingTabs.add([
+      {
+        name: 'MySettings',
+        order: 1,
+        requiredPolicy: 'policy key here',
+        component: MySettingsComponent,
+      },
+    ]);
+  }
 }
 ```
 
 Navigate to `/setting-management` route to see the changes:
 
 ![Custom Settings Tab](./images/custom-settings.png)
-
-## What's Next?
-
-- [Lazy Loading Scripts & Styles](./Lazy-Load-Service.md)

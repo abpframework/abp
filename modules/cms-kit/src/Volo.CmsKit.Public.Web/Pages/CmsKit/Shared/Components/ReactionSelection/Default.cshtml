@@ -1,0 +1,35 @@
+﻿@inject ICurrentUser CurrentUser
+@using Volo.Abp.Users
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection.ReactionSelectionViewComponent.ReactionSelectionViewModel
+
+@if (CurrentUser.IsAuthenticated || Model.Reactions.Count(r => r.Count > 0) > 0)
+{
+    <div class="text-center text-md-right">
+        <div class="px-2 py-1 my-2 card border-0 shadow-sm d-inline-block">
+            <span class="cms-reaction-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    <a class="cms-reaction-select-icon" href="javascript:;">
+                        <i class="fa fa-smile-o text-muted"></i>
+                    </a>
+                    <div class="cms-reaction-selection-popover-content" style="display: none">
+                        @foreach (var reaction in Model.Reactions)
+                        {
+                            <span class="m-2 p-2 w-25 d-inline-block text-center cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "shadow-sm  bg-light rounded cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name">
+                                <i class="@reaction.Icon fa-2x"></i>
+                            </span>
+                        }
+                    </div>
+                }
+                @foreach (var reaction in Model.Reactions.Where(r => r.Count > 0))
+                {
+                    <span class="ml-1 cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name" data-click-action="@(CurrentUser.IsAuthenticated ? "true" : "false")">
+                        <i class="@reaction.Icon"></i>
+                        <small class="text-muted" style="opacity: .45;">@(reaction.Count)</small>
+                    </span>
+                }
+            </span>
+        </div>
+    </div>
+}

@@ -79,13 +79,15 @@ var abp = abp || {};
         }
     };
 
-    new MutationObserver(mutationObserverCallback).observe(
-        $('body')[0],
-        {
-            subtree: true,
-            childList: true
-        }
-    );
+    $(function(){
+        new MutationObserver(mutationObserverCallback).observe(
+            $('body')[0],
+            {
+                subtree: true,
+                childList: true
+            }
+        );
+    });    
 
     // AJAX ///////////////////////////////////////////////////////////////////
 
@@ -359,13 +361,17 @@ var abp = abp || {};
 
         var _loadScript = function (url, loadCallback, failCallback) {
             _loadFromUrl(url, loadCallback, failCallback, function (urlInfo) {
-                $.getScript(url)
-                    .done(function () {
-                        urlInfo.succeed();
-                    })
-                    .fail(function () {
-                        urlInfo.failed();
-                    });
+                $.get({
+                    url: url,
+                    dataType: 'text'
+                })
+                .done(function (script) {
+                    $.globalEval(script);
+                    urlInfo.succeed();
+                })
+                .fail(function () {
+                    urlInfo.failed();
+                });
             });
         };
 

@@ -11,12 +11,17 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\SettingManagement\Localization\Resources\AbpSettingManagement\*.json" />
     <Content Remove="Volo\Abp\SettingManagement\Localization\Resources\AbpSettingManagement\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,7 +16,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MongoDB"
             );
 
-            ChangeModuleDependency(
+            ChangeNamespaceAndKeyword(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
@@ -39,7 +39,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MongoDB"
             );
 
-            ChangeModuleDependency(
+            ChangeNamespaceAndKeyword(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
@@ -62,7 +62,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MongoDB"
             );
 
-            ChangeModuleDependency(
+            ChangeNamespaceAndKeyword(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
@@ -85,7 +85,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MongoDB"
             );
 
-            ChangeModuleDependency(
+            ChangeNamespaceAndKeyword(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
@@ -108,7 +108,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MongoDB"
             );
 
-            ChangeModuleDependency(
+            ChangeNamespaceAndKeyword(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/MyProjectNameDbMigratorModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
@@ -131,13 +131,44 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MongoDB.Tests"
             );
 
-            ChangeModuleDependency(
+            ChangeNamespaceAndKeyword(
                 context,
                 "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreTestModule",
                 "MyProjectNameMongoDbTestModule"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainCollection.cs",
+                "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                "MyCompanyName.MyProjectName.MongoDB",
+                "MyProjectNameEntityFrameworkCoreCollectionFixtureBase",
+                "MyProjectNameMongoDbCollectionFixtureBase"
+            );
+
+            //MyCompanyName.MyProjectName.Application.Tests
+
+            ChangeNamespaceAndKeyword(
+                context,
+                "/aspnet-core/test/MyCompanyName.MyProjectName.Application.Tests/MyProjectNameApplicationCollection.cs",
+                "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                "MyCompanyName.MyProjectName.MongoDB",
+                "MyProjectNameEntityFrameworkCoreCollectionFixtureBase",
+                "MyProjectNameMongoDbCollectionFixtureBase"
+            );
+
+            //MyCompanyName.MyProjectName.Web.Tests
+
+            ChangeNamespaceAndKeyword(
+                context,
+                "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests/MyProjectNameWebCollection.cs",
+                "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                "MyCompanyName.MyProjectName.MongoDB",
+                "MyProjectNameEntityFrameworkCoreCollectionFixtureBase",
+                "MyProjectNameMongoDbCollectionFixtureBase"
             );
         }
 
@@ -165,13 +196,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             throw new ApplicationException($"Could not find the '{oldReference}' reference in the project '{targetProjectFilePath}'!");
         }
 
-        private void ChangeModuleDependency(
+        private void ChangeNamespaceAndKeyword(
             ProjectBuildContext context,
             string targetModuleFilePath,
             string oldNamespace,
             string newNamespace,
-            string oldModuleName,
-            string newModuleName)
+            string oldKeyword,
+            string newKeyword)
         {
             var file = context.GetFile(targetModuleFilePath);
 
@@ -185,9 +216,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 {
                     lines[i] = $"using {newNamespace};";
                 }
-                else if (lines[i].Contains(oldModuleName))
+                else if (lines[i].Contains(oldKeyword))
                 {
-                    lines[i] = lines[i].Replace(oldModuleName, newModuleName);
+                    lines[i] = lines[i].Replace(oldKeyword, newKeyword);
                 }
             }
 

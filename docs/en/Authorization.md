@@ -80,6 +80,8 @@ namespace Acme.BookStore.Permissions
 
 > ABP automatically discovers this class. No additional configuration required!
 
+> You typically define this class inside the `Application.Contracts` project of your [application](Startup-Templates/Application.md). The startup template already comes with an empty class named *YourProjectNamePermissionDefinitionProvider* that you can start with.
+
 In the `Define` method, you first need to add a **permission group** or get an existing group then add **permissions** to this group.
 
 When you define a permission, it becomes usable in the ASP.NET Core authorization system as a **policy** name. It also becomes visible in the UI. See permissions dialog for a role:
@@ -276,15 +278,23 @@ public async Task CreateAsync(CreateAuthorDto input)
 
 > Tip: Prefer to use the `Authorize` attribute wherever possible, since it is declarative & simple. Use `IAuthorizationService` if you need to conditionally check a permission and run a business code based on the permission check.
 
-### Check a Permission in JavaScript
+## Check a Permission in JavaScript
 
-You may need to check a policy/permission on the client side. For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API. Example:
+You may need to check a policy/permission on the client side.
+
+### MVC UI
+
+For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API.
+
+**Example: Check if a given permission has been granted for the current user**
 
 ```js
 abp.auth.isGranted('MyPermissionName');
 ```
 
-See [abp.auth](API/JavaScript-API/Auth.md) API documentation for details.
+### Angular UI
+
+See the [permission management document](UI/Angular/Permission-Management.md) for the Angular UI.
 
 ## Permission Management
 
@@ -376,7 +386,7 @@ Configure<AbpPermissionOptions>(options =>
 
 ### Permission Store
 
-`IPermissionStore` is the only interface that needs to be implemented to read the value of permissions from a persistence source, generally a database system. Permission management module implements it. See the [permission management module documentation](Modules/Permission-Management.md) for more information
+`IPermissionStore` is the only interface that needs to be implemented to read the value of permissions from a persistence source, generally a database system. The Permission Management module implements it  and pre-installed in the application startup template. See the [permission management module documentation](Modules/Permission-Management.md) for more information
 
 ### AlwaysAllowAuthorizationService
 

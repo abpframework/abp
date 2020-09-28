@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
+using System.Linq.Dynamic.Core;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
+using Volo.Abp.DynamicProxy;
+using Volo.Abp.Localization;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -20,12 +23,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
         private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
-        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
+        public AbpSelectTagHelperService(
+            IHtmlGenerator generator, 
+            HtmlEncoder encoder, 
+            IAbpTagHelperLocalizer tagHelperLocalizer, 
+            IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
             _encoder = encoder;
             _tagHelperLocalizer = tagHelperLocalizer;
+            _stringLocalizerFactory = stringLocalizerFactory;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -102,7 +111,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return TagHelper.AspItems.ToList();
             }
 
-            if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            if (IsEnum())
             {
                 return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
             }
@@ -114,6 +123,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             throw new Exception("No items provided for select attribute.");
+        }
+
+        private bool IsEnum()
+        {
+            var value = TagHelper.AspFor.Model;
+            if (value != null && value.GetType().IsEnum)
+            {
+                return true;
+            }
+
+            return TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
         }
 
         protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -186,8 +206,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
-
             var selectItems = new List<SelectListItem>();
             var isNullableType = Nullable.GetUnderlyingType(explorer.ModelType) != null;
             var enumType = explorer.ModelType;
@@ -198,26 +216,34 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 selectItems.Add(new SelectListItem());
             }
 
-            selectItems.AddRange(enumType.GetEnumNames()
-                .Select(enumName => new SelectListItem
-                {
-                    Value = Convert.ToUInt64(Enum.Parse(enumType, enumName)).ToString(),
-                    Text = GetLocalizedPropertyName(localizer, enumType, enumName)
-                }));
+            var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
 
-            return selectItems;
-        }
-
-        protected virtual string GetLocalizedPropertyName(IStringLocalizer localizer, Type enumType, string propertyName)
-        {
-            if (localizer == null)
+            foreach (var enumValue in enumType.GetEnumValues())
             {
-                return propertyName;
+                var memberName = enumType.GetEnumName(enumValue);
+                var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
+                    new[]
+                    {
+                        containerLocalizer,
+                        _stringLocalizerFactory.CreateDefaultOrNull()
+                    },
+                    new[]
+                    {
+                        $"Enum:{enumType.Name}.{memberName}",
+                        $"{enumType.Name}.{memberName}",
+                        memberName
+                    },
+                    memberName
+                );
+
+                selectItems.Add(new SelectListItem
+                {
+                    Value = enumValue.ToString(),
+                    Text = localizedMemberName
+                });
             }
 
-            var localizedString = localizer[enumType.Name + "." + propertyName];
-
-            return !localizedString.ResourceNotFound ? localizedString.Value : localizer[propertyName].Value;
+            return selectItems;
         }
 
         protected virtual List<SelectListItem> GetSelectItemsFromAttribute(

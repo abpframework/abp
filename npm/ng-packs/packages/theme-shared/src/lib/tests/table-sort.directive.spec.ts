@@ -2,7 +2,6 @@ import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/je
 import { TableSortDirective } from '../directives/table-sort.directive';
 import { TableComponent } from '../components/table/table.component';
 import { DummyLocalizationPipe } from './table.component.spec';
-import { PaginationComponent } from '../components';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 describe('TableSortDirective', () => {
@@ -10,7 +9,7 @@ describe('TableSortDirective', () => {
   let directive: TableSortDirective;
   const createDirective = createDirectiveFactory({
     directive: TableSortDirective,
-    declarations: [TableComponent, DummyLocalizationPipe, PaginationComponent],
+    declarations: [TableComponent, DummyLocalizationPipe],
     imports: [NgbPaginationModule],
   });
 

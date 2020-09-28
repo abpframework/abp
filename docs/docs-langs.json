@@ -14,11 +14,6 @@
       "DisplayName" : "简体中文",
       "Code" : "zh-Hans",
       "IsDefault": false
-    },	
-    {	
-      "DisplayName" : "Čeština",	
-      "Code" : "cs",	
-      "IsDefault": false
-	}
+    }
   ]
 }

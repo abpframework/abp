@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -13,9 +14,9 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule))]
+        typeof(AbpEntityFrameworkCoreSqlServerModule),
+        typeof(BlobStoringDatabaseEntityFrameworkCoreModule))]
     public class BloggingTestAppEntityFrameworkCoreModule : AbpModule
     {
-
     }
 }

@@ -1,0 +1,40 @@
+<nz-tree
+  [nzBeforeDrop]="beforeDrop"
+  [nzDraggable]="draggable"
+  [nzCheckStrictly]="checkStrictly"
+  [nzCheckable]="checkable"
+  [nzCheckedKeys]="checkedKeys"
+  [nzData]="nodes"
+  [nzTreeTemplate]="treeTemplate"
+  [nzExpandedKeys]="expandedKeys"
+  [nzExpandedIcon]="expandedIconTemplate?.template"
+  (nzExpandChange)="onExpandedKeysChange($event)"
+  (nzCheckBoxChange)="onCheckboxChange($event)"
+  (nzOnDrop)="onDrop($event)"
+></nz-tree>
+<ng-template #treeTemplate let-node>
+  <div
+    class="node-wrapper"
+    [class.selected]="isNodeSelected(node)"
+    [title]="node.title"
+    (click)="onSelectedNodeChange(node)"
+  >
+    <ng-container
+      *ngTemplateOutlet="
+        customNodeTemplate?.template || defaultNodeTemplate;
+        context: { $implicit: node }
+      "
+    ></ng-container>
+
+    <ng-template #defaultNodeTemplate>
+      <span>{{ node.title }}</span>
+    </ng-template>
+
+    <div *ngIf="menu" class="ellipsis" ngbDropdown placement="bottom" container="body">
+      <i class="fas fa-ellipsis-h" ngbDropdownToggle [class.dropdown-toggle]="false"></i>
+      <div ngbDropdownMenu>
+        <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>

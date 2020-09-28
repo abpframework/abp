@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         public AbpExceptionPageFilter(
             IExceptionToErrorInfoConverter errorInfoConverter,
-            IHttpExceptionStatusCodeFinder statusCodeFinder, 
+            IHttpExceptionStatusCodeFinder statusCodeFinder,
             IJsonSerializer jsonSerializer)
         {
             _errorInfoConverter = errorInfoConverter;
@@ -34,13 +35,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             Logger = NullLogger<AbpExceptionPageFilter>.Instance;
         }
-        
 
         public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
             return Task.CompletedTask;
         }
-        
+
         public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
             if (context.HandlerMethod == null || !ShouldHandleException(context))
@@ -54,20 +54,20 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             {
                 return;;
             }
-            
+
             await HandleAndWrapException(pageHandlerExecutedContext);
         }
-        
+
         protected virtual bool ShouldHandleException(PageHandlerExecutingContext context)
         {
             //TODO: Create DontWrap attribute to control wrapping..?
 
             if (context.ActionDescriptor.IsPageAction() &&
-                ActionResultHelper.IsObjectResult(context.HandlerMethod.MethodInfo.ReturnType))
+                ActionResultHelper.IsObjectResult(context.HandlerMethod.MethodInfo.ReturnType, typeof(void)))
             {
                 return true;
             }
-            
+
             if (context.HttpContext.Request.CanAccept(MimeTypes.Application.Json))
             {
                 return true;
@@ -94,8 +94,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var logLevel = context.Exception.GetLogLevel();
 
-            Logger.LogWithLevel(logLevel, $"---------- {nameof(RemoteServiceErrorInfo)} ----------");
-            Logger.LogWithLevel(logLevel, _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
+            var remoteServiceErrorInfoBuilder = new StringBuilder();
+            remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
+            remoteServiceErrorInfoBuilder.AppendLine( _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
+            Logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+
             Logger.LogException(context.Exception, logLevel);
 
             await context.HttpContext
@@ -107,6 +110,5 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             context.Exception = null; //Handled!
         }
-        
     }
 }

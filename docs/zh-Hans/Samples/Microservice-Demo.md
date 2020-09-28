@@ -28,7 +28,7 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 
 ### 源码
 
-你可以从[GitHub仓库](https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo)获取源码.
+你可以从[GitHub仓库](https://github.com/abpframework/abp-samples/tree/master/MicroserviceDemo)获取源码.
 
 ## 运行解决方案
 
@@ -42,6 +42,12 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 * [MongoDB](https://www.mongodb.com/download-center) 4.0+
 * [ElasticSearch](https://www.elastic.co/downloads/elasticsearch) 6.6+
 * [Kibana](https://www.elastic.co/downloads/kibana) 6.6+ (可选,建议显示日志)
+
+### 运行基础设施
+
+- 默认情况下运行Docker-compose可以轻松运行预先要求. 如果你没有安装,在windows环境下你可以在[这里](https://docs.docker.com/docker-for-windows/install/)下载并使用[Docker for Windows](https://docs.docker.com/docker-for-windows/).
+* 在 `MicroserviceDemo` 目录下运行命令 `docker-compose -f docker-compose.infrastructure.yml -f docker-compose.infrastructure.override.yml up -d` 或使用powershell运行 `MicroserviceDemo/_run` 文件夹下的 `__Run_Infrastructure.ps1` 脚本.
+* 如果你不想使用docker运行预先要求的服务在你的本地环境,你需要更改微服务示例解决方案项目中的 `appsettings.json` 文件.
 
 ### 打开并构建Visual Studio解决方案
 
@@ -553,7 +559,7 @@ app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                    ctx.Request.Path.ToString().StartsWith("/Abp/"),
     app2 =>
     {
-        app2.UseMvcWithDefaultRouteAndArea();
+        app2.UseConfiguredEndpoints();
     });
 
 app.UseOcelot().Wait();

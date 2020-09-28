@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Guids;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Settings;
@@ -27,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
 
         protected TService LazyGetRequiredService<TService>(ref TService reference)
             => LazyGetRequiredService(typeof(TService), ref reference);
-        
+
         protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
         {
             if (reference == null)
@@ -44,16 +45,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
             return reference;
         }
 
-        public IClock Clock => LazyGetRequiredService(ref _clock);
+        protected IClock Clock => LazyGetRequiredService(ref _clock);
         private IClock _clock;
 
-        public AlertList Alerts => AlertManager.Alerts;
+        protected AlertList Alerts => AlertManager.Alerts;
 
-        public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
+        protected IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
         private IUnitOfWorkManager _unitOfWorkManager;
 
         protected Type ObjectMapperContext { get; set; }
-        public IObjectMapper ObjectMapper
+        protected IObjectMapper ObjectMapper
         {
             get
             {
@@ -75,52 +76,48 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
         }
         private IObjectMapper _objectMapper;
 
-        public IGuidGenerator GuidGenerator => LazyGetRequiredService(ref _guidGenerator);
+        protected IGuidGenerator GuidGenerator => LazyGetRequiredService(ref _guidGenerator);
         private IGuidGenerator _guidGenerator;
 
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
+        protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
         private ILoggerFactory _loggerFactory;
 
-        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
         private IStringLocalizerFactory _stringLocalizerFactory;
 
-        public IStringLocalizer L
+        protected IStringLocalizer L
         {
             get
             {
                 if (_localizer == null)
                 {
-                    if (LocalizationResourceType == null)
-                    {
-                        throw new AbpException($"{nameof(LocalizationResourceType)} should be set before using the {nameof(L)} object!");
-                    }
-
-                    _localizer = StringLocalizerFactory.Create(LocalizationResourceType);
+                    _localizer = CreateLocalizer();
                 }
 
                 return _localizer;
             }
         }
+
         private IStringLocalizer _localizer;
 
         protected Type LocalizationResourceType { get; set; }
 
-        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
+        protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
         private ICurrentUser _currentUser;
 
-        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
+        protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
         private ICurrentTenant _currentTenant;
 
-        public ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
+        protected ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
         private ISettingProvider _settingProvider;
 
-        public IModelStateValidator ModelValidator => LazyGetRequiredService(ref _modelValidator);
+        protected IModelStateValidator ModelValidator => LazyGetRequiredService(ref _modelValidator);
         private IModelStateValidator _modelValidator;
 
-        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
+        protected IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
         private IAuthorizationService _authorizationService;
 
-        public IAlertManager AlertManager => LazyGetRequiredService(ref _alertManager);
+        protected IAlertManager AlertManager => LazyGetRequiredService(ref _alertManager);
         private IAlertManager _alertManager;
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
@@ -151,6 +148,22 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
                 ViewData = new ViewDataDictionary<TModel>(ViewData, model),
                 TempData = TempData
             };
+        }
+
+        protected virtual IStringLocalizer CreateLocalizer()
+        {
+            if (LocalizationResourceType != null)
+            {
+                return StringLocalizerFactory.Create(LocalizationResourceType);
+            }
+
+            var localizer = StringLocalizerFactory.CreateDefaultOrNull();
+            if (localizer == null)
+            {
+                throw new AbpException($"Set {nameof(LocalizationResourceType)} or define the default localization resource type (by configuring the {nameof(AbpLocalizationOptions)}.{nameof(AbpLocalizationOptions.DefaultResourceType)}) to be able to use the {nameof(L)} object!");
+            }
+
+            return localizer;
         }
     }
 }

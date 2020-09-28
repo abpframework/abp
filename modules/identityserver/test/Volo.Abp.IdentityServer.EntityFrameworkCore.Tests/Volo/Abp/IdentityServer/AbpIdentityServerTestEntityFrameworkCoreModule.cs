@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -14,7 +15,8 @@ namespace Volo.Abp.IdentityServer
     [DependsOn(
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpIdentityServerTestBaseModule)
+        typeof(AbpIdentityServerTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
     public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
     {

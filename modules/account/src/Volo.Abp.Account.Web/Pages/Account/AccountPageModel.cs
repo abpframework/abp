@@ -12,8 +12,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 {
     public abstract class AccountPageModel : AbpPageModel
     {
+        public IAccountAppService AccountAppService { get; set; }
         public SignInManager<IdentityUser> SignInManager { get; set; }
         public IdentityUserManager UserManager { get; set; }
+        public IdentitySecurityLogManager IdentitySecurityLogManager { get; set; }
 
         protected AccountPageModel()
         {
@@ -73,7 +75,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual string GetAppHomeUrl()
         {
-            return "/"; //TODO: ???
+            return "~/"; //TODO: ???
         }
     }
 }

@@ -9,6 +9,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
 
@@ -26,7 +27,7 @@ namespace Volo.Abp.EventBus.RabbitMq
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected IConnectionPool ConnectionPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
-        
+
         //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
         protected ConcurrentDictionary<string, Type> EventTypes { get; }
@@ -37,17 +38,18 @@ namespace Volo.Abp.EventBus.RabbitMq
             IOptions<AbpRabbitMqEventBusOptions> options,
             IConnectionPool connectionPool,
             IRabbitMqSerializer serializer,
-            IServiceScopeFactory serviceScopeFactory, 
+            IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
-            IRabbitMqMessageConsumerFactory messageConsumerFactory)
-            : base(serviceScopeFactory)
+            IRabbitMqMessageConsumerFactory messageConsumerFactory,
+            ICurrentTenant currentTenant)
+            : base(serviceScopeFactory, currentTenant)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
             MessageConsumerFactory = messageConsumerFactory;
             AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             AbpRabbitMqEventBusOptions = options.Value;
-            
+
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
         }
@@ -83,7 +85,7 @@ namespace Volo.Abp.EventBus.RabbitMq
                 return;
             }
 
-            var eventData = Serializer.Deserialize(ea.Body, eventType);
+            var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
 
             await TriggerHandlersAsync(eventType, eventData);
         }
@@ -178,7 +180,7 @@ namespace Volo.Abp.EventBus.RabbitMq
                     "direct",
                     durable: true
                 );
-                
+
                 var properties = channel.CreateBasicProperties();
                 properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
 

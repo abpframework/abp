@@ -1,9 +1,15 @@
-import { Router, RouteReuseStrategy, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+import {
+  Router,
+  RouteReuseStrategy,
+  NavigationStart,
+  NavigationEnd,
+  NavigationError,
+} from '@angular/router';
 import { createHostFactory, SpectatorHost, SpyObject } from '@ngneat/spectator/jest';
 import { Actions, NgxsModule, Store } from '@ngxs/store';
 import { Subject, Subscription, Observable, Subscriber, timer } from 'rxjs';
 import { LoaderBarComponent } from '../components/loader-bar/loader-bar.component';
-import { StartLoader, StopLoader } from '@abp/ng.core';
+import { StartLoader, StopLoader, SubscriptionService } from '@abp/ng.core';
 import { HttpRequest } from '@angular/common/http';
 
 describe('LoaderBarComponent', () => {
@@ -16,13 +22,14 @@ describe('LoaderBarComponent', () => {
     mocks: [Router],
     imports: [NgxsModule.forRoot()],
     detectChanges: false,
+    providers: [SubscriptionService],
   });
 
   beforeEach(() => {
     spectator = createHost('<abp-loader-bar></abp-loader-bar>');
     spectator.component.intervalPeriod = 1;
     spectator.component.stopDelay = 1;
-    router = spectator.get(Router);
+    router = spectator.inject(Router);
     (router as any).events = events$;
   });
 
@@ -34,7 +41,7 @@ describe('LoaderBarComponent', () => {
 
   it('should increase the progressLevel', done => {
     spectator.detectChanges();
-    spectator.get(Store).dispatch(new StartLoader(new HttpRequest('GET', 'test')));
+    spectator.inject(Store).dispatch(new StartLoader(new HttpRequest('GET', 'test')));
     spectator.detectChanges();
     setTimeout(() => {
       expect(spectator.component.progressLevel > 0).toBeTruthy();
@@ -44,7 +51,7 @@ describe('LoaderBarComponent', () => {
 
   test.skip('should be interval unsubscribed', done => {
     spectator.detectChanges();
-    spectator.get(Store).dispatch(new StartLoader(new HttpRequest('GET', 'test')));
+    spectator.inject(Store).dispatch(new StartLoader(new HttpRequest('GET', 'test')));
     expect(spectator.component.interval.closed).toBe(false);
 
     timer(400).subscribe(() => {
@@ -73,7 +80,7 @@ describe('LoaderBarComponent', () => {
     (router as any).events.next(new NavigationStart(1, 'test'));
     expect(spectator.component.interval.closed).toBe(false);
 
-    spectator.get(Store).dispatch(new StopLoader(new HttpRequest('GET', 'test')));
+    spectator.inject(Store).dispatch(new StopLoader(new HttpRequest('GET', 'test')));
     expect(spectator.component.progressLevel).toBe(100);
 
     timer(2).subscribe(() => {

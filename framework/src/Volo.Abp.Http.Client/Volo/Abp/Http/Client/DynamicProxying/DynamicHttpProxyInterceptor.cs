@@ -17,7 +17,6 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Tracing;
 
@@ -26,7 +25,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
     public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientDependency
     {
         // ReSharper disable once StaticMemberInGenericType
-        protected static MethodInfo GenericInterceptAsyncMethod { get; }
+        protected static MethodInfo MakeRequestAndGetResultAsyncMethod { get; }
 
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
@@ -43,7 +42,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         static DynamicHttpProxyInterceptor()
         {
-            GenericInterceptAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
+            MakeRequestAndGetResultAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
                 .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
                 .First(m => m.Name == nameof(MakeRequestAndGetResultAsync) && m.IsGenericMethodDefinition);
         }
@@ -82,7 +81,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
             else
             {
-                var result = (Task)GenericInterceptAsyncMethod
+                var result = (Task)MakeRequestAndGetResultAsyncMethod
                     .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
                     .Invoke(this, new object[] { invocation });
 
@@ -91,7 +90,6 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     invocation.Method.ReturnType.GetGenericArguments()[0]
                 );
             }
-
         }
 
         private async Task<object> GetResultAsync(Task task, Type resultType)
@@ -106,7 +104,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private async Task<T> MakeRequestAndGetResultAsync<T>(IAbpMethodInvocation invocation)
         {
             var responseAsString = await MakeRequestAsync(invocation);
-            
+
             if (typeof(T) == typeof(string))
             {
                 return (T)Convert.ChangeType(responseAsString, typeof(T));
@@ -122,7 +120,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
 
-            var action = await ApiDescriptionFinder.FindActionAsync(remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
+            var action = await ApiDescriptionFinder.FindActionAsync(client, remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
             var apiVersion = GetApiVersionInfo(action);
             var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
 

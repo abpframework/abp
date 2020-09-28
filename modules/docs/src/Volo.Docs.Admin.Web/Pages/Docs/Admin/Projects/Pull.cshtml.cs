@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Validation;
 using Volo.Docs.Admin.Documents;
 using Volo.Docs.Admin.Projects;
 using Volo.Docs.Documents;
@@ -60,15 +61,15 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             public bool All { get; set; }
 
             [Required]
-            [StringLength(DocumentConsts.MaxNameLength)]
+            [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxNameLength))]
             public string Name { get; set; }
 
             [Required]
-            [StringLength(DocumentConsts.MaxLanguageCodeNameLength)]
+            [DynamicStringLength(typeof(DocumentConsts),nameof(DocumentConsts.MaxLanguageCodeNameLength))]
             public string LanguageCode { get; set; }
 
             [Required]
-            [StringLength(DocumentConsts.MaxVersionNameLength)]
+            [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxVersionNameLength))]
             public string Version { get; set; }
         }
     }

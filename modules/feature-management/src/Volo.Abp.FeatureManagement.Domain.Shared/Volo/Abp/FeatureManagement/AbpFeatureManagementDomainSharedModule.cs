@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
@@ -26,6 +27,11 @@ namespace Volo.Abp.FeatureManagement
                     .AddBaseTypes(
                         typeof(AbpValidationResource)
                     ).AddVirtualJson("Volo/Abp/FeatureManagement/Localization/Domain");
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.Abp.FeatureManagement", typeof(AbpFeatureManagementResource));
             });
         }
     }

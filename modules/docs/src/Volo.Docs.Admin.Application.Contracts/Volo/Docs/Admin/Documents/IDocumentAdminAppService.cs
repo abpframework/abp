@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Volo.Docs.Admin.Documents
@@ -11,6 +14,12 @@ namespace Volo.Docs.Admin.Documents
 
         Task PullAsync(PullDocumentInput input);
 
-        Task ReindexAsync();
+        Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input);
+
+        Task RemoveFromCacheAsync(Guid documentId);
+
+        Task ReindexAsync(Guid documentId);
+
+        Task DeleteFromDatabaseAsync(Guid documentId);
     }
 }

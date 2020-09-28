@@ -7,7 +7,7 @@ using Volo.Abp.Data;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
-    internal static class DbContextOptionsFactory
+    public static class DbContextOptionsFactory
     {
         public static DbContextOptions<TDbContext> Create<TDbContext>(IServiceProvider serviceProvider)
             where TDbContext : AbpDbContext<TDbContext>

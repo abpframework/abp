@@ -1,44 +1,69 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, Injector, Optional } from '@angular/core';
 import { Navigate } from '@ngxs/router-plugin';
-import { Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { from, Observable } from 'rxjs';
-import { switchMap, tap, take } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import snq from 'snq';
-import { GetAppConfiguration } from '../actions/config.actions';
-import { SessionState } from '../states/session.state';
-import { RestService } from './rest.service';
+import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
 import { ConfigState } from '../states/config.state';
+import { SessionState } from '../states/session.state';
+import { AuthFlowStrategy, AUTH_FLOW_STRATEGY } from '../strategies/auth-flow.strategy';
+import { RestService } from './rest.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private flow: string;
+  private strategy: AuthFlowStrategy;
+
+  get isInternalAuth() {
+    return this.strategy.isInternalAuth;
+  }
+
   constructor(
+    private actions: Actions,
+    private injector: Injector,
     private rest: RestService,
     private oAuthService: OAuthService,
     private store: Store,
     @Optional() @Inject('ACCOUNT_OPTIONS') private options: any,
-  ) {}
+  ) {
+    this.setStrategy();
+    this.listenToSetEnvironment();
+  }
+
+  private setStrategy = () => {
+    const flow =
+      this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.responseType')) ||
+      'password';
+    if (this.flow === flow) return;
+
+    if (this.strategy) this.strategy.destroy();
+
+    this.flow = flow;
+    this.strategy =
+      this.flow === 'code'
+        ? AUTH_FLOW_STRATEGY.Code(this.injector)
+        : AUTH_FLOW_STRATEGY.Password(this.injector);
+  };
+
+  private listenToSetEnvironment() {
+    this.actions.pipe(ofActionSuccessful(SetEnvironment)).subscribe(this.setStrategy);
+  }
 
   login(username: string, password: string): Observable<any> {
     const tenant = this.store.selectSnapshot(SessionState.getTenant);
 
-    this.oAuthService.configure(
-      this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig,
-    );
-
-    return from(this.oAuthService.loadDiscoveryDocument()).pipe(
-      switchMap(() =>
-        from(
-          this.oAuthService.fetchTokenUsingPasswordFlow(
-            username,
-            password,
-            new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
-          ),
-        ),
+    return from(
+      this.oAuthService.fetchTokenUsingPasswordFlow(
+        username,
+        password,
+        new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
       ),
+    ).pipe(
       switchMap(() => this.store.dispatch(new GetAppConfiguration())),
       tap(() => {
         const redirectUrl =
@@ -49,23 +74,15 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<void> {
-    const issuer = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.issuer'));
+  async init() {
+    return await this.strategy.init();
+  }
 
-    return this.rest
-      .request(
-        {
-          method: 'GET',
-          url: '/api/account/logout',
-        },
-        null,
-        issuer,
-      )
-      .pipe(
-        switchMap(() => {
-          this.oAuthService.logOut();
-          return this.store.dispatch(new GetAppConfiguration());
-        }),
-      );
+  logout(): Observable<any> {
+    return this.strategy.logout();
+  }
+
+  initLogin() {
+    this.strategy.login();
   }
 }

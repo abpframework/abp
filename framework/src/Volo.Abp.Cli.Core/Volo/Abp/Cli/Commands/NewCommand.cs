@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -61,6 +62,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Tiered: yes");
             }
 
+            var preview = commandLineArgs.Options.ContainsKey(Options.Preview.Long);
+            if (preview)
+            {
+                Logger.LogInformation("Preview: yes if any exist for next version.");
+            }
+
             var databaseProvider = GetDatabaseProvider(commandLineArgs);
             if (databaseProvider != DatabaseProvider.NotSpecified)
             {
@@ -85,10 +92,16 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Mobile App: " + mobileApp);
             }
 
-            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
-            if (gitHubLocalRepositoryPath != null)
+            var gitHubAbpLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubAbpLocalRepositoryPath.Long);
+            if (gitHubAbpLocalRepositoryPath != null)
             {
-                Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
+                Logger.LogInformation("GitHub Abp Local Repository Path: " + gitHubAbpLocalRepositoryPath);
+            }
+
+            var gitHubVoloLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubVoloLocalRepositoryPath.Long);
+            if (gitHubVoloLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Volo Local Repository Path: " + gitHubVoloLocalRepositoryPath);
             }
 
             var templateSource = commandLineArgs.Options.GetOrNull(Options.TemplateSource.Short, Options.TemplateSource.Long);
@@ -97,7 +110,7 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Template Source: " + templateSource);
             }
 
-            var createSolutionFolder = (commandLineArgs.Options.GetOrNull(Options.CreateSolutionFolder.Short, Options.CreateSolutionFolder.Long) ?? "true").ToLowerInvariant() != "false";
+            var createSolutionFolder = GetCreateSolutionFolderPreference(commandLineArgs);
             if (!createSolutionFolder)
             {
                 Logger.LogInformation("Create Solution Folder: no");
@@ -126,7 +139,8 @@ namespace Volo.Abp.Cli.Commands
                     databaseProvider,
                     uiFramework,
                     mobileApp,
-                    gitHubLocalRepositoryPath,
+                    gitHubAbpLocalRepositoryPath,
+                    gitHubVoloLocalRepositoryPath,
                     templateSource,
                     commandLineArgs.Options,
                     connectionString
@@ -175,6 +189,18 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
         }
 
+        private bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
+        {
+            var longKey = commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Long);
+
+            if (longKey == false)
+            {
+                return  commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Short);
+            }
+
+            return longKey;
+        }
+
         private static string GetConnectionString(CommandLineArgs commandLineArgs)
         {
             var connectionString = commandLineArgs.Options.GetOrNull(Options.ConnectionString.Short, Options.ConnectionString.Long);
@@ -198,6 +224,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
+            sb.AppendLine("--preview                                   (Use latest pre-release version if there is at least one pre-release after latest stable version)");
             sb.AppendLine("-ts|--template-source <template-source>     (your local or network abp template source)");
             sb.AppendLine("-csf|--create-solution-folder               (default: true)");
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
@@ -218,6 +245,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t module");
             sb.AppendLine("  abp new Acme.BookStore -t module --no-ui");
+            sb.AppendLine("  abp new Acme.BookStore -t console");
             sb.AppendLine("  abp new Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
             sb.AppendLine("  abp new Acme.BookStore -csf false");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
@@ -258,6 +286,8 @@ namespace Volo.Abp.Cli.Commands
                     return UiFramework.Mvc;
                 case "angular":
                     return UiFramework.Angular;
+                case "blazor":
+                    return UiFramework.Blazor;
                 default:
                     return UiFramework.NotSpecified;
             }
@@ -266,6 +296,7 @@ namespace Volo.Abp.Cli.Commands
         protected virtual MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.Mobile.Short, Options.Mobile.Long);
+
             switch (optionValue)
             {
                 case "none":
@@ -273,7 +304,7 @@ namespace Volo.Abp.Cli.Commands
                 case "react-native":
                     return MobileApp.ReactNative;
                 default:
-                    return MobileApp.ReactNative;
+                    return MobileApp.None;
             }
         }
 
@@ -297,9 +328,14 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "output-folder";
             }
 
-            public static class GitHubLocalRepositoryPath
+            public static class GitHubAbpLocalRepositoryPath
             {
                 public const string Long = "abp-path";
+            }
+
+            public static class GitHubVoloLocalRepositoryPath
+            {
+                public const string Long = "volo-path";
             }
 
             public static class Version
@@ -341,6 +377,11 @@ namespace Volo.Abp.Cli.Commands
             public static class Tiered
             {
                 public const string Long = "tiered";
+            }
+
+            public static class Preview
+            {
+                public const string Long = "preview";
             }
         }
     }

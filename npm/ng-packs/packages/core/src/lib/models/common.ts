@@ -1,18 +1,17 @@
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { eLayoutType } from '../enums/common';
 import { Config } from './config';
+import { NgxsStoragePluginOptions } from '@ngxs/storage-plugin';
 
 export namespace ABP {
   export interface Root {
     environment: Partial<Config.Environment>;
-    /**
-     *
-     * @deprecated To be deleted in v3.0
-     */
-    requirements?: Config.Requirements;
     skipGetAppConfiguration?: boolean;
+    sendNullsAsQueryParam?: boolean;
+    cultureNameLocaleFileMap?: Dictionary<string>;
+    ngxsStoragePluginOptions?: NgxsStoragePluginOptions & { key?: string[] };
   }
 
   export interface Test {
@@ -34,21 +33,27 @@ export namespace ABP {
     maxResultCount?: number;
   }
 
-  export interface Route {
-    children?: Route[];
-    invisible?: boolean;
-    layout?: eLayoutType;
+  export interface Lookup {
+    id: string;
+    displayName: string;
+  }
+
+  export interface Nav {
     name: string;
-    order?: number;
     parentName?: string;
-    path: string;
     requiredPolicy?: string;
+    order?: number;
+    invisible?: boolean;
+  }
+
+  export interface Route extends Nav {
+    path: string;
+    layout?: eLayoutType;
     iconClass?: string;
   }
 
-  export interface FullRoute extends Route {
-    url?: string;
-    wrapper?: boolean;
+  export interface Tab extends Nav {
+    component: Type<any>;
   }
 
   export interface BasicItem {

@@ -2,7 +2,7 @@
 
 This document begins by **introducing the default structure** provided by [the application startup template](Startup-Templates/Application.md) and **discusses various scenarios** you may want to implement for your own application.
 
-> This document is for who want to fully understand and customize the database structure comes with [the application startup template](Startup-Templates/Application.md). If you simply want to create entities and manage your code first migrations, just follow [the startup tutorials](Tutorials/Index.md).
+> This document is for who want to fully understand and customize the database structure comes with [the application startup template](Startup-Templates/Application.md). If you simply want to create entities and manage your code first migrations, just follow [the startup tutorials](Tutorials/Part-1.md).
 
 ### Source Code
 
@@ -398,7 +398,7 @@ builder.Entity<AppRole>(b =>
 
 You've configured the custom property for your `DbContext` that is used by your application on the runtime. We also need to configure the `MigrationsDbContext`.
 
-Instead of directly changing the `MigrationsDbContext`, we should use the entity extension system of the ABP Framework. Find the `YourProjectNameEntityExtensions` class in the `.EntityFrameworkCore` project of your solution (`BookStoreEntityExtensions` for this example) and change it as shown below:
+Instead of directly changing the `MigrationsDbContext`, we **should** use the entity extension system of the ABP Framework. Find the `YourProjectNameEfCoreEntityExtensionMappings` class in the `.EntityFrameworkCore` project of your solution (`BookStoreEfCoreEntityExtensionMappings` for this example) and change it as shown below:
 
 ````csharp
 public static class MyProjectNameEntityExtensions
@@ -412,7 +412,10 @@ public static class MyProjectNameEntityExtensions
             ObjectExtensionManager.Instance
                 .MapEfCoreProperty<IdentityRole, string>(
                     "Title",
-                    builder => { builder.HasMaxLength(64); }
+                    (entityBuilder, propertyBuilder) =>
+                    {
+                        propertyBuilder.HasMaxLength(128);
+                    }
                 );
         });
     }
@@ -545,6 +548,8 @@ In this way, you can easily attach any type of value to an entity of a depended 
 Entity extension system solves the main problem of the extra properties: It can store an extra property in a **standard table field** in the database.
 
 All you need to do is to use the `ObjectExtensionManager` to define the extra property as explained above, in the `AppRole` example. Then you can continue to use the same `GetProperty` and `SetProperty` methods  defined above to get/set the related property on the entity, but this time stored as a separate field in the database.
+
+See the [entity extension system](Customizing-Application-Modules-Extending-Entities.md) for details.
 
 ###### Creating a New Table
 

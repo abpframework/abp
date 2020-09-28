@@ -58,13 +58,17 @@ Now an empty ABP project has been created! You can now run your project and see 
 
 To login your website enter `admin` as the username and `1q2w3E*` as the password.
 
-### 2- Referencing Docs Module Packages
+### 3- Installation Module
 
 Docs module packages are hosted on NuGet. There are 4 packages that needs be to installed to your application. Each package has to be installed to the relevant project.  
+
+#### 3.1- Use ABP CLI
 
 It is recommended to use the ABP CLI to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
 
 `abp add-module Volo.Docs`
+
+#### 3.2- Manually install
 
 Or you can also manually install nuget package to each project:
 
@@ -84,7 +88,7 @@ Or you can also manually install nuget package to each project:
 
   `Install-Package Volo.Docs.Web`
 
-### 3- Adding Module Dependencies
+##### 3.2.1- Adding Module Dependencies
 
 An ABP module must declare `[DependsOn]` attribute if it has a dependency upon another module. Each module has to be added in`[DependsOn]` attribute to the relevant project.
 
@@ -164,6 +168,27 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
           //...
       }
   ```
+
+##### 3.2.2- Adding NPM Package
+
+Open `package.json` and add `@abp/docs": "^2.9.0` as shown below:
+
+  ```json
+    {
+        "version": "1.0.0",
+        "name": "my-app",
+        "private": true,
+        "dependencies": {
+            "@abp/aspnetcore.mvc.ui.theme.basic": "^2.9.0",
+            "@abp/docs": "^2.9.0"
+        }
+    }
+  ```
+
+  Then open the command line terminal in the `Acme.MyProject.Web` project folder and run the following command:
+
+  1. `yarn`
+  2. `gulp`
 
 ### 4- Database Integration
 
@@ -588,7 +613,7 @@ Configure<DocsElasticSearchOptions>(options =>
 The `Index` is automatically created after the application starts if the `Index` does not exist.
 
 `DefaultElasticClientProvider` is responsible for creating `IElasticClient`. By default, it reads Elastic Search's `Url` from `IConfiguration`.
-If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](Dependency-Injection.md) system.
+If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](../Dependency-Injection.md) system.
 
 ```
 {

@@ -9,6 +9,14 @@ namespace System.Collections.Generic
     /// </summary>
     public static class AbpListExtensions
     {
+        public static void InsertRange<T>(this IList<T> source, int index, IEnumerable<T> items)
+        {
+            foreach (var item in items)
+            {
+                source.Insert(index++, item);
+            }
+        }
+
         public static int FindIndex<T>(this IList<T> source, Predicate<T> selector)
         {
             for (var i = 0; i < source.Count; ++i)
@@ -180,15 +188,22 @@ namespace System.Collections.Generic
         /// <typeparam name="T">The type of the members of values.</typeparam>
         /// <param name="source">A list of objects to sort</param>
         /// <param name="getDependencies">Function to resolve the dependencies</param>
-        /// <returns></returns>
-        public static List<T> SortByDependencies<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> getDependencies)
+        /// <param name="comparer">Equality comparer for dependencies </param>
+        /// <returns>
+        /// Returns a new list ordered by dependencies.
+        /// If A depends on B, then B will come before than A in the resulting list.
+        /// </returns>
+        public static List<T> SortByDependencies<T>(
+            this IEnumerable<T> source, 
+            Func<T, IEnumerable<T>> getDependencies,
+            IEqualityComparer<T> comparer = null)
         {
             /* See: http://www.codeproject.com/Articles/869059/Topological-sorting-in-Csharp
              *      http://en.wikipedia.org/wiki/Topological_sorting
              */
 
             var sorted = new List<T>();
-            var visited = new Dictionary<T, bool>();
+            var visited = new Dictionary<T, bool>(comparer);
 
             foreach (var item in source)
             {
@@ -199,14 +214,15 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T">The type of the members of values.</typeparam>
         /// <param name="item">Item to resolve</param>
         /// <param name="getDependencies">Function to resolve the dependencies</param>
         /// <param name="sorted">List with the sortet items</param>
         /// <param name="visited">Dictionary with the visited items</param>
-        private static void SortByDependenciesVisit<T>(T item, Func<T, IEnumerable<T>> getDependencies, List<T> sorted, Dictionary<T, bool> visited)
+        private static void SortByDependenciesVisit<T>(T item, Func<T, IEnumerable<T>> getDependencies, List<T> sorted,
+            Dictionary<T, bool> visited)
         {
             bool inProcess;
             var alreadyVisited = visited.TryGetValue(item, out inProcess);

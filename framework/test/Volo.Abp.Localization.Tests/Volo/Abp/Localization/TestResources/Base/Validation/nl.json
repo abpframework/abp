@@ -1,0 +1,7 @@
+{
+  "culture": "nl",
+  "texts": {
+    "ThisFieldIsRequired": "Dit veld is verplicht",
+    "MaxLenghtErrorMessage": "Dit veld mag maximaal '{0}' tekens bevatten"
+  }
+}

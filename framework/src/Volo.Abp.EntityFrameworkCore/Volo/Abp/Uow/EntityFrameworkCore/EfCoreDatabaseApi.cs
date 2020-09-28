@@ -18,10 +18,5 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         {
             return DbContext.SaveChangesAsync(cancellationToken);
         }
-
-        public void SaveChanges()
-        {
-            DbContext.SaveChanges();
-        }
     }
 }

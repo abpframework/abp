@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Validation;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
+using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
@@ -40,6 +42,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
             if (!await _authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
             {
                 return Redirect("/");
+            }
+            if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
+            {
+                return NotFound();
             }
 
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
@@ -74,7 +80,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             public Guid BlogId { get; set; }
 
             [Required]
-            [StringLength(PostConsts.MaxTitleLength)]
+            [DynamicStringLength(typeof(PostConsts), nameof(PostConsts.MaxTitleLength))]
             public string Title { get; set; }
 
             [Required]
@@ -82,16 +88,16 @@ namespace Volo.Blogging.Pages.Blog.Posts
             public string CoverImage { get; set; }
 
             [Required]
-            [StringLength(PostConsts.MaxUrlLength)]
+            [DynamicStringLength(typeof(PostConsts), nameof(PostConsts.MaxUrlLength))]
             public string Url { get; set; }
 
             [HiddenInput]
-            [StringLength(PostConsts.MaxContentLength)]
+            [DynamicStringLength(typeof(PostConsts), nameof(PostConsts.MaxContentLength))]
             public string Content { get; set; }
 
             public string Tags { get; set; }
 
-            [StringLength(PostConsts.MaxDescriptionLength)]
+            [DynamicStringLength(typeof(PostConsts), nameof(PostConsts.MaxDescriptionLength))]
             public string Description { get; set; }
 
         }

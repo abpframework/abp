@@ -12,8 +12,8 @@ describe('LocalizationPipe', () => {
 
   beforeEach(() => {
     spectator = createService();
-    pipe = spectator.get(LocalizationPipe);
-    store = spectator.get(Store);
+    pipe = spectator.inject(LocalizationPipe);
+    store = spectator.inject(Store);
   });
 
   it('should call getLocalization selector', () => {

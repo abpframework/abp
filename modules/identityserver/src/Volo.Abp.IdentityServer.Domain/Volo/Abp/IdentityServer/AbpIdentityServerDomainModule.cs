@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
@@ -41,7 +41,7 @@ namespace Volo.Abp.IdentityServer
                 options.AddProfile<IdentityServerAutoMapperProfile>(validate: true);
             });
 
-            Configure<AbpDistributedEventBusOptions>(options =>
+            Configure<AbpDistributedEntityEventOptions>(options =>
             {
                 options.EtoMappings.Add<ApiResource, ApiResourceEto>(typeof(AbpIdentityServerDomainModule));
                 options.EtoMappings.Add<Client, ClientEto>(typeof(AbpIdentityServerDomainModule));
@@ -67,7 +67,7 @@ namespace Volo.Abp.IdentityServer
 
             if (builderOptions.AddDeveloperSigningCredential)
             {
-                identityServerBuilder = identityServerBuilder.AddDeveloperSigningCredential();
+                identityServerBuilder = identityServerBuilder.AddAbpDeveloperSigningCredential();
             }
 
             identityServerBuilder.AddAbpIdentityServer(builderOptions);

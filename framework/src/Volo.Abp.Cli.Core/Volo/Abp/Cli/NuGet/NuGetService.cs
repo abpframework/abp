@@ -39,7 +39,7 @@ namespace Volo.Abp.Cli.NuGet
             Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
         }
 
-        public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includePreviews = false, bool includeNightly = false)
+        public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
         {
             if (AuthService.IsLoggedIn())
             {
@@ -75,18 +75,37 @@ namespace Volo.Abp.Cli.NuGet
 
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-                var versions = JsonSerializer
+                List<SemanticVersion> versions;
+
+                if (!includeNightly && !includeReleaseCandidates)
+                {
+                    versions = JsonSerializer
                     .Deserialize<NuGetVersionResultDto>(responseContent)
                     .Versions
-                    .Select(SemanticVersion.Parse);
+                    .Select(SemanticVersion.Parse)
+                    .OrderByDescending(v=> v, new VersionComparer()).ToList();
 
-                if (!includePreviews && !includeNightly)
+                    versions = versions.Where(x => !x.IsPrerelease).ToList();
+                }
+                else if (!includeNightly && includeReleaseCandidates)
                 {
-                    versions = versions.Where(x => !x.IsPrerelease);
+                    versions = JsonSerializer
+                        .Deserialize<NuGetVersionResultDto>(responseContent)
+                        .Versions
+                        .Where(v=> !v.Contains("-preview"))
+                        .Select(SemanticVersion.Parse)
+                        .OrderByDescending(v=> v, new VersionComparer()).ToList();
+                }
+                else
+                {
+                    versions = JsonSerializer
+                        .Deserialize<NuGetVersionResultDto>(responseContent)
+                        .Versions
+                        .Select(SemanticVersion.Parse)
+                        .OrderByDescending(v=> v, new VersionComparer()).ToList();
                 }
 
-                var semanticVersions = versions.ToList();
-                return semanticVersions.Any() ? semanticVersions.Max() : null;
+                return versions.Any() ? versions.Max() : null;
             }
         }
 

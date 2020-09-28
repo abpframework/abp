@@ -4,21 +4,16 @@
       "text": "Getting Started",
       "items": [
         {
-          "text": "From Startup Templates",
+          "text": "Web Application",
           "path": "Getting-Started.md"
         },
         {
-          "text": "From Empty Projects",
-          "items": [
-            {
-              "text": "With ASP.NET Core Web Application",
-              "path": "Getting-Started-AspNetCore-Application.md"
-            },
-            {
-              "text": "With Console Application",
-              "path": "Getting-Started-Console-Application.md"
-            }
-          ]
+          "text": "Console Application",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "Empty Web Project",
+          "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
     },
@@ -26,19 +21,47 @@
       "text": "Tutorials",
       "items": [
         {
-          "text": "Application Development",
+          "text": "Web Application Development",
           "items": [
             {
-              "text": "Part-1: Creating a new solution and listing items",
+              "text": "1: Creating the Server Side",
               "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "Part-2: CRUD operations",
+              "text": "2: The Book List Page",
               "path": "Tutorials/Part-2.md"
             },
             {
-              "text": "Part-3: Integration tests",
+              "text": "3: Creating, Updating and Deleting Books",
               "path": "Tutorials/Part-3.md"
+            },
+            {
+              "text": "4: Integration Tests",
+              "path": "Tutorials/Part-4.md"
+            },
+            {
+              "text": "5: Authorization",
+              "path": "Tutorials/Part-5.md"
+            },
+            {
+              "text": "6: Authors: Domain layer",
+              "path": "Tutorials/Part-6.md"
+            },
+            {
+              "text": "7: Authors: Database Integration",
+              "path": "Tutorials/Part-7.md"
+            },
+            {
+              "text": "8: Authors: Application Layer",
+              "path": "Tutorials/Part-8.md"
+            },
+            {
+              "text": "9: Authors: User Interface",
+              "path": "Tutorials/Part-9.md"
+            },
+            {
+              "text": "10: Book to Author Relation",
+              "path": "Tutorials/Part-10.md"
             }
           ]
         }
@@ -66,10 +89,6 @@
           ]
         },
         {
-          "text": "\"How to\" Guides",
-          "path": "How-To/Index.md"
-        },
-        {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
         }
@@ -78,6 +97,15 @@
     {
       "text": "CLI",
       "path": "CLI.md"
+    },
+    {
+      "text": "Authentication",
+      "items": [
+        {
+          "text": "Social/External Logins",
+          "path": "Authentication/Social-External-Logins.md"
+        }
+      ]
     },
     {
       "text": "Fundamentals",
@@ -143,6 +171,10 @@
           "path": "Settings.md"
         },
         {
+          "text": "Features",
+          "path": "Features.md"
+        },
+        {
           "text": "Data Filtering",
           "path": "Data-Filtering.md"
         },
@@ -153,16 +185,27 @@
       ]
     },
     {
-      "text": "Events",
+      "text": "Event Bus",
       "items": [
         {
-          "text": "Event Bus (local)"
+          "text": "Overall",
+          "path": "Event-Bus.md"
+        },
+        {
+          "text": "Local Event Bus",
+          "path": "Local-Event-Bus.md"
         },
         {
           "text": "Distributed Event Bus",
+          "path": "Distributed-Event-Bus.md",
           "items": [
             {
-              "text": "RabbitMQ Integration"
+              "text": "RabbitMQ Integration",
+              "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+            },
+            {
+              "text": "Kafka Integration",
+              "path": "Distributed-Event-Bus-Kafka-Integration.md"
             }
           ]
         }
@@ -180,22 +223,71 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
-          "text": "Object Serialization"
+          "text": "Email Sending",
+          "items": [
+            {
+              "text": "Email Sending System",
+              "path": "Emailing.md"
+            },
+            {
+              "text": "MailKit Integration",
+              "path": "MailKit.md"
+            }
+          ]
         },
         {
-          "text": "JSON Serialization"
+          "text": "BLOB Storing",
+          "items": [
+            {
+              "text": "BLOB Storing System",
+              "path": "Blob-Storing.md"
+            },
+            {
+              "text": "Storage Providers",
+              "items": [
+                {
+                  "text": "File System Provider",
+                  "path": "Blob-Storing-File-System.md"
+                },
+                {
+                  "text": "Database Provider",
+                  "path": "Blob-Storing-Database.md"
+                },
+                {
+                  "text": "Azure Provider",
+                  "path": "Blob-Storing-Azure.md"
+                },
+                {
+                  "text": "Aliyun Provider",
+                  "path": "Blob-Storing-Aliyun.md"
+                },
+                {
+                  "text": "Minio Provider",
+                  "path": "Blob-Storing-Minio.md"
+                },
+                {
+                  "text": "AWS Provider",
+                  "path": "Blob-Storing-Aws.md"
+                },
+                {
+                  "text": "Create a Custom Provider",
+                  "path": "Blob-Storing-Custom-Provider.md"
+                }
+              ]
+            }
+          ]
         },
         {
-          "text": "Emailing"
+          "text": "Text Templating",
+          "path": "Text-Templating.md"
         },
         {
-          "text": "GUIDs"
+          "text": "GUID Generation",
+          "path": "Guid-Generation.md"
         },
         {
-          "text": "Threading"
-        },
-        {
-          "text": "Timing"
+          "text": "Timing",
+          "path": "Timing.md"
         }
       ]
     },
@@ -257,10 +349,12 @@
               "path": "Application-Services.md"
             },
             {
-              "text": "Data Transfer Objects"
+              "text": "Data Transfer Objects",
+              "path": "Data-Transfer-Objects.md"
             },
             {
-              "text": "Unit Of Work"
+              "text": "Unit Of Work",
+              "path": "Unit-Of-Work.md"
             }
           ]
         }
@@ -276,6 +370,15 @@
         {
           "text": "Dynamic C# API Clients",
           "path": "API/Dynamic-CSharp-API-Clients.md"
+        },
+        {
+          "text": "ABP Endpoints",
+          "items": [
+            {
+              "text": "Application Configuration",
+              "path": "API/Application-Configuration.md"
+            }
+          ]
         }
       ]
     },
@@ -325,60 +428,117 @@
           "text": "Angular",
           "items": [
             {
-              "text": "Service Proxies",
-              "path": "UI/Angular/Service-Proxies.md"
+              "text": "Migration Guide v2.x to v3",
+              "path": "UI/Angular/Migration-Guide-v3.md"
             },
             {
-              "text": "HTTP Requests",
-              "path": "UI/Angular/HTTP-Requests.md"
+              "text": "Quick Start",
+              "path": "UI/Angular/Quick-Start.md"
             },
             {
-              "text": "Localization",
-              "path": "UI/Angular/Localization.md"
+              "text": "Development",
+              "items": [
+                {
+                  "text": "Environment Variables",
+                  "path": "UI/Angular/Environment.md"
+                },
+                {
+                  "text": "About Feature Libraries",
+                  "path": "UI/Angular/Feature-Libraries.md"
+                },
+                {
+                  "text": "Service Proxies",
+                  "path": "UI/Angular/Service-Proxies.md"
+                }
+              ]
             },
             {
-              "text": "Permission Management",
-              "path": "UI/Angular/Permission-Management.md"
+              "text": "Core Functionality",
+              "items": [
+                {
+                  "text": "Config State",
+                  "path": "UI/Angular/Config-State.md"
+                },
+                {
+                  "text": "HTTP Requests",
+                  "path": "UI/Angular/HTTP-Requests.md"
+                },
+                {
+                  "text": "Localization",
+                  "path": "UI/Angular/Localization.md"
+                },
+                {
+                  "text": "Permission Management",
+                  "path": "UI/Angular/Permission-Management.md"
+                },
+                {
+                  "text": "Multi Tenancy",
+                  "path": "UI/Angular/Multi-Tenancy.md"
+                }
+              ]
             },
             {
-              "text": "Confirmation Popup",
-              "path": "UI/Angular/Confirmation-Service.md"
+              "text": "Utilities",
+              "items": [
+                {
+                  "text": "Managing RxJS Subscriptions",
+                  "path": "UI/Angular/Subscription-Service.md"
+                },
+                {
+                  "text": "Working with Lists",
+                  "path": "UI/Angular/List-Service.md"
+                },
+                {
+                  "text": "Easy *ngFor trackBy",
+                  "path": "UI/Angular/Track-By-Service.md"
+                },
+                {
+                  "text": "Inserting Scripts & Styles to DOM",
+                  "path": "UI/Angular/Dom-Insertion-Service.md"
+                },
+                {
+                  "text": "Lazy Loading Scripts & Styles",
+                  "path": "UI/Angular/Lazy-Load-Service.md"
+                },
+                {
+                  "text": "Projecting Angular Content",
+                  "path": "UI/Angular/Content-Projection-Service.md"
+                },
+                {
+                  "text": "Confirmation Popup",
+                  "path": "UI/Angular/Confirmation-Service.md"
+                },
+                {
+                  "text": "Toast Overlay",
+                  "path": "UI/Angular/Toaster-Service.md"
+                }
+              ]
             },
             {
-              "text": "Toast Overlay",
-              "path": "UI/Angular/Toaster-Service.md"
-            },
+              "text": "Customization",
+              "items": [
+                {
+                  "text": "Modifying the Menu",
+                  "path": "UI/Angular/Modifying-the-Menu.md"
+                },
+                {
+                  "text": "Component Replacement",
+                  "path": "UI/Angular/Component-Replacement.md"
+                },
+                {
+                  "text": "Custom Setting Page",
+                  "path": "UI/Angular/Custom-Setting-Page.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "React Native",
+          "items": [
             {
-              "text": "Config State",
-              "path": "UI/Angular/Config-State.md"
-            },
-            {
-              "text": "Modifying the Menu",
-              "path": "UI/Angular/Modifying-the-Menu.md"
-            },
-            {
-              "text": "Component Replacement",
-              "path": "UI/Angular/Component-Replacement.md"
-            },
-            {
-              "text": "Custom Setting Page",
-              "path": "UI/Angular/Custom-Setting-Page.md"
-            },
-            {
-              "text": "Lazy Loading Scripts & Styles",
-              "path": "UI/Angular/Lazy-Load-Service.md"
-            },
-            {
-              "text": "DomInsertionService",
-              "path": "UI/Angular/Dom-Insertion-Service.md"
-            },
-            {
-              "text": "ContentProjectionService",
-              "path": "UI/Angular/Content-Projection-Service.md"
-            },
-            {
-              "text": "TrackByService",
-              "path": "UI/Angular/Track-By-Service.md"
+              "text": "Getting Started",
+              "path": "Getting-Started-React-Native.md"
             }
           ]
         },
@@ -433,6 +593,10 @@
                       "path": "Entity-Framework-Core-PostgreSQL.md"
                     },
                     {
+                      "text": "To Oracle",
+                      "path": "Entity-Framework-Core-Oracle.md"
+                    },
+                    {
                       "text": "To SQLite",
                       "path": "Entity-Framework-Core-SQLite.md"
                     }
@@ -449,6 +613,19 @@
               "path": "Dapper.md"
             }
           ]
+        },
+        {
+          "text": "Data Seeding",
+          "path": "Data-Seeding.md"
+        }
+      ]
+    },
+    {
+      "text": "Real Time",
+      "items": [
+        {
+          "text": "SignalR Integration",
+          "path": "SignalR-Integration.md"
         }
       ]
     },
@@ -499,12 +676,20 @@
         {
           "text": "Module",
           "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "Console",
+          "path": "Startup-Templates/Console.md"
         }
       ]
     },
     {
       "text": "Samples",
       "items": [
+        {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
         {
           "text": "Microservice Demo",
           "path": "Samples/Microservice-Demo.md"
@@ -520,15 +705,32 @@
       "path": "Microservice-Architecture.md"
     },
     {
-      "text": "Testing"
+      "text": "Preview Releases",
+      "path": "Previews.md"
     },
     {
       "text": "Nightly Builds",
       "path": "Nightly-Builds.md"
     },
     {
+      "text": "Road Map",
+      "path": "Road-Map.md"
+    },
+    {
+      "text": "Upgrading",
+      "path": "Upgrading.md"
+    },
+    {
       "text": "Contribution Guide",
       "path": "Contribution/Index.md"
+    },
+    {
+      "text": "API Documentation",
+      "path": "{ApiDocumentationUrl}"
+    },
+    {
+      "text": "Official Packages",
+      "path": "https://abp.io/packages"
     }
   ]
 }

@@ -1,5 +1,6 @@
-import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import { ListService, PagedAndSortedResultRequestDto } from '@abp/ng.core';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
+import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -12,24 +13,24 @@ import {
   GetRoles,
   UpdateRole,
 } from '../../actions/identity.actions';
-import { Identity } from '../../models/identity';
+import { IdentityRoleDto } from '../../proxy/identity/models';
 import { IdentityState } from '../../states/identity.state';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 
 @Component({
   selector: 'abp-roles',
   templateUrl: './roles.component.html',
+  providers: [ListService],
 })
 export class RolesComponent implements OnInit {
   @Select(IdentityState.getRoles)
-  data$: Observable<Identity.RoleItem[]>;
+  data$: Observable<IdentityRoleDto[]>;
 
   @Select(IdentityState.getRolesTotalCount)
   totalCount$: Observable<number>;
 
   form: FormGroup;
 
-  selected: Identity.RoleItem;
+  selected: IdentityRoleDto;
 
   isModalVisible: boolean;
 
@@ -37,15 +38,7 @@ export class RolesComponent implements OnInit {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
-
-  loading = false;
-
   modalBusy = false;
-
-  sortOrder = '';
-
-  sortKey = '';
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
@@ -57,13 +50,14 @@ export class RolesComponent implements OnInit {
   };
 
   constructor(
+    public readonly list: ListService<PagedAndSortedResultRequestDto>,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
   ) {}
 
   ngOnInit() {
-    this.get();
+    this.hookToQuery();
   }
 
   buildForm() {
@@ -83,7 +77,7 @@ export class RolesComponent implements OnInit {
   }
 
   add() {
-    this.selected = {} as Identity.RoleItem;
+    this.selected = {} as IdentityRoleDto;
     this.openModal();
   }
 
@@ -110,7 +104,7 @@ export class RolesComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
-        this.get();
+        this.list.get();
       });
   }
 
@@ -121,23 +115,13 @@ export class RolesComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteRole(id)).subscribe(() => this.get());
+          this.store.dispatch(new DeleteRole(id)).subscribe(() => this.list.get());
         }
       });
   }
 
-  onPageChange(page: number) {
-    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
-
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetRoles(this.pageQuery))
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe();
+  private hookToQuery() {
+    this.list.hookToQuery(query => this.store.dispatch(new GetRoles(query))).subscribe();
   }
 
   onClickSaveButton() {
@@ -151,5 +135,11 @@ export class RolesComponent implements OnInit {
     setTimeout(() => {
       this.visiblePermissions = true;
     }, 0);
+  }
+
+  sort(data) {
+    const { prop, dir } = data.sorts[0];
+    this.list.sortKey = prop;
+    this.list.sortOrder = dir;
   }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -241,6 +242,11 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                 }
             }
 
+            if (propertyInfo != null && IsBaseAuditProperty(propertyInfo, entityType))
+            {
+                return false;
+            }
+
             var isModified = !(propertyEntry.OriginalValue?.Equals(propertyEntry.CurrentValue) ?? propertyEntry.CurrentValue == null);
             if (isModified)
             {
@@ -250,6 +256,59 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             return defaultValue;
         }
 
+        private bool IsBaseAuditProperty(PropertyInfo propertyInfo, Type entityType)
+        {
+            if (entityType.IsAssignableTo<IHasCreationTime>()
+                && propertyInfo.Name == nameof(IHasCreationTime.CreationTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IMayHaveCreator>()
+                && propertyInfo.Name == nameof(IMayHaveCreator.CreatorId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IMustHaveCreator>()
+                && propertyInfo.Name == nameof(IMustHaveCreator.CreatorId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IHasModificationTime>()
+                && propertyInfo.Name == nameof(IHasModificationTime.LastModificationTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IModificationAuditedObject>()
+                && propertyInfo.Name == nameof(IModificationAuditedObject.LastModifierId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<ISoftDelete>()
+                && propertyInfo.Name == nameof(ISoftDelete.IsDeleted))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IHasDeletionTime>()
+                && propertyInfo.Name == nameof(IHasDeletionTime.DeletionTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IDeletionAuditedObject>()
+                && propertyInfo.Name == nameof(IDeletionAuditedObject.DeleterId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
         /// <summary>
         /// Updates change time, entity id and foreign keys after SaveChanges is called.
         /// </summary>

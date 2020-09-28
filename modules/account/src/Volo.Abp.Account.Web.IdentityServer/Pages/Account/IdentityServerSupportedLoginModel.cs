@@ -14,9 +14,10 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -50,6 +51,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (context != null)
             {
+                ShowCancelButton = true;
+
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
@@ -127,14 +130,16 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 true
             );
 
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = LoginInput.UserNameOrEmailAddress
+            });
+
             if (result.RequiresTwoFactor)
             {
-                return RedirectToPage("./SendSecurityCode", new
-                {
-                    returnUrl = ReturnUrl,
-                    returnUrlHash = ReturnUrlHash,
-                    rememberMe = LoginInput.RememberMe
-                });
+                return await TwoFactorLoginResultAsync();
             }
 
             if (result.IsLockedOut)

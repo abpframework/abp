@@ -1,19 +1,30 @@
+import { ApplicationConfiguration, ConfigState, GetAppConfiguration } from '@abp/ng.core';
+import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output, Renderer2, TrackByFunction } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize, map, pluck, take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
+import { UpdatePermissionDto } from '../proxy/models';
 import { PermissionManagementState } from '../states/permission-management.state';
 
-type PermissionWithMargin = PermissionManagement.Permission & {
-  margin: number;
+type PermissionWithStyle = PermissionManagement.Permission & {
+  style: string;
 };
 
 @Component({
   selector: 'abp-permission-management',
   templateUrl: './permission-management.component.html',
   exportAs: 'abpPermissionManagement',
+  styles: [
+    `
+      .overflow-scroll {
+        max-height: 70vh;
+        overflow-y: scroll;
+      }
+    `,
+  ],
 })
 export class PermissionManagementComponent
   implements
@@ -70,21 +81,25 @@ export class PermissionManagementComponent
 
   trackByFn: TrackByFunction<PermissionManagement.Group> = (_, item) => item.name;
 
-  get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
+  get selectedGroupPermissions$(): Observable<PermissionWithStyle[]> {
+    const margin = `margin-${
+      (document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
+    }.px`;
+
     return this.groups$.pipe(
       map(groups =>
         this.selectedGroup
           ? groups.find(group => group.name === this.selectedGroup.name).permissions
           : [],
       ),
-      map<PermissionManagement.Permission[], PermissionWithMargin[]>(permissions =>
+      map<PermissionManagement.Permission[], PermissionWithStyle[]>(permissions =>
         permissions.map(
           permission =>
             (({
               ...permission,
-              margin: findMargin(permissions, permission),
+              style: { [margin]: findMargin(permissions, permission) },
               isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
-            } as any) as PermissionWithMargin),
+            } as any) as PermissionWithStyle),
         ),
       ),
     );
@@ -195,12 +210,11 @@ export class PermissionManagementComponent
   }
 
   submit() {
-    this.modalBusy = true;
     const unchangedPermissions = getPermissions(
       this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
     );
 
-    const changedPermissions: PermissionManagement.MinimumPermission[] = this.permissions
+    const changedPermissions: UpdatePermissionDto[] = this.permissions
       .filter(per =>
         unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted ===
         per.isGranted
@@ -209,23 +223,29 @@ export class PermissionManagementComponent
       )
       .map(({ name, isGranted }) => ({ name, isGranted }));
 
-    if (changedPermissions.length) {
-      this.store
-        .dispatch(
-          new UpdatePermissions({
-            providerKey: this.providerKey,
-            providerName: this.providerName,
-            permissions: changedPermissions,
-          }),
-        )
-        .pipe(finalize(() => (this.modalBusy = false)))
-        .subscribe(() => {
-          this.visible = false;
-        });
-    } else {
-      this.modalBusy = false;
+    if (!changedPermissions.length) {
       this.visible = false;
+      return;
     }
+
+    this.modalBusy = true;
+    this.store
+      .dispatch(
+        new UpdatePermissions({
+          providerKey: this.providerKey,
+          providerName: this.providerName,
+          permissions: changedPermissions,
+        }),
+      )
+      .pipe(
+        switchMap(() =>
+          this.shouldFetchAppConfig() ? this.store.dispatch(GetAppConfiguration) : of(null),
+        ),
+        finalize(() => (this.modalBusy = false)),
+      )
+      .subscribe(() => {
+        this.visible = false;
+      });
   }
 
   openModal() {
@@ -252,6 +272,25 @@ export class PermissionManagementComponent
   initModal() {
     this.setTabCheckboxState();
     this.setGrantCheckboxState();
+  }
+
+  getAssignedCount(groupName: string) {
+    return this.permissions.reduce(
+      (acc, val) => (val.name.split('.')[0] === groupName && val.isGranted ? acc + 1 : acc),
+      0,
+    );
+  }
+
+  shouldFetchAppConfig() {
+    const currentUser = this.store.selectSnapshot(
+      ConfigState.getOne('currentUser'),
+    ) as ApplicationConfiguration.CurrentUser;
+
+    if (this.providerName === 'R') return currentUser.roles.some(role => role === this.providerKey);
+
+    if (this.providerName === 'U') return currentUser.id === this.providerKey;
+
+    return false;
   }
 }
 

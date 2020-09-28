@@ -4,8 +4,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Security.Claims
 {
-    public class ThreadCurrentPrincipalAccessor : ICurrentPrincipalAccessor, ISingletonDependency
+    public class ThreadCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ISingletonDependency
     {
-        public virtual ClaimsPrincipal Principal => Thread.CurrentPrincipal as ClaimsPrincipal;
+        protected override ClaimsPrincipal GetClaimsPrincipal()
+        {
+            return Thread.CurrentPrincipal as ClaimsPrincipal;
+        }
     }
 }

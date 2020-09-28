@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -9,6 +10,8 @@ namespace Volo.Abp.TestApp.Application
     public interface IPeopleAppService : ICrudAppService<PersonDto, Guid>
     {
         Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter);
+
+        Task<List<string>> GetParams(IEnumerable<Guid> ids, string[] names);
 
         Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto);
 

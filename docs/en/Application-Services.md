@@ -2,7 +2,7 @@
 
 Application services are used to implement the **use cases** of an application. They are used to **expose domain logic to the presentation layer**.
 
-An Application Service is called from the presentation layer (optionally) with a **DTO (Data Transfer Object)** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
+An Application Service is called from the presentation layer (optionally) with a **DTO ([Data Transfer Object](Data-Transfer-Objects.md))** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
 
 ## Example
 
@@ -205,7 +205,7 @@ See the [object to object mapping document](Object-To-Object-Mapping.md) for mor
 
 ## Validation
 
-Inputs of application service methods are automatically validated (like ASP.NET Core controller actions). You can use the standard data annotation attributes or custom validation method to perform the validation. ABP also ensures that the input is not null.
+Inputs of application service methods are automatically validated (like ASP.NET Core controller actions). You can use the standard data annotation attributes or a custom validation method to perform the validation. ABP also ensures that the input is not null.
 
 See the [validation document](Validation.md) for more.
 
@@ -366,6 +366,84 @@ public class DistrictKey
     public string Name { get; set; }
 }
 ````
+
+### Authorization (for CRUD App Services)
+
+There are two ways of authorizing the base application service methods;
+
+1. You can set the policy properties (xxxPolicyName) in the constructor of your service. Example:
+
+```csharp
+public class MyPeopleAppService : CrudAppService<Person, PersonDto, Guid>
+{
+    public MyPeopleAppService(IRepository<Person, Guid> repository) 
+        : base(repository)
+    {
+        GetPolicyName = "...";
+        GetListPolicyName = "...";
+        CreatePolicyName = "...";
+        UpdatePolicyName = "...";
+        DeletePolicyName = "...";
+    }
+}
+```
+
+`CreatePolicyName` is checked by the `CreateAsync` method and so on... You should specify a policy (permission) name defined in your application.
+
+2. You can override the check methods (CheckXxxPolicyAsync) in your service. Example:
+
+```csharp
+public class MyPeopleAppService : CrudAppService<Person, PersonDto, Guid>
+{
+    public MyPeopleAppService(IRepository<Person, Guid> repository) 
+        : base(repository)
+    {
+    }
+
+    protected override async Task CheckDeletePolicyAsync()
+    {
+        await AuthorizationService.CheckAsync("...");
+    }
+}
+```
+
+You can perform any logic in the `CheckDeletePolicyAsync` method. It is expected to throw an `AbpAuthorizationException` in any unauthorized case, like `AuthorizationService.CheckAsync` already does.
+
+### Base Properties & Methods
+
+CRUD application service base class provides many useful base methods that **you can override** to customize it based on your requirements.
+
+#### CRUD Methods
+
+These are the essential CRUD methods. You can override any of them to completely customize the operation. Here, the definitions of the methods:
+
+````csharp
+Task<TGetOutputDto> GetAsync(TKey id);
+Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input);
+Task<TGetOutputDto> CreateAsync(TCreateInput input);
+Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input);
+Task DeleteAsync(TKey id);
+````
+
+#### Querying
+
+These methods are low level methods those can be control how to query entities from the database.
+
+* `CreateFilteredQuery` can be overridden to create an `IQueryable<TEntity>` that is filtered by the given input. If your `TGetListInput` class contains any filter, it is proper to override this method and filter the query. It returns the (unfiltered) repository (which is already `IQueryable<TEntity>`) by default.
+* `ApplyPaging` is used to make paging on the query. If your `TGetListInput` already implements `IPagedResultRequest`, you don't need to override this since the ABP Framework automatically understands it and performs the paging.
+* `ApplySorting` is used to sort (order by...) the query. If your `TGetListInput` already implements the `ISortedResultRequest`, ABP Framework automatically sorts the query. If not, it fallbacks to the `ApplyDefaultSorting` which tries to sort by creating time, if your entity implements the standard `IHasCreationTime` interface.
+* `GetEntityByIdAsync` is used to get an entity by id, which calls `Repository.GetAsync(id)` by default.
+* `DeleteByIdAsync` is used to delete an entity by id, which calls `Repository.DeleteAsync(id)` by default.
+
+#### Object to Object Mapping
+
+These methods are used to convert Entities to DTOs and vice verse. They uses the [IObjectMapper](Object-To-Object-Mapping.md) by default.
+
+* `MapToGetOutputDtoAsync` is used to map the entity to the DTO returned from the `GetAsync`, `CreateAsync` and `UpdateAsync` methods. Alternatively, you can override the `MapToGetOutputDto` if you don't need to perform any async operation.
+* `MapToGetListOutputDtosAsync` is used to map a list of entities to a list of DTOs returned from the `GetListAsync` method. It uses the `MapToGetListOutputDtoAsync` to map each entity in the list. You can override one of them based on your case. Alternatively, you can override the `MapToGetListOutputDto` if you don't need to perform any async operation.
+* `MapToEntityAsync` method has two overloads;
+  * `MapToEntityAsync(TCreateInput)` is used to create an entity from `TCreateInput`.
+  * `MapToEntityAsync(TUpdateInput, TEntity)` is used to update an existing entity from `TUpdateInput`.
 
 ## Lifetime
 

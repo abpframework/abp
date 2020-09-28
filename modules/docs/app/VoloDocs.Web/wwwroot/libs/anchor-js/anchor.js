@@ -1,4 +1,5 @@
-/* eslint-env amd, node */
+/* eslint-env amd */
+/* globals module:false */
 
 // https://github.com/umdjs/umd/blob/master/templates/returnExports.js
 (function (root, factory) {
@@ -34,8 +35,10 @@
       opts.placement = opts.hasOwnProperty('placement') ? opts.placement : 'right'; // Also accepts 'left'
       opts.ariaLabel = opts.hasOwnProperty('ariaLabel') ? opts.ariaLabel : 'Anchor'; // Accepts any text.
       opts.class = opts.hasOwnProperty('class') ? opts.class : ''; // Accepts any class name.
+      opts.base = opts.hasOwnProperty('base') ? opts.base : ''; // Accepts any base URI.
       // Using Math.floor here will ensure the value is Number-cast and an integer.
       opts.truncate = opts.hasOwnProperty('truncate') ? Math.floor(opts.truncate) : 64; // Accepts any value that can be typecast to a number.
+      opts.titleText = opts.hasOwnProperty('titleText') ? opts.titleText : ''; // Accepts any text.
     }
 
     _applyRemainingDefaultOptions(this.options);
@@ -65,9 +68,9 @@
           count,
           tidyText,
           newTidyText,
-          readableID,
           anchor,
           visibleOptionToUse,
+          hrefBase,
           indexesToDrop = [];
 
       // We reapply options here because somebody may have overwritten the default options object when setting options.
@@ -132,15 +135,24 @@
           elementID = newTidyText;
         }
 
-        readableID = elementID.replace(/-/g, ' ');
-
-        // The following code builds the following DOM structure in a more effiecient (albeit opaque) way.
-        // '<a class="anchorjs-link ' + this.options.class + '" href="#' + elementID + '" aria-label="Anchor" data-anchorjs-icon="' + this.options.icon + '"></a>';
+        // The following code efficiently builds this DOM structure:
+        // `<a class="anchorjs-link ${this.options.class}"
+        //     aria-label="${this.options.ariaLabel}"
+        //     data-anchorjs-icon="${this.options.icon}"
+        //     title="${this.options.titleText}"
+        //     href="this.options.base#${elementID}">
+        // </a>;`
         anchor = document.createElement('a');
         anchor.className = 'anchorjs-link ' + this.options.class;
-        anchor.href = '#' + elementID;
         anchor.setAttribute('aria-label', this.options.ariaLabel);
         anchor.setAttribute('data-anchorjs-icon', this.options.icon);
+        if (this.options.titleText) {
+          anchor.title = this.options.titleText;
+        }
+        // Adjust the href if there's a <base> tag. See https://github.com/bryanbraun/anchorjs/issues/98
+        hrefBase = document.querySelector('base') ? window.location.pathname + window.location.search : '';
+        hrefBase = this.options.base || hrefBase;
+        anchor.href = hrefBase + '#' + elementID;
 
         if (visibleOptionToUse === 'always') {
           anchor.style.opacity = '1';
@@ -178,7 +190,7 @@
     };
 
     /**
-     * Removes all anchorjs-links from elements targed by the selector.
+     * Removes all anchorjs-links from elements targeted by the selector.
      * @param  {String|Array|Nodelist} selector - A CSS selector string targeting elements with anchor links,
      *                                            OR a nodeList / array containing the DOM elements.
      * @return {this}                           - The AnchorJS object
@@ -213,14 +225,14 @@
     /**
      * Urlify - Refine text so it makes a good ID.
      *
-     * To do this, we remove apostrophes, replace nonsafe characters with hyphens,
+     * To do this, we remove apostrophes, replace non-safe characters with hyphens,
      * remove extra hyphens, truncate, trim hyphens, and make lowercase.
      *
      * @param  {String} text - Any text. Usually pulled from the webpage element we are linking to.
      * @return {String}      - hyphen-delimited text for use in IDs and URLs.
      */
     this.urlify = function(text) {
-      // Regex for finding the nonsafe URL characters (many need escaping): & +$,:;=?@"#{}|^~[`%!'<>]./()*\ (newlines, tabs, backspace, & vertical tabs)
+      // Regex for finding the non-safe URL characters (many need escaping): & +$,:;=?@"#{}|^~[`%!'<>]./()*\ (newlines, tabs, backspace, & vertical tabs)
       var nonsafeChars = /[& +$,:;=?@"#{}|^~[`%!'<>\]\.\/\(\)\*\\\n\t\b\v]/g,
           urlText;
 
@@ -246,7 +258,7 @@
     /**
      * Determines if this element already has an AnchorJS link on it.
      * Uses this technique: http://stackoverflow.com/a/5898748/1154642
-     * @param    {HTMLElemnt}  el - a DOM node
+     * @param    {HTMLElement}  el - a DOM node
      * @return   {Boolean}     true/false
      */
     this.hasAnchorJSLink = function(el) {

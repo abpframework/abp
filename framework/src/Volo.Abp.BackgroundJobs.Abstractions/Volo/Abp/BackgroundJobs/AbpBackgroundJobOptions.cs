@@ -8,8 +8,7 @@ namespace Volo.Abp.BackgroundJobs
     {
         private readonly Dictionary<Type, BackgroundJobConfiguration> _jobConfigurationsByArgsType;
         private readonly Dictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
-
-        //TODO: Implement for all providers! (Hangfire does not implement yet)
+        
         /// <summary>
         /// Default: true.
         /// </summary>

@@ -79,13 +79,15 @@ var abp = abp || {};
         }
     };
 
-    new MutationObserver(mutationObserverCallback).observe(
-        $('body')[0],
-        {
-            subtree: true,
-            childList: true
-        }
-    );
+    $(function(){
+        new MutationObserver(mutationObserverCallback).observe(
+            $('body')[0],
+            {
+                subtree: true,
+                childList: true
+            }
+        );
+    });    
 
     // AJAX ///////////////////////////////////////////////////////////////////
 

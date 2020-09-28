@@ -35,6 +35,8 @@ namespace Volo.Abp.Domain.Repositories
 
         public abstract Task<long> GetCountAsync(CancellationToken cancellationToken = default);
 
+        public abstract Task<List<TEntity>> GetPagedListAsync(int skipCount, int maxResultCount, string sorting, bool includeDetails = false, CancellationToken cancellationToken = default);
+
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
         {
             return CancellationTokenProvider.FallbackToProvider(preferredValue);

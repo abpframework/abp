@@ -4,7 +4,11 @@ import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angul
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import {
+  NgxsStoragePluginModule,
+  NGXS_STORAGE_PLUGIN_OPTIONS,
+  StorageOption,
+} from '@ngxs/storage-plugin';
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
@@ -21,6 +25,8 @@ import { PermissionDirective } from './directives/permission.directive';
 import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { VisibilityDirective } from './directives/visibility.directive';
+import { OAuthConfigurationHandler } from './handlers/oauth-configuration.handler';
+import { RoutesHandler } from './handlers/routes.handler';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { LocalizationModule } from './localization.module';
 import { ABP } from './models/common';
@@ -28,16 +34,19 @@ import { LocalizationPipe, MockLocalizationPipe } from './pipes/localization.pip
 import { SortPipe } from './pipes/sort.pipe';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config.plugin';
 import { LocaleProvider } from './providers/locale.provider';
+import { LocalizationService } from './services/localization.service';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { ReplaceableComponentsState } from './states/replaceable-components.state';
 import { SessionState } from './states/session.state';
-import { CORE_OPTIONS } from './tokens/options.token';
+import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
+import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { oAuthStorage } from './strategies/auth-flow.strategy';
 
 export function storageFactory(): OAuthStorage {
-  return localStorage;
+  return oAuthStorage;
 }
 
 /**
@@ -114,7 +123,8 @@ export class BaseCoreModule {}
     LocalizationModule,
     NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, SessionState, ConfigState]),
     NgxsRouterPluginModule.forRoot(),
-    NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
+    NgxsStoragePluginModule.forRoot(),
+    OAuthModule.forRoot(),
   ],
 })
 export class RootCoreModule {}
@@ -167,13 +177,24 @@ export class CoreModule {
           useValue: { environment: options.environment },
         },
         {
-          provide: CORE_OPTIONS,
+          provide: 'CORE_OPTIONS',
           useValue: options,
         },
         {
+          provide: CORE_OPTIONS,
+          useFactory: coreOptionsFactory,
+          deps: ['CORE_OPTIONS'],
+        },
+        {
           provide: HTTP_INTERCEPTORS,
-          useClass: ApiInterceptor,
+          useExisting: ApiInterceptor,
           multi: true,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [OAuthConfigurationHandler],
+          useFactory: noop,
         },
         {
           provide: APP_INITIALIZER,
@@ -187,9 +208,36 @@ export class CoreModule {
           deps: [Injector],
           useFactory: localeInitializer,
         },
-        ...OAuthModule.forRoot().providers,
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [LocalizationService],
+          useFactory: noop,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [RoutesHandler],
+          useFactory: noop,
+        },
         { provide: OAuthStorage, useFactory: storageFactory },
+        {
+          provide: NGXS_STORAGE_PLUGIN_OPTIONS,
+          useValue: {
+            storage: StorageOption.LocalStorage,
+            serialize: JSON.stringify,
+            deserialize: JSON.parse,
+            beforeSerialize: ngxsStoragePluginSerialize,
+            afterDeserialize: ngxsStoragePluginSerialize,
+            ...options.ngxsStoragePluginOptions,
+            key: [...(options.ngxsStoragePluginOptions?.key || []), 'SessionState'],
+          },
+        },
       ],
     };
   }
+}
+
+export function ngxsStoragePluginSerialize(data) {
+  return data;
 }

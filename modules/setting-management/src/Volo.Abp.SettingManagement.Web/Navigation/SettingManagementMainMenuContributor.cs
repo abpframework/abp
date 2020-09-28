@@ -29,7 +29,7 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                 return;
             }
 
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpSettingManagementResource>>();
+            var l = context.GetLocalizer<AbpSettingManagementResource>();
 
             context.Menu
                 .GetAdministration()
@@ -37,7 +37,7 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                     new ApplicationMenuItem(
                         SettingManagementMenuNames.GroupName,
                         l["Settings"],
-                        "/SettingManagement",
+                        "~/SettingManagement",
                         icon: "fa fa-cog"
                     )
                 );

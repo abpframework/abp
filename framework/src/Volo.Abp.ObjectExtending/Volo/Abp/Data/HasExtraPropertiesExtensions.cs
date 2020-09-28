@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
@@ -32,15 +34,26 @@ namespace Volo.Abp.Data
 
             if (TypeHelper.IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
             {
-                return (TProperty)Convert.ChangeType(value, typeof(TProperty), CultureInfo.InvariantCulture);
+                var conversionType = typeof(TProperty);
+                if (TypeHelper.IsNullable(conversionType))
+                {
+                    conversionType = conversionType.GetFirstGenericArgumentIfNullable();
+                }
+
+                if (conversionType == typeof(Guid))
+                {
+                    return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString());
+                }
+
+                return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
             }
 
             throw new AbpException("GetProperty<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
         }
 
         public static TSource SetProperty<TSource>(
-            this TSource source, 
-            string name, 
+            this TSource source,
+            string name,
             object value,
             bool validate = true)
             where TSource : IHasExtraProperties
@@ -65,8 +78,13 @@ namespace Volo.Abp.Data
         public static TSource SetDefaultsForExtraProperties<TSource>(this TSource source, Type objectType = null)
             where TSource : IHasExtraProperties
         {
+            if (objectType == null)
+            {
+                objectType = typeof(TSource);
+            }
+
             var properties = ObjectExtensionManager.Instance
-                .GetProperties(objectType ?? typeof(TSource));
+                .GetProperties(objectType);
 
             foreach (var property in properties)
             {
@@ -75,7 +93,7 @@ namespace Volo.Abp.Data
                     continue;
                 }
 
-                source.ExtraProperties[property.Name] = TypeHelper.GetDefaultValue(property.Type);
+                source.ExtraProperties[property.Name] = property.GetDefaultValue();
             }
 
             return source;

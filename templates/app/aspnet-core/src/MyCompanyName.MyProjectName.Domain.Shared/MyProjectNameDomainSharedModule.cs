@@ -5,6 +5,7 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
@@ -26,11 +27,17 @@ namespace MyCompanyName.MyProjectName
         )]
     public class MyProjectNameDomainSharedModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            MyProjectNameGlobalFeatureConfigurator.Configure();
+            MyProjectNameModuleExtensionConfigurator.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>("MyCompanyName.MyProjectName");
+                options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -39,8 +46,13 @@ namespace MyCompanyName.MyProjectName
                     .Add<MyProjectNameResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/MyProjectName");
-                
+
                 options.DefaultResourceType = typeof(MyProjectNameResource);
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
             });
         }
     }

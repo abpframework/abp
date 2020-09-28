@@ -6,7 +6,11 @@ Repositories, in practice, are used to perform database operations for domain ob
 
 ## Generic Repositories
 
-ABP can provide a **default generic repository** for each aggregate root or entity. You can [inject](Dependency-Injection.md) `IRepository<TEntity, TKey>` into your service and perform standard **CRUD** operations. Example usage:
+ABP can provide a **default generic repository** for each aggregate root or entity. You can [inject](Dependency-Injection.md) `IRepository<TEntity, TKey>` into your service and perform standard **CRUD** operations.
+
+> Database provider layer should be properly configured to be able to use the default generic repositories. It is **already done** if you've created your project using the startup templates. If not, refer to the database provider documents ([EF Core](Entity-Framework-Core.md) / [MongoDB](MongoDB.md)) to configure it.
+
+**Example usage of a default generic repository:**
 
 ````C#
 public class PersonAppService : ApplicationService
@@ -37,6 +41,8 @@ public class PersonAppService : ApplicationService
     }
 }
 ````
+
+> See the "*IQueryable & Async Operations*" section below to understand how you can use **async extension methods**, like `ToListAsync()` (which is strongly suggested) instead of `ToList()`.
 
 In this example;
 
@@ -116,5 +122,129 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 }
 ````
 
-You can directly access the data access provider (`DbContext` in this case) to perform operations. See [entity framework integration document](Entity-Framework-Core.md) for more about custom repositories based on EF Core.
+You can directly access the data access provider (`DbContext` in this case) to perform operations.
 
+> See [EF Core](Entity-Framework-Core.md) or [MongoDb](MongoDB.md) document for more info about the custom repositories.
+
+## IQueryable & Async Operations
+
+`IRepository` inherits from `IQueryable`, that means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Generic Repositories*" section above.
+
+**Example: Using the `Where(...)` and the `ToList()` extension methods**
+
+````csharp
+var people = _personRepository
+    .Where(p => p.Name.Contains(nameFilter))
+    .ToList();
+````
+
+`.ToList`, `Count()`... are standard extension methods defined in the `System.Linq` namespace ([see all](https://docs.microsoft.com/en-us/dotnet/api/system.linq.queryable)).
+
+You normally want to use `.ToListAsync()`, `.CountAsync()`... instead, to be able to write a **truly async code**.
+
+However, you see that you can't use these async extension methods in your application or domain layer when you create a new project using the standard [application startup template](Startup-Templates/Application.md), because;
+
+* These async methods **are not standard LINQ methods** and they are defined in the [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) NuGet package.
+* The standard template **doesn't have a reference** to the EF Core package from the domain and application layers, to be independent from the database provider.
+
+Based on your requirements and development model, you have the following options to be able to use the async methods.
+
+> Using async methods is strongly suggested! Don't use sync LINQ methods while executing database queries to be able to develop a scalable application.
+
+### Option-1: Reference to the EF Core
+
+The easiest solution is to directly add the EF Core package from the project you want to use these async methods.
+
+> Add the [Volo.Abp.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore) NuGet package to your project, which indirectly reference to the EF Core package. This ensures that you use the correct version of the EF Core compatible to the rest of your application.
+
+When you add the NuGet package to your project, you can take full power of the EF Core extension methods.
+
+**Example: Directly using the `ToListAsync()` after adding the EF Core package**
+
+````csharp
+var people = _personRepository
+    .Where(p => p.Name.Contains(nameFilter))
+    .ToListAsync();
+````
+
+This method is suggested;
+
+* If you are developing an application and you **don't plan to change** EF Core in the future, or you can **tolerate** it if you need to change later. We believe that's reasonable if you are developing a final application.
+
+#### MongoDB Case
+
+If you are using [MongoDB](MongoDB.md), you need to add the [Volo.Abp.MongoDB](https://www.nuget.org/packages/Volo.Abp.MongoDB) NuGet package to your project. Even in this case, you can't directly use async LINQ extensions (like `ToListAsync`) because MongoDB doesn't provide async extension methods for `IQueryable<T>`, but provides for `IMongoQueryable<T>`. You need to cast the query to `IMongoQueryable<T>` first to be able to use the async extension methods.
+
+**Example: Cast `IQueryable<T>` to `IMongoQueryable<T>` and use `ToListAsync()`**
+
+````csharp
+var people = ((IMongoQueryable<Person>)_personRepository
+    .Where(p => p.Name.Contains(nameFilter)))
+    .ToListAsync();
+````
+
+### Option-2: Custom Repository Methods
+
+You can always create custom repository methods and use the database provider specific APIs, like async extension methods here. See [EF Core](Entity-Framework-Core.md) or [MongoDb](MongoDB.md) document for more info about the custom repositories.
+
+This method is suggested;
+
+* If you want to **completely isolate** your domain & application layers from the database provider.
+* If you develop a **reusable [application module](Modules/Index.md)** and don't want to force to a specific database provider, which should be done as a [best practice](Best-Practices/Index.md).
+
+### Option-3: IAsyncQueryableExecuter
+
+`IAsyncQueryableExecuter` is a service that is used to execute an `IQueryable<T>` object asynchronously **without depending on the actual database provider**.
+
+**Example: Inject & use the `IAsyncQueryableExecuter.ToListAsync()` method**
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Linq;
+
+namespace AbpDemo
+{
+    public class ProductAppService : ApplicationService, IProductAppService
+    {
+        private readonly IRepository<Product, Guid> _productRepository;
+        private readonly IAsyncQueryableExecuter _asyncExecuter;
+
+        public ProductAppService(
+            IRepository<Product, Guid> productRepository,
+            IAsyncQueryableExecuter asyncExecuter)
+        {
+            _productRepository = productRepository;
+            _asyncExecuter = asyncExecuter;
+        }
+
+        public async Task<ListResultDto<ProductDto>> GetListAsync(string name)
+        {
+            //Create the query
+            var query = _productRepository
+                .Where(p => p.Name.Contains(name))
+                .OrderBy(p => p.Name);
+
+            //Run the query asynchronously
+            List<Product> products = await _asyncExecuter.ToListAsync(query);
+
+            //...
+        }
+    }
+}
+````
+
+> `ApplicationService` and `DomainService` base classes already have `AsyncExecuter` properties pre-injected and usable without needing an explicit constructor injection.
+
+ABP Framework executes the query asynchronously using the actual database provider's API. While that is not a usual way to execute a query, it is the best way to use the async API without depending on the database provider.
+
+This method is suggested;
+
+* If you are building a **reusable library** that doesn't have a database provider integration package, but needs to execute an `IQueryable<T>` object in some case.
+
+For example, ABP Framework uses the `IAsyncQueryableExecuter` in the `CrudAppService` base class (see the [application services](Application-Services.md) document).

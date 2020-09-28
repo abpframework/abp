@@ -5,9 +5,17 @@ using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.Identity
 {
-    public interface IIdentityUserAppService : ICrudAppService<IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
+    public interface IIdentityUserAppService 
+        : ICrudAppService<
+            IdentityUserDto, 
+            Guid, 
+            GetIdentityUsersInput, 
+            IdentityUserCreateDto, 
+            IdentityUserUpdateDto>
     {
         Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
+
+        Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync();
 
         Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
 

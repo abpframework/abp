@@ -7,5 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
     public class ObjectExtensionsDto
     {
         public Dictionary<string, ModuleExtensionDto> Modules { get; set; }
+        
+        public Dictionary<string, ExtensionEnumDto> Enums { get; set; }
     }
 }

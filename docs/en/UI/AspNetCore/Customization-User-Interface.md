@@ -51,15 +51,13 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 
 ### Overriding a Razor Page (.CSHTML)
 
-Overriding a `.cshtml` file (razor page, razor view, view component... etc.) is possible through the [Virtual File System](../../Virtual-File-System.md).
-
-Virtual File system allows us to **embed resources into assemblies**. In this way, pre-built modules define the razor pages inside their NuGet packages. When you depend a module, you can override any file added to the virtual file system by that module, including pages/views.
+Overriding a `.cshtml` file (razor page, razor view, view component... etc.) is possible through creating the same `.cshtml` file under the same path.
 
 #### Example
 
 This example overrides the **login page** UI defined by the [Account Module](../../Modules/Account.md).
 
-Physical files override the embedded files defined in the same location. The account module defines a `Login.cshtml` file under the `Pages/Account` folder. So, you can override it by creating a file in the same path:
+The account module defines a `Login.cshtml` file under the `Pages/Account` folder. So, you can override it by creating a file in the same path:
 
 ![overriding-login-cshtml](../../images/overriding-login-cshtml.png)
 
@@ -160,7 +158,7 @@ Just as explained above, you can replace any component, layout or c# class of th
 
 ## Overriding Static Resources
 
-Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the Virtual File System to handle it.
+Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the [Virtual File System](../../Virtual-File-System.md) to handle it.
 
 ## Manipulating the Bundles
 

@@ -1,8 +1,9 @@
-## ASP.NET Core {{UI_Value}} 教程 - 第二章
+# Web应用程序开发教程 - 第二章: 图书列表页面
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"]
+    "UI": ["MVC","NG"],
+    "DB": ["EF","Mongo"]
 }
 ````
 
@@ -15,519 +16,497 @@ else if UI == "NG"
   DB="mongodb"
   DB_Text="MongoDB"
   UI_Text="angular"
-else 
+else
   DB ="?"
   UI_Text="?"
 end
 }}
 
-### 关于本教程
+## 关于本教程
 
-这是ASP.NET Core{{UI_Value}}系列教程的第二章. 共有三章:
+在本系列教程中, 你将构建一个名为 `Acme.BookStore` 的用于管理书籍及其作者列表的基于ABP的应用程序.  它是使用以下技术开发的:
 
-- [Part-1: 创建项目和书籍列表页面](Part-1.md)
-- **Part 2: 创建,编辑,删除书籍(本章)**
-- [Part-3: 集成测试](Part-3.md)
+* **{{DB_Text}}** 做为ORM提供程序.
+* **{{UI_Value}}** 做为UI框架.
 
-> 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application).
+本教程分为以下部分:
+
+- [Part 1: 创建服务端](Part-1.md)
+- **Part 2: 图书列表页面**(本章)
+- [Part 3: 创建,更新和删除图书](Part-3.md)
+- [Part 4: 集成测试](Part-4.md)
+- [Part 5: 授权](Part-5.md)
+- [Part 6: 作者: 领域层](Part-6.md)
+- [Part 7: 作者: 数据库集成](Part-7.md)
+- [Part 8: 作者: 应用服务层](Part-8.md)
+- [Part 9: 作者: 用户页面](Part-9.md)
+- [Part 10: 图书到作者的关系](Part-10.md)
+
+## 下载源码
+
+本教程根据你的**UI** 和 **Database**偏好有多个版,我们准备了两种可供下载的源码组合:
+
+* [MVC (Razor Pages) UI 与 EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Angular UI 与 MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 {{if UI == "MVC"}}
 
-### 新增 Book 实体
+## 动态JavaScript代理
 
-通过本节, 你将会了解如何创建一个 modal form 来实现新增书籍的功能. 最终成果如下图所示:
+通常在 **JavaScript** 端通过AJAX调用HTTP API端点. 你可以使用 `$.ajax` 或其他工具来调用端点. 但是ABP提供了更好的方法.
 
-![bookstore-create-dialog](./images/bookstore-create-dialog-2.png)
+ABP**动态**为所有API端点创建 **[JavaScript代理](../UI/AspNetCore/Dynamic-JavaScript-Proxies.md)**. 所以你可以像调用**Javascript本地方法**一样使用任何**端点**.
 
-#### 新建 modal form
+### 在开发者控制台中进行测试
 
-在 `Acme.BookStore.Web` 项目的 `Pages/Books` 目录下新建一个 `CreateModal.cshtml` Razor页面:
-
-![bookstore-add-create-dialog](./images/bookstore-add-create-dialog-v2.png)
-
-##### CreateModal.cshtml.cs
-
-打开 `CreateModal.cshtml.cs` 代码文件,用如下代码替换 `CreateModalModel` 类的实现:
-
-````C#
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Acme.BookStore.Web.Pages.Books
-{
-    public class CreateModalModel : BookStorePageModel
-    {
-        [BindProperty]
-        public CreateUpdateBookDto Book { get; set; }
-
-        private readonly IBookAppService _bookAppService;
-
-        public CreateModalModel(IBookAppService bookAppService)
-        {
-            _bookAppService = bookAppService;
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            await _bookAppService.CreateAsync(Book);
-            return NoContent();
-        }
-    }
-}
-````
-
-* 该类派生于 `BookStorePageModel` 而非默认的 `PageModel`. `BookStorePageModel` 继承了 `PageModel` 并且添加了一些可以被你的page model类使用的通用属性和方法.
-*  `Book` 属性上的 `[BindProperty]` 特性将post请求提交上来的数据绑定到该属性上.
-* 该类通过构造函数注入了 `IBookAppService` 应用服务,并且在 `OnPostAsync` 处理程序中调用了服务的 `CreateAsync` 方法.
-
-##### CreateModal.cshtml
-
-打开 `CreateModal.cshtml` 文件并粘贴如下代码:
-
-````html
-@page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
-@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@model Acme.BookStore.Web.Pages.Books.CreateModalModel
-@{
-    Layout = null;
-}
-<abp-dynamic-form abp-model="Book" data-ajaxForm="true" asp-page="/Books/CreateModal">
-    <abp-modal>
-        <abp-modal-header title="@L["NewBook"].Value"></abp-modal-header>
-        <abp-modal-body>
-            <abp-form-content />
-        </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
-    </abp-modal>
-</abp-dynamic-form>
-````
-
-* 这个 modal 使用 `abp-dynamic-form` Tag Helper 根据 `CreateBookViewModel` 类自动构建了表单.
-  * `abp-model` 指定了 `Book` 属性为模型对象.
-  * `data-ajaxForm` 设置了表单通过AJAX提交,而不是经典的页面回发.
-  * `abp-form-content` tag helper 作为表单控件渲染位置的占位符 (这是可选的,只有你在 `abp-dynamic-form` 中像本示例这样添加了其他内容才需要).
-
-#### 添加 "New book" 按钮
-
-打开 `Pages/Books/Index.cshtml` 并按如下代码修改 `abp-card-header` :
-
-````html
-<abp-card-header>
-    <abp-row>
-        <abp-column size-md="_6">
-            <h2>@L["Books"]</h2>
-        </abp-column>
-        <abp-column size-md="_6" class="text-right">
-            <abp-button id="NewBookButton"
-                        text="@L["NewBook"].Value"
-                        icon="plus"
-                        button-type="Primary" />
-        </abp-column>
-    </abp-row>
-</abp-card-header>
-````
-
-如下图所示,只是在表格 **右上方** 添加了 **New book** 按钮:
-
-![bookstore-new-book-button](./images/bookstore-new-book-button.png)
-
-打开 `Pages/books/index.js` 在 `datatable` 配置代码后面添加如下代码:
+你可以在自己喜欢的浏览器的**开发者控制台**轻松的测试JavaScript代理. 运行应用程序,打开浏览器的**开发者人员工具**(*快捷键通常是F12*),切换到**控制台**选项卡,输入以下代码然后按回车:
 
 ````js
-var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
-
-createModal.onResult(function () {
-    dataTable.ajax.reload();
-});
-
-$('#NewBookButton').click(function (e) {
-    e.preventDefault();
-    createModal.open();
-});
+acme.bookStore.books.book.getList({}).done(function (result) { console.log(result); });
 ````
 
-* `abp.ModalManager` 是一个在客户端打开和管理modal的辅助类.它基于Twitter Bootstrap的标准modal组件通过简化的API抽象隐藏了许多细节.
+* `acme.bookStore.books` 是 `BookAppService` 的命令空间转换成[小驼峰](https://en.wikipedia.org/wiki/Camel_case)形式.
+* `book` 是 `BookAppService` 的约定名称(删除`AppService`后缀并且转换为小驼峰).
+* `getList` 是 `CrudAppService` 基类定义的 `GetListAsync` 方法的约定名称(删除`Async`后缀并且转换为小驼峰).
+* `{}` 参数将空对象发送到 `GetListAsync` 方法,该方法通常需要一个类型为 `PagedAndSortedResultRequestDto` 的对象,该对象用于将分页和排序选项发送到服务器(所有属性都是可选的,具有默认值. 因此你可以发送一个空对象).
+* `getList` 函数返回一个 `promise`. 你可以传递一个回调到 `then`(或`done`)函数来获取从服务器返回的结果.
 
-现在,你可以 **运行程序** 通过新的 modal form 来创建书籍了.
+运行该代码会产生以下输出:
 
-### 编辑更新已存在的 Book 实体
+![bookstore-javascript-proxy-console](images/bookstore-javascript-proxy-console.png)
 
-在 `Acme.BookStore.Web` 项目的 `Pages/Books` 目录下新建一个名叫 `EditModal.cshtml` 的Razor页面:
+你可以看到服务端返回的 **图书列表**. 你也可以在开发者人员工具的 **网络** 选项卡查看客户端到服务端的通信:
 
-![bookstore-add-edit-dialog](./images/bookstore-add-edit-dialog.png)
+![bookstore-getlist-result-network](images/bookstore-getlist-result-network.png)
 
-#### EditModal.cshtml.cs
+Let's **create a new book** using the `create` function:
 
-展开 `EditModal.cshtml`,打开 `EditModal.cshtml.cs` 文件（ `EditModalModel` 类） 并替换成以下代码:
-
-````csharp
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Acme.BookStore.Web.Pages.Books
-{
-    public class EditModalModel : BookStorePageModel
-    {
-        [HiddenInput]
-        [BindProperty(SupportsGet = true)]
-        public Guid Id { get; set; }
-
-        [BindProperty]
-        public CreateUpdateBookDto Book { get; set; }
-
-        private readonly IBookAppService _bookAppService;
-
-        public EditModalModel(IBookAppService bookAppService)
-        {
-            _bookAppService = bookAppService;
-        }
-
-        public async Task OnGetAsync()
-        {
-            var bookDto = await _bookAppService.GetAsync(Id);
-            Book = ObjectMapper.Map<BookDto, CreateUpdateBookDto>(bookDto);
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            await _bookAppService.UpdateAsync(Id, Book);
-            return NoContent();
-        }
-    }
-}
-````
-
-* `[HiddenInput]` 和 `[BindProperty]` 是标准的 ASP.NET Core MVC 特性.这里启用 `SupportsGet` 从Http请求的查询字符串中获取Id的值.
-* 在 `OnGetAsync` 方法中,将 `BookAppService.GetAsync` 方法返回的 `BookDto` 映射成 `CreateUpdateBookDto` 并赋值给Book属性.
-* `OnPostAsync` 方法直接使用 `BookAppService.UpdateAsync` 来更新实体.
-
-#### BookDto到CreateUpdateBookDto对象映射
-
-为了执行`BookDto`到`CreateUpdateBookDto`对象映射,请打开`Acme.BookStore.Web`项目中的`BookStoreWebAutoMapperProfile.cs`并更改它,如下所示:
-
-````csharp
-using AutoMapper;
-
-namespace Acme.BookStore.Web
-{
-    public class BookStoreWebAutoMapperProfile : Profile
-    {
-        public BookStoreWebAutoMapperProfile()
-        {
-            CreateMap<BookDto, CreateUpdateBookDto>();
-        }
-    }
-}
-````
-
-* 刚刚添加了`CreateMap<BookDto, CreateUpdateBookDto>();`作为映射定义.
-
-#### EditModal.cshtml
-
-将 `EditModal.cshtml` 页面内容替换成如下代码:
-
-````html
-@page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
-@using Acme.BookStore.Web.Pages.Books
-@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@model EditModalModel
-@{
-    Layout = null;
-}
-<abp-dynamic-form abp-model="Book" data-ajaxForm="true" asp-page="/Books/EditModal">
-    <abp-modal>
-        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
-        <abp-modal-body>
-            <abp-input asp-for="Id" />
-            <abp-form-content />
-        </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
-    </abp-modal>
-</abp-dynamic-form>
-````
-
-这个页面内容和 `CreateModal.cshtml` 非常相似,除了以下几点:
-
-* 它包含`id`属性的`abp-input`, 用于存储编辑书的 `id` (它是隐藏的Input)
-* 此页面指定的post地址是`Books/EditModal`, 并用文本 *Update* 作为 modal 标题.
-
-#### 为表格添加 "操作（Actions）" 下拉菜单
-
-我们将为表格每行添加下拉按钮 ("Actions") . 最终效果如下:
-
-![bookstore-books-table-actions](images/bookstore-books-table-actions.png)
-
-打开 `Pages/Books/Index.cshtml` 页面,并按下方所示修改表格部分的代码:
-
-````html
-<abp-table striped-rows="true" id="BooksTable">
-    <thead>
-        <tr>
-            <th>@L["Actions"]</th>
-            <th>@L["Name"]</th>
-            <th>@L["Type"]</th>
-            <th>@L["PublishDate"]</th>
-            <th>@L["Price"]</th>
-            <th>@L["CreationTime"]</th>
-        </tr>
-    </thead>
-</abp-table>
-````
-
-* 只是为"Actions"增加了一个 `th` 标签.
-
-打开 `Pages/books/index.js` 并用以下内容进行替换:
+让我们使用 `create` 函数**创建一本书**:
 
 ````js
-$(function () {
-
-    var l = abp.localization.getResource('BookStore');
-
-    var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
-    var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
-
-    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
-        processing: true,
-        serverSide: true,
-        paging: true,
-        searching: false,
-        autoWidth: false,
-        scrollCollapse: true,
-        order: [[1, "asc"]],
-        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
-        columnDefs: [
-            {
-                rowAction: {
-                    items:
-                        [
-                            {
-                                text: l('Edit'),
-                                action: function (data) {
-                                    editModal.open({ id: data.record.id });
-                                }
-                            }
-                        ]
-                }
-            },
-            { data: "name" },
-            { data: "type" },
-            { data: "publishDate" },
-            { data: "price" },
-            { data: "creationTime" }
-        ]
-    }));
-
-    createModal.onResult(function () {
-        dataTable.ajax.reload();
+acme.bookStore.books.book.create({ 
+        name: 'Foundation', 
+        type: 7, 
+        publishDate: '1951-05-24', 
+        price: 21.5 
+    }).then(function (result) { 
+        console.log('successfully created the book with id: ' + result.id); 
     });
-
-    editModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
-
-    $('#NewBookButton').click(function (e) {
-        e.preventDefault();
-        createModal.open();
-    });
-});
 ````
 
-* 通过 `abp.localization.getResource('BookStore')` 可以在客户端使用服务器端定义的相同的本地化语言文本.
-* 添加了一个名为 `createModal` 的新的 `ModalManager` 来打开创建用的 modal 对话框.
-* 添加了一个名为 `editModal` 的新的 `ModalManager` 来打开编辑用的 modal 对话框.
-* 在 `columnDefs` 起始处新增一列用于显示 "Actions" 下拉按钮.
-* "New Book"动作只需调用`createModal.open`来打开创建对话框.
-* "Edit" 操作只是简单调用 `editModal.open` 来打开编辑对话框.
+您应该在控制台中看到类似以下的消息:
 
-现在,你可以运行程序,通过编辑操作来更新任一个book实体.
-
-### 删除一个已有的Book实体
-
-打开 `Pages/books/index.js` 文件,在 `rowAction` `items` 下新增一项:
-
-````js
-{
-    text: l('Delete'),
-    confirmMessage: function (data) {
-        return l('BookDeletionConfirmationMessage', data.record.name);
-    },
-    action: function (data) {
-        acme.bookStore.book
-            .delete(data.record.id)
-            .then(function() {
-                abp.notify.info(l('SuccessfullyDeleted'));
-                dataTable.ajax.reload();
-            });
-    }
-}
+````text
+successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 ````
 
-* `confirmMessage` 用来在实际执行 `action` 之前向用户进行确认.
-* 通过javascript代理方法 `acme.bookStore.book.delete` 执行一个AJAX请求来删除一个book实体.
-* `abp.notify.info` 用来在执行删除操作后显示一个toastr通知信息.
+检查数据库中的 `Books` 表你会看到新的一行. 你可以自己尝试使用 `get`, `update` 和 `delete` 函数.
 
-最终的 `index.js` 文件内容如下所示:
-
-````js
-$(function () {
-
-    var l = abp.localization.getResource('BookStore');
-
-    var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
-    var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
-
-    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
-        processing: true,
-        serverSide: true,
-        paging: true,
-        searching: false,
-        autoWidth: false,
-        scrollCollapse: true,
-        order: [[1, "asc"]],
-        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
-        columnDefs: [
-            {
-                rowAction: {
-                    items:
-                    [
-                        {
-                            text: l('Edit'),
-                            action: function (data) {
-                                editModal.open({ id: data.record.id });
-                            }
-                        },
-                        {
-                            text: l('Delete'),
-                            confirmMessage: function (data) {
-                                return l('BookDeletionConfirmationMessage', data.record.name);
-                            },
-                            action: function (data) {
-                                acme.bookStore.book
-                                    .delete(data.record.id)
-                                    .then(function() {
-                                        abp.notify.info(l('SuccessfullyDeleted'));
-                                        dataTable.ajax.reload();
-                                    });
-                            }
-                        }
-                    ]
-                }
-            },
-            { data: "name" },
-            { data: "type" },
-            { data: "publishDate" },
-            { data: "price" },
-            { data: "creationTime" }
-        ]
-    }));
-
-    createModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
-
-    editModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
-
-    $('#NewBookButton').click(function (e) {
-        e.preventDefault();
-        createModal.open();
-    });
-});
-````
-
-打开`Acme.BookStore.Domain.Shared`项目中的`en.json`并添加以下行:
-
-````json
-"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?",
-"SuccessfullyDeleted": "Successfully deleted"
-````
-
-运行程序并尝试删除一个book实体.
+我们将利用这些动态代理功能在接下来的章节来与服务器通信.
 
 {{end}}
 
-### 新增 Book 实体
+## 本地化
 
-下面的章节中,你将学习到如何创建一个新的模态对话框来新增Book实体.
+开始的UI开发之前,我们首先要准备本地化的文本(这是你通常在开发应用程序时需要做的).
 
-#### 状态定义
+本地化文本位于 `Acme.BookStore.Domain.Shared` 项目的 `Localization/BookStore` 文件夹下:
 
-在 `books\state` 文件夹下打开 `books.action.ts` 文件,使用以下内容替换它:
+![bookstore-localization-files](./images/bookstore-localization-files-v2.png)
 
-```js
-import { CreateUpdateBookDto } from '../../app/shared/models'; //<== added this line ==>
+打开 `en.json` (*英文翻译*)文件并更改内容,如下所示:
 
-export class GetBooks {
-  static readonly type = '[Books] Get';
+````json
+{
+  "Culture": "en",
+  "Texts": {
+    "Menu:Home": "Home",
+    "Welcome": "Welcome",
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "Menu:BookStore": "Book Store",
+    "Menu:Books": "Books",
+    "Actions": "Actions",
+    "Close": "Close",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "PublishDate": "Publish date",
+    "NewBook": "New book",
+    "Name": "Name",
+    "Type": "Type",
+    "Price": "Price",
+    "CreationTime": "Creation time",
+    "AreYouSure": "Are you sure?",
+    "AreYouSureToDelete": "Are you sure you want to delete this item?",
+    "Enum:BookType:0": "Undefined",
+    "Enum:BookType:1": "Adventure",
+    "Enum:BookType:2": "Biography",
+    "Enum:BookType:3": "Dystopia",
+    "Enum:BookType:4": "Fantastic",
+    "Enum:BookType:5": "Horror",
+    "Enum:BookType:6": "Science",
+    "Enum:BookType:7": "Science fiction",
+    "Enum:BookType:8": "Poetry"
+  }
 }
+````
 
-// added CreateUpdateBook class
-export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
-  constructor(public payload: CreateUpdateBookDto) { }
+* 本地化关键字名称是任意的. 你可以设置任何名称. 对于特定的文本类型,我们更喜欢遵循一些约定:
+  * 为按钮项添加 `Menu:` 前缀.
+  * 使用 `Enum:<enum-type>:<enum-value>` 命名约定来本地化枚举成员. 当您这样做时ABP可以在某些适当的情况下自动将枚举本地化.
+
+如果未在本地化文件中定义文本,则文本将**回退**到本地化键(作为ASP.NET Core的标准行为).
+
+> ABP本地化系统建立在[ASP.NET Core标准本地化](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization)系统之上,并以多种方式进行了扩展. 有关详细信息请参见[本地化文档](../Localization.md).
+
+{{if UI == "MVC"}}
+
+## 创建图书页面
+
+是时候创建可见的和可用的东西了! 代替经典的MVC,我们将使用微软推荐的[Razor Pages UI](https://docs.microsoft.com/zh-cn/aspnet/core/tutorials/razor-pages/razor-pages-start).
+
+在 `Acme.BookStore.Web` 项目的 `Pages` 文件夹下创建一个名为新的 `Books` 的文件夹. 然后在文件夹右键选择 **添加 > Razor Page** 菜单. 输入名称 `Index`:
+
+![bookstore-add-index-page](./images/bookstore-add-index-page-v2.png)
+
+打开 `Index.cshtml` 并把内容修改成下面这样:
+
+````html
+@page
+@using Acme.BookStore.Web.Pages.Books
+@model IndexModel
+
+<h2>Books</h2>
+````
+
+`Index.cshtml.cs` 内容应该是:
+
+```csharp
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace Acme.BookStore.Web.Pages.Books
+{
+    public class IndexModel : PageModel
+    {
+        public void OnGet()
+        {
+  
+        }
+    }
 }
 ```
 
-* 我们导入了 `CreateUpdateBookDto` 模型并且创建了 `CreateUpdateBook` 动作.
+### 将Book页面添加到主菜单
 
-打开 `books\state` 文件夹下的 `books.state.ts` 文件,使用以下内容替换它:
+打开 `Menus` 文件夹中的 `BookStoreMenuContributor` 类,在 `ConfigureMainMenuAsync` 方法的底部添加如下代码:
 
-```js
-import { PagedResultDto } from '@abp/ng.core';
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks, CreateUpdateBook } from './books.actions'; // <== added CreateUpdateBook==>
-import { BookService } from '../../app/shared/services';
-import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { BookDto } from '../../app/shared/models';
+````csharp
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/Books"
+        )
+    )
+);
+````
 
-export class BooksStateModel {
-  public book: PagedResultDto<BookDto>;
+运行项目,使用用户名 `admin` 和密码 `1q2w3E*` 登录到应用程序. 看到新菜单项已添加到顶部栏:
+
+![bookstore-menu-items](./images/bookstore-new-menu-item.png)
+
+点击BookStore下的Books子菜单项就会跳转到空的图书页面.
+
+### 图书列表
+
+We will use the [Datatables.net](https://datatables.net/) jQuery library to show the book list. Datatables library completely work via AJAX, it is fast, popular and provides a good user experience.
+
+我们将使用[Datatables.net](https://datatables.net/)JQuery插件来显示页面上的表格列表. [Datatables](https://datatables.net/)可以完全通过AJAX工作,速度快,并提供良好的用户体验.
+
+> Datatables插件在启动模板中配置,因此你可以直接在任何页面中使用它,无需在页面中引用样式和脚本文件.
+
+#### Index.cshtml
+
+将 `Pages/Book/Index.cshtml` 改成下面的样子:
+
+````html
+@page
+@using Acme.BookStore.Localization
+@using Acme.BookStore.Web.Pages.Books
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IStringLocalizer<BookStoreResource> L
+@section scripts
+{
+    <abp-script src="/Pages/Books/Index.js" />
 }
+<abp-card>
+    <abp-card-header>
+        <h2>@L["Books"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable"></abp-table>
+    </abp-card-body>
+</abp-card>
+````
 
-@State<BooksStateModel>({
-  name: 'BooksState',
-  defaults: { book: {} } as BooksStateModel,
-})
-@Injectable()
-export class BooksState {
-  @Selector()
-  static getBooks(state: BooksStateModel) {
-    return state.book.items || [];
-  }
+* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro)用于将外部的 **脚本** 添加到页面中.它比标准的`script`标签多了很多额外的功能.它可以处理 **最小化**和 **版本**.查看[捆绑 & 压缩文档](../UI/AspNetCore/Bundling-Minification.md)获取更多信息.
+* `abp-card` 和 `abp-table` 是为Twitter Bootstrap的[card component](http://getbootstrap.com/docs/4.5/components/card/)封装的 **tag helpers**.ABP中有很多tag helpers,可以很方便的使用大多数[bootstrap](https://getbootstrap.com/)组件.你也可以使用原生的HTML标签代替tag helpers.使用tag helper可以通过智能提示和编译时类型检查减少HTML代码并防止错误.查看[tag helpers 文档](../UI/AspNetCore/Tag-Helpers/Index.md).
 
-  constructor(private bookService: BookService) {}
+#### Index.js
 
-  @Action(GetBooks)
-  get(ctx: StateContext<BooksStateModel>) {
-    return this.bookService.getListByInput().pipe(
-      tap((bookResponse) => {
-        ctx.patchState({
-          book: bookResponse,
-        });
-      })
+在 `Pages/Books/` 文件夹中创建 `index.js`文件
+
+![bookstore-index-js-file](./images/bookstore-index-js-file-v3.png)
+
+`index.js` 的内容如下:
+
+````js
+$(function () {
+    var l = abp.localization.getResource('BookStore');
+
+    var dataTable = $('#BooksTable').DataTable(
+        abp.libs.datatables.normalizeConfiguration({
+            serverSide: true,
+            paging: true,
+            order: [[1, "asc"]],
+            searching: false,
+            scrollX: true,
+            ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList),
+            columnDefs: [
+                {
+                    title: l('Name'),
+                    data: "name"
+                },
+                {
+                    title: l('Type'),
+                    data: "type",
+                    render: function (data) {
+                        return l('Enum:BookType:' + data);
+                    }
+                },
+                {
+                    title: l('PublishDate'),
+                    data: "publishDate",
+                    render: function (data) {
+                        return luxon
+                            .DateTime
+                            .fromISO(data, {
+                                locale: abp.localization.currentCulture.name
+                            }).toLocaleString();
+                    }
+                },
+                {
+                    title: l('Price'),
+                    data: "price"
+                },
+                {
+                    title: l('CreationTime'), data: "creationTime",
+                    render: function (data) {
+                        return luxon
+                            .DateTime
+                            .fromISO(data, {
+                                locale: abp.localization.currentCulture.name
+                            }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
+                    }
+                }
+            ]
+        })
     );
-  }
+});
+````
 
-  // added CreateUpdateBook action listener
-  @Action(CreateUpdateBook)
-  save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
-    return this.bookService.createByInput(action.payload);
+* `abp.localization.getResource` 获取一个函数,该函数用于使用服务器端定义的相同JSON文件对文本进行本地化. 通过这种方式你可以与客户端共享本地化值.
+* `abp.libs.datatables.normalizeConfiguration`是另一个辅助方法.不是必须的, 但是它通过为缺少的选项提供常规值来简化数据表配置.
+* `abp.libs.datatables.createAjax`是帮助ABP的动态JavaScript API代理跟[Datatable](https://datatables.net/)的格式相适应的辅助方法.
+* `acme.bookStore.books.book.getList` 是动态JavaScript代理函数(上面已经介绍过了)
+* [luxon](https://moment.github.io/luxon/) 库也是该解决方案中预先配置的标准库,你可以轻松地执行日期/时间操作.
+
+> 查看 [Datatable文档](https://datatables.net/manual/) 了解更多配置项.
+
+## 运行最终应用程序
+
+你可以运行应用程序!该部分的最终用户界面如下所示:
+
+![Book list](images/bookstore-book-list-3.png)
+
+这是一个完全正常工作的服务端分页,排序和本地化的图书列表.
+
+{{end}}
+
+{{if UI == "NG"}}
+
+## 安装NPM包
+
+>注意: 本教程基于ABP Framework v3.0.3+. 如果你的项目版本较旧,请升级您的解决方案. 如果要升级现有的v2.x项目,请参阅[迁移指南](../UI/Angular/Migration-Guide-v3.md).
+
+在 `angular` 目录下打开命令行窗口,选择 `yarn` 命令安装NPM包:
+
+```bash
+yarn
+```
+
+## 创建图书页面
+
+是时候创建可见和可用的东西了!开发ABP Angular前端应用程序时,需要使用一些工具:
+
+- [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) 用做UI组件库.
+- [ngx-datatable](https://swimlane.gitbook.io/ngx-datatable/) 用做 datatable 类库.
+
+### BookModule
+
+运行以下命令创建一个名为 `BookModule` 的新模块:
+
+```bash
+yarn ng generate module book --module app --routing --route books
+```
+
+该命令应该产生以下的输出:
+
+````bash
+> yarn ng generate module book --module app --routing --route books
+
+yarn run v1.19.1
+$ ng generate module book --module app --routing --route books
+CREATE src/app/book/book-routing.module.ts (336 bytes)
+CREATE src/app/book/book.module.ts (335 bytes)
+CREATE src/app/book/book.component.html (19 bytes)
+CREATE src/app/book/book.component.spec.ts (614 bytes)
+CREATE src/app/book/book.component.ts (268 bytes)
+CREATE src/app/book/book.component.scss (0 bytes)
+UPDATE src/app/app-routing.module.ts (1289 bytes)
+Done in 3.88s.
+````
+
+### BookModule
+
+打开 `/src/app/book/book.module.ts` 并使用以下内容替换:
+
+````js
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
+import { BookRoutingModule } from './book-routing.module';
+import { BookComponent } from './book.component';
+
+@NgModule({
+  declarations: [BookComponent],
+  imports: [
+    BookRoutingModule,
+    SharedModule
+  ]
+})
+export class BookModule { }
+
+````
+
+* 添加了 `SharedModule`. `SharedModule` 导出了一些创建用户界面所需的通用模块.
+* `SharedModule` 已经导出了 `CommonModule`,所以我们删除了 `CommonModule`.
+
+### 路由
+
+生成的代码将新的路由定义放在 `src/app/app-routing.module.ts` 文件中,如下所示:
+
+````js
+const routes: Routes = [
+  // other route definitions...
+  { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
+];
+````
+
+现在打开 `src/app/route.provider.ts` 以下替换 `configureRoutes` 函数:
+
+```js
+function configureRoutes(routes: RoutesService) {
+  return () => {
+    routes.add([
+      {
+        path: '/',
+        name: '::Menu:Home',
+        iconClass: 'fas fa-home',
+        order: 1,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/book-store',
+        name: '::Menu:BookStore',
+        iconClass: 'fas fa-book',
+        order: 2,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/books',
+        name: '::Menu:Books',
+        parentName: '::Menu:BookStore',
+        layout: eLayoutType.application,
+      },
+    ]);
+  };
+}
+```
+
+`RoutesService` 是ABP框架提供的用于配置主菜单和路由的服务.
+
+* `path` 路由的URL.	
+* `name` 菜单项的名称(参阅[本地化文档](../UI/Angular/Localization.md)了解更多).
+* `iconClass` 菜单项的图标(你可以使用默认的[Font Awesome](https://fontawesome.com/)图标).	
+* `order` 菜单项的排序.我们定义了101,它显示在 "Administration" 项的后面.	
+* `layout` BooksModule路由的布局. 可以定义 `eLayoutType.application`, `eLayoutType.account` 或 `eLayoutType.empty`.
+
+更多信息请参阅[RoutesService 文档](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
+
+### 生成代理
+
+ABP CLI提供了 `generate-proxy` 命令为你的服务HTTP API生成客户端代理简化客户端使用服务的成本. 运行 `generate-proxy` 命令前你的host必须正在运行. 参阅 [CLI 文档](../CLI.md).
+
+在 `angular` 文件夹下运行以下命令:
+
+```bash
+abp generate-proxy
+```
+
+生成的文件如下:
+
+![Generated files](./images/generated-proxies-2.png)
+
+### BookComponent
+
+打开 `/src/app/book/book.component.ts` 用以下内容替换它:
+
+```js
+import { ListService, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit } from '@angular/core';
+import { BookDto } from './models';
+import { BookService } from './services';
+
+@Component({
+  selector: 'app-book',
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.scss'],
+  providers: [ListService],
+})
+export class BookComponent implements OnInit {
+  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+
+  constructor(public readonly list: ListService, private bookService: BookService) {}
+
+  ngOnInit() {
+    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+
+    this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
+      this.book = response;
+    });
   }
 }
 ```
 
-* 我们导入了 `CreateUpdateBook` 动作并且定义了 `save` 方法监听 `CreateUpdateBook` 动作去创建图书.
+* 我们注入了生成的 `BookService`.	
+* 我们实现了 [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service),它是一个公用服务,提供了简单的分页,排序和搜索.
 
-当 `SaveBook` 动作被分派时,save方法被执行. 它调用 `BookService` 的 `createByInput` 方法.
-
-#### 添加模态到 BookListComponent
-
-打开 `books\book-list` 文件夹内的 `book-list.component.html` 文件,使用以下内容替换它:
+打开 `/src/app/book/book.component.html` 用以下内容替换它:
 
 ```html
 <div class="card">
@@ -538,812 +517,38 @@ export class BooksState {
           {%{{{ '::Menu:Books' | abpLocalization }}}%}
         </h5>
       </div>
-       <!--Added new book button -->
-      <div class="text-right col col-md-6">
-        <div class="text-lg-right pt-2">
-          <button
-            id="create"
-            class="btn btn-primary"
-            type="button"
-            (click)="createBook()"
-          >
-            <i class="fa fa-plus mr-1"></i>
-            <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
-          </button>
-        </div>
-      </div>
+      <div class="text-right col col-md-6"></div>
     </div>
   </div>
   <div class="card-body">
-    <abp-table
-      [value]="books$ | async"
-      [abpLoading]="loading"
-      [headerTemplate]="tableHeader"
-      [bodyTemplate]="tableBody"
-      [rows]="10"
-      [scrollable]="true"
-    >
-    </abp-table>
-    <ng-template #tableHeader>
-      <tr>
-        <th>{%{{{ "::Name" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::Type" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::PublishDate" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::Price" | abpLocalization }}}%}</th>
-      </tr>
-    </ng-template>
-    <ng-template #tableBody let-data>
-      <tr>
-        <td>{%{{{ data.name }}}%}</td>
-        <td>{%{{{ booksType[data.type] }}}%}</td>
-        <td>{%{{{ data.publishDate | date }}}%}</td>
-        <td>{%{{{ data.price }}}%}</td>
-      </tr>
-    </ng-template>
+    <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ '::Enum:BookType:' + row.type | abpLocalization }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ row.publishDate | date }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Price' | abpLocalization" prop="price">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ row.price | currency }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
   </div>
 </div>
-
-<!--added modal-->
-<abp-modal [(visible)]="isModalOpen">
-    <ng-template #abpHeader>
-        <h3>{%{{{ '::NewBook' | abpLocalization }}}%}</h3>
-    </ng-template>
-
-    <ng-template #abpBody> </ng-template>
-
-    <ng-template #abpFooter>
-        <button type="button" class="btn btn-secondary" #abpClose>
-             {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
-        </button>
-    </ng-template>
-</abp-modal>
 ```
 
-* 我们添加了 `abp-modal` 渲染模态框,允许用户创建新书.
-* `abp-modal` 是显示模态框的预构建组件. 你也可以使用其它方法显示模态框,但 `abp-modal` 提供了一些附加的好处.
-* 我们添加了 `New book` 按钮到 `AbpContentToolbar`.
+现在你可以在浏览器看到最终结果:
 
-打开 `books\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
-
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  loading = false;
-
-  isModalOpen = false; // <== added this line ==>
-
-  constructor(private store: Store) {}
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  // added createBook method
-  createBook() {
-    this.isModalOpen = true;
-  }
-}
-```
-
-* 我们添加了 `isModalOpen = false` 和 `createBook` 方法.
-
-你可以打开浏览器,点击**New book**按钮看到模态框.
-
-![Empty modal for new book](./images/bookstore-empty-new-book-modal.png)
-
-#### 添加响应式表单
-
-[响应式表单](https://angular.io/guide/reactive-forms) 提供一种模型驱动的方法来处理其值随时间变化的表单输入.
-
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
-
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // <== added this line ==>
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  loading = false;
-
-  isModalOpen = false;
-
-  form: FormGroup; // <== added this line ==>
-
-  constructor(private store: Store, private fb: FormBuilder) {} // <== added FormBuilder ==>
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  createBook() {
-    this.buildForm(); //<== added this line ==>
-    this.isModalOpen = true;
-  }
-
-  // added buildForm method
-  buildForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      type: [null, Validators.required],
-      publishDate: [null, Validators.required],
-      price: [null, Validators.required],
-    });
-  }
-}
-```
-
-* 我们导入了 `FormGroup, FormBuilder and Validators`.
-* 我们添加了 `form: FormGroup` 变量.
-* 我们注入了 `fb: FormBuilder` 服务到构造函数. [FormBuilder](https://angular.io/api/forms/FormBuilder) 服务为生成控件提供了方便的方法. 它减少了构建复杂表单所需的样板文件的数量.
-* 我们添加了 `buildForm` 方法到文件末尾, 在 `createBook` 方法调用 `buildForm()` 方法. 该方法创建一个响应式表单去创建新书.
-  * `FormBuilder` 内的 `fb.group` 方法创建一个 `FormGroup`.
-  * 添加了 `Validators.required` 静态方法用于验证表单元素.
-
-#### 创建表单的DOM元素
-
-打开 `app\books\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<ng-template #abpBody> </ng-template>`:
-
-```html
-<ng-template #abpBody>
-  <form [formGroup]="form">
-    <div class="form-group">
-      <label for="book-name">Name</label><span> * </span>
-      <input type="text" id="book-name" class="form-control" formControlName="name" autofocus />
-    </div>
-
-    <div class="form-group">
-      <label for="book-price">Price</label><span> * </span>
-      <input type="number" id="book-price" class="form-control" formControlName="price" />
-    </div>
-
-    <div class="form-group">
-      <label for="book-type">Type</label><span> * </span>
-      <select class="form-control" id="book-type" formControlName="type">
-        <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Publish date</label><span> * </span>
-      <input
-        #datepicker="ngbDatepicker"
-        class="form-control"
-        name="datepicker"
-        formControlName="publishDate"
-        ngbDatepicker
-        (click)="datepicker.toggle()"
-      />
-    </div>
-  </form>
-</ng-template>
-```
-
-- 模板创建了带有 `Name`, `Price`, `Type` 和 `Publish` 时间字段的表单.
-- 我们在组件中使用了 [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview).
-
-#### Datepicker 要求
-
-打开 `app\books` 文件夹下的  `books.module.ts` 文件,使用以下内容替换它:
-
-```js
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { BooksRoutingModule } from './books-routing.module';
-import { BooksComponent } from './books.component';
-import { BookListComponent } from './book-list/book-list.component';
-import { SharedModule } from '../shared/shared.module';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap'; //<== added this line ==>
-
-@NgModule({
-  declarations: [BooksComponent, BookListComponent],
-  imports: [
-    CommonModule,
-    BooksRoutingModule,
-    SharedModule,
-    NgbDatepickerModule //<== added this line ==>
-  ]
-})
-export class BooksModule { }
-```
-
-* 我们导入了 `NgbDatepickerModule`  来使用日期选择器.
-
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
-
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap'; // <== added this line ==>
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }], // <== added this line ==>
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  //added bookTypeArr array
-  bookTypeArr = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
-  );
-
-  loading = false;
-
-  isModalOpen = false;
-
-  form: FormGroup;
-
-  constructor(private store: Store, private fb: FormBuilder) {}
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  createBook() {
-    this.buildForm();
-    this.isModalOpen = true;
-  }
-
-  buildForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      type: [null, Validators.required],
-      publishDate: [null, Validators.required],
-      price: [null, Validators.required],
-    });
-  }
-}
-```
-
-* 我们导入了 ` NgbDateNativeAdapter, NgbDateAdapter` 
-
-* 我们添加了一个新的 `NgbDateAdapter` 提供程序,它将Datepicker值转换为Date类型. 有关更多详细信息,请参见[datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview).
-
-* 我们添加了 `bookTypeArr` 数组,以便能够在combobox值中使用它. `bookTypeArr` 包含 `BookType` 枚举的字段. 得到的数组如下所示:
-
-  ```js
-  ['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
-  ```
-
-  在先前的表单模板中 用 `ngFor` 使用这个数组.
-
-现在你可以打开浏览器看到以下变化:
-
-![New book modal](./images/bookstore-new-book-form.png)
-
-#### 保存图书
-
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
-
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks, CreateUpdateBook } from '../state/books.actions'; // <== added CreateUpdateBook ==>
-import { BooksState } from '../state/books.state';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  //added bookTypeArr array
-  bookTypeArr = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
-  );
-
-  loading = false;
-
-  isModalOpen = false;
-
-  form: FormGroup;
-
-  constructor(private store: Store, private fb: FormBuilder) {}
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  createBook() {
-    this.buildForm();
-    this.isModalOpen = true;
-  }
-
-  buildForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      type: [null, Validators.required],
-      publishDate: [null, Validators.required],
-      price: [null, Validators.required],
-    });
-  }
-
-  //<== added save ==>
-  save() {
-    if (this.form.invalid) {
-      return;
-    }
-
-    this.store.dispatch(new CreateUpdateBook(this.form.value)).subscribe(() => {
-      this.isModalOpen = false;
-      this.form.reset();
-      this.get();
-    });
-  }
-}
-```
-
-* 我们导入了 `CreateUpdateBook`.
-* 我们添加了 `save` 方法.
-
-打开 `app\books\book-list` 文件夹下的 `app\books\book-list`文件, 添加 `abp-button` 保存图书.
-
-```html
-<ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
-      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
-  </button>
-    
-  <!--added save button-->
-  <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
-        <i class="fa fa-check mr-1"></i>
-        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
-  </button>
-</ng-template>
-```
-
-使用以下内容替换 `<form [formGroup]="form">` 标签:
-
-```html
-<form [formGroup]="form" (ngSubmit)="save()"> <!-- added the ngSubmit -->
-```
-
-* 我们添加了 `(ngSubmit)="save()"` 到 `<form>` 元素,当按下enter时保存图书.
-* 我们在模态框的底部添加了 `abp-button` 来保存图书.
-
-模态框最终看起来像这样:
-
-![Save button to the modal](./images/bookstore-new-book-form-v2.png)
-
-### 更新图书
-
-#### CreateUpdateBook 动作
-
-打开 `books\state` 文件夹下的 `books.actions.ts` 文件,使用以下内容替换它:
-
-```js
-import { CreateUpdateBookDto } from '../../app/shared/models';
-
-export class GetBooks {
-  static readonly type = '[Books] Get';
-}
-
-export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
-  constructor(public payload: CreateUpdateBookDto, public id?: string) { } // <== added id parameter ==>
-}
-```
-
-* 我们在 `CreateUpdateBook` 动作的构造函数添加了 `id` 参数.
-
-打开 `books\state` 文件夹下的 `books.state.ts` 文件,使用以下内容替换 `save` 方法:
-
-```js
-@Action(CreateUpdateBook)
-save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
-  if (action.id) {
-    return this.bookService.updateByIdAndInput(action.payload, action.id);
-  } else {
-    return this.bookService.createByInput(action.payload);
-  }
-}
-```
-
-#### BookListComponent
-
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,在构造函数注入 `BookService` 服务,并添加 名为 `selectedBook` 的变量.
-
-```js
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks, CreateUpdateBook } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { BookService } from '../../app/shared/services'; // <== imported BookService ==>
-
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
-})
-export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
-
-  booksType = BookType;
-
-  bookTypeArr = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
-  );
-
-  loading = false;
-
-  isModalOpen = false;
-
-  form: FormGroup;
-
-  selectedBook = {} as BookDto; // <== declared selectedBook ==>
-
-  constructor(private store: Store, private fb: FormBuilder, private bookService: BookService) {} //<== injected BookService ==>
-
-  ngOnInit() {
-    this.get();
-  }
-
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
-  }
-
-  // <== this method is replaced ==>
-  createBook() {
-    this.selectedBook = {} as BookDto; // <== added ==>
-    this.buildForm();
-    this.isModalOpen = true;
-  }
-
-  // <== added editBook method ==>
-  editBook(id: string) {
-    this.bookService.getById(id).subscribe((book) => {
-      this.selectedBook = book;
-      this.buildForm();
-      this.isModalOpen = true;
-    });
-  }
-
-  // <== this method is replaced ==>
-  buildForm() {
-    this.form = this.fb.group({
-      name: [this.selectedBook.name || '', Validators.required],
-      type: [this.selectedBook.type || null, Validators.required],
-      publishDate: [
-        this.selectedBook.publishDate ? new Date(this.selectedBook.publishDate) : null,
-        Validators.required,
-      ],
-      price: [this.selectedBook.price || null, Validators.required],
-    });
-  }
-
-  save() {
-    if (this.form.invalid) {
-      return;
-    }
-
-    //<== added this.selectedBook.id ==>
-    this.store
-      .dispatch(new CreateUpdateBook(this.form.value, this.selectedBook.id))
-      .subscribe(() => {
-        this.isModalOpen = false;
-        this.form.reset();
-        this.get();
-      });
-  }
-}
-```
-
-* 我们导入了 `BookService`.
-* 我们声明了类型为 `BookDto` 的 `selectedBook` 变量.
-* 我们在构造函数注入了  `BookService`, 它用于检索正在编辑的图书数据.
-* 我们添加了 `editBook`  方法, 根据给定图书 `Id` 设置 `selectedBook` 对象.
-* 我们替换了 `buildForm` 方法使用 `selectedBook` 数据创建表单.
-* 我们替换了 `createBook` 方法,设置 `selectedBook` 为空对象.
-* 我们在 `CreateUpdateBook` 构造函数添加了 `selectedBook.id`.
-
-#### 添加 "Actions" 下拉框到表格
-
-打开 `app\books\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<div class="card-body">` 标签:
-
-```html
-<div class="card-body">
-  <abp-table
-    [value]="books$ | async"
-    [abpLoading]="loading"
-    [headerTemplate]="tableHeader"
-    [bodyTemplate]="tableBody"
-    [rows]="10"
-    [scrollable]="true"
-  >
-  </abp-table>
-  <ng-template #tableHeader>
-    <tr>
-      <th>{%{{{ "::Actions" | abpLocalization }}}%}</th>
-      <th>{%{{{ "::Name" | abpLocalization }}}%}</th>
-      <th>{%{{{ "::Type" | abpLocalization }}}%}</th>
-      <th>{%{{{ "::PublishDate" | abpLocalization }}}%}</th>
-      <th>{%{{{ "::Price" | abpLocalization }}}%}</th>
-    </tr>
-  </ng-template>
-  <ng-template #tableBody let-data>
-    <tr>
-      <td>
-        <div ngbDropdown container="body" class="d-inline-block">
-          <button
-            class="btn btn-primary btn-sm dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            ngbDropdownToggle
-          >
-            <i class="fa fa-cog mr-1"></i>{%{{{ "::Actions" | abpLocalization }}}%}
-          </button>
-          <div ngbDropdownMenu>
-            <button ngbDropdownItem (click)="editBook(data.id)">
-              {%{{{ "::Edit" | abpLocalization }}}%}
-            </button>
-          </div>
-        </div>
-      </td>
-      <td>{%{{{ data.name }}}%}</td>
-      <td>{%{{{ booksType[data.type] }}}%}</td>
-      <td>{%{{{ data.publishDate | date }}}%}</td>
-      <td>{%{{{ data.price }}}%}</td>
-    </tr>
-  </ng-template>
-</div>
-```
-
-- 我们添加了 "Actions" 栏的 `th`.
-- 我们添加了带有 `ngbDropdownToggle` 的 `button`,在点击按钮时打开操作.
-- 我们习惯于将[NgbDropdown](https://ng-bootstrap.github.io/#/components/dropdown/examples)用于操作的下拉菜单.
-
-UI最终看起来像这样:
-
-![Action buttons](./images/bookstore-actions-buttons.png)
-
-打开 `app\books\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<ng-template #abpHeader>` 标签:
-
-```html
-<ng-template #abpHeader>
-    <h3>{%{{{ (selectedBook.id ? 'AbpIdentity::Edit' : '::NewBook' ) | abpLocalization }}}%}</h3>
-</ng-template>
-```
-
-* **Edit** 文本做为编辑记录操作的标题, **New Book** 做为添加记录操作的标题.
-
-### 删除图书
-
-#### DeleteBook 动作
-
-打开 `books\state` 文件夹下的 `books.actions.ts` 文件添加名为 `DeleteBook` 的动作.
-
-```js
-export class DeleteBook {
-  static readonly type = '[Books] Delete';
-  constructor(public id: string) {}
-}
-```
-
-打开 `books\state` 文件夹下的 `books.state.ts` 文件,使用以下内容替换它:
-
-```js
-import { PagedResultDto } from '@abp/ng.core';
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks, CreateUpdateBook, DeleteBook } from './books.actions'; // <== added DeleteBook==>
-import { BookService } from '../../app/shared/services';
-import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { BookDto } from '../../app/shared/models';
-
-export class BooksStateModel {
-  public book: PagedResultDto<BookDto>;
-}
-
-@State<BooksStateModel>({
-  name: 'BooksState',
-  defaults: { book: {} } as BooksStateModel,
-})
-@Injectable()
-export class BooksState {
-  @Selector()
-  static getBooks(state: BooksStateModel) {
-    return state.book.items || [];
-  }
-
-  constructor(private bookService: BookService) {}
-
-  @Action(GetBooks)
-  get(ctx: StateContext<BooksStateModel>) {
-    return this.bookService.getListByInput().pipe(
-      tap((booksResponse) => {
-        ctx.patchState({
-          book: booksResponse,
-        });
-      })
-    );
-  }
-
-  @Action(CreateUpdateBook)
-  save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
-    if (action.id) {
-      return this.bookService.updateByIdAndInput(action.payload, action.id);
-    } else {
-      return this.bookService.createByInput(action.payload);
-    }
-  }
-
-  // <== added DeleteBook action listener ==>
-  @Action(DeleteBook)
-  delete(ctx: StateContext<BooksStateModel>, action: DeleteBook) {
-    return this.bookService.deleteById(action.id);
-  }
-}
-```
-
-- 我们导入了 `DeleteBook` .
-
-- 我们在文件末尾添加了 `DeleteBook` 动作监听器.
-
-#### 删除确认弹层
-
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,注入 `ConfirmationService`.
-
-替换构造函数:
-
-```js
-import { ConfirmationService } from '@abp/ng.theme.shared';
-//...
-
-constructor(
-    private store: Store, 
-    private fb: FormBuilder,
-    private bookService: BookService,
-    private confirmation: ConfirmationService // <== added this line ==>
-) { }
-```
-
-* 我们导入了 `ConfirmationService`.
-* 我们在构造函数注入了 `ConfirmationService` .
-
-参阅[确认弹层文档](https://docs.abp.io/en/abp/latest/UI/Angular/Confirmation-Service)了解更多
-
-在 `book-list.component.ts` 中添加删除方法:
-
-```js
-import { GetBooks, CreateUpdateBook, DeleteBook } from '../state/books.actions' ;// <== imported DeleteBook ==>
-
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared'; //<== imported Confirmation ==>
-
-//...
-
-delete(id: string) {
-    this.confirmation
-        .warn('::AreYouSureToDelete', 'AbpAccount::AreYouSure')
-        .subscribe(status => {
-        if (status === Confirmation.Status.confirm) {
-            this.store.dispatch(new DeleteBook(id)).subscribe(() => this.get());
-        }
-    });
-}
-```
-
-`delete` 方法会显示一个确认弹层并订阅用户响应. 只在用户点击 `Yes` 按钮时分派动作. 确认弹层看起来如下:
-
-![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
-
-#### 添加删除按钮
-
-打开 `app\books\book-list` 文件夹下的 `app\books\book-list` 文件,修改 `ngbDropdownMenu` 添加删除按钮:
-
-```html
-<div ngbDropdownMenu>
-  <!-- added Delete button -->
-    <button ngbDropdownItem (click)="delete(data.id)">
-        {%{{{ 'AbpAccount::Delete' | abpLocalization }}}%}
-    </button>
-</div>
-```
-
-最终操作下拉框UI看起来如下:
-
-![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
+![Book list final result](./images/bookstore-book-list.png)
 
 {{end}}
 
-### 下一章
+## 下一章
 
-查看本教程的 [下一章](Part-3.md) .
+查看本教程的[下一章](Part-3.md).

@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
     "InternalServerErrorMessage": "حدث خطأ داخلي أثناء طلبك!",
@@ -17,6 +17,7 @@
     "Error": "خطأ",
     "AreYouSure": "هل أنت متأكد؟",
     "Cancel": "إلغاء",
+    "Clear": "تنظيف",
     "Yes": "نعم",
     "No": "لا",
     "Ok": "حسنا",
@@ -47,6 +48,8 @@
     "PagerInfoEmpty": "عرض 0 الي 0 من 0 إدخالات",
     "PagerInfoFiltered": "(تمت تصفيته من _MAX_ مجموع الإدخالات)",
     "NoDataAvailableInDatatable": "لا توجد بيانات متاحة في الجدول",
+    "Total": "مجموع",
+    "Selected": "مختارة",
     "PagerShowMenuEntries": "عرض _MENU_ إدخالات",
     "DatatableActionDropdownDefaultText": "أجراءات",
     "ChangePassword": "تغيير كلمة السر",
@@ -58,6 +61,7 @@
     "404Message": "الصفحة غير موجودة",
     "500Message": "خطأ في الخادم الداخلي",
     "GoHomePage": "اذهب الى الصفحة الرئيسية",
-    "GoBack": "عد"
+    "GoBack": "عد",
+    "Search": "بحث"
   }
 }

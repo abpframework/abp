@@ -103,6 +103,15 @@ export class IdentityService {
     return this.rest.request<null, Identity.RoleResponse>(request, { apiName: this.apiName });
   }
 
+  getUserAssingableRoles(): Observable<Identity.RoleResponse> {
+    const request: Rest.Request<null> = {
+      method: 'GET',
+      url: '/api/identity/users/assignable-roles',
+    };
+
+    return this.rest.request<null, Identity.RoleResponse>(request, { apiName: this.apiName });
+  }
+
   deleteUser(id: string): Observable<null> {
     const request: Rest.Request<null> = {
       method: 'DELETE',

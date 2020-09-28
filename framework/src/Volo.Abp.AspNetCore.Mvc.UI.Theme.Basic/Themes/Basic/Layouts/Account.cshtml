@@ -12,6 +12,7 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetScripts
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles
 @using Volo.Abp.MultiTenancy
+@using Volo.Abp.Localization
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @inject IBrandingProvider BrandingProvider
 @inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions
@@ -23,12 +24,12 @@
     Layout = null;
     AbpAntiForgeryManager.SetCookie();
     var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
-
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
 }
 
 <!DOCTYPE html>
 
-<html lang="@CultureInfo.CurrentCulture.Name">
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
 <head>
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Account)
 
@@ -38,8 +39,10 @@
 
     <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
 
-    <meta name="description" content="@(ViewBag.Description != null ? ViewBag.Description as string : "Login or register to check out your ABP account. You need to be logged in to to view pay statements, generate new project and manage your license.")" />
-
+    @if (ViewBag.Description != null)
+    {
+        <meta name="description" content="@(ViewBag.Description as string)" />
+    }
     <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
     @await RenderSectionAsync("styles", false)
@@ -48,14 +51,14 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
-<body class="abp-account-layout bg-light">
+<body class="abp-account-layout bg-light @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
     <div class="@containerClass">
         <abp-row>
-            <abp-column size-md="_5" class="mx-auto">
+            <abp-column class="col mx-auto" style="max-width: 440px">
                 @if (MultiTenancyOptions.Value.IsEnabled &&
                   (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
                 {
@@ -85,7 +88,9 @@
                     </div>
                 }
                 @(await Component.InvokeAsync<PageAlertsViewComponent>())
+                @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Account)
                 @RenderBody()
+                @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Account)
             </abp-column>
         </abp-row>
     </div>

@@ -4,36 +4,17 @@ A permission is a simple policy that is granted or prohibited for a particular u
 
 You can get permission of authenticated user using `getGrantedPolicy` selector of `ConfigState`.
 
-You can get permission as boolean value from store:
+You can get permission as boolean value:
 
 ```js
-import { Store } from '@ngxs/store';
-import { ConfigState } from '../states';
+import { ConfigStateService } from '@abp/ng.core';
 
 export class YourComponent {
-  constructor(private store: Store) {}
+  constructor(private config: ConfigStateService) {}
 
   ngOnInit(): void {
-    const canCreate = this.store.selectSnapshot(ConfigState.getGrantedPolicy('AbpIdentity.Roles.Create'));
+    const canCreate = this.config.getGrantedPolicy('AbpIdentity.Roles.Create');
   }
-
-  // ...
-}
-```
-
-Or you can get it via `ConfigStateService`:
-
-```js
-import { ConfigStateService } from '../services/config-state.service';
-
-export class YourComponent {
-  constructor(private configStateService: ConfigStateService) {}
-
-  ngOnInit(): void {
-    const canCreate = this.configStateService.getGrantedPolicy('AbpIdentity.Roles.Create');
-  }
-
-  // ...
 }
 ```
 
@@ -42,7 +23,7 @@ export class YourComponent {
 You can use the `PermissionDirective` to manage visibility of a DOM Element accordingly to user's permission.
 
 ```html
-<div *abpPermission="AbpIdentity.Roles">
+<div *abpPermission="'AbpIdentity.Roles'">
   This content is only visible if the user has 'AbpIdentity.Roles' permission.
 </div>
 ```
@@ -55,18 +36,20 @@ The directive can also be used as an attribute directive but we recommend to you
 
 You can use `PermissionGuard` if you want to control authenticated user's permission to access to the route during navigation.
 
-Add `requiredPolicy` to the `routes` property in your routing module.
+* Import the PermissionGuard from @abp/ng.core.
+* Add `canActivate: [PermissionGuard]` to your route object.
+* Add `requiredPolicy` to the `data` property of your route in your routing module.
 
 ```js
+import { PermissionGuard } from '@abp/ng.core';
+// ...
 const routes: Routes = [
   {
     path: 'path',
     component: YourComponent,
     canActivate: [PermissionGuard],
     data: {
-      routes: {
-        requiredPolicy: 'AbpIdentity.Roles.Create',
-      },
+        requiredPolicy: 'YourProjectName.YourComponent', // policy key for your component
     },
   },
 ];
@@ -76,4 +59,4 @@ Granted Policies are stored in the `auth` property of `ConfigState`.
 
 ## What's Next?
 
-- [Confirmation Popup](./Confirmation-Service.md)
+* [Multi Tenancy](./Multi-Tenancy.md)

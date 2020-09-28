@@ -41,6 +41,10 @@ namespace Volo.Abp.Cli.ProjectModification
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi");
                 case NuGetPackageTarget.HttpApiClient:
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Client");
+                case NuGetPackageTarget.SignalR:
+                    return FindProjectEndsWith(projectFiles, assemblyNames, ".SignalR") ??
+                           FindProjectEndsWith(projectFiles, assemblyNames, ".Web") ??
+                           FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Host");
                 default:
                     return null;
             }

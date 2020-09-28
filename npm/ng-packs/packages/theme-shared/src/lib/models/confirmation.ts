@@ -3,7 +3,7 @@ import { Config } from '@abp/ng.core';
 export namespace Confirmation {
   export interface Options {
     id?: any;
-    closable?: boolean;
+    dismissible?: boolean;
     messageLocalizationParams?: string[];
     titleLocalizationParams?: string[];
     hideCancelBtn?: boolean;

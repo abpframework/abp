@@ -46,7 +46,7 @@ export class SessionState {
       .pipe(ofActionSuccessful(GetAppConfiguration))
       .pipe(take(1))
       .subscribe(() => {
-        const { sessionDetail } = this.store.selectSnapshot(SessionState) || { sessionDetail: {} };
+        const sessionDetail = this.store.selectSnapshot(SessionState)?.sessionDetail || {};
 
         const fiveMinutesBefore = new Date().valueOf() - 5 * 60 * 1000;
 
@@ -69,12 +69,15 @@ export class SessionState {
   }
 
   @Action(SetLanguage)
-  setLanguage({ patchState, dispatch }: StateContext<Session.State>, { payload }: SetLanguage) {
+  setLanguage(
+    { patchState, dispatch }: StateContext<Session.State>,
+    { payload, dispatchAppConfiguration = true }: SetLanguage,
+  ) {
     patchState({
       language: payload,
     });
 
-    return dispatch(new GetAppConfiguration());
+    if (dispatchAppConfiguration) return dispatch(new GetAppConfiguration());
   }
 
   @Action(SetTenant)
