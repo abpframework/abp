@@ -40,67 +40,31 @@ After successful login, you should be redirected to home page.
 
 Let's create a module which will be loaded lazily.
 
-Open up a terminal and navigate to `angular` to run following commands. Following commands require `angular-cli` being installed globally.
-If you do not have `angular-cli` installed or you do not want to install it, you can run the same commands by adding `npx` to the beginning. 
-E.g. `npx ng g m dev-extreme --routing`
+Open up a terminal and navigate to `angular` to run following command.
 
-```bash
-ng g m dev-extreme --routing
+```shell
+ng g m dev-extreme --route dev-extreme --module app
 ```
 
-Following files should be created.
+...or with `npx`, if you do not have `angular-cli` installed...
 
-```bash
-CREATE src/app/dev-extreme/dev-extreme-routing.module.ts (253 bytes)
-CREATE src/app/dev-extreme/dev-extreme.module.ts (297 bytes)
+```shell
+npx ng g m dev-extreme --route dev-extreme --module app
 ```
 
-Let's create a component for `DevExtremeModule` by running following command
+Your terminal should log the following output:
 
-```bash
-ng g c dev-extreme
-```
-
-Following files should be created.
-
-```bash
+```shell
+CREATE src/app/dev-extreme/dev-extreme-routing.module.ts (361 bytes)
+CREATE src/app/dev-extreme/dev-extreme.module.ts (379 bytes)
 CREATE src/app/dev-extreme/dev-extreme.component.scss (0 bytes)
 CREATE src/app/dev-extreme/dev-extreme.component.html (26 bytes)
-CREATE src/app/dev-extreme/dev-extreme.component.spec.ts (657 bytes)
+CREATE src/app/dev-extreme/dev-extreme.component.spec.ts (655 bytes)
 CREATE src/app/dev-extreme/dev-extreme.component.ts (295 bytes)
-UPDATE src/app/dev-extreme/dev-extreme.module.ts (379 bytes)
+UPDATE src/app/app-routing.module.ts (362 bytes)
 ```
 
-We should edit `dev-extreme-routing.module.ts` to load newly created `DevExtremeComponent` when `DevExtremeModule` is loaded.
-
-Open `dev-extreme-routing.module.ts` and import `DevExtremeComponent` change `routes` array to the following
-
-```typescript
-// ...
-import { DevExtremeComponent } from './dev-extreme.component';
-
-const routes: Routes = [{
-  path: '',
-  component: DevExtremeComponent
-}];
-
-// ...
-```
-
-We should also edit `app-routing.module.ts` to be able to load `DevExtremeModule` and `route.provider.ts` to show a link to this module.
-
-Open `app-routing.module.ts` and add following object to `routes` array
-
-```typescript
-const routes: Routes = [
-  // ...
-  {
-    path: 'dev-extreme',
-    loadChildren: () => import('./dev-extreme/dev-extreme.module').then((m) => m.DevExtremeModule),
-  },
-  // ...
-];
-```
+The Angular CLI has created a module and configured it to lazy-load at `/dev-extreme` path.
 
 The last step to be able to see our newly created module in the browser, open `route.provider.ts` and edit the array being added into the routes.
 
