@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -29,6 +30,8 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         
         protected string ProviderName;
         protected string ProviderKey;
+
+        protected string SelectedTabName;
         
         protected List<FeatureGroupDto> Groups { get; set; }
 
@@ -36,7 +39,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
 
         protected Dictionary<string, string> SelectionStringValues;
         
-        public virtual async Task OpenAsync(string providerName, string providerKey)
+        public virtual async Task OpenAsync([NotNull]string providerName, string providerKey = null)
         {
             ProviderName = providerName;
             ProviderKey = providerKey;
@@ -46,6 +49,8 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             
             Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey)).Groups;
 
+            SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
+            
             foreach (var featureGroupDto in Groups)
             {
                 foreach (var featureDto in featureGroupDto.Features)
