@@ -68,7 +68,8 @@ namespace Volo.Abp.Cli.ProjectModification
             string startupProject,
             string version,
             bool skipDbMigrations = false,
-            bool withSourceCode = false)
+            bool withSourceCode = false,
+            bool addSourceCodeToSolutionFile = false)
         {
             Check.NotNull(solutionFile, nameof(solutionFile));
             Check.NotNull(moduleName, nameof(moduleName));
@@ -85,7 +86,12 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
                 await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version);
-                await SolutionFileModifier.AddModuleToSolutionFileAsync(module, solutionFile);
+
+                if (addSourceCodeToSolutionFile)
+                {
+                    await SolutionFileModifier.AddModuleToSolutionFileAsync(module, solutionFile);
+                }
+
                 await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
                 await AddAngularSourceCode(modulesFolderInSolution, solutionFile);
             }
