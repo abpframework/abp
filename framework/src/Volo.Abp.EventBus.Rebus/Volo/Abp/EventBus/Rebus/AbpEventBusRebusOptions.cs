@@ -21,7 +21,6 @@ namespace Volo.Abp.EventBus.Rebus
         }
         private Action<RebusConfigurer> _configurer;
 
-
         [NotNull]
         public Func<IBus, Type, object, Task> Publish
         {
