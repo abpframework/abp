@@ -36,7 +36,8 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            var withSourceCode = commandLineArgs.Options.ContainsKey("with-source-code");
+            var withSourceCode = commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
+            var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
 
             var skipDbMigrations = Convert.ToBoolean(
                 commandLineArgs.Options.GetOrNull(Options.DbMigrations.Skip) ?? "false");
@@ -55,7 +56,8 @@ namespace Volo.Abp.Cli.Commands
                 commandLineArgs.Options.GetOrNull(Options.StartupProject.Short, Options.StartupProject.Long),
                 version,
                 skipDbMigrations,
-                withSourceCode
+                withSourceCode,
+                addSourceCodeToSolutionFile
             );
         }
 
@@ -71,7 +73,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-module <module-name> [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
-            sb.AppendLine("  --with-source-code                              Downloads the source code of the module and adds it to your solution.");
+            sb.AppendLine("  --with-source-code                              Downloads the source code of the module to your solution folder.");
+            sb.AppendLine("  --add-to-solution-file                          Adds the downloaded module to your solution file. (only available when --with-source-code used)");
             sb.AppendLine("  -s|--solution <solution-file>                   Specify the solution file explicitly.");
             sb.AppendLine("  --skip-db-migrations <boolean>                  Specify if a new migration will be added or not.");
             sb.AppendLine("  -sp|--startup-project <startup-project-path>    Relative path to the project folder of the startup project. Default value is the current folder.");
@@ -157,6 +160,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "sp";
                 public const string Long = "startup-project";
+            }
+
+            public static class SourceCode
+            {
+                public const string Long = "with-source-code";
             }
         }
     }
