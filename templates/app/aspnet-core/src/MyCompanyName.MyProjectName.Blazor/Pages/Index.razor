@@ -8,8 +8,6 @@
 @inject ICurrentTenant CurrentTenant
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IStringLocalizer<MyProjectNameResource> L
-
-
 <div class="container">
     <div class="p-5 text-center">
         <Badge Color="Color.Success" class="mb-4">
@@ -22,53 +20,10 @@
 
         @if (!CurrentUser.IsAuthenticated)
         {
-            <Button Size="ButtonSize.None" Color="Color.Primary">
+            <a class="btn btn-primary" href="/authentication/login">
                 <i class="fa fa-sign-in-alt"></i> @L["Login"]
-            </Button>
-        }
-
-    <Row class="text-left">
-        @if (CurrentUser.IsAuthenticated)
-        {
-            <Column>
-                <h3>Current User</h3>
-                <ul>
-                    <li>Id: <strong>@CurrentUser.Id</strong></li>
-                    <li>TenantId: <strong>@CurrentUser.TenantId</strong></li>
-                    <li>UserName: <strong>@CurrentUser.UserName</strong></li>
-                    <li>Name: <strong>@CurrentUser.Name</strong></li>
-                    <li>SurName: <strong>@CurrentUser.SurName</strong></li>
-                    <li>Email: <strong>@CurrentUser.Email</strong></li>
-                    <li>EmailVerified: <strong>@CurrentUser.EmailVerified</strong></li>
-                    <li>PhoneNumber: <strong>@CurrentUser.PhoneNumber</strong></li>
-                    <li>PhoneNumberVerified: <strong>@CurrentUser.PhoneNumberVerified</strong></li>
-                    <li>Roles: <strong>@CurrentUser.Roles.JoinAsString(", ")</strong></li>
-                </ul>
-            </Column>
-        }
-        @if (_claims != null)
-        {
-            <Column>
-                <h3>Current Claims</h3>
-                <ul>
-                    @foreach (var claim in _claims)
-                    {
-                        <li>@claim.Type: @claim.Value</li>
-                    }
-                </ul>
-            </Column>
-        }
-        @if (CurrentTenant.IsAvailable)
-        {
-    <Column>
-        <h3>Current Tenant</h3>
-        <ul>
-            <li>Id: <strong>@CurrentTenant.Id</strong></li>
-            <li>Name: <strong>@CurrentTenant.Name</strong></li>
-        </ul>
-    </Column>
-        }
-    </Row>
+            </a>
+        }    
     </div>
 
     <div class="my-3 text-center">
@@ -114,9 +69,9 @@
                     <div class="p-4">
                         <h5 class="mb-3"><i class="fab fa-github text-secondary d-block my-3 fa-2x"></i> Github</h5>
                         <p>Do you love the ABP Framework? Please <strong>give a star</strong> to support it!</p>
-                        
+
                         <a href="https://github.com/abpframework/abp/" target="_blank" class="btn btn-link px-1">See Open Source Framework <i class="fas fa-chevron-right"></i></a>
-                        
+
                     </div>
                 </div>
                 <div class="col-lg-4 border-left">
