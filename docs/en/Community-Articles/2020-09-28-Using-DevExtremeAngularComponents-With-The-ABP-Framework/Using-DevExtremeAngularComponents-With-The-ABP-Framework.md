@@ -6,9 +6,11 @@ We will create the same application using Angular as the UI framework and integr
 
 ## Create the Project
 
+For detail information about how to generate and start up a project, please refer to the [official docs](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No). For the scope of this post, we will not go into details of the backend applications.
+
 Let's create an application using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI#new)
 
-```bash
+```shell
 abp new DevExtremeAngular -u angular
 ```
 
@@ -34,9 +36,38 @@ You can login to the application by using following credentials
 
 After successful login, you should be redirected to home page.
 
+## Install DevExtreme
+
+Let's start with installing DevExtreme into our project before writing any code.
+
+You can follow [the guide](https://js.devexpress.com/Documentation/Guide/Angular_Components/Getting_Started/Add_DevExtreme_to_an_Angular_CLI_Application/) provided by **DevExtreme** team or apply the following steps.
+
+* `npm install devextreme devextreme-angular` or `yarn add devextreme devextreme-angular`
+* Import following two styles in `angular.json`
+
+```javascript
+  // ...
+  "styles": [
+    // ...
+    "src/styles.scss",
+    "node_modules/devextreme/dist/css/dx.common.css",
+    "node_modules/devextreme/dist/css/dx.light.css"
+  ]
+```
+
+* Add `dx-viewport` to classes of `body` in `index.html`
+
+```html
+<body class="bg-light dx-viewport">
+  <app-root>
+    <div class="donut centered"></div>
+  </app-root>
+</body>
+```
+
+After completing these steps, you need to restart the angular application.
 
 ## Create a lazy Angular Module for DevExtreme Demo
-
 
 Let's create a module which will be loaded lazily.
 
@@ -106,13 +137,13 @@ Firstly, let's create a service for our component.
 
 Navigate to the `dev-extreme` folder and run following command. If you run this command at the root, the service will be generated next to `app.module.ts`
 
-```bash
+```shell
 ng g s dev-extreme
 ```
 
 Following files should be created
 
-```bash
+```shell
 CREATE src/app/dev-extreme/dev-extreme.service.spec.ts (378 bytes)
 CREATE src/app/dev-extreme/dev-extreme.service.ts (139 bytes)
 ```
@@ -169,37 +200,6 @@ And use it within `dev-extreme.component.html`
 This should list names of the users on the screen
 
 ![A screenshot showing list users on the dev extreme page](users-on-dev-extreme.png)
-
-## Install DevExtreme
-
-We've added new users and listed them on the `/dev-extreme`. Now, it is time to integrate **DevExtreme** components into our application.
-
-You can follow [the guide](https://js.devexpress.com/Documentation/Guide/Angular_Components/Getting_Started/Add_DevExtreme_to_an_Angular_CLI_Application/) provided by **DevExtreme** team or apply the following steps.
-
-* `npm install devextreme devextreme-angular` or `yarn add devextreme devextreme-angular`
-* Import following two styles in `angular.json`
-
-```javascript
-  // ...
-  "styles": [
-    // ...
-    "src/styles.scss",
-    "node_modules/devextreme/dist/css/dx.common.css",
-    "node_modules/devextreme/dist/css/dx.light.css"
-  ]
-```
-
-* Add `dx-viewport` to classes of `body` in `index.html`
-
-```html
-<body class="bg-light dx-viewport">
-  <app-root>
-    <div class="donut centered"></div>
-  </app-root>
-</body>
-```
-
-After completing these steps, you need to restart the angular application.
 
 ## Use DxDataGrid to list the users
 
