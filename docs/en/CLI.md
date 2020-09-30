@@ -181,7 +181,7 @@ abp add-module Volo.Blogging
 * `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
 * `-sp` or `--startup-project`: Relative path to the project folder of the startup project. Default value is the current folder.
 * `--with-source-code`: Downloads the source code of the module to your solution folder and uses local project references instead of NuGet/NPM packages.
-* `--add-to-solution-file`: Adds the downloaded module to your solution file, so you will also see the projects of the module in your solution when you open it on a IDE. (only available when `--with-source-code` is used.)
+* `--add-to-solution-file`: Adds the downloaded module to your solution file, so you will also see the projects of the module when you open the solution on a IDE. (only available when `--with-source-code` is used.)
 
 ### get-source
 
