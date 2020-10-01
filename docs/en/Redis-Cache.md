@@ -7,7 +7,7 @@ However, ABP provides an **integration package** for Redis Cache: [Volo.Abp.Cach
 1. It implements `SetManyAsync` and `GetManyAsync` methods. These are not standard methods of the Microsoft Caching library, but added by the ABP Framework [Caching](Caching.md) system. They **significiantly increases the performance** when you need to set/get multiple cache items with a single method call.
 2. It **simplifies** the Redis cache **configuration** (will be explained below).
 
-> Volo.Abp.Caching.StackExchangeRedis is already depends on the Microsoft.Extensions.Caching.StackExchangeRedis package, but extends and improves it.
+> Volo.Abp.Caching.StackExchangeRedis is already uses the Microsoft.Extensions.Caching.StackExchangeRedis package, but extends and improves it.
 
 ## Installation
 

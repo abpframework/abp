@@ -41,7 +41,8 @@ ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in t
 * It automatically adds a **cache name** prefix to the cache keys based on the object type stored in the cache. Default cache name is the full name of the cache item class (`CacheItem` postfix is removed if your cache item class ends with it). You can use the **`CacheName` attribute** on the cache item class to set the cache name.
 * It automatically adds the **current tenant id** to the cache key to distinguish cache items for different tenants (if your application is [multi-tenant](Multi-Tenancy.md)). Define `IgnoreMultiTenancy` attribute on the cache item class to disable this if you want to share the cached objects among all tenants in a multi-tenant application.
 * Allows to define a **global cache key prefix** per application, so different applications can use their isolated key pools in a shared distributed cache server.
-* ABP's distributed cache also **can tolerate errors** wherever possible and bypasses the cache. This is useful when you have temporary problems on the cache server.
+* It **can tolerate errors** wherever possible and bypasses the cache. This is useful when you have temporary problems on the cache server.
+* It has methods like `GetManyAsync` and `SetManyAsync` which significantly improve the performance on **batch operations**.
 
 **Example: Store Book names and prices in the cache**
 
@@ -97,11 +98,11 @@ namespace MyProject
 }
 ````
 
-* This sample service uses the `GetOrAddAsync()` method to get a book item from the cache.
+* This sample service uses the `GetOrAddAsync()` method to get a book item from the cache. `GetOrAddAsync` is an additional method that was added by the ABP Framework to the standard ASP.NET Core distributed cache methods.
 * If the book was not found in the cache, it calls the factory method (`GetBookFromDatabaseAsync` in this case) to retrieve the book item from the original source.
 * `GetOrAddAsync` optionally gets a `DistributedCacheEntryOptions` which can be used to set the lifetime of the cached item.
 
-Other methods of the `IDistributedCache<BookCacheItem>` are same as ASP.NET Core's `IDistributedCache` interface, so you can refer [it's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
+`IDistributedCache<BookCacheItem>` supports the same methods of the ASP.NET Core's standard `IDistributedCache` interface, so you can refer [it's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
 
 ### `IDistributedCache<TCacheItem, TCacheKey>` Interface
 
@@ -238,6 +239,15 @@ In most cases, you want to **tolerate the cache errors**; If you get error from 
 ABP's Distributed Cache [handle](Exception-Handling.md), log and hide errors by default. There is an option to change this globally (see the options below).
 
 In addition, all of the `IDistributedCache<TCacheItem>` (and `IDistributedCache<TCacheItem, TCacheKey>`) methods have an optional `hideErrors` parameter, which is `null` by default. The global value is used if this parameter left as `null`, otherwise you can decide to hide or throw the exceptions for individual method calls.
+
+## Batch Operations
+
+ABP's distributed cache interfaces provide methods to perform batch get/set methods those improves the performance when you want to get or set multiple cache items in a single method call.
+
+* `SetManyAsync` and `SetMany` methods can be used to set multiple values to the cache.
+* `GetManyAsync` and `GetMany` methods can be used to retrieve multiple values from the cache.
+
+> These are not standard methods of the ASP.NET Core caching. So, a provide may not support them. They are supported by the [ABP Redis Cache integration package](Redis-Cache.md).
 
 ## Advanced Topics
 
