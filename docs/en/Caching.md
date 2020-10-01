@@ -207,7 +207,13 @@ public class BookService : ITransientDependency
 
 ## Error Handling
 
-TODO
+When you design a cache for your objects, you typically try to get the value from cache first. If not found in the cache, you query the object from the **original source**. It may be located in a **database** or may require to perform an HTTP call to a remote server.
+
+In most cases, you want to **tolerate the cache errors**; If you get error from the cache server you don't want to cancel the operation. Instead, you silently hide (and log) the error and **query from the original source**. This is what the ABP Framework does by default.
+
+ABP's Distributed Cache [handle](Exception-Handling.md), log and hide errors by default. There is an option to change this globally (see the options below).
+
+In addition, all of the `IDistributedCache<TCacheItem>` (and `IDistributedCache<TCacheItem, TCacheKey>`) methods have an optional `hideErrors` parameter, which is `null` by default. The global value is used if this parameter left as `null`, otherwise you can decide to hide or throw the exceptions for individual method calls.
 
 ## Configuration
 
