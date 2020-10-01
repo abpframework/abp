@@ -10,8 +10,6 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
         [Inject]
         private IToolbarManager ToolbarManager { get; set; }
 
-        private RenderFragment ToolbarRender { get; set; }
-
         private List<RenderFragment> ToolbarItemRenders { get; set; } = new List<RenderFragment>();
 
         protected override async Task OnInitializedAsync()
