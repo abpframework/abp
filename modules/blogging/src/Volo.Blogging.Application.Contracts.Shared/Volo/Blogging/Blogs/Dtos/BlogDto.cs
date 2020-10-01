@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.Blogging.Admin.Blogs
+namespace Volo.Blogging.Blogs.Dtos
 {
     public class BlogDto : FullAuditedEntityDto<Guid>
     {
