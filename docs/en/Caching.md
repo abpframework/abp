@@ -2,7 +2,7 @@
 
 ABP Framework extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
 
-## Volo.Abp.Caching Package
+## Installation
 
 > This package is already installed by default with the [application startup template](Startup-Templates/Application.md). So, most of the time, you don't need to install it manually.
 
@@ -14,7 +14,9 @@ abp add-package Volo.Abp.Caching
 
 You need to run this command on a command line terminal in a folder containing a `csproj` file (see [other options](https://abp.io/package-detail/Volo.Abp.Caching) to install).
 
-## `IDistributedCache` Interface
+## Usage
+
+### `IDistributedCache` Interface
 
 ASP.NET Core defines the `IDistributedCache` interface to get/set the cache values. But it has some difficulties:
 
@@ -29,7 +31,7 @@ ASP.NET Core defines the `IDistributedCache` interface to get/set the cache valu
 
 See [ASP.NET Core's distributed caching document](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) for more information.
 
-## `IDistributedCache<TCacheItem>` Interface
+### `IDistributedCache<TCacheItem>` Interface
 
 ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in the [Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/) package. `TCacheItem` is the type of the object stored in the cache. 
 
@@ -41,9 +43,7 @@ ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in t
 * Allows to define a **global cache key prefix** per application, so different applications can use their isolated key pools in a shared distributed cache server.
 * ABP's distributed cache also **can tolerate errors** wherever possible and bypasses the cache. This is useful when you have temporary problems on the cache server.
 
-### Usage
-
-An example class to store an item in the cache:
+**Example: Store Book names and prices in the cache**
 
 ````csharp
 namespace MyProject
@@ -103,13 +103,11 @@ namespace MyProject
 
 Other methods of the `IDistributedCache<BookCacheItem>` are same as ASP.NET Core's `IDistributedCache` interface, so you can refer [it's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
 
-## `IDistributedCache<TCacheItem, TCacheKey>` Interface
+### `IDistributedCache<TCacheItem, TCacheKey>` Interface
 
 `IDistributedCache<TCacheItem>` interface assumes that the type of your **cache key** is `string` (so, you need to manually convert your key to string if you need to use a different kind of cache key). While this is not a big deal, `IDistributedCache<TCacheItem, TCacheKey>` can be used when your cache key type is not `string`.
 
-### Usage
-
-An example class to store an item in the cache:
+**Example: Store Book names and prices in the cache**
 
 ````csharp
 using Volo.Abp.Caching;
@@ -126,7 +124,9 @@ namespace MyProject
 }
 ````
 
-Example usage (assumes that your cache key type is `Guid`):
+* This example uses the `CacheName` attribute for the `BookCacheItem` class to set the cache name.
+
+You can inject and use the `IDistributedCache<BookCacheItem, Guid>` service to get/set `BookCacheItem` objects:
 
 ````csharp
 using System;
@@ -167,7 +167,8 @@ namespace MyProject
 
 * This sample service uses the `GetOrAddAsync()` method to get a book item from the cache.
 * Since cache explicitly implemented as using  `Guid` as cache key, `Guid` value passed to  `_cache_GetOrAddAsync()` method.
-* This example uses the `CacheName` attribute for the `BookCacheItem` class.
+
+#### Complex Types as the Cache Key
 
 `IDistributedCache<TCacheItem, TCacheKey>`  internally uses `ToString()` method of the key object to convert it to a string. If you need to use a complex object as the cache key, you need to override `ToString` method of your class.
 
@@ -205,16 +206,6 @@ public class BookService : ITransientDependency
 }
 ````
 
-## Error Handling
-
-When you design a cache for your objects, you typically try to get the value from cache first. If not found in the cache, you query the object from the **original source**. It may be located in a **database** or may require to perform an HTTP call to a remote server.
-
-In most cases, you want to **tolerate the cache errors**; If you get error from the cache server you don't want to cancel the operation. Instead, you silently hide (and log) the error and **query from the original source**. This is what the ABP Framework does by default.
-
-ABP's Distributed Cache [handle](Exception-Handling.md), log and hide errors by default. There is an option to change this globally (see the options below).
-
-In addition, all of the `IDistributedCache<TCacheItem>` (and `IDistributedCache<TCacheItem, TCacheKey>`) methods have an optional `hideErrors` parameter, which is `null` by default. The global value is used if this parameter left as `null`, otherwise you can decide to hide or throw the exceptions for individual method calls.
-
 ## Configuration
 
 ### AbpDistributedCacheOptions
@@ -238,7 +229,23 @@ Configure<AbpDistributedCacheOptions>(options =>
 * `KeyPrefix` (`string`, default: `null`): If your cache server is shared by multiple applications, you can set a prefix for the cache keys for your application. In this case, different applications can not overwrite each other's cache items.
 * `GlobalCacheEntryOptions` (`DistributedCacheEntryOptions`): Used to set default distributed cache options (like `AbsoluteExpiration` and `SlidingExpiration`) used when you don't specify the options while saving cache items. Default value uses the `SlidingExpiration` as 20 minutes.
 
+## Error Handling
+
+When you design a cache for your objects, you typically try to get the value from cache first. If not found in the cache, you query the object from the **original source**. It may be located in a **database** or may require to perform an HTTP call to a remote server.
+
+In most cases, you want to **tolerate the cache errors**; If you get error from the cache server you don't want to cancel the operation. Instead, you silently hide (and log) the error and **query from the original source**. This is what the ABP Framework does by default.
+
+ABP's Distributed Cache [handle](Exception-Handling.md), log and hide errors by default. There is an option to change this globally (see the options below).
+
+In addition, all of the `IDistributedCache<TCacheItem>` (and `IDistributedCache<TCacheItem, TCacheKey>`) methods have an optional `hideErrors` parameter, which is `null` by default. The global value is used if this parameter left as `null`, otherwise you can decide to hide or throw the exceptions for individual method calls.
+
 ## Advanced Topics
+
+### Unit Of Work Level Cache
+
+Distributed cache service provides an interesting feature. Assume that you've updated the price of a book in the database, then set the new price to the cache, so you can use the cached value later. What if you have an exception after setting the cache and you **rollback the transaction** that updates the price of the book? In this case, cache value will be incorrect.
+
+`IDistributedCache<..>` methods gets an optional parameter, named `considerOuw`, which is `false` by default. If you set it to `true`, then the changes you made for the cache are not actually applied to the real cache store, but associated with the current [unit of work](Unit-Of-Work.md). You get the value you set in the same unit of work, but the changes are applied **only if the current unit of work succeed**.
 
 ### IDistributedCacheSerializer
 
