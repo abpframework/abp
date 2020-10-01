@@ -247,7 +247,7 @@ ABP's distributed cache interfaces provide methods to perform batch get/set meth
 * `SetManyAsync` and `SetMany` methods can be used to set multiple values to the cache.
 * `GetManyAsync` and `GetMany` methods can be used to retrieve multiple values from the cache.
 
-> These are not standard methods of the ASP.NET Core caching. So, a provide may not support them. They are supported by the [ABP Redis Cache integration package](Redis-Cache.md).
+> These are not standard methods of the ASP.NET Core caching. So, some providers may not support them. They are supported by the [ABP Redis Cache integration package](Redis-Cache.md). If the provider doesn't support, it fallbacks to `SetAsync` and `GetAsync` methods (called once for each item).
 
 ## Advanced Topics
 
