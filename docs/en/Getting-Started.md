@@ -43,24 +43,6 @@ The following tools should be installed on your development machine:
 
 > ABP CLI is a free & open source tool for the ABP framework.
 
-{{if UI == "Blazor"}}
-
-BLAZOR UI IS ONLY AVAILABLE WITH THE PREVIEW VERSION. SO, YOU NEED TO INSTALL THE PREVIEW VERSION OF THE ABP CLI
-
-First, you need to install the ABP CLI **RC.2** using the following command:
-
-````shell
-dotnet tool install Volo.Abp.Cli -g --version 3.2.0-rc.2
-````
-
-If you've already installed, you can update it using the following command:
-
-````shell
-dotnet tool update Volo.Abp.Cli -g --version 3.2.0-rc.2
-````
-
-{{else}}
-
 First, you need to install the ABP CLI using the following command:
 
 ````shell
@@ -73,21 +55,13 @@ If you've already installed, you can update it using the following command:
 dotnet tool update -g Volo.Abp.Cli
 ````
 
-{{end}}
-
 ## Create a New Project
 
 Use the `new` command of the ABP CLI to create a new project:
 
 ````shell
-abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor --preview{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC"}} --tiered{{else}} --separate-identity-server{{end}}{{end}}
+abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC"}} --tiered{{else}} --separate-identity-server{{end}}{{end}}
 ````
-
-{{if UI == "Blazor"}}
-
-> BLAZOR UI IS ONLY AVAILABLE WITH THE PREVIEW VERSION. THIS IS WHY IT IS REQUIRED TO SET THE `--PREVIEW` OPTION.
-
-{{end}}
 
 > You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore. 
 
