@@ -22,54 +22,41 @@ import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
 import { TableSortDirective } from './directives/table-sort.directive';
-import { ErrorHandler } from './handlers/error.handler';
 import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
-import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
+import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 
+const declarationsWithExports = [
+  BreadcrumbComponent,
+  ButtonComponent,
+  ChartComponent,
+  ConfirmationComponent,
+  LoaderBarComponent,
+  LoadingComponent,
+  ModalComponent,
+  TableComponent,
+  TableEmptyMessageComponent,
+  ToastComponent,
+  ToastContainerComponent,
+  SortOrderIconComponent,
+  NgxDatatableDefaultDirective,
+  NgxDatatableListDirective,
+  LoadingDirective,
+  TableSortDirective,
+];
 @NgModule({
   imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
   declarations: [
-    BreadcrumbComponent,
-    ButtonComponent,
-    ChartComponent,
-    ConfirmationComponent,
+    ...declarationsWithExports,
     HttpErrorWrapperComponent,
-    LoaderBarComponent,
-    LoadingComponent,
-    ModalComponent,
     ModalContainerComponent,
-    TableComponent,
-    TableEmptyMessageComponent,
-    ToastComponent,
-    ToastContainerComponent,
-    SortOrderIconComponent,
-    NgxDatatableDefaultDirective,
-    NgxDatatableListDirective,
-    LoadingDirective,
-    TableSortDirective,
   ],
   exports: [
     NgxDatatableModule,
-    BreadcrumbComponent,
-    ButtonComponent,
-    ChartComponent,
-    ConfirmationComponent,
-    LoaderBarComponent,
-    LoadingComponent,
-    ModalComponent,
-    TableComponent,
-    TableEmptyMessageComponent,
-    ToastComponent,
-    ToastContainerComponent,
-    SortOrderIconComponent,
-    NgxDatatableDefaultDirective,
-    NgxDatatableListDirective,
-    LoadingDirective,
-    TableSortDirective,
+    ...declarationsWithExports,
   ],
   providers: [DatePipe],
   entryComponents: [
@@ -81,8 +68,6 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
   ],
 })
 export class ThemeSharedModule {
-  constructor(private errorHandler: ErrorHandler) {}
-
   static forRoot(options = {} as RootParams): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,

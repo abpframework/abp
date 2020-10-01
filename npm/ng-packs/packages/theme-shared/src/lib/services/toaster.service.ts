@@ -1,14 +1,14 @@
-import { Injectable, ComponentRef } from '@angular/core';
+import { ComponentRef, Injectable } from '@angular/core';
 import { Toaster } from '../models';
 import { ReplaySubject } from 'rxjs';
-import { Config, PROJECTION_STRATEGY, ContentProjectionService } from '@abp/ng.core';
+import { Config, ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
 import snq from 'snq';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ToasterService {
+export class ToasterService implements Toaster.Service {
   toasts$ = new ReplaySubject<Toaster.Toast[]>(1);
 
   private lastId = -1;
