@@ -21,3 +21,9 @@ ABP is an **open source application framework** focused on ASP.NET Core based we
 ## Contribution
 
 ABP is an open source platform. Check [the contribution guide](docs/en/Contribution/Index.md) if you want to contribute to the project.
+ABP provides a full stack development model and infrastructure for modern web applications. It increases developer productivity by automating repetitive tasks and providing a complete application architecture.
+ Modular, Layered Architecture based on Domain Driven Design
+ Microservice Focused
+ Multi-Tenancy
+ Virtual File System & Theming
+ Free & Open Source (LGPL licensed)
