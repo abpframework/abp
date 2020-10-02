@@ -125,7 +125,7 @@ See the *Localization & Validation* section below to localize the field display 
 
 ## ABP Form Tag Helpers
 
-While `abp-dynamic-form` covers most of the scenarios and allows you to control and customize the form using the attributes.
+`abp-dynamic-form` covers most of the scenarios and allows you to control and customize the form using the attributes.
 
 However, if you want to **render the form body yourself** (for example, you may want to fully control the **form layout**), you can directly use the [ABP Form Tag Helpers](Tag-Helpers/Form-elements.md). The same auto-generated form above can be created using the ABP Form Tag Helpers as shown below:
 
