@@ -140,4 +140,4 @@ export class BookComponent implements OnInit {
 
 ## What's Next?
 
-- [Config State](./Config-State.md)
+- [PWA Configuration](./PWA-Configuration.md)
