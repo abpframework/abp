@@ -431,6 +431,24 @@
           ]
         },
         {
+          "text": "Blazor",
+          "items": [
+            {
+              "text": "Overall",
+              "path": "UI/Blazor/Overall.md"
+            },
+            {
+              "text": "Services",
+              "items": [
+                {
+                  "text": "Overall",
+                  "path": "UI/Blazor/Services/Notification.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "text": "Angular",
           "items": [
             {
