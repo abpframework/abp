@@ -125,7 +125,81 @@ See the *Localization & Validation* section below to localize the field display 
 
 ## ABP Form Tag Helpers
 
-## Localization & Validation
+While `abp-dynamic-form` covers most of the scenarios and allows you to control and customize the form using the attributes.
+
+However, if you want to **render the form body yourself** (for example, you may want to fully control the **form layout**), you can directly use the [ABP Form Tag Helpers](Tag-Helpers/Form-elements.md). The same auto-generated form above can be created using the ABP Form Tag Helpers as shown below:
+
+```html
+@page
+@model MyProject.Web.Pages.CreateMovieModel
+
+<h2>Create a new Movie</h2>
+
+<form method="post">
+    <abp-input asp-for="Movie.Name"/>
+    <abp-input asp-for="Movie.ReleaseDate"/>
+    <abp-input asp-for="Movie.Description"/>
+    <abp-select asp-for="Movie.Genre"/>
+    <abp-input asp-for="Movie.Price"/>
+    <abp-input asp-for="Movie.PreOrder"/>
+    <abp-button button-type="Primary" type="submit">Save</abp-button>
+</form>
+```
+
+> See the [ABP Form Tag Helpers](Tag-Helpers/Form-elements.md) document for details of these tag helpers and their options.
+
+## Validation & Localization
+
+Both of the Dynamic Form and the Form Tag Helpers **automatically validate** the input based on the data annotation attributes and shows validation error messages on the user interface. Error messages are **automatically localized** based on the current culture.
+
+**Example: User leaves empty a requires string property**
+
+![abp-form-input-validation-error](../../images/abp-form-input-validation-error.png)
+
+The error message below is shown if the language is French:
+
+![abp-form-input-validation-error](../../images/abp-form-input-validation-error-french.png)
+
+Validation errors are already [translated](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.Validation/Volo/Abp/Validation/Localization) a lot of languages. You can [contribute](../../Contribution/Index.md) to the translation for your own language or override the texts for your own application by following the [localization](../../Localization.md) documentation.
+
+## Display Name Localization
+
+ABP Framework uses the property name as the field name on the user interface. You typically want to [localize](../../Localization.md) this name based on the current culture.
+
+ABP Framework can conventionally localize the fields on the UI when you add the localization keys to the localization JSON files.
+
+Example: French localization for the *Name* property (add into the `fr.json` in the application):
+
+````js
+"Name": "Nom"
+````
+
+Then the UI will use the given name for French language:
+
+![abp-form-input-validation-error](../../images/abp-form-input-validation-error-french-name.png)
+
+### Using the `DisplayName:` Prefix
+
+Directly using the property name as the localization key may be a problem if you need to use the property name for other purpose, which a different translation value. In this case, use the `DisplayName:` prefix for the localization key:
+
+````js
+"DisplayName:Name": "Nom"
+````
+
+ABP prefers to use the `DisplayName:Name` key over the `Name` key if it does exists.
+
+### Using a Custom Localization Key
+
+If you need, you can use the `[DisplayName]` attribute to specify the localization key for a specific property:
+
+````csharp
+[DisplayName("MyNameKey")]
+public string Name { get; set; }
+````
+
+In this case, you can add an entry to the localization file using the key `MyNameKey`.
+
+> If you use the `[DisplayName]` but not add a corresponding entity to the localization file, then ABP Framework shows the given key as the field name, `MyNameKey` for this case. So, it provides a way to specify a hard coded display name even if you don't need to use the localization system.
 
 ## See Also
 
