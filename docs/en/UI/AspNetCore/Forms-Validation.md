@@ -74,9 +74,58 @@ namespace MyProject.Web.Pages
 }
 ````
 
+In order to create the form in a razor page, create a property in your `PageModel` class:
+
+```csharp
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace MyProject.Web.Pages
+{
+    public class CreateMovieModel : PageModel
+    {
+        [BindProperty]
+        public MovieViewModel Movie { get; set; }
+
+        public void OnGet()
+        {
+            Movie = new MovieViewModel();
+        }
+
+        public async Task OnPostAsync()
+        {
+            if (ModelState.IsValid)
+            {
+                //TODO: Save the Movie
+            }
+        }
+    }
+}
+```
+
+Then you can render the form in the `.cshtml` file:
+
+```html
+@page
+@model MyProject.Web.Pages.CreateMovieModel
+
+<h2>Create a new Movie</h2>
+
+<abp-dynamic-form abp-model="Movie" submit-button="true" />
+```
+
+The result is shown below:
+
+![abp-dynamic-form-result](../../images/abp-dynamic-form-result.png)
+
+See the *Localization & Validation* section below to localize the field display names and see how the validation works.
+
+> See [its own document](Tag-Helpers/Dynamic-Forms.md) for all options of the `abp-dynamic-form` tag helper.
+
 ## ABP Form Tag Helpers
 
-
+## Localization & Validation
 
 ## See Also
 
