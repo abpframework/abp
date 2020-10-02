@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Auditing;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 using Volo.Abp.Guids;
@@ -20,7 +21,8 @@ namespace Volo.Abp.Domain
         typeof(AbpThreadingModule),
         typeof(AbpTimingModule),
         typeof(AbpUnitOfWorkModule),
-        typeof(AbpObjectMappingModule)
+        typeof(AbpObjectMappingModule),
+        typeof(AbpCachingModule)
         )]
     public class AbpDddDomainModule : AbpModule
     {
