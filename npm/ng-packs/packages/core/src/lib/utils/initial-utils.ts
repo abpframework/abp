@@ -1,5 +1,5 @@
 import { registerLocaleData } from '@angular/common';
-import { Injector } from '@angular/core';
+import { Injector, isDevMode } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { tap } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { ABP } from '../models/common';
 import { AuthService } from '../services/auth.service';
 import { ConfigState } from '../states/config.state';
 import { clearOAuthStorage } from '../strategies/auth-flow.strategy';
+import { LocaleErrorHandlerData, LOCALE_ERROR_HANDLER } from '../tokens/locale-error-handler.token';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
@@ -42,26 +43,73 @@ export function checkAccessToken(store: Store, injector: Injector) {
 export function localeInitializer(injector: Injector) {
   const fn = () => {
     const store: Store = injector.get(Store);
-    const options = injector.get(CORE_OPTIONS);
 
     const lang = store.selectSnapshot(state => state.SessionState.language) || 'en';
 
     return new Promise((resolve, reject) => {
-      registerLocale(lang, options.cultureNameLocaleFileMap).then(
-        () => resolve('resolved'),
-        reject,
-      );
+      registerLocale(lang, injector).then(() => resolve('resolved'), reject);
     });
   };
 
   return fn;
 }
 
-export function registerLocale(locale: string, localeNameMap: ABP.Dictionary<string>) {
-  return import(
-    /* webpackChunkName: "_locale-[request]"*/
-    `@angular/common/locales/${localeNameMap[locale] || locale}.js`
-  ).then(module => {
-    registerLocaleData(module.default);
+export function registerLocale(locale: string, injector: Injector): Promise<any> {
+  const { cultureNameLocaleFileMap } = injector.get(CORE_OPTIONS, {} as ABP.Root);
+
+  const errorHandlerFn = injector.get(LOCALE_ERROR_HANDLER, defaultLocalErrorHandlerFn);
+
+  return new Promise((resolve, reject) => {
+    return import(
+      /* webpackChunkName: "_locale-[request]"*/
+      /* webpackInclude: /\/(ar|cs|en|fr|pt|ru|sl|zh-Hans|zh-Hant).js/ */
+      /* webpackExclude: /\/global|\/extra/ */
+      `@angular/common/locales/${cultureNameLocaleFileMap[locale] || locale}.js`
+    )
+      .then(module => {
+        registerLocaleData(module.default, locale);
+        resolve(module.default);
+      })
+      .catch(error => {
+        errorHandlerFn({
+          resolve,
+          reject,
+          error,
+          injector,
+          locale,
+          storedLocales: { ...extraLocales },
+        });
+      });
   });
+}
+
+const extraLocales = {};
+export function storeLocaleData(data: any, localeId: string) {
+  extraLocales[localeId] = data;
+}
+
+async function defaultLocalErrorHandlerFn({
+  locale,
+  storedLocales,
+  resolve,
+  injector,
+}: LocaleErrorHandlerData) {
+  if (storedLocales[locale]) {
+    registerLocaleData(storedLocales[locale], locale);
+    resolve();
+    return;
+  }
+
+  if (isDevMode) {
+    console.error(`Cannot find the ${locale} locale file. You should add the code below to app.module:
+
+import { storeLocaleData } from '@abp/ng.core';
+import(
+/* webpackChunkName: "_locale-${locale}-js"*/
+/* webpackMode: "eager" */
+'@angular/common/locales/${locale}.js'
+).then(m => storeLocaleData(m.default, '${locale}'));`);
+  }
+
+  resolve();
 }
