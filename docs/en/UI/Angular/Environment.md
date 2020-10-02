@@ -54,7 +54,7 @@ Everything else will be sent to `"https://localhost:8080"`
 
 * `rootNamespace` **(new)** : Root namespace of the related API. e.g. Acme.BookStore
 
-## Application
+## Application
 
 ```js
  export interface Application {
