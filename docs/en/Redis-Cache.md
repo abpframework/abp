@@ -37,3 +37,7 @@ Configure<RedisCacheOptions>(options =>
     //...
 });
 ````
+
+## See Also
+
+* [Caching](Caching.md)
