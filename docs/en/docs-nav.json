@@ -449,6 +449,10 @@
                 {
                   "text": "Service Proxies",
                   "path": "UI/Angular/Service-Proxies.md"
+                },
+                {
+                  "text": "PWA Configuration",
+                  "path": "UI/Angular/PWA-Configuration.md"
                 }
               ]
             },
