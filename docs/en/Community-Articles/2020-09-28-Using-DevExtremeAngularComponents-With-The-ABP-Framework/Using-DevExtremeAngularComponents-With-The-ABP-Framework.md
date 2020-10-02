@@ -1,34 +1,39 @@
-## Using DevExtreme Angular Components With the ABP Framework
+# Using DevExtreme Angular Components With the ABP Framework
 
-Hello, this is a follow up on the article [Using DevExtreme Components With the ABP Framework](https://community.abp.io/articles/using-devextreme-components-with-the-abp-framework-zb8z7yqv)
-
-We will create the same application using Angular as the UI framework and integrate [DevExpress Angular components](https://js.devexpress.com/Documentation/Guide/Angular_Components/DevExtreme_Angular_Components/). 
+In this article, I will show you how to integrate the [DevExpress Angular components](https://js.devexpress.com/Documentation/Guide/Angular_Components/DevExtreme_Angular_Components/) to a project created using the ABP Framework startup templates. Then I will use the [DataGrid](https://js.devexpress.com/Documentation/Guide/Widgets/DataGrid/Overview/) component to show a list of users on the UI.
 
 ## Create the Project
 
-For detail information about how to generate and start up a project, please refer to the [official docs](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No). For the scope of this post, we will not go into details of the backend applications.
-
-Let's create an application using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI#new)
+Let's create a new web application with the Angular UI using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI#new):
 
 ```shell
 abp new DevExtremeAngular -u angular
 ```
 
-After the project is created, you should run following projects in order
+> For detail information about how to generate and start up a project, please refer to the [official docs](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No). For the scope of this post, we will not go into details of the backend applications.
+
+## Running the Solution
+
+### The Server Side
+
+Server side contains multiple projects in the solution:
 
 ![A screenshot showing DevExtremeAngular.DbMigrator and DevExtremeAngular.HttpApi.Host](project-setup.png)
 
-Firstly, run `DevExtremeAngular.DbMigrator` for db migration and then run `DevExtremeAngular.HttpApi.Host` for backend APIs.
+Run following projects in order;
 
-After the backend is ready, navigate to `angular` folder and run `yarn` or `npm install` based on which package you are using. 
+* Run `DevExtremeAngular.DbMigrator` to create the database and seed the initial data.
+* Run `DevExtremeAngular.HttpApi.Host` project to make the backend API up & running.
 
-After installation process is done, you can start your angular project by running `yarn start` or `npm start`
+### The Angular Application
 
-Everything should run smoothly and when you go to http://localhost:4200 in the browser, you should see your application up and running.
+Open a command line terminal and navigate to `angular` folder then run `yarn` or `npm install` based on which package you are using. 
+
+After installation process is done, you can start your angular project by running `yarn start` or `npm start`. This command should serve the application and open the application in your default browser. If it doesn't open, you can navigate to http://localhost:4200 in your browser:
 
 ![A screenshot showing localhost is running](localhost-running.png)
 
-You can login to the application by using following credentials
+You can login to the application by using following credentials:
 
 > _Default admin username is **admin** and password is **1q2w3E\***_
 
@@ -38,18 +43,17 @@ After successful login, you should be redirected to home page.
 
 ## Install DevExtreme
 
-Let's start with installing DevExtreme into our project before writing any code.
-
 You can follow [the guide](https://js.devexpress.com/Documentation/Guide/Angular_Components/Getting_Started/Add_DevExtreme_to_an_Angular_CLI_Application/) provided by **DevExtreme** team or apply the following steps.
 
 * `npm install devextreme devextreme-angular` or `yarn add devextreme devextreme-angular`
-* Import following two styles in `angular.json`
+* Import given two following styles in `angular.json` file:
 
 ```javascript
   // ...
   "styles": [
     // ...
     "src/styles.scss",
+
     "node_modules/devextreme/dist/css/dx.common.css",
     "node_modules/devextreme/dist/css/dx.light.css"
   ]
@@ -240,7 +244,7 @@ It should display a table on the screen
 
 Since, we did not specify any columns, `dx-data-grid` displayed every column avaliable. Let's pick some columns to make it more readable.
 
-Change `dev-extreme.component.html` to the following 
+Change `dev-extreme.component.html` to the following:
 
 ```html
 <ng-container *ngIf="service.users$ | async as users">
@@ -273,7 +277,7 @@ import { CoreModule } from '@abp/ng.core';
 export class DevExtremeModule {}
 ```
 
-And change the template to the following
+And change the template to the following:
 
 ```html
 <ng-container *ngIf="service.users$ | async as users">
@@ -302,12 +306,12 @@ And change the template to the following
 </ng-container>
 ```
 
-The headers should change when a new language is selected
+The headers should change when a new language is selected;
 
 ![A gif showing the headers of the table getting translated into the chosen language](devextreme-final.gif)
 
 ## Conclusion
 
-In this article, we have seen how to integrate `DevExtreme` angular components into a project generated by `ABP CLI`
+In this article, we have seen how to integrate `DevExtreme` angular components into a project generated by `ABP CLI`.
 
-You can download the code of [the demo here](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Angular)
+You can download source code of [the demo here](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Angular).
