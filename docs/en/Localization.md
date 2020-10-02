@@ -2,7 +2,7 @@
 
 ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.Localization` package and compatible with the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization). It adds some useful features and enhancements to make it easier to use in real life application scenarios.
 
-## Volo.Abp.Localization Package
+## Installation
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
@@ -243,3 +243,4 @@ Both of the samples above produce the output `Hello John, welcome!`.
 ## See Also
 
 * [Localization in Angular UI](UI/Angular/Localization.md)
+* [Forms & Validation](UI/AspNetCore/Forms-Validation.md) for the ASP.NET Core MVC / Razor Pages UI

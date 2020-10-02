@@ -392,7 +392,7 @@
       "text": "User Interface",
       "items": [
         {
-          "text": "ASP.NET Core",
+          "text": "ASP.NET Core MVC / Razor Pages",
           "items": [
             {
               "text": "Client Side Package Management",
@@ -401,6 +401,10 @@
             {
               "text": "Bundling & Minification",
               "path": "UI/AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Forms & Validation",
+              "path": "UI/AspNetCore/Forms-Validation.md"
             },
             {
               "text": "Tag Helpers",
@@ -473,6 +477,10 @@
                 {
                   "text": "Service Proxies",
                   "path": "UI/Angular/Service-Proxies.md"
+                },
+                {
+                  "text": "PWA Configuration",
+                  "path": "UI/Angular/PWA-Configuration.md"
                 }
               ]
             },
