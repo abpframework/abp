@@ -17,6 +17,10 @@ export class ConfigStateService {
     return this.store.selectSnapshot(ConfigState.getApplicationInfo);
   }
 
+  getEnvironment() {
+    return this.store.selectSnapshot(ConfigState.getEnvironment);
+  }
+
   getOne(...args: Parameters<typeof ConfigState.getOne>) {
     return this.store.selectSnapshot(ConfigState.getOne(...args));
   }

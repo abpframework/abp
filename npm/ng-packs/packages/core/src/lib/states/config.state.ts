@@ -28,6 +28,11 @@ export class ConfigState {
     return state.environment.application || ({} as Config.Application);
   }
 
+  @Selector()
+  static getEnvironment(state: Config.State): Config.Environment {
+    return state.environment;
+  }
+
   static getOne(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
       return state[key];
