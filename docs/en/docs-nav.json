@@ -156,7 +156,13 @@
         },
         {
           "text": "Caching",
-          "path": "Caching.md"
+          "path": "Caching.md",
+          "items": [
+            {
+              "text": "Redis Cache",
+              "path": "Redis-Cache.md"
+            }
+          ]
         },
         {
           "text": "Logging",
