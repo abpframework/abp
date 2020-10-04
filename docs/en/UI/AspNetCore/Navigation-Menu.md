@@ -1,4 +1,4 @@
-# Navigation Menu
+# ASP.NET Core MVC / Razor Pages UI: Navigation Menu
 
 Every application has a main menu to allow users to navigate to pages/screens of the application. Some applications may contain more than one menu in different sections of the UI.
 
@@ -54,7 +54,7 @@ namespace MyProject.Web.Menus
 ```
 
 * This example adds items only to the main menu (`StandardMenus.Main`: see the *Standard Menus* section below).
-* It gets a `IStringLocalizer` from `context` to localize the display names of the menu items.
+* It gets a `IStringLocalizer` from `context` to [localize](../../Localization.md) the display names of the menu items.
 * Adds the Customers and Orders as children of the CRM menu.
 
 Once you create a menu contributor, you need to add it to the `AbpNavigationOptions` in the `ConfigureServices` method of your module:
@@ -78,6 +78,20 @@ Here, a few notes on the menu contributors;
 * Every menu item can have **children**. So, you can add menu items with **unlimited depth** (however, your UI theme may not support unlimited depth).
 * Only leaf menu items have `url`s normally. When you click to a parent menu, its sub menu is opened or closed, you don't navigate the `url` of a parent menu item.
 * If a menu item has no children and has no `url` defined, then it is not rendered on the UI. This simplifies to authorize the menu items: You only authorize the child items (see the next section). If none of the children are authorized, then the parent automatically disappears.
+
+### Menu Item Properties
+
+There are more options of a menu item (the constructor of the `ApplicationMenuItem` class). Here, the list of all available options;
+
+* `name` (`string`, required): The unique name of the menu item.
+* `displayName` (`string`, required): Display name/text of the menu item. You can [localize](../../Localization.md) this as shown before.
+* `url` (`string`): The URL of the menu item.
+* `icon` (`string`): An icon name. Free [Font Awesome](https://fontawesome.com/) icon classes are supported out of the box. Example: `fa fa-book`. You can use any CSS font icon class as long as you include the necessary CSS files to your application.
+* `order` (`int`): The order of the menu item. Default value is `1000`. Items are sorted by the adding order unless you specify an order value.
+* `customData` (`object`): A custom object that you can associate to the menu item and use it while rendering the menu item.
+* `target` (`string`): Target of the menu item. Can be `null` (default), "_blank", "_*self*", "_parent", "_*top*" or a frame name for web applications.
+* `elementId` (`string`): Can be used to render the element with a specific HTML `id` attribute.
+* `cssClass` (`string`): Additional string classes for the menu item.
 
 ### Authorization
 
@@ -143,4 +157,35 @@ if (context.Menu.Name == StandardMenus.User)
 
 ## IMenuManager
 
-TODO
+`IMenuManager` is generally used by the UI [theme](Theming.md) to render the menu items on the UI. So, **you generally don't need to directly use** the `IMenuManager`.
+
+**Example: Getting the `Main` menu items**
+
+```csharp
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.UI.Navigation;
+
+namespace MyProject.Web.Pages
+{
+    public class IndexModel : PageModel
+    {
+        private readonly IMenuManager _menuManager;
+
+        public IndexModel(IMenuManager menuManager)
+        {
+            _menuManager = menuManager;
+        }
+        
+        public async Task OnGetAsync()
+        {
+            var mainMenu = await _menuManager.GetAsync(StandardMenus.Main);
+            
+            foreach (var menuItem in mainMenu.Items)
+            {
+                //...
+            }
+        }
+    }
+}
+```
