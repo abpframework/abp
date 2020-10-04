@@ -395,16 +395,20 @@
           "text": "ASP.NET Core MVC / Razor Pages",
           "items": [
             {
+              "text": "Forms & Validation",
+              "path": "UI/AspNetCore/Forms-Validation.md"
+            },
+            {
+              "text": "Navigation / Menus",
+              "path": "UI/AspNetCore/Navigation-Menu.md"
+            },
+            {
               "text": "Client Side Package Management",
               "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
             {
               "text": "Bundling & Minification",
               "path": "UI/AspNetCore/Bundling-Minification.md"
-            },
-            {
-              "text": "Forms & Validation",
-              "path": "UI/AspNetCore/Forms-Validation.md"
             },
             {
               "text": "Tag Helpers",
