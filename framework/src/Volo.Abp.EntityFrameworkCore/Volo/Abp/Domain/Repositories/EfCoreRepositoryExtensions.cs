@@ -12,21 +12,25 @@ namespace Volo.Abp.Domain.Repositories
         {
             return repository.ToEfCoreRepository().DbContext;
         }
+
         public static DbContext GetDbContext<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
             where TEntity : class, IEntity
         {
             return repository.ToEfCoreRepository().DbContext;
         }
+
         public static DbSet<TEntity> GetDbSet<TEntity, TKey>(this IReadOnlyBasicRepository<TEntity, TKey> repository)
             where TEntity : class, IEntity<TKey>
         {
             return repository.ToEfCoreRepository().DbSet;
         }
+
         public static DbSet<TEntity> GetDbSet<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
             where TEntity : class, IEntity
         {
             return repository.ToEfCoreRepository().DbSet;
         }
+
         public static IEfCoreRepository<TEntity, TKey> ToEfCoreRepository<TEntity, TKey>(this IReadOnlyBasicRepository<TEntity, TKey> repository)
             where TEntity : class, IEntity<TKey>
         {
@@ -37,6 +41,7 @@ namespace Volo.Abp.Domain.Repositories
 
             return efCoreRepository;
         }
+
         public static IEfCoreRepository<TEntity> ToEfCoreRepository<TEntity>(
             this IReadOnlyBasicRepository<TEntity> repository)
             where TEntity : class, IEntity
