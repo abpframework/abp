@@ -47,9 +47,9 @@ namespace MyCompanyName.MyProjectName.Data
             var migratedDatabaseSchemas = new HashSet<string>();
             foreach (var tenant in tenants)
             {
-                if (tenant.ConnectionStrings.Any())
+                using (_currentTenant.Change(tenant.Id))
                 {
-                    using (_currentTenant.Change(tenant.Id))
+                    if (tenant.ConnectionStrings.Any())
                     {
                         var tenantConnectionStrings = tenant.ConnectionStrings
                             .Select(x => x.Value)
@@ -62,9 +62,9 @@ namespace MyCompanyName.MyProjectName.Data
                             migratedDatabaseSchemas.AddIfNotContains(tenantConnectionStrings);
                         }
                     }
-                }
 
-                await SeedDataAsync(tenant);
+                    await SeedDataAsync(tenant);
+                }
 
                 Logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
             }

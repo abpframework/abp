@@ -218,20 +218,17 @@ export class ConfigState {
           }),
         ),
         switchMap(configuration => {
-          let defaultLang: string =
-            configuration.setting.values['Abp.Localization.DefaultLanguage'];
+          let lang = configuration.localization.currentCulture.cultureName;
 
-          if (defaultLang.includes(';')) {
-            defaultLang = defaultLang.split(';')[0];
+          if (lang.includes(';')) {
+            lang = lang.split(';')[0];
           }
 
-          document.documentElement.setAttribute(
-            'lang',
-            configuration.localization.currentCulture.cultureName,
-          );
+          document.documentElement.setAttribute('lang', lang);
+
           return this.store.selectSnapshot(SessionState.getLanguage)
             ? of(null)
-            : dispatch(new SetLanguage(defaultLang, false));
+            : dispatch(new SetLanguage(lang, false));
         }),
         catchError((err: HttpErrorResponse) => {
           dispatch(new RestOccurError(err));

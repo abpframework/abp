@@ -53,7 +53,8 @@
     "YourPasswordIsSuccessfullyReset": "您的密码已经被重置成功.",
     "GoToTheApplication": "转到应用程序",
     "BackToLogin": "返回登录",
-    "ProfileTab:Password": "修改密码",
-    "ProfileTab:PersonalInfo": "个人资料"
+    "ProfileTab:Password": "更改密码",
+    "ProfileTab:PersonalInfo": "个人信息",
+    "ReturnToApplication": "返回到应用程序"
   }
 }

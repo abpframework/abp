@@ -4,6 +4,7 @@ import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { GetAppConfiguration } from '../actions';
+import * as AuthFlowStrategy from '../strategies/auth-flow.strategy';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
 import * as environmentUtils from '../utils/environment-utils';
@@ -54,9 +55,9 @@ describe('InitialUtils', () => {
     test('should call logOut fn of OAuthService when token is valid and current user not found', async () => {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
-      const logOutFn = jest.fn();
+      const clearOAuthStorageSpy = jest.spyOn(AuthFlowStrategy, 'clearOAuthStorage');
 
-      injectorSpy.mockReturnValue({ hasValidAccessToken: () => true, logOut: logOutFn });
+      injectorSpy.mockReturnValue({ hasValidAccessToken: () => true });
 
       checkAccessToken(
         {
@@ -64,7 +65,7 @@ describe('InitialUtils', () => {
         } as any,
         injector,
       );
-      expect(logOutFn).toHaveBeenCalled();
+      expect(clearOAuthStorageSpy).toHaveBeenCalled();
     });
   });
 

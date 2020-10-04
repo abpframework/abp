@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.FeatureManagement.Blazor;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Blazor.Navigation;
 using Volo.Abp.UI.Navigation;
@@ -9,7 +10,8 @@ namespace Volo.Abp.TenantManagement.Blazor
 {
     [DependsOn(
         typeof(AbpAutoMapperModule),
-        typeof(AbpTenantManagementHttpApiClientModule)
+        typeof(AbpTenantManagementHttpApiClientModule),
+        typeof(AbpFeatureManagementBlazorModule)
     )]
     public class AbpTenantManagementBlazorModule : AbpModule
     {

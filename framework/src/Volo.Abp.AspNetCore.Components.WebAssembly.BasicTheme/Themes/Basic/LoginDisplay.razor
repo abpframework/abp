@@ -17,7 +17,10 @@
                         <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
                     }
                 }
-                <Divider />
+                <a class="dropdown-item" href="@ServerAccountUrl">
+                    @UiLocalizer["ManageYourAccount"]
+                </a>
+                <DropdownDivider />
                 <DropdownItem Clicked="BeginSignOut">Logout</DropdownItem>
             </DropdownMenu>
         </Dropdown>
@@ -32,7 +35,7 @@
     {
         Navigation.NavigateTo(uri);
     }
-    
+
     private async Task BeginSignOut()
     {
         await SignOutManager.SetSignOutState();
