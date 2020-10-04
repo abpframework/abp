@@ -62,7 +62,7 @@ export function registerLocale(locale: string, injector: Injector): Promise<any>
   return new Promise((resolve, reject) => {
     return import(
       /* webpackChunkName: "_locale-[request]"*/
-      /* webpackInclude: /\/(ar|cs|en|fr|pt|ru|sl|zh-Hans|zh-Hant).js/ */
+      /* webpackInclude: /\/(ar|cs|en|fr|pt|tr|ru|sl|zh-Hans|zh-Hant).js/ */
       /* webpackExclude: /\/global|\/extra/ */
       `@angular/common/locales/${cultureNameLocaleFileMap[locale] || locale}.js`
     )
