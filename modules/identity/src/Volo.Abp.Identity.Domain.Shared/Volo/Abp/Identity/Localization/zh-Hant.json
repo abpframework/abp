@@ -111,7 +111,7 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "是否啟用電話認證.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "決定使用者是否需電話認證後才能登入.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "決定使用者是否能更新帳號.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "決定使用者是否能更新信箱."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "決定使用者是否能更新信箱.",
     "DisplayName:Abp.Identity.TwoFactorBehaviour": "雙因素認證行為",
     "Description:Abp.Identity.TwoFactorBehaviour": "雙因素認證行為",
     "DisplayName:Abp.Identity.UsersCanChange": "允許使用者變更雙因素認證.",
