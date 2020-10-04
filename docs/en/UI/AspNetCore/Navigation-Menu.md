@@ -135,6 +135,19 @@ If you want to add menu items under the *Administration* menu item, you can use 
 context.Menu.GetAdministration().AddItem(...)
 ````
 
+### Manipulating the Existing Menu Items
+
+ABP Framework executes the menu contributors by the [module dependency order](../../Module-Development-Basics.md). So, you can manipulate the menu items that your application or module (directly or indirectly) depends on.
+
+**Example: Set an icon for the `Users` menu item added by the [Identity Module](../../Modules/Identity.md)**
+
+````csharp
+var userMenu = context.Menu.FindMenuItem(IdentityMenuNames.Users);
+userMenu.Icon = "fa fa-users";
+````
+
+> `context.Menu` gives you ability to access to all the menu items those have been added by the previous menu contributors.
+
 ## Standard Menus
 
 A menu is a **named** component. An application may contain more than one menus with different, unique names. There are two pre-defined standard menus:
@@ -189,3 +202,4 @@ namespace MyProject.Web.Pages
     }
 }
 ```
+
