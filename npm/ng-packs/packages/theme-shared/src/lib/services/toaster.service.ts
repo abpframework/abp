@@ -1,15 +1,15 @@
 import { ComponentRef, Injectable } from '@angular/core';
 import { Toaster } from '../models';
 import { ReplaySubject } from 'rxjs';
-import { Config, ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
+import { Config, ContentProjectionService, PROJECTION_STRATEGY, Strict } from '@abp/ng.core';
 import snq from 'snq';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ToasterService implements Toaster.Service {
-  toasts$ = new ReplaySubject<Toaster.Toast[]>(1);
+export class ToasterService implements ToasterContract {
+  private toasts$ = new ReplaySubject<Toaster.Toast[]>(1);
 
   private lastId = -1;
 
@@ -37,7 +37,7 @@ export class ToasterService implements Toaster.Service {
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
-  ): number {
+  ): Toaster.ToasterId {
     return this.show(message, title, 'info', options);
   }
 
@@ -51,7 +51,7 @@ export class ToasterService implements Toaster.Service {
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
-  ): number {
+  ): Toaster.ToasterId {
     return this.show(message, title, 'success', options);
   }
 
@@ -65,7 +65,7 @@ export class ToasterService implements Toaster.Service {
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
-  ): number {
+  ): Toaster.ToasterId {
     return this.show(message, title, 'warning', options);
   }
 
@@ -79,7 +79,7 @@ export class ToasterService implements Toaster.Service {
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
-  ): number {
+  ): Toaster.ToasterId {
     return this.show(message, title, 'error', options);
   }
 
@@ -96,7 +96,7 @@ export class ToasterService implements Toaster.Service {
     title: Config.LocalizationParam = null,
     severity: Toaster.Severity = 'neutral',
     options = {} as Partial<Toaster.ToastOptions>,
-  ): number {
+  ): Toaster.ToasterId {
     if (!this.containerComponentRef) this.setContainer();
 
     const id = ++this.lastId;
@@ -122,10 +122,12 @@ export class ToasterService implements Toaster.Service {
   /**
    * Removes all open toasts at once.
    */
-  clear(key?: string): void {
-    this.toasts = !key
+  clear(containerKey?: string): void {
+    this.toasts = !containerKey
       ? []
-      : this.toasts.filter(toast => snq(() => toast.options.containerKey) !== key);
+      : this.toasts.filter(toast => snq(() => toast.options.containerKey) !== containerKey);
     this.toasts$.next(this.toasts);
   }
 }
+
+export type ToasterContract = Strict<ToasterService, Toaster.Service>;

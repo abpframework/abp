@@ -30,7 +30,7 @@ export namespace Toaster {
       options: Partial<Toaster.ToastOptions>,
     ) => ToasterId;
     remove: (id: number) => void;
-    clear: (key?: string) => void;
+    clear: (containerKey?: string) => void;
     info: (
       message: Config.LocalizationParam,
       title?: Config.LocalizationParam,

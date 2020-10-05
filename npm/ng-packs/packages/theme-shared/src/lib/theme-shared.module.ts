@@ -22,6 +22,7 @@ import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
 import { TableSortDirective } from './directives/table-sort.directive';
+import { ErrorHandler } from './handlers/error.handler';
 import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
@@ -68,6 +69,8 @@ const declarationsWithExports = [
   ],
 })
 export class ThemeSharedModule {
+  constructor(private errorHandler: ErrorHandler) {}
+
   static forRoot(options = {} as RootParams): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
