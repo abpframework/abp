@@ -1,6 +1,7 @@
 ﻿using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -20,7 +21,8 @@ namespace Volo.Abp.Domain
         typeof(AbpThreadingModule),
         typeof(AbpTimingModule),
         typeof(AbpUnitOfWorkModule),
-        typeof(AbpObjectMappingModule)
+        typeof(AbpObjectMappingModule),
+        typeof(AbpExceptionHandlingModule)
         )]
     public class AbpDddDomainModule : AbpModule
     {

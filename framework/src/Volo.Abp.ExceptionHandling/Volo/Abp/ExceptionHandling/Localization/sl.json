@@ -1,0 +1,23 @@
+{
+  "culture": "sl",
+  "texts": {
+    "InternalServerErrorMessage": "Zgodila se je napaka na strežniku!",
+    "ValidationErrorMessage": "Vaš zahtevek ni veljaven!",
+    "ValidationNarrativeErrorMessageTitle": "Pri preverjanju so bile zaznane sledeče napake.",
+    "DefaultErrorMessage": "Zgodila se je napaka!",
+    "DefaultErrorMessageDetail": "Strežnik ni poslal podrobnosti o napaki.",
+    "DefaultErrorMessage401": "Niste prijavljeni!",
+    "DefaultErrorMessage401Detail": "Za izvedbo te operacije se morate prijaviti.",
+    "DefaultErrorMessage403": "Nimate pravic!",
+    "DefaultErrorMessage403Detail": "Nimate dovoljenja za izvedbo te operacije!",
+    "DefaultErrorMessage404": "Vir ni bil najden!",
+    "DefaultErrorMessage404Detail": "Zahtevanega vira ni bilo mogoče najti na strežniku!",
+    "EntityNotFoundErrorMessage": "Ni entitete {0} z id-jem = {1}!",
+    "Error": "Napaka",
+    "UnhandledException": "Neobravnavana napaka!",
+    "401Message": "Nepooblaščeno",
+    "403Message": "Prepovedano",
+    "404Message": "Strani ni mogoče najti",
+    "500Message": "Napaka na strani strežnika"
+  }
+}
