@@ -130,7 +130,9 @@
 						}
 					}
 				],
-				'punctuation': /:/
+				'punctuation': /:/,
+				'attr-id': /#[\w\-]+/,
+				'attr-class': /\.[\w\-]+/
 			}
 		},
 		'code': [

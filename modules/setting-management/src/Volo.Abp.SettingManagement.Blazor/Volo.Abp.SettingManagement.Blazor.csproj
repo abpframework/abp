@@ -2,9 +2,9 @@
 
     <Import Project="..\..\..\..\configureawait.props" />
     <Import Project="..\..\..\..\common.props" />
-    
+
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <RazorLangVersion>3.0</RazorLangVersion>
         <RootNamespace>Volo.Abp.SettingManagement.Blazor</RootNamespace>
     </PropertyGroup>
