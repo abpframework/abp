@@ -1,47 +1,49 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
-using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
 {
     public class UserExceptionInformer : IUserExceptionInformer, ITransientDependency
     {
-        private readonly IUiMessageService _messageService;
+        protected IUiMessageService MessageService { get; }
+        protected IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; }
 
-        public UserExceptionInformer(IUiMessageService messageService)
+        public UserExceptionInformer(IUiMessageService messageService, IExceptionToErrorInfoConverter exceptionToErrorInfoConverter)
         {
-            _messageService = messageService;
+            MessageService = messageService;
+            ExceptionToErrorInfoConverter = exceptionToErrorInfoConverter;
         }
 
         public virtual async Task InformAsync(UserExceptionInformerContext context)
         {
-            if (context.Exception is AbpRemoteCallException remoteCallException)
-            {
-                await InformAbpRemoteCallExceptionAsync(remoteCallException, context);
-            }
-            else if (context.Exception is AbpValidationException validationException)
-            {
-                await InformAbpValidationExceptionAsync(validationException, context);
-            }
+            var errorInfo = GetErrorInfo(context);
+            await ShowErrorInfoAsync(errorInfo);
         }
 
-        protected virtual async Task InformAbpRemoteCallExceptionAsync(AbpRemoteCallException exception, UserExceptionInformerContext context)
+        protected virtual RemoteServiceErrorInfo GetErrorInfo(UserExceptionInformerContext context)
         {
-            if (exception.Error.Details.IsNullOrEmpty())
+            if (context.Exception is AbpRemoteCallException remoteCallException)
             {
-                await _messageService.ErrorAsync(exception.Error.Message);
+                return remoteCallException.Error;
+            }
+
+            return ExceptionToErrorInfoConverter.Convert(context.Exception, false);
+        }
+
+        protected virtual async Task ShowErrorInfoAsync(RemoteServiceErrorInfo errorInfo)
+        {
+            if (errorInfo.Details.IsNullOrEmpty())
+            {
+                await MessageService.ErrorAsync(errorInfo.Message);
             }
             else
             {
-                await _messageService.ErrorAsync(exception.Error.Details, exception.Error.Message);
+                await MessageService.ErrorAsync(errorInfo.Details, errorInfo.Message);
             }
-        }
-
-        protected virtual async Task InformAbpValidationExceptionAsync(AbpValidationException exception, UserExceptionInformerContext context)
-        {
-            await _messageService.ErrorAsync(exception.Message);
         }
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -10,6 +9,7 @@ using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.ExceptionHandling;
+using Volo.Abp.ExceptionHandling.Localization;
 using Volo.Abp.Http;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -20,28 +20,25 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
     public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConverter, ITransientDependency
     {
         protected AbpExceptionLocalizationOptions LocalizationOptions { get; }
-        protected AbpExceptionHandlingOptions ExceptionHandlingOptions { get; }
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
-        protected IStringLocalizer<AbpUiResource> L { get; }
+        protected IStringLocalizer<AbpExceptionHandlingResource> L { get; }
         protected IServiceProvider ServiceProvider { get; }
 
         public DefaultExceptionToErrorInfoConverter(
             IOptions<AbpExceptionLocalizationOptions> localizationOptions,
-            IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions,
             IStringLocalizerFactory stringLocalizerFactory,
-            IStringLocalizer<AbpUiResource> abpUiStringLocalizer,
+            IStringLocalizer<AbpExceptionHandlingResource> stringLocalizer,
             IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
-            ExceptionHandlingOptions = exceptionHandlingOptions.Value;
             StringLocalizerFactory = stringLocalizerFactory;
-            L = abpUiStringLocalizer;
+            L = stringLocalizer;
             LocalizationOptions = localizationOptions.Value;
         }
 
-        public RemoteServiceErrorInfo Convert(Exception exception)
+        public RemoteServiceErrorInfo Convert(Exception exception, bool includeSensitiveDetails)
         {
-            var errorInfo = CreateErrorInfoWithoutCode(exception);
+            var errorInfo = CreateErrorInfoWithoutCode(exception, includeSensitiveDetails);
 
             if (exception is IHasErrorCode hasErrorCodeException)
             {
@@ -51,9 +48,9 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             return errorInfo;
         }
 
-        protected virtual RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception)
+        protected virtual RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception, bool includeSensitiveDetails)
         {
-            if (ExceptionHandlingOptions.SendExceptionsDetailsToClients)
+            if (includeSensitiveDetails)
             {
                 return CreateDetailedErrorInfoFromException(exception);
             }
@@ -179,10 +176,9 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             {
                 var aggException = exception as AggregateException;
 
-                if (aggException.InnerException is IUserFriendlyException ||
-                    aggException.InnerException is AbpValidationException ||
-                    aggException.InnerException is EntityNotFoundException ||
+                if (aggException.InnerException is AbpValidationException ||
                     aggException.InnerException is AbpAuthorizationException ||
+                    aggException.InnerException is EntityNotFoundException ||
                     aggException.InnerException is IBusinessException)
                 {
                     return aggException.InnerException;
