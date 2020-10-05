@@ -101,14 +101,7 @@ async function defaultLocalErrorHandlerFn({
   }
 
   if (isDevMode) {
-    console.error(`Cannot find the ${locale} locale file. You should add the code below to app.module:
-
-import { storeLocaleData } from '@abp/ng.core';
-import(
-/* webpackChunkName: "_locale-${locale}-js"*/
-/* webpackMode: "eager" */
-'@angular/common/locales/${locale}.js'
-).then(m => storeLocaleData(m.default, '${locale}'));`);
+    console.error(`Cannot find the ${locale} locale file. You can check how can add new culture at https://docs.abp.io/en/abp/latest/UI/Angular/Localization#adding-new-culture`);
   }
 
   resolve();
