@@ -403,6 +403,10 @@
               "path": "UI/AspNetCore/Navigation-Menu.md"
             },
             {
+              "text": "Page Alerts",
+              "path": "UI/AspNetCore/Page-Alerts.md"
+            },
+            {
               "text": "Client Side Package Management",
               "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
