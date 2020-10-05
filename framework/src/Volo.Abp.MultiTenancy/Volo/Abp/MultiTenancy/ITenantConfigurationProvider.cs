@@ -4,6 +4,6 @@ namespace Volo.Abp.MultiTenancy
 {
     public interface ITenantConfigurationProvider
     {
-        Task<TenantConfiguration> ResolverAndGet();
+        Task<TenantConfiguration> GetAsync();
     }
 }

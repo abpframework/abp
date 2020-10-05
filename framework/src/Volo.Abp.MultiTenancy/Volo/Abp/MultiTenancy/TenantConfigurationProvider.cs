@@ -20,7 +20,7 @@ namespace Volo.Abp.MultiTenancy
             TenantResolveResultAccessor = tenantResolveResultAccessor;
         }
 
-        public virtual async Task<TenantConfiguration> ResolverAndGet()
+        public virtual async Task<TenantConfiguration> GetAsync()
         {
             var resolveResult = TenantResolver.ResolveTenantIdOrName();
             TenantResolveResultAccessor.Result = resolveResult;
