@@ -4,17 +4,8 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-<<<<<<< maliming/net5
         <TargetFramework>net5.0</TargetFramework>
-        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-        <RootNamespace />
-=======
-        <TargetFramework>netstandard2.1</TargetFramework>
         <RazorLangVersion>3.0</RazorLangVersion>
->>>>>>> dev
     </PropertyGroup>
 
     <ItemGroup>
