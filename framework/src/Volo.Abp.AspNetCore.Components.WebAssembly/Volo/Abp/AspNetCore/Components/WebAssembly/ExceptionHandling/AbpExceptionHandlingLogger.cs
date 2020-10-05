@@ -8,20 +8,25 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
     {
         private readonly IServiceCollection _serviceCollection;
         private IServiceScope _serviceScope;
-        private IUiMessageService _messageService;
+        private IUserExceptionInformer _userExceptionInformer;
 
         public AbpExceptionHandlingLogger(IServiceCollection serviceCollection)
         {
             _serviceCollection = serviceCollection;
         }
 
-        public void Log<TState>(
+        public virtual void Log<TState>(
             LogLevel logLevel,
             EventId eventId,
             TState state,
             Exception exception,
             Func<TState, Exception, string> formatter)
         {
+            if (exception == null)
+            {
+                return;
+            }
+
             if (logLevel != LogLevel.Critical && logLevel != LogLevel.Error)
             {
                 return;
@@ -29,18 +34,15 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
 
             TryInitialize();
 
-            if (_messageService == null)
+            if (_userExceptionInformer == null)
             {
                 return;
             }
 
-            //TODO: handle exception types
-            _messageService.ErrorAsync(
-                exception?.Message ?? state?.ToString() ?? "Unknown error!"
-            );
+            _userExceptionInformer.InformAsync(new UserExceptionInformerContext(exception));
         }
 
-        private void TryInitialize()
+        protected virtual void TryInitialize()
         {
             var serviceProvider = _serviceCollection.GetServiceProviderOrNull();
             if (serviceProvider == null)
@@ -49,20 +51,20 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
             }
 
             _serviceScope = serviceProvider.CreateScope();
-            _messageService = _serviceScope.ServiceProvider.GetRequiredService<IUiMessageService>();
+            _userExceptionInformer = _serviceScope.ServiceProvider.GetRequiredService<IUserExceptionInformer>();
         }
 
-        public bool IsEnabled(LogLevel logLevel)
+        public virtual bool IsEnabled(LogLevel logLevel)
         {
             return logLevel == LogLevel.Critical || logLevel == LogLevel.Error;
         }
 
-        public IDisposable BeginScope<TState>(TState state)
+        public virtual IDisposable BeginScope<TState>(TState state)
         {
             return NullDisposable.Instance;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _serviceScope?.Dispose();
         }
