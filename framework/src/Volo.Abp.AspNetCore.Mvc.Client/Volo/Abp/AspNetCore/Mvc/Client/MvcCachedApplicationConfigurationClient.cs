@@ -12,6 +12,11 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {
+    [ExposeServices(
+        typeof(MvcCachedApplicationConfigurationClient),
+        typeof(ICachedApplicationConfigurationClient),
+        typeof(IAsyncInitialize)
+        )]
     public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
         protected IHttpContextAccessor HttpContextAccessor { get; }

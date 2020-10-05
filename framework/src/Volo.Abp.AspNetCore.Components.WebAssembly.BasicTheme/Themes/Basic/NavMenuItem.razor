@@ -2,49 +2,44 @@
 @{
     var elementId = MenuItem.ElementId ?? "MenuItem_" + MenuItem.Name.Replace(".", "_");
     var cssClass = string.IsNullOrEmpty(MenuItem.CssClass) ? string.Empty : MenuItem.CssClass;
+    var disabled = MenuItem.IsDisabled ? "disabled" : string.Empty;
     var url = string.IsNullOrEmpty(MenuItem.Url) ? "#" : MenuItem.Url;
 }
 @if (MenuItem.IsLeaf)
 {
     if (MenuItem.Url != null)
     {
-        <li class="nav-item @cssClass" disabled="@MenuItem.IsDisabled">
-            <NavLink class="nav-link" href="@url" id="@elementId">
-                @if (MenuItem.Icon != null)
+        <a class="dropdown-item @cssClass @disabled" href="@url" id="@elementId">
+            @if (MenuItem.Icon != null)
+            {
+                if (MenuItem.Icon.StartsWith("fa"))
                 {
-                    if (MenuItem.Icon.StartsWith("fa"))
-                    {
-                        <i class="@MenuItem.Icon"></i>
-                    }
+                    <i class="@MenuItem.Icon"></i>
                 }
-                @MenuItem.DisplayName
-            </NavLink>
-        </li>
+            }
+            @MenuItem.DisplayName
+        </a>
     }
 }
 else
 {
-    <li class="nav-item">
-        <div class="dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="@elementId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                @if (MenuItem.Icon != null)
-                {
-                    if (MenuItem.Icon.StartsWith("fa"))
-                    {
-                        <i class="@MenuItem.Icon"></i>
-                    }
-                }
+    <div class="dropdown-submenu">
+        <a role="button" class="btn dropdown-toggle" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            <span class="lp-icon">
+                <i class="@(MenuItem.Icon ?? "")"></i>
+            </span>
+            <span class="lp-text">
                 @MenuItem.DisplayName
-            </a>
-            <div class="dropdown-menu border-0 shadow-sm" aria-labelledby="@elementId">
-                @foreach (var childMenuItem in MenuItem.Items)
-                {
-                    <NavMenuItem MenuItem="@childMenuItem" />
-                }
-            </div>
+            </span>
+        </a>
+        <div class="dropdown-menu border-0 shadow-sm">
+            @foreach (var childMenuItem in MenuItem.Items)
+            {
+                <NavMenuItem MenuItem="@childMenuItem"/>
+            }
         </div>
-    </li>
-
+    </div>
 }
 @code {
     [Parameter]

@@ -2,75 +2,108 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Features;
+using Volo.Abp.Localization;
 using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.FeatureManagement.Blazor.Components
 {
     public partial class FeatureManagementModal
     {
-        [Inject] private IFeatureAppService FeatureAppService { get; set; }
+        [Inject] protected IFeatureAppService FeatureAppService { get; set; }
         
         [Inject] protected IUiMessageService UiMessageService { get; set; }
+        
+        [Inject] protected IStringLocalizer<AbpFeatureManagementResource> L { get; set; }
+        
+        [Inject] protected IStringLocalizerFactory HtmlLocalizerFactory { get; set; }
+        
+        [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
 
-        private Modal _modal;
+        protected Modal Modal;
         
-        private string _providerName;
-        private string _providerKey;
-        
-        private List<FeatureGroupDto> _groups { get; set; }
+        protected string ProviderName;
+        protected string ProviderKey;
 
-        private Dictionary<string, bool> _toggleValues;
+        protected string SelectedTabName;
         
-        public async Task OpenAsync(string providerName, string providerKey)
+        protected List<FeatureGroupDto> Groups { get; set; }
+
+        protected Dictionary<string, bool> ToggleValues;
+
+        protected Dictionary<string, string> SelectionStringValues;
+        
+        public virtual async Task OpenAsync([NotNull]string providerName, string providerKey = null)
         {
-            _providerName = providerName;
-            _providerKey = providerKey;
+            ProviderName = providerName;
+            ProviderKey = providerKey;
 
-            _groups = (await FeatureAppService.GetAsync(_providerName, _providerKey)).Groups;
-
-            _toggleValues = _groups
-                .SelectMany(x => x.Features)
-                .Where(x => x.ValueType is ToggleStringValueType)
-                .ToDictionary(x => x.Name, x => bool.Parse(x.Value));
+            ToggleValues = new Dictionary<string, bool>();
+            SelectionStringValues = new Dictionary<string, string>();
             
-            _modal.Show();
+            Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey)).Groups;
+
+            SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
+            
+            foreach (var featureGroupDto in Groups)
+            {
+                foreach (var featureDto in featureGroupDto.Features)
+                {
+                    if (featureDto.ValueType is ToggleStringValueType)
+                    {
+                        ToggleValues.Add(featureDto.Name, bool.Parse(featureDto.Value));
+                    }
+
+                    if (featureDto.ValueType is SelectionStringValueType)
+                    {
+                        SelectionStringValues.Add(featureDto.Name, featureDto.Value);
+                    }
+                }
+            }
+
+            Modal.Show();
         }
         
-        private void CloseModal()
+        public virtual Task CloseModal()
         {
-            _modal.Hide();
+            Modal.Hide();
+            return Task.CompletedTask;
         }
         
-        private async Task SaveAsync()
+        protected virtual async Task SaveAsync()
         {
             var features = new UpdateFeaturesDto
             {
-                Features = _groups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
+                Features = Groups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
                 {
                     Name = f.Name,
-                    Value = f.ValueType is ToggleStringValueType ? _toggleValues[f.Name].ToString() : f.Value
+                    Value = f.ValueType is ToggleStringValueType ? ToggleValues[f.Name].ToString() : 
+                            f.ValueType is SelectionStringValueType ? SelectionStringValues[f.Name] : f.Value
                 }).ToList()
             };
             
-            await FeatureAppService.UpdateAsync(_providerName, _providerKey, features);
+            await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
             
-            _modal.Hide();
+            Modal.Hide();
         }
         
-        public string GetNormalizedGroupName(string name)
+        protected virtual string GetNormalizedGroupName(string name)
         {
             return "FeatureGroup_" + name.Replace(".", "_");
         }
         
-        public virtual bool IsDisabled(string providerName)
+        protected virtual bool IsDisabled(string providerName)
         {
-            return providerName != _providerName && providerName != DefaultValueFeatureValueProvider.ProviderName;
+            return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
         }
 
-        private async Task OnFeatureValueChangedAsync(string value, FeatureDto feature)
+        protected virtual async Task OnFeatureValueChangedAsync(string value, FeatureDto feature)
         {
             if (feature.ValueType.Validator.IsValid(value))
             {
@@ -80,6 +113,17 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             {
                 await UiMessageService.WarnAsync(L["Volo.Abp.FeatureManagement:InvalidFeatureValue", feature.DisplayName]);
             }
+        }
+
+        protected virtual void SelectedValueChanged(string featureName, string value)
+        {
+            SelectionStringValues[featureName] = value;
+        }
+        
+        protected virtual IStringLocalizer CreateStringLocalizer(string resourceName)
+        {
+            var resource = LocalizationOptions.Value.Resources.Values.FirstOrDefault(x => x.ResourceName == resourceName);
+            return HtmlLocalizerFactory.Create(resource != null ? resource.ResourceType : LocalizationOptions.Value.DefaultResourceType);
         }
     }
 }

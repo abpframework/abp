@@ -1,9 +1,7 @@
-﻿@using Microsoft.Extensions.Localization
-@using Volo.Abp.FeatureManagement.Localization
-@using Volo.Abp.Validation.StringValues
-@inject IStringLocalizer<AbpFeatureManagementResource> L
+﻿@using Volo.Abp.Validation.StringValues
+@using Microsoft.Extensions.Localization
 
-<Modal @ref="_modal">
+<Modal @ref="Modal">
     <ModalBackdrop />
     <ModalContent Size="ModalSize.Large" IsCentered="true">
         <ModalHeader>
@@ -12,15 +10,15 @@
         </ModalHeader>
         <ModalBody MaxHeight="50">
             <EditForm id="UpdateFeaturesForm" OnValidSubmit="SaveAsync">
-                @if (_groups == null)
+                @if (Groups == null)
                 {
                     <span>@L["NoFeatureFoundMessage"]</span>
                 }
                 else
                 {
-                    <Tabs TabPosition="TabPosition.Left" Pills="true" SelectedTab="@GetNormalizedGroupName(_groups.First().Name)">
+                    <Tabs TabPosition="TabPosition.Left" Pills="true" @bind-SelectedTab="@SelectedTabName">
                         <Items>
-                            @foreach (var group in _groups)
+                            @foreach (var group in Groups)
                             {
                                 <Tab Name="@GetNormalizedGroupName(group.Name)">
                                     <span>@group.DisplayName</span>
@@ -28,7 +26,7 @@
                             }
                         </Items>
                         <Content>
-                            @foreach (var group in _groups)
+                            @foreach (var group in Groups)
                             {
                                 <TabPanel Name="@GetNormalizedGroupName(group.Name)">
                                     <h4>@group.DisplayName</h4>
@@ -58,10 +56,14 @@
                                             
                                             <Field>
                                                 <FieldLabel>@feature.DisplayName</FieldLabel>
-                                                <Select TValue="string" SelectedValue="feature.Value">
+                                                <Select 
+                                                    TValue="string"
+                                                    @bind-SelectedValue="@SelectionStringValues[feature.Name]">
                                                     @foreach (var item in items)
                                                     {
-                                                        <SelectItem Value="@item.Value">@item.DisplayText</SelectItem>
+                                                        <SelectItem Value="@item.Value">
+                                                            @CreateStringLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name)
+                                                        </SelectItem>
                                                     }
                                                 </Select>
                                             </Field>
@@ -70,7 +72,7 @@
                                         if (feature.ValueType is ToggleStringValueType)
                                         {
                                             <Field>
-                                                <Check TValue="bool" @bind-checked="@_toggleValues[feature.Name]">@feature.DisplayName</Check>
+                                                <Check TValue="bool" @bind-checked="@ToggleValues[feature.Name]">@feature.DisplayName</Check>
                                             </Field>
                                         }
                                     }

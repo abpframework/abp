@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
@@ -34,16 +35,52 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var attributes = GetTabHeaderAttributes(context, output);
 
             var classAttributesAsString = attributes.Where(a=>a.Name == "class").ToList().Select(a=>a.Value).JoinAsString(" ");
-            var otherAttributesAsString = attributes.Where(a => a.Name != "class").ToList().ToHtmlAttributesAsString();
+            var otherAttributes = attributes.Where(a => a.Name != "class").ToList();
 
             if (!string.IsNullOrWhiteSpace(TagHelper.ParentDropdownName))
             {
-                return "<a class=\"dropdown-item "+ classAttributesAsString + "\" id=\"" + id + "\" href=\"#" + link + "\" data-toggle=\"tab\"  role=\"tab\" aria-controls=\"" + control + "\" aria-selected=\"false\" "+ otherAttributesAsString + ">" + title + "</a>";
-            }
+                var anchor = new TagBuilder("a");
+                anchor.AddCssClass("dropdown-item " + classAttributesAsString);
+                anchor.Attributes.Add("id", id);
+                anchor.Attributes.Add("href", "#" + link);
+                anchor.Attributes.Add("data-toggle", "tab");
+                anchor.Attributes.Add("role", "tab");
+                anchor.Attributes.Add("aria-controls", control);
+                anchor.Attributes.Add("aria-selected", "false");
 
-            return "<li class=\"nav-item\"><a class=\"nav-link " + classAttributesAsString + " " + AbpTabItemActivePlaceholder + "\" id=\"" + id + "\" data-toggle=\"" + TabItemsDataTogglePlaceHolder + "\" href=\"#" + link + "\" role=\"tab\" aria-controls=\"" + control + "\" aria-selected=\"" + AbpTabItemSelectedPlaceholder + "\" "+ otherAttributesAsString + ">" +
-                   title +
-                   "</a></li>";
+                foreach (var attr in otherAttributes)
+                {
+                    anchor.Attributes.Add(attr.Name, attr.Value.ToString());
+                }
+
+                anchor.InnerHtml.Append(title);
+
+                return anchor.ToHtmlString();
+            }
+            else
+            {
+                var anchor = new TagBuilder("a");
+                anchor.AddCssClass("nav-link " + classAttributesAsString + " " + AbpTabItemActivePlaceholder);
+                anchor.Attributes.Add("id", id);
+                anchor.Attributes.Add("data-toggle", TabItemsDataTogglePlaceHolder);
+                anchor.Attributes.Add("href", "#" + link);
+                anchor.Attributes.Add("role", "tab");
+                anchor.Attributes.Add("aria-controls", control);
+                anchor.Attributes.Add("aria-selected", AbpTabItemSelectedPlaceholder);
+
+                foreach (var attr in otherAttributes)
+                {
+                    anchor.Attributes.Add(attr.Name, attr.Value.ToString());
+                }
+
+                anchor.InnerHtml.Append(title);
+
+                var listItem = new TagBuilder("li");
+                listItem.AddCssClass("nav-item");
+                listItem.InnerHtml.AppendHtml(anchor);
+
+                return listItem.ToHtmlString();
+            }
         }
 
         protected virtual string GetTabContentItem(TagHelperContext context, TagHelperOutput output, string content)
@@ -53,11 +90,22 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var attributes = GetTabContentAttributes(context, output);
 
             var classAttributesAsString = attributes.Where(a => a.Name == "class").ToList().Select(a => a.Name).JoinAsString(" ");
-            var otherAttributesAsString = attributes.Where(a => a.Name != "class").ToList().ToHtmlAttributesAsString();
+            var otherAttributes = attributes.Where(a => a.Name != "class").ToList();
 
-            return "<div class=\"tab-pane fade " + classAttributesAsString + " " + AbpTabItemShowActivePlaceholder + "\" id=\"" + id + "\" role=\"tabpanel\" aria-labelledby=\"" + headerId + "\" " + otherAttributesAsString + ">" +
-                   content +
-                   "</div>";
+            var wrapper = new TagBuilder("div");
+            wrapper.AddCssClass("tab-pane fade " + classAttributesAsString + " " + AbpTabItemShowActivePlaceholder);
+            wrapper.Attributes.Add("id", id);
+            wrapper.Attributes.Add("role", "tabpanel");
+            wrapper.Attributes.Add("aria-labelledby", headerId);
+
+            foreach (var attr in otherAttributes)
+            {
+                wrapper.Attributes.Add(attr.Name, attr.Value.ToString());
+            }
+
+            wrapper.InnerHtml.AppendHtml(content);
+
+            return wrapper.ToHtmlString();
         }
 
         protected virtual void SetPlaceholderForNameIfNotProvided()

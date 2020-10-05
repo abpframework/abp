@@ -121,9 +121,6 @@
                                 <Field>
                                     <Check TValue="bool" @bind-checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
                                 </Field>
-                                <Field>
-                                    <Check TValue="bool" @bind-checked="@NewEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
-                                </Field>
                             </TabPanel>
                             <TabPanel Name="Roles">
                                 @if (NewUserRoles != null)
@@ -196,9 +193,6 @@
                                 </Field>
                                 <Field>
                                     <Check TValue="bool" @bind-checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
-                                </Field>
-                                <Field>
-                                    <Check TValue="bool" @bind-checked="EditingEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
                                 </Field>
                             </TabPanel>
                             <TabPanel Name="Roles">

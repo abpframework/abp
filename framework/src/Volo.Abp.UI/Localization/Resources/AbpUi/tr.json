@@ -64,6 +64,7 @@
     "GoBack": "Geri dön",
     "Search": "Arama",
     "ItemWillBeDeletedMessageWithFormat": "{0} silinecektir!",
-    "ItemWillBeDeletedMessage": "Bu nesne silinecektir!"
+    "ItemWillBeDeletedMessage": "Bu nesne silinecektir!",
+    "ManageYourAccount": "Hesap yönetimi"
   }
 }
