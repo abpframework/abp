@@ -4,6 +4,7 @@
 @using System.Security.Claims
 @using Microsoft.Extensions.Localization
 @using MyCompanyName.MyProjectName.Localization
+@using Volo.Abp.BlazoriseUI.Components
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -14,8 +15,21 @@
             <h5 class="m-1"> <i class="fas fa-rocket"></i> Congratulations, <strong>MyProjectName</strong> is successfully running!</h5>
         </Badge>
 
-        <h1>Welcome to the Application</h1>
+        <Card>
+            <CardHeader>
+                <CardTitle>UI Message Tests</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <Button Color="Color.Info" Clicked="@(()=>UiMessageService.InfoAsync("This is info message", "Info"))">
+                    INFO
+                </Button>
+            </CardBody>
+        </Card>
 
+        <UiMessageAlert />
+
+        <h1>Welcome to the Application</h1>
+        
         <p class="lead px-lg-5 mx-lg-5">@L["LongWelcomeMessage"]</p>
 
         @if (!CurrentUser.IsAuthenticated)
@@ -23,7 +37,7 @@
             <a class="btn btn-primary" href="/authentication/login">
                 <i class="fa fa-sign-in-alt"></i> @L["Login"]
             </a>
-        }    
+        }
     </div>
 
     <div class="my-3 text-center">
@@ -161,6 +175,8 @@
 
 @code
 {
+    [Inject] IUiMessageService UiMessageService { get; set; }
+
     private IEnumerable<Claim> _claims;
 
     protected override async Task OnInitializedAsync()

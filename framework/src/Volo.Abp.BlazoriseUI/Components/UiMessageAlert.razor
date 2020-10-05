@@ -1,0 +1,17 @@
+﻿<Modal @ref="@ModalRef">
+    <ModalBackdrop />
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>
+                @Title
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            @Message
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@OnCancelClicked">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@OnOKClicked">OK</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
