@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Volo.Abp.UI</AssemblyName>
     <PackageId>Volo.Abp.UI</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -18,7 +18,7 @@
     <EmbeddedResource Include="Localization\**\*.json" />
     <Content Remove="Localization\**\*.json" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
   </ItemGroup>

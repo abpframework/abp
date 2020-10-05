@@ -2,9 +2,9 @@
 
     <Import Project="..\..\..\configureawait.props" />
     <Import Project="..\..\..\common.props" />
-    
+
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <RootNamespace />
     </PropertyGroup>
 
