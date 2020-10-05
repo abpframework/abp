@@ -1,4 +1,4 @@
-# Dom Insertion (of Scripts and Styles)
+# Inserting Scripts & Styles to DOM
 
 You can use the `DomInsertionService` in @abp/ng.core package in order to insert scripts and styles in an easy and explicit way.
 
@@ -137,4 +137,4 @@ The `has` method returns a boolean value that indicates the given content has al
 
 ## What's Next?
 
-- [ContentProjectionService](./Content-Projection-Service.md)
+- [Lazy Loading Scripts & Styles](./Lazy-Load-Service.md)

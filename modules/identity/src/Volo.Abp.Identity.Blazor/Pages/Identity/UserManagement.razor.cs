@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.PermissionManagement.Blazor.Components;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public class UserManagementBase : BlazoriseCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
+    public abstract class UserManagementBase : AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
     {
         protected const string PermissionProviderName = "U";
 
         protected const string DefaultSelectedTab = "UserInformations";
-        
+
         protected PermissionManagementModal PermissionManagementModal;
 
         protected IReadOnlyList<IdentityRoleDto> Roles;
@@ -21,14 +21,21 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected AssignedRoleViewModel[] NewUserRoles;
 
         protected AssignedRoleViewModel[] EditUserRoles;
-        
-        protected string _createModalSelectedTab = DefaultSelectedTab;
-        
-        protected string _editModalSelectedTab = DefaultSelectedTab;
-        
+
+        protected bool ShouldShowEntityActions { get; set; }
+        protected bool HasManagePermissionsPermission { get; set; }
+
+        protected string CreateModalSelectedTab = DefaultSelectedTab;
+
+        protected string EditModalSelectedTab = DefaultSelectedTab;
+
         public UserManagementBase()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
+
+            CreatePolicyName = IdentityPermissions.Users.Create;
+            UpdatePolicyName = IdentityPermissions.Users.Update;
+            DeletePolicyName = IdentityPermissions.Users.Delete;
         }
 
         protected override async Task OnInitializedAsync()
@@ -38,10 +45,23 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
 
+        protected override async Task SetPermissionsAsync()
+        {
+            await base.SetPermissionsAsync();
+
+            HasManagePermissionsPermission = await AuthorizationService.IsGrantedAsync(
+                IdentityPermissions.Users.ManagePermissions
+            );
+
+            ShouldShowEntityActions = HasUpdatePermission ||
+                                      HasDeletePermission ||
+                                      HasManagePermissionsPermission;
+        }
+
         protected override Task OpenCreateModalAsync()
         {
-            _createModalSelectedTab = DefaultSelectedTab;
-            
+            CreateModalSelectedTab = DefaultSelectedTab;
+
             NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
                             {
                                 Name = x.Name,
@@ -60,8 +80,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override async Task OpenEditModalAsync(Guid id)
         {
-            _editModalSelectedTab = DefaultSelectedTab;
-            
+            EditModalSelectedTab = DefaultSelectedTab;
+
             var userRoleNames = (await AppService.GetRolesAsync(id)).Items.Select(r => r.Name).ToList();
 
             EditUserRoles = Roles.Select(x => new AssignedRoleViewModel

@@ -1,0 +1,18 @@
+{
+  "culture": "ar",
+  "texts": {
+    "PickYourReaction": "اختر رد فعلك",
+    "YourComment": "تعليقك",
+    "YourReply": "ردك",
+    "Comments": "تعليقات",
+    "Send": "إرسال",
+    "Delete": "حذف",
+    "Reply": "رد",
+    "Update": "حفظ",
+    "Edit": "تعديل",
+    "LoginToAddComment": "تسجيل الدخول لإضافة تعليق",
+    "LoginToReply": "تسجيل الدخول للرد",
+    "MessageDeletionConfirmationMessage": "سيتم حذف هذا التعليق بالكامل.",
+    "CommentAuthorizationExceptionMessage": "هذه التعليقات غير مسموح بها للعرض العام."
+  }
+}

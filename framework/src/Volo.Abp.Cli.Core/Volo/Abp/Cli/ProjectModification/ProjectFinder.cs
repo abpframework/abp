@@ -45,6 +45,8 @@ namespace Volo.Abp.Cli.ProjectModification
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".SignalR") ??
                            FindProjectEndsWith(projectFiles, assemblyNames, ".Web") ??
                            FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Host");
+                case NuGetPackageTarget.Blazor:
+                    return FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
                 default:
                     return null;
             }
@@ -103,8 +105,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private static string FindProjectEndsWith(
             string[] projectFiles,
-            string[] assemblyNames, 
-            string postfix, 
+            string[] assemblyNames,
+            string postfix,
             string excludePostfix = null)
         {
             for (var i = 0; i < assemblyNames.Length; i++)

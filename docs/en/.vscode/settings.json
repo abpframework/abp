@@ -1,0 +1,15 @@
+{
+  "grammarly.userWords": [
+    "api",
+    "apiName",
+    "cli",
+    "defaultProject",
+    "formatter",
+    "md",
+    "monorepo",
+    "ngsw",
+    "npx",
+    "pwa",
+    "rootNamespace"
+  ]
+}

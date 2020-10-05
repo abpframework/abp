@@ -9,7 +9,7 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Account.Blazor.Pages.Account
 {
-    public class AccountManageBase : OwningComponentBase
+    public abstract class AccountManageBase : OwningComponentBase
     {
         [Inject] protected IAccountAppService AccountAppService { get; set; }
         [Inject] protected IProfileAppService ProfileAppService { get; set; }

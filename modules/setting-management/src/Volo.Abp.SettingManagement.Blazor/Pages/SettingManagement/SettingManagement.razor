@@ -1,0 +1,57 @@
+﻿@page "/setting-management"
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.SettingManagement.Localization
+@inject IStringLocalizer<AbpSettingManagementResource> L
+@inherits SettingManagementBase
+
+@* ************************* PAGE HEADER ************************* *@
+<div class="row entry-row">
+    <div class="col-auto">
+        <h1 class="content-header-title">@L["Settings"]</h1>
+    </div>
+    <div class="col-lg-auto pl-lg-0">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="~/"><i class="fa fa-home"></i> </a></li>
+            <li class="breadcrumb-item active" aria-current="page">@L["Settings"]</li>
+        </ol>
+    </div>
+    <div class="col">
+        <div class="text-lg-right pt-2" id="AbpContentToolbar">
+            
+        </div>
+    </div>
+</div>
+
+<Card>
+    <CardBody>
+        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Left" Pills="true">
+            <Items>
+                @foreach (var group in SettingComponentCreationContext.Groups)
+                {
+                    <Tab Name="@GetNormalizedString(group.Id)">
+                        @group.DisplayName
+                    </Tab>
+                }
+            </Items>
+            <Content>
+                @foreach (var group in SettingComponentCreationContext.Groups)
+                {
+                    <TabPanel Name="@GetNormalizedString(group.Id)">
+                        <h2>@group.DisplayName</h2>
+                        <Divider />
+                        
+                        @{
+                            SettingItemRenders.Add(builder =>
+                            {
+                                builder.OpenComponent(0, group.ComponentType);
+                                builder.CloseComponent();
+                            });
+                        }
+                        
+                        @SettingItemRenders.Last()
+                    </TabPanel>
+                }
+            </Content>
+        </Tabs>
+    </CardBody>
+</Card>

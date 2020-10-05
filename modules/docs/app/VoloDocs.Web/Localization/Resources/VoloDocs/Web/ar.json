@@ -1,0 +1,10 @@
+{
+  "culture": "ar",
+  "texts": {
+    "DocsTitle": "Volo وثائق",
+    "WelcomeVoloDocs": "!Volo مرحباً بك فى وثائق",
+    "NoProjectWarning": "لا يوجد مشروع محدد بعد!",
+    "CreateYourFirstProject": "انقر هنا لبدء مشروعك الأول",
+    "NoProject": "لا يوجد مشروع!"
+  }
+}

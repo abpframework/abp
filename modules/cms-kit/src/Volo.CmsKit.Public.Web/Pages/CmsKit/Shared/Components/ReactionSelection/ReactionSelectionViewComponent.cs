@@ -14,7 +14,8 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelectio
     [Widget(
         ScriptTypes = new[] {typeof(ReactionSelectionScriptBundleContributor)},
         StyleTypes = new[] {typeof(ReactionSelectionStyleBundleContributor)},
-        RefreshUrl = "/CmsKitPublicWidgets/ReactionSelection"
+        RefreshUrl = "/CmsKitPublicWidgets/ReactionSelection",
+        AutoInitialize = true
     )]
     public class ReactionSelectionViewComponent : AbpViewComponent
     {

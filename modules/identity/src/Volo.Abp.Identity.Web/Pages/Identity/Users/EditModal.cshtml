@@ -28,8 +28,7 @@
                     <abp-input asp-for="UserInfo.Email" />
                     <abp-input asp-for="UserInfo.PhoneNumber" />
                     <abp-input asp-for="UserInfo.LockoutEnabled" />
-                    <abp-input asp-for="UserInfo.TwoFactorEnabled" />
-                    
+
                     @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.UserInfoViewModel>())
                     {
                         if (propertyInfo.Type.IsEnum)
@@ -46,7 +45,7 @@
                                        value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.ExtraProperties[propertyInfo.Name])" />
                         }
                     }
-                    
+
                 </abp-tab>
                 <abp-tab title="@L["Roles"].Value">
                     @for (var i = 0; i < Model.Roles.Length; i++)

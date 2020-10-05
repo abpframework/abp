@@ -1,0 +1,10 @@
+{
+ "culture": "fr",
+ "texts": {
+  "Features": "Fonctionnalités",
+  "NoFeatureFoundMessage": "Il n'y a aucune fonctionnalité disponible.",
+  "Permission:FeatureManagement": "Gestion des fonctionnalités",
+  "Permission:FeatureManagement.ManageHostFeatures": "Gérer les fonctionnalités de l'hôte",
+  "Volo.Abp.FeatureManagement:InvalidFeatureValue": "La valeur de la fonctionnalité {0} n'est pas valide!"
+ }
+}

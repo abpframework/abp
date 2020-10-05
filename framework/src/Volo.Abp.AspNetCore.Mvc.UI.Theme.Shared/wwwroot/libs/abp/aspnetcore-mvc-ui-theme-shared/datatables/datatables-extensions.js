@@ -27,6 +27,10 @@
             }
         };
 
+        var htmlEncode = function (html) {
+            return $('<div/>').text(html).html();
+        }
+        
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
             var $li = $('<li/>');
             var $a = $('<a/>');
@@ -41,7 +45,7 @@
                     $a.append($("<i>").addClass(fieldItem.iconClass + " mr-1"));
                 }
 
-                $a.append(fieldItem.text);
+                $a.append(htmlEncode(fieldItem.text));
             }
 
             if (fieldItem.action) {
@@ -84,7 +88,7 @@
                     } else if (firstItem.iconClass) {
                         $button.append($("<i>").addClass(firstItem.iconClass + " mr-1"));
                     }
-                    $button.append(firstItem.text);
+                    $button.append(htmlEncode(firstItem.text));
                 }
                 
                 if (firstItem.enabled && !firstItem.enabled({ record: record, table: tableInstance })) {
@@ -128,9 +132,9 @@
             }
 
             if (field.text) {
-                $dropdownButton.append(field.text);
+                $dropdownButton.append(htmlEncode(fieldItem.text));
             } else {
-                $dropdownButton.append(localize("DatatableActionDropdownDefaultText"));
+                $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }
 
             $dropdownButton
