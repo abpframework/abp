@@ -5,8 +5,6 @@ using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    //TODO: Should work for any IRepository implementation
-
     public static class EfCoreRepositoryExtensions
     {
         public static DbContext GetDbContext<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
