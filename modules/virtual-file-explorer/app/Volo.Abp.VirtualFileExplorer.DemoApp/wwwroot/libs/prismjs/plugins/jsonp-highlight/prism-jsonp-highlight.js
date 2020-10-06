@@ -1,17 +1,19 @@
 (function () {
-	if (!self.Prism || !self.document || !document.querySelectorAll || ![].filter) return;
+	if (typeof self === 'undefined' || !self.Prism || !self.document) {
+		return;
+	}
 
 	/**
 	 * @callback Adapter
 	 * @param {any} response
 	 * @param {HTMLPreElement} [pre]
-	 * @returns {string}
+	 * @returns {string | null}
 	 */
 
 	/**
 	 * The list of adapter which will be used if `data-adapter` is not specified.
 	 *
-	 * @type {Array.<{adapter: Adapter, name: string}>}
+	 * @type {Array<{adapter: Adapter, name: string}>}
 	 */
 	var adapters = [];
 
@@ -66,7 +68,9 @@
 			adapter = getAdapter(adapter);
 		}
 		if (typeof adapter === "function") {
-			var index = adapters.map(function (item) { return item.adapter; }).indexOf(adapter);
+			var index = adapters.findIndex(function (item) {
+				return item.adapter === adapter;
+			});
 			if (index >= 0) {
 				adapters.splice(index, 1);
 			}
@@ -120,63 +124,101 @@
 		return null;
 	}, 'bitbucket');
 
-	var jsonpcb = 0,
-		loadMsg = "Loading\u2026";
 
-	/**
-	 * Highlights all `pre` elements with an `data-jsonp` by requesting the specified JSON and using the specified adapter
-	 * or a registered adapter to extract the code to highlight from the response. The highlighted code will be inserted
-	 * into the `pre` element.
-	 */
-	function highlight() {
-		Array.prototype.slice.call(document.querySelectorAll("pre[data-jsonp]")).forEach(function (pre) {
-			pre.textContent = "";
+	var jsonpCallbackCounter = 0;
 
-			var code = document.createElement("code");
-			code.textContent = loadMsg;
-			pre.appendChild(code);
+	var LOADING_MESSAGE = 'Loading…';
+	var MISSING_ADAPTER_MESSAGE = function (name) {
+		return '✖ Error: JSONP adapter function "' + name + '" doesn\'t exist';
+	};
+	var TIMEOUT_MESSAGE = function (url) {
+		return '✖ Error: Timeout loading ' + url;
+	};
+	var UNKNOWN_FAILURE_MESSAGE = '✖ Error: Cannot parse response (perhaps you need an adapter function?)';
 
-			var adapterName = pre.getAttribute("data-adapter");
+	var STATUS_ATTR = 'data-jsonp-status';
+	var STATUS_LOADING = 'loading';
+	var STATUS_LOADED = 'loaded';
+	var STATUS_FAILED = 'failed';
+
+	var SELECTOR = 'pre[data-jsonp]:not([' + STATUS_ATTR + '="' + STATUS_LOADED + '"])'
+		+ ':not([' + STATUS_ATTR + '="' + STATUS_LOADING + '"])';
+
+
+	Prism.hooks.add('before-highlightall', function (env) {
+		env.selector += ', ' + SELECTOR;
+	});
+
+	Prism.hooks.add('before-sanity-check', function (env) {
+		var pre = /** @type {HTMLPreElement} */ (env.element);
+		if (pre.matches(SELECTOR)) {
+			env.code = ''; // fast-path the whole thing and go to complete
+
+			// mark as loading
+			pre.setAttribute(STATUS_ATTR, STATUS_LOADING);
+
+			// add code element with loading message
+			var code = pre.appendChild(document.createElement('CODE'));
+			code.textContent = LOADING_MESSAGE;
+
+			// set language
+			var language = env.language;
+			code.className = 'language-' + language;
+
+			// preload the language
+			var autoloader = Prism.plugins.autoloader;
+			if (autoloader) {
+				autoloader.loadLanguages(language);
+			}
+
+			var adapterName = pre.getAttribute('data-adapter');
 			var adapter = null;
 			if (adapterName) {
-				if (typeof window[adapterName] === "function") {
+				if (typeof window[adapterName] === 'function') {
 					adapter = window[adapterName];
-				}
-				else {
-					code.textContent = "JSONP adapter function '" + adapterName + "' doesn't exist";
+				} else {
+					// mark as failed
+					pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
+
+					code.textContent = MISSING_ADAPTER_MESSAGE(adapterName);
 					return;
 				}
 			}
 
-			var cb = "prismjsonp" + jsonpcb++;
+			var callbackName = 'prismjsonp' + jsonpCallbackCounter++;
 
-			var uri = document.createElement("a");
-			var src = uri.href = pre.getAttribute("data-jsonp");
-			uri.href += (uri.search ? "&" : "?") + (pre.getAttribute("data-callback") || "callback") + "=" + cb;
+			var uri = document.createElement('a');
+			var src = uri.href = pre.getAttribute('data-jsonp');
+			uri.href += (uri.search ? '&' : '?') + (pre.getAttribute('data-callback') || 'callback') + '=' + callbackName;
+
 
 			var timeout = setTimeout(function () {
 				// we could clean up window[cb], but if the request finally succeeds, keeping it around is a good thing
-				if (code.textContent === loadMsg) {
-					code.textContent = "Timeout loading '" + src + "'";
-				}
-			}, 5000);
 
-			var script = document.createElement("script");
+				// mark as failed
+				pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
+
+				code.textContent = TIMEOUT_MESSAGE(src);
+			}, Prism.plugins.jsonphighlight.timeout);
+
+
+			var script = document.createElement('script');
 			script.src = uri.href;
 
-			window[cb] = function (rsp) {
+			// the JSONP callback function
+			window[callbackName] = function (response) {
+				// clean up
 				document.head.removeChild(script);
 				clearTimeout(timeout);
-				delete window[cb];
+				delete window[callbackName];
 
-				var data = "";
-
+				// interpret the received data using the adapter(s)
+				var data = null;
 				if (adapter) {
-					data = adapter(rsp, pre);
-				}
-				else {
-					for (var p in adapters) {
-						data = adapters[p].adapter(rsp, pre);
+					data = adapter(response, pre);
+				} else {
+					for (var i = 0, l = adapters.length; i < l; i++) {
+						data = adapters[i].adapter(response, pre);
 						if (data !== null) {
 							break;
 						}
@@ -184,23 +226,51 @@
 				}
 
 				if (data === null) {
-					code.textContent = "Cannot parse response (perhaps you need an adapter function?)";
-				}
-				else {
+					// mark as failed
+					pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
+
+					code.textContent = UNKNOWN_FAILURE_MESSAGE;
+				} else {
+					// mark as loaded
+					pre.setAttribute(STATUS_ATTR, STATUS_LOADED);
+
 					code.textContent = data;
 					Prism.highlightElement(code);
 				}
 			};
 
 			document.head.appendChild(script);
-		});
-	}
+		}
+	});
+
 
 	Prism.plugins.jsonphighlight = {
+		/**
+		 * The timeout after which an error message will be displayed.
+		 *
+		 * __Note:__ If the request succeeds after the timeout, it will still be processed and will override any
+		 * displayed error messages.
+		 */
+		timeout: 5000,
 		registerAdapter: registerAdapter,
 		removeAdapter: removeAdapter,
-		highlight: highlight
+
+		/**
+		 * Highlights all `pre` elements under the given container with a `data-jsonp` attribute by requesting the
+		 * specified JSON and using the specified adapter or a registered adapter to extract the code to highlight
+		 * from the response. The highlighted code will be inserted into the `pre` element.
+		 *
+		 * Note: Elements which are already loaded or currently loading will not be touched by this method.
+		 *
+		 * @param {Element | Document} [container=document]
+		 */
+		highlight: function (container) {
+			var elements = (container || document).querySelectorAll(SELECTOR);
+
+			for (var i = 0, element; element = elements[i++];) {
+				Prism.highlightElement(element);
+			}
+		}
 	};
 
-	highlight();
 })();
