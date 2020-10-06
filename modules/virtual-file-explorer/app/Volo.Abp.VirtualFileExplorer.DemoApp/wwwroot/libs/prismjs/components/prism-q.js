@@ -44,7 +44,7 @@ Prism.languages.q = {
 		alias: 'function'
 	},
 	'verb': {
-		pattern: /(?:\B\.\B|\b[01]:|<[=>]?|>=?|[:+\-*%,!?_~=|$&#@^]):?/,
+		pattern: /(?:\B\.\B|\b[01]:|<[=>]?|>=?|[:+\-*%,!?~=|$&#@^]):?|\b_\b:?/,
 		alias: 'operator'
 	},
 	'punctuation': /[(){}\[\];.]/

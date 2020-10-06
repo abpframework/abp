@@ -1,6 +1,6 @@
 (function () {
 
-	if (typeof self === 'undefined' || !self.Prism || !self.document || !Prism.languages.markup) {
+	if (typeof self === 'undefined' || !self.Prism || !self.document) {
 		return;
 	}
 
