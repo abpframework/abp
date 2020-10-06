@@ -213,6 +213,12 @@ This method votes a question and returns the current score of the question.
 * **Do** always get all the related entities from repositories to perform the operations on them.
 * **Do** call repository's Update/UpdateAsync method after updating an entity. Because, not all database APIs support change tracking & auto update.
 
+#### Handle files
+
+* **Do not** use any file-related components(like `IFormFile`) or `Stream` in the application service interface. You can use primitive types as file parameters. Such as `byte[]`.
+* **Do** use a controller to handle file upload and call a application service method.
+
+
 #### Using Other Application Services
 
 * **Do not** use other application services of the same module/application. Instead;
