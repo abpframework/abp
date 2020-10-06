@@ -15,6 +15,7 @@ import { Options } from './models/options';
 import { ACCOUNT_OPTIONS } from './tokens/options.token';
 import { accountOptionsFactory } from './utils/factory-utils';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
+import { ManageProfileGuard } from './guards/manage-profile.guard';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ export class AccountModule {
       ngModule: AccountModule,
       providers: [
         AuthenticationFlowGuard,
+        ManageProfileGuard,
         { provide: ACCOUNT_OPTIONS, useValue: options },
         {
           provide: 'ACCOUNT_OPTIONS',
