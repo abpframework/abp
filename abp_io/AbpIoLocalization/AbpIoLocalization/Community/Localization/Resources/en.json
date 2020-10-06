@@ -83,6 +83,7 @@
     "LatestBlogPost": "Latest Blog Post",
     "Edit": "Edit",
     "ProfileImageChange": "Change the profile image",
-    "BlogItemErrorMessage": "Could not get the latest blog post details from ABP."
+    "BlogItemErrorMessage": "Could not get the latest blog post details from ABP.",
+    "PlannedReleaseDate": "Planned release date"
   }
 }
