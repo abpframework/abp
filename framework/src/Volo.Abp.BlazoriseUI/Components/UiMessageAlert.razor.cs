@@ -9,8 +9,6 @@ namespace Volo.Abp.BlazoriseUI.Components
 {
     public partial class UiMessageAlert : ComponentBase, IDisposable
     {
-        private object messageIcon;
-
         protected override void OnInitialized()
         {
             UiMessageNotifierService.MessageReceived += OnMessageReceived;
@@ -80,18 +78,18 @@ namespace Volo.Abp.BlazoriseUI.Components
             UiMessageType.Info => IconName.Info,
             UiMessageType.Success => IconName.Check,
             UiMessageType.Warning => IconName.Exclamation,
-            UiMessageType.Error => IconName.Stop,
+            UiMessageType.Error => IconName.Times,
             UiMessageType.Confirmation => IconName.QuestionCircle,
             _ => null,
         };
 
         protected virtual string MessageIconColor => MessageType switch
         {
-            UiMessageType.Info => "#0000ff",
-            UiMessageType.Success => "#00ff00",
-            UiMessageType.Warning => "#ffae00",
-            UiMessageType.Error => "#e8301c",
-            UiMessageType.Confirmation => "#de692f",
+            UiMessageType.Info => "var(--b-theme-info, var(--info, #17a2b8))",
+            UiMessageType.Success => "var(--b-theme-success, var(--success, #28a745))",
+            UiMessageType.Warning => "var(--b-theme-warning, var(--warning, #ffc107))",
+            UiMessageType.Error => "var(--b-theme-danger, var(--danger, #dc3545))",
+            UiMessageType.Confirmation => "var(--b-theme-secondary, var(--secondary, #6c757d))",
             _ => null,
         };
 
