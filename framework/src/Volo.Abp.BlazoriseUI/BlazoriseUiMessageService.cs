@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Blazorise;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
@@ -23,27 +22,31 @@ namespace Volo.Abp.BlazoriseUI
 
         public Task InfoAsync(string message, string title = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceived(message, title);
+            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Info, message, title);
         }
 
         public Task SuccessAsync(string message, string title = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceived(message, title);
+            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Success, message, title);
         }
 
         public Task WarnAsync(string message, string title = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceived(message, title);
+            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Warning, message, title);
         }
 
         public Task ErrorAsync(string message, string title = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceived(message, title);
+            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Error, message, title);
         }
 
-        public Task<bool> ConfirmAsync(string message, string title = null)
+        public async Task<bool> ConfirmAsync(string message, string title = null)
         {
-            return Task.FromResult(true);
+            var callback = new TaskCompletionSource<bool>();
+
+            await uiMessageNotifierService.NotifyConfirmationReceivedAsync(message, title, callback);
+
+            return await callback.Task;
         }
     }
 }

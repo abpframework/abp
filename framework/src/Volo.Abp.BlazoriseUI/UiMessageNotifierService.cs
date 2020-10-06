@@ -10,9 +10,16 @@ namespace Volo.Abp.BlazoriseUI
     {
         public event EventHandler<UiMessageEventArgs> MessageReceived;
 
-        public Task NotifyMessageReceived(string message, string title = null)
+        public Task NotifyMessageReceivedAsync(UiMessageType messageType, string message, string title = null)
         {
-            MessageReceived?.Invoke(this, new UiMessageEventArgs(message, title));
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(messageType, message, title));
+
+            return Task.CompletedTask;
+        }
+
+        public Task NotifyConfirmationReceivedAsync(string message, string title, TaskCompletionSource<bool> callback)
+        {
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Confirmation, message, title, callback));
 
             return Task.CompletedTask;
         }
