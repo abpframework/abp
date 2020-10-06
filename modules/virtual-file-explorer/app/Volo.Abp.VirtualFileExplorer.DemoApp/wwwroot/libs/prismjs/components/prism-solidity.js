@@ -18,3 +18,5 @@ Prism.languages.insertBefore('solidity', 'number', {
 		alias: 'number',
 	}
 });
+
+Prism.languages.sol = Prism.languages.solidity;

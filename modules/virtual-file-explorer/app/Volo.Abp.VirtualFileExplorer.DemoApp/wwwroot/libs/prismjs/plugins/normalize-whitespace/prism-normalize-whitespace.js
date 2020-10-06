@@ -140,6 +140,11 @@ Prism.hooks.add('before-sanity-check', function (env) {
 		return;
 	}
 
+	// Check classes
+	if (!Prism.util.isActive(env.element, 'whitespace-normalization', true)) {
+		return;
+	}
+
 	// Simple mode if there is no env.element
 	if ((!env.element || !env.element.parentNode) && env.code) {
 		env.code = Normalizer.normalize(env.code, env.settings);
@@ -148,10 +153,9 @@ Prism.hooks.add('before-sanity-check', function (env) {
 
 	// Normal mode
 	var pre = env.element.parentNode;
-	var clsReg = /(?:^|\s)no-whitespace-normalization(?:\s|$)/;
-	if (!env.code || !pre || pre.nodeName.toLowerCase() !== 'pre' ||
-			clsReg.test(pre.className) || clsReg.test(env.element.className))
+	if (!env.code || !pre || pre.nodeName.toLowerCase() !== 'pre') {
 		return;
+	}
 
 	var children = pre.childNodes,
 	    before = '',

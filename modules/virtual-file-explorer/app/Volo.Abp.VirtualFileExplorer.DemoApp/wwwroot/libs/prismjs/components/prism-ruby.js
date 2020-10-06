@@ -39,36 +39,14 @@
 	Prism.languages.insertBefore('ruby', 'keyword', {
 		'regex': [
 			{
-				pattern: /%r([^a-zA-Z0-9\s{(\[<])(?:(?!\1)[^\\]|\\[\s\S])*\1[gim]{0,3}/,
-				greedy: true,
-				inside: {
-					'interpolation': interpolation
-				}
-			},
-			{
-				pattern: /%r\((?:[^()\\]|\\[\s\S])*\)[gim]{0,3}/,
-				greedy: true,
-				inside: {
-					'interpolation': interpolation
-				}
-			},
-			{
-				// Here we need to specifically allow interpolation
-				pattern: /%r\{(?:[^#{}\\]|#(?:\{[^}]+\})?|\\[\s\S])*\}[gim]{0,3}/,
-				greedy: true,
-				inside: {
-					'interpolation': interpolation
-				}
-			},
-			{
-				pattern: /%r\[(?:[^\[\]\\]|\\[\s\S])*\][gim]{0,3}/,
-				greedy: true,
-				inside: {
-					'interpolation': interpolation
-				}
-			},
-			{
-				pattern: /%r<(?:[^<>\\]|\\[\s\S])*>[gim]{0,3}/,
+				pattern: RegExp(/%r/.source + '(?:' + [
+					/([^a-zA-Z0-9\s{(\[<])(?:(?!\1)[^\\]|\\[\s\S])*\1[gim]{0,3}/.source,
+					/\((?:[^()\\]|\\[\s\S])*\)[gim]{0,3}/.source,
+					// Here we need to specifically allow interpolation
+					/\{(?:[^#{}\\]|#(?:\{[^}]+\})?|\\[\s\S])*\}[gim]{0,3}/.source,
+					/\[(?:[^\[\]\\]|\\[\s\S])*\][gim]{0,3}/.source,
+					/<(?:[^<>\\]|\\[\s\S])*>[gim]{0,3}/.source
+				].join('|') + ')'),
 				greedy: true,
 				inside: {
 					'interpolation': interpolation
@@ -102,36 +80,14 @@
 
 	Prism.languages.ruby.string = [
 		{
-			pattern: /%[qQiIwWxs]?([^a-zA-Z0-9\s{(\[<])(?:(?!\1)[^\\]|\\[\s\S])*\1/,
-			greedy: true,
-			inside: {
-				'interpolation': interpolation
-			}
-		},
-		{
-			pattern: /%[qQiIwWxs]?\((?:[^()\\]|\\[\s\S])*\)/,
-			greedy: true,
-			inside: {
-				'interpolation': interpolation
-			}
-		},
-		{
-			// Here we need to specifically allow interpolation
-			pattern: /%[qQiIwWxs]?\{(?:[^#{}\\]|#(?:\{[^}]+\})?|\\[\s\S])*\}/,
-			greedy: true,
-			inside: {
-				'interpolation': interpolation
-			}
-		},
-		{
-			pattern: /%[qQiIwWxs]?\[(?:[^\[\]\\]|\\[\s\S])*\]/,
-			greedy: true,
-			inside: {
-				'interpolation': interpolation
-			}
-		},
-		{
-			pattern: /%[qQiIwWxs]?<(?:[^<>\\]|\\[\s\S])*>/,
+			pattern: RegExp(/%[qQiIwWxs]?/.source + '(?:' + [
+				/([^a-zA-Z0-9\s{(\[<])(?:(?!\1)[^\\]|\\[\s\S])*\1/.source,
+				/\((?:[^()\\]|\\[\s\S])*\)/.source,
+				// Here we need to specifically allow interpolation
+				/\{(?:[^#{}\\]|#(?:\{[^}]+\})?|\\[\s\S])*\}/.source,
+				/\[(?:[^\[\]\\]|\\[\s\S])*\]/.source,
+				/<(?:[^<>\\]|\\[\s\S])*>/.source
+			].join('|') + ')'),
 			greedy: true,
 			inside: {
 				'interpolation': interpolation

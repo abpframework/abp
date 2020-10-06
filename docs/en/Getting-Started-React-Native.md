@@ -110,4 +110,4 @@ The application is up and running. You can continue to develop your application 
 
 ## See Also
 
-* [React Native project structure](./Startup-Templates/Application.md#react-native)
+* [React Native project structure](./Startup-Templates/Application#react-native)

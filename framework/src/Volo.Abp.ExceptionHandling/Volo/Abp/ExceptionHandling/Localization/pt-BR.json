@@ -1,0 +1,23 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "InternalServerErrorMessage": "Um erro interno ocorreu durante a requisição!",
+    "ValidationErrorMessage": "Sua requisição não é válida!",
+    "ValidationNarrativeErrorMessageTitle": "Os seguintes erros foram detectados durante a validação:",
+    "DefaultErrorMessage": "Ocorreu um erro!",
+    "DefaultErrorMessageDetail": "Os detalhes do erro não foram enviados pelo servidor.",
+    "DefaultErrorMessage401": "Você não etá autenticado!",
+    "DefaultErrorMessage401Detail": "Você deve autenticar-se para proceder com esta operação.",
+    "DefaultErrorMessage403": "Você não possui autorização!",
+    "DefaultErrorMessage403Detail": "Você não tem permissão para executar esta operação!",
+    "DefaultErrorMessage404": "Recurso não encontrado!",
+    "DefaultErrorMessage404Detail": "O recurso requisitado não pode ser encontrado pelo servidor!",
+    "EntityNotFoundErrorMessage": "Não existe uma entidade {0} com código = {1}!",
+    "Error": "Erro",
+    "UnhandledException": "Exceção não tratada!",
+    "401Message": "Autenticação inválida",
+    "403Message": "Não autorizado",
+    "404Message": "Página não encontrada",
+    "500Message": "Erro interno do servidor"
+  }
+}

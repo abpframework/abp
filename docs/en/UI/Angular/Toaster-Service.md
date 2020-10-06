@@ -67,7 +67,7 @@ With the options above, the toast overlay looks like this:
 
 ![toast](./images/toast.png)
 
-### How to Remove a Toast Overlay
+### How to Remove a Toast Overlay
 
 The open toast overlay can be removed manually via the `remove` method by passing the `id` of toast:
 

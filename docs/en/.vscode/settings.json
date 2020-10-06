@@ -7,7 +7,9 @@
     "formatter",
     "md",
     "monorepo",
+    "ngsw",
     "npx",
+    "pwa",
     "rootNamespace"
   ]
 }

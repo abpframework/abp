@@ -16,7 +16,7 @@
                 }
                 else
                 {
-                    <Tabs TabPosition="TabPosition.Left" Pills="true" SelectedTab="@GetNormalizedGroupName(Groups.First().Name)">
+                    <Tabs TabPosition="TabPosition.Left" Pills="true" @bind-SelectedTab="@SelectedTabName">
                         <Items>
                             @foreach (var group in Groups)
                             {

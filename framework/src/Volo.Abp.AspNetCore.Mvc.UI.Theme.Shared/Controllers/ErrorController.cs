@@ -19,18 +19,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
         private readonly IStringLocalizer<AbpUiResource> _localizer;
         private readonly AbpErrorPageOptions _abpErrorPageOptions;
         private readonly IExceptionNotifier _exceptionNotifier;
+        private readonly AbpExceptionHandlingOptions _exceptionHandlingOptions;
 
         public ErrorController(
             IExceptionToErrorInfoConverter exceptionToErrorInfoConverter,
             IHttpExceptionStatusCodeFinder httpExceptionStatusCodeFinder,
             IOptions<AbpErrorPageOptions> abpErrorPageOptions,
-            IStringLocalizer<AbpUiResource> localizer, 
-            IExceptionNotifier exceptionNotifier)
+            IStringLocalizer<AbpUiResource> localizer,
+            IExceptionNotifier exceptionNotifier,
+            IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
         {
             _errorInfoConverter = exceptionToErrorInfoConverter;
             _statusCodeFinder = httpExceptionStatusCodeFinder;
             _localizer = localizer;
             _exceptionNotifier = exceptionNotifier;
+            _exceptionHandlingOptions = exceptionHandlingOptions.Value;
             _abpErrorPageOptions = abpErrorPageOptions.Value;
         }
 
@@ -44,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
 
             await _exceptionNotifier.NotifyAsync(new ExceptionNotificationContext(exception));
 
-            var errorInfo = _errorInfoConverter.Convert(exception);
+            var errorInfo = _errorInfoConverter.Convert(exception, _exceptionHandlingOptions.SendExceptionsDetailsToClients);
 
             if (httpStatusCode == 0)
             {
