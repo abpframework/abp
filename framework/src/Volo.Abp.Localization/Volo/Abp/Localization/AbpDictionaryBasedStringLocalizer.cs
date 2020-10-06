@@ -31,7 +31,7 @@ namespace Volo.Abp.Localization
                 includeParentCultures
             );
         }
-        
+
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
         {
             return GetAllStrings(
@@ -39,12 +39,6 @@ namespace Volo.Abp.Localization
                 includeParentCultures,
                 includeBaseLocalizers
             );
-        }
-
-        [Obsolete("This method is obsolete. Use `CurrentCulture` and `CurrentUICulture` instead.")]
-        public IStringLocalizer WithCulture(CultureInfo culture)
-        {
-            return new CultureWrapperStringLocalizer(culture.Name, this);
         }
 
         protected virtual LocalizedString GetLocalizedStringFormatted(string name, params object[] arguments)
@@ -126,7 +120,7 @@ namespace Volo.Abp.Localization
         }
 
         protected virtual IReadOnlyList<LocalizedString> GetAllStrings(
-            string cultureName, 
+            string cultureName,
             bool includeParentCultures = true,
             bool includeBaseLocalizers = true)
         {
@@ -177,7 +171,7 @@ namespace Volo.Abp.Localization
 
             return allStrings.Values.ToImmutableList();
         }
-        
+
         public class CultureWrapperStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
         {
             private readonly string _cultureName;
@@ -196,12 +190,6 @@ namespace Volo.Abp.Localization
             public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
             {
                 return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures);
-            }
-
-            [Obsolete("This method is obsolete. Use `CurrentCulture` and `CurrentUICulture` instead.")]
-            public IStringLocalizer WithCulture(CultureInfo culture)
-            {
-                return new CultureWrapperStringLocalizer(culture.Name, _innerLocalizer);
             }
 
             public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
