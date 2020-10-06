@@ -9,9 +9,7 @@ export class ManageProfileGuard implements CanActivate {
   canActivate(_: ActivatedRouteSnapshot, __: RouterStateSnapshot) {
     const env = this.configState.getEnvironment();
     if (env.oAuthConfig.responseType === 'code') {
-      window.location.replace(
-        `${env.oAuthConfig.issuer}/Account/Manage?returnUrl=${window.location.href}`,
-      );
+      window.location.href = `${env.oAuthConfig.issuer}/Account/Manage?returnUrl=${window.location.href}`;
       return false;
     } else {
       return true;
