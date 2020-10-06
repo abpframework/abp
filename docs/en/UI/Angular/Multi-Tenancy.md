@@ -2,8 +2,8 @@
 
 ABP Angular UI supports the multi-tenancy. The following features related to multi-tenancy are available in the startup templates.
 
-
 ![Tenants Page](./images/tenants-page.png)
+
 <p style="font-size:small;text-align:center;">Tenants page</p>
 
 On the page above, you can;
@@ -13,12 +13,11 @@ On the page above, you can;
 - Edit an existing tenant.
 - Delete a tenant.
 
-
 ![Tenant Switching Component](./images/tenant-switching-box.png)
+
 <p style="font-size:small;text-align:center;">Tenant Switching Component</p>
 
 You can switch between existing tenants by using the tenant switching component in the child pages of the `AccountLayoutComponent` (like Login page). Angular UI sends the selected tenant id to the backend as `__tenant` header on each request.
-
 
 ## Domain Tenant Resolver
 
@@ -32,10 +31,10 @@ Subdomain resolver:
 export const environment = {
   //...
   application: {
-    baseUrl: 'https://{0}.mydomain.com/'
+    baseUrl: "https://{0}.mydomain.com/",
   },
   //...
-}
+};
 ```
 
 **{0}** is the placeholder to determine current tenant's unique name.
@@ -43,7 +42,6 @@ export const environment = {
 After the configuration above, if your app runs on the `mytenant1.mydomain.com`, the app will get the tenant name as **mytenant1**. Then, the app will call the `/api/abp/multi-tenancy/tenants/by-name/mytenant1` endpoint to check if the tenant exists. If the tenant (mytenant1) exists, the app will keep this tenant data and send its `id` as `__tenant` header to the backend on each request. If the tenant does not exist, the app will not send `__tenant` header to the backend.
 
 > **Important Note:** If you define the `baseUrl` with the placeholder (**{0}**), the tenant switching component in the child pages of the `AccountLayoutComponent` (like Login page) will be hidden.
-
 
 Domain resolver:
 
@@ -53,10 +51,10 @@ Domain resolver:
 export const environment = {
   //...
   application: {
-    baseUrl: 'https://{0}.com/'
+    baseUrl: "https://{0}.com/",
   },
   //...
-}
+};
 ```
 
 After the configuration above, if your app runs on the `mytenant.com`, the app will get the tenant name as **mytenant**.
@@ -71,28 +69,27 @@ The **{0}** placeholder can be put to the API URLs in the environment to determi
 export const environment = {
   //...
   application: {
-    baseUrl: 'https://{0}.mydomain.com/',
+    baseUrl: "https://{0}.mydomain.com/",
     //...
   },
   oAuthConfig: {
-    issuer: 'https://{0}.ids.mydomain.com',
+    issuer: "https://{0}.ids.mydomain.com",
     //...
   },
   apis: {
     default: {
-      url: 'https://{0}.api.mydomain.com',
+      url: "https://{0}.api.mydomain.com",
     },
     AbpIdentity: {
-      url: 'https://{0}.identity.mydomain.com',
+      url: "https://{0}.identity.mydomain.com",
     },
   },
-}
+};
 ```
 
 > **Important Note:** The `application.baseUrl` and the `{0}` placeholder in the value of the `baseUrl` property are required to be able to get tenant from running URL. Other placeholders in API URLs are optional.
 
 After the configuration above, if your app runs on the `mytenant1.mydomain.com`, the app will get tenant name as **mytenant1** and replace the environment object in `ConfigState` on app initialization as follows:
-
 
 ```js
 // environment object in ConfigState
@@ -128,8 +125,8 @@ The app sends the `__tenant` header that contains the current tenant id on each 
 
 ## See Also
 
-* [Multi Tenancy in ABP](../../Multi-Tenancy.md)
+- [Multi Tenancy in ABP](../../Multi-Tenancy.md)
 
 ## What's Next?
 
-- [Confirmation Popup](./Confirmation-Service.md)
+- [Managing RxJS Subscriptions](./Subscription-Service.md)

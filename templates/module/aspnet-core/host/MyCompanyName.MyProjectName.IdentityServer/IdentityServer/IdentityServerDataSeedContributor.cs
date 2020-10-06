@@ -153,16 +153,37 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     secret: (configurationSection["MyProjectName_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
                 );
             }
+            
+            // Blazor Client
+            var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
+            if (!blazorClientId.IsNullOrWhiteSpace())
+            {
+                var blazorRootUrl = configurationSection["MyProjectName_Blazor:RootUrl"].TrimEnd('/');
+
+                await CreateClientAsync(
+                    name: blazorClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
+                    secret: configurationSection["MyProjectName_Blazor:ClientSecret"]?.Sha256(),
+                    requireClientSecret: false,
+                    requirePkce: true,
+                    redirectUri: $"{blazorRootUrl}/authentication/login-callback",
+                    postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
+                );
+            }
+            
         }
 
         private async Task<Client> CreateClientAsync(
             string name,
             IEnumerable<string> scopes,
             IEnumerable<string> grantTypes,
-            string secret,
+            string secret = null,
             string redirectUri = null,
             string postLogoutRedirectUri = null,
             string frontChannelLogoutUri = null,
+            bool requireClientSecret = true,
+            bool requirePkce = false,
             IEnumerable<string> permissions = null)
         {
             var client = await _clientRepository.FindByClientIdAsync(name);
@@ -184,8 +205,9 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                         AuthorizationCodeLifetime = 300,
                         IdentityTokenLifetime = 300,
                         RequireConsent = false,
-                        RequirePkce = false,
-                        FrontChannelLogoutUri = frontChannelLogoutUri
+                        FrontChannelLogoutUri = frontChannelLogoutUri,
+                        RequireClientSecret = requireClientSecret,
+                        RequirePkce = requirePkce
                     },
                     autoSave: true
                 );
@@ -207,9 +229,12 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 }
             }
 
-            if (client.FindSecret(secret) == null)
+            if (!secret.IsNullOrEmpty())
             {
-                client.AddSecret(secret);
+                if (client.FindSecret(secret) == null)
+                {
+                    client.AddSecret(secret);
+                }
             }
 
             if (redirectUri != null)

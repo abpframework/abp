@@ -7,5 +7,10 @@
         protected override string CommandName => Name;
 
         protected override string SchematicsCommandName => "proxy-remove";
+
+        public RemoveProxyCommand(CliService cliService)
+            : base(cliService)
+        {
+        }
     }
 }

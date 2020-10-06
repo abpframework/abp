@@ -1,13 +1,15 @@
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
 import { RestService } from '../services/rest.service';
 import { ConfigState } from '../states/config.state';
+
+export const oAuthStorage = localStorage;
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -29,6 +31,12 @@ export abstract class AuthFlowStrategy {
   }
 
   async init(): Promise<any> {
+    const shouldClear = shouldStorageClear(
+      this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.clientId')),
+      oAuthStorage,
+    );
+    if (shouldClear) clearOAuthStorage(oAuthStorage);
+
     this.oAuthService.configure(this.oAuthConfig);
     return this.oAuthService.loadDiscoveryDocument().catch(this.catchError);
   }
@@ -110,3 +118,34 @@ export const AUTH_FLOW_STRATEGY = {
     return new AuthPasswordFlowStrategy(injector);
   },
 };
+
+export function clearOAuthStorage(storage: OAuthStorage = oAuthStorage) {
+  const keys = [
+    'access_token',
+    'id_token',
+    'refresh_token',
+    'nonce',
+    'PKCE_verifier',
+    'expires_at',
+    'id_token_claims_obj',
+    'id_token_expires_at',
+    'id_token_stored_at',
+    'access_token_stored_at',
+    'granted_scopes',
+    'session_state',
+  ];
+
+  keys.forEach(key => storage.removeItem(key));
+}
+
+function shouldStorageClear(clientId: string, storage: OAuthStorage): boolean {
+  const key = 'abpOAuthClientId';
+  if (!storage.getItem(key)) {
+    storage.setItem(key, clientId);
+    return false;
+  }
+
+  const shouldClear = storage.getItem(key) !== clientId;
+  if (shouldClear) storage.setItem(key, clientId);
+  return shouldClear;
+}

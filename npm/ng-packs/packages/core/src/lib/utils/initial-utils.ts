@@ -7,6 +7,7 @@ import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
 import { AuthService } from '../services/auth.service';
 import { ConfigState } from '../states/config.state';
+import { clearOAuthStorage } from '../strategies/auth-flow.strategy';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
@@ -34,7 +35,7 @@ export function getInitialData(injector: Injector) {
 export function checkAccessToken(store: Store, injector: Injector) {
   const oAuth = injector.get(OAuthService);
   if (oAuth.hasValidAccessToken() && !store.selectSnapshot(ConfigState.getDeep('currentUser.id'))) {
-    oAuth.logOut();
+    clearOAuthStorage();
   }
 }
 

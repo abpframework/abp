@@ -4,8 +4,8 @@
 
 @if (CurrentUser.IsAuthenticated || Model.Reactions.Count(r => r.Count > 0) > 0)
 {
-    <div class="text-right">
-        <div class="px-2 py-1 my-3 card border-0 shadow-sm d-inline-block">
+    <div class="text-center text-md-right">
+        <div class="px-2 py-1 my-2 card border-0 shadow-sm d-inline-block">
             <span class="cms-reaction-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
 
                 @if (CurrentUser.IsAuthenticated)
@@ -24,9 +24,9 @@
                 }
                 @foreach (var reaction in Model.Reactions.Where(r => r.Count > 0))
                 {
-                    <span class="ml-3 cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name" data-click-action="@(CurrentUser.IsAuthenticated ? "true" : "false")">
+                    <span class="ml-1 cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name" data-click-action="@(CurrentUser.IsAuthenticated ? "true" : "false")">
                         <i class="@reaction.Icon"></i>
-                        <small class="text-muted" style="opacity: .75;">@(reaction.Count)</small>
+                        <small class="text-muted" style="opacity: .45;">@(reaction.Count)</small>
                     </span>
                 }
             </span>

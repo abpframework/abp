@@ -18,9 +18,11 @@ export const environment = {
   apis: {
     default: {
       url: 'https://localhost:44301',
+      rootNamespace: 'MyCompanyName.MyProjectName',
     },
     MyProjectName: {
       url: 'https://localhost:44300',
+      rootNamespace: 'MyCompanyName.MyProjectName',
     },
   },
 } as Config.Environment;

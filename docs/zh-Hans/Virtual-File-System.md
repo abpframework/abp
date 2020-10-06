@@ -1,6 +1,6 @@
 ## 虚拟文件系统
 
-虚拟文件系统使得管理物理上不存在于文件系统中(磁盘)的文件成为可能. 它主要用于将(js, css, image...)文件嵌入到程序集中, 并在运行时将它们象物理文件一样使用.
+虚拟文件系统使得管理物理上不存在于文件系统中(磁盘)的文件成为可能. 它主要用于将(js, css, image...)文件嵌入到程序集中, 并在运行时将它们像物理文件一样使用.
 
 ## 安装
 
@@ -27,12 +27,19 @@
 
 如果需要添加多个文件, 这样做会很乏味. 作为选择, 你可以直接编辑 **.csproj** 文件:
 
+````C#
+<ItemGroup>
+  <EmbeddedResource Include="MyResources\**\*.*" />
+  <Content Remove="MyResources\**\*.*" />
+</ItemGroup>
+````
+
+此配置以递归方式添加项目的 **MyResources** 文件夹下的所有文件(包括将来新添加的文件).
+
 如果文件名包含一些特殊字符,在项目/程序集中嵌入文件可能会导致问题. 为了克服这个限制;
 
 1. 将[Microsoft.Extensions.FileProviders.Embedded](https://www.nuget.org/packages/Microsoft.Extensions.FileProviders.Embedded) NuGet包添加到包含嵌入式资源的项目中.
 2. 添加 `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` 到 `.csproj` 文件的 `<PropertyConfig>...</PropertyConfig>` 部分中.
-
-此配置以递归方式添加项目的 **MyResources** 文件夹下的所有文件(包括将来新添加的文件).
 
 > 尽管这两个步骤是可选的,并且ABP无需这些配置即可工作,但强烈建议你这样做.
 

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.MongoDB
@@ -18,7 +20,7 @@ namespace Volo.Abp.MongoDB
             _entityModelBuilders = new Dictionary<Type, object>();
         }
 
-        public MongoDbContextModel Build()
+        public MongoDbContextModel Build(AbpMongoDbContext dbContext)
         {
             lock (SyncObj)
             {
@@ -38,6 +40,8 @@ namespace Volo.Abp.MongoDB
                     }
 
                     baseClasses.AddRange(entityModel.EntityType.GetBaseClasses(includeObject: false));
+
+                    CreateCollectionIfNotExists(dbContext, entityModel.CollectionName);
                 }
 
                 baseClasses = baseClasses.Distinct().ToList();
@@ -83,6 +87,17 @@ namespace Volo.Abp.MongoDB
         public virtual IReadOnlyList<IMongoEntityModel> GetEntities()
         {
             return _entityModelBuilders.Values.Cast<IMongoEntityModel>().ToImmutableList();
+        }
+
+        protected virtual void CreateCollectionIfNotExists(AbpMongoDbContext dbContext, string collectionName)
+        {
+            var filter = new BsonDocument("name", collectionName);
+            var options = new ListCollectionNamesOptions { Filter = filter };
+
+            if (!dbContext.Database.ListCollectionNames(options).Any())
+            {
+                dbContext.Database.CreateCollection(collectionName);
+            }
         }
     }
 }
