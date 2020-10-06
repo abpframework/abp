@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var tenant = await _tenantConfigurationProvider.GetAsync();
+            var tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
             using (_currentTenant.Change(tenant?.Id, tenant?.Name))
             {
                 await next(context);
