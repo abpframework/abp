@@ -8,7 +8,6 @@ In this step-by-step article, I will explain how you can customize the user enti
 
 - How to add
 - How to map to a table field via EF Core
-- How to write custom business logic for the new property
 - How to add standard and custom validation logics
 - How to relate it with the `AppUser` entity in the startup template
 - ...
