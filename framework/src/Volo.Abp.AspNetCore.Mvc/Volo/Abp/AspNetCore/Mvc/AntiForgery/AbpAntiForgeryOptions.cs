@@ -57,6 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 Name = "XSRF-TOKEN",
                 HttpOnly = false,
                 IsEssential = true,
+                SameSite = SameSiteMode.None,
                 Expiration = TimeSpan.FromDays(3650) //10 years!
             };
 
