@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>

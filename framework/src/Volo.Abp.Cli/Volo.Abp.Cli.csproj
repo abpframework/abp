@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>abp</ToolCommandName>
     <RootNamespace />
