@@ -9,11 +9,11 @@ namespace Volo.Abp.BlazoriseUI
     [Dependency(ReplaceServices = true)]
     public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
     {
-        private readonly IUiMessageNotifierService uiMessageNotifierService;
+        private readonly UiMessageNotifierService uiMessageNotifierService;
 
         public ILogger<BlazoriseUiMessageService> Logger { get; set; }
 
-        public BlazoriseUiMessageService(IUiMessageNotifierService uiMessageNotifierService)
+        public BlazoriseUiMessageService(UiMessageNotifierService uiMessageNotifierService)
         {
             this.uiMessageNotifierService = uiMessageNotifierService;
 

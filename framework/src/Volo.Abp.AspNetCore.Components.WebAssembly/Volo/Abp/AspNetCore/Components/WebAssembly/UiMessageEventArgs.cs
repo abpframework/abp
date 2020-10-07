@@ -3,13 +3,6 @@ using System.Threading.Tasks;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    public interface IUiMessageNotifierService
-    {
-        event EventHandler<UiMessageEventArgs> MessageReceived;
-
-        Task NotifyMessageReceivedAsync(UiMessageType messageType, string message, string title, UiMessageOptions options, TaskCompletionSource<bool> callback = null);
-    }
-
     public class UiMessageEventArgs : EventArgs
     {
         public UiMessageEventArgs(UiMessageType messageType, string message, string title, UiMessageOptions options)

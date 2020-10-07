@@ -132,6 +132,6 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         [Parameter] public EventCallback Canceled { get; set; }
 
-        [Inject] protected IUiMessageNotifierService UiMessageNotifierService { get; set; }
+        [Inject] protected UiMessageNotifierService UiMessageNotifierService { get; set; }
     }
 }

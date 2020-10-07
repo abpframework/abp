@@ -6,11 +6,11 @@ using Volo.Abp.DependencyInjection;
 namespace Volo.Abp.BlazoriseUI
 {
     [Dependency(ReplaceServices = true)]
-    public class UiMessageNotifierService : IUiMessageNotifierService, IScopedDependency
+    public class UiMessageNotifierService : IScopedDependency
     {
         public event EventHandler<UiMessageEventArgs> MessageReceived;
 
-        public Task NotifyMessageReceivedAsync(UiMessageType messageType, string message, string title, UiMessageOptions options, TaskCompletionSource<bool> callback)
+        public Task NotifyMessageReceivedAsync(UiMessageType messageType, string message, string title, UiMessageOptions options, TaskCompletionSource<bool> callback = null)
         {
             MessageReceived?.Invoke(this, new UiMessageEventArgs(messageType, message, title, options, callback));
 
