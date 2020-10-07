@@ -18,7 +18,7 @@ You can see the screenshots below which we will reach at the end of the article.
 
 ![custom-identity-user-list](./custom-identity-user-list.png)
 
-![edit-user](/Users/berkan/Desktop/2020-10-08-How-To-Add-Custom-Property-To-The-User-Entity/edit-user.png)![ ](/Users/berkan/Desktop/2020-10-08-How-To-Add-Custom-Property-To-The-User-Entity/new-user.png)
+![edit-user](./edit-user.png)![new-user](./new-user.png)
 
 
 ## Preparing the Project
