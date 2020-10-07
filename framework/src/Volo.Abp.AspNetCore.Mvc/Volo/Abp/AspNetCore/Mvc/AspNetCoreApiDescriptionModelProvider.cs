@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -282,10 +283,21 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
-            var matchedMethodParamNames = ArrayMatcher.Match(
-                apiDescription.ParameterDescriptions.Select(p => p.Name).ToArray(),
-                method.GetParameters().Select(GetMethodParamName).ToArray()
-            );
+            /*
+             * --- bug report ---
+             ArrayMatcher.Match has the following bug:
+                sourceArray: [ "test1", "test2", "test3" ], 
+                destinationArray: [ "test2", "test3" ],
+                expectedResult: [ "test2", "test3" ],
+                result: [ "test1", "test1" ]
+             */
+            /*Because of ArrayMatcher.Match bug parameters that are 
+             * service provided by FromServicesAttribute must be excluded
+             * because Microsoft's API Explorer does not include them
+             */
+            var parameterDescriptionNames = apiDescription.ParameterDescriptions.Select(p => p.Name).ToArray();
+            var methodParameterNames = method.GetParameters().Where(NotServiceProvidedParam).Select(GetMethodParamName).ToArray();
+            var matchedMethodParamNames = ArrayMatcher.Match(parameterDescriptionNames, methodParameterNames);
 
             for (var i = 0; i < apiDescription.ParameterDescriptions.Count; i++)
             {
@@ -308,6 +320,12 @@ namespace Volo.Abp.AspNetCore.Mvc
                     )
                 );
             }
+        }
+
+        private bool NotServiceProvidedParam(ParameterInfo parameterInfo)
+        {
+            var fromServicesAttribute = parameterInfo.GetCustomAttribute<FromServicesAttribute>();
+            return fromServicesAttribute == null;
         }
 
         public string GetMethodParamName(ParameterInfo parameterInfo)
