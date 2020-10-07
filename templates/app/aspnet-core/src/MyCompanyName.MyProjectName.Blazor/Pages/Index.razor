@@ -3,7 +3,6 @@
 @using Volo.Abp.MultiTenancy
 @using Microsoft.Extensions.Localization
 @using MyCompanyName.MyProjectName.Localization
-@using Volo.Abp.BlazoriseUI.Components
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -36,8 +35,6 @@
                 </Button>
             </CardBody>
         </Card>
-
-        <UiMessageAlert />
 
         <h1>Welcome to the Application</h1>
 
