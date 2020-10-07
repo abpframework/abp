@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -31,6 +32,19 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 return false;
             }
 
+            if(context.ActionDescriptor.IsControllerAction())
+            {
+                var controllerType = context.ActionDescriptor
+                    .AsControllerActionDescriptor()
+                    .ControllerTypeInfo
+                    .AsType();
+
+                if (!_options.AutoValidateFilter(controllerType))
+                {
+                    return false;
+                }
+            }
+
             if (IsIgnoredHttpMethod(context))
             {
                 return false;
@@ -41,11 +55,11 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 
         protected virtual bool IsIgnoredHttpMethod(AuthorizationFilterContext context)
         {
-            var method = context.HttpContext.Request.Method;
-            return string.Equals("GET", method, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals("HEAD", method, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals("TRACE", method, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals("OPTIONS", method, StringComparison.OrdinalIgnoreCase);
+            return context.HttpContext
+                .Request
+                .Method
+                .ToUpperInvariant()
+                .IsIn(_options.AutoValidateIgnoredHttpMethods);
         }
     }
 }
