@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             IOptions<AntiforgeryOptions> antiforgeryOptions,
             IOptions<AbpAntiForgeryOptions> abpAntiForgeryOptions,
             IOptionsSnapshot<CookieAuthenticationOptions> namedOptionsAccessor,
-            ILogger logger)
+            ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> logger)
             : base(antiforgery, antiforgeryOptions, abpAntiForgeryOptions, namedOptionsAccessor, logger)
         {
             _namedOptionsAccessor = namedOptionsAccessor;

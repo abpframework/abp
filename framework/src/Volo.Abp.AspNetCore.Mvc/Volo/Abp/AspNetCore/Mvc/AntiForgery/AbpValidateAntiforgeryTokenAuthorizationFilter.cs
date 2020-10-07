@@ -16,14 +16,14 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
         private readonly AntiforgeryOptions _antiforgeryOptions;
         private readonly IOptionsSnapshot<CookieAuthenticationOptions> _namedOptionsAccessor;
         private readonly AbpAntiForgeryOptions _abpAntiForgeryOptions;
-        private readonly ILogger _logger;
+        private readonly ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> _logger;
 
         public AbpValidateAntiforgeryTokenAuthorizationFilter(
             IAntiforgery antiforgery,
             IOptions<AntiforgeryOptions> antiforgeryOptions,
             IOptions<AbpAntiForgeryOptions> abpAntiForgeryOptions,
             IOptionsSnapshot<CookieAuthenticationOptions> namedOptionsAccessor,
-            ILogger logger)
+            ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> logger)
         {
             _antiforgery = antiforgery;
             _antiforgeryOptions = antiforgeryOptions.Value;
