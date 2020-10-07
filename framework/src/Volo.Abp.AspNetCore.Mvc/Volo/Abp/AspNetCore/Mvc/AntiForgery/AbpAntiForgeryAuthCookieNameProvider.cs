@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 
         public virtual string GetNameOrNull()
         {
-            return _namedOptionsAccessor.Get(_abpAntiForgeryOptions.AuthCookieName)?.Cookie?.Name;
+            return _namedOptionsAccessor.Get(_abpAntiForgeryOptions.AuthCookieSchemaName)?.Cookie?.Name;
         }
     }
 }

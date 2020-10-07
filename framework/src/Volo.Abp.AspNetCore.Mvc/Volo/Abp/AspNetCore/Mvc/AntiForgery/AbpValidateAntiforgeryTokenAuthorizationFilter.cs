@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 {
-    public class AbpValidateAntiforgeryTokenAuthorizationFilter : IAsyncAuthorizationFilter, IAntiforgeryPolicy
+    public class AbpValidateAntiforgeryTokenAuthorizationFilter : IAsyncAuthorizationFilter, IAntiforgeryPolicy, ITransientDependency
     {
         private IAntiforgery _antiforgery;
         private readonly AntiforgeryOptions _antiforgeryOptions;

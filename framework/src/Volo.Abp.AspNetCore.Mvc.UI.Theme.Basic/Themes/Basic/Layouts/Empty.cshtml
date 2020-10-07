@@ -8,12 +8,10 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetScripts
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles
 @using Volo.Abp.Localization
-@inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
 @{
     Layout = null;
-    AbpAntiForgeryManager.SetCookie();
     var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
 
     var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from Title

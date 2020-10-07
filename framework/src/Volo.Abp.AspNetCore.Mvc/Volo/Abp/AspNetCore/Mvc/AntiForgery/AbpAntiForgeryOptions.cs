@@ -1,23 +1,33 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
+﻿using System;
+using Microsoft.AspNetCore.Http;
+
+namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 {
     public class AbpAntiForgeryOptions
     {
         /// <summary>
-        /// Get/sets cookie name to transfer Anti Forgery token between server and client.
-        /// Default value: "XSRF-TOKEN".
+        /// Use to set the cookie options to transfer Anti Forgery token between server and client.
+        /// Default name of the cookie: "XSRF-TOKEN".
         /// </summary>
-        public string TokenCookieName { get; set; }
+        public CookieBuilder TokenCookie { get; }
 
         /// <summary>
         /// Used to find auth cookie when validating Anti Forgery token.
-        /// Default value: ".AspNetCore.Identity.Application".
+        /// Default value: "Identity.Application".
         /// </summary>
-        public string AuthCookieName { get; set; }
+        public string AuthCookieSchemaName { get; set; }
 
         public AbpAntiForgeryOptions()
         {
-            TokenCookieName = "XSRF-TOKEN";
-            AuthCookieName = ".AspNetCore.Identity.Application";
+            TokenCookie = new CookieBuilder
+            {
+                Name = "XSRF-TOKEN",
+                HttpOnly = false,
+                IsEssential = true,
+                Expiration = TimeSpan.FromDays(3650) //10 years!
+            };
+
+            AuthCookieSchemaName = "Identity.Application";
         }
     }
 }
