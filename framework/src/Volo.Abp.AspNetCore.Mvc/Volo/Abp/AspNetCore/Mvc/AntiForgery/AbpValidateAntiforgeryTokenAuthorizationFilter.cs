@@ -54,11 +54,6 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 
         protected virtual bool ShouldValidate(AuthorizationFilterContext context)
         {
-            if (!ShouldValidateInternal(context))
-            {
-                return false;
-            }
-
             var authCookieName = _antiForgeryCookieNameProvider.GetAuthCookieNameOrNull();
 
             //Always perform antiforgery validation when request contains authentication cookie
@@ -80,16 +75,6 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             }
 
             // Anything else requires a token.
-            return true;
-        }
-
-        private static bool ShouldValidateInternal(AuthorizationFilterContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
             return true;
         }
     }
