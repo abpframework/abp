@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -14,22 +13,19 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
     {
         private IAntiforgery _antiforgery;
         private readonly AntiforgeryOptions _antiforgeryOptions;
-        private readonly IOptionsSnapshot<CookieAuthenticationOptions> _namedOptionsAccessor;
-        private readonly AbpAntiForgeryOptions _abpAntiForgeryOptions;
+        private readonly AbpAntiForgeryAuthCookieNameProvider _antiForgeryAuthCookieNameProvider;
         private readonly ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> _logger;
 
         public AbpValidateAntiforgeryTokenAuthorizationFilter(
             IAntiforgery antiforgery,
             IOptions<AntiforgeryOptions> antiforgeryOptions,
-            IOptions<AbpAntiForgeryOptions> abpAntiForgeryOptions,
-            IOptionsSnapshot<CookieAuthenticationOptions> namedOptionsAccessor,
+            AbpAntiForgeryAuthCookieNameProvider antiForgeryAuthCookieNameProvider,
             ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> logger)
         {
             _antiforgery = antiforgery;
             _antiforgeryOptions = antiforgeryOptions.Value;
-            _namedOptionsAccessor = namedOptionsAccessor;
             _logger = logger;
-            _abpAntiForgeryOptions = abpAntiForgeryOptions.Value;
+            _antiForgeryAuthCookieNameProvider = antiForgeryAuthCookieNameProvider;
         }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
@@ -66,11 +62,11 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 return false;
             }
 
-            var cookieAuthenticationOptions = _namedOptionsAccessor.Get(_abpAntiForgeryOptions.AuthorizationCookieName);
+            var authCookieName = _antiForgeryAuthCookieNameProvider.GetNameOrNull();
 
             //Always perform antiforgery validation when request contains authentication cookie
-            if (cookieAuthenticationOptions?.Cookie.Name != null &&
-                context.HttpContext.Request.Cookies.ContainsKey(cookieAuthenticationOptions.Cookie.Name))
+            if (authCookieName != null &&
+                context.HttpContext.Request.Cookies.ContainsKey(authCookieName))
             {
                 return true;
             }

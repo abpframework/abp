@@ -10,14 +10,14 @@
 
         /// <summary>
         /// Used to find auth cookie when validating Anti Forgery token.
-        /// Default value: ".AspNet.ApplicationCookie".
+        /// Default value: ".AspNetCore.Identity.Application".
         /// </summary>
-        public string AuthorizationCookieName { get; set; }
+        public string AuthCookieName { get; set; }
 
         public AbpAntiForgeryOptions()
         {
             TokenCookieName = "XSRF-TOKEN";
-            AuthorizationCookieName = ".AspNet.ApplicationCookie";
+            AuthCookieName = ".AspNetCore.Identity.Application";
         }
     }
 }
