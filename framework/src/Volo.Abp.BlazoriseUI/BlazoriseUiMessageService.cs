@@ -20,31 +20,31 @@ namespace Volo.Abp.BlazoriseUI
             Logger = NullLogger<BlazoriseUiMessageService>.Instance;
         }
 
-        public Task InfoAsync(string message, string title = null)
+        public Task InfoAsync(string message, string title = null, UiMessageOptions options = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Info, message, title);
+            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Info, message, title, options);
         }
 
-        public Task SuccessAsync(string message, string title = null)
+        public Task SuccessAsync(string message, string title = null, UiMessageOptions options = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Success, message, title);
+            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Success, message, title, options);
         }
 
-        public Task WarnAsync(string message, string title = null)
+        public Task WarnAsync(string message, string title = null, UiMessageOptions options = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Warning, message, title);
+            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Warning, message, title, options);
         }
 
-        public Task ErrorAsync(string message, string title = null)
+        public Task ErrorAsync(string message, string title = null, UiMessageOptions options = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Error, message, title);
+            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Error, message, title, options);
         }
 
-        public async Task<bool> ConfirmAsync(string message, string title = null)
+        public async Task<bool> ConfirmAsync(string message, string title = null, UiMessageOptions options = null)
         {
             var callback = new TaskCompletionSource<bool>();
 
-            await uiMessageNotifierService.NotifyConfirmationReceivedAsync(message, title, callback);
+            await uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Confirmation, message, title, options, callback);
 
             return await callback.Task;
         }

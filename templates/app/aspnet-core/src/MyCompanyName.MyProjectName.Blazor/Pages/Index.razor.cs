@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Blazorise;
 using Microsoft.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
@@ -23,7 +24,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
 
         Task OnInfoTestClicked()
         {
-            return UiMessageService.InfoAsync( "This is the Info message", "Info" );
+            return UiMessageService.InfoAsync( "This is the Info message", "Info", new UiMessageOptions
+            {
+                OkButtonIcon = IconName.InfoCircle,
+                OkButtonText = "Hello info"
+            } );
         }
 
         Task OnSuccessTestClicked()

@@ -7,25 +7,25 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
     {
         event EventHandler<UiMessageEventArgs> MessageReceived;
 
-        Task NotifyMessageReceivedAsync(UiMessageType messageType, string message, string title = null);
-
-        Task NotifyConfirmationReceivedAsync(string message, string title, TaskCompletionSource<bool> callback);
+        Task NotifyMessageReceivedAsync(UiMessageType messageType, string message, string title, UiMessageOptions options, TaskCompletionSource<bool> callback = null);
     }
 
     public class UiMessageEventArgs : EventArgs
     {
-        public UiMessageEventArgs(UiMessageType messageType, string message, string title)
+        public UiMessageEventArgs(UiMessageType messageType, string message, string title, UiMessageOptions options)
         {
             MessageType = messageType;
             Message = message;
             Title = title;
+            Options = options;
         }
 
-        public UiMessageEventArgs(UiMessageType messageType, string message, string title, TaskCompletionSource<bool> callback)
+        public UiMessageEventArgs(UiMessageType messageType, string message, string title, UiMessageOptions options, TaskCompletionSource<bool> callback)
         {
             MessageType = messageType;
             Message = message;
             Title = title;
+            Options = options;
             Callback = callback;
         }
 
@@ -35,15 +35,8 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 
         public string Title { get; }
 
-        public TaskCompletionSource<bool> Callback { get; }
-    }
+        public UiMessageOptions Options { get; }
 
-    public enum UiMessageType
-    {
-        Info,
-        Success,
-        Warning,
-        Error,
-        Confirmation,
+        public TaskCompletionSource<bool> Callback { get; }
     }
 }

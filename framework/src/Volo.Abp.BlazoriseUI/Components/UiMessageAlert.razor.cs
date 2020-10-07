@@ -21,6 +21,7 @@ namespace Volo.Abp.BlazoriseUI.Components
             MessageType = e.MessageType;
             Message = e.Message;
             Title = e.Title;
+            Options = e.Options;
             Callback = e.Callback;
 
             ModalRef.Show();
@@ -73,7 +74,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         protected virtual bool ShowMessageIcon
            => Options?.ShowMessageIcon ?? true;
 
-        protected virtual object MessageIcon => MessageType switch
+        protected virtual object MessageIcon => Options?.MessageIcon ?? MessageType switch
         {
             UiMessageType.Info => IconName.Info,
             UiMessageType.Success => IconName.Check,
@@ -85,6 +86,7 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         protected virtual string MessageIconColor => MessageType switch
         {
+            // gets the color in the order of importance: Blazorise > Bootstrap > fallback color
             UiMessageType.Info => "var(--b-theme-info, var(--info, #17a2b8))",
             UiMessageType.Success => "var(--b-theme-success, var(--success, #28a745))",
             UiMessageType.Warning => "var(--b-theme-warning, var(--warning, #ffc107))",
