@@ -95,14 +95,9 @@ namespace Volo.Abp.AspNetCore.Mvc
                 }
             });
 
-            var antiForgeryPreOptions = context.Services.ExecutePreConfiguredActions<AbpAntiForgeryPreOptions>();
-
             var mvcCoreBuilder = context.Services.AddMvcCore(options =>
             {
-                if (antiForgeryPreOptions.AutoValidate)
-                {
-                    options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
-                }
+                options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
             });
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 

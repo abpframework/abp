@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
 namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
@@ -16,6 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
         /// Default value: "Identity.Application".
         /// </summary>
         public string AuthCookieSchemaName { get; set; }
+
+        /// <summary>
+        /// Default value: true.
+        /// </summary>
+        public bool AutoValidate { get; set; } = true;
 
         public AbpAntiForgeryOptions()
         {
