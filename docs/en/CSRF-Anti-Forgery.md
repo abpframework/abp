@@ -31,3 +31,67 @@ ABP Framework also automates the following infrastructure;
 
 That's all. The systems works smoothly.
 
+## Configuration / Customization
+
+### AbpAntiForgeryOptions
+
+`AbpAntiForgeryOptions` is the main [options class](Options.md) to configure the ABP Antiforgery system. It has the following properties;
+
+* `TokenCookie`:  Can be used to configure the cookie details. This cookie is used to store the antiforgery token value in the client side, so clients can read it and sends the value as the HTTP header. Default cookie name is `XSRF-TOKEN`, expiration time is 10 years (yes, ten years! It should be a value longer than the authentication cookie max life time, for the security).
+* `AuthCookieSchemaName`: The name of the authentication cookie used by your application. Default value is `Identity.Application` (which becomes `AspNetCore.Identity.Application` on runtime). The default value properly works with the ABP startup templates. **If you change the authentication cookie name, you also must change this.**
+* `AutoValidate`: The single point to enable/disable the ABP automatic antiforgery validation system. Default value is `true`.
+* `AutoValidateFilter`: A predicate that gets a type and returns a boolean. ABP uses this predicate to check a controller type. If it returns false for a controller type, the controller is excluded from the automatic antiforgery token validation.
+* `AutoValidateIgnoredHttpMethods`: A list of HTTP Methods to ignore on automatic antiforgery validation. Default value: "GET", "HEAD", "TRACE", "OPTIONS". These HTTP Methods are safe to skip antiforgery validation since they don't change the application state.
+
+If you need to change these options, do it in the `ConfigureServices` method of your [module](Module-Development-Basics.md).
+
+**Example: Configuring the AbpAntiForgeryOptions**
+
+```csharp
+Configure<AbpAntiForgeryOptions>(options =>
+{
+    options.TokenCookie.Expiration = TimeSpan.FromDays(365);
+    options.AutoValidateIgnoredHttpMethods.Remove("GET");
+    options.AutoValidateFilter =
+        type => !type.Namespace.StartsWith("MyProject.MyIgnoredNamespace");
+});
+```
+
+This configuration;
+
+* Sets the antiforgery token expiration time to ~1 year.
+* Enables antiforgery token validation for GET requests too.
+* Ignores the controller types in the specified namespace.
+
+### AntiforgeryOptions
+
+`AntiforgeryOptions` is the standard [options class](Options.md) of the ASP.NET Core. **You can find all the information about this class in its [own documentation](https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery)**.
+
+`HeaderName` option is especially important for the ABP Framework point of view. Default value of this value is `RequestVerificationToken` and the clients uses this name while sending the token value in the header. So, if you change this option, you should also arrange your clients to align the change. If you don't have a good reason, leave it as default.
+
+### AbpValidateAntiForgeryToken Attribute
+
+If you disable the automatic validation or want to perform the validation for an endpoint that is not validated by default (for example, an endpoint with HTTP GET Method), you can use the `[AbpValidateAntiForgeryToken]` attribute for a **controller type or method** (action).
+
+**Example: Add `[AbpValidateAntiForgeryToken]` to a HTTP GET method**
+
+```csharp
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
+
+namespace MyCompanyName.MyProjectName.Controllers
+{
+    [Route("api/products")]
+    public class ProductController : AbpController
+    {
+        [HttpGet]
+        [AbpValidateAntiForgeryToken]
+        public async Task GetAsync()
+        {
+            //TODO: ...
+        }
+    }
+}
+```
