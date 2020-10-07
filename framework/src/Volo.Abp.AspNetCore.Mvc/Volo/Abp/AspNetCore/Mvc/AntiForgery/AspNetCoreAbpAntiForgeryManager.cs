@@ -7,9 +7,9 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 {
     public class AspNetCoreAbpAntiForgeryManager : IAbpAntiForgeryManager, ITransientDependency
     {
-        public AbpAntiForgeryOptions Options { get; }
+        protected AbpAntiForgeryOptions Options { get; }
 
-        public HttpContext HttpContext => _httpContextAccessor.HttpContext;
+        protected HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
         private readonly IAntiforgery _antiforgery;
         private readonly IHttpContextAccessor _httpContextAccessor;
