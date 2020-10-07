@@ -47,6 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             var icon = new TagBuilder("i");
             icon.AddCssClass(GetIconClass(context, output));
             output.Content.AppendHtml(icon);
+            output.Content.Append(" ");
         }
 
         protected virtual string GetIconClass(TagHelperContext context, TagHelperOutput output)
