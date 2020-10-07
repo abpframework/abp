@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             Options = options.Value;
         }
 
-        public void SetCookie()
+        public virtual void SetCookie()
         {
             HttpContext.Response.Cookies.Append(
                 Options.TokenCookie.Name,
@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             );
         }
 
-        public string GenerateToken()
+        public virtual string GenerateToken()
         {
             return _antiforgery.GetAndStoreTokens(_httpContextAccessor.HttpContext).RequestToken;
         }
