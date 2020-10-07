@@ -9,15 +9,15 @@
         public string TokenCookieName { get; set; }
 
         /// <summary>
-        /// Get/sets header name to transfer Anti Forgery token from client to the server.
-        /// Default value: "X-XSRF-TOKEN". 
+        /// Used to find auth cookie when validating Anti Forgery token.
+        /// Default value: ".AspNet.ApplicationCookie".
         /// </summary>
-        public string TokenHeaderName { get; set; }
+        public string AuthorizationCookieName { get; set; }
 
         public AbpAntiForgeryOptions()
         {
             TokenCookieName = "XSRF-TOKEN";
-            TokenHeaderName = "X-XSRF-TOKEN";
+            AuthorizationCookieName = ".AspNet.ApplicationCookie";
         }
     }
 }
