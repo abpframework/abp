@@ -4,7 +4,11 @@
     {
         public static void SetCookie(this IAbpAntiForgeryManager manager)
         {
-            manager.HttpContext.Response.Cookies.Append(manager.Options.TokenCookieName, manager.GenerateToken());
+            manager.HttpContext.Response.Cookies.Append(
+                manager.Options.TokenCookie.Name,
+                manager.GenerateToken(),
+                manager.Options.TokenCookie.Build(manager.HttpContext)
+            );
         }
     }
 }

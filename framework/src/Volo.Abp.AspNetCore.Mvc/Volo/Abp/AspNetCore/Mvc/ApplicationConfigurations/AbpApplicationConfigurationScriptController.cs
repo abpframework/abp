@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
@@ -20,17 +21,20 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         private readonly IJsonSerializer _jsonSerializer;
         private readonly AbpAspNetCoreMvcOptions _options;
         private readonly IJavascriptMinifier _javascriptMinifier;
+        private readonly IAbpAntiForgeryManager _antiForgeryManager;
 
         public AbpApplicationConfigurationScriptController(
             IAbpApplicationConfigurationAppService configurationAppService,
             IJsonSerializer jsonSerializer,
             IOptions<AbpAspNetCoreMvcOptions> options,
-            IJavascriptMinifier javascriptMinifier)
+            IJavascriptMinifier javascriptMinifier,
+            IAbpAntiForgeryManager antiForgeryManager)
         {
             _configurationAppService = configurationAppService;
             _jsonSerializer = jsonSerializer;
             _options = options.Value;
             _javascriptMinifier = javascriptMinifier;
+            _antiForgeryManager = antiForgeryManager;
         }
 
         [HttpGet]
@@ -38,6 +42,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         public async Task<ActionResult> Get()
         {
             var script = CreateAbpExtendScript(await _configurationAppService.GetAsync());
+
+            _antiForgeryManager.SetCookie();
 
             return Content(
                 _options.MinifyGeneratedScript == true

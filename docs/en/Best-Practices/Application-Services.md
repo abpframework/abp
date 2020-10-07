@@ -215,9 +215,8 @@ This method votes a question and returns the current score of the question.
 
 #### Handle files
 
-* **Do not** use any file-related components(like `IFormFile`) or `Stream` in the application service interface. You can use primitive types as file parameters. Such as `byte[]`.
-* **Do** use a controller to handle file upload and call a application service method.
-
+* **Do not** use any web components like `IFormFile` or `Stream` in the application services. If you want to serve a file you can use `byte[]`.
+* **Do** use a `Controller` to handle file uploading then pass the `byte[]` of the file to the application service method.
 
 #### Using Other Application Services
 
