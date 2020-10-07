@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
@@ -13,20 +12,17 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
     public class AbpValidateAntiforgeryTokenAuthorizationFilter : IAsyncAuthorizationFilter, IAntiforgeryPolicy, ITransientDependency
     {
         private IAntiforgery _antiforgery;
-        private readonly AntiforgeryOptions _antiforgeryOptions;
-        private readonly AbpAntiForgeryAuthCookieNameProvider _antiForgeryAuthCookieNameProvider;
+        private readonly AbpAntiForgeryCookieNameProvider _antiForgeryCookieNameProvider;
         private readonly ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> _logger;
 
         public AbpValidateAntiforgeryTokenAuthorizationFilter(
             IAntiforgery antiforgery,
-            IOptions<AntiforgeryOptions> antiforgeryOptions,
-            AbpAntiForgeryAuthCookieNameProvider antiForgeryAuthCookieNameProvider,
+            AbpAntiForgeryCookieNameProvider antiForgeryCookieNameProvider,
             ILogger<AbpValidateAntiforgeryTokenAuthorizationFilter> logger)
         {
             _antiforgery = antiforgery;
-            _antiforgeryOptions = antiforgeryOptions.Value;
             _logger = logger;
-            _antiForgeryAuthCookieNameProvider = antiForgeryAuthCookieNameProvider;
+            _antiForgeryCookieNameProvider = antiForgeryCookieNameProvider;
         }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
@@ -63,7 +59,7 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 return false;
             }
 
-            var authCookieName = _antiForgeryAuthCookieNameProvider.GetNameOrNull();
+            var authCookieName = _antiForgeryCookieNameProvider.GetAuthCookieNameOrNull();
 
             //Always perform antiforgery validation when request contains authentication cookie
             if (authCookieName != null &&
@@ -72,10 +68,13 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
                 return true;
             }
 
+            var antiForgeryCookieName = _antiForgeryCookieNameProvider.GetAntiForgeryCookieNameOrNull();
+
             //No need to validate if antiforgery cookie is not sent.
             //That means the request is sent from a non-browser client.
             //See https://github.com/aspnet/Antiforgery/issues/115
-            if (!context.HttpContext.Request.Cookies.ContainsKey(_antiforgeryOptions.Cookie.Name))
+            if (antiForgeryCookieName != null &&
+                !context.HttpContext.Request.Cookies.ContainsKey(antiForgeryCookieName))
             {
                 return false;
             }
