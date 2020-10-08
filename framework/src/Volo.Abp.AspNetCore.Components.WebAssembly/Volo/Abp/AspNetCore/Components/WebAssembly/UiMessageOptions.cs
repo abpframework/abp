@@ -6,9 +6,14 @@
     public class UiMessageOptions
     {
         /// <summary>
-        /// If true, the message dialog will show the large icon for the current message type.
+        /// If true, the message dialogue will be centered on the screen.
         /// </summary>
-        public bool ShowMessageIcon { get; set; } = true;
+        public bool CenterMessage { get; set; }
+
+        /// <summary>
+        /// If true, the message dialogue will show the large icon for the current message type.
+        /// </summary>
+        public bool ShowMessageIcon { get; set; }
 
         /// <summary>
         /// Overrides the build-in message icon.

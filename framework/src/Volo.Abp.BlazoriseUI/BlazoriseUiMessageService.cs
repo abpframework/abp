@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Localization.Resources.AbpUi;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
@@ -9,44 +12,85 @@ namespace Volo.Abp.BlazoriseUI
     [Dependency(ReplaceServices = true)]
     public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
     {
-        private readonly UiMessageNotifierService uiMessageNotifierService;
+        /// <summary>
+        /// An event raised after the message is received. Used to notify the message dialog.
+        /// </summary>
+        public event EventHandler<UiMessageEventArgs> MessageReceived;
+
+        private readonly IStringLocalizer<AbpUiResource> localizer;
 
         public ILogger<BlazoriseUiMessageService> Logger { get; set; }
 
-        public BlazoriseUiMessageService(UiMessageNotifierService uiMessageNotifierService)
+        public BlazoriseUiMessageService(
+            IStringLocalizer<AbpUiResource> localizer)
         {
-            this.uiMessageNotifierService = uiMessageNotifierService;
+            this.localizer = localizer;
 
             Logger = NullLogger<BlazoriseUiMessageService>.Instance;
         }
 
-        public Task InfoAsync(string message, string title = null, UiMessageOptions options = null)
+        public Task InfoAsync(string message, string title = null, Action<UiMessageOptions> options = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Info, message, title, options);
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Info, message, title, uiMessageOptions));
+
+            return Task.CompletedTask;
         }
 
-        public Task SuccessAsync(string message, string title = null, UiMessageOptions options = null)
+        public Task SuccessAsync(string message, string title = null, Action<UiMessageOptions> options = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Success, message, title, options);
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Success, message, title, uiMessageOptions));
+
+            return Task.CompletedTask;
         }
 
-        public Task WarnAsync(string message, string title = null, UiMessageOptions options = null)
+        public Task WarnAsync(string message, string title = null, Action<UiMessageOptions> options = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Warning, message, title, options);
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Warning, message, title, uiMessageOptions));
+
+            return Task.CompletedTask;
         }
 
-        public Task ErrorAsync(string message, string title = null, UiMessageOptions options = null)
+        public Task ErrorAsync(string message, string title = null, Action<UiMessageOptions> options = null)
         {
-            return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Error, message, title, options);
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Error, message, title, uiMessageOptions));
+
+            return Task.CompletedTask;
         }
 
-        public async Task<bool> ConfirmAsync(string message, string title = null, UiMessageOptions options = null)
+        public async Task<bool> ConfirmAsync(string message, string title = null, Action<UiMessageOptions> options = null)
         {
+            var uiMessageOptions = CreateDefaultOptions();
+            options?.Invoke(uiMessageOptions);
+
             var callback = new TaskCompletionSource<bool>();
 
-            await uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Confirmation, message, title, options, callback);
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Confirmation, message, title, uiMessageOptions));
 
             return await callback.Task;
+        }
+
+        protected virtual UiMessageOptions CreateDefaultOptions()
+        {
+            return new UiMessageOptions
+            {
+                CenterMessage = true,
+                ShowMessageIcon = true,
+                OkButtonText = localizer["Ok"],
+                CancelButtonText = localizer["Cancel"],
+                ConfirmButtonText = localizer["Yes"],
+            };
         }
     }
 }

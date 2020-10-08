@@ -9,67 +9,13 @@ namespace Volo.Abp.BlazoriseUI.Components
 {
     public partial class UiMessageAlert : ComponentBase, IDisposable
     {
-        protected override void OnInitialized()
-        {
-            UiMessageNotifierService.MessageReceived += OnMessageReceived;
-
-            base.OnInitialized();
-        }
-
-        private void OnMessageReceived(object sender, UiMessageEventArgs e)
-        {
-            MessageType = e.MessageType;
-            Message = e.Message;
-            Title = e.Title;
-            Options = e.Options;
-            Callback = e.Callback;
-
-            ModalRef.Show();
-        }
-
-        public void Dispose()
-        {
-            if (UiMessageNotifierService != null)
-            {
-                UiMessageNotifierService.MessageReceived -= OnMessageReceived;
-            }
-        }
-
-        protected Task OnOkClicked()
-        {
-            ModalRef.Hide();
-
-            return Okayed.InvokeAsync(null);
-        }
-
-        protected Task OnConfirmClicked()
-        {
-            ModalRef.Hide();
-
-            if (IsConfirmation && Callback != null)
-            {
-                Callback.SetResult(true);
-            }
-
-            return Confirmed.InvokeAsync(null);
-        }
-
-        protected Task OnCancelClicked()
-        {
-            ModalRef.Hide();
-
-            if (IsConfirmation && Callback != null)
-            {
-                Callback.SetResult(false);
-            }
-
-            return Canceled.InvokeAsync(null);
-        }
-
         protected Modal ModalRef { get; set; }
 
         protected virtual bool IsConfirmation
             => MessageType == UiMessageType.Confirmation;
+
+        protected virtual bool CenterMessage
+           => Options?.CenterMessage ?? true;
 
         protected virtual bool ShowMessageIcon
            => Options?.ShowMessageIcon ?? true;
@@ -126,12 +72,69 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         [Parameter] public UiMessageOptions Options { get; set; }
 
-        [Parameter] public EventCallback Okayed { get; set; } // TODO: ?
+        [Parameter] public EventCallback Okayed { get; set; }
 
         [Parameter] public EventCallback Confirmed { get; set; }
 
         [Parameter] public EventCallback Canceled { get; set; }
 
-        [Inject] protected UiMessageNotifierService UiMessageNotifierService { get; set; }
+        [Inject] protected BlazoriseUiMessageService UiMessageService { get; set; }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            UiMessageService.MessageReceived += OnMessageReceived;
+        }
+
+        private void OnMessageReceived(object sender, UiMessageEventArgs e)
+        {
+            MessageType = e.MessageType;
+            Message = e.Message;
+            Title = e.Title;
+            Options = e.Options;
+            Callback = e.Callback;
+
+            ModalRef.Show();
+        }
+
+        public void Dispose()
+        {
+            if (UiMessageService != null)
+            {
+                UiMessageService.MessageReceived -= OnMessageReceived;
+            }
+        }
+
+        protected Task OnOkClicked()
+        {
+            ModalRef.Hide();
+
+            return Okayed.InvokeAsync(null);
+        }
+
+        protected Task OnConfirmClicked()
+        {
+            ModalRef.Hide();
+
+            if (IsConfirmation && Callback != null)
+            {
+                Callback.SetResult(true);
+            }
+
+            return Confirmed.InvokeAsync(null);
+        }
+
+        protected Task OnCancelClicked()
+        {
+            ModalRef.Hide();
+
+            if (IsConfirmation && Callback != null)
+            {
+                Callback.SetResult(false);
+            }
+
+            return Canceled.InvokeAsync(null);
+        }
     }
 }
