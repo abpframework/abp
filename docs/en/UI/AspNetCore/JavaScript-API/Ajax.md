@@ -31,7 +31,7 @@ This command logs the list of users to the console, if you've **logged in** to t
 
 The example AJAX call above shows an **error message** if you haven't login to the application or you don't have the necessary permissions to perform this request:
 
-![ajax-error](D:\Github\abp\docs\en\images\ajax-error.png)
+![ajax-error](../../../images/ajax-error.png)
 
 All kinds of errors are automatically handled by `abp.ajax`, unless you want to disable it.
 
