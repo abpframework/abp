@@ -31,6 +31,36 @@ ABP Framework also automates the following infrastructure;
 
 That's all. The systems works smoothly.
 
+### Angular
+
+Angular supports CSRF Token out of box. It's default values are as follows:
+
+```json
+{
+  "cookieName": "XSRF-TOKEN",
+  "headerName": "X-XSRF-TOKEN"
+}
+```
+
+The default configuration provided by Angular does not match ours. We have overriden these values with ours in `CoreModule` as follows:
+
+```typescript
+@NgModule({
+  // ...
+  imports: [
+    BaseCoreModule,
+    //...
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'RequestVerificationToken'
+    })
+  ],
+})
+export class RootCoreModule {}
+```
+If you use the ABP Framework with Angular as frontend, you should be already importing `CoreModule.forRoot` in your `AppModule`. 
+Therefore, this configuration will just work for you and you won't have to do anything. However, if you have different configuration (i.e. different `cookieName` or `headerName`), you can simply import `HttpClientXsrfModule.withOptions` in your `AppModule` with proper options.
+
 ## Configuration / Customization
 
 ### AbpAntiForgeryOptions
