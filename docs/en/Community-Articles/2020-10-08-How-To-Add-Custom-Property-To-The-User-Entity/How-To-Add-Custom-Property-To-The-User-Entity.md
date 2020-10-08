@@ -22,7 +22,7 @@ Abp Framework offers startup templates to get into the work faster. We can creat
 
 `abp new CustomizeUserDemo`
 
-> In this article, I will go through the MVC application, but it will also work in the [Angular](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No) application.
+> In this article, I will go through the MVC application, but it will work also in the [Angular](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No) application.
 
 After the download is finished, we can run **CustomizeUserDemo.DbMigrator** project to create the database migrations and seed the initial data (admin user, role, etc). Then we can run `CustomizeUserDemo.Web` to see that our application is working.
 
@@ -117,7 +117,7 @@ This will create a new migration class inside the `Migrations` folder of the **C
 
 > If you are using another IDE than the Visual Studio, you can use `dotnet-ef` tool as [documented here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration).
 
-Finally, run the **CustomizeUserDemo.DbMigrator** application to update the database.
+Finally, run the **CustomizeUserDemo.DbMigrator** project to update the database.
 
 When we updated the database, you can see that the `Title` and `Reputation` columns are added to the `Users` table. 
 
