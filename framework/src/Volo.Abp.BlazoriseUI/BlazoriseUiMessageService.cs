@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Localization.Resources.AbpUi;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
@@ -10,19 +13,32 @@ namespace Volo.Abp.BlazoriseUI
     public class BlazoriseUiMessageService : IUiMessageService, IScopedDependency
     {
         private readonly UiMessageNotifierService uiMessageNotifierService;
+        private readonly IStringLocalizer<AbpUiResource> _localizer;
 
         public ILogger<BlazoriseUiMessageService> Logger { get; set; }
 
-        public BlazoriseUiMessageService(UiMessageNotifierService uiMessageNotifierService)
+        public BlazoriseUiMessageService(
+            UiMessageNotifierService uiMessageNotifierService,
+            IStringLocalizer<AbpUiResource> localizer)
         {
             this.uiMessageNotifierService = uiMessageNotifierService;
+            _localizer = localizer;
 
             Logger = NullLogger<BlazoriseUiMessageService>.Instance;
         }
 
-        public Task InfoAsync(string message, string title = null, UiMessageOptions options = null)
+        public Task InfoAsync(string message, string title = null, Action<UiMessageOptions> optionsActions = null)
         {
+            var options = CreateDefaultOptions();
+            optionsActions?.Invoke(options);
             return uiMessageNotifierService.NotifyMessageReceivedAsync(UiMessageType.Info, message, title, options);
+        }
+
+        protected virtual UiMessageOptions CreateDefaultOptions()
+        {
+            return new UiMessageOptions {
+                ConfirmButtonText = _localizer["Yes"]
+            };
         }
 
         public Task SuccessAsync(string message, string title = null, UiMessageOptions options = null)

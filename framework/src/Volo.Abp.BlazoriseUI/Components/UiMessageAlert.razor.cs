@@ -9,11 +9,50 @@ namespace Volo.Abp.BlazoriseUI.Components
 {
     public partial class UiMessageAlert : ComponentBase, IDisposable
     {
+        protected virtual string MessageIconStyle
+        {
+            get
+            {
+                var sb = new StringBuilder();
+
+                sb.Append($"color:{MessageIconColor}");
+
+                return sb.ToString();
+            }
+        }
+
+        protected virtual string OkButtonText
+            => Options?.OkButtonText ?? "OK";
+
+        protected virtual string ConfirmButtonText
+            => Options?.ConfirmButtonText ?? "Confirm";
+
+        protected virtual string CancelButtonText
+            => Options?.CancelButtonText ?? "Cancel";
+
+        [Parameter] public UiMessageType MessageType { get; set; }
+
+        [Parameter] public string Title { get; set; }
+
+        [Parameter] public string Message { get; set; }
+
+        [Parameter] public TaskCompletionSource<bool> Callback { get; set; }
+
+        [Parameter] public UiMessageOptions Options { get; set; }
+
+        [Parameter] public EventCallback Okayed { get; set; } // TODO: ?
+
+        [Parameter] public EventCallback Confirmed { get; set; }
+
+        [Parameter] public EventCallback Canceled { get; set; }
+
+        [Inject] protected UiMessageNotifierService UiMessageNotifierService { get; set; }
+
         protected override void OnInitialized()
         {
-            UiMessageNotifierService.MessageReceived += OnMessageReceived;
-
             base.OnInitialized();
+
+            UiMessageNotifierService.MessageReceived += OnMessageReceived;
         }
 
         private void OnMessageReceived(object sender, UiMessageEventArgs e)
@@ -94,44 +133,5 @@ namespace Volo.Abp.BlazoriseUI.Components
             UiMessageType.Confirmation => "var(--b-theme-secondary, var(--secondary, #6c757d))",
             _ => null,
         };
-
-        protected virtual string MessageIconStyle
-        {
-            get
-            {
-                var sb = new StringBuilder();
-
-                sb.Append($"color:{MessageIconColor}");
-
-                return sb.ToString();
-            }
-        }
-
-        protected virtual string OkButtonText
-            => Options?.OkButtonText ?? "OK";
-
-        protected virtual string ConfirmButtonText
-            => Options?.ConfirmButtonText ?? "Confirm";
-
-        protected virtual string CancelButtonText
-            => Options?.CancelButtonText ?? "Cancel";
-
-        [Parameter] public UiMessageType MessageType { get; set; }
-
-        [Parameter] public string Title { get; set; }
-
-        [Parameter] public string Message { get; set; }
-
-        [Parameter] public TaskCompletionSource<bool> Callback { get; set; }
-
-        [Parameter] public UiMessageOptions Options { get; set; }
-
-        [Parameter] public EventCallback Okayed { get; set; } // TODO: ?
-
-        [Parameter] public EventCallback Confirmed { get; set; }
-
-        [Parameter] public EventCallback Canceled { get; set; }
-
-        [Inject] protected UiMessageNotifierService UiMessageNotifierService { get; set; }
     }
 }
