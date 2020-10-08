@@ -437,6 +437,10 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "Layout Hooks",
+              "path": "UI/AspNetCore/Layout-Hooks.md"
+            },
+            {
               "text": "Theming",
               "path": "UI/AspNetCore/Theming.md"
             },
