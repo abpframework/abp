@@ -115,5 +115,5 @@ You don't need to make anything unless you need to change the `AntiforgeryOption
     })
   ],
 })
-export class YourModule {}
+export class AppModule {}
 ```
