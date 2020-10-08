@@ -1,18 +1,14 @@
-# How to add custom property to the user entity
-
-
+# How to Add Custom Properties to the User Entity
 
 ## Introduction
 
 In this step-by-step article, I will explain how you can customize the user entity class, which is available in every web application you create using the ABP framework, according to your needs. When you read this article, you will learn how to override the services of built-in modules, extend the entities, extend data transfer objects and customize the user interface in the applications you develop using the ABP framework. 
-
 
 You can see the screenshots below which we will reach at the end of the article.
 
 ![custom-identity-user-list](./custom-identity-user-list.png)
 
 ![new-user](./new-user.png)
-
 
 ## Preparing the Project
 
