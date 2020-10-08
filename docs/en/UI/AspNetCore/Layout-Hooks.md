@@ -12,7 +12,7 @@ The **Layout Hook System** allows you to **add code** at some specific parts of 
 
 Assume that you need to add the Google Analytics script to the layout (that will be available for all the pages). First, **create a view component** in your project:
 
-![bookstore-google-analytics-view-component](D:/Github/abp/docs/en/images/bookstore-google-analytics-view-component.png)
+![bookstore-google-analytics-view-component](../../images/bookstore-google-analytics-view-component.png)
 
 **NotificationViewComponent.cs**
 
