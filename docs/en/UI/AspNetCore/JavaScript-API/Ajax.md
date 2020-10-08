@@ -10,7 +10,7 @@
 
 > While `abp.ajax` makes the AJAX call pretty easier, you typically will use the [Dynamic JavaScript Client Proxy](Dynamic-JavaScript-Client-Proxies.md) system to perform calls to your server side HTTP APIs. `abp.ajax` can be used when you need to perform low level AJAX operations.
 
-## Usage
+## Basic Usage
 
 `abp.ajax` accepts an options object that is accepted by the standard [$.ajax](https://api.jquery.com/jquery.ajax/#jQuery-ajax-settings). All the standard options are valid. It returns a [promise](https://api.jquery.com/category/deferred-object/) as the return value.
 
@@ -48,6 +48,8 @@ All kinds of errors are automatically handled by `abp.ajax`, unless you want to 
   }
 }
 ````
+
+The error message is directly shown to the user, using the `message` and `details` properties.
 
 ### Non-Standard Error Response & HTTP Status Codes
 
@@ -99,4 +101,50 @@ If you set `abpHandleError: false` and don't catch the error yourself, then the 
 
 ## Configuration
 
-TODO
+`abp.ajax` has a **global configuration** that you can customize based on your requirements.
+
+### Default AJAX Options
+
+`abp.ajax.defaultOpts` object is used to configure default options used while performing an AJAX call, unless you override them. Default value of this object is shown below: 
+
+````js
+{
+    dataType: 'json',
+    type: 'POST',
+    contentType: 'application/json',
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+    }
+}
+````
+
+So, if you want to change the default request type, you can do it as shown below:
+
+````js
+abp.ajax.defaultOpts.type = 'GET';
+````
+
+Write this code before all of your JavaScript code. You typically want to place such a configuration into a separate JavaScript file and add it to the layout using the global [bundle](../Bundling-Minification.md).
+
+### Log/Show Errors
+
+The following functions can be overridden to customize the logging and showing the error messages:
+
+* `abp.ajax.logError` function logs errors using the [abp.log.error(...)](Logging.md) by default.
+* `abp.ajax.showError` function shows the error message using the [abp.message.error(...)](Message.md) by default.
+* `abp.ajax.handleErrorStatusCode` handles different HTTP status codes and shows different messages based on the code.
+* `abp.ajax.handleAbpErrorResponse` handles the errors sent with the standard ABP error format.
+* `abp.ajax.handleNonAbpErrorResponse` handles the non-standard error responses.
+* `abp.ajax.handleUnAuthorizedRequest` handles responses with `401` status code and redirect users to the home page of the application.
+
+**Example: Override the `logError` function**
+
+````js
+abp.ajax.logError = function(error) {
+    //...
+}
+````
+
+### Other Options
+
+* `abp.ajax.ajaxSendHandler` function is used to intercept the AJAX requests and add antiforgery token to the HTTP header. Note that this works for all AJAX requests, even if you don't use the `abp.ajax`.
