@@ -20,4 +20,3 @@ ABP provides some JavaScript APIs for ASP.NET Core MVC / Razor Pages application
 * abp.utils
 * abp.ResourceLoader
 * abp.WidgetManager
-* Other APIs
