@@ -31,36 +31,6 @@ ABP Framework also automates the following infrastructure;
 
 That's all. The systems works smoothly.
 
-### Angular
-
-Angular supports CSRF Token out of box. It's default values are as follows:
-
-```json
-{
-  "cookieName": "XSRF-TOKEN",
-  "headerName": "X-XSRF-TOKEN"
-}
-```
-
-The default configuration provided by Angular does not match ours. We have overriden these values with ours in `CoreModule` as follows:
-
-```typescript
-@NgModule({
-  // ...
-  imports: [
-    BaseCoreModule,
-    //...
-    HttpClientXsrfModule.withOptions({
-      cookieName: 'XSRF-TOKEN',
-      headerName: 'RequestVerificationToken'
-    })
-  ],
-})
-export class RootCoreModule {}
-```
-If you use the ABP Framework with Angular as frontend, you should be already importing `CoreModule.forRoot` in your `AppModule`. 
-Therefore, this configuration will just work for you and you won't have to do anything. However, if you have different configuration (i.e. different `cookieName` or `headerName`), you can simply import `HttpClientXsrfModule.withOptions` in your `AppModule` with proper options.
-
 ## Configuration / Customization
 
 ### AbpAntiForgeryOptions
@@ -124,4 +94,26 @@ namespace MyCompanyName.MyProjectName.Controllers
         }
     }
 }
+```
+
+### Angular UI
+
+Angular supports CSRF Token out of box, but the token header name is `X-XSRF-TOKEN`. Since ABP Framework follows the ASP.NET Core conventions, it changes this value to `RequestVerificationToken` in the core package. 
+
+You don't need to make anything unless you need to change the `AntiforgeryOptions.HeaderName` as explained before. If you change it, remember to change the header name for the Angular application too. To do that, add an import declaration for the `HttpClientXsrfModule` into your root module.
+
+**Example: Change the header name to *MyCustomHeaderName***
+
+```typescript
+@NgModule({
+  // ...
+  imports: [
+    //...
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'MyCustomHeaderName'
+    })
+  ],
+})
+export class YourModule {}
 ```
