@@ -1,5 +1,5 @@
 import { APP_BASE_HREF, CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientXsrfModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -125,6 +125,10 @@ export class BaseCoreModule {}
     NgxsRouterPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot(),
     OAuthModule.forRoot(),
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'RequestVerificationToken',
+    }),
   ],
 })
 export class RootCoreModule {}
