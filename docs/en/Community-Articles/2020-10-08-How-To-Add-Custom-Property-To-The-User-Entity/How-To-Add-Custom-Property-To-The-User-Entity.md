@@ -47,7 +47,7 @@ public int Reputation { get; protected set; }
 Create the Users folder in the **CustomizeUserDemo.Domain.Shared** project, create the class `UserConsts` inside the folder and update the class you created as below:
 
 ```csharp
-public class UserConst
+public static class UserConsts
 {
     public const string TitlePropertyName = "Title";
 
@@ -83,13 +83,13 @@ public static class CustomizeUserDemoEfCoreEntityExtensionMappings
                     (entityBuilder, propertyBuilder) =>
                     {
                         propertyBuilder.IsRequired();
-                        propertyBuilder.HasMaxLength(UserConst.MaxTitleLength);
+                        propertyBuilder.HasMaxLength(UserConsts.MaxTitleLength);
                     }
                 ).MapEfCoreProperty<IdentityUser, int>(
                     nameof(AppUser.Reputation),
                     (entityBuilder, propertyBuilder) =>
                     {
-                        propertyBuilder.HasDefaultValue(UserConst.MinReputationValue);
+                        propertyBuilder.HasDefaultValue(UserConsts.MinReputationValue);
                     }
                 );
         });
@@ -133,22 +133,22 @@ private static void ConfigureExtraProperties()
         identity.ConfigureUser(user =>
         {
             user.AddOrUpdateProperty<string>(
-                UserConst.TitlePropertyName,
+                UserConsts.TitlePropertyName,
                 options =>
                 {
                     options.Attributes.Add(new RequiredAttribute());
                     options.Attributes.Add(
-                        new StringLengthAttribute(UserConst.MaxTitleLength)
+                        new StringLengthAttribute(UserConsts.MaxTitleLength)
                     );
                 }
             );
             user.AddOrUpdateProperty<int>(
-                UserConst.ReputationPropertyName,
+                UserConsts.ReputationPropertyName,
                 options =>
                 {
-                    options.DefaultValue = UserConst.MinReputationValue;
+                    options.DefaultValue = UserConsts.MinReputationValue;
                     options.Attributes.Add(
-                        new RangeAttribute(UserConst.MinReputationValue, UserConst.MaxReputationValue)
+                        new RangeAttribute(UserConsts.MinReputationValue, UserConsts.MaxReputationValue)
                     );
                 }
             );
