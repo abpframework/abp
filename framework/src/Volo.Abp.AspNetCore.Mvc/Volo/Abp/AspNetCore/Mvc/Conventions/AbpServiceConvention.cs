@@ -75,7 +75,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
             foreach (var controllerModel in application.Controllers)
             {
                 var baseControllerTypes = controllerModel.ControllerType
-                    .GetBaseClasses(typeof(Controller))
+                    .GetBaseClasses(typeof(Controller), includeObject: false)
                     .Where(t => !t.IsAbstract)
                     .ToArray();
                 if (baseControllerTypes.Length > 0)

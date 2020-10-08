@@ -60,12 +60,13 @@ namespace System
         /// </summary>
         /// <param name="type">The type to get its base classes.</param>
         /// <param name="stoppingType">A type to stop going to the deeper base classes. This type will be be included in the returned array</param>
-        public static Type[] GetBaseClasses([NotNull] this Type type, Type stoppingType)
+        /// <param name="includeObject">True, to include the standard <see cref="object"/> type in the returned array.</param>
+        public static Type[] GetBaseClasses([NotNull] this Type type, Type stoppingType, bool includeObject = true)
         {
             Check.NotNull(type, nameof(type));
 
             var types = new List<Type>();
-            AddTypeAndBaseTypesRecursively(types, type.BaseType, true, stoppingType);
+            AddTypeAndBaseTypesRecursively(types, type.BaseType, includeObject, stoppingType);
             return types.ToArray();
         }
 
@@ -75,7 +76,7 @@ namespace System
             bool includeObject,
             [CanBeNull] Type stoppingType = null)
         {
-            if (type == stoppingType)
+            if (type == null || type == stoppingType)
             {
                 return;
             }
