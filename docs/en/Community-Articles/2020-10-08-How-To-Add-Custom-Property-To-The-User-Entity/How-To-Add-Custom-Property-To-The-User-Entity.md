@@ -4,20 +4,14 @@
 
 ## Introduction
 
-In this step-by-step article, I will explain how you can customize the user entity class, which is available in every web application you create using the ABP framework, according to your needs. When you read this article, you will learn how to override the services of built-in modules, extend the entities, extend data transfer objects and customize the user interface in the applications you develop using the ABP framework. In short, we will ask ourselves some questions throughout this article and we will find the answers together;
-
-- How to add
-- How to map to a table field via EF Core
-- How to add standard and custom validation logics
-- How to relate it with the `AppUser` entity in the startup template
-- ...
+In this step-by-step article, I will explain how you can customize the user entity class, which is available in every web application you create using the ABP framework, according to your needs. When you read this article, you will learn how to override the services of built-in modules, extend the entities, extend data transfer objects and customize the user interface in the applications you develop using the ABP framework. 
 
 
 You can see the screenshots below which we will reach at the end of the article.
 
 ![custom-identity-user-list](./custom-identity-user-list.png)
 
-![edit-user](./edit-user.png)![new-user](./new-user.png)
+![new-user](./new-user.png)
 
 
 ## Preparing the Project
@@ -26,16 +20,15 @@ You can see the screenshots below which we will reach at the end of the article.
 
 Abp Framework offers startup templates to get into the work faster. We can create a new startup template using Abp CLI:
 
-`abp new CustomizeUserDemo -m none`
+`abp new CustomizeUserDemo`
+
+> In this article, I will go through the MVC application, but it will also work in the [Angular](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No) application.
 
 After the download is finished, we can run **CustomizeUserDemo.DbMigrator** project to create the database migrations and seed the initial data (admin user, role, etc). Then we can run `CustomizeUserDemo.Web` to see that our application is working.
 
 > Default admin username is **admin** and password is **1q2w3E\***
 
-<div>
-    <img src="initial-project.png" width="500" height="300"/>
-</div>
-
+![initial-project](./initial-project.png)
 
 In this article, we will go through a scenario together and find the solutions to our questions through this scenario. However, since the scenario is not a real-life scenario, it may be strange, please don't get too about this issue :)
 
@@ -51,7 +44,7 @@ public int Reputation { get; protected set; }
 
 ## Step-2 
 
-Create the Users folder in the **CustomizeUserDemo.DomainShared** project, create the class `UserConsts` inside the folder and update the class you created as below:
+Create the Users folder in the **CustomizeUserDemo.Domain.Shared** project, create the class `UserConsts` inside the folder and update the class you created as below:
 
 ```csharp
 public class UserConst
@@ -108,9 +101,25 @@ This class can be used to map these extra properties to table fields in the data
 
 So far, we have added our extra features to the `User` entity and matched these features with the `ef core`.
 
-Now we need to [add](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF#add-database-migration) migration to see what has changed in our database and then run the **CustomizeUserDemo.DbMigrator** project as we did in [this](#startup-template-and-the-initial-run) step.
+Now we need to add migration to see what has changed in our database. This for, open the Package Manager Console (PMC) under the menu Tools > NuGet Package Manager.
 
-When we updated the database, you can see that the `Title` and `Reputation` columns are added to the user table. 
+![nuget-package-manager](./nuget-package-manager.png)
+
+Select the **CustomizeUserDemo.EntityFramework.DbMigrations** as the **default project** and execute the following command:
+
+```bash
+Add-Migration "Updated-User-Entity"
+```
+
+![added-new-migration](./added-new-migration.png)
+
+This will create a new migration class inside the `Migrations` folder of the **CustomizeUserDemo.EntityFrameworkCore.DbMigrations** project.
+
+> If you are using another IDE than the Visual Studio, you can use `dotnet-ef` tool as [documented here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration).
+
+Finally, run the **CustomizeUserDemo.DbMigrator** application to update the database.
+
+When we updated the database, you can see that the `Title` and `Reputation` columns are added to the `Users` table. 
 
 ![user-table](./user-table.png)
 
@@ -131,20 +140,6 @@ private static void ConfigureExtraProperties()
                     options.Attributes.Add(
                         new StringLengthAttribute(UserConst.MaxTitleLength)
                     );
-                    options.Validators.Add(context =>
-                    {
-                        var title = context.Value as string;
-
-                        if (title == null || title.ToLower().Contains("title"))
-                        {
-                            context.ValidationErrors.Add(
-                                new ValidationResult(
-                                    "The word 'title' cannot be contain in the Title input.",
-                                    new[] {"Title"}
-                                )
-                            );
-                        }
-                    });
                 }
             );
             user.AddOrUpdateProperty<int>(
@@ -166,4 +161,4 @@ That's it. Now let's run the application and look at the Identity user page. You
 
 If there is a situation you want to add, you can click the contribute button or make a comment. Also, if you like the article, don't forget to share it :)
 
-Stay with the code :) 
+Happy coding :) 
