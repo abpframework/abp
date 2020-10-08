@@ -441,6 +441,19 @@
               "path": "UI/AspNetCore/Theming.md"
             },
             {
+              "text": "JavaScript API",
+              "items": [
+                {
+                  "text": "Overall",
+                  "path": "UI/AspNetCore/JavaScript-API/Index.md"
+                },
+                {
+                  "text": "AJAX",
+                  "path": "UI/AspNetCore/JavaScript-API/Ajax.md"
+                }
+              ]
+            },
+            {
               "text": "Customize/Extend the UI",
               "path": "UI/AspNetCore/Customization-User-Interface.md"
             }
