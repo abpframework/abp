@@ -23,10 +23,10 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
 
         Task OnInfoTestClicked()
         {
-            return UiMessageService.InfoAsync( "This is the Info message", "Info", new UiMessageOptions
+            return UiMessageService.InfoAsync( "This is the Info message", "Info", options =>
             {
-                OkButtonIcon = IconName.InfoCircle,
-                OkButtonText = "Hello info"
+                options.OkButtonIcon = IconName.InfoCircle;
+                options.OkButtonText = "Hello info";
             } );
         }
 
@@ -47,7 +47,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
 
         Task OnConfirmTestClicked()
         {
-            return UiMessageService.ConfirmAsync( "This is the Confirm message", "Confirm" )
+            return UiMessageService.ConfirmAsync( "Are you sure you want to delete the item?", "Confirm", options =>
+            {
+                options.CancelButtonText = "Do not delete it";
+                options.ConfirmButtonText = "Yes I'm sure";
+            } )
                 .ContinueWith( result =>
                  {
                      if ( result.Result )
