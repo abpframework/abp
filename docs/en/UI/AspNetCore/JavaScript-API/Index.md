@@ -1,6 +1,6 @@
 # JavaScript API
 
-ABP provides some JavaScript APIs for ASP.NET Core MVC / Razor Pages applications. They can be used to perform some common application requirements in the client side.
+ABP provides a set of JavaScript APIs for ASP.NET Core MVC / Razor Pages applications. They can be used to perform common application requirements easily in the client side and integrate to the server side.
 
 ## APIs
 
@@ -12,6 +12,7 @@ ABP provides some JavaScript APIs for ASP.NET Core MVC / Razor Pages application
 * abp.features
 * abp.localization
 * abp.log
+* [abp.message](Message.md)
 * abp.ModalManager
 * abp.notify
 * abp.security

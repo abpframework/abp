@@ -454,6 +454,10 @@
                 {
                   "text": "AJAX",
                   "path": "UI/AspNetCore/JavaScript-API/Ajax.md"
+                },
+                {
+                  "text": "Message",
+                  "path": "UI/AspNetCore/JavaScript-API/Message.md"
                 }
               ]
             },
