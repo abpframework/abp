@@ -15,7 +15,7 @@ abp.notify.success(
 
 A notification message is shown at the bottom right of the page:
 
-![js-message-success](D:/Github/abp/docs/en/images/js-notify-success.png)
+![js-message-success](../../../images/js-notify-success.png)
 
 ## Notification Types
 

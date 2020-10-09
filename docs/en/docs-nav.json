@@ -458,6 +458,10 @@
                 {
                   "text": "Message",
                   "path": "UI/AspNetCore/JavaScript-API/Message.md"
+                },
+                {
+                  "text": "Notify",
+                  "path": "UI/AspNetCore/JavaScript-API/Notify.md"
                 }
               ]
             },
