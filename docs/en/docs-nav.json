@@ -452,6 +452,10 @@
                   "path": "UI/AspNetCore/JavaScript-API/Index.md"
                 },
                 {
+                  "text": "Localization",
+                  "path": "UI/AspNetCore/JavaScript-API/Localization.md"
+                },
+                {
                   "text": "AJAX",
                   "path": "UI/AspNetCore/JavaScript-API/Ajax.md"
                 },
