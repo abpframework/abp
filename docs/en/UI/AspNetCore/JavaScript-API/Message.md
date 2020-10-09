@@ -59,7 +59,7 @@ The resulting UI will be like shown below:
 
 If user has clicked the `Yes` button, the `confirmed` argument in the `then` callback function will be `true`.
 
-> "*Are you sure?*" is the default title and you can override it.
+> "*Are you sure?*" is the default title (localized based on the current language) and you can override it.
 
 ### The Return Value
 
@@ -115,6 +115,8 @@ The Message API is implemented using the [SweetAlert2](https://sweetalert2.githu
     }
 }
 ````
+
+> "Are you sure?", "Cancel" and "Yes" texts are automatically localized based on the current language.
 
 So, if you want to set the `warn` icon, you can set it like:
 
