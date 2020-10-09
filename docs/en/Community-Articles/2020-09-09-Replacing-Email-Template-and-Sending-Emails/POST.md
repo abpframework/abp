@@ -1,12 +1,24 @@
-# Replacing Email Template and Sending Emails
+# Replacing Email Templates and Sending Emails
 
 ## Introduction
 
-Hi, in this step by step article, I will show you how you can replace the existing templates and how you can send emails by using the replaced templates.
+Hi, in this step by step article, we will send an email by using standard email template and then we will replace the standard email template with our new created template, thanks to [Text Templating System](https://docs.abp.io/en/abp/latest/Text-Templating#replacing-the-existing-templates) and [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System).
+
+* ABP framework provides a strong and flexible [Text Templating System](https://docs.abp.io/en/abp/latest/Text-Templating). So, we can use the text templating system to create dynamic email contents on a template and a model.
+
+* In this article, we will use `StandardEmailTemplates.Message` as standard email template. Then we will create a new template and replace the standard email template with our new template by using [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System).
+
+* The `Virtual File System` makes it possible to manage files that do not physically exist on the file system. That means we can override `StandardEmailTemplates.Message` template by changing it's path with our new template's path.
 
 ## Creating the Solution
 
-Before starting to development, we need to create a solution named `TemplateReplace` (or whatever you want). We can download a new startup template by using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) :
+> ABP Framework offers startup templates to get into the business faster. 
+
+In this article, I will create a new startup template and perform the operations on this template. But if you have already a project you don't need to create a new startup template, you can implement the following steps to your existing project. (These steps can be applied to any project. (MVC, Angular etc.))
+
+> If you have already a project you can skip this section.
+
+Before starting to development, we will create a solution named `TemplateReplace` (or whatever you want). We can create a new startup template by using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) :
 
 ````bash
 abp new TemplateReplace
@@ -18,7 +30,7 @@ Run the `TemplateReplace.DbMigrator` application as below to create the database
 
 ![db-migrator-1](db-migrator-1.jpg)
 
-* Left click to `TemplateReplace.DbMigrator` and choose the `Debug`.
+* Right click to `TemplateReplace.DbMigrator` and choose the `Debug`.
 
 ![db-migrator-2](db-migrator-2.jpg)
 
@@ -36,23 +48,7 @@ First thing we need to do is, creating a email service to sending emails. ABP Fr
 
 ### Step - 1
 
-Create an `Email` folder in the `TemplateReplace.Application.Contracts` project and add a interface named `IEmailService` inside of it :
-
-```csharp
-using System.Threading.Tasks;
-
-namespace TemplateReplace.Email
-{
-    public interface IEmailService
-    {
-        Task<string> SendAsync();
-    }
-} 
-```
-
-### Step - 2
-
-Create an `Email` folder in the `TemplateReplace.Application` project and add a class named `EmailService` inside of it to implement the `IEmailService` interface.
+Create an `Emailing` folder in the `TemplateReplace.Domain` project and add a class named `EmailService` inside of it.
 
 ```csharp
 using System.Threading.Tasks;
@@ -61,9 +57,9 @@ using Volo.Abp.Emailing;
 using Volo.Abp.Emailing.Templates;
 using Volo.Abp.TextTemplating;
 
-namespace TemplateReplace.Email
+namespace TemplateReplace.Emailing
 {
-    public class EmailService : IEmailService, ITransientDependency
+    public class EmailService : ITransientDependency
     {
         private readonly IEmailSender _emailSender;
         private readonly ITemplateRenderer _templateRenderer;
@@ -74,36 +70,32 @@ namespace TemplateReplace.Email
             _templateRenderer = templateRenderer;
         }
 
-        public async Task<string> SendAsync()
+        public async Task SendAsync(string targetEmail)
         {
             var emailBody = await _templateRenderer.RenderAsync(
                 StandardEmailTemplates.Message,
                 new
                 {
-                   message = "This is email body..."
+                    message = "ABP Framework provides IEmailSender service that is used to send emails."
                 }
             );
 
             await _emailSender.SendAsync(
-                "from_email@abp.io",
-                "target_email@abp.io",
+                targetEmail,
                 "Subject",
                 emailBody
             );
-
-            return emailBody;
         }
     }
-} 
+}
 ```
-
-* ABP framework provides a strong and flexible [text templating system](https://docs.abp.io/en/abp/latest/Text-Templating). So, we can use the text templating system to create dynamic email contents.
 
 * To create an email content, we need to inject `ITemplateRenderer` and use the `RenderAsync` method to render a template.
 
 * We've used `StandardEmailTemplates.Message` as standart email template. This provides us a standard and simple message template to send mails.
 
 * The resulting email body should be like shown below:
+
 ```html
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -111,96 +103,118 @@ namespace TemplateReplace.Email
     <meta charset="utf-8" />
 </head>
 <body>
-    This is email body...
+    ABP Framework provides IEmailSender service that is used to send emails.
 </body>
 </html>
 ```
 
-### Step - 3
+### Step - 2 (Configuring Email Settings)
 
-* Now we need to create a user interface to be able to see the standard email template. To do this quickly, open your existing `Index.cshtml.cs` in your `TemplateReplace.Web` project. It's under the **Pages** folder. And copy-paste the below content.
+* Now, we need to configure some email settings by following [settings documentation](https://docs.abp.io/en/abp/latest/Settings). For achieve this, create a class named `EmailSettingProvider` in `Emailing` folder and set the content as below.
 
 ```csharp
-using TemplateReplace.Email;
+using Volo.Abp.Emailing;
+using Volo.Abp.Settings;
 
-namespace TemplateReplace.Web.Pages
+namespace TemplateReplace.Emailing
 {
-    public class IndexModel : TemplateReplacePageModel
+    public class EmailSettingProvider : SettingDefinitionProvider
     {
-        private readonly IEmailService _emailService;
-        public string EmailBody { get; set; }
-
-        public IndexModel(IEmailService emailService)
+        public override void Define(ISettingDefinitionContext context)
         {
-            _emailService = emailService;
+            //Google's SMTP settings:
+            context.Add(
+                new SettingDefinition(EmailSettingNames.Smtp.Host, "smtp.gmail.com"),
+                new SettingDefinition(EmailSettingNames.Smtp.Port, "587"),
+                new SettingDefinition(EmailSettingNames.Smtp.UserName, "your_email@gmail.com"), //smtp username: your email address
+                new SettingDefinition(EmailSettingNames.Smtp.Password, "your_password", isEncrypted: false), //smtp password: your email password to auth
+                new SettingDefinition(EmailSettingNames.Smtp.EnableSsl, "true"),
+                new SettingDefinition(EmailSettingNames.Smtp.UseDefaultCredentials, "false") //set as false to auth
+            );
         }
-        
-        public async void OnGet()
+    }
+}
+```
+
+* ABP was designed to be modular, so different modules can have different settings. A module must create a class derived from the `SettingDefinitionProvider` in order to define its settings. Therefore in here we created a class named `EmailSettingProvider` and inherit from `SettingDefinitionProvider` to define email settings.
+
+* Here, I used Google's SMTP settings to send emails via Gmail. You can change these setting values by your need. It's a good idea to define a const string for a setting name instead of using a magic string. The ABP framework has a class named `EmailSettingNames`, we can just change the values of these settings by using these pre-defined class properties as key.
+
+> **Note:** If you want to use Google's SMTP server settings and send emails via Gmail, you should confirm [this](https://myaccount.google.com/u/0/lesssecureapps).
+
+* After that we need to open `TemplateReplaceDomainModule.cs` file and change its contents as below to sending real-time emails.
+
+```csharp
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using TemplateReplace.MultiTenancy;
+using Volo.Abp.AuditLogging;
+using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Emailing;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer;
+using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.PermissionManagement.IdentityServer;
+using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
+
+namespace TemplateReplace
+{
+    [DependsOn(
+        typeof(TemplateReplaceDomainSharedModule),
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(AbpBackgroundJobsDomainModule),
+        typeof(AbpFeatureManagementDomainModule),
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityServerModule),
+        typeof(AbpSettingManagementDomainModule),
+        typeof(AbpTenantManagementDomainModule),
+        typeof(AbpEmailingModule)
+    )]
+    public class TemplateReplaceDomainModule : AbpModule
+    {
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            if(CurrentUser.IsAuthenticated)
+            Configure<AbpMultiTenancyOptions>(options =>
             {
-                EmailBody = await _emailService.SendAsync();
-            }
+                options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
+
+            // #if DEBUG
+            //  context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+            // #endif
         }
     }
 }
+
 ```
 
-* Then, open your `Index.cshtml` file and set the content as below.
+* `NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the standard log system, rather than actually sending the emails. This class can be useful especially in development time where you generally don't want to send real emails. Therefore ABP framework defined this by default. But we want to send real emails, so we must remove these lines or we should take it to the comment line.
 
-```html
-@page
-@using Microsoft.AspNetCore.Mvc.Localization
-@using TemplateReplace.Localization
-@using Volo.Abp.Users
-@model TemplateReplace.Web.Pages.IndexModel
-@inject IHtmlLocalizer<TemplateReplaceResource> L
-@inject ICurrentUser CurrentUser
-@section styles {
-    <abp-style-bundle>
-        <abp-style src="/Pages/Index.css" />
-    </abp-style-bundle>
-}
-@section scripts {
-    <abp-script-bundle>
-        <abp-script src="/Pages/Index.js" />
-    </abp-script-bundle>
-}
-<div class="jumbotron text-center">
-    <h1>@L["Welcome"]</h1>
-    <div class="row">
-        <div class="col-md-6 mx-auto">
-            <p>@L["LongWelcomeMessage"]</p>
-            <hr class="my-4" />
-        </div>
-    </div>
-    <a href="https://abp.io?ref=tmpl" target="_blank" class="btn btn-primary px-4">abp.io</a>
-    @if (!CurrentUser.IsAuthenticated)
-    {
-        <a abp-button="Primary" href="~/Account/Login" class="px-4"><i class="fa fa-sign-in"></i> @L["Login"]</a>
-    }
-</div>
+* The last thing we need to do is delete the default email settings from `appsettings.json` file in `TemplateReplace.Web`.
 
-<div class="email-content">
-    @Html.Raw(Model.EmailBody)
-</div>
-```
+![appsettings.json](settings.jpg)
 
-* After all of this, we can run the `TemplateReplace.Web` application and logged in to see the standard email template. 
+> **Note:** In this article, we defined email settings in `EmailSettingProvider` class, but these settings could be defined in `appsettings.json` file. For more details about this, please check the [document](https://docs.abp.io/en/abp/latest/Settings#setting-values-in-the-application-configuration).
 
-![standard-template](standard-template.jpg)
+* After all of these steps, when we send an email we should see the following template.
 
-* As we see above, `StandardEmailTemplates.Message` template works as expected. But we need to be sure about the mail has been sent or not. To achieve this, we can examine the **logs**. So, open the `Logs` folder (It's under **TemplateReplace .Web** folder). Inside of this folder, there is a file named `logs.txt`. When we open this file and examine the lines, we can see our email details as below (target email address, subject of mail and email body).
+![email-message](message.jpg)
 
-![email-details](email-details.jpg)
+### Step - 3
 
-### Step - 4
+* So far we've sent mail by using standard email template of ABP. But we may want to replace the email template with the new one. We can achieve this by following the `Text Templating` [documentation](https://docs.abp.io/en/abp/latest/Text-Templating#replacing-the-existing-templates).
 
-* So far we've sent mail by using standard email template of ABP. But we can want to replace the email template with the new one. We can achieve this by following [the documentation](https://docs.abp.io/en/abp/latest/Text-Templating#replacing-the-existing-templates).
+* In this article, I will create a email template by using free template generator named `Bee`. You can reach the free templates from [here](https://beefree.io/templates/free/).
 
-* First thing we need to do is creating our new **email template**. So, create a folder named `Templates` and add `EmailLayout.cshtml` file inside of it. And copy-paste the below content.
+* After choosing our free template, we can create a new **email template**. So, create a folder named `Templates` under `Emailing` folder in `TemplateReplace.Domain` and add `EmailTemplate.tpl` file inside of it. And copy-paste the below content or your free template's content.
 
-```html
+```tpl
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -233,11 +247,6 @@ namespace TemplateReplace.Web.Pages
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <img src="https://image.flaticon.com/icons/svg/149/149314.svg" height="90px" style="display:block; margin:auto;padding-bottom: 25px;"/>
-                        </td>
-                    </tr>
-                    <tr>
                         <td style="text-align: center;">
                             <h1 style="margin: 0px;padding-bottom: 25px; color: #E90052">ABP Community</h1>
                             <h2 style="margin: 0px;padding-bottom: 25px;font-size:22px;">Share your experiences with the ABP Framework!</h2>
@@ -257,19 +266,6 @@ namespace TemplateReplace.Web.Pages
                             </button>
                         </td>
                     </tr>
-                    <tr style="text-align:center;">
-                        <td>
-                            <a href="https://github.com/abpframework/abp" style="color: black">
-                                <i class="fab fa-github fa-2x" style="padding: 20px"></i>
-                            </a>
-                            <a href="https://stackoverflow.com/questions/tagged/abp" style="color:orange;">
-                                <i style="padding: 20px" class="fab fa-stack-overflow fa-2x"></i>
-                            </a>
-                            <a href="https://twitter.com/abpframework">
-                                <i class="fab fa-twitter fa-2x" style="padding: 20px"></i>
-                            </a>
-                        </td>
-                    </tr>
                 </table>
             </td>
         </tr>
@@ -281,7 +277,7 @@ namespace TemplateReplace.Web.Pages
 
 * Then we need to make the template file as "Embedded Resource". We can do this as below.
 
-* First left click to **EmailLayout.cshtml** and choose `Properties`.
+* First right click to **EmailTemplate.tpl** and choose `Properties`.
 
 ![embedded-resource](embedded-resource.jpg) 
 
@@ -289,16 +285,16 @@ namespace TemplateReplace.Web.Pages
 
 ![embedded-resource-2](embedded-resource-2.jpg)
 
-### Step - 5 (Replacing the Email Template)
+### Step - 4 (Replacing the Email Template)
 
-* To replace the current email template with our new email template, we need to override it. To achieve this, create a class in `TemplateReplace.Web` and fill it with the below content.
+* To replace the current email template with our new email template, we need to override it. To achieve this, create a class named `EmailTemplateDefinitionProvider` under `Emailing` folder in `TemplateReplace.Domain` and fill it with the below content.
 
 ```csharp
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Emailing.Templates;
 using Volo.Abp.TextTemplating;
 
-namespace TemplateReplace.Web
+namespace TemplateReplace.Emailing
 {
     public class EmailTemplateDefinitionProvider : TemplateDefinitionProvider, ITransientDependency
     {
@@ -308,7 +304,7 @@ namespace TemplateReplace.Web
 
             emailLayoutTemplate
                 .WithVirtualFilePath(
-                    "/Templates/EmailLayout.cshtml",
+                    "/Emailing/Templates/EmailTemplate.tpl",
                     isInlineLocalized: true
                 );
         }
@@ -316,32 +312,66 @@ namespace TemplateReplace.Web
 }
 ```
 
-* In here we've created a template definition provider class that gets the email layout template and changes the virtual file path for the template.
+* In here we've created a template definition provider class that gets the email layout template and change the virtual file path for the template.
 
-* This approach allows us to locate templates in any folder instead of the folder defined by the depended module.
+* This approach allows us to locate templates in any folder instead of the folder defined by the depended module. For more detail, check the [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System).
 
-### Step - 6
+### Step - 5
 
-* Lastly, we need to configure the [virtual file system](https://docs.abp.io/en/abp/latest/Virtual-File-System). To do this open your `TemplateReplaceWebModule` in `TemplateReplace.Web` and update the `ConfigureVirtualFileSystem` method as below.
+* Lastly, we need to configure the [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System). To do this open your `TemplateReplaceDomainModule.cs` in `TemplateReplace.Domain` and update the content as below.
 
 ```csharp
-//...
-private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
+using TemplateReplace.MultiTenancy;
+using Volo.Abp.AuditLogging;
+using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Emailing;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer;
+using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.PermissionManagement.IdentityServer;
+using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.VirtualFileSystem;
+
+namespace TemplateReplace
 {
-    if (hostingEnvironment.IsDevelopment())
+    [DependsOn(
+        typeof(TemplateReplaceDomainSharedModule),
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(AbpBackgroundJobsDomainModule),
+        typeof(AbpFeatureManagementDomainModule),
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityServerModule),
+        typeof(AbpSettingManagementDomainModule),
+        typeof(AbpTenantManagementDomainModule),
+        typeof(AbpEmailingModule)
+    )]
+    public class TemplateReplaceDomainModule : AbpModule
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            options.FileSets.AddEmbedded<TemplateReplaceWebModule>(); //to replace the standard email template
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
             
-            //...
-        });
+            //Add this configuration
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<TemplateReplaceDomainModule>();
+            });
+        }
     }
 }
-//...
+
 ```
 
-* And now when we start the application, we need to see the new email template like as below.
+* And now when we want to send a new email, we should see the our new defined template as the message like below.
 
 ![email-last](email-last.jpg)
 
