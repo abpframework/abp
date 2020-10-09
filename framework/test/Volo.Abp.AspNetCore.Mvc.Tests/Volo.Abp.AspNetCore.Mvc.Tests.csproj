@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Volo\Abp\AspNetCore\Mvc\Localization\Resource\es.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
   </ItemGroup>
 
