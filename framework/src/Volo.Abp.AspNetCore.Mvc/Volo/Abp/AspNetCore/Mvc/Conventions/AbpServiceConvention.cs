@@ -7,24 +7,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
-using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
     public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
     {
+        public ILogger<AbpServiceConvention> Logger { get; set; }
+
         private readonly AbpAspNetCoreMvcOptions _options;
 
-        public AbpServiceConvention(IOptions<AbpAspNetCoreMvcOptions> options)
+        public AbpServiceConvention(
+            IOptions<AbpAspNetCoreMvcOptions> options)
         {
             _options = options.Value;
+
+            Logger = NullLogger<AbpServiceConvention>.Instance;
         }
 
         public void Apply(ApplicationModel application)
@@ -34,9 +40,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual void ApplyForControllers(ApplicationModel application)
         {
+            RemoveDuplicateControllers(application);
+
             foreach (var controller in application.Controllers)
             {
                 var controllerType = controller.ControllerType.AsType();
+
                 var configuration = GetControllerSettingOrNull(controllerType);
 
                 //TODO: We can remove different behaviour for ImplementsRemoteServiceInterface. If there is a configuration, then it should be applied!
@@ -57,6 +66,26 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                     }
                 }
             }
+        }
+
+        protected virtual void RemoveDuplicateControllers(ApplicationModel application)
+        {
+            var derivedControllerModels = new List<ControllerModel>();
+
+            foreach (var controllerModel in application.Controllers)
+            {
+                var baseControllerTypes = controllerModel.ControllerType
+                    .GetBaseClasses(typeof(Controller), includeObject: false)
+                    .Where(t => !t.IsAbstract)
+                    .ToArray();
+                if (baseControllerTypes.Length > 0)
+                {
+                    derivedControllerModels.Add(controllerModel);
+                    Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")}");
+                }
+            }
+
+            application.Controllers.RemoveAll(derivedControllerModels);
         }
 
         protected virtual void ConfigureRemoteService(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)

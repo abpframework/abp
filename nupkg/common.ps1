@@ -46,6 +46,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo"
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Widgets",
     "framework/src/Volo.Abp.AspNetCore.Serilog",
     "framework/src/Volo.Abp.AspNetCore.SignalR",

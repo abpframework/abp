@@ -99,11 +99,15 @@
       "path": "CLI.md"
     },
     {
-      "text": "Authentication",
+      "text": "Authentication & Security",
       "items": [
         {
           "text": "Social/External Logins",
           "path": "Authentication/Social-External-Logins.md"
+        },
+        {
+          "text": "CSRF/XSRF & Anti Forgery",
+          "path": "CSRF-Anti-Forgery.md"
         }
       ]
     },
@@ -433,8 +437,37 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "Layout Hooks",
+              "path": "UI/AspNetCore/Layout-Hooks.md"
+            },
+            {
               "text": "Theming",
               "path": "UI/AspNetCore/Theming.md"
+            },
+            {
+              "text": "JavaScript API",
+              "items": [
+                {
+                  "text": "Overall",
+                  "path": "UI/AspNetCore/JavaScript-API/Index.md"
+                },
+                {
+                  "text": "Localization",
+                  "path": "UI/AspNetCore/JavaScript-API/Localization.md"
+                },
+                {
+                  "text": "AJAX",
+                  "path": "UI/AspNetCore/JavaScript-API/Ajax.md"
+                },
+                {
+                  "text": "Message",
+                  "path": "UI/AspNetCore/JavaScript-API/Message.md"
+                },
+                {
+                  "text": "Notify",
+                  "path": "UI/AspNetCore/JavaScript-API/Notify.md"
+                }
+              ]
             },
             {
               "text": "Customize/Extend the UI",

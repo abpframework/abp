@@ -9,8 +9,10 @@ namespace Volo.Blogging.Posts
     {
         Task<List<Post>> GetPostsByBlogId(Guid id);
 
+        Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null);
+
         Task<Post> GetPostByUrl(Guid blogId, string url);
-        
+
         Task<List<Post>> GetOrderedList(Guid blogId,bool descending = false);
     }
 }
