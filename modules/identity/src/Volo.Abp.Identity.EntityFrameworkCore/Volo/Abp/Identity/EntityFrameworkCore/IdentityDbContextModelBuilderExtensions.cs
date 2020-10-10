@@ -233,6 +233,22 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasIndex(x => new { x.TenantId, x.UserId });
             });
 
+            builder.Entity<IdentityLinkUser>(b =>
+            {
+                b.ToTable(options.TablePrefix + "LinkUsers", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(x => new
+                {
+                    UserId = x.SourceUserId,
+                    TenantId = x.SourceTenantId,
+                    LinkedUserId = x.TargetUserId,
+                    LinkedTenantId = x.TargetTenantId
+                }).IsUnique();
+            });
+
+
         }
     }
 }

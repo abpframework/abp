@@ -1,15 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <Import Project="..\..\..\configureawait.props" />
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-        <RootNamespace />
+        <RazorLangVersion>3.0</RazorLangVersion>
     </PropertyGroup>
 
     <ItemGroup>

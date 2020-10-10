@@ -237,119 +237,6 @@
             setQueryString();
         };
 
-        var initCrawlerLinks = function () {
-            var isCrawler = function () {
-                var crawlers = [
-                    'Google',
-                    'Googlebot',
-                    'YandexBot',
-                    'msnbot',
-                    'Rambler',
-                    'Yahoo',
-                    'AbachoBOT',
-                    'accoona',
-                    'AcoiRobot',
-                    'ASPSeek',
-                    'CrocCrawler',
-                    'Dumbot',
-                    'FAST-WebCrawler',
-                    'GeonaBot',
-                    'Gigabot',
-                    'Lycos',
-                    'MSRBOT',
-                    'Scooter',
-                    'AltaVista',
-                    'IDBot',
-                    'eStyle',
-                    'Scrubby',
-                    'Slurp',
-                    'DuckDuckBot',
-                    'Baiduspider',
-                    'VoilaBot',
-                    'ExaLead',
-                    'Search Dog',
-                    'MSN Bot',
-                    'BingBot',
-                ];
-
-                var agent = navigator.userAgent;
-
-                for (var i = 0; i < crawlers.length; i++) {
-                    if (agent.indexOf(crawlers[i]) >= 0) {
-                        return true;
-                    }
-                }
-
-                return false;
-            };
-
-            if (!isCrawler()) {
-                return;
-            }
-
-            var comboboxes = $('.doc-section-combobox');
-
-            if (comboboxes.length <= 0) {
-                return;
-            }
-
-            $('#crawler_link').show();
-
-            var html = '';
-
-            var currentUrl = window.location.href.toString();
-
-            if (currentUrl.indexOf('?') > 0) {
-                currentUrl = currentUrl.substring(0, currentUrl.indexOf('?'));
-            }
-
-            var getQueryStringsFromComboboxes = function (x) {
-                if (x >= comboboxes.length) {
-                    return [];
-                }
-
-                var key = $(comboboxes[x]).data('key');
-
-                var queryStrings = getQueryStringsFromComboboxes(x + 1);
-                var returnList = [];
-
-                $(comboboxes[x])
-                    .find('option')
-                    .each(function () {
-                        if (queryStrings.length <= 0) {
-                            returnList.push(key + '=' + $(this).val());
-                        } else {
-                            for (var k = 0; k < queryStrings.length; k++) {
-                                returnList.push(
-                                    key +
-                                        '=' +
-                                        $(this).val() +
-                                        '&' +
-                                        queryStrings[k]
-                                );
-                            }
-                        }
-                    });
-
-                return returnList;
-            };
-
-            var queryStrings = getQueryStringsFromComboboxes(0);
-
-            for (var i = 0; i < queryStrings.length; i++) {
-                html +=
-                    '<a href="' +
-                    currentUrl +
-                    '?' +
-                    queryStrings[i] +
-                    '">' +
-                    queryStrings[i] +
-                    '</a> ';
-            }
-
-            $('#crawler_link').html(html);
-        };
-
         initNavigationFilter('sidebar-scroll');
 
         initAnchorTags('.docs-page .docs-body');
@@ -357,7 +244,5 @@
         initSocialShareLinks();
 
         initSections();
-
-        initCrawlerLinks();
     });
 })(jQuery);

@@ -48,12 +48,15 @@
 		},
 		"markup": {
 			"title": "Markup",
-			"alias": ["html", "xml", "svg", "mathml"],
+			"alias": ["html", "xml", "svg", "mathml", "ssml", "atom", "rss"],
 			"aliasTitles": {
 				"html": "HTML",
 				"xml": "XML",
 				"svg": "SVG",
-				"mathml": "MathML"
+				"mathml": "MathML",
+				"ssml": "SSML",
+				"atom": "Atom",
+				"rss": "RSS"
 			},
 			"option": "default"
 		},
@@ -78,7 +81,7 @@
 			"owner": "dellagustin"
 		},
 		"abnf": {
-			"title": "Augmented Backus–Naur form",
+			"title": "ABNF",
 			"owner": "RunDevelopment"
 		},
 		"actionscript": {
@@ -90,6 +93,14 @@
 		"ada": {
 			"title": "Ada",
 			"owner": "Lucretia"
+		},
+		"agda": {
+			"title": "Agda",
+			"owner": "xy-ren"
+		},
+		"al": {
+			"title": "AL",
+			"owner": "RunDevelopment"
 		},
 		"antlr4": {
 			"title": "ANTLR4",
@@ -126,14 +137,14 @@
 			"title": "AsciiDoc",
 			"owner": "Golmote"
 		},
-		"asm6502": {
-			"title": "6502 Assembly",
-			"owner": "kzurawel"
-		},
 		"aspnet": {
 			"title": "ASP.NET (C#)",
 			"require": ["markup", "csharp"],
 			"owner": "nauzilus"
+		},
+		"asm6502": {
+			"title": "6502 Assembly",
+			"owner": "kzurawel"
 		},
 		"autohotkey": {
 			"title": "AutoHotkey",
@@ -173,10 +184,10 @@
 			"owner": "Golmote"
 		},
 		"bnf": {
-			"title": "Backus–Naur form",
+			"title": "BNF",
 			"alias": "rbnf",
 			"aliasTitles": {
-				"rbnf": "Routing Backus–Naur form"
+				"rbnf": "RBNF"
 			},
 			"owner": "RunDevelopment"
 		},
@@ -197,11 +208,6 @@
 			"require": "clike",
 			"owner": "zeitgeist87"
 		},
-		"concurnas": {
-			"title": "Concurnas",
-			"alias": "conc",
-			"owner": "jasontatton"
-		},
 		"csharp": {
 			"title": "C#",
 			"require": "clike",
@@ -217,34 +223,43 @@
 			"title": "CIL",
 			"owner": "sbrl"
 		},
+		"clojure": {
+			"title": "Clojure",
+			"owner": "troglotit"
+		},
+		"cmake": {
+			"title": "CMake",
+			"owner": "mjrogozinski"
+		},
 		"coffeescript": {
 			"title": "CoffeeScript",
 			"require": "javascript",
 			"alias": "coffee",
 			"owner": "R-osey"
 		},
-		"cmake": {
-			"title": "CMake",
-			"owner": "mjrogozinski"
+		"concurnas": {
+			"title": "Concurnas",
+			"alias": "conc",
+			"owner": "jasontatton"
 		},
-		"clojure": {
-			"title": "Clojure",
-			"owner": "troglotit"
+		"csp": {
+			"title": "Content-Security-Policy",
+			"owner": "ScottHelme"
 		},
 		"crystal": {
 			"title": "Crystal",
 			"require": "ruby",
 			"owner": "MakeNowJust"
 		},
-		"csp": {
-			"title": "Content-Security-Policy",
-			"owner": "ScottHelme"
-		},
 		"css-extras": {
 			"title": "CSS Extras",
 			"require": "css",
 			"modify": "css",
 			"owner": "milesj"
+		},
+		"cypher": {
+			"title": "Cypher",
+			"owner": "RunDevelopment"
 		},
 		"d": {
 			"title": "D",
@@ -259,6 +274,10 @@
 		"dax": {
 			"title": "DAX",
 			"owner": "peterbud"
+		},
+		"dhall": {
+			"title": "Dhall",
+			"owner": "RunDevelopment"
 		},
 		"diff": {
 			"title": "Diff",
@@ -281,8 +300,12 @@
 			"owner": "JustinBeckwith"
 		},
 		"ebnf": {
-			"title": "Extended Backus–Naur form",
+			"title": "EBNF",
 			"owner": "RunDevelopment"
+		},
+		"editorconfig": {
+			"title": "EditorConfig",
+			"owner": "osipxd"
 		},
 		"eiffel": {
 			"title": "Eiffel",
@@ -291,7 +314,11 @@
 		"ejs": {
 			"title": "EJS",
 			"require": ["javascript", "markup-templating"],
-			"owner": "RunDevelopment"
+			"owner": "RunDevelopment",
+			"alias": "eta",
+			"aliasTitles": {
+				"eta": "Eta"
+			}
 		},
 		"elixir": {
 			"title": "Elixir",
@@ -348,6 +375,12 @@
 			"require": "markup-templating",
 			"owner": "RunDevelopment"
 		},
+		"gml": {
+			"title": "GameMaker Language",
+			"alias": "gamemakerlanguage",
+			"require": "clike",
+			"owner": "LiarOnce"
+		},
 		"gcode": {
 			"title": "G-code",
 			"owner": "RunDevelopment"
@@ -370,14 +403,8 @@
 		},
 		"glsl": {
 			"title": "GLSL",
-			"require": "clike",
+			"require": "c",
 			"owner": "Golmote"
-		},
-		"gml": {
-			"title": "GameMaker Language",
-			"alias": "gamemakerlanguage",
-			"require": "clike",
-			"owner": "LiarOnce"
 		},
 		"go": {
 			"title": "Go",
@@ -386,6 +413,7 @@
 		},
 		"graphql": {
 			"title": "GraphQL",
+			"optional": ["markdown"],
 			"owner": "Golmote"
 		},
 		"groovy": {
@@ -428,6 +456,11 @@
 			"title": "HCL",
 			"owner": "outsideris"
 		},
+		"hlsl": {
+			"title": "HLSL",
+			"require": "c",
+			"owner": "RunDevelopment"
+		},
 		"http": {
 			"title": "HTTP",
 			"optional": [
@@ -453,6 +486,20 @@
 		"icon": {
 			"title": "Icon",
 			"owner": "Golmote"
+		},
+		"ignore": {
+			"title": ".ignore",
+			"owner": "osipxd",
+			"alias": [
+				"gitignore",
+				"hgignore",
+				"npmignore"
+			],
+			"aliasTitles": {
+				"gitignore": ".gitignore",
+				"hgignore": ".hgignore",
+				"npmignore": ".npmignore"
+			}
 		},
 		"inform7": {
 			"title": "Inform 7",
@@ -506,7 +553,7 @@
 		},
 		"jsdoc": {
 			"title": "JSDoc",
-			"require": ["javascript", "javadoclike"],
+			"require": ["javascript", "javadoclike", "typescript"],
 			"modify": "javascript",
 			"optional": [
 				"actionscript",
@@ -527,6 +574,28 @@
 			],
 			"owner": "RunDevelopment"
 		},
+		"json": {
+			"title": "JSON",
+			"alias": "webmanifest",
+			"aliasTitles": {
+				"webmanifest": "Web App Manifest"
+			},
+			"owner": "CupOfTea696"
+		},
+		"json5": {
+			"title": "JSON5",
+			"require": "json",
+			"owner": "RunDevelopment"
+		},
+		"jsonp": {
+			"title": "JSONP",
+			"require": "json",
+			"owner": "RunDevelopment"
+		},
+		"jsstacktrace": {
+			"title": "JS stack trace",
+			"owner": "sbrl"
+		},
 		"js-templates": {
 			"title": "JS Templates",
 			"require": "javascript",
@@ -540,20 +609,6 @@
 			],
 			"owner": "RunDevelopment"
 		},
-		"json": {
-			"title": "JSON",
-			"owner": "CupOfTea696"
-		},
-		"jsonp": {
-			"title": "JSONP",
-			"require": "json",
-			"owner": "RunDevelopment"
-		},
-		"json5": {
-			"title": "JSON5",
-			"require": "json",
-			"owner": "RunDevelopment"
-		},
 		"julia": {
 			"title": "Julia",
 			"owner": "cdagnino"
@@ -564,6 +619,10 @@
 		},
 		"kotlin": {
 			"title": "Kotlin",
+			"alias": ["kt", "kts"],
+			"aliasTitles": {
+				"kts": "Kotlin Script"
+			},
 			"require": "clike",
 			"owner": "Golmote"
 		},
@@ -697,6 +756,7 @@
 		"objectivec": {
 			"title": "Objective-C",
 			"require": "c",
+			"alias": "objc",
 			"owner": "uranusjr"
 		},
 		"ocaml": {
@@ -740,6 +800,11 @@
 		"pcaxis": {
 			"title": "PC-Axis",
 			"alias": "px",
+			"owner": "RunDevelopment"
+		},
+		"peoplecode": {
+			"title": "PeopleCode",
+			"alias": "pcode",
 			"owner": "RunDevelopment"
 		},
 		"perl": {
@@ -824,6 +889,12 @@
 			],
 			"owner": "Golmote"
 		},
+		"purebasic": {
+			"title": "PureBasic",
+			"require": "clike",
+			"alias": "pbfasm",
+			"owner": "HeX0R101"
+		},
 		"python": {
 			"title": "Python",
 			"alias": "py",
@@ -847,6 +918,12 @@
 			"title": "R",
 			"owner": "Golmote"
 		},
+		"racket": {
+			"title": "Racket",
+			"require": "scheme",
+			"alias": "rkt",
+			"owner": "RunDevelopment"
+		},
 		"jsx": {
 			"title": "React JSX",
 			"require": ["markup", "javascript"],
@@ -860,10 +937,6 @@
 		"tsx": {
 			"title": "React TSX",
 			"require": ["jsx", "typescript"]
-		},
-		"renpy": {
-			"title": "Ren'py",
-			"owner": "HyuchiaDiego"
 		},
 		"reason": {
 			"title": "Reason",
@@ -881,6 +954,11 @@
 				"vala"
 			],
 			"owner": "RunDevelopment"
+		},
+		"renpy": {
+			"title": "Ren'py",
+			"alias": "rpy",
+			"owner": "HyuchiaDiego"
 		},
 		"rest": {
 			"title": "reST (reStructuredText)",
@@ -939,6 +1017,10 @@
 			"require": "bash",
 			"owner": "RunDevelopment"
 		},
+		"smali": {
+			"title": "Smali",
+			"owner": "RunDevelopment"
+		},
 		"smalltalk": {
 			"title": "Smalltalk",
 			"owner": "Golmote"
@@ -950,6 +1032,7 @@
 		},
 		"solidity": {
 			"title": "Solidity (Ethereum)",
+			"alias": "sol",
 			"require": "clike",
 			"owner": "glachaud"
 		},
@@ -982,6 +1065,10 @@
 			"title": "SQL",
 			"owner": "multipetros"
 		},
+		"iecst": {
+			"title": "Structured Text (IEC 61131-3)",
+			"owner": "serhioromano"
+		},
 		"stylus": {
 			"title": "Stylus",
 			"owner": "vkbansal"
@@ -990,6 +1077,21 @@
 			"title": "Swift",
 			"require": "clike",
 			"owner": "chrischares"
+		},
+		"t4-templating": {
+			"title": "T4 templating",
+			"owner": "RunDevelopment"
+		},
+		"t4-cs": {
+			"title": "T4 Text Templates (C#)",
+			"require": ["t4-templating", "csharp"],
+			"alias": "t4",
+			"owner": "RunDevelopment"
+		},
+		"t4-vb": {
+			"title": "T4 Text Templates (VB)",
+			"require": ["t4-templating", "vbnet"],
+			"owner": "RunDevelopment"
 		},
 		"tap": {
 			"title": "TAP",
@@ -1000,6 +1102,11 @@
 			"title": "Tcl",
 			"owner": "PeterChaplin"
 		},
+		"tt2": {
+			"title": "Template Toolkit 2",
+			"require": ["clike", "markup-templating"],
+			"owner": "gflohr"
+		},
 		"textile": {
 			"title": "Textile",
 			"require": "markup",
@@ -1009,11 +1116,6 @@
 		"toml": {
 			"title": "TOML",
 			"owner": "RunDevelopment"
-		},
-		"tt2": {
-			"title": "Template Toolkit 2",
-			"require": ["clike", "markup-templating"],
-			"owner": "gflohr"
 		},
 		"turtle": {
 			"title": "Turtle",
@@ -1035,19 +1137,9 @@
 			"alias": "ts",
 			"owner": "vkbansal"
 		},
-		"t4-cs": {
-			"title": "T4 Text Templates (C#)",
-			"require": ["t4-templating", "csharp"],
-			"alias": "t4",
-			"owner": "RunDevelopment"
-		},
-		"t4-vb": {
-			"title": "T4 Text Templates (VB)",
-			"require": ["t4-templating", "visual-basic"],
-			"owner": "RunDevelopment"
-		},
-		"t4-templating": {
-			"title": "T4 templating",
+		"unrealscript": {
+			"title": "UnrealScript",
+			"alias": ["uscript", "uc"],
 			"owner": "RunDevelopment"
 		},
 		"vala": {
@@ -1079,8 +1171,15 @@
 		},
 		"visual-basic": {
 			"title": "Visual Basic",
-			"alias": "vb",
+			"alias": ["vb", "vba"],
+			"aliasTitles": {
+				"vba": "VBA"
+			},
 			"owner": "Golmote"
+		},
+		"warpscript": {
+			"title": "WarpScript",
+			"owner": "RunDevelopment"
 		},
 		"wasm": {
 			"title": "WebAssembly",
@@ -1100,6 +1199,12 @@
 			},
 			"owner": "freakmaxi"
 		},
+		"xml-doc": {
+			"title": "XML doc (.net)",
+			"require": "markup",
+			"modify": ["csharp", "fsharp", "vbnet"],
+			"owner": "RunDevelopment"
+		},
 		"xojo": {
 			"title": "Xojo (REALbasic)",
 			"owner": "Golmote"
@@ -1113,6 +1218,10 @@
 			"title": "YAML",
 			"alias": "yml",
 			"owner": "hason"
+		},
+		"yang": {
+			"title": "YANG",
+			"owner": "RunDevelopment"
 		},
 		"zig": {
 			"title": "Zig",

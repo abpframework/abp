@@ -4,15 +4,33 @@
 		return;
 	}
 
-	function $$(expr, con) {
-		return Array.prototype.slice.call((con || document).querySelectorAll(expr));
+	/**
+	 * @param {string} selector
+	 * @param {ParentNode} [container]
+	 * @returns {HTMLElement[]}
+	 */
+	function $$(selector, container) {
+		return Array.prototype.slice.call((container || document).querySelectorAll(selector));
 	}
 
+	/**
+	 * Returns whether the given element has the given class.
+	 *
+	 * @param {Element} element
+	 * @param {string} className
+	 * @returns {boolean}
+	 */
 	function hasClass(element, className) {
 		className = " " + className + " ";
 		return (" " + element.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1
 	}
 
+	/**
+	 * Calls the given function.
+	 *
+	 * @param {() => any} func
+	 * @returns {void}
+	 */
 	function callFunction(func) {
 		func();
 	}
@@ -26,8 +44,8 @@
 				var d = document.createElement('div');
 				d.style.fontSize = '13px';
 				d.style.lineHeight = '1.5';
-				d.style.padding = 0;
-				d.style.border = 0;
+				d.style.padding = '0';
+				d.style.border = '0';
 				d.innerHTML = '&nbsp;<br />&nbsp;';
 				document.body.appendChild(d);
 				// Browsers that round the line-height should have offsetHeight === 38
@@ -53,7 +71,7 @@
 	function highlightLines(pre, lines, classes) {
 		lines = typeof lines === 'string' ? lines : pre.getAttribute('data-line');
 
-		var ranges = lines.replace(/\s+/g, '').split(',');
+		var ranges = lines.replace(/\s+/g, '').split(',').filter(Boolean);
 		var offset = +pre.getAttribute('data-line-offset') || 0;
 
 		var parseMethod = isLineHeightRounded() ? parseInt : parseFloat;
@@ -68,6 +86,7 @@
 			var start = +range[0];
 			var end = +range[1] || start;
 
+			/** @type {HTMLElement} */
 			var line = pre.querySelector('.line-highlight[data-range="' + currentRange + '"]') || document.createElement('div');
 
 			mutateActions.push(function () {
@@ -115,11 +134,58 @@
 			});
 		});
 
+		var id = pre.id;
+		if (hasLineNumbers && id) {
+			// This implements linkable line numbers. Linkable line numbers use Line Highlight to create a link to a
+			// specific line. For this to work, the pre element has to:
+			//  1) have line numbers,
+			//  2) have the `linkable-line-numbers` class or an ascendant that has that class, and
+			//  3) have an id.
+
+			var linkableLineNumbersClass = 'linkable-line-numbers';
+			var linkableLineNumbers = false;
+			var node = pre;
+			while (node) {
+				if (hasClass(node, linkableLineNumbersClass)) {
+					linkableLineNumbers = true;
+					break;
+				}
+				node = node.parentElement;
+			}
+
+			if (linkableLineNumbers) {
+				if (!hasClass(pre, linkableLineNumbersClass)) {
+					// add class to pre
+					mutateActions.push(function () {
+						pre.className = (pre.className + ' ' + linkableLineNumbersClass).trim();
+					});
+				}
+
+				var start = parseInt(pre.getAttribute('data-start') || '1');
+
+				// iterate all line number spans
+				$$('.line-numbers-rows > span', pre).forEach(function (lineSpan, i) {
+					var lineNumber = i + start;
+					lineSpan.onclick = function () {
+						var hash = id + '.' + lineNumber;
+
+						// this will prevent scrolling since the span is obviously in view
+						scrollIntoView = false;
+						location.hash = hash;
+						setTimeout(function () {
+							scrollIntoView = true;
+						}, 1);
+					};
+				});
+			}
+		}
+
 		return function () {
 			mutateActions.forEach(callFunction);
 		};
 	}
 
+	var scrollIntoView = true;
 	function applyHash() {
 		var hash = location.hash.slice(1);
 
@@ -148,7 +214,9 @@
 		var mutateDom = highlightLines(pre, range, 'temporary ');
 		mutateDom();
 
-		document.querySelector('.temporary.line-highlight').scrollIntoView();
+		if (scrollIntoView) {
+			document.querySelector('.temporary.line-highlight').scrollIntoView();
+		}
 	}
 
 	var fakeTimer = 0; // Hack to limit the number of times applyHash() runs
@@ -203,9 +271,8 @@
 
 	window.addEventListener('hashchange', applyHash);
 	window.addEventListener('resize', function () {
-		var actions = [];
-		$$('pre[data-line]').forEach(function (pre) {
-			actions.push(highlightLines(pre));
+		var actions = $$('pre[data-line]').map(function (pre) {
+			return highlightLines(pre);
 		});
 		actions.forEach(callFunction);
 	});

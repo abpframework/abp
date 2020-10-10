@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {

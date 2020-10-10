@@ -162,6 +162,41 @@ This example class inherits from the `IdentityUserManager` [domain service](Doma
 
 Check the [localization system](Localization.md) to learn how to localize the error messages.
 
+### Example: Overriding a Controller
+
+````csharp
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.Account;
+using Volo.Abp.DependencyInjection;
+
+namespace MyProject.Controllers
+{
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(AccountController))]
+    public class MyAccountController : AccountController
+    {
+        public MyAccountController(IAccountAppService accountAppService)
+            : base(accountAppService)
+        {
+
+        }
+
+        public override async Task SendPasswordResetCodeAsync(
+            SendPasswordResetCodeDto input)
+        {
+            Logger.LogInformation("Your custom logic...");
+
+            await base.SendPasswordResetCodeAsync(input);
+        }
+    }
+}
+````
+
+This example replaces the `AccountController` (An API Controller defined in the [Account Module](Modules/Account.md)) and overrides the `SendPasswordResetCodeAsync` method.
+
+**`[ExposeServices(typeof(AccountController))]` is essential** here since it registers this controller for the `AccountController` in the dependency injection system. `[Dependency(ReplaceServices = true)]` is also recommended to clear the old registration (even the ASP.NET Core DI system selects the last registered one).
+
 ### Overriding Other Classes
 
 Overriding controllers, framework services, view component classes and any other type of classes registered to dependency injection can be overridden just like the examples above.

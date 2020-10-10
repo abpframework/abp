@@ -443,7 +443,7 @@ function configureRoutes(routes: RoutesService) {
 * `order` is the order of the menu item.
 * `layout` is the layout of the BooksModule's routes (there are three types of pre-defined layouts: `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty`).
 
-For more information, see the [RoutesService document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
+For more information, see the [RoutesService document](../UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
 ### Service Proxy Generation
 
@@ -643,7 +643,7 @@ Open the `Books.razor` and replace the content as the following:
 </Card>
 ````
 
-> If you see some syntax errors, you can ignore them if your application property built and run. Visual Studio still has some bugs with Blazor.
+> If you see some syntax errors, you can ignore them if your application properly built and run. Visual Studio still has some bugs with Blazor.
 
 * Inherited from the `BlazoriseCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
 * `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base blass.

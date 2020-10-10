@@ -63,12 +63,5 @@ namespace Volo.Docs.Admin
         {
             await _documentAdminAppService.ReindexAsync(documentId);
         }
-
-        [HttpDelete]
-        [Route("DeleteDocumentFromDatabase")]
-        public async Task DeleteFromDatabaseAsync(Guid documentId)
-        {
-            await _documentAdminAppService.DeleteFromDatabaseAsync(documentId);
-        }
     }
 }

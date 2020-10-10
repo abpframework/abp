@@ -39,6 +39,8 @@
 		var linkCopy = document.createElement('button');
 		linkCopy.textContent = 'Copy';
 
+		var element = env.element;
+
 		if (!ClipboardJS) {
 			callbacks.push(registerClipboard);
 		} else {
@@ -50,7 +52,7 @@
 		function registerClipboard() {
 			var clip = new ClipboardJS(linkCopy, {
 				'text': function () {
-					return env.code;
+					return element.textContent;
 				}
 			});
 
