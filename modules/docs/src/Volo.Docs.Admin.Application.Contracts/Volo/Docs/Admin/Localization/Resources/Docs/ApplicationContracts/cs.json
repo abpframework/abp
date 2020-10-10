@@ -43,7 +43,6 @@
     "RemovedFromCache": "Odebráno z mezipaměti",
     "RemoveFromCacheConfirmation": "Opravdu chcete tuto položku odebrat z mezipaměti?",
     "ReIndexDocumentConfirmation": "Opravdu chcete tuto položku reindexovat?",
-    "DeleteDocumentFromDbConfirmation": "Opravdu chcete tuto položku odstranit z databáze?",
     "DeleteFromDatabase": "Odstranit z databáze",
     "Deleted": "Vymazáno",
     "Search": "Vyhledávání",
