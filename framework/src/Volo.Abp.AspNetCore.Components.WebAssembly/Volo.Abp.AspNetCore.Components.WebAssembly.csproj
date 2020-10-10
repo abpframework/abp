@@ -22,6 +22,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.6" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     </ItemGroup>
 
 </Project>
