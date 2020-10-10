@@ -8,12 +8,12 @@ namespace Volo.Abp.Domain.Entities.Caching
     {
         IDistributedCache<TCacheItem> InternalCache { get; }
 
-        TCacheItem this[TKey id] { get; }
+        TCacheItem this[TKey key] { get; }
 
         string CacheName { get; }
 
-        TCacheItem Get(TKey id);
+        TCacheItem Get(TKey key);
 
-        Task<TCacheItem> GetAsync(TKey id);
+        Task<TCacheItem> GetAsync(TKey key);
     }
 }

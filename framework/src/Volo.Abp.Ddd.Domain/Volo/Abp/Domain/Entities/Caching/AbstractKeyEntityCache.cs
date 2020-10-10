@@ -13,7 +13,7 @@ namespace Volo.Abp.Domain.Entities.Caching
         where TEntity : class, IEntity
         where TCacheItem : class
     {
-        public TCacheItem this[TKey id] => Get(id);
+        public TCacheItem this[TKey key] => Get(key);
 
         public string CacheName { get; }
 
@@ -33,14 +33,14 @@ namespace Volo.Abp.Domain.Entities.Caching
             CacheName = cacheName ?? GenerateDefaultCacheName();
         }
 
-        public virtual TCacheItem Get(TKey id)
+        public virtual TCacheItem Get(TKey key)
         {
-            return InternalCache.GetOrAdd(GetCacheKey(id), () => GetCacheItemFromDataSource(id));
+            return InternalCache.GetOrAdd(GetCacheKey(key), () => GetCacheItemFromDataSource(key));
         }
 
-        public virtual async Task<TCacheItem> GetAsync(TKey id)
+        public virtual async Task<TCacheItem> GetAsync(TKey key)
         {
-            return await InternalCache.GetOrAddAsync(GetCacheKey(id), async () => await GetCacheItemFromDataSourceAsync(id));
+            return await InternalCache.GetOrAddAsync(GetCacheKey(key), async () => await GetCacheItemFromDataSourceAsync(key));
         }
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<TEntity> eventData)
@@ -48,23 +48,26 @@ namespace Volo.Abp.Domain.Entities.Caching
             await InternalCache.RemoveAsync(GetCacheKey(eventData.Entity));
         }
 
-        protected virtual TCacheItem GetCacheItemFromDataSource(TKey id)
+        protected virtual TCacheItem GetCacheItemFromDataSource(TKey key)
         {
-            return MapToCacheItem(GetEntityFromDataSource(id));
+            return MapToCacheItem(GetEntityFromDataSource(key));
         }
 
-        protected abstract TEntity GetEntityFromDataSource(TKey id);
+        protected abstract TEntity GetEntityFromDataSource(TKey key);
 
-        protected virtual async Task<TCacheItem> GetCacheItemFromDataSourceAsync(TKey id)
+        protected virtual async Task<TCacheItem> GetCacheItemFromDataSourceAsync(TKey key)
         {
-            return MapToCacheItem(await GetEntityFromDataSourceAsync(id));
+            return MapToCacheItem(await GetEntityFromDataSourceAsync(key));
         }
 
-        protected abstract Task<TEntity> GetEntityFromDataSourceAsync(TKey id);
+        protected abstract Task<TEntity> GetEntityFromDataSourceAsync(TKey key);
 
-        protected abstract string GetCacheKey(TKey id);
+        protected abstract string GetCacheKey(TKey key);
 
-        protected abstract string GetCacheKey(TEntity entity);
+        protected virtual string GetCacheKey(TEntity entity)
+        {
+            return string.Join("", entity.GetKeys());
+        }
 
         protected virtual TCacheItem MapToCacheItem(TEntity entity)
         {
