@@ -18,12 +18,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Content
             return typeof(IRemoteStreamContent).IsAssignableFrom(type);
         }
 
-        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
+        public async override Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
         {
-            var httpContext = context.HttpContext;
-            var remoteStream = context.Object as IRemoteStreamContent;
+            var remoteStream = (IRemoteStreamContent)context.Object;
             using (var stream = remoteStream.GetStream())
-                await stream.CopyToAsync(httpContext.Response.Body);
+            {
+                await stream.CopyToAsync(context.HttpContext.Response.Body);
+            }
         }
     }
 }

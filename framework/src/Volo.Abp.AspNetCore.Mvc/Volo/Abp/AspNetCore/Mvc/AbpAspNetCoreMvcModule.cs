@@ -38,7 +38,6 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
-using Volo.Abp.AspNetCore.Mvc.Content;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -177,8 +176,6 @@ namespace Volo.Abp.AspNetCore.Mvc
             Configure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.AddAbp(context.Services);
-                mvcOptions.InputFormatters.Insert(0, new RemoteStreamContentInputFormatter());
-                mvcOptions.OutputFormatters.Insert(0, new RemoteStreamContentOutputFormatter());
             });
 
             Configure<AbpEndpointRouterOptions>(options =>

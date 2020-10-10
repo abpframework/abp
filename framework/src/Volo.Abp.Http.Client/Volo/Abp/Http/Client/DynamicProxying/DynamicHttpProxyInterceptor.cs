@@ -109,20 +109,19 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             if (typeof(T) == typeof(IRemoteStreamContent))
             {
-                /*returning a class that holds a reference to response 
-                 * content just to be sure that GC does not dispose of 
-                 * it before we finish doing our work with the stream*/
+                /* returning a class that holds a reference to response
+                 * content just to be sure that GC does not dispose of
+                 * it before we finish doing our work with the stream */
                 return (T)((object)new ReferencedRemoteStreamContent(await responseContent.ReadAsStreamAsync(), responseContent));
             }
-            else
-            {
-                var stringContent = await responseContent.ReadAsStringAsync();
 
-                if (typeof(T) == typeof(string))
-                    return (T)((object)stringContent);
-                return JsonSerializer.Deserialize<T>(await responseContent.ReadAsStringAsync());
+            var stringContent = await responseContent.ReadAsStringAsync();
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)stringContent;
             }
 
+            return JsonSerializer.Deserialize<T>(await responseContent.ReadAsStringAsync());
         }
 
         private async Task<HttpContent> MakeRequestAsync(IAbpMethodInvocation invocation)
@@ -152,7 +151,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 )
             );
 
-            var response = await client.SendAsync(requestMessage, 
+            var response = await client.SendAsync(requestMessage,
                 HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
                 GetCancellationToken());
 

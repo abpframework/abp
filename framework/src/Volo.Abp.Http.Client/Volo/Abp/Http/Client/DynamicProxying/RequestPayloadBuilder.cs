@@ -7,7 +7,6 @@ using Volo.Abp.Content;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
@@ -23,12 +22,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
 
             body = GenerateFormPostData(action, methodArguments);
-            if (body != null)
-            {
-                return body;
-            }
 
-            return null;
+            return body;
         }
 
         private static HttpContent GenerateBody(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer)
