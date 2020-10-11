@@ -1,0 +1,7 @@
+{
+    "culture": "hu",
+    "texts": {
+      "DisplayName:Abp.Localization.DefaultLanguage": "Alapértelmezett nyelv",
+      "Description:Abp.Localization.DefaultLanguage": "Az alkalmazás alapértelmezett nyelve."
+    }
+  }
