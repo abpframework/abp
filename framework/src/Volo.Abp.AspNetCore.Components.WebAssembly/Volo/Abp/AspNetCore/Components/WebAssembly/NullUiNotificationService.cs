@@ -9,5 +9,19 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
         {
             return Task.CompletedTask;
         }
+
+        public Task Success(string message)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task Warn(string message)
+        {
+            return Task.CompletedTask;
+        }
+        public Task Error(string message)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

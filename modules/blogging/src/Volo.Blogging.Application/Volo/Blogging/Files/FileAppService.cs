@@ -34,7 +34,7 @@ namespace Volo.Blogging.Files
         {
             if (input.Bytes.IsNullOrEmpty())
             {
-                ThrowValidationException("Bytes can not be null or empty!", "Bytes");
+                ThrowValidationException("Bytes of file can not be null or empty!", "Bytes");
             }
 
             if (input.Bytes.Length > BloggingWebConsts.FileUploading.MaxFileSize)
@@ -44,7 +44,7 @@ namespace Volo.Blogging.Files
 
             if (!ImageFormatHelper.IsValidImage(input.Bytes, FileUploadConsts.AllowedImageUploadFormats))
             {
-                throw new UserFriendlyException("Not a valid image format!");
+                throw new UserFriendlyException("Invalid image format!");
             }
 
             var uniqueFileName = GenerateUniqueFileName(Path.GetExtension(input.Name));

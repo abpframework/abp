@@ -376,7 +376,7 @@ Assume that you need to add the Google Analytics script to the layout (that will
 
 ![bookstore-google-analytics-view-component](../../images/bookstore-google-analytics-view-component.png)
 
-**NotificationViewComponent.cs**
+**GoogleAnalyticsViewComponent.cs**
 
 ````csharp
 public class GoogleAnalyticsViewComponent : AbpViewComponent
@@ -441,7 +441,7 @@ Layout system allows themes to define standard, named layouts and allows any pag
 * "**Account**": This layout is used by login, register and other similar pages. It is used for the pages under the `/Pages/Account` folder by default.
 * "**Empty**": Empty and minimal layout.
 
-These names are defined in the `StandardLayouts` class as constants. You can definitely create your own layouts, but these are standard layout names and implemented by all the themes out of the box.
+These names are defined in the `StandardLayouts` class as constants. You can definitely create your own layouts, but these are the standard layout names and implemented by all the themes out of the box.
 
 #### Layout Location
 

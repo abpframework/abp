@@ -144,7 +144,7 @@ namespace MyCompanyName.MyProjectName
                 .AddAbpOpenIdConnect("oidc", options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
+                    options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                     options.ClientId = configuration["AuthServer:ClientId"];

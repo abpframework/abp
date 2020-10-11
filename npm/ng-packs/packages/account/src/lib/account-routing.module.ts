@@ -11,7 +11,6 @@ import { ManageProfileComponent } from './components/manage-profile/manage-profi
 import { RegisterComponent } from './components/register/register.component';
 import { eAccountComponents } from './enums/components';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
-import { ManageProfileGuard } from './guards/manage-profile.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -44,7 +43,7 @@ const routes: Routes = [
       {
         path: 'manage-profile',
         component: ReplaceableRouteContainerComponent,
-        canActivate: [AuthGuard, ManageProfileGuard],
+        canActivate: [AuthGuard],
         data: {
           replaceableComponent: {
             key: eAccountComponents.ManageProfile,

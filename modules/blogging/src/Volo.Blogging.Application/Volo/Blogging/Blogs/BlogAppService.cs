@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Blogging.Blogs.Dtos;
@@ -28,6 +29,8 @@ namespace Volo.Blogging.Blogs
 
         public async Task<BlogDto> GetByShortNameAsync(string shortName)
         {
+            Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
+
             var blog = await _blogRepository.FindByShortNameAsync(shortName);
 
             if (blog == null)

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
@@ -47,6 +48,17 @@ namespace System
         public static bool IsIn<T>(this T item, params T[] list)
         {
             return list.Contains(item);
+        }
+
+        /// <summary>
+        /// Check if an item is in the given enumerable.
+        /// </summary>
+        /// <param name="item">Item to check</param>
+        /// <param name="items">Items</param>
+        /// <typeparam name="T">Type of the items</typeparam>
+        public static bool IsIn<T>(this T item, IEnumerable<T> items)
+        {
+            return items.Contains(item);
         }
 
         /// <summary>

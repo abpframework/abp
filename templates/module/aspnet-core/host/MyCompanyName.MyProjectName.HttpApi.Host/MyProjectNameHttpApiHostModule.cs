@@ -109,7 +109,7 @@ namespace MyCompanyName.MyProjectName
                 .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
+                    options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                     options.Audience = "MyProjectName";
                 });
 
