@@ -58,11 +58,11 @@ To demonstrate the usage, we are creating a simple Razor Page, named `ProductInf
 **ProductInfoModalModel.cshtml.cs Content:**
 
 ```csharp
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace MyProject.Web.Pages.Products
 {
-    public class ProductInfoModalModel : PageModel
+    public class ProductInfoModalModel : AbpPageModel
     {
         public string ProductName { get; set; }
 
@@ -77,17 +77,21 @@ namespace MyProject.Web.Pages.Products
 }
 ```
 
+You can surely get the product info from a database or API. We are setting the properties hard-coded for the sake of simplicity,
+
 ### Defining the Modal Manager
 
-Once you have a modal, you can open it in any page.
+Once you have a modal, you can open it in any page using some simple JavaScript code.
 
-First, create an `abp.ModalManager` object by setting the `viewUrl`:
+First, create an `abp.ModalManager` object by setting the `viewUrl`, in the JavaScript file of the page that will use the modal:
 
 ````js
 var productInfoModal = new abp.ModalManager({
     viewUrl: '/Products/ProductInfoModal'
 });
 ````
+
+> If you only need to specify the `viewUrl`, you can directly pass it to the `ModalManager` constructor, as a shortcut. Example: `new abp.ModalManager('/Products/ProductInfoModal');`
 
 ### Opening the Modal
 
@@ -110,5 +114,183 @@ The resulting modal will be like that:
 ![modal-example-product-info](../../../images/modal-example-product-info.png)
 
 ## Modals with Forms
+
+`abpModalManager` handles various common tasks (described in the introduction) when you want to use a form inside the modal.
+
+### Example Modal with Form
+
+This section shows an example form to create a new product.
+
+#### Creating the Razor Page
+
+For this example, creating a new Razor Page, named `ProductCreateModal.cshtml`, under the `/Pages/Products` folder:
+
+![product-create-modal-page-on-rider](../../../images/product-create-modal-page-on-rider.png)
+
+**ProductCreateModal.cshtml Content:**
+
+````html
+@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model MyProject.Web.Pages.Products.ProductCreateModalModel
+@{
+    Layout = null;
+}
+<form method="post" action="@Url.Page("/Products/ProductCreateModal")">
+    <abp-modal>
+        <abp-modal-header title="Create New Product"></abp-modal-header>
+        <abp-modal-body>
+            <abp-input asp-for="Product.Name"/>
+            <abp-input asp-for="Product.Description"/>
+            <abp-input asp-for="Product.ReleaseDate"/>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@AbpModalButtons.Save | @AbpModalButtons.Cancel"></abp-modal-footer>
+    </abp-modal>
+</form>
+````
+
+* The `abp-modal` has been wrapped by the `form`. This is needed to place the `Save` and the `Cancel` buttons into the form. In this way, the `Save` button acts as the `submit` button for the `form`.
+* Used the [abp-input tag helpers](../Tag-Helpers/Form-Elements.md) to simplify to create the form elements. Otherwise, you need to write more HTML.
+
+**ProductCreateModal.cshtml.cs Content:**
+
+```csharp
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+
+namespace MyProject.Web.Pages.Products
+{
+    public class ProductCreateModalModel : AbpPageModel
+    {
+        [BindProperty]
+        public PoductCreationDto Product { get; set; }
+
+        public async Task OnGetAsync()
+        {
+            //TODO: Get logic, if available
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            //TODO: Save the Product...
+
+            return NoContent();
+        }
+    }
+}
+```
+
+* This is a simple `PageModal` class. The `[BindProperty]` make the form binding to the model when you post (submit) the form; The standard ASP.NET Core system.
+* `OnPostAsync` returns `NoContent` (this method is defined by the base `AbpPageModel` class). Because we don't need to a return value in the client side, after the form post operation.
+
+**PoductCreationDto:**
+
+`ProductCreateModalModel` uses a `PoductCreationDto` class defined as shown below:
+
+````csharp
+using System;
+using System.ComponentModel.DataAnnotations;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+
+namespace MyProject.Web.Pages.Products
+{
+    public class PoductCreationDto
+    {
+        [Required]
+        [StringLength(128)]
+        public string Name { get; set; }
+        
+        [TextArea(Rows = 4)]
+        [StringLength(2000)]
+        public string Description { get; set; }
+        
+        [DataType(DataType.Date)]
+        public DateTime ReleaseDate { get; set; }
+    }
+}
+````
+
+* `abp-input` Tag Helper can understand the data annotation attributes and uses them to shape and validate the form elements. See the [abp-input tag helpers](../Tag-Helpers/Form-Elements.md) document to learn more.
+
+#### Defining the Modal Manager
+
+Again, create an `abp.ModalManager` object by setting the `viewUrl`, in the JavaScript file of the page that will use the modal:
+
+````js
+var productCreateModal = new abp.ModalManager({
+    viewUrl: '/Products/ProductCreateModal'
+});
+````
+
+#### Opening the Modal
+
+Then open the modal whenever you need:
+
+````js
+productCreateModal.open();
+````
+
+You typically want to open the modal when something happens; For example, when the user clicks a button:
+
+````js
+$('#OpenProductCreateModal').click(function(){
+    productCreateModal.open();
+});
+````
+
+So, the complete code will be something like that (assuming you have a `button` with `id` is `OpenProductCreateModal` on the view side):
+
+```js
+$(function () {
+
+    var productCreateModal = new abp.ModalManager({
+        viewUrl: '/Products/ProductCreateModal'
+    });
+
+    $('#OpenProductCreateModal').click(function () {
+        productCreateModal.open();
+    });
+
+});
+```
+
+The resulting modal will be like that:
+
+![modal-example-product-create](../../../images/modal-example-product-create.png)
+
+#### Saving the Modal
+
+When you click to the `Save` button, the form is posted to the server. If server returns a success response, the modal is closed. Otherwise, it shows the error message returned from the server.
+
+> You can register to the events to be informed when form is saved or modal is closed. See the *Modal Manager Reference* section below.
+
+#### Canceling the Modal
+
+If you click to the Cancel button with some changes made but not saved, you get such a warning message:
+
+![modal-manager-cancel-warning](../../../images/modal-manager-cancel-warning.png)
+
+### Form Validation
+
+`ModalManager` automatically triggers the form validation when you click to the `Save` button or hit the `Enter` key on the form:
+
+![modal-manager-validation](../../../images/modal-manager-validation.png)
+
+See the [Forms & Validation document](../Forms-Validation.md) to learn more about the validation.
+
+## Modal Manager Reference
+
+TODO
+
+### Options
+
+TODO
+
+### Functions
+
+TODO
+
+### Events
 
 TODO
