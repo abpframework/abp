@@ -17,3 +17,17 @@ var requiredLength = abp.setting.getInt('Abp.Identity.Password.RequiredLength');
 var requireDigit = abp.setting.getBoolean('Abp.Identity.Password.RequireDigit');
 ````
 
+## All Values
+
+`abp.setting.values` can be used to obtain all the setting values as an object where the object properties are setting names and property values are the setting values.
+
+An example value of this object is shown below:
+
+````js
+{
+  Abp.Localization.DefaultLanguage: "en",
+  Abp.Timing.TimeZone: "UTC",
+  ...
+}
+````
+
