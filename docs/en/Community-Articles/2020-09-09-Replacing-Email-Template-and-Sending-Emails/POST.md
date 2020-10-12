@@ -14,7 +14,7 @@ Hi, in this step by step article, we will send an email by using standard email 
 
 > ABP Framework offers startup templates to get into the business faster. 
 
-In this article, I will create a new startup template and perform the operations on this template. But if you have already a project you don't need to create a new startup template, you can implement the following steps to your existing project. (These steps can be applied to any project. (MVC, Angular etc.))
+In this article, I will create a new startup template and perform the operations on this template. But if you already have a project you don't need to create a new startup template, you can implement the following steps to your existing project. (These steps can be applied to any project. (MVC, Angular etc.))
 
 > If you have already a project you can skip this section.
 
@@ -110,37 +110,15 @@ namespace TemplateReplace.Emailing
 
 ### Step - 2 (Configuring Email Settings)
 
-* Now, we need to configure some email settings by following [settings documentation](https://docs.abp.io/en/abp/latest/Settings). For achieve this, create a class named `EmailSettingProvider` in `Emailing` folder and set the content as below.
+* Now, we need to configure some email settings by following [settings documentation](https://docs.abp.io/en/abp/latest/Settings#setting-values-in-the-application-configuration). For achieve this, open the `appsettings.json` file under `TemplateReplace.Web` and configure your email settings in **settings** section like below.
 
-```csharp
-using Volo.Abp.Emailing;
-using Volo.Abp.Settings;
+![appsettings.json](settings.jpg)
 
-namespace TemplateReplace.Emailing
-{
-    public class EmailSettingProvider : SettingDefinitionProvider
-    {
-        public override void Define(ISettingDefinitionContext context)
-        {
-            //Google's SMTP settings:
-            context.Add(
-                new SettingDefinition(EmailSettingNames.Smtp.Host, "smtp.gmail.com"),
-                new SettingDefinition(EmailSettingNames.Smtp.Port, "587"),
-                new SettingDefinition(EmailSettingNames.Smtp.UserName, "your_email@gmail.com"), //smtp username: your email address
-                new SettingDefinition(EmailSettingNames.Smtp.Password, "your_password", isEncrypted: false), //smtp password: your email password to auth
-                new SettingDefinition(EmailSettingNames.Smtp.EnableSsl, "true"),
-                new SettingDefinition(EmailSettingNames.Smtp.UseDefaultCredentials, "false") //set as false to auth
-            );
-        }
-    }
-}
-```
-
-* ABP was designed to be modular, so different modules can have different settings. A module must create a class derived from the `SettingDefinitionProvider` in order to define its settings. Therefore in here we created a class named `EmailSettingProvider` and inherit from `SettingDefinitionProvider` to define email settings.
-
-* Here, I used Google's SMTP settings to send emails via Gmail. You can change these setting values by your need. It's a good idea to define a const string for a setting name instead of using a magic string. The ABP framework has a class named `EmailSettingNames`, we can just change the values of these settings by using these pre-defined class properties as key.
+* Here, I used Google's SMTP settings to send emails via Gmail. You can change these setting values by your need. 
 
 > **Note:** If you want to use Google's SMTP server settings and send emails via Gmail, you should confirm [this](https://myaccount.google.com/u/0/lesssecureapps).
+
+### Step - 3
 
 * After that we need to open `TemplateReplaceDomainModule.cs` file and change its contents as below to sending real-time emails.
 
@@ -178,6 +156,13 @@ namespace TemplateReplace
     )]
     public class TemplateReplaceDomainModule : AbpModule
     {
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var settingManager = context.ServiceProvider.GetService<SettingManager>();
+            //encrypts the password on set and decrypts on get
+            settingManager.SetGlobalAsync(EmailSettingNames.Smtp.Password, "your_password");
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpMultiTenancyOptions>(options =>
@@ -194,25 +179,23 @@ namespace TemplateReplace
 
 ```
 
-* `NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the standard log system, rather than actually sending the emails. This class can be useful especially in development time where you generally don't want to send real emails. Therefore ABP framework defined this by default. But we want to send real emails, so we must remove these lines or we must take it to the comment line.
+* `NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the standard log system, rather than actually sending the emails. This class can be useful especially in development time where you generally don't want to send real emails. Therefore ABP framework defined this by default. But in our case we want to send real emails, so we must remove these lines or we must take it to the comment line.
 
-* The last thing we need to do is delete the default email settings from `appsettings.json` file in `TemplateReplace.Web`.
+* `Abp.Mailing.Smtp.Password` must be an encrypted value. Therefore we used `SettingManager` in here to set the password. It internally **encrypts** the values on set and **decrypts** on get.
 
-![appsettings.json](settings.jpg)
+* After all these steps, whenever we want to send an email, we can do it by using our `EmailService` class. We can inject this class and invoke the `SendAsync` method to sending email where its needed. 
 
-> **Note:** In this article, we defined email settings in `EmailSettingProvider` class, but these settings could be defined in `appsettings.json` file. For more details about this, please check the [document](https://docs.abp.io/en/abp/latest/Settings#setting-values-in-the-application-configuration).
-
-* After all of these steps, when we send an email we should see the following template.
+After sending the email we should see the template like below.
 
 ![email-message](message.jpg)
 
-### Step - 3
+### Step - 4 (Defining New Template)
 
 * So far we've sent mail by using standard email template of ABP. But we may want to replace the email template with the new one. We can achieve this by following the `Text Templating` [documentation](https://docs.abp.io/en/abp/latest/Text-Templating#replacing-the-existing-templates).
 
 * In this article, I will create a email template by using free template generator named **Bee**. You can reach the free templates from [here](https://beefree.io/templates/free/).
 
-* When we find a template for our purpose, we can hover the link and click the get started button to edit the template. (I chose a template named "gdpr".)
+* When we find a template for our purpose, we can hover the link and click the **get started** button to edit the template. (I chose a template named "gdpr".)
 
 * Here, you can edit your template as below. (You can delete or add sections, edit texts, and so on.)
 
@@ -469,11 +452,13 @@ namespace TemplateReplace
 
 ```
 
-* And now when we want to send a new email, we should see our newly defined template as the message like below.
+* And now when we send a new email, we should see our newly defined template as the message like below.
 
 ![email-last](email-last.jpg)
 
 ## Text Template Management  
+
+* Generally, more than one e-mail is required in applications. We create email templates for **"password changes"** or **"welcome"** etc in our applications. In such cases, it is necessary to create different templates for each mail. ABP Commercial allows us to perform these operations on UI in a simple way. Text Template Management provides UI to easily create and manage email templates.
 
 ![template-definitions](template-definitions.png)
 
