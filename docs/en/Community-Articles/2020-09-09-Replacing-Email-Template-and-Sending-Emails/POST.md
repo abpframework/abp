@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Hi, in this step by step article, we will send an email by using standard email template and then we will replace the standard email template with our new created template, thanks to [Text Templating System](https://docs.abp.io/en/abp/latest/Text-Templating#replacing-the-existing-templates) and [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System).
+Hi, in this step by step article, we will send an email by using standard email template and then we will replace the standard email template with our new created template, thanks to [Text Templating System](https://docs.abp.io/en/abp/latest/Text-Templating#replacing-the-existing-templates) and [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System). Let's start by explaining what these systems do.
 
 * ABP framework provides a strong and flexible [Text Templating System](https://docs.abp.io/en/abp/latest/Text-Templating). So, we can use the text templating system to create dynamic email contents on a template and a model.
 
@@ -194,7 +194,7 @@ namespace TemplateReplace
 
 ```
 
-* `NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the standard log system, rather than actually sending the emails. This class can be useful especially in development time where you generally don't want to send real emails. Therefore ABP framework defined this by default. But we want to send real emails, so we must remove these lines or we should take it to the comment line.
+* `NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the standard log system, rather than actually sending the emails. This class can be useful especially in development time where you generally don't want to send real emails. Therefore ABP framework defined this by default. But we want to send real emails, so we must remove these lines or we must take it to the comment line.
 
 * The last thing we need to do is delete the default email settings from `appsettings.json` file in `TemplateReplace.Web`.
 
@@ -210,68 +210,166 @@ namespace TemplateReplace
 
 * So far we've sent mail by using standard email template of ABP. But we may want to replace the email template with the new one. We can achieve this by following the `Text Templating` [documentation](https://docs.abp.io/en/abp/latest/Text-Templating#replacing-the-existing-templates).
 
-* In this article, I will create a email template by using free template generator named `Bee`. You can reach the free templates from [here](https://beefree.io/templates/free/).
+* In this article, I will create a email template by using free template generator named **Bee**. You can reach the free templates from [here](https://beefree.io/templates/free/).
 
-* After choosing our free template, we can create a new **email template**. So, create a folder named `Templates` under `Emailing` folder in `TemplateReplace.Domain` and add `EmailTemplate.tpl` file inside of it. And copy-paste the below content or your free template's content.
+* When we find a template for our purpose, we can hover the link and click the get started button to edit the template. (I chose a template named "gdpr".)
+
+* Here, you can edit your template as below. (You can delete or add sections, edit texts, and so on.)
+
+![bee](bee.gif)
+
+> **Note:** After editing our template, we need to export it to reach our created template's content. You can see the **export** button top-right of the template editing page.
+
+* After choosing and editing our free template, we can create a new **email template** in our project. For this, create a folder named `Templates` under `Emailing` folder in `TemplateReplace.Domain` and add `EmailTemplate.tpl` file inside of it. And copy-paste the below content or your template's content.
 
 ```tpl
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        a {
-          text-decoration: none !important;
-        }
-        td img {
-            color: #0f3462;
-        }
-        
-        table {
-            max-width: 650px;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <table border="0" align="center" cellspacing="0" cellpadding="0" bgcolor="white" class="email-template">
-        <tr>
-            <td>
-                <table border="0" cellspacing="0" cellpadding="0" style="color:#0f3462; font-family: sans-serif;">
-                    <tr>
-                        <td>
-                            <h2 style="text-align:center; margin: 0px; padding-bottom: 25px; margin-top: 25px;">
-                                <span style="color:lightcoral"></span>
-                            </h2>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center;">
-                            <h1 style="margin: 0px;padding-bottom: 25px; color: #E90052">ABP Community</h1>
-                            <h2 style="margin: 0px;padding-bottom: 25px;font-size:22px;">Share your experiences with the ABP Framework!</h2>
-                            <p style=" margin: 0px 40px;padding-bottom: 25px;line-height: 2; font-size: 15px;">
-                                ABP is an <a href="https://github.com/abpframework">open source</a> and community driven project. This guide is aims to help anyone wants to contribute to the project.
-                            </p>
-                            <p style=" margin: 0px 32px;padding-bottom: 25px;line-height: 2; font-size: 15px;">
-                                If you want to write articles or "how to" guides related to the ABP Framework and ASP.NET Core, please submit your article to the <a href="https://community.abp.io/">community.abp.io</a> web site.
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" style="background-color:#E90052; color:white; padding:15px 97px; outline: none; display: block; margin: auto; border-radius: 31px;
-                                    font-weight: bold; margin-top: 25px; margin-bottom: 25px; border: none; text-transform:uppercase; ">
-                                <a style="text-decoration: none; color:white" href="https://community.abp.io/articles/submit">Contribute</a>
-                            </button>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</div>
-</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
+   <head>
+      <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+      <meta content="width=device-width" name="viewport"/>
+      <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+      <style type="text/css">
+         body {
+         margin: 0;
+         padding: 0;
+         }
+         table,
+         td,
+         tr {
+         vertical-align: top;
+         border-collapse: collapse;
+         }
+         * {
+         line-height: inherit;
+         }
+         a[x-apple-data-detectors=true] {
+         color: inherit !important;
+         text-decoration: none !important;
+         }
+      </style>
+      <style id="media-query" type="text/css">
+         @media (max-width: 670px) {
+         .block-grid,
+         .col {
+         min-width: 320px !important;
+         max-width: 100% !important;
+         display: block !important;
+         }
+         .block-grid {
+         width: 100% !important;
+         }
+         .col {
+         width: 100% !important;
+         }
+         .col>div {
+         margin: 0 auto;
+         }
+         img.fullwidth,
+         img.fullwidthOnMobile {
+         max-width: 100% !important;
+         }
+         .no-stack .col {
+         min-width: 0 !important;
+         display: table-cell !important;
+         }
+         .no-stack.two-up .col {
+         width: 50% !important;
+         }
+         .no-stack .col.num2 {
+         width: 16.6% !important;
+         }
+         .no-stack .col.num3 {
+         width: 25% !important;
+         }
+         .no-stack .col.num4 {
+         width: 33% !important;
+         }
+         .no-stack .col.num5 {
+         width: 41.6% !important;
+         }
+         .no-stack .col.num6 {
+         width: 50% !important;
+         }
+         .no-stack .col.num7 {
+         width: 58.3% !important;
+         }
+         .no-stack .col.num8 {
+         width: 66.6% !important;
+         }
+         .no-stack .col.num9 {
+         width: 75% !important;
+         }
+         .no-stack .col.num10 {
+         width: 83.3% !important;
+         }
+         .video-block {
+         max-width: none !important;
+         }
+         .mobile_hide {
+         min-height: 0px;
+         max-height: 0px;
+         max-width: 0px;
+         display: none;
+         overflow: hidden;
+         font-size: 0px;
+         }
+         .desktop_hide {
+         display: block !important;
+         max-height: none !important;
+         }
+         }
+      </style>
+   </head>
+   <body class="clean-body" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; background-color: #3d1554;">
+      <table bgcolor="#3d1554" cellpadding="0" cellspacing="0" class="nl-container" role="presentation" style="table-layout: fixed; vertical-align: top; min-width: 320px; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #3d1554; width: 100%;" valign="top" width="100%">
+         <tbody>
+            <tr style="vertical-align: top;" valign="top">
+               <td style="word-break: break-word; vertical-align: top;" valign="top">
+                  <div style="background-color:transparent;overflow:hidden">
+                     <div class="block-grid" style="min-width: 320px; max-width: 650px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; Margin: 0 auto; width: 100%; background-color: transparent;">
+                        <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+                           <div class="col num12" style="min-width: 320px; max-width: 650px; display: table-cell; vertical-align: top; width: 650px;">
+                              <div style="width:100% !important;">
+                                 <div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:35px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
+                                    <div align="center" class="img-container center autowidth" style="padding-right: 0px;padding-left: 0px;"></div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div style="background-color:transparent;overflow:hidden">
+                     <div class="block-grid" style="min-width: 320px; max-width: 650px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; Margin: 0 auto; width: 100%; background-color: transparent;">
+                        <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+                           <div class="col num12" style="min-width: 320px; max-width: 650px; display: table-cell; vertical-align: top; width: 642px;">
+                              <div style="width:100% !important;">
+                                 <div style="border-top:0px solid transparent; border-left:4px solid #57366E; border-bottom:0px solid transparent; border-right:4px solid #57366E; padding-top:55px; padding-bottom:60px; padding-right: 0px; padding-left: 0px;">
+                                    <div style="color:#fbd711;font-family:Poppins, Arial, Helvetica, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
+                                       <div style="line-height: 1.2; font-size: 12px; color: #fbd711; font-family: Poppins, Arial, Helvetica, sans-serif; mso-line-height-alt: 14px;">
+                                          <p style="font-size: 14px; line-height: 1.2; word-break: break-word; text-align: center; mso-line-height-alt: 17px; margin: 0;"><strong><span style="font-size: 30px;">ABP Community </span></strong></p>
+                                       </div>
+                                    </div>
+                                    <div style="color:#ffffff;font-family:Poppins, Arial, Helvetica, sans-serif;line-height:1.8;padding-top:10px;padding-right:50px;padding-bottom:10px;padding-left:50px;">
+                                       <div style="line-height: 1.8; font-size: 12px; color: #ffffff; font-family: Poppins, Arial, Helvetica, sans-serif; mso-line-height-alt: 22px;">
+                                          <p style="line-height: 1.8; word-break: break-word; font-size: 14px; mso-line-height-alt: 25px; margin: 0;"><span style="font-size: 14px;">Share your experiences with the ABP Framework!</span><br/><span style="font-size: 14px;">ABP is an open source and community driven project. This guide is aims to help anyone wants to contribute to the project.</span></p>
+                                          <p style="line-height: 1.8; word-break: break-word; font-size: 14px; mso-line-height-alt: 25px; margin: 0;"><span style="font-size: 14px;">If you want to write articles or "how to" guides related to the ABP Framework and ASP.NET Core, please submit your article to the community.abp.io web site.</span></p>
+                                       </div>
+                                    </div>
+                                    <div align="center" class="button-container" style="padding-top:12px;padding-right:10px;padding-bottom:12px;padding-left:10px;">
+                                       <a href="http://www.example.com/" style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #000000; background-color: #fbd711; border-radius: 30px; -webkit-border-radius: 30px; -moz-border-radius: 30px; width: auto; width: auto; border-top: 1px solid #fbd711; border-right: 1px solid #fbd711; border-bottom: 1px solid #fbd711; border-left: 1px solid #fbd711; padding-top: 10px; padding-bottom: 10px; font-family: Poppins, Arial, Helvetica, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;" target="_blank"><span style="padding-left:45px;padding-right:45px;font-size:18px;display:inline-block;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span data-mce-style="font-size: 18px; line-height: 36px;" style="font-size: 18px; line-height: 36px;"><strong>Contribute</strong></span></span></span></a>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
 </html>
 ```
 
@@ -371,7 +469,7 @@ namespace TemplateReplace
 
 ```
 
-* And now when we want to send a new email, we should see the our new defined template as the message like below.
+* And now when we want to send a new email, we should see our newly defined template as the message like below.
 
 ![email-last](email-last.jpg)
 
