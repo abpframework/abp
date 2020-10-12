@@ -57,7 +57,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-See Configuration (TODO: link) document for more about the configuration system.
+See [Configuration document](Configuration.md) for more about the configuration system.
 
 #### Pre & Post Configure Services
 
