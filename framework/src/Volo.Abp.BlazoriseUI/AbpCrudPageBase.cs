@@ -318,7 +318,8 @@ namespace Volo.Abp.BlazoriseUI
         {
             await CheckCreatePolicyAsync();
 
-            NewEntity = new TCreateViewModel();
+            NewEntity.ResetState();
+
             CreateModal.Show();
         }
 
