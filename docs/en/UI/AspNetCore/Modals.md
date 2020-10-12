@@ -52,7 +52,7 @@ To demonstrate the usage, we are creating a simple Razor Page, named `ProductInf
 ````
 
 * This page sets the `Layout` to `null` since we will show this as a modal. So, no need to wrap with a layout.
-* It uses [abp-modal tag helper](../Tag-Helpers/Modals.md) to simplify creating the modal HTML code. You can use the standard  Bootstrap modal code if you prefer it.
+* It uses [abp-modal tag helper](Tag-Helpers/Modals.md) to simplify creating the modal HTML code. You can use the standard  Bootstrap modal code if you prefer it.
 
 **ProductInfoModalModel.cshtml.cs Content:**
 
@@ -186,7 +186,7 @@ For this example, creating a new Razor Page, named `ProductCreateModal.cshtml`, 
 ````
 
 * The `abp-modal` has been wrapped by the `form`. This is needed to place the `Save` and the `Cancel` buttons into the form. In this way, the `Save` button acts as the `submit` button for the `form`.
-* Used the [abp-input tag helpers](../Tag-Helpers/Form-Elements.md) to simplify to create the form elements. Otherwise, you need to write more HTML.
+* Used the [abp-input tag helpers](Tag-Helpers/Form-Elements.md) to simplify to create the form elements. Otherwise, you need to write more HTML.
 
 **ProductCreateModal.cshtml.cs Content:**
 
@@ -247,7 +247,7 @@ namespace MyProject.Web.Pages.Products
 }
 ````
 
-* `abp-input` Tag Helper can understand the data annotation attributes and uses them to shape and validate the form elements. See the [abp-input tag helpers](../Tag-Helpers/Form-Elements.md) document to learn more.
+* `abp-input` Tag Helper can understand the data annotation attributes and uses them to shape and validate the form elements. See the [abp-input tag helpers](Tag-Helpers/Form-Elements.md) document to learn more.
 
 #### Defining the Modal Manager
 
@@ -331,7 +331,7 @@ If you don't want such a check & message, you can add `data-check-form-on-close=
 
 ![modal-manager-validation](../../images/modal-manager-validation.png)
 
-See the [Forms & Validation document](../Forms-Validation.md) to learn more about the validation.
+See the [Forms & Validation document](Forms-Validation.md) to learn more about the validation.
 
 ## Modals with Script Files
 
