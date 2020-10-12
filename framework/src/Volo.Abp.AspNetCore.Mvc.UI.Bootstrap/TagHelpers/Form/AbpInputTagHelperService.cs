@@ -260,7 +260,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var label = new TagBuilder("label");
             label.Attributes.Add("for", GetIdAttributeValue(inputTag));
-            label.InnerHtml.Append(TagHelper.Label);
+            label.InnerHtml.AppendHtml(TagHelper.Label);
 
             if (isCheckbox)
             {
