@@ -315,8 +315,17 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         {
             if (b.Metadata.ClrType.IsAssignableTo<IMultiLingualTranslation>())
             {
-                b.HasIndex(nameof(IMultiLingualTranslation.Language))
-                    .IsUnique();
+                if (b.Metadata.ClrType.IsAssignableTo<IMultiTenant>())
+                {
+                    b.HasIndex(nameof(IMultiTenant.TenantId), nameof(IMultiLingualTranslation.Language))
+                        .IsUnique();
+                }
+                else
+                {
+                    b.HasIndex(nameof(IMultiTenant.TenantId))
+                          .IsUnique();
+                }
+
                 b.Property(nameof(IMultiLingualTranslation.Language))
                     .IsRequired()
                     .HasColumnName(nameof(IMultiLingualTranslation.Language));
