@@ -281,18 +281,79 @@ If you click to the Cancel button with some changes made but not saved, you get 
 
 See the [Forms & Validation document](../Forms-Validation.md) to learn more about the validation.
 
-## ModalManager Reference
+## Other Features
+
+### Script URL & Modal Class
 
 TODO
+
+## ModalManager Reference
 
 ### Options
 
-TODO
+Options can be passed when you create a new `ModalManager` object:
+
+````js
+var productInfoModal = new abp.ModalManager({
+    viewUrl: '/Products/ProductInfoModal',
+    //...other options
+});
+````
+
+Here, the list of all available options;
+
+* `viewUrl` (required, `string`): The URL to lazy load the HTML of the modal.
+* `scriptUrl` (optional, `string`): A URL to lazy load a JavaScript file. It is loaded only once, when the modal first opened.
+* `modalClass` (optional, `string`): A JavaScript class defined in the `abp.modals` namespace that can be used to execute code related to the modal.
 
 ### Functions
 
-TODO
+When you create a new `ModalManager` object, you can use its functions to perform operations on the modal. Example:
+
+````js
+var myModal = new abp.ModalManager({
+    //...options
+});
+
+//Open the modal
+myModal.open();
+
+//Close the modal
+myModal.close();
+````
+
+Here, the list of all available functions of the `ModalManager` object;
+
+* `open([args])`: Opens the modal dialog. It can get an `args` object that is converted to query string while getting the `viewUrl` from the server. For example, if `args` is `{ productId: 42 }`, then the `ModalManager` passes `?productId=42` to the end of the `viewUrl` while loading the view from the server.
+* `reopen()`: Opens the modal with the latest provided `args` for the `open()` method. So, it is a shortcut if you want to re-open the modal with the same `args`.
+* `close()`: Closes the modal. The modal HTML is automatically removed from DOM once it has been closed.
+* `getModalId()`: Gets the `id` attribute of the container that contains the view returned from the server. This is a unique id per modal and it doesn't change after you create the `ModalManager`.
+* `getModal()`: Returns the modal wrapper DOM element (the HTML element with the `modal` CSS class) as a JQuery selection, so you can perform any JQuery method on it.
+* `getForm()`: Returns the `form` HTML element  as a JQuery selection, so you can perform any JQuery method on it. It returns `null` if the modal has no form inside it.
+* `getArgs()` Gets the latest arguments object provided while opening the modal.
+* `getOptions()`: Gets the options object passed to the `ModalManager` constructor.
+* `setResult(...)`: Triggers the `onResult` event with the provided arguments. You can pass zero or more arguments those are directly passed to the `onResult` event. This function is generally called by the modal script to notify the page that uses the modal.
 
 ### Events
 
-TODO
+When you create a new `ModalManager` object, you can use its functions register to events of the modal. Examples:
+
+````js
+var myModal = new abp.ModalManager({
+    //...options
+});
+
+myModal.onOpen(function () {
+    console.log('opened the modal...');
+});
+
+myModal.onClose(function () {
+    console.log('closed the modal...');
+});
+````
+
+Here, the list of all available functions to register to events of the `ModalManager` object;
+
+* `onOpen(callback)`: Registers a callback function to get notified once the modal is opened. It is triggered when the modal is completely visible on the UI.
+* `onClose(callback)`: Registers a callback function to get notified once the modal is closed. It is triggered when the modal is completely invisible on the UI.
+* `onResult(callback)`: Registers a callback function that is triggered when the ``setResult(...)` method is called. All the parameters sent to the `setResult` method is passed to the callback.
