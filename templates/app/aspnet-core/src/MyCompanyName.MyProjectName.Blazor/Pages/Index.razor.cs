@@ -45,24 +45,16 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
             return UiMessageService.ErrorAsync( "This is the Error message", "Error" );
         }
 
-        Task OnConfirmTestClicked()
+        async Task OnConfirmTestClicked()
         {
-            return UiMessageService.ConfirmAsync( "Are you sure you want to delete the item?", "Confirm", options =>
+            if ( await UiMessageService.ConfirmAsync( "Are you sure you want to delete the item?", "Confirm", options =>
             {
                 options.CancelButtonText = "Do not delete it";
                 options.ConfirmButtonText = "Yes I'm sure";
-            } )
-                .ContinueWith( result =>
-                 {
-                     if ( result.Result )
-                     {
-                         Console.WriteLine( "Confirmed" );
-                     }
-                     else
-                     {
-                         Console.WriteLine( "Cancelled" );
-                     }
-                 } );
+            } ) )
+            {
+                Console.WriteLine( "Confirmed" );
+            }
         }
 
         [Inject] IUiMessageService UiMessageService { get; set; }
