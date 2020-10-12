@@ -322,7 +322,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
                 }
                 else
                 {
-                    b.HasIndex(nameof(IMultiTenant.TenantId))
+                    b.HasIndex(nameof(IMultiLingualTranslation.Language))
                           .IsUnique();
                 }
 
