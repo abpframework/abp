@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 
 namespace System
 {
@@ -101,6 +102,37 @@ namespace System
             if (condition)
             {
                 action(obj);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Resets all fields of a given object to their default values.
+        /// </summary>
+        /// <typeparam name="T">Type of the object</typeparam>
+        /// <param name="obj">An object</param>
+        /// <param name="customReset">Alternative custom method to reset the values.</param>
+        /// <returns>Returns the original object.</returns>
+        public static T ResetState<T>(this T obj, Action<T> customReset = null)
+        {
+            if (customReset != null)
+            {
+                customReset(obj);
+            }
+            else
+            {
+                var properties = typeof(T).GetProperties();
+
+                foreach (var property in properties)
+                {
+                    if (!property.CanWrite)
+                    {
+                        continue;
+                    }
+
+                    property.SetValue(obj, null);
+                }
             }
 
             return obj;
