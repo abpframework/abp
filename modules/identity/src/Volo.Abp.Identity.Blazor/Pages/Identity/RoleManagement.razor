@@ -78,26 +78,32 @@
 {
     <Modal @ref="CreateModal">
         <ModalBackdrop />
-        <ModalContent IsCentered="true">
+        <ModalContent Centered="true">
             <ModalHeader>
                 <ModalTitle>@L["NewRole"]</ModalTitle>
                 <CloseButton Clicked="CloseCreateModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <EditForm id="IdentityRoleCreateForm" Model="@NewEntity" OnValidSubmit="CreateEntityAsync">
+                <Validations @ref="@ValidationsRef" Mode="ValidationMode.Auto" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.Name">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
                     <Field>
-                        <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                        <TextEdit @bind-text="@NewEntity.Name"/>
+                        <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                        <Check TValue="bool" @bind-Checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
                     </Field>
-                    <Field>
-                        <Check TValue="bool" @bind-checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                        <Check TValue="bool" @bind-checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
-                    </Field>
-                </EditForm>
+                </Validations>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                <Button form="IdentityRoleCreateForm" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+                <Button Color="Color.Primary" Clicked="OnCreateEntityClicked">@L["Save"]</Button>
             </ModalFooter>
         </ModalContent>
     </Modal>
@@ -107,7 +113,7 @@
 {
     <Modal @ref="EditModal">
         <ModalBackdrop />
-        <ModalContent IsCentered="true">
+        <ModalContent Centered="true">
             <ModalHeader>
                 <ModalTitle>@L["Edit"]</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync" />

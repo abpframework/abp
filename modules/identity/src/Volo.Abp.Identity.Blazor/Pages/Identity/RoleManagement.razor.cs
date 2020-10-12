@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlazoriseUI;
@@ -16,6 +17,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected bool HasManagePermissionsPermission { get; set; }
 
         protected bool ShouldShowEntityActions { get; set; }
+
+        protected Validations ValidationsRef { get; set; }
 
         public RoleManagementBase()
         {
@@ -37,6 +40,18 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             ShouldShowEntityActions = HasUpdatePermission ||
                                       HasDeletePermission ||
                                       HasManagePermissionsPermission;
+        }
+
+        protected virtual Task OnCreateEntityClicked()
+        {
+            if ( ValidationsRef.ValidateAll() )
+            {
+                CreateModal.Hide();
+
+                return CreateEntityAsync();
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
