@@ -297,15 +297,33 @@ The resulting modal will be like that:
 
 #### Saving the Modal
 
-When you click to the `Save` button, the form is posted to the server. If server returns a success response, the modal is closed. Otherwise, it shows the error message returned from the server.
+When you click to the `Save` button, the form is posted to the server. If the server returns a **success response**, then the `onResult` event is triggered with some arguments including the server response and the modal is automatically closed.
 
-> You can register to the events to be informed when form is saved or modal is closed. See the *Modal Manager Reference* section below.
+An example callback that logs the arguments passed to the `onResult` method:
+
+````js
+productCreateModal.onResult(function(){
+   console.log(arguments);
+});
+````
+
+If the server returns a failed response, it shows the error message returned from the server and keeps the modal open.
+
+> See the *Modal Manager Reference* section below for other modal events.
 
 #### Canceling the Modal
 
 If you click to the Cancel button with some changes made but not saved, you get such a warning message:
 
 ![modal-manager-cancel-warning](../../images/modal-manager-cancel-warning.png)
+
+If you don't want such a check & message, you can add `data-check-form-on-close="false"` attribute to your `form` element. Example:
+
+````html
+<form method="post"
+      action="@Url.Page("/Products/ProductCreateModal")"
+      data-check-form-on-close="false">
+````
 
 ### Form Validation
 
@@ -315,7 +333,7 @@ If you click to the Cancel button with some changes made but not saved, you get 
 
 See the [Forms & Validation document](../Forms-Validation.md) to learn more about the validation.
 
-## Modals with Script
+## Modals with Script Files
 
 You may need to perform some logic for your modal. To do that, create a JavaScript file like below:
 
