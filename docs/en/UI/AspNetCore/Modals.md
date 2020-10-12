@@ -115,6 +115,40 @@ The resulting modal will be like that:
 
 ![modal-example-product-info](../../images/modal-example-product-info.png)
 
+#### Opening the Modal with Arguments
+
+When you call the `open()` method, `ModalManager` loads the modal HTML by requesting it from the `viewUrl`. You can pass some **query string parameters** to this URL when you open the modal.
+
+**Example: Pass the product id while opening the modal**
+
+````js
+productInfoModal.open({
+    productId: 42
+});
+````
+
+You can add a `productId` parameter to the get method:
+
+````csharp
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+
+namespace MyProject.Web.Pages.Products
+{
+    public class ProductInfoModalModel : AbpPageModel
+    {
+        //...
+
+        public async Task OnGetAsync(int productId) //Add productId parameter
+        {
+            //TODO: Get the product with database with the given productId
+            //...
+        }
+    }
+}
+````
+
+In this way, you can use the `productId` to query the product from a data source.
+
 ## Modals with Forms
 
 `abp.ModalManager` handles various common tasks (described in the introduction) when you want to use a form inside the modal.
