@@ -281,11 +281,83 @@ If you click to the Cancel button with some changes made but not saved, you get 
 
 See the [Forms & Validation document](../Forms-Validation.md) to learn more about the validation.
 
-## Other Features
+## Modals with Script
 
-### Script URL & Modal Class
+You may need to perform some logic for your modal. To do that, create a JavaScript file like below:
 
-TODO
+````js
+abp.modals.ProductInfo = function () {
+
+    function initModal(modalManager, args) {
+        var $modal = modalManager.getModal();
+        var $form = modalManager.getForm();
+
+        $modal.find('h3').css('color', 'red');
+        
+        console.log('initialized the modal...');
+    };
+
+    return {
+        initModal: initModal
+    };
+};
+````
+
+* This code simply adds a `ProductInfo` class into the `abp.modals` namespace. The `ProductInfo` class exposes a single public function: `initModal`.
+* `initModal` method is called by the `ModalManager` once the modal HTML is inserted to DOM and ready for the initialization logic.
+* `modalManager` parameter is the `ModalManager` object related to this modal instance. So, you can use any function on it in your code. See the *ModalManager Reference* section.
+
+Then include this file to the page that you use the modal:
+
+````html
+<abp-script src="/Pages/Products/ProductInfoModal.js"/>
+<abp-script src="/Pages/Products/Index.js"/>
+````
+
+* We've use the `abp-script` Tag Helper here. See the [Bundling & Minification](Bundling-Minification.md) document if you want to understand it. You can use the standard `script` tag. It doesn't matter for this case.
+
+Finally, set the `modalClass` option while creating the `ModalManager` instance:
+
+````js
+var productInfoModal = new abp.ModalManager({
+    viewUrl: '/Products/ProductInfoModal',
+    modalClass: 'ProductInfo' //Matches to the abp.modals.ProductInfo
+});
+````
+
+### Lazy Loading the Script File
+
+Instead of adding the `ProductInfoModal.js` to the page you use the modal, you can configure it to lazy load the script file when the first time the modal is opened.
+
+Example:
+
+````js
+var productInfoModal = new abp.ModalManager({
+    viewUrl: '/Products/ProductInfoModal',
+    scriptUrl: '/Pages/Products/ProductInfoModal.js', //Lazy Load URL
+    modalClass: 'ProductInfo'
+});
+````
+
+* `scriptUrl` is used to set the URL to load the script file of the modal.
+* In this case, you no longer need to include the `ProductInfoModal.js` to the page. It will be loaded on demand.
+
+#### Tip: Bundling & Minification
+
+While lazy loading seems cool at the beginning, it requires an additional call to the server when you first open the modal.
+
+Instead, you can use the [Bundling & Minification](Bundling-Minification.md) system to create a bundle (that is a single and minified file on production) for all the used script files for a page:
+
+````html
+<abp-script-bundle>
+    <abp-script src="/Pages/Products/ProductInfoModal.js"/>
+    <abp-script src="/Pages/Products/Index.js"/>
+</abp-script-bundle>
+````
+
+This is efficient if the script file is not large and frequently opened while users use the page.
+
+Alternatively, you can define the `abp.modals.ProductInfo` class in the page's main JavaScript file if the modal is only and always used in the same page. In this case, you don't need to another external script file at all.
 
 ## ModalManager Reference
 
