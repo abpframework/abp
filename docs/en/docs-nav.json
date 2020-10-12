@@ -395,12 +395,16 @@
           "text": "ASP.NET Core MVC / Razor Pages",
           "items": [
             {
+              "text": "Navigation / Menus",
+              "path": "UI/AspNetCore/Navigation-Menu.md"
+            },
+            {
               "text": "Forms & Validation",
               "path": "UI/AspNetCore/Forms-Validation.md"
             },
             {
-              "text": "Navigation / Menus",
-              "path": "UI/AspNetCore/Navigation-Menu.md"
+              "text": "Modals",
+              "path": "UI/AspNetCore/Modals.md"
             },
             {
               "text": "Page Alerts",
