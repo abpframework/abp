@@ -1,12 +1,12 @@
-# ASP.NET Core MVC / Razor Pages UI: JavaScript Modal Manager
+# ASP.NET Core MVC / Razor Pages UI: Modals
 
-`abp.ModalManager` is used to easily manage a modal dialog in your application.
+While you can continue to use the standard [Bootstrap way](https://getbootstrap.com/docs/4.5/components/modal/) to create, open and manage modals in your applications, ABP Framework provides a **flexible** way to manage modals by **automating common tasks** for you.
 
 **Example: A modal dialog to create a new role entity**
 
-![modal-manager-example-modal](../../../images/modal-manager-example-modal.png)
+![modal-manager-example-modal](../../images/modal-manager-example-modal.png)
 
-While you can always use the standard Bootstrap API (or another library) to create modal dialogs, `abp.ModalManager` provides the following benefits;
+ABP Framework provides the following benefits for such a modal with a form inside it;
 
 * **Lazy loads** the modal HTML into the page and **removes** it from the DOM once its closed. This makes easy to consume a reusable modal dialog. Also, every time you open the modal, it will be a fresh new modal, so you don't have to deal with resetting the modal content.
 * **Auto-focuses** the first input of the form once the modal has been opened.
@@ -15,7 +15,7 @@ While you can always use the standard Bootstrap API (or another library) to crea
 * Automatically **disables the modal buttons** (save & cancel) until the AJAX operation completes.
 * Makes it easy to register a **JavaScript object that is initialized** once the modal has loaded.
 
-So, the `ModalManager` makes you write less code when you deal with the modals, especially the modals with a form inside.
+So, it makes you write less code when you deal with the modals, especially the modals with a form inside.
 
 ## Basic Usage
 
@@ -23,7 +23,7 @@ So, the `ModalManager` makes you write less code when you deal with the modals, 
 
 To demonstrate the usage, we are creating a simple Razor Page, named `ProductInfoModal.cshtml`, under the `/Pages/Products` folder:
 
-![modal-page-on-rider](../../../images/modal-page-on-rider.png)
+![modal-page-on-rider](../../images/modal-page-on-rider.png)
 
 **ProductInfoModal.cshtml Content:**
 
@@ -38,7 +38,7 @@ To demonstrate the usage, we are creating a simple Razor Page, named `ProductInf
     <abp-modal-body>
         <h3>@Model.ProductName</h3>
         <div>
-            <img src="https://acme.com/catalog/acmeindestructo.jpg" />
+            <img src="@Model.ProductImageUrl" />
         </div>
         <p>
             @Model.ProductDescription
@@ -49,7 +49,6 @@ To demonstrate the usage, we are creating a simple Razor Page, named `ProductInf
     </abp-modal-body>
     <abp-modal-footer buttons="Close"></abp-modal-footer>
 </abp-modal>
-
 ````
 
 * This page sets the `Layout` to `null` since we will show this as a modal. So, no need to wrap with a layout.
@@ -68,10 +67,13 @@ namespace MyProject.Web.Pages.Products
 
         public string ProductDescription { get; set; }
 
+        public string ProductImageUrl { get; set; }
+
         public void OnGet()
         {
             ProductName = "Acme Indestructo Steel Ball";
             ProductDescription = "The ACME Indestructo Steel Ball is completely indestructible, there is nothing that can destroy it!";
+            ProductImageUrl = "https://acme.com/catalog/acmeindestructo.jpg";
         }
     }
 }
@@ -81,7 +83,7 @@ You can surely get the product info from a database or API. We are setting the p
 
 ### Defining the Modal Manager
 
-Once you have a modal, you can open it in any page using some simple JavaScript code.
+Once you have a modal, you can open it in any page using some simple **JavaScript** code.
 
 First, create an `abp.ModalManager` object by setting the `viewUrl`, in the JavaScript file of the page that will use the modal:
 
@@ -111,13 +113,13 @@ $('#OpenProductInfoModal').click(function(){
 
 The resulting modal will be like that:
 
-![modal-example-product-info](../../../images/modal-example-product-info.png)
+![modal-example-product-info](../../images/modal-example-product-info.png)
 
 ## Modals with Forms
 
-`abpModalManager` handles various common tasks (described in the introduction) when you want to use a form inside the modal.
+`abp.ModalManager` handles various common tasks (described in the introduction) when you want to use a form inside the modal.
 
-### Example Modal with Form
+### Example Modal with a Form
 
 This section shows an example form to create a new product.
 
@@ -125,7 +127,7 @@ This section shows an example form to create a new product.
 
 For this example, creating a new Razor Page, named `ProductCreateModal.cshtml`, under the `/Pages/Products` folder:
 
-![product-create-modal-page-on-rider](../../../images/product-create-modal-page-on-rider.png)
+![product-create-modal-page-on-rider](../../images/product-create-modal-page-on-rider.png)
 
 **ProductCreateModal.cshtml Content:**
 
@@ -257,7 +259,7 @@ $(function () {
 
 The resulting modal will be like that:
 
-![modal-example-product-create](../../../images/modal-example-product-create.png)
+![modal-example-product-create](../../images/modal-example-product-create.png)
 
 #### Saving the Modal
 
@@ -269,17 +271,17 @@ When you click to the `Save` button, the form is posted to the server. If server
 
 If you click to the Cancel button with some changes made but not saved, you get such a warning message:
 
-![modal-manager-cancel-warning](../../../images/modal-manager-cancel-warning.png)
+![modal-manager-cancel-warning](../../images/modal-manager-cancel-warning.png)
 
 ### Form Validation
 
 `ModalManager` automatically triggers the form validation when you click to the `Save` button or hit the `Enter` key on the form:
 
-![modal-manager-validation](../../../images/modal-manager-validation.png)
+![modal-manager-validation](../../images/modal-manager-validation.png)
 
 See the [Forms & Validation document](../Forms-Validation.md) to learn more about the validation.
 
-## Modal Manager Reference
+## ModalManager Reference
 
 TODO
 
