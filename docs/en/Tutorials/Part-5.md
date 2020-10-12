@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider. 
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,9 +28,10 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 {{if UI == "MVC" && DB == "EF"}}
@@ -145,6 +129,8 @@ Go to the *Administration -> Identity -> Roles* page, select *Permissions* actio
 
 Grant the permissions you want and save the modal.
 
+> **Tip**: New permissions are automatically granted to the admin role if you run the `Acme.BookStore.DbMigrator` application.
+
 ## Authorization
 
 Now, you can use the permissions to authorize the book management.
@@ -185,6 +171,8 @@ namespace Acme.BookStore.Books
 ````
 
 Added code to the constructor. Base `CrudAppService` automatically uses these permissions on the CRUD operations. This makes the **application service** secure, but also makes the **HTTP API** secure since this service is automatically used as an HTTP API as explained before (see [auto API controllers](../API/Auto-API-Controllers.md)).
+
+> You will see the declarative authorization, using the `[Authorize(...)]` attribute, later while developing the author management functionality.
 
 {{if UI == "MVC"}}
 
@@ -327,6 +315,64 @@ if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
 }
 ````
 
+You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return values. The final `BookStoreMenuContributor` class should be the following:
+
+````csharp
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Acme.BookStore.Localization;
+using Acme.BookStore.MultiTenancy;
+using Acme.BookStore.Permissions;
+using Volo.Abp.TenantManagement.Web.Navigation;
+using Volo.Abp.UI.Navigation;
+
+namespace Acme.BookStore.Web.Menus
+{
+    public class BookStoreMenuContributor : IMenuContributor
+    {
+        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        {
+            if (context.Menu.Name == StandardMenus.Main)
+            {
+                await ConfigureMainMenuAsync(context);
+            }
+        }
+
+        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        {
+            if (!MultiTenancyConsts.IsEnabled)
+            {
+                var administration = context.Menu.GetAdministration();
+                administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
+            }
+
+            var l = context.GetLocalizer<BookStoreResource>();
+
+            context.Menu.Items.Insert(0, new ApplicationMenuItem("BookStore.Home", l["Menu:Home"], "~/"));
+
+            var bookStoreMenu = new ApplicationMenuItem(
+                "BooksStore",
+                l["Menu:BookStore"],
+                icon: "fa fa-book"
+            );
+
+            context.Menu.AddItem(bookStoreMenu);
+
+            //CHECK the PERMISSION
+            if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
+            {
+                bookStoreMenu.AddItem(new ApplicationMenuItem(
+                    "BooksStore.Books",
+                    l["Menu:Books"],
+                    url: "/Books"
+                ));
+            }
+        }
+    }
+}
+````
+
 {{else if UI == "NG"}}
 
 ### Angular Guard Configuration
@@ -409,6 +455,195 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 
 * Added `abpPermission="BookStore.Books.Edit"` that hides the edit action if the current user has no editing permission.
 * Added `abpPermission="BookStore.Books.Delete"` that hides the delete action if the current user has no delete permission.
+
+{{else if UI == "Blazor"}}
+
+### Authorize the Razor Component
+
+Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor` project and add an `Authorize` attribute just after the `@page` directive, as shown below:
+
+````html
+@page "/books"
+@attribute [Authorize(BookStorePermissions.Books.Default)]
+@using Acme.BookStore.Permissions
+@using Microsoft.AspNetCore.Authorization
+...
+````
+
+Adding this attribute prevents to enter this page if the current hasn't logged in or hasn't granted for the given permission. In case of attempt, the user is redirected to the login page.
+
+### Show/Hide the Actions
+
+The book management page has a *New Book* button and *Edit* and *Delete* actions for each book. We should hide these buttons/actions if the current user has not granted for the related permissions.
+
+#### Inject the IAuthorizationService
+
+Inject the `IAuthorizationService` into the `Books.razor`:
+
+````csharp
+@inject IAuthorizationService AuthorizationService
+````
+
+#### Get the Permissions On Initialization
+
+Add the following code block to the end of the `Books.razor` file:
+
+````csharp
+@code
+{
+    bool canCreateBook;
+    bool canEditBook;
+    bool canDeleteBook;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        canCreateBook =await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create);
+        canEditBook = await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Edit);
+        canDeleteBook = await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Delete);
+    }
+}
+````
+
+We will use these `bool` fields to check the permissions.
+
+> **Blazor Tip**: While adding the C# code into a `@code` block is fine for small code parts, it is suggested to use the code behind approach to develop a more maintainable code base when the code block becomes longer. We will use this approach for the authors part.
+
+#### Hide the New Book Button
+
+Wrap the *New Book* button by an `if` block as shown below:
+
+````xml
+@if (canCreateBook)
+{
+    <Button Color="Color.Primary"
+            Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
+}
+````
+
+#### Hide the Edit/Delete Actions
+
+As similar to the *New Book* button, we can use `if` blocks to conditionally show/hide the *Edit* and *Delete* actions:
+
+````xml
+@if (canEditBook)
+{
+    <DropdownItem Clicked="() => OpenEditModalAsync(context.Id)">
+        @L["Edit"]
+    </DropdownItem>
+}
+@if (canDeleteBook)
+{
+    <DropdownItem Clicked="() => DeleteEntityAsync(context)">
+        @L["Delete"]
+    </DropdownItem>
+}
+````
+
+#### About the Permission Caching
+
+You can run and test the permissions. Remove a book related permission from the admin role to see the related button/action disappears from the UI.
+
+However, ABP Framework caches the permissions of the current user in the client side. So, when you change a permission for yourself, you need to manually **refresh the page** to take the effect. If you don't refresh and try to use the prohibited action you get an HTTP 403 (forbidden) response from the server.
+
+> Changing a permission for a role or user immediately available on the server side. So, this cache system doesn't cause any security problem.
+
+### Menu Item
+
+Even we have secured all the layers of the book management page, it is still visible on the main menu of the application. We should hide the menu item if the current user has no permission.
+
+Open the `BookStoreMenuContributor` class in the `Acme.BookStore.Blazor` project, find the code block below:
+
+````csharp
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/books"
+        )
+    )
+);
+````
+
+And replace this code block with the following:
+
+````csharp
+var bookStoreMenu = new ApplicationMenuItem(
+    "BooksStore",
+    l["Menu:BookStore"],
+    icon: "fa fa-book"
+);
+
+context.Menu.AddItem(bookStoreMenu);
+
+//CHECK the PERMISSION
+if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
+{
+    bookStoreMenu.AddItem(new ApplicationMenuItem(
+        "BooksStore.Books",
+        l["Menu:Books"],
+        url: "/books"
+    ));
+}
+````
+
+You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return values. The final `BookStoreMenuContributor` class should be the following:
+
+````csharp
+using System.Threading.Tasks;
+using Acme.BookStore.Localization;
+using Acme.BookStore.Permissions;
+using Volo.Abp.UI.Navigation;
+
+namespace Acme.BookStore.Blazor
+{
+    public class BookStoreMenuContributor : IMenuContributor
+    {
+        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        {
+            if(context.Menu.DisplayName != StandardMenus.Main)
+            {
+                return;
+            }
+
+            var l = context.GetLocalizer<BookStoreResource>();
+
+            context.Menu.Items.Insert(
+                0,
+                new ApplicationMenuItem(
+                    "BookStore.Home",
+                    l["Menu:Home"],
+                    "/",
+                    icon: "fas fa-home"
+                )
+            );
+
+            var bookStoreMenu = new ApplicationMenuItem(
+                "BooksStore",
+                l["Menu:BookStore"],
+                icon: "fa fa-book"
+            );
+
+            context.Menu.AddItem(bookStoreMenu);
+
+            if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
+            {
+                bookStoreMenu.AddItem(new ApplicationMenuItem(
+                    "BooksStore.Books",
+                    l["Menu:Books"],
+                    url: "/books"
+                ));
+            }
+        }
+    }
+}
+````
 
 {{end}}
 

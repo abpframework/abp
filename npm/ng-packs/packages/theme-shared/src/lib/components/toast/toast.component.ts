@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Toaster } from '../../models/toaster';
 import { ToasterService } from '../../services/toaster.service';
-import { LocalizationService } from '@abp/ng.core';
 import snq from 'snq';
 
 @Component({
@@ -15,7 +14,7 @@ export class ToastComponent implements OnInit {
 
   get severityClass(): string {
     if (!this.toast || !this.toast.severity) return '';
-    return `toast-${this.toast.severity}`;
+    return `abp-toast-${this.toast.severity}`;
   }
 
   get iconClass(): string {
@@ -33,10 +32,7 @@ export class ToastComponent implements OnInit {
     }
   }
 
-  constructor(
-    private toastService: ToasterService,
-    private localizationService: LocalizationService,
-  ) {}
+  constructor(private toasterService: ToasterService) {}
 
   ngOnInit() {
     if (snq(() => this.toast.options.sticky)) return;
@@ -47,10 +43,10 @@ export class ToastComponent implements OnInit {
   }
 
   close() {
-    this.toastService.remove(this.toast.options.id);
+    this.toasterService.remove(this.toast.options.id);
   }
 
   tap() {
-    if (this.toast.options && this.toast.options.tapToDismiss) this.close();
+    if (this.toast.options?.tapToDismiss) this.close();
   }
 }

@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
-using Volo.Abp.DynamicProxy;
 using Volo.Abp.Localization;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -26,9 +24,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
         public AbpSelectTagHelperService(
-            IHtmlGenerator generator, 
-            HtmlEncoder encoder, 
-            IAbpTagHelperLocalizer tagHelperLocalizer, 
+            IHtmlGenerator generator,
+            HtmlEncoder encoder,
+            IAbpTagHelperLocalizer tagHelperLocalizer,
             IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
@@ -140,7 +138,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             if (!string.IsNullOrEmpty(TagHelper.Label))
             {
-                return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>" + GetRequiredSymbol(context, output);
+                var label = new TagBuilder("label");
+                label.Attributes.Add("for", GetIdAttributeValue(selectTag));
+                label.InnerHtml.Append(TagHelper.Label);
+
+                return label.ToHtmlString() + GetRequiredSymbol(context, output);
             }
 
             return await GetLabelAsHtmlUsingTagHelperAsync(context, output) + GetRequiredSymbol(context, output);
@@ -199,9 +201,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
             var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
-            return "<small id=\"" + idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
-                   localizedText +
-                   "</small>";
+            var small = new TagBuilder("small");
+            small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
+            small.AddCssClass("form-text text-muted");
+
+            return small.ToHtmlString();
         }
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
@@ -338,11 +342,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
         }
 
-        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        protected virtual string GetIdAttributeValue(TagHelperOutput inputTag)
         {
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
-            return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
+            return idAttr != null ? idAttr.Value.ToString() : string.Empty;
+        }
+
+        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        {
+            var id = GetIdAttributeValue(inputTag);
+
+            return !string.IsNullOrWhiteSpace(id) ? "for=\"" + id + "\"" : string.Empty;
         }
 
         protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)

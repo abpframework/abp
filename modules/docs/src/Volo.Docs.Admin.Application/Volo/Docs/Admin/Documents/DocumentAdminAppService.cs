@@ -205,10 +205,7 @@ namespace Volo.Docs.Admin.Documents
             );
 
             await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
-
-            document.LastCachedTime = DateTime.MinValue;
-
-            await _documentRepository.UpdateAsync(document);
+            await _documentRepository.DeleteAsync(document);
         }
 
         public async Task ReindexAsync(Guid documentId)
@@ -216,12 +213,6 @@ namespace Volo.Docs.Admin.Documents
             await _documentFullSearch.DeleteAsync(documentId);
             var document = await _documentRepository.GetAsync(documentId);
             await _documentFullSearch.AddOrUpdateAsync(document);
-        }
-
-        public async Task DeleteFromDatabaseAsync(Guid documentId)
-        {
-            var document = await _documentRepository.GetAsync(documentId);
-            await _documentRepository.DeleteAsync(document);
         }
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)

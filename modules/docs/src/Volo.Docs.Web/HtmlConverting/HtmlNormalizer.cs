@@ -49,7 +49,7 @@ namespace Volo.Docs.HtmlConverting
                     var imgTag = match.Groups[0].Value;
                     var title = GetTitleFromTag(imgTag);
 
-                    return $"<a target = \"_blank\" rel=\"noopener noreferrer\" title=\"{title}\" href=\"{link}\"><img src=\"{link}\" alt=\"{title}\"></a>";
+                    return $"<a target = \"_blank\" rel=\"noopener noreferrer\" title=\"{title}\" href=\"{link}\">{imgTag}</a>";
                 });
 
             }

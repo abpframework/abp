@@ -305,7 +305,10 @@
                                 </article>
 
                                 <div id="crawler_link" style="display:none;">
-
+                                    @foreach (var query in Model.AlternativeOptionLinkQueries)
+                                    {
+                                        <a href="@($"{Request.Path}?{query}")"> @query </a>
+                                    }
                                 </div>
                             </div>
                         </div>

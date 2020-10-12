@@ -233,6 +233,19 @@ public class BookService
 
 > 重要:如果你想访问MongoDB API,你需要在你的项目中引用`Volo.Abp.MongoDB`.这会破坏封装,但在这种情况下,这就是你想要的.
 
+#### 事务
+
+MongoDB在4.0版本开始支持事务, ABP在3.2版本加入了对MongoDb事务的支持. 如果你升级到3.2版本,需要将[MongoDbSchemaMigrator](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.MongoDB/MongoDb/MongoDbMyProjectNameDbSchemaMigrator.cs)添加到你的 `.MongoDB` 项目中.
+
+[启动模板](Startup-templates/Index.md)默认在 `.MongoDB` 项目中**禁用**了工作单元事务. 如果你的MongoDB服务器支持事务,你可以手动启用工作单元的事务:
+
+```csharp
+Configure<AbpUnitOfWorkDefaultOptions>(options =>
+{
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
+});
+```
+
 #### 高级主题
 
 ##### 设置默认的仓储类

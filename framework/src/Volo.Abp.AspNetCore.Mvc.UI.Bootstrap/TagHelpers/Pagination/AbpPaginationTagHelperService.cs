@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Localization.Resources.AbpUi;
+﻿using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
+using System;
+using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -134,7 +134,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
             SetHrefAttribute(currentPage, attributeList);
 
-            tagHelperOutput.Content.SetHtmlContent(localizer[localizationKey]);
+            tagHelperOutput.Content.SetContent(localizer[localizationKey]);
 
             var renderedHtml = tagHelperOutput.Render(_encoder);
 
@@ -166,7 +166,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             var localizer = _stringLocalizerFactory.Create(typeof(AbpUiResource));
 
             var pagerInfo = (TagHelper.ShowInfo ?? false) ?
-                "    <div class=\"col-sm-12 col-md-5\"> " + localizer["PagerInfo{0}{1}{2}", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount] + "</div>\r\n"
+                "    <div class=\"col-sm-12 col-md-5\"> " + _encoder.Encode(localizer["PagerInfo{0}{1}{2}", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount]) + "</div>\r\n"
                 : "";
 
             return

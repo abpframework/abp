@@ -29,14 +29,17 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
             london.ExtraProperties["PhoneCode"] = 123456;
             london.ExtraProperties["Rank"] = "88";
             london.ExtraProperties["ZipCode"] = null;
+            london.ExtraProperties["Established"] = DateTime.MinValue;
+            london.ExtraProperties["Guid"] = "a7ae2efe-d8d6-466b-92e3-da14aa6e1c5b";
             await CityRepository.UpdateAsync(london);
 
             var london2 = await CityRepository.FindByNameAsync("London");
             london2.GetProperty<string>("PhoneCode").ShouldBe("123456");
             london2.GetProperty<int>("Rank").ShouldBe(88);
             london2.GetProperty<string>("ZipCode").ShouldBe(null);
+            london2.GetProperty<DateTime?>("Established").ShouldBe(DateTime.MinValue);
+            london2.GetProperty<Guid>("Guid").ShouldBe(new Guid("a7ae2efe-d8d6-466b-92e3-da14aa6e1c5b"));
         }
-
 
         [Fact]
         public async Task An_Extra_Property_Configured_As_Extension2()

@@ -142,13 +142,31 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     postLogoutRedirectUri: webClientRootUrl
                 );
             }
+
+            // Blazor Client
+            var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
+            if (!blazorClientId.IsNullOrWhiteSpace())
+            {
+                var blazorRootUrl = configurationSection["MyProjectName_Blazor:RootUrl"].TrimEnd('/');
+
+                await CreateClientAsync(
+                    name: blazorClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
+                    secret: configurationSection["MyProjectName_Blazor:ClientSecret"]?.Sha256(),
+                    requireClientSecret: false,
+                    requirePkce: true,
+                    redirectUri: $"{blazorRootUrl}/authentication/login-callback",
+                    postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
+                );
+            }
         }
 
         private async Task<Client> CreateClientAsync(
             string name,
             IEnumerable<string> scopes,
             IEnumerable<string> grantTypes,
-            string secret,
+            string secret = null,
             string redirectUri = null,
             string postLogoutRedirectUri = null,
             string frontChannelLogoutUri = null,
@@ -199,9 +217,12 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 }
             }
 
-            if (client.FindSecret(secret) == null)
+            if (!secret.IsNullOrEmpty())
             {
-                client.AddSecret(secret);
+                if (client.FindSecret(secret) == null)
+                {
+                    client.AddSecret(secret);
+                }
             }
 
             if (redirectUri != null)

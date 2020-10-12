@@ -14,6 +14,7 @@ import { ToasterService } from '../services/toaster.service';
   imports: [CoreModule.forTest()],
 })
 export class MockModule {}
+const toastClassPrefix = 'abp-toast';
 
 describe('ToasterService', () => {
   let spectator: SpectatorService<ToasterService>;
@@ -39,24 +40,23 @@ describe('ToasterService', () => {
     service['containerComponentRef'].changeDetectorRef.detectChanges();
 
     expect(selectToasterElement('.fa-exclamation-circle')).toBeTruthy();
-    expect(selectToasterContent('.toast-title')).toBe('TITLE');
-    expect(selectToasterContent('.toast-message')).toBe('MESSAGE');
+    expect(selectToasterContent(`.${toastClassPrefix}-title`)).toBe('TITLE');
+    expect(selectToasterContent(`.${toastClassPrefix}-message`)).toBe('MESSAGE');
   });
 
   test.each`
-    type         | selector            | icon
-    ${'info'}    | ${'.toast-info'}    | ${'.fa-info-circle'}
-    ${'success'} | ${'.toast-success'} | ${'.fa-check-circle'}
-    ${'warn'}    | ${'.toast-warning'} | ${'.fa-exclamation-triangle'}
-    ${'error'}   | ${'.toast-error'}   | ${'.fa-times-circle'}
+    type         | selector                          | icon
+    ${'info'}    | ${`.${toastClassPrefix}-info`}    | ${'.fa-info-circle'}
+    ${'success'} | ${`.${toastClassPrefix}-success`} | ${'.fa-check-circle'}
+    ${'warn'}    | ${`.${toastClassPrefix}-warning`} | ${'.fa-exclamation-triangle'}
+    ${'error'}   | ${`.${toastClassPrefix}-error`}   | ${'.fa-times-circle'}
   `('should display $type toast', async ({ type, selector, icon }) => {
     service[type]('MESSAGE', 'TITLE');
 
     await timer(0).toPromise();
     service['containerComponentRef'].changeDetectorRef.detectChanges();
-
-    expect(selectToasterContent('.toast-title')).toBe('TITLE');
-    expect(selectToasterContent('.toast-message')).toBe('MESSAGE');
+    expect(selectToasterContent(`.${toastClassPrefix}-title`)).toBe('TITLE');
+    expect(selectToasterContent(`.${toastClassPrefix}-message`)).toBe('MESSAGE');
     expect(selectToasterElement()).toBe(document.querySelector(selector));
     expect(selectToasterElement(icon)).toBeTruthy();
   });
@@ -68,10 +68,10 @@ describe('ToasterService', () => {
     await timer(0).toPromise();
     service['containerComponentRef'].changeDetectorRef.detectChanges();
 
-    const titles = document.querySelectorAll('.toast-title');
+    const titles = document.querySelectorAll(`.${toastClassPrefix}-title`);
     expect(titles.length).toBe(2);
 
-    const messages = document.querySelectorAll('.toast-message');
+    const messages = document.querySelectorAll(`.${toastClassPrefix}-message`);
     expect(messages.length).toBe(2);
   });
 
@@ -104,19 +104,19 @@ describe('ToasterService', () => {
     service['containerComponentRef'].changeDetectorRef.detectChanges();
 
     expect(selectToasterElement('.fa-exclamation-circle')).toBeTruthy();
-    expect(selectToasterContent('.toast-title')).toBe('TITLE_2');
-    expect(selectToasterContent('.toast-message')).toBe('MESSAGE_2');
+    expect(selectToasterContent(`.${toastClassPrefix}-title`)).toBe('TITLE_2');
+    expect(selectToasterContent(`.${toastClassPrefix}-message`)).toBe('MESSAGE_2');
   });
 });
 
-function clearElements(selector = '.toast') {
+function clearElements(selector = `.${toastClassPrefix}`) {
   document.querySelectorAll(selector).forEach(element => element.parentNode.removeChild(element));
 }
 
-function selectToasterContent(selector = '.toast'): string {
+function selectToasterContent(selector = `.${toastClassPrefix}`): string {
   return selectToasterElement(selector).textContent.trim();
 }
 
-function selectToasterElement<T extends HTMLElement>(selector = '.toast'): T {
+function selectToasterElement<T extends HTMLElement>(selector = `.${toastClassPrefix}`): T {
   return document.querySelector(selector);
 }

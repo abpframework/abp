@@ -1,4 +1,4 @@
-# Querying Lists Easily with ListService
+# Working with Lists
 
 `ListService` is a utility service to provide an easy pagination, sorting, and search implementation.
 
@@ -177,3 +177,8 @@ As of v3.0, with ngx-datatable, the `page` property has to be set as `0` for ini
 ```
 
 **Important Note:** The `abp-table` is not removed, but is deprecated and will be removed in the future. Please consider switching to ngx-datatable.
+
+
+## What's Next?
+
+- [Easy *ngFor trackBy](./Track-By-Service.md)

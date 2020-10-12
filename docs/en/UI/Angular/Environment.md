@@ -4,7 +4,7 @@ Every application needs some **environment** variables. In Angular world, this i
 
 Current `Environment` configuration holds sub config classes as follows:
 
-```typescript
+```js
 export interface Environment {
   apis: Apis;
   application: Application;
@@ -16,7 +16,7 @@ export interface Environment {
 
 ## Apis
 
-```typescript
+```js
 export interface Apis {
   [key: string]: ApiConfig;
   default: ApiConfig;
@@ -54,9 +54,9 @@ Everything else will be sent to `"https://localhost:8080"`
 
 * `rootNamespace` **(new)** : Root namespace of the related API. e.g. Acme.BookStore
 
-## Application
+## Application
 
-```typescript
+```js
  export interface Application {
   name: string;
   baseUrl?: string;
@@ -69,7 +69,7 @@ Everything else will be sent to `"https://localhost:8080"`
 * `baseUrl`: [For detailed information](./Multi-Tenancy.md#domain-tenant-resolver)
 
 
-## AuthConfig
+## AuthConfig
 
 For authentication, we use angular-oauth2-oidc. Please check their [docs](https://github.com/manfredsteyer/angular-oauth2-oidc) out
 
@@ -80,7 +80,7 @@ Abp Framework supports this out of box.
 
 To integrate an existing config json into the `environment`, you need to set `remoteEnv`
 
-```typescript
+```js
 export type customMergeFn = (
   localEnv: Partial<Config.Environment>,
   remoteEnv: any,
@@ -105,5 +105,4 @@ export interface RemoteEnv {
 
 ## What's Next?
 
-* [Service Proxies](./Service-Proxies.md)
-
+- [About Feature Libraries](./Feature-Libraries.md)

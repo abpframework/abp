@@ -1,5 +1,7 @@
 using System;
 using Mongo2Go;
+using MongoDB.Driver;
+using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.TenantManagement.MongoDB
 {

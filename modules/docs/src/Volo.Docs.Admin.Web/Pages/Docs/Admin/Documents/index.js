@@ -80,26 +80,7 @@
                                             dataTable.ajax.reload();
                                         });
                                 },
-                            },
-                            {
-                                text: l('DeleteFromDatabase'),
-                                visible: abp.auth.isGranted(
-                                    'Docs.Admin.Documents'
-                                ),
-                                confirmMessage: function (data) {
-                                    return l(
-                                        'DeleteDocumentFromDbConfirmation'
-                                    );
-                                },
-                                action: function (data) {
-                                    service
-                                        .deleteFromDatabase(data.record.id)
-                                        .then(function () {
-                                            abp.message.success(l('Deleted'));
-                                            dataTable.ajax.reload();
-                                        });
-                                },
-                            },
+                            }
                         ],
                     },
                 },

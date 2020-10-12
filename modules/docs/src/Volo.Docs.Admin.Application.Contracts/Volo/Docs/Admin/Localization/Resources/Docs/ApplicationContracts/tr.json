@@ -41,7 +41,6 @@
     "RemovedFromCache": "Önbellekten kaldırıldı",
     "RemoveFromCacheConfirmation": "Bu maddeyi önbellekten kaldırmak istediğiniz emin misiniz?",
     "ReIndexDocumentConfirmation": "Bu maddeyi yeniden indekslemek istediğinize emin misiniz?",
-    "DeleteDocumentFromDbConfirmation": "Bu maddeyi veritabanından silmek istediğinize emin misiniz?",
     "DeleteFromDatabase": "Veritabanından sil",
     "Deleted": "Silindi"
   }

@@ -275,6 +275,19 @@ public class BookService
 
 > Important: You must reference to the `Volo.Abp.MongoDB` package from the project you want to access to the MongoDB API. This breaks encapsulation, but this is what you want in that case.
 
+### Transactions
+
+MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](Startup-templates/Index.md) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
+
+```csharp
+Configure<AbpUnitOfWorkDefaultOptions>(options =>
+{
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
+});
+```
+
+> Or you can delete this code since this is already the default behavior.
+
 ### Advanced Topics
 
 #### Set Default Repository Classes

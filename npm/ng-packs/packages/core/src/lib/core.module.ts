@@ -1,5 +1,5 @@
 import { APP_BASE_HREF, CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientXsrfModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -43,9 +43,10 @@ import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { oAuthStorage } from './strategies/auth-flow.strategy';
 
 export function storageFactory(): OAuthStorage {
-  return localStorage;
+  return oAuthStorage;
 }
 
 /**
@@ -124,6 +125,10 @@ export class BaseCoreModule {}
     NgxsRouterPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot(),
     OAuthModule.forRoot(),
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'RequestVerificationToken',
+    }),
   ],
 })
 export class RootCoreModule {}
@@ -186,7 +191,7 @@ export class CoreModule {
         },
         {
           provide: HTTP_INTERCEPTORS,
-          useClass: ApiInterceptor,
+          useExisting: ApiInterceptor,
           multi: true,
         },
         {
