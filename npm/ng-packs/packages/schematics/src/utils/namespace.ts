@@ -7,6 +7,8 @@ export function parseNamespace(solution: string, type: string) {
     .slice(0, -1)
     .join('.');
 
+  if (solution === namespace) return '';
+
   solution.split('.').reduceRight((acc, part) => {
     acc = `${part}\\.${acc}`;
     const regex = new RegExp(`^${acc}(Controllers\\.)?`);

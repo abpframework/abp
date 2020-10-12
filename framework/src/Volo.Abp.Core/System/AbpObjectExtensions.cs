@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 
 namespace System
@@ -9,7 +11,7 @@ namespace System
     public static class AbpObjectExtensions
     {
         /// <summary>
-        /// Used to simplify and beautify casting an object to a type. 
+        /// Used to simplify and beautify casting an object to a type.
         /// </summary>
         /// <typeparam name="T">Type to be casted</typeparam>
         /// <param name="obj">Object to cast</param>
@@ -29,6 +31,11 @@ namespace System
         public static T To<T>(this object obj)
             where T : struct
         {
+            if (typeof(T) == typeof(Guid))
+            {
+                return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(obj.ToString());
+            }
+
             return (T)Convert.ChangeType(obj, typeof(T), CultureInfo.InvariantCulture);
         }
 
@@ -42,7 +49,18 @@ namespace System
         {
             return list.Contains(item);
         }
-        
+
+        /// <summary>
+        /// Check if an item is in the given enumerable.
+        /// </summary>
+        /// <param name="item">Item to check</param>
+        /// <param name="items">Items</param>
+        /// <typeparam name="T">Type of the items</typeparam>
+        public static bool IsIn<T>(this T item, IEnumerable<T> items)
+        {
+            return items.Contains(item);
+        }
+
         /// <summary>
         /// Can be used to conditionally perform a function
         /// on an object and return the modified or the original object.
@@ -65,7 +83,7 @@ namespace System
 
             return obj;
         }
-        
+
         /// <summary>
         /// Can be used to conditionally perform an action
         /// on an object and return the original object.

@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.ApiVersioning;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
@@ -94,7 +95,10 @@ namespace Volo.Abp.AspNetCore.Mvc
                 }
             });
 
-            var mvcCoreBuilder = context.Services.AddMvcCore();
+            var mvcCoreBuilder = context.Services.AddMvcCore(options =>
+            {
+                options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
+            });
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
 
             var abpMvcDataAnnotationsLocalizationOptions = context.Services

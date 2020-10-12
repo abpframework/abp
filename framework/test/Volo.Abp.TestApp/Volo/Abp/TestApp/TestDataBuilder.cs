@@ -52,7 +52,8 @@ namespace Volo.Abp.TestApp
                 {
                     { "Population", 10_470_000 },
                     { "PhoneCode", "42" },
-                    { "ZipCode", "1000" }
+                    { "ZipCode", "1000" },
+                    { "Guid", "a5ed8170-30b9-4580-a395-a3c2dbc031ee" }
                 }
             });
             await _cityRepository.InsertAsync(istanbul);

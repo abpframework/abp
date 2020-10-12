@@ -1,5 +1,5 @@
 ﻿@page "/identity/roles"
-@attribute [Authorize]
+@attribute [Authorize(IdentityPermissions.Roles.Default)]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
@@ -7,15 +7,19 @@
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @inherits RoleManagementBase
 @inject IStringLocalizer<IdentityResource> L
+
 @* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">
         <h1>@L["Roles"]</h1>
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
-        <Paragraph Alignment="TextAlignment.Right">
-            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewRole"]</Button>
-        </Paragraph>
+        @if (HasCreatePermission)
+        {
+            <Paragraph Alignment="TextAlignment.Right">
+                <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewRole"]</Button>
+            </Paragraph>
+        }
     </Column>
 </Row>
 
@@ -27,21 +31,32 @@
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
-        <DataGridColumn Width="150px" TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Sortable="false" Caption="@L["Actions"].Value">
-            <DisplayTemplate>
-                <Dropdown>
-                    <DropdownToggle Color="Color.Primary">
-                        @L["Actions"]
-                    </DropdownToggle>
-                    <DropdownMenu>
-                        <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityRoleDto>().Id)">@L["Edit"]</DropdownItem>
-                        <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName,context.As<IdentityRoleDto>().Name)">@L["Permissions"]</DropdownItem>
-                        <DropdownDivider/>
-                        <DropdownItem Clicked="() => DeleteEntityAsync(context.As<IdentityRoleDto>())">@L["Delete"]</DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>
-            </DisplayTemplate>
-        </DataGridColumn>
+        @if (ShouldShowEntityActions)
+        {
+            <DataGridColumn Width="150px" TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Sortable="false" Caption="@L["Actions"].Value">
+                <DisplayTemplate>
+                    <Dropdown>
+                        <DropdownToggle Color="Color.Primary">
+                            @L["Actions"]
+                        </DropdownToggle>
+                        <DropdownMenu>
+                            @if (HasUpdatePermission)
+                            {
+                                <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityRoleDto>().Id)">@L["Edit"]</DropdownItem>
+                            }
+                            @if (HasManagePermissionsPermission)
+                            {
+                                <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.As<IdentityRoleDto>().Name)">@L["Permissions"]</DropdownItem>
+                            }
+                            @if (HasDeletePermission)
+                            {
+                                <DropdownItem Clicked="() => DeleteEntityAsync(context.As<IdentityRoleDto>())">@L["Delete"]</DropdownItem>
+                            }
+                        </DropdownMenu>
+                    </Dropdown>
+                </DisplayTemplate>
+            </DataGridColumn>
+        }
         <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="@L["RoleName"].Value">
             <DisplayTemplate>
                 @(context.As<IdentityRoleDto>().Name)
@@ -59,54 +74,63 @@
 </DataGrid>
 
 @* ************************* CREATE MODAL ************************* *@
-<Modal @ref="CreateModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
-        <ModalHeader>
-            <ModalTitle>@L["NewRole"]</ModalTitle>
-            <CloseButton Clicked="CloseCreateModalAsync" />
-        </ModalHeader>
-        <ModalBody>
-            <Field>
-                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                <TextEdit @bind-text="NewEntity.Name" />
-            </Field>
-            <Field>
-                <Check TValue="bool" @bind-checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                <Check TValue="bool" @bind-checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-            <Button Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
-
+@if (HasCreatePermission)
+{
+    <Modal @ref="CreateModal">
+        <ModalBackdrop />
+        <ModalContent IsCentered="true">
+            <ModalHeader>
+                <ModalTitle>@L["NewRole"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <EditForm id="IdentityRoleCreateForm" Model="@NewEntity" OnValidSubmit="CreateEntityAsync">
+                    <Field>
+                        <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                        <TextEdit @bind-text="@NewEntity.Name"/>
+                    </Field>
+                    <Field>
+                        <Check TValue="bool" @bind-checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                        <Check TValue="bool" @bind-checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                    </Field>
+                </EditForm>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <Button form="IdentityRoleCreateForm" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+}
 @* ************************* EDIT MODAL ************************* *@
-<Modal @ref="EditModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
-        <ModalHeader>
-            <ModalTitle>Edit role</ModalTitle>
-            <CloseButton Clicked="CloseEditModalAsync" />
-        </ModalHeader>
-        <ModalBody>
-            <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
-            <Field>
-                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                <TextEdit @bind-text="EditingEntity.Name" />
-            </Field>
-            <Field>
-                <Check TValue="bool" @bind-checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                <Check TValue="bool" @bind-checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-            <Button Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
+@if (HasUpdatePermission)
+{
+    <Modal @ref="EditModal">
+        <ModalBackdrop />
+        <ModalContent IsCentered="true">
+            <ModalHeader>
+                <ModalTitle>@L["Edit"]</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <EditForm id="IdentityRoleEditForm" Model="@EditingEntity" OnValidSubmit="UpdateEntityAsync">
+                    <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
+                    <Field>
+                        <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                        <TextEdit @bind-text="EditingEntity.Name" />
+                    </Field>
+                    <Field>
+                        <Check TValue="bool" @bind-checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                        <Check TValue="bool" @bind-checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                    </Field>
+                </EditForm>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+}
 
 <PermissionManagementModal @ref="PermissionManagementModal"/>

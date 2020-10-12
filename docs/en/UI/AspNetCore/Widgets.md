@@ -305,6 +305,27 @@ public class CountersWidgetController : AbpController
 
 > A widget supposed to be refreshed in two ways: In the first way, when you use a `RefreshUrl`, it re-rendered on the server and replaced by the HTML returned from server. In the second way the widget gets data (generally a JSON object) from server and refreshes itself in the client side (see the refresh method in the Widget JavaScript API section).
 
+## AutoInitialize
+
+`WidgetAttribute` has an `AutoInitialize` property (`bool`) that can be set to automatically initialize a widget on page ready & whenever the widget is added to the DOM. The default value is `false`.
+
+If a widget is configured to be auto initialized, then a `WidgetManager` (see below) automatically created and initialized for instances of this widget. This is useful when the widget instances are not grouped and separately works (they don't require to init or refresh together).
+
+Setting the `AutoInitialize` to `true` is equivalent to write such a code yourself:
+
+````js
+$('.abp-widget-wrapper[data-widget-name="MySimpleWidget"]')
+    .each(function () {
+        var widgetManager = new abp.WidgetManager({
+            wrapper: $(this),
+        });
+
+        widgetManager.init($(this));
+    });
+````
+
+> `AutoInitialize` also supports widgets loaded/refreshed via AJAX (added to the DOM later) and/or used in a nested way (a widget inside another widget). If you don't need to group multiple widgets and control with a single `WidgetManager`, `AutoInitialize` is the recommended approach.
+
 ## JavaScript API
 
 A widget may need to be rendered and refreshed in the client side. In such cases, you can use ABP's `WidgetManager` and define APIs for your widgets.

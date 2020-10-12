@@ -72,11 +72,11 @@ namespace Volo.Abp.BlobStoring.Minio
             }      
                
             var memoryStream = new MemoryStream();
-            await client.GetObjectAsync(containerName, blobName,  async stream => 
+            await client.GetObjectAsync(containerName, blobName,  (stream) => 
             {
                     if (stream != null)
                     {
-                        await stream.CopyToAsync(memoryStream);
+                        stream.CopyTo(memoryStream);
                     }
                     else
                     {

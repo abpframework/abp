@@ -67,6 +67,8 @@
     "Volo.Abp.Identity:010004": "There is already an organization unit with name {0}. Two units with same name can not be created in same level.",
     "Volo.Abp.Identity:010005": "Static roles can not be renamed.",
     "Volo.Abp.Identity:010006": "Static roles can not be deleted.",
+    "Volo.Abp.Identity:010007": "You can't change your two factor setting.",
+    "Volo.Abp.Identity:010008": "It's not allowed to change two factor setting.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organization unit membership count for a user",
     "Permission:IdentityManagement": "Identity management",
     "Permission:RoleManagement": "Role management",

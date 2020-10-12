@@ -46,6 +46,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo"
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Widgets",
     "framework/src/Volo.Abp.AspNetCore.Serilog",
     "framework/src/Volo.Abp.AspNetCore.SignalR",
@@ -92,6 +93,7 @@ $projects = (
     "framework/src/Volo.Abp.EventBus",
     "framework/src/Volo.Abp.EventBus.RabbitMQ",
     "framework/src/Volo.Abp.EventBus.Kafka",
+    "framework/src/Volo.Abp.ExceptionHandling",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
     "framework/src/Volo.Abp.GlobalFeatures",
@@ -142,6 +144,7 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.HttpApi",
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
+    "modules/account/src/Volo.Abp.Account.Blazor",
         
     # modules/audit-logging
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain",

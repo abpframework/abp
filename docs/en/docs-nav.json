@@ -99,11 +99,15 @@
       "path": "CLI.md"
     },
     {
-      "text": "Authentication",
+      "text": "Authentication & Security",
       "items": [
         {
           "text": "Social/External Logins",
           "path": "Authentication/Social-External-Logins.md"
+        },
+        {
+          "text": "CSRF/XSRF & Anti Forgery",
+          "path": "CSRF-Anti-Forgery.md"
         }
       ]
     },
@@ -156,7 +160,13 @@
         },
         {
           "text": "Caching",
-          "path": "Caching.md"
+          "path": "Caching.md",
+          "items": [
+            {
+              "text": "Redis Cache",
+              "path": "Redis-Cache.md"
+            }
+          ]
         },
         {
           "text": "Logging",
@@ -386,8 +396,24 @@
       "text": "User Interface",
       "items": [
         {
-          "text": "ASP.NET Core",
+          "text": "ASP.NET Core MVC / Razor Pages",
           "items": [
+            {
+              "text": "Navigation / Menus",
+              "path": "UI/AspNetCore/Navigation-Menu.md"
+            },
+            {
+              "text": "Forms & Validation",
+              "path": "UI/AspNetCore/Forms-Validation.md"
+            },
+            {
+              "text": "Modals",
+              "path": "UI/AspNetCore/Modals.md"
+            },
+            {
+              "text": "Page Alerts",
+              "path": "UI/AspNetCore/Page-Alerts.md"
+            },
             {
               "text": "Client Side Package Management",
               "path": "UI/AspNetCore/Client-Side-Package-Management.md"
@@ -415,12 +441,63 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "Layout Hooks",
+              "path": "UI/AspNetCore/Layout-Hooks.md"
+            },
+            {
               "text": "Theming",
               "path": "UI/AspNetCore/Theming.md"
             },
             {
+              "text": "JavaScript API",
+              "items": [
+                {
+                  "text": "Overall",
+                  "path": "UI/AspNetCore/JavaScript-API/Index.md"
+                },
+                {
+                  "text": "Localization",
+                  "path": "UI/AspNetCore/JavaScript-API/Localization.md"
+                },
+                {
+                  "text": "Settings",
+                  "path": "UI/AspNetCore/JavaScript-API/Settings.md"
+                },
+                {
+                  "text": "AJAX",
+                  "path": "UI/AspNetCore/JavaScript-API/Ajax.md"
+                },
+                {
+                  "text": "Message",
+                  "path": "UI/AspNetCore/JavaScript-API/Message.md"
+                },
+                {
+                  "text": "Notify",
+                  "path": "UI/AspNetCore/JavaScript-API/Notify.md"
+                }
+              ]
+            },
+            {
               "text": "Customize/Extend the UI",
               "path": "UI/AspNetCore/Customization-User-Interface.md"
+            }
+          ]
+        },
+        {
+          "text": "Blazor",
+          "items": [
+            {
+              "text": "Overall",
+              "path": "UI/Blazor/Overall.md"
+            },
+            {
+              "text": "Services",
+              "items": [
+                {
+                  "text": "Overall",
+                  "path": "UI/Blazor/Services/Notification.md"
+                }
+              ]
             }
           ]
         },
@@ -432,76 +509,108 @@
               "path": "UI/Angular/Migration-Guide-v3.md"
             },
             {
-              "text": "Environment",
-              "path": "UI/Angular/Environment.md"
+              "text": "Quick Start",
+              "path": "UI/Angular/Quick-Start.md"
             },
             {
-              "text": "Service Proxies",
-              "path": "UI/Angular/Service-Proxies.md"
+              "text": "Development",
+              "items": [
+                {
+                  "text": "Environment Variables",
+                  "path": "UI/Angular/Environment.md"
+                },
+                {
+                  "text": "About Feature Libraries",
+                  "path": "UI/Angular/Feature-Libraries.md"
+                },
+                {
+                  "text": "Service Proxies",
+                  "path": "UI/Angular/Service-Proxies.md"
+                },
+                {
+                  "text": "PWA Configuration",
+                  "path": "UI/Angular/PWA-Configuration.md"
+                }
+              ]
             },
             {
-              "text": "HTTP Requests",
-              "path": "UI/Angular/HTTP-Requests.md"
+              "text": "Core Functionality",
+              "items": [
+                {
+                  "text": "Config State",
+                  "path": "UI/Angular/Config-State.md"
+                },
+                {
+                  "text": "HTTP Requests",
+                  "path": "UI/Angular/HTTP-Requests.md"
+                },
+                {
+                  "text": "Localization",
+                  "path": "UI/Angular/Localization.md"
+                },
+                {
+                  "text": "Permission Management",
+                  "path": "UI/Angular/Permission-Management.md"
+                },
+                {
+                  "text": "Multi Tenancy",
+                  "path": "UI/Angular/Multi-Tenancy.md"
+                }
+              ]
             },
             {
-              "text": "Localization",
-              "path": "UI/Angular/Localization.md"
+              "text": "Utilities",
+              "items": [
+                {
+                  "text": "Managing RxJS Subscriptions",
+                  "path": "UI/Angular/Subscription-Service.md"
+                },
+                {
+                  "text": "Working with Lists",
+                  "path": "UI/Angular/List-Service.md"
+                },
+                {
+                  "text": "Easy *ngFor trackBy",
+                  "path": "UI/Angular/Track-By-Service.md"
+                },
+                {
+                  "text": "Inserting Scripts & Styles to DOM",
+                  "path": "UI/Angular/Dom-Insertion-Service.md"
+                },
+                {
+                  "text": "Lazy Loading Scripts & Styles",
+                  "path": "UI/Angular/Lazy-Load-Service.md"
+                },
+                {
+                  "text": "Projecting Angular Content",
+                  "path": "UI/Angular/Content-Projection-Service.md"
+                },
+                {
+                  "text": "Confirmation Popup",
+                  "path": "UI/Angular/Confirmation-Service.md"
+                },
+                {
+                  "text": "Toast Overlay",
+                  "path": "UI/Angular/Toaster-Service.md"
+                }
+              ]
             },
             {
-              "text": "Permission Management",
-              "path": "UI/Angular/Permission-Management.md"
-            },
-            {
-              "text": "Multi Tenancy",
-              "path": "UI/Angular/Multi-Tenancy.md"
-            },
-            {
-              "text": "Confirmation Popup",
-              "path": "UI/Angular/Confirmation-Service.md"
-            },
-            {
-              "text": "Toast Overlay",
-              "path": "UI/Angular/Toaster-Service.md"
-            },
-            {
-              "text": "Config State",
-              "path": "UI/Angular/Config-State.md"
-            },
-            {
-              "text": "Modifying the Menu",
-              "path": "UI/Angular/Modifying-the-Menu.md"
-            },
-            {
-              "text": "Component Replacement",
-              "path": "UI/Angular/Component-Replacement.md"
-            },
-            {
-              "text": "Custom Setting Page",
-              "path": "UI/Angular/Custom-Setting-Page.md"
-            },
-            {
-              "text": "Lazy Loading Scripts & Styles",
-              "path": "UI/Angular/Lazy-Load-Service.md"
-            },
-            {
-              "text": "DomInsertionService",
-              "path": "UI/Angular/Dom-Insertion-Service.md"
-            },
-            {
-              "text": "ContentProjectionService",
-              "path": "UI/Angular/Content-Projection-Service.md"
-            },
-            {
-              "text": "TrackByService",
-              "path": "UI/Angular/Track-By-Service.md"
-            },
-            {
-              "text": "SubscriptionService",
-              "path": "UI/Angular/Subscription-Service.md"
-            },
-            {
-              "text": "ListService",
-              "path": "UI/Angular/List-Service.md"
+              "text": "Customization",
+              "items": [
+                {
+                  "text": "Modifying the Menu",
+                  "path": "UI/Angular/Modifying-the-Menu.md"
+                },
+                {
+                  "text": "Component Replacement",
+                  "path": "UI/Angular/Component-Replacement.md"
+                },
+                {
+                  "text": "Custom Setting Page",
+                  "path": "UI/Angular/Custom-Setting-Page.md"
+                }
+              ]
             }
           ]
         },

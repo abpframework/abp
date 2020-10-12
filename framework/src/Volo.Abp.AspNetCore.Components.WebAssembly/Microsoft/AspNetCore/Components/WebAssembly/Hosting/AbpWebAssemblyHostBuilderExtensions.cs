@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -31,7 +32,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             return application;
         }
 
-        public static async Task InitializeAsync(
+        public async static Task InitializeAsync(
             [NotNull] this IAbpApplicationWithExternalServiceProvider application,
             [NotNull] IServiceProvider serviceProvider)
         {
@@ -42,9 +43,29 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
             using (var scope = serviceProvider.CreateScope())
             {
-                await scope.ServiceProvider
-                    .GetRequiredService<ICachedApplicationConfigurationClient>()
-                    .InitializeAsync();
+                await InitializeModulesAsync(scope.ServiceProvider);
+                SetCurrentLanguage(scope);
+            }
+        }
+
+        private async static Task InitializeModulesAsync(IServiceProvider serviceProvider)
+        {
+            foreach (var service in serviceProvider.GetServices<IAsyncInitialize>())
+            {
+                await service.InitializeAsync();
+            }
+        }
+
+        private static void SetCurrentLanguage(IServiceScope scope)
+        {
+            var configurationClient = scope.ServiceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
+            var configuration = configurationClient.Get();
+            var cultureName = configuration.Localization?.CurrentCulture?.CultureName;
+            if (!cultureName.IsNullOrEmpty())
+            {
+                var culture = new CultureInfo(cultureName);
+                CultureInfo.DefaultThreadCurrentCulture = culture;
+                CultureInfo.DefaultThreadCurrentUICulture = culture;
             }
         }
     }

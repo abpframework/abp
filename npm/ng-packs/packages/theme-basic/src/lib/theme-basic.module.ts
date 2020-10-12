@@ -69,7 +69,7 @@ export class ThemeBasicModule {
         minlength:
           'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}[{{ requiredLength }}]',
         ngbDate: 'AbpValidation::ThisFieldIsNotValid.',
-        passwordMismatch: 'AbpIdentity::Identity.PasswordConfirmationFailed',
+        passwordMismatch: 'AbpIdentity::Volo.Abp.Identity:PasswordConfirmationFailed',
         range: 'AbpValidation::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
         required: 'AbpValidation::ThisFieldIsRequired.',
         url: 'AbpValidation::ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl',

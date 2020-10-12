@@ -689,7 +689,7 @@ var abp = abp || {};
     abp.security.antiForgery = abp.security.antiForgery || {};
 
     abp.security.antiForgery.tokenCookieName = 'XSRF-TOKEN';
-    abp.security.antiForgery.tokenHeaderName = 'X-XSRF-TOKEN';
+    abp.security.antiForgery.tokenHeaderName = 'RequestVerificationToken';
 
     abp.security.antiForgery.getToken = function () {
         return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);

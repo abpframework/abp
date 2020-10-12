@@ -1,8 +1,8 @@
-import { strings } from '@angular-devkit/core';
 import { VOLO_NAME_VALUE, VOLO_REGEX } from '../constants';
 import { Interface, Model, Property, Type, TypeWithEnum } from '../models';
 import { parseNamespace } from './namespace';
 import { relativePathToModel } from './path';
+import { camel } from './text';
 import { parseGenerics } from './tree';
 import {
   createTypeParser,
@@ -118,7 +118,7 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
     const _interface = new Interface({ identifier, base, namespace, ref });
 
     typeDef.properties?.forEach(prop => {
-      const name = strings.camelize(prop.name);
+      const name = camel(prop.name);
       const optional = prop.typeSimple.endsWith('?') ? '?' : '';
       const type = simplifyType(prop.typeSimple);
       const refs = parseType(prop.type).reduce(
