@@ -12,7 +12,7 @@
     "DefaultErrorMessage403Detail": "Ezt a műveletet nem hajthatja végre!",
     "DefaultErrorMessage404": "Az erőforrás nem található!",
     "DefaultErrorMessage404Detail": "A kért erőforrás nem található a szerveren",
-    "EntityNotFoundErrorMessage": "",
+    "EntityNotFoundErrorMessage": "Nincs {0} elem, amelynek id értéke {1}!",
     "Error": "Nincs {0} elem, amelynek id értéke {1}!",
     "UnhandledException": "Nem kezelt kivétel!",
     "401Message": "Jogosulatlan",
