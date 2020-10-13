@@ -1,0 +1,23 @@
+{
+  "culture": "hu",
+  "texts": {
+    "InternalServerErrorMessage": "Belső hiba történt a kérése során!",
+    "ValidationErrorMessage": "Kérése érvénytelen!",
+    "ValidationNarrativeErrorMessageTitle": "A validálás során a következő hibákat észleltük.",
+    "DefaultErrorMessage": "Hiba történt!",
+    "DefaultErrorMessageDetail": "A hiba részleteit nem a szerver küldte el.",
+    "DefaultErrorMessage401": "Nincs hitelesítve!",
+    "DefaultErrorMessage401Detail": "A művelet végrehajtásához be kell jelentkeznie.",
+    "DefaultErrorMessage403": "Ön nem jogosult!",
+    "DefaultErrorMessage403Detail": "Ezt a műveletet nem hajthatja végre!",
+    "DefaultErrorMessage404": "Az erőforrás nem található!",
+    "DefaultErrorMessage404Detail": "A kért erőforrás nem található a szerveren",
+    "EntityNotFoundErrorMessage": "Nincs {0} elem, amelynek id értéke {1}!",
+    "Error": "Nincs {0} elem, amelynek id értéke {1}!",
+    "UnhandledException": "Nem kezelt kivétel!",
+    "401Message": "Jogosulatlan",
+    "403Message": "Tiltott",
+    "404Message": "Az oldal nem található",
+    "500Message": "Belső Szerverhiba"
+  }
+}
