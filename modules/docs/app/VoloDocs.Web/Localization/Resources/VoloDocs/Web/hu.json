@@ -1,0 +1,10 @@
+{
+  "culture": "hu",
+  "texts": {
+    "DocsTitle": "VoloDocs",
+    "WelcomeVoloDocs": "Üdvözöljük a VoloDocs-ban!",
+    "NoProjectWarning": "Még nincs meghatározott projekt!",
+    "CreateYourFirstProject": "Kattintson ide az első projekt elindításához",
+    "NoProject": "Nincs projekt!"
+  }
+}

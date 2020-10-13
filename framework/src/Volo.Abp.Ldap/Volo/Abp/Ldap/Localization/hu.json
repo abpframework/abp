@@ -1,0 +1,20 @@
+{
+    "culture": "hu",
+    "texts": {
+      "DisplayName:Abp.Ldap.ServerHost": "Szerver host",
+      "Description:Abp.Ldap.ServerHost": "Az LDAP ksizolgáló szerver hostneve vagy IP címe",
+  
+      "DisplayName:Abp.Ldap.ServerPort": "Szerver port",
+      "Description:Abp.Ldap.ServerPort": "LDAP kommunikáció portja",
+  
+      "DisplayName:Abp.Ldap.BaseDc": "Bázis tartomány-komponens",
+      "Description:Abp.Ldap.BaseDc": "Bázis tartomány-komponens",
+  
+      "DisplayName:Abp.Ldap.UserName": "Felhasználónév",
+      "Description:Abp.Ldap.UserName": "Felhasználónév",
+  
+      "DisplayName:Abp.Ldap.Password": "Jelszó",
+      "Description:Abp.Ldap.Password": "Jelszó"
+    }
+  }
+  
