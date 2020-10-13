@@ -175,6 +175,10 @@
             {
               "text": "Kafka 集成",
               "path": "Distributed-Event-Bus-Kafka-Integration.md"
+            },
+            {
+              "text": "Rebus 集成",
+              "path": "Distributed-Event-Bus-Rebus-Integration.md"
             }
           ]
         }

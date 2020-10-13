@@ -11,11 +11,11 @@ namespace Volo.Abp.EventBus.Rebus
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var options = context.Services.ExecutePreConfiguredActions<AbpEventBusRebusOptions>();
+            var options = context.Services.ExecutePreConfiguredActions<AbpRebusEventBusOptions>();
 
             context.Services.AddTransient(typeof(IHandleMessages<>), typeof(RebusDistributedEventHandlerAdapter<>));
 
-            Configure<AbpEventBusRebusOptions>(rebusOptions =>
+            Configure<AbpRebusEventBusOptions>(rebusOptions =>
             {
                 rebusOptions.Configurer = options.Configurer;
                 rebusOptions.Publish = options.Publish;
