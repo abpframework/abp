@@ -1,44 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Volo.CmsKit.Migrations
+namespace VoloDocs.EntityFrameworkCore.Migrations
 {
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AbpAuditLogs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
-                    ApplicationName = table.Column<string>(maxLength: 96, nullable: true),
-                    UserId = table.Column<Guid>(nullable: true),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    TenantId = table.Column<Guid>(nullable: true),
-                    TenantName = table.Column<string>(nullable: true),
-                    ImpersonatorUserId = table.Column<Guid>(nullable: true),
-                    ImpersonatorTenantId = table.Column<Guid>(nullable: true),
-                    ExecutionTime = table.Column<DateTime>(nullable: false),
-                    ExecutionDuration = table.Column<int>(nullable: false),
-                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientName = table.Column<string>(maxLength: 128, nullable: true),
-                    ClientId = table.Column<string>(maxLength: 64, nullable: true),
-                    CorrelationId = table.Column<string>(maxLength: 64, nullable: true),
-                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
-                    HttpMethod = table.Column<string>(maxLength: 16, nullable: true),
-                    Url = table.Column<string>(maxLength: 256, nullable: true),
-                    Exceptions = table.Column<string>(maxLength: 4000, nullable: true),
-                    Comments = table.Column<string>(maxLength: 256, nullable: true),
-                    HttpStatusCode = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpAuditLogs", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AbpClaimTypes",
                 columns: table => new
@@ -57,6 +25,21 @@ namespace Volo.CmsKit.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpClaimTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpLinkUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    SourceUserId = table.Column<Guid>(nullable: false),
+                    SourceTenantId = table.Column<Guid>(nullable: true),
+                    TargetUserId = table.Column<Guid>(nullable: false),
+                    TargetTenantId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpLinkUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,6 +107,31 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpSecurityLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
+                    TenantId = table.Column<Guid>(nullable: true),
+                    ApplicationName = table.Column<string>(maxLength: 96, nullable: true),
+                    Identity = table.Column<string>(maxLength: 96, nullable: true),
+                    Action = table.Column<string>(maxLength: 96, nullable: true),
+                    UserId = table.Column<Guid>(nullable: true),
+                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    TenantName = table.Column<string>(maxLength: 64, nullable: true),
+                    ClientId = table.Column<string>(maxLength: 64, nullable: true),
+                    CorrelationId = table.Column<string>(maxLength: 64, nullable: true),
+                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
+                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpSecurityLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpSettings",
                 columns: table => new
                 {
@@ -136,27 +144,6 @@ namespace Volo.CmsKit.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpSettings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpTenants",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorId = table.Column<Guid>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierId = table.Column<Guid>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(maxLength: 64, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpTenants", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,6 +170,7 @@ namespace Volo.CmsKit.Migrations
                     EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     PasswordHash = table.Column<string>(maxLength: 256, nullable: true),
                     SecurityStamp = table.Column<string>(maxLength: 256, nullable: false),
+                    IsExternal = table.Column<bool>(nullable: false, defaultValue: false),
                     PhoneNumber = table.Column<string>(maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false, defaultValue: false),
@@ -196,109 +184,54 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CmsComments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    TenantId = table.Column<Guid>(nullable: true),
-                    EntityType = table.Column<string>(maxLength: 64, nullable: false),
-                    EntityId = table.Column<string>(maxLength: 64, nullable: false),
-                    Text = table.Column<string>(maxLength: 512, nullable: false),
-                    RepliedCommentId = table.Column<Guid>(nullable: true),
-                    CreatorId = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CmsComments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CmsUserReactions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    TenantId = table.Column<Guid>(nullable: true),
-                    EntityType = table.Column<string>(maxLength: 64, nullable: false),
-                    EntityId = table.Column<string>(maxLength: 64, nullable: false),
-                    ReactionName = table.Column<string>(maxLength: 32, nullable: false),
-                    CreatorId = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CmsUserReactions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CmsUsers",
+                name: "DocsDocuments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
-                    TenantId = table.Column<Guid>(nullable: true),
-                    UserName = table.Column<string>(maxLength: 256, nullable: false),
-                    Email = table.Column<string>(maxLength: 256, nullable: false),
-                    Name = table.Column<string>(maxLength: 64, nullable: true),
-                    Surname = table.Column<string>(maxLength: 64, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
-                    PhoneNumber = table.Column<string>(maxLength: 16, nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false, defaultValue: false)
+                    ProjectId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: false),
+                    Version = table.Column<string>(maxLength: 128, nullable: false),
+                    LanguageCode = table.Column<string>(maxLength: 128, nullable: false),
+                    FileName = table.Column<string>(maxLength: 128, nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    Format = table.Column<string>(maxLength: 128, nullable: true),
+                    EditLink = table.Column<string>(maxLength: 2048, nullable: true),
+                    RootUrl = table.Column<string>(maxLength: 2048, nullable: true),
+                    RawRootUrl = table.Column<string>(maxLength: 2048, nullable: true),
+                    LocalDirectory = table.Column<string>(maxLength: 512, nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    LastUpdatedTime = table.Column<DateTime>(nullable: false),
+                    LastSignificantUpdateTime = table.Column<DateTime>(nullable: true),
+                    LastCachedTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CmsUsers", x => x.Id);
+                    table.PrimaryKey("PK_DocsDocuments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpAuditLogActions",
+                name: "DocsProjects",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    TenantId = table.Column<Guid>(nullable: true),
-                    AuditLogId = table.Column<Guid>(nullable: false),
-                    ServiceName = table.Column<string>(maxLength: 256, nullable: true),
-                    MethodName = table.Column<string>(maxLength: 128, nullable: true),
-                    Parameters = table.Column<string>(maxLength: 2000, nullable: true),
-                    ExecutionTime = table.Column<DateTime>(nullable: false),
-                    ExecutionDuration = table.Column<int>(nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true)
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
+                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    ShortName = table.Column<string>(maxLength: 32, nullable: false),
+                    Format = table.Column<string>(nullable: true),
+                    DefaultDocumentName = table.Column<string>(maxLength: 128, nullable: false),
+                    NavigationDocumentName = table.Column<string>(maxLength: 128, nullable: false),
+                    ParametersDocumentName = table.Column<string>(maxLength: 128, nullable: false),
+                    MinimumVersion = table.Column<string>(nullable: true),
+                    DocumentStoreType = table.Column<string>(nullable: true),
+                    MainWebsiteUrl = table.Column<string>(nullable: true),
+                    LatestVersionBranchName = table.Column<string>(maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AbpAuditLogActions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AbpAuditLogActions_AbpAuditLogs_AuditLogId",
-                        column: x => x.AuditLogId,
-                        principalTable: "AbpAuditLogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpEntityChanges",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    AuditLogId = table.Column<Guid>(nullable: false),
-                    TenantId = table.Column<Guid>(nullable: true),
-                    ChangeTime = table.Column<DateTime>(nullable: false),
-                    ChangeType = table.Column<byte>(nullable: false),
-                    EntityTenantId = table.Column<Guid>(nullable: true),
-                    EntityId = table.Column<string>(maxLength: 128, nullable: false),
-                    EntityTypeFullName = table.Column<string>(maxLength: 128, nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpEntityChanges", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AbpEntityChanges_AbpAuditLogs_AuditLogId",
-                        column: x => x.AuditLogId,
-                        principalTable: "AbpAuditLogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_DocsProjects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -345,25 +278,6 @@ namespace Volo.CmsKit.Migrations
                         name: "FK_AbpRoleClaims_AbpRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AbpRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpTenantConnectionStrings",
-                columns: table => new
-                {
-                    TenantId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 64, nullable: false),
-                    Value = table.Column<string>(maxLength: 1024, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpTenantConnectionStrings", x => new { x.TenantId, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AbpTenantConnectionStrings_AbpTenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "AbpTenants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -484,62 +398,31 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpEntityPropertyChanges",
+                name: "DocsDocumentContributors",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    TenantId = table.Column<Guid>(nullable: true),
-                    EntityChangeId = table.Column<Guid>(nullable: false),
-                    NewValue = table.Column<string>(maxLength: 512, nullable: true),
-                    OriginalValue = table.Column<string>(maxLength: 512, nullable: true),
-                    PropertyName = table.Column<string>(maxLength: 128, nullable: false),
-                    PropertyTypeFullName = table.Column<string>(maxLength: 64, nullable: false)
+                    DocumentId = table.Column<Guid>(nullable: false),
+                    Username = table.Column<string>(nullable: false),
+                    UserProfileUrl = table.Column<string>(nullable: true),
+                    AvatarUrl = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AbpEntityPropertyChanges", x => x.Id);
+                    table.PrimaryKey("PK_DocsDocumentContributors", x => new { x.DocumentId, x.Username });
                     table.ForeignKey(
-                        name: "FK_AbpEntityPropertyChanges_AbpEntityChanges_EntityChangeId",
-                        column: x => x.EntityChangeId,
-                        principalTable: "AbpEntityChanges",
+                        name: "FK_DocsDocumentContributors_DocsDocuments_DocumentId",
+                        column: x => x.DocumentId,
+                        principalTable: "DocsDocuments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpAuditLogActions_AuditLogId",
-                table: "AbpAuditLogActions",
-                column: "AuditLogId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpAuditLogActions_TenantId_ServiceName_MethodName_ExecutionTime",
-                table: "AbpAuditLogActions",
-                columns: new[] { "TenantId", "ServiceName", "MethodName", "ExecutionTime" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpAuditLogs_TenantId_ExecutionTime",
-                table: "AbpAuditLogs",
-                columns: new[] { "TenantId", "ExecutionTime" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpAuditLogs_TenantId_UserId_ExecutionTime",
-                table: "AbpAuditLogs",
-                columns: new[] { "TenantId", "UserId", "ExecutionTime" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpEntityChanges_AuditLogId",
-                table: "AbpEntityChanges",
-                column: "AuditLogId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpEntityChanges_TenantId_EntityTypeFullName_EntityId",
-                table: "AbpEntityChanges",
-                columns: new[] { "TenantId", "EntityTypeFullName", "EntityId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpEntityPropertyChanges_EntityChangeId",
-                table: "AbpEntityPropertyChanges",
-                column: "EntityChangeId");
+                name: "IX_AbpLinkUsers_SourceUserId_SourceTenantId_TargetUserId_TargetTenantId",
+                table: "AbpLinkUsers",
+                columns: new[] { "SourceUserId", "SourceTenantId", "TargetUserId", "TargetTenantId" },
+                unique: true,
+                filter: "[SourceTenantId] IS NOT NULL AND [TargetTenantId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpOrganizationUnitRoles_RoleId_OrganizationUnitId",
@@ -572,14 +455,29 @@ namespace Volo.CmsKit.Migrations
                 column: "NormalizedName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpSecurityLogs_TenantId_Action",
+                table: "AbpSecurityLogs",
+                columns: new[] { "TenantId", "Action" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpSecurityLogs_TenantId_ApplicationName",
+                table: "AbpSecurityLogs",
+                columns: new[] { "TenantId", "ApplicationName" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpSecurityLogs_TenantId_Identity",
+                table: "AbpSecurityLogs",
+                columns: new[] { "TenantId", "Identity" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpSecurityLogs_TenantId_UserId",
+                table: "AbpSecurityLogs",
+                columns: new[] { "TenantId", "UserId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpSettings_Name_ProviderName_ProviderKey",
                 table: "AbpSettings",
                 columns: new[] { "Name", "ProviderName", "ProviderKey" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpTenants_Name",
-                table: "AbpTenants",
-                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
@@ -620,38 +518,15 @@ namespace Volo.CmsKit.Migrations
                 name: "IX_AbpUsers_UserName",
                 table: "AbpUsers",
                 column: "UserName");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CmsComments_RepliedCommentId",
-                table: "CmsComments",
-                column: "RepliedCommentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CmsComments_EntityType_EntityId",
-                table: "CmsComments",
-                columns: new[] { "EntityType", "EntityId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CmsUserReactions_EntityType_EntityId",
-                table: "CmsUserReactions",
-                columns: new[] { "EntityType", "EntityId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CmsUserReactions_CreatorId_EntityType_EntityId_ReactionName",
-                table: "CmsUserReactions",
-                columns: new[] { "CreatorId", "EntityType", "EntityId", "ReactionName" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AbpAuditLogActions");
-
-            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
-                name: "AbpEntityPropertyChanges");
+                name: "AbpLinkUsers");
 
             migrationBuilder.DropTable(
                 name: "AbpOrganizationUnitRoles");
@@ -663,10 +538,10 @@ namespace Volo.CmsKit.Migrations
                 name: "AbpRoleClaims");
 
             migrationBuilder.DropTable(
-                name: "AbpSettings");
+                name: "AbpSecurityLogs");
 
             migrationBuilder.DropTable(
-                name: "AbpTenantConnectionStrings");
+                name: "AbpSettings");
 
             migrationBuilder.DropTable(
                 name: "AbpUserClaims");
@@ -684,19 +559,10 @@ namespace Volo.CmsKit.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CmsComments");
+                name: "DocsDocumentContributors");
 
             migrationBuilder.DropTable(
-                name: "CmsUserReactions");
-
-            migrationBuilder.DropTable(
-                name: "CmsUsers");
-
-            migrationBuilder.DropTable(
-                name: "AbpEntityChanges");
-
-            migrationBuilder.DropTable(
-                name: "AbpTenants");
+                name: "DocsProjects");
 
             migrationBuilder.DropTable(
                 name: "AbpOrganizationUnits");
@@ -708,7 +574,7 @@ namespace Volo.CmsKit.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
-                name: "AbpAuditLogs");
+                name: "DocsDocuments");
         }
     }
 }
