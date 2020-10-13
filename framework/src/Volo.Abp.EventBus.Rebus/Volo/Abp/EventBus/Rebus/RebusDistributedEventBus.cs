@@ -23,18 +23,18 @@ namespace Volo.Abp.EventBus.Rebus
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
         protected ConcurrentDictionary<string, Type> EventTypes { get; }
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
-        protected AbpEventBusRebusOptions AbpEventBusRebusOptions { get; }
+        protected AbpRebusEventBusOptions AbpRebusEventBusOptions { get; }
 
         public RebusDistributedEventBus(
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
             IBus rebus,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
-            IOptions<AbpEventBusRebusOptions> abpEventBusRebusOptions) :
+            IOptions<AbpRebusEventBusOptions> abpEventBusRebusOptions) :
             base(serviceScopeFactory, currentTenant)
         {
             Rebus = rebus;
-            AbpEventBusRebusOptions = abpEventBusRebusOptions.Value;
+            AbpRebusEventBusOptions = abpEventBusRebusOptions.Value;
             AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
@@ -126,7 +126,7 @@ namespace Volo.Abp.EventBus.Rebus
 
         public override async Task PublishAsync(Type eventType, object eventData)
         {
-            await AbpEventBusRebusOptions.Publish(Rebus, eventType, eventData);
+            await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
         }
 
         private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
