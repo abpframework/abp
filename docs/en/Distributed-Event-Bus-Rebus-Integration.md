@@ -8,7 +8,7 @@ Use the ABP CLI to add [Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/
 
 * Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.EventBus.Rebus` package.
-* Run `abp add-package Volo.Abp.EventBus.Rebusv` command.
+* Run `abp add-package Volo.Abp.EventBus.Rebus` command.
 
 If you want to do it manually, install the [Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/Volo.Abp.EventBus.Rebus) NuGet package to your project and add `[DependsOn(typeof(AbpEventBusRebusModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
 
