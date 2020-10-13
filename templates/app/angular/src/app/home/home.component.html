@@ -45,7 +45,6 @@
             starterLinkTemplate;
             context: {
               $implicit: {
-                borderLeft: true,
                 title: 'Samples',
                 description: 'See the example projects built with the ABP Framework.',
                 links: [
@@ -64,7 +63,6 @@
             starterLinkTemplate;
             context: {
               $implicit: {
-                borderLeft: true,
                 title: 'ABP Community',
                 description: 'Get involved with a vibrant community and become a contributor.',
                 links: [
@@ -148,7 +146,6 @@
                     label: 'Request a feature'
                   }
                 ],
-                borderLeft: true,
                 customTemplate: githubButtonsTemplate
               }
             }
@@ -171,8 +168,7 @@
                     href: 'https://stackoverflow.com/questions/ask',
                     label: 'Ask a Question'
                   }
-                ],
-                borderLeft: true
+                ]
               }
             }
           "
@@ -213,8 +209,7 @@
             context: {
               $implicit: {
                 title: 'Application Modules',
-                href: 'https://commercial.abp.io/modules?ref=tmpl',
-                borderLeft: true
+                href: 'https://commercial.abp.io/modules?ref=tmpl'
               }
             }
           "
@@ -226,8 +221,7 @@
             context: {
               $implicit: {
                 title: 'Developer<br />Tools',
-                href: 'https://commercial.abp.io/tools?ref=tmpl',
-                borderLeft: true
+                href: 'https://commercial.abp.io/tools?ref=tmpl'
               }
             }
           "
@@ -239,8 +233,7 @@
             context: {
               $implicit: {
                 title: 'UI<br />Themes',
-                href: 'https://commercial.abp.io/themes?ref=tmpl',
-                borderLeft: true
+                href: 'https://commercial.abp.io/themes?ref=tmpl'
               }
             }
           "
@@ -252,8 +245,7 @@
             context: {
               $implicit: {
                 title: 'Premium Support',
-                href: 'https://support.abp.io/QA/Questions?ref=tmpl',
-                borderLeft: true
+                href: 'https://support.abp.io/QA/Questions?ref=tmpl'
               }
             }
           "
@@ -265,8 +257,7 @@
             context: {
               $implicit: {
                 title: 'Additional Services',
-                href: 'https://commercial.abp.io/additional-services?ref=tmpl',
-                borderLeft: true
+                href: 'https://commercial.abp.io/additional-services?ref=tmpl'
               }
             }
           "
@@ -290,7 +281,7 @@
 </div>
 
 <ng-template #starterLinkTemplate let-context>
-  <div class="col-lg-4" [class.border-left]="context.borderLeft">
+  <div class="col-lg-4 border-left">
     <div class="p-4">
       <h5 class="mb-3">
         <i class="fas fa-cubes text-secondary d-block my-3 fa-2x"></i> {{ context.title }}
@@ -312,7 +303,7 @@
 </ng-template>
 
 <ng-template #featuresTemplate let-context>
-  <div class="col-lg-2" [class.border-left]="context.borderLeft">
+  <div class="col-lg-2 border-left">
     <div class="p-3">
       <h6>
         <i class="fas fa-plus d-block mb-3 fa- 2x text-secondary"></i>
@@ -324,3 +315,19 @@
     </div>
   </div>
 </ng-template>
+
+<style scoped>
+  .col-lg-2.border-left:nth-of-type(6n + 1) {
+    border-left: 0 !important;
+  }
+
+  .col-lg-4.border-left:nth-of-type(3n + 1) {
+    border-left: 0 !important;
+  }
+
+  @media (max-width: 991px) {
+    .border-left {
+      border-left: 0 !important;
+    }
+  }
+</style>
