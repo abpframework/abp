@@ -11,15 +11,15 @@ using Volo.CmsKit.EntityFrameworkCore;
 namespace Volo.CmsKit.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20200815101508_ReArrange_Indexes")]
-    partial class ReArrange_Indexes
+    [Migration("20201013061938_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "3.1.6")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -957,6 +957,43 @@ namespace Volo.CmsKit.Migrations
                     b.HasIndex("TenantId", "EntityType", "EntityId");
 
                     b.ToTable("CmsComments");
+                });
+
+            modelBuilder.Entity("Volo.CmsKit.Ratings.Rating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<short>("StarCount")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "EntityType", "EntityId", "CreatorId");
+
+                    b.ToTable("CmsRatings");
                 });
 
             modelBuilder.Entity("Volo.CmsKit.Reactions.UserReaction", b =>

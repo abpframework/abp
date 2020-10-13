@@ -214,6 +214,23 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CmsRatings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
+                    EntityType = table.Column<string>(maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(maxLength: 64, nullable: false),
+                    StarCount = table.Column<short>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsRatings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CmsUserReactions",
                 columns: table => new
                 {
@@ -622,24 +639,39 @@ namespace Volo.CmsKit.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CmsComments_RepliedCommentId",
+                name: "IX_CmsComments_TenantId_RepliedCommentId",
                 table: "CmsComments",
-                column: "RepliedCommentId");
+                columns: new[] { "TenantId", "RepliedCommentId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CmsComments_EntityType_EntityId",
+                name: "IX_CmsComments_TenantId_EntityType_EntityId",
                 table: "CmsComments",
-                columns: new[] { "EntityType", "EntityId" });
+                columns: new[] { "TenantId", "EntityType", "EntityId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CmsUserReactions_EntityType_EntityId",
-                table: "CmsUserReactions",
-                columns: new[] { "EntityType", "EntityId" });
+                name: "IX_CmsRatings_TenantId_EntityType_EntityId_CreatorId",
+                table: "CmsRatings",
+                columns: new[] { "TenantId", "EntityType", "EntityId", "CreatorId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CmsUserReactions_CreatorId_EntityType_EntityId_ReactionName",
+                name: "IX_CmsUserReactions_TenantId_EntityType_EntityId_ReactionName",
                 table: "CmsUserReactions",
-                columns: new[] { "CreatorId", "EntityType", "EntityId", "ReactionName" });
+                columns: new[] { "TenantId", "EntityType", "EntityId", "ReactionName" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUserReactions_TenantId_CreatorId_EntityType_EntityId_ReactionName",
+                table: "CmsUserReactions",
+                columns: new[] { "TenantId", "CreatorId", "EntityType", "EntityId", "ReactionName" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUsers_TenantId_Email",
+                table: "CmsUsers",
+                columns: new[] { "TenantId", "Email" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUsers_TenantId_UserName",
+                table: "CmsUsers",
+                columns: new[] { "TenantId", "UserName" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -685,6 +717,9 @@ namespace Volo.CmsKit.Migrations
 
             migrationBuilder.DropTable(
                 name: "CmsComments");
+
+            migrationBuilder.DropTable(
+                name: "CmsRatings");
 
             migrationBuilder.DropTable(
                 name: "CmsUserReactions");
