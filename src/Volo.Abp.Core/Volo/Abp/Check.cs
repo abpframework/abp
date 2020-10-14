@@ -40,15 +40,21 @@ namespace Volo.Abp
 
             return value;
         }
-        public static string IsNumeric(
+        [ContractAnnotation("value:null => null")]
+        public static string IsDigit(
             string value,
             [InvokerParameterName][NotNull] string parameterName)
         {
-            if (!value.IsNullOrEmpty() && !double.TryParse(value, out _))
+            if (parameterName.IsNullOrEmpty())
             {
-                throw new ArgumentException($"{parameterName} must be numeric!", parameterName);
+                throw new ArgumentException($"parameterName can not be null or empty!");
+            }
+            if (!value.IsNullOrEmpty() && !Regex.IsMatch(value, @"^\d+$"))
+            {
+                throw new ArgumentException($"each character of {parameterName} must be in the range 0 through 9!", parameterName);
             }
             return value;
         }
+        
     }
 }
