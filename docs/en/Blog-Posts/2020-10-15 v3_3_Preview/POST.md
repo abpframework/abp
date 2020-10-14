@@ -190,11 +190,15 @@ There are some breaking changes with the Blazor UI. If you've built an applicati
 
 ### Linked Accounts
 
-TODO
+Linked user system allows you to link other accounts (including account in a different tenant) with your account, so you can switch between account with a single-click. It is practical since you no longer need to logout and login again with entering the username and password of the other account.
+
+To manage the linked accounts, go to the profile management page from the user menu;
+
+![abp-commercial-linked-users](abp-commercial-linked-users.png)
 
 ### Paypal & Stripe Integrations
 
-TODO
+The [Payment Module](https://commercial.abp.io/modules/Volo.Payment) was supporting PayU and 2Checkout providers until the version 3.3. It now has integration for Paypal and Stripe. See the [technical documentation](https://docs.abp.io/en/commercial/latest/modules/payment) to learn how to use it.
 
 ### ABP Suite Improvements
 
@@ -208,7 +212,7 @@ We've done a lot of small improvements for the [ABP Suite](https://commercial.ab
 
 * Added an option to the Account Module to show reCAPTCHA on the login & the registration forms.
 
-Beside these, we've done a lot of small enhancements and bug fixes to provide a better development experience and increment your productivity.
+Beside the new features introduced in this post, we've done a lot of small enhancements and bug fixes to provide a better development experience and increment the developer productivity.
 
 ## New Articles
 
