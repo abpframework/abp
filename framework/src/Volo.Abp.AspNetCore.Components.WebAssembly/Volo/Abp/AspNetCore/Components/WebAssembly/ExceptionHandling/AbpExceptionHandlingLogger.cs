@@ -39,7 +39,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
                 return;
             }
 
-            _userExceptionInformer.InformAsync(new UserExceptionInformerContext(exception));
+            _userExceptionInformer.Inform(new UserExceptionInformerContext(exception));
         }
 
         protected virtual void TryInitialize()
