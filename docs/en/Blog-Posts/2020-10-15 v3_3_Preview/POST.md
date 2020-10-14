@@ -20,7 +20,7 @@ We are still working on the fundamentals. So, the next version may introduce bre
 
 #### Breaking Changes on the Blazor UI
 
-TODO...
+There are some breaking changes with the Blazor UI. If you've built an application and upgrade it, your application might not properly work. See [the migration guide](https://github.com/abpframework/abp/blob/dev/docs/en/Migration-Guides/BlazorUI-3_3.md) for the changes you need to do after upgrading your application.
 
 ### Automatic Validation for AntiForgery Token for HTTP APIs
 
