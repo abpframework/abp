@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
 namespace Volo.Abp
@@ -41,6 +42,7 @@ namespace Volo.Abp
             return value;
         }
         [ContractAnnotation("value:null => null")]
+        [ContractAnnotation("parameterName:null => halt")]
         public static string IsDigit(
             string value,
             [InvokerParameterName][NotNull] string parameterName)
