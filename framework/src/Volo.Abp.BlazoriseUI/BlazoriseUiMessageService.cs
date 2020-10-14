@@ -64,11 +64,6 @@ namespace Volo.Abp.BlazoriseUI
             var uiMessageOptions = CreateDefaultOptions();
             options?.Invoke(uiMessageOptions);
 
-            if (MessageReceived == null)
-            {
-                Logger.LogWarning("MessageReceived was NULL...!!!!!!!!!!!! " + message);
-            }
-
             MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Error, message, title, uiMessageOptions));
 
             return Task.CompletedTask;
