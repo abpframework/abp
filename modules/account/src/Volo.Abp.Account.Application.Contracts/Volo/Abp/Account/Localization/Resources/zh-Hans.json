@@ -55,6 +55,9 @@
     "BackToLogin": "返回登录",
     "ProfileTab:Password": "更改密码",
     "ProfileTab:PersonalInfo": "个人信息",
-    "ReturnToApplication": "返回到应用程序"
+    "ReturnToApplication": "返回到应用程序",
+    "Volo.Account:InvalidEmailAddress": "找不到给定的电子邮件地址：{0}",
+    "Volo.Account:SelfRegistrationDisabled": "自我注册已禁用!",
+
   }
 }

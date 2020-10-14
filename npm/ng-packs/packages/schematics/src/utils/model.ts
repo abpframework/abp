@@ -134,7 +134,8 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
     return _interface.properties
       .reduce<string[]>((refs, prop) => {
         prop.refs.forEach(type => {
-          if (types[type]?.isEnum || type === _interface.ref) return;
+          if (types[type]?.isEnum) return;
+          if (interfaces.some(i => i.ref === type)) return;
           refs.push(type);
         });
 

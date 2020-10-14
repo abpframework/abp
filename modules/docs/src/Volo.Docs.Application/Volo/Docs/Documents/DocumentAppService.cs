@@ -213,8 +213,7 @@ namespace Volo.Docs.Documents
                     input.Version
                 );
 
-                if (!JsonConvertExtensions.TryDeserializeObject<DocumentParametersDto>(document.Content,
-                    out var documentParameters))
+                if (!JsonConvertExtensions.TryDeserializeObject<DocumentParametersDto>(document.Content,out var documentParameters))
                 {
                     throw new UserFriendlyException(
                         $"Cannot validate document parameters file '{project.ParametersDocumentName}' for the project {project.Name}.");
@@ -257,10 +256,10 @@ namespace Volo.Docs.Documents
             }
 
             var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
-                project: project,
-                documentName: document.Name,
-                languageCode: document.LanguageCode,
-                version: document.Version
+                project,
+                document.Name,
+                document.LanguageCode,
+                document.Version
             );
 
             await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
@@ -277,9 +276,10 @@ namespace Volo.Docs.Documents
         protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
         {
             var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
+
             documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
-            documentDto.Contributors =
-                ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
+            documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
+
             return documentDto;
         }
 
@@ -289,8 +289,7 @@ namespace Volo.Docs.Documents
             Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the source...");
 
             var source = _documentStoreFactory.Create(project.DocumentStoreType);
-            var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version,
-                oldDocument?.LastSignificantUpdateTime);
+            var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version, oldDocument?.LastSignificantUpdateTime);
 
             await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode,
                 sourceDocument.Version);
@@ -299,10 +298,10 @@ namespace Volo.Docs.Documents
             Logger.LogInformation($"Document retrieved: {documentName}");
 
             var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
-                project: project,
-                documentName: sourceDocument.Name,
-                languageCode: sourceDocument.LanguageCode,
-                version: sourceDocument.Version
+                project,
+                sourceDocument.Name,
+                sourceDocument.LanguageCode,
+                sourceDocument.Version
             );
 
             await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
@@ -351,12 +350,13 @@ namespace Volo.Docs.Documents
 
         private string GetProjectVersionPrefixIfExist(Project project)
         {
-            if (GetGithubVersionProviderSource(project) == GithubVersionProviderSource.Branches)
+            if (GetGithubVersionProviderSource(project) != GithubVersionProviderSource.Branches)
             {
-                return project.ExtraProperties["VersionBranchPrefix"].ToString();
+                return string.Empty;
             }
 
-            return "";
+            return project.ExtraProperties["VersionBranchPrefix"].ToString();
+
         }
 
         private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
