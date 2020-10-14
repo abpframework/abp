@@ -20,13 +20,23 @@ We are still working on the fundamentals. So, the next version may introduce bre
 
 #### Breaking Changes on the Blazor UI
 
-TODO
+TODO...
 
 ### Automatic Validation for AntiForgery Token for HTTP APIs
 
 Starting with the version 3.3, all your HTTP API endpoints are **automatically protected** against CSRF attacks, unless you disable it for your application.
 
 [See the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/CSRF-Anti-Forgery.md) to understand why you need it and how ABP Framework solves the problem.
+
+### Rebus Integration Package for the Distributed Event Bus
+
+[Rebus](https://github.com/rebus-org/Rebus) describes itself as "Simple and lean service bus implementation for .NET". There are a lot of integration packages like RabbitMQ and Azure Service Bus for the Rebus. The new [Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/Volo.Abp.EventBus.Rebus) package allows you to use the Rebus as the [distributed event bus](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) for the ABP Framework.
+
+See [the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Distributed-Event-Bus-Rebus-Integration.md) to learn how to use Rebus with the ABP Framework.
+
+### Async Repository LINQ Methods
+
+TODO: https://github.com/abpframework/abp/pull/5477
 
 ### Stream Support for the Application Service Methods
 
@@ -91,6 +101,12 @@ namespace MyProject.Test
 > This is just a demo code. Do it better on a production code :)
 
 Thanks to [@alexandru-bagu](https://github.com/alexandru-bagu) for the great contribution!
+
+### Other Changes
+
+* Upgraded all the .NET Core / ASP.NET Core related packages to the version 3.1.8. If you have additional dependencies to the .NET Core / ASP.NET Core related packages, we suggest you to updates your packages to the version 3.1.8 to have the latest bug and security fixes published by Microsoft.
+* The blogging module now uses the [BLOB Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) system to store images & files of the blog posts. If you are using this module, then you need to manually migrate the local files to the BLOB Storing system after the upgrade.
+* The Angular UI is now redirecting to the profile management page of the MVC UI instead of using its own UI, if you've configured the authorization code flow (which is default since the version 3.2.0).
 
 ## What's new with the ABP Commercial 3.3
 
