@@ -1,8 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyCompanyName.MyProjectName.MultiTenancy;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Content;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -42,5 +46,21 @@ namespace MyCompanyName.MyProjectName
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif
         }
+
+        public async Task Upload(Guid id, IRemoteStreamContent streamContent)
+        {
+            using (var fs = new FileStream("C:\\Temp\\" + id + ".blob", FileMode.Create))
+            {
+                await streamContent.GetStream().CopyToAsync(fs);
+                await fs.FlushAsync();
+            }
+        }
+
+        public Task<IRemoteStreamContent> Download(Guid id)
+        {
+            var fs = new FileStream(id + ".blob", FileMode.OpenOrCreate);
+            return Task.FromResult((IRemoteStreamContent)new RemoteStreamContent(fs) { ContentType = "application/octet-stream" });
+        }
+
     }
 }
