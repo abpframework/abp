@@ -53,7 +53,7 @@ namespace Volo.Abp
             }
             if (!value.IsNullOrEmpty() && !Regex.IsMatch(value, @"^\d+$"))
             {
-                throw new ArgumentException($"each character of {parameterName} must be in the range 0 through 9!", parameterName);
+                throw new ArgumentException("All characters must be in the range 0 through 9!", parameterName);
             }
             return value;
         }
