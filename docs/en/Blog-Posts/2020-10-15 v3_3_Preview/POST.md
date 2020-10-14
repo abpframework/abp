@@ -34,9 +34,67 @@ Starting with the version 3.3, all your HTTP API endpoints are **automatically p
 
 See [the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Distributed-Event-Bus-Rebus-Integration.md) to learn how to use Rebus with the ABP Framework.
 
-### Async Repository LINQ Methods
+### Async Repository LINQ Extension Methods
 
-TODO: https://github.com/abpframework/abp/pull/5477
+You have a problem when you want to use **Async LINQ Extension Methods** (e.g. `FirstOrDefaultAsync(...)`) in your **domain** and **application** layers. These async methods are **not included in the standard LINQ extension methods**. They are defined by the [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) NuGet package (see [the code](https://github.com/dotnet/efcore/blob/main/src/EFCore/Extensions/EntityFrameworkQueryableExtensions.cs)). So, you normally need to reference to the **Microsoft.EntityFrameworkCore** package to be able to use these async methods.
+
+If you don't want to depend on the EF Core in your business layer, then ABP Framework provides the `IAsyncQueryableExecuter` service to execute your queries asynchronously without depending to the EF Core package. You can see [the documentation](https://docs.abp.io/en/abp/latest/Repositories#option-3-iasyncqueryableexecuter) to get more information for this service.
+
+ABP Framework version 3.3 takes this one step further and allows you to directly execute the async LINQ extension methods on the `IRepository` interface.
+
+**Example: Use `CountAsync` and `FirstOrDefaultAsync` methods on the repositories**
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace MyCompanyName.MyProjectName
+{
+    public class BookAppService : ApplicationService, IBookAppService
+    {
+        private readonly IRepository<Book, Guid> _bookRepository;
+
+        public BookAppService(IRepository<Book, Guid> bookRepository)
+        {
+            _bookRepository = bookRepository;
+        }
+
+        public async Task DemoAsync()
+        {
+            var countAll = await _bookRepository
+                .CountAsync();
+
+            var count = await _bookRepository
+                .CountAsync(x => x.Name.Contains("A"));
+
+            var book1984 = await _bookRepository
+                .FirstOrDefaultAsync(x => x.Name == "1984");            
+        }
+    }
+}
+````
+
+All the standard LINQ methods are supported: *AllAsync, AnyAsync, AverageAsync, ContainsAsync, CountAsync, FirstAsync, FirstOrDefaultAsync, LastAsync, LastOrDefaultAsync, LongCountAsync, MaxAsync, MinAsync, SingleAsync, SingleOrDefaultAsync, SumAsync, ToArrayAsync, ToListAsync*.
+
+This approach still has a limitation. You need to execute the extension method directly on the repository object. For example, the usage below is **not supported**:
+
+````csharp
+var count = await _bookRepository.Where(x => x.Name.Contains("A")).CountAsync();
+````
+
+This is because the object returned from the `Where` method is not a repository object, it is a standard `IQueryable`. In such cases, you can still use the `IAsyncQueryableExecuter`:
+
+````csharp
+var count = await AsyncExecuter.CountAsync(
+    _bookRepository.Where(x => x.Name.Contains("A"))
+);
+````
+
+`AsyncExecuter` has all the standard extension methods, so you don't have any restriction here. See [the repository documentation](https://docs.abp.io/en/abp/latest/Repositories#iqueryable-async-operations) for all the options you have.
+
+> ABP Framework does it's best to not depend on the EF Core yet still be able to use the async LINQ extension methods. However, it there is no problem to depend on the EF Core for your application, you can add the Microsoft.EntityFrameworkCore NuGet package and use it natively.
 
 ### Stream Support for the Application Service Methods
 
