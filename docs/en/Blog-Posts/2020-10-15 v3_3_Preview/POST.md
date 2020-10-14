@@ -94,7 +94,7 @@ var count = await AsyncExecuter.CountAsync(
 
 `AsyncExecuter` has all the standard extension methods, so you don't have any restriction here. See [the repository documentation](https://docs.abp.io/en/abp/latest/Repositories#iqueryable-async-operations) for all the options you have.
 
-> ABP Framework does it's best to not depend on the EF Core yet still be able to use the async LINQ extension methods. However, it there is no problem to depend on the EF Core for your application, you can add the Microsoft.EntityFrameworkCore NuGet package and use it natively.
+> ABP Framework does its best to not depend on the EF Core yet still be able to use the async LINQ extension methods. However, it there is no problem to depend on the EF Core for your application, you can add the Microsoft.EntityFrameworkCore NuGet package and use it natively.
 
 ### Stream Support for the Application Service Methods
 
