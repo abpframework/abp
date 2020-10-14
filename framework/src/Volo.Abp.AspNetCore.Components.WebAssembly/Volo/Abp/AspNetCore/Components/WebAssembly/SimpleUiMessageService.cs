@@ -5,12 +5,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    //TODO: Implement with sweetalert in a new package
-    public class UiMessageService : IUiMessageService, ITransientDependency
+    public class SimpleUiMessageService : IUiMessageService, ITransientDependency
     {
         protected IJSRuntime JsRuntime { get; }
 
-        public UiMessageService(IJSRuntime jsRuntime)
+        public SimpleUiMessageService(IJSRuntime jsRuntime)
         {
             JsRuntime = jsRuntime;
         }
