@@ -110,7 +110,7 @@ namespace System
         /// <summary>
         /// Resets all fields of a given object to their default values.
         /// </summary>
-        /// <typeparam name="T">Type of the object</typeparam>
+        /// <typeparam name="T">Type of the object.</typeparam>
         /// <param name="obj">An object</param>
         /// <param name="customReset">Alternative custom method to reset the values.</param>
         /// <returns>Returns the original object.</returns>
@@ -133,6 +133,32 @@ namespace System
 
                     property.SetValue(obj, null);
                 }
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Applies all fields of a given object from it's counterpart.
+        /// </summary>
+        /// <typeparam name="T">Type of the object.</typeparam>
+        /// <param name="obj">An object.</param>
+        /// <param name="other">An object from which we copy the values.</param>
+        /// <returns>Returns the original object.</returns>
+        public static T ApplyState<T>(this T obj, T other)
+        {
+            // This code is not production ready and it should be removed once
+            // the proper validation in Blazorise is done!
+            var properties = typeof(T).GetProperties();
+
+            foreach (var property in properties)
+            {
+                if (!property.CanWrite)
+                {
+                    continue;
+                }
+
+                property.SetValue(obj, typeof(T).GetProperty(property.Name).GetValue(other));
             }
 
             return obj;

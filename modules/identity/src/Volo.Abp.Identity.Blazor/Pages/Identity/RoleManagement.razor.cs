@@ -8,7 +8,7 @@ using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public abstract class RoleManagementBase : AbpCrudPageBase<IIdentityRoleAppService,IdentityRoleDto, Guid, PagedAndSortedResultRequestDto, IdentityRoleCreateDto, IdentityRoleUpdateDto>
+    public abstract class RoleManagementBase : AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, PagedAndSortedResultRequestDto, IdentityRoleCreateDto, IdentityRoleUpdateDto>
     {
         protected const string PermissionProviderName = "R";
 
@@ -18,7 +18,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected bool ShouldShowEntityActions { get; set; }
 
-        protected Validations ValidationsRef { get; set; }
+        protected Validations CreateValidationsRef { get; set; }
+
+        protected Validations EditValidationsRef { get; set; }
 
         public RoleManagementBase()
         {
@@ -42,13 +44,39 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                                       HasManagePermissionsPermission;
         }
 
-        protected virtual Task OnCreateEntityClicked()
+        protected override Task OpenCreateModalAsync()
         {
-            if ( ValidationsRef.ValidateAll() )
+            CreateValidationsRef.ClearAll();
+
+            return base.OpenCreateModalAsync();
+        }
+
+        protected override Task OpenEditModalAsync(Guid id)
+        {
+            EditValidationsRef.ClearAll();
+
+            return base.OpenEditModalAsync(id);
+        }
+
+        protected override Task CreateEntityAsync()
+        {
+            if (CreateValidationsRef.ValidateAll())
             {
                 CreateModal.Hide();
 
-                return CreateEntityAsync();
+                return base.CreateEntityAsync();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        protected override Task UpdateEntityAsync()
+        {
+            if (EditValidationsRef.ValidateAll())
+            {
+                EditModal.Hide();
+
+                return base.UpdateEntityAsync();
             }
 
             return Task.CompletedTask;

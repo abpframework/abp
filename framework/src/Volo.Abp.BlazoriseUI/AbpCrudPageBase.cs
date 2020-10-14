@@ -335,7 +335,7 @@ namespace Volo.Abp.BlazoriseUI
 
             var entityDto = await AppService.GetAsync(id);
             EditingEntityId = id;
-            EditingEntity = MapToEditingEntity(entityDto);
+            EditingEntity.ApplyState(MapToEditingEntity(entityDto));
             EditModal.Show();
         }
 
