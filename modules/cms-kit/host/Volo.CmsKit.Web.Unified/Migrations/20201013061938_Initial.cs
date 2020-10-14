@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace Volo.CmsKit.Migrations
 {
     public partial class Initial : Migration
     {
@@ -57,21 +57,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpClaimTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpFeatureValues",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Value = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderName = table.Column<string>(maxLength: 64, nullable: true),
-                    ProviderKey = table.Column<string>(maxLength: 64, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpFeatureValues", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,31 +124,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpSecurityLogs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
-                    TenantId = table.Column<Guid>(nullable: true),
-                    ApplicationName = table.Column<string>(maxLength: 96, nullable: true),
-                    Identity = table.Column<string>(maxLength: 96, nullable: true),
-                    Action = table.Column<string>(maxLength: 96, nullable: true),
-                    UserId = table.Column<Guid>(nullable: true),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    TenantName = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientId = table.Column<string>(maxLength: 64, nullable: true),
-                    CorrelationId = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
-                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpSecurityLogs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AbpSettings",
                 columns: table => new
                 {
@@ -223,7 +183,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                     EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     PasswordHash = table.Column<string>(maxLength: 256, nullable: true),
                     SecurityStamp = table.Column<string>(maxLength: 256, nullable: false),
-                    IsExternal = table.Column<bool>(nullable: false, defaultValue: false),
                     PhoneNumber = table.Column<string>(maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false, defaultValue: false),
@@ -234,6 +193,79 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsComments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
+                    EntityType = table.Column<string>(maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(maxLength: 64, nullable: false),
+                    Text = table.Column<string>(maxLength: 512, nullable: false),
+                    RepliedCommentId = table.Column<Guid>(nullable: true),
+                    CreatorId = table.Column<Guid>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsComments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsRatings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
+                    EntityType = table.Column<string>(maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(maxLength: 64, nullable: false),
+                    StarCount = table.Column<short>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsRatings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsUserReactions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
+                    EntityType = table.Column<string>(maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(maxLength: 64, nullable: false),
+                    ReactionName = table.Column<string>(maxLength: 32, nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsUserReactions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
+                    TenantId = table.Column<Guid>(nullable: true),
+                    UserName = table.Column<string>(maxLength: 256, nullable: false),
+                    Email = table.Column<string>(maxLength: 256, nullable: false),
+                    Name = table.Column<string>(maxLength: 64, nullable: true),
+                    Surname = table.Column<string>(maxLength: 64, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
+                    PhoneNumber = table.Column<string>(maxLength: 16, nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -527,11 +559,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 column: "EntityChangeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpFeatureValues_Name_ProviderName_ProviderKey",
-                table: "AbpFeatureValues",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpOrganizationUnitRoles_RoleId_OrganizationUnitId",
                 table: "AbpOrganizationUnitRoles",
                 columns: new[] { "RoleId", "OrganizationUnitId" });
@@ -560,26 +587,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_AbpRoles_NormalizedName",
                 table: "AbpRoles",
                 column: "NormalizedName");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpSecurityLogs_TenantId_Action",
-                table: "AbpSecurityLogs",
-                columns: new[] { "TenantId", "Action" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpSecurityLogs_TenantId_ApplicationName",
-                table: "AbpSecurityLogs",
-                columns: new[] { "TenantId", "ApplicationName" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpSecurityLogs_TenantId_Identity",
-                table: "AbpSecurityLogs",
-                columns: new[] { "TenantId", "Identity" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpSecurityLogs_TenantId_UserId",
-                table: "AbpSecurityLogs",
-                columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpSettings_Name_ProviderName_ProviderKey",
@@ -630,6 +637,41 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_AbpUsers_UserName",
                 table: "AbpUsers",
                 column: "UserName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsComments_TenantId_RepliedCommentId",
+                table: "CmsComments",
+                columns: new[] { "TenantId", "RepliedCommentId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsComments_TenantId_EntityType_EntityId",
+                table: "CmsComments",
+                columns: new[] { "TenantId", "EntityType", "EntityId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsRatings_TenantId_EntityType_EntityId_CreatorId",
+                table: "CmsRatings",
+                columns: new[] { "TenantId", "EntityType", "EntityId", "CreatorId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUserReactions_TenantId_EntityType_EntityId_ReactionName",
+                table: "CmsUserReactions",
+                columns: new[] { "TenantId", "EntityType", "EntityId", "ReactionName" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUserReactions_TenantId_CreatorId_EntityType_EntityId_ReactionName",
+                table: "CmsUserReactions",
+                columns: new[] { "TenantId", "CreatorId", "EntityType", "EntityId", "ReactionName" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUsers_TenantId_Email",
+                table: "CmsUsers",
+                columns: new[] { "TenantId", "Email" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUsers_TenantId_UserName",
+                table: "CmsUsers",
+                columns: new[] { "TenantId", "UserName" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -644,9 +686,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "AbpEntityPropertyChanges");
 
             migrationBuilder.DropTable(
-                name: "AbpFeatureValues");
-
-            migrationBuilder.DropTable(
                 name: "AbpOrganizationUnitRoles");
 
             migrationBuilder.DropTable(
@@ -654,9 +693,6 @@ namespace MyCompanyName.MyProjectName.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpRoleClaims");
-
-            migrationBuilder.DropTable(
-                name: "AbpSecurityLogs");
 
             migrationBuilder.DropTable(
                 name: "AbpSettings");
@@ -678,6 +714,18 @@ namespace MyCompanyName.MyProjectName.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CmsComments");
+
+            migrationBuilder.DropTable(
+                name: "CmsRatings");
+
+            migrationBuilder.DropTable(
+                name: "CmsUserReactions");
+
+            migrationBuilder.DropTable(
+                name: "CmsUsers");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChanges");

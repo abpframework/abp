@@ -216,6 +216,10 @@
             {
               "text": "Kafka Integration",
               "path": "Distributed-Event-Bus-Kafka-Integration.md"
+            },
+            {
+              "text": "Rebus Integration",
+              "path": "Distributed-Event-Bus-Rebus-Integration.md"
             }
           ]
         }

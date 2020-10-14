@@ -8,7 +8,7 @@ using Rebus.Transport.InMem;
 
 namespace Volo.Abp.EventBus.Rebus
 {
-    public class AbpEventBusRebusOptions
+    public class AbpRebusEventBusOptions
     {
         [NotNull]
         public string InputQueueName { get; set; }
@@ -29,7 +29,7 @@ namespace Volo.Abp.EventBus.Rebus
         }
         private Func<IBus, Type, object, Task> _publish;
 
-        public AbpEventBusRebusOptions()
+        public AbpRebusEventBusOptions()
         {
             _publish = DefaultPublish;
             _configurer = DefaultConfigurer;

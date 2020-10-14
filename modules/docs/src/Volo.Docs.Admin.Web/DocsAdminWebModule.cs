@@ -31,7 +31,6 @@ namespace Volo.Docs.Admin
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-
             Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DocsMenuContributor());
