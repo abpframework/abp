@@ -1,5 +1,7 @@
 # Modals
 
+> This document explains the details of the `abp-modal` Tag Helper, which simplifies to build the HTML markup for a modal dialog. Read [that documentation](../Modals.md) to learn how to work with modals.
+
 ## Introduction
 
 `abp-modal` is a main element to create a modal.
@@ -17,8 +19,6 @@ Basic usage:
    <abp-modal-footer buttons="Close"></abp-modal-footer>
 </abp-modal>
 ````
-
-
 
 ## Demo
 

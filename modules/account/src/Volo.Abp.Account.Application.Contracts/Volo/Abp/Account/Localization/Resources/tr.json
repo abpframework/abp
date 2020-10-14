@@ -56,6 +56,7 @@
     "BackToLogin": "Girişe dön",
     "ProfileTab:Password": "Şifre değiştir",
     "ProfileTab:PersonalInfo": "Kişisel bilgiler",
-    "ReturnToApplication": "Uygulamaya geri dön"
+    "ReturnToApplication": "Uygulamaya geri dön",
+    "Volo.Account:InvalidEmailAddress": "Email adresi bulunamadı: {0}"
   }
 }

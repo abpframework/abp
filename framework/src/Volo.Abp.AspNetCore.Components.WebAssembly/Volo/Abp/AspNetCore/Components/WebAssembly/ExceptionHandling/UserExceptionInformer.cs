@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -9,19 +11,32 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
 {
     public class UserExceptionInformer : IUserExceptionInformer, ITransientDependency
     {
+        public ILogger<UserExceptionInformer> Logger { get; set; }
         protected IUiMessageService MessageService { get; }
         protected IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; }
 
-        public UserExceptionInformer(IUiMessageService messageService, IExceptionToErrorInfoConverter exceptionToErrorInfoConverter)
+        public UserExceptionInformer(
+            IUiMessageService messageService,
+            IExceptionToErrorInfoConverter exceptionToErrorInfoConverter)
         {
             MessageService = messageService;
             ExceptionToErrorInfoConverter = exceptionToErrorInfoConverter;
+            Logger = NullLogger<UserExceptionInformer>.Instance;
         }
 
-        public virtual async Task InformAsync(UserExceptionInformerContext context)
+        public void Inform(UserExceptionInformerContext context)
         {
             var errorInfo = GetErrorInfo(context);
-            await ShowErrorInfoAsync(errorInfo);
+
+            if (errorInfo.Details.IsNullOrEmpty())
+            {
+                //TODO: Should we introduce MessageService.Error (sync) method instead of such a usage (without await)..?
+                MessageService.ErrorAsync(errorInfo.Message);
+            }
+            else
+            {
+                MessageService.ErrorAsync(errorInfo.Details, errorInfo.Message);
+            }
         }
 
         protected virtual RemoteServiceErrorInfo GetErrorInfo(UserExceptionInformerContext context)
@@ -32,18 +47,6 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
             }
 
             return ExceptionToErrorInfoConverter.Convert(context.Exception, false);
-        }
-
-        protected virtual async Task ShowErrorInfoAsync(RemoteServiceErrorInfo errorInfo)
-        {
-            if (errorInfo.Details.IsNullOrEmpty())
-            {
-                await MessageService.ErrorAsync(errorInfo.Message);
-            }
-            else
-            {
-                await MessageService.ErrorAsync(errorInfo.Details, errorInfo.Message);
-            }
         }
     }
 }

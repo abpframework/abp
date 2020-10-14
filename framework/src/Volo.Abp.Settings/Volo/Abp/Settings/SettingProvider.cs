@@ -35,7 +35,7 @@ namespace Volo.Abp.Settings
             //TODO: How to implement setting.IsInherited?
 
             var value = await GetOrNullValueFromProvidersAsync(providers, setting);
-            if (setting.IsEncrypted)
+            if (value != null && setting.IsEncrypted)
             {
                 value = SettingEncryptionService.Decrypt(setting, value);
             }
