@@ -168,7 +168,62 @@ Thanks to [@alexandru-bagu](https://github.com/alexandru-bagu) for the great con
 
 ## What's new with the ABP Commercial 3.3
 
+### The Blazor UI
+
+We have good news for the ABP Commercial Blazor UI too. We have implemented the [Lepton Theme](https://commercial.abp.io/themes) integration, so it is now available with the Blazor UI. Also, implemented most of the fundamental [modules](https://commercial.abp.io/modules).
+
+**A screenshot from the ABP Commercial startup template with the Blazor UI**
+
+![abp-commercial-blazor-ui](abp-commercial-blazor-ui.png)
+
+There are still missing features and modules. However, we are working on it to have a more complete version in the next release.
+
+### Multi-Tenant Social Logins
+
+[Account module](https://commercial.abp.io/modules/Volo.Account.Pro) now supports to manage the social/external logins in the UI. You can **enable/disable** and **set options** in the settings page. It also supports to use **different credentials for the tenants** and it is also **configured on the runtime**.
+
+![abp-commercial-setting-account-external-logins](abp-commercial-setting-account-external-logins.png)
+
+### Linked Accounts
+
 TODO
+
+### Paypal & Stripe Integrations
+
+TODO
+
+### ABP Suite Improvements
+
+We've done a lot of small improvements for the [ABP Suite](https://commercial.abp.io/tools/suite). Some of the enhancements are;
+
+* Show the previously installed modules as *installed* on the module list.
+* Switch between the latest stable, the latest [preview](https://docs.abp.io/en/abp/latest/Previews) and the latest [nightly build](https://docs.abp.io/en/abp/latest/Nightly-Builds) versions of the ABP related packages.
+* Moved the file that stores the *previously created entities* to the solution folder to allow you to store it in your source control system.
+
+### Others
+
+* Added an option to the Account Module to show reCAPTCHA on the login & the registration forms.
+
+Beside these, we've done a lot of small enhancements and bug fixes to provide a better development experience and increment your productivity.
+
+## New Articles
+
+The core ABP Framework team & the people continue to publish new articles on the ABP Community web site. The latest published articles are;
+
+* [Replacing Email Templates and Sending Emails](https://community.abp.io/articles/replacing-email-templates-and-sending-emails-jkeb8zzh) (by [@EngincanV](https://community.abp.io/members/EngincanV))
+* [How to Add Custom Properties to the User Entity](https://community.abp.io/articles/how-to-add-custom-property-to-the-user-entity-6ggxiddr) (by [@berkansasmaz](https://community.abp.io/members/berkansasmaz))
+* [Using the AdminLTE Theme with the ABP Framework MVC / Razor Pages UI](https://community.abp.io/articles/using-the-adminlte-theme-with-the-abp-framework-mvc-razor-pages-ui-gssbhb7m) (by [@mucahiddanis](https://community.abp.io/members/mucahiddanis))
+* [Using DevExtreme Angular Components With the ABP Framework](https://community.abp.io/articles/using-devextreme-angular-components-with-the-abp-framework-x5nyvj3i) (by [@bunyamin](https://community.abp.io/members/bunyamin))
+
+It is appreciated if you want to [submit an article](https://community.abp.io/articles/submit) related to the ABP Framework.
+
+## About the Next Release
+
+The next version will be `4.0.0`. We are releasing a major version since we will move the ABP Framework to .NET 5.0. We see that for most of the applications this will not be a breaking change and we hope you easily upgrade it.
+
+The planned 4.0.0-rc.1 (Release Candidate) version date is November 11th, just after the Microsoft releases the .NET 5.0 final. The planned 4.0.0 final release date is November 26th.
+
+Follow the [GitHub milestones](https://github.com/abpframework/abp/milestones) for the planned ABP Framework version release dates.
 
 ## Feedback
 
