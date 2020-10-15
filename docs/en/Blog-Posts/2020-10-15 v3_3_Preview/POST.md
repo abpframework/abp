@@ -24,9 +24,9 @@ There are some breaking changes with the Blazor UI. If you've built an applicati
 
 ### Automatic Validation for AntiForgery Token for HTTP APIs
 
-Starting with the version 3.3, all your HTTP API endpoints are **automatically protected** against CSRF attacks, unless you disable it for your application.
+Starting with the version 3.3, all your HTTP API endpoints are **automatically protected** against CSRF attacks, unless you disable it for your application. So, no configuration needed, just upgrade the ABP Framework.
 
-[See the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/CSRF-Anti-Forgery.md) to understand why you need it and how ABP Framework solves the problem.
+[See the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/CSRF-Anti-Forgery.md) to if you want to understand why you need it and how ABP Framework solves the problem.
 
 ### Rebus Integration Package for the Distributed Event Bus
 
