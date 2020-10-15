@@ -1,6 +1,6 @@
 # ABP Framework 3.3 RC Has Been Published
 
-We have released the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/)) `3.3.0-rc.1` today. This blog post introduces the new features and important changes of this new version.
+We have released the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/)) `3.3.0-rc.1` today. This blog post introduces the new features and important changes in the new version.
 
 ## What's new with the ABP Framework 3.3
 
@@ -8,7 +8,7 @@ We have released the [ABP Framework](https://abp.io/) (and the [ABP Commercial](
 
 We had released an experimental early preview version of the Blazor UI with the [previous version](https://blog.abp.io/abp/ABP-Framework-ABP-Commercial-3.2-RC-With-The-New-Blazor-UI). In this version, we've completed most of the fundamental infrastructure features and the application modules (like identity and tenant management).
 
-It currently has almost the same functionalities with the other UI types (Angular & MVC / Razor Pages).
+It currently has almost the same functionalities as the other UI types (Angular & MVC / Razor Pages).
 
 **Example screenshot**: User management page of the Blazor UI
 
@@ -16,7 +16,7 @@ It currently has almost the same functionalities with the other UI types (Angula
 
 > We've adapted the [Lepton Theme](https://commercial.abp.io/themes) for the ABP Commercial, see the related section below.
 
-We are still working on the fundamentals. So, the next version may introduce breaking changes for the Blazor UI, while we will work to keep them with minimal effect on your application code.
+We are still working on the fundamentals. So, the next version may introduce breaking changes of the Blazor UI. We will work hard to keep them with the minimal effect on your application code.
 
 #### Breaking Changes on the Blazor UI
 
@@ -36,9 +36,9 @@ See [the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Dis
 
 ### Async Repository LINQ Extension Methods
 
-You have a problem when you want to use **Async LINQ Extension Methods** (e.g. `FirstOrDefaultAsync(...)`) in your **domain** and **application** layers. These async methods are **not included in the standard LINQ extension methods**. They are defined by the [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) NuGet package (see [the code](https://github.com/dotnet/efcore/blob/main/src/EFCore/Extensions/EntityFrameworkQueryableExtensions.cs)). So, you normally need to reference to the **Microsoft.EntityFrameworkCore** package to be able to use these async methods.
+You have a problem when you want to use **Async LINQ Extension Methods** (e.g. `FirstOrDefaultAsync(...)`) in your **domain** and **application** layers. These async methods are **not included in the standard LINQ extension methods**. Those are defined by the [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) NuGet package (see [the code](https://github.com/dotnet/efcore/blob/main/src/EFCore/Extensions/EntityFrameworkQueryableExtensions.cs)). To be able to use these `async` methods, you need to reference to the `Microsoft.EntityFrameworkCore` package.
 
-If you don't want to depend on the EF Core in your business layer, then ABP Framework provides the `IAsyncQueryableExecuter` service to execute your queries asynchronously without depending to the EF Core package. You can see [the documentation](https://docs.abp.io/en/abp/latest/Repositories#option-3-iasyncqueryableexecuter) to get more information for this service.
+If you don't want to depend on the EF Core in your business layer, then ABP Framework provides the `IAsyncQueryableExecuter` service to execute your queries asynchronously without depending on the EF Core package. You can see [the documentation](https://docs.abp.io/en/abp/latest/Repositories#option-3-iasyncqueryableexecuter) to get more information about this service.
 
 ABP Framework version 3.3 takes this one step further and allows you to directly execute the async LINQ extension methods on the `IRepository` interface.
 
@@ -78,7 +78,7 @@ namespace MyCompanyName.MyProjectName
 
 All the standard LINQ methods are supported: *AllAsync, AnyAsync, AverageAsync, ContainsAsync, CountAsync, FirstAsync, FirstOrDefaultAsync, LastAsync, LastOrDefaultAsync, LongCountAsync, MaxAsync, MinAsync, SingleAsync, SingleOrDefaultAsync, SumAsync, ToArrayAsync, ToListAsync*.
 
-This approach still has a limitation. You need to execute the extension method directly on the repository object. For example, the usage below is **not supported**:
+This approach still has a limitation. You need to execute the extension method directly on the repository object. For example, the below usage is **not supported**:
 
 ````csharp
 var count = await _bookRepository.Where(x => x.Name.Contains("A")).CountAsync();
@@ -94,7 +94,7 @@ var count = await AsyncExecuter.CountAsync(
 
 `AsyncExecuter` has all the standard extension methods, so you don't have any restriction here. See [the repository documentation](https://docs.abp.io/en/abp/latest/Repositories#iqueryable-async-operations) for all the options you have.
 
-> ABP Framework does its best to not depend on the EF Core yet still be able to use the async LINQ extension methods. However, it there is no problem to depend on the EF Core for your application, you can add the Microsoft.EntityFrameworkCore NuGet package and use it natively.
+> ABP Framework does its best to not depend on the EF Core and still be able to use the async LINQ extension methods. However, there is no problem to depend on the EF Core for your application, you can add the `Microsoft.EntityFrameworkCore` NuGet package and use the native methods.
 
 ### Stream Support for the Application Service Methods
 
@@ -120,7 +120,7 @@ namespace MyProject.Test
 }
 ````
 
-The implementation can be like shown below:
+The implementation can be as shown below:
 
 ````csharp
 using System;
@@ -156,7 +156,7 @@ namespace MyProject.Test
 }
 ````
 
-> This is just a demo code. Do it better on a production code :)
+> This is just a demo code. Do it better in your production code :)
 
 Thanks to [@alexandru-bagu](https://github.com/alexandru-bagu) for the great contribution!
 
@@ -190,7 +190,7 @@ There are some breaking changes with the Blazor UI. If you've built an applicati
 
 ### Linked Accounts
 
-Linked user system allows you to link other accounts (including account in a different tenant) with your account, so you can switch between account with a single-click. It is practical since you no longer need to logout and login again with entering the username and password of the other account.
+Linked user system allows you to link other accounts (including account in a different tenant) with your account, so you can switch between different accounts with a single-click. It is practical since you no longer need to logout and login again with entering the credentials of the target account.
 
 To manage the linked accounts, go to the profile management page from the user menu;
 
@@ -198,7 +198,7 @@ To manage the linked accounts, go to the profile management page from the user m
 
 ### Paypal & Stripe Integrations
 
-The [Payment Module](https://commercial.abp.io/modules/Volo.Payment) was supporting PayU and 2Checkout providers until the version 3.3. It now has integration for Paypal and Stripe. See the [technical documentation](https://docs.abp.io/en/commercial/latest/modules/payment) to learn how to use it.
+The [Payment Module](https://commercial.abp.io/modules/Volo.Payment) was supporting PayU and 2Checkout providers until the version 3.3. It's now integrated to PayPal and Stripe. See the [technical documentation](https://docs.abp.io/en/commercial/latest/modules/payment) to learn how to use it.
 
 ### ABP Suite Improvements
 
@@ -206,17 +206,17 @@ We've done a lot of small improvements for the [ABP Suite](https://commercial.ab
 
 * Show the previously installed modules as *installed* on the module list.
 * Switch between the latest stable, the latest [preview](https://docs.abp.io/en/abp/latest/Previews) and the latest [nightly build](https://docs.abp.io/en/abp/latest/Nightly-Builds) versions of the ABP related packages.
-* Moved the file that stores the *previously created entities* to the solution folder to allow you to store it in your source control system.
+* Moved the file that stores the *previously created entities* into the solution folder to allow you to store it in your source control system.
 
 ### Others
 
 * Added an option to the Account Module to show reCAPTCHA on the login & the registration forms.
 
-Beside the new features introduced in this post, we've done a lot of small enhancements and bug fixes to provide a better development experience and increment the developer productivity.
+Besides the new features introduced in this post, we've done a lot of small other enhancements and bug fixes to provide a better development experience and increase the developer productivity.
 
 ## New Articles
 
-The core ABP Framework team & the people continue to publish new articles on the ABP Community web site. The latest published articles are;
+The core ABP Framework team & the community continue to publish new articles on the ABP Community web site. The recently published articles are;
 
 * [Replacing Email Templates and Sending Emails](https://community.abp.io/articles/replacing-email-templates-and-sending-emails-jkeb8zzh) (by [@EngincanV](https://community.abp.io/members/EngincanV))
 * [How to Add Custom Properties to the User Entity](https://community.abp.io/articles/how-to-add-custom-property-to-the-user-entity-6ggxiddr) (by [@berkansasmaz](https://community.abp.io/members/berkansasmaz))
@@ -227,12 +227,12 @@ It is appreciated if you want to [submit an article](https://community.abp.io/ar
 
 ## About the Next Release
 
-The next version will be `4.0.0`. We are releasing a major version since we will move the ABP Framework to .NET 5.0. We see that for most of the applications this will not be a breaking change and we hope you easily upgrade it.
+The next version will be `4.0.0`. We are releasing a major version, since we will move the ABP Framework to .NET 5.0. We see that for most of the applications this will not be a breaking change and we hope you easily upgrade to it.
 
-The planned 4.0.0-rc.1 (Release Candidate) version date is November 11th, just after the Microsoft releases the .NET 5.0 final. The planned 4.0.0 final release date is November 26th.
+The planned 4.0.0-rc.1 (Release Candidate) version date is **November 11**, just after the Microsoft releases the .NET 5.0 final. The planned 4.0.0 final release date is **November 26**.
 
-Follow the [GitHub milestones](https://github.com/abpframework/abp/milestones) for the planned ABP Framework version release dates.
+Follow the [GitHub milestones](https://github.com/abpframework/abp/milestones) for all the planned ABP Framework version release dates.
 
 ## Feedback
 
-Please try the ABP Framework 3.3.0 RC and [provide feedback](https://github.com/abpframework/abp/issues/new) to help us to release a more stable version. The planned release date for the [3.3.0 final](https://github.com/abpframework/abp/milestone/44) version is October 27th.
+Please check out the ABP Framework 3.3.0 RC and [provide feedback](https://github.com/abpframework/abp/issues/new) to help us to release a more stable version. The planned release date for the [3.3.0 final](https://github.com/abpframework/abp/milestone/44) version is October 27th.
