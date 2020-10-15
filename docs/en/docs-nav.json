@@ -470,6 +470,10 @@
                 {
                   "text": "Notify",
                   "path": "UI/AspNetCore/JavaScript-API/Notify.md"
+                },
+                {
+                  "text": "Events",
+                  "path": "UI/AspNetCore/JavaScript-API/Events.md"
                 }
               ]
             },
