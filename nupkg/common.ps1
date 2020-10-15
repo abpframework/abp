@@ -250,6 +250,7 @@ $projects = (
     # modules/tenant-management
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Application.Contracts",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Application",
+    "modules/tenant-management/src/Volo.Abp.TenantManagement.Blazor",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Domain",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Domain.Shared",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.EntityFrameworkCore",
