@@ -18,6 +18,7 @@ using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
 using Volo.Docs.GitHub.Documents.Version;
+using Volo.Docs.Localization;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
@@ -99,6 +100,8 @@ namespace Volo.Docs.Pages.Documents.Project
             _documentSectionRenderer = documentSectionRenderer;
             _versionHelper = versionHelper;
             _uiOptions = options.Value;
+
+            LocalizationResourceType = typeof(DocsResource);
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
@@ -312,11 +315,15 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 var LatestVersionBranchNameWithoutPrefix = RemoveVersionPrefix(Project.LatestVersionBranchName);
 
-                var latest = versions.FirstOrDefault(v=> v.Version == LatestVersionBranchNameWithoutPrefix);
-
-                if (latest != null)
+                foreach (var version in versions)
                 {
-                    return latest;
+                    if (version.Version == LatestVersionBranchNameWithoutPrefix)
+                    {
+                        return version;
+                    }
+                    
+                    version.DisplayText = $"{version.DisplayText} ({L["Preview"].Value})";
+
                 }
             }
 
