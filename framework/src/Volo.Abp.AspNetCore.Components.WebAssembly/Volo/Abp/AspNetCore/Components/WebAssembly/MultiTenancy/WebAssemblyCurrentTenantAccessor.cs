@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly
+namespace Volo.Abp.AspNetCore.Components.WebAssembly.MultiTenancy
 {
     [Dependency(ReplaceServices = true)]
     public class WebAssemblyCurrentTenantAccessor : ICurrentTenantAccessor, ISingletonDependency
