@@ -241,6 +241,7 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor",
 
     # modules/setting-management
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Blazor",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain.Shared",
     "modules/setting-management/src/Volo.Abp.SettingManagement.EntityFrameworkCore",
