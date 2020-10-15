@@ -23,7 +23,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                 var appSettingLines = appSetting.GetLines();
                 for (var i = 0; i < appSettingLines.Length; i++)
                 {
-                    if (appSettingLines[i].Contains(defaultPassPhrase) && appSettingLines[i].Contains(defaultPassPhrase))
+                    if (appSettingLines[i].Contains("DefaultPassPhrase") && appSettingLines[i].Contains(defaultPassPhrase))
                     {
                         appSettingLines[i] = appSettingLines[i].Replace(defaultPassPhrase, randomPassPhrase);
                     }
