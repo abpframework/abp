@@ -25,6 +25,7 @@ namespace Volo.Abp.IdentityServer.Clients
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(x => x.ClientId)
                 .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
         }
 

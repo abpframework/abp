@@ -43,8 +43,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is Local.
-            resultAsString.ShouldBe(DateTimeKind.Local.ToString().ToLower());
+            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+            //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
+            resultAsString.ShouldBe(DateTimeKind.Utc.ToString().ToLower());
         }
 
         [Fact]
@@ -56,8 +57,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is Local.
-            resultAsString.ShouldBe(DateTimeKind.Local.ToString().ToLower());
+            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+            //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
+            resultAsString.ShouldBe(DateTimeKind.Utc.ToString().ToLower());
         }
 
         [Fact]
@@ -71,9 +73,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is Local.
+            //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+            //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
             resultAsString.ShouldBe(
-                $"local_{DateTimeKind.ToString().ToLower()}_{DateTimeKind.ToString().ToLower()}_local");
+                $"utc_{DateTimeKind.ToString().ToLower()}_{DateTimeKind.ToString().ToLower()}_utc");
         }
     }
 
