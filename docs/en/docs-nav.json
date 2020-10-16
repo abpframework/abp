@@ -482,6 +482,10 @@
                 {
                   "text": "Events",
                   "path": "UI/AspNetCore/JavaScript-API/Events.md"
+                },
+                {
+                  "text": "DOM",
+                  "path": "UI/AspNetCore/JavaScript-API/DOM.md"
                 }
               ]
             },
