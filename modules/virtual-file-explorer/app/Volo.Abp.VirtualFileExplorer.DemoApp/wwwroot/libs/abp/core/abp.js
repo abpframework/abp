@@ -136,6 +136,38 @@ var abp = abp || {};
     };
 
     abp.localization.defaultResourceName = undefined;
+    abp.localization.currentCulture = {
+        cultureName: undefined
+    };
+
+    var getMapValue = function (packageMaps, packageName, language) {
+        language = language || abp.localization.currentCulture.name;
+        if (!packageMaps || !packageName || !language) {
+            return language;
+        }
+
+        var packageMap = packageMaps[packageName];
+        if (!packageMap) {
+            return language;
+        }
+
+        for (var i = 0; i < packageMap.length; i++) {
+            var map = packageMap[i];
+            if (map.name === language){
+                return map.value;
+            }
+        }
+
+        return language;
+    };
+
+    abp.localization.getLanguagesMap = function (packageName, language) {
+        return getMapValue(abp.localization.languagesMap, packageName, language);
+    };
+
+    abp.localization.getLanguageFilesMap = function (packageName, language) {
+        return getMapValue(abp.localization.languageFilesMap, packageName, language);
+    };
 
     /* AUTHORIZATION **********************************************/
 
@@ -330,7 +362,7 @@ var abp = abp || {};
     };
 
     /* opts: {
-     *    
+     *
      * }
      */
     abp.ui.unblock = function (opts) {
@@ -584,7 +616,7 @@ var abp = abp || {};
      * This is a simple implementation created to be used by ABP.
      * Please use a complete cookie library if you need.
      * @param {string} key
-     * @param {string} value 
+     * @param {string} value
      * @param {Date} expireDate (optional). If not specified the cookie will expire at the end of session.
      * @param {string} path (optional)
      */
@@ -661,6 +693,62 @@ var abp = abp || {};
 
     abp.security.antiForgery.getToken = function () {
         return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);
+    };
+
+    /* CLOCK *****************************************/
+    abp.clock = abp.clock || {};
+
+    abp.clock.kind = 'Unspecified';
+
+    abp.clock.supportsMultipleTimezone = function () {
+        return abp.clock.kind === 'Utc';
+    };
+
+    var toLocal = function (date) {
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds(),
+            date.getMilliseconds()
+        );
+    };
+
+    var toUtc = function (date) {
+        return Date.UTC(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            date.getUTCHours(),
+            date.getUTCMinutes(),
+            date.getUTCSeconds(),
+            date.getUTCMilliseconds()
+        );
+    };
+
+    abp.clock.now = function () {
+        if (abp.clock.kind === 'Utc') {
+            return toUtc(new Date());
+        }
+        return new Date();
+    };
+
+    abp.clock.normalize = function (date) {
+        var kind = abp.clock.kind;
+
+        if (kind === 'Unspecified') {
+            return date;
+        }
+
+        if (kind === 'Local') {
+            return toLocal(date);
+        }
+
+        if (kind === 'Utc') {
+            return toUtc(date);
+        }
     };
 
 })();

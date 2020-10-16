@@ -1,5 +1,6 @@
-﻿using Volo.Abp.DependencyInjection;
-using Volo.Abp.Serialization.Binary;
+﻿using System.Text.Json;
+using Volo.Abp.DependencyInjection;
+
 
 namespace Volo.Abp.Serialization.Objects
 {
@@ -8,12 +9,12 @@ namespace Volo.Abp.Serialization.Objects
         public byte[] Serialize(Car obj)
         {
             obj.Name += "-serialized";
-            return BinarySerializationHelper.Serialize(obj);
+            return JsonSerializer.SerializeToUtf8Bytes(obj);
         }
 
         public Car Deserialize(byte[] bytes)
         {
-            var car = (Car)BinarySerializationHelper.DeserializeExtended(bytes);
+            var car = JsonSerializer.Deserialize<Car>(bytes);
             car.Name += "-deserialized";
             return car;
         }

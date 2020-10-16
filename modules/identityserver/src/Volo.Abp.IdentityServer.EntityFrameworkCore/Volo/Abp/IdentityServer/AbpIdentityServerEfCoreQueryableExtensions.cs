@@ -16,6 +16,7 @@ namespace Volo.Abp.IdentityServer
             }
 
             return queryable
+                .AsSplitQuery()
                 .Include(x => x.Secrets)
                 .Include(x => x.UserClaims)
                 .Include(x => x.Scopes)
@@ -41,6 +42,7 @@ namespace Volo.Abp.IdentityServer
             }
 
             return queryable
+                .AsSplitQuery()
                 .Include(x => x.AllowedGrantTypes)
                 .Include(x => x.RedirectUris)
                 .Include(x => x.PostLogoutRedirectUris)
