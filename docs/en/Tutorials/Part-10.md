@@ -911,6 +911,17 @@ You can run the application and try to create a new book or update an existing b
 
 {{else if UI=="NG"}}
 
+### Service Proxy Generation
+
+[ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
+
+Run the following command in the `angular` folder:
+
+```bash
+abp generate-proxy
+```
+This command will update the service proxy files under the `/src/app/proxy/` folder.
+
 ### The Book List
 
 Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:
