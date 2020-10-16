@@ -464,6 +464,14 @@
                   "path": "UI/AspNetCore/JavaScript-API/Localization.md"
                 },
                 {
+                  "text": "Auth",
+                  "path": "UI/AspNetCore/JavaScript-API/Auth.md"
+                },
+                {
+                  "text": "Current User",
+                  "path": "UI/AspNetCore/JavaScript-API/CurrentUser.md"
+                },
+                {
                   "text": "Settings",
                   "path": "UI/AspNetCore/JavaScript-API/Settings.md"
                 },
@@ -482,6 +490,10 @@
                 {
                   "text": "Events",
                   "path": "UI/AspNetCore/JavaScript-API/Events.md"
+                },
+                {
+                  "text": "DOM",
+                  "path": "UI/AspNetCore/JavaScript-API/DOM.md"
                 }
               ]
             },
