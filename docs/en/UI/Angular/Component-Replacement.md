@@ -42,7 +42,7 @@ The example below describes how to replace the `ApplicationLayoutComponent`:
 Run the following command to generate a layout in `angular` folder:
 
 ```bash
-yarn ng generate component my-application-layout
+yarn ng generate component my-layout
 ```
 
 Add the following code in your layout template (`my-layout.component.html`) where you want the page to be loaded.
