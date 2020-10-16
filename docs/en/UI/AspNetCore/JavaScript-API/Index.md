@@ -11,7 +11,7 @@ ABP provides a set of JavaScript APIs for ASP.NET Core MVC / Razor Pages applica
 * [abp.event](Events.md)
 * [abp.features](Features.md)
 * [abp.localization](Localization.md)
-* abp.log
+* [abp.log](Logging.md)
 * [abp.message](Message.md)
 * [abp.notify](Notify.md)
 * abp.security

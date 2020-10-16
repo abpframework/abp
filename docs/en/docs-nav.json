@@ -490,6 +490,10 @@
                 {
                   "text": "DOM",
                   "path": "UI/AspNetCore/JavaScript-API/DOM.md"
+                },
+                {
+                  "text": "Logging",
+                  "path": "UI/AspNetCore/JavaScript-API/Logging.md"
                 }
               ]
             },
