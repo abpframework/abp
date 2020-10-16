@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Settings
+using System.Collections.Generic;
+
+namespace Volo.Abp.Settings
 {
     public interface ISettingDefinitionContext
     {
