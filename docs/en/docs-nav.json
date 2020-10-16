@@ -476,6 +476,10 @@
                   "path": "UI/AspNetCore/JavaScript-API/Settings.md"
                 },
                 {
+                  "text": "Features",
+                  "path": "UI/AspNetCore/JavaScript-API/Features.md"
+                },
+                {
                   "text": "AJAX",
                   "path": "UI/AspNetCore/JavaScript-API/Ajax.md"
                 },
