@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Volo.Abp.DependencyInjection;
 
@@ -15,9 +14,9 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
             JsRuntime = jsRuntime;
         }
 
-        public async ValueTask SetAsync(string key, string value, DateTimeOffset? expireDate = null, string path = null)
+        public async ValueTask SetAsync(string key, string value, CookieOptions options)
         {
-            await JsRuntime.InvokeVoidAsync("abp.utils.setCookieValue", key, value, expireDate?.ToString("r"), path);
+            await JsRuntime.InvokeVoidAsync("abp.utils.setCookieValue", key, value, options?.ExpireDate?.ToString("r"), options?.Path, options?.Secure);
         }
 
         public async ValueTask<string> GetAsync(string key)

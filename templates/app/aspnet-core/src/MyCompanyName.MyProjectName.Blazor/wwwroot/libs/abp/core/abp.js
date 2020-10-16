@@ -1,4 +1,14 @@
-﻿window.abp.utils.setCookieValue = function (key, value, expireDate, path) {
+﻿/**
+     * Sets a cookie value for given key.
+     * This is a simple implementation created to be used by ABP.
+     * Please use a complete cookie library if you need.
+     * @param {string} key
+     * @param {string} value
+     * @param {string} expireDate (optional). If not specified the cookie will expire at the end of session.
+     * @param {string} path (optional)
+     * @param {bool} secure (optional)
+     */
+window.abp.utils.setCookieValue = function (key, value, expireDate, path, secure) {
     var cookieValue = encodeURIComponent(key) + '=';
     if (value) {
         cookieValue = cookieValue + encodeURIComponent(value);
@@ -10,6 +20,10 @@
 
     if (path) {
         cookieValue = cookieValue + "; path=" + path;
+    }
+
+    if (secure) {
+        cookieValue = cookieValue + "; secure";
     }
 
     document.cookie = cookieValue;
