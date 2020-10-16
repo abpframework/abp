@@ -460,6 +460,10 @@
                   "path": "UI/AspNetCore/JavaScript-API/Auth.md"
                 },
                 {
+                  "text": "Current User",
+                  "path": "UI/AspNetCore/JavaScript-API/CurrentUser.md"
+                },
+                {
                   "text": "Settings",
                   "path": "UI/AspNetCore/JavaScript-API/Settings.md"
                 },
