@@ -22,7 +22,7 @@ abp.ResourceLoader.loadScript('/Pages/my-script.js');
 
 **Example: Provide the `loadCallback` argument**
 
-````
+````js
 abp.ResourceLoader.loadScript('/Pages/my-script.js', function() {
   console.log('successfully loaded :)');
 });
