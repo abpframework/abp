@@ -484,6 +484,10 @@
                   "path": "UI/AspNetCore/JavaScript-API/Notify.md"
                 },
                 {
+                  "text": "Block/Busy",
+                  "path": "UI/AspNetCore/JavaScript-API/Block-Busy.md"
+                },
+                {
                   "text": "Events",
                   "path": "UI/AspNetCore/JavaScript-API/Events.md"
                 },
