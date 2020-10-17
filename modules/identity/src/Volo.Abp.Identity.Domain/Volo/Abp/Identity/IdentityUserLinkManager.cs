@@ -32,16 +32,22 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            var userLink = new IdentityLinkUser(
-                GuidGenerator.Create(),
-                sourceLinkUser,
-                targetLinkUser);
-            await IdentityLinkUserRepository.InsertAsync(userLink, true);
+            using (CurrentTenant.Change(null))
+            {
+                var userLink = new IdentityLinkUser(
+                    GuidGenerator.Create(),
+                    sourceLinkUser,
+                    targetLinkUser);
+                await IdentityLinkUserRepository.InsertAsync(userLink, true);
+            }
         }
 
         public virtual async Task<bool> IsLinkedAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser)
         {
-            return await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser) != null;
+            using (CurrentTenant.Change(null))
+            {
+                return await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser) != null;
+            }
         }
 
         public virtual async Task UnlinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser)
@@ -51,10 +57,13 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            var linkedUser = await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser);
-            if (linkedUser != null)
+            using (CurrentTenant.Change(null))
             {
-                await IdentityLinkUserRepository.DeleteAsync(linkedUser);
+                var linkedUser = await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser);
+                if (linkedUser != null)
+                {
+                    await IdentityLinkUserRepository.DeleteAsync(linkedUser);
+                }
             }
         }
 
