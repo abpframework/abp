@@ -38,7 +38,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 
 We have created `Book` and `Author` functionalities for the book store application. However, currently there is no relation between these entities.
 
-In this tutorial, we will establish a **1 to N** relation between the `Book` and the `Author`.
+In this tutorial, we will establish a **1 to N** relation between the `Author` and the `Book` entities.
 
 ## Add Relation to The Book Entity
 
