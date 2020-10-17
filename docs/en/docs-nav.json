@@ -498,6 +498,10 @@
                 {
                   "text": "Logging",
                   "path": "UI/AspNetCore/JavaScript-API/Logging.md"
+                },
+                {
+                  "text": "Resource Loader",
+                  "path": "UI/AspNetCore/JavaScript-API/ResourceLoader.md"
                 }
               ]
             },

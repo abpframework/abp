@@ -12,7 +12,7 @@ ABP provides a set of JavaScript APIs for ASP.NET Core MVC / Razor Pages applica
 * [Features](Features.md)
 * [Localization](Localization.md)
 * [Logging](Logging.md)
-* ResourceLoader
+* [ResourceLoader](ResourceLoader.md)
 * [Settings](Settings.md)
 * [UI Block/Busy](Block-Busy.md)
 * [UI Message](Message.md)
