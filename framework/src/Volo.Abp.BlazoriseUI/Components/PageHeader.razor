@@ -4,7 +4,7 @@
     </Column>
     @if (BreadcrumbItems.Any())
     {
-        <Column ColumnSize="ColumnSize.IsAuto.OnWidescreen" Class="pl-lg-0">
+        <Column ColumnSize="ColumnSize.IsAuto.OnWidescreen" Padding="Padding.Is0.FromLeft.OnWidescreen">
             <Breadcrumb Mode="@(BreadcrumbShowCurrent ? BreadcrumbMode.Auto : BreadcrumbMode.None)">
                 @if (BreadcrumbShowHome)
                 {
