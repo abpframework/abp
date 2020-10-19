@@ -16,10 +16,10 @@ namespace MyCompanyName.MyProjectName.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseIdentityColumns()
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.0-rc.2.20475.6");
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {
@@ -28,99 +28,99 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationName")
-                        .HasColumnName("ApplicationName")
+                        .HasMaxLength(96)
                         .HasColumnType("nvarchar(96)")
-                        .HasMaxLength(96);
+                        .HasColumnName("ApplicationName");
 
                     b.Property<string>("BrowserInfo")
-                        .HasColumnName("BrowserInfo")
+                        .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                        .HasColumnName("BrowserInfo");
 
                     b.Property<string>("ClientId")
-                        .HasColumnName("ClientId")
+                        .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("ClientIpAddress")
-                        .HasColumnName("ClientIpAddress")
+                        .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnName("ClientIpAddress");
 
                     b.Property<string>("ClientName")
-                        .HasColumnName("ClientName")
+                        .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnName("ClientName");
 
                     b.Property<string>("Comments")
-                        .HasColumnName("Comments")
+                        .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnName("Comments");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<string>("CorrelationId")
-                        .HasColumnName("CorrelationId")
+                        .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnName("CorrelationId");
 
                     b.Property<string>("Exceptions")
-                        .HasColumnName("Exceptions")
+                        .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnName("Exceptions");
 
                     b.Property<int>("ExecutionDuration")
-                        .HasColumnName("ExecutionDuration")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ExecutionDuration");
 
                     b.Property<DateTime>("ExecutionTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnName("ExtraProperties")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<string>("HttpMethod")
-                        .HasColumnName("HttpMethod")
+                        .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
+                        .HasColumnName("HttpMethod");
 
                     b.Property<int?>("HttpStatusCode")
-                        .HasColumnName("HttpStatusCode")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HttpStatusCode");
 
                     b.Property<Guid?>("ImpersonatorTenantId")
-                        .HasColumnName("ImpersonatorTenantId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ImpersonatorTenantId");
 
                     b.Property<Guid?>("ImpersonatorUserId")
-                        .HasColumnName("ImpersonatorUserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ImpersonatorUserId");
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
 
                     b.Property<string>("TenantName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url")
-                        .HasColumnName("Url")
+                        .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnName("Url");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnName("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
 
                     b.Property<string>("UserName")
-                        .HasColumnName("UserName")
+                        .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnName("UserName");
 
                     b.HasKey("Id");
 
@@ -138,39 +138,39 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuditLogId")
-                        .HasColumnName("AuditLogId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("AuditLogId");
 
                     b.Property<int>("ExecutionDuration")
-                        .HasColumnName("ExecutionDuration")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ExecutionDuration");
 
                     b.Property<DateTime>("ExecutionTime")
-                        .HasColumnName("ExecutionTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ExecutionTime");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnName("ExtraProperties")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<string>("MethodName")
-                        .HasColumnName("MethodName")
+                        .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnName("MethodName");
 
                     b.Property<string>("Parameters")
-                        .HasColumnName("Parameters")
+                        .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
+                        .HasColumnName("Parameters");
 
                     b.Property<string>("ServiceName")
-                        .HasColumnName("ServiceName")
+                        .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnName("ServiceName");
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 
@@ -188,39 +188,39 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuditLogId")
-                        .HasColumnName("AuditLogId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("AuditLogId");
 
                     b.Property<DateTime>("ChangeTime")
-                        .HasColumnName("ChangeTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ChangeTime");
 
                     b.Property<byte>("ChangeType")
-                        .HasColumnName("ChangeType")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint")
+                        .HasColumnName("ChangeType");
 
                     b.Property<string>("EntityId")
                         .IsRequired()
-                        .HasColumnName("EntityId")
+                        .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnName("EntityId");
 
                     b.Property<Guid?>("EntityTenantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntityTypeFullName")
                         .IsRequired()
-                        .HasColumnName("EntityTypeFullName")
+                        .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnName("EntityTypeFullName");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnName("ExtraProperties")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 
@@ -241,30 +241,30 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("NewValue")
-                        .HasColumnName("NewValue")
+                        .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                        .HasColumnName("NewValue");
 
                     b.Property<string>("OriginalValue")
-                        .HasColumnName("OriginalValue")
+                        .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                        .HasColumnName("OriginalValue");
 
                     b.Property<string>("PropertyName")
                         .IsRequired()
-                        .HasColumnName("PropertyName")
+                        .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnName("PropertyName");
 
                     b.Property<string>("PropertyTypeFullName")
                         .IsRequired()
-                        .HasColumnName("PropertyTypeFullName")
+                        .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnName("PropertyTypeFullName");
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 
@@ -281,22 +281,22 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("ProviderName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 
@@ -313,21 +313,21 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("ProviderName")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nvarchar(2048)")
-                        .HasMaxLength(2048);
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.HasKey("Id");
 
@@ -361,6 +361,18 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasForeignKey("EntityChangeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
+                {
+                    b.Navigation("Actions");
+
+                    b.Navigation("EntityChanges");
+                });
+
+            modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
+                {
+                    b.Navigation("PropertyChanges");
                 });
 #pragma warning restore 612, 618
         }
