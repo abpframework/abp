@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
@@ -13,6 +13,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             }
 
             return queryable
+                .AsSplitQuery()
                 .Include(x => x.Roles)
                 .Include(x => x.Logins)
                 .Include(x => x.Claims)

@@ -1,0 +1,22 @@
+{
+    "culture": "hu",
+    "texts": {
+      "PickYourReaction": "Válassza ki a reakciót",
+      "YourComment": "A hozzászólásod",
+      "YourReply": "A válaszod",
+      "Comments": "Megjegyzések",
+      "Send": "Küldés",
+      "Delete": "Törlés",
+      "Reply": "Válasz",
+      "Update": "Frissítés",
+      "Edit": "Szerkesztés",
+      "LoginToAddComment": "Jelentkezzen be a hozzászóláshoz",
+      "LoginToReply": "Jelentkezzen be a válaszhoz",
+      "MessageDeletionConfirmationMessage": "Ezt a megjegyzést teljesen töröljük.",
+      "CommentAuthorizationExceptionMessage": "Ezek a megjegyzések nem nyilvánosak.",
+      "Undo": "Visszavonás",
+      "RatingUndoMessage": "Az értékelésed visszavonásra kerül.",
+      "LoginToRate": "Jelentkezzen be az értékeléshez",
+      "Star": "Csillag"
+    }
+  }

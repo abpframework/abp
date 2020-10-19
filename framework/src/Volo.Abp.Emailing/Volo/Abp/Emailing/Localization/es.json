@@ -18,6 +18,8 @@
     "Description:Abp.Mailing.Smtp.Password": "La contraseña del ususario asociado a las credenciales.",
     "Description:Abp.Mailing.Smtp.Domain": "El dominio o equipo que valida las credenciales.",
     "Description:Abp.Mailing.Smtp.EnableSsl": "Si SmtpClient usa Secure Sockets Layer (SSL) para encriptar la conección.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Si las credenciales por defecto se envían con los request."
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Si las credenciales por defecto se envían con los request.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Plantilla de email por defecto",
+    "TextTemplate:StandardEmailTemplates.Message": "Plantilla de mensaje simple para emails"
   }
 }

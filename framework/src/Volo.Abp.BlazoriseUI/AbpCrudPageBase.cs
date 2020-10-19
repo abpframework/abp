@@ -225,7 +225,7 @@ namespace Volo.Abp.BlazoriseUI
         {
             if (reference == null)
             {
-                reference = (TRef) ScopedServices.GetRequiredService(serviceType);
+                reference = (TRef)ScopedServices.GetRequiredService(serviceType);
             }
 
             return reference;
@@ -266,7 +266,7 @@ namespace Volo.Abp.BlazoriseUI
             var input = await CreateGetListInputAsync();
             var result = await AppService.GetListAsync(input);
             Entities = MapToListViewModel(result.Items);
-            TotalCount = (int?) result.TotalCount;
+            TotalCount = (int?)result.TotalCount;
         }
 
         private IReadOnlyList<TListViewModel> MapToListViewModel(IReadOnlyList<TGetListOutputDto> dtos)

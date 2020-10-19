@@ -32,6 +32,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
         {
             var query = from apiResource in DbSet.IncludeDetails(includeDetails)
                 where apiResourceNames.Contains(apiResource.Name)
+                orderby apiResource.Name
                 select apiResource;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));

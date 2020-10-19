@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,12 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             where TStartupModule : IAbpModule
         {
             Check.NotNull(builder, nameof(builder));
+
+            // Related this commit(https://github.com/dotnet/aspnetcore/commit/b99d805bc037fcac56afb79abeb7d5a43141c85e)
+            // Microsoft.AspNetCore.Blazor.BuildTools has been removed in net 5.0.
+            // This call may be removed when we find a suitable solution.
+            // System.Runtime.CompilerServices.AsyncStateMachineAttribute
+            Castle.DynamicProxy.Generators.AttributesToAvoidReplicating.Add<AsyncStateMachineAttribute>();
 
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddSingleton(builder);

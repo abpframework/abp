@@ -4,6 +4,7 @@
     "Languages": "Lenguajes",
     "AreYouSure": "¿Está seguro?",
     "Cancel": "Cancelar",
+    "Clear": "Limpiar",
     "Yes": "Si",
     "No": "No",
     "Ok": "Aceptar",
@@ -34,6 +35,8 @@
     "PagerInfoEmpty": "Mostrando desde 0 hasta 0 de 0 registros",
     "PagerInfoFiltered": "(filtrado de un total de _MAX_ registros)",
     "NoDataAvailableInDatatable": "No hay datos",
+    "Total": "total",
+    "Selected": "seleccionado",
     "PagerShowMenuEntries": "Mostrar _MENU_ registros",
     "DatatableActionDropdownDefaultText": "Acciones",
     "ChangePassword": "Cambiar contraseña",
@@ -41,6 +44,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "Tiene cambios sin guardar.",
     "GoHomePage": "Ir a la página principal",
     "GoBack": "Atras",
-    "Search": "Buscar"
+    "Search": "Buscar",
+    "ItemWillBeDeletedMessageWithFormat": "Se eliminarán {0}!",
+    "ItemWillBeDeletedMessage": "Este itém será eliminado!",
+    "ManageYourAccount": "Administre su cuenta"
   }
 }

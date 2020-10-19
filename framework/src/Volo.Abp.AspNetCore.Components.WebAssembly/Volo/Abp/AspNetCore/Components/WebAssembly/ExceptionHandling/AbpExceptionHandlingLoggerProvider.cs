@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
 
         public void Dispose()
         {
-            _logger.Dispose();
+
         }
     }
 }

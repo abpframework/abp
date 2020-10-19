@@ -12,7 +12,7 @@
           "path": "Startup-Templates/Console.md"
         },
         {
-          "text": "空Web应用程序t",
+          "text": "空Web应用程序",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
@@ -175,6 +175,10 @@
             {
               "text": "Kafka 集成",
               "path": "Distributed-Event-Bus-Kafka-Integration.md"
+            },
+            {
+              "text": "Rebus 集成",
+              "path": "Distributed-Event-Bus-Rebus-Integration.md"
             }
           ]
         }

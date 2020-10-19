@@ -1,16 +1,17 @@
-<div class="toast" [ngClass]="severityClass" (click)="tap()">
-  <div class="toast-icon">
+<div class="abp-toast" [ngClass]="severityClass" (click)="tap()">
+  <div class="abp-toast-icon">
     <i class="fa icon" [ngClass]="iconClass"></i>
   </div>
-  <div class="toast-content">
-    <button class="toast-close-button" (click)="close()" *ngIf="toast.options.closable">
+  <div class="abp-toast-content">
+    <button class="abp-toast-close-button" (click)="close()" *ngIf="toast.options.closable">
       <i class="fa fa-times"></i>
     </button>
-    <div class="toast-title">
+    <div class="abp-toast-title">
       {{ toast.title | abpLocalization: toast.options?.titleLocalizationParams }}
     </div>
-    <p class="toast-message">
-      {{ toast.message | abpLocalization: toast.options?.messageLocalizationParams }}
-    </p>
+    <p
+      class="abp-toast-message"
+      [innerHTML]="toast.message | abpLocalization: toast.options?.messageLocalizationParams"
+    ></p>
   </div>
 </div>

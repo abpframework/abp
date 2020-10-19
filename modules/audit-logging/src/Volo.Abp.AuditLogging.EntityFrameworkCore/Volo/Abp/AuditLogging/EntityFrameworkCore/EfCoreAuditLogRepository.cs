@@ -143,7 +143,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
         public Task<EntityChange> GetEntityChange(Guid entityChangeId)
         {
-            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails().Where(x => x.Id == entityChangeId).FirstAsync();
+            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails().OrderBy(x => x.Id).Where(x => x.Id == entityChangeId).FirstAsync();
         }
 
         public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(
