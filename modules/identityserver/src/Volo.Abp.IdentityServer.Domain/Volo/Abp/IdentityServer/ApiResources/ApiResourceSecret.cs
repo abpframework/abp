@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public class ApiSecret : Secret
+    public class ApiResourceSecret : Secret
     {
         public virtual Guid ApiResourceId { get; protected set; }
 
-        protected ApiSecret()
+        protected ApiResourceSecret()
         {
 
         }
@@ -18,16 +18,16 @@ namespace Volo.Abp.IdentityServer.ApiResources
             return ApiResourceId == apiResourceId && Value == value && Type == type;
         }
 
-        protected internal ApiSecret(
+        protected internal ApiResourceSecret(
             Guid apiResourceId,
-            [NotNull] string value, 
-            DateTime? expiration = null, 
-            string type = IdentityServerConstants.SecretTypes.SharedSecret, 
+            [NotNull] string value,
+            DateTime? expiration = null,
+            string type = IdentityServerConstants.SecretTypes.SharedSecret,
             string description = null
             ) : base(
-                value, 
-                expiration, 
-                type, 
+                value,
+                expiration,
+                type,
                 description)
         {
             ApiResourceId = apiResourceId;

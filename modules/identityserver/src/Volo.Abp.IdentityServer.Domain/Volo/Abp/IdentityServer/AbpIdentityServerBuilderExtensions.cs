@@ -55,7 +55,9 @@ namespace Volo.Abp.IdentityServer
             return builder;
         }
 
-        public static IIdentityServerBuilder AddAbpDeveloperSigningCredential(
+        //TODO: Use the latest Identity server code to optimize performance.
+        // https://github.com/IdentityServer/IdentityServer4/blob/main/src/IdentityServer4/src/Configuration/DependencyInjection/BuilderExtensions/Crypto.cs
+        private static IIdentityServerBuilder AddAbpDeveloperSigningCredential(
             this IIdentityServerBuilder builder,
             bool persistKey = true,
             string filename = null,

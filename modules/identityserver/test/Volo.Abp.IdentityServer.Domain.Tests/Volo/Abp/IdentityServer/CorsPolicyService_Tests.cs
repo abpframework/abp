@@ -35,7 +35,7 @@ namespace Volo.Abp.IdentityServer
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var client1 = await _clientRepository.FindByCliendIdAsync("ClientId1");
+                var client1 = await _clientRepository.FindByClientIdAsync("ClientId1");
                 client1.AddCorsOrigin("https://new-origin.com");
                 await _clientRepository.UpdateAsync(client1);
 

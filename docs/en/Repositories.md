@@ -270,7 +270,7 @@ This method is suggested;
 
 For example, ABP Framework uses the `IAsyncQueryableExecuter` in the `CrudAppService` base class (see the [application services](Application-Services.md) document).
 
-### Option-3: Custom Repository Methods
+### Option-4: Custom Repository Methods
 
 You can always create custom repository methods and use the database provider specific APIs, like async extension methods here. See [EF Core](Entity-Framework-Core.md) or [MongoDb](MongoDB.md) document for more info about the custom repositories.
 

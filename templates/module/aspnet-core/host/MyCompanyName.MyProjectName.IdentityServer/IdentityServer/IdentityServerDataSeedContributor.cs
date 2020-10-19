@@ -7,12 +7,14 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
+using ApiScope = Volo.Abp.IdentityServer.ApiScopes.ApiScope;
 using Client = Volo.Abp.IdentityServer.Clients.Client;
 
 namespace MyCompanyName.MyProjectName.IdentityServer
@@ -20,6 +22,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
     public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         private readonly IApiResourceRepository _apiResourceRepository;
+        private readonly IApiScopeRepository _apiScopeRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
@@ -29,6 +32,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         public IdentityServerDataSeedContributor(
             IClientRepository clientRepository,
             IApiResourceRepository apiResourceRepository,
+            IApiScopeRepository apiScopeRepository,
             IIdentityResourceDataSeeder identityResourceDataSeeder,
             IGuidGenerator guidGenerator,
             IPermissionDataSeeder permissionDataSeeder,
@@ -36,6 +40,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         {
             _clientRepository = clientRepository;
             _apiResourceRepository = apiResourceRepository;
+            _apiScopeRepository = apiScopeRepository;
             _identityResourceDataSeeder = identityResourceDataSeeder;
             _guidGenerator = guidGenerator;
             _permissionDataSeeder = permissionDataSeeder;
@@ -47,6 +52,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         {
             await _identityResourceDataSeeder.CreateStandardResourcesAsync();
             await CreateApiResourcesAsync();
+            await CreateApiScopeAsync();
             await CreateClientsAsync();
         }
 
@@ -91,10 +97,17 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             return await _apiResourceRepository.UpdateAsync(apiResource);
         }
 
+        private async Task CreateApiScopeAsync()
+        {
+            var apiScope = await _apiScopeRepository.GetByNameAsync("MyProjectName");
+            if (apiScope == null)
+            {
+                await _apiScopeRepository.InsertAsync(new ApiScope(_guidGenerator.Create(), "MyProjectName", "MyProjectName API"), autoSave: true);
+            }
+        }
+
         private async Task CreateClientsAsync()
         {
-            const string commonSecret = "E5Xd4yMqjP5kjWFKrYgySBju6JVfCzMyFp7n2QmMrME=";
-
             var commonScopes = new[]
             {
                 "email",
@@ -103,6 +116,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 "role",
                 "phone",
                 "address",
+
                 "MyProjectName"
             };
 
@@ -113,13 +127,18 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             if (!webClientId.IsNullOrWhiteSpace())
             {
                 var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"].EnsureEndsWith('/');
+
+                /* MyProjectName_Web client is only needed if you created a tiered
+                 * solution. Otherwise, you can delete this client. */
+
                 await CreateClientAsync(
-                    webClientId,
-                    commonScopes,
-                    new[] { "hybrid" },
-                    commonSecret,
+                    name: webClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] {"hybrid"},
+                    secret: (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     redirectUri: $"{webClientRootUrl}signin-oidc",
-                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
+                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
+                    frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout"
                 );
             }
 
@@ -128,10 +147,10 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             if (!consoleClientId.IsNullOrWhiteSpace())
             {
                 await CreateClientAsync(
-                    consoleClientId,
-                    commonScopes,
-                    new[] { "password", "client_credentials" },
-                    commonSecret
+                    name: consoleClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] {"password", "client_credentials"},
+                    secret: (configurationSection["MyProjectName_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
                 );
             }
             
@@ -167,7 +186,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             bool requirePkce = false,
             IEnumerable<string> permissions = null)
         {
-            var client = await _clientRepository.FindByCliendIdAsync(name);
+            var client = await _clientRepository.FindByClientIdAsync(name);
             if (client == null)
             {
                 client = await _clientRepository.InsertAsync(

@@ -464,8 +464,20 @@
                   "path": "UI/AspNetCore/JavaScript-API/Localization.md"
                 },
                 {
+                  "text": "Auth",
+                  "path": "UI/AspNetCore/JavaScript-API/Auth.md"
+                },
+                {
+                  "text": "Current User",
+                  "path": "UI/AspNetCore/JavaScript-API/CurrentUser.md"
+                },
+                {
                   "text": "Settings",
                   "path": "UI/AspNetCore/JavaScript-API/Settings.md"
+                },
+                {
+                  "text": "Features",
+                  "path": "UI/AspNetCore/JavaScript-API/Features.md"
                 },
                 {
                   "text": "AJAX",
@@ -480,8 +492,24 @@
                   "path": "UI/AspNetCore/JavaScript-API/Notify.md"
                 },
                 {
+                  "text": "Block/Busy",
+                  "path": "UI/AspNetCore/JavaScript-API/Block-Busy.md"
+                },
+                {
                   "text": "Events",
                   "path": "UI/AspNetCore/JavaScript-API/Events.md"
+                },
+                {
+                  "text": "DOM",
+                  "path": "UI/AspNetCore/JavaScript-API/DOM.md"
+                },
+                {
+                  "text": "Logging",
+                  "path": "UI/AspNetCore/JavaScript-API/Logging.md"
+                },
+                {
+                  "text": "Resource Loader",
+                  "path": "UI/AspNetCore/JavaScript-API/ResourceLoader.md"
                 }
               ]
             },
