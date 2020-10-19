@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.Modularity;
 using Xunit;
 
@@ -20,7 +21,7 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task FindByNormalizedNameAsync()
         {
-            (await apiResourceRepository.FindByNameAsync("NewApiResource2")).ShouldNotBeNull();
+            (await apiResourceRepository.FindByNameAsync(new []{"NewApiResource2"})).ShouldNotBeNull();
         }
 
         [Fact]

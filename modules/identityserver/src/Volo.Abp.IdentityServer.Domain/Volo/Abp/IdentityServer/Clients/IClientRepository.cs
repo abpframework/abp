@@ -9,7 +9,7 @@ namespace Volo.Abp.IdentityServer.Clients
 {
     public interface IClientRepository : IBasicRepository<Client, Guid>
     {
-        Task<Client> FindByCliendIdAsync(
+        Task<Client> FindByClientIdAsync(
             [NotNull] string clientId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default

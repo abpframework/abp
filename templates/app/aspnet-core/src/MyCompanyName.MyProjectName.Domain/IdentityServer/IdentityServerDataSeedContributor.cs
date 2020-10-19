@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
@@ -7,12 +7,14 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
+using ApiScope = Volo.Abp.IdentityServer.ApiScopes.ApiScope;
 using Client = Volo.Abp.IdentityServer.Clients.Client;
 
 namespace MyCompanyName.MyProjectName.IdentityServer
@@ -20,6 +22,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
     public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         private readonly IApiResourceRepository _apiResourceRepository;
+        private readonly IApiScopeRepository _apiScopeRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
@@ -29,6 +32,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         public IdentityServerDataSeedContributor(
             IClientRepository clientRepository,
             IApiResourceRepository apiResourceRepository,
+            IApiScopeRepository apiScopeRepository,
             IIdentityResourceDataSeeder identityResourceDataSeeder,
             IGuidGenerator guidGenerator,
             IPermissionDataSeeder permissionDataSeeder,
@@ -36,6 +40,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         {
             _clientRepository = clientRepository;
             _apiResourceRepository = apiResourceRepository;
+            _apiScopeRepository = apiScopeRepository;
             _identityResourceDataSeeder = identityResourceDataSeeder;
             _guidGenerator = guidGenerator;
             _permissionDataSeeder = permissionDataSeeder;
@@ -47,6 +52,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         {
             await _identityResourceDataSeeder.CreateStandardResourcesAsync();
             await CreateApiResourcesAsync();
+            await CreateApiScopeAsync();
             await CreateClientsAsync();
         }
 
@@ -91,6 +97,15 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             return await _apiResourceRepository.UpdateAsync(apiResource);
         }
 
+        private async Task CreateApiScopeAsync()
+        {
+            var apiScope = await _apiScopeRepository.GetByNameAsync("MyProjectName");
+            if (apiScope == null)
+            {
+                await _apiScopeRepository.InsertAsync(new ApiScope(_guidGenerator.Create(), "MyProjectName", "MyProjectName API"), autoSave: true);
+            }
+        }
+
         private async Task CreateClientsAsync()
         {
             var commonScopes = new[]
@@ -101,6 +116,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 "role",
                 "phone",
                 "address",
+
                 "MyProjectName"
             };
 
@@ -174,7 +190,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             bool requirePkce = false,
             IEnumerable<string> permissions = null)
         {
-            var client = await _clientRepository.FindByCliendIdAsync(name);
+            var client = await _clientRepository.FindByClientIdAsync(name);
             if (client == null)
             {
                 client = await _clientRepository.InsertAsync(
