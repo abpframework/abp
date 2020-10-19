@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Volo.CmsKit</RootNamespace>
   </PropertyGroup>
 
@@ -14,9 +14,9 @@
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.2" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="3.0.3" />
-    <PackageReference Include="Volo.Abp.Authorization" Version="3.0.3" />
-    <PackageReference Include="Volo.Abp.TestBase" Version="3.0.3" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\src\Volo.CmsKit.Domain\Volo.CmsKit.Domain.csproj" />
   </ItemGroup>
 

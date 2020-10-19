@@ -4,10 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
 {
-    public class AbpExceptionHandlingLogger : ILogger, IDisposable
+    public class AbpExceptionHandlingLogger : ILogger
     {
         private readonly IServiceCollection _serviceCollection;
-        private IServiceScope _serviceScope;
         private IUserExceptionInformer _userExceptionInformer;
 
         public AbpExceptionHandlingLogger(IServiceCollection serviceCollection)
@@ -39,7 +38,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
                 return;
             }
 
-            _userExceptionInformer.InformAsync(new UserExceptionInformerContext(exception));
+            _userExceptionInformer.Inform(new UserExceptionInformerContext(exception));
         }
 
         protected virtual void TryInitialize()
@@ -50,8 +49,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
                 return;
             }
 
-            _serviceScope = serviceProvider.CreateScope();
-            _userExceptionInformer = _serviceScope.ServiceProvider.GetRequiredService<IUserExceptionInformer>();
+            _userExceptionInformer = serviceProvider.GetRequiredService<IUserExceptionInformer>();
         }
 
         public virtual bool IsEnabled(LogLevel logLevel)
@@ -62,11 +60,6 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
         public virtual IDisposable BeginScope<TState>(TState state)
         {
             return NullDisposable.Instance;
-        }
-
-        public virtual void Dispose()
-        {
-            _serviceScope?.Dispose();
         }
     }
 }
