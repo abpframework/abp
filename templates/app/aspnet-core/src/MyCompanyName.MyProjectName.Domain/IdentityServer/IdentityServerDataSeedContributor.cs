@@ -52,8 +52,13 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         {
             await _identityResourceDataSeeder.CreateStandardResourcesAsync();
             await CreateApiResourcesAsync();
-            await CreateApiScopeAsync();
+            await CreateApiScopesAsync();
             await CreateClientsAsync();
+        }
+
+        private async Task CreateApiScopesAsync()
+        {
+            await CreateApiScopeAsync("MyProjectName");
         }
 
         private async Task CreateApiResourcesAsync()
@@ -97,13 +102,22 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             return await _apiResourceRepository.UpdateAsync(apiResource);
         }
 
-        private async Task CreateApiScopeAsync()
+        private async Task<ApiScope> CreateApiScopeAsync(string name)
         {
-            var apiScope = await _apiScopeRepository.GetByNameAsync("MyProjectName");
+            var apiScope = await _apiScopeRepository.GetByNameAsync(name);
             if (apiScope == null)
             {
-                await _apiScopeRepository.InsertAsync(new ApiScope(_guidGenerator.Create(), "MyProjectName", "MyProjectName API"), autoSave: true);
+                apiScope = await _apiScopeRepository.InsertAsync(
+                    new ApiScope(
+                        _guidGenerator.Create(),
+                        name,
+                        name + " API"
+                    ),
+                    autoSave: true
+                );
             }
+
+            return apiScope;
         }
 
         private async Task CreateClientsAsync()
