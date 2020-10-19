@@ -7,8 +7,8 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
@@ -130,7 +130,6 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 "role",
                 "phone",
                 "address",
-
                 "MyProjectName"
             };
 
@@ -148,7 +147,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 await CreateClientAsync(
                     name: webClientId,
                     scopes: commonScopes,
-                    grantTypes: new[] {"hybrid"},
+                    grantTypes: new[] { "hybrid" },
                     secret: (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     redirectUri: $"{webClientRootUrl}signin-oidc",
                     postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
@@ -165,7 +164,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 await CreateClientAsync(
                     name: consoleAndAngularClientId,
                     scopes: commonScopes,
-                    grantTypes: new[] {"password", "client_credentials", "authorization_code"},
+                    grantTypes: new[] { "password", "client_credentials", "authorization_code" },
                     secret: (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     requireClientSecret: false,
                     redirectUri: webClientRootUrl,
@@ -185,7 +184,6 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     grantTypes: new[] { "authorization_code" },
                     secret: configurationSection["MyProjectName_Blazor:ClientSecret"]?.Sha256(),
                     requireClientSecret: false,
-                    requirePkce: true,
                     redirectUri: $"{blazorRootUrl}/authentication/login-callback",
                     postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
                 );
