@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Blazorise;
 using Microsoft.AspNetCore.Components;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
@@ -18,17 +18,12 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        protected List<BreadcrumbItem> BreadcrumbItems { get; set; }
+        [Parameter]
+        public List<BreadcrumbItem> BreadcrumbItems { get; set; }
 
         public PageHeader()
         {
             BreadcrumbItems = new List<BreadcrumbItem>();
-        }
-
-        public void AddBreadcrumbItem(string text, string url = null, string icon = null)
-        {
-            BreadcrumbItems.Add(new BreadcrumbItem(text, url, icon));
-            StateHasChanged();
         }
     }
 }

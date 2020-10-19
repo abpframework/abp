@@ -9,16 +9,18 @@
                 @if (BreadcrumbShowHome)
                 {
                     <BreadcrumbItem>
-                        <BreadcrumbLink To="/"><i class="fa fa-home"></i></BreadcrumbLink>
+                        <BreadcrumbLink To="/">
+                            <Icon Name="IconName.Home" />
+                        </BreadcrumbLink>
                     </BreadcrumbItem>
                 }
                 @foreach (var item in BreadcrumbItems)
                 {
                     <BreadcrumbItem>
                         <BreadcrumbLink To="@item.Url">
-                            @if (!string.IsNullOrEmpty(item.Icon))
+                            @if (item.Icon != null)
                             {
-                                <i class="fa @item.Icon"></i>
+                                <Icon Name="@item.Icon" />
                             }
                             @item.Text
                         </BreadcrumbLink>
