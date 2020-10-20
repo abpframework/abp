@@ -4,9 +4,9 @@ using Volo.Abp.Account.Web.Modules.Account.Components.Toolbar.UserLoginLink;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Users;
 
-namespace Volo.Abp.Account.Web
+namespace MyCompanyName.MyProjectName.Web.Menus
 {
-    public class AccountModuleToolbarContributor : IToolbarContributor
+    public class MyProjectNameToolbarContributor : IToolbarContributor
     {
         public virtual Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
         {
@@ -17,7 +17,7 @@ namespace Volo.Abp.Account.Web
 
             if (!context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
             {
-                context.Toolbar.Items.Add(new ToolbarItem(typeof(UserLoginLinkViewComponent)));
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginLinkViewComponent)));
             }
 
             return Task.CompletedTask;
