@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-    <PackageReference Include="Mongo2Go" Version="2.2.12" />
+    <PackageReference Include="Mongo2Go" Version="2.2.14" />
     <ProjectReference Include="..\..\src\Volo.Abp.BlobStoring.Database.MongoDB\Volo.Abp.BlobStoring.Database.MongoDB.csproj" />
     <ProjectReference Include="..\Volo.Abp.BlobStoring.Database.TestBase\Volo.Abp.BlobStoring.Database.TestBase.csproj" />
   </ItemGroup>
