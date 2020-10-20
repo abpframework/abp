@@ -24,7 +24,7 @@
 else
 {
     <div class="dropdown-submenu">
-        <a role="button" class="btn dropdown-toggle" data-toggle="dropdown"
+        <a role="button" @onclick="ToggleSubMenu" class="btn dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             <span class="lp-icon">
                 <i class="@(MenuItem.Icon ?? "")"></i>
@@ -33,15 +33,13 @@ else
                 @MenuItem.DisplayName
             </span>
         </a>
-        <div class="dropdown-menu border-0 shadow-sm">
+        <div class="dropdown-menu border-0 shadow-sm @(IsSubMenuOpen ? "show" : "")">
             @foreach (var childMenuItem in MenuItem.Items)
             {
-                <NavMenuItem MenuItem="@childMenuItem"/>
+                <SecondLevelNavMenuItem MenuItem="@childMenuItem"/>
             }
         </div>
     </div>
 }
 @code {
-    [Parameter]
-    public ApplicationMenuItem MenuItem { get; set; }
 }
