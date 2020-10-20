@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -216,6 +217,7 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
+                options.IndexStream = () => Assembly.GetExecutingAssembly().GetManifestResourceStream("MyCompanyName.MyProjectName.Web.wwwroot.swagger.ui.index.html");
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
             app.UseAuditing();
