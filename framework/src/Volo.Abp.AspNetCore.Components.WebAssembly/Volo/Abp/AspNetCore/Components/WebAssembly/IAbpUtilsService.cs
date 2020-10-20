@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
     public interface IAbpUtilsService
     {

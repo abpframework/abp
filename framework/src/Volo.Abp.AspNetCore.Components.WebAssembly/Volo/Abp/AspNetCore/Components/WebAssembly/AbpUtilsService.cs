@@ -2,7 +2,7 @@
 using Microsoft.JSInterop;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
     public class AbpUtilsService : IAbpUtilsService, ITransientDependency
     {
