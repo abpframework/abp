@@ -1,7 +1,7 @@
-﻿﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.Account.Web.Modules.Account.Components.Toolbar.UserLoginLink
+namespace MyCompanyName.MyProjectName.Web.Components.Toolbar.LoginLink
 {
     public class LoginLinkViewComponent : AbpViewComponent
     {

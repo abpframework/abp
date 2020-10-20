@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Account.Web.Modules.Account.Components.Toolbar.UserLoginLink;
+using MyCompanyName.MyProjectName.Web.Components.Toolbar.LoginLink;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Users;
 
