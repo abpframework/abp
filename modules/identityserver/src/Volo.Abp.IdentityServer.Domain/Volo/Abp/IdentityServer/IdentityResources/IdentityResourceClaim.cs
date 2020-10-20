@@ -3,11 +3,11 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.IdentityServer.IdentityResources
 {
-    public class IdentityClaim : UserClaim
+    public class IdentityResourceClaim : UserClaim
     {
         public virtual Guid IdentityResourceId { get; set; }
 
-        protected IdentityClaim()
+        protected IdentityResourceClaim()
         {
 
         }
@@ -17,7 +17,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             return IdentityResourceId == identityResourceId && Type == type;
         }
 
-        protected internal IdentityClaim(Guid identityResourceId, [NotNull] string type)
+        protected internal IdentityResourceClaim(Guid identityResourceId, [NotNull] string type)
             : base(type)
         {
             IdentityResourceId = identityResourceId;

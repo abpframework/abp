@@ -208,6 +208,13 @@ There are still missing features and modules. However, we are working on it to h
 
 There are some breaking changes with the Blazor UI. If you've built an application and upgrade it, your application might not properly work. See the [ABP Commercial Blazor UI v 3.3 Migration Guide](https://docs.abp.io/en/commercial/3.3/migration-guides/blazor-ui-3_3) for the changes you need to do after upgrading your application.
 
+#### Known Issues
+
+When you create a new project, profile management doesn't work, you get an exception because it can't find the `/libs/cropperjs/css/cropper.min.css` file. To fix the issue;
+
+* Add `"@volo/account": "^3.3.0-rc.1"` to the `package.json` in the `.Host` project.
+* Run `yarn` (or `npm install`), then `gulp` on a command line terminal in the root folder of the `.Host` project.
+
 ### Multi-Tenant Social Logins
 
 [Account module](https://commercial.abp.io/modules/Volo.Account.Pro) now supports to manage the social/external logins in the UI. You can **enable/disable** and **set options** in the settings page. It also supports to use **different credentials for the tenants** and it is also **configured on the runtime**.

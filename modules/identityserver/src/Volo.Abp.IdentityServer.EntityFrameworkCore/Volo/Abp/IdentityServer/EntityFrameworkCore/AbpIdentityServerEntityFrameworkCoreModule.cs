@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
@@ -33,6 +34,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 options.AddRepository<Client, ClientRepository>();
                 options.AddRepository<ApiResource, ApiResourceRepository>();
+                options.AddRepository<ApiScope, ApiScopeRepository>();
                 options.AddRepository<IdentityResource, IdentityResourceRepository>();
                 options.AddRepository<PersistedGrant, PersistentGrantRepository>();
                 options.AddRepository<DeviceFlowCodes, DeviceFlowCodesRepository>();

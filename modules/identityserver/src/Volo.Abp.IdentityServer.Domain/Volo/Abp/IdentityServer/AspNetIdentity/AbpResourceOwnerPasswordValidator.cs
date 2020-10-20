@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -27,7 +27,6 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
     public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
         protected SignInManager<IdentityUser> SignInManager { get; }
-        protected IEventService Events { get; }
         protected UserManager<IdentityUser> UserManager { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected ILogger<ResourceOwnerPasswordValidator<IdentityUser>> Logger { get; }
@@ -39,7 +38,6 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IdentitySecurityLogManager identitySecurityLogManager,
-            IEventService events,
             ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
             IStringLocalizer<AbpIdentityServerResource> localizer,
             IOptions<AbpIdentityOptions> abpIdentityOptions,
@@ -48,7 +46,6 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             UserManager = userManager;
             SignInManager = signInManager;
             IdentitySecurityLogManager = identitySecurityLogManager;
-            Events = events;
             Logger = logger;
             Localizer = localizer;
             ServiceScopeFactory = serviceScopeFactory;
@@ -75,7 +72,6 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 var sub = await UserManager.GetUserIdAsync(user);
 
                 Logger.LogInformation("Credentials validated for username: {username}", context.UserName);
-                await Events.RaiseAsync(new UserLoginSuccessEvent(context.UserName, sub, context.UserName, interactive: false));
 
                 var additionalClaims = new List<Claim>();
 
@@ -136,19 +132,16 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 else if (result.IsLockedOut)
                 {
                     Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", context.UserName);
-                    await Events.RaiseAsync(new UserLoginFailureEvent(context.UserName, "locked out", interactive: false));
                     errorDescription = Localizer["UserLockedOut"];
                 }
                 else if (result.IsNotAllowed)
                 {
                     Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
-                    await Events.RaiseAsync(new UserLoginFailureEvent(context.UserName, "not allowed", interactive: false));
                     errorDescription = Localizer["LoginIsNotAllowed"];
                 }
                 else
                 {
                     Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", context.UserName);
-                    await Events.RaiseAsync(new UserLoginFailureEvent(context.UserName, "invalid credentials", interactive: false));
                     errorDescription = Localizer["InvalidUserNameOrPassword"];
                 }
 
@@ -163,7 +156,6 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             else
             {
                 Logger.LogInformation("No user found matching username: {username}", context.UserName);
-                await Events.RaiseAsync(new UserLoginFailureEvent(context.UserName, "invalid username", interactive: false));
                 errorDescription = Localizer["InvalidUsername"];
 
                 await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
