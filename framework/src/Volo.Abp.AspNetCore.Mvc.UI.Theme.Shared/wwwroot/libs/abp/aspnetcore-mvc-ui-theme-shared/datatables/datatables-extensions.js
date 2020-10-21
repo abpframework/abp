@@ -217,7 +217,7 @@
 
         var renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             var columns;
-			debugger;
+			
             if (tableInstance.aoColumns) {
                 columns = tableInstance.aoColumns;
             } else {
