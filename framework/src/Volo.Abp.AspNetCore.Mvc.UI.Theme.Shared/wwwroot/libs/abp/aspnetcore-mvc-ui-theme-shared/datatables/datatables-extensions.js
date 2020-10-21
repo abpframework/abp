@@ -217,6 +217,7 @@
 
         var renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             var columns;
+			debugger;
             if (tableInstance.aoColumns) {
                 columns = tableInstance.aoColumns;
             } else {
@@ -267,6 +268,37 @@
                     }
 
                     renderRowActions(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
+                }
+            });
+
+        //Delay for processing indicator
+        var defaultDelayForProcessingIndicator = 500;
+        var _existingDefaultFnPreDrawCallback = $.fn.dataTable.defaults.fnPreDrawCallback;
+        $.extend(true,
+            $.fn.dataTable.defaults,
+            {
+                fnPreDrawCallback: function (settings) {
+                    if (_existingDefaultFnPreDrawCallback) {
+                        _existingDefaultFnPreDrawCallback(settings);
+                    }
+
+                    var $tableWrapper = $(settings.nTableWrapper);
+
+                    $tableWrapper.on('processing.dt',
+                        function (e, settings, processing) {
+                            if (processing) {
+                                var $processing = $tableWrapper.find(".dataTables_processing");
+                                $processing.hide();
+                               
+                                var delay = settings.oInit.processingDelay === undefined
+                                    ? defaultDelayForProcessingIndicator
+                                    : settings.oInit.processingDelay;
+
+                                setTimeout(function () {
+                                    $processing.show();
+                                }, delay);
+                            }
+                        });
                 }
             });
 
