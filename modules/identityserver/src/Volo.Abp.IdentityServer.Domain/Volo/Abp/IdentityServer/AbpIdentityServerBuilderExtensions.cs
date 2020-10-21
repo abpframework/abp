@@ -1,17 +1,21 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Configuration;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json.Linq;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.Security.Claims;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -32,6 +36,10 @@ namespace Volo.Abp.IdentityServer
                 builder.AddAspNetIdentity<IdentityUser>();
                 builder.AddProfileService<AbpProfileService>();
                 builder.AddResourceOwnerValidator<AbpResourceOwnerPasswordValidator>();
+
+                builder.Services.Remove(builder.Services.LastOrDefault(x => x.ServiceType == typeof(IUserClaimsPrincipalFactory<IdentityUser>)));
+                builder.Services.AddTransient<IUserClaimsPrincipalFactory<IdentityUser>, AbpUserClaimsFactory<IdentityUser>>();
+                builder.Services.AddTransient<IObjectAccessor<IUserClaimsPrincipalFactory<IdentityUser>>, ObjectAccessor<AbpUserClaimsPrincipalFactory>>();
             }
 
             builder.Services.Replace(ServiceDescriptor.Transient<IClaimsService, AbpClaimsService>());
