@@ -32,10 +32,6 @@ Also, added `Enabled(string)` and `Description(bool,true)` properties.
 
 * Added `AllowedAccessTokenSigningAlgorithms (string)` and `Description (string)` and `ConsumedTime (DateTime?)` properties
 
-#### ApiScope
-
-* Before it was a property of `ApiResource`, now it becomes an independent aggregate root.
-
 ## Migrating the Database
 
 > Attention: **Please backup your database** before the migration!
