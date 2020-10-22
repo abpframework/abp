@@ -240,7 +240,6 @@ namespace Volo.Abp.BlazoriseUI
         protected override async Task OnInitializedAsync()
         {
             await SetPermissionsAsync();
-            await GetEntitiesAsync();
         }
 
         protected virtual async Task SetPermissionsAsync()
@@ -377,8 +376,6 @@ namespace Volo.Abp.BlazoriseUI
             await GetEntitiesAsync();
             CreateModal.Hide();
         }
-
-
 
         protected virtual async Task UpdateEntityAsync()
         {
