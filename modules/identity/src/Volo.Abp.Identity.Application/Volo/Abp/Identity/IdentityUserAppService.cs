@@ -135,10 +135,10 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public virtual async Task<IdentityUserDto> FindByUsernameAsync(string username)
+        public virtual async Task<IdentityUserDto> FindByUsernameAsync(string userName)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-                await UserManager.FindByNameAsync(username)
+                await UserManager.FindByNameAsync(userName)
             );
         }
 
