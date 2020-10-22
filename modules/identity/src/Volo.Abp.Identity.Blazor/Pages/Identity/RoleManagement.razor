@@ -85,7 +85,7 @@
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@CreateValidationsRef" Mode="ValidationMode.Auto" Model="@NewEntity" ValidateOnLoad="false">
-                    <Validation MessageLocalizer="@((e)=>ML.Localize(e))">
+                    <Validation MessageLocalizer="@ML.Localize">
                         <Field>
                             <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
                             <TextEdit @bind-Text="@NewEntity.Name">
@@ -121,7 +121,7 @@
             <ModalBody>
                 <Validations @ref="@EditValidationsRef" Mode="ValidationMode.Auto" Model="@EditingEntity" ValidateOnLoad="false">
                     <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
-                    <Validation MessageLocalizer="@((e)=>ML.Localize(e))">
+                    <Validation MessageLocalizer="@ML.Localize">
                         <Field>
                             <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
                             <TextEdit @bind-Text="EditingEntity.Name">

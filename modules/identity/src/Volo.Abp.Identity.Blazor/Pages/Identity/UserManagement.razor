@@ -6,6 +6,7 @@
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @inherits UserManagementBase
 @inject IStringLocalizer<IdentityResource> L
+@inject AbpIdentityMessageLocalizer<IdentityResource> ML
 @* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">
@@ -79,7 +80,7 @@
 {
     <Modal @ref="CreateModal">
         <ModalBackdrop />
-        <ModalContent IsCentered="true">
+        <ModalContent Centered="true">
             <ModalHeader>
                 <ModalTitle>@L["NewUser"]</ModalTitle>
                 <CloseButton Clicked="CloseCreateModalAsync" />
@@ -93,7 +94,7 @@
                         </Items>
                         <Content>
                             <TabPanel Name="UserInformations">
-                                <Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
                                     <Field>
                                         <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
                                         <TextEdit @bind-Text="NewEntity.UserName">
@@ -103,7 +104,7 @@
                                         </TextEdit>
                                     </Field>
                                 </Validation>
-                                <Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
                                     <Field>
                                         <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
                                         <TextEdit @bind-Text="NewEntity.Name">
@@ -113,7 +114,7 @@
                                         </TextEdit>
                                     </Field>
                                 </Validation>
-                                <Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
                                     <Field>
                                         <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
                                         <TextEdit @bind-Text="NewEntity.Surname">
@@ -133,7 +134,7 @@
                                         </TextEdit>
                                     </Field>
                                 </Validation>
-                                <Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
                                     <Field>
                                         <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
                                         <TextEdit @bind-Text="NewEntity.Email">
@@ -143,7 +144,7 @@
                                         </TextEdit>
                                     </Field>
                                 </Validation>
-                                <Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
                                     <Field>
                                         <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
                                         <TextEdit @bind-Text="NewEntity.PhoneNumber">
@@ -186,7 +187,7 @@
 {
     <Modal @ref="EditModal">
         <ModalBackdrop />
-        <ModalContent IsCentered="true">
+        <ModalContent Centered="true">
             <ModalHeader>
                 <ModalTitle>@L["Edit"]</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync" />
@@ -202,17 +203,17 @@
                         </Items>
                         <Content>
                             <TabPanel Name="UserInformations">
-                                <Field>
-                                    <Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
+                                    <Field>
                                         <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
                                         <TextEdit @bind-Text="EditingEntity.UserName">
                                             <Feedback>
                                                 <ValidationError />
                                             </Feedback>
                                         </TextEdit>
-                                    </Validation>
-                                </Field>
-                                <Validation>
+                                    </Field>
+                                </Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
                                     <Field>
                                         <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
                                         <TextEdit @bind-Text="EditingEntity.Name">
@@ -222,14 +223,16 @@
                                         </TextEdit>
                                     </Field>
                                 </Validation>
-                                <Field>
-                                    <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
-                                    <TextEdit @bind-Text="EditingEntity.Surname">
-                                        <Feedback>
-                                            <ValidationError />
-                                        </Feedback>
-                                    </TextEdit>
-                                </Field>
+                                <Validation MessageLocalizer="@ML.Localize">
+                                    <Field>
+                                        <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
+                                        <TextEdit @bind-Text="EditingEntity.Surname">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </Field>
+                                </Validation>
                                 <Validation>
                                     <Field>
                                         <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
@@ -240,7 +243,7 @@
                                         </TextEdit>
                                     </Field>
                                 </Validation>
-                                <Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
                                     <Field>
                                         <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
                                         <TextEdit @bind-Text="EditingEntity.Email">
@@ -250,7 +253,7 @@
                                         </TextEdit>
                                     </Field>
                                 </Validation>
-                                <Validation>
+                                <Validation MessageLocalizer="@ML.Localize">
                                     <Field>
                                         <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
                                         <TextEdit @bind-Text="EditingEntity.PhoneNumber">
