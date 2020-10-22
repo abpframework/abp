@@ -10,7 +10,7 @@ namespace Volo.Abp.FeatureManagement.MongoDB
 
         static MongoDbFixture()
         {
-            MongoDbRunner = MongoDbRunner.Start();
+            MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 20);
             ConnectionString = MongoDbRunner.ConnectionString;
         }
 

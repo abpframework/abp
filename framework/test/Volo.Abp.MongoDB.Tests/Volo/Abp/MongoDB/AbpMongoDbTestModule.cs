@@ -21,9 +21,10 @@ namespace Volo.Abp.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var connectionString = MongoDbFixture.ConnectionString.EnsureEndsWith('/')  +
-                                   "Db_" +
-                                   Guid.NewGuid().ToString("N");
+            var stringArray = MongoDbFixture.ConnectionString.Split('?');
+            var connectionString = stringArray[0].EnsureEndsWith('/')  +
+                                       "Db_" +
+                                   Guid.NewGuid().ToString("N") + "/?" + stringArray[1];
 
             Configure<AbpDbConnectionOptions>(options =>
             {
@@ -34,11 +35,6 @@ namespace Volo.Abp.MongoDB
             {
                 options.AddDefaultRepositories<ITestAppMongoDbContext>();
                 options.AddRepository<City, CityRepository>();
-            });
-
-            Configure<AbpUnitOfWorkDefaultOptions>(options =>
-            {
-                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
             });
         }
     }

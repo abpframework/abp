@@ -184,6 +184,7 @@ namespace Volo.Abp.BlazoriseUI
         protected TUpdateViewModel EditingEntity;
         protected Modal CreateModal;
         protected Modal EditModal;
+        protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
 
         protected string CreatePolicyName { get; set; }
         protected string UpdatePolicyName { get; set; }
@@ -239,6 +240,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected override async Task OnInitializedAsync()
         {
+            await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();
             await GetEntitiesAsync();
         }
@@ -437,6 +439,11 @@ namespace Volo.Abp.BlazoriseUI
             }
 
             await AuthorizationService.CheckAsync(policyName);
+        }
+
+        protected virtual ValueTask SetBreadcrumbItemsAsync()
+        {
+            return ValueTask.CompletedTask;
         }
     }
 }
