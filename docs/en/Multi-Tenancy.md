@@ -329,6 +329,7 @@ Configure<AbpTenantResolveOptions>(options =>
 `MyCustomTenantResolveContributor` must inherit from the `TenantResolveContributorBase` (or implement the `ITenantResolveContributor`) as shown below:
 
 ````csharp
+using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 
 namespace MultiTenancyDemo.Web
@@ -337,7 +338,7 @@ namespace MultiTenancyDemo.Web
     {
         public override string Name => "Custom";
 
-        public override void Resolve(ITenantResolveContext context)
+        public override Task ResolveAsync(ITenantResolveContext context)
         {
             //TODO...
         }

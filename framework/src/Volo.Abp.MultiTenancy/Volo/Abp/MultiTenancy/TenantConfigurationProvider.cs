@@ -22,7 +22,7 @@ namespace Volo.Abp.MultiTenancy
 
         public virtual async Task<TenantConfiguration> GetAsync(bool saveResolveResult = false)
         {
-            var resolveResult = TenantResolver.ResolveTenantIdOrName();
+            var resolveResult = await TenantResolver.ResolveTenantIdOrNameAsync();
 
             if (saveResolveResult)
             {
