@@ -242,7 +242,6 @@ namespace Volo.Abp.BlazoriseUI
         {
             await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();
-            await GetEntitiesAsync();
         }
 
         protected virtual async Task SetPermissionsAsync()
@@ -379,8 +378,6 @@ namespace Volo.Abp.BlazoriseUI
             await GetEntitiesAsync();
             CreateModal.Hide();
         }
-
-
 
         protected virtual async Task UpdateEntityAsync()
         {
