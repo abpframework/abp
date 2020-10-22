@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Linq
 {
@@ -12,14 +13,22 @@ namespace Volo.Abp.Linq
     {
         protected IEnumerable<IAsyncQueryableProvider> Providers { get; }
 
-        public AsyncQueryableExecuter(IEnumerable<IAsyncQueryableProvider> providers)
+        public AsyncQueryableExecuter(IEnumerable<IAsyncQueryableProvider> providers, ILogger<AsyncQueryableExecuter> logger)
         {
             Providers = providers;
+            Logger = logger;
+
         }
+        
+        protected ILogger<AsyncQueryableExecuter> Logger { get; set; }
 
         protected virtual IAsyncQueryableProvider FindProvider<T>(IQueryable<T> queryable)
         {
-            return Providers.FirstOrDefault(p => p.CanExecute(queryable));
+            var provider = Providers.FirstOrDefault(p => p.CanExecute(queryable));
+            if (provider == null)
+                Logger.LogWarning("IAsyncQueryableProvider is null");
+
+            return provider;
         }
 
         public Task<bool> ContainsAsync<T>(IQueryable<T> queryable, T item, CancellationToken cancellationToken = default)
