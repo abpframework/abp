@@ -6,10 +6,24 @@
 
 ## Basic Usage
 
-`abp.features.values` can be used to access to the all feature values.
-
 ````js
-var excelExportFeatureValue = abp.features.values["ExportingToExcel"];
+//Gets a value as string.
+var value = abp.features.get('ExportingToExcel');
+
+//Check the feature is enabled
+var enabled = abp.features.isEnabled('ExportingToExcel.Enabled');
 ````
 
-Then you can check the value of the feature to perform your logic.
+## All Values
+
+`abp.features.values` can be used to access to the all feature values.
+
+An example value of this object is shown below:
+
+````js
+{
+  Identity.TwoFactor: "Optional",
+  ExportingToExcel.Enabled: "true",
+  ...
+}
+````
