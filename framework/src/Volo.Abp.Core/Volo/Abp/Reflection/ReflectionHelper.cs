@@ -124,7 +124,7 @@ namespace Volo.Abp.Reflection
                 ? customAttributes.Concat(declaringTypeCustomAttributes).Distinct()
                 : customAttributes;
         }
-        
+
         /// <summary>
         /// Gets value of a property by it's full path from given object
         /// </summary>
@@ -134,7 +134,7 @@ namespace Volo.Abp.Reflection
             var currentType = objectType;
             var objectPath = currentType.FullName;
             var absolutePropertyPath = propertyPath;
-            if (absolutePropertyPath.StartsWith(objectPath))
+             if (objectPath != null && absolutePropertyPath.StartsWith(objectPath))
             {
                 absolutePropertyPath = absolutePropertyPath.Replace(objectPath + ".", "");
             }
@@ -142,8 +142,16 @@ namespace Volo.Abp.Reflection
             foreach (var propertyName in absolutePropertyPath.Split('.'))
             {
                 var property = currentType.GetProperty(propertyName);
-                value = property.GetValue(value, null);
-                currentType = property.PropertyType;
+                if (property != null)
+                {
+                    value = property.GetValue(value, null);
+                    currentType = property.PropertyType;
+                }
+                else
+                {
+                    value = null;
+                    break;
+                }
             }
 
             return value;
