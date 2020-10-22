@@ -14,6 +14,10 @@ As the **most important breaking change**, Identity Server 4.x places the `ApiSc
 
 Also, added `Enabled(string)` and `Description(bool,true)` properties.
 
+#### ApiResource
+
+* Added `AllowedAccessTokenSigningAlgorithms (string)` and `ShowInDiscoveryDocument(bool, default: true)` properties
+
 #### Client
 
 * Added `RequireRequestObject (bool)` and `AllowedIdentityTokenSigningAlgorithms (string)` properties.
@@ -26,11 +30,7 @@ Also, added `Enabled(string)` and `Description(bool,true)` properties.
 
 #### PersistedGrant
 
-* Added `SessionId (string)` and `ShowInDiscoveryDocument (bool, default: true)` properties
-
-#### ApiResource
-
-* Added `AllowedAccessTokenSigningAlgorithms (string)` and `Description (string)` and `ConsumedTime (DateTime?)` properties
+* Added `SessionId (string)` and `Description(string)` and `ConsumedTime (DateTime?)` properties
 
 ## Migrating the Database
 
