@@ -137,8 +137,6 @@ public class CreateInput
 }
 ````
 
-> You should always disable validation for some special types of properties, Because the framework will validate the properties recursively. Such as `byte[]`.
-
 ### AbpValidationException
 
 Once ABP determines a validation error, it throws an exception of type `AbpValidationException`. Your application code can throw `AbpValidationException`, but most of the times it is not needed.
