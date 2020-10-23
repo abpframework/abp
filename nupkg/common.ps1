@@ -136,7 +136,7 @@ $projects = (
     "framework/src/Volo.Abp.Validation",
     "framework/src/Volo.Abp.VirtualFileSystem",
     "framework/src/Volo.Abp.Kafka",
-    "framework/src/Volo.Abp.Swagger",
+    "framework/src/Volo.Abp.Swashbuckle",
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Application.Contracts",

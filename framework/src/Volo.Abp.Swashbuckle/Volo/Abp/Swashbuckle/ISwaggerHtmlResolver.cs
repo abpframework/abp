@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Volo.Abp
+namespace Volo.Abp.Swashbuckle
 {
     public interface ISwaggerHtmlResolver
     {

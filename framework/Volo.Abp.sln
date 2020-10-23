@@ -351,7 +351,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Rebus", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.ExceptionHandling", "src\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj", "{B9D1ADCB-D552-4626-A1F1-78FF72C1E822}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Swagger", "src\Volo.Abp.Swagger\Volo.Abp.Swagger.csproj", "{DD9519E0-5A68-48DC-A051-7BF2AC922F3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Swashbuckle", "src\Volo.Abp.Swashbuckle\Volo.Abp.Swashbuckle.csproj", "{DD9519E0-5A68-48DC-A051-7BF2AC922F3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

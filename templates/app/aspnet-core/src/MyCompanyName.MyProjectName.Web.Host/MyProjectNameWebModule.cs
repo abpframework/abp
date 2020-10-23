@@ -31,6 +31,7 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
@@ -52,7 +53,7 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpIdentityWebModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwaggerModule)
+        typeof(AbpSwashbuckleModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {

@@ -4,8 +4,7 @@
     
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <AssemblyName>Volo.Abp.Swagger</AssemblyName>
-        <PackageId>Volo.Abp.Swagger</PackageId>
+        <PackageId>Volo.Abp.Swashbuckle</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

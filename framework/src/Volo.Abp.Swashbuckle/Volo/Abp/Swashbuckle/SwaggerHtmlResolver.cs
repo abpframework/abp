@@ -4,7 +4,7 @@ using System.Text;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp
+namespace Volo.Abp.Swashbuckle
 {
     public class SwaggerHtmlResolver : ISwaggerHtmlResolver, ITransientDependency
     {
@@ -15,7 +15,7 @@ namespace Volo.Abp
 
             var html = new StreamReader(stream)
                 .ReadToEnd()
-                .Replace("SwaggerUIBundle(configObject)", "AbpSwaggerUIBundle(configObject)");
+                .Replace("SwaggerUIBundle(configObject)", "abp.SwaggerUIBundle(configObject)");
 
             return new MemoryStream(Encoding.UTF8.GetBytes(html));
         }

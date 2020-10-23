@@ -40,6 +40,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
@@ -75,7 +76,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(MyProjectNameApplicationContractsModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwaggerModule)
+        typeof(AbpSwashbuckleModule)
         )]
     public class MyProjectNameIdentityServerModule : AbpModule
     {
