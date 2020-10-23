@@ -7,7 +7,6 @@
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @inherits RoleManagementBase
 @inject IStringLocalizer<IdentityResource> L
-@inject AbpIdentityMessageLocalizer<IdentityResource> ML
 @* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">
@@ -85,7 +84,7 @@
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
-                    <Validation MessageLocalizer="@ML.Localize">
+                    <Validation MessageLocalizer="@L.Localize">
                         <Field>
                             <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
                             <TextEdit @bind-Text="@NewEntity.Name">
@@ -121,7 +120,7 @@
             <ModalBody>
                 <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
-                    <Validation MessageLocalizer="@ML.Localize">
+                    <Validation MessageLocalizer="@L.Localize">
                         <Field>
                             <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
                             <TextEdit @bind-Text="EditingEntity.Name">

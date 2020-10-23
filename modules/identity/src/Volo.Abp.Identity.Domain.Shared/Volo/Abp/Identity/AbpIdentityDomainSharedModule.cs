@@ -38,8 +38,6 @@ namespace Volo.Abp.Identity
             {
                 options.MapCodeNamespace("Volo.Abp.Identity", typeof(IdentityResource));
             });
-
-            context.Services.AddSingleton(typeof(AbpIdentityMessageLocalizer<>), typeof(AbpIdentityMessageLocalizer<>));
         }
     }
 }
