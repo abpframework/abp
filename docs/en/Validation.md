@@ -112,6 +112,33 @@ namespace Acme.BookStore
 
 > ABP framework uses the [dynamic proxying / interception](Dynamic-Proxying-Interceptors.md) system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
 
+
+#### Enabling/Disabling Validation
+
+You can use the `[DisableValidation]` to disable it for methods, classs and properties.
+
+````csharp
+[DisableValidation]
+public Void Method()
+{
+
+}
+
+[DisableValidation]
+public class UpdateInput
+{
+    public string MyStringProperty { get; set; }
+}
+
+public class CreateInput
+{
+    [DisableValidation]
+    public string MyStringProperty { get; set; }
+}
+````
+
+> You should always disable validation for some special types of properties, Because the framework will validate the properties recursively. Such as `byte[]`.
+
 ### AbpValidationException
 
 Once ABP determines a validation error, it throws an exception of type `AbpValidationException`. Your application code can throw `AbpValidationException`, but most of the times it is not needed.
