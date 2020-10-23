@@ -127,13 +127,14 @@ namespace MyCompany.MyProject
 `MyCustomTenantResolveContributor`必须像下面这样实现**ITenantResolveContributor**接口:
 
 ````C#
+using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
     public class MyCustomTenantResolveContributor : ITenantResolveContributor
     {
-        public void Resolve(ITenantResolveContext context)
+        public override Task ResolveAsync(ITenantResolveContext context)
         {
             context.TenantIdOrName = ... //从其他地方获取租户id或租户名字...
         }

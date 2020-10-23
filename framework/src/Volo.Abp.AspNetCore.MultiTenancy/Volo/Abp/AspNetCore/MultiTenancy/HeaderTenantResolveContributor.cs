@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,9 +14,9 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         public override string Name => ContributorName;
 
-        protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
+        protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
         {
-            if (httpContext.Request == null || httpContext.Request.Headers.IsNullOrEmpty())
+            if (httpContext.Request.Headers.IsNullOrEmpty())
             {
                 return null;
             }
@@ -33,7 +34,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 Log(context, $"HTTP request includes more than one {tenantIdKey} header value. First one will be used. All of them: {tenantIdHeader.JoinAsString(", ")}");
             }
 
-            return tenantIdHeader.First();
+            return Task.FromResult(tenantIdHeader.First());
         }
 
         protected virtual void Log(ITenantResolveContext context, string text)
