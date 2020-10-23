@@ -30,7 +30,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
             context.Handled = true;
 
-            return extractResult.IsMatch ? Task.FromResult(extractResult.Matches[0].Value) : null;
+            return Task.FromResult(extractResult.IsMatch ? extractResult.Matches[0].Value : null);
         }
     }
 }
