@@ -62,8 +62,8 @@ export function registerLocale(locale: string, injector: Injector): Promise<any>
   return new Promise((resolve, reject) => {
     return import(
       /* webpackChunkName: "_locale-[request]"*/
-      /* webpackInclude: /\/(ar|cs|en|fr|pt|tr|ru|sl|zh-Hans|zh-Hant).js/ */
-      /* webpackExclude: /\/global|\/extra/ */
+      /* webpackInclude: /[/\\](ar|cs|en|fr|pt|tr|ru|hu|sl|zh-Hans|zh-Hant).js/ */
+      /* webpackExclude: /[/\\]global|extra/ */
       `@angular/common/locales/${cultureNameLocaleFileMap[locale] || locale}.js`
     )
       .then(module => {
@@ -101,7 +101,9 @@ async function defaultLocalErrorHandlerFn({
   }
 
   if (isDevMode) {
-    console.error(`Cannot find the ${locale} locale file. You can check how can add new culture at https://docs.abp.io/en/abp/latest/UI/Angular/Localization#adding-new-culture`);
+    console.error(
+      `Cannot find the ${locale} locale file. You can check how can add new culture at https://docs.abp.io/en/abp/latest/UI/Angular/Localization#adding-new-culture`,
+    );
   }
 
   resolve();
