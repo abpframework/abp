@@ -1,8 +1,5 @@
 using System;
 using System.IO;
-using System.Reflection;
-using Localization.Resources.AbpUi;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +10,6 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -50,7 +46,8 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpTenantManagementWebModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwaggerModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -215,9 +212,8 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
-                options.IndexStream = () => Assembly.GetExecutingAssembly().GetManifestResourceStream("MyCompanyName.MyProjectName.Web.wwwroot.swagger.ui.index.html");
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
             app.UseAuditing();

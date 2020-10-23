@@ -1,28 +1,19 @@
 using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
-using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
@@ -60,7 +51,8 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpTenantManagementWebModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwaggerModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -241,9 +233,8 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
-                options.IndexStream = () => Assembly.GetExecutingAssembly().GetManifestResourceStream("MyCompanyName.MyProjectName.Web.wwwroot.swagger.ui.index.html");
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
 

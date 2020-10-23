@@ -74,7 +74,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(MyProjectNameApplicationContractsModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwaggerModule)
         )]
     public class MyProjectNameIdentityServerModule : AbpModule
     {
@@ -200,7 +201,7 @@ namespace MyCompanyName.MyProjectName
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });

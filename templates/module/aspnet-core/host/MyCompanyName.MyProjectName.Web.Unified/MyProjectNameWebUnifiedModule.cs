@@ -62,7 +62,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwaggerModule)
         )]
     public class MyProjectNameWebUnifiedModule : AbpModule
     {
@@ -144,9 +145,8 @@ namespace MyCompanyName.MyProjectName
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
-                options.IndexStream = () => Assembly.GetExecutingAssembly().GetManifestResourceStream("MyCompanyName.MyProjectName.wwwroot.swagger.ui.index.html");
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });
 
