@@ -1,5 +1,4 @@
-﻿@typeparam TItem
-@using Blazorise
+﻿@using Blazorise
 
 @if (ParentActions.Type == ActionType.Dropdown)
 {
@@ -13,7 +12,7 @@ else
     if (IsVisible)
     {
         <Blazorise.Button Block="true"
-                          Color="Color.Primary"
+                          Color="@Color"
                           Clicked="@ActionClickedAsync">
             @Text
         </Blazorise.Button>
