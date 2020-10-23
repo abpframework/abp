@@ -249,7 +249,7 @@ namespace MyCompanyName.MyProjectName
             app.UseSwagger();
             app.UseAbpSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
 
             app.UseAuditing();

@@ -18,12 +18,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="wwwroot\swagger\ui\index.html" />
-      <EmbeddedResource Include="wwwroot\swagger\ui\index.html" />
+      <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+      <None Remove="wwwroot\swagger\ui\abp.swagger.js" />
+      <EmbeddedResource Include="wwwroot\swagger\ui\abp.swagger.js" />
     </ItemGroup>
 
 </Project>

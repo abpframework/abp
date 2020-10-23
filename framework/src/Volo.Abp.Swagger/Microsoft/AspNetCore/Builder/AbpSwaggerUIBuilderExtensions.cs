@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using Volo.Abp.VirtualFileSystem;
+using Volo.Abp;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -11,11 +11,13 @@ namespace Microsoft.AspNetCore.Builder
             this IApplicationBuilder app,
             Action<SwaggerUIOptions> setupAction = null)
         {
-            var fileProvider = app.ApplicationServices.GetService<IVirtualFileProvider>();
+            var resolver = app.ApplicationServices.GetService<ISwaggerHtmlResolver>();
 
             return app.UseSwaggerUI(options =>
             {
-                options.IndexStream = () => fileProvider.GetFileInfo("/wwwroot/swagger/ui/index.html").CreateReadStream();
+                options.InjectJavascript("/libs/abp/core/abp.js");
+                options.InjectJavascript("/swagger/ui/abp.swagger.js");
+                options.IndexStream = () => resolver.Resolver();
 
                 setupAction?.Invoke(options);
             });
