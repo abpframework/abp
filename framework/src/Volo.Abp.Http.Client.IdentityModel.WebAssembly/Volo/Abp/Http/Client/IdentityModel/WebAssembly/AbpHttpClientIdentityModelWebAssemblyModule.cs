@@ -12,8 +12,8 @@ namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             AbpClaimTypes.UserName = JwtClaimTypes.PreferredUserName;
-            //AbpClaimTypes.Name = ...; //TODO
-            //AbpClaimTypes.SurName = ...; //TODO
+            AbpClaimTypes.Name = JwtClaimTypes.GivenName;
+            AbpClaimTypes.SurName = JwtClaimTypes.FamilyName;
             AbpClaimTypes.UserId = JwtClaimTypes.Subject;
             AbpClaimTypes.Role = JwtClaimTypes.Role;
             AbpClaimTypes.Email = JwtClaimTypes.Email;

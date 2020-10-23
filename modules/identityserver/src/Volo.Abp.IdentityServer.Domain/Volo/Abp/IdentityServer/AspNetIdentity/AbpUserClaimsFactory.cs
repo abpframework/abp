@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.IdentityServer.AspNetIdentity
 {
@@ -66,6 +68,19 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     identity.AddIfNotContains(new Claim(JwtClaimTypes.PhoneNumberVerified,
                         await _userManager.IsPhoneNumberConfirmedAsync(user) ? "true" : "false",
                         ClaimValueTypes.Boolean));
+                }
+            }
+
+            if (user is IdentityUser identityUser)
+            {
+                if (!identityUser.Name.IsNullOrEmpty())
+                {
+                    identity.AddIfNotContains(new Claim(JwtClaimTypes.GivenName, identityUser.Name));
+                }
+
+                if (!identityUser.Surname.IsNullOrEmpty())
+                {
+                    identity.AddIfNotContains(new Claim(JwtClaimTypes.FamilyName, identityUser.Surname));
                 }
             }
 
