@@ -318,7 +318,11 @@ namespace Volo.Abp.BlazoriseUI
         {
             await CheckCreatePolicyAsync();
 
-            NewEntity.ResetState();
+            ObjectMapper.Map(new TCreateViewModel(), NewEntity);
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(() => StateHasChanged());
 
             CreateModal.Show();
         }
@@ -334,8 +338,12 @@ namespace Volo.Abp.BlazoriseUI
             await CheckUpdatePolicyAsync();
 
             var entityDto = await AppService.GetAsync(id);
+
             EditingEntityId = id;
-            EditingEntity.ApplyState(MapToEditingEntity(entityDto));
+            ObjectMapper.Map(entityDto, EditingEntity);
+
+            await InvokeAsync(() => StateHasChanged());
+
             EditModal.Show();
         }
 
@@ -378,8 +386,6 @@ namespace Volo.Abp.BlazoriseUI
             await GetEntitiesAsync();
             CreateModal.Hide();
         }
-
-
 
         protected virtual async Task UpdateEntityAsync()
         {
