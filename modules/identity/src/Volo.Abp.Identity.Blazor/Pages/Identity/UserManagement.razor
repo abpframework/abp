@@ -86,7 +86,7 @@
                 <CloseButton Clicked="CloseCreateModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@CreateValidationsRef" Mode="ValidationMode.Auto" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                     <Tabs @bind-SelectedTab="@CreateModalSelectedTab">
                         <Items>
                             <Tab Name="UserInformations">@L["UserInformations"]</Tab>
@@ -193,7 +193,7 @@
                 <CloseButton Clicked="CloseEditModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@EditValidationsRef" Mode="ValidationMode.Auto" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                     <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
 
                     <Tabs @bind-SelectedTab="@EditModalSelectedTab">

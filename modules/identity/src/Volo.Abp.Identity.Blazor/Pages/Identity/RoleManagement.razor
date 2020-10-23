@@ -14,7 +14,7 @@
         <Heading Size="HeadingSize.Is1">@L["Roles"]</Heading>
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
-        @if (HasCreatePermission)
+        @if ( HasCreatePermission )
         {
             <Paragraph Alignment="TextAlignment.Right">
                 <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewRole"]</Button>
@@ -31,7 +31,7 @@
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
-        @if (ShouldShowEntityActions)
+        @if ( ShouldShowEntityActions )
         {
             <DataGridColumn Width="150px" TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Sortable="false" Caption="@L["Actions"].Value">
                 <DisplayTemplate>
@@ -40,15 +40,15 @@
                             @L["Actions"]
                         </DropdownToggle>
                         <DropdownMenu>
-                            @if (HasUpdatePermission)
+                            @if ( HasUpdatePermission )
                             {
                                 <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityRoleDto>().Id)">@L["Edit"]</DropdownItem>
                             }
-                            @if (HasManagePermissionsPermission)
+                            @if ( HasManagePermissionsPermission )
                             {
                                 <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.As<IdentityRoleDto>().Name)">@L["Permissions"]</DropdownItem>
                             }
-                            @if (HasDeletePermission)
+                            @if ( HasDeletePermission )
                             {
                                 <DropdownItem Clicked="() => DeleteEntityAsync(context.As<IdentityRoleDto>())">@L["Delete"]</DropdownItem>
                             }
@@ -60,11 +60,11 @@
         <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="@L["RoleName"].Value">
             <DisplayTemplate>
                 @(context.As<IdentityRoleDto>().Name)
-                @if (context.As<IdentityRoleDto>().IsDefault)
+                @if ( context.As<IdentityRoleDto>().IsDefault )
                 {
                     <Badge Color="Color.Primary">@L["DisplayName:IsDefault"]</Badge>
                 }
-                @if (context.As<IdentityRoleDto>().IsPublic)
+                @if ( context.As<IdentityRoleDto>().IsPublic )
                 {
                     <Badge Color="Color.Light">@L["DisplayName:IsPublic"]</Badge>
                 }
@@ -74,7 +74,7 @@
 </DataGrid>
 
 @* ************************* CREATE MODAL ************************* *@
-@if (HasCreatePermission)
+@if ( HasCreatePermission )
 {
     <Modal @ref="CreateModal">
         <ModalBackdrop />
@@ -84,7 +84,7 @@
                 <CloseButton Clicked="CloseCreateModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@CreateValidationsRef" Mode="ValidationMode.Auto" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@ML.Localize">
                         <Field>
                             <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
@@ -109,7 +109,7 @@
     </Modal>
 }
 @* ************************* EDIT MODAL ************************* *@
-@if (HasUpdatePermission)
+@if ( HasUpdatePermission )
 {
     <Modal @ref="EditModal">
         <ModalBackdrop />
@@ -119,7 +119,7 @@
                 <CloseButton Clicked="CloseEditModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@EditValidationsRef" Mode="ValidationMode.Auto" Model="@EditingEntity" ValidateOnLoad="false">
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
                     <Validation MessageLocalizer="@ML.Localize">
                         <Field>
