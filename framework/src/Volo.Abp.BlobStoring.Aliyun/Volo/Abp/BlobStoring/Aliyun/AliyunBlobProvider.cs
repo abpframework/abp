@@ -73,7 +73,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             return Task.FromResult(BlobExistsAsync(ossClient, containerName, blobName));
         }
 
-        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var containerName = GetContainerName(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);

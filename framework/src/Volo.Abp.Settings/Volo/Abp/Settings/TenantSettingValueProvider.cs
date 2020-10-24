@@ -17,7 +17,7 @@ namespace Volo.Abp.Settings
             CurrentTenant = currentTenant;
         }
 
-        public override async Task<string> GetOrNullAsync(SettingDefinition setting)
+        public async override Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString());
         }

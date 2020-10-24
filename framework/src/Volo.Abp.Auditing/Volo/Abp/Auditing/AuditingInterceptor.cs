@@ -18,7 +18,7 @@ namespace Volo.Abp.Auditing
             _auditingManager = auditingManager;
         }
 
-        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {

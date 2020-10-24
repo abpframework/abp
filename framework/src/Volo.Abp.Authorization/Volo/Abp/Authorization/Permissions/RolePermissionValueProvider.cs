@@ -16,7 +16,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         }
 
-        public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
+        public async override Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
             var roles = context.Principal?.FindAll(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
 

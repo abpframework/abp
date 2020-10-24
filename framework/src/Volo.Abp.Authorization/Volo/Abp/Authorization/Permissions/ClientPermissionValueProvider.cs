@@ -15,7 +15,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         }
 
-        public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
+        public async override Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
             var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
 
