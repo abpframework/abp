@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Components;
 
-namespace Volo.Abp.AspNetCore.Components
+namespace Volo.Abp.AspNetCore.Components.DependencyInjection
 {
     public class ServiceProviderComponentActivator : IComponentActivator
     {

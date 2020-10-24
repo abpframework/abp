@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components
+namespace Volo.Abp.AspNetCore.Components.DependencyInjection
 {
     public class AbpWebAssemblyConventionalRegistrar : ConventionalRegistrarBase
     {
