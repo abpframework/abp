@@ -17,6 +17,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Client.Common\Volo.Abp.AspNetCore.Mvc.Client.Common.csproj" />
       <ProjectReference Include="..\Volo.Abp.UI\Volo.Abp.UI.csproj" />
+      <ProjectReference Include="..\Volo.Abp.AspNetCore.Components\Volo.Abp.AspNetCore.Components.csproj" />
     </ItemGroup>
 
     <ItemGroup>
