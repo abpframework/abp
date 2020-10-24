@@ -12,9 +12,9 @@ namespace Volo.Abp.ExceptionHandling
     {
         public ILogger<ExceptionNotifier> Logger { get; set; }
 
-        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        public ExceptionNotifier(IHybridServiceScopeFactory serviceScopeFactory)
+        public ExceptionNotifier(IServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Logger = NullLogger<ExceptionNotifier>.Instance;
