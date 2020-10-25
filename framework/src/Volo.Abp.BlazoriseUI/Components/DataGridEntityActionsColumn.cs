@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Blazorise.DataGrid;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
@@ -11,13 +12,19 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Inject]
         public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-            base.OnInitialized();
+            await base.OnInitializedAsync();
+            await SetDefaultValuesAsync();
+        }
+
+        protected virtual ValueTask SetDefaultValuesAsync()
+        {
             Caption = UiLocalizer["Actions"];
             Width = "150px";
             Sortable = false;
             Field = typeof(TItem).GetProperties().First().Name;
+            return ValueTask.CompletedTask;
         }
     }
 }

@@ -7,7 +7,7 @@ using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
-    public partial class EntityAction : ComponentBase
+    public partial class EntityAction<TItem> : ComponentBase
     {
         internal bool IsVisible;
 
@@ -30,7 +30,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         public string ConfirmationMessage { get; set; }
 
         [CascadingParameter]
-        public EntityActions ParentActions { get; set; }
+        public EntityActions<TItem> ParentActions { get; set; }
 
         [Inject]
         protected IAuthorizationService AuthorizationService { get; set; }
@@ -42,8 +42,8 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await base.OnInitializedAsync();
             await SetDefaultValuesAsync();
-            ParentActions.AddAction(this);
             IsVisible = await AuthorizationService.IsGrantedAsync(Policy);
+            ParentActions.AddAction(this);
         }
 
         protected internal virtual async Task ActionClickedAsync()

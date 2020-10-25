@@ -8,15 +8,15 @@ using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
-    public partial class EntityActions : ComponentBase
+    public partial class EntityActions<TItem> : ComponentBase
     {
-        protected readonly List<EntityAction> Actions = new List<EntityAction>();
+        protected readonly List<EntityAction<TItem>> Actions = new List<EntityAction<TItem>>();
         protected bool HasPrimaryAction => Actions.Any(t => t.Primary);
-        protected EntityAction PrimaryAction => Actions.FirstOrDefault(t => t.Primary);
+        protected EntityAction<TItem> PrimaryAction => Actions.FirstOrDefault(t => t.Primary);
         protected internal ActionType Type => Actions.Count(t => t.IsVisible) > 1 ? ActionType.Dropdown : ActionType.Button;
 
         [Parameter]
-        public Color ToggleColor { get; set; }
+        public Color ToggleColor { get; set; } = Color.Primary;
 
         [Parameter]
         public string ToggleText { get; set; }
@@ -24,26 +24,26 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        [Parameter]
+        public DataGridEntityActionsColumn<TItem> EntityActionsColumn { get; set; }
+
         [Inject]
         public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
 
-        internal void AddAction(EntityAction action)
+        internal void AddAction(EntityAction<TItem> action)
         {
             Actions.Add(action);
+            if (EntityActionsColumn != null)
+            {
+                EntityActionsColumn.Displayable = Actions.Any(t => t.IsVisible);
+            }
             StateHasChanged();
         }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            await base.OnInitializedAsync();
-            await SetDefaultValuesAsync();
-        }
-
-        protected virtual ValueTask SetDefaultValuesAsync()
-        {
-            ToggleColor = Color.Primary;
+            base.OnInitialized();
             ToggleText = UiLocalizer["Actions"];
-            return ValueTask.CompletedTask;
         }
     }
 
