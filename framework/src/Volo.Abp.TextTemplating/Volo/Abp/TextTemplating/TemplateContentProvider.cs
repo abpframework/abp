@@ -12,13 +12,13 @@ namespace Volo.Abp.TextTemplating
 {
     public class TemplateContentProvider : ITemplateContentProvider, ITransientDependency
     {
-        public IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        public IServiceScopeFactory ServiceScopeFactory { get; }
         public AbpTextTemplatingOptions Options { get; }
         private readonly ITemplateDefinitionManager _templateDefinitionManager;
 
         public TemplateContentProvider(
             ITemplateDefinitionManager templateDefinitionManager,
-            IHybridServiceScopeFactory serviceScopeFactory,
+            IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpTextTemplatingOptions> options)
         {
             ServiceScopeFactory = serviceScopeFactory;

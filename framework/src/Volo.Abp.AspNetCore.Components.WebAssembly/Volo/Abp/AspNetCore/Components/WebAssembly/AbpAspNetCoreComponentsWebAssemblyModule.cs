@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.AspNetCore.Components.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.Http.Client;
@@ -12,14 +13,13 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcClientCommonModule),
-        typeof(AbpUiModule)
+        typeof(AbpUiModule),
+        typeof(AbpAspNetCoreComponentsModule)
         )]
     public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddConventionalRegistrar(new AbpWebAssemblyConventionalRegistrar());
-
             PreConfigure<AbpHttpClientBuilderOptions>(options =>
             {
                 options.ProxyClientBuildActions.Add((_, builder) =>
