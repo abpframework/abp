@@ -32,5 +32,20 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
         {
             return JsRuntime.InvokeVoidAsync("abp.utils.replaceLinkHrefById", linkId, hrefValue);
         }
+
+        public ValueTask ToggleFullscreenAsync()
+        {
+            return JsRuntime.InvokeVoidAsync("abp.utils.toggleFullscreen");
+        }
+
+        public ValueTask RequestFullscreenAsync()
+        {
+            return JsRuntime.InvokeVoidAsync("abp.utils.requestFullscreen");
+        }
+
+        public ValueTask ExitFullscreenAsync()
+        {
+            return JsRuntime.InvokeVoidAsync("abp.utils.exitFullscreen");
+        }
     }
 }
