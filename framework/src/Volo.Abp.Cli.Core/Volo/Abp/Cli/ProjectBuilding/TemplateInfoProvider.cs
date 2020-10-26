@@ -3,6 +3,7 @@ using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectBuilding
@@ -28,6 +29,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     return new ModuleProTemplate();
                 case ConsoleTemplate.TemplateName:
                     return new ConsoleTemplate();
+                case WpfTemplate.TemplateName:
+                    return new WpfTemplate();
                 default:
                     throw new Exception("There is no template found with given name: " + name);
             }
