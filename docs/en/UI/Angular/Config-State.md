@@ -93,17 +93,6 @@ const searchUrl = this.config.getApiUrl("search");
 
 This method returns the `url` of a specific API based on the key given as its only parameter. If there is no key, `'default'` is used.
 
-### How to Get a Specific Feature From the Store
-
-You can use the `getFeature` method of `ConfigStateService` to get a specific feature from the configuration state. Here is an example:
-
-```js
-// this.config is instance of ConfigStateService
-
-const isChatEnabled = this.config.getFeature("Chat.Enable");
-// 'en'
-```
-
 ### How to Get a Specific Permission From the Store
 
 You can use the `getGrantedPolicy` method of `ConfigStateService` to get a specific permission from the configuration state. For that, you should pass a policy key as parameter to the method.
@@ -200,6 +189,7 @@ Please refer to `Config.Environment` type for all the properties you can pass to
 ## See Also
 
 - [Settings](./Settings.md)
+- [Features](./Features.md)
 
 ## What's Next?
 
