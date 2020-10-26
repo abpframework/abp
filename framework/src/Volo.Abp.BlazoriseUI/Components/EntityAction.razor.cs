@@ -21,12 +21,12 @@ namespace Volo.Abp.BlazoriseUI.Components
         public EventCallback Clicked { get; set; }
 
         [Parameter]
-        public string Policy { get; set; }
+        public string RequiredPolicy { get; set; }
 
         [Parameter]
         public Color Color { get; set; }
-        
-        [Parameter] 
+
+        [Parameter]
         public string ConfirmationMessage { get; set; }
 
         [CascadingParameter]
@@ -42,7 +42,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await base.OnInitializedAsync();
             await SetDefaultValuesAsync();
-            IsVisible = await AuthorizationService.IsGrantedAsync(Policy);
+            IsVisible = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
             ParentActions.AddAction(this);
         }
 
