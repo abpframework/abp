@@ -56,4 +56,4 @@ Beware though, **settings search is case-sensitive**.
 
 ## What's Next?
 
-- [Permission Management](./Permission-Management.md)
+- [Features](./Features.md)
