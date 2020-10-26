@@ -6,21 +6,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Volo.Abp.Linq
 {
     public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ITransientDependency
     {
         protected IEnumerable<IAsyncQueryableProvider> Providers { get; }
+        public ILogger<AsyncQueryableExecuter> Logger { get; set; }
 
-        public AsyncQueryableExecuter(IEnumerable<IAsyncQueryableProvider> providers, ILogger<AsyncQueryableExecuter> logger)
+        public AsyncQueryableExecuter(IEnumerable<IAsyncQueryableProvider> providers)
         {
             Providers = providers;
-            Logger = logger;
-
+            Logger = NullLogger<AsyncQueryableExecuter>.Instance;
         }
         
-        protected ILogger<AsyncQueryableExecuter> Logger { get; set; }
 
         protected virtual IAsyncQueryableProvider FindProvider<T>(IQueryable<T> queryable)
         {
