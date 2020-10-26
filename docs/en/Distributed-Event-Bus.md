@@ -44,7 +44,7 @@ namespace AbpDemo
         public virtual async Task ChangeStockCountAsync(Guid productId, int newCount)
         {
             await _distributedEventBus.PublishAsync(
-                new StockCountChangedEvent
+                new StockCountChangedEto
                 {
                     ProductId = productId,
                     NewCount = newCount
