@@ -589,6 +589,10 @@
                   "path": "UI/Angular/Settings.md"
                 },
                 {
+                  "text": "Features",
+                  "path": "UI/Angular/Features.md"
+                },
+                {
                   "text": "Permission Management",
                   "path": "UI/Angular/Permission-Management.md"
                 },
