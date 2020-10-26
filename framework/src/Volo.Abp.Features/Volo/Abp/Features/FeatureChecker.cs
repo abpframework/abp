@@ -37,7 +37,11 @@ namespace Volo.Abp.Features
         
         public override async Task<string> GetOrNullAsync(string name)
         {
-            var featureDefinition = FeatureDefinitionManager.Get(name);
+            var featureDefinition = FeatureDefinitionManager.GetOrNull(name);
+            if (featureDefinition == null)
+            {
+                return null;
+            }
             var providers = Enumerable
                 .Reverse(Providers);
 
