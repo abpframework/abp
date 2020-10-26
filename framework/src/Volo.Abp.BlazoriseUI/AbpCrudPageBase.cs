@@ -169,7 +169,6 @@ namespace Volo.Abp.BlazoriseUI
         where TUpdateViewModel : class, new()
     {
         [Inject] protected TAppService AppService { get; set; }
-        [Inject] protected IUiMessageService UiMessageService { get; set; }
         [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
         [Inject] protected IAuthorizationService AuthorizationService { get; set; }
 
@@ -391,11 +390,6 @@ namespace Volo.Abp.BlazoriseUI
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
         {
             await CheckDeletePolicyAsync();
-
-            if (!await UiMessageService.ConfirmAsync(GetDeleteConfirmationMessage(entity)))
-            {
-                return;
-            }
 
             await AppService.DeleteAsync(entity.Id);
             await GetEntitiesAsync();

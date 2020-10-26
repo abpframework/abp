@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Blazorise;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components
@@ -27,7 +29,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         public Color Color { get; set; }
 
         [Parameter]
-        public string ConfirmationMessage { get; set; }
+        public Func<string> ConfirmationMessage { get; set; }
 
         [CascadingParameter]
         public EntityActions<TItem> ParentActions { get; set; }
@@ -48,9 +50,9 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         protected internal virtual async Task ActionClickedAsync()
         {
-            if (!ConfirmationMessage.IsNullOrEmpty())
+            if (ConfirmationMessage != null)
             {
-                if (await UiMessageService.ConfirmAsync(ConfirmationMessage))
+                if (await UiMessageService.ConfirmAsync(ConfirmationMessage()))
                 {
                     await Clicked.InvokeAsync();
                 }
