@@ -46,10 +46,4 @@ namespace Volo.Abp.BlazoriseUI.Components
             ToggleText = UiLocalizer["Actions"];
         }
     }
-
-    public enum ActionType
-    {
-        Dropdown,
-        Button
-    }
 }
