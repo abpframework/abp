@@ -10,7 +10,7 @@
         public WpfTemplate()
             : base(TemplateName)
         {
-            DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Getting-Started-WPF-Application";
+            DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/WPF";
         }
     }
 }
