@@ -1,5 +1,5 @@
-using System.Text.Json;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Auditing
@@ -16,14 +16,29 @@ namespace Volo.Abp.Auditing
 
         public string Serialize(object obj)
         {
-            return JsonSerializer.Serialize(obj, GetJsonSerializerOptions());
+            return JsonConvert.SerializeObject(obj, GetSharedJsonSerializerSettings());
         }
 
-        private JsonSerializerOptions GetJsonSerializerOptions()
+        private static readonly object SyncObj = new object();
+        private static JsonSerializerSettings _sharedJsonSerializerSettings;
+
+        private JsonSerializerSettings GetSharedJsonSerializerSettings()
         {
-            var options = new JsonSerializerOptions();
-            options.Converters.Add(new AuditingRuntimeIgnoreConverter(Options.IgnoredTypes));
-            return options;
+            if (_sharedJsonSerializerSettings == null)
+            {
+                lock (SyncObj)
+                {
+                    if (_sharedJsonSerializerSettings == null)
+                    {
+                        _sharedJsonSerializerSettings = new JsonSerializerSettings
+                        {
+                            ContractResolver = new AuditingContractResolver(Options.IgnoredTypes)
+                        };
+                    }
+                }
+            }
+
+            return _sharedJsonSerializerSettings;
         }
     }
 }
