@@ -2,17 +2,20 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Json.Microsoft;
+using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Modularity;
-using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json
 {
-    [DependsOn(typeof(AbpTimingModule))]
-    public class AbpJsonModule : AbpModule
+    [DependsOn(typeof(AbpJsonModule))]
+    public class AbpJsonNewtonsoftModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<AbpJsonSerializerOptions>, AbpJsonSerializerOptionsSetup>());
+            Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
+            {
+                options.Converters.Add<AbpJsonIsoDateTimeConverter>();
+            });
         }
     }
 }

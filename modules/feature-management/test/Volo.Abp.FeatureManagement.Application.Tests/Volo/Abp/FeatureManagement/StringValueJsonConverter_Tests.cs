@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Shouldly;
 using Volo.Abp.Json;
 using Volo.Abp.Validation.StringValues;
@@ -66,9 +66,11 @@ namespace Volo.Abp.FeatureManagement
                 }
             };
 
-            var serialized = _jsonSerializer.Serialize(featureListDto, indented: true);
+            var serialized = _jsonSerializer.Serialize(featureListDto);
+
             var featureListDto2 = _jsonSerializer.Deserialize<GetFeatureListResultDto>(serialized);
 
+            featureListDto2.ShouldNotBeNull();
             featureListDto2.Groups[0].Features[0].ValueType.ShouldBeOfType<FreeTextStringValueType>();
             featureListDto2.Groups[0].Features[0].ValueType.Validator.ShouldBeOfType<BooleanValueValidator>();
 

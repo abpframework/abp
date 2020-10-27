@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
-using Newtonsoft.Json.Linq;
 using Shouldly;
 using Volo.Abp.Security.Claims;
 using Xunit;

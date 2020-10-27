@@ -109,6 +109,7 @@ $projects = (
     "framework/src/Volo.Abp.Http",
     "framework/src/Volo.Abp.IdentityModel",
     "framework/src/Volo.Abp.Json",
+    "framework/src/Volo.Abp.Json.Newtonsoft",
     "framework/src/Volo.Abp.Ldap",
     "framework/src/Volo.Abp.Localization.Abstractions",
     "framework/src/Volo.Abp.MailKit",

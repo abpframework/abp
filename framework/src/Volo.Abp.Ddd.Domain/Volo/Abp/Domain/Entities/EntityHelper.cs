@@ -77,7 +77,7 @@ namespace Volo.Abp.Domain.Entities
             {
                 var entity1Key = entity1Keys[i];
                 var entity2Key = entity2Keys[i];
-                
+
                 if (entity1Key == null)
                 {
                     if (entity2Key == null)
@@ -89,13 +89,13 @@ namespace Volo.Abp.Domain.Entities
                     //entity2Key is not null!
                     return false;
                 }
-                
+
                 if (entity2Key == null)
                 {
                     //entity1Key was not null!
                     return false;
                 }
-                
+
                 if (TypeHelper.IsDefaultValue(entity1Key) && TypeHelper.IsDefaultValue(entity2Key))
                 {
                     return false;
@@ -265,6 +265,37 @@ namespace Volo.Abp.Domain.Entities
                 });
 
             property?.SetValue(entity, idFactory());
+        }
+
+        public static void TrySetId<TKey>(
+            object entity,
+            TKey id,
+            bool checkForDisableIdGenerationAttribute = false)
+        {
+            var property = CachedIdProperties.GetOrAdd(
+                $"{entity.GetType().FullName}-{checkForDisableIdGenerationAttribute}", () =>
+                {
+                    var idProperty = entity
+                        .GetType()
+                        .GetProperties()
+                        .FirstOrDefault(x => x.Name == nameof(IEntity<object>.Id) &&
+                                             x.GetSetMethod(true) != null);
+
+                    if (idProperty == null)
+                    {
+                        return null;
+                    }
+
+                    if (checkForDisableIdGenerationAttribute &&
+                        idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
+                    {
+                        return null;
+                    }
+
+                    return idProperty;
+                });
+
+            property?.SetValue(entity, id);
         }
     }
 }
