@@ -54,7 +54,7 @@ There are some abstractions in the ABP Framework to make your code independent f
 * JavaScript [Message](JavaScript-API/Message.md) and [Notification](JavaScript-API/Notify.md) APIs provides abstractions to use the Sweetalert and Toastr.
 * [Forms & Validation](Forms-Validation.md) system automatically handles the validation, so you mostly don't directly type any validation code.
 
-### The Layouts
+### The Standard Layouts
 
 The main responsibility of a theme is to provide the layouts. There are **three pre-defined layouts must be implemented by all the themes**:
 
@@ -122,4 +122,55 @@ The empty layout provides an empty page, however it typically includes the follo
 
 ## Implementing a Theme
 
-TODO
+### The ITheme Interface
+
+`ITheme` interface is used by the ABP Framework to select the layout for the current page. A theme must implement this interface to provide the requested layout path.
+
+This is the `ITheme` implementation of the [Basic Theme](Basic-Theme.md).
+
+````csharp
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+using Volo.Abp.DependencyInjection;
+
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
+{
+    [ThemeName(Name)]
+    public class BasicTheme : ITheme, ITransientDependency
+    {
+        public const string Name = "Basic";
+
+        public virtual string GetLayout(string name, bool fallbackToDefault = true)
+        {
+            switch (name)
+            {
+                case StandardLayouts.Application:
+                    return "~/Themes/Basic/Layouts/Application.cshtml";
+                case StandardLayouts.Account:
+                    return "~/Themes/Basic/Layouts/Account.cshtml";
+                case StandardLayouts.Empty:
+                    return "~/Themes/Basic/Layouts/Empty.cshtml";
+                default:
+                    return fallbackToDefault
+                        ? "~/Themes/Basic/Layouts/Application.cshtml"
+                        : null;
+            }
+        }
+    }
+}
+````
+
+* `[ThemeName]` attribute is required and a theme must have a unique name, `Basic` in this sample.
+* `GetLayout` method should return a path if the requested layout (`name`) is provided by the theme. *The Standard Layouts* should be implemented if the theme is aimed to be used by a standard application. It may implement additional layouts.
+
+Once the theme implements the `ITheme` interface, it should add the theme to the `AbpThemingOptions` in the `ConfigureServices` method of the [module](../../Module-Development-Basics.md).
+
+````csharp
+Configure<AbpThemingOptions>(options =>
+{
+    options.Themes.Add<BasicTheme>();
+});
+````
+
+#### The IThemeSelector Service
+
+ABP Framework allows to use multiple themes together. This is why `options.Themes` is a list. `IThemeSelector` service selects the theme on the runtime. The application developer can set the `AbpThemingOptions.DefaultThemeName` to set the theme to be used, or replace the `IThemeSelector` service implementation (the default implementation is `DefaultThemeSelector`) to completely control the theme selection on runtime.
