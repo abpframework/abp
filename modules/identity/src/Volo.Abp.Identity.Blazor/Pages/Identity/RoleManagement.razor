@@ -2,11 +2,8 @@
 @attribute [Authorize(IdentityPermissions.Roles.Default)]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.Extensions.Localization
-@using Volo.Abp.Identity.Localization
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @inherits RoleManagementBase
-@inject IStringLocalizer<IdentityResource> L
 
 @* ************************* PAGE HEADER ************************* *@
 <Row>
