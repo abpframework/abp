@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Authorization;
 using Volo.Abp.ObjectMapping;
@@ -151,7 +152,7 @@ namespace Volo.Abp.BlazoriseUI
             TListViewModel,
             TCreateViewModel,
             TUpdateViewModel>
-        : OwningComponentBase
+        : AbpComponentBase
         where TAppService : ICrudAppService<
             TGetOutputDto,
             TGetListOutputDto,
@@ -194,44 +195,6 @@ namespace Volo.Abp.BlazoriseUI
         public bool HasCreatePermission { get; set; }
         public bool HasUpdatePermission { get; set; }
         public bool HasDeletePermission { get; set; }
-
-        protected Type ObjectMapperContext { get; set; }
-
-        protected IObjectMapper ObjectMapper
-        {
-            get
-            {
-                if (_objectMapper != null)
-                {
-                    return _objectMapper;
-                }
-
-                if (ObjectMapperContext == null)
-                {
-                    return LazyGetRequiredService(ref _objectMapper);
-                }
-
-                return LazyGetRequiredService(
-                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
-                    ref _objectMapper
-                );
-            }
-        }
-
-        private IObjectMapper _objectMapper;
-
-        protected TService LazyGetRequiredService<TService>(ref TService reference)
-            => LazyGetRequiredService(typeof(TService), ref reference);
-
-        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
-        {
-            if (reference == null)
-            {
-                reference = (TRef)ScopedServices.GetRequiredService(serviceType);
-            }
-
-            return reference;
-        }
 
         protected AbpCrudPageBase()
         {
@@ -297,7 +260,7 @@ namespace Volo.Abp.BlazoriseUI
             {
                 limitedResultRequestInput.MaxResultCount = PageSize;
             }
-            
+
             return Task.CompletedTask;
         }
 
