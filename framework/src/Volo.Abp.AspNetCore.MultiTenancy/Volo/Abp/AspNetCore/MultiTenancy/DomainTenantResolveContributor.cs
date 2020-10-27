@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Text.Formatting;
@@ -22,26 +23,14 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             _domainFormat = domainFormat.RemovePreFix(ProtocolPrefixes);
         }
 
-        protected override string GetTenantIdOrNameFromHttpContextOrNull(
-            ITenantResolveContext context, 
-            HttpContext httpContext)
+        protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
         {
-            if (httpContext.Request?.Host == null)
-            {
-                return null;
-            }
-
             var hostName = httpContext.Request.Host.Host.RemovePreFix(ProtocolPrefixes);
             var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
 
             context.Handled = true;
 
-            if (!extractResult.IsMatch)
-            {
-                return null;
-            }
-
-            return extractResult.Matches[0].Value;
+            return Task.FromResult(extractResult.IsMatch ? extractResult.Matches[0].Value : null);
         }
     }
 }

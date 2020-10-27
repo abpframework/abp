@@ -178,6 +178,7 @@ namespace Volo.Abp.BlazoriseUI
         protected int CurrentPage;
         protected string CurrentSorting;
         protected int? TotalCount;
+        protected TGetListInput GetListInput = new TGetListInput();
         protected IReadOnlyList<TListViewModel> Entities = Array.Empty<TListViewModel>();
         protected TCreateViewModel NewEntity;
         protected TKey EditingEntityId;
@@ -186,6 +187,7 @@ namespace Volo.Abp.BlazoriseUI
         protected Modal EditModal;
         protected Validations CreateValidationsRef;
         protected Validations EditValidationsRef;
+        protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
 
         protected string CreatePolicyName { get; set; }
         protected string UpdatePolicyName { get; set; }
@@ -241,8 +243,8 @@ namespace Volo.Abp.BlazoriseUI
 
         protected override async Task OnInitializedAsync()
         {
+            await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();
-            await GetEntitiesAsync();
         }
 
         protected virtual async Task SetPermissionsAsync()
@@ -265,8 +267,8 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task GetEntitiesAsync()
         {
-            var input = await CreateGetListInputAsync();
-            var result = await AppService.GetListAsync(input);
+            await UpdateGetListInputAsync();
+            var result = await AppService.GetListAsync(GetListInput);
             Entities = MapToListViewModel(result.Items);
             TotalCount = (int?)result.TotalCount;
         }
@@ -281,26 +283,24 @@ namespace Volo.Abp.BlazoriseUI
             return ObjectMapper.Map<IReadOnlyList<TGetListOutputDto>, List<TListViewModel>>(dtos);
         }
 
-        protected virtual Task<TGetListInput> CreateGetListInputAsync()
+        protected virtual Task UpdateGetListInputAsync()
         {
-            var input = new TGetListInput();
-
-            if (input is ISortedResultRequest sortedResultRequestInput)
+            if (GetListInput is ISortedResultRequest sortedResultRequestInput)
             {
                 sortedResultRequestInput.Sorting = CurrentSorting;
             }
 
-            if (input is IPagedResultRequest pagedResultRequestInput)
+            if (GetListInput is IPagedResultRequest pagedResultRequestInput)
             {
                 pagedResultRequestInput.SkipCount = CurrentPage * PageSize;
             }
 
-            if (input is ILimitedResultRequest limitedResultRequestInput)
+            if (GetListInput is ILimitedResultRequest limitedResultRequestInput)
             {
                 limitedResultRequestInput.MaxResultCount = PageSize;
             }
-
-            return Task.FromResult(input);
+            
+            return Task.CompletedTask;
         }
 
         protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TListViewModel> e)
@@ -514,6 +514,11 @@ namespace Volo.Abp.BlazoriseUI
             }
 
             await AuthorizationService.CheckAsync(policyName);
+        }
+
+        protected virtual ValueTask SetBreadcrumbItemsAsync()
+        {
+            return ValueTask.CompletedTask;
         }
     }
 }

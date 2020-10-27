@@ -12,7 +12,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         public ConventionalControllerSettingList ConventionalControllerSettings { get; }
 
         public List<Type> FormBodyBindingIgnoredTypes { get; }
-        
+
+        /// <summary>
+        /// Set true to use the old style URL path style.
+        /// Default: false.
+        /// </summary>
+        public bool UseV3UrlStyle { get; set; }
+
         public AbpConventionalControllerOptions()
         {
             ConventionalControllerSettings = new ConventionalControllerSettingList();
@@ -24,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         }
 
         public AbpConventionalControllerOptions Create(
-            Assembly assembly, 
+            Assembly assembly,
             [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
         {
             var setting = new ConventionalControllerSetting(

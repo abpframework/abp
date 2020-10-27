@@ -6,6 +6,8 @@
     "Volo.AbpIo.Commercial:010003": "你不是该组织的所有者!",
     "OrganizationNotFoundMessage": "找不到任何组织!",
     "DeveloperCount": "开发者数量",
+    "QuestionCount": "剩余 / 问题总数",
+    "Unlimited": "无限制",
     "Owners": "所有者",
     "AddMember": "添加成员",
     "AddOwner": "添加所有者",
@@ -25,6 +27,9 @@
     "Volo.AbpIo.Commercial:010004": "不能找到指定的用户! 用户必须已经注册.",
     "MyOrganizations": "我的组织",
     "ApiKey": "API key",
-    "UserNameNotFound": "没有用户名为{0}的用户"
+    "UserNameNotFound": "没有用户名为{0}的用户",
+    "SuccessfullyAddedToNewsletter": "感谢你订阅我们的新闻通讯!",
+    "MyProfile": "我的资料",
+    "EmailNotValid": "请输入有效的电子邮件地址"
   }
 }
