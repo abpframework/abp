@@ -11,9 +11,8 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { Subscription } from 'rxjs';
-import { ConfigState } from '../states';
+import { PermissionService } from '../services/permission.service';
 
 @Directive({
   selector: '[abpPermission]',
@@ -26,18 +25,17 @@ export class PermissionDirective implements OnInit, OnDestroy, OnChanges {
   constructor(
     private elRef: ElementRef,
     private renderer: Renderer2,
-    private store: Store,
     @Optional() private templateRef: TemplateRef<any>,
     private vcRef: ViewContainerRef,
+    private permissionService: PermissionService,
   ) {}
 
   private check() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-
-    this.subscription = this.store
-      .select(ConfigState.getGrantedPolicy(this.condition))
+    this.subscription = this.permissionService
+      .getGrantedPolicy$(this.condition)
       .subscribe(isGranted => {
         if (this.templateRef && isGranted) {
           this.vcRef.clear();

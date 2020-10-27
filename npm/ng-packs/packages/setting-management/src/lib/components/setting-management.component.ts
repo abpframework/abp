@@ -24,7 +24,7 @@ export class SettingManagementComponent implements OnDestroy, OnInit {
 
   trackByFn: TrackByFunction<ABP.Tab> = (_, item) => item.name;
 
-  constructor(private store: Store, private settingTabs: SettingTabsService) {}
+  constructor(private store: Store, private settingTabsService: SettingTabsService) {}
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -32,7 +32,7 @@ export class SettingManagementComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.subscription.add(
-      this.settingTabs.visible$.subscribe(settings => {
+      this.settingTabsService.visible$.subscribe(settings => {
         this.settings = settings;
 
         if (!this.selected) this.selected = this.settings[0];

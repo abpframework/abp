@@ -7,14 +7,15 @@ import {
   HostBinding,
   Injector,
   Input,
-  OnInit,
   OnDestroy,
+  OnInit,
   Renderer2,
   ViewContainerRef,
 } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { LoadingComponent } from '../components/loading/loading.component';
+import { PermissionService } from '@abp/ng.core';
 
 @Directive({ selector: '[abpLoading]' })
 export class LoadingDirective implements OnInit, OnDestroy {
@@ -81,6 +82,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
     private cdRes: ComponentFactoryResolver,
     private injector: Injector,
     private renderer: Renderer2,
+    private ser: PermissionService,
   ) {}
 
   ngOnInit() {
