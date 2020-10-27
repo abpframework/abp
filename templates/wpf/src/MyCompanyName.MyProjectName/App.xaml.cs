@@ -49,7 +49,7 @@ namespace MyCompanyName.MyProjectName
 
             try
             {
-                Log.Information("Starting wpf host.");
+                Log.Information("Starting WPF host.");
                 await _host.StartAsync();
                 Initialize(_host.Services);
 

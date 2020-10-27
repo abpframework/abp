@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <Import Project="..\..\common.props" />
+
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net5.0-windows</TargetFramework>
@@ -16,7 +18,7 @@
         <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     </ItemGroup>
-    
+
     <ItemGroup>
       <None Remove="appsettings.json" />
       <Content Include="appsettings.json">
