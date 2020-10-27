@@ -1,5 +1,7 @@
 # ASP.NET Core MVC / Razor Pages: UI Theming
 
+## Introduction
+
 ABP Framework provides a complete **UI Theming** system with the following goals:
 
 * Reusable [application modules](../../Modules/Index.md) are developed **theme-independent**, so they can work with any UI theme.
@@ -12,7 +14,7 @@ In order to accomplish these goals, ABP Framework;
 * Determines a set of **base libraries** used and adapted by all the themes. So, module and application developers can depend on and use these libraries without depending on a particular theme.
 * Provides a system that consists of [navigation menus](Navigation-Menu.md), [toolbars](Toolbars.md), [layout hooks](Layout-Hooks.md)... that is implemented by all the themes. So, the modules and the application to contribute to the layout to compose a consistent application UI.
 
-## The Current Themes
+### Current Themes
 
 Currently, two themes are **officially provided**:
 
@@ -21,7 +23,9 @@ Currently, two themes are **officially provided**:
 
 There are also some community-driven themes for the ABP Framework (you can search on the web).
 
-## The Base Libraries
+## Overall
+
+### The Base Libraries
 
 All the themes must depend on the [@abp/aspnetcore.mvc.ui.theme.shared](https://www.npmjs.com/package/@abp/aspnetcore.mvc.ui.theme.shared) NPM package, so they are indirectly depending on the following libraries:
 
@@ -42,7 +46,7 @@ All the themes must depend on the [@abp/aspnetcore.mvc.ui.theme.shared](https://
 
 These libraries are selected as the base libraries and available to the applications and modules.
 
-### Abstractions / Wrappers
+#### Abstractions / Wrappers
 
 There are some abstractions in the ABP Framework to make your code independent from some of these libraries too. Examples;
 
@@ -50,9 +54,9 @@ There are some abstractions in the ABP Framework to make your code independent f
 * JavaScript [Message](JavaScript-API/Message.md) and [Notification](JavaScript-API/Notify.md) APIs provides abstractions to use the Sweetalert and Toastr.
 * [Forms & Validation](Forms-Validation.md) system automatically handles the validation, so you mostly don't directly type any validation code.
 
-## The Layouts
+### The Layouts
 
-The main responsibility of a theme is to provide the layouts. There are **three pre-defined layouts must be supported by all the themes**:
+The main responsibility of a theme is to provide the layouts. There are **three pre-defined layouts must be implemented by all the themes**:
 
 * **Application**: The default layout which is used by the main application pages.
 * **Account**: Mostly used by the [account module](../../Modules/Account.md) for login, register, forgot password... pages.
@@ -60,7 +64,7 @@ The main responsibility of a theme is to provide the layouts. There are **three 
 
 Layout names are constants defined in the `Volo.Abp.AspNetCore.Mvc.UI.Theming.StandardLayouts` class.
 
-### The Application Layout
+#### The Application Layout
 
 This is the default layout which is used by the main application pages. The following image shows the user management page in the [Basic Theme](Basic-Theme.md) application layout:
 
@@ -68,8 +72,54 @@ This is the default layout which is used by the main application pages. The foll
 
 And the same page is shown below with the [Lepton Theme](https://commercial.abp.io/themes) application layout:
 
-![basic-theme-application-layout](../../images/lepton-theme-application-layout.png)
+![lepton-theme-application-layout](../../images/lepton-theme-application-layout.png)
 
 As you can see, the page is the same, but the look is completely different in the themes above.
 
-TODO...
+The application layout typically includes the following parts;
+
+* A [main menu](Navigation-Menu.md)
+* Main [Toolbar](Toolbars.md) with the following components;
+  * User menu
+  * Language switch dropdown
+* [Page alerts](Page-Alerts.md)
+* The page content (aka `RenderBody()`)
+* [Layout hooks](Layout-Hooks.md)
+
+Some themes may provide more parts like breadcrumbs, page header & toolbar... etc. See the *Layout Parts* section.
+
+#### The Account Layout
+
+The Account layout is typically used by the [account module](../../Modules/Account.md) for login, register, forgot password... pages.
+
+![basic-theme-account-layout](../../images/basic-theme-account-layout.png)
+
+This layout typically provides the following parts;
+
+* Language switch dropdown
+* Tenant switch area (if the application is [multi-tenant](../../Multi-Tenancy.md) and the current is resolved by the cookie)
+* [Page alerts](Page-Alerts.md)
+* The page content (aka `RenderBody()`)
+* [Layout hooks](Layout-Hooks.md)
+
+The [Basic Theme](Basic-Theme.md) renders the top navigation bar for this layout too (as shown above)
+
+Here, the account layout of the Lepton Theme:
+
+![lepton-theme-account-layout](../../images/lepton-theme-account-layout.png)
+
+The [Lepton Theme](https://commercial.abp.io/themes) shows the application logo and footer in this layout.
+
+> You can override theme layouts completely or partially in an application to [customize](Customization-User-Interface.md) it.
+
+#### The Empty Layout
+
+The empty layout provides an empty page, however it typically includes the following parts;
+
+* [Page alerts](Page-Alerts.md)
+* The page content (aka `RenderBody()`)
+* [Layout hooks](Layout-Hooks.md)
+
+## Implementing a Theme
+
+TODO
