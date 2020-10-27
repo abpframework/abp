@@ -18,10 +18,6 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected bool ShouldShowEntityActions { get; set; }
 
-        protected Validations CreateValidationsRef { get; set; }
-
-        protected Validations EditValidationsRef { get; set; }
-
         public RoleManagementBase()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
@@ -42,44 +38,6 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             ShouldShowEntityActions = HasUpdatePermission ||
                                       HasDeletePermission ||
                                       HasManagePermissionsPermission;
-        }
-
-        protected override Task OpenCreateModalAsync()
-        {
-            CreateValidationsRef.ClearAll();
-
-            return base.OpenCreateModalAsync();
-        }
-
-        protected override Task OpenEditModalAsync(Guid id)
-        {
-            EditValidationsRef.ClearAll();
-
-            return base.OpenEditModalAsync(id);
-        }
-
-        protected override Task CreateEntityAsync()
-        {
-            if (CreateValidationsRef.ValidateAll())
-            {
-                CreateModal.Hide();
-
-                return base.CreateEntityAsync();
-            }
-
-            return Task.CompletedTask;
-        }
-
-        protected override Task UpdateEntityAsync()
-        {
-            if (EditValidationsRef.ValidateAll())
-            {
-                EditModal.Hide();
-
-                return base.UpdateEntityAsync();
-            }
-
-            return Task.CompletedTask;
         }
     }
 }

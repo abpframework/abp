@@ -30,10 +30,6 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected string EditModalSelectedTab = DefaultSelectedTab;
 
-        protected Validations CreateValidationsRef { get; set; }
-
-        protected Validations EditValidationsRef { get; set; }
-
         public UserManagementBase()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
@@ -63,10 +59,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                                       HasManagePermissionsPermission;
         }
 
-        protected override Task OpenCreateModalAsync()
+        protected override async Task OnOpeningCreateModalAsync()
         {
-            CreateValidationsRef.ClearAll();
-
             CreateModalSelectedTab = DefaultSelectedTab;
 
             NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
@@ -75,27 +69,19 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                 IsAssigned = x.IsDefault
             }).ToArray();
 
-            return base.OpenCreateModalAsync();
+            await base.OnOpeningCreateModalAsync();
         }
 
-        protected override Task CreateEntityAsync()
+        protected override Task OnCreatingEntityAsync()
         {
-            if (CreateValidationsRef.ValidateAll())
-            {
-                CreateModal.Hide();
+            // apply roles before saving
+            NewEntity.RoleNames = NewUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
 
-                NewEntity.RoleNames = NewUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
-
-                return base.CreateEntityAsync();
-            }
-
-            return Task.CompletedTask;
+            return base.OnCreatingEntityAsync();
         }
 
-        protected override async Task OpenEditModalAsync(Guid id)
+        protected override async Task OnOpeningEditModalAsync(Guid id)
         {
-            EditValidationsRef.ClearAll();
-
             EditModalSelectedTab = DefaultSelectedTab;
 
             var userRoleNames = (await AppService.GetRolesAsync(id)).Items.Select(r => r.Name).ToList();
@@ -106,21 +92,15 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                 IsAssigned = userRoleNames.Contains(x.Name)
             }).ToArray();
 
-            await base.OpenEditModalAsync(id);
+            await base.OnOpeningEditModalAsync(id);
         }
 
-        protected override Task UpdateEntityAsync()
+        protected override Task OnUpdatingEntityAsync()
         {
-            if (EditValidationsRef.ValidateAll())
-            {
-                EditModal.Hide();
+            // apply roles before saving
+            EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
 
-                EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
-
-                return base.UpdateEntityAsync();
-            }
-
-            return Task.CompletedTask;
+            return base.OnUpdatingEntityAsync();
         }
     }
 
