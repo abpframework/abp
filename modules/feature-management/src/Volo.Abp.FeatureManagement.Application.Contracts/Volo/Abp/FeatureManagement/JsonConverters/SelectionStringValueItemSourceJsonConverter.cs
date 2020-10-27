@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Volo.Abp.Validation.StringValues;
@@ -10,12 +11,13 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
     {
         public override ISelectionStringValueItemSource Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
+
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var jsonSerializerOptions = new JsonSerializerOptions();
-            jsonSerializerOptions.Converters.Add(new SelectionStringValueItemJsonConverter());
+            var items = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals("Items", StringComparison.InvariantCultureIgnoreCase)).Value.GetRawText();
 
             var selectionStringValueItem =
-                JsonSerializer.Deserialize<List<LocalizableSelectionStringValueItem>>(rootElement.GetProperty("Items").GetRawText(), jsonSerializerOptions) ??
+                JsonSerializer.Deserialize<List<LocalizableSelectionStringValueItem>>(items, newOptions) ??
                 new List<LocalizableSelectionStringValueItem>();
 
             return new StaticSelectionStringValueItemSource(selectionStringValueItem.ToArray());
@@ -23,9 +25,11 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, ISelectionStringValueItemSource value, JsonSerializerOptions options)
         {
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
+
             if (value.GetType() == typeof(StaticSelectionStringValueItemSource))
             {
-                JsonSerializer.Serialize(writer, (StaticSelectionStringValueItemSource)value);
+                JsonSerializer.Serialize(writer, (StaticSelectionStringValueItemSource)value, newOptions);
             }
             else
             {

@@ -13,11 +13,12 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
         public override IValueValidator Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var valueValidator = CreateValueValidatorByName(rootElement.GetProperty("Name").GetString());
+            var name = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals("Name", StringComparison.InvariantCultureIgnoreCase)).Value.GetString();
+            var valueValidator = CreateValueValidatorByName(name);
 
-            var deserializeOptions = new JsonSerializerOptions();
-            deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
-            var properties = JsonSerializer.Deserialize<IDictionary<string, object>>(rootElement.GetProperty("Properties").GetRawText(), deserializeOptions);
+            var propertiesRawText = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals("Properties", StringComparison.InvariantCultureIgnoreCase)).Value.GetRawText();
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ObjectToInferredTypesConverter());
+            var properties = JsonSerializer.Deserialize<IDictionary<string, object>>(propertiesRawText, newOptions);
             if (properties != null && properties.Any())
             {
                 foreach (var property in properties)
@@ -31,21 +32,23 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, IValueValidator value, JsonSerializerOptions options)
         {
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
+
             if (value.GetType() == typeof(AlwaysValidValueValidator))
             {
-                JsonSerializer.Serialize(writer, (AlwaysValidValueValidator)value);
+                JsonSerializer.Serialize(writer, (AlwaysValidValueValidator)value, newOptions);
             }
             else if (value.GetType() == typeof(BooleanValueValidator))
             {
-                JsonSerializer.Serialize(writer, (BooleanValueValidator)value);
+                JsonSerializer.Serialize(writer, (BooleanValueValidator)value, newOptions);
             }
             else if (value.GetType() == typeof(NumericValueValidator))
             {
-                JsonSerializer.Serialize(writer, (NumericValueValidator)value);
+                JsonSerializer.Serialize(writer, (NumericValueValidator)value, newOptions);
             }
             else if (value.GetType() == typeof(StringValueValidator))
             {
-                JsonSerializer.Serialize(writer, (StringValueValidator)value);
+                JsonSerializer.Serialize(writer, (StringValueValidator)value, newOptions);
             }
             else
             {

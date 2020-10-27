@@ -66,7 +66,7 @@ namespace Volo.Abp.FeatureManagement
                 }
             };
 
-            var serialized = _jsonSerializer.Serialize(featureListDto);
+            var serialized = _jsonSerializer.Serialize(featureListDto, indented: true);
 
             var featureListDto2 = _jsonSerializer.Deserialize<GetFeatureListResultDto>(serialized);
 
