@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
 import { RoutesService } from '../services/routes.service';
 import { findRoute, getRoutePath } from '../utils/route-utils';
-import { PermissionService } from '../services';
+import { PermissionService } from '../services/permission.service';
 
 @Injectable({
   providedIn: 'root',

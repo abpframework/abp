@@ -1,15 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Injector, NgModule, ɵangular_packages_core_core_d } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
-import { NEVER } from 'rxjs';
+import { NgxsModule } from '@ngxs/store';
 import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
 import {
   ApplicationConfigurationService,
-  PermissionService,
   ReplaceableComponentsService,
   RoutesService,
 } from '../services';

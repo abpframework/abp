@@ -3,7 +3,9 @@ import { Store } from '@ngxs/store';
 import { map } from 'rxjs/operators';
 import { ApplicationConfiguration } from '../models';
 import snq from 'snq';
+import { Injectable } from '@angular/core';
 
+@Injectable({ providedIn: 'root' })
 export class PermissionService {
   constructor(private store: Store) {}
 
