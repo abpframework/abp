@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlazoriseUI;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
@@ -19,6 +20,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         public RoleManagementBase()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
+            LocalizationResource = typeof(IdentityResource);
 
             CreatePolicyName = IdentityPermissions.Roles.Create;
             UpdatePolicyName = IdentityPermissions.Roles.Update;
