@@ -122,6 +122,10 @@ The empty layout provides an empty page, however it typically includes the follo
 
 ## Implementing a Theme
 
+### The Easy Way
+
+The easiest way to create a new theme is to copy the [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) and customize it. Once you get a copy of the theme in your solution, remove the `Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic` NuGet package and reference to the local project.
+
 ### The ITheme Interface
 
 `ITheme` interface is used by the ABP Framework to select the layout for the current page. A theme must implement this interface to provide the requested layout path.
