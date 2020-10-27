@@ -7,6 +7,8 @@ using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Users;
@@ -18,15 +20,21 @@ namespace Volo.CmsKit.Public.Comments
         protected CmsKitOptions CmsKitOptions { get; }
         protected ICommentRepository CommentRepository { get; }
         protected ICmsUserLookupService CmsUserLookupService { get; }
+        public IDistributedEventBus DistributedEventBus { get; }
+        public IUnitOfWorkManager UnitOfWorkManager { get; }
 
         public CommentPublicAppService(
             ICommentRepository commentRepository,
             ICmsUserLookupService cmsUserLookupService,
+            IDistributedEventBus distributedEventBus,
+            IUnitOfWorkManager unitOfWorkManager,
             IOptions<CmsKitOptions> cmsKitOptions)
         {
             CmsKitOptions = cmsKitOptions.Value;
             CommentRepository = commentRepository;
             CmsUserLookupService = cmsUserLookupService;
+            DistributedEventBus = distributedEventBus;
+            UnitOfWorkManager = unitOfWorkManager;
         }
 
         public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
@@ -55,6 +63,14 @@ namespace Volo.CmsKit.Public.Comments
                     CurrentTenant.Id
                 )
             );
+
+
+            await UnitOfWorkManager.Current.SaveChangesAsync();
+
+            await DistributedEventBus.PublishAsync(new CreatedCommentEvent
+            {
+                Id = comment.Id
+            });
 
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
