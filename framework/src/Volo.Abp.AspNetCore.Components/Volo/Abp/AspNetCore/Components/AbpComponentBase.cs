@@ -11,7 +11,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Components
 {
-    public class AbpComponentBase : OwningComponentBase
+    public abstract class AbpComponentBase : OwningComponentBase
     {
         protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
         private IStringLocalizerFactory _stringLocalizerFactory;
