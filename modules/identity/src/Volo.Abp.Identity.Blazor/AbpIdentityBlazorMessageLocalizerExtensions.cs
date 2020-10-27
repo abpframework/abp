@@ -7,21 +7,11 @@ namespace Volo.Abp.Identity.Blazor
 {
     public static class AbpIdentityBlazorMessageLocalizerExtensions
     {
-        public static IEnumerable<string> Localize<T>(this IStringLocalizer<T> stringLocalizer, ValidationMessageLocalizerEventArgs eventArgs)
-        {
-            return LocalizeMessages(stringLocalizer, eventArgs.Messages?.Select(m => (m.Message, m.MessageArguments)))?.ToArray();
-        }
-
-        private static IEnumerable<string> LocalizeMessages<T>(IStringLocalizer<T> stringLocalizer, IEnumerable<(string format, string[] arguments)> messages)
-        {
-            return messages?.Select(m => LocalizeMessage(stringLocalizer, m.format, m.arguments));
-        }
-
-        private static string LocalizeMessage<T>(IStringLocalizer<T> stringLocalizer, string format, params string[] arguments)
+        public static string Localize<T>(this IStringLocalizer<T> stringLocalizer, string format, IEnumerable<string> arguments)
         {
             try
             {
-                return arguments?.Length > 0
+                return arguments?.Count() > 0
                     ? string.Format(stringLocalizer[format], LocalizeMessageArguments(stringLocalizer, arguments)?.ToArray())
                     : stringLocalizer[format];
             }
