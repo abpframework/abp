@@ -184,6 +184,8 @@ namespace Volo.Abp.BlazoriseUI
         protected TUpdateViewModel EditingEntity;
         protected Modal CreateModal;
         protected Modal EditModal;
+        protected Validations CreateValidationsRef;
+        protected Validations EditValidationsRef;
 
         protected string CreatePolicyName { get; set; }
         protected string UpdatePolicyName { get; set; }
@@ -316,15 +318,31 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task OpenCreateModalAsync()
         {
+            await OnOpeningCreateModalAsync();
+
+            CreateValidationsRef.ClearAll();
+
             await CheckCreatePolicyAsync();
 
-            ObjectMapper.Map(new TCreateViewModel(), NewEntity);
+            NewEntity = new TCreateViewModel();
 
             // Mapper will not notify Blazor that binded values are changed
             // so we need to notify it manually by calling StateHasChanged
             await InvokeAsync(() => StateHasChanged());
 
             CreateModal.Show();
+
+            await OnOpeningCreateModalAsync();
+        }
+
+        protected virtual Task OnOpeningCreateModalAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task OnOpenedCreateModalAsync()
+        {
+            return Task.CompletedTask;
         }
 
         protected virtual Task CloseCreateModalAsync()
@@ -335,16 +353,32 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task OpenEditModalAsync(TKey id)
         {
+            await OnOpeningEditModalAsync(id);
+
+            EditValidationsRef.ClearAll();
+
             await CheckUpdatePolicyAsync();
 
             var entityDto = await AppService.GetAsync(id);
 
             EditingEntityId = id;
-            ObjectMapper.Map(entityDto, EditingEntity);
+            EditingEntity = MapToEditingEntity(entityDto);
 
             await InvokeAsync(() => StateHasChanged());
 
             EditModal.Show();
+
+            await OnOpenedEditModalAsync(id);
+        }
+
+        protected virtual Task OnOpeningEditModalAsync(TKey id)
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task OnOpenedEditModalAsync(TKey id)
+        {
+            return Task.CompletedTask;
         }
 
         protected virtual TUpdateViewModel MapToEditingEntity(TGetOutputDto entityDto)
@@ -380,20 +414,56 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task CreateEntityAsync()
         {
-            await CheckCreatePolicyAsync();
-            var createInput = MapToCreateInput(NewEntity);
-            await AppService.CreateAsync(createInput);
-            await GetEntitiesAsync();
-            CreateModal.Hide();
+            if (CreateValidationsRef.ValidateAll())
+            {
+                await OnCreatingEntityAsync();
+
+                await CheckCreatePolicyAsync();
+                var createInput = MapToCreateInput(NewEntity);
+                await AppService.CreateAsync(createInput);
+                await GetEntitiesAsync();
+
+                await OnCreatedEntityAsync();
+
+                CreateModal.Hide();
+            }
+        }
+
+        protected virtual Task OnCreatingEntityAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task OnCreatedEntityAsync()
+        {
+            return Task.CompletedTask;
         }
 
         protected virtual async Task UpdateEntityAsync()
         {
-            await CheckUpdatePolicyAsync();
-            var updateInput = MapToUpdateInput(EditingEntity);
-            await AppService.UpdateAsync(EditingEntityId, updateInput);
-            await GetEntitiesAsync();
-            EditModal.Hide();
+            if (EditValidationsRef.ValidateAll())
+            {
+                await OnUpdatingEntityAsync();
+
+                await CheckUpdatePolicyAsync();
+                var updateInput = MapToUpdateInput(EditingEntity);
+                await AppService.UpdateAsync(EditingEntityId, updateInput);
+                await GetEntitiesAsync();
+
+                await OnUpdatedEntityAsync();
+
+                EditModal.Hide();
+            }
+        }
+
+        protected virtual Task OnUpdatingEntityAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task OnUpdatedEntityAsync()
+        {
+            return Task.CompletedTask;
         }
 
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
