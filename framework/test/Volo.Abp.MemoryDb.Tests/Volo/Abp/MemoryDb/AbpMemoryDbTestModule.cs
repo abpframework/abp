@@ -6,6 +6,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Autofac;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MemoryDb;
+using Volo.Abp.MemoryDb.JsonConverters;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 

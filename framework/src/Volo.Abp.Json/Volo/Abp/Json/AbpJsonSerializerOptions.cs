@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Volo.Abp.Json.Microsoft
+namespace Volo.Abp.Json
 {
     public class AbpJsonSerializerOptions
     {

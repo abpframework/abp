@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Json.Microsoft.JsonConverters;
+using Volo.Abp.Json.JsonConverters;
+using Volo.Abp.Json;
 
-namespace Volo.Abp.Json.Microsoft
+namespace Volo.Abp.Json
 {
     public class AbpJsonSerializerOptionsSetup : IConfigureOptions<AbpJsonSerializerOptions>
     {

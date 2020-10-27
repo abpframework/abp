@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Json.Microsoft;
-using Volo.Abp.Json.Microsoft.JsonConverters;
+using Volo.Abp.Json.JsonConverters;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.Json
 {

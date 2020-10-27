@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Volo.Abp.Json.Microsoft.JsonConverters
+namespace Volo.Abp.Json.JsonConverters
 {
     public class ObjectToInferredTypesConverter : JsonConverter<object>
     {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Json.Microsoft.JsonConverters
+namespace Volo.Abp.Json.JsonConverters
 {
     public class AbpDateTimeConverter : JsonConverter<DateTime>, ITransientDependency
     {

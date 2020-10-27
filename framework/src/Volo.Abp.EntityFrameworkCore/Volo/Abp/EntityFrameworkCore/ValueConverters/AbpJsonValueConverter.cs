@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Volo.Abp.Json.Microsoft.JsonConverters;
+using Volo.Abp.Json.JsonConverters;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 {

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Domain.Entities
+namespace Volo.Abp.MemoryDb.JsonConverters
 {
     public class EntityJsonConverter<TEntity, TKey> : JsonConverter<TEntity>
     {

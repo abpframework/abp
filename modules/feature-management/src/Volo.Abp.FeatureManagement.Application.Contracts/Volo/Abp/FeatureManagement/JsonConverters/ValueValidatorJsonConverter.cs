@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Volo.Abp.Json.Microsoft.JsonConverters;
+using Volo.Abp.Json.JsonConverters;
 using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.FeatureManagement.JsonConverters

@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Json.Microsoft
+namespace Volo.Abp.Json
 {
     public class AbpJsonSerializer : IJsonSerializer, ITransientDependency
     {

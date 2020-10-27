@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Application;
 using Volo.Abp.FeatureManagement.JsonConverters;
 using Volo.Abp.Json;
-using Volo.Abp.Json.Microsoft;
+using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
