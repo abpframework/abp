@@ -7,17 +7,17 @@ namespace Volo.Abp.Identity.Blazor
 {
     public static class AbpIdentityBlazorMessageLocalizerExtensions
     {
-        public static string Localize<T>(this IStringLocalizer<T> stringLocalizer, string format, IEnumerable<string> arguments)
+        public static string Localize<T>(this IStringLocalizer<T> stringLocalizer, string message, IEnumerable<string> arguments)
         {
             try
             {
                 return arguments?.Count() > 0
-                    ? stringLocalizer[format, LocalizeMessageArguments(stringLocalizer, arguments)?.ToArray()]
-                    : stringLocalizer[format];
+                    ? stringLocalizer[message, LocalizeMessageArguments(stringLocalizer, arguments)?.ToArray()]
+                    : stringLocalizer[message];
             }
             catch
             {
-                return stringLocalizer[format];
+                return stringLocalizer[message];
             }
         }
 
