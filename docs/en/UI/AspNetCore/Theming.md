@@ -302,13 +302,7 @@ Configure<AbpToolbarOptions>(options =>
 
 Language Selection toolbar item is generally a dropdown that is used to switch between languages. `ILanguageProvider` is used to get the list of available languages and `CultureInfo.CurrentUICulture` is used to learn the current language.
 
-`/Abp/Languages/Switch` endpoint can be used to switch the language using such a link:
-
-````html
-<a class="dropdown-item" href="~/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))">@language.DisplayName</a>
-````
-
-This endpoint accepts the following query string parameters:
+`/Abp/Languages/Switch` endpoint can be used to switch the language This endpoint accepts the following query string parameters:
 
 * `culture`: The selected culture, like `en-US` or `en`.
 * `uiCulture`: The selected UI culture, like `en-US` or `en`.
@@ -377,7 +371,7 @@ Another pre-defined section is the Content Toolbar section which can be used by 
 
 The container div's id must be `AbpContentToolbar`. This section should come before the `RenderBody()`.
 
-#### Widget Scripts
+#### Widget Resources
 
 The [Widget System](Widgets.md) allows to define reusable widgets with their own style/script files. All the layouts should render the widget style and scripts.
 
