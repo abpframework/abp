@@ -12,6 +12,10 @@
           "path": "Startup-Templates/Console.md"
         },
         {
+          "text": "WPF Application",
+          "path": "Startup-Templates/WPF.md"
+        },
+        {
           "text": "Empty Web Project",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
@@ -585,6 +589,14 @@
                   "path": "UI/Angular/Localization.md"
                 },
                 {
+                  "text": "Settings",
+                  "path": "UI/Angular/Settings.md"
+                },
+                {
+                  "text": "Features",
+                  "path": "UI/Angular/Features.md"
+                },
+                {
                   "text": "Permission Management",
                   "path": "UI/Angular/Permission-Management.md"
                 },
@@ -797,6 +809,10 @@
         {
           "text": "Console",
           "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
         }
       ]
     },

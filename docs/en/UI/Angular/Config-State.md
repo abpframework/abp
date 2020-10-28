@@ -93,51 +93,6 @@ const searchUrl = this.config.getApiUrl("search");
 
 This method returns the `url` of a specific API based on the key given as its only parameter. If there is no key, `'default'` is used.
 
-### How to Get All Settings From the Store
-
-You can use the `getSettings` method of `ConfigStateService` to get all of the settings object from the configuration state. Here is how you get all settings:
-
-```js
-// this.config is instance of ConfigStateService
-
-const settings = this.config.getSettings();
-```
-
-In addition, the method lets you search settings by **passing a keyword** to it.
-
-```js
-const localizationSettings = this.config.getSettings("Localization");
-/*
-{
-	'Abp.Localization.DefaultLanguage': 'en'
-}
-*/
-```
-
-Beware though, **settings search is case sensitive**.
-
-### How to Get a Specific Setting From the Store
-
-You can use the `getSetting` method of `ConfigStateService` to get a specific setting from the configuration state. Here is an example:
-
-```js
-// this.config is instance of ConfigStateService
-
-const defaultLang = this.config.getSetting("Abp.Localization.DefaultLanguage");
-// 'en'
-```
-
-### How to Get a Specific Feature From the Store
-
-You can use the `getFeature` method of `ConfigStateService` to get a specific feature from the configuration state. Here is an example:
-
-```js
-// this.config is instance of ConfigStateService
-
-const isChatEnabled = this.config.getFeature("Chat.Enable");
-// 'en'
-```
-
 ### How to Get a Specific Permission From the Store
 
 You can use the `getGrantedPolicy` method of `ConfigStateService` to get a specific permission from the configuration state. For that, you should pass a policy key as parameter to the method.
@@ -230,6 +185,11 @@ Note that **you do not have to call this method at application initiation**, bec
 #### Environment Properties
 
 Please refer to `Config.Environment` type for all the properties you can pass to `dispatchSetEnvironment` as parameter. It can be found in the [config.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/config.ts#L13).
+
+## See Also
+
+- [Settings](./Settings.md)
+- [Features](./Features.md)
 
 ## What's Next?
 

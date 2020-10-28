@@ -237,4 +237,4 @@ import(
 
 ## What's Next?
 
-* [Permission Management](./Permission-Management.md)
+* [Settings](./Settings.md)
