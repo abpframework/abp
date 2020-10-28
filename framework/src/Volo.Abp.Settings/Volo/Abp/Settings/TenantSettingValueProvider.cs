@@ -10,14 +10,14 @@ namespace Volo.Abp.Settings
         public override string Name => ProviderName;
 
         protected ICurrentTenant CurrentTenant { get; }
-        
+
         public TenantSettingValueProvider(ISettingStore settingStore, ICurrentTenant currentTenant)
             : base(settingStore)
         {
             CurrentTenant = currentTenant;
         }
 
-        public override async Task<string> GetOrNullAsync(SettingDefinition setting)
+        public async override Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString());
         }

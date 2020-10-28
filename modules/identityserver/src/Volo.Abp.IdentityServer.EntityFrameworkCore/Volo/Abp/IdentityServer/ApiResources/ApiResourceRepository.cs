@@ -72,7 +72,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
             return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name, GetCancellationToken(cancellationToken));
         }
 
-        public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
+        public async override Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var resourceClaims = DbContext.Set<ApiResourceClaim>().Where(sc => sc.ApiResourceId == id);
             foreach (var scopeClaim in resourceClaims)
