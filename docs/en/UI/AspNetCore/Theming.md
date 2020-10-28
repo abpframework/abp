@@ -114,7 +114,7 @@ The [Lepton Theme](https://commercial.abp.io/themes) shows the application logo 
 
 #### The Empty Layout
 
-The empty layout provides an empty page, however it typically includes the following parts;
+The empty layout provides an empty page. It typically includes the following parts;
 
 * [Page alerts](Page-Alerts.md)
 * The page content (aka `RenderBody()`)
@@ -178,3 +178,80 @@ Configure<AbpThemingOptions>(options =>
 #### The IThemeSelector Service
 
 ABP Framework allows to use multiple themes together. This is why `options.Themes` is a list. `IThemeSelector` service selects the theme on the runtime. The application developer can set the `AbpThemingOptions.DefaultThemeName` to set the theme to be used, or replace the `IThemeSelector` service implementation (the default implementation is `DefaultThemeSelector`) to completely control the theme selection on runtime.
+
+### Bundles
+
+[Bundling system](Bundling-Minification.md) provides a standard way to import style & script files into pages. There are two standard bundles defined by the ABP Framework:
+
+* `StandardBundles.Styles.Global`: The global bundle that includes the style files used in all the pages. Typically, it includes the CSS files of the Base Libraries.
+* `StandardBundles.Scripts.Global`: The global bundle that includes the script files used in all the pages. Typically, it includes the JavaScript files of the Base Libraries.
+
+A theme generally extends these standard bundles by adding theme specific CSS/JavaScript files.
+
+The best way to define new bundles, inherit from the standard bundles and add to the `AbpBundlingOptions` as shown below (this code is from the [Basic Theme](Basic-Theme.md)):
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options
+        .StyleBundles
+        .Add(BasicThemeBundles.Styles.Global, bundle =>
+        {
+            bundle
+                .AddBaseBundles(StandardBundles.Styles.Global)
+                .AddContributors(typeof(BasicThemeGlobalStyleContributor));
+        });
+
+    options
+        .ScriptBundles
+        .Add(BasicThemeBundles.Scripts.Global, bundle =>
+        {
+            bundle
+                .AddBaseBundles(StandardBundles.Scripts.Global)
+                .AddContributors(typeof(BasicThemeGlobalScriptContributor));
+        });
+});
+````
+
+`BasicThemeGlobalStyleContributor` and `BasicThemeGlobalScriptContributor` are bundle contributors. For example, `BasicThemeGlobalStyleContributor` is defined as shown below:
+
+```csharp
+public class BasicThemeGlobalStyleContributor : BundleContributor
+{
+    public override void ConfigureBundle(BundleConfigurationContext context)
+    {
+        context.Files.Add("/themes/basic/layout.css");
+    }
+}
+```
+
+Then the theme can render these bundles in a layout. For example, you can render the Global Styles as shown below:
+
+````html
+<abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
+````
+
+See the [Bundle & Minification](Bundling-Minification.md) document to understand the Bundling system better.
+
+### Layout Parts
+
+#### Branding
+
+#### Main Menu
+
+#### Main Toolbar
+
+##### Language Selection
+
+##### User Menu
+
+#### Page Alerts
+
+#### Layout Hooks
+
+### The NPM Package
+
+A theme should have a NPM package that depends on the [@abp/aspnetcore.mvc.ui.theme.shared](https://www.npmjs.com/package/@abp/aspnetcore.mvc.ui.theme.shared) package. In this way, it inherits all the Base Libraries. If the theme requires additional libraries, then it should define these dependencies too.
+
+Applications use the [Client Side Package Management](Client-Side-Package-Management.md) system to add client side libraries to the project. So, if an application uses your theme, it should add dependency to your theme's NPM package as well as the NuGet package dependency.
+
