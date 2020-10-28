@@ -294,16 +294,9 @@ namespace Volo.Abp.BlazoriseUI
             await InvokeAsync(() => StateHasChanged());
 
             CreateModal.Show();
-
-            await OnOpeningCreateModalAsync();
         }
 
         protected virtual Task OnOpeningCreateModalAsync()
-        {
-            return Task.CompletedTask;
-        }
-
-        protected virtual Task OnOpenedCreateModalAsync()
         {
             return Task.CompletedTask;
         }
@@ -330,16 +323,9 @@ namespace Volo.Abp.BlazoriseUI
             await InvokeAsync(() => StateHasChanged());
 
             EditModal.Show();
-
-            await OnOpenedEditModalAsync(id);
         }
 
         protected virtual Task OnOpeningEditModalAsync(TKey id)
-        {
-            return Task.CompletedTask;
-        }
-
-        protected virtual Task OnOpenedEditModalAsync(TKey id)
         {
             return Task.CompletedTask;
         }
