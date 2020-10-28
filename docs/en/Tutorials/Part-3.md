@@ -916,7 +916,15 @@ export class BookComponent implements OnInit {
     public readonly list: ListService,
     private bookService: BookService,
     private fb: FormBuilder
-  ) {}
+  ) {
+  this.form = new FormGroup( // Create a FormGroup instance
+            {
+                name: new FormControl(),
+                type: new FormControl(),
+                price: new FormControl(),
+                publishDate: new FormControl(),
+            });
+  }
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -993,7 +1001,14 @@ export class BookComponent implements OnInit {
     public readonly list: ListService,
     private bookService: BookService,
     private fb: FormBuilder
-  ) {}
+  ) {
+   this.form = new FormGroup( 
+            {
+                name: new FormControl(),
+                type: new FormControl(),
+                price: new FormControl(),
+                publishDate: new FormControl(),
+            });}
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
