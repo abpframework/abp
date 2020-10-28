@@ -111,9 +111,57 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             }
         }
 
+        private void PermissionChanged(bool value, string groupName, PermissionGrantInfoDto permission)
+        {
+            permission.IsGranted = value;
+            
+            if (value == false)
+            {
+                var childPermissions = GetChildPermissions(groupName, permission);
+                
+                foreach (var permissionGrantInfoDto in childPermissions)
+                {
+                    permissionGrantInfoDto.IsGranted = false;
+                }
+            }
+            else if (permission.ParentName != null)
+            {
+                var parentPermission = GetParentPermission(groupName, permission);
+
+                parentPermission.IsGranted = true;
+            }
+        }
+
+        private PermissionGrantInfoDto GetParentPermission(string groupName, PermissionGrantInfoDto permission)
+        {
+            return _groups.First(x => x.Name == groupName).Permissions.First(x => x.Name == permission.ParentName);
+        }
+        
+        private List<PermissionGrantInfoDto> GetChildPermissions(string groupName, PermissionGrantInfoDto permission)
+        {
+            return _groups.First(x => x.Name == groupName).Permissions.Where(x => x.Name.StartsWith(permission.Name)).ToList();
+        }
+        
         private bool IsDisabledPermission(PermissionGrantInfoDto permissionGrantInfo)
         {
             return _disabledPermissions.Any(x => x == permissionGrantInfo);
+        }
+
+        private string GetShownName(PermissionGrantInfoDto permissionGrantInfo)
+        {
+            if (!IsDisabledPermission(permissionGrantInfo))
+            {
+                return permissionGrantInfo.DisplayName;
+            }
+
+            return string.Format(
+                "{0} ({1})",
+                permissionGrantInfo.DisplayName,
+                permissionGrantInfo.GrantedProviders
+                    .Where(p => p.ProviderName != _providerName)
+                    .Select(p => p.ProviderName)
+                    .JoinAsString(", ")
+            );
         }
     }
 }

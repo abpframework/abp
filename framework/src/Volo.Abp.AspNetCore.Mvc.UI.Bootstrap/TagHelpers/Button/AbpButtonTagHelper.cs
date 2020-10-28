@@ -19,6 +19,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
 
         public FontIconType IconType { get; set; } = FontIconType.FontAwesome;
 
+        public bool BusyTextIsHtml { get; set; }
+
         public AbpButtonTagHelper(AbpButtonTagHelperService service) 
             : base(service)
         {

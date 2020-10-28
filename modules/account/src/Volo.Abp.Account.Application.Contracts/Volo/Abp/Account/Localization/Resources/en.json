@@ -55,6 +55,8 @@
     "GoToTheApplication": "Go to the application",
     "BackToLogin": "Back to login",
     "ProfileTab:Password": "Change password",
-    "ProfileTab:PersonalInfo": "Personal info"
+    "ProfileTab:PersonalInfo": "Personal info",
+    "ReturnToApplication": "Return to application",
+    "Volo.Account:InvalidEmailAddress": "Can not find the given email address: {0}"
   }
 }

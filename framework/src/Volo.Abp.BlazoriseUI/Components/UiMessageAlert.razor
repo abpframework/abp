@@ -1,0 +1,48 @@
+﻿<Modal @ref="@ModalRef">
+    <ModalBackdrop />
+    <ModalContent Centered="@CenterMessage">
+        <ModalHeader>
+            <ModalTitle>
+                @Title
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            @if ( ShowMessageIcon )
+            {
+                <DisplayHeading Size="DisplayHeadingSize.Is2" Style="text-align:center;">
+                    <Icon Name="@MessageIcon" Style="@MessageIconStyle" />
+                </DisplayHeading>
+            }
+            @Message
+        </ModalBody>
+        <ModalFooter>
+            @if ( IsConfirmation )
+            {
+                <Button Color="Color.Danger" Padding="Padding.Is2.OnX" Margin="Margin.IsAuto.FromRight" Clicked="@OnCancelClicked">
+                    @if ( Options?.CancelButtonIcon != null )
+                    {
+                        <Icon Name="@Options.CancelButtonIcon" Margin="Margin.Is2.FromRight" />
+                    }
+                    @CancelButtonText
+                </Button>
+                <Button Color="Color.Primary" Padding="Padding.Is2.OnX" Clicked="@OnConfirmClicked">
+                    @if ( Options?.ConfirmButtonIcon != null )
+                    {
+                        <Icon Name="@Options.ConfirmButtonIcon" Margin="Margin.Is2.FromRight" />
+                    }
+                    @ConfirmButtonText
+                </Button>
+            }
+            else
+            {
+                <Button Color="Color.Primary" Padding="Padding.Is2.OnX" Clicked="@OnOkClicked">
+                    @if ( Options?.OkButtonIcon != null )
+                    {
+                        <Icon Name="@Options.OkButtonIcon" Margin="Margin.Is2.FromRight" />
+                    }
+                    @OkButtonText
+                </Button>
+            }
+        </ModalFooter>
+    </ModalContent>
+</Modal>

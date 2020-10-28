@@ -1,0 +1,19 @@
+{
+  "culture": "es",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Server host",
+    "Description:Abp.Ldap.ServerHost": "Servidor host",
+
+    "DisplayName:Abp.Ldap.ServerPort": "Server port",
+    "Description:Abp.Ldap.ServerPort": "Puerto del servidor host",
+
+    "DisplayName:Abp.Ldap.BaseDc": "Base domain component",
+    "Description:Abp.Ldap.BaseDc": "Dominio base",
+
+    "DisplayName:Abp.Ldap.UserName": "Username",
+    "Description:Abp.Ldap.UserName": "Nombre de usuario",
+
+    "DisplayName:Abp.Ldap.Password": "Password",
+    "Description:Abp.Ldap.Password": "Contraseña"
+  }
+}

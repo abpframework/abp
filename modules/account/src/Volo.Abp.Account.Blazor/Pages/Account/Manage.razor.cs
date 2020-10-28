@@ -9,7 +9,7 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Account.Blazor.Pages.Account
 {
-    public class AccountManageBase : OwningComponentBase
+    public abstract class AccountManageBase : OwningComponentBase
     {
         [Inject] protected IAccountAppService AccountAppService { get; set; }
         [Inject] protected IProfileAppService ProfileAppService { get; set; }
@@ -58,11 +58,6 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
                 return;
             }
             
-            if (!await UiMessageService.ConfirmAsync(UiLocalizer["AreYouSure"]))
-            {
-                return;
-            }
-
             await ProfileAppService.ChangePasswordAsync(new ChangePasswordInput
             {
                 CurrentPassword = ChangePasswordModel.CurrentPassword,
@@ -73,12 +68,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
         }
 
         protected async Task UpdatePersonalInfoAsync()
-        {
-            if (!await UiMessageService.ConfirmAsync(UiLocalizer["AreYouSure"]))
-            {
-                return;
-            }
-            
+        {            
             await ProfileAppService.UpdateAsync(
                 ObjectMapper.Map<PersonalInfoModel, UpdateProfileDto>(PersonalInfoModel)
                 );

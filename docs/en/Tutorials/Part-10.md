@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider. 
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,16 +28,17 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 ## Introduction
 
 We have created `Book` and `Author` functionalities for the book store application. However, currently there is no relation between these entities.
 
-In this tutorial, we will establish a **1 to N** relation between the `Book` and the `Author`.
+In this tutorial, we will establish a **1 to N** relation between the `Author` and the `Book` entities.
 
 ## Add Relation to The Book Entity
 
@@ -66,21 +50,21 @@ public Guid AuthorId { get; set; }
 
 {{if DB=="EF"}}
 
-> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their entities (just like we will done below) which makes your application code simpler.
+> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (just like we will done below) which makes your application code simpler.
 
 {{end}}
 
 ## Database & Data Migration
 
-Added a new, required `AuthorId` property to the `Book` entity. But, what about the existing books on the database? They currently don't have `AuthorId`s and this will be a problem when we try to run the application.
+Added a new, required `AuthorId` property to the `Book` entity. But, **what about the existing books** on the database? They currently don't have `AuthorId`s and this will be a problem when we try to run the application.
 
-This is a typical migration problem and the decision depends on your case;
+This is a **typical migration problem** and the decision depends on your case;
 
 * If you haven't published your application to the production yet, you can just delete existing books in the database, or you can even delete the entire database in your development environment.
-* You can do it programmatically on data migration or seed phase.
+* You can update the existing data programmatically on data migration or seed phase.
 * You can manually handle it on the database.
 
-We prefer to **delete the database** {{if DB=="EF"}}(run the `Drop-Database` in the *Package Manager Console*){{end}} since this is just an example project and data loss is not important. Since this topic is not related to the ABP Framework, we don't go deeper for all the scenarios.
+We prefer to **delete the database** {{if DB=="EF"}}(you can run the `Drop-Database` in the *Package Manager Console*){{end}} since this is just an example project and data loss is not important. Since this topic is not related to the ABP Framework, we don't go deeper for all the scenarios.
 
 {{if DB=="EF"}}
 
@@ -107,6 +91,8 @@ Run the following command in the Package Manager Console (of the Visual Studio) 
 ````bash
 Add-Migration "Added_AuthorId_To_Book"
 ````
+
+> Ensure that the `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the Default project and the `Acme.BookStore.DbMigrator` is the startup project, as always.
 
 This should create a new migration class with the following code in its `Up` method:
 
@@ -222,6 +208,8 @@ namespace Acme.BookStore
 
 The only change is that we set the `AuthorId` properties of the `Book` entities.
 
+> Delete existing books or delete the database before executing the `DbMigrator`. See the *Database & Data Migration* section above for more info.
+
 {{if DB=="EF"}}
 
 You can now run the `.DbMigrator` console application to **migrate** the **database schema** and **seed** the initial data.
@@ -299,7 +287,7 @@ namespace Acme.BookStore.Books
 }
 ````
 
-This will be used in a new method will be added to the `IBookAppService`.
+This will be used in a new method that will be added to the `IBookAppService`.
 
 ### IBookAppService
 
@@ -1067,5 +1055,113 @@ Open the `/src/app/book/book.component.html` and add the following form group ju
 ````
 
 That's all. Just run the application and try to create or edit an author.
+
+{{end}}
+
+{{if UI == "Blazor"}}
+
+### The Book List
+
+It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor` project and add the following `DataGridColumn` definition just after the `Name` (book name) column:
+
+````xml
+<DataGridColumn TItem="BookDto"
+                Field="@nameof(BookDto.AuthorName)"
+                Caption="@L["Author"]"></DataGridColumn>
+````
+
+When you run the application, you can see the *Author* column on the table:
+
+![blazor-bookstore-book-list-with-authors](images/blazor-bookstore-book-list-with-authors.png)
+
+### Create Book Modal
+
+Add the following field to the `@code` section of the `Books.razor` file:
+
+````csharp
+IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
+````
+
+And fill it in the `OnInitializedAsync` method, by adding the following code to the end of the method:
+
+````csharp
+authorList = (await AppService.GetAuthorLookupAsync()).Items;
+````
+
+The final `@code` block should be the following:
+
+````csharp
+@code
+{
+    bool canCreateBook;
+    bool canEditBook;
+    bool canDeleteBook;
+
+    //ADDED A NEW FIELD
+    IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        canCreateBook = await 
+            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create);
+        canEditBook = await 
+            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Edit);
+        canDeleteBook = await 
+            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Delete);
+
+        //GET AUTHORS
+        authorList = (await AppService.GetAuthorLookupAsync()).Items;
+    }
+}
+````
+
+Finally, add the following `Field` definition into the `ModalBody` of the *Create* modal, as the first item, before the `Name` field:
+
+````xml
+<Field>
+    <FieldLabel>@L["Author"]</FieldLabel>
+    <Select TValue="Guid" @bind-SelectedValue="@NewEntity.AuthorId">
+        <SelectItem TValue="Guid" Value="Guid.Empty">@L["PickAnAuthor"]</SelectItem>
+        @foreach (var author in authorList)
+        {
+            <SelectItem TValue="Guid" Value="@author.Id">
+                @author.Name
+            </SelectItem>
+        }
+        </Select>
+</Field>
+````
+
+This requires to add a new localization key to the `en.json` file:
+
+````js
+"PickAnAuthor": "Pick an author"
+````
+
+You can run the application to see the *Author Selection* while creating a new book:
+
+![book-create-modal-with-author](images/book-create-modal-with-author.png)
+
+### Edit Book Modal
+
+Add the following `Field` definition into the `ModalBody` of the *Edit* modal, as the first item, before the `Name` field:
+
+````xml
+<Field>
+    <FieldLabel>@L["Author"]</FieldLabel>
+    <Select TValue="Guid" @bind-SelectedValue="@EditingEntity.AuthorId">
+        @foreach (var author in authorList)
+        {
+            <SelectItem TValue="Guid" Value="@author.Id">
+                @author.Name
+            </SelectItem>
+        }
+    </Select>
+</Field>
+````
+
+That's all. We are reusing the `authorList` defined for the *Create* modal.
 
 {{end}}

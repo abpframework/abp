@@ -13,5 +13,10 @@ namespace Volo.Abp.Authorization
 
             PermissionName = permissionName;
         }
+
+        public override string ToString()
+        {
+            return $"PermissionRequirement: {PermissionName}";
+        }
     }
 }

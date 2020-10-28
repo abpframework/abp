@@ -3,6 +3,7 @@ import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spect
 import { Store } from '@ngxs/store';
 import { of, ReplaySubject, timer } from 'rxjs';
 import { SetLanguage } from '../actions';
+import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
 import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
@@ -91,7 +92,7 @@ export const CONFIG_STATE_DATA = {
     userName: null,
     email: null,
     roles: [],
-  },
+  } as ApplicationConfiguration.CurrentUser,
   features: {
     values: {
       'Chat.Enable': 'True',
@@ -248,8 +249,7 @@ describe('ConfigState', () => {
       let dispatchArg;
 
       const configuration = {
-        setting: { values: { 'Abp.Localization.DefaultLanguage': 'tr;TR' } },
-        localization: { currentCulture: {} },
+        localization: { currentCulture: { cultureName: 'en;EN' } },
       };
 
       const res$ = new ReplaySubject(1);
@@ -268,7 +268,7 @@ describe('ConfigState', () => {
       timer(0).subscribe(() => {
         expect(patchStateArg).toEqual(configuration);
         expect(dispatchArg instanceof SetLanguage).toBeTruthy();
-        expect(dispatchArg).toEqual({ payload: 'tr', dispatchAppConfiguration: false });
+        expect(dispatchArg).toEqual({ payload: 'en', dispatchAppConfiguration: false });
         done();
       });
     });

@@ -445,6 +445,68 @@ These methods are used to convert Entities to DTOs and vice verse. They uses the
   * `MapToEntityAsync(TCreateInput)` is used to create an entity from `TCreateInput`.
   * `MapToEntityAsync(TUpdateInput, TEntity)` is used to update an existing entity from `TUpdateInput`.
 
+## Miscellaneous
+
+### Working with Streams
+
+`Stream` object itself is not serializable. So, you may have problems if you directly use `Stream` as the parameter or the return value for your application service. ABP Framework provides a special type, `IRemoteStreamContent` to be used to get or return streams in the application services.
+
+**Example: Application Service Interface that can be used to get and return streams**
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
+
+namespace MyProject.Test
+{
+    public interface ITestAppService : IApplicationService
+    {
+        Task Upload(Guid id, IRemoteStreamContent streamContent);
+        Task<IRemoteStreamContent> Download(Guid id);
+    }
+}
+````
+
+**Example: Application Service Implementation that can be used to get and return streams**
+
+````csharp
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
+
+namespace MyProject.Test
+{
+    public class TestAppService : ApplicationService, ITestAppService
+    {
+        public Task<IRemoteStreamContent> Download(Guid id)
+        {
+            var fs = new FileStream("C:\\Temp\\" + id + ".blob", FileMode.OpenOrCreate);
+            return Task.FromResult(
+                (IRemoteStreamContent) new RemoteStreamContent(fs) {
+                    ContentType = "application/octet-stream" 
+                }
+            );
+        }
+
+        public async Task Upload(Guid id, IRemoteStreamContent streamContent)
+        {
+            using (var fs = new FileStream("C:\\Temp\\" + id + ".blob", FileMode.Create))
+            {
+                await streamContent.GetStream().CopyToAsync(fs);
+                await fs.FlushAsync();
+            }
+        }
+    }
+}
+````
+
+`IRemoteStreamContent` is compatible with the [Auto API Controller](API/Auto-API-Controllers.md) and [Dynamic C# HTTP Proxy](API/Dynamic-CSharp-API-Clients.md) systems.
+
 ## Lifetime
 
 Lifetime of application services are [transient](Dependency-Injection.md) and they are automatically registered to the dependency injection system.

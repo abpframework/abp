@@ -3,6 +3,7 @@ using System.Net.Http;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using IdentityModel;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +15,8 @@ using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Identity.Blazor;
-using Volo.Abp.Account.Blazor;
+using Volo.Abp.AutoMapper;
+using Volo.Abp.TenantManagement.Blazor;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
@@ -23,7 +25,7 @@ namespace MyCompanyName.MyProjectName.Blazor
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
         typeof(AbpIdentityBlazorModule),
-        typeof(AbpAccountBlazorModule)
+        typeof(AbpTenantManagementBlazorModule)
     )]
     public class MyProjectNameBlazorModule : AbpModule
     {
@@ -38,6 +40,7 @@ namespace MyCompanyName.MyProjectName.Blazor
             ConfigureRouter(context);
             ConfigureUI(builder);
             ConfigureMenu(context);
+            ConfigureAutoMapper(context);
         }
 
         private void ConfigureRouter(ServiceConfigurationContext context)
@@ -69,13 +72,17 @@ namespace MyCompanyName.MyProjectName.Blazor
             builder.Services.AddOidcAuthentication(options =>
             {
                 builder.Configuration.Bind("AuthServer", options.ProviderOptions);
+                options.UserOptions.RoleClaim = JwtClaimTypes.Role;
                 options.ProviderOptions.DefaultScopes.Add("MyProjectName");
+                options.ProviderOptions.DefaultScopes.Add("role");
+                options.ProviderOptions.DefaultScopes.Add("email");
+                options.ProviderOptions.DefaultScopes.Add("phone");
             });
         }
 
         private static void ConfigureUI(WebAssemblyHostBuilder builder)
         {
-            builder.RootComponents.Add<App>("app");
+            builder.RootComponents.Add<App>("#ApplicationContainer");
         }
 
         private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)
@@ -83,6 +90,14 @@ namespace MyCompanyName.MyProjectName.Blazor
             context.Services.AddTransient(sp => new HttpClient
             {
                 BaseAddress = new Uri(environment.BaseAddress)
+            });
+        }
+
+        private void ConfigureAutoMapper(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddMaps<MyProjectNameBlazorModule>();
             });
         }
 

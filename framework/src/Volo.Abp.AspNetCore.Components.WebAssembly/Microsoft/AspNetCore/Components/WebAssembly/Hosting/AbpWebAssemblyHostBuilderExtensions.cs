@@ -1,5 +1,7 @@
 using System;
+using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +22,12 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
         {
             Check.NotNull(builder, nameof(builder));
 
+            // Related this commit(https://github.com/dotnet/aspnetcore/commit/b99d805bc037fcac56afb79abeb7d5a43141c85e)
+            // Microsoft.AspNetCore.Blazor.BuildTools has been removed in net 5.0.
+            // This call may be removed when we find a suitable solution.
+            // System.Runtime.CompilerServices.AsyncStateMachineAttribute
+            Castle.DynamicProxy.Generators.AttributesToAvoidReplicating.Add<AsyncStateMachineAttribute>();
+
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddSingleton(builder);
 
@@ -31,7 +39,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             return application;
         }
 
-        public static async Task InitializeAsync(
+        public async static Task InitializeAsync(
             [NotNull] this IAbpApplicationWithExternalServiceProvider application,
             [NotNull] IServiceProvider serviceProvider)
         {
@@ -42,9 +50,35 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
             using (var scope = serviceProvider.CreateScope())
             {
-                await scope.ServiceProvider
-                    .GetRequiredService<ICachedApplicationConfigurationClient>()
-                    .InitializeAsync();
+                await InitializeModulesAsync(scope.ServiceProvider);
+                await SetCurrentLanguageAsync(scope);
+            }
+        }
+
+        private async static Task InitializeModulesAsync(IServiceProvider serviceProvider)
+        {
+            foreach (var service in serviceProvider.GetServices<IAsyncInitialize>())
+            {
+                await service.InitializeAsync();
+            }
+        }
+
+        private async static Task SetCurrentLanguageAsync(IServiceScope scope)
+        {
+            var configurationClient = scope.ServiceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
+            var utilsService = scope.ServiceProvider.GetRequiredService<IAbpUtilsService>();
+            var configuration = configurationClient.Get();
+            var cultureName = configuration.Localization?.CurrentCulture?.CultureName;
+            if (!cultureName.IsNullOrEmpty())
+            {
+                var culture = new CultureInfo(cultureName);
+                CultureInfo.DefaultThreadCurrentCulture = culture;
+                CultureInfo.DefaultThreadCurrentUICulture = culture;
+            }
+
+            if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
+            {
+                await utilsService.AddClassToTagAsync("body", "rtl");
             }
         }
     }

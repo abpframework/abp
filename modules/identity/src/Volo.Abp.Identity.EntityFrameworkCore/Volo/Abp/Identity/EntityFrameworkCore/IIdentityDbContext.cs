@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.SecurityLog;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
@@ -16,6 +15,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         DbSet<OrganizationUnit> OrganizationUnits { get; set; }
 
-        DbSet<IdentitySecurityLog> IdentitySecurityLogs { get; set; }
+        DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
+
+        DbSet<IdentityLinkUser> LinkUsers { get; set; }
     }
 }

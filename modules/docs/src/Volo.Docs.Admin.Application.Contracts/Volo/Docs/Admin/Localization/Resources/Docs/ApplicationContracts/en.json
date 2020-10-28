@@ -43,7 +43,6 @@
     "RemovedFromCache": "Removed from cache",
     "RemoveFromCacheConfirmation": "Are you sure you want to remove this item from cache?",
     "ReIndexDocumentConfirmation": "Are you sure you want to reindex this item?",
-    "DeleteDocumentFromDbConfirmation": "Are you sure you want to delete this item from database?",
     "DeleteFromDatabase": "Delete from database",
     "Deleted": "Deleted",
     "Search": "Search",

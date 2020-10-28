@@ -42,3 +42,11 @@
         display: none;
     }
 }
+
+.jq-star {
+    top: -2px !important;
+    position: relative;
+}
+.rating-undo-link:hover {
+    text-decoration:none;
+}

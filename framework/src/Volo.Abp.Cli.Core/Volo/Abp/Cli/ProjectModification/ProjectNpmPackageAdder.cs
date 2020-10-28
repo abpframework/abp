@@ -17,20 +17,28 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<ProjectNpmPackageAdder>.Instance;
         }
 
-        public Task AddAsync(string directory, NpmPackageInfo npmPackage)
+        public Task AddAsync(string directory, NpmPackageInfo npmPackage, bool skipGulpCommand = false)
         {
             var packageJsonFilePath = Path.Combine(directory, "package.json");
-            if (!File.Exists(packageJsonFilePath) || File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
+            if (!File.Exists(packageJsonFilePath) ||
+                File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
             {
                 return Task.CompletedTask;
             }
 
             Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
 
+
+
             using (DirectoryHelper.ChangeCurrentDirectory(directory))
             {
                 Logger.LogInformation("yarn add " + npmPackage.Name);
                 CmdHelper.RunCmd("yarn add " + npmPackage.Name);
+
+                if (skipGulpCommand)
+                {
+                    return Task.CompletedTask;
+                }
 
                 Logger.LogInformation("gulp");
                 CmdHelper.RunCmd("gulp");

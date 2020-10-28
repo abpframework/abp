@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.MultiTenancy
@@ -18,9 +19,10 @@ namespace Volo.Abp.MultiTenancy
             _resolveAction = resolveAction;
         }
 
-        public override void Resolve(ITenantResolveContext context)
+        public override Task ResolveAsync(ITenantResolveContext context)
         {
             _resolveAction(context);
+            return Task.CompletedTask;
         }
     }
 }

@@ -270,17 +270,7 @@ namespace Acme.BookStore
 
 ![bookstore-dbmigrator-on-solution](images/bookstore-dbmigrator-on-solution.png)
 
-{{if DB == "EF"}}
-
 `.DbMigrator`  是一个控制台使用程序,可以在**开发**和**生产**环境**迁移数据库架构**和**初始化种子数据**.
-
-{{end}}
-
-{{if DB == "Mongo"}}
-
-尽管MongoDB**不需要**数据库架构迁移,但仍建议运行该应用程序,因为它可以在数据库上播种初始数据. 可以在**开发**和**生产**环境中使用.
-
-{{end}}
 
 ## 创建应用程序
 

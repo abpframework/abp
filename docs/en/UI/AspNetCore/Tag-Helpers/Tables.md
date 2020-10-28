@@ -6,7 +6,7 @@
 
 Basic usage:
 
-````csharp
+````html
 <abp-table hoverable-rows="true" responsive-sm="true">
         <thead>
             <tr>

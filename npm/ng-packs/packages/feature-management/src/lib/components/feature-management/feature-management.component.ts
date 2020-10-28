@@ -1,6 +1,7 @@
-import { TrackByService } from '@abp/ng.core';
+import { TrackByService, GetAppConfiguration } from '@abp/ng.core';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
 import { FeaturesService } from '../../proxy/feature-management/features.service';
@@ -60,7 +61,11 @@ export class FeatureManagementComponent
 
   modalBusy = false;
 
-  constructor(public readonly track: TrackByService, private service: FeaturesService) {}
+  constructor(
+    public readonly track: TrackByService,
+    protected service: FeaturesService,
+    protected store: Store,
+  ) {}
 
   openModal() {
     if (!this.providerName) {
@@ -107,7 +112,76 @@ export class FeatureManagementComponent
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.visible = false;
+
+        if (!this.providerKey) {
+          // to refresh host's features
+          this.store.dispatch(new GetAppConfiguration());
+        }
       });
+  }
+
+  onCheckboxClick(val: boolean, feature: FeatureDto) {
+    if (val) {
+      this.checkToggleAncestors(feature);
+    } else {
+      this.uncheckToggleDescendants(feature);
+    }
+  }
+
+  private uncheckToggleDescendants(feature: FeatureDto) {
+    this.findAllDescendantsOfByType(feature, ValueTypes.ToggleStringValueType).forEach(node =>
+      this.setFeatureValue(node, false),
+    );
+  }
+
+  private checkToggleAncestors(feature: FeatureDto) {
+    this.findAllAncestorsOfByType(feature, ValueTypes.ToggleStringValueType).forEach(node =>
+      this.setFeatureValue(node, true),
+    );
+  }
+
+  private findAllAncestorsOfByType(feature: FeatureDto, type: ValueTypes) {
+    let parent = this.findParentByType(feature, type);
+    const ancestors = [];
+    while (parent) {
+      ancestors.push(parent);
+      parent = this.findParentByType(parent, type);
+    }
+    return ancestors;
+  }
+
+  private findAllDescendantsOfByType(feature: FeatureDto, type: ValueTypes) {
+    const descendants = [];
+    const queue = [feature];
+
+    while (queue.length) {
+      const node = queue.pop();
+      const newDescendants = this.findChildrenByType(node, type);
+      descendants.push(...newDescendants);
+      queue.push(...newDescendants);
+    }
+
+    return descendants;
+  }
+
+  private findParentByType(feature: FeatureDto, type: ValueTypes) {
+    return this.getCurrentGroup().find(
+      f => f.valueType.name === type && f.name === feature.parentName,
+    );
+  }
+
+  private findChildrenByType(feature: FeatureDto, type: ValueTypes) {
+    return this.getCurrentGroup().filter(
+      f => f.valueType.name === type && f.parentName === feature.name,
+    );
+  }
+
+  private getCurrentGroup() {
+    return this.features[this.selectedGroupDisplayName] ?? [];
+  }
+
+  private setFeatureValue(feature: FeatureDto, val: boolean) {
+    feature.value = val as any;
   }
 }
 
