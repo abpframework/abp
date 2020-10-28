@@ -363,6 +363,20 @@ In this way, the page can import styles and scripts to the layout.
 @await RenderSectionAsync("styles", required: false)
 ````
 
+#### Content Toolbar Section
+
+Another pre-defined section is the Content Toolbar section which can be used by the pages to add code just before the page content. The Basic Theme renders it as shown below:
+
+````html
+<div id="AbpContentToolbar">
+    <div class="text-right mb-2">
+        @RenderSection("content_toolbar", false)
+    </div>
+</div>
+````
+
+The container div's id must be `AbpContentToolbar`. This section should come before the `RenderBody()`.
+
 #### Widget Scripts
 
 The [Widget System](Widgets.md) allows to define reusable widgets with their own style/script files. All the layouts should render the widget style and scripts.
@@ -389,6 +403,34 @@ ABP scripts (`ApplicationConfigurationScript` and `ServiceProxyScript`) should b
 <script src="~/Abp/ApplicationConfigurationScript"></script>
 <script src="~/Abp/ServiceProxyScript"></script>
 ````
+
+#### Page Title, Selected Menu Item and Breadcrumbs
+
+`IPageLayout` service can be injected by any page to set the Page Title, the selected menu item name and the breadcrumb items. Then the theme can use this service to get these values and render on the UI.
+
+The Basic Theme doesn't implement this service, but the Lepton Theme implements:
+
+![breadcrumbs-example](../../images/breadcrumbs-example.png)
+
+#### Tenant Switch
+
+The Account Layout should allow the user to switch the current tenant if the application is multi-tenant and the tenant was resolved from the cookies. See the [Basic Theme Account Layout](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts/Account.cshtml) as an example implementation.
+
+### Layout Classes
+
+The Standard Layouts (`Application`, `Account` and `Empty`) should add the following CSS classes to the `body` tag:
+
+* `abp-application-layout` for the `Application` layout.
+* `abp-account-layout` for the `Account` layout.
+* `abp-empty-layout` for the `Empty` layout.
+
+In this way, applications or modules can have selectors based on the current layout.
+
+### RTL
+
+To support Right-To-Left languages, the Layout should check the current culture and add `dir="rtl"` to the `html` tag and `rtl` CSS class the the `body` tag.
+
+You can check `CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft` to understand if the current language is a RTL language.
 
 ### The NPM Package
 
