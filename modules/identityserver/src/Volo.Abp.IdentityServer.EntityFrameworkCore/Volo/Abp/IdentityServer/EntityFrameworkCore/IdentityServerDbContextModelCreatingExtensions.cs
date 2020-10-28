@@ -193,8 +193,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.DisplayName).HasMaxLength(IdentityResourceConsts.DisplayNameMaxLength);
                 b.Property(x => x.Description).HasMaxLength(IdentityResourceConsts.DescriptionMaxLength);
 
-                b.HasIndex(x => x.Name).IsUnique();
-
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
                 b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
             });
@@ -235,8 +233,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.ToTable(options.TablePrefix + "ApiResources", options.Schema);
 
                 b.ConfigureByConvention();
-
-                b.HasIndex(x => x.Name).IsUnique();
 
                 b.Property(x => x.Name).HasMaxLength(ApiResourceConsts.NameMaxLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
@@ -319,8 +315,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Name).HasMaxLength(ApiScopeConsts.NameMaxLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(ApiScopeConsts.DisplayNameMaxLength);
                 b.Property(x => x.Description).HasMaxLength(ApiScopeConsts.DescriptionMaxLength);
-
-                b.HasIndex(x => x.Name).IsUnique();
 
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
                 b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
