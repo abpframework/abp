@@ -235,19 +235,160 @@ See the [Bundle & Minification](Bundling-Minification.md) document to understand
 
 ### Layout Parts
 
+A typical Layout consists of several parts. The theme should include the necessary parts in each layout.
+
+**Example: The Basic Theme has the following parts for the Application Layout**
+
+![basic-theme-application-layout-parts](../../images/basic-theme-application-layout-parts.png)
+
+The application code and the modules can only show contents in the Page Content part. If they need to change the other parts (to add a menu item, to add a toolbar item, to change the application name in the branding area...) they should use the ABP Framework APIs.
+
+The following sections explain the fundamental parts pre-defined by the ABP Framework and can be implemented by the themes.
+
+> It is a good practice to split the layout into components/partials, so the final application can override them partially for customization purpose.
+
 #### Branding
+
+`IBrandingProvider` service should be used to get the name and the logo URL of the application to render in the Branding part.
+
+The [Application Startup Template](../../Startup-Templates/Application.md) has an implementation of this interface to set the values by the application developer.
 
 #### Main Menu
 
+`IMenuManager` service is used to get the main menu items and render on the layout.
+
+**Example: Get the Main Menu to render in a view component**
+
+```csharp
+public class MainNavbarMenuViewComponent : AbpViewComponent
+{
+    private readonly IMenuManager _menuManager;
+
+    public MainNavbarMenuViewComponent(IMenuManager menuManager)
+    {
+        _menuManager = menuManager;
+    }
+
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        var menu = await _menuManager.GetAsync(StandardMenus.Main);
+        return View("~/Themes/Basic/Components/Menu/Default.cshtml", menu);
+    }
+}
+```
+
+See the [Navigation / Menus](Navigation-Menu.md) document to learn more about the navigation system.
+
 #### Main Toolbar
+
+`IToolbarManager` service is used to get the Main Toolbar items and render on the layout. Each item of this toolbar is a View Component, so it may include any type of UI elements. Inject the `IToolbarManager` and use the `GetAsync` to get the toolbar items:
+
+````csharp
+var toolbar = await _toolbarManager.GetAsync(StandardToolbars.Main);
+````
+
+> See the [Toolbars](Toolbars.md) document to learn more on the toolbar system.
+
+The theme has a responsibility to add two pre-defined items to the main toolbar: Language Selection and User Menu. To do that, create a class implementing the `IToolbarContributor` interface and add it to the `AbpToolbarOptions` as shown below:
+
+```csharp
+Configure<AbpToolbarOptions>(options =>
+{
+    options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
+});
+```
 
 ##### Language Selection
 
+Language Selection toolbar item is generally a dropdown that is used to switch between languages. `ILanguageProvider` is used to get the list of available languages and `CultureInfo.CurrentUICulture` is used to learn the current language.
+
+`/Abp/Languages/Switch` endpoint can be used to switch the language using such a link:
+
+````html
+<a class="dropdown-item" href="~/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))">@language.DisplayName</a>
+````
+
+This endpoint accepts the following query string parameters:
+
+* `culture`: The selected culture, like `en-US` or `en`.
+* `uiCulture`: The selected UI culture, like `en-US` or `en`.
+* `returnUrl` (optional): Can be used to return a given URL after switching the language.
+
+`culture` and `uiCulture` should match one of the available languages. ABP Framework sets a culture cookie in the `/Abp/Languages/Switch` endpoint.
+
 ##### User Menu
+
+User menu includes links related to the user account. `IMenuManager` is used just like the Main Menu, but this time with `StandardMenus.User` parameter like shown below:
+
+````csharp
+var menu = await _menuManager.GetAsync(StandardMenus.User);
+````
+
+[ICurrentUser](../../CurrentUser.md) and [ICurrentTenant](../../Multi-Tenancy.md) services can be used to obtain the current user and tenant names.
 
 #### Page Alerts
 
+`IAlertManager` service is used to get the current page alerts to render on the layout. Use the `Alerts` list of the `IAlertManager`. It is generally rendered just before the page content (`RenderBody()`).
+
+See the [Page Alerts](Page-Alerts.md) document to learn more.
+
 #### Layout Hooks
+
+Since the Layout is in the theme package, the final application or any module can't directly manipulate the layout content. The [Layout Hook](Layout-Hooks.md) system allows to inject components to some specific points of the layout.
+
+The theme is responsible to render the hooks in the correct place.
+
+**Example: Render the `LayoutHooks.Head.First` Hook in the Application Layout**
+
+````html
+<head>
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Application)
+    ...
+````
+
+See the [Layout Hook](Layout-Hooks.md) document to learn the standard layout hooks.
+
+#### Script / Style Sections
+
+Every layout should render the following optional sections:
+
+* `styles` section is rendered in the end of the `head`, just before the `LayoutHooks.Head.Last`.
+* `scripts` section is rendered in the end of the `body`, just before the `LayoutHooks.Body.Last`.
+
+In this way, the page can import styles and scripts to the layout.
+
+**Example: Render the `styles` section**
+
+````csharp
+@await RenderSectionAsync("styles", required: false)
+````
+
+#### Widget Scripts
+
+The [Widget System](Widgets.md) allows to define reusable widgets with their own style/script files. All the layouts should render the widget style and scripts.
+
+**Widget Styles** is rendered as shown below, just before the `styles` section, after the global style bundle:
+
+````csharp
+@await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
+````
+
+**Widget Scripts** is rendered as shown below, just before the `scripts` section, after the global script bundle:
+
+````csharp
+@await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
+````
+
+#### ABP Scripts
+
+ABP has some special scripts those should be included into every layout. They are not included in the global bundles since they are dynamically created based on the current user.
+
+ABP scripts (`ApplicationConfigurationScript` and `ServiceProxyScript`) should be added just after the global script bundle, as shown below:
+
+````html
+<script src="~/Abp/ApplicationConfigurationScript"></script>
+<script src="~/Abp/ServiceProxyScript"></script>
+````
 
 ### The NPM Package
 
