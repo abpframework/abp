@@ -982,9 +982,6 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("IdentityServerApiResources");
                 });
 
@@ -1131,9 +1128,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("IdentityServerApiScopes");
                 });
@@ -1709,9 +1703,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("IdentityServerIdentityResources");
                 });
