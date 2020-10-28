@@ -121,7 +121,7 @@ ABP框架的[异常处理系统](https://docs.abp.io/en/abp/latest/Exception-Han
 ````csharp
 public class MyExceptionSubscriber : ExceptionSubscriber
 {
-    public override async Task HandleAsync(ExceptionNotificationContext context)
+    public async override Task HandleAsync(ExceptionNotificationContext context)
     {
         //TODO...
     }

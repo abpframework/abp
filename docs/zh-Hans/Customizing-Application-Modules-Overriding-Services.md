@@ -76,7 +76,7 @@ public class MyIdentityUserAppService : IdentityUserAppService
     {
     }
 
-    public override async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+    public async override Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
         if (input.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -109,33 +109,33 @@ public class MyIdentityUserManager : IdentityUserManager
 {
     public MyIdentityUserManager(
         IdentityUserStore store,
-        IIdentityRoleRepository roleRepository, 
+        IIdentityRoleRepository roleRepository,
         IIdentityUserRepository userRepository,
-        IOptions<IdentityOptions> optionsAccessor, 
+        IOptions<IdentityOptions> optionsAccessor,
         IPasswordHasher<IdentityUser> passwordHasher,
-        IEnumerable<IUserValidator<IdentityUser>> userValidators, 
-        IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, 
+        IEnumerable<IUserValidator<IdentityUser>> userValidators,
+        IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators,
         ILookupNormalizer keyNormalizer,
         IdentityErrorDescriber errors,
         IServiceProvider services,
-        ILogger<IdentityUserManager> logger, 
-        ICancellationTokenProvider cancellationTokenProvider) : 
+        ILogger<IdentityUserManager> logger,
+        ICancellationTokenProvider cancellationTokenProvider) :
         base(store,
             roleRepository,
-            userRepository, 
-            optionsAccessor, 
-            passwordHasher, 
-            userValidators, 
+            userRepository,
+            optionsAccessor,
+            passwordHasher,
+            userValidators,
             passwordValidators,
-            keyNormalizer, 
-            errors, 
-            services, 
-            logger, 
+            keyNormalizer,
+            errors,
+            services,
+            logger,
             cancellationTokenProvider)
     {
     }
 
-    public override async Task<IdentityResult> CreateAsync(IdentityUser user)
+    public async override Task<IdentityResult> CreateAsync(IdentityUser user)
     {
         if (user.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -251,8 +251,8 @@ ObjectExtensionManager.Instance
     .AddOrUpdateProperty<string>(
         new[]
         {
-            typeof(IdentityUserDto), 
-            typeof(IdentityUserCreateDto), 
+            typeof(IdentityUserDto),
+            typeof(IdentityUserCreateDto),
             typeof(IdentityUserUpdateDto)
         },
         "SocialSecurityNumber"
