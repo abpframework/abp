@@ -12,7 +12,7 @@ namespace Volo.Abp.Identity.Blazor
             try
             {
                 return arguments?.Count() > 0
-                    ? string.Format(stringLocalizer[format], LocalizeMessageArguments(stringLocalizer, arguments)?.ToArray())
+                    ? stringLocalizer[format, LocalizeMessageArguments(stringLocalizer, arguments)?.ToArray()]
                     : stringLocalizer[format];
             }
             catch
