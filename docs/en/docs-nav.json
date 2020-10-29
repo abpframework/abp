@@ -445,6 +445,10 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "Toolbars",
+              "path": "UI/AspNetCore/Toolbars.md"
+            },
+            {
               "text": "Layout Hooks",
               "path": "UI/AspNetCore/Layout-Hooks.md"
             },
