@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Volo.Abp.Users
 @using Volo.Abp.MultiTenancy
+@using Volo.Abp.UI.Navigation
+@inject IJSRuntime JsRuntime
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
 @inject NavigationManager Navigation
@@ -23,12 +25,9 @@
                 {
                     @foreach (var menuItem in Menu.Items)
                     {
-                        <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
+                        <DropdownItem Clicked="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</DropdownItem>
                     }
                 }
-                <a class="dropdown-item" href="@ServerAccountUrl">
-                    @UiLocalizer["ManageYourAccount"]
-                </a>
                 <DropdownDivider />
                 <DropdownItem Clicked="BeginSignOut">Logout</DropdownItem>
             </DropdownMenu>
@@ -40,14 +39,21 @@
 </AuthorizeView>
 @code{
 
-    private void NavigateTo(string uri)
+    private async Task NavigateToAsync(string uri, string target = "_self")
     {
-        Navigation.NavigateTo(uri);
+        if (target == "_blank")
+        {
+            await JsRuntime.InvokeVoidAsync("open", uri, "_blank");
+        }
+        else
+        {
+            Navigation.NavigateTo(uri);
+        }
     }
 
     private async Task BeginSignOut()
     {
         await SignOutManager.SetSignOutState();
-        NavigateTo("authentication/logout");
+        await NavigateToAsync("authentication/logout");
     }
 }
