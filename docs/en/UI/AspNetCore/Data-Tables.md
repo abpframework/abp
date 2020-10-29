@@ -97,6 +97,14 @@ Here, the all configuration options;
 * `dom`: Default value is `<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto"i><"col"p>>`.
 * `language`: A function that returns the localization text using the current language.
 
+### AJAX Adapter
+
+DataTables.Net has its own expected data format while getting results of an AJAX call to the server to get the table data. They are especially related how paging and sorting parameters are sent and received. ABP Framework also offers its own conventions for the client-server [AJAX](JavaScript-API/Ajax.md) communication. 
+
+The `abp.libs.datatables.createAjax` method (used in the example above) adapts request and response data format and perfectly works with the [Dynamic JavaScript Client Proxy](Dynamic-JavaScript-Client-Proxies.md) system.
+
+This works automatically, so most of the times you don't need to know how it works. See the [DTO document](../../Data-Transfer-Objects.md) if you want to learn more about `IPagedAndSortedResultRequest`, `IPagedResult` and other standard interfaces and base DTO classes those are used in client to server communication.
+
 ### Row Actions
 
 `rowAction` is an option defined by the ABP Framework to the column definitions to show a drop down button to take actions for a row in the table.
@@ -177,6 +185,78 @@ If you define a `function`, then the `function` has two arguments: `record` (the
 
 * `enabled`: A `function` that returns a `bool` to disable the action. The `function` takes a `data` object with two fields: `data.record` is the data object related to the row and `data.table` is the DataTables instance.
 * `displayNameHtml`: Set this to `true` is the `text` value contains HTML tags.
+
+There are some rules with the action items;
+
+* If none of the action items is visible then the actions column is not rendered.
+
+### Data Format
+
+#### The Problem
+
+See the *Creation Time* column in the example below:
+
+````js
+{
+    title: l('CreationTime'),
+    data: "creationTime",
+    render: function (data) {
+        return luxon
+            .DateTime
+            .fromISO(data, {
+                locale: abp.localization.currentCulture.name
+            }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
+    }
+}
+````
+
+The `render` is a standard DataTables option to render the column content by a custom function. This example uses the [luxon](https://moment.github.io/luxon/) library (which is installed by default) to write a human readable value of the `creationTime` in the current user's language. Example output of the column:
+
+![datatables-custom-render-date](../../images/datatables-custom-render-date.png)
+
+If you don't define the render option, then the result will be ugly and not user friendly:
+
+![datatables-custom-render-date](../../images/datatables-default-render-date.png)
+
+However, rendering a `DateTime` is almost same and repeating the same rendering logic everywhere is against to the DRY (Don't Repeat Yourself!) principle.
+
+#### dataFormat Option
+
+`dataFormat` column option specifies the data format that is used to render the column data. The same output could be accomplished using the following column definition:
+
+````js
+{
+    title: l('CreationTime'),
+    data: "creationTime",
+    dataFormat: 'datetime'
+}
+````
+
+`dataFormat: 'datetime'` specifies the data format for this column. There are a few pre-defined `dataFormat`s:
+
+* `boolean`: Shows a `check` icon for `true` and `times` icon for `false` value and useful to render `bool` values.
+* `date`: Shows date part of a `DateTime` value, formatted based on the current culture.
+* `datetime`: Shows date & time (excluding seconds) of a `DateTime` value, formatted based on the current culture.
+
+### Default Renderers
+
+`abp.libs.datatables.defaultRenderers` option allows you to define new data formats and set renderers for them.
+
+**Example: Render male / female icons based on the gender**
+
+````js
+abp.libs.datatables.defaultRenderers['gender'] = function(value) {
+    if (value === 'f') {
+        return '<i class="fa fa-venus"></i>';
+    } else {
+        return '<i class="fa fa-mars"></i>';
+    }
+};
+````
+
+Assuming that the possible values for a column data is `f` and `m`, the `gender` data format shows female/male icons instead of `f` and `m` texts. You can now set `dataFormat: 'gender'` for a column definition that has the proper data values.
+
+> You can write the default renderers in a single JavaScript file and add it to the [Global Script Bundle](Bundling-Minification.md), so you can reuse them in all the pages.
 
 ## Other Data Grids
 
