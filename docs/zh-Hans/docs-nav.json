@@ -12,6 +12,10 @@
           "path": "Startup-Templates/Console.md"
         },
         {
+          "text": "WPF应用程序",
+          "path": "Startup-Templates/WPF.md"
+        },
+        {
           "text": "空Web应用程序",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
@@ -627,6 +631,10 @@
         {
           "text": "控制台",
           "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
         }
       ]
     },
