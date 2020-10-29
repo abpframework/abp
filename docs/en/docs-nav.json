@@ -453,6 +453,10 @@
               "path": "UI/AspNetCore/Toolbars.md"
             },
             {
+              "text": "Page Header",
+              "path": "UI/AspNetCore/Page-Header.md"
+            },
+            {
               "text": "Layout Hooks",
               "path": "UI/AspNetCore/Layout-Hooks.md"
             },
