@@ -157,9 +157,9 @@ The example screenshot below shows the actions for each user in the user managem
 * `action`: A `function` that is executed when the user clicks to the action. The function takes a `data` argument that has the following fields;
   * `data.record`: This is the data object related to the row. You can access the data fields like `data.record.id`, `data.record.name`... etc.
   * `data.table`: The DataTables instance.
-* `confirmMessage`: A function (see the example above) that returns a message (`string`) to show a dialog to get a confirmation from the user before executing the `action`. Example confirmation dialog:
+* `confirmMessage`: A `function` (see the example above) that returns a message (`string`) to show a dialog to get a confirmation from the user before executing the `action`. Example confirmation dialog:
 
-![datatables-row-actions-confirmation](D:\Github\abp\docs\en\images\datatables-row-actions-confirmation.png)
+![datatables-row-actions-confirmation](../../images/datatables-row-actions-confirmation.png)
 
 You can use the [localization](JavaScript-API/Localization.md) system to show a localized message.
 
@@ -171,9 +171,12 @@ visible: abp.auth.isGranted('BookStore.Books.Delete');
 
 If you define a `function`, then the `function` has two arguments: `record` (the data object of the related row) and the `table` (the DataTable instance). So, you can decide to show/hide the action dynamically, based on the row data and other conditions.
 
-* `iconClass`: Can be used to show a font-icon, like a [Font-Awesome](https://fontawesome.com/) icon (ex: `fas fa-trash-alt`), near to the action text.
+* `iconClass`: Can be used to show a font-icon, like a [Font-Awesome](https://fontawesome.com/) icon (ex: `fas fa-trash-alt`), near to the action text. Example screenshot:
+
+![datatables-row-actions-confirmation](../../images/datatables-row-actions-icon.png)
+
 * `enabled`: A `function` that returns a `bool` to disable the action. The `function` takes a `data` object with two fields: `data.record` is the data object related to the row and `data.table` is the DataTables instance.
-* `displayNameHtml`: An alternative to use `text` and/or `icon`. You can directly set an HTML content as the display name of the action.
+* `displayNameHtml`: Set this to `true` is the `text` value contains HTML tags.
 
 ## Other Data Grids
 
