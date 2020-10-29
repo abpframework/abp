@@ -419,6 +419,10 @@
               "path": "UI/AspNetCore/Modals.md"
             },
             {
+              "text": "Data Tables",
+              "path": "UI/AspNetCore/Data-Tables.md"
+            },
+            {
               "text": "Page Alerts",
               "path": "UI/AspNetCore/Page-Alerts.md"
             },
@@ -447,6 +451,10 @@
             {
               "text": "Widgets",
               "path": "UI/AspNetCore/Widgets.md"
+            },
+            {
+              "text": "Toolbars",
+              "path": "UI/AspNetCore/Toolbars.md"
             },
             {
               "text": "Layout Hooks",

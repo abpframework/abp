@@ -38,7 +38,7 @@ Application Layout implements the following parts, in addition to the common par
 
 ### The Account Layout
 
-![basic-theme-account-layout](D:\Github\abp\docs\en\images\basic-theme-account-layout.png)
+![basic-theme-account-layout](../../images/basic-theme-account-layout.png)
 
 Application Layout implements the following parts, in addition to the common parts mentioned above;
 
