@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using Localization.Resources.AbpUi;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.DependencyInjection;
 
@@ -19,22 +17,16 @@ namespace Volo.Abp.BlazoriseUI
 
         private readonly IStringLocalizer<AbpUiResource> localizer;
 
-        public ILogger<BlazoriseUiNotificationService> Logger { get; set; }
-
         public BlazoriseUiNotificationService(
             IStringLocalizer<AbpUiResource> localizer)
         {
             this.localizer = localizer;
-
-            Logger = NullLogger<BlazoriseUiNotificationService>.Instance;
         }
 
         public Task Info(string message, string title = null, Action<UiNotificationOptions> options = null)
         {
             var uiNotificationOptions = CreateDefaultOptions();
             options?.Invoke(uiNotificationOptions);
-
-            Logger.LogInformation(message);
 
             NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Info, message, title, uiNotificationOptions));
 
@@ -46,8 +38,6 @@ namespace Volo.Abp.BlazoriseUI
             var uiNotificationOptions = CreateDefaultOptions();
             options?.Invoke(uiNotificationOptions);
 
-            Logger.LogInformation(message);
-
             NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Success, message, title, uiNotificationOptions));
 
             return Task.CompletedTask;
@@ -58,8 +48,6 @@ namespace Volo.Abp.BlazoriseUI
             var uiNotificationOptions = CreateDefaultOptions();
             options?.Invoke(uiNotificationOptions);
 
-            Logger.LogWarning(message);
-
             NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Warning, message, title, uiNotificationOptions));
 
             return Task.CompletedTask;
@@ -69,8 +57,6 @@ namespace Volo.Abp.BlazoriseUI
         {
             var uiNotificationOptions = CreateDefaultOptions();
             options?.Invoke(uiNotificationOptions);
-
-            Logger.LogError(message);
 
             NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Error, message, title, uiNotificationOptions));
 
