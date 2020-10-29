@@ -450,7 +450,13 @@
             },
             {
               "text": "Theming",
-              "path": "UI/AspNetCore/Theming.md"
+              "path": "UI/AspNetCore/Theming.md",
+              "items": [
+                {
+                  "text": "The Basic Theme",
+                  "path": "UI/AspNetCore/Basic-Theme.md"
+                }
+              ]
             },
             {
               "text": "JavaScript API",
