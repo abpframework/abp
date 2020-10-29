@@ -406,6 +406,8 @@ The Basic Theme doesn't implement this service, but the Lepton Theme implements:
 
 ![breadcrumbs-example](../../images/breadcrumbs-example.png)
 
+See the [Page Header](Page-Header.md) document for more.
+
 #### Tenant Switch
 
 The Account Layout should allow the user to switch the current tenant if the application is multi-tenant and the tenant was resolved from the cookies. See the [Basic Theme Account Layout](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts/Account.cshtml) as an example implementation.

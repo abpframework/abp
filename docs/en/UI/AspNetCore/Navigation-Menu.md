@@ -83,7 +83,7 @@ Here, a few notes on the menu contributors;
 
 There are more options of a menu item (the constructor of the `ApplicationMenuItem` class). Here, the list of all available options;
 
-* `name` (`string`, required): The unique name of the menu item.
+* `name` (`string`, required): The **unique name** of the menu item.
 * `displayName` (`string`, required): Display name/text of the menu item. You can [localize](../../Localization.md) this as shown before.
 * `url` (`string`): The URL of the menu item.
 * `icon` (`string`): An icon name. Free [Font Awesome](https://fontawesome.com/) icon classes are supported out of the box. Example: `fa fa-book`. You can use any CSS font icon class as long as you include the necessary CSS files to your application.
