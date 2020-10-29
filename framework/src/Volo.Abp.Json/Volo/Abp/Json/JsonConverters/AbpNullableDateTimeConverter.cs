@@ -38,11 +38,11 @@ namespace Volo.Abp.Json.JsonConverters
             {
                 if (_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
                 {
-                    writer.WriteStringValue(_clock.Normalize(value.Value));
+                    writer.WriteStringValue(value.Value);
                 }
                 else
                 {
-                    writer.WriteStringValue(_clock.Normalize(value.Value).ToString(_options.DefaultDateTimeFormat));
+                    writer.WriteStringValue(value.Value.ToString(_options.DefaultDateTimeFormat));
                 }
             }
         }

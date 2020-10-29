@@ -27,11 +27,11 @@ namespace Volo.Abp.Json.JsonConverters
         {
             if (_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
             {
-                writer.WriteStringValue(_clock.Normalize(value));
+                writer.WriteStringValue(value);
             }
             else
             {
-                writer.WriteStringValue(_clock.Normalize(value).ToString(_options.DefaultDateTimeFormat));
+                writer.WriteStringValue(value.ToString(_options.DefaultDateTimeFormat));
             }
         }
     }
