@@ -7,7 +7,6 @@ using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore.ValueComparers;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
-using Volo.Abp.MultiLingualObject;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
@@ -29,7 +28,6 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.TryConfigureLastModificationTime();
             b.TryConfigureModificationAudited();
             b.TryConfigureMultiTenant();
-            b.TryConfigureEntityTranslation();
         }
 
         public static void ConfigureConcurrencyStamp<T>(this EntityTypeBuilder<T> b)
@@ -302,25 +300,6 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.As<EntityTypeBuilder>().TryConfigureFullAudited();
             b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
             b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
-        }
-
-        public static void ConfigureMultiLingual<T, TTranslation>(this EntityTypeBuilder<T> b)
-            where T : class, IHasMultiLingual<TTranslation>
-            where TTranslation : class, IMultiLingualTranslation
-        {
-            b.As<EntityTypeBuilder>().TryConfigureEntityTranslation();
-        }
-
-        public static void TryConfigureEntityTranslation(this EntityTypeBuilder b)
-        {
-            if (b.Metadata.ClrType.IsAssignableTo<IMultiLingualTranslation>())
-            {
-                b.HasIndex(nameof(IMultiLingualTranslation.Language))
-                    .IsUnique();
-                b.Property(nameof(IMultiLingualTranslation.Language))
-                    .IsRequired()
-                    .HasColumnName(nameof(IMultiLingualTranslation.Language));
-            }
         }
 
         //TODO: Add other interfaces (IAuditedObject<TUser>...)
