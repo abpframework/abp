@@ -1,5 +1,5 @@
 ﻿@page "/identity/roles"
-@attribute [Authorize(IdentityPermissions.Roles.Default)]
+@attribute [Authorize( IdentityPermissions.Roles.Default )]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
@@ -7,6 +7,7 @@
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @inherits RoleManagementBase
 @inject IStringLocalizer<IdentityResource> L
+@inject AbpIdentityBlazorMessageLocalizerHelper<IdentityResource> LH
 @* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">
@@ -84,7 +85,7 @@
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
-                    <Validation MessageLocalizer="@L.Localize">
+                    <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
                             <TextEdit @bind-Text="@NewEntity.Name">
@@ -120,7 +121,7 @@
             <ModalBody>
                 <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
-                    <Validation MessageLocalizer="@L.Localize">
+                    <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
                             <TextEdit @bind-Text="EditingEntity.Name">
