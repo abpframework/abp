@@ -132,7 +132,7 @@ The screenshot below was taken from the **basic theme** comes with the applicati
 
 ![bookstore-brand-area-highlighted](../../images/bookstore-brand-area-highlighted.png)
 
-[The basic theme](../../Themes/Basic.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called **Brand component**. You probably want to customize this component by adding your **own application logo**. Let's see how to do it.
+[The basic theme](Basic-Theme.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called **Brand component**. You probably want to customize this component by adding your **own application logo**. Let's see how to do it.
 
 First, create your logo and place under a folder in your web application. We used `wwwroot/logos/bookstore-logo.png` path. Then copy the Brand component's view ([from here](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml)) from the basic theme files under the `Themes/Basic/Components/Brand` folder. The result should be similar the picture below:
 

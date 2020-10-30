@@ -476,14 +476,6 @@ Adding this attribute prevents to enter this page if the current hasn't logged i
 
 The book management page has a *New Book* button and *Edit* and *Delete* actions for each book. We should hide these buttons/actions if the current user has not granted for the related permissions.
 
-#### Inject the IAuthorizationService
-
-Inject the `IAuthorizationService` into the `Books.razor`:
-
-````csharp
-@inject IAuthorizationService AuthorizationService
-````
-
 #### Get the Permissions On Initialization
 
 Add the following code block to the end of the `Books.razor` file:
@@ -506,7 +498,7 @@ Add the following code block to the end of the `Books.razor` file:
 }
 ````
 
-We will use these `bool` fields to check the permissions.
+We will use these `bool` fields to check the permissions. `AuthorizationService` comes from the base class as an injected property.
 
 > **Blazor Tip**: While adding the C# code into a `@code` block is fine for small code parts, it is suggested to use the code behind approach to develop a more maintainable code base when the code block becomes longer. We will use this approach for the authors part.
 

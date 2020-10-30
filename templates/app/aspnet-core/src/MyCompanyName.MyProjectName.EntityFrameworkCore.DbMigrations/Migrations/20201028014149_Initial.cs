@@ -1182,18 +1182,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerApiResources_Name",
-                table: "IdentityServerApiResources",
-                column: "Name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerApiScopes_Name",
-                table: "IdentityServerApiScopes",
-                column: "Name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerClients_ClientId",
                 table: "IdentityServerClients",
                 column: "ClientId");
@@ -1213,12 +1201,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_IdentityServerDeviceFlowCodes_UserCode",
                 table: "IdentityServerDeviceFlowCodes",
                 column: "UserCode");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdentityServerIdentityResources_Name",
-                table: "IdentityServerIdentityResources",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerPersistedGrants_Expiration",

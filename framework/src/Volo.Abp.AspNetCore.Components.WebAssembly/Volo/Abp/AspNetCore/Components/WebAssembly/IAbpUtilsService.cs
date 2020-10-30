@@ -11,5 +11,11 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
         ValueTask<bool> HasClassOnTagAsync(string tagName, string className);
 
         ValueTask ReplaceLinkHrefByIdAsync(string linkId, string hrefValue);
+
+        ValueTask ToggleFullscreenAsync();
+
+        ValueTask RequestFullscreenAsync();
+
+        ValueTask ExitFullscreenAsync();
     }
 }

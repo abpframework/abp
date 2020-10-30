@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Auditing;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 
@@ -142,10 +143,17 @@ namespace Volo.Abp.AuditLogging.MongoDB
 
         public virtual async Task<EntityChange> GetEntityChange(Guid entityChangeId)
         {
-            return (await GetMongoQueryable()
-                            .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
-                            .FirstAsync()
-                    ).EntityChanges.First(x => x.Id == entityChangeId);
+            var entityChange = (await GetMongoQueryable()
+                .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
+                .FirstAsync()).EntityChanges.FirstOrDefault(x => x.Id == entityChangeId);
+            
+            
+            if (entityChange == null)
+            {
+                throw new EntityNotFoundException(typeof(EntityChange));
+            }
+
+            return entityChange;
         }
 
         public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(

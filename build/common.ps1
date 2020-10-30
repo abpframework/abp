@@ -31,6 +31,8 @@ if ($full -eq "-f")
 		"../modules/blogging",
 		"../templates/module/aspnet-core",
 		"../templates/app/aspnet-core",
+		"../templates/console",
+		"../templates/wpf",
 		"../abp_io/AbpIoLocalization"
 	) 
 }else{ 

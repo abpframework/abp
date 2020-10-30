@@ -51,7 +51,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             using (var scope = serviceProvider.CreateScope())
             {
                 await InitializeModulesAsync(scope.ServiceProvider);
-                SetCurrentLanguage(scope);
+                await SetCurrentLanguageAsync(scope);
             }
         }
 
@@ -63,9 +63,10 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             }
         }
 
-        private static void SetCurrentLanguage(IServiceScope scope)
+        private async static Task SetCurrentLanguageAsync(IServiceScope scope)
         {
             var configurationClient = scope.ServiceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
+            var utilsService = scope.ServiceProvider.GetRequiredService<IAbpUtilsService>();
             var configuration = configurationClient.Get();
             var cultureName = configuration.Localization?.CurrentCulture?.CultureName;
             if (!cultureName.IsNullOrEmpty())
@@ -73,6 +74,11 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 var culture = new CultureInfo(cultureName);
                 CultureInfo.DefaultThreadCurrentCulture = culture;
                 CultureInfo.DefaultThreadCurrentUICulture = culture;
+            }
+
+            if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
+            {
+                await utilsService.AddClassToTagAsync("body", "rtl");
             }
         }
     }

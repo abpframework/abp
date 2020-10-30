@@ -12,6 +12,10 @@
           "path": "Startup-Templates/Console.md"
         },
         {
+          "text": "WPF Application",
+          "path": "Startup-Templates/WPF.md"
+        },
+        {
           "text": "Empty Web Project",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
@@ -415,6 +419,10 @@
               "path": "UI/AspNetCore/Modals.md"
             },
             {
+              "text": "Data Tables",
+              "path": "UI/AspNetCore/Data-Tables.md"
+            },
+            {
               "text": "Page Alerts",
               "path": "UI/AspNetCore/Page-Alerts.md"
             },
@@ -445,12 +453,26 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "Toolbars",
+              "path": "UI/AspNetCore/Toolbars.md"
+            },
+            {
+              "text": "Page Header",
+              "path": "UI/AspNetCore/Page-Header.md"
+            },
+            {
               "text": "Layout Hooks",
               "path": "UI/AspNetCore/Layout-Hooks.md"
             },
             {
               "text": "Theming",
-              "path": "UI/AspNetCore/Theming.md"
+              "path": "UI/AspNetCore/Theming.md",
+              "items": [
+                {
+                  "text": "The Basic Theme",
+                  "path": "UI/AspNetCore/Basic-Theme.md"
+                }
+              ]
             },
             {
               "text": "JavaScript API",
@@ -583,6 +605,14 @@
                 {
                   "text": "Localization",
                   "path": "UI/Angular/Localization.md"
+                },
+                {
+                  "text": "Settings",
+                  "path": "UI/Angular/Settings.md"
+                },
+                {
+                  "text": "Features",
+                  "path": "UI/Angular/Features.md"
                 },
                 {
                   "text": "Permission Management",
@@ -797,6 +827,10 @@
         {
           "text": "Console",
           "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
         }
       ]
     },

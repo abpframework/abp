@@ -1,11 +1,8 @@
 ﻿@page "/identity/users"
 @attribute [Authorize(IdentityPermissions.Users.Default)]
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.Extensions.Localization
-@using Volo.Abp.Identity.Localization
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @inherits UserManagementBase
-@inject IStringLocalizer<IdentityResource> L
 
 @* ************************* PAGE HEADER ************************* *@
 <Row>
