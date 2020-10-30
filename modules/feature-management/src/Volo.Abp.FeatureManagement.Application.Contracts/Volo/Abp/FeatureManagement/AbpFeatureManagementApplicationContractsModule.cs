@@ -2,6 +2,7 @@
 using Volo.Abp.Application;
 using Volo.Abp.FeatureManagement.JsonConverters;
 using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -21,7 +22,7 @@ namespace Volo.Abp.FeatureManagement
                 options.FileSets.AddEmbedded<AbpFeatureManagementApplicationContractsModule>();
             });
 
-            Configure<AbpJsonSerializerOptions>(options =>
+            Configure<AbpSystemTextJsonSerializerOptions>(options =>
             {
                 options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter());
             });

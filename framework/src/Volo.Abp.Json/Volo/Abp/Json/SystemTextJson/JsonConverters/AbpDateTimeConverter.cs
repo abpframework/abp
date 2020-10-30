@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Json.JsonConverters
+namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 {
     public class AbpDateTimeConverter : JsonConverter<DateTime>, ITransientDependency
     {
@@ -27,11 +27,11 @@ namespace Volo.Abp.Json.JsonConverters
         {
             if (_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
             {
-                writer.WriteStringValue(value);
+                writer.WriteStringValue(_clock.Normalize(value));
             }
             else
             {
-                writer.WriteStringValue(value.ToString(_options.DefaultDateTimeFormat));
+                writer.WriteStringValue(_clock.Normalize(value).ToString(_options.DefaultDateTimeFormat));
             }
         }
     }

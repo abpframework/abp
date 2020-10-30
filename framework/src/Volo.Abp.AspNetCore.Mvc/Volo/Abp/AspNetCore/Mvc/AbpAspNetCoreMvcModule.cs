@@ -136,7 +136,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 })
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
-            context.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<JsonOptions>, AbpJsonOptionsSetup>());
+            mvcCoreBuilder.AddAbpHybridJson();
 
             Configure<MvcRazorRuntimeCompilationOptions>(options =>
             {

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Volo.Abp.Json.JsonConverters
+namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 {
     /// <summary>
     /// https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-converters-how-to#deserialize-inferred-types-to-object-properties

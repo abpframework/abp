@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Volo.Abp.Json.JsonConverters;
+using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters

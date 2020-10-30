@@ -1,12 +1,12 @@
 ﻿using System.Text.Json;
 
-namespace Volo.Abp.Json
+namespace Volo.Abp.Json.SystemTextJson
 {
-    public class AbpJsonSerializerOptions
+    public class AbpSystemTextJsonSerializerOptions
     {
         public JsonSerializerOptions JsonSerializerOptions { get; }
 
-        public AbpJsonSerializerOptions()
+        public AbpSystemTextJsonSerializerOptions()
         {
             //TODO:Defaults?
             //https://github.com/dotnet/aspnetcore/blob/master/src/Mvc/Mvc.Core/src/JsonOptions.cs#L18
