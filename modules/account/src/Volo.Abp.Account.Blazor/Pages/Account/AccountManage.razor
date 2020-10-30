@@ -1,5 +1,7 @@
 ﻿@page "/account/manage-profile"
-@inherits AccountManageBase
+@using Microsoft.AspNetCore.Components.Forms 
+@inherits AbpAccountComponentBase
+
 <Row>
     <Column ColumnSize="ColumnSize.Is12">
         <Tabs @bind-SelectedTab="@SelectedTab" TabPosition="TabPosition.Left" Pills="true">
@@ -14,15 +16,15 @@
                         <EditForm id="ChangePasswordForm" Model="@ChangePasswordModel" OnValidSubmit="ChangePasswordAsync">
                             <Field>
                                 <FieldLabel>@L["DisplayName:CurrentPassword"]</FieldLabel>
-                                <TextEdit Role="TextRole.Password" @bind-text="@ChangePasswordModel.CurrentPassword"/>
+                                <TextEdit Role="@TextRole.Password" @bind-text="@ChangePasswordModel.CurrentPassword"/>
                             </Field>
                             <Field>
                                 <FieldLabel>@L["DisplayName:NewPassword"]</FieldLabel>
-                                <TextEdit Role="TextRole.Password" @bind-text="@ChangePasswordModel.NewPassword"/>
+                                <TextEdit Role="@TextRole.Password" @bind-text="@ChangePasswordModel.NewPassword"/>
                             </Field>
                             <Field>
                                 <FieldLabel>@L["DisplayName:NewPasswordConfirm"]</FieldLabel>
-                                <TextEdit Role="TextRole.Password" @bind-text="@ChangePasswordModel.NewPasswordConfirm"/>
+                                <TextEdit Role="@TextRole.Password" @bind-text="@ChangePasswordModel.NewPasswordConfirm"/>
                             </Field>
                             <Field>
                                 <Button form="ChangePasswordForm" Color="Color.Primary" Clicked="@ChangePasswordAsync">@L["Save"]</Button>
