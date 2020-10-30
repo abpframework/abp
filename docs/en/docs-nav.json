@@ -423,6 +423,10 @@
               "path": "UI/AspNetCore/Page-Alerts.md"
             },
             {
+              "text": "Dynamic JavaScript API Client Proxies",
+              "path": "UI/AspNetCore/Dynamic-JavaScript-Proxies.md"
+            },
+            {
               "text": "Client Side Package Management",
               "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
