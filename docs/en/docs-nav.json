@@ -457,6 +457,10 @@
               "path": "UI/AspNetCore/Page-Header.md"
             },
             {
+              "text": "Branding",
+              "path": "UI/AspNetCore/Branding.md"
+            },
+            {
               "text": "Layout Hooks",
               "path": "UI/AspNetCore/Layout-Hooks.md"
             },
