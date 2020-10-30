@@ -42,9 +42,10 @@ namespace Volo.Docs.Admin.Projects
 
             var totalCount = await _projectRepository.GetCountAsync();
 
-            var dtos = ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects);
-
-            return new PagedResultDto<ProjectDto>(totalCount, dtos);
+            return new PagedResultDto<ProjectDto>(
+                totalCount,
+                ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects)
+                );
         }
 
         public async Task<ProjectDto> GetAsync(Guid id)

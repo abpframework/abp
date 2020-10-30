@@ -12,7 +12,11 @@
           "path": "Startup-Templates/Console.md"
         },
         {
-          "text": "空Web应用程序t",
+          "text": "WPF应用程序",
+          "path": "Startup-Templates/WPF.md"
+        },
+        {
+          "text": "空Web应用程序",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
@@ -175,6 +179,10 @@
             {
               "text": "Kafka 集成",
               "path": "Distributed-Event-Bus-Kafka-Integration.md"
+            },
+            {
+              "text": "Rebus 集成",
+              "path": "Distributed-Event-Bus-Rebus-Integration.md"
             }
           ]
         }
@@ -623,6 +631,10 @@
         {
           "text": "控制台",
           "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
         }
       ]
     },

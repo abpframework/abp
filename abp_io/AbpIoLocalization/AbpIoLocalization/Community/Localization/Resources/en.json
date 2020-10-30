@@ -84,6 +84,7 @@
     "Edit": "Edit",
     "ProfileImageChange": "Change the profile image",
     "BlogItemErrorMessage": "Could not get the latest blog post details from ABP.",
-    "PlannedReleaseDate": "Planned release date"
+    "PlannedReleaseDate": "Planned release date",
+    "CommunityArticleRequestErrorMessage": "Could not get the latest article request from Github."
   }
 }

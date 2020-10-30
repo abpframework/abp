@@ -125,12 +125,13 @@ namespace Volo.Docs.Projects
 
         private string GetProjectVersionPrefixIfExist(Project project)
         {
-            if (GetGithubVersionProviderSource(project) == GithubVersionProviderSource.Branches)
+            if (GetGithubVersionProviderSource(project) != GithubVersionProviderSource.Branches)
             {
-                return project.ExtraProperties["VersionBranchPrefix"].ToString();
+                return string.Empty;
             }
 
-            return "";
+            return project.ExtraProperties["VersionBranchPrefix"].ToString();
+
         }
 
         private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)

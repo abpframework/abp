@@ -17,7 +17,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Extras.DynamicProxy" Version="5.0.0" />
     <PackageReference Include="Autofac" Version="5.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0-rc.2.*" />
   </ItemGroup>
 
   <ItemGroup>

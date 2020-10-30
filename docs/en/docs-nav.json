@@ -12,6 +12,10 @@
           "path": "Startup-Templates/Console.md"
         },
         {
+          "text": "WPF Application",
+          "path": "Startup-Templates/WPF.md"
+        },
+        {
           "text": "Empty Web Project",
           "path": "Getting-Started-AspNetCore-Application.md"
         }
@@ -216,6 +220,10 @@
             {
               "text": "Kafka Integration",
               "path": "Distributed-Event-Bus-Kafka-Integration.md"
+            },
+            {
+              "text": "Rebus Integration",
+              "path": "Distributed-Event-Bus-Rebus-Integration.md"
             }
           ]
         }
@@ -399,12 +407,20 @@
           "text": "ASP.NET Core MVC / Razor Pages",
           "items": [
             {
+              "text": "Navigation / Menus",
+              "path": "UI/AspNetCore/Navigation-Menu.md"
+            },
+            {
               "text": "Forms & Validation",
               "path": "UI/AspNetCore/Forms-Validation.md"
             },
             {
-              "text": "Navigation / Menus",
-              "path": "UI/AspNetCore/Navigation-Menu.md"
+              "text": "Modals",
+              "path": "UI/AspNetCore/Modals.md"
+            },
+            {
+              "text": "Data Tables",
+              "path": "UI/AspNetCore/Data-Tables.md"
             },
             {
               "text": "Page Alerts",
@@ -437,12 +453,26 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "Toolbars",
+              "path": "UI/AspNetCore/Toolbars.md"
+            },
+            {
+              "text": "Page Header",
+              "path": "UI/AspNetCore/Page-Header.md"
+            },
+            {
               "text": "Layout Hooks",
               "path": "UI/AspNetCore/Layout-Hooks.md"
             },
             {
               "text": "Theming",
-              "path": "UI/AspNetCore/Theming.md"
+              "path": "UI/AspNetCore/Theming.md",
+              "items": [
+                {
+                  "text": "The Basic Theme",
+                  "path": "UI/AspNetCore/Basic-Theme.md"
+                }
+              ]
             },
             {
               "text": "JavaScript API",
@@ -456,8 +486,20 @@
                   "path": "UI/AspNetCore/JavaScript-API/Localization.md"
                 },
                 {
+                  "text": "Auth",
+                  "path": "UI/AspNetCore/JavaScript-API/Auth.md"
+                },
+                {
+                  "text": "Current User",
+                  "path": "UI/AspNetCore/JavaScript-API/CurrentUser.md"
+                },
+                {
                   "text": "Settings",
                   "path": "UI/AspNetCore/JavaScript-API/Settings.md"
+                },
+                {
+                  "text": "Features",
+                  "path": "UI/AspNetCore/JavaScript-API/Features.md"
                 },
                 {
                   "text": "AJAX",
@@ -470,6 +512,26 @@
                 {
                   "text": "Notify",
                   "path": "UI/AspNetCore/JavaScript-API/Notify.md"
+                },
+                {
+                  "text": "Block/Busy",
+                  "path": "UI/AspNetCore/JavaScript-API/Block-Busy.md"
+                },
+                {
+                  "text": "Events",
+                  "path": "UI/AspNetCore/JavaScript-API/Events.md"
+                },
+                {
+                  "text": "DOM",
+                  "path": "UI/AspNetCore/JavaScript-API/DOM.md"
+                },
+                {
+                  "text": "Logging",
+                  "path": "UI/AspNetCore/JavaScript-API/Logging.md"
+                },
+                {
+                  "text": "Resource Loader",
+                  "path": "UI/AspNetCore/JavaScript-API/ResourceLoader.md"
                 }
               ]
             },
@@ -543,6 +605,14 @@
                 {
                   "text": "Localization",
                   "path": "UI/Angular/Localization.md"
+                },
+                {
+                  "text": "Settings",
+                  "path": "UI/Angular/Settings.md"
+                },
+                {
+                  "text": "Features",
+                  "path": "UI/Angular/Features.md"
                 },
                 {
                   "text": "Permission Management",
@@ -757,6 +827,10 @@
         {
           "text": "Console",
           "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
         }
       ]
     },

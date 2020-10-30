@@ -1,5 +1,6 @@
 ﻿using System;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
@@ -27,13 +28,19 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 b.CollectionName = options.CollectionPrefix + "ApiResources";
             });
 
-            builder.Entity<Client>(b =>
+            builder.Entity<ApiScope>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "Clients";
+                b.CollectionName = options.CollectionPrefix + "ApiScopes";
             });
+
             builder.Entity<IdentityResource>(b =>
             {
                 b.CollectionName = options.CollectionPrefix + "IdentityResources";
+            });
+
+            builder.Entity<Client>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "Clients";
             });
 
             builder.Entity<PersistedGrant>(b =>

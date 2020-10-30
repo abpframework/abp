@@ -69,16 +69,16 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        public async Task<bool> ConfirmAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public Task<bool> ConfirmAsync(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             var uiMessageOptions = CreateDefaultOptions();
             options?.Invoke(uiMessageOptions);
 
             var callback = new TaskCompletionSource<bool>();
 
-            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Confirmation, message, title, uiMessageOptions));
+            MessageReceived?.Invoke(this, new UiMessageEventArgs(UiMessageType.Confirmation, message, title, uiMessageOptions, callback));
 
-            return await callback.Task;
+            return callback.Task;
         }
 
         protected virtual UiMessageOptions CreateDefaultOptions()

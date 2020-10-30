@@ -1,40 +1,13 @@
 ﻿@page "/"
-@using Volo.Abp.Users
 @using Volo.Abp.MultiTenancy
-@using Microsoft.Extensions.Localization
-@using MyCompanyName.MyProjectName.Localization
-@inject ICurrentUser CurrentUser
+@inherits MyProjectNameComponentBase
 @inject ICurrentTenant CurrentTenant
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject IStringLocalizer<MyProjectNameResource> L
 <div class="container">
     <div class="p-5 text-center">
         <Badge Color="Color.Success" class="mb-4">
             <h5 class="m-1"> <i class="fas fa-rocket"></i> Congratulations, <strong>MyProjectName</strong> is successfully running!</h5>
         </Badge>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>UI Message Tests</CardTitle>
-            </CardHeader>
-            <CardBody>
-                <Button Color="Color.Info" Clicked="@OnInfoTestClicked">
-                    INFO
-                </Button>
-                <Button Color="Color.Success" Clicked="@OnSuccessTestClicked">
-                    SUCCESS
-                </Button>
-                <Button Color="Color.Warning" Clicked="@OnWarningTestClicked">
-                    WARNING
-                </Button>
-                <Button Color="Color.Danger" Clicked="@OnErrorTestClicked">
-                    DANGER
-                </Button>
-                <Button Color="Color.Secondary" Clicked="@OnConfirmTestClicked">
-                    CONFIRM
-                </Button>
-            </CardBody>
-        </Card>
 
         <h1>Welcome to the Application</h1>
 

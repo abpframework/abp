@@ -116,7 +116,7 @@ namespace Volo.Abp.PermissionManagement
             var policyName = Options.ProviderPolicies.GetOrDefault(providerName);
             if (policyName.IsNullOrEmpty())
             {
-                throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(PermissionManagementOptions)} to map the policy.");
+                throw new AbpException($"No policy defined to get/set permissions for the provider '{providerName}'. Use {nameof(PermissionManagementOptions)} to map the policy.");
             }
 
             await AuthorizationService.CheckAsync(policyName);
