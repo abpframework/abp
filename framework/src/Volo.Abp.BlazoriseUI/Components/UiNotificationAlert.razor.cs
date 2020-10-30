@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Blazorise.Snackbar;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components
@@ -23,6 +24,8 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter] public EventCallback Closed { get; set; }
 
         [Inject] protected BlazoriseUiNotificationService UiNotificationService { get; set; }
+
+        [Inject] protected IStringLocalizerFactory StringLocalizerFactory { get; set; }
 
         protected virtual SnackbarColor GetSnackbarColor(UiNotificationType notificationType)
         {
@@ -50,7 +53,9 @@ namespace Volo.Abp.BlazoriseUI.Components
             Title = e.Title;
             Options = e.Options;
 
-            SnackbarStack.Push(Message, GetSnackbarColor(e.NotificationType));
+            var okButtonText = Options?.OkButtonText?.Localize(StringLocalizerFactory);
+
+            SnackbarStack.Push(Message, GetSnackbarColor( e.NotificationType ), okButtonText);
         }
 
         public virtual void Dispose()

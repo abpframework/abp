@@ -67,7 +67,6 @@ namespace Volo.Abp.BlazoriseUI
         {
             return new UiNotificationOptions
             {
-                OkButtonText = localizer["Ok"],
             };
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.AspNetCore.Components.WebAssembly
+﻿using Volo.Abp.Localization;
+
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
     /// <summary>
     /// Options to override notification appearance.
@@ -8,7 +10,7 @@
         /// <summary>
         /// Custom text for the Ok button.
         /// </summary>
-        public string OkButtonText { get; set; }
+        public ILocalizableString OkButtonText { get; set; }
 
         /// <summary>
         /// Custom icon for the Ok button.
