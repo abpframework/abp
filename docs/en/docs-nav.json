@@ -400,8 +400,12 @@
       "text": "User Interface",
       "items": [
         {
-          "text": "ASP.NET Core MVC / Razor Pages",
+          "text": "MVC / Razor Pages",
           "items": [
+            {
+              "text": "Overall",
+              "path": "UI/AspNetCore/Overall.md"
+            },
             {
               "text": "Navigation / Menus",
               "path": "UI/AspNetCore/Navigation-Menu.md"
