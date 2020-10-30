@@ -560,8 +560,20 @@
               "text": "Services",
               "items": [
                 {
-                  "text": "Overall",
+                  "text": "Localization",
+                  "path": "UI/Blazor/Services/Localization.md"
+                },
+                {
+                  "text": "Settings",
+                  "path": "UI/Blazor/Services/Settings.md"
+                },
+                {
+                  "text": "Notification",
                   "path": "UI/Blazor/Services/Notification.md"
+                },
+                {
+                  "text": "Message",
+                  "path": "UI/Blazor/Services/Message.md"
                 }
               ]
             }
