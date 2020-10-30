@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Features;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
