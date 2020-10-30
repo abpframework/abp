@@ -565,19 +565,19 @@
               "items": [
                 {
                   "text": "Localization",
-                  "path": "UI/Blazor/Services/Localization.md"
+                  "path": "UI/Blazor/Localization.md"
                 },
                 {
                   "text": "Settings",
-                  "path": "UI/Blazor/Services/Settings.md"
+                  "path": "UI/Blazor/Settings.md"
                 },
                 {
                   "text": "Notification",
-                  "path": "UI/Blazor/Services/Notification.md"
+                  "path": "UI/Blazor/Notification.md"
                 },
                 {
                   "text": "Message",
-                  "path": "UI/Blazor/Services/Message.md"
+                  "path": "UI/Blazor/Message.md"
                 }
               ]
             }
