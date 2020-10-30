@@ -1,18 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Blazorise;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Identity.Blazor
 {
-    public static class AbpIdentityBlazorMessageLocalizerExtensions
+    public class AbpIdentityBlazorMessageLocalizerHelper<T>
     {
-        public static string Localize<T>(this IStringLocalizer<T> stringLocalizer, string message, IEnumerable<string> arguments)
+        private readonly IStringLocalizer<T> stringLocalizer;
+
+        public AbpIdentityBlazorMessageLocalizerHelper(IStringLocalizer<T> stringLocalizer)
+        {
+            this.stringLocalizer = stringLocalizer;
+        }
+
+        public string Localize(string message, [CanBeNull] IEnumerable<string> arguments)
         {
             try
             {
                 return arguments?.Count() > 0
-                    ? stringLocalizer[message, LocalizeMessageArguments(stringLocalizer, arguments)?.ToArray()]
+                    ? stringLocalizer[message, LocalizeMessageArguments(arguments)?.ToArray()]
                     : stringLocalizer[message];
             }
             catch
@@ -21,7 +28,7 @@ namespace Volo.Abp.Identity.Blazor
             }
         }
 
-        private static IEnumerable<string> LocalizeMessageArguments<T>(IStringLocalizer<T> stringLocalizer, IEnumerable<string> arguments)
+        private IEnumerable<string> LocalizeMessageArguments(IEnumerable<string> arguments)
         {
             foreach (var argument in arguments)
             {
