@@ -404,8 +404,12 @@
       "text": "User Interface",
       "items": [
         {
-          "text": "ASP.NET Core MVC / Razor Pages",
+          "text": "MVC / Razor Pages",
           "items": [
+            {
+              "text": "Overall",
+              "path": "UI/AspNetCore/Overall.md"
+            },
             {
               "text": "Navigation / Menus",
               "path": "UI/AspNetCore/Navigation-Menu.md"
@@ -425,6 +429,10 @@
             {
               "text": "Page Alerts",
               "path": "UI/AspNetCore/Page-Alerts.md"
+            },
+            {
+              "text": "Dynamic JavaScript API Client Proxies",
+              "path": "UI/AspNetCore/Dynamic-JavaScript-Proxies.md"
             },
             {
               "text": "Client Side Package Management",
@@ -459,6 +467,10 @@
             {
               "text": "Page Header",
               "path": "UI/AspNetCore/Page-Header.md"
+            },
+            {
+              "text": "Branding",
+              "path": "UI/AspNetCore/Branding.md"
             },
             {
               "text": "Layout Hooks",
@@ -552,8 +564,20 @@
               "text": "Services",
               "items": [
                 {
-                  "text": "Overall",
-                  "path": "UI/Blazor/Services/Notification.md"
+                  "text": "Localization",
+                  "path": "UI/Blazor/Localization.md"
+                },
+                {
+                  "text": "Settings",
+                  "path": "UI/Blazor/Settings.md"
+                },
+                {
+                  "text": "Notification",
+                  "path": "UI/Blazor/Notification.md"
+                },
+                {
+                  "text": "Message",
+                  "path": "UI/Blazor/Message.md"
                 }
               ]
             }
