@@ -61,7 +61,7 @@
                                             Checked="@permission.IsGranted"
                                             CheckedChanged="@(b => PermissionChanged(b, group.Name, permission))"
                                             TValue="bool">
-                                            @permission.DisplayName
+                                            @GetShownName(permission)
                                         </Check>
                                     </Field>
                                 }

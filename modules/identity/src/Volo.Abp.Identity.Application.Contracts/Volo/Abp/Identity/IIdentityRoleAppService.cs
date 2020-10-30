@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity
         : ICrudAppService<
             IdentityRoleDto,
             Guid,
-            PagedAndSortedResultRequestDto,
+            GetIdentityRolesInput,
             IdentityRoleCreateDto,
             IdentityRoleUpdateDto>
     {

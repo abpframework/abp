@@ -18,13 +18,14 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
-        public virtual async Task<Client> FindByCliendIdAsync(
+        public virtual async Task<Client> FindByClientIdAsync(
             string clientId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(x => x.ClientId)
                 .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
         }
 

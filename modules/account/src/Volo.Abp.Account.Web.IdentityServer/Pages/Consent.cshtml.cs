@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.UI;
@@ -50,16 +51,16 @@ namespace Volo.Abp.Account.Web.Pages
                 throw new ApplicationException($"No consent request matching request: {ReturnUrl}");
             }
 
-            var client = await _clientStore.FindEnabledClientByIdAsync(request.ClientId);
+            var client = await _clientStore.FindEnabledClientByIdAsync(request.Client.ClientId);
             if (client == null)
             {
-                throw new ApplicationException($"Invalid client id: {request.ClientId}");
+                throw new ApplicationException($"Invalid client id: {request.Client.ClientId}");
             }
 
-            var resources = await _resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
+            var resources = await _resourceStore.FindEnabledResourcesByScopeAsync(request.ValidatedResources.RawScopeValues);
             if (resources == null || (!resources.IdentityResources.Any() && !resources.ApiResources.Any()))
             {
-                throw new ApplicationException($"No scopes matching: {request.ScopesRequested.Aggregate((x, y) => x + ", " + y)}");
+                throw new ApplicationException($"No scopes matching: {request.ValidatedResources.RawScopeValues.Aggregate((x, y) => x + ", " + y)}");
             }
 
             ClientInfo = new ClientInfoModel(client);
@@ -67,13 +68,25 @@ namespace Volo.Abp.Account.Web.Pages
             {
                 RememberConsent = true,
                 IdentityScopes = resources.IdentityResources.Select(x => CreateScopeViewModel(x, true)).ToList(),
-                ApiScopes = resources.ApiResources.SelectMany(x => x.Scopes).Select(x => CreateScopeViewModel(x, true)).ToList()
             };
+
+            var apiScopes = new List<ScopeViewModel>();
+            foreach(var parsedScope in request.ValidatedResources.ParsedScopes)
+            {
+                var apiScope = request.ValidatedResources.Resources.FindApiScope(parsedScope.ParsedName);
+                if (apiScope != null)
+                {
+                    var scopeVm = CreateScopeViewModel(parsedScope, apiScope, true);
+                    apiScopes.Add(scopeVm);
+                }
+            }
 
             if (resources.OfflineAccess)
             {
-                ConsentInput.ApiScopes.Add(GetOfflineAccessScope(true));
+                apiScopes.Add(GetOfflineAccessScope(true));
             }
+
+            ConsentInput.ApiScopes = apiScopes;
 
             return Page();
         }
@@ -104,7 +117,10 @@ namespace Volo.Abp.Account.Web.Pages
 
             if (ConsentInput.UserDecision == "no")
             {
-                grantedConsent = ConsentResponse.Denied;
+                grantedConsent = new ConsentResponse
+                {
+                    Error = AuthorizationError.AccessDenied
+                };
             }
             else
             {
@@ -113,7 +129,7 @@ namespace Volo.Abp.Account.Web.Pages
                     grantedConsent = new ConsentResponse
                     {
                         RememberConsent = ConsentInput.RememberConsent,
-                        ScopesConsented = ConsentInput.GetAllowedScopeNames()
+                        ScopesValuesConsented = ConsentInput.GetAllowedScopeNames()
                     };
                 }
                 else
@@ -151,16 +167,22 @@ namespace Volo.Abp.Account.Web.Pages
             };
         }
 
-        protected virtual ConsentModel.ScopeViewModel CreateScopeViewModel(Scope scope, bool check)
+        protected virtual ConsentModel.ScopeViewModel CreateScopeViewModel(ParsedScopeValue parsedScopeValue, ApiScope apiScope, bool check)
         {
-            return new ConsentModel.ScopeViewModel
+            var displayName = apiScope.DisplayName ?? apiScope.Name;
+            if (!string.IsNullOrWhiteSpace(parsedScopeValue.ParsedParameter))
             {
-                Name = scope.Name,
-                DisplayName = scope.DisplayName,
-                Description = scope.Description,
-                Emphasize = scope.Emphasize,
-                Required = scope.Required,
-                Checked = check || scope.Required
+                displayName += ":" + parsedScopeValue.ParsedParameter;
+            }
+
+            return new ScopeViewModel
+            {
+                Name = parsedScopeValue.RawValue,
+                DisplayName = displayName,
+                Description = apiScope.Description,
+                Emphasize = apiScope.Emphasize,
+                Required = apiScope.Required,
+                Checked = check || apiScope.Required
             };
         }
 

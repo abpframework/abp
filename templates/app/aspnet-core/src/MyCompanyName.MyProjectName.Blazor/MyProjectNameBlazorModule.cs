@@ -3,6 +3,7 @@ using System.Net.Http;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using IdentityModel;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,13 +72,17 @@ namespace MyCompanyName.MyProjectName.Blazor
             builder.Services.AddOidcAuthentication(options =>
             {
                 builder.Configuration.Bind("AuthServer", options.ProviderOptions);
+                options.UserOptions.RoleClaim = JwtClaimTypes.Role;
                 options.ProviderOptions.DefaultScopes.Add("MyProjectName");
+                options.ProviderOptions.DefaultScopes.Add("role");
+                options.ProviderOptions.DefaultScopes.Add("email");
+                options.ProviderOptions.DefaultScopes.Add("phone");
             });
         }
 
         private static void ConfigureUI(WebAssemblyHostBuilder builder)
         {
-            builder.RootComponents.Add<App>("app");
+            builder.RootComponents.Add<App>("#ApplicationContainer");
         }
 
         private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)

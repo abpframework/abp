@@ -146,5 +146,22 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
         {
             return _disabledPermissions.Any(x => x == permissionGrantInfo);
         }
+
+        private string GetShownName(PermissionGrantInfoDto permissionGrantInfo)
+        {
+            if (!IsDisabledPermission(permissionGrantInfo))
+            {
+                return permissionGrantInfo.DisplayName;
+            }
+
+            return string.Format(
+                "{0} ({1})",
+                permissionGrantInfo.DisplayName,
+                permissionGrantInfo.GrantedProviders
+                    .Where(p => p.ProviderName != _providerName)
+                    .Select(p => p.ProviderName)
+                    .JoinAsString(", ")
+            );
+        }
     }
 }

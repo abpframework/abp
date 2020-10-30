@@ -87,6 +87,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                     ).AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
 
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             });
 
