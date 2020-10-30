@@ -2,8 +2,10 @@
 @attribute [Authorize(IdentityPermissions.Roles.Default)]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.PermissionManagement.Blazor.Components
-@inherits RoleManagementBase
+
+@inherits AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
 
 @* ************************* PAGE HEADER ************************* *@
 <Row>

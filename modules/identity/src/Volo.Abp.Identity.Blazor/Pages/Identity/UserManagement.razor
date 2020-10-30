@@ -1,8 +1,10 @@
 ﻿@page "/identity/users"
 @attribute [Authorize(IdentityPermissions.Users.Default)]
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.PermissionManagement.Blazor.Components
-@inherits UserManagementBase
+
+@inherits AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
 
 @* ************************* PAGE HEADER ************************* *@
 <Row>

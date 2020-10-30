@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public abstract class UserManagementBase : AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
+    public partial class UserManagement
     {
         protected const string PermissionProviderName = "U";
 
@@ -30,7 +29,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected string EditModalSelectedTab = DefaultSelectedTab;
 
-        public UserManagementBase()
+        public UserManagement()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
             LocalizationResource = typeof(IdentityResource);
