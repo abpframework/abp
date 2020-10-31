@@ -194,6 +194,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
         }
 
+        public override Task<TEntity> ReloadAsync(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException(
+                $"{nameof(ReloadAsync)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
+            );
+        }
+
         public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().ToListAsync(GetCancellationToken(cancellationToken));

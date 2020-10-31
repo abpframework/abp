@@ -83,6 +83,14 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             }
         }
 
+        public override async Task<TEntity> ReloadAsync(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            await DbContext
+                .Entry(entity)
+                .ReloadAsync(GetCancellationToken(cancellationToken));
+            return entity;
+        }
+
         public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return includeDetails

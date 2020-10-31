@@ -42,6 +42,15 @@ namespace Volo.Abp.Domain.Repositories
         /// </param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         Task DeleteAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Reload an entity.
+        /// </summary>
+        /// <param name="entity">Entity to be reloaded</param>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Entity</returns>
+        [NotNull]
+        Task<TEntity> ReloadAsync([NotNull] TEntity entity, CancellationToken cancellationToken = default);
     }
 
     public interface IBasicRepository<TEntity, TKey> : IBasicRepository<TEntity>, IReadOnlyBasicRepository<TEntity, TKey>

@@ -81,6 +81,23 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public async Task ReloadAsync()
+        {
+            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            person.Age.ShouldBe(42);
+
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var person2 = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+                person2.Age = 43;
+                await PersonRepository.UpdateAsync(person2);
+            });
+
+            await PersonRepository.ReloadAsync(person);
+            person.Age.ShouldBe(43);
+        }
+
+        [Fact]
         public async Task Should_Access_To_Other_Collections_In_Same_Context_In_A_Custom_Method()
         {
             var people = await CityRepository.GetPeopleInTheCityAsync("London");

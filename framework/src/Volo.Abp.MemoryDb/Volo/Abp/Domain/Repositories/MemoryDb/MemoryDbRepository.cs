@@ -236,6 +236,11 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             }
         }
 
+        public override Task<TEntity> ReloadAsync(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(entity);
+        }
+
         public override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(GetQueryable().ToList());
