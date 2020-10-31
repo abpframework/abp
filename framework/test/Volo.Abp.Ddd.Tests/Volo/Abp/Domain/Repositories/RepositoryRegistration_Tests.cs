@@ -271,6 +271,11 @@ namespace Volo.Abp.Domain.Repositories
                 throw new NotImplementedException();
             }
 
+            public override Task<TEntity> ReloadAsync(TEntity entity, CancellationToken cancellationToken = default)
+            {
+                throw new NotImplementedException();
+            }
+
             public override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
