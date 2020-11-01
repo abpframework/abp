@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Json.SystemTextJson;
@@ -16,6 +17,7 @@ namespace Volo.Abp.Json
             services.Configure<SystemTextJsonSupportTypeMatcherOptions>(options =>
             {
                 options.UnsupportedTypes.Add<MyClass7>();
+                options.UnsupportedTypes.Add<byte>();
             });
 
             base.AfterAddApplication(services);
@@ -38,6 +40,18 @@ namespace Volo.Abp.Json
             _systemTextJsonSupportTypeMatcher.Match(typeof(MyClass6)).ShouldBeTrue();
 
             _systemTextJsonSupportTypeMatcher.Match(typeof(MyClass7)).ShouldBeFalse();
+
+            _systemTextJsonSupportTypeMatcher.Match(typeof(MyClass8)).ShouldBeFalse();
+            _systemTextJsonSupportTypeMatcher.Match(typeof(MyClass9)).ShouldBeFalse();
+
+            _systemTextJsonSupportTypeMatcher.Match(typeof(string)).ShouldBeTrue();
+            _systemTextJsonSupportTypeMatcher.Match(typeof(string[])).ShouldBeTrue();
+
+            _systemTextJsonSupportTypeMatcher.Match(typeof(int)).ShouldBeTrue();
+
+            _systemTextJsonSupportTypeMatcher.Match(typeof(byte)).ShouldBeFalse();
+            _systemTextJsonSupportTypeMatcher.Match(typeof(Dictionary<byte, byte>)).ShouldBeFalse();
+            _systemTextJsonSupportTypeMatcher.Match(typeof(Dictionary<string, MyClass10>)).ShouldBeFalse();
         }
 
         [DisableDateTimeNormalization]
@@ -77,6 +91,22 @@ namespace Volo.Abp.Json
 
         class MyClass7
         {
+            public DateTime Prop1 { get; set; }
+        }
+
+        class MyClass8
+        {
+            public MyClass10[] Prop1 { get; set; }
+        }
+
+        class MyClass9
+        {
+            public Dictionary<string, MyClass10> Prop1 { get; set; }
+        }
+
+        class MyClass10
+        {
+            [DisableDateTimeNormalization]
             public DateTime Prop1 { get; set; }
         }
     }
