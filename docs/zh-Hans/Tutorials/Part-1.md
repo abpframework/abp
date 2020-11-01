@@ -84,7 +84,7 @@ namespace Acme.BookStore.Books
 }
 ````
 
-* ABP为实体提供了两个基本的基类: `AggregateRoot`和`Entity`. **Aggregate Root**是**[领域驱动设计](./Domain-Driven-Design.md)** 概念之一. 可以视为直接查询和处理的根实体(请参阅[实体文档](./Entities.md)).
+* ABP为实体提供了两个基本的基类: `AggregateRoot`和`Entity`. **Aggregate Root**是[**领域驱动设计**](./Domain-Driven-Design.md) 概念之一. 可以视为直接查询和处理的根实体(请参阅[实体文档](./Entities.md)).
 * `Book`实体继承了`AuditedAggregateRoot`,`AuditedAggregateRoot`类在`AggregateRoot`类的基础上添加了一些审计属性(`CreationTime`, `CreatorId`, `LastModificationTime` 等). ABP框架自动为你管理这些属性.
 * `Guid`是`Book`实体的主键类型.
 
@@ -201,7 +201,7 @@ Add-Migration "Created_Book_Entity"
 
 在更新数据库之前,请阅读下面的部分了解如何将一些初始数据插入到数据库.
 
-> 如果你使用其他IDE而不是Visual Studio, 你可以使用 [`dotnet-ef]`(https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration) 工具.
+> 如果你使用其他IDE而不是Visual Studio, 你可以使用 [`dotnet-ef`](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration) 工具.
 
 {{end}}
 
@@ -276,7 +276,7 @@ namespace Acme.BookStore
 
 应用程序层由两个分离的项目组成:
 
-* `Acme.BookStore.Application.Contracts 包含你的[DTO](../Data-Transfer-Objects.md)和[应用服务](../Application-Services.md)接口.
+* `Acme.BookStore.Application.Contracts` 包含你的[DTO](../Data-Transfer-Objects.md)和[应用服务](../Application-Services.md)接口.
 * `Acme.BookStore.Application` 包含你的应用服务实现.
 
 在本部分中,你将创建一个应用程序服务,使用ABP Framework的 `CrudAppService` 基类来获取,创建,更新和删除书籍.
