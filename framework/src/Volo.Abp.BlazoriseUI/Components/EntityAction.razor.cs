@@ -11,7 +11,7 @@ namespace Volo.Abp.BlazoriseUI.Components
 {
     public partial class EntityAction<TItem> : ComponentBase
     {
-        internal bool IsVisible;
+        internal bool IsVisible = true;
 
         [Parameter]
         public string Text { get; set; }
@@ -44,7 +44,10 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await base.OnInitializedAsync();
             await SetDefaultValuesAsync();
-            IsVisible = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
+            if (!RequiredPolicy.IsNullOrEmpty())
+            {
+                IsVisible = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
+            }
             ParentActions.AddAction(this);
         }
 
