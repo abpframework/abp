@@ -27,6 +27,11 @@ namespace Volo.Abp.Json
             {
                 options.UnsupportedAttributes.Add<DisableDateTimeNormalizationAttribute>();
             });
+
+            Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
+            {
+                options.Converters.Add<AbpJsonIsoDateTimeConverter>();
+            });
         }
     }
 }

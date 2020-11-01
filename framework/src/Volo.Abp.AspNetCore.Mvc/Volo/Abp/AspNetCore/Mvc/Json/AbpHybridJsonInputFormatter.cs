@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             return await GetTextInputFormatter(context).ReadRequestBodyAsync(context, encoding);
         }
 
-        private TextInputFormatter GetTextInputFormatter(InputFormatterContext context)
+        protected virtual TextInputFormatter GetTextInputFormatter(InputFormatterContext context)
         {
             var typesMatcher = context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonSupportTypeMatcher>();
             if (typesMatcher.Match(context.ModelType))
@@ -34,6 +34,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             return context.HttpContext.RequestServices.GetRequiredService<NewtonsoftJsonInputFormatter>();
         }
 
-        public InputFormatterExceptionPolicy ExceptionPolicy => InputFormatterExceptionPolicy.MalformedInputExceptions;
+        public virtual InputFormatterExceptionPolicy ExceptionPolicy => InputFormatterExceptionPolicy.MalformedInputExceptions;
     }
 }

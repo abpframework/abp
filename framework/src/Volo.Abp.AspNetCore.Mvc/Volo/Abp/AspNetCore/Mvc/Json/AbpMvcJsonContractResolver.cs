@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
@@ -11,11 +12,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 {
     public class AbpMvcJsonContractResolver : DefaultContractResolver, ITransientDependency
     {
-        private readonly AbpJsonIsoDateTimeConverter _dateTimeConverter;
+        private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
 
-        public AbpMvcJsonContractResolver(AbpJsonIsoDateTimeConverter dateTimeConverter)
+        public AbpMvcJsonContractResolver(IServiceProvider serviceProvider)
         {
-            _dateTimeConverter = dateTimeConverter;
+            _dateTimeConverter = new Lazy<AbpJsonIsoDateTimeConverter>(
+                serviceProvider.GetRequiredService<AbpJsonIsoDateTimeConverter>,
+                true
+            );
 
             NamingStrategy = new CamelCaseNamingStrategy();
         }
@@ -38,7 +42,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 
             if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(member) == null)
             {
-                property.Converter = _dateTimeConverter;
+                property.Converter = _dateTimeConverter.Value;
             }
         }
     }

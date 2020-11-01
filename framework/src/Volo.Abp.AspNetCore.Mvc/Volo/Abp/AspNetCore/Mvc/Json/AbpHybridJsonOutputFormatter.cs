@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             await GetTextInputFormatter(context).WriteResponseBodyAsync(context, selectedEncoding);
         }
 
-        private TextOutputFormatter GetTextInputFormatter(OutputFormatterWriteContext context)
+        protected virtual TextOutputFormatter GetTextInputFormatter(OutputFormatterWriteContext context)
         {
             var typesMatcher = context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonSupportTypeMatcher>();
             if (typesMatcher.Match(context.ObjectType))
