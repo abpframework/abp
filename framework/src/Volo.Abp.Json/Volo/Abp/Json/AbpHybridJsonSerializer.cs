@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -7,21 +6,16 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json
 {
-    public class AbpHybridJsonSerializer : IJsonSerializer, ISingletonDependency
+    public class AbpHybridJsonSerializer : IJsonSerializer, ITransientDependency
     {
-        private readonly Lazy<List<IJsonSerializerProvider>> _lazyProviders;
-        public List<IJsonSerializerProvider> Providers => _lazyProviders.Value;
+        protected AbpJsonOptions Options { get; }
+
+        protected IServiceProvider ServiceProvider { get; }
 
         public AbpHybridJsonSerializer(IOptions<AbpJsonOptions> options, IServiceProvider serviceProvider)
         {
-            _lazyProviders = new Lazy<List<IJsonSerializerProvider>>(
-                () => options.Value
-                    .Providers
-                    .Select(c => serviceProvider.GetRequiredService(c) as IJsonSerializerProvider)
-                    .Reverse()
-                    .ToList(),
-                true
-            );
+            Options = options.Value;
+            ServiceProvider = serviceProvider;
         }
 
         public string Serialize(object obj, bool camelCase = true, bool indented = false)
@@ -44,12 +38,16 @@ namespace Volo.Abp.Json
 
         protected virtual IJsonSerializerProvider GetSerializerProvider(Type type)
         {
-            foreach (var provider in Providers.Where(provider => provider.CanHandle(type)))
+            foreach (var providerType in Options.Providers.Reverse())
             {
-                return provider;
+                var provider = ServiceProvider.GetRequiredService(providerType) as IJsonSerializerProvider;
+                if (provider.CanHandle(type))
+                {
+                    return provider;
+                }
             }
 
-            throw new AbpException($"There is no IJsonSerializerProvider that can handle {type.GetFullNameWithAssemblyName()} types!");
+            throw new AbpException($"There is no IJsonSerializerProvider that can handle '{type.GetFullNameWithAssemblyName()}'!");
         }
     }
 }

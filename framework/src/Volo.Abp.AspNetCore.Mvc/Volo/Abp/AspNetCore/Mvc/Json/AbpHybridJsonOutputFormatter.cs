@@ -12,6 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
         {
             SupportedEncodings.Add(Encoding.UTF8);
             SupportedEncodings.Add(Encoding.Unicode);
+
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationJson);
             SupportedMediaTypes.Add(MediaTypeHeaderValues.TextJson);
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationAnyJsonSyntax);
@@ -24,7 +25,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 
         private TextOutputFormatter GetTextInputFormatter(OutputFormatterWriteContext context)
         {
-            if (context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonSupportTypes>().CanHandle(context.ObjectType))
+            var typesMatcher = context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonSupportTypeMatcher>();
+            if (typesMatcher.Match(context.ObjectType))
             {
                 return context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonOutputFormatter>();
             }

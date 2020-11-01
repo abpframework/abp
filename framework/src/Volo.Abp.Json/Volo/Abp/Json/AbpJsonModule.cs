@@ -23,9 +23,9 @@ namespace Volo.Abp.Json
                 options.Providers.Add<SystemTextJsonSerializerProvider>();
             });
 
-            Configure<SystemTextJsonSupportTypesOptions>(options =>
+            Configure<SystemTextJsonSupportTypeMatcherOptions>(options =>
             {
-                options.IgnoreAttributes.Add<DisableDateTimeNormalizationAttribute>();
+                options.UnsupportedAttributes.Add<DisableDateTimeNormalizationAttribute>();
             });
         }
     }

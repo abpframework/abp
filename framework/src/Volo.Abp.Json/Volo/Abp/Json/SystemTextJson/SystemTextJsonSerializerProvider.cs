@@ -2,25 +2,26 @@
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json.SystemTextJson;
 
-namespace Volo.Abp.Json
+namespace Volo.Abp.Json.SystemTextJson
 {
     public class SystemTextJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
     {
         protected AbpSystemTextJsonSerializerOptions Options { get; }
 
-        protected SystemTextJsonSupportTypes SystemTextJsonSupportTypes { get; }
+        protected SystemTextJsonSupportTypeMatcher SystemTextJsonSupportTypeMatcher { get; }
 
-        public SystemTextJsonSerializerProvider(IOptions<AbpSystemTextJsonSerializerOptions> options, SystemTextJsonSupportTypes systemTextJsonSupportTypes)
+        public SystemTextJsonSerializerProvider(
+            IOptions<AbpSystemTextJsonSerializerOptions> options,
+            SystemTextJsonSupportTypeMatcher systemTextJsonSupportTypeMatcher)
         {
-            SystemTextJsonSupportTypes = systemTextJsonSupportTypes;
+            SystemTextJsonSupportTypeMatcher = systemTextJsonSupportTypeMatcher;
             Options = options.Value;
         }
 
         public bool CanHandle(Type type)
         {
-            return SystemTextJsonSupportTypes.CanHandle(type);
+            return SystemTextJsonSupportTypeMatcher.Match(type);
         }
 
         public string Serialize(object obj, bool camelCase = true, bool indented = false)
