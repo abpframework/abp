@@ -9,19 +9,19 @@ namespace Volo.Abp.Json.SystemTextJson
     {
         protected AbpSystemTextJsonSerializerOptions Options { get; }
 
-        protected AbpSystemTextJsonSupportTypeMatcher AbpSystemTextJsonSupportTypeMatcher { get; }
+        protected AbpSystemTextJsonUnsupportedTypeMatcher AbpSystemTextJsonUnsupportedTypeMatcher { get; }
 
         public AbpSystemTextJsonSerializerProvider(
             IOptions<AbpSystemTextJsonSerializerOptions> options,
-            AbpSystemTextJsonSupportTypeMatcher abpSystemTextJsonSupportTypeMatcher)
+            AbpSystemTextJsonUnsupportedTypeMatcher abpSystemTextJsonUnsupportedTypeMatcher)
         {
-            AbpSystemTextJsonSupportTypeMatcher = abpSystemTextJsonSupportTypeMatcher;
+            AbpSystemTextJsonUnsupportedTypeMatcher = abpSystemTextJsonUnsupportedTypeMatcher;
             Options = options.Value;
         }
 
         public bool CanHandle(Type type)
         {
-            return AbpSystemTextJsonSupportTypeMatcher.Match(type);
+            return !AbpSystemTextJsonUnsupportedTypeMatcher.Match(type);
         }
 
         public string Serialize(object obj, bool camelCase = true, bool indented = false)
