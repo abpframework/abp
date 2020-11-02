@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Blazorise.Bootstrap" Version="0.9.2-rc1" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.2-rc1" />
-    <PackageReference Include="Blazorise.Snackbar" Version="0.9.2-rc1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rc.2.*" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0-rc.2.*" />
   </ItemGroup>
