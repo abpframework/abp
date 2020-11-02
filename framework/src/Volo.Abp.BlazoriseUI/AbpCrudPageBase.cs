@@ -15,6 +15,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Authorization;
+using Volo.Abp.BlazoriseUI.Components;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
@@ -170,7 +171,6 @@ namespace Volo.Abp.BlazoriseUI
         where TUpdateViewModel : class, new()
     {
         [Inject] protected TAppService AppService { get; set; }
-        [Inject] protected IUiMessageService UiMessageService { get; set; }
         [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
         [Inject] protected IAuthorizationService AuthorizationService { get; set; }
 
@@ -189,6 +189,7 @@ namespace Volo.Abp.BlazoriseUI
         protected Validations CreateValidationsRef;
         protected Validations EditValidationsRef;
         protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
+        protected DataGridEntityActionsColumn<TListViewModel> EntityActionsColumn;
 
         protected string CreatePolicyName { get; set; }
         protected string UpdatePolicyName { get; set; }
@@ -404,11 +405,6 @@ namespace Volo.Abp.BlazoriseUI
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
         {
             await CheckDeletePolicyAsync();
-
-            if (!await UiMessageService.ConfirmAsync(GetDeleteConfirmationMessage(entity)))
-            {
-                return;
-            }
 
             await AppService.DeleteAsync(entity.Id);
             await GetEntitiesAsync();
