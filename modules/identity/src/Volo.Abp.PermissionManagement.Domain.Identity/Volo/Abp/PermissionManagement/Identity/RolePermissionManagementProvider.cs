@@ -16,7 +16,7 @@ namespace Volo.Abp.PermissionManagement.Identity
         public RolePermissionManagementProvider(
             IPermissionGrantRepository permissionGrantRepository,
             IGuidGenerator guidGenerator,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IUserRoleFinder userRoleFinder)
             : base(
                 permissionGrantRepository,
@@ -26,7 +26,7 @@ namespace Volo.Abp.PermissionManagement.Identity
             UserRoleFinder = userRoleFinder;
         }
 
-        public override async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
+        public async override Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
         {
             if (providerName == Name)
             {

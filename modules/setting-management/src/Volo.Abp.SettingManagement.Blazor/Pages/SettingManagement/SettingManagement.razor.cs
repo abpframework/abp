@@ -29,7 +29,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement
         protected string SelectedGroup;
         protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>();
 
-        protected override async Task OnInitializedAsync()
+        protected async override Task OnInitializedAsync()
         {
             SettingComponentCreationContext = new SettingComponentCreationContext(ServiceProvider);
 

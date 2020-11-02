@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             DeletePolicyName = IdentityPermissions.Roles.Delete;
         }
 
-        protected override async Task SetPermissionsAsync()
+        protected async override Task SetPermissionsAsync()
         {
             await base.SetPermissionsAsync();
 
