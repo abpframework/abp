@@ -10,37 +10,46 @@ namespace Volo.Abp.Json
     {
         protected AbpJsonOptions Options { get; }
 
-        protected IServiceProvider ServiceProvider { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        public AbpHybridJsonSerializer(IOptions<AbpJsonOptions> options, IServiceProvider serviceProvider)
+        public AbpHybridJsonSerializer(IOptions<AbpJsonOptions> options, IServiceScopeFactory  serviceScopeFactory)
         {
             Options = options.Value;
-            ServiceProvider = serviceProvider;
+            ServiceScopeFactory = serviceScopeFactory;
         }
 
         public string Serialize(object obj, bool camelCase = true, bool indented = false)
         {
-            var provider = GetSerializerProvider(obj.GetType());
-            return provider.Serialize(obj, camelCase, indented);
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var serializerProvider = GetSerializerProvider(scope.ServiceProvider, obj.GetType());
+                return serializerProvider.Serialize(obj, camelCase, indented);
+            }
         }
 
         public T Deserialize<T>(string jsonString, bool camelCase = true)
         {
-            var provider = GetSerializerProvider(typeof(T));
-            return provider.Deserialize<T>(jsonString, camelCase);
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var serializerProvider = GetSerializerProvider(scope.ServiceProvider, typeof(T));
+                return serializerProvider.Deserialize<T>(jsonString, camelCase);
+            }
         }
 
         public object Deserialize(Type type, string jsonString, bool camelCase = true)
         {
-            var provider = GetSerializerProvider(type);
-            return provider.Deserialize(type, jsonString, camelCase);
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var serializerProvider = GetSerializerProvider(scope.ServiceProvider, type);
+                return serializerProvider.Deserialize(type, jsonString, camelCase);
+            }
         }
 
-        protected virtual IJsonSerializerProvider GetSerializerProvider(Type type)
+        protected virtual IJsonSerializerProvider GetSerializerProvider(IServiceProvider serviceProvider, Type type)
         {
             foreach (var providerType in Options.Providers.Reverse())
             {
-                var provider = ServiceProvider.GetRequiredService(providerType) as IJsonSerializerProvider;
+                var provider = serviceProvider.GetRequiredService(providerType) as IJsonSerializerProvider;
                 if (provider.CanHandle(type))
                 {
                     return provider;
