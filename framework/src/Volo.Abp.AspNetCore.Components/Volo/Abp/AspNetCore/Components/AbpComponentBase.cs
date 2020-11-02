@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Localization;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
@@ -52,6 +53,12 @@ namespace Volo.Abp.AspNetCore.Components
 
         protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
         private ICurrentUser _currentUser;
+
+        protected IUiMessageService Message => LazyGetRequiredService(ref _message);
+        private IUiMessageService _message;
+
+        protected IUiNotificationService Notify => LazyGetRequiredService(ref _notify);
+        private IUiNotificationService _notify;
 
         protected IObjectMapper ObjectMapper
         {

@@ -172,7 +172,6 @@ namespace Volo.Abp.BlazoriseUI
     {
         [Inject] protected TAppService AppService { get; set; }
         [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
-        [Inject] protected IAuthorizationService AuthorizationService { get; set; }
 
         protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
