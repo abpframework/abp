@@ -1,5 +1,5 @@
 ﻿@page "/identity/users"
-@attribute [Authorize( IdentityPermissions.Users.Default )]
+@attribute [Authorize(IdentityPermissions.Users.Default)]
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.PermissionManagement.Blazor.Components
@@ -15,7 +15,7 @@
         <h1>@L["Users"]</h1>
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
-        @if ( HasCreatePermission )
+        @if (HasCreatePermission)
         {
             <Paragraph Alignment="TextAlignment.Right">
                 <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewUser"]</Button>
@@ -32,33 +32,25 @@
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
-        @if ( ShouldShowEntityActions )
-        {
-            <DataGridColumn Width="150px" TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.UserName)" Sortable="false" Caption="@L["Actions"].Value">
-                <DisplayTemplate>
-                    <Dropdown>
-                        <DropdownToggle Color="Color.Primary">
-                            @L["Actions"]
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            @if ( HasUpdatePermission )
-                            {
-                                <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityUserDto>().Id)">@L["Edit"]</DropdownItem>
-                            }
-                            @if ( HasManagePermissionsPermission )
-                            {
-                                <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.As<IdentityUserDto>().Id.ToString())">@L["Permissions"]</DropdownItem>
-                            }
-                            @if ( HasDeletePermission )
-                            {
-                                <DropdownDivider />
-                                <DropdownItem Clicked="() => DeleteEntityAsync(context.As<IdentityUserDto>())">@L["Delete"]</DropdownItem>
-                            }
-                        </DropdownMenu>
-                    </Dropdown>
-                </DisplayTemplate>
-            </DataGridColumn>
-        }
+        <DataGridEntityActionsColumn TItem="IdentityUserDto" @ref="@EntityActionsColumn">
+            <DisplayTemplate>
+                <EntityActions TItem="IdentityUserDto" EntityActionsColumn="@EntityActionsColumn">
+                    <EntityAction TItem="IdentityUserDto"
+                                  RequiredPolicy="@UpdatePolicyName"
+                                  Clicked="() => OpenEditModalAsync(context.Id)"
+                                  Text="@L["Edit"]" />
+                    <EntityAction TItem="IdentityUserDto"
+                                  RequiredPolicy="@ManagePermissionsPolicyName"
+                                  Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.Id.ToString())"
+                                  Text="@L["Permissions"]" />
+                    <EntityAction TItem="IdentityUserDto"
+                                  RequiredPolicy="@DeletePolicyName"
+                                  Clicked="() => DeleteEntityAsync(context)"
+                                  ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)"
+                                  Text="@L["Delete"]" />
+                </EntityActions>
+            </DisplayTemplate>
+        </DataGridEntityActionsColumn>
         <DataGridColumn TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.UserName)" Caption="@L["UserName"].Value">
             <DisplayTemplate>
                 @(context.As<IdentityUserDto>().UserName)
@@ -78,7 +70,7 @@
 </DataGrid>
 
 @* ************************* CREATE MODAL ************************* *@
-@if ( HasCreatePermission )
+@if (HasCreatePermission)
 {
     <Modal @ref="CreateModal">
         <ModalBackdrop />
@@ -161,9 +153,9 @@
                                 </Field>
                             </TabPanel>
                             <TabPanel Name="Roles">
-                                @if ( NewUserRoles != null )
+                                @if (NewUserRoles != null)
                                 {
-                                    @foreach ( var role in NewUserRoles )
+                                    @foreach (var role in NewUserRoles)
                                     {
                                         <Field>
                                             <input type="hidden" @bind-value="@role.Name" />
@@ -185,7 +177,7 @@
 }
 
 @* ************************* EDIT MODAL ************************* *@
-@if ( HasUpdatePermission )
+@if (HasUpdatePermission)
 {
     <Modal @ref="EditModal">
         <ModalBackdrop />
@@ -270,9 +262,9 @@
                                 </Field>
                             </TabPanel>
                             <TabPanel Name="Roles">
-                                @if ( EditUserRoles != null )
+                                @if (EditUserRoles != null)
                                 {
-                                    @foreach ( var role in EditUserRoles )
+                                    @foreach (var role in EditUserRoles)
                                     {
                                         <Field>
                                             <input type="hidden" @bind-value="@role.Name" />

@@ -1,0 +1,30 @@
+﻿@typeparam TItem
+<CascadingValue Value="this">
+    @if (Type == ActionType.Dropdown)
+    {
+        <Dropdown>
+            @if (HasPrimaryAction)
+            {
+                <Blazorise.Button Block="true"
+                                  Color="@PrimaryAction.Color"
+                                  Clicked="async ()=> await PrimaryAction.ActionClickedAsync()">
+                    @PrimaryAction.Text
+                </Blazorise.Button>
+                <DropdownToggle Color="@ToggleColor" Split="true" />
+            }
+            else
+            {
+                <DropdownToggle Color="@ToggleColor">
+                    @ToggleText
+                </DropdownToggle>
+            }
+            <DropdownMenu>
+                @ChildContent
+            </DropdownMenu>
+        </Dropdown>
+    }
+    else
+    {
+        @ChildContent
+    }
+</CascadingValue>
