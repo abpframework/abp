@@ -9,14 +9,14 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json.Newtonsoft
 {
-    public class NewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
+    public class AbpNewtonsoftJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
     {
         private static readonly CamelCaseExceptDictionaryKeysResolver SharedCamelCaseExceptDictionaryKeysResolver =
             new CamelCaseExceptDictionaryKeysResolver();
 
         protected List<JsonConverter> Converters { get; }
 
-        public NewtonsoftJsonSerializerProvider(
+        public AbpNewtonsoftJsonSerializerProvider(
             IOptions<AbpNewtonsoftJsonSerializerOptions> options,
             IServiceProvider serviceProvider)
         {

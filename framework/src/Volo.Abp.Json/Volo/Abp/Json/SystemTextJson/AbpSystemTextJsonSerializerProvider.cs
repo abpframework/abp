@@ -5,23 +5,23 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Json.SystemTextJson
 {
-    public class SystemTextJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
+    public class AbpSystemTextJsonSerializerProvider : IJsonSerializerProvider, ITransientDependency
     {
         protected AbpSystemTextJsonSerializerOptions Options { get; }
 
-        protected SystemTextJsonSupportTypeMatcher SystemTextJsonSupportTypeMatcher { get; }
+        protected AbpSystemTextJsonSupportTypeMatcher AbpSystemTextJsonSupportTypeMatcher { get; }
 
-        public SystemTextJsonSerializerProvider(
+        public AbpSystemTextJsonSerializerProvider(
             IOptions<AbpSystemTextJsonSerializerOptions> options,
-            SystemTextJsonSupportTypeMatcher systemTextJsonSupportTypeMatcher)
+            AbpSystemTextJsonSupportTypeMatcher abpSystemTextJsonSupportTypeMatcher)
         {
-            SystemTextJsonSupportTypeMatcher = systemTextJsonSupportTypeMatcher;
+            AbpSystemTextJsonSupportTypeMatcher = abpSystemTextJsonSupportTypeMatcher;
             Options = options.Value;
         }
 
         public bool CanHandle(Type type)
         {
-            return SystemTextJsonSupportTypeMatcher.Match(type);
+            return AbpSystemTextJsonSupportTypeMatcher.Match(type);
         }
 
         public string Serialize(object obj, bool camelCase = true, bool indented = false)

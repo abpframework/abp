@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 
         protected virtual TextInputFormatter GetTextInputFormatter(InputFormatterContext context)
         {
-            var typesMatcher = context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonSupportTypeMatcher>();
+            var typesMatcher = context.HttpContext.RequestServices.GetRequiredService<AbpSystemTextJsonSupportTypeMatcher>();
             if (typesMatcher.Match(context.ModelType))
             {
                 return context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonInputFormatter>();

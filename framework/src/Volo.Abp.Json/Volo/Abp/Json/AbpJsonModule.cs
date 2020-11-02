@@ -19,13 +19,8 @@ namespace Volo.Abp.Json
 
             Configure<AbpJsonOptions>(options =>
             {
-                options.Providers.Add<NewtonsoftJsonSerializerProvider>();
-                options.Providers.Add<SystemTextJsonSerializerProvider>();
-            });
-
-            Configure<SystemTextJsonSupportTypeMatcherOptions>(options =>
-            {
-                options.UnsupportedAttributes.Add<DisableDateTimeNormalizationAttribute>();
+                options.Providers.Add<AbpNewtonsoftJsonSerializerProvider>();
+                options.Providers.Add<AbpSystemTextJsonSerializerProvider>();
             });
 
             Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
