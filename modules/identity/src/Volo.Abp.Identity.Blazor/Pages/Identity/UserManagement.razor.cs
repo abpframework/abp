@@ -48,7 +48,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
 
-        protected override Task OnOpeningCreateModalAsync()
+
+        protected override Task OpenCreateModalAsync()
         {
             CreateModalSelectedTab = DefaultSelectedTab;
 
