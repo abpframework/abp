@@ -36,7 +36,9 @@ namespace Volo.Abp.Localization.Json
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
-                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    AllowTrailingCommas = true
                 };
 
                 jsonFile = JsonSerializer.Deserialize<JsonLocalizationFile>(jsonString, options);

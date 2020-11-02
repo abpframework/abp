@@ -14,8 +14,7 @@ namespace Volo.Abp.Json
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.TryAddEnumerable(ServiceDescriptor
-                .Transient<IConfigureOptions<AbpSystemTextJsonSerializerOptions>,
-                    AbpSystemTextJsonSerializerOptionsSetup>());
+                .Transient<IConfigureOptions<AbpSystemTextJsonSerializerOptions>, AbpSystemTextJsonSerializerOptionsSetup>());
 
             Configure<AbpJsonOptions>(options =>
             {

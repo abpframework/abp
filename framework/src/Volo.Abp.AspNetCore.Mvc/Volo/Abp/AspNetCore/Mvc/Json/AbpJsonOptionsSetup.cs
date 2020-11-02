@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -17,6 +18,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 
         public void Configure(JsonOptions options)
         {
+            options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+            options.JsonSerializerOptions.AllowTrailingCommas = true;
+
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
         }

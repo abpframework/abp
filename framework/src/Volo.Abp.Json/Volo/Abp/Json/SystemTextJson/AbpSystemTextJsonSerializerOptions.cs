@@ -11,11 +11,11 @@ namespace Volo.Abp.Json.SystemTextJson
 
         public AbpSystemTextJsonSerializerOptions()
         {
-            //TODO:Defaults?
-            //https://github.com/dotnet/aspnetcore/blob/master/src/Mvc/Mvc.Core/src/JsonOptions.cs#L18
-            //https://github.com/dotnet/runtime/blob/master/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializerDefaults.cs
-
-            JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+            JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            {
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                AllowTrailingCommas = true
+            };
 
             UnsupportedTypes = new TypeList();
         }
