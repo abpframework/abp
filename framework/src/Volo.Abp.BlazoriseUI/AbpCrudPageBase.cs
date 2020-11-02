@@ -281,9 +281,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task OpenCreateModalAsync()
         {
-            await OnOpeningCreateModalAsync();
-
-            CreateValidationsRef.ClearAll();
+            CreateValidationsRef?.ClearAll();
 
             await CheckCreatePolicyAsync();
 
@@ -296,11 +294,6 @@ namespace Volo.Abp.BlazoriseUI
             CreateModal.Show();
         }
 
-        protected virtual Task OnOpeningCreateModalAsync()
-        {
-            return Task.CompletedTask;
-        }
-
         protected virtual Task CloseCreateModalAsync()
         {
             CreateModal.Hide();
@@ -309,9 +302,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task OpenEditModalAsync(TKey id)
         {
-            await OnOpeningEditModalAsync(id);
-
-            EditValidationsRef.ClearAll();
+            EditValidationsRef?.ClearAll();
 
             await CheckUpdatePolicyAsync();
 
@@ -323,11 +314,6 @@ namespace Volo.Abp.BlazoriseUI
             await InvokeAsync(() => StateHasChanged());
 
             EditModal.Show();
-        }
-
-        protected virtual Task OnOpeningEditModalAsync(TKey id)
-        {
-            return Task.CompletedTask;
         }
 
         protected virtual TUpdateViewModel MapToEditingEntity(TGetOutputDto entityDto)
@@ -363,7 +349,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task CreateEntityAsync()
         {
-            if (CreateValidationsRef.ValidateAll())
+            if (CreateValidationsRef?.ValidateAll() ?? false)
             {
                 await OnCreatingEntityAsync();
 
@@ -390,7 +376,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task UpdateEntityAsync()
         {
-            if (EditValidationsRef.ValidateAll())
+            if (EditValidationsRef?.ValidateAll() ?? false)
             {
                 await OnUpdatingEntityAsync();
 
