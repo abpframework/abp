@@ -3,9 +3,9 @@ using Volo.Abp.AspNetCore.Components;
 
 namespace Volo.Abp.Account.Blazor
 {
-    public class AbpAccountComponentBase : AbpComponentBase
+    public abstract class AbpAccountComponentBase : AbpComponentBase
     {
-        public AbpAccountComponentBase()
+        protected AbpAccountComponentBase()
         {
             LocalizationResource = typeof(AccountResource);
             ObjectMapperContext = typeof(AbpAccountBlazorModule);
