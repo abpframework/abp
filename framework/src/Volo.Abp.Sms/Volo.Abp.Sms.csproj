@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <ProjectReference Include="..\Volo.Abp.BackgroundJobs.Abstractions\Volo.Abp.BackgroundJobs.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
