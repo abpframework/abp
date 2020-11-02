@@ -11,7 +11,8 @@ namespace Volo.Abp.Sms
 
         public IDictionary<string, object> Properties { get; }
 
-        public SmsMessage([NotNull] string phoneNumber, [NotNull] string text): base(phoneNumber, testc, null)
+        public SmsMessage([NotNull] string phoneNumber, [NotNull] string text)
+            : this(phoneNumber, text, null)
         {
         }
 

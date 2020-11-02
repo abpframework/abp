@@ -3,11 +3,11 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Sms
 {
+    [DependsOn(
+        typeof(AbpBackgroundJobsAbstractionsModule)
+        )]
     public class AbpSmsModule : AbpModule
     {
-        [DependsOn(
-            typeof(AbpBackgroundJobsAbstractionsModule)
-            )]
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpBackgroundJobOptions>(options =>
