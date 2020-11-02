@@ -22,7 +22,7 @@ namespace Volo.Abp.IdentityServer.Tokens
             timer.Period = Options.CleanupPeriod;
         }
 
-        protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+        protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
             await workerContext
                 .ServiceProvider

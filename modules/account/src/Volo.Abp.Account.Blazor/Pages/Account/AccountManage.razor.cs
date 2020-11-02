@@ -17,7 +17,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
 
         protected PersonalInfoModel PersonalInfoModel;
 
-        protected override async Task OnInitializedAsync()
+        protected async override Task OnInitializedAsync()
         {
             await GetUserInformations();
         }

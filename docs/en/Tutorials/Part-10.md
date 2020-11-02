@@ -10,7 +10,7 @@
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Value}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider.
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -78,7 +78,7 @@ builder.Entity<Book>(b =>
     b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
     b.ConfigureByConvention(); //auto configure for the base class props
     b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-    
+
     // ADD THE MAPPING FOR THE RELATION
     b.HasOne<Author>().WithMany().HasForeignKey(x => x.AuthorId).IsRequired();
 });
@@ -362,7 +362,7 @@ namespace Acme.BookStore.Books
             DeletePolicyName = BookStorePermissions.Books.Create;
         }
 
-        public override async Task<BookDto> GetAsync(Guid id)
+        public async override Task<BookDto> GetAsync(Guid id)
         {
             await CheckGetPolicyAsync();
 
@@ -384,7 +384,7 @@ namespace Acme.BookStore.Books
             return bookDto;
         }
 
-        public override async Task<PagedResultDto<BookDto>>
+        public async override Task<PagedResultDto<BookDto>>
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
             await CheckGetListPolicyAsync();
@@ -485,7 +485,7 @@ namespace Acme.BookStore.Books
             DeletePolicyName = BookStorePermissions.Books.Create;
         }
 
-        public override async Task<BookDto> GetAsync(Guid id)
+        public async override Task<BookDto> GetAsync(Guid id)
         {
             await CheckGetPolicyAsync();
 
@@ -498,7 +498,7 @@ namespace Acme.BookStore.Books
             return bookDto;
         }
 
-        public override async Task<PagedResultDto<BookDto>> 
+        public async override Task<PagedResultDto<BookDto>>
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
             await CheckGetListPolicyAsync();
@@ -524,7 +524,7 @@ namespace Acme.BookStore.Books
             var authorDictionary = await GetAuthorDictionaryAsync(books);
 
             //Set AuthorName for the DTOs
-            bookDtos.ForEach(bookDto => bookDto.AuthorName = 
+            bookDtos.ForEach(bookDto => bookDto.AuthorName =
                              authorDictionary[bookDto.AuthorId].Name);
 
             //Get the total count with another query (required for the paging)
@@ -622,7 +622,7 @@ namespace Acme.BookStore.Books
             result.Items.ShouldContain(b => b.Name == "1984" &&
                                        b.AuthorName == "George Orwell");
         }
-        
+
         [Fact]
         public async Task Should_Create_A_Valid_Book()
         {
@@ -645,7 +645,7 @@ namespace Acme.BookStore.Books
             result.Id.ShouldNotBe(Guid.Empty);
             result.Name.ShouldBe("New test book 42");
         }
-        
+
         [Fact]
         public async Task Should_Not_Create_A_Book_Without_Name()
         {
@@ -1100,15 +1100,15 @@ The final `@code` block should be the following:
     //ADDED A NEW FIELD
     IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
-        canCreateBook = await 
+        canCreateBook = await
             AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create);
-        canEditBook = await 
+        canEditBook = await
             AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Edit);
-        canDeleteBook = await 
+        canDeleteBook = await
             AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Delete);
 
         //GET AUTHORS

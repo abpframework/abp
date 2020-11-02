@@ -17,7 +17,7 @@ namespace Volo.Abp.Settings
             CurrentUser = currentUser;
         }
 
-        public override async Task<string> GetOrNullAsync(SettingDefinition setting)
+        public async override Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             if (CurrentUser.Id == null)
             {

@@ -18,7 +18,7 @@ namespace Volo.Abp.Features
             PrincipalAccessor = principalAccessor;
         }
 
-        public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
+        public async override Task<string> GetOrNullAsync(FeatureDefinition feature)
         {
             var editionId = PrincipalAccessor.Principal?.FindEditionId();
             if (editionId == null)

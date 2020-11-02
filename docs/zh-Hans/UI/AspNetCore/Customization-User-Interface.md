@@ -36,7 +36,7 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
         {
         }
 
-        public override async Task<IActionResult> OnPostAsync()
+        public async override Task<IActionResult> OnPostAsync()
         {
             //TODO: Additional logic
             await base.OnPostAsync();
@@ -83,10 +83,10 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 public class MyLoginModel : LoginModel
 {
     public MyLoginModel(
-        IAuthenticationSchemeProvider schemeProvider, 
+        IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions
         ) : base(
-        schemeProvider, 
+        schemeProvider,
         accountOptions)
     {
 
