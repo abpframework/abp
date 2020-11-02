@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
         protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-            services.Configure<AbpSystemTextJsonSupportTypeMatcherOptions>(options =>
+            services.Configure<AbpSystemTextJsonSerializerOptions>(options =>
             {
                 options.UnsupportedTypes.Add<GetDateTimeKindModel>();
                 options.UnsupportedTypes.Add<GetDateTimeKindModel.GetDateTimeKindInnerModel>();

@@ -18,7 +18,7 @@ namespace Volo.Abp.Json
 
         protected override void AfterAddApplication(IServiceCollection services)
         {
-            services.Configure<AbpSystemTextJsonSupportTypeMatcherOptions>(options =>
+            services.Configure<AbpSystemTextJsonSerializerOptions>(options =>
             {
                 options.UnsupportedTypes.Add<MyClass>();
                 options.UnsupportedTypes.Add<byte[]>();

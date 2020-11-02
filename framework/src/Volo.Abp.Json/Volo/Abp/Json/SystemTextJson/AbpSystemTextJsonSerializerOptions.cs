@@ -1,10 +1,13 @@
 ﻿using System.Text.Json;
+using Volo.Abp.Collections;
 
 namespace Volo.Abp.Json.SystemTextJson
 {
     public class AbpSystemTextJsonSerializerOptions
     {
         public JsonSerializerOptions JsonSerializerOptions { get; }
+
+        public ITypeList UnsupportedTypes { get; }
 
         public AbpSystemTextJsonSerializerOptions()
         {
@@ -13,6 +16,8 @@ namespace Volo.Abp.Json.SystemTextJson
             //https://github.com/dotnet/runtime/blob/master/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/JsonSerializerDefaults.cs
 
             JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+
+            UnsupportedTypes = new TypeList();
         }
     }
 }

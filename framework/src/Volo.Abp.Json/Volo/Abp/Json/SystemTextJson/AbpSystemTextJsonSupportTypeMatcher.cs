@@ -6,9 +6,9 @@ namespace Volo.Abp.Json.SystemTextJson
 {
     public class AbpSystemTextJsonSupportTypeMatcher : ITransientDependency
     {
-        protected AbpSystemTextJsonSupportTypeMatcherOptions Options { get; }
+        protected AbpSystemTextJsonSerializerOptions Options { get; }
 
-        public AbpSystemTextJsonSupportTypeMatcher(IOptions<AbpSystemTextJsonSupportTypeMatcherOptions> options)
+        public AbpSystemTextJsonSupportTypeMatcher(IOptions<AbpSystemTextJsonSerializerOptions> options)
         {
             Options = options.Value;
         }
