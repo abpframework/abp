@@ -48,7 +48,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
 
-        protected override async Task OnOpeningCreateModalAsync()
+        protected override Task OnOpeningCreateModalAsync()
         {
             CreateModalSelectedTab = DefaultSelectedTab;
 
@@ -58,7 +58,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                 IsAssigned = x.IsDefault
             }).ToArray();
 
-            await base.OnOpeningCreateModalAsync();
+            return base.OpenCreateModalAsync();
         }
 
         protected override Task OnCreatingEntityAsync()
@@ -81,7 +81,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                 IsAssigned = userRoleNames.Contains(x.Name)
             }).ToArray();
 
-            await base.OnOpeningEditModalAsync(id);
+            await base.OpenEditModalAsync(id);
         }
 
         protected override Task OnUpdatingEntityAsync()
