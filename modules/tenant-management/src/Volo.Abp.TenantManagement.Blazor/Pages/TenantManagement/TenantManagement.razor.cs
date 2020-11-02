@@ -4,11 +4,11 @@ using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.FeatureManagement.Blazor.Components;
+using Volo.Abp.TenantManagement.Localization;
 
 namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 {
-    public abstract class TenantManagementBase 
-        : AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
+    public partial class TenantManagement
     {
         protected const string FeatureProviderName = "T";
 
@@ -22,9 +22,10 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
         protected Modal ManageConnectionStringModal;
 
         protected TenantInfoModel TenantInfo;
-
-        public TenantManagementBase()
+        
+        public TenantManagement()
         {
+            LocalizationResource = typeof(AbpTenantManagementResource);
             ObjectMapperContext = typeof(AbpTenantManagementBlazorModule);
 
             CreatePolicyName = TenantManagementPermissions.Tenants.Create;

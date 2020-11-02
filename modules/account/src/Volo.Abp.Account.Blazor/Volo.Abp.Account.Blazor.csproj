@@ -17,10 +17,4 @@
     <ProjectReference Include="..\Volo.Abp.Account.HttpApi.Client\Volo.Abp.Account.HttpApi.Client.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="Pages\Account\Manage.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-  </ItemGroup>
-
 </Project>

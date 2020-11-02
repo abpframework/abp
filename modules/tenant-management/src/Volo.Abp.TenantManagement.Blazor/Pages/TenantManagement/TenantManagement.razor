@@ -1,11 +1,11 @@
 ﻿@page "/tenant-management/tenants"
 @attribute [Authorize(TenantManagementPermissions.Tenants.Default)]
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.Extensions.Localization
-@using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.FeatureManagement.Blazor.Components
-@inherits TenantManagementBase
-@inject IStringLocalizer<AbpTenantManagementResource> L
+@using Microsoft.AspNetCore.Components.Forms
+
+@inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
+
 @* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">

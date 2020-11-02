@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public abstract class RoleManagementBase : AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
+    public partial class RoleManagement
     {
         protected const string PermissionProviderName = "R";
 
@@ -17,7 +16,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected bool HasManagePermissionsPermission { get; set; }
 
-        public RoleManagementBase()
+        protected bool ShouldShowEntityActions { get; set; }
+
+        public RoleManagement()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
             LocalizationResource = typeof(IdentityResource);
