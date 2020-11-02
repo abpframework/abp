@@ -15,7 +15,7 @@ namespace Volo.Blogging.Comments
             _permissionChecker = permissionChecker;
         }
 
-        protected override async Task HandleRequirementAsync(
+        protected async override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
             OperationAuthorizationRequirement requirement,
             Comment resource)

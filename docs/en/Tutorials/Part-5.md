@@ -487,7 +487,7 @@ Add the following code block to the end of the `Books.razor` file:
     bool canEditBook;
     bool canDeleteBook;
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 

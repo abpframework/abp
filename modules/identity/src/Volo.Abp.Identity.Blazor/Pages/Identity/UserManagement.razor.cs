@@ -40,14 +40,14 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             DeletePolicyName = IdentityPermissions.Users.Delete;
         }
 
-        protected override async Task OnInitializedAsync()
+        protected async override Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
             Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
 
-        protected override async Task SetPermissionsAsync()
+        protected async override Task SetPermissionsAsync()
         {
             await base.SetPermissionsAsync();
 
@@ -80,7 +80,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             return base.CreateEntityAsync();
         }
 
-        protected override async Task OpenEditModalAsync(Guid id)
+        protected async override Task OpenEditModalAsync(Guid id)
         {
             EditModalSelectedTab = DefaultSelectedTab;
 

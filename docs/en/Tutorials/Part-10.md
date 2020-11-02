@@ -1100,7 +1100,7 @@ The final `@code` block should be the following:
     //ADDED A NEW FIELD
     IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
