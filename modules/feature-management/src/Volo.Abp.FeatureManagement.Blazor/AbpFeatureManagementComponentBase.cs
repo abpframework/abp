@@ -3,9 +3,9 @@ using Volo.Abp.FeatureManagement.Localization;
 
 namespace Volo.Abp.FeatureManagement.Blazor
 {
-    public class AbpFeatureManagementComponentBase : AbpComponentBase
+    public abstract class AbpFeatureManagementComponentBase : AbpComponentBase
     {
-        public AbpFeatureManagementComponentBase()
+        protected AbpFeatureManagementComponentBase()
         {
             LocalizationResource = typeof(AbpFeatureManagementResource);
         }
