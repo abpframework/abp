@@ -32,6 +32,8 @@ namespace Volo.Abp.Identity.Blazor
             {
                 options.AdditionalAssemblies.Add(typeof(AbpIdentityBlazorModule).Assembly);
             });
+
+            context.Services.AddSingleton(typeof(AbpIdentityBlazorMessageLocalizerHelper<>));
         }
     }
 }

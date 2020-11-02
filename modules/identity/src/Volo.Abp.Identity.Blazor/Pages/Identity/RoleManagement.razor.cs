@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Localization;

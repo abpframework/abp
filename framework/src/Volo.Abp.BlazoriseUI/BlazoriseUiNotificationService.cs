@@ -1,40 +1,73 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using System;
+using System.Threading.Tasks;
+using Localization.Resources.AbpUi;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlazoriseUI
 {
     [Dependency(ReplaceServices = true)]
-    public class BlazoriseUiNotificationService : IUiNotificationService, ITransientDependency
+    public class BlazoriseUiNotificationService : IUiNotificationService, IScopedDependency
     {
-        public ILogger<BlazoriseUiNotificationService> Logger { get; set; }
+        /// <summary>
+        /// An event raised after the notification is received.
+        /// </summary>
+        public event EventHandler<UiNotificationEventArgs> NotificationReceived;
 
-        public BlazoriseUiNotificationService()
+        private readonly IStringLocalizer<AbpUiResource> localizer;
+
+        public BlazoriseUiNotificationService(
+            IStringLocalizer<AbpUiResource> localizer)
         {
-            Logger = NullLogger<BlazoriseUiNotificationService>.Instance;
+            this.localizer = localizer;
         }
 
-        public Task Info(string message)
+        public Task Info(string message, string title = null, Action<UiNotificationOptions> options = null)
         {
-            Logger.LogInformation(message);
+            var uiNotificationOptions = CreateDefaultOptions();
+            options?.Invoke(uiNotificationOptions);
+
+            NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Info, message, title, uiNotificationOptions));
+
             return Task.CompletedTask;
         }
 
-        public Task Success(string message)
+        public Task Success(string message, string title = null, Action<UiNotificationOptions> options = null)
         {
+            var uiNotificationOptions = CreateDefaultOptions();
+            options?.Invoke(uiNotificationOptions);
+
+            NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Success, message, title, uiNotificationOptions));
+
             return Task.CompletedTask;
         }
 
-        public Task Warn(string message)
+        public Task Warn(string message, string title = null, Action<UiNotificationOptions> options = null)
         {
+            var uiNotificationOptions = CreateDefaultOptions();
+            options?.Invoke(uiNotificationOptions);
+
+            NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Warning, message, title, uiNotificationOptions));
+
             return Task.CompletedTask;
         }
 
-        public Task Error(string message)
+        public Task Error(string message, string title = null, Action<UiNotificationOptions> options = null)
         {
+            var uiNotificationOptions = CreateDefaultOptions();
+            options?.Invoke(uiNotificationOptions);
+
+            NotificationReceived?.Invoke(this, new UiNotificationEventArgs(UiNotificationType.Error, message, title, uiNotificationOptions));
+
             return Task.CompletedTask;
+        }
+
+        protected virtual UiNotificationOptions CreateDefaultOptions()
+        {
+            return new UiNotificationOptions
+            {
+            };
         }
     }
 }

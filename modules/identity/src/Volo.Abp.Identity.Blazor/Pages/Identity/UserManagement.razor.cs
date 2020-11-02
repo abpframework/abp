@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Localization;
@@ -60,24 +61,25 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                                       HasManagePermissionsPermission;
         }
 
-        protected override Task OpenCreateModalAsync()
+        protected override async Task OnOpeningCreateModalAsync()
         {
             CreateModalSelectedTab = DefaultSelectedTab;
 
             NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
-                            {
-                                Name = x.Name,
-                                IsAssigned = x.IsDefault
-                            }).ToArray();
+            {
+                Name = x.Name,
+                IsAssigned = x.IsDefault
+            }).ToArray();
 
-            return base.OpenCreateModalAsync();
+            await base.OnOpeningCreateModalAsync();
         }
 
-        protected override Task CreateEntityAsync()
+        protected override Task OnCreatingEntityAsync()
         {
+            // apply roles before saving
             NewEntity.RoleNames = NewUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
 
-            return base.CreateEntityAsync();
+            return base.OnCreatingEntityAsync();
         }
 
         protected async override Task OpenEditModalAsync(Guid id)
@@ -87,19 +89,20 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             var userRoleNames = (await AppService.GetRolesAsync(id)).Items.Select(r => r.Name).ToList();
 
             EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
-                                {
-                                    Name = x.Name,
-                                    IsAssigned = userRoleNames.Contains(x.Name)
-                                }).ToArray();
+            {
+                Name = x.Name,
+                IsAssigned = userRoleNames.Contains(x.Name)
+            }).ToArray();
 
-            await base.OpenEditModalAsync(id);
+            await base.OnOpeningEditModalAsync(id);
         }
 
-        protected override Task UpdateEntityAsync()
+        protected override Task OnUpdatingEntityAsync()
         {
+            // apply roles before saving
             EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
 
-            return base.UpdateEntityAsync();
+            return base.OnUpdatingEntityAsync();
         }
     }
 
