@@ -15,7 +15,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         }
 
-        public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
+        public async override Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
             var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.Authorization.Permissions
                 return PermissionGrantResult.Undefined;
             }
 
-            return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId) 
+            return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId)
                 ? PermissionGrantResult.Granted
                 : PermissionGrantResult.Undefined;
         }

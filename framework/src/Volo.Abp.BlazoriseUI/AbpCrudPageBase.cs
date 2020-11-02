@@ -205,7 +205,7 @@ namespace Volo.Abp.BlazoriseUI
             EditingEntity = new TUpdateViewModel();
         }
 
-        protected override async Task OnInitializedAsync()
+        protected async override Task OnInitializedAsync()
         {
             await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();

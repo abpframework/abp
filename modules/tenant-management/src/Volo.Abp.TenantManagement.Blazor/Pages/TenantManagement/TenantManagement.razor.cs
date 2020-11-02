@@ -7,7 +7,7 @@ using Volo.Abp.FeatureManagement.Blazor.Components;
 
 namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 {
-    public abstract class TenantManagementBase
+    public abstract class TenantManagementBase 
         : AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
     {
         protected const string FeatureProviderName = "T";
@@ -35,8 +35,8 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 
             TenantInfo = new TenantInfoModel();
         }
-
-        protected override async Task SetPermissionsAsync()
+        
+        protected async override Task SetPermissionsAsync()
         {
             await base.SetPermissionsAsync();
 

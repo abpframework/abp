@@ -29,7 +29,7 @@ public class TestAppService : IIdentityUserAppService, ITransientDependency
 }
 ````
 
-The dependency injection system allows to register multiple services for the same interface. The last registered one is used when the interface is injected. It is a good practice to explicitly replace the service. 
+The dependency injection system allows to register multiple services for the same interface. The last registered one is used when the interface is injected. It is a good practice to explicitly replace the service.
 
 Example:
 
@@ -76,7 +76,7 @@ public class MyIdentityUserAppService : IdentityUserAppService
     {
     }
 
-    public override async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+    public async override Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
         if (input.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -109,33 +109,33 @@ public class MyIdentityUserManager : IdentityUserManager
 {
         public MyIdentityUserManager(
             IdentityUserStore store,
-            IIdentityRoleRepository roleRepository, 
+            IIdentityRoleRepository roleRepository,
             IIdentityUserRepository userRepository,
-            IOptions<IdentityOptions> optionsAccessor, 
+            IOptions<IdentityOptions> optionsAccessor,
             IPasswordHasher<IdentityUser> passwordHasher,
-            IEnumerable<IUserValidator<IdentityUser>> userValidators, 
-            IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, 
+            IEnumerable<IUserValidator<IdentityUser>> userValidators,
+            IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators,
             ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,
             IServiceProvider services,
-            ILogger<IdentityUserManager> logger, 
-            ICancellationTokenProvider cancellationTokenProvider) : 
+            ILogger<IdentityUserManager> logger,
+            ICancellationTokenProvider cancellationTokenProvider) :
             base(store,
                 roleRepository,
-                userRepository, 
-                optionsAccessor, 
-                passwordHasher, 
-                userValidators, 
+                userRepository,
+                optionsAccessor,
+                passwordHasher,
+                userValidators,
                 passwordValidators,
-                keyNormalizer, 
-                errors, 
-                services, 
-                logger, 
+                keyNormalizer,
+                errors,
+                services,
+                logger,
                 cancellationTokenProvider)
         {
         }
 
-    public override async Task<IdentityResult> CreateAsync(IdentityUser user)
+    public async override Task<IdentityResult> CreateAsync(IdentityUser user)
     {
         if (user.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -182,7 +182,7 @@ namespace MyProject.Controllers
 
         }
 
-        public override async Task SendPasswordResetCodeAsync(
+        public async override Task SendPasswordResetCodeAsync(
             SendPasswordResetCodeDto input)
         {
             Logger.LogInformation("Your custom logic...");
@@ -214,7 +214,7 @@ Assuming that you've already added a `SocialSecurityNumber` as described in the 
 You can use the [object extension system](Object-Extensions.md) to add the property to the `IdentityUserDto`. Write this code inside the `YourProjectNameDtoExtensions` class comes with the application startup template:
 
 ````csharp
-ObjectExtensionManager.Instance                    
+ObjectExtensionManager.Instance
     .AddOrUpdateProperty<IdentityUserDto, string>(
         "SocialSecurityNumber"
     );
@@ -286,8 +286,8 @@ ObjectExtensionManager.Instance
     .AddOrUpdateProperty<string>(
         new[]
         {
-            typeof(IdentityUserDto), 
-            typeof(IdentityUserCreateDto), 
+            typeof(IdentityUserDto),
+            typeof(IdentityUserCreateDto),
             typeof(IdentityUserUpdateDto)
         },
         "SocialSecurityNumber"
