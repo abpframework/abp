@@ -3,13 +3,13 @@ using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 
-namespace Volo.Abp.Identity.Blazor
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    public class AbpIdentityBlazorMessageLocalizerHelper<T>
+    public class AbpBlazorMessageLocalizerHelper<T>
     {
         private readonly IStringLocalizer<T> stringLocalizer;
 
-        public AbpIdentityBlazorMessageLocalizerHelper(IStringLocalizer<T> stringLocalizer)
+        public AbpBlazorMessageLocalizerHelper(IStringLocalizer<T> stringLocalizer)
         {
             this.stringLocalizer = stringLocalizer;
         }
