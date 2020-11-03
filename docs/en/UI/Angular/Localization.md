@@ -219,18 +219,21 @@ If you see an error like this, you should pass the `cultureNameLocaleFileMap` pr
 
 See [all locale files in Angular](https://github.com/angular/angular/tree/master/packages/common/locales).
 
-## Adding new culture
+## Adding a New Culture
 
 ```js
 //app.module.ts
 
-import { storeLocaleData } from '@abp/ng.core';
+import { storeLocaleData } from '@abp/ng.core/locale';
 import(
 /* webpackChunkName: "_locale-your-locale-js"*/
 /* webpackMode: "eager" */
 '@angular/common/locales/your-locale.js'
 ).then(m => storeLocaleData(m.default, 'your-locale'));
 ```
+
+> Note: In order for the new locale to be created as a chunk, the application must be restarted.
+
 ## See Also
 
 * [Localization in ASP.NET Core](../../Localization.md)
