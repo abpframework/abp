@@ -1,26 +1,15 @@
-﻿using System.Collections.Generic;
-using Volo.Abp.Bundling;
+﻿using Volo.Abp.Bundling;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
 {
-    public class BundleContributer : IBundleContributer
+    public class BundleContributer : BaseBundleContributer
     {
-        public void AddScripts(List<BundleDefinition> scriptDefinitions)
+        public override string[] GetStyles()
         {
-
-        }
-
-        public void AddStyles(List<BundleDefinition> styleDefinitions)
-        {
-            var styles = new string[]
+            return new string[]
             {
                 "_content/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme/libs/abp/css/theme.css",
             };
-
-            foreach (var style in styles)
-            {
-                styleDefinitions.AddIfNotContains((item) => item.Source == style, () => new BundleDefinition(style));
-            }
         }
     }
 }
