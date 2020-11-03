@@ -10,17 +10,17 @@ namespace Volo.Abp.Json
     {
         protected AbpJsonOptions Options { get; }
 
-        protected IHybridServiceScopeFactory HybridServiceScopeFactory { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        public AbpHybridJsonSerializer(IOptions<AbpJsonOptions> options, IHybridServiceScopeFactory hybridServiceScopeFactory)
+        public AbpHybridJsonSerializer(IOptions<AbpJsonOptions> options, IServiceScopeFactory serviceScopeFactory)
         {
             Options = options.Value;
-            HybridServiceScopeFactory = hybridServiceScopeFactory;
+            ServiceScopeFactory = serviceScopeFactory;
         }
 
         public string Serialize(object obj, bool camelCase = true, bool indented = false)
         {
-            using (var scope = HybridServiceScopeFactory.CreateScope())
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var serializerProvider = GetSerializerProvider(scope.ServiceProvider, obj.GetType());
                 return serializerProvider.Serialize(obj, camelCase, indented);
@@ -29,7 +29,7 @@ namespace Volo.Abp.Json
 
         public T Deserialize<T>(string jsonString, bool camelCase = true)
         {
-            using (var scope = HybridServiceScopeFactory.CreateScope())
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var serializerProvider = GetSerializerProvider(scope.ServiceProvider, typeof(T));
                 return serializerProvider.Deserialize<T>(jsonString, camelCase);
@@ -38,7 +38,7 @@ namespace Volo.Abp.Json
 
         public object Deserialize(Type type, string jsonString, bool camelCase = true)
         {
-            using (var scope = HybridServiceScopeFactory.CreateScope())
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var serializerProvider = GetSerializerProvider(scope.ServiceProvider, type);
                 return serializerProvider.Deserialize(type, jsonString, camelCase);
