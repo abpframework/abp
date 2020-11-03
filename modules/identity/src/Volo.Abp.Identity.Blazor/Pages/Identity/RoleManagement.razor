@@ -6,10 +6,9 @@
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.Identity.Localization
-@inject AbpIdentityBlazorMessageLocalizerHelper<IdentityResource> LH
+@inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
 
 @inherits AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
-
 @* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">

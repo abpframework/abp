@@ -1,14 +1,13 @@
 ﻿@page "/identity/users"
-@attribute [Authorize(IdentityPermissions.Users.Default)]
+@attribute [Authorize( IdentityPermissions.Users.Default )]
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.PermissionManagement.Blazor.Components
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.Identity.Localization
+@inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
 
 @inherits AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
-
-@inject AbpIdentityBlazorMessageLocalizerHelper<IdentityResource> LH
 @* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">
@@ -187,7 +186,7 @@
                 <CloseButton Clicked="CloseEditModalAsync" />
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
 
                     <Tabs @bind-SelectedTab="@EditModalSelectedTab">
