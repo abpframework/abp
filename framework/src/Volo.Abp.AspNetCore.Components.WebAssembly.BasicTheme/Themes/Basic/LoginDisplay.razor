@@ -7,8 +7,8 @@
 @inject SignOutSessionStateManager SignOutManager
 <AuthorizeView>
     <Authorized>
-        <Dropdown>
-            <DropdownToggle Color="Color.None">
+        <BarDropdown>
+            <BarDropdownToggle>
                 @if (CurrentTenant.Name != null)
                 {
                     <span><i>@CurrentTenant.Name</i>\@CurrentUser.UserName</span>
@@ -17,25 +17,25 @@
                 {
                     <span>@CurrentUser.UserName</span>
                 }
-            </DropdownToggle>
-            <DropdownMenu>
+            </BarDropdownToggle>
+            <BarDropdownMenu RightAligned="true">
                 @if (Menu != null)
                 {
                     @foreach (var menuItem in Menu.Items)
                     {
-                        <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
+                        <BarDropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</BarDropdownItem>
                     }
                 }
-                <a class="dropdown-item" href="@ServerAccountUrl">
+                <BarDropdownItem To="@ServerAccountUrl">
                     @UiLocalizer["ManageYourAccount"]
-                </a>
+                </BarDropdownItem>
                 <DropdownDivider />
-                <DropdownItem Clicked="BeginSignOut">Logout</DropdownItem>
-            </DropdownMenu>
-        </Dropdown>
+                <BarDropdownItem Clicked="BeginSignOut">Logout</BarDropdownItem>
+            </BarDropdownMenu>
+        </BarDropdown>
     </Authorized>
     <NotAuthorized>
-        <a class="nav-link" href="authentication/login">Log in</a>
+        <BarLink To="authentication/login">Log in</BarLink>
     </NotAuthorized>
 </AuthorizeView>
 @code{

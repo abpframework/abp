@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly
+namespace Volo.Abp.AspNetCore.Components.WebAssembly.Messages
 {
     public class SimpleUiMessageService : IUiMessageService, ITransientDependency
     {
