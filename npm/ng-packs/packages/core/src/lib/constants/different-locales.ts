@@ -1,7 +1,7 @@
 // Different locales from .NET
 // Key is .NET locale, value is Angular locale
 
-export default {
+export const differentLocales = {
   aa: 'en',
   'aa-DJ': 'en',
   'aa-ER': 'en',
