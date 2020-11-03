@@ -56,11 +56,11 @@
                 @(context.Name)
                 @if (context.IsDefault)
                 {
-                    <Badge Color="Color.Primary">@L["DisplayName:IsDefault"]</Badge>
+                    <Badge Color="Color.Primary" Margin="Margin.Is1.FromLeft">@L["DisplayName:IsDefault"]</Badge>
                 }
                 @if (context.IsPublic)
                 {
-                    <Badge Color="Color.Light">@L["DisplayName:IsPublic"]</Badge>
+                    <Badge Color="Color.Light" Margin="Margin.Is1.FromLeft">@L["DisplayName:IsPublic"]</Badge>
                 }
             </DisplayTemplate>
         </DataGridColumn>
