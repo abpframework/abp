@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
-using Volo.Abp.Http.Client;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
