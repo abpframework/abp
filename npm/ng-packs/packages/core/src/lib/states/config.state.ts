@@ -223,17 +223,15 @@ export class ConfigState {
           }),
         ),
         switchMap(configuration => {
-          let lang = configuration.localization.currentCulture.cultureName;
+          if (this.store.selectSnapshot(SessionState.getLanguage)) return of(null);
 
+          let lang = configuration.localization.currentCulture.cultureName;
           if (lang.includes(';')) {
             lang = lang.split(';')[0];
           }
 
           document.documentElement.setAttribute('lang', lang);
-
-          return this.store.selectSnapshot(SessionState.getLanguage)
-            ? of(null)
-            : dispatch(new SetLanguage(lang, false));
+          return dispatch(new SetLanguage(lang, false));
         }),
         catchError((err: HttpErrorResponse) => {
           dispatch(new RestOccurError(err));
