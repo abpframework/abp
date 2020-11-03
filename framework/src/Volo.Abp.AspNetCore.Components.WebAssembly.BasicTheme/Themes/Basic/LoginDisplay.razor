@@ -25,7 +25,7 @@
                 {
                     @foreach (var menuItem in Menu.Items)
                     {
-                        <DropdownItem Clicked="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</DropdownItem>
+                        <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
                     }
                 }
                 <DropdownDivider />
@@ -39,21 +39,14 @@
 </AuthorizeView>
 @code{
 
-    private async Task NavigateToAsync(string uri, string target = "_self")
+    private void NavigateTo(string uri, string target = "_self")
     {
-        if (target == "_blank")
-        {
-            await JsRuntime.InvokeVoidAsync("open", uri, "_blank");
-        }
-        else
-        {
-            Navigation.NavigateTo(uri);
-        }
+        Navigation.NavigateTo(uri);
     }
 
     private async Task BeginSignOut()
     {
         await SignOutManager.SetSignOutState();
-        await NavigateToAsync("authentication/logout");
+        NavigateTo("authentication/logout");
     }
 }
