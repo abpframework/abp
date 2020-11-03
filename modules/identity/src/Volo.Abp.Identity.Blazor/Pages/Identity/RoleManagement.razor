@@ -73,32 +73,34 @@
 <Modal @ref="CreateModal">
     <ModalBackdrop />
     <ModalContent Centered="true">
-        <ModalHeader>
-            <ModalTitle>@L["NewRole"]</ModalTitle>
-            <CloseButton Clicked="CloseCreateModalAsync" />
-        </ModalHeader>
-        <ModalBody>
-            <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
-                <Validation MessageLocalizer="@LH.Localize">
+        <Form id="RoleCreateForm">
+            <ModalHeader>
+                <ModalTitle>@L["NewRole"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.Name">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
                     <Field>
-                        <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                        <TextEdit @bind-Text="@NewEntity.Name">
-                            <Feedback>
-                                <ValidationError />
-                            </Feedback>
-                        </TextEdit>
+                        <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                        <Check TValue="bool" @bind-Checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
                     </Field>
-                </Validation>
-                <Field>
-                    <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                    <Check TValue="bool" @bind-Checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
-                </Field>
-            </Validations>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-            <Button Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
-        </ModalFooter>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <Button form="RoleCreateForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
     </ModalContent>
 </Modal>
 }
@@ -108,33 +110,35 @@
     <Modal @ref="EditModal">
         <ModalBackdrop />
         <ModalContent Centered="true">
-            <ModalHeader>
-                <ModalTitle>@L["Edit"]</ModalTitle>
-                <CloseButton Clicked="CloseEditModalAsync" />
-            </ModalHeader>
-            <ModalBody>
-                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
-                    <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
-                    <Validation MessageLocalizer="@LH.Localize">
+            <Form id="RoleEditForm">
+                <ModalHeader>
+                    <ModalTitle>@L["Edit"]</ModalTitle>
+                    <CloseButton Clicked="CloseEditModalAsync" />
+                </ModalHeader>
+                <ModalBody>
+                    <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
+                        <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                                <TextEdit @bind-Text="EditingEntity.Name">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
                         <Field>
-                            <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                            <TextEdit @bind-Text="EditingEntity.Name">
-                                <Feedback>
-                                    <ValidationError />
-                                </Feedback>
-                            </TextEdit>
+                            <Check TValue="bool" @bind-Checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                            <Check TValue="bool" @bind-Checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
                         </Field>
-                    </Validation>
-                    <Field>
-                        <Check TValue="bool" @bind-Checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                        <Check TValue="bool" @bind-Checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
-                    </Field>
-                </Validations>
-            </ModalBody>
-            <ModalFooter>
-                <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                <Button Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
-            </ModalFooter>
+                    </Validations>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                    <Button form="RoleEditForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
+                </ModalFooter>
+            </Form>
         </ModalContent>
     </Modal>
 }
