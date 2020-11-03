@@ -350,7 +350,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task CreateEntityAsync()
         {
-            if (CreateValidationsRef?.ValidateAll() ?? false)
+            if (CreateValidationsRef?.ValidateAll() ?? true)
             {
                 await OnCreatingEntityAsync();
 
@@ -377,7 +377,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task UpdateEntityAsync()
         {
-            if (EditValidationsRef?.ValidateAll() ?? false)
+            if (EditValidationsRef?.ValidateAll() ?? true)
             {
                 await OnUpdatingEntityAsync();
 
