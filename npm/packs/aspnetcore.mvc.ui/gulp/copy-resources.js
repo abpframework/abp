@@ -4,7 +4,9 @@
 
     var gulp = require("gulp"),
         merge = require("merge-stream"),
-        rimraf = require("rimraf"),
+        fse = require('fs-extra'),
+        glob = require('glob'),
+        micromatch = require('micromatch'),
         path = require("path"),
         extendObject = require('extend-object');
 
@@ -41,13 +43,42 @@
             return undefined;
         } 
     }
-    
-    function cleanFiles() {
-        if (resourceMapping.clean) {
-            for (var i = 0; i < resourceMapping.clean.length; i++) {
-                rimraf.sync(replaceAliases(resourceMapping.clean[i]) + '/**/*', { force: true });
-            }
-        }
+
+    function cleanDirsAndFiles(patterns) {
+        const { dirs, files } = findDirsAndFiles(patterns);
+
+        files.forEach(file => fse.unlinkSync(file));
+        dirs.forEach(dir => {
+            try {
+                fse.rmdirSync(dir);
+            } catch (_) {}
+        });
+    }
+
+    function findDirsAndFiles(patterns) {
+        const dirs = [];
+        const files = [];
+
+        const list = glob.sync('**/*', { dot: true });
+
+        const matches = micromatch(list, normalizeGlob(patterns), {
+            dot: true,
+        });
+
+        matches.forEach(match => {
+            if (!fse.pathExistsSync(match)) return;
+
+            (fse.statSync(match).isDirectory() ? dirs : files).push(match);
+        });
+
+        return { dirs, files };
+    }
+
+    function normalizeGlob(patterns) {
+        return patterns.map(pattern => {
+            const prefix = /\*$/.test(pattern) ? '' : '/**';
+            return replaceAliases(pattern).replace(/(!?)\.\//, '$1') + prefix;
+        });
     }
     
     function normalizeResourceMapping(resourcemapping) {
@@ -106,7 +137,7 @@
         rootPath = path;
         resourceMapping = normalizeResourceMapping(buildResourceMapping(rootPath));
     
-        cleanFiles();
+        cleanDirsAndFiles(resourceMapping.clean);
 
         var tasks = [];
 
