@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,8 +22,7 @@ namespace Volo.Abp.Cli.Bundling
         const string ScriptPlaceholderEnd = "<!--/ABP:Scripts-->";
         const string SupportedWebAssemblyProjectType = "Microsoft.NET.Sdk.BlazorWebAssembly";
 
-        protected IDotNetProjectBuilder DotNetProjectBuilder { get; set; }
-        protected ILogger<BundlingService> Logger { get; set; }
+        public IDotNetProjectBuilder DotNetProjectBuilder { get; set; }
 
         public async Task BundleAsync(string directory, bool forceBuild)
         {
@@ -42,9 +40,7 @@ namespace Volo.Abp.Cli.Bundling
                 {
                     new DotNetProjectInfo(string.Empty, projectFilePath, true)
                 };
-                Logger.LogInformation("Build starting...");
                 DotNetProjectBuilder.Build(projects, string.Empty);
-                Logger.LogInformation("Build completed...");
             }
 
             var frameworkVersion = GetTargetFrameworkVersion(projectFilePath);
@@ -120,7 +116,7 @@ namespace Volo.Abp.Cli.Bundling
                     builder.AppendLine($"\t<link href=\"{style.Source}\" rel=\"stylesheet\" />");
                 }
             }
-            builder.AppendLine($"\t{StylePlaceholderEnd}");
+            builder.Append($"\t{StylePlaceholderEnd}");
 
             return builder.ToString();
         }
@@ -155,7 +151,7 @@ namespace Volo.Abp.Cli.Bundling
                     builder.AppendLine($"\t<script src=\"{script.Source}\"></script>");
                 }
             }
-            builder.AppendLine($"\t{ScriptPlaceholderEnd}");
+            builder.Append($"\t{ScriptPlaceholderEnd}");
 
             return builder.ToString();
         }
