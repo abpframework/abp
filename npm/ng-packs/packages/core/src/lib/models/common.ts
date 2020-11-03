@@ -1,4 +1,4 @@
-import { EventEmitter, Type } from '@angular/core';
+import { EventEmitter, Injector, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { eLayoutType } from '../enums/common';
@@ -8,9 +8,9 @@ import { NgxsStoragePluginOptions } from '@ngxs/storage-plugin';
 export namespace ABP {
   export interface Root {
     environment: Partial<Config.Environment>;
+    registerLocaleFn: (locale: string, injector: Injector) => Promise<any>;
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
-    cultureNameLocaleFileMap?: Dictionary<string>;
     ngxsStoragePluginOptions?: NgxsStoragePluginOptions & { key?: string[] };
   }
 
