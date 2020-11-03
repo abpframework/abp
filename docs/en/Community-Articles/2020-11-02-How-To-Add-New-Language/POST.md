@@ -10,6 +10,7 @@ Adding a new language to your ABP project is pretty simple.  Let's add the Germa
     ```
     
     Check out for [the complete supported culture codes](https://docs.microsoft.com/en-us/bingmaps/rest-services/common-parameters-and-types/supported-culture-codes).
+    (For internal development `D:\Github\abp` and `D:\Github\volo\abp`)
     
 2. Fill the `target` fields in your target language.
 
