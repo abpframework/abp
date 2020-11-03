@@ -33,27 +33,7 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
         public override void Write(Utf8JsonWriter writer, IValueValidator value, JsonSerializerOptions options)
         {
             var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-
-            if (value.GetType() == typeof(AlwaysValidValueValidator))
-            {
-                JsonSerializer.Serialize(writer, (AlwaysValidValueValidator)value, newOptions);
-            }
-            else if (value.GetType() == typeof(BooleanValueValidator))
-            {
-                JsonSerializer.Serialize(writer, (BooleanValueValidator)value, newOptions);
-            }
-            else if (value.GetType() == typeof(NumericValueValidator))
-            {
-                JsonSerializer.Serialize(writer, (NumericValueValidator)value, newOptions);
-            }
-            else if (value.GetType() == typeof(StringValueValidator))
-            {
-                JsonSerializer.Serialize(writer, (StringValueValidator)value, newOptions);
-            }
-            else
-            {
-                throw new JsonException("Unknown IValueValidator type!");
-            }
+            JsonSerializer.Serialize(writer, value, value.GetType(), newOptions);
         }
 
         protected virtual IValueValidator CreateValueValidatorByName(string name)

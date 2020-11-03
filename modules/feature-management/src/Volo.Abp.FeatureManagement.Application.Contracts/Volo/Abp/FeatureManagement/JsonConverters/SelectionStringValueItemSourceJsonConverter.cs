@@ -26,15 +26,7 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
         public override void Write(Utf8JsonWriter writer, ISelectionStringValueItemSource value, JsonSerializerOptions options)
         {
             var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-
-            if (value.GetType() == typeof(StaticSelectionStringValueItemSource))
-            {
-                JsonSerializer.Serialize(writer, (StaticSelectionStringValueItemSource)value, newOptions);
-            }
-            else
-            {
-                throw new JsonException("Unknown ISelectionStringValueItemSource type!");
-            }
+            JsonSerializer.Serialize(writer, value, value.GetType(), newOptions);
         }
     }
 }
