@@ -33,7 +33,7 @@ namespace PasswordlessAuthentication.Web
         }
 
         //We need to override this method as well.
-        public override async Task<string> GetUserModifierAsync(string purpose, UserManager<TUser> manager, TUser user)
+        public async override Task<string> GetUserModifierAsync(string purpose, UserManager<TUser> manager, TUser user)
         {
             var userId = await manager.GetUserIdAsync(user);
 
@@ -105,7 +105,7 @@ namespace PasswordlessAuthentication.Web.Pages
             UserManager = userManager;
             _userRepository = userRepository;
         }
-        
+
         public ActionResult OnGet()
         {
             if (!CurrentUser.IsAuthenticated)
@@ -115,15 +115,15 @@ namespace PasswordlessAuthentication.Web.Pages
 
             return Page();
         }
-        
+
         //added for passwordless authentication
         public async Task<IActionResult> OnPostGeneratePasswordlessTokenAsync()
         {
             var adminUser = await _userRepository.FindByNormalizedUserNameAsync("admin");
-            
+
             var token = await UserManager.GenerateUserTokenAsync(adminUser, "PasswordlessLoginProvider",
                 "passwordless-auth");
-            
+
             PasswordlessLoginUrl = Url.Action("Login", "Passwordless",
                 new {token = token, userId = adminUser.Id.ToString()}, Request.Scheme);
 
@@ -238,7 +238,7 @@ namespace PasswordlessAuthentication.Web.Controllers
 
             return Redirect("/");
         }
-        
+
         private static IEnumerable<Claim> CreateClaims(IUser user, IEnumerable<string> roles)
         {
             var claims = new List<Claim>

@@ -50,7 +50,7 @@ namespace Volo.Abp.Identity
             return role;
         }
 
-        public override async Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string name)
+        public async override Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string name)
         {
             if (role.IsStatic && role.Name != name)
             {
@@ -60,7 +60,7 @@ namespace Volo.Abp.Identity
             return await base.SetRoleNameAsync(role, name);
         }
 
-        public override async Task<IdentityResult> DeleteAsync(IdentityRole role)
+        public async override Task<IdentityResult> DeleteAsync(IdentityRole role)
         {
             if (role.IsStatic)
             {

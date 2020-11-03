@@ -50,7 +50,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
             return await DbSet.AnyAsync(x => x.Id != expectedId && x.Name == name, GetCancellationToken(cancellationToken));
         }
 
-        public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = new CancellationToken())
+        public async override Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = new CancellationToken())
         {
             var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiScopeId == id);
             foreach (var claim in scopeClaims)

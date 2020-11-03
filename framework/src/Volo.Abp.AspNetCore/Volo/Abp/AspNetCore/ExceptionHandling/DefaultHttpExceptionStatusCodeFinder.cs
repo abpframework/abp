@@ -22,7 +22,13 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
         public virtual HttpStatusCode GetStatusCode(HttpContext httpContext, Exception exception)
         {
-            if (exception is IHasErrorCode exceptionWithErrorCode && 
+            if (exception is IHasHttpStatusCode exceptionWithHttpStatusCode &&
+                exceptionWithHttpStatusCode.HttpStatusCode > 0)
+            {
+                return (HttpStatusCode) exceptionWithHttpStatusCode.HttpStatusCode;
+            }
+
+            if (exception is IHasErrorCode exceptionWithErrorCode &&
                 !exceptionWithErrorCode.Code.IsNullOrWhiteSpace())
             {
                 if (Options.ErrorCodeToHttpStatusCodeMappings.TryGetValue(exceptionWithErrorCode.Code, out var status))
@@ -39,7 +45,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             }
 
             //TODO: Handle SecurityException..?
-            
+
             if (exception is AbpValidationException)
             {
                 return HttpStatusCode.BadRequest;
@@ -59,7 +65,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             {
                 return HttpStatusCode.Forbidden;
             }
-            
+
             return HttpStatusCode.InternalServerError;
         }
     }
