@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Bundling;
@@ -48,12 +49,26 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            throw new NotImplementedException();
+            return "Bundles all third party styles and scripts required by modules and updates index.html file.";
         }
 
         public string GetUsageInfo()
         {
-            throw new NotImplementedException();
+            var sb = new StringBuilder();
+
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("");
+            sb.AppendLine("  abp bundle [options]");
+            sb.AppendLine("");
+            sb.AppendLine("Options:");
+            sb.AppendLine("");
+            sb.AppendLine("-wd|--working-directory <directory-path>                (default: empty)");
+            sb.AppendLine("-f | --force                                            (default: false)");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+
+            return sb.ToString();
         }
 
         public static class Options
