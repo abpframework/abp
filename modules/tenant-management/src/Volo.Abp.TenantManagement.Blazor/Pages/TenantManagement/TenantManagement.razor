@@ -1,11 +1,10 @@
 ﻿@page "/tenant-management/tenants"
 @attribute [Authorize(TenantManagementPermissions.Tenants.Default)]
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.Extensions.Localization
-@using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.FeatureManagement.Blazor.Components
-@inherits TenantManagementBase
-@inject IStringLocalizer<AbpTenantManagementResource> L
+@using Microsoft.AspNetCore.Components.Forms
+
+@inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
 
 @* ************************* PAGE HEADER ************************* *@
 <Row>
@@ -30,40 +29,32 @@
           ShowPager="true"
           PageSize="PageSize">
     <DataGridColumns>
-        @if (ShouldShowEntityActions)
-        {
-            <DataGridColumn Width="150px" TItem="TenantDto" Field="@nameof(TenantDto.Name)" Sortable="false" Caption="@L["Actions"].Value">
-                <DisplayTemplate>
-                    <Dropdown>
-                        <DropdownToggle Color="Color.Primary">
-                            @L["Actions"]
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            @if (HasUpdatePermission)
-                            {
-                                <DropdownItem Clicked="() => OpenEditModalAsync(context.As<TenantDto>().Id)">@L["Edit"]</DropdownItem>
-                            }
-                            @if (HasManageConnectionStringsPermission)
-                            {
-                                <DropdownItem Clicked="() => OpenEditConnectionStringModalAsync(context.As<TenantDto>().Id)">@L["ConnectionStrings"]</DropdownItem>
-                            }
-                            @if (HasManageFeaturesPermission)
-                            {
-                                <DropdownItem Clicked="() => FeatureManagementModal.OpenAsync(FeatureProviderName, context.As<TenantDto>().Id.ToString())">@L["Features"]</DropdownItem>
-                            }
-                            @if (HasDeletePermission)
-                            {
-                                <DropdownDivider/>
-                                <DropdownItem Clicked="() => DeleteEntityAsync(context.As<TenantDto>())">@L["Delete"]</DropdownItem>
-                            }
-                        </DropdownMenu>
-                    </Dropdown>
-                </DisplayTemplate>
-            </DataGridColumn>
-        }
+        <DataGridEntityActionsColumn TItem="TenantDto" @ref="@EntityActionsColumn">
+            <DisplayTemplate>
+                <EntityActions TItem="TenantDto" EntityActionsColumn="@EntityActionsColumn">
+                    <EntityAction TItem="TenantDto"
+                                  RequiredPolicy="@UpdatePolicyName"
+                                  Clicked="() => OpenEditModalAsync(context.Id)"
+                                  Text="@L["Edit"]"></EntityAction>
+                    <EntityAction TItem="TenantDto"
+                                  RequiredPolicy="@ManageConnectionStringsPolicyName"
+                                  Clicked="() => OpenEditConnectionStringModalAsync(context.Id)"
+                                  Text="@L["ConnectionStrings"]"></EntityAction>
+                    <EntityAction TItem="TenantDto"
+                                  RequiredPolicy="@ManageFeaturesPolicyName"
+                                  Clicked="() => FeatureManagementModal.OpenAsync(FeatureProviderName, context.Id.ToString())"
+                                  Text="@L["Features"]"></EntityAction>
+                    <EntityAction TItem="TenantDto"
+                                  RequiredPolicy="@DeletePolicyName"
+                                  Clicked="() => DeleteEntityAsync(context)"
+                                  ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)"
+                                  Text="@L["Delete"]"></EntityAction>
+                </EntityActions>
+            </DisplayTemplate>
+        </DataGridEntityActionsColumn>
         <DataGridColumn TItem="TenantDto" Field="@nameof(TenantDto.Name)" Caption="@L["TenantName"].Value">
             <DisplayTemplate>
-                @(context.As<TenantDto>().Name)
+                @(context.Name)
             </DisplayTemplate>
         </DataGridColumn>
     </DataGridColumns>
@@ -73,25 +64,25 @@
 @if (HasCreatePermission)
 {
     <Modal @ref="CreateModal">
-        <ModalBackdrop/>
+        <ModalBackdrop />
         <ModalContent IsCentered="true">
             <ModalHeader>
                 <ModalTitle>@L["NewTenant"]</ModalTitle>
-                <CloseButton Clicked="CloseCreateModalAsync"/>
+                <CloseButton Clicked="CloseCreateModalAsync" />
             </ModalHeader>
             <ModalBody>
                 <EditForm id="TenantCreateForm" Model="@NewEntity" OnValidSubmit="CreateEntityAsync">
                     <Field>
                         <FieldLabel>@L["TenantName"]</FieldLabel>
-                        <TextEdit @bind-text="@NewEntity.Name"/>
+                        <TextEdit @bind-text="@NewEntity.Name" />
                     </Field>
                     <Field>
                         <FieldLabel>@L["DisplayName:AdminEmailAddress"]</FieldLabel>
-                        <TextEdit Role="@TextRole.Email" @bind-text="@NewEntity.AdminEmailAddress"/>
+                        <TextEdit Role="@TextRole.Email" @bind-text="@NewEntity.AdminEmailAddress" />
                     </Field>
                     <Field>
                         <FieldLabel>@L["DisplayName:AdminPassword"]</FieldLabel>
-                        <TextEdit Role="@TextRole.Password" @bind-text="@NewEntity.AdminPassword"/>
+                        <TextEdit Role="@TextRole.Password" @bind-text="@NewEntity.AdminPassword" />
                     </Field>
                 </EditForm>
             </ModalBody>
@@ -107,17 +98,17 @@
 @if (HasUpdatePermission)
 {
     <Modal @ref="EditModal">
-        <ModalBackdrop/>
+        <ModalBackdrop />
         <ModalContent IsCentered="true">
             <ModalHeader>
                 <ModalTitle>@L["Edit"]</ModalTitle>
-                <CloseButton Clicked="CloseEditModalAsync"/>
+                <CloseButton Clicked="CloseEditModalAsync" />
             </ModalHeader>
             <ModalBody>
                 <EditForm id="TenantEditForm" Model="@EditingEntity" OnValidSubmit="UpdateEntityAsync">
                     <Field>
                         <FieldLabel>@L["TenantName"]</FieldLabel>
-                        <TextEdit @bind-text="@EditingEntity.Name"/>
+                        <TextEdit @bind-text="@EditingEntity.Name" />
                     </Field>
                 </EditForm>
             </ModalBody>
@@ -133,11 +124,11 @@
 @if (HasUpdatePermission)
 {
     <Modal @ref="@ManageConnectionStringModal">
-        <ModalBackdrop/>
+        <ModalBackdrop />
         <ModalContent IsCentered="true">
             <ModalHeader>
                 <ModalTitle>@L["ConnectionStrings"]</ModalTitle>
-                <CloseButton Clicked="CloseEditConnectionStringModal"/>
+                <CloseButton Clicked="CloseEditConnectionStringModal" />
             </ModalHeader>
             <ModalBody>
                 <EditForm id="ConnectionStringEditForm" Model="@TenantInfo" OnValidSubmit="UpdateConnectionStringAsync">
@@ -149,7 +140,7 @@
                     {
                         <Field>
                             <FieldLabel>@L["DisplayName:DefaultConnectionString"]</FieldLabel>
-                            <TextEdit @bind-text="@TenantInfo.DefaultConnectionString"/>
+                            <TextEdit @bind-text="@TenantInfo.DefaultConnectionString" />
                         </Field>
                     }
                 </EditForm>
@@ -164,5 +155,5 @@
 
 @if (HasManageFeaturesPermission)
 {
-    <FeatureManagementModal @ref="FeatureManagementModal"/>
+    <FeatureManagementModal @ref="FeatureManagementModal" />
 }
