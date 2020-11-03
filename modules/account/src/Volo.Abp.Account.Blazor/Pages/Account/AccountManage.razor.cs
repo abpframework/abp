@@ -1,34 +1,23 @@
 ﻿using System.Threading.Tasks;
-using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Localization;
-using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Identity;
-using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Account.Blazor.Pages.Account
 {
-    public abstract class AccountManageBase : OwningComponentBase
+    public partial class AccountManage
     {
-        [Inject] protected IAccountAppService AccountAppService { get; set; }
         [Inject] protected IProfileAppService ProfileAppService { get; set; }
-        
-        [Inject] protected IObjectMapper<AbpAccountBlazorModule> ObjectMapper { get; set; }
-        
+                
         [Inject] protected IUiMessageService UiMessageService { get; set; }
-
-        [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
-        
-        [Inject] protected IStringLocalizer<AccountResource> L { get; set; }
 
         protected string SelectedTab = "Password";
 
         protected ChangePasswordModel ChangePasswordModel;
 
         protected PersonalInfoModel PersonalInfoModel;
-        
-        protected override async Task OnInitializedAsync()
+
+        protected async override Task OnInitializedAsync()
         {
             await GetUserInformations();
         }

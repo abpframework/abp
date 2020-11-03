@@ -85,7 +85,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
 
 ### Logging
 
-Caught exceptions are automatically logged. 
+Caught exceptions are automatically logged.
 
 #### Log Level
 
@@ -300,7 +300,7 @@ In this case, create a class derived from the `ExceptionSubscriber` class in you
 ````csharp
 public class MyExceptionSubscriber : ExceptionSubscriber
 {
-    public override async Task HandleAsync(ExceptionNotificationContext context)
+    public async override Task HandleAsync(ExceptionNotificationContext context)
     {
         //TODO...
     }

@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             HtmlGenerator = htmlGenerator;
         }
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             SetRandomIdIfNotProvided();
 
@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Attributes.AddClass("accordion");
             output.Attributes.Add("id",TagHelper.Id);
-            
+
             var items = InitilizeFormGroupContentsContext(context, output);
 
             await output.GetChildContentAsync();

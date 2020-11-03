@@ -15,7 +15,7 @@ namespace Volo.Abp.BlobStoring.Azure
             AzureBlobNameCalculator = azureBlobNameCalculator;
         }
 
-        public override async Task SaveAsync(BlobProviderSaveArgs args)
+        public async override Task SaveAsync(BlobProviderSaveArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetAzureConfiguration();
@@ -33,7 +33,7 @@ namespace Volo.Abp.BlobStoring.Azure
             await GetBlobClient(args, blobName).UploadAsync(args.BlobStream, true);
         }
 
-        public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
 
@@ -45,14 +45,14 @@ namespace Volo.Abp.BlobStoring.Azure
             return false;
         }
 
-        public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
 
             return await BlobExistsAsync(args, blobName);
         }
 
-        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
 
