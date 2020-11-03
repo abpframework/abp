@@ -1,0 +1,23 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "InternalServerErrorMessage": "Bei Ihrer Anfrage ist ein interner Fehler aufgetreten!",
+    "ValidationErrorMessage": "Ihre Anfrage ist ungültig!",
+    "ValidationNarrativeErrorMessageTitle": "Die folgenden Fehler wurden während der Validierung festgestellt.",
+    "DefaultErrorMessage": "Ein Fehler ist aufgetreten!",
+    "DefaultErrorMessageDetail": "Fehlerdetail nicht vom Server gesendet.",
+    "DefaultErrorMessage401": "Sie sind nicht authentifiziert!",
+    "DefaultErrorMessage401Detail": "Sie sollten sich anmelden, um diesen Vorgang auszuführen.",
+    "DefaultErrorMessage403": "Sie sind nicht berechtigt!",
+    "DefaultErrorMessage403Detail": "Sie dürfen diesen Vorgang nicht ausführen!",
+    "DefaultErrorMessage404": "Ressource nicht gefunden!",
+    "DefaultErrorMessage404Detail": "Die angeforderte Ressource konnte nicht auf dem Server gefunden werden!",
+    "EntityNotFoundErrorMessage": "Es gibt keine Entität {0} mit id = {1}!",
+    "Error": "Fehler",
+    "UnhandledException": "Unbehandelte Ausnahme!",
+    "401Message": "Nicht autorisiert",
+    "403Message": "Unzulässig",
+    "404Message": "Seite nicht gefunden",
+    "500Message": "Interner Serverfehler"
+  }
+}
