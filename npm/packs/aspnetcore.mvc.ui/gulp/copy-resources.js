@@ -64,13 +64,7 @@
         extendObject(defaultSettings.aliases, resourcemapping.aliases);
         resourcemapping.aliases = defaultSettings.aliases;
         
-        if (!resourcemapping.clean) {
-            resourcemapping.clean = [];
-        }
-        
-        for (var i = 0; i < defaultSettings.clean.length; ++i) {
-            resourcemapping.clean.push(defaultSettings.clean[i]);
-        }
+        resourcemapping.clean = resourcemapping.clean || defaultSettings.clean;
         
         return resourcemapping;
     }
