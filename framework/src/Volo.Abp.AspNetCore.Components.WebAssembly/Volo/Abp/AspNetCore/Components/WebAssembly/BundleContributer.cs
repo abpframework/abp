@@ -5,14 +5,21 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
     public class BundleContributer : IBundleContributer
     {
-        public void AddScripts(List<string> scripts)
+        public void AddScripts(List<BundleDefinition> scriptDefinitions)
         {
-            scripts.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.WebAssembly/libs/abp/js/abp.js");
+            var scripts = new string[]
+            {
+                "_content/Volo.Abp.AspNetCore.Components.WebAssembly/libs/abp/js/abp.js",
+            };
+
+            foreach (var script in scripts)
+            {
+                scriptDefinitions.AddIfNotContains((item) => item.Source == script, () => new BundleDefinition(script));
+            }
         }
 
-        public void AddStyles(List<string> styles)
+        public void AddStyles(List<BundleDefinition> styleDefinitions)
         {
-
         }
     }
 }

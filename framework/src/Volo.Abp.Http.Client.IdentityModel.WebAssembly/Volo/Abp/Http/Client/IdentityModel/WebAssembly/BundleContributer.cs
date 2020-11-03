@@ -1,18 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Volo.Abp.Bundling;
 
 namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly
 {
     public class BundleContributer : IBundleContributer
     {
-        public void AddScripts(List<string> scripts)
+        public void AddScripts(List<BundleDefinition> scriptDefinitions)
         {
-            scripts.AddIfNotContains("_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js");
+            var scripts = new string[]
+            {
+                "_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js",
+            };
+
+            foreach (var script in scripts)
+            {
+                scriptDefinitions.AddIfNotContains((item) => item.Source == script, () => new BundleDefinition(script));
+            }
         }
 
-        public void AddStyles(List<string> styles)
+        public void AddStyles(List<BundleDefinition> styleDefinitions)
         {
+
         }
     }
 }

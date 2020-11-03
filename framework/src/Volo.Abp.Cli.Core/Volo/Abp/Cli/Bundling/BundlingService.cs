@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,7 +51,7 @@ namespace Volo.Abp.Cli.Bundling
             var assemblyFilePath = GetAssemblyFilePath(directory, frameworkVersion, Path.GetFileNameWithoutExtension(projectFilePath));
             var startupModule = GetStartupModule(assemblyFilePath);
 
-            var bundleDefinitions = new List<BundleDefinition>();
+            var bundleDefinitions = new List<BundleTypeDefinition>();
             FindBundleContributersRecursively(startupModule, 0, bundleDefinitions);
             bundleDefinitions = bundleDefinitions.OrderByDescending(t => t.Level).ToList();
 
@@ -92,9 +93,9 @@ namespace Volo.Abp.Cli.Bundling
             return updatedContent.Insert(placeholderStartIndex, definitions);
         }
 
-        private string GenerateStyleDefinitions(List<BundleDefinition> bundleDefinitions)
+        private string GenerateStyleDefinitions(List<BundleTypeDefinition> bundleDefinitions)
         {
-            var styles = new List<string>();
+            var styles = new List<BundleDefinition>();
             foreach (var bundleDefinition in bundleDefinitions)
             {
                 var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
@@ -105,18 +106,30 @@ namespace Volo.Abp.Cli.Bundling
             builder.AppendLine($"{StylePlaceholderStart}");
             foreach (var style in styles)
             {
-                builder.AppendLine($"\t<link href=\"{style}\" rel=\"stylesheet\" />");
+                if (style.AdditionalProperties != null && style.AdditionalProperties.Any())
+                {
+                    builder.Append($"\t<link href=\"{style.Source}\" rel=\"stylesheet\" ");
+                    foreach (var additionalProperty in style.AdditionalProperties)
+                    {
+                        builder.Append($"{additionalProperty.Key}={additionalProperty.Value} ");
+                    }
+                    builder.AppendLine("/>");
+                }
+                else
+                {
+                    builder.AppendLine($"\t<link href=\"{style.Source}\" rel=\"stylesheet\" />");
+                }
             }
             builder.AppendLine($"\t{StylePlaceholderEnd}");
 
             return builder.ToString();
         }
 
-        private string GenerateScriptDefinitions(List<BundleDefinition> bundleDefinitions)
+        private string GenerateScriptDefinitions(List<BundleTypeDefinition> bundleDefinitions)
         {
-            var scripts = new List<string>
+            var scripts = new List<BundleDefinition>
             {
-                "_framework/blazor.webassembly.js"
+                new BundleDefinition("_framework/blazor.webassembly.js")
             };
             foreach (var bundleDefinition in bundleDefinitions)
             {
@@ -128,7 +141,19 @@ namespace Volo.Abp.Cli.Bundling
             builder.AppendLine($"{ScriptPlaceholderStart}");
             foreach (var script in scripts)
             {
-                builder.AppendLine($"\t<script src=\"{script}\"></script>");
+                if (script.AdditionalProperties != null && script.AdditionalProperties.Any())
+                {
+                    builder.Append($"\t<script src=\"{script.Source}\" ");
+                    foreach (var additionalProperty in script.AdditionalProperties)
+                    {
+                        builder.Append($"{additionalProperty.Key}={additionalProperty.Value} ");
+                    }
+                    builder.AppendLine("></script>");
+                }
+                else
+                {
+                    builder.AppendLine($"\t<script src=\"{script.Source}\"></script>");
+                }
             }
             builder.AppendLine($"\t{ScriptPlaceholderEnd}");
 
@@ -141,7 +166,7 @@ namespace Volo.Abp.Cli.Bundling
             return instance.As<IBundleContributer>();
         }
 
-        private void FindBundleContributersRecursively(Type module, int level, List<BundleDefinition> bundleDefinitions)
+        private void FindBundleContributersRecursively(Type module, int level, List<BundleTypeDefinition> bundleDefinitions)
         {
             var dependencyDescriptors = module
                 .GetCustomAttributes()
@@ -160,7 +185,7 @@ namespace Volo.Abp.Cli.Bundling
                 }
                 else
                 {
-                    bundleDefinitions.Add(new BundleDefinition
+                    bundleDefinitions.Add(new BundleTypeDefinition
                     {
                         Level = level,
                         BundleContributerType = bundleContributer

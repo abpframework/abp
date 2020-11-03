@@ -5,16 +5,24 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
 {
     public class BundleContributer : IBundleContributer
     {
-        public void AddScripts(List<string> scripts)
+        public void AddScripts(List<BundleDefinition> scriptDefinitions)
         {
 
         }
 
-        public void AddStyles(List<string> styles)
+        public void AddStyles(List<BundleDefinition> styleDefinitions)
         {
-            styles.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/bootstrap/css/bootstrap.css");
-            styles.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/fontawesome/css/all.css");
-            styles.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/flag-icon/css/flag-icon.css");
+            var styles = new string[]
+            {
+                "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/bootstrap/css/bootstrap.min.css",
+                "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/fontawesome/css/all.css",
+                "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/flag-icon/css/flag-icon.css"
+            };
+
+            foreach (var style in styles)
+            {
+                styleDefinitions.AddIfNotContains((item) => item.Source == style, () => new BundleDefinition(style));
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Cli.Bundling
 {
-    internal class BundleDefinition
+    internal class BundleTypeDefinition
     {
         public int Level { get; set; }
         public Type BundleContributerType { get; set; }

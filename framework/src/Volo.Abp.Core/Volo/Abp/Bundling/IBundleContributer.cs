@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Volo.Abp.Bundling
 {
     public interface IBundleContributer
     {
-        void AddScripts(List<string> scripts);
-        void AddStyles(List<string> styles);
+        void AddScripts(List<BundleDefinition> scriptDefinitions);
+        void AddStyles(List<BundleDefinition> styleDefinitions);
     }
 }
