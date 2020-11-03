@@ -15,12 +15,6 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
         [Inject]
         protected IMenuManager MenuManager { get; set; }
 
-        [Inject]
-        protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
-
-        [Inject]
-        protected IOptions<AbpRemoteServiceOptions> RemoteServiceOptions { get; set; }
-
         protected ApplicationMenu Menu { get; set; }
 
         protected override async Task OnInitializedAsync()
