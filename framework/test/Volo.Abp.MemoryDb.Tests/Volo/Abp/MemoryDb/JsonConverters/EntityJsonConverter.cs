@@ -6,6 +6,7 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.Abp.MemoryDb.JsonConverters
 {
     public class EntityJsonConverter<TEntity, TKey> : JsonConverter<TEntity>
+        where TEntity : IEntity<TKey>
     {
         public override TEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -16,7 +17,7 @@ namespace Volo.Abp.MemoryDb.JsonConverters
             var id = JsonSerializer.Deserialize<TKey>(idJsonElement.GetRawText());
             if (id != null)
             {
-                EntityHelper.TrySetId(entity, id);
+                EntityHelper.TrySetId(entity, () => id);
             }
 
             return entity;
