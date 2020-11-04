@@ -1,14 +1,14 @@
-import { EventEmitter, Injector, Type } from '@angular/core';
+import { EventEmitter, Type } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgxsStoragePluginOptions } from '@ngxs/storage-plugin';
 import { Subject } from 'rxjs';
 import { eLayoutType } from '../enums/common';
 import { Config } from './config';
-import { NgxsStoragePluginOptions } from '@ngxs/storage-plugin';
 
 export namespace ABP {
   export interface Root {
     environment: Partial<Config.Environment>;
-    registerLocaleFn: (locale: string, injector: Injector) => Promise<any>;
+    registerLocaleFn: (locale: string) => Promise<any>;
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
     ngxsStoragePluginOptions?: NgxsStoragePluginOptions & { key?: string[] };
