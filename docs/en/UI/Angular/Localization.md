@@ -232,7 +232,7 @@ import(
 ).then(m => storeLocaleData(m.default, 'your-locale'));
 ```
 
-> Note: In order for the new locale to be created as a chunk, the application must be restarted.
+> Note: In order to create a new locale as a chunk, the application must be restarted.
 
 ## See Also
 
