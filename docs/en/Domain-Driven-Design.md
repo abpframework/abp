@@ -30,7 +30,7 @@ See the following documents to learn what ABP Framework provides to you to imple
   * [Repositories](Repositories.md)
   * [Domain Services](Domain-Services.md)
   * [Value Objects](Value-Objects.md)
-  * Specifications
+  * [Specifications](Specifications.md)
 * **Application Layer**
   * [Application Services](Application-Services.md)
   * [Data Transfer Objects (DTOs)](Data-Transfer-Objects.md)
