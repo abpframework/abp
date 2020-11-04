@@ -15,9 +15,6 @@ namespace Volo.Abp.Domain.Entities
     /// </summary>
     public static class EntityHelper
     {
-        private static readonly ConcurrentDictionary<string, PropertyInfo> CachedIdProperties =
-            new ConcurrentDictionary<string, PropertyInfo>();
-
         public static bool EntityEquals(IEntity entity1, IEntity entity2)
         {
             if (entity1 == null || entity2 == null)
@@ -241,30 +238,13 @@ namespace Volo.Abp.Domain.Entities
             Func<TKey> idFactory,
             bool checkForDisableIdGenerationAttribute = false)
         {
-            var property = CachedIdProperties.GetOrAdd(
-                $"{entity.GetType().FullName}-{checkForDisableIdGenerationAttribute}", () =>
-                {
-                    var idProperty = entity
-                        .GetType()
-                        .GetProperties()
-                        .FirstOrDefault(x => x.Name == nameof(entity.Id) &&
-                                             x.GetSetMethod(true) != null);
-
-                    if (idProperty == null)
-                    {
-                        return null;
-                    }
-
-                    if (checkForDisableIdGenerationAttribute &&
-                        idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
-                    {
-                        return null;
-                    }
-
-                    return idProperty;
-                });
-
-            property?.SetValue(entity, idFactory());
+            ObjectHelper.TrySetProperty(
+                entity,
+                x => x.Id,
+                idFactory,
+                checkForDisableIdGenerationAttribute
+                    ? new Type[] { typeof(DisableIdGenerationAttribute) }
+                    : new Type[] { });
         }
 
         public static void TrySetId<TKey>(
