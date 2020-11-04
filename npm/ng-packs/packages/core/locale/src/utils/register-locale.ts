@@ -1,13 +1,12 @@
 import { differentLocales } from '@abp/ng.core';
 import { registerLocaleData } from '@angular/common';
-import { Injector, isDevMode } from '@angular/core';
+import { isDevMode } from '@angular/core';
 
 export interface LocaleErrorHandlerData {
   resolve: any;
   reject: any;
   error: any;
   locale: string;
-  injector: Injector;
 }
 
 export interface RegisterLocaleData {
@@ -21,7 +20,7 @@ export function registerLocale(
     errorHandlerFn = defaultLocalErrorHandlerFn,
   } = {} as RegisterLocaleData,
 ) {
-  return (locale: string, injector: Injector): Promise<any> => {
+  return (locale: string): Promise<any> => {
     cultureNameLocaleFileMap = { ...differentLocales, ...cultureNameLocaleFileMap };
 
     return new Promise((resolve, reject) => {
@@ -40,7 +39,6 @@ export function registerLocale(
             resolve,
             reject,
             error,
-            injector,
             locale,
           });
         });
@@ -53,11 +51,7 @@ export function storeLocaleData(data: any, localeId: string) {
   extraLocales[localeId] = data;
 }
 
-export async function defaultLocalErrorHandlerFn({
-  locale,
-  resolve,
-  injector,
-}: LocaleErrorHandlerData) {
+export async function defaultLocalErrorHandlerFn({ locale, resolve }: LocaleErrorHandlerData) {
   if (extraLocales[locale]) {
     registerLocaleData(extraLocales[locale], locale);
     resolve();
