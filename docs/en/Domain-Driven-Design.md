@@ -27,9 +27,9 @@ See the following documents to learn what ABP Framework provides to you to imple
 
 * **Domain Layer**
   * [Entities & Aggregate Roots](Entities.md)
-  * Value Objects
   * [Repositories](Repositories.md)
   * [Domain Services](Domain-Services.md)
+  * [Value Objects](Value-Objects.md)
   * Specifications
 * **Application Layer**
   * [Application Services](Application-Services.md)
