@@ -85,6 +85,11 @@
     "ProfileImageChange": "Change the profile image",
     "BlogItemErrorMessage": "Could not get the latest blog post details from ABP.",
     "PlannedReleaseDate": "Planned release date",
-    "CommunityArticleRequestErrorMessage": "Could not get the latest article request from Github."
+    "CommunityArticleRequestErrorMessage": "Could not get the latest article request from Github.",
+    "ArticleRequestFromGithubIssue": "There are not any article requests now.",
+    "LatestArticles": "Latest Articles",
+    "ArticleRequests": "Article Requests",
+    "AllArticleRequests": "See All Article Requests",
+    "ArticleAssignRequest": "Want to write this article? Click here to assign yourself."
   }
 }
