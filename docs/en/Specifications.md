@@ -12,7 +12,7 @@ abp add-package Volo.Abp.Specifications
 
 ## Defining the Specifications
 
-Assume that you've an Customer entity as defined below:
+Assume that you've a Customer entity as defined below:
 
 ````csharp
 using System;
