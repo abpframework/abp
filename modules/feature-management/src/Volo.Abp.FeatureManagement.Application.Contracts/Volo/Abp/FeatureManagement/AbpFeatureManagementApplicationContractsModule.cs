@@ -1,5 +1,8 @@
-﻿using Volo.Abp.Application;
-using Volo.Abp.Json.Newtonsoft;
+﻿using System.Collections.Generic;
+using Volo.Abp.Application;
+using Volo.Abp.FeatureManagement.JsonConverters;
+using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -7,7 +10,8 @@ namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
         typeof(AbpFeatureManagementDomainSharedModule),
-        typeof(AbpDddApplicationModule)
+        typeof(AbpDddApplicationModule),
+        typeof(AbpJsonModule)
         )]
     public class AbpFeatureManagementApplicationContractsModule : AbpModule
     {
@@ -18,9 +22,9 @@ namespace Volo.Abp.FeatureManagement
                 options.FileSets.AddEmbedded<AbpFeatureManagementApplicationContractsModule>();
             });
 
-            Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
+            Configure<AbpSystemTextJsonSerializerOptions>(options =>
             {
-                options.Converters.Add<StringValueTypeJsonConverter>();
+                options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter());
             });
         }
     }

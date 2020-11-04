@@ -9,7 +9,7 @@ namespace Volo.Abp.Localization.Json
         /// </summary>
         public string Culture { get; set; }
 
-        public Dictionary<string, string> Texts { get; }
+        public Dictionary<string, string> Texts { get; set; }
 
         public JsonLocalizationFile()
         {

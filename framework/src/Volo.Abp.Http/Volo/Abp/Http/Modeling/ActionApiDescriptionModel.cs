@@ -26,7 +26,7 @@ namespace Volo.Abp.Http.Modeling
 
         public ReturnValueApiDescriptionModel ReturnValue { get; set; }
 
-        private ActionApiDescriptionModel()
+        public ActionApiDescriptionModel()
         {
 
         }

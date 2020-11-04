@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Volo.Abp.Localization.Json
 {
     public static class JsonLocalizationDictionaryBuilder
     {
-        private static readonly JsonSerializerSettings SharedJsonSerializerSettings = new JsonSerializerSettings
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-
         /// <summary>
         ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.
         /// </summary>
@@ -39,8 +33,15 @@ namespace Volo.Abp.Localization.Json
             JsonLocalizationFile jsonFile;
             try
             {
-                jsonFile = JsonConvert.DeserializeObject<JsonLocalizationFile>(
-                    jsonString, SharedJsonSerializerSettings);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    AllowTrailingCommas = true
+                };
+
+                jsonFile = JsonSerializer.Deserialize<JsonLocalizationFile>(jsonString, options);
             }
             catch (JsonException ex)
             {
