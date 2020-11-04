@@ -246,36 +246,5 @@ namespace Volo.Abp.Domain.Entities
                     ? new Type[] { typeof(DisableIdGenerationAttribute) }
                     : new Type[] { });
         }
-
-        public static void TrySetId<TKey>(
-            object entity,
-            TKey id,
-            bool checkForDisableIdGenerationAttribute = false)
-        {
-            var property = CachedIdProperties.GetOrAdd(
-                $"{entity.GetType().FullName}-{checkForDisableIdGenerationAttribute}", () =>
-                {
-                    var idProperty = entity
-                        .GetType()
-                        .GetProperties()
-                        .FirstOrDefault(x => x.Name == nameof(IEntity<object>.Id) &&
-                                             x.GetSetMethod(true) != null);
-
-                    if (idProperty == null)
-                    {
-                        return null;
-                    }
-
-                    if (checkForDisableIdGenerationAttribute &&
-                        idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
-                    {
-                        return null;
-                    }
-
-                    return idProperty;
-                });
-
-            property?.SetValue(entity, id);
-        }
     }
 }
