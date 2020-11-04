@@ -344,7 +344,8 @@
               "path": "Entities.md"
             },
             {
-              "text": "Value Objects"
+              "text": "Value Objects",
+              "path": "Value-Objects.md"
             },
             {
               "text": "Repositories",
