@@ -31,14 +31,16 @@ export function registerLocale(
         /* webpackInclude: /[/\\](ar|cs|en|fr|pt|tr|ru|hu|sl|zh-Hans|zh-Hant).js/ */
         /* webpackExclude: /[/\\]global|extra/ */
         `@angular/common/locales/${localeMap[locale] || locale}.js`
-      ).catch(error => {
-        errorHandlerFn({
-          resolve,
-          reject,
-          error,
-          locale,
+      )
+        .then(resolve)
+        .catch(error => {
+          errorHandlerFn({
+            resolve,
+            reject,
+            error,
+            locale,
+          });
         });
-      });
     });
   };
 }
