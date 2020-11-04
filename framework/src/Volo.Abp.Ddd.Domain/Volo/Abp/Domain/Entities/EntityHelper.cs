@@ -13,7 +13,7 @@ namespace Volo.Abp.Domain.Entities
     /// <summary>
     /// Some helper methods for entities.
     /// </summary>
-    public static partial class EntityHelper
+    public static class EntityHelper
     {
         public static bool EntityEquals(IEntity entity1, IEntity entity2)
         {
