@@ -27,29 +27,36 @@ namespace Volo.Abp
             Func<TObject, TValue> valueFactory,
             params Type[] ignoreAttributeTypes)
         {
-            var property = CachedObjectProperties.GetOrAdd(
-                $"{obj.GetType().FullName}-{propertySelector}{(ignoreAttributeTypes != null ? string.Join("-",  ignoreAttributeTypes.Select(x => x.FullName)) : "")}", () =>
+            var cacheKey = $"{obj.GetType().FullName}-" +
+                           $"{propertySelector}-" +
+                           $"{(ignoreAttributeTypes != null ? "-" + string.Join("-", ignoreAttributeTypes.Select(x => x.FullName)) : "")}";
+
+            var property = CachedObjectProperties.GetOrAdd(cacheKey, () =>
+            {
+                if (propertySelector.Body.NodeType != ExpressionType.MemberAccess)
                 {
-                    if (propertySelector.Body.NodeType != ExpressionType.MemberAccess)
-                    {
-                        return null;
-                    }
+                    return null;
+                }
 
-                    var memberExpression = propertySelector.Body.As<MemberExpression>();
+                var memberExpression = propertySelector.Body.As<MemberExpression>();
 
-                    var propertyInfo = obj.GetType().GetProperties().FirstOrDefault(x => x.Name == memberExpression.Member.Name && x.DeclaringType == obj.GetType());
-                    if (propertyInfo == null || propertyInfo.GetSetMethod(true) == null)
-                    {
-                        return null;
-                    }
+                var propertyInfo = obj.GetType().GetProperties().FirstOrDefault(x =>
+                    x.Name == memberExpression.Member.Name &&
+                    x.GetSetMethod(true) != null);
 
-                    if (ignoreAttributeTypes != null && ignoreAttributeTypes.Any(ignoreAttribute => propertyInfo.IsDefined(ignoreAttribute, true)))
-                    {
-                        return null;
-                    }
+                if (propertyInfo == null)
+                {
+                    return null;
+                }
 
-                    return propertyInfo;
-                });
+                if (ignoreAttributeTypes != null &&
+                    ignoreAttributeTypes.Any(ignoreAttribute => propertyInfo.IsDefined(ignoreAttribute, true)))
+                {
+                    return null;
+                }
+
+                return propertyInfo;
+            });
 
             property?.SetValue(obj, valueFactory(obj));
         }
