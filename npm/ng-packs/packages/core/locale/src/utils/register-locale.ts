@@ -9,6 +9,8 @@ export interface LocaleErrorHandlerData {
   locale: string;
 }
 
+let localeMap = {};
+
 export interface RegisterLocaleData {
   cultureNameLocaleFileMap: Record<string, string>;
   errorHandlerFn: (data: LocaleErrorHandlerData) => any;
@@ -21,27 +23,22 @@ export function registerLocale(
   } = {} as RegisterLocaleData,
 ) {
   return (locale: string): Promise<any> => {
-    cultureNameLocaleFileMap = { ...differentLocales, ...cultureNameLocaleFileMap };
+    localeMap = { ...differentLocales, ...cultureNameLocaleFileMap };
 
     return new Promise((resolve, reject) => {
       return import(
         /* webpackChunkName: "_locale-[request]"*/
         /* webpackInclude: /[/\\](ar|cs|en|fr|pt|tr|ru|hu|sl|zh-Hans|zh-Hant).js/ */
         /* webpackExclude: /[/\\]global|extra/ */
-        `@angular/common/locales/${cultureNameLocaleFileMap[locale] || locale}.js`
-      )
-        .then(module => {
-          registerLocaleData(module.default, locale);
-          resolve(module.default);
-        })
-        .catch(error => {
-          errorHandlerFn({
-            resolve,
-            reject,
-            error,
-            locale,
-          });
+        `@angular/common/locales/${localeMap[locale] || locale}.js`
+      ).catch(error => {
+        errorHandlerFn({
+          resolve,
+          reject,
+          error,
+          locale,
         });
+      });
     });
   };
 }
@@ -53,8 +50,7 @@ export function storeLocaleData(data: any, localeId: string) {
 
 export async function defaultLocalErrorHandlerFn({ locale, resolve }: LocaleErrorHandlerData) {
   if (extraLocales[locale]) {
-    registerLocaleData(extraLocales[locale], locale);
-    resolve();
+    resolve({ default: extraLocales[localeMap[locale] || locale] });
     return;
   }
 

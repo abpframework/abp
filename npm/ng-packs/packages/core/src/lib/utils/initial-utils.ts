@@ -1,3 +1,4 @@
+import { registerLocaleData } from '@angular/common';
 import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -46,7 +47,11 @@ export function localeInitializer(injector: Injector) {
     const lang = store.selectSnapshot(state => state.SessionState.language) || 'en';
 
     return new Promise((resolve, reject) => {
-      registerLocaleFn(lang).then(() => resolve('resolved'), reject);
+      registerLocaleFn(lang).then(module => {
+        if (module?.default) registerLocaleData(module.default);
+
+        return resolve('resolved');
+      }, reject);
     });
   };
 

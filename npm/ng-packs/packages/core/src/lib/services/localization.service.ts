@@ -1,3 +1,4 @@
+import { registerLocaleData } from '@angular/common';
 import { Injectable, Injector, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
@@ -54,7 +55,9 @@ export class LocalizationService {
 
     const { registerLocaleFn }: ABP.Root = this.injector.get(CORE_OPTIONS);
 
-    return registerLocaleFn(locale).then(() => {
+    return registerLocaleFn(locale).then(module => {
+      if (module?.default) registerLocaleData(module.default);
+
       this.ngZone.run(async () => {
         await router.navigateByUrl(router.url).catch(noop);
         router.routeReuseStrategy.shouldReuseRoute = shouldReuseRoute;
