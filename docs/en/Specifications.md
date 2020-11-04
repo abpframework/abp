@@ -2,9 +2,13 @@
 
 Specification Pattern is used to define **named, reusable, combinable and testable filters** for entities and other business objects.
 
+> A Specification is a part of the Domain Layer.
+
 ## Installation
 
-If you haven't installed yet, install the [Volo.Abp.Specifications](https://abp.io/package-detail/Volo.Abp.Specifications) package to your project. You can use the [ABP CLI](CLI.md) *add-package* command in a command line terminal when the current folder is the root folder of your project (`.csproj`):
+> This package is **already installed** when you use the startup templates. So, most of the times you don't need to manually install it.
+
+Install the [Volo.Abp.Specifications](https://abp.io/package-detail/Volo.Abp.Specifications) package to your project. You can use the [ABP CLI](CLI.md) *add-package* command in a command line terminal when the current folder is the root folder of your project (`.csproj`):
 
 ````bash
 abp add-package Volo.Abp.Specifications
