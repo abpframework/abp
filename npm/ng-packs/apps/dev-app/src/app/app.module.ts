@@ -38,7 +38,7 @@ const INSPECTION_TOOLS = [
     SettingManagementConfigModule.forRoot(),
     NgxsModule.forRoot(),
     ThemeBasicModule.forRoot(),
-    ...(environment.production ? [] : INSPECTION_TOOLS),
+    ...(environment.production || environment.test ? [] : INSPECTION_TOOLS),
   ],
   providers: [APP_ROUTE_PROVIDER],
   declarations: [AppComponent],

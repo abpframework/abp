@@ -9,6 +9,7 @@
     "symlink": "symlink",
     "start": "ng serve dev-app",
     "start:internal": "ng serve dev-app --configuration=internal",
+    "start:regression": "ng serve dev-app --configuration=regression",
     "build": "ng build",
     "test": "ng test --watchAll --runInBand",
     "commit": "git-cz",
