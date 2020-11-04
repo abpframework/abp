@@ -159,7 +159,7 @@ abp add-package Volo.Abp.MongoDB
 
 Adds a [multi-package application module](Modules/Index) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
-It can also create a fresh new module for your solution and add it to your solution. See `--new-template` option.
+It can also create a new module for your solution and add it to your solution. See `--new-template` option.
 
 > A business module generally consists of several packages (because of layering, different database provider options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
 
@@ -181,7 +181,7 @@ abp add-module Volo.Blogging
 abp add-module ProductManagement --new-template --add-to-solution-file
 ```
 
-* This example creates a fresh new module specialized for your solution (named `ProductManagement`) and adds it to your solution & solution file.
+* This command creates a fresh new module customized for your solution (named `ProductManagement`) and adds it to your solution.
 
 
 #### Options
@@ -189,7 +189,7 @@ abp add-module ProductManagement --new-template --add-to-solution-file
 * `--solution` or `-s`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
 * `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
 * `-sp` or `--startup-project`: Relative path to the project folder of the startup project. Default value is the current folder.
-* `--new-template`: Creates a fresh new module (speсialized for your solution) and adds it to your solution.
+* `--new-template`: Creates a fresh new module (customized for your solution) and adds it to your solution.
 * `--with-source-code`: Downloads the source code of the module to your solution folder and uses local project references instead of NuGet/NPM packages. This options is always `True` if `--new-template` is used.
 * `--add-to-solution-file`: Adds the downloaded/created module to your solution file, so you will also see the projects of the module when you open the solution on a IDE. (only available when `--with-source-code` is `True`.)
 
