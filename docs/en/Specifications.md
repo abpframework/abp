@@ -12,7 +12,7 @@ abp add-package Volo.Abp.Specifications
 
 ## Defining the Specifications
 
-Assume that you've an Customer entity as defined below:
+Assume that you've a Customer entity as defined below:
 
 ````csharp
 using System;
@@ -228,9 +228,9 @@ public async Task<int> GetAdultPremiumCustomerCountAsync()
 
 While the specification pattern is older than C# lambda expressions, it's generally compared to expressions. Some developers may think it's not needed anymore and we can directly pass expressions to a repository or to a domain service as shown below:
 
-```
+````csharp
 var count = await _customerRepository.CountAsync(c => c.Balance > 100000 && c.Age => 18);
-```
+````
 
 Since ABP's [Repository](Repositories.md) supports Expressions, this is a completely valid use. You don't have to define or use any specification in your application and you can go with expressions.
 
