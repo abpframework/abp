@@ -54,7 +54,7 @@ export class LocalizationService {
 
     const { registerLocaleFn }: ABP.Root = this.injector.get(CORE_OPTIONS);
 
-    return registerLocaleFn(locale, this.injector).then(() => {
+    return registerLocaleFn(locale).then(() => {
       this.ngZone.run(async () => {
         await router.navigateByUrl(router.url).catch(noop);
         router.routeReuseStrategy.shouldReuseRoute = shouldReuseRoute;
