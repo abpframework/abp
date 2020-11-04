@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
                 return new SystemTextJsonInputFormatter(jsonOptions.Value, logger);
             });
 
-            builder.Services.AddTransient<DefaultObjectPoolProvider>();
+            builder.Services.TryAddTransient<DefaultObjectPoolProvider>();
             //NewtonsoftJsonInputFormatter
             builder.Services.AddTransient(provider =>
             {
