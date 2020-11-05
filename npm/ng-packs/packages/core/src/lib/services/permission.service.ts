@@ -1,7 +1,7 @@
 import { ConfigState } from '../states';
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs/operators';
-import { ApplicationConfiguration } from '../models';
+import { ApplicationConfiguration } from '../models/application-configuration';
 import snq from 'snq';
 import { Injectable } from '@angular/core';
 
