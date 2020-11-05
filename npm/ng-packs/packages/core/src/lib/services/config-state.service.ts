@@ -45,6 +45,7 @@ export class ConfigStateService {
     return this.store.selectSnapshot(ConfigState.getSettings(...args));
   }
 
+  /** @deprecated Use PermissionService's getGrantedPolicySnapshot method */
   getGrantedPolicy(...args: Parameters<typeof ConfigState.getGrantedPolicy>) {
     return this.store.selectSnapshot(ConfigState.getGrantedPolicy(...args));
   }
