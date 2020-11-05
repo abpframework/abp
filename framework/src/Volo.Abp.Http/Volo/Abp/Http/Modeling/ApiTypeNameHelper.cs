@@ -8,18 +8,25 @@ namespace Volo.Abp.Http.Modeling
     {
         public static string GetTypeName(Type type)
         {
+            return GetTypeName(type, new TypeList());
+        }
+
+        private static string GetTypeName(Type type, ITypeList duplicateTypes)
+        {
+            duplicateTypes.Add(type);
+
             if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
             {
-                if (keyType != type && valueType != type)
+                if (!duplicateTypes.Contains(keyType) && !duplicateTypes.Contains(valueType))
                 {
-                    return $"{{{GetTypeName(keyType)}:{GetTypeName(valueType)}}}";
+                    return $"{{{GetTypeName(keyType, duplicateTypes)}:{GetTypeName(valueType, duplicateTypes)}}}";
                 }
             }
             else if (TypeHelper.IsEnumerable(type, out var itemType, includePrimitives: false))
             {
-                if (itemType != type)
+                if (!duplicateTypes.Contains(itemType))
                 {
-                    return $"[{GetTypeName(itemType)}]";
+                    return $"[{GetTypeName(itemType, duplicateTypes)}]";
                 }
             }
 
@@ -28,18 +35,25 @@ namespace Volo.Abp.Http.Modeling
 
         public static string GetSimpleTypeName(Type type)
         {
+            return GetSimpleTypeName(type, new TypeList());
+        }
+
+        private static string GetSimpleTypeName(Type type, ITypeList duplicateTypes)
+        {
+            duplicateTypes.Add(type);
+
             if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
             {
-                if (keyType != type && valueType != type)
+                if (!duplicateTypes.Contains(keyType) && !duplicateTypes.Contains(valueType))
                 {
-                    return  $"{{{GetSimpleTypeName(keyType)}:{GetSimpleTypeName(valueType)}}}";
+                    return  $"{{{GetSimpleTypeName(keyType, duplicateTypes)}:{GetSimpleTypeName(valueType, duplicateTypes)}}}";
                 }
             }
             else if (TypeHelper.IsEnumerable(type, out var itemType, includePrimitives: false))
             {
-                if (itemType != type)
+                if (!duplicateTypes.Contains(itemType))
                 {
-                    return  $"[{GetSimpleTypeName(itemType)}]";
+                    return  $"[{GetSimpleTypeName(itemType, duplicateTypes)}]";
                 }
             }
 

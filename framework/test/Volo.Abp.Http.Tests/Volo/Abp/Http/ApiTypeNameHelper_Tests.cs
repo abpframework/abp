@@ -14,6 +14,7 @@ namespace Volo.Abp.Http
         {
             ApiTypeNameHelper.GetTypeName(typeof(CycleClass)).ShouldBe(TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass)));
             ApiTypeNameHelper.GetTypeName(typeof(CycleClass2)).ShouldBe(TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass2)));
+            ApiTypeNameHelper.GetTypeName(typeof(CycleClass3)).ShouldBe($"[{TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(CycleClass4))}]");
         }
 
         [Fact]
@@ -21,6 +22,7 @@ namespace Volo.Abp.Http
         {
             ApiTypeNameHelper.GetSimpleTypeName(typeof(CycleClass)).ShouldBe(TypeHelper.GetSimplifiedName(typeof(CycleClass)));
             ApiTypeNameHelper.GetSimpleTypeName(typeof(CycleClass2)).ShouldBe(TypeHelper.GetSimplifiedName(typeof(CycleClass2)));
+            ApiTypeNameHelper.GetTypeName(typeof(CycleClass3)).ShouldBe($"[{TypeHelper.GetSimplifiedName(typeof(CycleClass4))}]");
         }
 
         class CycleClass : IEnumerable<CycleClass>
@@ -39,6 +41,33 @@ namespace Volo.Abp.Http
         class CycleClass2 : Dictionary<CycleClass2, CycleClass2>
         {
 
+        }
+
+        class CycleClass3 : IEnumerable<CycleClass4>
+        {
+
+            public IEnumerator<CycleClass4> GetEnumerator()
+            {
+                yield return new CycleClass4();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
+        class CycleClass4 : IEnumerable<CycleClass3>
+        {
+            public IEnumerator<CycleClass3> GetEnumerator()
+            {
+                yield return new CycleClass3();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
     }
 }
