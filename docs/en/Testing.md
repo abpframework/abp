@@ -514,7 +514,7 @@ namespace MyProject
     public static class TestData
     {
         public static Guid User1Id = Guid.Parse("41951813-5CF9-4204-8B18-CD765DBCBC9B");
-        public static Guid User2Id = Guid.Parse("41951813-5CF9-4204-8B18-CD765DBCBC9B");
+        public static Guid User2Id = Guid.Parse("2DAB4460-C21B-4925-BF41-A52750A9B999");
     }
 }
 ````
@@ -647,7 +647,7 @@ namespace MyProject.Issues
 }
 ````
 
-It's that simple. This test method tests everything, including the application service, EF Core mapping, object to object mapping and the repository implementation. In this way, you can fully test the Application & Domain Layers of your application.
+It's that simple. This test method tests everything, including the application service, EF Core mapping, object to object mapping and the repository implementation. In this way, you can fully test the Application Later and the Domain Layer of your solution.
 
 ## UI Tests
 
