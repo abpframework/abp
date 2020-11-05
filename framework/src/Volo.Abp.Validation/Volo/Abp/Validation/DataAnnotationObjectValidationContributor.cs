@@ -52,7 +52,7 @@ namespace Volo.Abp.Validation
                     foreach (var item in enumerable)
                     {
                         //Do not recursively validate for primitive objects
-                        if (TypeHelper.IsPrimitiveExtended(item.GetType()))
+                        if (item == null || TypeHelper.IsPrimitiveExtended(item.GetType()))
                         {
                             break;
                         }
