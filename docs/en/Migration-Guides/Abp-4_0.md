@@ -14,19 +14,19 @@ The route calculation for the [Auto API Controllers](https://docs.abp.io/en/abp/
 
 If it is hard to change it for your application, you can continue to use the version 3.x route strategy, by following one of the approaches;
 
-* Set `UseV3UrlStyle` to `true` in the options of the `options.ConventionalControllers.Create(...)` method. Example:
+- Set `UseV3UrlStyle` to `true` in the options of the `options.ConventionalControllers.Create(...)` method. Example:
 
-````csharp
+```csharp
 options.ConventionalControllers
     .Create(typeof(BookStoreApplicationModule).Assembly, opts =>
         {
             opts.UseV3UrlStyle = true;
         });
-````
+```
 
 This approach effects only the controllers for the `BookStoreApplicationModule`.
 
-* Set `UseV3UrlStyle` to `true` for the `AbpConventionalControllerOptions` to set it globally. Example:
+- Set `UseV3UrlStyle` to `true` for the `AbpConventionalControllerOptions` to set it globally. Example:
 
 ```csharp
 Configure<AbpConventionalControllerOptions>(options =>
@@ -47,27 +47,27 @@ Entity changed don't directly affect your application, however it is good to kno
 
 #### ApiScope
 
-As the **most important breaking change**, Identity Server 4.x places the `ApiScope` as an independent aggregate root. Previously it was a part of the to `ApiResource` aggregate. This requires manual operation. See the *Database Changes* section.
+As the **most important breaking change**, Identity Server 4.x places the `ApiScope` as an independent aggregate root. Previously it was a part of the to `ApiResource` aggregate. This requires manual operation. See the _Database Changes_ section.
 
 Also, added `Enabled(string)` and `Description(bool,true)` properties.
 
 #### ApiResource
 
-* Added `AllowedAccessTokenSigningAlgorithms (string)` and `ShowInDiscoveryDocument(bool, default: true)` properties
+- Added `AllowedAccessTokenSigningAlgorithms (string)` and `ShowInDiscoveryDocument(bool, default: true)` properties
 
 #### Client
 
-* Added `RequireRequestObject (bool)` and `AllowedIdentityTokenSigningAlgorithms (string)` properties.
-* Changed default value of `RequireConsent` from `true` to `false`.
-* Changed default value of `RequirePkce` from `false` to `true`.
+- Added `RequireRequestObject (bool)` and `AllowedIdentityTokenSigningAlgorithms (string)` properties.
+- Changed default value of `RequireConsent` from `true` to `false`.
+- Changed default value of `RequirePkce` from `false` to `true`.
 
 #### DeviceFlowCodes
 
-* Added `SessionId (string)` and `Description (string)` properties.
+- Added `SessionId (string)` and `Description (string)` properties.
 
 #### PersistedGrant
 
-* Added `SessionId (string)` and `Description(string)` and `ConsumedTime (DateTime?)` properties
+- Added `SessionId (string)` and `Description(string)` and `ConsumedTime (DateTime?)` properties
 
 ### Database Changes
 
@@ -102,7 +102,7 @@ IdentityServer has removed the [public origin option](https://github.com/Identit
 
 One simple solution is to add such a middleware into your ASP.NET Core pipeline, at the beginning.
 
-```
+```csharp
 app.Use((httpContext, next) =>
 {
     httpContext.Request.Scheme = "https";
@@ -113,5 +113,13 @@ app.Use((httpContext, next) =>
 > This sample is obtained from the [ASP.NET Core documentation](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer#scenarios-and-use-cases). You can use it if you always use HTTPS in all environments.
 
 ### Related Resources
-* https://leastprivilege.com/2020/06/19/announcing-identityserver4-v4-0/
-* https://github.com/IdentityServer/IdentityServer4/issues/4592
+
+- https://leastprivilege.com/2020/06/19/announcing-identityserver4-v4-0/
+- https://github.com/IdentityServer/IdentityServer4/issues/4592
+
+## Blazor UI
+
+### AbpCrudPageBase Changes
+
+- `OpenEditModalAsync` method is requires `EntityDto` instead of id (`Guid`) parameter.
+- `DeleteEntityAsync` method doesn't display confirmation dialog anymore. You can use the new `EntityActions` component in DataGrids to show confirmation messages. You can also inject `IUiMessageService` to your page or component and call `ConfirmAsync` explicitly.
