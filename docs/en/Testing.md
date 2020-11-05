@@ -37,7 +37,7 @@ There are more than one test project, organized by the layers;
 * `Domain.Tests` is used to test your Domain Layer objects (like [Domain Services](Domain-Services.md) and [Entities](Entities.md)).
 * `Application.Tests` is used to test your Application Layer (like [Application Services](Application-Services.md)).
 * `EntityFrameworkCore.Tests` is used to test your custom repository implementations or EF Core mappings (this project will be different if you use another [Database Provider](Data-Access.md)).
-* `Web.Tests` is used to test the UI Layer (like Pages, Controllers and View Components)
+* `Web.Tests` is used to test the UI Layer (like Pages, Controllers and View Components). This project does exists only for MVC / Razor Page applications.
 * `TestBase` contains some classes those are shared/used by the other projects.
 
 > `HttpApi.Client.ConsoleTestApp` is not an automated test application. It is an example Console Application that shows how to consume your HTTP APIs from a .NET Console Application.
@@ -651,5 +651,23 @@ It's that simple. This test method tests everything, including the application s
 
 ## UI Tests
 
-TODO
+In general, there are two types of UI Tests;
 
+### Non Visual Tests
+
+Such tests completely depends on your UI Framework choice;
+
+* For an MVC / Razor Pages UI, you typically make request to the server, get some HTML and test if some expected DOM elements exist in the returned result.
+* Angular has its own infrastructure and practices to test the components, views and services.
+
+See the following documents to learn Non Visual UI Testing;
+
+* [Testing in ASP.NET Core MVC / Razor Pages](UI/AspNetCore/Testing.md)
+* [Testing in Angular](UI/Angular/Testing.md)
+* [Testing in Blazor](UI/Blazor/Testing.md)
+
+### Visual Tests
+
+Visual Tests are used to interact with the application UI just like a real user does. It fully tests the application, including the visual appearance of the pages and components.
+
+Visual UI Testing is out of the scope for the ABP Framework. There are a lot of tooling in the industry (like [Selenium](https://www.selenium.dev/)) that you can use to test your application's UI.
