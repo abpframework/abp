@@ -519,7 +519,7 @@ namespace MyProject
 
 In this way, we can use these known Issues and the User `Id`s to perform the tests.
 
-#### Example: Testing a Domain Service
+### Example: Testing a Domain Service
 
 `AbpIntegratedTest<T>` class (defined in the [Volo.Abp.TestBase](https://www.nuget.org/packages/Volo.Abp.TestBase) package) is used to write tests integrated to the ABP Framework. `T` is the Type of the root module to setup and initialize the application.
 
@@ -584,9 +584,68 @@ Writing such an integration test class is very straightforward. Another benefit 
 
 ### Example: Testing an Application Service
 
+Testing an [Application Service](Application-Services.md) is not so different. Assume that you've created an `IssueAppService` as defined below:
 
+````csharp
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
 
-TODO
+namespace MyProject.Issues
+{
+    public class IssueAppService : ApplicationService, IIssueAppService
+    {
+        private readonly IIssueRepository _issueRepository;
+
+        public IssueAppService(IIssueRepository issueRepository)
+        {
+            _issueRepository = issueRepository;
+        }
+
+        public async Task<List<IssueDto>> GetListAsync()
+        {
+            var issues = await _issueRepository.GetListAsync();
+
+            return ObjectMapper.Map<List<Issue>, List<IssueDto>>(issues);
+        }
+    }
+}
+````
+
+*(assuming you've also defined the `IIssueAppService` and `IssueDto` and created the [object mapping](Object-To-Object-Mapping.md) between `Issue` and the `IssueDto`)*
+
+Now, you can write a test class inside the `.Application.Tests` project:
+
+````csharp
+using System.Threading.Tasks;
+using Shouldly;
+using Xunit;
+
+namespace MyProject.Issues
+{
+    public class IssueAppService_Tests : MyProjectApplicationTestBase
+    {
+        private readonly IIssueAppService _issueAppService;
+
+        public IssueAppService_Tests()
+        {
+            _issueAppService = GetRequiredService<IIssueAppService>();
+        }
+
+        [Fact]
+        public async Task Should_Get_All_Issues()
+        {
+            //Act
+            var issueDtos = await _issueAppService.GetListAsync();
+
+            //Assert
+            issueDtos.Count.ShouldBeGreaterThan(0);
+        }
+    }
+}
+````
+
+It's that simple. This test method tests everything, including the application service, EF Core mapping, object to object mapping and the repository implementation. In this way, you can fully test the Application & Domain Layers of your application.
 
 ## UI Tests
 
