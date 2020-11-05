@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Newtonsoft.Json;
+using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters
@@ -36,13 +36,14 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
                 }
             }
 
-            return JsonConvert.SerializeObject(copyDictionary, Formatting.None);
+            return JsonSerializer.Serialize(copyDictionary);
         }
 
         private static Dictionary<string, object> DeserializeObject(string extraPropertiesAsJson, Type entityType)
         {
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(extraPropertiesAsJson);
-
+            var deserializeOptions = new JsonSerializerOptions();
+            deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(extraPropertiesAsJson, deserializeOptions) ?? new Dictionary<string, object>();
             if (entityType != null)
             {
                 var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
@@ -59,7 +60,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
         }
 
         private static object GetNormalizedValue(
-            Dictionary<string, object> dictionary, 
+            Dictionary<string, object> dictionary,
             ObjectExtensionPropertyInfo property)
         {
             var value = dictionary.GetOrDefault(property.Name);

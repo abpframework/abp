@@ -19,7 +19,7 @@ namespace Volo.Abp.Http.Modeling
 
         public object DefaultValue { get; set; }
 
-        private MethodParameterApiDescriptionModel()
+        public MethodParameterApiDescriptionModel()
         {
 
         }

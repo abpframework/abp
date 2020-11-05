@@ -1,0 +1,10 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "Features": "Features",
+    "NoFeatureFoundMessage": "Es ist kein Feature verfügbar.",
+    "Permission:FeatureManagement": "Feature-Verwaltung",
+    "Permission:FeatureManagement.ManageHostFeatures": "Host-Features verwalten",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} Feature-Wert ist ungültig!"
+  }
+}

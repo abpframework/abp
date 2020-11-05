@@ -12,9 +12,9 @@ namespace Volo.Abp.Http.Modeling
 
         public IDictionary<string, TypeApiDescriptionModel> Types { get; set; }
 
-        private ApplicationApiDescriptionModel()
+        public ApplicationApiDescriptionModel()
         {
-            
+
         }
 
         public static ApplicationApiDescriptionModel Create()

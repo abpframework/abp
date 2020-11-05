@@ -4,14 +4,17 @@ using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.MemoryDb;
 using Volo.Abp.Data;
 using Volo.Abp.Autofac;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories.MemoryDb;
+using Volo.Abp.MemoryDb.JsonConverters;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 
 namespace Volo.Abp.MemoryDb
 {
     [DependsOn(
-        typeof(TestAppModule), 
-        typeof(AbpMemoryDbModule), 
+        typeof(TestAppModule),
+        typeof(AbpMemoryDbModule),
         typeof(AbpAutofacModule))]
     public class AbpMemoryDbTestModule : AbpModule
     {
@@ -28,6 +31,11 @@ namespace Volo.Abp.MemoryDb
             {
                 options.AddDefaultRepositories();
                 options.AddRepository<City, CityRepository>();
+            });
+
+            Configure<Utf8JsonMemoryDbSerializerOptions>(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new EntityJsonConverter<EntityWithIntPk, int>());
             });
         }
     }

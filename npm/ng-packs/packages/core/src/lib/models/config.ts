@@ -10,6 +10,7 @@ export namespace Config {
     apis: Apis;
     application: Application;
     hmr?: boolean;
+    test?: boolean;
     localization?: { defaultResourceName?: string };
     oAuthConfig: AuthConfig;
     production: boolean;

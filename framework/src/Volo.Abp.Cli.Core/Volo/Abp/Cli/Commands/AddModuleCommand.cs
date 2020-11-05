@@ -36,10 +36,12 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            var withSourceCode = commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
+            var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
+            var newProTemplate = commandLineArgs.Options.ContainsKey(Options.NewProTemplate.Long);
+            var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
 
-            var skipDbMigrations = Convert.ToBoolean(
+            var skipDbMigrations = newTemplate || newProTemplate || Convert.ToBoolean(
                 commandLineArgs.Options.GetOrNull(Options.DbMigrations.Skip) ?? "false");
 
             var solutionFile = GetSolutionFile(commandLineArgs);
@@ -57,7 +59,9 @@ namespace Volo.Abp.Cli.Commands
                 version,
                 skipDbMigrations,
                 withSourceCode,
-                addSourceCodeToSolutionFile
+                addSourceCodeToSolutionFile,
+                newTemplate,
+                newProTemplate
             );
         }
 
@@ -73,10 +77,11 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-module <module-name> [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
-            sb.AppendLine("  --with-source-code                              Downloads the source code of the module to your solution folder.");
-            sb.AppendLine("  --add-to-solution-file                          Adds the downloaded module to your solution file. (only available when --with-source-code used)");
+            sb.AppendLine("  --new-template                                  Creates a fresh new module (speсialized for your solution) and adds it your solution.");
+            sb.AppendLine("  --with-source-code                              Downloads the source code of the module to your solution folder. (Always True if `--new-template` is used.)");
+            sb.AppendLine("  --add-to-solution-file                          Adds the downloaded/created module to your solution file. (only available when --with-source-code used)");
             sb.AppendLine("  -s|--solution <solution-file>                   Specify the solution file explicitly.");
-            sb.AppendLine("  --skip-db-migrations <boolean>                  Specify if a new migration will be added or not.");
+            sb.AppendLine("  --skip-db-migrations <boolean>                  Specify if a new migration will be added or not.  (Always True if `--new-template` is used.)");
             sb.AppendLine("  -sp|--startup-project <startup-project-path>    Relative path to the project folder of the startup project. Default value is the current folder.");
             sb.AppendLine("  -v|--version <version>                          Specify the version of the module. Default is your project's ABP version.");
             sb.AppendLine("");
@@ -86,6 +91,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given solution.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given solution but doesn't create a database migration.");
             sb.AppendLine(@"  abp add-module Volo.Blogging -s Acme.BookStore -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Adds the module to the given solution and specify migration startup project.");
+            sb.AppendLine(@"  abp add-module ProductManagement --new-template -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Crates a new module named `ProductManagement` and adds it to your solution.");
+            sb.AppendLine(@"  abp add-module ProductManagement --new-template --add-to-solution-file -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Crates a new module named `ProductManagement`, adds it to your solution & solution file.");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -165,6 +172,16 @@ namespace Volo.Abp.Cli.Commands
             public static class SourceCode
             {
                 public const string Long = "with-source-code";
+            }
+
+            public class NewTemplate
+            {
+                public const string Long = "new-template";
+            }
+
+            public class NewProTemplate
+            {
+                public const string Long = "new-pro-template";
             }
         }
     }

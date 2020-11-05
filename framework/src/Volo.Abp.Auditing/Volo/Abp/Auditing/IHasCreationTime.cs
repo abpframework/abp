@@ -10,6 +10,6 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Creation time.
         /// </summary>
-        DateTime CreationTime { get; set; }
+        DateTime CreationTime { get; }
     }
 }

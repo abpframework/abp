@@ -39,6 +39,16 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                    input.Time3.Value.Kind.ToString().ToLower() + "_" +
                    input.InnerModel.Time4.Kind.ToString().ToLower();
         }
+
+        //JSON input and output.
+        [HttpPost("ComplexTypeDateTimeKind_JSON")]
+        public string ComplexTypeDateTimeKind_JSON([FromBody]GetDateTimeKindModel input)
+        {
+            return input.Time1.Kind.ToString().ToLower() + "_" +
+                   input.Time2.Kind.ToString().ToLower() + "_" +
+                   input.Time3.Value.Kind.ToString().ToLower() + "_" +
+                   input.InnerModel.Time4.Kind.ToString().ToLower();
+        }
     }
 
     public class GetDateTimeKindModel

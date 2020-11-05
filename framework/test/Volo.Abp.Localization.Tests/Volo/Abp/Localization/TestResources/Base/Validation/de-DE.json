@@ -1,0 +1,7 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "ThisFieldIsRequired": "Dieses Feld wird benötigt",
+    "MaxLenghtErrorMessage": "Dieses Feld darf maximal '{0}' Zeichen enthalten"
+  }
+}

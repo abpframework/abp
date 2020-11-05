@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Volo.Abp.DependencyInjection;
 
@@ -8,6 +7,8 @@ namespace Volo.Abp.MongoDB
     public abstract class AbpMongoDbContext : IAbpMongoDbContext, ITransientDependency
     {
         public IMongoModelSource ModelSource { get; set; }
+
+        public IMongoClient Client { get; private set; }
 
         public IMongoDatabase Database { get; private set; }
 
@@ -18,9 +19,10 @@ namespace Volo.Abp.MongoDB
 
         }
 
-        public virtual void InitializeDatabase(IMongoDatabase database, IClientSessionHandle sessionHandle)
+        public virtual void InitializeDatabase(IMongoDatabase database, IMongoClient client, IClientSessionHandle sessionHandle)
         {
             Database = database;
+            Client = client;
             SessionHandle = sessionHandle;
         }
 

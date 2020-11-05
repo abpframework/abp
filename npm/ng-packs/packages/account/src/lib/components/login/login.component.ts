@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
           this.toasterService.error(
             snq(() => err.error.error_description) ||
               snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
-            'Error',
+            'AbpAccount::Error',
             { life: 7000 },
           );
           return throwError(err);

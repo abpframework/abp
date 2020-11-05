@@ -1,0 +1,7 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "Zeitzone",
+    "Description:Abp.Timing.Timezone": "Anwendungszeitzone"
+  }
+}

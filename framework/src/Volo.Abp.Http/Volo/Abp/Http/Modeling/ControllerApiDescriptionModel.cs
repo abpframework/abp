@@ -16,7 +16,7 @@ namespace Volo.Abp.Http.Modeling
 
         public Dictionary<string, ActionApiDescriptionModel> Actions { get; set; }
 
-        private ControllerApiDescriptionModel()
+        public ControllerApiDescriptionModel()
         {
 
         }
