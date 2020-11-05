@@ -55,32 +55,38 @@ namespace Volo.Abp.Cli.Build
             var projects = new List<DotNetProjectInfo>();
 
             AddProjectsOfRepository(buildConfig.GitRepository, projects);
-            
+
             _dotNetProjectDependencyFiller.Fill(projects);
-            
+
             var allSortedProjectList = _buildProjectListSorter.SortByDependencies(
                 projects,
                 new DotNetProjectInfoEqualityComparer()
             );
-            
-            FilterIgnoredDirectories(allSortedProjectList, buildConfig.GitRepository);
 
-            return allSortedProjectList;
+            return FilterIgnoredDirectories(allSortedProjectList, buildConfig.GitRepository);
         }
 
-        private void FilterIgnoredDirectories(List<DotNetProjectInfo> projects, GitRepository gitRepository)
+        private List<DotNetProjectInfo> FilterIgnoredDirectories(List<DotNetProjectInfo> projects,
+            GitRepository gitRepository)
         {
             foreach (var ignoredDirectory in gitRepository.IgnoredDirectories)
             {
+                Console.WriteLine("projects count 1:" + projects.Count);
+                Console.WriteLine("Ignoring Directory...:" + Path.Combine(gitRepository.RootPath, ignoredDirectory));
+
                 projects = projects.Where(e =>
                         !e.CsProjPath.StartsWith(Path.Combine(gitRepository.RootPath, ignoredDirectory)))
                     .ToList();
+
+                Console.WriteLine("projects count 2:" + projects.Count);
             }
 
             foreach (var dependingRepository in gitRepository.DependingRepositories)
             {
                 FilterIgnoredDirectories(projects, dependingRepository);
             }
+
+            return projects;
         }
 
         private void AddProjectsOfRepository(GitRepository gitRepository, List<DotNetProjectInfo> projects)
@@ -107,9 +113,9 @@ namespace Volo.Abp.Cli.Build
                 buildConfig.BuildName,
                 buildConfig.GitRepository
             );
-            
+
             var allSortedProjectList = FindAllProjects(buildConfig);
-            
+
             MarkProjectsForBuild(
                 buildConfig.GitRepository,
                 gitRepositoryBuildStatus,

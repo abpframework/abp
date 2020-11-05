@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
@@ -51,7 +52,7 @@ namespace Volo.Abp.Cli.Commands
             var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
             buildConfig.BuildName = buildName;
             buildConfig.ForceBuild = forceBuild;
-
+            
             Console.WriteLine("Finding changed projects...");
 
             var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
