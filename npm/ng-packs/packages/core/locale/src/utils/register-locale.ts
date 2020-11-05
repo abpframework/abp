@@ -12,8 +12,8 @@ export interface LocaleErrorHandlerData {
 let localeMap = {};
 
 export interface RegisterLocaleData {
-  cultureNameLocaleFileMap: Record<string, string>;
-  errorHandlerFn: (data: LocaleErrorHandlerData) => any;
+  cultureNameLocaleFileMap?: Record<string, string>;
+  errorHandlerFn?: (data: LocaleErrorHandlerData) => any;
 }
 
 export function registerLocale(
