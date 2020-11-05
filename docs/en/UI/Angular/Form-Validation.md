@@ -38,6 +38,39 @@ In this example;
 - Localization resource is defined as `"AlreadyExists": "Sorry, “{0}” already exists."`.
 - And the validator should return `{ uniqueUsername: { username: "admin" } }` as the error object.
 
+## How to Change Existing Error Messages
+
+You can overwrite an existing error message by providing `VALIDATION_BLUEPRINTS` injection token from your root module. Let's imagine you have a custom localization resource for required inputs.
+
+```json
+"RequiredInput": "Oops! We need this input."
+```
+
+To use this instead of the built-in required input message, all you need to do is the following.
+
+```js
+import { VALIDATION_BLUEPRINTS } from "@ngx-validate/core";
+
+@NgModule({
+  // rest of the module metadata
+
+  providers: [
+    // other providers
+    {
+      provide: VALIDATION_BLUEPRINTS,
+      useValue: {
+        required: "::RequiredInput",
+      },
+    },
+  ],
+})
+export class AppModule {}
+```
+
+The error message will look like this:
+
+<img alt="A required field is cleared and the custom error message appears under the input." src="./images/form-validation---overwrite-error-message.gif" width="990px" style="max-width:100%">
+
 ## What's Next?
 
 - [Settings](./Settings.md)
