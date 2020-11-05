@@ -214,3 +214,7 @@ The `AbpAspNetCoreIntegratedTestBase` provides the following base properties tho
 
 * `ConfigureServices` can be overridden to register/replace services only for the derived test class.
 * `CreateHostBuilder` can be used to customize building the `IHostBuilder`.
+
+See Also
+
+* [Overall / Server Side Testing](../../Testing.md)
