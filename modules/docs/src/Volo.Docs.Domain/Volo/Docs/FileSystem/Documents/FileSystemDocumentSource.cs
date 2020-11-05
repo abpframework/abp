@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.IO;
@@ -60,7 +59,7 @@ namespace Volo.Docs.FileSystem.Documents
             var path = Path.Combine(project.GetFileSystemPath(), DocsDomainConsts.LanguageConfigFileName);
             var configJsonContent = await FileHelper.ReadAllTextAsync(path);
 
-            if (!JsonConvertExtensions.TryDeserializeObject<LanguageConfig>(configJsonContent, out var languageConfig))
+            if (!DocsJsonSerializerHelper.TryDeserialize<LanguageConfig>(configJsonContent, out var languageConfig))
             {
                 throw new UserFriendlyException($"Cannot validate language config file '{DocsDomainConsts.LanguageConfigFileName}' for the project {project.Name}.");
             }
