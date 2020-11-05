@@ -1,10 +1,26 @@
 ﻿# Automated Testing
 
+## Introduction
+
 ABP Framework has been designed with testability in mind. There are some different levels of automated testing;
 
 * **Unit Tests**: You typically test a single class (or a very few classes together). These tests will be fast. However, you generally need to deal with mocking for the dependencies of your service(s).
 * **Integration Tests**: You typically test a service, but this time you don't mock the fundamental infrastructure and services to see if they properly working together.
 * **UI Tests**: You test the UI of the application, just like the users interact with your application.
+
+### Unit Tests vs Integration Tests
+
+Integration tests have some significant **advantages** compared to unit tests;
+
+* **Easier to write** since you don't work to establish mocking and dealing with the dependencies.
+* Your test code runs with all the real services and infrastructure (including database mapping and queries), so it is much closer to the **real application test**.
+
+While they have some drawbacks;
+
+* They are **slower** compared to unit tests since all the infrastructure is prepared for each test case.
+* A bug in a service may make multiple test cases broken, so it may be **harder to find the real problem** in some cases.
+
+We suggest to go mixed: Write unit or integration test where it is necessary and you find effective to write and maintain it.
 
 ## The Application Startup Template
 
@@ -406,6 +422,44 @@ namespace MyProject.Issues
 > Keep your test code clean to create a maintainable test suite.
 
 ## Integration Tests
+
+### The Integration Test Infrastructure
+
+ABP Provides a complete infrastructure to write integration tests. All the ABP infrastructure and services will perform in your tests. The application startup template comes with the necessary infrastructure pre-configured for you;
+
+#### The Database
+
+The startup template is configured to use in-memory SQL database for the EF Core (for MongoDB, it uses [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library). So, all the configuration and queries are performed against a real database and you can even test database transactions.
+
+Using in-memory SQL database has two main advantages;
+
+* It is faster compared to an external DBMS.
+* It create a **new fresh database** for each test case, so tests doesn't affect each other.
+
+#### The Seed Data
+
+Writing tests against an empty database is not practical. In most cases, you need to some initial data in the database. For example, if you write a test class that query, update and delete the Products, it would be helpful to have a few products in the database before executing the test case.
+
+ABP's [Data Seeding](Data-Seeding.md) system is a powerful way to seed the initial data. The application startup template has a *YourProject*TestDataSeedContributor class in the `.TestBase` project. You can fill it to have an initial data that you can use for each test method.
+
+#### AbpIntegratedTest Class
+
+`AbpIntegratedTest<T>` class (defined in the [Volo.Abp.TestBase](https://www.nuget.org/packages/Volo.Abp.TestBase) package) is used to write tests integrated to the ABP Framework. `T` is the Type of the root module to setup and initialize the application.
+
+**Example: Create a test class derived from the `AbpIntegratedTest`**
+
+````csharp
+using Volo.Abp.Testing;
+
+namespace MyProject.Issues
+{
+    public class IssueManager_Integration_Tests
+        : AbpIntegratedTest<MyProjectDomainModule>
+    {
+
+    }
+}
+````
 
 TODO
 
