@@ -71,6 +71,24 @@ The error message will look like this:
 
 <img alt="A required field is cleared and the custom error message appears under the input." src="./images/form-validation---overwrite-error-message.gif" width="990px" style="max-width:100%">
 
+## How to Disable Validation on a Form
+
+If you want to validate a form manually, you can always disable automatic validation on it. All you need to do is place `skipValidation` on the form element.
+
+```html
+<form [formGroup]="form" skipValidation>
+  <!-- form fields here -->
+</form>
+```
+
+## How to Disable Validation on a Specific Field
+
+Validation works on any element or component with a `formControl` or `formControlName` directive. You can disable automatic validation on a specific field by placing `skipValidation` on the input element or component.
+
+```html
+<input type="text" formControlName="name" skipValidation />
+```
+
 ## What's Next?
 
 - [Settings](./Settings.md)
