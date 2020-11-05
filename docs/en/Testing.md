@@ -207,7 +207,135 @@ public void Should_Not_Allow_To_ReOpen_A_Locked_Issue()
 
 ### Classes With Dependencies
 
-TODO
+If your service has dependencies and you want to unit test this service, you need to mock the dependencies.
+
+#### Example: Testing a Domain Service
+
+Assume that you've an `IssueManager` [Domain Service](Domain-Services.md) that is defined as below:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Domain.Services;
+
+namespace MyProject.Issues
+{
+    public class IssueManager : DomainService
+    {
+        public const int MaxAllowedOpenIssueCountForAUser = 3;
+
+        private readonly IIssueRepository _issueRepository;
+
+        public IssueManager(IIssueRepository issueRepository)
+        {
+            _issueRepository = issueRepository;
+        }
+
+        public async Task AssignToUserAsync(Issue issue, Guid userId)
+        {
+            var issueCount = await _issueRepository.GetIssueCountOfUserAsync(userId);
+
+            if (issueCount >= MaxAllowedOpenIssueCountForAUser)
+            {
+                throw new BusinessException(
+                    code: "IM:00392",
+                    message: $"You can not assign more" +
+                             $"than {MaxAllowedOpenIssueCountForAUser} issues to a user!"
+                );
+            }
+
+            issue.AssignedUserId = userId;
+        }
+    }
+}
+````
+
+`IssueManager` depends on the `IssueRepository` service, that will be mocked in this example.
+
+**Business Rule**: The example `AssignToUserAsync` doesn't allow to assign more than 3 (`MaxAllowedOpenIssueCountForAUser` constant) issues to a user. If you want to assign an issue in this case, you first need to unassign an existing issue.
+
+The test case below tries to make a valid assignment:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using NSubstitute;
+using Shouldly;
+using Volo.Abp;
+using Xunit;
+
+namespace MyProject.Issues
+{
+    public class IssueManager_Tests
+    {
+        [Fact]
+        public async Task Should_Assign_An_Issue_To_A_User()
+        {
+            // Arrange
+
+            var userId = Guid.NewGuid();
+
+            var fakeRepo = Substitute.For<IIssueRepository>();
+            fakeRepo.GetIssueCountOfUserAsync(userId).Returns(1);
+
+            var issueManager = new IssueManager(fakeRepo);
+
+            var issue = new Issue();
+
+            // Act
+
+            await issueManager.AssignToUserAsync(issue, userId);
+
+            //Assert
+
+            issue.AssignedUserId.ShouldBe(userId);
+            await fakeRepo.Received(1).GetIssueCountOfUserAsync(userId);
+        }
+    }
+}
+````
+
+* `Substitute.For<IIssueRepository>` creates a mock (fake) object that is passed into the `IssueManager` constructor.
+* `fakeRepo.GetIssueCountOfUserAsync(userId).Returns(1)` ensures that the `GetIssueCountOfUserAsync` method of the repository returns `1`.
+* `issueManager.AssignToUserAsync` doesn't throw any exception since the repository returns `1` for the currently assigned issue count.
+* `issue.AssignedUserId.ShouldBe(userId);` line checks if the `AssignedUserId` has the correct value.
+* `await fakeRepo.Received(1).GetIssueCountOfUserAsync(userId);` checks if the `IssueManager` called the `GetIssueCountOfUserAsync` method exactly one time.
+
+Let's add a second test to see if it prevents to assign issues to a user more than the allowed count:
+
+````csharp
+[Fact]
+public async Task Should_Not_Allow_To_Assign_Issues_Over_The_Limit()
+{
+    // Arrange
+
+    var userId = Guid.NewGuid();
+
+    var fakeRepo = Substitute.For<IIssueRepository>();
+    fakeRepo
+        .GetIssueCountOfUserAsync(userId)
+        .Returns(IssueManager.MaxAllowedOpenIssueCountForAUser);
+
+    var issueManager = new IssueManager(fakeRepo);
+
+    // Act & Assert
+
+    var issue = new Issue();
+
+    await Assert.ThrowsAsync<BusinessException>(async () =>
+    {
+        await issueManager.AssignToUserAsync(issue, userId);
+    });
+
+    issue.AssignedUserId.ShouldBeNull();
+    await fakeRepo.Received(1).GetIssueCountOfUserAsync(userId);
+}
+````
+
+> For more information on the mocking, see the [NSubstitute](https://nsubstitute.github.io/) documentation.
+
+It is relatively easy to mock a single dependency. But, when your dependencies grow, it gets harder to setup the test objects and mock all the dependencies. See the *Integration Tests* section that doesn't require mocking the dependencies.
 
 ## Integration Tests
 
