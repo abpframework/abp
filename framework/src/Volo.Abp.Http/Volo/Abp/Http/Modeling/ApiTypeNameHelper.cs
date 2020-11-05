@@ -1,20 +1,28 @@
 ﻿using System;
+using Volo.Abp.Collections;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Modeling
 {
     public static class ApiTypeNameHelper
     {
+        private static ITypeList _cycleType = new TypeList();
+
         public static string GetTypeName(Type type)
         {
             if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
             {
-                return $"{{{GetTypeName(keyType)}:{GetTypeName(valueType)}}}";
+                if (keyType != type && valueType != type)
+                {
+                    return $"{{{GetTypeName(keyType)}:{GetTypeName(valueType)}}}";
+                }
             }
-
-            if (TypeHelper.IsEnumerable(type, out var itemType, includePrimitives: false))
+            else if (TypeHelper.IsEnumerable(type, out var itemType, includePrimitives: false))
             {
-                return $"[{GetTypeName(itemType)}]";
+                if (itemType != type)
+                {
+                    return $"[{GetTypeName(itemType)}]";
+                }
             }
 
             return TypeHelper.GetFullNameHandlingNullableAndGenerics(type);
@@ -24,12 +32,17 @@ namespace Volo.Abp.Http.Modeling
         {
             if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
             {
-                return  $"{{{GetSimpleTypeName(keyType)}:{GetSimpleTypeName(valueType)}}}";
+                if (keyType != type && valueType != type)
+                {
+                    return  $"{{{GetSimpleTypeName(keyType)}:{GetSimpleTypeName(valueType)}}}";
+                }
             }
-
-            if (TypeHelper.IsEnumerable(type, out var itemType, includePrimitives: false))
+            else if (TypeHelper.IsEnumerable(type, out var itemType, includePrimitives: false))
             {
-                return  $"[{GetSimpleTypeName(itemType)}]";
+                if (itemType != type)
+                {
+                    return  $"[{GetSimpleTypeName(itemType)}]";
+                }
             }
 
             return TypeHelper.GetSimplifiedName(type);
