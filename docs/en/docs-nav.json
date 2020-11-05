@@ -832,6 +832,10 @@
       ]
     },
     {
+      "text": "Testing",
+      "path": "Modules/Testing.md"
+    },
+    {
       "text": "Startup Templates",
       "items": [
         {
