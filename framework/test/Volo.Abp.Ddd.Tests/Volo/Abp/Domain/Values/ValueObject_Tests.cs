@@ -22,7 +22,7 @@ namespace Volo.Abp.Domain.Values
             var cityId = Guid.NewGuid();
 
             var address1 = new Address(cityId, "Baris Manco", 42);
-            var address2 = new Address(cityId, "Baris Manco", 42);
+            var address2 = new Address(cityId, "Baris Manco", 43);
 
             address1.ValueEquals(address2).ShouldBeFalse();
         }
