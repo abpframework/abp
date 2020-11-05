@@ -6,11 +6,5 @@ namespace Volo.Abp.Bundling
     {
         public string Source { get; set; }
         public Dictionary<string, string> AdditionalProperties { get; set; }
-
-        public BundleDefinition(string source)
-        {
-            Source = source;
-            AdditionalProperties = new Dictionary<string, string>();
-        }
     }
 }
