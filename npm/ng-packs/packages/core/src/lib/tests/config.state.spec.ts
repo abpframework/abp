@@ -8,7 +8,7 @@ import { Config } from '../models/config';
 import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
 
-export const CONFIG_STATE_DATA = {
+export const CONFIG_STATE_DATA = ({
   environment: {
     production: false,
     application: {
@@ -98,7 +98,8 @@ export const CONFIG_STATE_DATA = {
       'Chat.Enable': 'True',
     },
   },
-} as Config.State;
+  registerLocaleFn: () => Promise.resolve(),
+} as any) as Config.State;
 
 describe('ConfigState', () => {
   let spectator: SpectatorService<ConfigStateService>;
