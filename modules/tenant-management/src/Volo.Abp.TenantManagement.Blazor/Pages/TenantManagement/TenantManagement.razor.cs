@@ -47,15 +47,15 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
             HasManageFeaturesPermission = await AuthorizationService.IsGrantedAsync(ManageFeaturesPolicyName);
         }
 
-        protected virtual async Task OpenEditConnectionStringModalAsync(Guid id)
+        protected virtual async Task OpenEditConnectionStringModalAsync(TenantDto entity)
         {
             ManageConnectionStringValidations.ClearAll();
 
-            var tenantConnectionString = await AppService.GetDefaultConnectionStringAsync(id);
+            var tenantConnectionString = await AppService.GetDefaultConnectionStringAsync(entity.Id);
 
             TenantInfo = new TenantInfoModel
             {
-                Id = id,
+                Id = entity.Id,
                 DefaultConnectionString = tenantConnectionString,
                 UseSharedDatabase = tenantConnectionString.IsNullOrWhiteSpace()
             };
