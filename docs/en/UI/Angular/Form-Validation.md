@@ -89,6 +89,56 @@ Validation works on any element or component with a `formControl` or `formContro
 <input type="text" formControlName="name" skipValidation />
 ```
 
+## How to Use a Custom Error Component
+
+First, build a custom error component. Extending the existing `ValidationErrorComponent` would make it easier.
+
+```js
+import { ValidationErrorComponent } from "@abp/ng.theme.basic";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
+
+@Component({
+  selector: "app-validation-error",
+  template: `
+    <div
+      class="font-weight-bold font-italic px-1 invalid-feedback"
+      *ngFor="let error of abpErrors; trackBy: trackByFn"
+    >
+      {{ error.message | abpLocalization: error.interpoliteParams }}
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ErrorComponent extends ValidationErrorComponent {}
+```
+
+Then, declare and provide it in your root module.
+
+```js
+import { VALIDATION_ERROR_TEMPLATE } from "@ngx-validate/core";
+
+@NgModule({
+  // rest of the module metadata
+
+  declarations: [
+    // other declarables
+    ErrorComponent,
+  ],
+  providers: [
+    // other providers
+    {
+      provide: VALIDATION_ERROR_TEMPLATE,
+      useValue: ErrorComponent,
+    },
+  ],
+})
+export class AppModule {}
+```
+
+The error message will be bold and italic now:
+
+<img alt="A required field is cleared and a bold and italic error message appears." src="./images/form-validation---custom-error-template.gif" width="990px" style="max-width:100%">
+
 ## What's Next?
 
 - [Settings](./Settings.md)
