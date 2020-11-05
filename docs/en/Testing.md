@@ -423,6 +423,8 @@ namespace MyProject.Issues
 
 ## Integration Tests
 
+> You can follow the [web application development tutorial](Tutorials/Part-1.md) to learn developing a full stack application, including the integration tests.
+
 ### The Integration Test Infrastructure
 
 ABP Provides a complete infrastructure to write integration tests. All the ABP infrastructure and services will perform in your tests. The application startup template comes with the necessary infrastructure pre-configured for you;
@@ -651,6 +653,3 @@ It's that simple. This test method tests everything, including the application s
 
 TODO
 
-## Best Practices
-
-TODO
