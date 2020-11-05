@@ -429,37 +429,162 @@ ABP Provides a complete infrastructure to write integration tests. All the ABP i
 
 #### The Database
 
-The startup template is configured to use in-memory SQL database for the EF Core (for MongoDB, it uses [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library). So, all the configuration and queries are performed against a real database and you can even test database transactions.
+The startup template is configured to use **in-memory SQLite** database for the EF Core (for MongoDB, it uses [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library). So, all the configuration and queries are performed against a real database and you can even test database transactions.
 
-Using in-memory SQL database has two main advantages;
+Using in-memory SQLite database has two main advantages;
 
 * It is faster compared to an external DBMS.
 * It create a **new fresh database** for each test case, so tests doesn't affect each other.
 
-#### The Seed Data
+> **Tip**: Do not use EF Core's In-Memory database for advanced integration tests. It is not a real DBMS and has many differences in details. For example, it doesn't support transaction and rollback scenarios, so you can't truly test the failing scenarios. On the other hand, In-Memory SQLite is a real DBMS and supports the fundamental SQL database features.
+
+### The Seed Data
 
 Writing tests against an empty database is not practical. In most cases, you need to some initial data in the database. For example, if you write a test class that query, update and delete the Products, it would be helpful to have a few products in the database before executing the test case.
 
 ABP's [Data Seeding](Data-Seeding.md) system is a powerful way to seed the initial data. The application startup template has a *YourProject*TestDataSeedContributor class in the `.TestBase` project. You can fill it to have an initial data that you can use for each test method.
 
-#### AbpIntegratedTest Class
-
-`AbpIntegratedTest<T>` class (defined in the [Volo.Abp.TestBase](https://www.nuget.org/packages/Volo.Abp.TestBase) package) is used to write tests integrated to the ABP Framework. `T` is the Type of the root module to setup and initialize the application.
-
-**Example: Create a test class derived from the `AbpIntegratedTest`**
+**Example: Create some Issues as the seed data**
 
 ````csharp
-using Volo.Abp.Testing;
+using System.Threading.Tasks;
+using MyProject.Issues;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 
-namespace MyProject.Issues
+namespace MyProject
 {
-    public class IssueManager_Integration_Tests
-        : AbpIntegratedTest<MyProjectDomainModule>
+    public class MyProjectTestDataSeedContributor
+        : IDataSeedContributor, ITransientDependency
     {
+        private readonly IIssueRepository _issueRepository;
 
+        public MyProjectTestDataSeedContributor(IIssueRepository issueRepository)
+        {
+            _issueRepository = issueRepository;
+        }
+
+        public async Task SeedAsync(DataSeedContext context)
+        {
+            await _issueRepository.InsertAsync(
+                new Issue
+                {
+                    Title = "Test issue one",
+                    Description = "Test issue one description",
+                    AssignedUserId = TestData.User1Id
+                });
+
+            await _issueRepository.InsertAsync(
+                new Issue
+                {
+                    Title = "Test issue two",
+                    Description = "Test issue two description",
+                    AssignedUserId = TestData.User1Id
+                });
+
+            await _issueRepository.InsertAsync(
+                new Issue
+                {
+                    Title = "Test issue three",
+                    Description = "Test issue three description",
+                    AssignedUserId = TestData.User1Id
+                });
+
+            await _issueRepository.InsertAsync(
+                new Issue
+                {
+                    Title = "Test issue four",
+                    Description = "Test issue four description",
+                    AssignedUserId = TestData.User2Id
+                });
+        }
     }
 }
 ````
+
+Also created a static class to store the User `Ids`:
+
+````csharp
+using System;
+
+namespace MyProject
+{
+    public static class TestData
+    {
+        public static Guid User1Id = Guid.Parse("41951813-5CF9-4204-8B18-CD765DBCBC9B");
+        public static Guid User2Id = Guid.Parse("41951813-5CF9-4204-8B18-CD765DBCBC9B");
+    }
+}
+````
+
+In this way, we can use these known Issues and the User `Id`s to perform the tests.
+
+#### Example: Testing a Domain Service
+
+`AbpIntegratedTest<T>` class (defined in the [Volo.Abp.TestBase](https://www.nuget.org/packages/Volo.Abp.TestBase) package) is used to write tests integrated to the ABP Framework. `T` is the Type of the root module to setup and initialize the application.
+
+The application startup template has base classes in each test project, so you can derive from these base classes to make it easier.
+
+See the `IssueManager` tests are re-written as integration tests
+
+````csharp
+using System.Threading.Tasks;
+using Shouldly;
+using Volo.Abp;
+using Xunit;
+
+namespace MyProject.Issues
+{
+    public class IssueManager_Integration_Tests : MyProjectDomainTestBase
+    {
+        private readonly IssueManager _issueManager;
+        private readonly Issue _issue;
+
+        public IssueManager_Integration_Tests()
+        {
+            _issueManager = GetRequiredService<IssueManager>();
+            _issue = new Issue
+            {
+                Title = "Test title",
+                Description = "Test description"
+            };
+        }
+
+        [Fact]
+        public async Task Should_Not_Allow_To_Assign_Issues_Over_The_Limit()
+        {
+            // Act & Assert
+            await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await _issueManager.AssignToUserAsync(_issue, TestData.User1Id);
+            });
+
+            _issue.AssignedUserId.ShouldBeNull();
+        }
+        
+        [Fact]
+        public async Task Should_Assign_An_Issue_To_A_User()
+        {
+            // Act
+            await _issueManager.AssignToUserAsync(_issue, TestData.User2Id);
+
+            //Assert
+            _issue.AssignedUserId.ShouldBe(TestData.User2Id);
+        }
+    }
+}
+````
+
+* First test method assigns the issue to the User 1, which has already assigned to 3 issues in the Data Seed code. So, it throws a `BusinessException`.
+* Second test method assigns the issue to User 2, which has only 1 issue assigned. So, the method succeeds.
+
+This class typically locates in the `.Domain.Tests` project since it tests a class located in the `.Domain` project. It is derived from the `MyProjectDomainTestBase` which is already configured to properly run the tests.
+
+Writing such an integration test class is very straightforward. Another benefit is that you won't need to change the test class later when you add another dependency to the `IssueManager` class.
+
+### Example: Testing an Application Service
+
+
 
 TODO
 
