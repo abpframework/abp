@@ -337,6 +337,74 @@ public async Task Should_Not_Allow_To_Assign_Issues_Over_The_Limit()
 
 It is relatively easy to mock a single dependency. But, when your dependencies grow, it gets harder to setup the test objects and mock all the dependencies. See the *Integration Tests* section that doesn't require mocking the dependencies.
 
+### Tip: Share the Test Class Constructor
+
+[xUnit](https://xunit.net/) creates a **new test class instance** (`IssueManager_Tests` for this example) for each test method. So, you can move some *Arrange* code into the constructor to reduce the code duplication. The constructor will be executed for each test case and doesn't affect each other, even if they work in parallel.
+
+**Example: Refactor the `IssueManager_Tests` to reduce the code duplication**
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using NSubstitute;
+using Shouldly;
+using Volo.Abp;
+using Xunit;
+
+namespace MyProject.Issues
+{
+    public class IssueManager_Tests
+    {
+        private readonly Guid _userId;
+        private readonly IIssueRepository _fakeRepo;
+        private readonly IssueManager _issueManager;
+        private readonly Issue _issue;
+
+        public IssueManager_Tests()
+        {
+            _userId = Guid.NewGuid();
+            _fakeRepo = Substitute.For<IIssueRepository>();
+            _issueManager = new IssueManager(_fakeRepo);
+            _issue = new Issue();
+        }
+
+        [Fact]
+        public async Task Should_Assign_An_Issue_To_A_User()
+        {
+            // Arrange            
+            _fakeRepo.GetIssueCountOfUserAsync(_userId).Returns(1);
+
+            // Act
+            await _issueManager.AssignToUserAsync(_issue, _userId);
+
+            //Assert
+            _issue.AssignedUserId.ShouldBe(_userId);
+            await _fakeRepo.Received(1).GetIssueCountOfUserAsync(_userId);
+        }
+
+        [Fact]
+        public async Task Should_Not_Allow_To_Assign_Issues_Over_The_Limit()
+        {
+            // Arrange
+            _fakeRepo
+                .GetIssueCountOfUserAsync(_userId)
+                .Returns(IssueManager.MaxAllowedOpenIssueCountForAUser);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await _issueManager.AssignToUserAsync(_issue, _userId);
+            });
+
+            _issue.AssignedUserId.ShouldBeNull();
+            await _fakeRepo.Received(1).GetIssueCountOfUserAsync(_userId);
+        }
+    }
+}
+````
+
+> Keep your test code clean to create a maintainable test suite.
+
 ## Integration Tests
 
 TODO
