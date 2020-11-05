@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly
 {
-    public class IdentityModelBundleContributer : IBundleContributer
+    public class IdentityModelWebAssemblyBundleContributer : IBundleContributer
     {
         public void AddScripts(BundleContext context)
         {
