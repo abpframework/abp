@@ -27,7 +27,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
         {
             var newOptions = new JsonSerializerOptions(options);
             newOptions.Converters.Remove(this);
-            newOptions.Converters.Add(_innerJsonStringEnumConverter.CreateConverter(typeToConvert, options));
+            newOptions.Converters.Add(_innerJsonStringEnumConverter.CreateConverter(typeToConvert, newOptions));
             return JsonSerializer.Deserialize(ref reader, typeToConvert, newOptions);
         }
 
