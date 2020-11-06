@@ -126,7 +126,3 @@ The app sends the `__tenant` header that contains the current tenant id on each 
 ## See Also
 
 - [Multi Tenancy in ABP](../../Multi-Tenancy.md)
-
-## What's Next?
-
-- [Managing RxJS Subscriptions](./Subscription-Service.md)

@@ -138,7 +138,3 @@ export class AppModule {}
 The error message will be bold and italic now:
 
 <img alt="A required field is cleared and a bold and italic error message appears." src="./images/form-validation---custom-error-template.gif" width="990px" style="max-width:100%">
-
-## What's Next?
-
-- [Settings](./Settings.md)

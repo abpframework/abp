@@ -234,7 +234,3 @@ import(
 ## See Also
 
 * [Localization in ASP.NET Core](../../Localization.md)
-
-## What's Next?
-
-* [Form Validation](./Form-Validation.md)
