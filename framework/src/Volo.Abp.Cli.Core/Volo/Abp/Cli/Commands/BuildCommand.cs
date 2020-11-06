@@ -53,23 +53,31 @@ namespace Volo.Abp.Cli.Commands
             buildConfig.BuildName = buildName;
             buildConfig.ForceBuild = forceBuild;
             
-            Console.WriteLine("Finding changed projects...");
+            if (string.IsNullOrEmpty(buildConfig.SlFilePath))
+            {
+                var changedProjectFiles = ChangedProjectFinder.FindByRepository(buildConfig);
+                
+                var buildSucceededProjects = DotNetProjectBuilder.BuildProjects(
+                    changedProjectFiles,
+                    dotnetBuildArguments ?? ""
+                );
 
-            var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
+                var buildStatus = BuildStatusGenerator.Generate(
+                    buildConfig,
+                    changedProjectFiles,
+                    buildSucceededProjects
+                );
 
-            var buildSucceededProjects = DotNetProjectBuilder.Build(
-                changedProjectFiles,
-                dotnetBuildArguments ?? ""
-            );
-
-            var buildStatus = BuildStatusGenerator.Generate(
-                buildConfig,
-                changedProjectFiles,
-                buildSucceededProjects
-            );
-
-            RepositoryBuildStatusStore.Set(buildName, buildConfig.GitRepository, buildStatus);
-
+                RepositoryBuildStatusStore.Set(buildName, buildConfig.GitRepository, buildStatus);
+            }
+            else
+            {
+                DotNetProjectBuilder.BuildSolution(
+                    buildConfig.SlFilePath,
+                    dotnetBuildArguments ?? ""
+                );
+            }
+            
             sw.Stop();
             Console.WriteLine("Build operation is completed in " + sw.ElapsedMilliseconds + " (ms)");
 

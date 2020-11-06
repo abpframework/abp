@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 using LibGit2Sharp;
 using Volo.Abp.DependencyInjection;
 
@@ -33,16 +32,6 @@ namespace Volo.Abp.Cli.Build
             _gitRepositoryHelper = gitRepositoryHelper;
             _dotNetProjectDependencyFiller = dotNetProjectDependencyFiller;
             _buildProjectListSorter = buildProjectListSorter;
-        }
-
-        public List<DotNetProjectInfo> Find(DotNetProjectBuildConfig buildConfig)
-        {
-            if (!buildConfig.SlFilePath.IsNullOrEmpty())
-            {
-                return FindBySlnFile(buildConfig);
-            }
-
-            return FindByRepository(buildConfig);
         }
 
         /// <summary>
@@ -107,8 +96,10 @@ namespace Volo.Abp.Cli.Build
             }
         }
 
-        private List<DotNetProjectInfo> FindByRepository(DotNetProjectBuildConfig buildConfig)
+        public List<DotNetProjectInfo> FindByRepository(DotNetProjectBuildConfig buildConfig)
         {
+            Console.WriteLine("Finding changed projects for repository...");
+            
             var gitRepositoryBuildStatus = _repositoryBuildStatusStore.Get(
                 buildConfig.BuildName,
                 buildConfig.GitRepository
@@ -215,72 +206,7 @@ namespace Volo.Abp.Cli.Build
                 }
             }
         }
-
-        private List<DotNetProjectInfo> FindBySlnFile(DotNetProjectBuildConfig buildConfig)
-        {
-            var allProjectList = FindAllProjects(buildConfig);
-
-            var slFine = new FileInfo(buildConfig.SlFilePath);
-            var csProjFiles = slFine.Directory.GetFiles(
-                    "*.csproj",
-                    SearchOption.AllDirectories
-                ).Select(e => e.FullName)
-                .ToList();
-
-            foreach (var csProjFile in csProjFiles)
-            {
-                MarkDependantProjectsForBuild(buildConfig.GitRepository, csProjFile, allProjectList);
-            }
-
-            return _buildProjectListSorter.SortByDependencies(
-                allProjectList,
-                new DotNetProjectInfoEqualityComparer()
-            ).Where(e => e.ShouldBuild).ToList();
-        }
-
-        private void MarkDependantProjectsForBuild(
-            GitRepository gitRepository,
-            string csProjFilePath,
-            List<DotNetProjectInfo> allProjectList)
-        {
-            var repositoryName = gitRepository.FindRepositoryOf(csProjFilePath);
-            var project = new DotNetProjectInfo(repositoryName, csProjFilePath, true);
-
-            if (allProjectList.IsMarkedForBuild(repositoryName, csProjFilePath))
-            {
-                return;
-            }
-
-            allProjectList.MarkForBuild(project);
-            AddProjectDependencies(gitRepository, project, allProjectList);
-        }
-
-        private void AddProjectDependencies(
-            GitRepository gitRepository,
-            DotNetProjectInfo project,
-            List<DotNetProjectInfo> allProjectList)
-        {
-            var projectInfo = allProjectList.FirstOrDefault(e => e.CsProjPath == project.CsProjPath);
-            if (projectInfo == null)
-            {
-                return;
-            }
-
-            var dependencies = projectInfo.Dependencies;
-
-            foreach (var dependency in dependencies)
-            {
-                if (allProjectList.IsMarkedForBuild(dependency.RepositoryName, dependency.CsProjPath))
-                {
-                    continue;
-                }
-
-                allProjectList.MarkForBuild(dependency.RepositoryName, dependency.CsProjPath);
-
-                AddProjectDependencies(gitRepository, dependency, allProjectList);
-            }
-        }
-
+        
         private void AddDependingProjectsToList(
             string repositoryName,
             string csProjPath,

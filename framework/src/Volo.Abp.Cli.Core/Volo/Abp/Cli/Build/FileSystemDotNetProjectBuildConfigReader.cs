@@ -26,8 +26,15 @@ namespace Volo.Abp.Cli.Build
             {
                 buildConfig.SlFilePath = solutionFiles.First();
                 var configFile = GetClosestFile(directoryPath, _buildConfigName);
-                var configFileContent = File.ReadAllText(configFile);
-                buildConfig.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFileContent);
+                if (configFile.IsNullOrEmpty())
+                {
+                    buildConfig.GitRepository = GetGitRepositoryUsingDirectory(directoryPath);
+                }
+                else
+                {
+                    var configFileContent = File.ReadAllText(configFile);
+                    buildConfig.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFileContent);
+                }
 
                 SetBranchNames(buildConfig.GitRepository);
 
@@ -53,23 +60,34 @@ namespace Volo.Abp.Cli.Build
                 );
             }
 
-            // use current directory to get repository info
-            var gitFolderPath = string.Concat(directoryPath, @"\.git");
-            if (!Directory.Exists(gitFolderPath))
+            return new DotNetProjectBuildConfig
             {
-                throw new Exception("There is no solution file (*.sln) and " + _buildConfigName +
-                                    " in the working directory and working directory is not a GIT repository !");
-            }
+                GitRepository = GetGitRepositoryUsingDirectory(directoryPath)
+            };
+        }
 
-            using (var repo = new Repository(string.Concat(directoryPath, @"\.git")))
+        private GitRepository GetGitRepositoryUsingDirectory(string directoryPath)
+        {
+            var directoryInfo = new DirectoryInfo(directoryPath);
+
+            do
             {
-                var repositoryName = GetRepositoryNameFromRepositoryInfo(repo);
-                
-                return new DotNetProjectBuildConfig
+                var gitFolderPath = string.Concat(directoryInfo.FullName, @"\.git");
+                if (Directory.Exists(gitFolderPath))
                 {
-                    GitRepository = new GitRepository(repositoryName, repo.Head.FriendlyName, directoryPath)
-                };
-            }
+                    using (var repo = new Repository(string.Concat(directoryInfo.FullName, @"\.git")))
+                    {
+                        var repositoryName = GetRepositoryNameFromRepositoryInfo(repo);
+
+                        return new GitRepository(repositoryName, repo.Head.FriendlyName, directoryInfo.FullName);
+                    }
+                }
+
+                directoryInfo = directoryInfo.Parent;
+            } while (directoryInfo?.Parent != null);
+
+            throw new Exception("There is no solution file (*.sln) and " + _buildConfigName +
+                                " in the working directory and working directory is not a GIT repository !");
         }
 
         private string GetRepositoryNameFromRepositoryInfo(Repository repository)
@@ -79,24 +97,24 @@ namespace Volo.Abp.Cli.Build
             {
                 throw new Exception("Remote origin is null for given repository !");
             }
-            
+
             var remoteUrl = remote.Url;
-            
+
             remoteUrl = Regex.Replace(remoteUrl, @"\.git$", "");
 
             remoteUrl = Regex.Replace(remoteUrl, "^git@", "https://");
             remoteUrl = Regex.Replace(remoteUrl, "^https:git@", "https://");
             remoteUrl = Regex.Replace(remoteUrl, ".com:", ".com/");
-            
+
             var remoteUri = new Uri(remoteUrl);
             var pathSegments = remoteUri.AbsolutePath.Split("/", StringSplitOptions.RemoveEmptyEntries);
-            
+
             if (pathSegments != null && pathSegments.Length >= 2)
             {
                 var repo = pathSegments[1];
                 return repo;
             }
-            
+
             throw new Exception("Couldn't find repository name using remote origin url !");
         }
 

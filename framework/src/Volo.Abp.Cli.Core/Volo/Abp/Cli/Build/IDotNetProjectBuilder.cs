@@ -4,6 +4,8 @@ namespace Volo.Abp.Cli.Build
 {
     public interface IDotNetProjectBuilder
     {
-        List<string> Build(List<DotNetProjectInfo> projects, string arguments);
+        List<string> BuildProjects(List<DotNetProjectInfo> projects, string arguments);
+        
+        void BuildSolution(string slnPath, string arguments);
     }
 }
