@@ -1264,7 +1264,7 @@ Open the `Books.razor` and add the following `DataGridColumn` section inside the
                 @L["Actions"]
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem Clicked="() => OpenEditModalAsync(context.Id)">
+                <DropdownItem Clicked="() => OpenEditModalAsync(context)">
                     @L["Edit"]
                 </DropdownItem>
             </DropdownMenu>
@@ -1273,7 +1273,7 @@ Open the `Books.razor` and add the following `DataGridColumn` section inside the
 </DataGridColumn>
 ````
 
-* `OpenEditModalAsync` is defined in the base class which takes the `Id` of the entity (book) to edit.
+* `OpenEditModalAsync` is defined in the base class which takes the entity (book) to edit.
 
 This adds an "Actions" dropdown to all the books inside the `DataGrid` with an `Edit` action:
 
@@ -1419,7 +1419,7 @@ Here the complete code to create the book management CRUD page, that has been de
                                 @L["Actions"]
                             </DropdownToggle>
                             <DropdownMenu>
-                                <DropdownItem Clicked="() => OpenEditModalAsync(context.Id)">
+                                <DropdownItem Clicked="() => OpenEditModalAsync(context)">
                                     @L["Edit"]
                                 </DropdownItem>
                                 <DropdownItem Clicked="() => DeleteEntityAsync(context)">

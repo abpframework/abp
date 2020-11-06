@@ -36,7 +36,7 @@
                 <EntityActions TItem="IdentityUserDto" EntityActionsColumn="@EntityActionsColumn">
                     <EntityAction TItem="IdentityUserDto"
                                   RequiredPolicy="@UpdatePolicyName"
-                                  Clicked="() => OpenEditModalAsync(context.Id)"
+                                  Clicked="() => OpenEditModalAsync(context)"
                                   Text="@L["Edit"]" />
                     <EntityAction TItem="IdentityUserDto"
                                   RequiredPolicy="@ManagePermissionsPolicyName"

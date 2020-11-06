@@ -393,7 +393,7 @@ abp build --build-name "prod" --dotnet-build-arguments "\"--no-dependencies\""
 
 #### Options
 
-* ```--working-directory``` or ```-w```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
+* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
 * ```--build-name``` or ```-n```: Specifies a name for the build. This option is useful when same repository is used for more than one different builds. 
 * ```--dotnet-build-arguments``` or ```-a```: Arguments to pass ```dotnet build``` when building project files.  This parameter must be passed like ```"\"{params}\""``` .
 * ```--force``` or ```-f```: Forces to build projects even they are not changed from the last successful build.

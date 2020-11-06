@@ -523,7 +523,7 @@ As similar to the *New Book* button, we can use `if` blocks to conditionally sho
 ````xml
 @if (canEditBook)
 {
-    <DropdownItem Clicked="() => OpenEditModalAsync(context.Id)">
+    <DropdownItem Clicked="() => OpenEditModalAsync(context)">
         @L["Edit"]
     </DropdownItem>
 }

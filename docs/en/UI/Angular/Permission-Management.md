@@ -2,18 +2,20 @@
 
 A permission is a simple policy that is granted or prohibited for a particular user, role or client. You can read more about [authorization in ABP](../../Authorization.md) document.
 
-You can get permission of authenticated user using `getGrantedPolicy` selector of `ConfigState`.
+You can get permission of authenticated user using `getGrantedPolicy` or `getGrantedPolicy$` method of `PermissionService`.
+
+> ConfigState's getGrantedPolicy selector and ConfigStateService's getGrantedPolicy method deprecated. Use permission service's `getGrantedPolicy$` or `getGrantedPolicy`methods instead 
 
 You can get permission as boolean value:
 
 ```js
-import { ConfigStateService } from '@abp/ng.core';
+import { PermissionService } from '@abp/ng.core';
 
 export class YourComponent {
-  constructor(private config: ConfigStateService) {}
+  constructor(private permissionService: PermissionService) {}
 
   ngOnInit(): void {
-    const canCreate = this.config.getGrantedPolicy('AbpIdentity.Roles.Create');
+    const canCreate = this.permissionService.getGrantedPolicy('AbpIdentity.Roles.Create');
   }
 }
 ```

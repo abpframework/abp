@@ -300,15 +300,15 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        protected virtual async Task OpenEditModalAsync(TKey id)
+        protected virtual async Task OpenEditModalAsync(TListViewModel entity)
         {
             EditValidationsRef?.ClearAll();
 
             await CheckUpdatePolicyAsync();
 
-            var entityDto = await AppService.GetAsync(id);
+            var entityDto = await AppService.GetAsync(entity.Id);
 
-            EditingEntityId = id;
+            EditingEntityId = entity.Id;
             EditingEntity = MapToEditingEntity(entityDto);
 
             await InvokeAsync(() => StateHasChanged());

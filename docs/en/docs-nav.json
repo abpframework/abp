@@ -479,6 +479,10 @@
               "path": "UI/AspNetCore/Layout-Hooks.md"
             },
             {
+              "text": "Testing",
+              "path": "UI/AspNetCore/Testing.md"
+            },
+            {
               "text": "Theming",
               "path": "UI/AspNetCore/Theming.md",
               "items": [
@@ -834,6 +838,10 @@
           ]
         }
       ]
+    },
+    {
+      "text": "Testing",
+      "path": "Testing.md"
     },
     {
       "text": "Startup Templates",

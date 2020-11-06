@@ -34,11 +34,11 @@
                 <EntityActions TItem="TenantDto" EntityActionsColumn="@EntityActionsColumn">
                     <EntityAction TItem="TenantDto"
                                   RequiredPolicy="@UpdatePolicyName"
-                                  Clicked="() => OpenEditModalAsync(context.Id)"
+                                  Clicked="() => OpenEditModalAsync(context)"
                                   Text="@L["Edit"]"></EntityAction>
                     <EntityAction TItem="TenantDto"
                                   RequiredPolicy="@ManageConnectionStringsPolicyName"
-                                  Clicked="() => OpenEditConnectionStringModalAsync(context.Id)"
+                                  Clicked="() => OpenEditConnectionStringModalAsync(context)"
                                   Text="@L["ConnectionStrings"]"></EntityAction>
                     <EntityAction TItem="TenantDto"
                                   RequiredPolicy="@ManageFeaturesPolicyName"

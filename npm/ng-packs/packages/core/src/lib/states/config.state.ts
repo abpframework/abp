@@ -104,6 +104,9 @@ export class ConfigState {
     return selector;
   }
 
+  /**
+   * @deprecated use PermissionService's getGrantedPolicyStream or getGrantedPolicy methods.
+   */
   static getGrantedPolicy(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State): boolean => {
       if (!key) return true;
