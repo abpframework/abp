@@ -6,6 +6,18 @@ namespace Volo.Abp.Data
 
     public interface IHasExtraProperties
     {
-        Dictionary<string, object> ExtraProperties { get; }
+        ExtraPropertyDictionary ExtraProperties { get; }
+    }
+
+    public class ExtraPropertyDictionary : Dictionary<string, object>
+    {
+        public ExtraPropertyDictionary()
+        {
+        }
+
+        public ExtraPropertyDictionary(IDictionary<string, object> dictionary)
+            : base(dictionary)
+        {
+        }
     }
 }
