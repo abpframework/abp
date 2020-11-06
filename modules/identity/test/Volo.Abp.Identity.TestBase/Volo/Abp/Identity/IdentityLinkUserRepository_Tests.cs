@@ -54,5 +54,26 @@ namespace Volo.Abp.Identity
             davidLinkUsers.ShouldContain(x => x.SourceUserId == john.Id && x.SourceTenantId == john.TenantId);
             davidLinkUsers.ShouldContain(x => x.TargetUserId == neo.Id && x.TargetTenantId == neo.TenantId);
         }
+
+        [Fact]
+        public async Task DeleteAsync()
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var david = await UserRepository.GetAsync(TestData.UserDavidId);
+
+            (await IdentityLinkUserRepository.FindAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                new IdentityLinkUserInfo(david.Id, david.TenantId))).ShouldNotBeNull();
+
+            await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(david.Id, david.TenantId));
+
+            (await IdentityLinkUserRepository.FindAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                new IdentityLinkUserInfo(david.Id, david.TenantId))).ShouldBeNull();
+
+            (await IdentityLinkUserRepository.FindAsync(
+                new IdentityLinkUserInfo(david.Id, david.TenantId),
+                new IdentityLinkUserInfo(john.Id, john.TenantId))).ShouldBeNull();
+        }
     }
 }
