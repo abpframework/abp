@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -33,6 +33,19 @@ namespace Volo.Abp.Identity.MongoDB
                     x.SourceUserId == linkUserInfo.UserId && x.SourceTenantId == linkUserInfo.TenantId ||
                     x.TargetUserId == linkUserInfo.UserId && x.TargetTenantId == linkUserInfo.TenantId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+        }
+
+        public async Task DeleteAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
+        {
+            var linkUsers = await GetMongoQueryable().Where(x =>
+                    x.SourceUserId == linkUserInfo.UserId && x.SourceTenantId == linkUserInfo.TenantId ||
+                    x.TargetUserId == linkUserInfo.UserId && x.TargetTenantId == linkUserInfo.TenantId)
+                .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+            foreach (var user in linkUsers)
+            {
+                await DeleteAsync(user, cancellationToken: cancellationToken);
+            }
         }
     }
 }
