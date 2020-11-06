@@ -52,13 +52,38 @@ namespace Volo.Abp.Cli.Bundling
             FindBundleContributersRecursively(startupModule, 0, bundleDefinitions);
             bundleDefinitions = bundleDefinitions.OrderByDescending(t => t.Level).ToList();
 
-            var styleDefinitions = GenerateStyleDefinitions(bundleDefinitions);
-            var scriptDefinitions = GenerateScriptDefinitions(bundleDefinitions);
+            var styleContext = GetStyleContext(bundleDefinitions);
+            var scriptContext = GetScriptContext(bundleDefinitions);
+            var styleDefinitons = GenerateStyleDefinitions(styleContext);
+            var scriptDefinitions = GenerateScriptDefinitions(scriptContext);
 
-            await UpdateDependenciesInHtmlFileAsync(directory, styleDefinitions, scriptDefinitions);
+            await UpdateDependenciesInHtmlFileAsync(directory, styleDefinitons, scriptDefinitions);
         }
 
-        protected virtual async Task UpdateDependenciesInHtmlFileAsync(string directory, string styleDefinitions, string scriptDefinitions)
+        private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions)
+        {
+            var scriptContext = new BundleContext();
+            foreach (var bundleDefinition in bundleDefinitions)
+            {
+                var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
+                contributer.AddScripts(scriptContext);
+            }
+            scriptContext.Add("_framework/blazor.webassembly.js");
+            return scriptContext;
+        }
+
+        private BundleContext GetStyleContext(List<BundleTypeDefinition> bundleDefinitions)
+        {
+            var styleContext = new BundleContext();
+            foreach (var bundleDefinition in bundleDefinitions)
+            {
+                var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
+                contributer.AddStyles(styleContext);
+            };
+            return styleContext;
+        }
+
+        private async Task UpdateDependenciesInHtmlFileAsync(string directory, string styleDefinitions, string scriptDefinitions)
         {
             var htmlFilePath = Path.Combine(directory, "wwwroot", "index.html");
             if (!File.Exists(htmlFilePath))
@@ -90,18 +115,11 @@ namespace Volo.Abp.Cli.Bundling
             return updatedContent.Insert(placeholderStartIndex, definitions);
         }
 
-        private string GenerateStyleDefinitions(List<BundleTypeDefinition> bundleDefinitions)
+        private string GenerateStyleDefinitions(BundleContext context)
         {
-            var styles = new List<BundleDefinition>();
-            foreach (var bundleDefinition in bundleDefinitions)
-            {
-                var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
-                contributer.AddStyles(styles);
-            }
-
             var builder = new StringBuilder();
             builder.AppendLine($"{StylePlaceholderStart}");
-            foreach (var style in styles)
+            foreach (var style in context.BundleDefinitions)
             {
                 if (style.AdditionalProperties != null && style.AdditionalProperties.Any())
                 {
@@ -122,21 +140,11 @@ namespace Volo.Abp.Cli.Bundling
             return builder.ToString();
         }
 
-        private string GenerateScriptDefinitions(List<BundleTypeDefinition> bundleDefinitions)
+        private string GenerateScriptDefinitions(BundleContext context)
         {
-            var scripts = new List<BundleDefinition>
-            {
-                new BundleDefinition("_framework/blazor.webassembly.js")
-            };
-            foreach (var bundleDefinition in bundleDefinitions)
-            {
-                var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
-                contributer.AddScripts(scripts);
-            }
-
             var builder = new StringBuilder();
             builder.AppendLine($"{ScriptPlaceholderStart}");
-            foreach (var script in scripts)
+            foreach (var script in context.BundleDefinitions)
             {
                 if (script.AdditionalProperties != null && script.AdditionalProperties.Any())
                 {
@@ -161,6 +169,16 @@ namespace Volo.Abp.Cli.Bundling
         {
             var instance = Activator.CreateInstance(bundleContributerType);
             return instance.As<IBundleContributer>();
+        }
+
+        private void ExecuteBundleContributers(List<BundleTypeDefinition> bundleDefinitions, BundleContext styleContext, BundleContext scriptContext)
+        {
+            foreach (var bundleDefinition in bundleDefinitions)
+            {
+                var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
+                contributer.AddStyles(styleContext);
+                contributer.AddScripts(scriptContext);
+            }
         }
 
         private void FindBundleContributersRecursively(Type module, int level, List<BundleTypeDefinition> bundleDefinitions)

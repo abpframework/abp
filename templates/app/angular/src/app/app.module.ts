@@ -1,5 +1,6 @@
 import { AccountConfigModule } from '@abp/ng.account/config';
 import { CoreModule } from '@abp/ng.core';
+import { registerLocale } from '@abp/ng.core/locale';
 import { IdentityConfigModule } from '@abp/ng.identity/config';
 import { SettingManagementConfigModule } from '@abp/ng.setting-management/config';
 import { TenantManagementConfigModule } from '@abp/ng.tenant-management/config';
@@ -21,6 +22,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     AppRoutingModule,
     CoreModule.forRoot({
       environment,
+      registerLocaleFn: registerLocale(),
     }),
     ThemeSharedModule.forRoot(),
     AccountConfigModule.forRoot(),
