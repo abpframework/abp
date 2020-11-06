@@ -1,2 +1,2 @@
-﻿﻿using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 [assembly:InternalsVisibleToAttribute("MyCompanyName.MyProjectName.Web.Tests")]
