@@ -15,6 +15,7 @@ namespace Volo.Abp.Identity
 
         Task<List<IdentityLinkUser>> GetListAsync(
             IdentityLinkUserInfo linkUserInfo,
+            bool includeIndirect = false,
             CancellationToken cancellationToken = default);
 
         Task DeleteAsync(

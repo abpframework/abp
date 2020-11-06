@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -27,12 +28,81 @@ namespace Volo.Abp.Identity.MongoDB
                 , cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
+        public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, bool includeIndirect = false, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().Where(x =>
+            var linkUsers = await GetMongoQueryable().Where(x =>
                     x.SourceUserId == linkUserInfo.UserId && x.SourceTenantId == linkUserInfo.TenantId ||
                     x.TargetUserId == linkUserInfo.UserId && x.TargetTenantId == linkUserInfo.TenantId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+            if (!includeIndirect)
+            {
+                return linkUsers;
+            }
+
+            var excludeUsers = new List<IdentityLinkUserInfo>
+            {
+                linkUserInfo
+            };
+
+            Expression<Func<IdentityLinkUser, bool>> excludeExp = null;
+
+            var indirectLinkUsers = linkUsers;
+            while (indirectLinkUsers.Any())
+            {
+                foreach (var user in excludeUsers)
+                {
+                    if (excludeExp == null)
+                    {
+                        excludeExp = PredicateBuilder.New<IdentityLinkUser>(x =>
+                            (x.SourceUserId != user.UserId || x.SourceTenantId != user.TenantId) &&
+                            (x.TargetUserId != user.UserId || x.TargetTenantId != user.TenantId));
+                    }
+                    else
+                    {
+                        excludeExp = excludeExp.And(PredicateBuilder.New<IdentityLinkUser>(x =>
+                            (x.SourceUserId != user.UserId || x.SourceTenantId != user.TenantId) &&
+                            (x.TargetUserId != user.UserId || x.TargetTenantId != user.TenantId)));
+                    }
+                }
+
+                Expression<Func<IdentityLinkUser, bool>> includeExp = null;
+                foreach (var user in linkUsers.Select(x =>
+                {
+                    if (excludeUsers.Any(s => s.UserId == x.SourceUserId && s.TenantId == x.SourceTenantId))
+                    {
+                        return new IdentityLinkUserInfo(x.TargetUserId, x.TargetTenantId);
+                    }
+
+                    if (excludeUsers.Any(s => s.UserId == x.TargetUserId && s.TenantId == x.TargetTenantId))
+                    {
+                        return new IdentityLinkUserInfo(x.SourceUserId, x.SourceTenantId);
+                    }
+
+                    return null;
+                }).Where(x => x != null))
+                {
+                    if (includeExp == null)
+                    {
+                        includeExp = PredicateBuilder.New<IdentityLinkUser>(x =>
+                            x.SourceUserId == user.UserId && x.SourceTenantId == user.TenantId ||
+                            x.TargetUserId == user.UserId && x.TargetTenantId == user.TenantId);
+                    }
+                    else
+                    {
+                        includeExp = includeExp.Or(PredicateBuilder.New<IdentityLinkUser>(x =>
+                            x.SourceUserId == user.UserId && x.SourceTenantId == user.TenantId ||
+                            x.TargetUserId == user.UserId && x.TargetTenantId == user.TenantId));
+                    }
+
+                    excludeUsers.Add(user);
+                }
+
+                indirectLinkUsers = await GetMongoQueryable().Where(includeExp).Where(excludeExp).ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+                linkUsers.AddRange(indirectLinkUsers);
+            }
+
+            return linkUsers.Distinct().ToList();
         }
 
         public async Task DeleteAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
