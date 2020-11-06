@@ -40,7 +40,8 @@ namespace Volo.Abp.Cli.Bundling
                 {
                     new DotNetProjectInfo(string.Empty, projectFilePath, true)
                 };
-                DotNetProjectBuilder.Build(projects, string.Empty);
+                
+                DotNetProjectBuilder.BuildProjects(projects, string.Empty);
             }
 
             var frameworkVersion = GetTargetFrameworkVersion(projectFilePath);
@@ -53,10 +54,10 @@ namespace Volo.Abp.Cli.Bundling
 
             var styleContext = GetStyleContext(bundleDefinitions);
             var scriptContext = GetScriptContext(bundleDefinitions);
-            var styleDefinitons = GenerateStyleDefinitions(styleContext);
+            var styleDefinitions = GenerateStyleDefinitions(styleContext);
             var scriptDefinitions = GenerateScriptDefinitions(scriptContext);
 
-            await UpdateDependenciesInHtmlFileAsync(directory, styleDefinitons, scriptDefinitions);
+            await UpdateDependenciesInHtmlFileAsync(directory, styleDefinitions, scriptDefinitions);
         }
 
         private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions)
