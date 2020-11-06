@@ -1,14 +1,15 @@
+import { registerLocaleData } from '@angular/common';
 import { Injectable, Injector, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { SetLanguage } from '../actions/session.actions';
+import { ABP } from '../models/common';
 import { Config } from '../models/config';
 import { ConfigState } from '../states/config.state';
-import { registerLocale } from '../utils/initial-utils';
-import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
 import { CORE_OPTIONS } from '../tokens/options.token';
+import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
 
 type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) => boolean;
 
@@ -52,7 +53,11 @@ export class LocalizationService {
     router.routeReuseStrategy.shouldReuseRoute = () => false;
     router.navigated = false;
 
-    return registerLocale(locale, this.injector).then(() => {
+    const { registerLocaleFn }: ABP.Root = this.injector.get(CORE_OPTIONS);
+
+    return registerLocaleFn(locale).then(module => {
+      if (module?.default) registerLocaleData(module.default);
+
       this.ngZone.run(async () => {
         await router.navigateByUrl(router.url).catch(noop);
         router.routeReuseStrategy.shouldReuseRoute = shouldReuseRoute;

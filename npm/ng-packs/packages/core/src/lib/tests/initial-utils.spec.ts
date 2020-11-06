@@ -22,7 +22,13 @@ describe('InitialUtils', () => {
     component: DummyComponent,
     mocks: [Store, OAuthService],
     providers: [
-      { provide: CORE_OPTIONS, useValue: { environment: { oAuthConfig: { issuer: 'test' } } } },
+      {
+        provide: CORE_OPTIONS,
+        useValue: {
+          environment: { oAuthConfig: { issuer: 'test' } },
+          registerLocaleFn: () => Promise.resolve(),
+        },
+      },
     ],
   });
 
@@ -76,7 +82,7 @@ describe('InitialUtils', () => {
       const store = spectator.inject(Store);
       store.selectSnapshot.andCallFake(selector => selector({ SessionState: { language: 'tr' } }));
       injectorSpy.mockReturnValueOnce(store);
-      injectorSpy.mockReturnValueOnce({ cultureNameLocaleFileMap: {} });
+      injectorSpy.mockReturnValueOnce({ registerLocaleFn: () => Promise.resolve() });
       expect(typeof localeInitializer(injector)).toBe('function');
       expect(await localeInitializer(injector)()).toBe('resolved');
     });

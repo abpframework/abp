@@ -193,44 +193,122 @@ import { Component } from '@angular/core';
 export class AppComponent {}
 ```
 
-## Mapping of Culture Name to Angular Locale File Name
+## Registering a New Locale
+
+Since ABP has more than one language, Angular locale files loads lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and register to Angular core using the [`registerLocaleData`](https://angular.io/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `CoreModule`.
+
+### registerLocaleFn
+
+A `registerLocaleFn` is a higher order function that accepts `cultureNameLocaleFileMap` object and `errorHandlerFn` function as params and returns Webpack import function. A `registerLocale` function must be passed to the `forRoot` of the `CoreModule` as shown below:
+
+```js
+// app.module.ts
+
+import { registerLocale } from '@abp/ng.core/locale';
+// if you have commercial license and the language management module, add the below import
+// import { registerLocale } from '@volo/abp.ng.language-management/locale';
+
+
+@NgModule({
+  imports: [
+    // ...
+    CoreModule.forRoot({
+      // ...other options,
+      registerLocaleFn: registerLocale(
+        // you can pass the cultureNameLocaleFileMap and errorHandlerFn as optionally
+        {
+          cultureNameLocaleFileMap: { 'pt-BR': 'pt' },
+          errorHandlerFn: ({ resolve, reject, locale, error }) => {
+            // the error can be handled here
+          },
+        },
+      )
+    }),
+    //...
+  ]
+```
+
+
+### Mapping of Culture Name to Angular Locale File Name
 
 Some of the culture names defined in .NET do not match Angular locales. In such cases, the Angular app throws an error like below at runtime:
 
 ![locale-error](./images/locale-error.png)
 
-If you see an error like this, you should pass the `cultureNameLocaleFileMap` property like below to CoreModule's forRoot static method.
+If you see an error like this, you should pass the `cultureNameLocaleFileMap` property like below to the `registerLocale` function.
 
 ```js
 // app.module.ts
 
+import { registerLocale } from '@abp/ng.core/locale';
+// if you have commercial license and the language management module, add the below import
+// import { registerLocale } from '@volo/abp.ng.language-management/locale';
+
+
 @NgModule({
   imports: [
-    // other imports
-     CoreModule.forRoot({
-      // other options
-      cultureNameLocaleFileMap: { 
-        "DotnetCultureName": "AngularLocaleFileName",
-        "pt-BR": "pt"  // example
-      }
-    })
+    // ...
+    CoreModule.forRoot({
+      // ...other options,
+      registerLocaleFn: registerLocale(
+        {
+          cultureNameLocaleFileMap: { 
+            "DotnetCultureName": "AngularLocaleFileName",
+            "pt-BR": "pt"  // example
+          },
+        },
+      )
+    }),
     //...
 ```
 
 See [all locale files in Angular](https://github.com/angular/angular/tree/master/packages/common/locales).
 
-## Adding new culture
+### Adding a New Culture
+
+Add the below code to the `app.module.ts` by replacing `your-locale` placeholder with a correct locale name.
 
 ```js
 //app.module.ts
 
-import { storeLocaleData } from '@abp/ng.core';
+import { storeLocaleData } from '@abp/ng.core/locale';
 import(
 /* webpackChunkName: "_locale-your-locale-js"*/
 /* webpackMode: "eager" */
 '@angular/common/locales/your-locale.js'
 ).then(m => storeLocaleData(m.default, 'your-locale'));
 ```
+
+...or a custom `registerLocale` function can be passed to the `CoreModule`:
+
+```js
+// register-locale.ts
+
+import { differentLocales } from '@abp/ng.core';
+export function registerLocale(locale: string) {
+  return import(
+    /* webpackChunkName: "_locale-[request]"*/
+    /* webpackInclude: /[/\\](en|fr).js/ */
+    /* webpackExclude: /[/\\]global|extra/ */
+    `@angular/common/locales/${differentLocales[locale] || locale}.js`
+  )
+}
+
+// app.module.ts
+
+import { registerLocale } from './register-locale';
+
+@NgModule({
+  imports: [
+    // ...
+    CoreModule.forRoot({
+      // ...other options,
+      registerLocaleFn: registerLocale
+    }),
+    //...
+  ]
+```
+
 ## See Also
 
 * [Localization in ASP.NET Core](../../Localization.md)
