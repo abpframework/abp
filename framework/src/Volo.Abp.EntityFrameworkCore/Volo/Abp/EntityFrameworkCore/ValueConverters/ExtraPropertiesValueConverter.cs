@@ -42,10 +42,16 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 
         private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson, Type entityType)
         {
+            if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
+            {
+                return new ExtraPropertyDictionary();
+            }
+
             var deserializeOptions = new JsonSerializerOptions();
             deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
             var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, deserializeOptions) ??
                              new ExtraPropertyDictionary();
+
             if (entityType != null)
             {
                 var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
