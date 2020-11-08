@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components

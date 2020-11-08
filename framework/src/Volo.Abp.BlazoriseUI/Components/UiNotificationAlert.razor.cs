@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Blazorise.Snackbar;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.AspNetCore.Components.Notifications;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components
