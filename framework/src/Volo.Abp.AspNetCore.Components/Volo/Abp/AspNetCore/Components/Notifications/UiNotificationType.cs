@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.AspNetCore.Components.WebAssembly
+﻿namespace Volo.Abp.AspNetCore.Components.Notifications
 {
     public enum UiNotificationType
     {
