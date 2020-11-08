@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
@@ -19,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (context.Metadata.ModelType != typeof(Dictionary<string, object>))
+            if (context.Metadata.ModelType != typeof(ExtraPropertyDictionary))
             {
                 return null;
             }
