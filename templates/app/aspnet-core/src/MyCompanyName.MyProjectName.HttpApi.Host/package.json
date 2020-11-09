@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "name": "my-app",
+  "private": true,
+  "dependencies": {
+    "@abp/core": "^3.3.1",
+    "@abp/aspnetcore.mvc.ui": "^3.3.1"
+  }
+}
