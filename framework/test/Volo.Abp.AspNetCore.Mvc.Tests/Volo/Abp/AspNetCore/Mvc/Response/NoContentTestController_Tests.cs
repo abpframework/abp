@@ -54,5 +54,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
                 ;
             result.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         }
+
+        [Fact]
+        public async Task Should_Not_Set_No_Content_For_Custom_Result_Filter_Async_Action()
+        {
+            var result = await GetResponseAsync("/api/NoContent-Test/TestAsyncMethodWithResultFilter")
+                ;
+            result.StatusCode.ShouldBe(HttpStatusCode.OK);
+        }
     }
 }
