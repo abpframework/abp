@@ -2,12 +2,16 @@ import { CORE_OPTIONS } from '../tokens/options.token';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { Actions, Store } from '@ngxs/store';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { LocalizationService } from '../services/localization.service';
+import { SessionStateService } from '../services';
+
+const shouldReuseRoute = () => true;
 
 describe('LocalizationService', () => {
   let spectator: SpectatorService<LocalizationService>;
   let store: SpyObject<Store>;
+  let router: SpyObject<Router>;
   let service: LocalizationService;
 
   const createService = createServiceFactory({
@@ -26,16 +30,21 @@ describe('LocalizationService', () => {
   beforeEach(() => {
     spectator = createService();
     store = spectator.inject(Store);
+    store.dispatch.mockReturnValue(new BehaviorSubject('tr'));
+    router = spectator.inject(Router);
+    router.routeReuseStrategy = { shouldReuseRoute } as any;
     service = spectator.service;
+
+    const sessionState = spectator.inject(SessionStateService);
+    sessionState.setLanguage('tr');
   });
 
   describe('#currentLang', () => {
-    it('should be tr', () => {
-      store.selectSnapshot.andCallFake((selector: (state: any, ...states: any[]) => string) => {
-        return selector({ SessionState: { language: 'tr' } });
-      });
-
-      expect(service.currentLang).toBe('tr');
+    it('should be tr', done => {
+      setTimeout(() => {
+        expect(service.currentLang).toBe('tr');
+        done();
+      }, 0);
     });
   });
 
@@ -59,11 +68,6 @@ describe('LocalizationService', () => {
 
   describe('#registerLocale', () => {
     it('should return registerLocale and then call setRouteReuse', () => {
-      const router = spectator.inject(Router);
-
-      const shouldReuseRoute = () => true;
-      router.routeReuseStrategy = { shouldReuseRoute } as any;
-
       router.navigateByUrl.andCallFake(url => {
         return new Promise(resolve => resolve({ catch: () => null }));
       });
@@ -76,7 +80,13 @@ describe('LocalizationService', () => {
 
     it('should throw an error message when service have an otherInstance', async () => {
       try {
-        const instance = new LocalizationService(new Subject(), null, null, null, {} as any);
+        const instance = new LocalizationService(
+          { getLanguage: () => {} } as any,
+          null,
+          null,
+          null,
+          {} as any,
+        );
       } catch (error) {
         expect((error as Error).message).toBe('LocalizationService should have only one instance.');
       }

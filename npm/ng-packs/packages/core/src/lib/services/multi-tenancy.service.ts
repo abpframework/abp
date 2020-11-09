@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { SetTenant } from '../actions/session.actions';
 import { ABP } from '../models/common';
 import { FindTenantResultDto } from '../models/find-tenant-result-dto';
 import { RestService } from './rest.service';
+import { SessionStateService } from './session-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class MultiTenancyService {
@@ -12,7 +11,7 @@ export class MultiTenancyService {
 
   set domainTenant(value: ABP.BasicItem) {
     this._domainTenant = value;
-    this.store.dispatch(new SetTenant(value));
+    this.sessionState.setTenant(value);
   }
 
   get domainTenant() {
@@ -23,7 +22,7 @@ export class MultiTenancyService {
 
   apiName = 'abp';
 
-  constructor(private restService: RestService, private store: Store) {}
+  constructor(private restService: RestService, private sessionState: SessionStateService) {}
 
   findTenantByName(name: string, headers: ABP.Dictionary<string>): Observable<FindTenantResultDto> {
     return this.restService.request(

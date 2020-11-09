@@ -1,4 +1,4 @@
-import { AuthService, SetRemember, ConfigState } from '@abp/ng.core';
+import { AuthService, ConfigState } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -65,8 +65,6 @@ export class LoginComponent implements OnInit {
         }),
         finalize(() => (this.inProgress = false)),
       )
-      .subscribe(() => {
-        this.store.dispatch(new SetRemember(this.form.get('remember').value));
-      });
+      .subscribe(() => {});
   }
 }

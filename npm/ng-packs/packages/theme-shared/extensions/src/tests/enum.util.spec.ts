@@ -1,9 +1,15 @@
 import { LocalizationService } from '@abp/ng.core';
 import { Store } from '@ngxs/store';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { PropData } from '../lib/models/props';
 import { createEnum, createEnumOptions, createEnumValueResolver } from '../lib/utils/enum.util';
+
+const mockSessionState = {
+  languageChange$: new BehaviorSubject('tr'),
+  getLanguage: () => 'tr',
+  onLanguageChange$: () => new BehaviorSubject('tr'),
+} as any;
 
 const fields = [
   { name: 'foo', value: 1 },
@@ -38,7 +44,7 @@ describe('Enum Utils', () => {
 
   describe('#createEnumValueResolver', () => {
     const service = new LocalizationService(
-      new Subject().asObservable(),
+      mockSessionState,
       ({
         selectSnapshot: () => ({
           values: {
@@ -78,9 +84,7 @@ describe('Enum Utils', () => {
         const propData = new MockPropData({ extraProperties: { EnumProp: value } });
         propData.getInjected = () => service as any;
 
-        const resolved = await valueResolver(propData)
-          .pipe(take(1))
-          .toPromise();
+        const resolved = await valueResolver(propData).pipe(take(1)).toPromise();
 
         expect(resolved).toBe(expected);
       },
@@ -89,7 +93,7 @@ describe('Enum Utils', () => {
 
   describe('#createEnumOptions', () => {
     const service = new LocalizationService(
-      new Subject().asObservable(),
+      mockSessionState,
       ({
         selectSnapshot: () => ({
           values: {
@@ -119,9 +123,7 @@ describe('Enum Utils', () => {
       const propData = new MockPropData({});
       propData.getInjected = () => service as any;
 
-      const resolved = await options(propData)
-        .pipe(take(1))
-        .toPromise();
+      const resolved = await options(propData).pipe(take(1)).toPromise();
 
       expect(resolved).toEqual([
         { key: 'Foo', value: 1 },
