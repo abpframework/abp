@@ -50,7 +50,7 @@ There are a set of standard JavaScript/CSS libraries that comes pre-installed an
 - [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
 - [SweetAlert](https://sweetalert.js.org/) to show fancy alert message and confirmation dialogs.
 - [Toastr](https://github.com/CodeSeven/toastr) to show toast notifications.
-- [Lodesh](https://lodash.com/) as a utility library.
+- [Lodash](https://lodash.com/) as a utility library.
 - [Luxon](https://moment.github.io/luxon/) for date/time operations.
 - [JQuery Form](https://github.com/jquery-form/form) for AJAX forms.
 - [bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker) to show date pickers.
