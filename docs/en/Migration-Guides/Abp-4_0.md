@@ -13,11 +13,11 @@ Here, the overall list of the changes;
 * Upgraded to the Identity Server 4.1.1.
 * Made some API revisions & startup template changes for the Blazor UI.
 * Switched to `kebab-case` for conventional URLs for the auto API controller routes.
-* TODO: Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow.
-* TODO: Removed Retry for the Dynamic HTTP Client Proxies.
-* TODO: Make read only for Creation audit properties of the entities.
-* TODO: Deprecate the SessionState in the @abp/ng.core package
+* Removed Retry for the Dynamic HTTP Client Proxies.
+* Creation audit properties of the entities made read-only.
 * TODO: Use IBrandingProvider in the Volo.Abp.UI package and remove the one in the Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
+* TODO: Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow.
+* TODO: Deprecate the SessionState in the @abp/ng.core package
 * TODO: Change type of the IHasExtraProperties.ExtraProperties
 
 ## Upgraded to .NET 5.0
@@ -206,6 +206,14 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 This example uses the Microsoft.Extensions.Http.Polly NuGet package.
 
 If you create a new solution, you can find the same configuration in the `.HttpApi.Client.ConsoleTestApp` project's module class, as an example.
+
+## Creation Audit Properties Made Read-Only
+
+Removed setters from the `IHasCreationTime.CreationTime`, ` IMustHaveCreator.CreatorId` and `IMayHaveCreator.CreatorId` properties to accidently set the creation properties while updating an existing entity.
+
+Since the ABP Framework automatically sets these properties, you normally don't need to directly set them. If you want to set them, as a best practice, it is suggested to make it in the constructor to not provide a way to change it later.
+
+These properties implemented with `protected set` in the `Entity` and `AggregateRoot` base classes. That means you can still set in a derived class, if you need it. Alternatively, you can use reflection to set them (Or use `ObjectHelper.TrySetProperty` which internally uses reflection) out of the class if you have to do.
 
 ## Blazor UI
 
