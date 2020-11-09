@@ -49,7 +49,7 @@ export function createEnumOptions<T = any>(
 }
 
 function createLocalizationStream(l10n: LocalizationService, mapTarget: any) {
-  return merge(of(null), l10n.languageChange).pipe(map(() => mapTarget));
+  return merge(of(null), l10n.languageChange$).pipe(map(() => mapTarget));
 }
 
 function createEnumLocalizer(

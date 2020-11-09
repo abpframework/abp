@@ -1,36 +1,37 @@
 import { registerLocaleData } from '@angular/common';
 import { Injectable, Injector, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { noop, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { SetLanguage } from '../actions/session.actions';
+import { Store } from '@ngxs/store';
+import { noop, Observable, of, Subject } from 'rxjs';
+import { map, mapTo, switchMap } from 'rxjs/operators';
+import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
 import { Config } from '../models/config';
 import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
+import { SessionStateService } from './session-state.service';
 
 type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) => boolean;
 
 @Injectable({ providedIn: 'root' })
 export class LocalizationService {
+  private latestLang = this.sessionState.getLanguage();
+  private _languageChange$ = new Subject<string>();
+
   /**
    * Returns currently selected language
    */
   get currentLang(): string {
-    return this.store.selectSnapshot(state => state.SessionState.language);
+    return this.latestLang;
   }
 
-  get languageChange(): Observable<SetLanguage> {
-    return this.actions.pipe(
-      ofActionSuccessful(SetLanguage),
-      filter((action: SetLanguage) => action.dispatchAppConfiguration !== false),
-    );
+  get languageChange$(): Observable<string> {
+    return this._languageChange$.asObservable();
   }
 
   constructor(
-    private actions: Actions,
+    private sessionState: SessionStateService,
     private store: Store,
     private injector: Injector,
     private ngZone: NgZone,
@@ -44,7 +45,17 @@ export class LocalizationService {
   }
 
   private listenToSetLanguage() {
-    this.languageChange.subscribe(({ payload }) => this.registerLocale(payload));
+    this.sessionState
+      .onLanguageChange$()
+      .pipe(
+        switchMap(lang => {
+          return this.store.dispatch(new GetAppConfiguration()).pipe(mapTo(lang));
+        }),
+      )
+      .subscribe(lang => {
+        this.registerLocale(lang);
+        this._languageChange$.next(lang);
+      });
   }
 
   registerLocale(locale: string) {
@@ -57,6 +68,7 @@ export class LocalizationService {
 
     return registerLocaleFn(locale).then(module => {
       if (module?.default) registerLocaleData(module.default);
+      this.latestLang = locale;
 
       this.ngZone.run(async () => {
         await router.navigateByUrl(router.url).catch(noop);

@@ -4,11 +4,6 @@ import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angul
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
-import {
-  NgxsStoragePluginModule,
-  NGXS_STORAGE_PLUGIN_OPTIONS,
-  StorageOption,
-} from '@ngxs/storage-plugin';
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
@@ -38,7 +33,6 @@ import { LocalizationService } from './services/localization.service';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { ReplaceableComponentsState } from './states/replaceable-components.state';
-import { SessionState } from './states/session.state';
 import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
@@ -121,9 +115,8 @@ export class BaseCoreModule {}
   imports: [
     BaseCoreModule,
     LocalizationModule,
-    NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, SessionState, ConfigState]),
+    NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, ConfigState]),
     NgxsRouterPluginModule.forRoot(),
-    NgxsStoragePluginModule.forRoot(),
     OAuthModule.forRoot(),
     HttpClientXsrfModule.withOptions({
       cookieName: 'XSRF-TOKEN',
@@ -225,18 +218,6 @@ export class CoreModule {
           useFactory: noop,
         },
         { provide: OAuthStorage, useFactory: storageFactory },
-        {
-          provide: NGXS_STORAGE_PLUGIN_OPTIONS,
-          useValue: {
-            storage: StorageOption.LocalStorage,
-            serialize: JSON.stringify,
-            deserialize: JSON.parse,
-            beforeSerialize: ngxsStoragePluginSerialize,
-            afterDeserialize: ngxsStoragePluginSerialize,
-            ...options.ngxsStoragePluginOptions,
-            key: [...(options.ngxsStoragePluginOptions?.key || []), 'SessionState'],
-          },
-        },
       ],
     };
   }

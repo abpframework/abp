@@ -8,9 +8,9 @@ import { switchMap, take, tap } from 'rxjs/operators';
 import snq from 'snq';
 import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
 import { ConfigState } from '../states/config.state';
-import { SessionState } from '../states/session.state';
 import { AuthFlowStrategy, AUTH_FLOW_STRATEGY } from '../strategies/auth-flow.strategy';
 import { RestService } from './rest.service';
+import { SessionStateService } from './session-state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +29,7 @@ export class AuthService {
     private rest: RestService,
     private oAuthService: OAuthService,
     private store: Store,
+    private sessionState: SessionStateService,
     @Optional() @Inject('ACCOUNT_OPTIONS') private options: any,
   ) {
     this.setStrategy();
@@ -55,7 +56,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    const tenant = this.store.selectSnapshot(SessionState.getTenant);
+    const tenant = this.sessionState.getTenant();
 
     return from(
       this.oAuthService.fetchTokenUsingPasswordFlow(
