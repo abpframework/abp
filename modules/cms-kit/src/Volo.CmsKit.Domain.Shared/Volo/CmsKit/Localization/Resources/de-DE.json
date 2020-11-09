@@ -1,0 +1,22 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "PickYourReaction": "Wählen Sie Ihre Reaktion",
+    "YourComment": "Ihr Kommentar",
+    "YourReply": "Ihre Antwort",
+    "Comments": "Kommentare",
+    "Send": "Senden",
+    "Delete": "Löschen",
+    "Reply": "Antworten",
+    "Update": "Aktualisieren",
+    "Edit": "Bearbeiten",
+    "LoginToAddComment": "Melden Sie sich an, um zu Kommentieren",
+    "LoginToReply": "Melden Sie sich an, um zu Antworten",
+    "MessageDeletionConfirmationMessage": "Dieser Kommentar wird vollständig gelöscht.",
+    "CommentAuthorizationExceptionMessage": "Diese Kommentare dürfen nicht öffentlich angezeigt werden.",
+    "Undo": "Rüchkängig machen",
+    "RatingUndoMessage": "Ihre Bewertung wird rückgängig gemacht.",
+    "LoginToRate": "Melden Sie sich an, um zu Bewerten",
+    "Star": "Stern"
+  }
+}

@@ -16,7 +16,10 @@ describe('LocalizationService', () => {
     mocks: [Store, Router],
     providers: [
       { provide: Actions, useValue: new Subject() },
-      { provide: CORE_OPTIONS, useValue: { cultureNameLocaleFileMap: {} } },
+      {
+        provide: CORE_OPTIONS,
+        useValue: { registerLocaleFn: () => Promise.resolve(), cultureNameLocaleFileMap: {} },
+      },
     ],
   });
 

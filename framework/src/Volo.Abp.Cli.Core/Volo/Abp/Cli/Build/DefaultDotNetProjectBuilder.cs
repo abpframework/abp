@@ -9,7 +9,7 @@ namespace Volo.Abp.Cli.Build
 {
     public class DefaultDotNetProjectBuilder : IDotNetProjectBuilder, ITransientDependency
     {
-        public List<string> Build(List<DotNetProjectInfo> projects, string arguments)
+        public List<string> BuildProjects(List<DotNetProjectInfo> projects, string arguments)
         {
             var builtProjects = new ConcurrentBag<string>();
             var totalProjectCountToBuild = projects.Count;
@@ -40,6 +40,27 @@ namespace Volo.Abp.Cli.Build
             }
 
             return builtProjects.ToList();
+        }
+
+        public void BuildSolution(string slnPath, string arguments)
+        {
+            var buildArguments = "/graphBuild " + arguments.TrimStart('"').TrimEnd('"');
+            Console.WriteLine("Executing...: dotnet build " + slnPath + " " + buildArguments);
+
+            var output = CmdHelper.RunCmdAndGetOutput(
+                "dotnet build " + slnPath + " " + buildArguments,
+                out int buildStatus
+            );
+
+            if (buildStatus == 0)
+            {
+                WriteOutput(output, ConsoleColor.Green);
+            }
+            else
+            {
+                WriteOutput(output, ConsoleColor.Red);
+                throw new Exception("Build failed!");
+            }
         }
 
         private void BuildInternal(DotNetProjectInfo project, string arguments, ConcurrentBag<string> builtProjects)

@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions';
 import { RoutesService } from '../services';
+import { mockRoutesService } from './utils';
+import { mockActions } from './utils/common.utils';
 
 describe('Routes Service', () => {
   let service: RoutesService;
@@ -14,15 +16,9 @@ describe('Routes Service', () => {
     { path: '/foo/x', name: 'x', parentName: 'foo', order: 1 },
   ];
 
-  const mockActions = new Subject();
-  const mockStore = ({
-    selectSnapshot() {
-      return true;
-    },
-  } as unknown) as Store;
 
   beforeEach(() => {
-    service = new RoutesService(mockActions, mockStore);
+    service = mockRoutesService();
   });
 
   describe('#add', () => {

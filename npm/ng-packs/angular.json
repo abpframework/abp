@@ -496,6 +496,15 @@
                   "with": "apps/dev-app/src/environments/environment.internal.ts"
                 }
               ]
+            },
+            "regression": {
+              "tsConfig": "apps/dev-app/tsconfig.dev.json",
+              "fileReplacements": [
+                {
+                  "replace": "apps/dev-app/src/environments/environment.ts",
+                  "with": "apps/dev-app/src/environments/environment.regression.ts"
+                }
+              ]
             }
           }
         },
@@ -510,6 +519,9 @@
             },
             "internal": {
               "browserTarget": "dev-app:build:internal"
+            },
+            "regression": {
+              "browserTarget": "dev-app:build:regression"
             }
           }
         },

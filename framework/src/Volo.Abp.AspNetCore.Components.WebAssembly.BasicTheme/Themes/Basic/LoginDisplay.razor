@@ -26,9 +26,6 @@
                         <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
                     }
                 }
-                <a class="dropdown-item" href="@ServerAccountUrl">
-                    @UiLocalizer["ManageYourAccount"]
-                </a>
                 <DropdownDivider />
                 <DropdownItem Clicked="BeginSignOut">Logout</DropdownItem>
             </DropdownMenu>

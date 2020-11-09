@@ -12,7 +12,7 @@ namespace Volo.Abp.Auditing
         /// Reference to the creator.
         /// </summary>
         [NotNull]
-        TCreator Creator { get; set; }
+        TCreator Creator { get; }
     }
 
     /// <summary>
@@ -23,6 +23,6 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Id of the creator.
         /// </summary>
-        Guid CreatorId { get; set; }
+        Guid CreatorId { get; }
     }
 }

@@ -4,13 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public abstract class UserManagementBase : AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
+    public partial class UserManagement
     {
         protected const string PermissionProviderName = "U";
 
@@ -24,14 +23,13 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected AssignedRoleViewModel[] EditUserRoles;
 
-        protected bool ShouldShowEntityActions { get; set; }
-        protected bool HasManagePermissionsPermission { get; set; }
+        protected string ManagePermissionsPolicyName;
 
         protected string CreateModalSelectedTab = DefaultSelectedTab;
 
         protected string EditModalSelectedTab = DefaultSelectedTab;
 
-        public UserManagementBase()
+        public UserManagement()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
             LocalizationResource = typeof(IdentityResource);
@@ -39,6 +37,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             CreatePolicyName = IdentityPermissions.Users.Create;
             UpdatePolicyName = IdentityPermissions.Users.Update;
             DeletePolicyName = IdentityPermissions.Users.Delete;
+            ManagePermissionsPolicyName = IdentityPermissions.Users.ManagePermissions;
         }
 
         protected async override Task OnInitializedAsync()
@@ -48,20 +47,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
 
-        protected async override Task SetPermissionsAsync()
-        {
-            await base.SetPermissionsAsync();
 
-            HasManagePermissionsPermission = await AuthorizationService.IsGrantedAsync(
-                IdentityPermissions.Users.ManagePermissions
-            );
-
-            ShouldShowEntityActions = HasUpdatePermission ||
-                                      HasDeletePermission ||
-                                      HasManagePermissionsPermission;
-        }
-
-        protected override async Task OnOpeningCreateModalAsync()
+        protected override Task OpenCreateModalAsync()
         {
             CreateModalSelectedTab = DefaultSelectedTab;
 
@@ -71,7 +58,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                 IsAssigned = x.IsDefault
             }).ToArray();
 
-            await base.OnOpeningCreateModalAsync();
+            return base.OpenCreateModalAsync();
         }
 
         protected override Task OnCreatingEntityAsync()
@@ -82,11 +69,11 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             return base.OnCreatingEntityAsync();
         }
 
-        protected async override Task OpenEditModalAsync(Guid id)
+        protected async override Task OpenEditModalAsync(IdentityUserDto entity)
         {
             EditModalSelectedTab = DefaultSelectedTab;
 
-            var userRoleNames = (await AppService.GetRolesAsync(id)).Items.Select(r => r.Name).ToList();
+            var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
 
             EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
             {
@@ -94,7 +81,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                 IsAssigned = userRoleNames.Contains(x.Name)
             }).ToArray();
 
-            await base.OnOpeningEditModalAsync(id);
+            await base.OpenEditModalAsync(entity);
         }
 
         protected override Task OnUpdatingEntityAsync()
@@ -103,6 +90,11 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
 
             return base.OnUpdatingEntityAsync();
+        }
+
+        protected override string GetDeleteConfirmationMessage(IdentityUserDto entity)
+        {
+            return string.Format(L["UserDeletionConfirmationMessage"], entity.UserName);
         }
     }
 

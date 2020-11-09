@@ -104,6 +104,9 @@ export class ConfigState {
     return selector;
   }
 
+  /**
+   * @deprecated use PermissionService's getGrantedPolicyStream or getGrantedPolicy methods.
+   */
   static getGrantedPolicy(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State): boolean => {
       if (!key) return true;
@@ -223,17 +226,15 @@ export class ConfigState {
           }),
         ),
         switchMap(configuration => {
-          let lang = configuration.localization.currentCulture.cultureName;
+          if (this.store.selectSnapshot(SessionState.getLanguage)) return of(null);
 
+          let lang = configuration.localization.currentCulture.cultureName;
           if (lang.includes(';')) {
             lang = lang.split(';')[0];
           }
 
           document.documentElement.setAttribute('lang', lang);
-
-          return this.store.selectSnapshot(SessionState.getLanguage)
-            ? of(null)
-            : dispatch(new SetLanguage(lang, false));
+          return dispatch(new SetLanguage(lang, false));
         }),
         catchError((err: HttpErrorResponse) => {
           dispatch(new RestOccurError(err));

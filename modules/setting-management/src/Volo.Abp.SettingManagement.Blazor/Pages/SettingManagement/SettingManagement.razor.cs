@@ -10,7 +10,7 @@ using Volo.Abp.SettingManagement.Localization;
 
 namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement
 {
-    public abstract class SettingManagementBase : OwningComponentBase
+    public partial class SettingManagement
     {
         [Inject]
         protected IServiceProvider ServiceProvider { get; set; }
@@ -44,7 +44,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement
             BreadcrumbItems.Add(new BreadcrumbItem(L["Settings"]));
         }
 
-        protected string GetNormalizedString(string value)
+        protected virtual string GetNormalizedString(string value)
         {
             return value.Replace('.', '_');
         }

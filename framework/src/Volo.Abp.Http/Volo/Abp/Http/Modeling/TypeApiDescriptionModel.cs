@@ -19,7 +19,7 @@ namespace Volo.Abp.Http.Modeling
 
         public PropertyApiDescriptionModel[] Properties { get; set; }
 
-        private TypeApiDescriptionModel()
+        public TypeApiDescriptionModel()
         {
 
         }

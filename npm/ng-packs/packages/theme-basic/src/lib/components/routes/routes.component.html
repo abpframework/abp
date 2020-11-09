@@ -1,6 +1,6 @@
 <ul class="navbar-nav">
   <ng-container
-    *ngFor="let route of routes.visible$ | async; trackBy: trackByFn"
+    *ngFor="let route of routesService.visible$ | async; trackBy: trackByFn"
     [ngTemplateOutlet]="isDropdown(route) ? dropdownLink : defaultLink"
     [ngTemplateOutletContext]="{ $implicit: route }"
   >

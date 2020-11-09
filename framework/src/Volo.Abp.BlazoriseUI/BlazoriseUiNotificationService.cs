@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Localization.Resources.AbpUi;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.DependencyInjection;
 
@@ -14,14 +12,6 @@ namespace Volo.Abp.BlazoriseUI
         /// An event raised after the notification is received.
         /// </summary>
         public event EventHandler<UiNotificationEventArgs> NotificationReceived;
-
-        private readonly IStringLocalizer<AbpUiResource> localizer;
-
-        public BlazoriseUiNotificationService(
-            IStringLocalizer<AbpUiResource> localizer)
-        {
-            this.localizer = localizer;
-        }
 
         public Task Info(string message, string title = null, Action<UiNotificationOptions> options = null)
         {
@@ -65,9 +55,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual UiNotificationOptions CreateDefaultOptions()
         {
-            return new UiNotificationOptions
-            {
-            };
+            return new UiNotificationOptions();
         }
     }
 }

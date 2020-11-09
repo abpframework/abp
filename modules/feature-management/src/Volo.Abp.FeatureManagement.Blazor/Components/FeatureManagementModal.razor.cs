@@ -20,8 +20,6 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         
         [Inject] protected IUiMessageService UiMessageService { get; set; }
         
-        [Inject] protected IStringLocalizer<AbpFeatureManagementResource> L { get; set; }
-        
         [Inject] protected IStringLocalizerFactory HtmlLocalizerFactory { get; set; }
         
         [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
