@@ -206,7 +206,7 @@ namespace MyCompanyName.MyProjectName
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseAbpSwaggerUI(options =>
+            app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
 
