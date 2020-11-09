@@ -1,33 +1,27 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
-using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Sms
 {
     [Dependency(TryRegister = true)]
-    public class NullSmsSender : SmsSenderBase, ISingletonDependency
+    public class NullSmsSender : ISmsSender, ISingletonDependency
     {
         public ILogger<NullSmsSender> Logger { get; set; }
 
-        public NullSmsSender(IBackgroundJobManager backgroundJobManager): base(backgroundJobManager)
+        public NullSmsSender()
         {
             Logger = NullLogger<NullSmsSender>.Instance;
         }
 
-        protected override Task SendSmsAsync(SmsMessage smsMessage)
+        public Task SendAsync(SmsMessage smsMessage)
         {
             Logger.LogWarning($"SMS Sending was not implemented! Using {nameof(NullSmsSender)}:");
 
-            Logger.LogWarning("Phone Number  : " + smsMessage.PhoneNumber);
-            Logger.LogWarning("SMS Text      : " + smsMessage.Text);
-            if (smsMessage.Properties != null)
-            {
-                Logger.LogWarning("SMS Properties: " + JsonConvert.SerializeObject(smsMessage.Properties));
-            }
-            
+            Logger.LogWarning("Phone Number : " + smsMessage.PhoneNumber);
+            Logger.LogWarning("SMS Text     : " + smsMessage.Text);
+
             return Task.CompletedTask;
         }
     }
