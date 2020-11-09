@@ -13,9 +13,9 @@ Here, the overall list of the changes;
 * Upgraded to the Identity Server 4.1.1.
 * Made some API revisions & startup template changes for the Blazor UI.
 * Switched to `kebab-case` for conventional URLs for the auto API controller routes.
-* Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow.
-* Moved retry logic for the Dynamic HTTP Client Proxies to the startup template.
-* Make read only for Creation audit properties of the entities.
+* TODO: Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow.
+* TODO: Removed Retry for the Dynamic HTTP Client Proxies.
+* TODO: Make read only for Creation audit properties of the entities.
 * TODO: Deprecate the SessionState in the @abp/ng.core package
 * TODO: Use IBrandingProvider in the Volo.Abp.UI package and remove the one in the Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
 * TODO: Change type of the IHasExtraProperties.ExtraProperties
@@ -180,6 +180,32 @@ Configure<AbpConventionalControllerOptions>(options =>
 ```
 
 Setting it globally affects all the modules in a modular application.
+
+## Removed Retry for the Dynamic HTTP Client Proxies
+
+[Dynamic C# HTTP Client Proxies](../API/Dynamic-CSharp-API-Clients.md) were trying up to 3 times if a request fails using the [Polly](https://github.com/App-vNext/Polly) library. Starting from the version 4.0, this logic has been removed. If you need it, you should configure it in your own application, by configuring the `AbpHttpClientBuilderOptions` in the `PreConfigureServices` method of your module.
+
+**Example: Retry 3 times on failure by incremental waiting between tries**
+
+````csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<AbpHttpClientBuilderOptions>(options =>
+    {
+        options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) =>
+        {
+            clientBuilder.AddTransientHttpErrorPolicy(
+                policyBuilder => policyBuilder
+                    .WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i)))
+            );
+        });
+    });
+}
+````
+
+This example uses the Microsoft.Extensions.Http.Polly NuGet package.
+
+If you create a new solution, you can find the same configuration in the `.HttpApi.Client.ConsoleTestApp` project's module class, as an example.
 
 ## Blazor UI
 
