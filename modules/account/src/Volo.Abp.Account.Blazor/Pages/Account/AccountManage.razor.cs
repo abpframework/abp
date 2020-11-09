@@ -43,7 +43,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
             
             if (ChangePasswordModel.NewPassword != ChangePasswordModel.NewPasswordConfirm)
             {
-                await UiMessageService.WarnAsync(L["NewPasswordConfirmFailed"]);
+                await UiMessageService.Warn(L["NewPasswordConfirmFailed"]);
                 return;
             }
             
@@ -53,7 +53,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
                 NewPassword = ChangePasswordModel.NewPassword
             });
             
-            await UiMessageService.SuccessAsync(L["PasswordChanged"]);
+            await UiMessageService.Success(L["PasswordChanged"]);
         }
 
         protected async Task UpdatePersonalInfoAsync()
@@ -62,7 +62,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
                 ObjectMapper.Map<PersonalInfoModel, UpdateProfileDto>(PersonalInfoModel)
                 );
             
-            await UiMessageService.SuccessAsync(L["PersonalSettingsSaved"]);
+            await UiMessageService.Success(L["PersonalSettingsSaved"]);
         }
     }
 

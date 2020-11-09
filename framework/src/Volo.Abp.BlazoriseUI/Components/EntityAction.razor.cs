@@ -56,7 +56,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             if (ConfirmationMessage != null)
             {
-                if (await UiMessageService.ConfirmAsync(ConfirmationMessage()))
+                if (await UiMessageService.Confirm(ConfirmationMessage()))
                 {
                     await Clicked.InvokeAsync();
                 }

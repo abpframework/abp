@@ -108,7 +108,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             }
             else
             {
-                await UiMessageService.WarnAsync(L["Volo.Abp.FeatureManagement:InvalidFeatureValue", feature.DisplayName]);
+                await UiMessageService.Warn(L["Volo.Abp.FeatureManagement:InvalidFeatureValue", feature.DisplayName]);
             }
         }
 
