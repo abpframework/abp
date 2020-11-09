@@ -8,17 +8,17 @@ This document introduces the breaking changes done in the ABP Framework 4.0 and 
 
 Here, the overall list of the changes;
 
-* Upgraded to the .NET 5.0.
-* Moved from Newtonsoft.Json to System.Text.Json.
-* Upgraded to the Identity Server 4.1.1.
+* Upgraded to the .NET 5.0 [(#6118](https://github.com/abpframework/abp/issues/6118)).
+* Moved from Newtonsoft.Json to System.Text.Json [(#1198](https://github.com/abpframework/abp/issues/1198)).
+* Upgraded to the Identity Server 4.1.1 ([#4461](https://github.com/abpframework/abp/issues/4461)).
+* Switched to `kebab-case` for conventional URLs for the auto API controller routes ([#5325](https://github.com/abpframework/abp/issues/5325)).
+* Removed Retry for the Dynamic HTTP Client Proxies ([#6090](https://github.com/abpframework/abp/issues/6090)).
+* Creation audit properties of the entities made read-only ([#6020](https://github.com/abpframework/abp/issues/6020)).
+* Changed type of the IHasExtraProperties.ExtraProperties ([#3751](https://github.com/abpframework/abp/issues/3751)).
+* Use IBrandingProvider in the Volo.Abp.UI package and remove the one in the Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared ([#5375](https://github.com/abpframework/abp/issues/5375)).
+* Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow ([#5652](https://github.com/abpframework/abp/issues/5652)).
+* Removed the SessionState in the @abp/ng.core package ([#5606](https://github.com/abpframework/abp/issues/5606)).
 * Made some API revisions & startup template changes for the Blazor UI.
-* Switched to `kebab-case` for conventional URLs for the auto API controller routes.
-* Removed Retry for the Dynamic HTTP Client Proxies.
-* Creation audit properties of the entities made read-only.
-* TODO: Use IBrandingProvider in the Volo.Abp.UI package and remove the one in the Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
-* TODO: Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow.
-* TODO: Deprecate the SessionState in the @abp/ng.core package
-* TODO: Change type of the IHasExtraProperties.ExtraProperties
 
 ## Upgraded to .NET 5.0
 
@@ -214,6 +214,30 @@ Removed setters from the `IHasCreationTime.CreationTime`, ` IMustHaveCreator.Cre
 Since the ABP Framework automatically sets these properties, you normally don't need to directly set them. If you want to set them, as a best practice, it is suggested to make it in the constructor to not provide a way to change it later.
 
 These properties implemented with `protected set` in the `Entity` and `AggregateRoot` base classes. That means you can still set in a derived class, if you need it. Alternatively, you can use reflection to set them (Or use `ObjectHelper.TrySetProperty` which internally uses reflection) out of the class if you have to do.
+
+## Changed type of the IHasExtraProperties.ExtraProperties
+
+`IHasExtraProperties.ExtraProperties` was a regular `Dictionary<string, object>`. With the version 4.0, it is replaced with `ExtraPropertyDictionary` class which inherits the `Dictionary<string, object>`. 
+
+Most of the applications don't be affected by this change. If you've directly implemented this interface, replace the standard dictionary the the `ExtraPropertyDictionary`.
+
+## ASP.NET Core MVC / Razor Pages UI
+
+### Use IBrandingProvider in the Volo.Abp.UI Package
+
+This will be a breaking change for MVC UI, but very easy to fix. `IBrandingProvider` is being moved from `Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components` to `Volo.Abp.Ui.Branding` namespace. So, just update the namespace imports.
+
+## Angular UI
+
+### Removed the Angular Account Module Public UI
+
+Angular UI is using the Authorization Code Flow to authenticate since the version 3.1.0 by default. Starting from the version 4.0, this is becoming the only option, because it is the recommended way of authenticating SPAs.
+
+If you haven't done it yet, see [this post](https://blog.abp.io/abp/ABP-Framework-v3.1-RC-Has-Been-Released) to change the authentication of your application.
+
+### Removed the SessionState
+
+Use `SessionStateService` instead of the `SessionState`. See [this issue](https://github.com/abpframework/abp/issues/5606) for details.
 
 ## Blazor UI
 
