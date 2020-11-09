@@ -22,12 +22,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         public Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
         {
-            var result = new MultiplePermissionGrantResult();
-            foreach (var name in names)
-            {
-                result.Result.Add(name, PermissionGrantResult.Prohibited);
-            }
-            return Task.FromResult(result);
+            return Task.FromResult(new MultiplePermissionGrantResult(names, PermissionGrantResult.Prohibited));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Security.Claims;
 
@@ -33,20 +32,15 @@ namespace Volo.Abp.Authorization.Permissions
 
         public async override Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
         {
-            var result = new MultiplePermissionGrantResult();
-            var permissionNames = context.Permissions.Select(x => x.Name).ToList();
-            foreach (var name in permissionNames)
-            {
-                result.Result.Add(name, PermissionGrantResult.Undefined);
-            }
+            var permissionNames = context.Permissions.Select(x => x.Name).ToArray();
 
             var userId = context.Principal?.FindFirst(AbpClaimTypes.UserId)?.Value;
             if (userId == null)
             {
-                return result;
+                return new MultiplePermissionGrantResult(permissionNames);
             }
 
-            return await PermissionStore.IsGrantedAsync(permissionNames.ToArray(), Name, userId);
+            return await PermissionStore.IsGrantedAsync(permissionNames, Name, userId);
         }
     }
 }

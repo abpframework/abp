@@ -39,12 +39,8 @@ namespace Volo.Abp.Authorization.Permissions
 
         public async override Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
         {
-            var result = new MultiplePermissionGrantResult();
             var permissionNames = context.Permissions.Select(x => x.Name).ToList();
-            foreach (var name in permissionNames)
-            {
-                result.Result.Add(name, PermissionGrantResult.Undefined);
-            }
+            var result = new MultiplePermissionGrantResult(permissionNames.ToArray());
 
             var roles = context.Principal?.FindAll(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
             if (roles == null || !roles.Any())
@@ -54,18 +50,19 @@ namespace Volo.Abp.Authorization.Permissions
 
             foreach (var role in roles)
             {
-                foreach (var grantResult in (await PermissionStore.IsGrantedAsync(permissionNames.ToArray(), Name, role)).Result)
+                var multipleResult = await PermissionStore.IsGrantedAsync(permissionNames.ToArray(), Name, role);
+                foreach (var grantResult in multipleResult.Result)
                 {
                     if (result.Result.ContainsKey(grantResult.Key) &&
                         result.Result[grantResult.Key] == PermissionGrantResult.Undefined &&
                         grantResult.Value != PermissionGrantResult.Undefined)
                     {
                         result.Result[grantResult.Key] = grantResult.Value;
-                        permissionNames.Remove(grantResult.Key);
+                        permissionNames.RemoveAll(x => x == grantResult.Key);
                     }
                 }
 
-                if (result.AllGranted)
+                if (result.AllGranted || result.AllProhibited)
                 {
                     break;
                 }

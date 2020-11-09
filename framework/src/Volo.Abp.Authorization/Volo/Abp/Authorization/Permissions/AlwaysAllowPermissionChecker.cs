@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp.Threading;
 
@@ -31,12 +29,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         public Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string[] names)
         {
-            var result = new MultiplePermissionGrantResult();
-            foreach (var name in names)
-            {
-                result.Result.Add(name, PermissionGrantResult.Granted);
-            }
-            return Task.FromResult(result);
+            return Task.FromResult(new MultiplePermissionGrantResult(names, PermissionGrantResult.Granted));
         }
     }
 }

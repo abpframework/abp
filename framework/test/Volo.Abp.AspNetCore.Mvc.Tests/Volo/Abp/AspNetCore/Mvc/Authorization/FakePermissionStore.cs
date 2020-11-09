@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                                         providerName == UserPermissionValueProvider.ProviderName &&
                                         providerKey == AuthTestController.FakeUserId.ToString()
                     ? PermissionGrantResult.Granted
-                    : PermissionGrantResult.Undefined);
+                    : PermissionGrantResult.Prohibited);
             }
 
             return Task.FromResult(result);

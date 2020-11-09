@@ -27,5 +27,17 @@ namespace Volo.Abp.Authorization.Permissions
         {
             Result = new Dictionary<string, PermissionGrantResult>();
         }
+
+        public MultiplePermissionGrantResult(string[] names, PermissionGrantResult grantResult = PermissionGrantResult.Undefined)
+        {
+            Check.NotNull(names, nameof(names));
+
+            Result = new Dictionary<string, PermissionGrantResult>();
+
+            foreach (var name in names)
+            {
+                Result.Add(name, grantResult);
+            }
+        }
     }
 }
