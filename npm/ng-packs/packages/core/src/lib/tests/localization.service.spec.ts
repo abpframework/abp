@@ -6,6 +6,8 @@ import { BehaviorSubject, of, Subject } from 'rxjs';
 import { LocalizationService } from '../services/localization.service';
 import { SessionStateService } from '../services';
 
+const shouldReuseRoute = () => true;
+
 describe('LocalizationService', () => {
   let spectator: SpectatorService<LocalizationService>;
   let store: SpyObject<Store>;
@@ -30,7 +32,7 @@ describe('LocalizationService', () => {
     store = spectator.inject(Store);
     store.dispatch.mockReturnValue(new BehaviorSubject('tr'));
     router = spectator.inject(Router);
-    router.routeReuseStrategy = {} as any;
+    router.routeReuseStrategy = { shouldReuseRoute } as any;
     service = spectator.service;
 
     const sessionState = spectator.inject(SessionStateService);
@@ -66,11 +68,6 @@ describe('LocalizationService', () => {
 
   describe('#registerLocale', () => {
     it('should return registerLocale and then call setRouteReuse', () => {
-      const router = spectator.inject(Router);
-
-      const shouldReuseRoute = () => true;
-      router.routeReuseStrategy = { shouldReuseRoute } as any;
-
       router.navigateByUrl.andCallFake(url => {
         return new Promise(resolve => resolve({ catch: () => null }));
       });
