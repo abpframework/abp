@@ -35,6 +35,21 @@ namespace Volo.Abp.PermissionManagement
             return (await GetCacheItemAsync(name, providerName, providerKey)).IsGranted;
         }
 
+        public virtual async Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
+        {
+            var result = new MultiplePermissionGrantResult();
+
+            var cacheItems = await GetCacheItemsAsync(names, providerName, providerKey);
+            foreach (var item in cacheItems)
+            {
+                result.Result.Add(PermissionGrantCacheItem.ParseCacheKeyOrNull(item.Key), item.Value.IsGranted
+                    ? PermissionGrantResult.Granted :
+                    PermissionGrantResult.Undefined);
+            }
+
+            return result;
+        }
+
         protected virtual async Task<PermissionGrantCacheItem> GetCacheItemAsync(
             string name,
             string providerName,
@@ -53,9 +68,9 @@ namespace Volo.Abp.PermissionManagement
             }
 
             Logger.LogDebug($"Not found in the cache: {cacheKey}");
-            
+
             cacheItem = new PermissionGrantCacheItem(false);
-            
+
             await SetCacheItemsAsync(providerName, providerKey, name, cacheItem);
 
             return cacheItem;
@@ -68,7 +83,7 @@ namespace Volo.Abp.PermissionManagement
             PermissionGrantCacheItem currentCacheItem)
         {
             var permissions = PermissionDefinitionManager.GetPermissions();
-            
+
             Logger.LogDebug($"Getting all granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
 
             var grantedPermissionsHashSet = new HashSet<string>(
@@ -87,7 +102,7 @@ namespace Volo.Abp.PermissionManagement
                     CalculateCacheKey(permission.Name, providerName, providerKey),
                     new PermissionGrantCacheItem(isGranted))
                 );
-                
+
                 if (permission.Name == currentName)
                 {
                     currentCacheItem.IsGranted = isGranted;
@@ -95,8 +110,59 @@ namespace Volo.Abp.PermissionManagement
             }
 
             await Cache.SetManyAsync(cacheItems);
-            
+
             Logger.LogDebug($"Finished setting the cache items. Count: {permissions.Count}");
+        }
+
+        protected virtual async Task<List<KeyValuePair<string, PermissionGrantCacheItem>>> GetCacheItemsAsync(
+            string[] names,
+            string providerName,
+            string providerKey)
+        {
+            var cacheKeys = names.Select(x => CalculateCacheKey(x, providerName, providerKey)).ToList();
+            var cacheItems = (await Cache.GetManyAsync(cacheKeys)).ToList();
+            if (cacheItems.All(x => x.Value != null))
+            {
+                return cacheItems;
+            }
+
+            return cacheItems.Where(x => x.Value != null)
+                .Union(await SetCacheItemsAsync(providerName, providerKey, cacheItems.Where(x => x.Value == null)))
+                .ToList();
+        }
+
+        protected virtual async Task<List<KeyValuePair<string, PermissionGrantCacheItem>>> SetCacheItemsAsync(
+            string providerName,
+            string providerKey,
+            IEnumerable<KeyValuePair<string, PermissionGrantCacheItem>> notCacheItems)
+        {
+            var permissions = PermissionDefinitionManager.GetPermissions();
+
+            Logger.LogDebug($"Getting all granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
+
+            var grantedPermissionsHashSet = new HashSet<string>(
+                (await PermissionGrantRepository.GetListAsync(providerName, providerKey)).Select(p => p.Name)
+            );
+
+            Logger.LogDebug($"Setting the cache items. Count: {permissions.Count}");
+
+            var cacheItems = new List<KeyValuePair<string, PermissionGrantCacheItem>>();
+
+            foreach (var permission in permissions)
+            {
+                var isGranted = grantedPermissionsHashSet.Contains(permission.Name);
+
+                cacheItems.Add(new KeyValuePair<string, PermissionGrantCacheItem>(
+                    CalculateCacheKey(permission.Name, providerName, providerKey),
+                    new PermissionGrantCacheItem(isGranted))
+                );
+            }
+
+            await Cache.SetManyAsync(cacheItems);
+
+            Logger.LogDebug($"Finished setting the cache items. Count: {permissions.Count}");
+
+            return cacheItems.Where(x => notCacheItems.Any(y => x.Key == y.Key)).ToList();
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
