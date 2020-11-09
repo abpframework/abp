@@ -3,7 +3,7 @@ import { Injectable, Injector, NgZone, Optional, SkipSelf } from '@angular/core'
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { noop, Observable, of, Subject } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
+import { filter, map, mapTo, switchMap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
 import { Config } from '../models/config';
@@ -48,9 +48,13 @@ export class LocalizationService {
     this.sessionState
       .onLanguageChange$()
       .pipe(
-        switchMap(lang => {
-          return this.store.dispatch(new GetAppConfiguration()).pipe(mapTo(lang));
-        }),
+        filter(
+          lang =>
+            this.store.selectSnapshot(
+              ConfigState.getDeep('localization.currentCulture.cultureName'),
+            ) !== lang,
+        ),
+        switchMap(lang => this.store.dispatch(new GetAppConfiguration()).pipe(mapTo(lang))),
       )
       .subscribe(lang => {
         this.registerLocale(lang);
