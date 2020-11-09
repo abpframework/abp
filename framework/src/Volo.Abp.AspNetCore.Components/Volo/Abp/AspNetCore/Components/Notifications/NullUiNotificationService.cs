@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly
+namespace Volo.Abp.AspNetCore.Components.Notifications
 {
     public class NullUiNotificationService : IUiNotificationService, ITransientDependency
     {

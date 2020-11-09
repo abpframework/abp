@@ -47,7 +47,7 @@ namespace Volo.Abp.Auditing
 
         public List<Exception> Exceptions { get; }
 
-        public Dictionary<string, object> ExtraProperties { get; }
+        public ExtraPropertyDictionary ExtraProperties { get; }
 
         public List<EntityChangeInfo> EntityChanges { get; }
 
@@ -57,7 +57,7 @@ namespace Volo.Abp.Auditing
         {
             Actions = new List<AuditLogActionInfo>();
             Exceptions = new List<Exception>();
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
             EntityChanges = new List<EntityChangeInfo>();
             Comments = new List<string>();
         }

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.Identity;
 
 namespace Volo.Abp.Account.Blazor.Pages.Account
@@ -17,7 +17,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
 
         protected PersonalInfoModel PersonalInfoModel;
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             await GetUserInformations();
         }

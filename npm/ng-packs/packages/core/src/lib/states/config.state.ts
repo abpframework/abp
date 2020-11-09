@@ -6,11 +6,10 @@ import { catchError, switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
 import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
-import { SetLanguage } from '../actions/session.actions';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
+import { SessionStateService } from '../services/session-state.service';
 import { interpolate } from '../utils/string-utils';
-import { SessionState } from './session.state';
 
 @State<Config.State>({
   name: 'ConfigState',
@@ -211,7 +210,11 @@ export class ConfigState {
     return selector;
   }
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(
+    private http: HttpClient,
+    private store: Store,
+    private sessionState: SessionStateService,
+  ) {}
 
   @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
@@ -226,7 +229,7 @@ export class ConfigState {
           }),
         ),
         switchMap(configuration => {
-          if (this.store.selectSnapshot(SessionState.getLanguage)) return of(null);
+          if (this.sessionState.getLanguage()) return of(null);
 
           let lang = configuration.localization.currentCulture.cultureName;
           if (lang.includes(';')) {
@@ -234,7 +237,7 @@ export class ConfigState {
           }
 
           document.documentElement.setAttribute('lang', lang);
-          return dispatch(new SetLanguage(lang, false));
+          return of(null).pipe(tap(() => this.sessionState.setLanguage(lang)));
         }),
         catchError((err: HttpErrorResponse) => {
           dispatch(new RestOccurError(err));

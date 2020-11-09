@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -55,12 +56,12 @@ namespace Volo.Abp.AuditLogging
 
         protected AuditLog()
         {
-            ExtraProperties = new Dictionary<string, object>();
+
         }
 
         public AuditLog(IGuidGenerator guidGenerator, AuditLogInfo auditInfo)
+            : base(guidGenerator.Create())
         {
-            Id = guidGenerator.Create();
             ApplicationName = auditInfo.ApplicationName.Truncate(AuditLogConsts.MaxApplicationNameLength);
             TenantId = auditInfo.TenantId;
             TenantName = auditInfo.TenantName.Truncate(AuditLogConsts.MaxTenantNameLength);
@@ -79,10 +80,14 @@ namespace Volo.Abp.AuditLogging
             ImpersonatorUserId = auditInfo.ImpersonatorUserId;
             ImpersonatorTenantId = auditInfo.ImpersonatorTenantId;
 
-            ExtraProperties = auditInfo
-                                  .ExtraProperties?
-                                  .ToDictionary(pair => pair.Key, pair => pair.Value)
-                              ?? new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
+            if (auditInfo.ExtraProperties != null)
+            {
+                foreach (var pair in auditInfo.ExtraProperties)
+                {
+                    ExtraProperties.Add(pair.Key, pair.Value);
+                }
+            }
 
             EntityChanges = auditInfo
                                 .EntityChanges?

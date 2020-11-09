@@ -102,7 +102,7 @@
     chart.js "^2.9.3"
     tslib "^2.0.0"
 
-"@abp/utils@^3.3.0", "@abp/utils@^3.3.0-rc.2":
+"@abp/utils@^3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-3.3.0.tgz#44ccacf4c415227e94981d907017de1c6f7225bb"
   integrity sha512-/JIcygVJu/Ob1G5IicL2XgOVjIIePC2t3QzgEbwaq6NDGMHiOm2quyS8Lj7TfjBeUFTJhCFEbXJMq0lGQ+KMww==

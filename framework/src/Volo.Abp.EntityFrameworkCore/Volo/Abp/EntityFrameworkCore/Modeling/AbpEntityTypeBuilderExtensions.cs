@@ -60,10 +60,10 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
                 return;
             }
 
-            b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
+            b.Property<ExtraPropertyDictionary>(nameof(IHasExtraProperties.ExtraProperties))
                 .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
                 .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
-                .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, object>());
+                .Metadata.SetValueComparer(new ExtraPropertyDictionaryValueComparer());
 
             b.TryConfigureObjectExtensions();
         }

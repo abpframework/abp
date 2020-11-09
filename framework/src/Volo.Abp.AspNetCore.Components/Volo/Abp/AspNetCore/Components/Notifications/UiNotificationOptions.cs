@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly
+namespace Volo.Abp.AspNetCore.Components.Notifications
 {
     /// <summary>
     /// Options to override notification appearance.

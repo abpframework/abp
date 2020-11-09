@@ -61,7 +61,6 @@
     "@ngxs/devtools-plugin": "^3.7.0",
     "@ngxs/logger-plugin": "^3.7.0",
     "@ngxs/router-plugin": "^3.7.0",
-    "@ngxs/storage-plugin": "^3.7.0",
     "@ngxs/store": "^3.7.0",
     "@schematics/angular": "~10.0.5",
     "@swimlane/ngx-datatable": "^17.1.0",

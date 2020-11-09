@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.AspNetCore.Components.WebAssembly
+﻿namespace Volo.Abp.AspNetCore.Components.Messages
 {
     /// <summary>
     /// Options to override message dialog appearance.

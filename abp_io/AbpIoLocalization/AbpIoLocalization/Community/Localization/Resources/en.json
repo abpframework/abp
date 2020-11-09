@@ -90,6 +90,14 @@
     "LatestArticles": "Latest Articles",
     "ArticleRequests": "Article Requests",
     "AllArticleRequests": "See All Article Requests",
-    "ArticleAssignRequest": "Want to write this article? Click here to assign yourself."
+    "ArticleAssignRequest": "Want to write this article? Click here to assign yourself.",
+    "SubscribeToTheNewsletter": "Subscribe to the Newsletter",
+    "NewsletterEmailDefinition": "Get information about happenings in ABP like new releases, free sources, articles, and more.",
+    "NoThanks": "No, thanks",
+    "MaybeLater": "Maybe later",
+    "JoinOurArticleNewsletter": "Join our article newsletter",
+    "JoinOurMarketingNewsletter": "Join our marketing newsletter",
+    "Community": "Community",
+    "Marketing": "Marketing"
   }
 }
