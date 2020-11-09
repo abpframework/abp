@@ -1,5 +1,25 @@
 # ABP Framework 3.3 to 4.0 Migration Guide
 
+This document introduces the breaking changes done in the ABP Framework 4.0 and explains how to fix your 3.x based solutions while upgrading to the ABP Framework 4.0.
+
+> See this blog post (TODO: LINK) to learn what's new with the ABP Framework 4.0. This document only focuses on the breaking changes.
+
+## Overall
+
+Here, the overall list of the changes;
+
+* Upgraded to the .NET 5.0.
+* Upgraded to the Identity Server 4.1.1.
+* Moved from Newtonsoft.Json to System.Text.Json as the JSON serializer by default.
+* Made some API revisions & startup template changes for the Blazor UI.
+* Switched to `kebab-case` for conventional URLs for the auto API controller routes.
+* Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow.
+* Moved retry logic for the Dynamic HTTP Client Proxies to the startup template.
+* Make read only for Creation audit properties of the entities.
+* TODO: Deprecate the SessionState in the @abp/ng.core package
+* TODO: Use IBrandingProvider in the Volo.Abp.UI package and remove the one in the Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
+* TODO: Change type of the IHasExtraProperties.ExtraProperties
+
 ## Auto API Controller Route Changes
 
 The route calculation for the [Auto API Controllers](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) is changing with the ABP Framework version 4.0 ([#5325](https://github.com/abpframework/abp/issues/5325)). Before v4.0 the route paths were **camelCase**. After version 4.0, it's changed to **kebab-case** route paths where it is possible.
@@ -11,6 +31,16 @@ The route calculation for the [Auto API Controllers](https://docs.abp.io/en/abp/
 **camelCase route parts become kebab-case with 4.0**
 
 ![route-4](images/route-4.png)
+
+### How to Fix?
+
+You may not take any action for the MVC & Blazor UI projects.
+
+For the Angular UI, this change may effect your client UI. If you have used the [ABP CLI Service Proxy Generation](../UI/Angular/Service-Proxies.md), you can run the server side and re-generate the service proxies. If you haven't used this tool, you should manually update the related URLs in your application.
+
+If there are other type of clients (e.g. 3rd-party companies) using your APIs, they also need to update the URLs.
+
+### Use the v3.x style URLs
 
 If it is hard to change it in your application, you can still to use the version 3.x route strategy, by following one of the approaches;
 
@@ -123,3 +153,7 @@ app.Use((httpContext, next) =>
 
 - `OpenEditModalAsync` method requires `EntityDto` instead of id (`Guid`) parameter.
 - `DeleteEntityAsync` method doesn't display confirmation dialog anymore. You can use the new `EntityActions` component in DataGrids to show confirmation messages. You can also inject `IUiMessageService` to your page or component and call `ConfirmAsync` explicitly.
+- TODO: Inconsistent Async suffix usage
+- TODO: Refactor namespaces for Blazor components
+- TODO: Update CreateGetListInputAsync on AbpCrudPageBase
+- TODO: Change app to div for app container in blazor UI
