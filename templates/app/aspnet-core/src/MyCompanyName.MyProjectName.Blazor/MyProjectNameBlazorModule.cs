@@ -17,7 +17,6 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.Identity.Blazor;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.TenantManagement.Blazor;
-using Volo.Abp.Http.Client;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
@@ -30,11 +29,6 @@ namespace MyCompanyName.MyProjectName.Blazor
     )]
     public class MyProjectNameBlazorModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            PreConfigureProxyClient(context);
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
@@ -104,14 +98,6 @@ namespace MyCompanyName.MyProjectName.Blazor
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<MyProjectNameBlazorModule>();
-            });
-        }
-
-        private void PreConfigureProxyClient(ServiceConfigurationContext context)
-        {
-            PreConfigure<AbpHttpClientBuilderOptions>(options =>
-            {
-                options.ProxyClientBuildActions.Clear();
             });
         }
 
