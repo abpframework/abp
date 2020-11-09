@@ -119,7 +119,7 @@ namespace Volo.Abp.PermissionManagement
             foreach (var item in cacheItems)
             {
                 result.Result.Add(PermissionGrantCacheItem.GetPermissionNameFormCacheKeyOrNull(item.Key),
-                    item.Value.IsGranted
+                    item.Value != null && item.Value.IsGranted
                         ? PermissionGrantResult.Granted
                         : PermissionGrantResult.Undefined);
             }
