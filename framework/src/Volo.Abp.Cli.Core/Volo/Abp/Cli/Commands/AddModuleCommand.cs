@@ -38,8 +38,8 @@ namespace Volo.Abp.Cli.Commands
 
             var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
 
-            var newProTemplateOption = commandLineArgs.Options.GetOrNull(Options.NewProTemplate.Short, Options.NewProTemplate.Long);
-            var newProTemplate = !string.IsNullOrEmpty(newProTemplateOption) && newProTemplateOption == "module-pro";
+            var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
+            var newProTemplate = !string.IsNullOrEmpty(template) && template == "module-pro";
 
             var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
@@ -182,7 +182,7 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "new";
             }
 
-            public class NewProTemplate
+            public class Template
             {
                 public const string Short = "t";
                 public const string Long = "template";
