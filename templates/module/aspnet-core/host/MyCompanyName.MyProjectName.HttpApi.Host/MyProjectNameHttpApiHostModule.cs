@@ -185,7 +185,7 @@ namespace MyCompanyName.MyProjectName
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
 
-                var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+                var configuration = context.GetConfiguration();
                 options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
                 options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
             });

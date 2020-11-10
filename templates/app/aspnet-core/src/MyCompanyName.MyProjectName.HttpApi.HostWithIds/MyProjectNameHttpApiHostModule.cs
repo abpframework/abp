@@ -58,7 +58,7 @@ namespace MyCompanyName.MyProjectName
             ConfigureLocalization();
             ConfigureVirtualFileSystem(context);
             ConfigureCors(context, configuration);
-            ConfigureSwaggerServices(context, configuration);
+            ConfigureSwaggerServices(context);
         }
 
         private void ConfigureBundles()
@@ -128,14 +128,9 @@ namespace MyCompanyName.MyProjectName
                 });
         }
 
-        private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
+        private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAbpSwaggerGenWithOAuth(
-                configuration["AuthServer:Authority"],
-                new Dictionary<string, string>
-                {
-                    {"MyProjectName", "MyProjectName API"}
-                },
+            context.Services.AddSwaggerGen(
                 options =>
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo {Title = "MyProjectName API", Version = "v1"});
@@ -219,10 +214,6 @@ namespace MyCompanyName.MyProjectName
             app.UseAbpSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
-
-                var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
-                c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-                c.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
             });
 
             app.UseAuditing();

@@ -109,7 +109,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
                 steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
-                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44305"));
             }
         }
 
@@ -130,7 +129,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
                 steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
-                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44305"));
             }
         }
 
@@ -148,7 +146,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44303"));
-                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44305"));
             }
 
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
@@ -171,7 +168,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
                 steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
-                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44305"));
             }
         }
 
