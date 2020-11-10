@@ -207,7 +207,7 @@ namespace Volo.Abp.SettingManagement
         protected virtual string GetSettingNameFormCacheKeyOrNull(string key)
         {
             //TODO: throw ex when name is null?
-            return SettingCacheItem.GetSettingNameFormCacheKey(key);
+            return SettingCacheItem.GetSettingNameFormCacheKeyOrNull(key);
         }
     }
 }

@@ -28,10 +28,10 @@ namespace Volo.Abp.SettingManagement
             return string.Format(CacheKeyFormat, providerName, providerKey, name);
         }
 
-        public static string GetSettingNameFormCacheKey(string cacheKey)
+        public static string GetSettingNameFormCacheKeyOrNull(string cacheKey)
         {
             var result = FormattedStringValueExtracter.Extract(cacheKey, CacheKeyFormat, true);
-            return result.IsMatch ? result.Matches.Last().Value : cacheKey;
+            return result.IsMatch ? result.Matches.Last().Value : null;
         }
     }
 }

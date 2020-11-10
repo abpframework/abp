@@ -51,15 +51,13 @@ namespace Volo.Abp.Authorization.Permissions
             foreach (var role in roles)
             {
                 var multipleResult = await PermissionStore.IsGrantedAsync(permissionNames.ToArray(), Name, role);
-                foreach (var grantResult in multipleResult.Result)
+                foreach (var grantResult in multipleResult.Result.Where(grantResult =>
+                    result.Result.ContainsKey(grantResult.Key) &&
+                    result.Result[grantResult.Key] == PermissionGrantResult.Undefined &&
+                    grantResult.Value != PermissionGrantResult.Undefined))
                 {
-                    if (result.Result.ContainsKey(grantResult.Key) &&
-                        result.Result[grantResult.Key] == PermissionGrantResult.Undefined &&
-                        grantResult.Value != PermissionGrantResult.Undefined)
-                    {
-                        result.Result[grantResult.Key] = grantResult.Value;
-                        permissionNames.RemoveAll(x => x == grantResult.Key);
-                    }
+                    result.Result[grantResult.Key] = grantResult.Value;
+                    permissionNames.RemoveAll(x => x == grantResult.Key);
                 }
 
                 if (result.AllGranted || result.AllProhibited)

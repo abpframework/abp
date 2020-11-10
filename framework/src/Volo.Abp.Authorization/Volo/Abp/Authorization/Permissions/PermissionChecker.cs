@@ -100,36 +100,34 @@ namespace Volo.Abp.Authorization.Permissions
             foreach (var name in names)
             {
                 var permission = PermissionDefinitionManager.Get(name);
-                if (!permission.IsEnabled || !permission.MultiTenancySide.HasFlag(multiTenancySide))
-                {
-                    result.Result.Add(name, PermissionGrantResult.Undefined);
-                    continue;
-                }
 
                 result.Result.Add(name, PermissionGrantResult.Undefined);
-                permissionDefinitions.Add(permission);
+
+                if (permission.IsEnabled && permission.MultiTenancySide.HasFlag(multiTenancySide))
+                {
+                    permissionDefinitions.Add(permission);
+                }
             }
 
             foreach (var provider in PermissionValueProviderManager.ValueProviders)
             {
-                var context = new PermissionValuesCheckContext(permissionDefinitions.Where(x => !x.Providers.Any() || x.Providers.Contains(provider.Name)).ToList(),
+                var context = new PermissionValuesCheckContext(
+                    permissionDefinitions.Where(x => !x.Providers.Any() || x.Providers.Contains(provider.Name)).ToList(),
                     claimsPrincipal);
 
                 var multipleResult = await provider.CheckAsync(context);
-                foreach (var grantResult in multipleResult.Result)
+                foreach (var grantResult in multipleResult.Result.Where(grantResult =>
+                    result.Result.ContainsKey(grantResult.Key) &&
+                    result.Result[grantResult.Key] == PermissionGrantResult.Undefined &&
+                    grantResult.Value != PermissionGrantResult.Undefined))
                 {
-                    if (result.Result.ContainsKey(grantResult.Key) &&
-                        result.Result[grantResult.Key] == PermissionGrantResult.Undefined &&
-                        grantResult.Value != PermissionGrantResult.Undefined)
-                    {
-                        result.Result[grantResult.Key] = grantResult.Value;
-                        permissionDefinitions.RemoveAll(x => x.Name == grantResult.Key);
-                    }
+                    result.Result[grantResult.Key] = grantResult.Value;
+                    permissionDefinitions.RemoveAll(x => x.Name == grantResult.Key);
+                }
 
-                    if (result.AllGranted || result.AllProhibited)
-                    {
-                        break;
-                    }
+                if (result.AllGranted || result.AllProhibited)
+                {
+                    break;
                 }
             }
 

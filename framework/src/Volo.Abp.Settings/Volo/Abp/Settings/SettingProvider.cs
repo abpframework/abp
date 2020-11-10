@@ -55,8 +55,7 @@ namespace Volo.Abp.Settings
                 var notNullValues = settingValues.Where(x => x.Value != null).ToList();
                 foreach (var settingValue in notNullValues)
                 {
-                    var value = settingValue;
-                    var settingDefinition = settingDefinitions.First(x => x.Name == value.Name);
+                    var settingDefinition = settingDefinitions.First(x => x.Name == settingValue.Name);
                     if (settingDefinition.IsEncrypted)
                     {
                         settingValue.Value = SettingEncryptionService.Decrypt(settingDefinition, settingValue.Value);
