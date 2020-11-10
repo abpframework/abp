@@ -58,6 +58,12 @@ ABP Framework 4.0 uses the System.Text.Json by default as the JSON serialization
 
 Follow the [Migration Guide](https://docs.abp.io/en/abp/4.0/Migration-Guides/Abp-4_0) to learn how to configure to use the Newtonsoft.Json for some specific types or switch back to the Newtonsoft.Json as the default JSON serializer.
 
+### Identity Server 4 Upgrade
+
+ABP Framework upgrades the [IdentityServer4](https://www.nuget.org/packages/IdentityServer4) library from 3.x to 4.1.1 with the ABP Framework version 4.0. IdentityServer 4.x has a lot of changes. Some of them are **breaking changes in the data structure**.
+
+Follow the [Migration Guide](https://docs.abp.io/en/abp/4.0/Migration-Guides/Abp-4_0) to upgrade existing solutions.
+
 ### Creating a New Module Inside the Application
 
 ABP CLI has now a command to create a new module and add it to an existing solution. In this way, you can create modular applications easier than before.
@@ -86,9 +92,26 @@ This is a minimalist, empty project template that is integrated to the ABP Frame
 
 **Thanks to the contributors** from the ABP Community, the framework modules and the startup template have been localized to **German** (by [Alexander Pilhar](https://github.com/alexanderpilhar) & [Nico Lachmuth](https://github.com/tntwist)) and **Spanish** (by [Jose Manuel Gonzalez](https://github.com/jmglezgz)) languages.
 
-## What's new with the ABP Commercial 3.3
+## What's new with the ABP Commercial 4.0
 
-TODO
+### The Blazor UI
+
+The Blazor UI for the ABP Commercial is also becomes stable and feature rich with the version 4.0;
+
+* [ABP Suite](https://commercial.abp.io/tools/suite) now supports to generate CRUD pages for the Blazor UI.
+* Completed the [Lepton Theme](https://commercial.abp.io/themes) for the Blazor UI.
+
+### Identity Server Management UI Revised
+
+Completely revised the Identity Server Management UI based on the IDS 4.x changes.
+
+### The ABP Suite
+
+#### Auto Complete for the Navigation Property Selection
+
+While creating create/edit modals with a navigation property, we had two options: A dropdown to select the target entity and a modal to select the entity by searching with a data table. Dropdown option now supports lazy load, search and auto-complete. In this way, selecting a navigation property becomes much easier and supports large data sets on the dropdown.
+
+TODO: Screenshot
 
 ## About the Next Release
 
