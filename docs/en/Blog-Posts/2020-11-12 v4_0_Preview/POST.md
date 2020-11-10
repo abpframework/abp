@@ -52,6 +52,15 @@ Removed JQuery & Bootstrap JavaScript dependencies for the Blazor UI.
 
 >There are some other changes in the startup template and some public APIs. Follow the [Migration Guide](https://docs.abp.io/en/abp/4.0/Migration-Guides/Abp-4_0) to apply changes for existing solutions that you're upgrading from the version 3.3. While we will continue to make improvements add new features, we no longer make breaking changes on the existing APIs until the version 5.0.
 
+#### Others
+
+A lot of minor and major improvements have been done for the Blazor UI. Some of them are listed below:
+
+* Implemented `IComponentActivator` to resolve the component from the `IServiceProvider`. So, you can now inject dependencies into the constructor of your razor component.
+* Introduced the `AbpComponentBase` base class that you derive your components from. It has useful base properties that you can use in your pages/components.
+* Introduced `IUiNotificationService` service to show toast notifications on the UI.
+* Improved the `IUiMessageService` to show message & confirmation dialogs.
+
 ### System.Text.Json
 
 ABP Framework 4.0 uses the System.Text.Json by default as the JSON serialization library. It, actually, using a hybrid approach: Continues to use the Newtonsoft.Json when it needs to use the features not supported by the System.Text.Json.
