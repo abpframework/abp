@@ -269,7 +269,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 await _permissionDataSeeder.SeedAsync(
                     ClientPermissionValueProvider.ProviderName,
                     name,
-                    permissions
+                    permissions,
+                    null
                 );
             }
 
