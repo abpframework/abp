@@ -340,7 +340,3 @@ In case you want to cache other static files, please refer to the [service worke
 ### 3.2 Set Data Groups
 
 This part is unique to your project. We recommend being very careful about which endpoints to cache. Please refer to [service worker configuration document](https://angular.io/guide/service-worker-config#datagroups) on Angular.io for details.
-
-## What's Next?
-
-- [Config State](./Config-State.md)

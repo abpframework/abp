@@ -637,6 +637,10 @@
                   "path": "UI/Angular/Localization.md"
                 },
                 {
+                  "text": "Form Validation",
+                  "path": "UI/Angular/Form-Validation.md"
+                },
+                {
                   "text": "Settings",
                   "path": "UI/Angular/Settings.md"
                 },
