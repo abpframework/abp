@@ -210,7 +210,7 @@ namespace MyCompanyName.MyProjectName
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
 
-                var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+                var configuration = context.GetConfiguration();
                 options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
                 options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
             });
