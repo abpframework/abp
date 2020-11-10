@@ -108,9 +108,13 @@ The Blazor UI for the ABP Commercial is also becomes stable and feature rich wit
 
 ### The ABP Suite
 
-While creating create/edit modals with a navigation property, we had two options: A dropdown to select the target entity and a modal to select the entity by searching with a data table. Dropdown option now supports **lazy load, search and auto-complete**. In this way, selecting a navigation property becomes much easier and supports large data sets on the dropdown.
+While creating create/edit modals with a navigation property, we had two options: A dropdown to select the target entity and a modal to select the entity by searching with a data table.
 
-TODO: Screenshot/GIF
+Dropdown option now supports **lazy load, search and auto-complete**. In this way, selecting a navigation property becomes much easier and supports large data sets on the dropdown.
+
+**Example: Select an author while creating a new book**
+
+![abp-suite-auto-complete-dropdown](abp-suite-auto-complete-dropdown.png)
 
 With the new version, you can **disable backend code generation** on CRUD page generation. This is especially useful if you want to regenerate the page with a different UI framework, but don't want to regenerate the server side code.
 
