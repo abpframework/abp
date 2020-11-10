@@ -28,7 +28,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
 
         [NotNull]
         public Dictionary<string, object> Configuration { get; }
-        
+
         /// <summary>
         /// Single point to enable/disable this property for the clients (UI and API).
         /// If this is false, the configuration made in the <see cref="UI"/> and the <see cref="Api"/>
@@ -42,7 +42,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
 
         [NotNull]
         public ExtensionPropertyUiConfiguration UI { get; }
-        
+
         [NotNull]
         public ExtensionPropertyApiConfiguration Api { get; }
 
@@ -58,6 +58,9 @@ namespace Volo.Abp.ObjectExtending.Modularity
         /// </summary>
         [CanBeNull]
         public Func<object> DefaultValueFactory { get; set; }
+
+        [NotNull]
+        public ExtensionPropertyLookupConfiguration LookupConfiguration { get; set; }
 
         public ExtensionPropertyConfiguration(
             [NotNull] EntityExtensionConfiguration entityExtensionConfiguration,
@@ -78,6 +81,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
 
             Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
             DefaultValue = TypeHelper.GetDefaultValue(Type);
+            LookupConfiguration = new ExtensionPropertyLookupConfiguration();
         }
 
         public object GetDefaultValue()

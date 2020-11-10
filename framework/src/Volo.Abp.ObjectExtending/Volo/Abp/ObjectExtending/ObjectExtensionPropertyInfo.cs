@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending
@@ -56,6 +57,9 @@ namespace Volo.Abp.ObjectExtending
         /// </summary>
         [CanBeNull]
         public Func<object> DefaultValueFactory { get; set; }
+
+        [NotNull]
+        public ExtensionPropertyLookupConfiguration LookupConfiguration { get; set; }
 
         public ObjectExtensionPropertyInfo(
             [NotNull] ObjectExtensionInfo objectExtension,
