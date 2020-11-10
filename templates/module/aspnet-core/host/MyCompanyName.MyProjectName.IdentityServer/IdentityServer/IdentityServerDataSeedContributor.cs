@@ -166,7 +166,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     secret: (configurationSection["MyProjectName_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
                 );
             }
-            
+
             // Blazor Client
             var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
             if (!blazorClientId.IsNullOrWhiteSpace())
@@ -181,6 +181,22 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     requireClientSecret: false,
                     redirectUri: $"{blazorRootUrl}/authentication/login-callback",
                     postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
+                );
+            }
+
+            // Swagger Client
+            var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
+            if (!swaggerClientId.IsNullOrWhiteSpace())
+            {
+                var swaggerRootUrl = configurationSection["MyProjectName_Swagger:RootUrl"].TrimEnd('/');
+
+                await CreateClientAsync(
+                    name: swaggerClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
+                    secret: configurationSection["MyProjectName_Swagger:ClientSecret"]?.Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html"
                 );
             }
         }
