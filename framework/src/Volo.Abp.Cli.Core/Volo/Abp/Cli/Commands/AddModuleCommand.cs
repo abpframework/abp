@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -39,7 +40,7 @@ namespace Volo.Abp.Cli.Commands
             var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
 
             var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
-            var newProTemplate = !string.IsNullOrEmpty(template) && template == "module-pro";
+            var newProTemplate = !string.IsNullOrEmpty(template) && template == ModuleProTemplate.TemplateName;
 
             var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
