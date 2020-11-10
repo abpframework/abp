@@ -92,6 +92,10 @@ This is a minimalist, empty project template that is integrated to the ABP Frame
 
 **Thanks to the contributors** from the ABP Community, the framework modules and the startup template have been localized to **German** (by [Alexander Pilhar](https://github.com/alexanderpilhar) & [Nico Lachmuth](https://github.com/tntwist)) and **Spanish** (by [Jose Manuel Gonzalez](https://github.com/jmglezgz)) languages.
 
+### Other Notes
+
+* Since [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library not supports transactions, you can use transactions in unit tests for MongoDB.
+
 ## What's new with the ABP Commercial 4.0
 
 ### The Blazor UI
@@ -100,18 +104,19 @@ The Blazor UI for the ABP Commercial is also becomes stable and feature rich wit
 
 * [ABP Suite](https://commercial.abp.io/tools/suite) now supports to generate CRUD pages for the Blazor UI.
 * Completed the [Lepton Theme](https://commercial.abp.io/themes) for the Blazor UI.
+* Implemented the [File Management](https://commercial.abp.io/modules/Volo.FileManagement) module for the Blazor UI.
+
+### The ABP Suite
+
+While creating create/edit modals with a navigation property, we had two options: A dropdown to select the target entity and a modal to select the entity by searching with a data table. Dropdown option now supports **lazy load, search and auto-complete**. In this way, selecting a navigation property becomes much easier and supports large data sets on the dropdown.
+
+TODO: Screenshot/GIF
+
+With the new version, you can **disable backend code generation** on CRUD page generation. This is especially useful if you want to regenerate the page with a different UI framework, but don't want to regenerate the server side code.
 
 ### Identity Server Management UI Revised
 
 Completely revised the Identity Server Management UI based on the IDS 4.x changes.
-
-### The ABP Suite
-
-#### Auto Complete for the Navigation Property Selection
-
-While creating create/edit modals with a navigation property, we had two options: A dropdown to select the target entity and a modal to select the entity by searching with a data table. Dropdown option now supports lazy load, search and auto-complete. In this way, selecting a navigation property becomes much easier and supports large data sets on the dropdown.
-
-TODO: Screenshot
 
 ## About the Next Release
 
