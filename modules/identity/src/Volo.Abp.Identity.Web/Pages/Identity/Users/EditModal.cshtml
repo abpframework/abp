@@ -36,6 +36,14 @@
                             <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
                                         label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"></abp-select>
                         }
+                        else if (!propertyInfo.LookupConfiguration.ApiUrl.IsNullOrEmpty())
+                        {
+                            <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                        label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                        autocomplete-api-url="@propertyInfo.LookupConfiguration.ApiUrl"
+                                        autocomplete-display-property-name="@propertyInfo.LookupConfiguration.DisplayPropertyName"
+                                        autocomplete-value-property-name="@propertyInfo.LookupConfiguration.ValuePropertyName"></abp-select>
+                        }
                         else
                         {
                             <abp-input type="@propertyInfo.GetInputType()"
