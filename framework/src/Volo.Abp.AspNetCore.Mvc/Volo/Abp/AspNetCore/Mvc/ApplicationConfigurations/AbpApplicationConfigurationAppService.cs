@@ -251,14 +251,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 Values = new Dictionary<string, string>()
             };
 
-            foreach (var settingDefinition in _settingDefinitionManager.GetAll())
-            {
-                if (!settingDefinition.IsVisibleToClients)
-                {
-                    continue;
-                }
+            var settingDefinitions = _settingDefinitionManager.GetAll().Where(x => x.IsVisibleToClients);
 
-                result.Values[settingDefinition.Name] = await _settingProvider.GetOrNullAsync(settingDefinition.Name);
+            var settingValues = await _settingProvider.GetAllAsync(settingDefinitions.Select(x => x.Name).ToArray());
+
+            foreach (var settingValue in settingValues)
+            {
+                result.Values[settingValue.Name] = settingValue.Value;
             }
 
             return result;

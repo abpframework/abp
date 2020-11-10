@@ -118,7 +118,7 @@ namespace Volo.Abp.PermissionManagement
             var cacheItems = await GetCacheItemsAsync(names, providerName, providerKey);
             foreach (var item in cacheItems)
             {
-                result.Result.Add(PermissionGrantCacheItem.GetPermissionNameFormCacheKeyOrNull(item.Key),
+                result.Result.Add(GetPermissionNameFormCacheKeyOrNull(item.Key),
                     item.Value != null && item.Value.IsGranted
                         ? PermissionGrantResult.Granted
                         : PermissionGrantResult.Undefined);
@@ -201,6 +201,12 @@ namespace Volo.Abp.PermissionManagement
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
         {
             return PermissionGrantCacheItem.CalculateCacheKey(name, providerName, providerKey);
+        }
+
+        protected virtual string GetPermissionNameFormCacheKeyOrNull(string key)
+        {
+            //TODO: throw ex when name is null?
+            return PermissionGrantCacheItem.GetPermissionNameFormCacheKeyOrNull(key);
         }
     }
 }

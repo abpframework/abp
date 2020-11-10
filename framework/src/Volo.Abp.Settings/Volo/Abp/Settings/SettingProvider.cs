@@ -43,29 +43,45 @@ namespace Volo.Abp.Settings
             return value;
         }
 
-        public virtual async Task<List<SettingValue>> GetAllAsync()
+        public async Task<List<SettingValue>> GetAllAsync(string[] names)
         {
-            var settingValues = new Dictionary<string, SettingValue>();
-            var settingDefinitions = SettingDefinitionManager.GetAll();
+            var result = new List<SettingValue>();
+            var settingDefinitions = SettingDefinitionManager.GetAll().Where(x => names.Contains(x.Name)).ToList();
 
-            foreach (var provider in SettingValueProviderManager.Providers)
+            foreach (var provider in Enumerable.Reverse(SettingValueProviderManager.Providers))
             {
-                foreach (var setting in settingDefinitions)
-                {
-                    var value = await provider.GetOrNullAsync(setting);
-                    if (value != null)
-                    {
-                        if (setting.IsEncrypted)
-                        {
-                            value = SettingEncryptionService.Decrypt(setting, value);
-                        }
+                var settingValues = await provider.GetAllAsync(settingDefinitions.Where(x => !x.Providers.Any() || x.Providers.Contains(provider.Name)).ToArray());
 
-                        settingValues[setting.Name] = new SettingValue(setting.Name, value);
+                var notNullValues = settingValues.Where(x => x.Value != null).ToList();
+                foreach (var settingValue in notNullValues)
+                {
+                    var value = settingValue;
+                    var settingDefinition = settingDefinitions.First(x => x.Name == value.Name);
+                    if (settingDefinition.IsEncrypted)
+                    {
+                        settingValue.Value = SettingEncryptionService.Decrypt(settingDefinition, settingValue.Value);
                     }
+
+                    result.Add(new SettingValue(settingValue.Name, settingValue.Value));
                 }
+
+                settingDefinitions.RemoveAll(x => notNullValues.Any(v => v.Name == x.Name));
             }
 
-            return settingValues.Values.ToList();
+            return result;
+        }
+
+        public virtual async Task<List<SettingValue>> GetAllAsync()
+        {
+            var settingValues = new List<SettingValue>();
+            var settingDefinitions = SettingDefinitionManager.GetAll();
+
+            foreach (var setting in settingDefinitions)
+            {
+                settingValues.Add(new SettingValue(setting.Name, await GetOrNullAsync(setting.Name)));
+            }
+
+            return settingValues;
         }
 
         protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
