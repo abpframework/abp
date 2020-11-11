@@ -78,9 +78,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var selectTagHelper = new SelectTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
-                Items = GetSelectItems(context, output),
                 ViewContext = TagHelper.ViewContext
             };
+
+            if (TagHelper.AutocompleteApiUrl.IsNullOrEmpty())
+            {
+                selectTagHelper.Items = GetSelectItems(context, output);
+            }
 
             var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
 
@@ -88,8 +92,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
             AddDisabledAttribute(selectTagHelperOutput);
             AddInfoTextId(selectTagHelperOutput);
+            AddAutocompleteAttributes(selectTagHelperOutput);
 
             return selectTagHelperOutput;
+        }
+
+        protected virtual void AddAutocompleteAttributes(TagHelperOutput output)
+        {
+            if (!TagHelper.AutocompleteApiUrl.IsNullOrEmpty())
+            {
+                output.Attributes.AddClass("auto-complete-select");
+                output.Attributes.Add("data-autocomplete-api-url", TagHelper.AutocompleteApiUrl);
+                output.Attributes.Add("data-autocomplete-items-property", TagHelper.AutocompleteItemsPropertyName);
+                output.Attributes.Add("data-autocomplete-display-property", TagHelper.AutocompleteDisplayPropertyName);
+                output.Attributes.Add("data-autocomplete-value-property", TagHelper.AutocompleteValuePropertyName);
+            }
         }
 
         protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
