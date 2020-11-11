@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@abp/vue.js": "~3.3.1",
-    "vee-validate.js": "^3.4.4"
+    "vee-validate": "~3.4.4"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
