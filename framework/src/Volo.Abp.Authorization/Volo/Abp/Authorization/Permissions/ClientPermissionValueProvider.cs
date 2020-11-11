@@ -46,7 +46,10 @@ namespace Volo.Abp.Authorization.Permissions
                 return new MultiplePermissionGrantResult(permissionNames);;
             }
 
-            return await PermissionStore.IsGrantedAsync(permissionNames, Name, clientId);
+            using (CurrentTenant.Change(null))
+            {
+                return await PermissionStore.IsGrantedAsync(permissionNames, Name, clientId);
+            }
         }
     }
 }
