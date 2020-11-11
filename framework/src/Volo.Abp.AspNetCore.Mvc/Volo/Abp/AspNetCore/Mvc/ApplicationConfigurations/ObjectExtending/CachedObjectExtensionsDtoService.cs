@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
@@ -139,7 +140,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                     },
                     OnTable = new ExtensionPropertyUiTableDto
                     {
-                        IsVisible = propertyConfig.UI.OnTable.IsVisible
+                        IsVisible = propertyConfig.UI.OnTable.IsVisible &&
+                                    propertyConfig.UI.Lookup.Url.IsNullOrEmpty()
                     },
                     Lookup = new ExtensionPropertyUiLookupDto
                     {
