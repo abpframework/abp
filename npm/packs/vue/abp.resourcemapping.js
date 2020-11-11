@@ -1,5 +1,5 @@
 ﻿module.exports = {
     mappings: {
-        "@node_modules/vue/dist/vue.global.prod.js": "@libs/vue/"
+        "@node_modules/vue/dist/vue.min.js": "@libs/vue/"
     }
 }
