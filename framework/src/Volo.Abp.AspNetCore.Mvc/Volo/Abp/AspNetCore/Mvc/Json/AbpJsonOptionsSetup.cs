@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
 
-            options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumConverter());
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
             options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
         }
     }
