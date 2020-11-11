@@ -3,6 +3,9 @@ import { AuthConfig } from 'angular-oauth2-oidc';
 import { ApplicationConfiguration } from './application-configuration';
 import { ABP } from './common';
 
+/**
+ * @deprecated Use ApplicationConfiguration.Response instead. To be deleted in v5.0.
+ */
 export namespace Config {
   export type State = ApplicationConfiguration.Response & ABP.Root & { environment: Environment };
 

@@ -27,6 +27,26 @@ namespace Volo.Abp.Json
         }
 
         [Fact]
+        public void Serialize_Deserialize_With_Nullable_Boolean()
+        {
+            var json = "{\"name\":\"abp\",\"IsDeleted\":null}";
+            var file = _jsonSerializer.Deserialize<FileWithNullableBoolean>(json);
+            file.Name.ShouldBe("abp");
+            file.IsDeleted.ShouldBeNull();
+
+            var newJson = _jsonSerializer.Serialize(file);
+            newJson.ShouldBe("{\"name\":\"abp\",\"isDeleted\":null}");
+
+            json = "{\"name\":\"abp\",\"IsDeleted\":\"true\"}";
+            file = _jsonSerializer.Deserialize<FileWithNullableBoolean>(json);
+            file.IsDeleted.ShouldNotBeNull();
+            file.IsDeleted.Value.ShouldBeTrue();
+
+            newJson = _jsonSerializer.Serialize(file);
+            newJson.ShouldBe("{\"name\":\"abp\",\"isDeleted\":true}");
+        }
+
+        [Fact]
         public void Serialize_Deserialize_With_Enum()
         {
             var json = "{\"name\":\"abp\",\"type\":\"Exe\"}";
@@ -38,12 +58,38 @@ namespace Volo.Abp.Json
             newJson.ShouldBe("{\"name\":\"abp\",\"type\":2}");
         }
 
+        [Fact]
+        public void Serialize_Deserialize_With_Nullable_Enum()
+        {
+            var json = "{\"name\":\"abp\",\"type\":null}";
+            var file = _jsonSerializer.Deserialize<FileWithNullableEnum>(json);
+            file.Name.ShouldBe("abp");
+            file.Type.ShouldBeNull();
+
+            var newJson = _jsonSerializer.Serialize(file);
+            newJson.ShouldBe("{\"name\":\"abp\",\"type\":null}");
+
+            json = "{\"name\":\"abp\",\"type\":\"Exe\"}";
+            file = _jsonSerializer.Deserialize<FileWithNullableEnum>(json);
+            file.Type.ShouldNotBeNull();
+            file.Type.ShouldBe(FileType.Exe);
+
+            newJson = _jsonSerializer.Serialize(file);
+            newJson.ShouldBe("{\"name\":\"abp\",\"type\":2}");
+        }
+
         class FileWithBoolean
         {
             public string Name { get; set; }
 
             public bool IsDeleted { get; set; }
+        }
 
+        class FileWithNullableBoolean
+        {
+            public string Name { get; set; }
+
+            public bool? IsDeleted { get; set; }
         }
 
         class FileWithEnum
@@ -53,6 +99,12 @@ namespace Volo.Abp.Json
             public FileType Type { get; set; }
         }
 
+        class FileWithNullableEnum
+        {
+            public string Name { get; set; }
+
+            public FileType? Type { get; set; }
+        }
 
         enum FileType
         {

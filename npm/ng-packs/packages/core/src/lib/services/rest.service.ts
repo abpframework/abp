@@ -5,10 +5,10 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
 import { Rest } from '../models/rest';
-import { ConfigState } from '../states/config.state';
 import { isUndefinedOrEmptyString } from '../utils/common-utils';
 import { ABP } from '../models/common';
 import { CORE_OPTIONS } from '../tokens/options.token';
+import { EnvironmentService } from './environment.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,10 +18,11 @@ export class RestService {
     @Inject(CORE_OPTIONS) private options: ABP.Root,
     private http: HttpClient,
     private store: Store,
+    private environment: EnvironmentService,
   ) {}
 
   private getApiFromStore(apiName: string): string {
-    return this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
+    return this.environment.getApiUrl(apiName);
   }
 
   handleError(err: any): Observable<any> {

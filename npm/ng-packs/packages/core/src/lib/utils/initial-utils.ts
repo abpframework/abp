@@ -3,12 +3,14 @@ import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { tap } from 'rxjs/operators';
-import { GetAppConfiguration } from '../actions/config.actions';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { ABP } from '../models/common';
+import { Environment } from '../models/environment';
+import { ApplicationConfigurationService } from '../services/application-configuration.service';
 import { AuthService } from '../services/auth.service';
+import { ConfigStateService } from '../services/config-state.service';
+import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
-import { ConfigState } from '../states/config.state';
 import { clearOAuthStorage } from '../strategies/auth-flow.strategy';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { getRemoteEnv } from './environment-utils';
@@ -16,22 +18,26 @@ import { parseTenantFromUrl } from './multi-tenancy-utils';
 
 export function getInitialData(injector: Injector) {
   const fn = async () => {
-    const store: Store = injector.get(Store);
+    const environmentService = injector.get(EnvironmentService);
+    const configState = injector.get(ConfigStateService);
+    const appConfigService = injector.get(ApplicationConfigurationService);
     const options = injector.get(CORE_OPTIONS) as ABP.Root;
 
+    environmentService.setState(options.environment as Environment);
     await getRemoteEnv(injector, options.environment);
     await parseTenantFromUrl(injector);
     await injector.get(AuthService).init();
 
     if (options.skipGetAppConfiguration) return;
 
-    return store
-      .dispatch(new GetAppConfiguration())
+    return appConfigService
+      .getConfiguration()
       .pipe(
-        tap(() => checkAccessToken(store, injector)),
+        tap(res => configState.setState(res)),
+        tap(() => checkAccessToken(injector)),
         tap(() => {
-          const currentTenant = store.selectSnapshot(
-            ConfigState.getDeep('currentTenant'),
+          const currentTenant = configState.getOne(
+            'currentTenant',
           ) as ApplicationConfiguration.CurrentTenant;
           if (!currentTenant?.id) return;
 
@@ -44,9 +50,10 @@ export function getInitialData(injector: Injector) {
   return fn;
 }
 
-export function checkAccessToken(store: Store, injector: Injector) {
+export function checkAccessToken(injector: Injector) {
+  const configState = injector.get(ConfigStateService);
   const oAuth = injector.get(OAuthService);
-  if (oAuth.hasValidAccessToken() && !store.selectSnapshot(ConfigState.getDeep('currentUser.id'))) {
+  if (oAuth.hasValidAccessToken() && !configState.getDeep('currentUser.id')) {
     clearOAuthStorage();
   }
 }

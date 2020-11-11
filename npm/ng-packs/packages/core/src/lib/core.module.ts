@@ -1,10 +1,10 @@
 import { APP_BASE_HREF, CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientXsrfModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
-import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
+import { NgxsModule } from '@ngxs/store';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
@@ -27,17 +27,15 @@ import { LocalizationModule } from './localization.module';
 import { ABP } from './models/common';
 import { LocalizationPipe, MockLocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
-import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config.plugin';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
-import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { ReplaceableComponentsState } from './states/replaceable-components.state';
+import { oAuthStorage } from './strategies/auth-flow.strategy';
 import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
-import { oAuthStorage } from './strategies/auth-flow.strategy';
 
 export function storageFactory(): OAuthStorage {
   return oAuthStorage;
@@ -115,7 +113,7 @@ export class BaseCoreModule {}
   imports: [
     BaseCoreModule,
     LocalizationModule,
-    NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, ConfigState]),
+    NgxsModule.forFeature([ReplaceableComponentsState, ProfileState]),
     NgxsRouterPluginModule.forRoot(),
     OAuthModule.forRoot(),
     HttpClientXsrfModule.withOptions({
@@ -164,15 +162,6 @@ export class CoreModule {
       ngModule: RootCoreModule,
       providers: [
         LocaleProvider,
-        {
-          provide: NGXS_PLUGINS,
-          useClass: ConfigPlugin,
-          multi: true,
-        },
-        {
-          provide: NGXS_CONFIG_PLUGIN_OPTIONS,
-          useValue: { environment: options.environment },
-        },
         {
           provide: 'CORE_OPTIONS',
           useValue: options,

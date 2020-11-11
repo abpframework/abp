@@ -8,7 +8,7 @@ import { reloadRoute } from '../utils/route-utils';
 
 @Injectable({ providedIn: 'root' })
 export class ReplaceableComponentsService {
-  private store: InternalStore<ReplaceableComponents.ReplaceableComponent[]>;
+  private readonly store: InternalStore<ReplaceableComponents.ReplaceableComponent[]>;
 
   get replaceableComponents$(): Observable<ReplaceableComponents.ReplaceableComponent[]> {
     return this.store.sliceState(state => state);

@@ -1,6 +1,6 @@
 import { ChangePassword, ProfileState } from '@abp/ng.core';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
@@ -32,6 +32,7 @@ export class ChangePasswordComponent
   };
 
   constructor(
+    private injector: Injector,
     private fb: FormBuilder,
     private store: Store,
     private toasterService: ToasterService,
@@ -40,7 +41,7 @@ export class ChangePasswordComponent
   ngOnInit(): void {
     this.hideCurrentPassword = !this.store.selectSnapshot(ProfileState.getProfile).hasPassword;
 
-    const passwordValidations = getPasswordValidators(this.store);
+    const passwordValidations = getPasswordValidators(this.injector);
 
     this.form = this.fb.group(
       {

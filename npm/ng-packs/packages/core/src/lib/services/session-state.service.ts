@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import compare from 'just-compare';
+import { filter, take } from 'rxjs/operators';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { Session } from '../models/session';
 import { InternalStore } from '../utils/internal-store-utils';
-import compare from 'just-compare';
+import { ConfigStateService } from './config-state.service';
 
 export interface SessionDetail {
   openedTabCount: number;
@@ -20,8 +22,9 @@ export class SessionStateService {
     localStorage.setItem('abpSession', JSON.stringify(this.store.state));
   };
 
-  constructor() {
+  constructor(private configState: ConfigStateService) {
     this.init();
+    this.setInitialLanguage();
   }
 
   private init() {
@@ -31,6 +34,24 @@ export class SessionStateService {
     }
 
     this.store.sliceUpdate(state => state).subscribe(this.updateLocalStorage);
+  }
+
+  private setInitialLanguage() {
+    if (this.getLanguage()) return;
+
+    this.configState
+      .getDeep$('localization.currentCulture.cultureName')
+      .pipe(
+        filter(cultureName => !!cultureName),
+        take(1),
+      )
+      .subscribe(lang => {
+        if (lang.includes(';')) {
+          lang = lang.split(';')[0];
+        }
+
+        this.setLanguage(lang);
+      });
   }
 
   onLanguageChange$() {
@@ -67,5 +88,6 @@ export class SessionStateService {
     if (language === this.store.state.language) return;
 
     this.store.patch({ language });
+    document.documentElement.setAttribute('lang', language);
   }
 }

@@ -1,4 +1,8 @@
-import { ApplicationConfiguration, ConfigState, GetAppConfiguration } from '@abp/ng.core';
+import {
+  ApplicationConfiguration,
+  ApplicationConfigurationService,
+  ConfigStateService,
+} from '@abp/ng.core';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output, Renderer2, TrackByFunction } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
@@ -105,7 +109,11 @@ export class PermissionManagementComponent
     );
   }
 
-  constructor(private store: Store, private renderer: Renderer2) {}
+  constructor(
+    protected store: Store,
+    protected configState: ConfigStateService,
+    protected appConfigService: ApplicationConfigurationService,
+  ) {}
 
   getChecked(name: string) {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
@@ -239,7 +247,11 @@ export class PermissionManagementComponent
       )
       .pipe(
         switchMap(() =>
-          this.shouldFetchAppConfig() ? this.store.dispatch(GetAppConfiguration) : of(null),
+          this.shouldFetchAppConfig()
+            ? this.appConfigService
+                .getConfiguration()
+                .pipe(tap(res => this.configState.setState(res)))
+            : of(null),
         ),
         finalize(() => (this.modalBusy = false)),
       )
@@ -282,8 +294,8 @@ export class PermissionManagementComponent
   }
 
   shouldFetchAppConfig() {
-    const currentUser = this.store.selectSnapshot(
-      ConfigState.getOne('currentUser'),
+    const currentUser = this.configState.getOne(
+      'currentUser',
     ) as ApplicationConfiguration.CurrentUser;
 
     if (this.providerName === 'R') return currentUser.roles.some(role => role === this.providerKey);

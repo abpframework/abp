@@ -1,4 +1,4 @@
-export * from './config.actions';
+export { SetEnvironment, GetAppConfiguration } from './config.actions';
 export * from './loader.actions';
 export * from './profile.actions';
 export * from './replaceable-components.actions';
