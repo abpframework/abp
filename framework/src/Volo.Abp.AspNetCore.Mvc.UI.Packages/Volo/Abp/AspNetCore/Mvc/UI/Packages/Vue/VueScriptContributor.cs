@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Vue
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/vue/vue.js");
+            context.Files.Add("/libs/vue/vue.global.prod.js");
         }
     }
 }
