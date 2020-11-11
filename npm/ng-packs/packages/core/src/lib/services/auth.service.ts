@@ -51,7 +51,7 @@ export class AuthService {
   };
 
   private listenToSetEnvironment() {
-    this.environment.onUpdate$(state => state.oAuthConfig).subscribe(this.setStrategy);
+    this.environment.createOnUpdateStream(state => state.oAuthConfig).subscribe(this.setStrategy);
   }
 
   login(username: string, password: string): Observable<any> {

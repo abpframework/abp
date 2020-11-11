@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import compare from 'just-compare';
+import { filter, take } from 'rxjs/operators';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { Session } from '../models/session';
 import { InternalStore } from '../utils/internal-store-utils';
-import compare from 'just-compare';
 import { ConfigStateService } from './config-state.service';
-import { filter, take, tap } from 'rxjs/operators';
 
 export interface SessionDetail {
   openedTabCount: number;
@@ -42,7 +42,6 @@ export class SessionStateService {
     this.configState
       .getDeep$('localization.currentCulture.cultureName')
       .pipe(
-        tap(console.warn),
         filter(cultureName => !!cultureName),
         take(1),
       )

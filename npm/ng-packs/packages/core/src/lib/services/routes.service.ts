@@ -153,7 +153,9 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
   constructor(protected injector: Injector) {
     super();
     const configState = this.injector.get(ConfigStateService);
-    this.subscription = configState.onUpdate$(state => state).subscribe(() => this.refresh());
+    this.subscription = configState
+      .createOnUpdateStream(state => state)
+      .subscribe(() => this.refresh());
     this.permissionService = injector.get(PermissionService);
   }
 

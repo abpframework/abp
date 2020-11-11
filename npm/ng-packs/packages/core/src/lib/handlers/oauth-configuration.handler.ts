@@ -20,7 +20,7 @@ export class OAuthConfigurationHandler {
 
   private listenToSetEnvironment() {
     this.environmentService
-      .onUpdate$(state => state)
+      .createOnUpdateStream(state => state)
       .pipe(
         map(environment => environment.oAuthConfig),
         filter(config => !compare(config, this.options.environment.oAuthConfig)),

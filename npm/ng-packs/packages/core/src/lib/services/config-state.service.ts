@@ -10,7 +10,9 @@ import { InternalStore } from '../utils/internal-store-utils';
 export class ConfigStateService {
   private readonly store = new InternalStore({} as ApplicationConfiguration.Response);
 
-  readonly onUpdate$ = this.store.sliceUpdate;
+  get createOnUpdateStream() {
+    return this.store.sliceUpdate;
+  }
 
   setState = (state: ApplicationConfiguration.Response) => {
     this.store.patch(state);

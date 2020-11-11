@@ -8,7 +8,7 @@ import { InternalStore } from '../utils/internal-store-utils';
 export class EnvironmentService {
   private readonly store = new InternalStore({} as Environment);
 
-  get onUpdate$() {
+  get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
 

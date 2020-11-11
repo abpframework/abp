@@ -193,7 +193,6 @@ function getLocalization(
     return defaultValue || sourceKey;
   }
 
-  // [TODO]: next line should be removed in v3.2, breaking change!!!
   interpolateParams = interpolateParams.filter(params => params != null);
   if (localization) localization = interpolate(localization, interpolateParams);
 
