@@ -11,6 +11,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public abstract class BundlerBase : IBundler, ITransientDependency
     {
+        private static string[] _minFileSuffixes = {"min", "prod"};
+
         public ILogger<BundlerBase> Logger { get; set; }
 
         protected IWebContentFileProvider WebContentFileProvider { get; }
@@ -82,7 +84,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             var fileContent = GetFileInfo(context, fileName).ReadAsString();
             var nonMinifiedSize = fileContent.Length;
-            
+
             Logger.LogDebug($"- {fileName} ({nonMinifiedSize} bytes) - non minified, minifying...");
 
             fileContent = Minifier.Minify(
@@ -110,14 +112,32 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual bool IsMinFile(string fileName)
         {
-            return fileName.EndsWith($".min.{FileExtension}", StringComparison.InvariantCultureIgnoreCase);
+            foreach (var suffix in _minFileSuffixes)
+            {
+                if (fileName.EndsWith($".{suffix}.{FileExtension}", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         protected virtual IFileInfo GetMinFileInfoOrNull(string file)
         {
-            var fileInfo = WebContentFileProvider.GetFileInfo($"{file.RemovePostFix($".{FileExtension}")}.min.{FileExtension}");
+            foreach (var suffix in _minFileSuffixes)
+            {
+                var fileInfo = WebContentFileProvider.GetFileInfo(
+                    $"{file.RemovePostFix($".{FileExtension}")}.{suffix}.{FileExtension}"
+                );
 
-            return fileInfo.Exists ? fileInfo : null;
+                if (fileInfo.Exists)
+                {
+                    return fileInfo;
+                }
+            }
+
+            return null;
         }
 
         protected virtual string ProcessBeforeAddingToTheBundle(IBundlerContext context, string filePath, string fileContent)
