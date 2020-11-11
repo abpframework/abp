@@ -204,7 +204,6 @@ export class ConfigState {
         return defaultValue || sourceKey;
       }
 
-      // [TODO]: next line should be removed in v3.2, breaking change!!!
       interpolateParams = interpolateParams.filter(params => params != null);
       if (localization) localization = interpolate(localization, interpolateParams);
 
@@ -223,16 +222,20 @@ export class ConfigState {
     private environmentService: EnvironmentService,
     private configState: ConfigStateService,
   ) {
-    this.configState
-      .onUpdate$(s => s)
-      .pipe(distinctUntilChanged(compare))
-      .subscribe(config => {
-        console.log(config);
-        this.store.dispatch(new PatchConfigState(config as any));
-      });
+    this.syncConfigState();
+    this.syncEnvironment();
+  }
 
+  private syncConfigState() {
+    this.configState
+      .createOnUpdateStream(state => state)
+      .pipe(distinctUntilChanged(compare))
+      .subscribe(config => this.store.dispatch(new PatchConfigState(config as any)));
+  }
+
+  private syncEnvironment() {
     this.environmentService
-      .onUpdate$(s => s)
+      .createOnUpdateStream(state => state)
       .pipe(distinctUntilChanged(compare))
       .subscribe(env => this.store.dispatch(new PatchConfigState({ environment: env } as any)));
   }
