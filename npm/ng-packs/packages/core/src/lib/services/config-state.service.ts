@@ -1,68 +1,122 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
-import { ConfigState } from '../states';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ApplicationConfiguration } from '../models/application-configuration';
+import { InternalStore } from '../utils/internal-store-utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigStateService {
-  constructor(private store: Store) {}
+  private readonly store = new InternalStore({} as ApplicationConfiguration.Response);
 
-  getAll() {
-    return this.store.selectSnapshot(ConfigState.getAll);
+  readonly onUpdate$ = this.store.sliceUpdate;
+
+  setState = (state: ApplicationConfiguration.Response) => {
+    this.store.patch(state);
+  };
+
+  getOne$(key: string) {
+    return this.store.sliceState(state => state[key]);
   }
 
-  getApplicationInfo() {
-    return this.store.selectSnapshot(ConfigState.getApplicationInfo);
+  getOne(key: string) {
+    return this.store.state[key];
   }
 
-  getEnvironment() {
-    return this.store.selectSnapshot(ConfigState.getEnvironment);
+  getAll$(): Observable<ApplicationConfiguration.Response> {
+    return this.store.sliceState(state => state);
   }
 
-  getOne(...args: Parameters<typeof ConfigState.getOne>) {
-    return this.store.selectSnapshot(ConfigState.getOne(...args));
+  getAll(): ApplicationConfiguration.Response {
+    return this.store.state;
   }
 
-  getDeep(...args: Parameters<typeof ConfigState.getDeep>) {
-    return this.store.selectSnapshot(ConfigState.getDeep(...args));
+  getDeep$(keys: string[] | string) {
+    keys = splitKeys(keys);
+
+    return this.store
+      .sliceState(state => state)
+      .pipe(
+        map(state => {
+          return (keys as string[]).reduce((acc, val) => {
+            if (acc) {
+              return acc[val];
+            }
+
+            return undefined;
+          }, state);
+        }),
+      );
   }
 
-  getApiUrl(...args: Parameters<typeof ConfigState.getApiUrl>) {
-    return this.store.selectSnapshot(ConfigState.getApiUrl(...args));
+  getDeep(keys: string[] | string) {
+    keys = splitKeys(keys);
+
+    return (keys as string[]).reduce((acc, val) => {
+      if (acc) {
+        return acc[val];
+      }
+
+      return undefined;
+    }, this.store.state);
   }
 
-  getFeature(...args: Parameters<typeof ConfigState.getFeature>) {
-    return this.store.selectSnapshot(ConfigState.getFeature(...args));
+  getFeature(key: string) {
+    return this.store.state.features?.values?.[key];
   }
 
-  getSetting(...args: Parameters<typeof ConfigState.getSetting>) {
-    return this.store.selectSnapshot(ConfigState.getSetting(...args));
+  getFeature$(key: string) {
+    return this.store.sliceState(state => state.features?.values?.[key]);
   }
 
-  getSettings(...args: Parameters<typeof ConfigState.getSettings>) {
-    return this.store.selectSnapshot(ConfigState.getSettings(...args));
+  getSetting(key: string) {
+    return this.store.state.setting?.values?.[key];
   }
 
-  /** @deprecated Use PermissionService's getGrantedPolicySnapshot method */
-  getGrantedPolicy(...args: Parameters<typeof ConfigState.getGrantedPolicy>) {
-    return this.store.selectSnapshot(ConfigState.getGrantedPolicy(...args));
+  getSetting$(key: string) {
+    return this.store.sliceState(state => state.setting?.values?.[key]);
   }
 
-  getLocalization(...args: Parameters<typeof ConfigState.getLocalization>) {
-    return this.store.selectSnapshot(ConfigState.getLocalization(...args));
+  getSettings(keyword?: string) {
+    const settings = this.store.state.setting?.values || {};
+
+    if (!keyword) return settings;
+
+    const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
+
+    return keysFound.reduce((acc, key) => {
+      acc[key] = settings[key];
+      return acc;
+    }, {});
   }
 
-  getLocalizationResource(...args: Parameters<typeof ConfigState.getLocalizationResource>) {
-    return this.store.selectSnapshot(ConfigState.getLocalizationResource(...args));
+  getSettings$(keyword?: string) {
+    return this.store
+      .sliceState(state => state.setting?.values)
+      .pipe(
+        map((settings = {}) => {
+          if (!keyword) return settings;
+
+          const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
+
+          return keysFound.reduce((acc, key) => {
+            acc[key] = settings[key];
+            return acc;
+          }, {});
+        }),
+      );
+  }
+}
+
+function splitKeys(keys: string[] | string): string[] {
+  if (typeof keys === 'string') {
+    keys = keys.split('.');
   }
 
-  dispatchGetAppConfiguration() {
-    return this.store.dispatch(new GetAppConfiguration());
+  if (!Array.isArray(keys)) {
+    throw new Error('The argument must be a dot string or an string array.');
   }
 
-  dispatchSetEnvironment(...args: ConstructorParameters<typeof SetEnvironment>) {
-    return this.store.dispatch(new SetEnvironment(...args));
-  }
+  return keys;
 }
