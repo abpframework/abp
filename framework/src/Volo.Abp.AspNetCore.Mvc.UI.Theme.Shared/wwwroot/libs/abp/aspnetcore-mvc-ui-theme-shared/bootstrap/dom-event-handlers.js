@@ -79,14 +79,14 @@
                 var displayName = $(this).data("autocompleteDisplayProperty");
                 var displayValue = $(this).data("autocompleteValueProperty");
                 var itemsPropertyName = $(this).data("autocompleteItemsProperty");
+                var filterParamName = $(this).data("autocompleteFilterParamName");
                 $select.select2({
                     ajax: {
                         url: url,
                         dataType: "json",
                         data: function (params) {
-                            var query = {
-                                search: params.term
-                            };
+                            var query = {};
+                            query[filterParamName] = params.term;
                             return query;
                         },
                         processResults: function (data) {
@@ -95,7 +95,7 @@
                             if (itemsPropertyName) {
                                 items = data[itemsPropertyName];
                             }
-                            
+
                             items.forEach(function (item, index) {
                                 retVal.push({
                                     id: item[displayValue],

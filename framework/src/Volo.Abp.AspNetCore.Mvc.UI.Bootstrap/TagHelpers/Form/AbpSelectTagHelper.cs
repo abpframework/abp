@@ -29,6 +29,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public string AutocompleteValuePropertyName { get; set; }
 
+        public string AutocompleteFilterParamName { get; set; }
+
         public AbpSelectTagHelper(AbpSelectTagHelperService tagHelperService)
             : base(tagHelperService)
         {
