@@ -1,6 +1,6 @@
 {
   "version": "3.3.1",
-  "name": "@abp/vue.js",
+  "name": "@abp/vue",
   "publishConfig": {
     "access": "public"
   },
