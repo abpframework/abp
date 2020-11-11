@@ -1,13 +1,12 @@
-import { ConfigState } from '../states';
-import { Store } from '@ngxs/store';
-import { map } from 'rxjs/operators';
-import { ApplicationConfiguration } from '../models/application-configuration';
-import snq from 'snq';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
+import snq from 'snq';
+import { ApplicationConfiguration } from '../models/application-configuration';
+import { ConfigStateService } from './config-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
-  constructor(private store: Store) {}
+  constructor(private configState: ConfigStateService) {}
 
   getGrantedPolicy$(key: string) {
     return this.getStream().pipe(map(policies => this.isPolicyGranted(key, policies)));
@@ -43,11 +42,11 @@ export class PermissionService {
   }
 
   private getStream() {
-    return this.store.select(ConfigState).pipe(map(this.mapToPolicies));
+    return this.configState.getAll$().pipe(map(this.mapToPolicies));
   }
 
   private getSnapshot() {
-    return this.mapToPolicies(this.store.selectSnapshot(ConfigState));
+    return this.mapToPolicies(this.configState.getAll());
   }
 
   private mapToPolicies(applicationConfiguration: ApplicationConfiguration.Response) {
