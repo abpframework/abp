@@ -2,12 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
@@ -24,6 +18,12 @@ namespace Volo.Abp.AutoFilterer.Tests.Volo.Abp.AutoFilterer
 
             options.OperationFilterDescriptors.ShouldContain(x => x.Type == typeof(OrderableEnumOperationFilter), "OrderableEnumOperationFilter couldn't found. Make sure the method 'UseAutoFiltererParameters()' is called.");
             options.OperationFilterDescriptors.ShouldContain(x => x.Type == typeof(InnerFilterPropertiesOperationFilter), "OrderableEnumOperationFilter couldn't found. Make sure the method 'UseAutoFiltererParameters()' is called.");
+        }
+
+        [DependsOn(typeof(AbpAutofacModule))]
+        [DependsOn(typeof(AbpAutoFiltererModule))]
+        public class TestModule : AbpModule
+        {
         }
     }
 }
