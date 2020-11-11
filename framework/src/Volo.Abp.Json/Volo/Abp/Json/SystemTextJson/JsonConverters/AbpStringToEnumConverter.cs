@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 {
-    public class AbpStringToEnumConverter : JsonConverter<object>
+    public class AbpStringToEnumConverter<T> : JsonConverter<T>
+        where T : struct, Enum
     {
         private readonly JsonStringEnumConverter _innerJsonStringEnumConverter;
 
         public AbpStringToEnumConverter()
             : this(namingPolicy: null, allowIntegerValues: true)
         {
+
         }
 
         public AbpStringToEnumConverter(JsonNamingPolicy namingPolicy = null, bool allowIntegerValues = true)
@@ -23,18 +26,18 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
             return typeToConvert.IsEnum;
         }
 
-        public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var newOptions = new JsonSerializerOptions(options);
-            newOptions.Converters.Remove(this);
+            newOptions.Converters.RemoveAll(x => x == this || x.GetType() == typeof(AbpStringToEnumFactory));
             newOptions.Converters.Add(_innerJsonStringEnumConverter.CreateConverter(typeToConvert, newOptions));
-            return JsonSerializer.Deserialize(ref reader, typeToConvert, newOptions);
+            return JsonSerializer.Deserialize<T>(ref reader, newOptions);
         }
 
-        public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
             var newOptions = new JsonSerializerOptions(options);
-            newOptions.Converters.Remove(this);
+            newOptions.Converters.RemoveAll(x => x == this || x.GetType() == typeof(AbpStringToEnumFactory));
             JsonSerializer.Serialize(writer, value, newOptions);
         }
     }
