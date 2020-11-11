@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using Volo.Abp;
 using Volo.Abp.Swashbuckle;
 
 namespace Microsoft.AspNetCore.Builder

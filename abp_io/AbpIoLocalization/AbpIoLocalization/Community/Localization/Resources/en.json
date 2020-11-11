@@ -96,9 +96,9 @@
     "NoThanks": "No, thanks",
     "MaybeLater": "Maybe later",
     "JoinOurArticleNewsletter": "Join our article newsletter",
-    "JoinOurMarketingNewsletter": "Join our marketing newsletter",
     "Community": "Community",
     "Marketing": "Marketing",
-    "ArticleAssignMessage": "Want to write this article? Click here to"
+    "ArticleAssignMessage": "Want to write this article? Click here to",
+    "CommunityPrivacyPolicyConfirmation": "I agree to the Terms & Conditions and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
   }
 }

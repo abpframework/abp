@@ -190,7 +190,3 @@ Please refer to `Config.Environment` type for all the properties you can pass to
 
 - [Settings](./Settings.md)
 - [Features](./Features.md)
-
-## What's Next?
-
-- [HTTP Requests](./Http-Requests)

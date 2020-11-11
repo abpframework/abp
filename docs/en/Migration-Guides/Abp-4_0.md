@@ -8,68 +8,55 @@ This document introduces the breaking changes done in the ABP Framework 4.0 and 
 
 Here, the overall list of the changes;
 
-* Upgraded to the .NET 5.0.
-* Upgraded to the Identity Server 4.1.1.
-* Moved from Newtonsoft.Json to System.Text.Json as the JSON serializer by default.
+* Upgraded to the .NET 5.0 [(#6118](https://github.com/abpframework/abp/issues/6118)).
+* Moved from Newtonsoft.Json to System.Text.Json [(#1198](https://github.com/abpframework/abp/issues/1198)).
+* Upgraded to the Identity Server 4.1.1 ([#4461](https://github.com/abpframework/abp/issues/4461)).
+* Switched to `kebab-case` for conventional URLs for the auto API controller routes ([#5325](https://github.com/abpframework/abp/issues/5325)).
+* Removed Retry for the Dynamic HTTP Client Proxies ([#6090](https://github.com/abpframework/abp/issues/6090)).
+* Creation audit properties of the entities made read-only ([#6020](https://github.com/abpframework/abp/issues/6020)).
+* Changed type of the IHasExtraProperties.ExtraProperties ([#3751](https://github.com/abpframework/abp/issues/3751)).
+* Use IBrandingProvider in the Volo.Abp.UI package and remove the one in the Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared ([#5375](https://github.com/abpframework/abp/issues/5375)).
+* Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow ([#5652](https://github.com/abpframework/abp/issues/5652)).
+* Removed the SessionState in the @abp/ng.core package ([#5606](https://github.com/abpframework/abp/issues/5606)).
 * Made some API revisions & startup template changes for the Blazor UI.
-* Switched to `kebab-case` for conventional URLs for the auto API controller routes.
-* Removed the Angular Account Module Public UI (login, register... pages) since they are not being used in the default (authorization code) flow.
-* Moved retry logic for the Dynamic HTTP Client Proxies to the startup template.
-* Make read only for Creation audit properties of the entities.
-* TODO: Deprecate the SessionState in the @abp/ng.core package
-* TODO: Use IBrandingProvider in the Volo.Abp.UI package and remove the one in the Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
-* TODO: Change type of the IHasExtraProperties.ExtraProperties
 
-## Auto API Controller Route Changes
+## Upgraded to .NET 5.0
 
-The route calculation for the [Auto API Controllers](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) is changing with the ABP Framework version 4.0 ([#5325](https://github.com/abpframework/abp/issues/5325)). Before v4.0 the route paths were **camelCase**. After version 4.0, it's changed to **kebab-case** route paths where it is possible.
+ABP Framework has been moved to .NET 5.0. So, if you want to upgrade to the ABP Framework 4.0, you also need to upgrade to .NET 5.0.
 
-**A typical auto API before v4.0**
+See the [Migrate from ASP.NET Core 3.1 to 5.0](https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50) document to learn how to upgrade your solution to .NET 5.0.
 
-![route-before-4](images/route-before-4.png)
+## Moved to System.Text.Json
 
-**camelCase route parts become kebab-case with 4.0**
+ABP Framework 4.0 uses the System.Text.Json by default as the JSON serialization library. It, actually, using a hybrid approach: Continues to use the Newtonsoft.Json when it needs to use features not supported by the System.Text.Json.
 
-![route-4](images/route-4.png)
+### Unsupported Types
 
-### How to Fix?
+If you want to use the Newtonsoft.Json to serialize/deserialize for some specific types, you can configure the `AbpSystemTextJsonSerializerOptions` in your module's `ConfigureServices` method.
 
-You may not take any action for the MVC & Blazor UI projects.
+**Example: Use Newtonsoft.Json for `MySpecialClass`**
 
-For the Angular UI, this change may effect your client UI. If you have used the [ABP CLI Service Proxy Generation](../UI/Angular/Service-Proxies.md), you can run the server side and re-generate the service proxies. If you haven't used this tool, you should manually update the related URLs in your application.
-
-If there are other type of clients (e.g. 3rd-party companies) using your APIs, they also need to update the URLs.
-
-### Use the v3.x style URLs
-
-If it is hard to change it in your application, you can still to use the version 3.x route strategy, by following one of the approaches;
-
-- Set `UseV3UrlStyle` to `true` in the options of the `options.ConventionalControllers.Create(...)` method. Example:
-
-```csharp
-options.ConventionalControllers
-    .Create(typeof(BookStoreApplicationModule).Assembly, opts =>
-        {
-            opts.UseV3UrlStyle = true;
-        });
-```
-
-This approach affects only the controllers for the `BookStoreApplicationModule`.
-
-- Set `UseV3UrlStyle` to `true` for the `AbpConventionalControllerOptions` to set it globally. Example:
-
-```csharp
-Configure<AbpConventionalControllerOptions>(options =>
+````csharp
+Configure<AbpSystemTextJsonSerializerOptions>(options =>
 {
-    options.UseV3UrlStyle = true;
+    options.UnsupportedTypes.AddIfNotContains(typeof(MySpecialClass));
 });
-```
+````
 
-Setting it globally affects all the modules in a modular application.
+### Always Use the Newtonsoft.Json
 
-## Identity Server Changes
+If you want to continue to use the Newtonsoft.Json library for all the types, you can set `UseHybridSerializer` to false in the `PreConfigureServices` method of your module class:
 
-ABP Framework upgrades the [IdentityServer4](https://www.nuget.org/packages/IdentityServer4) library from 3.x to 4.x with the ABP Framework version 4.0. IdentityServer 4.x has a lot of changes. Some of them are **breaking changes in the data structure**.
+````csharp
+PreConfigure<AbpJsonOptions>(options =>
+{
+    options.UseHybridSerializer = false;
+});
+````
+
+## Upgraded to Identity Server 4.1.1
+
+ABP Framework upgrades the [IdentityServer4](https://www.nuget.org/packages/IdentityServer4) library from 3.x to 4.1.1 with the ABP Framework version 4.0. IdentityServer 4.x has a lot of changes. Some of them are **breaking changes in the data structure**.
 
 ### Entity Changes
 
@@ -147,13 +134,101 @@ app.Use((httpContext, next) =>
 - https://leastprivilege.com/2020/06/19/announcing-identityserver4-v4-0/
 - https://github.com/IdentityServer/IdentityServer4/issues/4592
 
+## Auto API Controller Route Changes
+
+The route calculation for the [Auto API Controllers](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) is changing with the ABP Framework version 4.0 ([#5325](https://github.com/abpframework/abp/issues/5325)). Before v4.0 the route paths were **camelCase**. After version 4.0, it's changed to **kebab-case** route paths where it is possible.
+
+**A typical auto API before v4.0**
+
+![route-before-4](images/route-before-4.png)
+
+**camelCase route parts become kebab-case with 4.0**
+
+![route-4](images/route-4.png)
+
+### How to Fix?
+
+You may not take any action for the MVC & Blazor UI projects.
+
+For the Angular UI, this change may effect your client UI. If you have used the [ABP CLI Service Proxy Generation](../UI/Angular/Service-Proxies.md), you can run the server side and re-generate the service proxies. If you haven't used this tool, you should manually update the related URLs in your application.
+
+If there are other type of clients (e.g. 3rd-party companies) using your APIs, they also need to update the URLs.
+
+### Use the v3.x style URLs
+
+If it is hard to change it in your application, you can still to use the version 3.x route strategy, by following one of the approaches;
+
+- Set `UseV3UrlStyle` to `true` in the options of the `options.ConventionalControllers.Create(...)` method. Example:
+
+```csharp
+options.ConventionalControllers
+    .Create(typeof(BookStoreApplicationModule).Assembly, opts =>
+        {
+            opts.UseV3UrlStyle = true;
+        });
+```
+
+This approach affects only the controllers for the `BookStoreApplicationModule`.
+
+- Set `UseV3UrlStyle` to `true` for the `AbpConventionalControllerOptions` to set it globally. Example:
+
+```csharp
+Configure<AbpConventionalControllerOptions>(options =>
+{
+    options.UseV3UrlStyle = true;
+});
+```
+
+Setting it globally affects all the modules in a modular application.
+
+## Removed Retry for the Dynamic HTTP Client Proxies
+
+[Dynamic C# HTTP Client Proxies](../API/Dynamic-CSharp-API-Clients.md) were trying up to 3 times if a request fails using the [Polly](https://github.com/App-vNext/Polly) library. Starting from the version 4.0, this logic has been removed. If you need it, you should configure it in your own application, by configuring the `AbpHttpClientBuilderOptions` in the `PreConfigureServices` method of your module.
+
+**Example: Retry 3 times on failure by incremental waiting between tries**
+
+````csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<AbpHttpClientBuilderOptions>(options =>
+    {
+        options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) =>
+        {
+            clientBuilder.AddTransientHttpErrorPolicy(
+                policyBuilder => policyBuilder
+                    .WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i)))
+            );
+        });
+    });
+}
+````
+
+This example uses the Microsoft.Extensions.Http.Polly NuGet package.
+
+If you create a new solution, you can find the same configuration in the `.HttpApi.Client.ConsoleTestApp` project's module class, as an example.
+
+## Creation Audit Properties Made Read-Only
+
+Removed setters from the `IHasCreationTime.CreationTime`, ` IMustHaveCreator.CreatorId` and `IMayHaveCreator.CreatorId` properties to accidently set the creation properties while updating an existing entity.
+
+Since the ABP Framework automatically sets these properties, you normally don't need to directly set them. If you want to set them, as a best practice, it is suggested to make it in the constructor to not provide a way to change it later.
+
+These properties implemented with `protected set` in the `Entity` and `AggregateRoot` base classes. That means you can still set in a derived class, if you need it. Alternatively, you can use reflection to set them (Or use `ObjectHelper.TrySetProperty` which internally uses reflection) out of the class if you have to do.
+
+## Changed type of the IHasExtraProperties.ExtraProperties
+
+`IHasExtraProperties.ExtraProperties` was a regular `Dictionary<string, object>`. With the version 4.0, it is replaced with `ExtraPropertyDictionary` class which inherits the `Dictionary<string, object>`. 
+
+Most of the applications don't be affected by this change. If you've directly implemented this interface, replace the standard dictionary the the `ExtraPropertyDictionary`.
+
+## ASP.NET Core MVC / Razor Pages UI
+
+See the [ASP.NET Core MVC / Razor Pages UI Migration Guide](Abp-4_0-MVC-Razor-Pages.md).
+
+## Angular UI
+
+See the [Angular UI Migration Guide](Abp-4_0-Angular.md).
+
 ## Blazor UI
 
-### AbpCrudPageBase Changes
-
-- `OpenEditModalAsync` method requires `EntityDto` instead of id (`Guid`) parameter.
-- `DeleteEntityAsync` method doesn't display confirmation dialog anymore. You can use the new `EntityActions` component in DataGrids to show confirmation messages. You can also inject `IUiMessageService` to your page or component and call `ConfirmAsync` explicitly.
-- TODO: Inconsistent Async suffix usage
-- TODO: Refactor namespaces for Blazor components
-- TODO: Update CreateGetListInputAsync on AbpCrudPageBase
-- TODO: Change app to div for app container in blazor UI
+See the [Blazor UI Migration Guide](Abp-4_0-Blazor.md).

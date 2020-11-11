@@ -197,7 +197,3 @@ class DemoComponent implements OnInit {
   }
 }
 ```
-
-## What's Next?
-
-- [Working with Lists](./List-Service.md)
