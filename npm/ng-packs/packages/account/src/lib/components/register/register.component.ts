@@ -1,6 +1,6 @@
 import { AuthService, ConfigState } from '@abp/ng.core';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -26,6 +26,7 @@ export class RegisterComponent implements OnInit {
   authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
+    private injector: Injector,
     private fb: FormBuilder,
     private accountService: AccountService,
     private oauthService: OAuthService,
@@ -55,7 +56,7 @@ export class RegisterComponent implements OnInit {
 
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
-      password: ['', [required, ...getPasswordValidators(this.store)]],
+      password: ['', [required, ...getPasswordValidators(this.injector)]],
       email: ['', [required, email]],
     });
   }
