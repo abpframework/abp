@@ -93,6 +93,6 @@ public class BookAppService :
 }
 ```
 
-Follow [the AutoFilterer documentation](https://fluentvalidation.net/) to create filter classes.  Example:
+Follow [the AutoFilterer documentation](https://github.com/enisn/AutoFilterer/wiki) to create filter classes.  Example:
 
 ABP will automatically apply filters with your given parameters. You don't need to call `ApplyFilter()` method for AutoFilterer.
