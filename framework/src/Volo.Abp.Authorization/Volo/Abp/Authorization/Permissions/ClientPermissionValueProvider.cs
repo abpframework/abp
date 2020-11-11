@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Volo.Abp.MultiTenancy;
+using System.Linq;
 using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Authorization.Permissions
@@ -10,10 +11,12 @@ namespace Volo.Abp.Authorization.Permissions
 
         public override string Name => ProviderName;
 
-        public ClientPermissionValueProvider(IPermissionStore permissionStore)
+        protected ICurrentTenant CurrentTenant { get; }
+
+        public ClientPermissionValueProvider(IPermissionStore permissionStore, ICurrentTenant currentTenant)
             : base(permissionStore)
         {
-
+            CurrentTenant = currentTenant;
         }
 
         public async override Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
@@ -25,9 +28,12 @@ namespace Volo.Abp.Authorization.Permissions
                 return PermissionGrantResult.Undefined;
             }
 
-            return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId)
-                ? PermissionGrantResult.Granted
-                : PermissionGrantResult.Undefined;
+            using (CurrentTenant.Change(null))
+            {
+                return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId)
+                    ? PermissionGrantResult.Granted
+                    : PermissionGrantResult.Undefined;
+            }
         }
 
         public async override Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)

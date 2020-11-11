@@ -19,7 +19,7 @@ namespace Volo.Abp.Json.SystemTextJson
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
 
-            options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumConverter());
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
             options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
         }
     }
