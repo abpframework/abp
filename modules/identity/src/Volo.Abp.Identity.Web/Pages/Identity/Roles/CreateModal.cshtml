@@ -24,12 +24,7 @@
 
             @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.RoleInfoModel>())
             {
-                if (propertyInfo.Type.IsEnum)
-                {
-                    <abp-select asp-for="Role.ExtraProperties[propertyInfo.Name]"
-                                label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"></abp-select>
-                }
-                else if (!propertyInfo.LookupConfiguration.ApiUrl.IsNullOrEmpty())
+                if (propertyInfo.Type.IsEnum || !propertyInfo.LookupConfiguration.ApiUrl.IsNullOrEmpty())
                 {
                     <abp-select asp-for="Role.ExtraProperties[propertyInfo.Name]"
                                 label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
