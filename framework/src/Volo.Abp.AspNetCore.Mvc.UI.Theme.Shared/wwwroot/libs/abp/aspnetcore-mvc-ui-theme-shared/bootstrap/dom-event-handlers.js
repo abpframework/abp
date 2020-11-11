@@ -91,13 +91,11 @@
                         },
                         processResults: function (data) {
                             var retVal = [];
-                            var items = [];
-                            if (itemsPropertyName == "") {
-                                items = data;
-                            }
-                            else {
+                            var items = data;
+                            if (itemsPropertyName) {
                                 items = data[itemsPropertyName];
                             }
+                            
                             items.forEach(function (item, index) {
                                 retVal.push({
                                     id: item[displayValue],
