@@ -24,13 +24,14 @@
 
             @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.RoleInfoModel>())
             {
-                if (propertyInfo.Type.IsEnum || !propertyInfo.LookupConfiguration.ApiUrl.IsNullOrEmpty())
+                if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
                 {
                     <abp-select asp-for="Role.ExtraProperties[propertyInfo.Name]"
                                 label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-                                autocomplete-api-url="@propertyInfo.LookupConfiguration.ApiUrl"
-                                autocomplete-display-property-name="@propertyInfo.LookupConfiguration.DisplayPropertyName"
-                                autocomplete-value-property-name="@propertyInfo.LookupConfiguration.ValuePropertyName"></abp-select>
+                                autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                                autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                                autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>
                 }
                 else
                 {
