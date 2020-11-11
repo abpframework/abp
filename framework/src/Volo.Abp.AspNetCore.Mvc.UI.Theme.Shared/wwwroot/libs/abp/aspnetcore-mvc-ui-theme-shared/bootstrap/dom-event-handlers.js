@@ -78,6 +78,7 @@
                 var url = $(this).data("autocompleteApiUrl");
                 var displayName = $(this).data("autocompleteDisplayProperty");
                 var displayValue = $(this).data("autocompleteValueProperty");
+                var itemsPropertyName = $(this).data("autocompleteItemsProperty");
                 $select.select2({
                     ajax: {
                         url: url,
@@ -90,7 +91,14 @@
                         },
                         processResults: function (data) {
                             var retVal = [];
-                            data.forEach(function (item, index) {
+                            var items = [];
+                            if (itemsPropertyName == "") {
+                                items = data;
+                            }
+                            else {
+                                items = data[itemsPropertyName];
+                            }
+                            items.forEach(function (item, index) {
                                 retVal.push({
                                     id: item[displayValue],
                                     text: item[displayName]

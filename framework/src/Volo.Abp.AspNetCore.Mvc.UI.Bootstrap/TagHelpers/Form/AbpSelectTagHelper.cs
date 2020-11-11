@@ -22,6 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         public bool DisplayRequiredSymbol { get; set; } = true;
 
         public string AutocompleteApiUrl { get; set; }
+        public string AutocompleteItemsPropertyName { get; set; }
 
         public string AutocompleteDisplayPropertyName { get; set; }
 

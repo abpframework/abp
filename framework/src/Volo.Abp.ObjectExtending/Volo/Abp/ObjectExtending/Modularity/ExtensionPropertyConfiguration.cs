@@ -59,9 +59,6 @@ namespace Volo.Abp.ObjectExtending.Modularity
         [CanBeNull]
         public Func<object> DefaultValueFactory { get; set; }
 
-        [NotNull]
-        public ExtensionPropertyLookupConfiguration LookupConfiguration { get; set; }
-
         public ExtensionPropertyConfiguration(
             [NotNull] EntityExtensionConfiguration entityExtensionConfiguration,
             [NotNull] Type type,
@@ -81,7 +78,6 @@ namespace Volo.Abp.ObjectExtending.Modularity
 
             Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
             DefaultValue = TypeHelper.GetDefaultValue(Type);
-            LookupConfiguration = new ExtensionPropertyLookupConfiguration();
         }
 
         public object GetDefaultValue()

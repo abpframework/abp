@@ -35,8 +35,5 @@ namespace Volo.Abp.ObjectExtending
         /// </summary>
         [CanBeNull]
         public Func<object> DefaultValueFactory { get; set; }
-
-        [NotNull]
-        public ExtensionPropertyLookupConfiguration LookupConfiguration { get; set; }
     }
 }

@@ -59,7 +59,7 @@ namespace Volo.Abp.ObjectExtending
         public Func<object> DefaultValueFactory { get; set; }
 
         [NotNull]
-        public ExtensionPropertyLookupConfiguration LookupConfiguration { get; set; }
+        public ExtensionPropertyLookupConfiguration Lookup { get; set; }
 
         public ObjectExtensionPropertyInfo(
             [NotNull] ObjectExtensionInfo objectExtension,
@@ -76,6 +76,7 @@ namespace Volo.Abp.ObjectExtending
 
             Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
             DefaultValue = TypeHelper.GetDefaultValue(Type);
+            Lookup = new ExtensionPropertyLookupConfiguration();
         }
 
         public object GetDefaultValue()

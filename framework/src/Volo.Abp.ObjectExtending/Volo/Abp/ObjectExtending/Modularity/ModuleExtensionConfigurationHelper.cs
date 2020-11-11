@@ -155,7 +155,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
                         property.Validators.AddRange(propertyConfig.Validators);
                         property.DefaultValue = propertyConfig.DefaultValue;
                         property.DefaultValueFactory = propertyConfig.DefaultValueFactory;
-                        property.LookupConfiguration = propertyConfig.LookupConfiguration;
+                        property.Lookup = propertyConfig.UI.Lookup;
                     }
                 );
         }
