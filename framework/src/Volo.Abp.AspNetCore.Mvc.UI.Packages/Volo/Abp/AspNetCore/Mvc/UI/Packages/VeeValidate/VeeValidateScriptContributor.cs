@@ -9,7 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.VeeValidate
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/libs/vee-validate.js/vee-validate.full.js");
+            context.Files.Add("/libs/vee-validate/vee-validate.full.js");
         }
     }
 }
