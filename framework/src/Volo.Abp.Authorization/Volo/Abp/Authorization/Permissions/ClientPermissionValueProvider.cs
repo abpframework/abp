@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
+using System.Linq;
 using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Authorization.Permissions
@@ -32,6 +33,22 @@ namespace Volo.Abp.Authorization.Permissions
                 return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId)
                     ? PermissionGrantResult.Granted
                     : PermissionGrantResult.Undefined;
+            }
+        }
+
+        public async override Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
+        {
+            var permissionNames = context.Permissions.Select(x => x.Name).ToArray();
+
+            var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
+            if (clientId == null)
+            {
+                return new MultiplePermissionGrantResult(permissionNames);;
+            }
+
+            using (CurrentTenant.Change(null))
+            {
+                return await PermissionStore.IsGrantedAsync(permissionNames, Name, clientId);
             }
         }
     }

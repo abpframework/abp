@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Settings
@@ -20,6 +22,11 @@ namespace Volo.Abp.Settings
         public async override Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString());
+        }
+
+        public async override Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+        {
+            return await SettingStore.GetAllAsync(settings.Select(x => x.Name).ToArray(), Name, CurrentTenant.Id?.ToString());
         }
     }
 }

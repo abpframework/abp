@@ -14,11 +14,17 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
         {
             ConfigurationClient = configurationClient;
         }
-        
+
         public async Task<string> GetOrNullAsync(string name)
         {
             var configuration = await ConfigurationClient.GetAsync();
             return configuration.Setting.Values.GetOrDefault(name);
+        }
+
+        public async Task<List<SettingValue>> GetAllAsync(string[] names)
+        {
+            var configuration = await ConfigurationClient.GetAsync();
+            return names.Select(x => new SettingValue(x, configuration.Setting.Values.GetOrDefault(x))).ToList();
         }
 
         public async Task<List<SettingValue>> GetAllAsync()

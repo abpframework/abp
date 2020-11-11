@@ -10,5 +10,11 @@ namespace Volo.Abp.Authorization.Permissions
             [CanBeNull] string providerName,
             [CanBeNull] string providerKey
         );
+
+        Task<MultiplePermissionGrantResult> IsGrantedAsync(
+            [NotNull] string[] names,
+            [CanBeNull] string providerName,
+            [CanBeNull] string providerKey
+        );
     }
 }
