@@ -1,15 +1,15 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, Injector, Optional } from '@angular/core';
 import { Navigate } from '@ngxs/router-plugin';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { from, Observable } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import snq from 'snq';
-import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
-import { ConfigState } from '../states/config.state';
 import { AuthFlowStrategy, AUTH_FLOW_STRATEGY } from '../strategies/auth-flow.strategy';
-import { RestService } from './rest.service';
+import { ApplicationConfigurationService } from './application-configuration.service';
+import { ConfigStateService } from './config-state.service';
+import { EnvironmentService } from './environment.service';
 import { SessionStateService } from './session-state.service';
 
 @Injectable({
@@ -24,12 +24,13 @@ export class AuthService {
   }
 
   constructor(
-    private actions: Actions,
+    private environment: EnvironmentService,
     private injector: Injector,
-    private rest: RestService,
     private oAuthService: OAuthService,
     private store: Store,
     private sessionState: SessionStateService,
+    private configState: ConfigStateService,
+    private appConfigService: ApplicationConfigurationService,
     @Optional() @Inject('ACCOUNT_OPTIONS') private options: any,
   ) {
     this.setStrategy();
@@ -37,9 +38,7 @@ export class AuthService {
   }
 
   private setStrategy = () => {
-    const flow =
-      this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.responseType')) ||
-      'password';
+    const flow = this.environment.getEnvironment().oAuthConfig.responseType || 'password';
     if (this.flow === flow) return;
 
     if (this.strategy) this.strategy.destroy();
@@ -52,7 +51,7 @@ export class AuthService {
   };
 
   private listenToSetEnvironment() {
-    this.actions.pipe(ofActionSuccessful(SetEnvironment)).subscribe(this.setStrategy);
+    this.environment.onUpdate$(state => state.oAuthConfig).subscribe(this.setStrategy);
   }
 
   login(username: string, password: string): Observable<any> {
@@ -65,7 +64,9 @@ export class AuthService {
         new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
       ),
     ).pipe(
-      switchMap(() => this.store.dispatch(new GetAppConfiguration())),
+      switchMap(() =>
+        this.appConfigService.getConfiguration().pipe(tap(res => this.configState.setState(res))),
+      ),
       tap(() => {
         const redirectUrl =
           snq(() => window.history.state.redirectUrl) || (this.options || {}).redirectUrl || '/';

@@ -4,10 +4,11 @@ import { Store } from '@ngxs/store';
 import { AuthConfig, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { GetAppConfiguration } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
+import { ApplicationConfigurationService } from '../services/application-configuration.service';
+import { ConfigStateService } from '../services/config-state.service';
+import { EnvironmentService } from '../services/environment.service';
 import { RestService } from '../services/rest.service';
-import { ConfigState } from '../states/config.state';
 
 export const oAuthStorage = localStorage;
 
@@ -15,6 +16,9 @@ export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
 
   protected store: Store;
+  protected environment: EnvironmentService;
+  protected configState: ConfigStateService;
+  protected appConfigService: ApplicationConfigurationService;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
   abstract checkIfInternalAuth(): boolean;
@@ -26,13 +30,16 @@ export abstract class AuthFlowStrategy {
 
   constructor(protected injector: Injector) {
     this.store = injector.get(Store);
+    this.environment = injector.get(EnvironmentService);
+    this.configState = injector.get(ConfigStateService);
+    this.appConfigService = injector.get(ApplicationConfigurationService);
     this.oAuthService = injector.get(OAuthService);
-    this.oAuthConfig = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
+    this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
   }
 
   async init(): Promise<any> {
     const shouldClear = shouldStorageClear(
-      this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.clientId')),
+      this.environment.getEnvironment().oAuthConfig.clientId,
       oAuthStorage,
     );
     if (shouldClear) clearOAuthStorage(oAuthStorage);
@@ -91,7 +98,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   logout() {
     const rest = this.injector.get(RestService);
 
-    const issuer = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.issuer'));
+    const issuer = this.environment.getEnvironment().oAuthConfig.issuer;
     return rest
       .request(
         {
@@ -103,7 +110,9 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       )
       .pipe(
         tap(() => this.oAuthService.logOut()),
-        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
+        switchMap(() =>
+          this.appConfigService.getConfiguration().pipe(tap(res => this.configState.setState(res))),
+        ),
       );
   }
 

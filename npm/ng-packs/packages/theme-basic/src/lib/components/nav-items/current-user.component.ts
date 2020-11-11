@@ -1,7 +1,6 @@
-import { ApplicationConfiguration, ConfigState, AuthService } from '@abp/ng.core';
+import { ApplicationConfiguration, AuthService, ConfigStateService } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -48,14 +47,19 @@ import { Observable } from 'rxjs';
   `,
 })
 export class CurrentUserComponent implements OnInit {
-  @Select(ConfigState.getOne('currentUser'))
-  currentUser$: Observable<ApplicationConfiguration.CurrentUser>;
+  currentUser$: Observable<ApplicationConfiguration.CurrentUser> = this.configState.getOne$(
+    'currentUser',
+  );
 
   get smallScreen(): boolean {
     return window.innerWidth < 992;
   }
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private configState: ConfigStateService,
+  ) {}
 
   ngOnInit() {}
 
