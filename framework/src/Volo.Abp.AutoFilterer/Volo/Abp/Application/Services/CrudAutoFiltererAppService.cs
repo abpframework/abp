@@ -59,9 +59,12 @@ namespace Volo.Abp.Application.Services
             => query;
 
         protected override IQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, TGetListInput input) 
-            => query.ApplyFilter(input);
+            => query;
 
         protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
             => query;
+
+        protected override IQueryable<TEntity> CreateFilteredQuery(TGetListInput input) 
+            => base.CreateFilteredQuery(input).ApplyFilter(input);
     }
 }
