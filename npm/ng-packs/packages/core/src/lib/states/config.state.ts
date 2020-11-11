@@ -2,15 +2,21 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of, throwError } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
-import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
+import { GetAppConfiguration, PatchConfigState, SetEnvironment } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
+import { ConfigStateService } from '../services/config-state.service';
+import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
 import { interpolate } from '../utils/string-utils';
+import compare from 'just-compare';
 
+/**
+ * @deprecated Use ConfigStateService instead. To be deleted in v5.0.
+ */
 @State<Config.State>({
   name: 'ConfigState',
   defaults: {} as Config.State,
@@ -214,7 +220,22 @@ export class ConfigState {
     private http: HttpClient,
     private store: Store,
     private sessionState: SessionStateService,
-  ) {}
+    private environmentService: EnvironmentService,
+    private configState: ConfigStateService,
+  ) {
+    this.configState
+      .onUpdate$(s => s)
+      .pipe(distinctUntilChanged(compare))
+      .subscribe(config => {
+        console.log(config);
+        this.store.dispatch(new PatchConfigState(config as any));
+      });
+
+    this.environmentService
+      .onUpdate$(s => s)
+      .pipe(distinctUntilChanged(compare))
+      .subscribe(env => this.store.dispatch(new PatchConfigState({ environment: env } as any)));
+  }
 
   @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
@@ -223,22 +244,7 @@ export class ConfigState {
     return this.http
       .get<ApplicationConfiguration.Response>(`${api}/api/abp/application-configuration`)
       .pipe(
-        tap(configuration =>
-          patchState({
-            ...configuration,
-          }),
-        ),
-        switchMap(configuration => {
-          if (this.sessionState.getLanguage()) return of(null);
-
-          let lang = configuration.localization.currentCulture.cultureName;
-          if (lang.includes(';')) {
-            lang = lang.split(';')[0];
-          }
-
-          document.documentElement.setAttribute('lang', lang);
-          return of(null).pipe(tap(() => this.sessionState.setLanguage(lang)));
-        }),
+        tap(configuration => this.configState.setState(configuration)),
         catchError((err: HttpErrorResponse) => {
           dispatch(new RestOccurError(err));
           return throwError(err);
@@ -247,7 +253,12 @@ export class ConfigState {
   }
 
   @Action(SetEnvironment)
-  setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
-    return patchState({ environment });
+  setEnvironment(_, { environment }: SetEnvironment) {
+    return this.environmentService.setState(environment);
+  }
+
+  @Action(PatchConfigState)
+  setConfig({ patchState, getState }: StateContext<Config.State>, { state }: PatchConfigState) {
+    patchState({ ...getState(), ...state });
   }
 }
