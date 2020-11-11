@@ -174,10 +174,11 @@ namespace Volo.Abp.SettingManagement
         private async Task<List<KeyValuePair<string, SettingCacheItem>>> SetCacheItemsAsync(
             string providerName,
             string providerKey,
-            IEnumerable<string> cacheKeys)
+            List<string> notCacheKeys)
         {
-            var settingDefinitions = SettingDefinitionManager.GetAll();
-            var settingsDictionary = (await SettingRepository.GetListAsync(providerName, providerKey))
+            var settingDefinitions = SettingDefinitionManager.GetAll().Where(x => notCacheKeys.Any(k => GetSettingNameFormCacheKeyOrNull(k) == x.Name));
+
+            var settingsDictionary = (await SettingRepository.GetListAsync(notCacheKeys.Select(GetSettingNameFormCacheKeyOrNull).ToArray(), providerName, providerKey))
                 .ToDictionary(s => s.Name, s => s.Value);
 
             var cacheItems = new List<KeyValuePair<string, SettingCacheItem>>();
@@ -195,7 +196,7 @@ namespace Volo.Abp.SettingManagement
 
             await Cache.SetManyAsync(cacheItems, considerUow: true);
 
-            return cacheItems.Where(x => cacheKeys.Contains(x.Key)).ToList();
+            return cacheItems;
         }
 
 

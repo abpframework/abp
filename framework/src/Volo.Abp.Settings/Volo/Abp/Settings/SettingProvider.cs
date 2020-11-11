@@ -45,8 +45,13 @@ namespace Volo.Abp.Settings
 
         public async Task<List<SettingValue>> GetAllAsync(string[] names)
         {
-            var result = new List<SettingValue>();
+            var result = new Dictionary<string, SettingValue>();
             var settingDefinitions = SettingDefinitionManager.GetAll().Where(x => names.Contains(x.Name)).ToList();
+
+            foreach (var definition in settingDefinitions)
+            {
+                result.Add(definition.Name, new SettingValue(definition.Name, null));
+            }
 
             foreach (var provider in Enumerable.Reverse(SettingValueProviderManager.Providers))
             {
@@ -61,13 +66,16 @@ namespace Volo.Abp.Settings
                         settingValue.Value = SettingEncryptionService.Decrypt(settingDefinition, settingValue.Value);
                     }
 
-                    result.Add(new SettingValue(settingValue.Name, settingValue.Value));
+                    if (result.ContainsKey(settingValue.Name) && result[settingValue.Name].Value == null)
+                    {
+                        result[settingValue.Name].Value = settingValue.Value;
+                    }
                 }
 
                 settingDefinitions.RemoveAll(x => notNullValues.Any(v => v.Name == x.Name));
             }
 
-            return result;
+            return result.Values.ToList();
         }
 
         public virtual async Task<List<SettingValue>> GetAllAsync()

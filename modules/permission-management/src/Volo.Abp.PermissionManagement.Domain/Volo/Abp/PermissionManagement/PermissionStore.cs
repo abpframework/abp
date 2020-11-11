@@ -167,14 +167,14 @@ namespace Volo.Abp.PermissionManagement
         protected virtual async Task<List<KeyValuePair<string, PermissionGrantCacheItem>>> SetCacheItemsAsync(
             string providerName,
             string providerKey,
-            IEnumerable<string> cacheKeys)
+            List<string> notCacheKeys)
         {
-            var permissions = PermissionDefinitionManager.GetPermissions();
+            var permissions = PermissionDefinitionManager.GetPermissions().Where(x => notCacheKeys.Any(k => GetPermissionNameFormCacheKeyOrNull(k) == x.Name)).ToList();
 
-            Logger.LogDebug($"Getting all granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
+            Logger.LogDebug($"Getting not cache granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
 
             var grantedPermissionsHashSet = new HashSet<string>(
-                (await PermissionGrantRepository.GetListAsync(providerName, providerKey)).Select(p => p.Name)
+                (await PermissionGrantRepository.GetListAsync(notCacheKeys.Select(GetPermissionNameFormCacheKeyOrNull).ToArray(), providerName, providerKey)).Select(p => p.Name)
             );
 
             Logger.LogDebug($"Setting the cache items. Count: {permissions.Count}");
@@ -195,7 +195,7 @@ namespace Volo.Abp.PermissionManagement
 
             Logger.LogDebug($"Finished setting the cache items. Count: {permissions.Count}");
 
-            return cacheItems.Where(x => cacheKeys.Contains(x.Key)).ToList();
+            return cacheItems;
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
