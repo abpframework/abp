@@ -309,15 +309,13 @@ import { registerLocale } from './register-locale';
   ]
 ```
 
-After this custom `registerLocale` function, only en and fr locale files will be created as chunks:
+After this custom `registerLocale` function, since the en and fr added to the `webpackInclude`, only en and fr locale files will be created as chunks:
 
 ![locale chunks](https://user-images.githubusercontent.com/34455572/98203212-acaa2100-1f44-11eb-85af-4eb66d296326.png)
+
+Which locale files you add to `webpackInclude` magic comment, they will be included in the bundle
 
 
 ## See Also
 
 * [Localization in ASP.NET Core](../../Localization.md)
-
-## What's Next?
-
-* [Settings](./Settings.md)

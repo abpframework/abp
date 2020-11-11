@@ -101,8 +101,3 @@ export interface RemoteEnv {
   * `customMergeFn`: You can also provide your own merge function as shown in the example. It will take two parameters, `localEnv: Partial<Config.Environment>` and `remoteEnv` and it needs to return a `Config.Environment` object.
 * `method`: HTTP method to be used when retrieving environment config. Default: `GET`
 * `headers`: If extra headers are needed for the request, it can be set through this field.
-
-
-## What's Next?
-
-- [About Feature Libraries](./Feature-Libraries.md)

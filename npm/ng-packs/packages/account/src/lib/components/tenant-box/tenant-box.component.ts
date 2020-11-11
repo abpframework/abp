@@ -1,4 +1,4 @@
-import { ABP, GetAppConfiguration, SessionState, SetTenant } from '@abp/ng.core';
+import { ABP, GetAppConfiguration, SessionStateService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
@@ -13,8 +13,7 @@ import { AccountService } from '../../services/account.service';
 })
 export class TenantBoxComponent
   implements Account.TenantBoxComponentInputs, Account.TenantBoxComponentOutputs {
-  @Select(SessionState.getTenant)
-  currentTenant$: Observable<ABP.BasicItem>;
+  currentTenant$ = this.sessionState.getTenant$();
 
   name: string;
 
@@ -26,11 +25,12 @@ export class TenantBoxComponent
     private store: Store,
     private toasterService: ToasterService,
     private accountService: AccountService,
+    private sessionState: SessionStateService,
   ) {}
 
   onSwitch() {
-    const tenant = this.store.selectSnapshot(SessionState.getTenant);
-    this.name = (tenant || ({} as ABP.BasicItem)).name;
+    const tenant = this.sessionState.getTenant;
+    this.name = tenant?.name;
     this.isModalVisible = true;
   }
 
@@ -57,7 +57,8 @@ export class TenantBoxComponent
   }
 
   private setTenant(tenant: ABP.BasicItem) {
-    return this.store.dispatch([new SetTenant(tenant), new GetAppConfiguration()]);
+    this.sessionState.setTenant(tenant);
+    return this.store.dispatch(new GetAppConfiguration());
   }
 
   private showError() {

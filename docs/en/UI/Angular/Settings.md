@@ -53,7 +53,3 @@ const localizationSettings = this.config.getSettings("Localization");
 ```
 
 Beware though, **settings search is case-sensitive**.
-
-## What's Next?
-
-- [Features](./Features.md)

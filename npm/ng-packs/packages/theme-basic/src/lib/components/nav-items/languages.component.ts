@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { SetLanguage, ConfigState, ApplicationConfiguration, SessionState } from '@abp/ng.core';
+import { ApplicationConfiguration, ConfigState, SessionStateService } from '@abp/ng.core';
+import { Component, OnInit } from '@angular/core';
+import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import snq from 'snq';
@@ -75,14 +75,14 @@ export class LanguagesComponent implements OnInit {
   }
 
   get selectedLangCulture(): string {
-    return this.store.selectSnapshot(SessionState.getLanguage);
+    return this.sessionState.getLanguage();
   }
 
-  constructor(private store: Store) {}
+  constructor(private sessionState: SessionStateService) {}
 
   ngOnInit() {}
 
   onChangeLang(cultureName: string) {
-    this.store.dispatch(new SetLanguage(cultureName));
+    this.sessionState.setLanguage(cultureName);
   }
 }

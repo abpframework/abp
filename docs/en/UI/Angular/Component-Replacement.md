@@ -547,7 +547,3 @@ The final UI looks like below:
 ## See Also
 
 - [How to Replace PermissionManagementComponent](./Permission-Management-Component-Replacement.md)
-
-## What's Next?
-
-- [Custom Setting Page](./Custom-Setting-Page.md)

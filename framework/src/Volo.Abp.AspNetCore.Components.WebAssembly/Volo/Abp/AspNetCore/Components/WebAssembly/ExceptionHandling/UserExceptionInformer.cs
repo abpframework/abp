@@ -31,11 +31,11 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.ExceptionHandling
             if (errorInfo.Details.IsNullOrEmpty())
             {
                 //TODO: Should we introduce MessageService.Error (sync) method instead of such a usage (without await)..?
-                MessageService.ErrorAsync(errorInfo.Message);
+                MessageService.Error(errorInfo.Message);
             }
             else
             {
-                MessageService.ErrorAsync(errorInfo.Details, errorInfo.Message);
+                MessageService.Error(errorInfo.Details, errorInfo.Message);
             }
         }
 

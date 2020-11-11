@@ -203,7 +203,3 @@ getSomeCustomHeaderValue() {
 
 
 You may find `Rest.Observe` enum [here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L10).
-
-## What's Next?
-
-* [Localization](./Localization.md)

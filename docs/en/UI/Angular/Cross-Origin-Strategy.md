@@ -51,10 +51,3 @@ CROSS_ORIGIN_STRATEGY.UseCredentials(integrity?: string)
 ```
 
 `crossorigin` will be set as `"use-credentials"` and `integrity` is optional.
-
-
-
-
-## What's Next?
-
-- [LoadingStrategy](./Loading-Strategy.md)

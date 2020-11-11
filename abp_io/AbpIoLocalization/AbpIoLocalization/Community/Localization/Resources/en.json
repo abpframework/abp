@@ -90,6 +90,15 @@
     "LatestArticles": "Latest Articles",
     "ArticleRequests": "Article Requests",
     "AllArticleRequests": "See All Article Requests",
-    "ArticleAssignRequest": "Want to write this article? Click here to assign yourself."
+    "ArticleAssignRequest": "assign yourself.",
+    "SubscribeToTheNewsletter": "Subscribe to the Newsletter",
+    "NewsletterEmailDefinition": "Get information about happenings in ABP like new releases, free sources, articles, and more.",
+    "NoThanks": "No, thanks",
+    "MaybeLater": "Maybe later",
+    "JoinOurArticleNewsletter": "Join our article newsletter",
+    "Community": "Community",
+    "Marketing": "Marketing",
+    "ArticleAssignMessage": "Want to write this article? Click here to",
+    "CommunityPrivacyPolicyConfirmation": "I agree to the Terms & Conditions and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>."
   }
 }

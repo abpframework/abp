@@ -188,6 +188,22 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
                 );
             }
+
+            // Swagger Client
+            var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
+            if (!swaggerClientId.IsNullOrWhiteSpace())
+            {
+                var swaggerRootUrl = configurationSection["MyProjectName_Swagger:RootUrl"].TrimEnd('/');
+
+                await CreateClientAsync(
+                    name: swaggerClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
+                    secret: configurationSection["MyProjectName_Swagger:ClientSecret"]?.Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html"
+                );
+            }
         }
 
         private async Task<Client> CreateClientAsync(

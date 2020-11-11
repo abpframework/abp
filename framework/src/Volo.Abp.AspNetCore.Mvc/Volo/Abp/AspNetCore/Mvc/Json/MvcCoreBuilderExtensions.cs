@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.Json
 {
@@ -15,6 +16,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
     {
         public static IMvcCoreBuilder AddAbpHybridJson(this IMvcCoreBuilder builder)
         {
+            var abpJsonOptions = builder.Services.ExecutePreConfiguredActions<AbpJsonOptions>();
+            if (!abpJsonOptions.UseHybridSerializer)
+            {
+                builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcNewtonsoftJsonOptions>, AbpMvcNewtonsoftJsonOptionsSetup>());
+                builder.AddNewtonsoftJson();
+                return builder;
+            }
+
             //SystemTextJsonInputFormatter
             builder.Services.AddTransient(provider =>
             {
