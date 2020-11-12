@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.ObjectExtending\Volo.Abp.ObjectExtending.csproj" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
