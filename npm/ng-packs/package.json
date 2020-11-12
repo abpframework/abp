@@ -63,7 +63,7 @@
     "@ngxs/router-plugin": "^3.7.0",
     "@ngxs/store": "^3.7.0",
     "@schematics/angular": "~10.0.5",
-    "@swimlane/ngx-datatable": "^17.1.0",
+    "@swimlane/ngx-datatable": "^18.0.0",
     "@types/jest": "^25.2.3",
     "@types/node": "^12.11.1",
     "angular-oauth2-oidc": "^10.0.3",
