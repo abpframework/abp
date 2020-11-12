@@ -1,7 +1,14 @@
-import { isObjectAndNotArray, isNullOrUndefined, exists, isArray, isObject } from './common-utils';
+import {
+  exists,
+  isArray,
+  isNode,
+  isNullOrUndefined,
+  isObject,
+  isObjectAndNotArrayNotNode,
+} from './common-utils';
 
 export function deepMerge(target, source) {
-  if (isObjectAndNotArray(target) && isObjectAndNotArray(source)) {
+  if (isObjectAndNotArrayNotNode(target) && isObjectAndNotArrayNotNode(source)) {
     return deepMergeRecursively(target, source);
   } else if (isNullOrUndefined(target) && isNullOrUndefined(source)) {
     return {};
@@ -17,7 +24,9 @@ function deepMergeRecursively(target, source) {
     isArray(target) ||
     isArray(source) || // at least one array
     !isObject(target) ||
-    !isObject(source); // at least one not an object
+    !isObject(source) || // at least one not an object
+    isNode(target) ||
+    isNode(source); // at least one node
 
   /**
    * if we will not recurse any further,
