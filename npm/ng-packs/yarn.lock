@@ -331,10 +331,12 @@
   dependencies:
     tslib "^2.0.0"
 
-"@angular/cdk@^9.0.0":
-  version "9.2.4"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-9.2.4.tgz#8413958bd275e4c34be3b96f56444671dd30ba93"
-  integrity sha512-iw2+qHMXHYVC6K/fttHeNHIieSKiTEodVutZoOEcBu9rmRTGbLB26V/CRsfIRmA1RBk+uFYWc6UQZnMC3RdnJQ==
+"@angular/cdk@^10.2.4":
+  version "10.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-10.2.7.tgz#0ff82eb91b2653ea26909c57a460d4593b44f186"
+  integrity sha512-ZQjDfTRTn7JuAKsf3jiIdU2XBaxxGBi/ZWYv5Pb3HCl6B4PISsIE5VWRhkoUogoAB0MiFHpjnWeIqknJEm11YQ==
+  dependencies:
+    tslib "^2.0.0"
   optionalDependencies:
     parse5 "^5.0.0"
 
@@ -465,19 +467,20 @@
   dependencies:
     tslib "^2.0.0"
 
-"@ant-design/colors@^3.1.0":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@ant-design/colors/-/colors-3.2.2.tgz#5ad43d619e911f3488ebac303d606e66a8423903"
-  integrity sha512-YKgNbG2dlzqMhA9NtI3/pbY16m3Yl/EeWBRa+lB1X1YaYxHrxNexiQYCLTWO/uDvAjLFMEDU+zR901waBtMtjQ==
+"@ant-design/colors@^4.0.0":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@ant-design/colors/-/colors-4.0.5.tgz#d7d100d7545cca8f624954604a6892fc48ba5aae"
+  integrity sha512-3mnuX2prnWOWvpFTS2WH2LoouWlOgtnIpc6IarWN6GOzzLF8dW/U8UctuvIPhoboETehZfJ61XP+CGakBEPJ3Q==
   dependencies:
     tinycolor2 "^1.4.1"
 
-"@ant-design/icons-angular@^9.0.0":
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/@ant-design/icons-angular/-/icons-angular-9.0.1.tgz#5ac8bec5bc34d23120820c93f8511b59aa117bc5"
-  integrity sha512-bWdHOmO4LSQ3wpmivwTI7EWiRUMGSVA+fyfiGZ9IrQqoccg9XjGcWqT/VA9A45OV0QTKweo4hp3xaTzRBKsc+g==
+"@ant-design/icons-angular@^10.0.0":
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/@ant-design/icons-angular/-/icons-angular-10.1.1.tgz#36c208730318d4aaed362a14f37c93ed8142cb68"
+  integrity sha512-OEX1WYYcEZzTEkyYeTTvzJ+AZ4qzXkZ19ipolrLOP/2856HbqX1TXNhHEtmoExk1T/bNzRe3+zOWXeUrkxD6xw==
   dependencies:
-    "@ant-design/colors" "^3.1.0"
+    "@ant-design/colors" "^4.0.0"
+    tslib "^2.0.0"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.8.3":
   version "7.10.4"
@@ -9580,16 +9583,16 @@ ng-packagr@^10.0.0:
     stylus "^0.54.7"
     terser "^5.0.0"
 
-ng-zorro-antd@^9.3.0:
-  version "9.3.0"
-  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-9.3.0.tgz#f80dbe2715e578c475728773449442f0099f152c"
-  integrity sha512-O7uRCnsFTGHn/74ly8VCUoaMlED3cWLJfvbD0FLzDjBlnz77kcuM5qd+yGMT2hAYXmXYWu2ZRRJWLx5QUGLHkA==
+ng-zorro-antd@^10.1.1:
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-10.1.1.tgz#0f274b16a1331a41522d6c9309c44779c94dcdc0"
+  integrity sha512-C9WHcsfSSU+5YSfzqBuF+zGcxBrcW3a0lL7wt2TfLYnrFTTZ4EaI9dhzZHv4NuDoFQ0WM8syzzRa+Yh93v0HyQ==
   dependencies:
-    "@angular/cdk" "^9.0.0"
-    "@ant-design/icons-angular" "^9.0.0"
+    "@angular/cdk" "^10.2.4"
+    "@ant-design/icons-angular" "^10.0.0"
     date-fns "^2.10.0"
     resize-observer-polyfill "^1.5.1"
-    tslib "^1.10.0"
+    tslib "^2.0.0"
 
 ngxs-reset-plugin@^1.3.0:
   version "1.3.0"
