@@ -162,15 +162,20 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 );
             }
 
-            //Console Test Client
-            var consoleClientId = configurationSection["MyProjectName_ConsoleTestApp:ClientId"];
-            if (!consoleClientId.IsNullOrWhiteSpace())
+            //Console Test / Angular Client
+            var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
+            if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
             {
+                var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
+
                 await CreateClientAsync(
-                    name: consoleClientId,
+                    name: consoleAndAngularClientId,
                     scopes: commonScopes,
-                    grantTypes: new[] {"password", "client_credentials"},
-                    secret: (configurationSection["MyProjectName_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
+                    grantTypes: new[] { "password", "client_credentials", "authorization_code" },
+                    secret: (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: webClientRootUrl,
+                    postLogoutRedirectUri: webClientRootUrl
                 );
             }
 
