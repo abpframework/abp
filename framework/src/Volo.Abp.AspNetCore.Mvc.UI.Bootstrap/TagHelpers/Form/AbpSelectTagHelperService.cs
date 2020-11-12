@@ -106,6 +106,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.Attributes.Add("data-autocomplete-items-property", TagHelper.AutocompleteItemsPropertyName);
                 output.Attributes.Add("data-autocomplete-display-property", TagHelper.AutocompleteDisplayPropertyName);
                 output.Attributes.Add("data-autocomplete-value-property", TagHelper.AutocompleteValuePropertyName);
+                output.Attributes.Add("data-autocomplete-filter-param-name", TagHelper.AutocompleteFilterParamName);
             }
         }
 
