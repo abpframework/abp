@@ -1,30 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Volo.Abp.Data;
-using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 {
-    public class AbpExtraPropertyDictionaryJsonConverter<T> : JsonConverter<T>
-        where T : ExtensibleObject
+    public class AbpHasExtraPropertiesJsonConverter<T> : JsonConverter<T>
+        where T : IHasExtraProperties
     {
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var newOptions = JsonSerializerOptionsHelper.Create(options, x =>
                 x == this ||
-                x.GetType() == typeof(AbpExtraPropertyDictionaryJsonConverterFactory));
+                x.GetType() == typeof(AbpHasExtraPropertiesJsonConverterFactory));
 
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
             var extensibleObject = JsonSerializer.Deserialize<T>(rootElement.GetRawText(), newOptions);
+
             var extraProperties = rootElement.EnumerateObject().FirstOrDefault(x =>
-                    x.Name.Equals(nameof(ExtensibleObject.ExtraProperties), StringComparison.OrdinalIgnoreCase))
+                    x.Name.Equals(nameof(IHasExtraProperties.ExtraProperties), StringComparison.OrdinalIgnoreCase))
                 .Value.GetRawText();
-
             var extraPropertyDictionary = JsonSerializer.Deserialize(extraProperties, typeof(ExtraPropertyDictionary), newOptions);
-
             ObjectHelper.TrySetProperty(extensibleObject, x => x.ExtraProperties, () => extraPropertyDictionary);
 
             return extensibleObject;
@@ -34,7 +31,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
         {
             var newOptions = JsonSerializerOptionsHelper.Create(options, x =>
                 x == this ||
-                x.GetType() == typeof(AbpExtraPropertyDictionaryJsonConverterFactory));
+                x.GetType() == typeof(AbpHasExtraPropertiesJsonConverterFactory));
 
             JsonSerializer.Serialize(writer, value, newOptions);
         }
