@@ -25,6 +25,7 @@
                     <abp-select asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
                                 label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                 autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
                                 autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
                                 autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
                                 autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>

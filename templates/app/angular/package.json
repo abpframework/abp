@@ -12,7 +12,6 @@
   },
   "private": true,
   "dependencies": {
-    "@abp/ng.account": "~3.3.1",
     "@abp/ng.identity": "~3.3.1",
     "@abp/ng.setting-management": "~3.3.1",
     "@abp/ng.tenant-management": "~3.3.1",
