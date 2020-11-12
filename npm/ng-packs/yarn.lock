@@ -2,14 +2,6 @@
 # yarn lockfile v1
 
 
-"@abp/ng.account@~3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.account/-/ng.account-3.3.1.tgz#e660ede11f2e73b62f9a58ada24afe38836056b3"
-  integrity sha512-IJeCB+Y8IeZIF54f406OYw/Bsg0hGSLbYC9X0up/o0Lwm16+UTCZOXVBQ4OifIf8mmWLDlX81zO2KX68fEm97g==
-  dependencies:
-    "@abp/ng.theme.shared" "~3.3.1"
-    tslib "^2.0.0"
-
 "@abp/ng.core@~3.3.1":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@abp/ng.core/-/ng.core-3.3.1.tgz#230518da3cd1a8b4efef85df9d4d07e5c66b2549"
