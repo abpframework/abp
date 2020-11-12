@@ -129,7 +129,7 @@ export class RootCoreModule {}
  */
 @NgModule({
   exports: [RouterModule, BaseCoreModule, MockLocalizationPipe],
-  imports: [RouterModule.forRoot([]), BaseCoreModule],
+  imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }), BaseCoreModule],
   declarations: [MockLocalizationPipe],
 })
 export class TestCoreModule {}
