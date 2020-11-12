@@ -12,7 +12,7 @@ export const environment = {
   oAuthConfig: {
     issuer: 'https://localhost:44301',
     redirectUri: baseUrl,
-    clientId: 'MyProjectName_ConsoleTestApp',
+    clientId: 'MyProjectName_App',
     responseType: 'code',
     scope: 'offline_access MyProjectName',
   },
