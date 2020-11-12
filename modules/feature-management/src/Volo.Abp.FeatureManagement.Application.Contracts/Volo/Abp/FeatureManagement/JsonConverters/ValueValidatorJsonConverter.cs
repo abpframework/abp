@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -13,10 +13,10 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
         public override IValueValidator Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var name = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals("Name", StringComparison.InvariantCultureIgnoreCase)).Value.GetString();
+            var name = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Name), StringComparison.OrdinalIgnoreCase)).Value.GetString();
             var valueValidator = CreateValueValidatorByName(name);
 
-            var propertiesRawText = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals("Properties", StringComparison.InvariantCultureIgnoreCase)).Value.GetRawText();
+            var propertiesRawText = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Properties), StringComparison.OrdinalIgnoreCase)).Value.GetRawText();
             var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ObjectToInferredTypesConverter());
             var properties = JsonSerializer.Deserialize<IDictionary<string, object>>(propertiesRawText, newOptions);
             if (properties != null && properties.Any())

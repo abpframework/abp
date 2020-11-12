@@ -14,13 +14,13 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
             var newOptions = JsonSerializerOptionsHelper.Create(options, this);
 
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var items = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals("Items", StringComparison.InvariantCultureIgnoreCase)).Value.GetRawText();
+            var items = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(ISelectionStringValueItemSource.Items), StringComparison.OrdinalIgnoreCase)).Value.GetRawText();
 
             var selectionStringValueItem =
                 JsonSerializer.Deserialize<List<LocalizableSelectionStringValueItem>>(items, newOptions) ??
                 new List<LocalizableSelectionStringValueItem>();
 
-            return new StaticSelectionStringValueItemSource(selectionStringValueItem.ToArray());
+            return new StaticSelectionStringValueItemSource(selectionStringValueItem.ToArray().As<ISelectionStringValueItem[]>());
         }
 
         public override void Write(Utf8JsonWriter writer, ISelectionStringValueItemSource value, JsonSerializerOptions options)
