@@ -99,10 +99,11 @@ This is a minimalist, empty project template that is integrated to the ABP Frame
 
 ### New Languages
 
-**Thanks to the contributors** from the ABP Community, the framework modules and the startup template have been localized to **German** (by [Alexander Pilhar](https://github.com/alexanderpilhar) & [Nico Lachmuth](https://github.com/tntwist)) and **Spanish** (by [Jose Manuel Gonzalez](https://github.com/jmglezgz)) languages.
+**Thanks to the contributors** from the ABP Community, the framework modules and the startup template have been localized to **German** language by [Alexander Pilhar](https://github.com/alexanderpilhar) & [Nico Lachmuth](https://github.com/tntwist).
 
 ### Other Notes
 
+* Upgraded to Angular 11.
 * Since [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library not supports transactions, you can use transactions in unit tests for MongoDB.
 
 ## What's new with the ABP Commercial 4.0
