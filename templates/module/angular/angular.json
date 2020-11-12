@@ -61,14 +61,8 @@
             "polyfills": "projects/dev-app/src/polyfills.ts",
             "tsConfig": "projects/dev-app/tsconfig.app.json",
             "aot": true,
-            "allowedCommonJsDependencies": [
-              "chart.js",
-              "js-sha256"
-            ],
-            "assets": [
-              "projects/dev-app/src/favicon.ico",
-              "projects/dev-app/src/assets"
-            ],
+            "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
+            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
             "styles": [
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -97,7 +91,7 @@
               },
               {
                 "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
-                "inject": true,
+                "inject": false,
                 "bundleName": "bootstrap-rtl.min"
               },
               {
@@ -164,10 +158,7 @@
             "polyfills": "projects/dev-app/src/polyfills.ts",
             "tsConfig": "projects/dev-app/tsconfig.spec.json",
             "karmaConfig": "projects/dev-app/karma.conf.js",
-            "assets": [
-              "projects/dev-app/src/favicon.ico",
-              "projects/dev-app/src/assets"
-            ],
+            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
             "styles": ["projects/dev-app/src/styles.scss"],
             "scripts": []
           }
