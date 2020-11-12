@@ -1,4 +1,3 @@
-import { AccountConfigModule } from '@abp/ng.account/config';
 import { CoreModule } from '@abp/ng.core';
 import { registerLocale } from '@abp/ng.core/locale';
 import { IdentityConfigModule } from '@abp/ng.identity/config';
@@ -28,7 +27,6 @@ import { ThemeBasicModule } from '@abp/ng.theme.basic';
       skipGetAppConfiguration: false,
     }),
     ThemeSharedModule.forRoot(),
-    AccountConfigModule.forRoot(),
     IdentityConfigModule.forRoot(),
     MyProjectNameConfigModule.forRoot(),
     TenantManagementConfigModule.forRoot(),
