@@ -7,16 +7,14 @@
 @inject AbpBlazorMessageLocalizerHelper<AbpTenantManagementResource> LH
 @inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
 @* ************************* PAGE HEADER ************************* *@
-<Row>
-    <Column ColumnSize="ColumnSize.Is6">
+<Row Class="justify-content-between">
+    <Column ColumnSize="ColumnSize.IsAuto">
         <Heading Size="HeadingSize.Is1">@L["Tenants"]</Heading>
     </Column>
-    <Column ColumnSize="ColumnSize.Is6">
+    <Column ColumnSize="ColumnSize.IsAuto">
         @if (HasCreatePermission)
         {
-            <Paragraph Alignment="TextAlignment.Right">
-                <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewTenant"]</Button>
-            </Paragraph>
+            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewTenant"]</Button>
         }
     </Column>
 </Row>
