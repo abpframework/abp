@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Buffers.Text;
 using System.Text.Json;
@@ -29,8 +29,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
         {
-            var newOptions = new JsonSerializerOptions(options);
-            newOptions.Converters.Remove(this);
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
             var entityConverter = (JsonConverter<bool>)newOptions.GetConverter(typeof(bool));
             entityConverter.Write(writer, value, newOptions);
         }
