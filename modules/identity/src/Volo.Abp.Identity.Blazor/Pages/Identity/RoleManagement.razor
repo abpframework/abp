@@ -1,5 +1,5 @@
 ﻿@page "/identity/roles"
-@attribute [Authorize(IdentityPermissions.Roles.Default)]
+@attribute [Authorize( IdentityPermissions.Roles.Default )]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Forms
@@ -10,16 +10,14 @@
 
 @inherits AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
 @* ************************* PAGE HEADER ************************* *@
-<Row>
-    <Column ColumnSize="ColumnSize.Is6">
+<Row Class="justify-content-between">
+    <Column ColumnSize="ColumnSize.IsAuto">
         <Heading Size="HeadingSize.Is1">@L["Roles"]</Heading>
     </Column>
-    <Column ColumnSize="ColumnSize.Is6">
-        @if (HasCreatePermission)
+    <Column ColumnSize="ColumnSize.IsAuto">
+        @if ( HasCreatePermission )
         {
-            <Paragraph Alignment="TextAlignment.Right">
-                <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewRole"]</Button>
-            </Paragraph>
+            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewRole"]</Button>
         }
     </Column>
 </Row>
@@ -70,39 +68,39 @@
 @* ************************* CREATE MODAL ************************* *@
 @if (HasCreatePermission)
 {
-<Modal @ref="CreateModal">
-    <ModalBackdrop />
-    <ModalContent Centered="true">
-        <Form id="RoleCreateForm">
-            <ModalHeader>
-                <ModalTitle>@L["NewRole"]</ModalTitle>
-                <CloseButton Clicked="CloseCreateModalAsync" />
-            </ModalHeader>
-            <ModalBody>
-                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
-                    <Validation MessageLocalizer="@LH.Localize">
+    <Modal @ref="CreateModal">
+        <ModalBackdrop />
+        <ModalContent Centered="true">
+            <Form id="RoleCreateForm">
+                <ModalHeader>
+                    <ModalTitle>@L["NewRole"]</ModalTitle>
+                    <CloseButton Clicked="CloseCreateModalAsync" />
+                </ModalHeader>
+                <ModalBody>
+                    <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.Name">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
                         <Field>
-                            <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                            <TextEdit @bind-Text="@NewEntity.Name">
-                                <Feedback>
-                                    <ValidationError />
-                                </Feedback>
-                            </TextEdit>
+                            <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                            <Check TValue="bool" @bind-Checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
                         </Field>
-                    </Validation>
-                    <Field>
-                        <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                        <Check TValue="bool" @bind-Checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
-                    </Field>
-                </Validations>
-            </ModalBody>
-            <ModalFooter>
-                <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                <Button form="RoleCreateForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
-            </ModalFooter>
-        </Form>
-    </ModalContent>
-</Modal>
+                    </Validations>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                    <Button form="RoleCreateForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+                </ModalFooter>
+            </Form>
+        </ModalContent>
+    </Modal>
 }
 @* ************************* EDIT MODAL ************************* *@
 @if (HasUpdatePermission)

@@ -9,16 +9,14 @@
 
 @inherits AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
 @* ************************* PAGE HEADER ************************* *@
-<Row>
-    <Column ColumnSize="ColumnSize.Is6">
+<Row Class="justify-content-between">
+    <Column ColumnSize="ColumnSize.IsAuto">
         <h1>@L["Users"]</h1>
     </Column>
-    <Column ColumnSize="ColumnSize.Is6">
+    <Column ColumnSize="ColumnSize.IsAuto">
         @if (HasCreatePermission)
         {
-            <Paragraph Alignment="TextAlignment.Right">
-                <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewUser"]</Button>
-            </Paragraph>
+            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewUser"]</Button>
         }
     </Column>
 </Row>
