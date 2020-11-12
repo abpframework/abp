@@ -1,5 +1,7 @@
 ﻿using Shouldly;
+using Volo.Abp.Data;
 using Volo.Abp.Json.SystemTextJson;
+using Volo.Abp.ObjectExtending;
 using Xunit;
 
 namespace Volo.Abp.Json
@@ -76,6 +78,24 @@ namespace Volo.Abp.Json
 
             newJson = _jsonSerializer.Serialize(file);
             newJson.ShouldBe("{\"name\":\"abp\",\"type\":2}");
+        }
+
+
+        [Fact]
+        public void Serialize_Deserialize_ExtensibleObject()
+        {
+            var json = "{\"name\":\"test\",\"extraProperties\":{\"One\":\"123\",\"Two\":456}}";
+            var extensibleObject = _jsonSerializer.Deserialize<TestExtensibleObjectClass>(json);
+            extensibleObject.GetProperty("One").ShouldBe("123");
+            extensibleObject.GetProperty("Two").ShouldBe(456);
+
+            var newJson = _jsonSerializer.Serialize(extensibleObject);
+            newJson.ShouldBe(json);
+        }
+
+        class TestExtensibleObjectClass : ExtensibleObject
+        {
+            public string Name { get; set; }
         }
 
         class FileWithBoolean

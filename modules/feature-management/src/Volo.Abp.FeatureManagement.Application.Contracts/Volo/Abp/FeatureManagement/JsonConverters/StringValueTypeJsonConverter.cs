@@ -11,7 +11,7 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
         public override IStringValueType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var name = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals("Name", StringComparison.InvariantCultureIgnoreCase)).Value.GetString();
+            var name = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IStringValueType.Name), StringComparison.OrdinalIgnoreCase)).Value.GetString();
             var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(), new SelectionStringValueItemSourceJsonConverter());
             return name switch
             {

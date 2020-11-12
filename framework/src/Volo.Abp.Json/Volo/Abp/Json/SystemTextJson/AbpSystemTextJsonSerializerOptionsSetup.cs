@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
@@ -21,6 +21,9 @@ namespace Volo.Abp.Json.SystemTextJson
 
             options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
             options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
+
+            options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
+            options.JsonSerializerOptions.Converters.Add(new AbpExtraPropertyDictionaryJsonConverterFactory());
         }
     }
 }

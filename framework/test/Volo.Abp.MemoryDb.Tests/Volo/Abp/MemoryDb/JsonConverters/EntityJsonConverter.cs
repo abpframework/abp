@@ -25,8 +25,7 @@ namespace Volo.Abp.MemoryDb.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, TEntity value, JsonSerializerOptions options)
         {
-            var newOptions = new JsonSerializerOptions(options);
-            newOptions.Converters.Remove(this);
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
             var entityConverter = (JsonConverter<TEntity>)newOptions.GetConverter(typeof(TEntity));
             entityConverter.Write(writer, value, newOptions);
         }
