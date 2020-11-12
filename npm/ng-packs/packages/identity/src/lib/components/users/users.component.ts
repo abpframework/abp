@@ -36,7 +36,6 @@ import {
   IdentityRoleDto,
   IdentityUserDto,
 } from '../../proxy/identity/models';
-import { IdentityService } from '../../services/identity.service';
 import { IdentityState } from '../../states/identity.state';
 
 @Component({
@@ -88,7 +87,6 @@ export class UsersComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
-    private identityService: IdentityService,
     private identityUserService: IdentityUserService,
   ) {}
 

@@ -1,13 +1,13 @@
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
-import { Rest } from '../models/rest';
-import { isUndefinedOrEmptyString } from '../utils/common-utils';
 import { ABP } from '../models/common';
+import { Rest } from '../models/rest';
 import { CORE_OPTIONS } from '../tokens/options.token';
+import { isUndefinedOrEmptyString } from '../utils/common-utils';
 import { EnvironmentService } from './environment.service';
 
 @Injectable({
@@ -30,7 +30,7 @@ export class RestService {
     return throwError(err);
   }
 
-  // TODO: Deprecate service or improve interface in v3.0
+  // TODO: Deprecate service or improve interface in v5.0
   request<T, R>(
     request: HttpRequest<T> | Rest.Request<T>,
     config?: Rest.Config,

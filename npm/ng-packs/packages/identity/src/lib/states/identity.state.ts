@@ -17,7 +17,7 @@ import {
 import { Identity } from '../models/identity';
 import { IdentityRoleService } from '../proxy/identity/identity-role.service';
 import { IdentityUserService } from '../proxy/identity/identity-user.service';
-import { IdentityUserDto } from '../proxy/identity/models';
+import { IdentityRoleDto, IdentityUserDto } from '../proxy/identity/models';
 
 @State<Identity.State>({
   name: 'IdentityState',
@@ -26,7 +26,7 @@ import { IdentityUserDto } from '../proxy/identity/models';
 @Injectable()
 export class IdentityState {
   @Selector()
-  static getRoles({ roles }: Identity.State): Identity.RoleItem[] {
+  static getRoles({ roles }: Identity.State): IdentityRoleDto[] {
     return roles.items || [];
   }
 
