@@ -16,7 +16,7 @@ describe('ReplaceableComponentsState', () => {
   const createHost = createHostFactory({
     component: DummyComponent,
     providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
-    imports: [RouterModule.forRoot([]), NgxsModule.forRoot([ReplaceableComponentsState])],
+    imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }), NgxsModule.forRoot([ReplaceableComponentsState])],
   });
 
   beforeEach(() => {
