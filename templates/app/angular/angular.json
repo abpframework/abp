@@ -129,12 +129,12 @@
               "src/styles.scss",
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-                "inject": true,
+                "inject": false,
                 "bundleName": "fontawesome-all.min"
               },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
-                "inject": true,
+                "inject": false,
                 "bundleName": "fontawesome-v4-shims.min"
               }
             ],
