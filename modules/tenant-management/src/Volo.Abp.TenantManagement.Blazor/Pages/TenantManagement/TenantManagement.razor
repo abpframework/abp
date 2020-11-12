@@ -164,7 +164,7 @@
                     <Validations @ref="@ManageConnectionStringValidations" Model="@TenantInfo" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
-                                <FieldLabel>@L["DisplayName:DefaultConnectionString"]</FieldLabel>
+                                <FieldLabel>@L["DisplayName:UseSharedDatabase"]</FieldLabel>
                                 <Check TValue="bool" @bind-Checked="@TenantInfo.UseSharedDatabase" Cursor="@Cursor.Pointer" />
                             </Field>
                         </Validation>
