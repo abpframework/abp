@@ -30,7 +30,6 @@ import { SortPipe } from './pipes/sort.pipe';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
 import { ProfileState } from './states/profile.state';
-import { ReplaceableComponentsState } from './states/replaceable-components.state';
 import { oAuthStorage } from './strategies/auth-flow.strategy';
 import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
@@ -113,7 +112,7 @@ export class BaseCoreModule {}
   imports: [
     BaseCoreModule,
     LocalizationModule,
-    NgxsModule.forFeature([ReplaceableComponentsState, ProfileState]),
+    NgxsModule.forFeature([ProfileState]),
     NgxsRouterPluginModule.forRoot(),
     OAuthModule.forRoot(),
     HttpClientXsrfModule.withOptions({
