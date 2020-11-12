@@ -14,7 +14,7 @@ import {
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
 import { GetTenantsInput, TenantDto } from '../../proxy/models';
-import { TenantManagementService } from '../../services/tenant-management.service';
+import { TenantService } from '../../proxy/tenant.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
 
 interface SelectedModalContent {
@@ -103,7 +103,7 @@ export class TenantsComponent implements OnInit {
     public readonly list: ListService<GetTenantsInput>,
     private injector: Injector,
     private confirmationService: ConfirmationService,
-    private tenantService: TenantManagementService,
+    private tenantService: TenantService,
     private fb: FormBuilder,
     private store: Store,
   ) {}
@@ -206,10 +206,7 @@ export class TenantsComponent implements OnInit {
         });
     } else {
       this.tenantService
-        .updateDefaultConnectionString({
-          id: this.selected.id,
-          defaultConnectionString: this.connectionString,
-        })
+        .updateDefaultConnectionString(this.selected.id, this.connectionString)
         .pipe(
           take(1),
           finalize(() => (this.modalBusy = false)),
