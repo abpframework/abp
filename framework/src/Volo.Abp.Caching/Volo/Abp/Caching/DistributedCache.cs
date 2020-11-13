@@ -499,7 +499,7 @@ namespace Volo.Abp.Caching
                 return value;
             }
 
-            using (await SyncSemaphore.LockAsync(token))
+            using (await SyncSemaphore.LockAsync(token).ConfigureAwait(false))
             {
                 value = await GetAsync(key, hideErrors, considerUow, token);
                 if (value != null)
