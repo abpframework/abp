@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
@@ -20,9 +21,25 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 
         public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TryGetDateTime(out var dateTime))
+            if (!_options.DefaultDateTimeFormat.IsNullOrWhiteSpace())
             {
-                return  _clock.Normalize(dateTime);
+                if (reader.TokenType == JsonTokenType.String)
+                {
+                    var s = reader.GetString();
+                    if (DateTime.TryParseExact(s, _options.DefaultDateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var d1))
+                    {
+                        return  _clock.Normalize(d1);
+                    }
+
+                    throw new JsonException($"{s} cannot parse to DateTime({_options.DefaultDateTimeFormat})!");
+                }
+
+                throw new JsonException("reader TokenType is not String!");
+            }
+
+            if (reader.TryGetDateTime(out var d2))
+            {
+                return  _clock.Normalize(d2);
             }
 
             return null;
