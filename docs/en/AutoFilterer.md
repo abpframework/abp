@@ -38,12 +38,11 @@ public class YourModule : AbpModule
 
 ## Using the AutoFilterer
 
-- Create your filter dto:
+- Create your filter dto via using `AbpPaginationFilterBase` instead of AutoFilterer's default.
 
 ```csharp
-public class BookFilterDto : PaginationFilterBase
+public class BookFilterDto : AbpPaginationFilterBase // <-- Careful here
 {
-
     [StringFilterOptions(StringFilterOption.Contains)]
     public string Name { get; set; }
 
@@ -53,6 +52,10 @@ public class BookFilterDto : PaginationFilterBase
     public Range<DateTime> PublishDate { get; set; }
 
     public Range<float> Price { get; set; }
+
+    /* ... 
+     * Any other properties to filter.
+     */
 }
 ```
 
@@ -60,24 +63,6 @@ public class BookFilterDto : PaginationFilterBase
 
 
 ```csharp
-/* Old State: */
-public class BookAppService :
-    CrudAppService<
-        Book,
-        BookDto,
-        Guid, 
-        PagedAndSortedResultRequestDto,
-        CreateUpdateBookDto>,
-    IBookAppService
-{
-    protected BookAppService(IRepository<Book, Guid> repository) : base(repository)
-    {
-    }
-}
-```
-
-```csharp
-/* New State: */
 public class BookAppService :
     CrudAutoFiltererAppService<  // Change inheritance
         Book,
