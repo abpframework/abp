@@ -169,7 +169,7 @@ Since ABP has more than one language, Angular locale files loads lazily using [W
 
 ### registerLocaleFn
 
-A `registerLocaleFn` is a higher order function that accepts `cultureNameLocaleFileMap` object and `errorHandlerFn` function as params and returns Webpack import function. A `registerLocale` function must be passed to the `forRoot` of the `CoreModule` as shown below:
+`registerLocale` function that exported from `@abp/ng.core/locale` package is a higher order function that accepts `cultureNameLocaleFileMap` object and `errorHandlerFn` function as params and returns Webpack `import` function. A `registerLocale` function must be passed to the `forRoot` of the `CoreModule` as shown below:
 
 ```js
 // app.module.ts
