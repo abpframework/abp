@@ -625,8 +625,8 @@
               "text": "Core Functionality",
               "items": [
                 {
-                  "text": "Config State",
-                  "path": "UI/Angular/Config-State.md"
+                  "text": "Config State Service",
+                  "path": "UI/Angular/Config-State-Service.md"
                 },
                 {
                   "text": "HTTP Requests",
