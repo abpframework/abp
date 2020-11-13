@@ -27,7 +27,7 @@ If you haven't done it yet, see [this post](https://blog.abp.io/abp/ABP-Framewor
 
 ### State Management
 
-In the ABP Framework, we've been using `NGXS` for state management. However, we've decided that the ABP Framework should be agnostic with regard to state management. Our users should be able to handle the state in any way they prefer. They should be able to use any library other than `NGXS` or no library at all. That's why we have created our internal store in version 3.2. It is a simple utility class that employs `BehaviorSubject` internally. 
+In the ABP Angular UI, we've been using `NGXS` for state management. However, we've decided that the Angular UI should be agnostic with regard to state management. Our users should be able to handle the state in any way they prefer. They should be able to use any library other than `NGXS` or no library at all. That's why we have created our internal store in version 3.2. It is a simple utility class that employs `BehaviorSubject` internally. 
 
 You can examine it [here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/utils/internal-store-utils.ts)
 
