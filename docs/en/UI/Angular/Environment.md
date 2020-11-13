@@ -102,7 +102,7 @@ export interface RemoteEnv {
 * `method`: HTTP method to be used when retrieving environment config. Default: `GET`
 * `headers`: If extra headers are needed for the request, it can be set through this field.
 
-## EnvironmentService
+## EnvironmentService
 
 ` EnvironmentService` is a singleton service, i.e. provided in root level of your application, and keeps the environment in the internal store.
 
