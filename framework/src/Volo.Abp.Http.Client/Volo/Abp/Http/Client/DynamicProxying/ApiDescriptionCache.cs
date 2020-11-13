@@ -27,7 +27,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             string baseUrl, 
             Func<Task<ApplicationApiDescriptionModel>> factory)
         {
-            using (await _semaphore.LockAsync(CancellationTokenProvider.Token))
+            using (await _semaphore.LockAsync(CancellationTokenProvider.Token).ConfigureAwait(false))
             {
                 var model = _cache.GetOrDefault(baseUrl);
                 if (model == null)
