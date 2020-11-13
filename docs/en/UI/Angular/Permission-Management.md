@@ -20,6 +20,28 @@ export class YourComponent {
 }
 ```
 
+You may also **combine policy keys** to fine tune your selection:
+
+```js
+// this.permissionService is instance of PermissionService
+
+const hasIdentityAndAccountPermission = this.permissionService.getGrantedPolicy(
+  "Abp.Identity && Abp.Account"
+);
+
+const hasIdentityOrAccountPermission = this.permissionService.getGrantedPolicy(
+  "Abp.Identity || Abp.Account"
+);
+```
+
+Please consider the following **rules** when creating your permission selectors:
+
+- Maximum 2 keys can be combined.
+- `&&` operator looks for both keys.
+- `||` operator looks for either key.
+- Empty string `''` as key will return `true`
+- Using an operator without a second key will return `false`
+
 ## Permission Directive
 
 You can use the `PermissionDirective` to manage visibility of a DOM Element accordingly to user's permission.
