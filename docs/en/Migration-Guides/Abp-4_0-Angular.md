@@ -10,7 +10,7 @@ You can read more about Angular v11 [here](https://blog.angular.io/version-11-of
 
 ### **Localization**
 
-Prior to ABP 4.x, we'd handled what language files should be created to load them lazily. However, this made it impossible to add new language files (to be lazily loaded) for our users. With ABP 4.x, we enabled an option to pass a function to `CoreModule`.
+Prior to ABP 4.x, we'd handled what locale files of Angular should be created to load them lazily. However, this made it impossible to add new locale files (to be lazily loaded) for our users. With ABP 4.x, we enabled an option to pass a function to `CoreModule`.
 
 You can find the related issue [here](https://github.com/abpframework/abp/issues/6066)
 Also, please refer to [the docs](https://docs.abp.io/en/abp/latest/UI/Angular/Localization#registering-a-new-locale) for how to implement this.
