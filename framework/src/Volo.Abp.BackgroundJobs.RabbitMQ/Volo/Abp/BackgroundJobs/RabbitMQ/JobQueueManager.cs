@@ -64,7 +64,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return (IJobQueue<TArgs>)jobQueue;
             }
 
-            using (await SyncSemaphore.LockAsync())
+            using (await SyncSemaphore.LockAsync().ConfigureAwait(false))
             {
                 if (JobQueues.TryGetValue(jobConfiguration.JobName, out jobQueue))
                 {
