@@ -4,7 +4,7 @@ using AutoFilterer.Types;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Volo.Abp.AutoFilterer.Volo.Abp.AutoFilterer
+namespace Volo.Abp.AutoFilterer
 {
     [PossibleSortings(typeof(AuditedAggregateRoot))]
     public class AbpPaginationFilterBase : PaginationFilterBase, IPagedAndSortedResultRequest
