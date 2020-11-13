@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.AutoFilterer.Volo.Abp.AutoFilterer;
+using Volo.Abp.AutoFilterer;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
