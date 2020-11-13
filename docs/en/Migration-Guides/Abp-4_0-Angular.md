@@ -47,9 +47,9 @@ Moving away from the global store, we create small services with a single respon
 See [the related issue](https://github.com/abpframework/abp/issues/6154)
 
 Please refer to the following docs for detail information and examples
-- [`ConfigStateService`](../UI/Angular/Config-State-Service.md)
-- [`EnvironmentService`](../UI/Angular/Environment.md#EnvironmentService)
-- [`PermissionService`](../UI/Angular/Permission-Management.md#)
+- [`ConfigStateService`](../UI/Angular/Config-State-Service)
+- [`EnvironmentService`](../UI/Angular/Environment#EnvironmentService)
+- [`PermissionService`](../UI/Angular/Permission-Management#)
 
 ### Deprecated Interfaces
 
