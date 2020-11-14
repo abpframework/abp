@@ -134,26 +134,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual string NormalizeIdPropertyNameCase(PropertyInfo property, [CanBeNull] ConventionalControllerSetting configuration)
         {
-            if (configuration?.UseV3UrlStyle ?? Options.UseV3UrlStyle)
-            {
-                return property.Name;
-            }
-            else
-            {
-                return property.Name.ToKebabCase();
-            }
+            return property.Name;
         }
 
         protected virtual string NormalizeSecondaryIdNameCase(ParameterModel secondaryId, [CanBeNull] ConventionalControllerSetting configuration)
         {
-            if (configuration?.UseV3UrlStyle ?? Options.UseV3UrlStyle)
-            {
-                return secondaryId.ParameterName;
-            }
-            else
-            {
-                return secondaryId.ParameterName.ToKebabCase();
-            }
+            return secondaryId.ParameterName;
         }
     }
 }
