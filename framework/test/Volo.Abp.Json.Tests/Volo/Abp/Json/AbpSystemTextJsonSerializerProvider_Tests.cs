@@ -4,6 +4,7 @@ using Shouldly;
 using Volo.Abp.Data;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.Timing;
 using Xunit;
 
 namespace Volo.Abp.Json
@@ -167,6 +168,9 @@ namespace Volo.Abp.Json
             file.CreationTime.Year.ShouldBe(2020);
             file.CreationTime.Month.ShouldBe(11);
             file.CreationTime.Day.ShouldBe(20);
+
+            var newJson = JsonSerializer.Serialize(file);
+            newJson.ShouldBe(json);
         }
 
         [Fact]
@@ -187,10 +191,13 @@ namespace Volo.Abp.Json
             file.CreationTime.Value.Year.ShouldBe(2020);
             file.CreationTime.Value.Month.ShouldBe(11);
             file.CreationTime.Value.Day.ShouldBe(20);
+
+            var newJson = JsonSerializer.Serialize(file);
+            newJson.ShouldBe(json);
         }
     }
 
-    public class AbpSystemTextJsonSerializerProviderDefaultDateTimeFormat_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+    public class AbpSystemTextJsonSerializerProvider_DateTimeFormat_Tests : AbpSystemTextJsonSerializerProvider_TestBase
     {
         protected override void AfterAddApplication(IServiceCollection services)
         {
@@ -208,6 +215,9 @@ namespace Volo.Abp.Json
             file.CreationTime.Year.ShouldBe(2020);
             file.CreationTime.Month.ShouldBe(11);
             file.CreationTime.Day.ShouldBe(20);
+
+            var newJson = JsonSerializer.Serialize(file);
+            newJson.ShouldBe(json);
         }
 
         [Fact]
@@ -228,6 +238,45 @@ namespace Volo.Abp.Json
             file.CreationTime.Value.Year.ShouldBe(2020);
             file.CreationTime.Value.Month.ShouldBe(11);
             file.CreationTime.Value.Day.ShouldBe(20);
+
+            var newJson = JsonSerializer.Serialize(file);
+            newJson.ShouldBe(json);
         }
+    }
+
+    public abstract class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+    {
+        protected DateTimeKind Kind { get; set; } = DateTimeKind.Unspecified;
+
+        [Fact]
+        public void Serialize_Deserialize()
+        {
+            var json = "{\"name\":\"abp\",\"creationTime\":\"2020-11-20T00:00:00\"}";
+            var file = JsonSerializer.Deserialize<FileWithDatetime>(json);
+            file.CreationTime.Kind.ShouldBe(Kind);
+        }
+    }
+
+    public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_UTC_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+    {
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            Kind = DateTimeKind.Utc;
+            services.Configure<AbpClockOptions>(x => x.Kind = Kind);
+        }
+    }
+
+    public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Local_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+    {
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            Kind = DateTimeKind.Local;
+            services.Configure<AbpClockOptions>(x => x.Kind = Kind);
+        }
+    }
+
+    public class AbpSystemTextJsonSerializerProvider_Datetime_Kind_Unspecified_Tests : AbpSystemTextJsonSerializerProvider_Datetime_Kind_Tests
+    {
+
     }
 }
