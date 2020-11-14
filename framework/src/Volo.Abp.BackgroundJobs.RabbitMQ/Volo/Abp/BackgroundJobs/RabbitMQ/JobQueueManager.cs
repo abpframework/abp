@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -64,7 +63,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return (IJobQueue<TArgs>)jobQueue;
             }
 
-            using (await SyncSemaphore.LockAsync().ConfigureAwait(false))
+            using (await SyncSemaphore.LockAsync())
             {
                 if (JobQueues.TryGetValue(jobConfiguration.JobName, out jobQueue))
                 {

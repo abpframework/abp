@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Volo.Abp.ExceptionHandling;
@@ -76,7 +75,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         {
             CheckDisposed();
 
-            using (await SyncObj.LockAsync().ConfigureAwait(false))
+            using (await SyncObj.LockAsync())
             {
                 await EnsureInitializedAsync();
 
@@ -95,7 +94,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return;
             }
 
-            using (await SyncObj.LockAsync().ConfigureAwait(false))
+            using (await SyncObj.LockAsync(cancellationToken))
             {
                 await EnsureInitializedAsync();
             }
