@@ -8,15 +8,71 @@ using Xunit;
 
 namespace Volo.Abp.Json
 {
-    public class AbpSystemTextJsonSerializerProvider_Tests : AbpJsonTestBase
+    public abstract class AbpSystemTextJsonSerializerProvider_TestBase : AbpJsonTestBase
     {
         protected AbpSystemTextJsonSerializerProvider JsonSerializer;
 
-        public AbpSystemTextJsonSerializerProvider_Tests()
+        public AbpSystemTextJsonSerializerProvider_TestBase()
         {
             JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializerProvider>();
         }
 
+        public class TestExtensibleObjectClass : ExtensibleObject
+        {
+            public string Name { get; set; }
+        }
+
+        public class FileWithBoolean
+        {
+            public string Name { get; set; }
+
+            public bool IsDeleted { get; set; }
+        }
+
+        public class FileWithNullableBoolean
+        {
+            public string Name { get; set; }
+
+            public bool? IsDeleted { get; set; }
+        }
+
+        public class FileWithEnum
+        {
+            public string Name { get; set; }
+
+            public FileType Type { get; set; }
+        }
+
+        public class FileWithNullableEnum
+        {
+            public string Name { get; set; }
+
+            public FileType? Type { get; set; }
+        }
+
+        public enum FileType
+        {
+            Zip = 0,
+            Exe = 2
+        }
+
+        public class FileWithDatetime
+        {
+            public string Name { get; set; }
+
+            public DateTime CreationTime { get; set; }
+        }
+
+        public class FileWithNullableDatetime
+        {
+            public string Name { get; set; }
+
+            public DateTime? CreationTime { get; set; }
+        }
+    }
+
+    public class AbpSystemTextJsonSerializerProvider_Tests : AbpSystemTextJsonSerializerProvider_TestBase
+    {
         [Fact]
         public void Serialize_Deserialize_With_Boolean()
         {
@@ -132,62 +188,9 @@ namespace Volo.Abp.Json
             file.CreationTime.Value.Month.ShouldBe(11);
             file.CreationTime.Value.Day.ShouldBe(20);
         }
-
-        class TestExtensibleObjectClass : ExtensibleObject
-        {
-            public string Name { get; set; }
-        }
-
-        class FileWithBoolean
-        {
-            public string Name { get; set; }
-
-            public bool IsDeleted { get; set; }
-        }
-
-        class FileWithNullableBoolean
-        {
-            public string Name { get; set; }
-
-            public bool? IsDeleted { get; set; }
-        }
-
-        class FileWithEnum
-        {
-            public string Name { get; set; }
-
-            public FileType Type { get; set; }
-        }
-
-        class FileWithNullableEnum
-        {
-            public string Name { get; set; }
-
-            public FileType? Type { get; set; }
-        }
-
-        enum FileType
-        {
-            Zip = 0,
-            Exe = 2
-        }
-
-        protected class FileWithDatetime
-        {
-            public string Name { get; set; }
-
-            public DateTime CreationTime { get; set; }
-        }
-
-        protected class FileWithNullableDatetime
-        {
-            public string Name { get; set; }
-
-            public DateTime? CreationTime { get; set; }
-        }
     }
 
-    public class FormatAbpSystemTextJsonSerializerProvider_Tests : AbpSystemTextJsonSerializerProvider_Tests
+    public class AbpSystemTextJsonSerializerProviderDefaultDateTimeFormat_Tests : AbpSystemTextJsonSerializerProvider_TestBase
     {
         protected override void AfterAddApplication(IServiceCollection services)
         {
