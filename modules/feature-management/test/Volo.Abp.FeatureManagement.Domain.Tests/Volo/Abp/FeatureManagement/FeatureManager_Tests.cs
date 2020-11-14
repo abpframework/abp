@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Features;
@@ -19,7 +20,15 @@ namespace Volo.Abp.FeatureManagement
             _featureChecker = GetRequiredService<IFeatureChecker>();
             _currentTenant = GetRequiredService<ICurrentTenant>();
         }
-
+        [Fact]
+        public async Task Should_Get_A_Correct_FeatureValue_By_GetAllWithProviderAsync()
+        {
+            (await _featureManager.GetAllWithProviderAsync(
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Enterprise.ToString()
+            )).FirstOrDefault(x=>x.Name== TestFeatureDefinitionProvider.ProjectCount)
+            .Value.ShouldBe("3");
+        }
         [Fact]
         public async Task Should_Get_A_FeatureValue_For_A_Provider()
         {
