@@ -20,10 +20,10 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
             {
                 var extensibleObject = JsonSerializer.Deserialize<T>(rootElement.GetRawText(), newOptions);
 
-                var extraProperties = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IHasExtraProperties.ExtraProperties), StringComparison.OrdinalIgnoreCase));
-                if (extraProperties.Value.ValueKind == JsonValueKind.Object)
+                var extraPropertiesJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IHasExtraProperties.ExtraProperties), StringComparison.OrdinalIgnoreCase));
+                if (extraPropertiesJsonProperty.Value.ValueKind == JsonValueKind.Object)
                 {
-                    var extraPropertyDictionary = JsonSerializer.Deserialize(extraProperties.Value.GetRawText(), typeof(ExtraPropertyDictionary), newOptions);
+                    var extraPropertyDictionary = JsonSerializer.Deserialize(extraPropertiesJsonProperty.Value.GetRawText(), typeof(ExtraPropertyDictionary), newOptions);
                     ObjectHelper.TrySetProperty(extensibleObject, x => x.ExtraProperties, () => extraPropertyDictionary);
                 }
 
