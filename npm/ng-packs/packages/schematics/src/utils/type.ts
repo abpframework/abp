@@ -13,7 +13,16 @@ export function createTypeSimplifier() {
       /System\.([0-9A-Za-z.]+)/g,
       (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
     );
-    return type.split('.').pop()!;
+    
+    let regexp = new RegExp(/.*(?<=\.)(?<generic>.+)<.*(?<=[\.<])(?<genericType>.+)>/gm);
+    let groups=regexp.exec(type)?.groups;
+
+    if(!groups?.generic){
+      return type.split('.').pop()!;
+    }
+    else{
+      return `${groups?.generic}<${groups?.genericType}>`
+    }
   });
 
   return (type: string) => {
@@ -95,8 +104,8 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
     const path = VOLO_REGEX.test(type)
       ? '@abp/ng.core'
       : isEnum
-      ? relativePathToEnum(namespace, modelNamespace, specifiers[0])
-      : relativePathToModel(namespace, modelNamespace);
+        ? relativePathToEnum(namespace, modelNamespace, specifiers[0])
+        : relativePathToModel(namespace, modelNamespace);
 
     return new Import({ keyword: eImportKeyword.Type, path, refs, specifiers });
   };
