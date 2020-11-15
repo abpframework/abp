@@ -26,15 +26,15 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
                 if (reader.TokenType == JsonTokenType.String)
                 {
                     var s = reader.GetString();
-                    if (DateTime.TryParseExact(s, _options.DefaultDateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var d1))
+                    if (DateTime.TryParseExact(s, _options.DefaultDateTimeFormat, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d1))
                     {
                         return  _clock.Normalize(d1);
                     }
 
-                    throw new JsonException($"{s} cannot parse to DateTime({_options.DefaultDateTimeFormat})!");
+                    throw new JsonException($"'{s}' can't parse to DateTime({_options.DefaultDateTimeFormat})!");
                 }
 
-                throw new JsonException("reader TokenType is not String!");
+                throw new JsonException("Reader's TokenType is not String!");
             }
 
             if (reader.TryGetDateTime(out var d2))
@@ -42,7 +42,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
                 return  _clock.Normalize(d2);
             }
 
-            throw new JsonException("reader can't get datetime!");
+            throw new JsonException("Can't get datetime from the reader!");
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
@@ -53,7 +53,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
             }
             else
             {
-                writer.WriteStringValue(_clock.Normalize(value).ToString(_options.DefaultDateTimeFormat));
+                writer.WriteStringValue(_clock.Normalize(value).ToString(_options.DefaultDateTimeFormat, CultureInfo.CurrentUICulture));
             }
         }
     }

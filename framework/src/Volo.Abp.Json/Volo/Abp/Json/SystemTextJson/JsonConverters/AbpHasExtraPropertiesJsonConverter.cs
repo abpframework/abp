@@ -30,7 +30,7 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
                 return extensibleObject;
             }
 
-            throw new JsonException("RootElement ValueKind is not Object!");
+            throw new JsonException("RootElement's ValueKind is not Object!");
         }
 
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)

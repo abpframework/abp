@@ -152,9 +152,27 @@ namespace Volo.Abp.Json
         }
 
         [Fact]
-        public void Serialize_Deserialize_ExtensibleObject_With_ExtraProperties_String()
+        public void Serialize_Deserialize_ExtensibleObject_Without_String()
         {
             var json = "{\"name\":\"test\"}";
+            var extensibleObject = JsonSerializer.Deserialize<TestExtensibleObjectClass>(json);
+            extensibleObject.ExtraProperties.ShouldNotBeNull();
+            extensibleObject.ExtraProperties.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Serialize_Deserialize_ExtensibleObject_Without_Empty()
+        {
+            var json = "{\"name\":\"test\",\"extraProperties\":{}}";
+            var extensibleObject = JsonSerializer.Deserialize<TestExtensibleObjectClass>(json);
+            extensibleObject.ExtraProperties.ShouldNotBeNull();
+            extensibleObject.ExtraProperties.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public void Serialize_Deserialize_ExtensibleObject_Without_Null()
+        {
+            var json = "{\"name\":\"test\",\"extraProperties\":null}";
             var extensibleObject = JsonSerializer.Deserialize<TestExtensibleObjectClass>(json);
             extensibleObject.ExtraProperties.ShouldNotBeNull();
             extensibleObject.ExtraProperties.ShouldBeEmpty();

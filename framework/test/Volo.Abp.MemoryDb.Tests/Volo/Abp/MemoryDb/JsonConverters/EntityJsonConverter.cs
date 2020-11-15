@@ -27,7 +27,7 @@ namespace Volo.Abp.MemoryDb.JsonConverters
                 return entity;
             }
 
-            throw new JsonException("RootElement ValueKind is not Object!");
+            throw new JsonException("RootElement's ValueKind is not Object!");
         }
 
         public override void Write(Utf8JsonWriter writer, TEntity value, JsonSerializerOptions options)
