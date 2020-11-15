@@ -83,8 +83,8 @@ namespace Volo.Abp.FeatureManagement
                 providers = providers.TakeWhile(c => c.Name == providerName);
             }
 
-            var providersList = providers.ToList();
-            if (!providersList.Any())
+            var providerList = providers.ToList();
+            if (!providerList.Any())
             {
                 return new List<FeatureNameValueWithGrantedProvider>();
             }
@@ -94,7 +94,7 @@ namespace Volo.Abp.FeatureManagement
             foreach (var feature in featureDefinitions)
             {
                 var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(feature.Name, null);
-                foreach (var provider in providersList)
+                foreach (var provider in providerList)
                 {
                     string pk = null;
                     if (provider.Compatible(providerName))
