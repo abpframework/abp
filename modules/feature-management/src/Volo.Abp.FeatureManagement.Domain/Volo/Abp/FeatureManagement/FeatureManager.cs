@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -76,15 +76,15 @@ namespace Volo.Abp.FeatureManagement
             Check.NotNull(providerName, nameof(providerName));
 
             var featureDefinitions = FeatureDefinitionManager.GetAll();
-            var providers = Enumerable.Reverse(Providers)
-                .SkipWhile(c => c.Name != providerName);
+            var providers = Enumerable.Reverse(Providers).SkipWhile(c => c.Name != providerName);
 
             if (!fallback)
             {
                 providers = providers.TakeWhile(c => c.Name == providerName);
             }
 
-            if (!providers.Any())
+            var providersList = providers.ToList();
+            if (!providersList.Any())
             {
                 return new List<FeatureNameValueWithGrantedProvider>();
             }
@@ -94,7 +94,7 @@ namespace Volo.Abp.FeatureManagement
             foreach (var feature in featureDefinitions)
             {
                 var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(feature.Name, null);
-                foreach (var provider in providers)
+                foreach (var provider in providersList)
                 {
                     string pk = null;
                     if (provider.Compatible(providerName))
