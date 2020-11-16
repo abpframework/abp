@@ -567,25 +567,44 @@
               "path": "UI/Blazor/Overall.md"
             },
             {
-              "text": "Services",
-              "items": [
-                {
-                  "text": "Localization",
-                  "path": "UI/Blazor/Localization.md"
-                },
-                {
-                  "text": "Settings",
-                  "path": "UI/Blazor/Settings.md"
-                },
-                {
-                  "text": "Notification",
-                  "path": "UI/Blazor/Notification.md"
-                },
-                {
-                  "text": "Message",
-                  "path": "UI/Blazor/Message.md"
-                }
-              ]
+              "text": "Navigation / Menu",
+              "path": "UI/Blazor/Navigation-Menu.md"
+            },
+            {
+              "text": "Localization",
+              "path": "UI/Blazor/Localization.md"
+            },
+            {
+              "text": "Settings",
+              "path": "UI/Blazor/Settings.md"
+            },
+            {
+              "text": "Notification",
+              "path": "UI/Blazor/Notification.md"
+            },
+            {
+              "text": "Message",
+              "path": "UI/Blazor/Message.md"
+            },
+            {
+              "text": "Theming",
+              "path": "UI/Blazor/Theming.md"
+            },
+            {
+              "text": "Toolbars",
+              "path": "UI/Blazor/Toolbars.md"
+            },
+            {
+              "text": "Customization / Overriding Components",
+              "path": "UI/Blazor/Customization-Overriding-Components.md"
+            },
+            {
+              "text": "Global Scripts & Styles",
+              "path": "UI/Blazor/Global-Scripts-Styles.md"
+            },
+            {
+              "text": "Authentication",
+              "path": "UI/Blazor/Authentication.md"
             }
           ]
         },
