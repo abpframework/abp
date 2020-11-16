@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using JetBrains.Annotations;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
@@ -47,12 +48,27 @@ namespace Volo.Abp.ObjectExtending.Modularity
                 propertyName,
                 () => new ExtensionPropertyConfiguration(this, propertyType, propertyName)
             );
-
             configureAction?.Invoke(propertyInfo);
 
             NormalizeProperty(propertyInfo);
 
+            AddLookupProperty(propertyInfo);
+
             return this;
+        }
+
+        private void AddLookupProperty(ExtensionPropertyConfiguration propertyInfo)
+        {
+            if (!propertyInfo.UI.Lookup.Url.IsNullOrEmpty())
+            {
+                var lookupPropertyName = $"{propertyInfo.Name}_Text";
+                var lookupPropertyInfo = Properties.GetOrAdd(
+                   lookupPropertyName,
+                   () => new ExtensionPropertyConfiguration(this, typeof(string), lookupPropertyName)
+               );
+                lookupPropertyInfo.DisplayName = propertyInfo.DisplayName ?? new FixedLocalizableString(propertyInfo.Name);
+                propertyInfo.UI.OnTable.IsVisible = false;
+            }
         }
 
         [NotNull]
