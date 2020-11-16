@@ -52,23 +52,23 @@ namespace Volo.Abp.ObjectExtending.Modularity
 
             NormalizeProperty(propertyInfo);
 
-            AddLookupProperty(propertyInfo);
-
+            if (!propertyInfo.UI.Lookup.Url.IsNullOrEmpty())
+            {
+                AddLookupTextProperty(propertyInfo);
+                propertyInfo.UI.OnTable.IsVisible = false;
+                propertyInfo.Api.OnGet.IsAvailable = false;
+            }
             return this;
         }
 
-        private void AddLookupProperty(ExtensionPropertyConfiguration propertyInfo)
+        private void AddLookupTextProperty(ExtensionPropertyConfiguration propertyInfo)
         {
-            if (!propertyInfo.UI.Lookup.Url.IsNullOrEmpty())
-            {
-                var lookupPropertyName = $"{propertyInfo.Name}_Text";
-                var lookupPropertyInfo = Properties.GetOrAdd(
-                   lookupPropertyName,
-                   () => new ExtensionPropertyConfiguration(this, typeof(string), lookupPropertyName)
-               );
-                lookupPropertyInfo.DisplayName = propertyInfo.DisplayName ?? new FixedLocalizableString(propertyInfo.Name);
-                propertyInfo.UI.OnTable.IsVisible = false;
-            }
+            var lookupTextPropertyName = $"{propertyInfo.Name}_Text";
+            var lookupTextPropertyInfo = Properties.GetOrAdd(
+               lookupTextPropertyName,
+               () => new ExtensionPropertyConfiguration(this, typeof(string), lookupTextPropertyName)
+           );
+            lookupTextPropertyInfo.DisplayName = propertyInfo.DisplayName ?? new FixedLocalizableString(propertyInfo.Name);
         }
 
         [NotNull]
