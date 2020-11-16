@@ -60,6 +60,14 @@ namespace Volo.Abp.FeatureManagement
                                         MinValue = 10
                                     }
                                 }
+                            },
+                            new FeatureDto
+                            {
+                                Provider = new FeatureProviderDto
+                                {
+                                    Name = "FeatureName",
+                                    Key = "FeatureKey"
+                                }
                             }
                         }
                     }
@@ -85,6 +93,9 @@ namespace Volo.Abp.FeatureManagement
             featureListDto2.Groups[0].Features[2].ValueType.Validator.ShouldBeOfType<NumericValueValidator>();
             featureListDto2.Groups[0].Features[2].ValueType.Validator.As<NumericValueValidator>().MaxValue.ShouldBe(1000);
             featureListDto2.Groups[0].Features[2].ValueType.Validator.As<NumericValueValidator>().MinValue.ShouldBe(10);
+
+            featureListDto2.Groups[0].Features[3].Provider.Name.ShouldBe("FeatureName");
+            featureListDto2.Groups[0].Features[3].Provider.Key.ShouldBe("FeatureKey");
         }
     }
 }

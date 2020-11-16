@@ -11,15 +11,25 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
         public override IStringValueType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var name = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IStringValueType.Name), StringComparison.OrdinalIgnoreCase)).Value.GetString();
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(), new SelectionStringValueItemSourceJsonConverter());
-            return name switch
+
+            var nameJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IStringValueType.Name), StringComparison.OrdinalIgnoreCase));
+            if (nameJsonProperty.Value.ValueKind == JsonValueKind.String)
             {
-                "SelectionStringValueType" =>  JsonSerializer.Deserialize<SelectionStringValueType>(rootElement.GetRawText(), newOptions),
-                "FreeTextStringValueType" => JsonSerializer.Deserialize<FreeTextStringValueType>(rootElement.GetRawText(), newOptions),
-                "ToggleStringValueType" => JsonSerializer.Deserialize<ToggleStringValueType>(rootElement.GetRawText(), newOptions),
-                _ => throw new ArgumentException($"{nameof(IStringValueType)} named {name} was not found!")
-            };
+                var name = nameJsonProperty.Value.GetString();
+
+                var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ValueValidatorJsonConverter(),
+                    new SelectionStringValueItemSourceJsonConverter());
+
+                return name switch
+                {
+                    "SelectionStringValueType" =>  JsonSerializer.Deserialize<SelectionStringValueType>(rootElement.GetRawText(), newOptions),
+                    "FreeTextStringValueType" => JsonSerializer.Deserialize<FreeTextStringValueType>(rootElement.GetRawText(), newOptions),
+                    "ToggleStringValueType" => JsonSerializer.Deserialize<ToggleStringValueType>(rootElement.GetRawText(), newOptions),
+                    _ => throw new ArgumentException($"{nameof(IStringValueType)} named {name} was not found!")
+                };
+            }
+
+            throw new JsonException($"Can't to get the {nameof(IStringValueType.Name)} property of {nameof(IStringValueType)}!");
         }
 
         public override void Write(Utf8JsonWriter writer, IStringValueType value, JsonSerializerOptions options)

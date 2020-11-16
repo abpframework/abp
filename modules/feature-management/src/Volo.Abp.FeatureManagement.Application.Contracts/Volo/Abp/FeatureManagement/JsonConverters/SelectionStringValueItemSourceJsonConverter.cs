@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -11,16 +10,22 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
     {
         public override ISelectionStringValueItemSource Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
-
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var items = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(ISelectionStringValueItemSource.Items), StringComparison.OrdinalIgnoreCase)).Value.GetRawText();
+            var itemsJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x =>
+                x.Name.Equals(nameof(ISelectionStringValueItemSource.Items), StringComparison.OrdinalIgnoreCase));
 
-            var selectionStringValueItem =
-                JsonSerializer.Deserialize<List<LocalizableSelectionStringValueItem>>(items, newOptions) ??
-                new List<LocalizableSelectionStringValueItem>();
+            if (itemsJsonProperty.Value.ValueKind == JsonValueKind.Array)
+            {
+                var newOptions = JsonSerializerOptionsHelper.Create(options, this);
 
-            return new StaticSelectionStringValueItemSource(selectionStringValueItem.ToArray().As<ISelectionStringValueItem[]>());
+                var selectionStringValueItem =
+                    JsonSerializer.Deserialize<LocalizableSelectionStringValueItem[]>(itemsJsonProperty.Value.GetRawText(), newOptions) ??
+                    Array.Empty<LocalizableSelectionStringValueItem>();
+
+                return new StaticSelectionStringValueItemSource(selectionStringValueItem.As<ISelectionStringValueItem[]>());
+            }
+
+            throw new JsonException($"Can't to get the {nameof(ISelectionStringValueItemSource.Items)} property of {nameof(ISelectionStringValueItemSource)}!");
         }
 
         public override void Write(Utf8JsonWriter writer, ISelectionStringValueItemSource value, JsonSerializerOptions options)
