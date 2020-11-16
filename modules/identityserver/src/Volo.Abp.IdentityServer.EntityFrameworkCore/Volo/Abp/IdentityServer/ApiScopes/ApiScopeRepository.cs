@@ -28,6 +28,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         {
             var query = from scope in DbSet.IncludeDetails(includeDetails)
                 where scopeNames.Contains(scope.Name)
+                orderby scope.Id
                 select scope;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));

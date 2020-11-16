@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -27,9 +27,10 @@ namespace Volo.Abp.IdentityServer.MongoDB
 
         public virtual async Task<PersistedGrant> FindByKeyAsync(string key, CancellationToken cancellationToken = default)
         {
-
             return await GetMongoQueryable()
-                .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken));
+                .Where(x => x.Key == key)
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<PersistedGrant>> GetListBySubjectIdAsync(string subjectId, CancellationToken cancellationToken = default)
