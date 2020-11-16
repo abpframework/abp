@@ -16,15 +16,21 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
                 x.GetType() == typeof(AbpHasExtraPropertiesJsonConverterFactory));
 
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var extensibleObject = JsonSerializer.Deserialize<T>(rootElement.GetRawText(), newOptions);
+            if (rootElement.ValueKind == JsonValueKind.Object)
+            {
+                var extensibleObject = JsonSerializer.Deserialize<T>(rootElement.GetRawText(), newOptions);
 
-            var extraProperties = rootElement.EnumerateObject().FirstOrDefault(x =>
-                    x.Name.Equals(nameof(IHasExtraProperties.ExtraProperties), StringComparison.OrdinalIgnoreCase))
-                .Value.GetRawText();
-            var extraPropertyDictionary = JsonSerializer.Deserialize(extraProperties, typeof(ExtraPropertyDictionary), newOptions);
-            ObjectHelper.TrySetProperty(extensibleObject, x => x.ExtraProperties, () => extraPropertyDictionary);
+                var extraPropertiesJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IHasExtraProperties.ExtraProperties), StringComparison.OrdinalIgnoreCase));
+                if (extraPropertiesJsonProperty.Value.ValueKind == JsonValueKind.Object)
+                {
+                    var extraPropertyDictionary = JsonSerializer.Deserialize(extraPropertiesJsonProperty.Value.GetRawText(), typeof(ExtraPropertyDictionary), newOptions);
+                    ObjectHelper.TrySetProperty(extensibleObject, x => x.ExtraProperties, () => extraPropertyDictionary);
+                }
 
-            return extensibleObject;
+                return extensibleObject;
+            }
+
+            throw new JsonException("RootElement's ValueKind is not Object!");
         }
 
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)

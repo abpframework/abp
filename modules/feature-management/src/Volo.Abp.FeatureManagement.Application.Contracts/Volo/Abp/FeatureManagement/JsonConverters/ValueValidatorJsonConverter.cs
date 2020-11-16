@@ -13,21 +13,30 @@ namespace Volo.Abp.FeatureManagement.JsonConverters
         public override IValueValidator Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var rootElement = JsonDocument.ParseValue(ref reader).RootElement;
-            var name = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Name), StringComparison.OrdinalIgnoreCase)).Value.GetString();
-            var valueValidator = CreateValueValidatorByName(name);
 
-            var propertiesRawText = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Properties), StringComparison.OrdinalIgnoreCase)).Value.GetRawText();
-            var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ObjectToInferredTypesConverter());
-            var properties = JsonSerializer.Deserialize<IDictionary<string, object>>(propertiesRawText, newOptions);
-            if (properties != null && properties.Any())
+            var nameJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Name), StringComparison.OrdinalIgnoreCase));
+            if (nameJsonProperty.Value.ValueKind == JsonValueKind.String)
             {
-                foreach (var property in properties)
+                var valueValidator = CreateValueValidatorByName(nameJsonProperty.Value.GetString());
+
+                var propertiesJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Properties), StringComparison.OrdinalIgnoreCase));
+                if (propertiesJsonProperty.Value.ValueKind == JsonValueKind.Object)
                 {
-                    valueValidator.Properties[property.Key] = property.Value;
+                    var newOptions = JsonSerializerOptionsHelper.Create(options, this, new ObjectToInferredTypesConverter());
+                    var properties = JsonSerializer.Deserialize<IDictionary<string, object>>(propertiesJsonProperty.Value.GetRawText(), newOptions);
+                    if (properties != null && properties.Any())
+                    {
+                        foreach (var property in properties)
+                        {
+                            valueValidator.Properties[property.Key] = property.Value;
+                        }
+                    }
                 }
+
+                return valueValidator;
             }
 
-            return valueValidator;
+            throw new JsonException($"Can't to get the {nameof(IValueValidator.Name)} property of {nameof(IValueValidator)}!");
         }
 
         public override void Write(Utf8JsonWriter writer, IValueValidator value, JsonSerializerOptions options)
