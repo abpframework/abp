@@ -27,7 +27,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                 return reader;
             }
 
-            using (await SyncObj.LockAsync().ConfigureAwait(false))
+            using (await SyncObj.LockAsync())
             {
                 if (ReaderCache.TryGetValue(templateDefinition.Name, out reader))
                 {
