@@ -59,12 +59,12 @@
     bootstrap "^4.5.0"
     bootstrap-v4-rtl "4.4.1-2"
 
-"@abp/clipboard@~4.0.0-rc.2":
-  version "4.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-4.0.0-rc.2.tgz#e85bf37ac204a513c0d74173dfe39bb5067599da"
-  integrity sha512-jNep1oOekiaRJfUIW7yVJU9PmsrhAFJ6Hq428u36/7BfbytBULTR/SbmNlHB3derjUpQwSNKqwogq+01FaPwdA==
+"@abp/clipboard@~4.0.0-rc.3":
+  version "4.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-4.0.0-rc.3.tgz#6c49aaf8704843265e227e4f764bcacf466f2fb5"
+  integrity sha512-OlL+q9hIOVR2o74D42hHdrbWk8G7fiS9FJaDBQtTvhgoAuVDKrtzfjUPC9cruEX+NrQxSwq7yrFGLGDet4jWUQ==
   dependencies:
-    "@abp/core" "~4.0.0-rc.2"
+    "@abp/core" "~4.0.0-rc.3"
     clipboard "^2.0.6"
 
 "@abp/core@~4.0.0-rc.2":
@@ -73,6 +73,13 @@
   integrity sha512-bG05CxrBqb+a02t7/XQy4sfOfUryCVkWskj7eTM1K05WTplwqztEhFfMLWut8WpTKROjVrIgrkXgJzJw5ulAmA==
   dependencies:
     "@abp/utils" "^4.0.0-rc.2"
+
+"@abp/core@~4.0.0-rc.3":
+  version "4.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-4.0.0-rc.3.tgz#bb52ae7539ae49a55bbd9aadc35429d779efdab9"
+  integrity sha512-CpZ7HjefHj6lq4KDGNT2Xs4kT6mnxL0XTrFrM4N08JF+9diKBEDM8HAMhoXo/psxGyu6Kt2JHqPGWo+aYc3uzQ==
+  dependencies:
+    "@abp/utils" "^4.0.0-rc.3"
 
 "@abp/datatables.net-bs4@~4.0.0-rc.2":
   version "4.0.0-rc.2"
@@ -154,13 +161,13 @@
     "@abp/core" "~4.0.0-rc.2"
     malihu-custom-scrollbar-plugin "^3.1.5"
 
-"@abp/prismjs@^4.0.0-rc.2":
-  version "4.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-4.0.0-rc.2.tgz#91433e23a7d1af068bd81053a16db6dbc343490b"
-  integrity sha512-fcrcpqRsL5D2nTD+0+rT6xSl/aheR2bxiw08LlGacxVUnzAtYCwjXi5iUu1++e/r1rB3MbuWYtLFdC8mQWJkVg==
+"@abp/prismjs@^4.0.0-rc.3":
+  version "4.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-4.0.0-rc.3.tgz#0070dfd3558a92d7f9766c279381594e59d0a409"
+  integrity sha512-o4zrCNHuoRasvzQWt+8Yj8mjgJOYWW53V4axGtNlK5NaYJaCZrEedm377gxfL9l5QXYkLZ1bcg3YPEoBPNj3UA==
   dependencies:
-    "@abp/clipboard" "~4.0.0-rc.2"
-    "@abp/core" "~4.0.0-rc.2"
+    "@abp/clipboard" "~4.0.0-rc.3"
+    "@abp/core" "~4.0.0-rc.3"
     prismjs "^1.20.0"
 
 "@abp/select2@~4.0.0-rc.2":
@@ -199,6 +206,13 @@
   version "4.0.0-rc.2"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-4.0.0-rc.2.tgz#ac9ba4f74168d9a949bc60a4a648240f0b5cf26e"
   integrity sha512-9Wkrup3XXrPk0B9lR7r7wI7D/0brFK/8X110lWKGPW5QFBVUrVVWuX3Mu7AX003Ez1ts/1pe/9D/QIbHZ579Xw==
+  dependencies:
+    just-compare "^1.3.0"
+
+"@abp/utils@^4.0.0-rc.3":
+  version "4.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-4.0.0-rc.3.tgz#95a67fc0f7c929e0404d33ee2ab8571c30e7f28d"
+  integrity sha512-6KH7Tddx5vQQ8j3vhDlveAyDw8VSnLlTpEKaNtQmIyJ+yZ025Faa3m+MKb83jXxDE9hPi3v8QGagEOT5TQjNHg==
   dependencies:
     just-compare "^1.3.0"
 
