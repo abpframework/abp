@@ -89,5 +89,6 @@ export class SessionStateService {
 
     this.store.patch({ language });
     document.documentElement.setAttribute('lang', language);
+    document.cookie = `.AspNetCore.Culture=${encodeURIComponent(`c=${language}|uic=${language}`)}`;
   }
 }
