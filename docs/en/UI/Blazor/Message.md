@@ -13,6 +13,11 @@ namespace MyProject.Blazor.Pages
     {
         public IUiMessageService UiMessageService { get; set; }
 
+        public Index(IUiMessageService uiMessageService)
+        {
+            UiMessageService = uiMessageService;
+        }
+
         public async Task SaveAsync()
         {
             await UiMessageService.Success("Your changes have been successfully saved!", "Congratulations");
@@ -24,6 +29,22 @@ namespace MyProject.Blazor.Pages
 It will show a dialog on the UI:
 
 ![blazor-message-success](../../images/blazor-message-success.png)
+
+If you inherit your page or component from `AbpComponentBase` class, you can use the `Message` property to access the `IUiMessageService`.
+
+```csharp
+namespace MyProject.Blazor.Pages
+{
+    public partial class Index : AbpComponentBase
+    {
+        public async Task SaveAsync()
+        {
+            await Message.Success("Your changes have been successfully saved!", "Congratulations");
+        }
+    }
+}
+```
+
 
 ## Informative Messages
 
@@ -51,7 +72,7 @@ UiMessageService.Error('Your credit card number is not valid!');
 
 ## Confirmation Message
 
-`IUiMessage.Confirm(...)` method can be used to get a confirmation from the user.
+`IUiMessageService.Confirm(...)` method can be used to get a confirmation from the user.
 
 **Example**
 
