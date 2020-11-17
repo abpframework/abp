@@ -158,7 +158,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     secret: (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     redirectUri: $"{webClientRootUrl}signin-oidc",
                     postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
-                    frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout"
+                    frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout",
+                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
 
@@ -175,7 +176,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     secret: (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     requireClientSecret: false,
                     redirectUri: webClientRootUrl,
-                    postLogoutRedirectUri: webClientRootUrl
+                    postLogoutRedirectUri: webClientRootUrl,
+                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
 
@@ -192,7 +194,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     secret: configurationSection["MyProjectName_Blazor:ClientSecret"]?.Sha256(),
                     requireClientSecret: false,
                     redirectUri: $"{blazorRootUrl}/authentication/login-callback",
-                    postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
+                    postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback",
+                    corsOrigins: new[] { blazorRootUrl.RemovePostFix("/") }
                 );
             }
 
@@ -208,7 +211,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     grantTypes: new[] { "authorization_code" },
                     secret: configurationSection["MyProjectName_Swagger:ClientSecret"]?.Sha256(),
                     requireClientSecret: false,
-                    redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html"
+                    redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
+                    corsOrigins: new[] { swaggerRootUrl.RemovePostFix("/") }
                 );
             }
         }
@@ -223,7 +227,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             string frontChannelLogoutUri = null,
             bool requireClientSecret = true,
             bool requirePkce = false,
-            IEnumerable<string> permissions = null)
+            IEnumerable<string> permissions = null,
+            IEnumerable<string> corsOrigins = null)
         {
             var client = await _clientRepository.FindByClientIdAsync(name);
             if (client == null)
@@ -300,6 +305,17 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     permissions,
                     null
                 );
+            }
+
+            if (corsOrigins != null)
+            {
+                foreach (var origin in corsOrigins)
+                {
+                    if (client.FindCorsOrigin(origin) == null)
+                    {
+                        client.AddCorsOrigin(origin);
+                    }
+                }
             }
 
             return await _clientRepository.UpdateAsync(client);
