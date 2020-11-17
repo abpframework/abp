@@ -99,7 +99,7 @@ export class FeatureManagementComponent
     Object.keys(this.features).forEach(key => {
       this.features[key].forEach(feature => {
         if (feature.value !== feature.initialValue)
-          changedFeatures.push({ name: feature.name, value: feature.value });
+          changedFeatures.push({ name: feature.name, value: `${feature.value}` });
       });
     });
 
