@@ -384,8 +384,8 @@ namespace Acme.BookStore.Books
             return bookDto;
         }
 
-        public override async Task<PagedResultDto<BookDto>>
-            GetListAsync(PagedAndSortedResultRequestDto input)
+        public override async Task<PagedResultDto<BookDto>> GetListAsync(
+            PagedAndSortedResultRequestDto input)
         {
             await CheckGetListPolicyAsync();
 
@@ -1082,36 +1082,37 @@ Add the following field to the `@code` section of the `Books.razor` file:
 IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
 ````
 
-And fill it in the `OnInitializedAsync` method, by adding the following code to the end of the method:
+Override the `OnInitializedAsync` method and adding the following code:
 
 ````csharp
-authorList = (await AppService.GetAuthorLookupAsync()).Items;
+protected override async Task OnInitializedAsync()
+{
+    await base.OnInitializedAsync();
+    authorList = (await AppService.GetAuthorLookupAsync()).Items;
+}
 ````
+
+* It is essential to call the `base.OnInitializedAsync()` since `AbpCrudPageBase` has some initialization code to be executed.
 
 The final `@code` block should be the following:
 
 ````csharp
 @code
 {
-    bool canCreateBook;
-    bool canEditBook;
-    bool canDeleteBook;
-
     //ADDED A NEW FIELD
     IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
 
-    protected async override Task OnInitializedAsync()
+    public Books() // Constructor
+    {
+        CreatePolicyName = BookStorePermissions.Books.Create;
+        UpdatePolicyName = BookStorePermissions.Books.Edit;
+        DeletePolicyName = BookStorePermissions.Books.Delete;
+    }
+
+    //GET AUTHORS ON INITIALIZATION
+    protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        canCreateBook = await
-            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create);
-        canEditBook = await
-            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Edit);
-        canDeleteBook = await
-            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Delete);
-
-        //GET AUTHORS
         authorList = (await AppService.GetAuthorLookupAsync()).Items;
     }
 }
