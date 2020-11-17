@@ -13,7 +13,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             }
 
             return queryable
-                .AsSplitQuery()
                 .Include(x => x.Roles)
                 .Include(x => x.Logins)
                 .Include(x => x.Claims)

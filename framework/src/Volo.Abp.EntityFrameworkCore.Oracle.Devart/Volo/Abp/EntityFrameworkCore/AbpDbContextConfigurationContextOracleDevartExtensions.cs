@@ -13,6 +13,7 @@
 //            [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null,
 //            bool useExistingConnectionIfAvailable = false)
 //         {
+//             TODO: UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
 //             if (useExistingConnectionIfAvailable && context.ExistingConnection != null)
 //             {
 //                 return context.DbContextOptions.UseOracle(context.ExistingConnection, oracleOptionsAction);
