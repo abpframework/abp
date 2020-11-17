@@ -176,6 +176,10 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ClientId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(ClientPropertyConsts.KeyMaxLength).IsRequired();
+                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
+                {
+                    ClientPropertyConsts.ValueMaxLength = 300;
+                }
                 b.Property(x => x.Value).HasMaxLength(ClientPropertyConsts.ValueMaxLength).IsRequired();
             });
 
