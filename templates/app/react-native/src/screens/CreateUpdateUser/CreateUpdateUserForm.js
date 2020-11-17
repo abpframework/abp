@@ -74,7 +74,6 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
       })}
       initialValues={{
         lockoutEnabled: false,
-        twoFactorEnabled: false,
         ...editingUser,
       }}
       onSubmit={values => onSubmit(values)}>
@@ -106,6 +105,7 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
                     onChangeText={handleChange('userName')}
                     onBlur={handleBlur('userName')}
                     value={values.userName}
+                    autoCapitalize = 'none'
                   />
                 </InputGroup>
                 <ValidationMessage>{errors.userName}</ValidationMessage>
@@ -138,11 +138,12 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
                   <Input
                     abpInput
                     ref={emailRef}
-                    onSubmitEditing={() => phoneNumberRef.current._root.focus()}
+                    onSubmitEditing={() => passwordRef.current._root.focus()}
                     returnKeyType="next"
                     onChangeText={handleChange('email')}
                     onBlur={handleBlur('email')}
                     value={values.email}
+                    autoCapitalize = 'none'
                   />
                 </InputGroup>
                 <ValidationMessage>{errors.email}</ValidationMessage>
@@ -150,11 +151,12 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
                   <Label abpLabel>{i18n.t('AbpIdentity::PhoneNumber')}</Label>
                   <Input
                     abpInput
-                    ref={phoneNumberRef}
+                    ref={passwordRef}
                     returnKeyType={!editingUser.id ? 'next' : 'default'}
                     onChangeText={handleChange('phoneNumber')}
                     onBlur={handleBlur('phoneNumber')}
                     value={values.phoneNumber}
+                    autoCapitalize = 'none'
                   />
                 </InputGroup>
                 {!editingUser.id ? (
@@ -168,6 +170,7 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
                           onChangeText={handleChange('password')}
                           onBlur={handleBlur('password')}
                           value={values.password}
+                          autoCapitalize = 'none'
                         />
                         <Icon
                           name={showPassword ? 'eye-off' : 'eye'}
@@ -187,18 +190,6 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
                     <TouchableOpacity
                       onPress={() => setFieldValue('lockoutEnabled', !values.lockoutEnabled)}>
                       <Text>{i18n.t('AbpIdentity::DisplayName:LockoutEnabled')}</Text>
-                    </TouchableOpacity>
-                  </Body>
-                </ListItem>
-                <ListItem>
-                  <CheckBox
-                    checked={values.twoFactorEnabled}
-                    onPress={() => setFieldValue('twoFactorEnabled', !values.twoFactorEnabled)}
-                  />
-                  <Body>
-                    <TouchableOpacity
-                      onPress={() => setFieldValue('twoFactorEnabled', !values.twoFactorEnabled)}>
-                      <Text>{i18n.t('AbpIdentity::DisplayName:TwoFactorEnabled')}</Text>
                     </TouchableOpacity>
                   </Body>
                 </ListItem>
