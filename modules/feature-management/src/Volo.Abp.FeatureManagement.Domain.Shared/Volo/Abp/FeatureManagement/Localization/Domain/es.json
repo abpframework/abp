@@ -1,0 +1,10 @@
+{
+  "culture": "es",
+  "texts": {
+    "Features": "Características",
+    "NoFeatureFoundMessage": "No hay ninguna característica disponible.",
+    "Permission:FeatureManagement": "Gestión de características",
+    "Permission:FeatureManagement.ManageHostFeatures": "Gestionar características del Host",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} valor de característica no es valido!"
+  }
+}

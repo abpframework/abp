@@ -1,19 +1,15 @@
 {
   "culture": "es",
   "texts": {
-    "DisplayName:Abp.Ldap.ServerHost": "Server host",
-    "Description:Abp.Ldap.ServerHost": "Servidor host",
-
-    "DisplayName:Abp.Ldap.ServerPort": "Server port",
-    "Description:Abp.Ldap.ServerPort": "Puerto del servidor host",
-
-    "DisplayName:Abp.Ldap.BaseDc": "Base domain component",
+    "DisplayName:Abp.Ldap.ServerHost": "Host del servidor",
+    "Description:Abp.Ldap.ServerHost": "Host del servidor",
+    "DisplayName:Abp.Ldap.ServerPort": "Puerto del servidor",
+    "Description:Abp.Ldap.ServerPort": "Puerto del servidor",
+    "DisplayName:Abp.Ldap.BaseDc": "Dominio base",
     "Description:Abp.Ldap.BaseDc": "Dominio base",
-
-    "DisplayName:Abp.Ldap.UserName": "Username",
+    "DisplayName:Abp.Ldap.UserName": "Nombre de usuario",
     "Description:Abp.Ldap.UserName": "Nombre de usuario",
-
-    "DisplayName:Abp.Ldap.Password": "Password",
-    "Description:Abp.Ldap.Password": "Contrase�a"
+    "DisplayName:Abp.Ldap.Password": "Contraseña",
+    "Description:Abp.Ldap.Password": "Contraseña"
   }
 }
