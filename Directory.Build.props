@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <MicrosoftPackageVersion>5.0.0</MicrosoftPackageVersion>
+    <MicrosoftNETTestSdkPackageVersion>16.6.1</MicrosoftNETTestSdkPackageVersion>
+    <NSubstitutePackageVersion>4.2.2</NSubstitutePackageVersion>
+    <ShouldlyPackageVersion>3.0.2</ShouldlyPackageVersion>
+    <xUnitPackageVersion>2.4.1</xUnitPackageVersion>
+    <xUnitExtensibilityExecutionPackageVersion>2.4.1</xUnitExtensibilityExecutionPackageVersion>
+    <xUnitRunnerVisualstudioPackageVersion>2.4.2</xUnitRunnerVisualstudioPackageVersion>
+    <Mongo2GoPackageVersion>2.2.14</Mongo2GoPackageVersion>
+  </PropertyGroup>
+</Project>

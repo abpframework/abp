@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 </Project>
