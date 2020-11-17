@@ -159,7 +159,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     redirectUri: $"{webClientRootUrl}signin-oidc",
                     postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
                     frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout",
-                    corsOrigins: new[] { webClientRootUrl }
+                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
 
@@ -177,7 +177,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     requireClientSecret: false,
                     redirectUri: webClientRootUrl,
                     postLogoutRedirectUri: webClientRootUrl,
-                    corsOrigins: new[] { webClientRootUrl }
+                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
 
@@ -195,7 +195,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     requireClientSecret: false,
                     redirectUri: $"{blazorRootUrl}/authentication/login-callback",
                     postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback",
-                    corsOrigins: new[] { blazorRootUrl }
+                    corsOrigins: new[] { blazorRootUrl.RemovePostFix("/") }
                 );
             }
 
@@ -212,7 +212,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     secret: configurationSection["MyProjectName_Swagger:ClientSecret"]?.Sha256(),
                     requireClientSecret: false,
                     redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
-                    corsOrigins: new[] { swaggerRootUrl }
+                    corsOrigins: new[] { swaggerRootUrl.RemovePostFix("/") }
                 );
             }
         }
