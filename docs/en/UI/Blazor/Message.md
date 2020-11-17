@@ -11,7 +11,7 @@ namespace MyProject.Blazor.Pages
 {
     public partial class Index
     {
-        public IUiMessageService UiMessageService { get; set; }
+        public IUiMessageService UiMessageService { get; }
 
         public Index(IUiMessageService uiMessageService)
         {
