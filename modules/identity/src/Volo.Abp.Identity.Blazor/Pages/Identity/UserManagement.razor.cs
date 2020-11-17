@@ -69,11 +69,11 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             return base.OnCreatingEntityAsync();
         }
 
-        protected async override Task OpenEditModalAsync(Guid id)
+        protected async override Task OpenEditModalAsync(IdentityUserDto entity)
         {
             EditModalSelectedTab = DefaultSelectedTab;
 
-            var userRoleNames = (await AppService.GetRolesAsync(id)).Items.Select(r => r.Name).ToList();
+            var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
 
             EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
             {
@@ -81,7 +81,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                 IsAssigned = userRoleNames.Contains(x.Name)
             }).ToArray();
 
-            await base.OpenEditModalAsync(id);
+            await base.OpenEditModalAsync(entity);
         }
 
         protected override Task OnUpdatingEntityAsync()

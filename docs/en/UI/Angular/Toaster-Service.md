@@ -249,7 +249,3 @@ Removes all open toasts.
 ## See Also
 
 - [Confirmation Popup](./Confirmation-Service.md)
-
-## What's Next?
-
-- [Modifying the Menu](./Modifying-the-Menu.md)

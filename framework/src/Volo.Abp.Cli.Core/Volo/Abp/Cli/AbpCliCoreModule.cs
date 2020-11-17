@@ -37,6 +37,7 @@ namespace Volo.Abp.Cli
                 options.Commands["switch-to-nightly"] = typeof(SwitchToNightlyCommand);
                 options.Commands["translate"] = typeof(TranslateCommand);
                 options.Commands["build"] = typeof(BuildCommand);
+                options.Commands["bundle"] = typeof(BundleCommand);
             });
         }
     }

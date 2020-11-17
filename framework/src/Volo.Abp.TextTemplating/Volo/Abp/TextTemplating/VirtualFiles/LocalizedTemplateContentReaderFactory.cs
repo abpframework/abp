@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles

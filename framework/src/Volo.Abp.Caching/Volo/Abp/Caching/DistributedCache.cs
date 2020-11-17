@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;

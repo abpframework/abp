@@ -1,5 +1,4 @@
-import { ABP, ApplicationConfiguration } from '@abp/ng.core';
-import { createSelector, Store } from '@ngxs/store';
+import { ABP, ApplicationConfiguration, ConfigStateService } from '@abp/ng.core';
 import { Observable, pipe, zip } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { ePropType } from '../enums/props.enum';
@@ -12,51 +11,59 @@ import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.ut
 import { createExtraPropertyValueResolver } from './props.util';
 import { getValidatorsFromProperty } from './validation.util';
 
-const selectConfig = (state: any) => state.ConfigState;
+function selectObjectExtensions(
+  configState: ConfigStateService,
+): Observable<ObjectExtensions.Item> {
+  return configState.getOne$('objectExtensions');
+}
 
-const selectObjectExtensions = createSelector(
-  [selectConfig],
-  (config: ObjectExtensions.Config) => config.objectExtensions,
-);
+function selectLocalization(
+  configState: ConfigStateService,
+): Observable<ApplicationConfiguration.Localization> {
+  return configState.getOne$('localization');
+}
 
-const selectLocalization = createSelector(
-  [selectConfig],
-  (config: ApplicationConfiguration.Response) => config.localization,
-);
+function selectEnums(
+  configState: ConfigStateService,
+): Observable<Record<string, ObjectExtensions.Enum>> {
+  return selectObjectExtensions(configState).pipe(
+    map((extensions: ObjectExtensions.Item) =>
+      Object.keys(extensions.enums).reduce((acc, key) => {
+        const { fields, localizationResource } = extensions.enums[key];
+        acc[key] = {
+          fields,
+          localizationResource,
+          transformed: createEnum(fields),
+        };
+        return acc;
+      }, {} as ObjectExtensions.Enums),
+    ),
+  );
+}
 
-const selectEnums = createSelector(
-  [selectObjectExtensions, selectLocalization],
-  (extensions: ObjectExtensions.Item) =>
-    Object.keys(extensions.enums).reduce((acc, key) => {
-      const { fields, localizationResource } = extensions.enums[key];
-      acc[key] = {
-        fields,
-        localizationResource,
-        transformed: createEnum(fields),
-      };
-      return acc;
-    }, {} as ObjectExtensions.Enums),
-);
+export function getObjectExtensionEntitiesFromStore(
+  configState: ConfigStateService,
+  moduleKey: ModuleKey,
+) {
+  return selectObjectExtensions(configState).pipe(
+    map(extensions => {
+      if (!extensions) return null;
 
-const createObjectExtensionEntitiesSelector = (moduleKey: ModuleKey) =>
-  createSelector([selectObjectExtensions], (extensions: ObjectExtensions.Item) => {
-    if (!extensions) return null;
-
-    return (extensions.modules[moduleKey] || ({} as ObjectExtensions.Module)).entities;
-  });
-
-export function getObjectExtensionEntitiesFromStore(store: Store, moduleKey: ModuleKey) {
-  return store.select(createObjectExtensionEntitiesSelector(moduleKey)).pipe(
+      return (extensions.modules[moduleKey] || ({} as ObjectExtensions.Module)).entities;
+    }),
     map(entities => (isUndefined(entities) ? {} : entities)),
     filter<ObjectExtensions.Entities>(Boolean),
     take(1),
   );
 }
 
-export function mapEntitiesToContributors<T = any>(store: Store, resource: string) {
+export function mapEntitiesToContributors<T = any>(
+  configState: ConfigStateService,
+  resource: string,
+) {
   return pipe(
     switchMap(entities =>
-      zip(store.select(selectLocalization), store.select(selectEnums)).pipe(
+      zip(selectLocalization(configState), selectEnums(configState)).pipe(
         map(([localization, enums]) => {
           const generateDisplayName = createDisplayNameLocalizationPipeKeyGenerator(localization);
 

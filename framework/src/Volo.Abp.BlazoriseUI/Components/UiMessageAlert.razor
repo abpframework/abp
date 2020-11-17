@@ -1,4 +1,4 @@
-﻿<Modal @ref="@ModalRef">
+﻿<Modal @ref="@ModalRef" Closing="@OnModalClosing">
     <ModalBackdrop />
     <ModalContent Centered="@CenterMessage">
         <ModalHeader>
@@ -9,16 +9,18 @@
         <ModalBody>
             @if ( ShowMessageIcon )
             {
-                <DisplayHeading Size="DisplayHeadingSize.Is2" Style="text-align:center;">
+                <DisplayHeading Size="DisplayHeadingSize.Is2" Alignment="TextAlignment.Center">
                     <Icon Name="@MessageIcon" Style="@MessageIconStyle" />
                 </DisplayHeading>
             }
-            @Message
+            <Text Alignment="TextAlignment.Center">
+                @Message
+            </Text>
         </ModalBody>
         <ModalFooter>
             @if ( IsConfirmation )
             {
-                <Button Color="Color.Danger" Padding="Padding.Is2.OnX" Margin="Margin.IsAuto.FromRight" Clicked="@OnCancelClicked">
+                <Button Color="Color.Danger" Padding="Padding.Is2.OnX" Clicked="@OnCancelClicked">
                     @if ( Options?.CancelButtonIcon != null )
                     {
                         <Icon Name="@Options.CancelButtonIcon" Margin="Margin.Is2.FromRight" />

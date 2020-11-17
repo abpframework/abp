@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -28,6 +29,8 @@ namespace Volo.Abp.Authorization
             context.Services.AddAuthorizationCore();
 
             context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+
+            context.Services.TryAddTransient<DefaultAuthorizationPolicyProvider>();
 
             Configure<AbpPermissionOptions>(options =>
             {

@@ -10,7 +10,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/my-project-name/tsconfig.lib.json",
             "project": "projects/my-project-name/ng-package.json"
@@ -61,12 +61,8 @@
             "polyfills": "projects/dev-app/src/polyfills.ts",
             "tsConfig": "projects/dev-app/tsconfig.app.json",
             "aot": true,
-            "extractCss": true,
             "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
-            "assets": [
-              "projects/dev-app/src/favicon.ico",
-              "projects/dev-app/src/assets"
-            ],
+            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
             "styles": [
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -119,7 +115,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -163,10 +158,7 @@
             "polyfills": "projects/dev-app/src/polyfills.ts",
             "tsConfig": "projects/dev-app/tsconfig.spec.json",
             "karmaConfig": "projects/dev-app/karma.conf.js",
-            "assets": [
-              "projects/dev-app/src/favicon.ico",
-              "projects/dev-app/src/assets"
-            ],
+            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
             "styles": ["projects/dev-app/src/styles.scss"],
             "scripts": []
           }

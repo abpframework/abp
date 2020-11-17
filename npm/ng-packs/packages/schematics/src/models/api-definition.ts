@@ -18,6 +18,7 @@ export interface PropertyDef {
   name: string;
   type: string;
   typeSimple: string;
+  isRequired: boolean;
 }
 
 export interface Module {

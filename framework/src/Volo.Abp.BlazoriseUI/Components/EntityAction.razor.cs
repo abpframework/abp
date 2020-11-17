@@ -5,6 +5,7 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components
@@ -55,7 +56,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             if (ConfirmationMessage != null)
             {
-                if (await UiMessageService.ConfirmAsync(ConfirmationMessage()))
+                if (await UiMessageService.Confirm(ConfirmationMessage()))
                 {
                     await Clicked.InvokeAsync();
                 }

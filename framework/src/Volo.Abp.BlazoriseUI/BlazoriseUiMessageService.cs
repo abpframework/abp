@@ -4,6 +4,7 @@ using Localization.Resources.AbpUi;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.DependencyInjection;
 
@@ -29,7 +30,7 @@ namespace Volo.Abp.BlazoriseUI
             Logger = NullLogger<BlazoriseUiMessageService>.Instance;
         }
 
-        public Task InfoAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public Task Info(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             var uiMessageOptions = CreateDefaultOptions();
             options?.Invoke(uiMessageOptions);
@@ -39,7 +40,7 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        public Task SuccessAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public Task Success(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             var uiMessageOptions = CreateDefaultOptions();
             options?.Invoke(uiMessageOptions);
@@ -49,7 +50,7 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        public Task WarnAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public Task Warn(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             var uiMessageOptions = CreateDefaultOptions();
             options?.Invoke(uiMessageOptions);
@@ -59,7 +60,7 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        public Task ErrorAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public Task Error(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             var uiMessageOptions = CreateDefaultOptions();
             options?.Invoke(uiMessageOptions);
@@ -69,7 +70,7 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        public Task<bool> ConfirmAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public Task<bool> Confirm(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             var uiMessageOptions = CreateDefaultOptions();
             options?.Invoke(uiMessageOptions);

@@ -2,13 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
 import { of, ReplaySubject, timer } from 'rxjs';
-import { SetLanguage } from '../actions';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
-import { ApplicationConfigurationService, ConfigStateService } from '../services';
+import {
+  ApplicationConfigurationService,
+  ConfigStateService,
+  SessionStateService,
+} from '../services';
 import { ConfigState } from '../states';
 
-export const CONFIG_STATE_DATA = {
+export const CONFIG_STATE_DATA = ({
   environment: {
     production: false,
     application: {
@@ -98,7 +101,8 @@ export const CONFIG_STATE_DATA = {
       'Chat.Enable': 'True',
     },
   },
-} as Config.State;
+  registerLocaleFn: () => Promise.resolve(),
+} as any) as Config.State;
 
 describe('ConfigState', () => {
   let spectator: SpectatorService<ConfigStateService>;
@@ -115,7 +119,11 @@ describe('ConfigState', () => {
     spectator = createService();
     store = spectator.inject(Store);
     service = spectator.service;
-    state = new ConfigState(spectator.inject(HttpClient), store);
+    state = new ConfigState(
+      spectator.inject(HttpClient),
+      store,
+      spectator.inject(SessionStateService),
+    );
   });
 
   describe('#getAll', () => {
@@ -267,8 +275,6 @@ describe('ConfigState', () => {
 
       timer(0).subscribe(() => {
         expect(patchStateArg).toEqual(configuration);
-        expect(dispatchArg instanceof SetLanguage).toBeTruthy();
-        expect(dispatchArg).toEqual({ payload: 'en', dispatchAppConfiguration: false });
         done();
       });
     });

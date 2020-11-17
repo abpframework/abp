@@ -18,15 +18,23 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
         private string _entityDisplayName;
         private List<PermissionGroupDto> _groups;
 
-        private List<PermissionGrantInfoDto> _disabledPermissions;
+        private List<PermissionGrantInfoDto> _disabledPermissions = new List<PermissionGrantInfoDto>();
 
         private string _selectedTabName;
+
+        private int _grantedPermissionCount = 0;
+        private int _notGrantedPermissionCount = 0;
         
         private bool GrantAll
         {
             get
             {
-                return _groups != null && _groups.All(x => x.Permissions.All(y => y.IsGranted));
+                if (_notGrantedPermissionCount == 0)
+                {
+                    return true;
+                }
+
+                return false;
             }
             set
             {
@@ -35,13 +43,22 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
                     return;
                 }
                 
-                foreach (var permissionGroupDto in _groups)
+                _grantedPermissionCount = 0;
+                _notGrantedPermissionCount = 0;
+                
+                foreach (var permission in _groups.SelectMany(x => x.Permissions))
                 {
-                    foreach (var permission in permissionGroupDto.Permissions)
+                    if (!IsDisabledPermission(permission))
                     {
-                        if (!IsDisabledPermission(permission))
+                        permission.IsGranted = value;
+                        
+                        if (value)
                         {
-                            permission.IsGranted = value;
+                            _grantedPermissionCount++;
+                        }
+                        else
+                        {
+                            _notGrantedPermissionCount++;
                         }
                     }
                 }
@@ -58,13 +75,26 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             _entityDisplayName = result.EntityDisplayName;
             _groups = result.Groups;
 
-            _disabledPermissions = 
-                _groups.SelectMany(x => x.Permissions)
-                        .Where(
-                            x => x.IsGranted &&
-                            x.GrantedProviders.All(y => y.ProviderName != _providerName)
-                            ).ToList();
+            _grantedPermissionCount = 0;
+            _notGrantedPermissionCount = 0;
+            foreach (var permission in _groups.SelectMany(x => x.Permissions))
+            {
+                if (permission.IsGranted && permission.GrantedProviders.All(x => x.ProviderName != _providerName))
+                {
+                    _disabledPermissions.Add(permission);
+                    continue;
+                }
 
+                if (permission.IsGranted)
+                {
+                    _grantedPermissionCount++;
+                }
+                else
+                {
+                    _notGrantedPermissionCount++;
+                }
+            }
+            
             _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
             
             _modal.Show();
@@ -95,51 +125,67 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             return "PermissionGroup_" + name.Replace(".", "_");
         }
 
-        private void GrantAllChanged(bool value)
+        private void GroupGrantAllChanged(bool value, PermissionGroupDto permissionGroup)
         {
-            GrantAll = value;
-        }
-
-        private void GroupGrantAllChanged(bool value, string groupName)
-        {
-            foreach (var permission in _groups.First(x => x.Name == groupName).Permissions)
+            foreach (var permission in permissionGroup.Permissions)
             {
                 if (!IsDisabledPermission(permission))
                 {
-                    permission.IsGranted = value;
+                    SetPermissionGrant(permission, value);
                 }
             }
         }
 
-        private void PermissionChanged(bool value, string groupName, PermissionGrantInfoDto permission)
+        private void PermissionChanged(bool value, PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
         {
-            permission.IsGranted = value;
+            SetPermissionGrant(permission, value);
             
-            if (value == false)
+            if (value && permission.ParentName != null)
             {
-                var childPermissions = GetChildPermissions(groupName, permission);
-                
-                foreach (var permissionGrantInfoDto in childPermissions)
-                {
-                    permissionGrantInfoDto.IsGranted = false;
-                }
-            }
-            else if (permission.ParentName != null)
-            {
-                var parentPermission = GetParentPermission(groupName, permission);
+                var parentPermission = GetParentPermission(permissionGroup, permission);
 
-                parentPermission.IsGranted = true;
+                SetPermissionGrant(parentPermission, true);
+            }
+            else if(value == false)
+            {
+                var childPermissions = GetChildPermissions(permissionGroup, permission);
+                
+                foreach (var childPermission in childPermissions)
+                {
+                    SetPermissionGrant(childPermission, false);
+                }
             }
         }
 
-        private PermissionGrantInfoDto GetParentPermission(string groupName, PermissionGrantInfoDto permission)
+        private void SetPermissionGrant(PermissionGrantInfoDto permission, bool value)
         {
-            return _groups.First(x => x.Name == groupName).Permissions.First(x => x.Name == permission.ParentName);
+            if (permission.IsGranted == value)
+            {
+                return;
+            }
+            
+            if (value)
+            {
+                _grantedPermissionCount++;
+                _notGrantedPermissionCount--;
+            }
+            else
+            {
+                _grantedPermissionCount--;
+                _notGrantedPermissionCount++;
+            }
+            
+            permission.IsGranted = value;
         }
         
-        private List<PermissionGrantInfoDto> GetChildPermissions(string groupName, PermissionGrantInfoDto permission)
+        private PermissionGrantInfoDto GetParentPermission(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
         {
-            return _groups.First(x => x.Name == groupName).Permissions.Where(x => x.Name.StartsWith(permission.Name)).ToList();
+            return permissionGroup.Permissions.First(x => x.Name == permission.ParentName);
+        }
+        
+        private List<PermissionGrantInfoDto> GetChildPermissions(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
+        {
+            return permissionGroup.Permissions.Where(x => x.Name.StartsWith(permission.Name)).ToList();
         }
         
         private bool IsDisabledPermission(PermissionGrantInfoDto permissionGrantInfo)

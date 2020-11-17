@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.Identity;
 
 namespace Volo.Abp.Account.Blazor.Pages.Account
@@ -17,7 +17,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
 
         protected PersonalInfoModel PersonalInfoModel;
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             await GetUserInformations();
         }
@@ -43,7 +43,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
             
             if (ChangePasswordModel.NewPassword != ChangePasswordModel.NewPasswordConfirm)
             {
-                await UiMessageService.WarnAsync(L["NewPasswordConfirmFailed"]);
+                await UiMessageService.Warn(L["NewPasswordConfirmFailed"]);
                 return;
             }
             
@@ -53,7 +53,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
                 NewPassword = ChangePasswordModel.NewPassword
             });
             
-            await UiMessageService.SuccessAsync(L["PasswordChanged"]);
+            await UiMessageService.Success(L["PasswordChanged"]);
         }
 
         protected async Task UpdatePersonalInfoAsync()
@@ -62,7 +62,7 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
                 ObjectMapper.Map<PersonalInfoModel, UpdateProfileDto>(PersonalInfoModel)
                 );
             
-            await UiMessageService.SuccessAsync(L["PersonalSettingsSaved"]);
+            await UiMessageService.Success(L["PersonalSettingsSaved"]);
         }
     }
 

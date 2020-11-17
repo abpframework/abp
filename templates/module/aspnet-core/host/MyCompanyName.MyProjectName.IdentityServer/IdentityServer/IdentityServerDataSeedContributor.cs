@@ -11,6 +11,7 @@ using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
@@ -28,6 +29,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         private readonly IGuidGenerator _guidGenerator;
         private readonly IPermissionDataSeeder _permissionDataSeeder;
         private readonly IConfiguration _configuration;
+        private readonly ICurrentTenant _currentTenant;
 
         public IdentityServerDataSeedContributor(
             IClientRepository clientRepository,
@@ -36,7 +38,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             IIdentityResourceDataSeeder identityResourceDataSeeder,
             IGuidGenerator guidGenerator,
             IPermissionDataSeeder permissionDataSeeder,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ICurrentTenant currentTenant)
         {
             _clientRepository = clientRepository;
             _apiResourceRepository = apiResourceRepository;
@@ -45,15 +48,19 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             _guidGenerator = guidGenerator;
             _permissionDataSeeder = permissionDataSeeder;
             _configuration = configuration;
+            _currentTenant = currentTenant;
         }
 
         [UnitOfWork]
         public virtual async Task SeedAsync(DataSeedContext context)
         {
-            await _identityResourceDataSeeder.CreateStandardResourcesAsync();
-            await CreateApiResourcesAsync();
-            await CreateApiScopesAsync();
-            await CreateClientsAsync();
+            using (_currentTenant.Change(context?.TenantId))
+            {
+                await _identityResourceDataSeeder.CreateStandardResourcesAsync();
+                await CreateApiResourcesAsync();
+                await CreateApiScopesAsync();
+                await CreateClientsAsync();
+            }
         }
 
         private async Task CreateApiScopesAsync()
@@ -155,18 +162,23 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 );
             }
 
-            //Console Test Client
-            var consoleClientId = configurationSection["MyProjectName_ConsoleTestApp:ClientId"];
-            if (!consoleClientId.IsNullOrWhiteSpace())
+            //Console Test / Angular Client
+            var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
+            if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
             {
+                var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
+
                 await CreateClientAsync(
-                    name: consoleClientId,
+                    name: consoleAndAngularClientId,
                     scopes: commonScopes,
-                    grantTypes: new[] {"password", "client_credentials"},
-                    secret: (configurationSection["MyProjectName_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
+                    grantTypes: new[] { "password", "client_credentials", "authorization_code" },
+                    secret: (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: webClientRootUrl,
+                    postLogoutRedirectUri: webClientRootUrl
                 );
             }
-            
+
             // Blazor Client
             var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
             if (!blazorClientId.IsNullOrWhiteSpace())
@@ -181,6 +193,22 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     requireClientSecret: false,
                     redirectUri: $"{blazorRootUrl}/authentication/login-callback",
                     postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
+                );
+            }
+
+            // Swagger Client
+            var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
+            if (!swaggerClientId.IsNullOrWhiteSpace())
+            {
+                var swaggerRootUrl = configurationSection["MyProjectName_Swagger:RootUrl"].TrimEnd('/');
+
+                await CreateClientAsync(
+                    name: swaggerClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
+                    secret: configurationSection["MyProjectName_Swagger:ClientSecret"]?.Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html"
                 );
             }
         }
@@ -269,7 +297,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 await _permissionDataSeeder.SeedAsync(
                     ClientPermissionValueProvider.ProviderName,
                     name,
-                    permissions
+                    permissions,
+                    null
                 );
             }
 

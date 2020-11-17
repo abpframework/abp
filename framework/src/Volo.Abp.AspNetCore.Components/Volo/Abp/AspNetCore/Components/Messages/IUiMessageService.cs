@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly
+namespace Volo.Abp.AspNetCore.Components.Messages
 {
     public interface IUiMessageService
     {
-        Task InfoAsync(string message, string title = null, Action<UiMessageOptions> options = null);
+        Task Info(string message, string title = null, Action<UiMessageOptions> options = null);
 
-        Task SuccessAsync(string message, string title = null, Action<UiMessageOptions> options = null);
+        Task Success(string message, string title = null, Action<UiMessageOptions> options = null);
 
-        Task WarnAsync(string message, string title = null, Action<UiMessageOptions> options = null);
+        Task Warn(string message, string title = null, Action<UiMessageOptions> options = null);
 
-        Task ErrorAsync(string message, string title = null, Action<UiMessageOptions> options = null);
+        Task Error(string message, string title = null, Action<UiMessageOptions> options = null);
 
-        Task<bool> ConfirmAsync(string message, string title = null, Action<UiMessageOptions> options = null);
+        Task<bool> Confirm(string message, string title = null, Action<UiMessageOptions> options = null);
     }
 }

@@ -55,7 +55,7 @@ namespace MyCompanyName.MyProjectName.Blazor
         {
             Configure<AbpNavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+                options.MenuContributors.Add(new MyProjectNameMenuContributor(context.Services.GetConfiguration()));
             });
         }
 

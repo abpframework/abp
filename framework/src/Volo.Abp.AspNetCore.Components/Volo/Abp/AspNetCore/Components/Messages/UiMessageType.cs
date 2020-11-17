@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.AspNetCore.Components.WebAssembly
+﻿namespace Volo.Abp.AspNetCore.Components.Messages
 {
     /// <summary>
     /// Defines the possible ui message types with predefined actions.
