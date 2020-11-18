@@ -68,7 +68,7 @@ Configure<AbpToolbarOptions>(options =>
 
 That's all, you will see the notification icon on the toolbar when you run the application:
 
-![bookstore-notification-icon-on-toolbar](D:/Github/abp/docs/en/images/bookstore-notification-icon-on-toolbar.png)
+![bookstore-notification-icon-on-toolbar](../../images/bookstore-notification-icon-on-toolbar.png)
 
 ## IToolbarManager
 
