@@ -257,6 +257,7 @@ namespace System
 
         /// <summary>
         /// Converts PascalCase string to camelCase string.
+        /// Example: "ThisIsSampleSentence" is converted to "thisIsSampleSentence".
         /// </summary>
         /// <param name="str">String to convert</param>
         /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
@@ -278,7 +279,7 @@ namespace System
 
         /// <summary>
         /// Converts given PascalCase/camelCase string to sentence (by splitting words by space).
-        /// Example: "ThisIsSampleSentence" is converted to "This is a sample sentence".
+        /// Example: "ThisIsSampleSentence" is converted to "This is sample sentence".
         /// </summary>
         /// <param name="str">String to convert.</param>
         /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
@@ -296,6 +297,7 @@ namespace System
 
         /// <summary>
         /// Converts given PascalCase/camelCase string to kebab-case.
+        /// Example: "ThisIsSampleSentence" is converted to "this-is-sample-sentence".
         /// </summary>
         /// <param name="str">String to convert.</param>
         /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
@@ -315,7 +317,7 @@ namespace System
 
         /// <summary>
         /// Converts given PascalCase/camelCase string to snake case.
-        /// Example: "ThisIsSampleSentence" is converted to "this_is_a_sample_sentence".
+        /// Example: "ThisIsSampleSentence" is converted to "this_is_sample_sentence".
         /// https://github.com/npgsql/npgsql/blob/dev/src/Npgsql/NameTranslation/NpgsqlSnakeCaseNameTranslator.cs#L51
         /// </summary>
         /// <param name="str">String to convert.</param>
@@ -428,6 +430,7 @@ namespace System
 
         /// <summary>
         /// Converts camelCase string to PascalCase string.
+        /// Example: "thisIsSampleSentence" is converted to "ThisIsSampleSentence".
         /// </summary>
         /// <param name="str">String to convert</param>
         /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
