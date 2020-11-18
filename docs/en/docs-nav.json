@@ -599,6 +599,10 @@
               "path": "UI/Blazor/Page-Alerts.md"
             },
             {
+              "text": "Branding",
+              "path": "UI/Blazor/Branding.md"
+            },
+            {
               "text": "Customization / Overriding Components",
               "path": "UI/Blazor/Customization-Overriding-Components.md"
             },
