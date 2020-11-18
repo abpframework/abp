@@ -28,7 +28,6 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
 Application Layout implements the following parts, in addition to the common parts mentioned above;
 
 * [Branding](Branding.md) Area
-
 * Main [Menu](Navigation-Menu.md)
 * Main [Toolbar](Toolbars.md) with Language Selection & User Menu
 * [Page Alerts](Page-Alerts.md)
