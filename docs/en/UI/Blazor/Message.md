@@ -68,7 +68,7 @@ All of these methods get three parameters:
 **Example: Show an error message**
 
 ````csharp
-Message.Error('Your credit card number is not valid!');
+_uiMessageService.Error('Your credit card number is not valid!');
 ````
 
 ![blazor-message-success](../../images/blazor-message-error.png)
