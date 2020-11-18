@@ -184,7 +184,7 @@ if (context.Menu.Name == StandardMenus.User)
 
 `IMenuManager` is generally used by the UI [theme](Theming.md) to render the menu items on the UI. So, **you generally don't need to directly use** the `IMenuManager`.
 
-**Example: Getting the `Main` menu items**
+**Example: Get the Main Menu to render in a razor component**
 
 ```csharp
 // Code behind file of a razor component
@@ -200,6 +200,7 @@ public partial class NavMenu
     protected override async Task OnInitializedAsync()
     {
         var menu = await _menuManager.GetAsync(StandardMenus.Main);
+        //...
     }
 }
 ```
