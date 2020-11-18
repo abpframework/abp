@@ -11,6 +11,8 @@
             public const string IdentityResource = "IdentityResource";
 
             public const string ApiResource = "ApiResource";
+
+            public const string ApiScope = "ApiScope";
         }
     }
 }

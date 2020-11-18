@@ -22,9 +22,11 @@ Then add a string property called `Title`, as an example property.
 
 ### Create AppUserDto
 
+_Note that, creating `AppUserDto` is not necessary after ABP v4.X_
+
 ABP Suite needs a DTO for the target entity (user, in this case) in order to define a navigation property.
 
-To do this, create a new folder called "Users" in `*.Application.Contracts`  then add a new class called  `AppUserDto` inherited from `IdentityUserDto`.
+To do this, create a new folder called "Users" in `*.Application.Contracts` then add a new class called `AppUserDto` inherited from `IdentityUserDto`.
 
 ![create-appuserdto](create-appuserdto.jpg)
 
@@ -40,13 +42,13 @@ CreateMap<AppUser, AppUserDto>().Ignore(x => x.ExtraProperties);
 
 ### Define the Navigation Property
 
-Get back to ABP Suite, open the **Navigation Properties** tab of the ABP Suite, click the **Add Navigation Property** button. Browse  `AppUser.cs` in `*.Domain\Users` folder. Then choose the `Name` item as display property. Browse `AppUserDto.cs` in `*.Contracts\Users` folder. Choose `Users` from Collection Names dropdown.
+Get back to ABP Suite, open the **Navigation Properties** tab of the ABP Suite, click the **Add Navigation Property** button. Browse `AppUser.cs` in `*.Domain\Users` folder. Then choose the `Name` item as display property. Browse `AppUserDto.cs` in `*.Contracts\Users` folder. Choose `Users` from Collection Names dropdown.
 
 ![add-user-navigation](add-user-navigation.jpg)
 
 ### Generate the Code!
 
-That's it! Click **Save and generate** button to create your page. You'll see the following page if everything goes well. 
+That's it! Click **Save and generate** button to create your page. You'll see the following page if everything goes well.
 
 ![final-page](final-page.jpg)
 
@@ -54,7 +56,7 @@ This is the new page that has been created by the ABP Suite. It can perform the 
 
 **Picking Users from Look Up Table**
 
-We used dropdown element to select a user from the user list. If you have a lot of users, then it's good to pick a user from a look up table. A look up table is a modal window that lets you filter data and pick one. To do this, get back to Suite and click **Edit** button of user navigation which is set as `AppUserId`  name. Choose "Modal" from the "UI Pick Type" field. Then click **Save and generate** button to recreate your page. 
+We used dropdown element to select a user from the user list. If you have a lot of users, then it's good to pick a user from a look up table. A look up table is a modal window that lets you filter data and pick one. To do this, get back to Suite and click **Edit** button of user navigation which is set as `AppUserId` name. Choose "Modal" from the "UI Pick Type" field. Then click **Save and generate** button to recreate your page.
 
 ![ui-pick-type-modal](ui-pick-type-modal.jpg)
 
@@ -64,18 +66,18 @@ After successful code generation, you'll see the the user can be picked from use
 
 ## About the ABP Commercial RC
 
-This example has been implemented with **ABP Commercial 3.1.0-rc.3**. This is a RC version. If you want to install the CLI and Suite RC version follow the next steps:
+This example has been implemented with **ABP Commercial 3.1.0**. If you have not installed the ABP CLI and ABP Suite, follow the next steps:
 
-1- Uninstall the current version of the CLI and install the specific RC version:
+1- Uninstall the current version of the CLI and install:
 
 ```bash
-dotnet tool uninstall --global Volo.Abp.Cli && dotnet tool install --global Volo.Abp.Cli --version 3.1.0-rc.3
+dotnet tool install --global Volo.Abp.Cli --version 3.1.0
 ```
 
-2- Uninstall the current version of the Suite and install the specific RC version:
+2- Uninstall the current version of the Suite and install:
 
 ```bash
-dotnet tool uninstall --global Volo.Abp.Suite && dotnet tool install -g Volo.Abp.Suite --version 3.1.0-rc.3 --add-source https://nuget.abp.io/<YOUR-API-KEY>/v3/index.json
+dotnet tool uninstall --global Volo.Abp.Suite && dotnet tool install -g Volo.Abp.Suite --version 3.1.0 --add-source https://nuget.abp.io/<YOUR-API-KEY>/v3/index.json
 ```
 
 Don't forget to replace the `<YOUR-API-KEY>` with your own key!

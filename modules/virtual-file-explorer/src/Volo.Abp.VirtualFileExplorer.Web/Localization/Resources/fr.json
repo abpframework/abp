@@ -1,0 +1,14 @@
+{
+ "culture": "fr",
+ "texts": {
+  "VirtualFileExplorer": "Explorateur de fichiers virtuels",
+  "VirtualFileType": "Type de fichier virtuel",
+  "Menu:VirtualFileExplorer": "Explorateur de fichiers virtuels",
+  "LastUpdateTime": "Dernière heure de mise à jour",
+  "VirtualFileName": "Nom de fichier virtuel",
+  "FileContent": "Contenu du fichier",
+  "Size": "Taille",
+  "BackToRoot": "Retour à la racine",
+  "EmptyFileInfoList": "Il n’y a pas de fichiers virtuels"
+ }
+}

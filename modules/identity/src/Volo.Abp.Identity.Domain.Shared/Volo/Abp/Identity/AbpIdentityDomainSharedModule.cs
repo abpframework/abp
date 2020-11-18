@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Identity.Localization;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Features;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
@@ -11,7 +13,8 @@ namespace Volo.Abp.Identity
 {
     [DependsOn(
         typeof(AbpUsersDomainSharedModule),
-        typeof(AbpValidationModule)
+        typeof(AbpValidationModule),
+        typeof(AbpFeaturesModule)
         )]
     public class AbpIdentityDomainSharedModule : AbpModule
     {

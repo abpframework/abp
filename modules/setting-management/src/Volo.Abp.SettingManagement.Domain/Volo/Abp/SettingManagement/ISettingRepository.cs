@@ -10,5 +10,7 @@ namespace Volo.Abp.SettingManagement
         Task<Setting> FindAsync(string name, string providerName, string providerKey);
 
         Task<List<Setting>> GetListAsync(string providerName, string providerKey);
+
+        Task<List<Setting>> GetListAsync(string[] names, string providerName, string providerKey);
     }
 }

@@ -6,7 +6,11 @@
 
 ## 通用(泛型)仓储
 
-ABP为每个聚合根或实体提供了  **默认的通用(泛型)仓储**  . 你可以在服务中[注入](Dependency-Injection.md) `IRepository<TEntity, TKey>` 使用标准的**CRUD**操作. 用法示例:
+ABP为每个聚合根或实体提供了  **默认的通用(泛型)仓储**  . 你可以在服务中[注入](Dependency-Injection.md) `IRepository<TEntity, TKey>` 使用标准的**CRUD**操作.
+
+> 数据库提供程序层应正确配置为能够使用默认的通用存储库. 如果你已经使用启动模板创建了项目,则这些配置 **已经完成**了. 如果不是,请参考数据库提供程序文档([EF Core](Entity-Framework-Core.md) / [MongoDB](MongoDB.md))进行配置.
+
+**默认通用仓储用法示例:**
 
 ````C#
 public class PersonAppService : ApplicationService

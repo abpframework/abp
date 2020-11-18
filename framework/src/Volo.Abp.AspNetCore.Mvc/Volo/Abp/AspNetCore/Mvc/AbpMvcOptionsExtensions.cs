@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Auditing;
+using Volo.Abp.AspNetCore.Mvc.Content;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Features;
@@ -21,6 +22,13 @@ namespace Volo.Abp.AspNetCore.Mvc
             AddPageFilters(options);
             AddModelBinders(options);
             AddMetadataProviders(options, services);
+            AddFormatters(options);
+        }
+
+        private static void AddFormatters(MvcOptions options)
+        {
+            options.InputFormatters.Insert(0, new RemoteStreamContentInputFormatter());
+            options.OutputFormatters.Insert(0, new RemoteStreamContentOutputFormatter());
         }
 
         private static void AddConventions(MvcOptions options, IServiceCollection services)
@@ -51,7 +59,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         private static void AddModelBinders(MvcOptions options)
         {
             options.ModelBinderProviders.Insert(0, new AbpDateTimeModelBinderProvider());
-            options.ModelBinderProviders.Insert(0, new AbpExtraPropertiesDictionaryModelBinderProvider());
+            options.ModelBinderProviders.Insert(1, new AbpExtraPropertiesDictionaryModelBinderProvider());
         }
 
         private static void AddMetadataProviders(MvcOptions options, IServiceCollection services)

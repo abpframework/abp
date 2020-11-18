@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using JetBrains.Annotations;
+using Volo.Abp.Content;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
@@ -12,24 +13,20 @@ namespace Volo.Abp.Http.Client.DynamicProxying
     public static class RequestPayloadBuilder
     {
         [CanBeNull]
-        public static HttpContent BuildContent(ActionApiDescriptionModel action,IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
+        public static HttpContent BuildContent(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
         {
             var body = GenerateBody(action, methodArguments, jsonSerializer);
             if (body != null)
             {
-                return new StringContent(body, Encoding.UTF8, MimeTypes.Application.Json);
+                return body;
             }
 
             body = GenerateFormPostData(action, methodArguments);
-            if (body != null)
-            {
-                return new StringContent(body, Encoding.UTF8, MimeTypes.Application.XWwwFormUrlencoded);
-            }
 
-            return null;
+            return body;
         }
 
-        private static string GenerateBody(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer)
+        private static HttpContent GenerateBody(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer)
         {
             var parameters = action
                 .Parameters
@@ -54,10 +51,20 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 return null;
             }
 
-            return jsonSerializer.Serialize(value);
+            if (value is IRemoteStreamContent remoteStreamContent)
+            {
+                var content = new StreamContent(remoteStreamContent.GetStream());
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(remoteStreamContent.ContentType);
+                content.Headers.ContentLength = remoteStreamContent.ContentLength;
+                return content;
+            }
+            else
+            {
+                return new StringContent(jsonSerializer.Serialize(value), Encoding.UTF8, MimeTypes.Application.Json);
+            }
         }
 
-        private static string GenerateFormPostData(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments)
+        private static HttpContent GenerateFormPostData(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments)
         {
             var parameters = action
                 .Parameters
@@ -86,7 +93,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 isFirstParam = false;
             }
 
-            return postDataBuilder.ToString();
+            return new StringContent(postDataBuilder.ToString(), Encoding.UTF8, MimeTypes.Application.XWwwFormUrlencoded);
         }
     }
 }

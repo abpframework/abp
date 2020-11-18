@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging.Admin.Blogs
 {
@@ -35,10 +36,12 @@ namespace Volo.Blogging.Admin.Blogs
         [Authorize(BloggingPermissions.Blogs.Create)]
         public async Task<BlogDto> CreateAsync(CreateBlogDto input)
         {
-            var newBlog = await _blogRepository.InsertAsync(new Blog(GuidGenerator.Create(), input.Name, input.ShortName)
+            var newBlog = new Blog(GuidGenerator.Create(), input.Name, input.ShortName)
             {
                 Description = input.Description
-            });
+            };
+
+            newBlog = await _blogRepository.InsertAsync(newBlog);
 
             return ObjectMapper.Map<Blog, BlogDto>(newBlog);
         }

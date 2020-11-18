@@ -1,0 +1,17 @@
+﻿@using Volo.Abp.Account.Localization
+@using Volo.Abp.Users
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<AccountResource> L
+@inject ICurrentUser CurrentUser
+@model Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password.AccountProfilePasswordManagementGroupViewComponent.ChangePasswordInfoModel
+
+<h4>@L["ChangePassword"]</h4><hr/>
+<form id="ChangePasswordForm">
+    @if (!Model.HideOldPasswordInput)
+    {
+        <abp-input asp-for="CurrentPassword"/>
+    }
+    <abp-input asp-for="NewPassword"/>
+    <abp-input asp-for="NewPasswordConfirm"/>
+    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value"/>
+</form>

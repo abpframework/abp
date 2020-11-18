@@ -45,13 +45,13 @@ namespace Volo.Abp.Identity
 
             result.Items.Count.ShouldBeGreaterThan(0);
         }
-        
+
         [Fact]
         public async Task GetListAsync()
         {
             //Act
 
-            var result = await _roleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            var result = await _roleAppService.GetListAsync(new GetIdentityRolesInput());
 
             //Assert
 

@@ -1,8 +1,8 @@
 # Introducing the Angular Service Proxy Generation
 
-Angular Service Proxy System **generates TypeScript services and models** to consume your backend HTTP APIs developed using the ABP Framework. So, you **don't manually create** models for your server side DTOs and perform raw HTTP calls to the server.
+ABP Angular Service Proxy System **generates TypeScript services and models** to consume your backend HTTP APIs developed using the ABP Framework. So, you **don't manually create** models for your server side DTOs and perform raw HTTP calls to the server.
 
-ABP Framework has introduced the **new** Angular Service Proxy Generation system with the version 3.1. While this feature was available since the [v2.3](https://blog.abp.io/abp/ABP-Framework-v2_3_0-Has-Been-Released), it was not well covering some scenarios, like inheritance and generic types and had some known problems. **With the v3.1, we've re-written** it using the [Angular Schematics](https://angular.io/guide/schematics) system. Now, it is much more stable and feature rich.
+ABP Framework has introduced the **new** Angular Service Proxy Generation system with the **version 3.1**. While this feature was available since the [v2.3](https://blog.abp.io/abp/ABP-Framework-v2_3_0-Has-Been-Released), it was not well covering some scenarios, like inheritance and generic types and had some known problems. **With the v3.1, we've re-written** it using the [Angular Schematics](https://angular.io/guide/schematics) system. Now, it is much more stable and feature rich.
 
 This post introduces the service proxy generation system and highlights some important features.
 
@@ -46,6 +46,15 @@ apis: {
 ```
 
 `Acme.BookStore` should be replaced by the root namespace of your .NET project. This ensures to not create unnecessary nested folders while creating the service proxy code. This value is `AngularProxyDemo` for the example solution explained below.
+
+* Finally, add the following paths to the `tsconfig.base.json` to have a shortcut while importing proxies:
+
+```json
+"paths": {
+    "@proxy": ["src/app/proxy/index.ts"],
+    "@proxy/*": ["src/app/proxy/*"]
+}
+```
 
 ## Basic Usage
 
@@ -139,21 +148,23 @@ abp generate-proxy
 It should produce an output like the following:
 
 ````bash
-CREATE src/app/shared/models/books/index.ts (142 bytes)
-CREATE src/app/shared/services/books/book.service.ts (437 bytes)
 ...
+CREATE src/app/proxy/books/book.service.ts (446 bytes)
+CREATE src/app/proxy/books/models.ts (148 bytes)
+CREATE src/app/proxy/books/index.ts (57 bytes)
+CREATE src/app/proxy/index.ts (33 bytes)
 ````
 
 > `generate-proxy` command can take some some optional parameters for advanced scenarios (like [modular development](https://docs.abp.io/en/abp/latest/Module-Development-Basics)). You can take a look at the [documentation](https://docs.abp.io/en/abp/latest/UI/Angular/Service-Proxies).
 
-It basically creates two files;
+#### The Generated Code
 
-src/app/shared/services/books/**book.service.ts**: This is the service that can be injected and used to get the list of books;
+`src/app/proxy/books/book.service.ts`: This is the service that can be injected and used to get the list of books;
 
-````typescript
+````js
+import type { BookDto } from './models';
 import { RestService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { BookDto } from '../../models/book';
 
 @Injectable({
   providedIn: 'root',
@@ -170,12 +181,11 @@ export class BookService {
 
   constructor(private restService: RestService) {}
 }
-
 ````
 
-src/app/shared/models/books/**index.ts**: This file contains the modal classes corresponding to the DTOs defined in the server side;
+`src/app/proxy/books/models.ts`: This file contains the modal classes corresponding to the DTOs defined in the server side;
 
-````typescript
+````js
 import type { EntityDto } from '@abp/ng.core';
 
 export interface BookDto extends EntityDto<string> {
@@ -184,7 +194,21 @@ export interface BookDto extends EntityDto<string> {
 }
 ````
 
-You can now inject the `BookService` into any Angular component and use the `getList()` method to get the list of books.
+> There are a few more files have been generated to help you import the types easier.
+
+#### How to Import
+
+You can now import the `BookService` into any Angular component and use the `getList()` method to get the list of books.
+
+````js
+import { BookService, BookDto } from '../proxy/books';
+````
+
+You can also use the `@proxy` as a shortcut of the proxy folder:
+
+````js
+import { BookService, BookDto } from '@proxy/books';
+````
 
 ### About the Generated Code
 
@@ -235,27 +259,20 @@ namespace AngularProxyDemo.Books
 }
 ```
 
-Let's re-run the `generate-proxy` command to see the result:
+Let's re-run the `generate-proxy` command:
 
-````
+````bash
 abp generate-proxy
 ````
 
-The output of this command will be like the following:
-
-````bash
-UPDATE src/app/shared/services/books/book.service.ts (660 bytes)
-UPDATE src/app/shared/models/books/index.ts (217 bytes)
-````
-
-It tells us two files have been updated. Let's see the changes;
+This command will re-generate the proxies by updating some files. Let's see some of the changes;
 
 **book.service.ts**
 
-````typescript
+````js
+import type { BookDto, BookUpdateDto } from './models';
 import { RestService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { BookDto, BookUpdateDto } from '../../models/books';
 
 @Injectable({
   providedIn: 'root',
@@ -284,7 +301,7 @@ export class BookService {
 
 `update` function has been added to the `BookService` that gets an `id` and a `BookUpdateDto` as the parameters.
 
-**index.ts**
+**models.ts**
 
 ````typescript
 import type { EntityDto } from '@abp/ng.core';
@@ -358,14 +375,14 @@ namespace AngularProxyDemo.Orders
 }
 ````
 
-When I run the `abp generate-proxy` command again, I see two new files have been created.
+When I run the `abp generate-proxy` command again, I see there are some created and updated files. Let's see some important ones;
 
-src/app/shared/services/orders/**order.service.ts**
+`src/app/proxy/orders/order.service.ts`
 
-````typescript
+````js
+import type { OrderCreateDto } from './models';
 import { RestService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { OrderCreateDto } from '../../models/orders';
 
 @Injectable({
   providedIn: 'root',
@@ -385,16 +402,19 @@ export class OrderService {
 }
 ````
 
-src/app/shared/models/orders/**index.ts**
+`src/app/proxy/orders/models.ts`
 
 ````typescript
-import type { GenericDetailDto } from '../../models/orders';
+export interface GenericDetailDto<TCount> {
+  productId: string;
+  count: TCount;
+}
 
 export interface OrderCreateDto {
   customerId: string;
   creationTime: string;
   details: OrderDetailDto[];
-  extraProperties: string | object;
+  extraProperties: Record<string, object>;
 }
 
 export interface OrderDetailDto extends GenericDetailDto<number> {
@@ -402,4 +422,10 @@ export interface OrderDetailDto extends GenericDetailDto<number> {
 }
 ````
 
-NOTE: 3.1.0-rc2 was generating the code above, which is wrong. It will be fixed in the next RC versions.
+## Conclusion
+
+`abp generate-proxy` is a very handy command that creates all the necessary code to consume your ABP based backend HTTP APIs. It generates a clean code that is well aligned to the backend services and benefits from the power of TypeScript (by using generics, inheritance...).
+
+## The Documentation
+
+See [the documentation](https://docs.abp.io/en/abp/latest/UI/Angular/Service-Proxies) for details of the Angular Service Proxy Generation.

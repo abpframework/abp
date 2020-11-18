@@ -29,9 +29,15 @@ $projects = (
     "framework/src/Volo.Abp.ApiVersioning.Abstractions",
     "framework/src/Volo.Abp.AspNetCore.Authentication.JwtBearer",
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
+    "framework/src/Volo.Abp.AspNetCore.Authentication.OpenIdConnect",
     "framework/src/Volo.Abp.AspNetCore",
+    "framework/src/Volo.Abp.AspNetCore.Components",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme",
     "framework/src/Volo.Abp.AspNetCore.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Client",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.Client.Common",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Contracts",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
@@ -41,6 +47,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Widgets",
     "framework/src/Volo.Abp.AspNetCore.Serilog",
     "framework/src/Volo.Abp.AspNetCore.SignalR",
@@ -48,6 +55,7 @@ $projects = (
     "framework/src/Volo.Abp.Auditing",
     "framework/src/Volo.Abp.Authorization",
     "framework/src/Volo.Abp.Autofac",
+    "framework/src/Volo.Abp.Autofac.WebAssembly",
     "framework/src/Volo.Abp.AutoMapper",
     "framework/src/Volo.Abp.BackgroundJobs.Abstractions",
     "framework/src/Volo.Abp.BackgroundJobs",
@@ -56,6 +64,7 @@ $projects = (
     "framework/src/Volo.Abp.BackgroundJobs.Quartz",
     "framework/src/Volo.Abp.BackgroundWorkers",
     "framework/src/Volo.Abp.BackgroundWorkers.Quartz",
+    "framework/src/Volo.Abp.BlazoriseUI",
     "framework/src/Volo.Abp.BlobStoring",
     "framework/src/Volo.Abp.BlobStoring.FileSystem",
     "framework/src/Volo.Abp.BlobStoring.Aliyun",
@@ -77,14 +86,16 @@ $projects = (
     "framework/src/Volo.Abp.Emailing",
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
-    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle",
-    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
+    # "framework/src/Volo.Abp.EntityFrameworkCore.Oracle",
+    # "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
     "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EntityFrameworkCore.Sqlite",
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
     "framework/src/Volo.Abp.EventBus",
     "framework/src/Volo.Abp.EventBus.RabbitMQ",
     "framework/src/Volo.Abp.EventBus.Kafka",
+    "framework/src/Volo.Abp.EventBus.Rebus",
+    "framework/src/Volo.Abp.ExceptionHandling",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
     "framework/src/Volo.Abp.GlobalFeatures",
@@ -94,6 +105,7 @@ $projects = (
     "framework/src/Volo.Abp.Http.Client",
     "framework/src/Volo.Abp.Http.Client.IdentityModel",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.Web",
+    "framework/src/Volo.Abp.Http.Client.IdentityModel.WebAssembly",
     "framework/src/Volo.Abp.Http",
     "framework/src/Volo.Abp.IdentityModel",
     "framework/src/Volo.Abp.Json",
@@ -125,6 +137,7 @@ $projects = (
     "framework/src/Volo.Abp.Validation",
     "framework/src/Volo.Abp.VirtualFileSystem",
     "framework/src/Volo.Abp.Kafka",
+    "framework/src/Volo.Abp.Swashbuckle",
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Application.Contracts",
@@ -133,6 +146,7 @@ $projects = (
     "modules/account/src/Volo.Abp.Account.HttpApi",
     "modules/account/src/Volo.Abp.Account.Web",
     "modules/account/src/Volo.Abp.Account.Web.IdentityServer",
+    "modules/account/src/Volo.Abp.Account.Blazor",
         
     # modules/audit-logging
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain",
@@ -193,6 +207,7 @@ $projects = (
     "modules/feature-management/src/Volo.Abp.FeatureManagement.HttpApi",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.MongoDB",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Web",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor",
 
     # modules/identity
     "modules/identity/src/Volo.Abp.Identity.Application.Contracts",
@@ -205,6 +220,7 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.HttpApi",
     "modules/identity/src/Volo.Abp.Identity.MongoDB",
     "modules/identity/src/Volo.Abp.Identity.Web",
+    "modules/identity/src/Volo.Abp.Identity.Blazor",
     "modules/identity/src/Volo.Abp.PermissionManagement.Domain.Identity",
     
     # modules/identityserver
@@ -224,8 +240,10 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.MongoDB",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Web",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor",
 
     # modules/setting-management
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Blazor",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain.Shared",
     "modules/setting-management/src/Volo.Abp.SettingManagement.EntityFrameworkCore",
@@ -235,6 +253,7 @@ $projects = (
     # modules/tenant-management
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Application.Contracts",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Application",
+    "modules/tenant-management/src/Volo.Abp.TenantManagement.Blazor",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Domain",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Domain.Shared",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.EntityFrameworkCore",

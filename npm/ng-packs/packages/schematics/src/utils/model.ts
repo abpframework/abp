@@ -1,8 +1,8 @@
-import { strings } from '@angular-devkit/core';
 import { VOLO_NAME_VALUE, VOLO_REGEX } from '../constants';
-import { Interface, Model, Property, Type, TypeWithEnum } from '../models';
+import { Interface, Model, Property, PropertyDef, Type, TypeWithEnum } from '../models';
 import { parseNamespace } from './namespace';
 import { relativePathToModel } from './path';
+import { camel } from './text';
 import { parseGenerics } from './tree';
 import {
   createTypeParser,
@@ -118,8 +118,8 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
     const _interface = new Interface({ identifier, base, namespace, ref });
 
     typeDef.properties?.forEach(prop => {
-      const name = strings.camelize(prop.name);
-      const optional = prop.typeSimple.endsWith('?') ? '?' : '';
+      const name = camel(prop.name);
+      const optional = isOptionalProperty(prop) ? '?' : '';
       const type = simplifyType(prop.typeSimple);
       const refs = parseType(prop.type).reduce(
         (acc: string[], r) => acc.concat(parseGenerics(r).toGenerics()),
@@ -133,7 +133,12 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
 
     return _interface.properties
       .reduce<string[]>((refs, prop) => {
-        prop.refs.forEach(type => !types[type]?.isEnum && refs.push(type));
+        prop.refs.forEach(type => {
+          if (types[type]?.isEnum) return;
+          if (interfaces.some(i => i.ref === type)) return;
+          refs.push(type);
+        });
+
         return refs;
       }, [])
       .concat(base ? parseGenerics(typeDef.baseType!).toGenerics() : [])
@@ -144,4 +149,10 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
 export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
   const { solution } = params;
   return (namespace: string) => createTypesToImportsReducer(solution, namespace);
+}
+
+function isOptionalProperty(prop: PropertyDef) {
+  return (
+    prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && prop.isRequired === false)
+  );
 }

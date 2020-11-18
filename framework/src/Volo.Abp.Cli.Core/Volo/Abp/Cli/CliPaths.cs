@@ -9,7 +9,8 @@ namespace Volo.Abp.Cli
         public static string Log => Path.Combine(AbpRootPath, "cli", "logs");
         public static string Root => Path.Combine(AbpRootPath, "cli");
         public static string AccessToken => Path.Combine(AbpRootPath, "cli", "access-token.bin");
-
+        public static string Build => Path.Combine(AbpRootPath, "build");
+        
         private static readonly string AbpRootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".abp");
     }
 }   

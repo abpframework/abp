@@ -9,7 +9,7 @@ using Volo.Abp.Threading;
 namespace Volo.Abp.BackgroundWorkers
 {
     /// <summary>
-    /// Extends <see cref="BackgroundWorkerBase"/> to add a periodic running Timer. 
+    /// Extends <see cref="BackgroundWorkerBase"/> to add a periodic running Timer.
     /// </summary>
     public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
     {
@@ -25,13 +25,13 @@ namespace Volo.Abp.BackgroundWorkers
             Timer.Elapsed += Timer_Elapsed;
         }
 
-        public override async Task StartAsync(CancellationToken cancellationToken = default)
+        public async override Task StartAsync(CancellationToken cancellationToken = default)
         {
             await base.StartAsync(cancellationToken);
             Timer.Start(cancellationToken);
         }
 
-        public override async Task StopAsync(CancellationToken cancellationToken = default)
+        public async override Task StopAsync(CancellationToken cancellationToken = default)
         {
             Timer.Stop(cancellationToken);
             await base.StopAsync(cancellationToken);

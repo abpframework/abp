@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Castle;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.Validation;
+using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.Http.Client
 {
@@ -14,7 +13,8 @@ namespace Volo.Abp.Http.Client
         typeof(AbpCastleCoreModule),
         typeof(AbpThreadingModule),
         typeof(AbpMultiTenancyModule),
-        typeof(AbpValidationModule)
+        typeof(AbpValidationModule),
+        typeof(AbpExceptionHandlingModule)
         )]
     public class AbpHttpClientModule : AbpModule
     {
@@ -22,25 +22,6 @@ namespace Volo.Abp.Http.Client
         {
             var configuration = context.Services.GetConfiguration();
             Configure<AbpRemoteServiceOptions>(configuration);
-        }
-
-        public override void PostConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpHttpClientOptions>(options =>
-            {
-                if (options.HttpClientActions.Any())
-                {
-                    var httpClientNames = options.HttpClientProxies.Select(x => x.Value.RemoteServiceName);
-                    foreach (var httpClientName in httpClientNames)
-                    {
-                        foreach (var httpClientAction in options.HttpClientActions)
-                        {
-                            context.Services.Configure<HttpClientFactoryOptions>(httpClientName,
-                                x => x.HttpClientActions.Add(httpClientAction.Invoke(httpClientName)));
-                        }
-                    }
-                }
-            });
         }
     }
 }

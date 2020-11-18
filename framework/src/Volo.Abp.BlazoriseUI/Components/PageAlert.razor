@@ -1,0 +1,16 @@
+﻿@foreach (var alert in Alerts)
+{
+    <Alert Visible="@alert.IsVisible" Dismisable="@alert.AlertMessage.Dismissible" Color="@GetAlertColor(alert.AlertMessage.Type)">
+        @if (!string.IsNullOrEmpty(alert.AlertMessage.Title))
+        {
+            <Heading Size="HeadingSize.Is4" Class="alert-heading">
+                @alert.AlertMessage.Title
+                @if (alert.AlertMessage.Dismissible)
+                {
+                    <CloseButton Clicked="() => alert.IsVisible = false" />
+                }
+            </Heading>
+        }
+        <Paragraph>@alert.AlertMessage.Text</Paragraph>
+    </Alert>
+}

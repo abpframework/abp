@@ -1,6 +1,6 @@
 <ul class="navbar-nav">
   <ng-container
-    *ngFor="let route of routes.visible$ | async; trackBy: trackByFn"
+    *ngFor="let route of routesService.visible$ | async; trackBy: trackByFn"
     [ngTemplateOutlet]="isDropdown(route) ? dropdownLink : defaultLink"
     [ngTemplateOutletContext]="{ $implicit: route }"
   >
@@ -60,7 +60,7 @@
 
   <ng-template #defaultChild let-child>
     <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
-      <a class="dropdown-item" [routerLink]="[child.path]">
+      <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
         <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
         {{ child.name | abpLocalization }}</a
       >

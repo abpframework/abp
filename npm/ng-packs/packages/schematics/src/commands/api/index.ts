@@ -1,4 +1,4 @@
-import { normalize, strings } from '@angular-devkit/core';
+import { normalize } from '@angular-devkit/core';
 import {
   applyTemplates,
   branchAndMerge,
@@ -33,7 +33,7 @@ import * as cases from '../../utils/text';
 
 export default function(schema: GenerateProxySchema) {
   const params = removeDefaultPlaceholders(schema);
-  const moduleName = strings.camelize(params.module || 'app');
+  const moduleName = params.module || 'app';
 
   return chain([
     async (tree: Tree, _context: SchematicContext) => {

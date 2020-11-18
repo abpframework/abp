@@ -50,6 +50,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         [CanBeNull]
         public string RefreshUrl { get; set; }
 
+        public bool AutoInitialize { get; set; }
+
         public WidgetDefinition(
             [NotNull] Type viewComponentType,
             [CanBeNull] ILocalizableString displayName = null)
@@ -64,6 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             Styles = GetStyles(WidgetAttribute);
             Scripts = GetScripts(WidgetAttribute);
             RefreshUrl = WidgetAttribute.RefreshUrl;
+            AutoInitialize = WidgetAttribute.AutoInitialize;
         }
 
         private static List<WidgetResourceItem> GetStyles(WidgetAttribute widgetAttribute)

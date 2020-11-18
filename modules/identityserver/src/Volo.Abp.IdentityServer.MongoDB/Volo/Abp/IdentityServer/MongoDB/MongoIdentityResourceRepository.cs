@@ -37,10 +37,11 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .Where(x => x.Name == name)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityResource>> GetListByScopesAsync(string[] scopeNames, bool includeDetails = false,
+        public virtual async Task<List<IdentityResource>> GetListByScopeNameAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()

@@ -89,7 +89,7 @@ Defining multiple connections is allowed. In this case, you can specify the conn
 }
 ````
 
-This allows you to use multiple RabbitMQ server in your application, but select one of them for the event bus.
+This allows you to use multiple Kafka cluster in your application, but select one of them for the event bus.
 
 You can use any of the [ClientConfig](https://docs.confluent.io/current/clients/confluent-kafka-dotnet/api/Confluent.Kafka.ClientConfig.html) properties as the connection properties.
 

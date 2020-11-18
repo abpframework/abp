@@ -15,7 +15,7 @@ namespace Volo.Abp.Features
             _methodInvocationFeatureCheckerService = methodInvocationFeatureCheckerService;
         }
 
-        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.FeatureChecking))
             {

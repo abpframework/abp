@@ -75,15 +75,34 @@ namespace Volo.Abp.Cli.NuGet
 
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-                var versions = JsonSerializer
+                List<SemanticVersion> versions;
+
+                if (!includeNightly && !includeReleaseCandidates)
+                {
+                    versions = JsonSerializer
                     .Deserialize<NuGetVersionResultDto>(responseContent)
                     .Versions
                     .Select(SemanticVersion.Parse)
                     .OrderByDescending(v=> v, new VersionComparer()).ToList();
 
-                if (!includeNightly && !includeReleaseCandidates)
-                {
                     versions = versions.Where(x => !x.IsPrerelease).ToList();
+                }
+                else if (!includeNightly && includeReleaseCandidates)
+                {
+                    versions = JsonSerializer
+                        .Deserialize<NuGetVersionResultDto>(responseContent)
+                        .Versions
+                        .Where(v=> !v.Contains("-preview"))
+                        .Select(SemanticVersion.Parse)
+                        .OrderByDescending(v=> v, new VersionComparer()).ToList();
+                }
+                else
+                {
+                    versions = JsonSerializer
+                        .Deserialize<NuGetVersionResultDto>(responseContent)
+                        .Versions
+                        .Select(SemanticVersion.Parse)
+                        .OrderByDescending(v=> v, new VersionComparer()).ToList();
                 }
 
                 return versions.Any() ? versions.Max() : null;

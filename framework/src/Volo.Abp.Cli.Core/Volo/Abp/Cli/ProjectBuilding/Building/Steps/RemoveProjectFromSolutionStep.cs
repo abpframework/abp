@@ -33,6 +33,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         private List<string> RemoveProject(List<string> solutionFileLines)
         {
             var projectKey = FindProjectKey(solutionFileLines);
+
+            if (projectKey == null)
+            {
+                return solutionFileLines;
+            }
+
             var newSolutionFileLines = new List<string>();
             var firstOccurence = true;
 
@@ -67,7 +73,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 }
             }
 
-            throw new ApplicationException($"The solution file '{_solutionFilePath}' does not contain a project '{_projectName}'");
+            return null;
         }
     }
 }

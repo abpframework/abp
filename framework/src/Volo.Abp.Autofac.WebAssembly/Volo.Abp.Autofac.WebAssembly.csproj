@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly\Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />
+      <ProjectReference Include="..\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    </ItemGroup>
+
+</Project>

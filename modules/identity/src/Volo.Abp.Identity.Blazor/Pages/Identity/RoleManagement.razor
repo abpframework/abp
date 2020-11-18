@@ -1,0 +1,144 @@
+﻿@page "/identity/roles"
+@attribute [Authorize( IdentityPermissions.Roles.Default )]
+@using Volo.Abp.Identity
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Volo.Abp.PermissionManagement.Blazor.Components
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.Identity.Localization
+@inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
+
+@inherits AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
+@* ************************* PAGE HEADER ************************* *@
+<Row Class="justify-content-between">
+    <Column ColumnSize="ColumnSize.IsAuto">
+        <Heading Size="HeadingSize.Is1">@L["Roles"]</Heading>
+    </Column>
+    <Column ColumnSize="ColumnSize.IsAuto">
+        @if ( HasCreatePermission )
+        {
+            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewRole"]</Button>
+        }
+    </Column>
+</Row>
+
+@* ************************* DATA GRID ************************* *@
+<DataGrid TItem="IdentityRoleDto"
+          Data="Entities"
+          ReadData="OnDataGridReadAsync"
+          TotalItems="TotalCount"
+          ShowPager="true"
+          PageSize="PageSize">
+    <DataGridColumns>
+        <DataGridEntityActionsColumn TItem="IdentityRoleDto" @ref="@EntityActionsColumn">
+            <DisplayTemplate>
+                <EntityActions TItem="IdentityRoleDto" EntityActionsColumn="@EntityActionsColumn">
+                    <EntityAction TItem="IdentityRoleDto"
+                                  RequiredPolicy="@UpdatePolicyName"
+                                  Clicked="() => OpenEditModalAsync(context)"
+                                  Text="@L["Edit"]"></EntityAction>
+                    <EntityAction TItem="IdentityRoleDto"
+                                  RequiredPolicy="@ManagePermissionsPolicyName"
+                                  Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.Name)"
+                                  Text="@L["Permissions"]"></EntityAction>
+                    <EntityAction TItem="IdentityRoleDto"
+                                  RequiredPolicy="@DeletePolicyName"
+                                  Clicked="() => DeleteEntityAsync(context)"
+                                  ConfirmationMessage="()=> GetDeleteConfirmationMessage(context)"
+                                  Text="@L["Delete"]"></EntityAction>
+                </EntityActions>
+            </DisplayTemplate>
+        </DataGridEntityActionsColumn>
+        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="@L["RoleName"].Value">
+            <DisplayTemplate>
+                @(context.Name)
+                @if (context.IsDefault)
+                {
+                    <Badge Color="Color.Primary" Margin="Margin.Is1.FromLeft">@L["DisplayName:IsDefault"]</Badge>
+                }
+                @if (context.IsPublic)
+                {
+                    <Badge Color="Color.Light" Margin="Margin.Is1.FromLeft">@L["DisplayName:IsPublic"]</Badge>
+                }
+            </DisplayTemplate>
+        </DataGridColumn>
+    </DataGridColumns>
+</DataGrid>
+
+@* ************************* CREATE MODAL ************************* *@
+@if (HasCreatePermission)
+{
+    <Modal @ref="CreateModal">
+        <ModalBackdrop />
+        <ModalContent Centered="true">
+            <Form id="RoleCreateForm">
+                <ModalHeader>
+                    <ModalTitle>@L["NewRole"]</ModalTitle>
+                    <CloseButton Clicked="CloseCreateModalAsync" />
+                </ModalHeader>
+                <ModalBody>
+                    <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                                <TextEdit @bind-Text="@NewEntity.Name">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Field>
+                            <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                            <Check TValue="bool" @bind-Checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                        </Field>
+                    </Validations>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                    <Button form="RoleCreateForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+                </ModalFooter>
+            </Form>
+        </ModalContent>
+    </Modal>
+}
+@* ************************* EDIT MODAL ************************* *@
+@if (HasUpdatePermission)
+{
+    <Modal @ref="EditModal">
+        <ModalBackdrop />
+        <ModalContent Centered="true">
+            <Form id="RoleEditForm">
+                <ModalHeader>
+                    <ModalTitle>@L["Edit"]</ModalTitle>
+                    <CloseButton Clicked="CloseEditModalAsync" />
+                </ModalHeader>
+                <ModalBody>
+                    <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
+                        <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
+                                <TextEdit @bind-Text="EditingEntity.Name">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Field>
+                            <Check TValue="bool" @bind-Checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                            <Check TValue="bool" @bind-Checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                        </Field>
+                    </Validations>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                    <Button form="RoleEditForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
+                </ModalFooter>
+            </Form>
+        </ModalContent>
+    </Modal>
+}
+
+<PermissionManagementModal @ref="PermissionManagementModal" />

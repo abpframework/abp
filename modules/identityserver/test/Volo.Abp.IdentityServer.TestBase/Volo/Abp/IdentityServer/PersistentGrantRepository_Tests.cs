@@ -36,7 +36,7 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task DeleteBySubjectIdAndClientId()
         {
-            await _persistentGrantRepository.DeleteAsync("PersistedGrantSubjectId1", "PersistedGrantClientId1");
+            await _persistentGrantRepository.DeleteAsync("PersistedGrantSubjectId1", "PersistedGrantSessionId1", "PersistedGrantClientId1");
 
             var persistedGrants = await _persistentGrantRepository.GetListAsync();
             persistedGrants.ShouldNotBeEmpty();
@@ -48,7 +48,7 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task DeleteBySubjectIdAndClientIdAndType()
         {
-            await _persistentGrantRepository.DeleteAsync("PersistedGrantSubjectId1", "PersistedGrantClientId1",
+            await _persistentGrantRepository.DeleteAsync("PersistedGrantSubjectId1", "PersistedGrantSessionId1", "PersistedGrantClientId1",
                 "PersistedGrantClientId1");
 
             var persistedGrants = await _persistentGrantRepository.GetListAsync();

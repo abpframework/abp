@@ -17,7 +17,7 @@ namespace Volo.Abp.FeatureManagement
         }
 
         [HttpGet]
-        public virtual Task<FeatureListDto> GetAsync(string providerName, string providerKey)
+        public virtual Task<GetFeatureListResultDto> GetAsync(string providerName, string providerKey)
         {
             return FeatureAppService.GetAsync(providerName, providerKey);
         }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Validation;
 using Volo.Blogging.Admin.Blogs;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 {

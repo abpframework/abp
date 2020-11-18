@@ -5,8 +5,10 @@ using Volo.Abp.ExceptionHandling;
 namespace Volo.Abp.Http.Client
 {
     [Serializable]
-    public class AbpRemoteCallException : AbpException, IHasErrorCode, IHasErrorDetails
+    public class AbpRemoteCallException : AbpException, IHasErrorCode, IHasErrorDetails, IHasHttpStatusCode
     {
+        public int HttpStatusCode { get; set; }
+
         public string Code => Error?.Code;
 
         public string Details => Error?.Details;
@@ -28,6 +30,14 @@ namespace Volo.Abp.Http.Client
             : base(error.Message)
         {
             Error = error;
+
+            if (error.Data != null)
+            {
+                foreach (var dataKey in error.Data.Keys)
+                {
+                    Data[dataKey] = error.Data[dataKey];
+                }
+            }
         }
     }
 }

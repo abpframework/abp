@@ -5,7 +5,7 @@ namespace Volo.Abp.DynamicProxy
 {
     public class SimpleAsyncInterceptor : AbpInterceptor
     {
-        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             await Task.Delay(5);
 			(invocation.TargetObject as ICanLogOnObject)?.Logs?.Add($"{GetType().Name}_InterceptAsync_BeforeInvocation");

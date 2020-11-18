@@ -9,6 +9,8 @@ namespace Volo.Abp.Http.DynamicProxying
 
         Task GetException1Async();
 
+        Task GetException2Async();
+
         Task<DateTime> GetWithDateTimeParameterAsync(DateTime dateTime1);
 
         Task<string> PostValueWithHeaderAndQueryStringAsync(string headerValue, string qsValue);

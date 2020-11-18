@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider.
+* **{{DB_Value}}** as the database provider.
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,9 +28,10 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 {{if UI == "MVC" && DB == "EF"}}
@@ -217,7 +201,7 @@ Before updating the database, read the section below to learn how to seed some i
 
 > It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create seed data, but it is suggested to follow it to learn this useful ABP Framework feature.
 
-Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project and copy the following code:
+Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project by copying the following code:
 
 ```csharp
 using System;
@@ -278,17 +262,8 @@ Run the `Acme.BookStore.DbMigrator` application to update the database:
 
 ![bookstore-dbmigrator-on-solution](images/bookstore-dbmigrator-on-solution.png)
 
-{{if DB == "EF"}}
 
 `.DbMigrator` is a console application that can be run to **migrate the database schema** and **seed the data** on **development** and **production** environments.
-
-{{end}}
-
-{{if DB == "Mongo"}}
-
-While MongoDB **doesn't require** a database schema migration, it is still good to run this application since it **seeds the initial data** on the database. This application can be used on **development** and **production** environments.
-
-{{end}}
 
 ## Create the Application Service
 
@@ -426,7 +401,7 @@ namespace Acme.BookStore.Books
 
 ### BookAppService
 
-It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the Acme.BookStore.Application project:
+It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the `Acme.BookStore.Application` project:
 
 ````csharp
 using System;
@@ -466,7 +441,7 @@ ABP can [**automagically**](../API/Auto-API-Controllers.md) configures your appl
 
 ### Swagger UI
 
-The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. (Replace `<port>` with your own port number.)
+The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application ({{if UI=="MVC"}}`Acme.BookStore.Web`{{else}}`Acme.BookStore.HttpApi.Host`{{end}}) by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. Replace `<port>` with your own port number.
 
 You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints:
 

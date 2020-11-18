@@ -33,6 +33,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 
         public string RefreshUrl { get; set; }
 
+        public bool AutoInitialize { get; set; }
+
         public static bool IsWidget(Type type)
         {
             return type.IsSubclassOf(typeof(ViewComponent)) &&

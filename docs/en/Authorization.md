@@ -80,6 +80,8 @@ namespace Acme.BookStore.Permissions
 
 > ABP automatically discovers this class. No additional configuration required!
 
+> You typically define this class inside the `Application.Contracts` project of your [application](Startup-Templates/Application.md). The startup template already comes with an empty class named *YourProjectNamePermissionDefinitionProvider* that you can start with.
+
 In the `Define` method, you first need to add a **permission group** or get an existing group then add **permissions** to this group.
 
 When you define a permission, it becomes usable in the ASP.NET Core authorization system as a **policy** name. It also becomes visible in the UI. See permissions dialog for a role:
@@ -232,7 +234,7 @@ context
 
 When you write this code inside your permission definition provider, it finds the "role deletion" permission of the [Identity Module](Modules/Identity.md) and disabled the permission, so no one can delete a role on the application.
 
-> Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined. 
+> Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined.
 
 ## IAuthorizationService
 
@@ -276,13 +278,23 @@ public async Task CreateAsync(CreateAuthorDto input)
 
 > Tip: Prefer to use the `Authorize` attribute wherever possible, since it is declarative & simple. Use `IAuthorizationService` if you need to conditionally check a permission and run a business code based on the permission check.
 
-### Check a Permission in JavaScript
+## Check a Permission in JavaScript
 
-You may need to check a policy/permission on the client side. For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API. Example:
+You may need to check a policy/permission on the client side.
+
+### MVC UI
+
+For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API.
+
+**Example: Check if a given permission has been granted for the current user**
 
 ```js
 abp.auth.isGranted('MyPermissionName');
 ```
+
+### Angular UI
+
+See the [permission management document](UI/Angular/Permission-Management.md) for the Angular UI.
 
 ## Permission Management
 
@@ -342,7 +354,7 @@ public class SystemAdminPermissionValueProvider : PermissionValueProvider
 
     public override string Name => "SystemAdmin";
 
-    public override async Task<PermissionGrantResult>
+    public async override Task<PermissionGrantResult>
            CheckAsync(PermissionValueCheckContext context)
     {
         if (context.Principal?.FindFirst("User_Type")?.Value == "SystemAdmin")
@@ -374,7 +386,7 @@ Configure<AbpPermissionOptions>(options =>
 
 ### Permission Store
 
-`IPermissionStore` is the only interface that needs to be implemented to read the value of permissions from a persistence source, generally a database system. Permission management module implements it. See the [permission management module documentation](Modules/Permission-Management.md) for more information
+`IPermissionStore` is the only interface that needs to be implemented to read the value of permissions from a persistence source, generally a database system. The Permission Management module implements it  and pre-installed in the application startup template. See the [permission management module documentation](Modules/Permission-Management.md) for more information
 
 ### AlwaysAllowAuthorizationService
 

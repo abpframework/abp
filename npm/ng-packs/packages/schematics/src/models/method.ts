@@ -1,5 +1,5 @@
-import { strings } from '@angular-devkit/core';
 import { eBindingSourceId, eMethodModifier } from '../enums';
+import { camel } from '../utils';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
@@ -42,7 +42,7 @@ export class Body {
 
   registerActionParameter = (param: ParameterInBody) => {
     const { bindingSourceId, descriptorName, name, nameOnMethod } = param;
-    const camelName = strings.camelize(name);
+    const camelName = camel(name);
     const value = descriptorName ? `${descriptorName}.${camelName}` : nameOnMethod;
 
     switch (bindingSourceId) {

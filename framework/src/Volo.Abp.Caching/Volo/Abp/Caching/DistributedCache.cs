@@ -9,8 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -31,7 +29,7 @@ namespace Volo.Abp.Caching
             ICancellationTokenProvider cancellationTokenProvider,
             IDistributedCacheSerializer serializer,
             IDistributedCacheKeyNormalizer keyNormalizer,
-            IHybridServiceScopeFactory serviceScopeFactory,
+            IServiceScopeFactory serviceScopeFactory,
             IUnitOfWorkManager unitOfWorkManager) : base(
                 distributedCacheOption: distributedCacheOption,
                 cache: cache,
@@ -69,7 +67,7 @@ namespace Volo.Abp.Caching
 
         protected IDistributedCacheKeyNormalizer KeyNormalizer { get; }
 
-        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
@@ -85,7 +83,7 @@ namespace Volo.Abp.Caching
             ICancellationTokenProvider cancellationTokenProvider,
             IDistributedCacheSerializer serializer,
             IDistributedCacheKeyNormalizer keyNormalizer,
-            IHybridServiceScopeFactory serviceScopeFactory,
+            IServiceScopeFactory serviceScopeFactory,
             IUnitOfWorkManager unitOfWorkManager)
         {
             _distributedCacheOption = distributedCacheOption.Value;

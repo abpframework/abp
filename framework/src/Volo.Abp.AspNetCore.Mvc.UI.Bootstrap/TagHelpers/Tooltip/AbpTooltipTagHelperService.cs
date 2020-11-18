@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Linq;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
 {
@@ -24,12 +24,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
             var directory = GetDirectory() != TooltipDirectory.Default ? GetDirectory() : TooltipDirectory.Top;
             output.Attributes.Add("data-placement", directory.ToString().ToLowerInvariant());
 
-            output.PreElement.SetHtmlContent(
-                "<span class=\"d-inline-block\" tabindex=\"0\" data-toggle=\"tooltip\" " +
-                "data-placement=\"" + directory.ToString().ToLowerInvariant() +
-                "\" title=\"" + GetTitle() + "\">" + Environment.NewLine);
+            var span = new TagBuilder("span");
+            span.AddCssClass("d-inline-block");
+            span.Attributes.Add("tabindex", "0");
+            span.Attributes.Add("data-toggle", "tooltip");
+            span.Attributes.Add("data-placement", directory.ToString().ToLowerInvariant());
+            span.Attributes.Add("title", GetTitle());
 
-            output.PostElement.SetHtmlContent(Environment.NewLine + "</span>");
+            output.PreElement.SetHtmlContent(span.RenderStartTag());
+
+            output.PostElement.SetHtmlContent(span.RenderEndTag());
 
             output.Attributes.Add("style", "pointer-events: none;");
         }

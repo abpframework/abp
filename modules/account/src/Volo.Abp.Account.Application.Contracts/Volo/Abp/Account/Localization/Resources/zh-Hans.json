@@ -44,6 +44,7 @@
     "LoggedOutTitle": "注销",
     "LoggedOutText": "你已成功注销并将马上返回.",
     "ReturnToText": "点击此处返回到 {0}",
+    "OrLoginWith": "或登录",
     "ForgotPassword": "忘记密码?",
     "SendPasswordResetLink_Information": "密码重置链接将发送到您的电子邮件以重置密码. 如果您在几分钟内没有收到电子邮件,请重试.",
     "PasswordResetMailSentMessage": "帐户恢复电子邮件已发送到您的电子邮件地址. 如果您在15分钟内未在收件箱中看到此电子邮件,请检查垃圾邮件,并标记为非垃圾邮件.",
@@ -52,6 +53,10 @@
     "ResetPassword_Information": "请输入您的新密码.",
     "YourPasswordIsSuccessfullyReset": "您的密码已经被重置成功.",
     "GoToTheApplication": "转到应用程序",
-    "BackToLogin": "返回登录"
+    "BackToLogin": "返回登录",
+    "ProfileTab:Password": "更改密码",
+    "ProfileTab:PersonalInfo": "个人信息",
+    "ReturnToApplication": "返回到应用程序",
+    "Volo.Account:InvalidEmailAddress": "找不到给定的电子邮件地址：{0}"
   }
 }

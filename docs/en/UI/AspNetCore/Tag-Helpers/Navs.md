@@ -6,7 +6,7 @@
 
 Basic usage:
 
-````csharp
+````html
 <abp-nav nav-style="Pill" align="Center">
     <abp-nav-item>
 <a abp-nav-link active="true" href="#">Active</a>
@@ -78,7 +78,7 @@ See the [navs demo page](https://bootstrap-taghelpers.abp.io/Components/Navs) to
 
 Example:
 
-````csharp
+````html
 <abp-nav-bar size="Lg" navbar-style="Dark_Warning">
     <a abp-navbar-brand href="#">Navbar</a>
     <abp-navbar-toggle>

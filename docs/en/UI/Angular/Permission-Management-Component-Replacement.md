@@ -473,24 +473,20 @@ Open the generated `permission-management.component.html` in `src/app/permission
 Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
-import { AddReplaceableComponent } from '@abp/ng.core';
+import { ReplaceableComponentsService } from '@abp/ng.core';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { PermissionManagementComponent } from './permission-management/permission-management.component';
 
 //...
 export class AppComponent implements OnInit {
-  constructor(private store: Store) {} // injected store
+  constructor(private replaceableComponents: ReplaceableComponentsService) {} // injected ReplaceableComponentsService
 
   ngOnInit() {
-    // added dispatching the AddReplaceableComponent action
-    this.store.dispatch(
-      new AddReplaceableComponent({
+    this.replaceableComponents.add({
         component: PermissionManagementComponent,
         key: ePermissionManagementComponents.PermissionManagement,
-      })
-    );
+      });
   }
 }
 ```

@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 {
     public class AbpTabDropdownTagHelperService : AbpTagHelperService<AbpTabDropdownTagHelper>
     {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             if (string.IsNullOrWhiteSpace(TagHelper.Name))
             {
@@ -31,14 +32,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var link = TagHelper.Name;
             var title = TagHelper.Title;
 
-            return "<li class=\"nav-item dropdown\">" +
-                   "<a class=\"nav-link dropdown-toggle\" id=\"" + id + "\" data-toggle=\"dropdown\" href=\"#" + link + "\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">" +
-                   title +
-                   "</a>" +
-                   "<div class=\"dropdown-menu\">" +
-                   AbpTabDropdownItemsActivePlaceholder +
-                   "</div>" +
-                   "</li>";
+            var anchor = new TagBuilder("a");
+            anchor.AddCssClass("nav-link dropdown-toggle");
+            anchor.Attributes.Add("id", id);
+            anchor.Attributes.Add("data-toggle", "dropdown");
+            anchor.Attributes.Add("href", "#" + link);
+            anchor.Attributes.Add("role", "button");
+            anchor.Attributes.Add("aria-haspopup", "true");
+            anchor.Attributes.Add("aria-expanded", "false");
+            anchor.InnerHtml.Append(title);
+
+            var menu = new TagBuilder("div");
+            menu.AddCssClass("dropdown-menu");
+            menu.InnerHtml.Append(AbpTabDropdownItemsActivePlaceholder);
+
+            var listItem = new TagBuilder("li");
+            listItem.AddCssClass("nav-item dropdown");
+            listItem.InnerHtml.AppendHtml(anchor);
+            listItem.InnerHtml.AppendHtml(menu);
+
+            return listItem.ToHtmlString();
         }
     }
 }

@@ -1,0 +1,60 @@
+﻿@page "/"
+@using Volo.Abp.Users
+@using Volo.Abp.MultiTenancy
+@using System.Security.Claims
+@inject ICurrentUser CurrentUser
+@inject ICurrentTenant CurrentTenant
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h1>Welcome to MyProjectName!</h1>
+
+@if (CurrentUser.IsAuthenticated)
+{
+    <h3>Current User</h3>
+    <ul>
+        <li>Id: <strong>@CurrentUser.Id</strong></li>
+        <li>TenantId: <strong>@CurrentUser.TenantId</strong></li>
+        <li>UserName: <strong>@CurrentUser.UserName</strong></li>
+        <li>Name: <strong>@CurrentUser.Name</strong></li>
+        <li>SurName: <strong>@CurrentUser.SurName</strong></li>
+        <li>Email: <strong>@CurrentUser.Email</strong></li>
+        <li>EmailVerified: <strong>@CurrentUser.EmailVerified</strong></li>
+        <li>PhoneNumber: <strong>@CurrentUser.PhoneNumber</strong></li>
+        <li>PhoneNumberVerified: <strong>@CurrentUser.PhoneNumberVerified</strong></li>
+        <li>Roles: <strong>@CurrentUser.Roles.JoinAsString(", ")</strong></li>
+    </ul>
+}
+
+@if (_claims != null)
+{
+    <h3>Current Claims</h3>
+    <ul>
+        @foreach (var claim in _claims)
+        {
+            <li>@claim.Type: @claim.Value</li>
+        }
+    </ul>
+}
+
+@if (CurrentTenant.IsAvailable)
+{
+    <h3>Current Tenant</h3>
+    <ul>
+        <li>Id: <strong>@CurrentTenant.Id</strong></li>
+        <li>Name: <strong>@CurrentTenant.Name</strong></li>
+    </ul>
+}
+
+@code
+{
+    private IEnumerable<Claim> _claims;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            _claims = authState.User.Claims;
+        }
+    }
+}

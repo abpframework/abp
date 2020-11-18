@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Volo.Abp.BlobStoring.Database.MongoDB;
 using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.MongoDB;
@@ -13,7 +11,8 @@ namespace Volo.BloggingTestApp.MongoDB
         typeof(AbpIdentityMongoDbModule),
         typeof(BloggingMongoDbModule),
         typeof(AbpSettingManagementMongoDbModule),
-        typeof(AbpPermissionManagementMongoDbModule)
+        typeof(AbpPermissionManagementMongoDbModule),
+        typeof(BlobStoringDatabaseMongoDbModule)
     )]
     public class BloggingTestAppMongoDbModule : AbpModule
     {

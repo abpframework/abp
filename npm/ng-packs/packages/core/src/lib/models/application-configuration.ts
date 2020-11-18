@@ -6,6 +6,7 @@ export namespace ApplicationConfiguration {
     auth: Auth;
     setting: Value;
     currentUser: CurrentUser;
+    currentTenant: CurrentTenant;
     features: Value;
   }
 
@@ -63,10 +64,21 @@ export namespace ApplicationConfiguration {
 
   export interface CurrentUser {
     email: string;
+    emailVerified: false;
     id: string;
     isAuthenticated: boolean;
     roles: string[];
     tenantId: string;
     userName: string;
+    name: string;
+    phoneNumber: string;
+    phoneNumberVerified: boolean;
+    surName: string;
+  }
+
+  export interface CurrentTenant {
+    id: string;
+    name: string;
+    isAvailable?: boolean;
   }
 }

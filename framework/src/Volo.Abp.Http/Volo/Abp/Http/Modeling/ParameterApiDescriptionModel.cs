@@ -24,7 +24,7 @@ namespace Volo.Abp.Http.Modeling
 
         public string DescriptorName { get; set; }
 
-        private ParameterApiDescriptionModel()
+        public ParameterApiDescriptionModel()
         {
 
         }

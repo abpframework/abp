@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .FirstOrDefault(d => d.ServiceType == typeof(T))
                 ?.ImplementationInstance;
         }
-        
+
         public static T GetSingletonInstance<T>(this IServiceCollection services)
         {
             var service = services.GetSingletonInstanceOrNull<T>();
@@ -164,6 +164,11 @@ namespace Microsoft.Extensions.DependencyInjection
         public static Lazy<object> GetRequiredServiceLazy(this IServiceCollection services, Type type)
         {
             return new Lazy<object>(() => services.GetRequiredService(type), true);
+        }
+
+        public static IServiceProvider GetServiceProviderOrNull(this IServiceCollection services)
+        {
+	        return services.GetObjectOrNull<IServiceProvider>();
         }
     }
 }

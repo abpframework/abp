@@ -1,0 +1,11 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Hello <b>{0}</b>.": "Helló <b>{0}</b>",
+    "Car": "Autó",
+    "CarPlural": "Autók",
+    "MaxLenghtErrorMessage": "Ennek a mezőnek a hossza legfeljebb „{0}” karakter lehet",
+    "Universe": "Világegyetem",
+    "FortyTwo": "Negyvenkettő"
+  }
+}

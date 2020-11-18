@@ -156,6 +156,8 @@ namespace AbpDemo
 
 > 事件处理程序类必须注册到依赖注入(DI),示例中使用了 `ITransientDependency`. 参阅[DI文档](Dependency-Injection.md)了解更多选项.
 
+如果您执行**数据库操作**并在事件处理程序中使用[仓储](Repositories.md),那么您可能需要创建一个[工作单元](Unit-Of-Work.md),因为一些存储库方法需要在**活动的工作单元**中工作. 确保处理方法设置为 `virtual`,并为该方法添加一个 `[UnitOfWork]` attribute. 或者手动使用 `IUnitOfWorkManager` 创建一个工作单元范围.
+
 ## 事务和异常行为
 
 当一个事件发布,订阅的事件处理程序将立即执行.所以;

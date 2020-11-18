@@ -11,7 +11,7 @@ describe('AuthGuard', () => {
   const createService = createServiceFactory({
     service: AuthGuard,
     mocks: [OAuthService, Router],
-    imports: [RouterModule.forRoot([{ path: '', component: RouterOutletComponent }])],
+    imports: [RouterModule.forRoot([{ path: '', component: RouterOutletComponent }], { relativeLinkResolution: 'legacy' })],
     declarations: [RouterOutletComponent],
     providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
   });

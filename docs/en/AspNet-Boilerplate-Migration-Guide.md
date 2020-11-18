@@ -364,9 +364,9 @@ ABP Framework doesn't have the same service. Instead, use `ICurrentUser` and `IC
 
 ABP Framework extends the [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing the authorization system to be usable in the [application services](Application-Services.md) too.
 
-#### AbpAutorize vs Autorize
+#### AbpAuthorize vs Authorize
 
-Use the standard `[Autorize]` and `[AllowAnonymous]` attributes instead of ASP.NET Boilerplate's custom `[AbpAutorize]` and `[AbpAllowAnonymous]` attributes.
+Use the standard `[Authorize]` and `[AllowAnonymous]` attributes instead of ASP.NET Boilerplate's custom `[AbpAuthorize]` and `[AbpAllowAnonymous]` attributes.
 
 #### IPermissionChecker vs IAuthorizationService
 
@@ -672,9 +672,9 @@ It was like `abp.localization.localize(...)` in the ASP.NET Boilerplate.
 
 ### Navigation vs Menu
 
-In ASP.NET you create a class deriving from the `NavigationProvider` to define your menu elements. Menu items has `requiredPermissionName` attributes to restrict access to a menu element. Menu items were static and your class is executed only one time.
+In ASP.NET Boilerplate you create a class deriving from the `NavigationProvider` to define your menu elements. Menu items has `requiredPermissionName` attributes to restrict access to a menu element. Menu items were static and your class is executed only one time.
 
-Int the ABP Framework you need to create a class implements the `IMenuContributor` interface. Your class is executed whenever the menu needs to be rendered. So, you can conditionally add menu items.
+In the ABP Framework you need to create a class implements the `IMenuContributor` interface. Your class is executed whenever the menu needs to be rendered. So, you can conditionally add menu items.
 
 As an example, this is the menu contributor of the tenant management module:
 

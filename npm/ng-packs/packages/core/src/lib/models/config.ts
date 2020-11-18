@@ -3,6 +3,9 @@ import { AuthConfig } from 'angular-oauth2-oidc';
 import { ApplicationConfiguration } from './application-configuration';
 import { ABP } from './common';
 
+/**
+ * @deprecated Use ApplicationConfiguration.Response instead. To be deleted in v5.0.
+ */
 export namespace Config {
   export type State = ApplicationConfiguration.Response & ABP.Root & { environment: Environment };
 
@@ -10,6 +13,7 @@ export namespace Config {
     apis: Apis;
     application: Application;
     hmr?: boolean;
+    test?: boolean;
     localization?: { defaultResourceName?: string };
     oAuthConfig: AuthConfig;
     production: boolean;
@@ -22,11 +26,12 @@ export namespace Config {
     logoUrl?: string;
   }
 
-  export interface ApiConfig {
+  export type ApiConfig = {
     [key: string]: string;
-    rootNamespace?: string;
     url: string;
-  }
+  } & Partial<{
+    rootNamespace: string;
+  }>;
 
   export interface Apis {
     [key: string]: ApiConfig;

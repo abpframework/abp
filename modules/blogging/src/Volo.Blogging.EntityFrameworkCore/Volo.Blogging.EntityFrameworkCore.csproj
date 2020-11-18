@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Volo.Blogging.EntityFrameworkCore</AssemblyName>
     <PackageId>Volo.Blogging.EntityFrameworkCore</PackageId>
     <RootNamespace />

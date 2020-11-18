@@ -36,7 +36,7 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
         {
         }
 
-        public override async Task<IActionResult> OnPostAsync()
+        public async override Task<IActionResult> OnPostAsync()
         {
             //TODO: Additional logic
             await base.OnPostAsync();
@@ -70,7 +70,7 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 
 在这种情况下;
 
-1. 像上面描述过的那术重写C#页面模型类,但不需要替换已存在的页面模型类.
+1. 像上面描述过的那样重写C#页面模型类,但不需要替换已存在的页面模型类.
 2. 像上面描述过的那样重写Razor页面,并且更改@model指向新的页面模型
 
 #### 示例
@@ -83,10 +83,10 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 public class MyLoginModel : LoginModel
 {
     public MyLoginModel(
-        IAuthenticationSchemeProvider schemeProvider, 
+        IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions
         ) : base(
-        schemeProvider, 
+        schemeProvider,
         accountOptions)
     {
 
@@ -157,7 +157,7 @@ public class MyLoginModel : LoginModel
 
 ## 重写静态资源
 
-重写模块的静态资源(像JavaScript,Css或图片文件)是很简单的. 只需要在解决方案的相同路径创建文件,虚拟文件系统会自动处理它.
+重写模块的静态资源(像JavaScript,Css或图片文件)是很简单的. 只需要在解决方案的相同路径创建文件,[虚拟文件系统](../../Virtual-File-System.md)会自动处理它.
 
 ## 操作捆绑
 

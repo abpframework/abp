@@ -1,0 +1,23 @@
+{
+ "culture": "fr",
+ "texts": {
+  "Menu:TenantManagement": "Gestion des locataires",
+  "Tenants": "Locataires",
+  "NewTenant": "Nouveau locataire",
+  "TenantName": "Nom du locataire",
+  "DisplayName:TenantName": "Nom du locataire",
+  "TenantDeletionConfirmationMessage": "Les ' {0} ' du locataire seront supprimés. Vous le confirmez ?",
+  "ConnectionStrings": "Chaînes de connexion",
+  "DisplayName:DefaultConnectionString": "Chaîne de connexion par défaut",
+  "DisplayName:UseSharedDatabase": "Utiliser la base de données partagée",
+  "ManageHostFeatures": "Gérer les fonctionnalités de l’hôte",
+  "Permission:TenantManagement": "Gestion des locataires",
+  "Permission:Create": "Créer",
+  "Permission:Edit": "Modifier",
+  "Permission:Delete": "Supprimer",
+  "Permission:ManageConnectionStrings": "Gérer les chaînes de connexion",
+  "Permission:ManageFeatures": "Gérer les fonctionnalités",
+  "DisplayName:AdminEmailAddress": "Adresse de messagerie d’administrateur",
+  "DisplayName:AdminPassword": "Mot de passe d’administrateur"
+ }
+}

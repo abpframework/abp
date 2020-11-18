@@ -226,6 +226,12 @@ ABP框架不强制你应用任何DDD规则或模式.但是,当你准备应用的
 
 虽然这种聚合根并不常见(也不建议使用),但实际上可以按照与上面提到的跟实体相同的方式定义复合键.在这种情况下,要使用非泛型的`AggregateRoot`基类.
 
+### BasicAggregateRoot类
+
+`AggregateRoot` 类实现了 `IHasExtraProperties` 和 `IHasConcurrencyStamp` 接口,这为派生类带来了两个属性. `IHasExtraProperties` 使实体可扩展(请参见下面的 *额外的属性*部分) 和 `IHasConcurrencyStamp` 添加了由ABP框架管理的 `ConcurrencyStamp` 属性实现[乐观并发](https://docs.microsoft.com/zh-cn/ef/core/saving/concurrency). 在大多数情况下,这些是聚合根需要的功能.
+
+但是,如果你不需要这些功能,你的聚合根可以继承 `BasicAggregateRoot<TKey>`(或`BasicAggregateRoot`).
+
 ## 基类和接口的审计属性
 
 有一些属性,像`CreationTime`,`CreatorId`,`LastModificationTime`...在所有应用中都很常见. ABP框架提供了一些接口和基类来**标准化**这些属性,并**自动设置它们的值**.

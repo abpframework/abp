@@ -29,10 +29,10 @@ namespace Volo.Abp.Identity
             IStringLocalizer<IdentityResource> localizer,
             ICancellationTokenProvider cancellationTokenProvider)
             : base(
-                  store, 
-                  roleValidators, 
-                  keyNormalizer, 
-                  errors, 
+                  store,
+                  roleValidators,
+                  keyNormalizer,
+                  errors,
                   logger)
         {
             Localizer = localizer;
@@ -50,21 +50,21 @@ namespace Volo.Abp.Identity
             return role;
         }
 
-        public override async Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string name)
+        public async override Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string name)
         {
             if (role.IsStatic && role.Name != name)
             {
-                throw new BusinessException(Localizer["Identity.StaticRoleRenamingErrorMessage"]); // TODO: localize & change exception type
+                throw new BusinessException(IdentityErrorCodes.StaticRoleRenaming);
             }
 
             return await base.SetRoleNameAsync(role, name);
         }
 
-        public override async Task<IdentityResult> DeleteAsync(IdentityRole role)
+        public async override Task<IdentityResult> DeleteAsync(IdentityRole role)
         {
             if (role.IsStatic)
             {
-                throw new BusinessException(Localizer["Identity.StaticRoleDeletionErrorMessage"]); // TODO: localize & change exception type
+                throw new BusinessException(IdentityErrorCodes.StaticRoleDeletion);
             }
 
             return await base.DeleteAsync(role);

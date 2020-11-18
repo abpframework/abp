@@ -153,7 +153,7 @@ namespace Volo.Abp.Cli.Commands
         {
             if (preview)
             {
-                var latestVersion = await GetLatestSuiteVersioAsync(true);
+                var latestVersion = await GetLatestSuiteVersionAsync(true);
                 if (latestVersion.IsPrerelease)
                 {
                     return $"--version {latestVersion.ToString()}";
@@ -163,7 +163,7 @@ namespace Volo.Abp.Cli.Commands
             return "";
         }
 
-        private async Task<SemanticVersion> GetLatestSuiteVersioAsync(bool preview)
+        private async Task<SemanticVersion> GetLatestSuiteVersionAsync(bool preview)
         {
             return await _nuGetService.GetLatestVersionOrNullAsync(SuitePackageName, includeReleaseCandidates: preview);
         }

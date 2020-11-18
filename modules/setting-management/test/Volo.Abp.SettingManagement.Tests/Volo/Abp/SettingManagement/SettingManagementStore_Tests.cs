@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
@@ -94,5 +95,26 @@ namespace Volo.Abp.SettingManagement
             }
         }
 
+        [Fact]
+        public async Task GetListAsync()
+        {
+            var result = await _settingManagementStore.GetListAsync(
+                new[]
+                {
+                    "MySetting1",
+                    "MySetting2",
+                    "MySetting3",
+                    "notExistName"
+                },
+                GlobalSettingValueProvider.ProviderName,
+                null);
+
+            result.Count.ShouldBe(4);
+
+            result.First(x => x.Name == "MySetting1").Value.ShouldBe("42");
+            result.First(x => x.Name == "MySetting2").Value.ShouldBe("default-store-value");
+            result.First(x => x.Name == "MySetting3").Value.ShouldBe(null);
+            result.First(x => x.Name == "notExistName").Value.ShouldBe(null);
+        }
     }
 }

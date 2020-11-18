@@ -2,6 +2,8 @@
 using Volo.Abp.AutoMapper;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Public.Comments;
+using Volo.CmsKit.Public.Ratings;
+using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public
@@ -18,6 +20,8 @@ namespace Volo.CmsKit.Public
             CreateMap<Comment, CommentWithDetailsDto>()
                 .Ignore(x=> x.Replies)
                 .Ignore(x=> x.Author);
+
+            CreateMap<Rating, RatingDto>();
         }
     }
 }

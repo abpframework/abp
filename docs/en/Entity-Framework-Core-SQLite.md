@@ -23,6 +23,16 @@ Find `UseSqlServer()` calls in your solution, replace with `UseSqlite()`. Check 
 
 SQLite connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/sqlite/ ) for details of SQLite connection string options.
 
+An example connection string is
+
+```
+{
+    "ConnectionStrings": {
+        "Default": "Filename=./MySQLiteDBFile.sqlite"
+    }
+}
+```
+
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
 
 ## Re-Generate the Migrations

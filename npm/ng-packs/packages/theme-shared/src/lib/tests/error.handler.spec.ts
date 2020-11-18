@@ -32,7 +32,7 @@ const CONFIRMATION_BUTTONS = {
 describe('ErrorHandler', () => {
   const createService = createServiceFactory({
     service: ErrorHandler,
-    imports: [RouterModule.forRoot([]), NgxsModule.forRoot([]), CoreModule, MockModule],
+    imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }), NgxsModule.forRoot([]), CoreModule, MockModule],
     mocks: [OAuthService],
     providers: [
       { provide: APP_BASE_HREF, useValue: '/' },
@@ -271,7 +271,7 @@ describe('ErrorHandler with custom error component', () => {
   const createService = createServiceFactory({
     service: ErrorHandler,
     imports: [
-      RouterModule.forRoot([]),
+      RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
       NgxsModule.forRoot([]),
       CoreModule,
       MockModule,

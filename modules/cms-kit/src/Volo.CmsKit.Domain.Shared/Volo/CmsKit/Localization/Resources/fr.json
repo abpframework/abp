@@ -1,0 +1,22 @@
+{
+ "culture": "fr",
+ "texts": {
+  "PickYourReaction": "Choisissez votre réaction",
+  "YourComment": "Votre commentaire",
+  "YourReply": "Votre réponse",
+  "Comments": "Commentaires",
+  "Send": "Envoyer",
+  "Delete": "Supprimer",
+  "Reply": "Réponse",
+  "Update": "Mettre à jour",
+  "Edit": "Modifier",
+  "LoginToAddComment": "Connectez-vous pour ajouter un commentaire",
+  "LoginToReply": "Connectez-vous pour répondre",
+  "MessageDeletionConfirmationMessage": "Ce commentaire sera complètement supprimé.",
+  "CommentAuthorizationExceptionMessage": "Ces commentaires ne sont pas autorisés pour l'affichage public.",
+  "Undo": "Annuler",
+  "RatingUndoMessage": "Votre note sera annulée.",
+  "LoginToRate": "Connectez-vous pour évaluer",
+  "Star": "étoile"
+ }
+}

@@ -1,4 +1,4 @@
-# Dynamic C# API Clients
+# Dynamic C# API Client Proxies
 
 ABP can dynamically create C# API client proxies to call remote HTTP services (REST APIs). In this way, you don't need to deal with `HttpClient` and other low level HTTP features to call remote services and get results.
 
@@ -162,4 +162,4 @@ context.Services.AddHttpClientProxies(
 
 Using `asDefaultServices: false` may only be needed if your application has already an implementation of the service and you do not want to override/replace the other implementation by your client proxy.
 
-> If you disable `asDefaultServices`, you can only use `IHttpClientProxy<T>` interface to use the client proxies (see the related section above).
+> If you disable `asDefaultServices`, you can only use `IHttpClientProxy<T>` interface to use the client proxies. See the *IHttpClientProxy Interface* section above.

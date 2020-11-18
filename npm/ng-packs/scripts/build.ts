@@ -36,9 +36,8 @@ import fse from 'fs-extra';
         '--angular',
         '--prod',
         '--no-watch',
-        '--all-packages',
-        '--excluded-packages',
-        '@abp/ng.schematics,@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management',
+        '--packages',
+        '@abp/ng.feature-management,@abp/ng.permission-management',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -51,8 +50,9 @@ import fse from 'fs-extra';
         '--angular',
         '--prod',
         '--no-watch',
-        '--packages',
-        '@abp/ng.feature-management,@abp/ng.permission-management',
+        '--all-packages',
+        '--excluded-packages',
+        '@abp/ng.schematics,@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management',
       ],
       { stdout: 'inherit', cwd: '../' },
     );

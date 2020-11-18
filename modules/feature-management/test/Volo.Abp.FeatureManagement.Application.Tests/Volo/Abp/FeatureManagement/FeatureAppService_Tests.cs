@@ -41,7 +41,7 @@ namespace Volo.Abp.FeatureManagement
                 TestEditionIds.Regular.ToString());
 
             featureList.ShouldNotBeNull();
-            featureList.Features.ShouldContain(feature => feature.Name == TestFeatureDefinitionProvider.SocialLogins);
+            featureList.Groups.SelectMany(g =>g .Features).ShouldContain(feature => feature.Name == TestFeatureDefinitionProvider.SocialLogins);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Volo.Abp.FeatureManagement
                 });
 
             (await _featureAppService.GetAsync(EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Regular.ToString())).Features.Any(x =>
+                    TestEditionIds.Regular.ToString())).Groups.SelectMany(g => g.Features).Any(x =>
                     x.Name == TestFeatureDefinitionProvider.SocialLogins &&
                     x.Value == false.ToString().ToLowerInvariant())
                 .ShouldBeTrue();

@@ -100,36 +100,6 @@ this.localizationService.get('Resource::Key');
 this.localizationService.get({ key: 'Resource::Key', defaultValue: 'Default Value' });
 ```
 
-### Using the Config State
-
-In order to you `getLocalization` method you should import ConfigState.
-
-```js
-import { ConfigState } from '@abp/ng.core';
-```
-
-Then you can use it as followed:
-
-```js
-this.store.selectSnapshot(ConfigState.getLocalization('ResourceName::Key'));
-```
-
-`getLocalization` method can be used with both `localization key` and [`LocalizationWithDefault`](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/config.ts#L34) interface.
-
-```js
-this.store.selectSnapshot(
-  ConfigState.getLocalization(
-    {
-      key: 'AbpIdentity::UserDeletionConfirmation',
-      defaultValue: 'Default Value',
-    },
-    'John',
-  ),
-);
-```
-
-Localization resources are stored in the `localization` property of `ConfigState`.
-
 ## RTL Support
 
 As of v2.9 ABP has RTL support. If you are generating a new project with v2.9 and above, everything is set, you do not need to do any changes. If you are migrating your project from an earlier version, please follow the 2 steps below:
@@ -193,37 +163,129 @@ import { Component } from '@angular/core';
 export class AppComponent {}
 ```
 
-## Mapping of Culture Name to Angular Locale File Name
+## Registering a New Locale
+
+Since ABP has more than one language, Angular locale files loads lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and register to Angular core using the [`registerLocaleData`](https://angular.io/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `CoreModule`.
+
+### registerLocaleFn
+
+`registerLocale` function that exported from `@abp/ng.core/locale` package is a higher order function that accepts `cultureNameLocaleFileMap` object and `errorHandlerFn` function as params and returns Webpack `import` function. A `registerLocale` function must be passed to the `forRoot` of the `CoreModule` as shown below:
+
+```js
+// app.module.ts
+
+import { registerLocale } from '@abp/ng.core/locale';
+// if you have commercial license and the language management module, add the below import
+// import { registerLocale } from '@volo/abp.ng.language-management/locale';
+
+
+@NgModule({
+  imports: [
+    // ...
+    CoreModule.forRoot({
+      // ...other options,
+      registerLocaleFn: registerLocale(
+        // you can pass the cultureNameLocaleFileMap and errorHandlerFn as optionally
+        {
+          cultureNameLocaleFileMap: { 'pt-BR': 'pt' },
+          errorHandlerFn: ({ resolve, reject, locale, error }) => {
+            // the error can be handled here
+          },
+        },
+      )
+    }),
+    //...
+  ]
+```
+
+
+### Mapping of Culture Name to Angular Locale File Name
 
 Some of the culture names defined in .NET do not match Angular locales. In such cases, the Angular app throws an error like below at runtime:
 
 ![locale-error](./images/locale-error.png)
 
-If you see an error like this, you should pass the `cultureNameLocaleFileMap` property like below to CoreModule's forRoot static method.
+If you see an error like this, you should pass the `cultureNameLocaleFileMap` property like below to the `registerLocale` function.
 
 ```js
 // app.module.ts
 
+import { registerLocale } from '@abp/ng.core/locale';
+// if you have commercial license and the language management module, add the below import
+// import { registerLocale } from '@volo/abp.ng.language-management/locale';
+
+
 @NgModule({
   imports: [
-    // other imports
-     CoreModule.forRoot({
-      // other options
-      cultureNameLocaleFileMap: { 
-        "DotnetCultureName": "AngularLocaleFileName",
-        "pt-BR": "pt"  // example
-      }
-    })
+    // ...
+    CoreModule.forRoot({
+      // ...other options,
+      registerLocaleFn: registerLocale(
+        {
+          cultureNameLocaleFileMap: { 
+            "DotnetCultureName": "AngularLocaleFileName",
+            "pt-BR": "pt"  // example
+          },
+        },
+      )
+    }),
     //...
 ```
 
 See [all locale files in Angular](https://github.com/angular/angular/tree/master/packages/common/locales).
 
+### Adding a New Culture
+
+Add the below code to the `app.module.ts` by replacing `your-locale` placeholder with a correct locale name.
+
+```js
+//app.module.ts
+
+import { storeLocaleData } from '@abp/ng.core/locale';
+import(
+/* webpackChunkName: "_locale-your-locale-js"*/
+/* webpackMode: "eager" */
+'@angular/common/locales/your-locale.js'
+).then(m => storeLocaleData(m.default, 'your-locale'));
+```
+
+...or a custom `registerLocale` function can be passed to the `CoreModule`:
+
+```js
+// register-locale.ts
+
+import { differentLocales } from '@abp/ng.core';
+export function registerLocale(locale: string) {
+  return import(
+    /* webpackChunkName: "_locale-[request]"*/
+    /* webpackInclude: /[/\\](en|fr).js/ */
+    /* webpackExclude: /[/\\]global|extra/ */
+    `@angular/common/locales/${differentLocales[locale] || locale}.js`
+  )
+}
+
+// app.module.ts
+
+import { registerLocale } from './register-locale';
+
+@NgModule({
+  imports: [
+    // ...
+    CoreModule.forRoot({
+      // ...other options,
+      registerLocaleFn: registerLocale
+    }),
+    //...
+  ]
+```
+
+After this custom `registerLocale` function, since the en and fr added to the `webpackInclude`, only en and fr locale files will be created as chunks:
+
+![locale chunks](https://user-images.githubusercontent.com/34455572/98203212-acaa2100-1f44-11eb-85af-4eb66d296326.png)
+
+Which locale files you add to `webpackInclude` magic comment, they will be included in the bundle
+
 
 ## See Also
 
 * [Localization in ASP.NET Core](../../Localization.md)
-
-## What's Next?
-
-* [Permission Management](./Permission-Management.md)

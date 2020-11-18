@@ -1,4 +1,5 @@
-﻿using Volo.Abp.ObjectExtending;
+﻿using System;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Threading;
 
@@ -24,6 +25,10 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                         "ZipCode"
                     ).MapEfCoreProperty<City, int>(
                         "Rank"
+                    ).MapEfCoreProperty<City, DateTime?>(
+                        "Established"
+                    ).MapEfCoreProperty<City, Guid>(
+                        "Guid"
                     );
             });
         }

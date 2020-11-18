@@ -2,6 +2,6 @@
 {
     public class ClientCorsOriginConsts
     {
-        public const int OriginMaxLength = 150;
+        public static int OriginMaxLength { get; set; } =  150;
     }
 }

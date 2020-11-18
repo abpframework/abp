@@ -14,10 +14,10 @@ namespace Volo.Abp.Cli.Commands
     {
         public ILogger<HelpCommand> Logger { get; set; }
         protected AbpCliOptions AbpCliOptions { get; }
-        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
         public HelpCommand(IOptions<AbpCliOptions> cliOptions,
-            IHybridServiceScopeFactory serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Logger = NullLogger<HelpCommand>.Instance;

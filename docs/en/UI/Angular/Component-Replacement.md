@@ -8,27 +8,22 @@ The reason that you **can replace** but **cannot customize** default ABP compone
 
 Create a new component that you want to use instead of an ABP component. Add that component to `declarations` and `entryComponents` in the `AppModule`.
 
-Then, open the `app.component.ts` and dispatch the `AddReplaceableComponent` action to replace your component with an ABP component as shown below:
+Then, open the `app.component.ts` and execute the `add` method of `ReplaceableComponentsService` to replace your component with an ABP component as shown below:
 
 ```js
-import { AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent action
+import { ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { eIdentityComponents } from '@abp/ng.identity'; // imported eIdentityComponents enum
-import { Store } from '@ngxs/store'; // imported Store
 //...
 
 @Component(/* component metadata */)
 export class AppComponent {
   constructor(
-    private store: Store // injected Store
-  )
-  {
-    // dispatched the AddReplaceableComponent action
-    this.store.dispatch(
-      new AddReplaceableComponent({
-        component: YourNewRoleComponent,
-        key: eIdentityComponents.Roles,
-      }),
-    );
+    private replaceableComponents: ReplaceableComponentsService, // injected the service
+  ) {
+    this.replaceableComponents.add({
+      component: YourNewRoleComponent,
+      key: eIdentityComponents.Roles,
+    });
   }
 }
 ```
@@ -50,7 +45,7 @@ Run the following command to generate a layout in `angular` folder:
 yarn ng generate component my-application-layout
 ```
 
-Add the following code in your layout template (`my-layout.component.html`) where you want the page to be loaded.
+Add the following code in your layout template (`my-application-layout.component.html`) where you want the page to be loaded.
 
 ```html
 <router-outlet></router-outlet>
@@ -59,28 +54,24 @@ Add the following code in your layout template (`my-layout.component.html`) wher
 Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
-import { AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
+import { ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents enum for component keys
-import { Store } from '@ngxs/store'; // imported Store
 import { MyApplicationLayoutComponent } from './my-application-layout/my-application-layout.component'; // imported MyApplicationLayoutComponent
 
 @Component(/* component metadata */)
 export class AppComponent {
   constructor(
-    private store: Store, // injected Store
+    private replaceableComponents: ReplaceableComponentsService, // injected the service
   ) {
-    // dispatched the AddReplaceableComponent action
-    this.store.dispatch(
-      new AddReplaceableComponent({
-        component: MyApplicationLayoutComponent,
-        key: eThemeBasicComponents.ApplicationLayout,
-      }),
-    );
+    this.replaceableComponents.add({
+      component: MyApplicationLayoutComponent,
+      key: eThemeBasicComponents.ApplicationLayout,
+    });
   }
 }
 ```
 
-> If you like to replace a layout component at runtime (e.g: changing the layout by pressing a button), pass the second parameter of the AddReplaceableComponent action as true. DynamicLayoutComponent loads content using a router-outlet. When the second parameter of AddReplaceableComponent is true, the route will be refreshed, so use it with caution. Your component state will be gone and any initiation logic (including HTTP requests) will be repeated.
+> If you like to replace a layout component at runtime (e.g: changing the layout by pressing a button), pass the second parameter of the `add` method of `ReplaceableComponentsService` as true. DynamicLayoutComponent loads content using a router-outlet. When the second parameter of the `add` method is true, the route will be refreshed, so use it with caution. Your component state will be gone and any initiation logic (including HTTP requests) will be repeated.
 
 ### Layout Components
 
@@ -123,26 +114,22 @@ export class LogoComponent {}
 Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
-import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
-import { Store } from '@ngxs/store'; // imported Store
+import { ..., ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { LogoComponent } from './logo/logo.component'; // imported NavItemsComponent
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents
 //...
 
 @Component(/* component metadata */)
 export class AppComponent implements OnInit {
-  constructor(..., private store: Store) {} // injected Store
+  constructor(..., private replaceableComponents: ReplaceableComponentsService) {} // injected ReplaceableComponentsService
 
   ngOnInit() {
     //...
 
-    // added dispatch
-    this.store.dispatch(
-      new AddReplaceableComponent({
+    this.replaceableComponents.add({
         component: LogoComponent,
         key: eThemeBasicComponents.Logo,
-      }),
-    );
+      });
   }
 }
 ```
@@ -158,15 +145,13 @@ The final UI looks like below:
 Run the following command in `angular` folder to create a new component called `RoutesComponent`.
 
 ```bash
-yarn ng generate component routes --entryComponent
-
-# You don't need the --entryComponent option in Angular 9
+yarn ng generate component routes
 ```
 
 Open the generated `routes.component.ts` in `src/app/routes` folder and replace its content with the following:
 
 ```js
-import { ABP, ReplaceableComponents } from '@abp/ng.core';
+import { ABP } from '@abp/ng.core';
 import {
   Component,
   HostBinding,
@@ -198,6 +183,21 @@ export class RoutesComponent implements AfterViewInit {
       });
   }
 }
+```
+
+Import the `SharedModule` to the `imports` array of `AppModule`:
+
+```js
+// app.module.ts
+
+import { SharedModule } from './shared/shared.module';
+
+@NgModule({
+  imports: [
+    //...
+    SharedModule
+  ]
+)}
 ```
 
 Open the generated `routes.component.html` in `src/app/routes` folder and replace its content with the following:
@@ -309,26 +309,22 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
 Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
-import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
-import { Store } from '@ngxs/store'; // imported Store
+import { ..., ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { RoutesComponent } from './routes/routes.component'; // imported NavItemsComponent
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents
 //...
 
 @Component(/* component metadata */)
 export class AppComponent implements OnInit {
-  constructor(..., private store: Store) {} // injected Store
+  constructor(..., private replaceableComponents: ReplaceableComponentsService) {} // injected ReplaceableComponentsService
 
   ngOnInit() {
     //...
 
-    // added dispatch
-    this.store.dispatch(
-      new AddReplaceableComponent({
+    this.replaceableComponents.add({
         component: RoutesComponent,
         key: eThemeBasicComponents.Routes,
-      }),
-    );
+      });
   }
 }
 ```
@@ -344,9 +340,7 @@ The final UI looks like below:
 Run the following command in `angular` folder to create a new component called `NavItemsComponent`.
 
 ```bash
-yarn ng generate component nav-items --entryComponent
-
-# You don't need the --entryComponent option in Angular 9
+yarn ng generate component nav-items
 ```
 
 Open the generated `nav-items.component.ts` in `src/app/nav-items` folder and replace the content with the following:
@@ -431,6 +425,21 @@ export class NavItemsComponent implements AfterViewInit {
 }
 ```
 
+Import the `SharedModule` to the `imports` array of `AppModule`:
+
+```js
+// app.module.ts
+
+import { SharedModule } from './shared/shared.module';
+
+@NgModule({
+  imports: [
+    //...
+    SharedModule
+  ]
+)}
+```
+
 Open the generated `nav-items.component.html` in `src/app/nav-items` folder and replace the content with the following:
 
 ```html
@@ -511,26 +520,22 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
 Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
-import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
-import { Store } from '@ngxs/store'; // imported Store
+import { ..., ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { NavItemsComponent } from './nav-items/nav-items.component'; // imported NavItemsComponent
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents
 //...
 
 @Component(/* component metadata */)
 export class AppComponent implements OnInit {
-  constructor(..., private store: Store) {} // injected Store
+  constructor(..., private replaceableComponents: ReplaceableComponentsService) {} // injected ReplaceableComponentsService
 
   ngOnInit() {
     //...
 
-    // added dispatch
-    this.store.dispatch(
-      new AddReplaceableComponent({
+    this.replaceableComponents.add({
         component: NavItemsComponent,
         key: eThemeBasicComponents.NavItems,
-      }),
-    );
+      });
   }
 }
 ```
@@ -542,7 +547,3 @@ The final UI looks like below:
 ## See Also
 
 - [How to Replace PermissionManagementComponent](./Permission-Management-Component-Replacement.md)
-
-## What's Next?
-
-- [Custom Setting Page](./Custom-Setting-Page.md)

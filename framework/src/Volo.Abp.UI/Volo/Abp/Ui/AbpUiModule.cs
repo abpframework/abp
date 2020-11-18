@@ -1,5 +1,6 @@
 ﻿using Localization.Resources.AbpUi;
-using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
+using Volo.Abp.ExceptionHandling.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -7,7 +8,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.UI
 {
     [DependsOn(
-        typeof(AbpLocalizationModule)
+        typeof(AbpExceptionHandlingModule)
     )]
     public class AbpUiModule : AbpModule
     {
@@ -22,6 +23,7 @@ namespace Volo.Abp.UI
             {
                 options.Resources
                     .Add<AbpUiResource>("en")
+                    .AddBaseTypes(typeof(AbpExceptionHandlingResource))
                     .AddVirtualJson("/Localization/Resources/AbpUi");
             });
         }

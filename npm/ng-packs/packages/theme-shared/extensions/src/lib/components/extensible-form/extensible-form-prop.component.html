@@ -38,8 +38,27 @@
       <option
         *ngFor="let option of options$ | async; trackBy: track.by('value')"
         [ngValue]="option.value"
-        >{{ option.key }}</option
       >
+        {{ option.key }}
+      </option>
+    </select>
+  </ng-template>
+
+  <ng-template ngSwitchCase="multiselect">
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
+    <select
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      [abpDisabled]="disabled"
+      multiple="multiple"
+      class="custom-select form-control"
+    >
+      <option
+        *ngFor="let option of options$ | async; trackBy: track.by('value')"
+        [ngValue]="option.value"
+      >
+        {{ option.key }}
+      </option>
     </select>
   </ng-template>
 

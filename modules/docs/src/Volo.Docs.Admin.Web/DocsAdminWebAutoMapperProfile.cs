@@ -10,9 +10,11 @@ namespace Volo.Docs.Admin
     {
         public DocsAdminWebAutoMapperProfile()
         {
-            CreateMap<CreateModel.CreateGithubProjectViewModel, CreateProjectDto>().Ignore(x => x.ExtraProperties);
+            CreateMap<CreateModel.CreateGithubProjectViewModel, CreateProjectDto>()
+                .Ignore(x => x.ExtraProperties);
 
-            CreateMap<EditModel.EditGithubProjectViewModel, UpdateProjectDto>().Ignore(x => x.ExtraProperties);
+            CreateMap<EditModel.EditGithubProjectViewModel, UpdateProjectDto>()
+                .Ignore(x => x.ExtraProperties);
 
             CreateMap<ProjectDto, EditModel.EditGithubProjectViewModel > ()
                 .Ignore(x => x.GitHubAccessToken)

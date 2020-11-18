@@ -1,4 +1,4 @@
-import { ABP } from '@abp/ng.core';
+import { ABP, PagedResultDto } from '@abp/ng.core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import {
@@ -9,8 +9,9 @@ import {
   UpdateTenant,
 } from '../actions/tenant-management.actions';
 import { TenantManagement } from '../models/tenant-management';
-import { TenantManagementService } from '../services/tenant-management.service';
 import { Injectable } from '@angular/core';
+import { TenantService } from '../proxy/tenant.service';
+import { TenantDto } from '../proxy/models';
 
 @State<TenantManagement.State>({
   name: 'TenantManagementState',
@@ -19,7 +20,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class TenantManagementState {
   @Selector()
-  static get({ result }: TenantManagement.State): ABP.BasicItem[] {
+  static get({ result }: TenantManagement.State): TenantDto[] {
     return result.items || [];
   }
 
@@ -28,11 +29,11 @@ export class TenantManagementState {
     return result.totalCount;
   }
 
-  constructor(private tenantManagementService: TenantManagementService) {}
+  constructor(private service: TenantService) {}
 
   @Action(GetTenants)
   get({ patchState }: StateContext<TenantManagement.State>, { payload }: GetTenants) {
-    return this.tenantManagementService.getTenant(payload).pipe(
+    return this.service.getList(payload).pipe(
       tap(result =>
         patchState({
           result,
@@ -43,7 +44,7 @@ export class TenantManagementState {
 
   @Action(GetTenantById)
   getById({ patchState }: StateContext<TenantManagement.State>, { payload }: GetTenantById) {
-    return this.tenantManagementService.getTenantById(payload).pipe(
+    return this.service.get(payload).pipe(
       tap(selectedItem =>
         patchState({
           selectedItem,
@@ -54,16 +55,16 @@ export class TenantManagementState {
 
   @Action(DeleteTenant)
   delete(_, { payload }: DeleteTenant) {
-    return this.tenantManagementService.deleteTenant(payload);
+    return this.service.delete(payload);
   }
 
   @Action(CreateTenant)
   add(_, { payload }: CreateTenant) {
-    return this.tenantManagementService.createTenant(payload);
+    return this.service.create(payload);
   }
 
   @Action(UpdateTenant)
   update({ getState }: StateContext<TenantManagement.State>, { payload }: UpdateTenant) {
-    return this.tenantManagementService.updateTenant({ ...getState().selectedItem, ...payload });
+    return this.service.update(payload.id, { ...getState().selectedItem, ...payload });
   }
 }

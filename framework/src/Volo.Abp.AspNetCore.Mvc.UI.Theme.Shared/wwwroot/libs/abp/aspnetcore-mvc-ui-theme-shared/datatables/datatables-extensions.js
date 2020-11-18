@@ -15,19 +15,23 @@
             return;
         }
 
-        var getVisibilityValue = function (visibilityField, record) {
+        var getVisibilityValue = function (visibilityField, record, tableInstance) {
             if (visibilityField === undefined) {
                 return true;
             }
 
             if (abp.utils.isFunction(visibilityField)) {
-                return visibilityField(record);
+                return visibilityField(record, tableInstance);
             } else {
                 return visibilityField;
             }
         };
 
-        var _createDropdownItem = function (record, fieldItem) {
+        var htmlEncode = function (html) {
+            return $('<div/>').text(html).html();
+        }
+        
+        var _createDropdownItem = function (record, fieldItem, tableInstance) {
             var $li = $('<li/>');
             var $a = $('<a/>');
 
@@ -41,7 +45,7 @@
                     $a.append($("<i>").addClass(fieldItem.iconClass + " mr-1"));
                 }
 
-                $a.append(fieldItem.text);
+                $a.append(htmlEncode(fieldItem.text));
             }
 
             if (fieldItem.action) {
@@ -50,14 +54,14 @@
 
                     if (!$(this).closest('li').hasClass('disabled')) {
                         if (fieldItem.confirmMessage) {
-                            abp.message.confirm(fieldItem.confirmMessage({ record: record }))
+                            abp.message.confirm(fieldItem.confirmMessage({ record: record, table: tableInstance }))
                                 .done(function (accepted) {
                                     if (accepted) {
-                                        fieldItem.action({ record: record });
+                                        fieldItem.action({ record: record, table: tableInstance });
                                     }
                                 });
                         } else {
-                            fieldItem.action({ record: record });
+                            fieldItem.action({ record: record, table: tableInstance });
                         }
                     }
                 });
@@ -67,17 +71,60 @@
             return $li;
         };
 
-        var _createButtonDropdown = function (record, field) {
+        var _createButtonDropdown = function (record, field, tableInstance) {
+            if(field.items.length === 1) {
+                var firstItem = field.items[0];
+                if (!getVisibilityValue(firstItem.visible, record, tableInstance)) {
+                    return "";
+                }
+
+                var $button = $('<button type="button" class="btn btn-primary"></button>');
+
+                if (firstItem.displayNameHtml) {
+                    $button.html(firstItem.text);
+                } else {
+                    if (firstItem.icon !== undefined && firstItem.icon) {
+                        $button.append($("<i>").addClass("fa fa-" + firstItem.icon + " mr-1"));
+                    } else if (firstItem.iconClass) {
+                        $button.append($("<i>").addClass(firstItem.iconClass + " mr-1"));
+                    }
+                    $button.append(htmlEncode(firstItem.text));
+                }
+                
+                if (firstItem.enabled && !firstItem.enabled({ record: record, table: tableInstance })) {
+                    $button.addClass('disabled');
+                }
+                
+                if (firstItem.action) {
+                    $button.click(function (e) {
+                        e.preventDefault();
+    
+                        if (!$(this).hasClass('disabled')) {
+                            if (firstItem.confirmMessage) {
+                                abp.message.confirm(firstItem.confirmMessage({ record: record, table: tableInstance }))
+                                    .done(function (accepted) {
+                                        if (accepted) {
+                                            firstItem.action({ record: record, table: tableInstance });
+                                        }
+                                    });
+                            } else {
+                                firstItem.action({ record: record, table: tableInstance });
+                            }
+                        }
+                    });
+                }
+
+                return $button;
+            }
+
             var $container = $('<div/>')
                 .addClass('dropdown')
                 .addClass('action-button');
 
             var $dropdownButton = $('<button/>');
 
-            if (field.icon !== undefined) {
-                if (field.icon) {
-                    $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " mr-1"));
-                }
+            if (field.icon !== undefined && field.icon) {
+                $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " mr-1"));
             } else if (field.iconClass) {
                 $dropdownButton.append($("<i>").addClass(field.iconClass + " mr-1"));
             } else {
@@ -85,9 +132,9 @@
             }
 
             if (field.text) {
-                $dropdownButton.append(field.text);
+                $dropdownButton.append(htmlEncode(fieldItem.text));
             } else {
-                $dropdownButton.append(localize("DatatableActionDropdownDefaultText"));
+                $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }
 
             $dropdownButton
@@ -105,14 +152,14 @@
             for (var i = 0; i < field.items.length; i++) {
                 var fieldItem = field.items[i];
 
-                var isVisible = getVisibilityValue(fieldItem.visible, record);
+                var isVisible = getVisibilityValue(fieldItem.visible, record, tableInstance);
                 if (!isVisible) {
                     continue;
                 }
 
-                var $dropdownItem = _createDropdownItem(record, fieldItem);
+                var $dropdownItem = _createDropdownItem(record, fieldItem, tableInstance);
 
-                if (fieldItem.enabled && !fieldItem.enabled({ record: record })) {
+                if (fieldItem.enabled && !fieldItem.enabled({ record: record, table: tableInstance })) {
                     $dropdownItem.addClass('disabled');
                 }
 
@@ -131,10 +178,10 @@
             return $container;
         };
 
-        var _createSingleButton = function (record, field) {
+        var _createSingleButton = function (record, field, tableInstance) {
             $(field.element).data(record);
 
-            var isVisible = getVisibilityValue(field.visible, record);
+            var isVisible = getVisibilityValue(field.visible, record, tableInstance);
 
             if (isVisible) {
                 return field.element;
@@ -147,7 +194,7 @@
             if (field.items && field.items.length > 0) {
                 return _createButtonDropdown(record, field, tableInstance);
             } else if (field.element) {
-                var $singleActionButton = _createSingleButton(record, field);
+                var $singleActionButton = _createSingleButton(record, field, tableInstance);
                 if ($singleActionButton === "") {
                     return "";
                 }
@@ -170,6 +217,7 @@
 
         var renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             var columns;
+			
             if (tableInstance.aoColumns) {
                 columns = tableInstance.aoColumns;
             } else {
@@ -223,6 +271,54 @@
                 }
             });
 
+       //Delay for processing indicator
+        var defaultDelayForProcessingIndicator = 500;
+        var _existingDefaultFnPreDrawCallback = $.fn.dataTable.defaults.fnPreDrawCallback;
+        $.extend(true,
+            $.fn.dataTable.defaults,
+            {
+                fnPreDrawCallback: function (settings) {
+                    if (_existingDefaultFnPreDrawCallback) {
+                        _existingDefaultFnPreDrawCallback(settings);
+                    }
+
+                    var $tableWrapper = $(settings.nTableWrapper);
+                    var $processing = $tableWrapper.find(".dataTables_processing");
+                    var timeoutHandles = [];
+                    var cancelHandles = [];
+
+                    $tableWrapper.on('processing.dt',
+                        function (e, settings, processing) {
+                            if ((settings.oInit.processingDelay !== undefined && settings.oInit.processingDelay < 1) || defaultDelayForProcessingIndicator < 1) {
+                                return;
+                            }
+
+                            if (processing) {
+                                $processing.hide();
+
+                                var delay = settings.oInit.processingDelay === undefined
+                                    ? defaultDelayForProcessingIndicator
+                                    : settings.oInit.processingDelay;
+
+                                cancelHandles[settings.nTableWrapper.id] = false;
+
+                                timeoutHandles[settings.nTableWrapper.id] = setTimeout(function () {
+                                    if (cancelHandles[settings.nTableWrapper.id] === true) {
+                                        return;
+                                    }
+
+                                    $processing.show();
+                                }, delay);
+                            }
+                            else {
+                                clearTimeout(timeoutHandles[settings.nTableWrapper.id]);
+                                cancelHandles[settings.nTableWrapper.id] = true;
+                                $processing.hide();
+                            }
+                        });
+                }
+            });
+
     })();
 
     /************************************************************************
@@ -231,7 +327,7 @@
     (function () {
         datatables.createAjax = function (serverMethod, inputAction) {
             return function (requestData, callback, settings) {
-                var input = inputAction ? inputAction() : {};
+                var input = inputAction ? inputAction(requestData, settings) : {};
 
                 //Paging
                 if (settings.oInit.paging) {
@@ -363,6 +459,8 @@
     datatables.defaultConfigurations = datatables.defaultConfigurations || {};
 
     datatables.defaultConfigurations.scrollX = true;
+
+    datatables.defaultConfigurations.responsive = true; 
 
     datatables.defaultConfigurations.language = function () {
         return {
