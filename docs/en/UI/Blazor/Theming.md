@@ -101,7 +101,7 @@ A typical Layout consists of several parts. The theme should include the necessa
 
 **Example: The Basic Theme has the following parts for the Application Layout**
 
-![basic-theme-application-layout-parts](D:/Github/abp/docs/en/images/basic-theme-application-layout-parts.png)
+![basic-theme-application-layout-parts](../../images/basic-theme-application-layout-parts.png)
 
 The application code and the modules can only show contents in the Page Content part. If they need to change the other parts (to add a menu item, to add a toolbar item, to change the application name in the branding area...) they should use the ABP Framework APIs.
 
