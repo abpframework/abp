@@ -1,6 +1,6 @@
 # ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide
 
-This document explains how to override the user interface of a depended [application module](../../Modules/Index.md) for ASP.NET Core MVC / Razor Page applications.
+This document explains how to override the user interface of a depended [application module](../../Modules/Index.md) or [theme](Theming.md) for ASP.NET Core MVC / Razor Page applications.
 
 ## Overriding a Page
 
