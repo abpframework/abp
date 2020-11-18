@@ -1,20 +1,13 @@
-﻿using AutoFilterer.Abstractions;
-using AutoFilterer.Extensions;
-using AutoFilterer.Types;
-using System;
-using System.Collections.Generic;
+﻿using AutoFilterer.Extensions;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 using Volo.Abp.AutoFilterer;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Application.Services
 {
-    public class CrudAutoFiltererAppService<TEntity, TEntityDto, TKey>
+    public abstract class CrudAutoFiltererAppService<TEntity, TEntityDto, TKey>
         : CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, AbpPaginationFilterBase>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
@@ -24,7 +17,7 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public class CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, TGetListInput>
+    public abstract class CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, TGetListInput>
         : CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
@@ -35,7 +28,7 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public class CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput>
+    public abstract class CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput>
         : CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
@@ -46,7 +39,7 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public class CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    public abstract class CrudAutoFiltererAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
