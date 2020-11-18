@@ -16,7 +16,7 @@ namespace Volo.Abp.AutoFilterer
             this.SortBy = Sorting.Descending;
         }
 
-        int IPagedResultRequest.SkipCount { get => Page; set => Page = value; }
+        int IPagedResultRequest.SkipCount { get => (Page - 1) * PerPage; set => Page = (value / PerPage) - 1; }
         int ILimitedResultRequest.MaxResultCount { get => PerPage; set => PerPage = value; }
         string ISortedResultRequest.Sorting
         {
