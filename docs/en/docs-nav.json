@@ -588,7 +588,13 @@
             },
             {
               "text": "Theming",
-              "path": "UI/Blazor/Theming.md"
+              "path": "UI/Blazor/Theming.md",
+              "items": [
+                {
+                  "text": "The Basic Theme",
+                  "path": "UI/Blazor/Basic-Theme.md"
+                }
+              ]
             },
             {
               "text": "Toolbars",
