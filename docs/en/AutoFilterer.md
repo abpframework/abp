@@ -41,17 +41,17 @@ public class YourModule : AbpModule
 - Create your filter dto via using `AbpPaginationFilterBase` instead of AutoFilterer's default.
 
 ```csharp
+[PossibleSortings(typeof(BookDto))] // Each property of return dto.
 public class BookFilterDto : AbpPaginationFilterBase // <-- Careful here
 {
-    [StringFilterOptions(StringFilterOption.Contains)]
-    public string Name { get; set; }
+    [CompareTo("Title", "Description")] // Properties of Entity to compare.
+    [StringFilterOptions(StringFilterOption.Contains)] // Use Contains method instead of exact value.
+    public string Filter { get; set; }
 
-    [ArraySearchFilter]
+    [ArraySearchFilter] // Gets only these types of books.
     public BookType[] Type { get; set; }
 
-    public Range<DateTime> PublishDate { get; set; }
-
-    public Range<float> Price { get; set; }
+    public Range<float> Price { get; set; } // To filter between Price range.
 
     /* ... 
      * Any other properties to filter.
