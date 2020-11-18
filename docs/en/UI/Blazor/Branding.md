@@ -1,4 +1,4 @@
-# ASP.NET Core MVC / Razor Pages: Branding
+# Blazor UI: Branding
 
 ## IBrandingProvider
 
@@ -11,13 +11,13 @@ The screenshot below shows *MyProject* as the application name:
 You can implement the `IBrandingProvider` interface or inherit from the `DefaultBrandingProvider` to set the application name:
 
 ````csharp
-using Volo.Abp.Ui.Branding;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Ui.Branding;
 
-namespace MyProject.Web
+namespace MyCompanyName.MyProjectName.Blazor
 {
     [Dependency(ReplaceServices = true)]
-    public class MyProjectBrandingProvider : DefaultBrandingProvider
+    public class MyProjectNameBrandingProvider : DefaultBrandingProvider
     {
         public override string AppName => "Book Store";
     }
@@ -35,11 +35,3 @@ The result will be like shown below:
 * `LogoReverseUrl`: A URL to show the application logo on a reverse color theme (dark, for example).
 
 > **Tip**: `IBrandingProvider` is used in every page refresh. For a multi-tenant application, you can return a tenant specific application name to customize it per tenant.
-
-## Overriding the Branding Area
-
-The [Basic Theme](Basic-Theme.md) doesn't implement the logos. However, you can see the [UI Customization Guide](Customization-User-Interface.md) to learn how you can replace the branding area with a custom view component.
-
-An example screenshot with an image is used in the branding area:
-
-![bookstore-added-logo](../../images/bookstore-added-logo.png)

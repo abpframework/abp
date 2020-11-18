@@ -14,7 +14,7 @@ export const environment = {
     redirectUri: baseUrl,
     clientId: 'MyProjectName_App',
     responseType: 'code',
-    scope: 'offline_access MyProjectName',
+    scope: 'offline_access MyProjectName role email openid profile',
   },
   apis: {
     default: {
