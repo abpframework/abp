@@ -80,7 +80,7 @@ See the [localization document](../../Localization.md) to learn more about the l
 
 When you run the application, you will see the menu items added to the main menu:
 
-![nav-main-menu](D:/Github/abp/docs/en/images/nav-main-menu.png)
+![nav-main-menu](../../images/nav-main-menu.png)
 
 > The menu is rendered by the current UI [theme](Theming.md). So, the look of the main menu can be completely different based on your theme.
 
@@ -139,7 +139,7 @@ var myService = context.ServiceProvider.GetRequiredService<IMyService>();
 
 There is a special menu item in the menu menu that is added by the ABP Framework: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../Modules/Index.md):
 
-![nav-main-menu-administration](D:/Github/abp/docs/en/images/nav-main-menu-administration.png)
+![nav-main-menu-administration](../../images/nav-main-menu-administration.png)
 
 If you want to add menu items under the *Administration* menu item, you can use the `context.Menu.GetAdministration()` extension method:
 
@@ -169,7 +169,7 @@ A menu is a **named** component. An application may contain more than one menus 
 
 The `Main` menu already covered above. The `User` menu is available when a user has logged in:
 
-![user-menu](D:/Github/abp/docs/en/images/user-menu.png)
+![user-menu](../../images/user-menu.png)
 
 You can add items to the `User` menu by checking the `context.Menu.Name` as shown below:
 
