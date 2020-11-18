@@ -84,5 +84,3 @@ namespace MyProject.Blazor.Components
 ## Theming
 
 The [Theming](Theming.md) system allows you to build your own theme. You can create your theme from scratch or get the [Basic Theme](Basic-Theme.md) and change however you like.
-
-## Manipulating the Bundles
