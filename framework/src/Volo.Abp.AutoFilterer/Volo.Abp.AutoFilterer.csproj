@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFilterer.Swagger" Version="2.4.0" />
+    <PackageReference Include="AutoFilterer" Version="2.4.3" />
   </ItemGroup>
 
   <ItemGroup>
