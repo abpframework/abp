@@ -40,7 +40,8 @@ using Volo.Abp.Emailing;
 
 namespace MyProject
 {
-    public class EmailSendingJob : BackgroundJob<EmailSendingArgs>, ITransientDependency
+    public class EmailSendingJob
+        : AsyncBackgroundJob<EmailSendingArgs>, ITransientDependency
     {
         private readonly IEmailSender _emailSender;
 
@@ -49,9 +50,9 @@ namespace MyProject
             _emailSender = emailSender;
         }
 
-        public override void Execute(EmailSendingArgs args)
+        public override async Task ExecuteAsync(EmailSendingArgs args)
         {
-            _emailSender.Send(
+            await _emailSender.SendAsync(
                 args.EmailAddress,
                 args.Subject,
                 args.Body
@@ -62,6 +63,8 @@ namespace MyProject
 ````
 
 This job simply uses `IEmailSender` to send emails (see [email sending document](Emailing.md)).
+
+> `AsyncBackgroundJob` is used to create a job needs to perform async calls. You can inherit from `BackgroundJob<TJob>` and override the `Execute` method if the method doesn't need to perform any async call.
 
 #### Exception Handling
 
