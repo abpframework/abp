@@ -1,4 +1,4 @@
-﻿using Volo.Abp.AspNetCore.Components.WebAssembly.Alerts;
+﻿using Volo.Abp.AspNetCore.Components.Alerts;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {

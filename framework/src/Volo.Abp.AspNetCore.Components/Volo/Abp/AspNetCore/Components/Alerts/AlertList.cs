@@ -1,6 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Alerts
+namespace Volo.Abp.AspNetCore.Components.Alerts
 {
     public class AlertList : ObservableCollection<AlertMessage>
     {
