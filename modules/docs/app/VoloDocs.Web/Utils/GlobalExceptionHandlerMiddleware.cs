@@ -11,9 +11,9 @@ namespace VoloDocs.Web.Utils
     public class GlobalExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<AbpUnitOfWorkMiddleware> _logger;
+        private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
 
-        public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<AbpUnitOfWorkMiddleware> logger)
+        public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
         {
             _logger = logger;
             _next = next;
