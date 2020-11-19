@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
 {
-    public class ThemingBundleContributer : IBundleContributer
+    public class ThemingBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {

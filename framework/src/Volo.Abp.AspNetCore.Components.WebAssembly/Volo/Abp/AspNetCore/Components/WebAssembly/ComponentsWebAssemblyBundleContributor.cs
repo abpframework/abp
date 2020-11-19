@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    public class ComponentsWebAssemblyBundleContributer : IBundleContributer
+    public class ComponentsWebAssemblyBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {

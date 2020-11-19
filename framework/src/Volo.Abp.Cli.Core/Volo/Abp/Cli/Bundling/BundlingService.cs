@@ -161,9 +161,9 @@ namespace Volo.Abp.Cli.Bundling
             return builder.ToString();
         }
 
-        private IBundleContributer CreateContributerInstance(Type bundleContributerType)
+        private IBundleContributor CreateContributerInstance(Type bundleContributerType)
         {
-            return (IBundleContributer) Activator.CreateInstance(bundleContributerType);
+            return (IBundleContributor)Activator.CreateInstance(bundleContributerType);
         }
 
         private void FindBundleContributersRecursively(

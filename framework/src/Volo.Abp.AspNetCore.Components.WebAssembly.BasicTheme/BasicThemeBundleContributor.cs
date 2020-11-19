@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
 {
-    public class BasicThemeBundleContributer : IBundleContributer
+    public class BasicThemeBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Bundling
 {
-    public interface IBundleContributer
+    public interface IBundleContributor
     {
         void AddScripts(BundleContext context);
         void AddStyles(BundleContext context);

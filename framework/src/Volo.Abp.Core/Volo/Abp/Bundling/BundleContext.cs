@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Volo.Abp.Bundling
 {
@@ -17,8 +16,12 @@ namespace Volo.Abp.Bundling
             var bundleDefinition = new BundleDefinition
             {
                 Source = source,
-                AdditionalProperties = additionalProperties
             };
+
+            if (additionalProperties != null)
+            {
+                bundleDefinition.AdditionalProperties = additionalProperties;
+            }
 
             BundleDefinitions.AddIfNotContains((item) => item.Source == bundleDefinition.Source, () => bundleDefinition);
         }
