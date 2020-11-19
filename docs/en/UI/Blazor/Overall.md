@@ -121,6 +121,35 @@ ABP provides useful services that you can consume in your applications. Some of 
 * [ISettingProvider](Settings.md) is used to access to the current setting values.
 * `ICurrentUser` and `ICurrentTenant` is used to get information about the current user and the tenant.
 
+## Dependency Injection
+
+Razor components doesn't support [constructor injection](../../Dependency-Injection.md) by default. ABP makes possible to inject dependencies into the constructor of the code-behind file of a component.
+
+**Example: Constructor-inject a service in the code-behind file of a component**
+
+````csharp
+using Microsoft.AspNetCore.Components;
+
+namespace MyProject.Blazor.Pages
+{
+    public partial class Index
+    {
+        private readonly NavigationManager _navigationManager;
+
+        public Index(NavigationManager navigationManager)
+        {
+            _navigationManager = navigationManager;
+        }
+    }
+}
+````
+
+ABP makes this possible by auto registering components to and resolving the component from the [Dependency Injection](../../Dependency-Injection.md) system.
+
+> You can still continue to use property injection and the standard `[Inject]` approach if you prefer.
+
+Resolving a component from the Dependency Injection system makes it possible to easily replace components of a depended module.
+
 ## Customization
 
-While the theme and some modules come as NuGet packages, you can still override and customize them on need. See the [Customization / Overriding Components](Customization-Overriding-Components.md) document.
+While the theme and some modules come as NuGet packages, you can still replace/override and customize them on need. See the [Customization / Overriding Components](Customization-Overriding-Components.md) document.
