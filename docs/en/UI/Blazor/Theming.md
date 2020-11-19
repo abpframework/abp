@@ -44,7 +44,7 @@ All themes must define a layout for the application. The following image shows t
 
 And the same page is shown below with the [Lepton Theme](https://commercial.abp.io/themes) application layout:
 
-![lepton-theme-application-layout](../../images/lepton-theme-application-layout.png)
+![lepton-theme-application-layout](../../images/lepton-theme-blazor-layout.png)
 
 As you can see, the page is the same, but the look is completely different in the themes above.
 
