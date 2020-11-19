@@ -140,8 +140,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                     },
                     OnTable = new ExtensionPropertyUiTableDto
                     {
-                        IsVisible = propertyConfig.UI.OnTable.IsVisible &&
-                                    propertyConfig.UI.Lookup.Url.IsNullOrEmpty()
+                        IsVisible = propertyConfig.UI.OnTable.IsVisible
                     },
                     Lookup = new ExtensionPropertyUiLookupDto
                     {

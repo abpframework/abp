@@ -911,6 +911,17 @@ You can run the application and try to create a new book or update an existing b
 
 {{else if UI=="NG"}}
 
+### Service Proxy Generation
+
+Since the HTTP APIs have been changed, you need to update Angular client side [service proxies](../UI/Angular/Service-Proxies.md). Before running `generate-proxy` command, your host must be up and running.
+
+Run the following command in the `angular` folder (you may need to stop the angular application):
+
+```bash
+abp generate-proxy
+```
+This command will update the service proxy files under the `/src/app/proxy/` folder.
+
 ### The Book List
 
 Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:

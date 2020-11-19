@@ -16,20 +16,21 @@
       <div class="row">
         <div class="col-12 col-md-3">
           <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
-            <li
-              *abpFor="let setting of settings; trackBy: trackByFn"
-              (click)="selected = setting"
-              class="nav-item pointer"
-              [abpPermission]="setting.requiredPolicy"
-            >
-              <a
-                class="nav-link"
-                [id]="setting.name + '-tab'"
-                role="tab"
-                [class.active]="setting.name === selected.name"
-                >{{ setting.name | abpLocalization }}</a
+            <ng-container *abpFor="let setting of settings; trackBy: trackByFn">
+              <li
+                (click)="selected = setting"
+                class="nav-item pointer"
+                *abpPermission="setting.requiredPolicy"
               >
-            </li>
+                <a
+                  class="nav-link"
+                  [id]="setting.name + '-tab'"
+                  role="tab"
+                  [class.active]="setting.name === selected.name"
+                  >{{ setting.name | abpLocalization }}</a
+                >
+              </li>
+            </ng-container>
           </ul>
         </div>
         <div class="col-12 col-md-9">
