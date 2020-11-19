@@ -97,7 +97,7 @@ These libraries are selected as the base libraries and available to the applicat
 
 The themes provide the layout. So, you have a responsive layout with the standard features already implemented. The screenshot below has taken from the layout of the [Basic Theme](Basic-Theme.md):
 
-![basic-theme-application-layout](D:/Github/abp/docs/en/images/basic-theme-application-layout.png)
+![basic-theme-application-layout](../../images/basic-theme-application-layout.png)
 
 See the [Theming](Theming.md) document for more layout options and other details.
 
