@@ -24,19 +24,20 @@
 ></ng-container>
 
 <ng-template #btnItem let-action>
-  <button
-    *ngIf="action.visible(data)"
-    ngbDropdownItem
-    [abpPermission]="action.permission"
-    (click)="action.action(data)"
-    type="button"
-    class="{{ actionList.length === 1 ? 'btn btn-primary' : '' }}"
-    [class.text-center]="actionList.length === 1"
-  >
-    <i [ngClass]="action.icon" [class.mr-1]="action.icon"></i>
-    <span *ngIf="action.icon; else ellipsis">{{ action.text | abpLocalization }}</span>
-    <ng-template #ellipsis>
-      <div abpEllipsis>{{ action.text | abpLocalization }}</div>
-    </ng-template>
-  </button>
+  <ng-container *ngIf="action.visible(data)">
+    <button
+      ngbDropdownItem
+      *abpPermission="action.permission"
+      (click)="action.action(data)"
+      type="button"
+      class="{{ actionList.length === 1 ? 'btn btn-primary' : '' }}"
+      [class.text-center]="actionList.length === 1"
+    >
+      <i [ngClass]="action.icon" [class.mr-1]="action.icon"></i>
+      <span *ngIf="action.icon; else ellipsis">{{ action.text | abpLocalization }}</span>
+      <ng-template #ellipsis>
+        <div abpEllipsis>{{ action.text | abpLocalization }}</div>
+      </ng-template>
+    </button>
+  </ng-container>
 </ng-template>

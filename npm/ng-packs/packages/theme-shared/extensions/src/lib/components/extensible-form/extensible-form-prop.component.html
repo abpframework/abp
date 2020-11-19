@@ -1,4 +1,4 @@
-<div class="form-group" [abpPermission]="prop.permission" [ngSwitch]="getComponent(prop)">
+<div class="form-group" *abpPermission="prop.permission" [ngSwitch]="getComponent(prop)">
   <ng-template ngSwitchCase="input">
     <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
     <input
