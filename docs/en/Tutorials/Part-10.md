@@ -913,9 +913,9 @@ You can run the application and try to create a new book or update an existing b
 
 ### Service Proxy Generation
 
-[ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
+Since the HTTP APIs have been changed, you need to update Angular client side [service proxies](../UI/Angular/Service-Proxies.md). Before running `generate-proxy` command, your host must be up and running.
 
-Run the following command in the `angular` folder:
+Run the following command in the `angular` folder (you may need to stop the angular application):
 
 ```bash
 abp generate-proxy
