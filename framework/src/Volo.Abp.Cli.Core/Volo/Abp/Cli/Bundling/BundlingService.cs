@@ -128,7 +128,7 @@ namespace Volo.Abp.Cli.Bundling
 
             foreach (var style in context.BundleDefinitions)
             {
-                builder.Append($"\t<link href=\"{style.Source}\" rel=\"stylesheet\" ");
+                builder.Append($"    <link href=\"{style.Source}\" rel=\"stylesheet\"");
 
                 foreach (var additionalProperty in style.AdditionalProperties)
                 {
@@ -138,34 +138,25 @@ namespace Volo.Abp.Cli.Bundling
                 builder.AppendLine("/>");
             }
 
-            builder.Append($"\t{StylePlaceholderEnd}");
+            builder.Append($"    {StylePlaceholderEnd}");
 
             return builder.ToString();
         }
 
         private string GenerateScriptDefinitions(BundleContext context)
         {
-            //TODO: refactor as like GenerateStyleDefinitions
-
             var builder = new StringBuilder();
             builder.AppendLine($"{ScriptPlaceholderStart}");
             foreach (var script in context.BundleDefinitions)
             {
-                if (script.AdditionalProperties != null && script.AdditionalProperties.Any())
+                builder.Append($"    <script src=\"{script.Source}\"");
+                foreach (var additionalProperty in script.AdditionalProperties)
                 {
-                    builder.Append($"\t<script src=\"{script.Source}\" ");
-                    foreach (var additionalProperty in script.AdditionalProperties)
-                    {
-                        builder.Append($"{additionalProperty.Key}={additionalProperty.Value} ");
-                    }
-                    builder.AppendLine("></script>");
+                    builder.Append($"{additionalProperty.Key}={additionalProperty.Value} ");
                 }
-                else
-                {
-                    builder.AppendLine($"\t<script src=\"{script.Source}\"></script>");
-                }
+                builder.AppendLine("></script>");
             }
-            builder.Append($"\t{ScriptPlaceholderEnd}");
+            builder.Append($"    {ScriptPlaceholderEnd}");
 
             return builder.ToString();
         }
