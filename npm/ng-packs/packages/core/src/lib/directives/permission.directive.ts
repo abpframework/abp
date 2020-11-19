@@ -7,11 +7,11 @@ import {
   OnDestroy,
   Optional,
   Renderer2,
-  SimpleChanges,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { PermissionService } from '../services/permission.service';
 
 @Directive({
@@ -38,6 +38,7 @@ export class PermissionDirective implements OnDestroy, OnChanges {
 
     this.subscription = this.permissionService
       .getGrantedPolicy$(this.condition)
+      .pipe(distinctUntilChanged())
       .subscribe(isGranted => {
         if (this.templateRef) this.initStructural(isGranted);
         else this.initAttribute(isGranted);
