@@ -28,7 +28,7 @@ namespace Volo.Abp.Cli.Bundling
             var projectFiles = Directory.GetFiles(directory, "*.csproj");
             if (!projectFiles.Any())
             {
-                throw new BundlingException("No project file found in the directory");
+                throw new BundlingException("No project file found in the directory. The working directory must have a Blazor project file.");
             }
 
             var projectFilePath = projectFiles[0];
