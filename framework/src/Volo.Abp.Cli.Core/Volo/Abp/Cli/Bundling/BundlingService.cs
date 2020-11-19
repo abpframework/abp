@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -40,7 +39,7 @@ namespace Volo.Abp.Cli.Bundling
                 {
                     new DotNetProjectInfo(string.Empty, projectFilePath, true)
                 };
-                
+
                 DotNetProjectBuilder.BuildProjects(projects, string.Empty);
             }
 
@@ -63,11 +62,13 @@ namespace Volo.Abp.Cli.Bundling
         private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions)
         {
             var scriptContext = new BundleContext();
+
             foreach (var bundleDefinition in bundleDefinitions)
             {
                 var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
                 contributer.AddScripts(scriptContext);
             }
+
             scriptContext.Add("_framework/blazor.webassembly.js");
             return scriptContext;
         }
@@ -75,11 +76,13 @@ namespace Volo.Abp.Cli.Bundling
         private BundleContext GetStyleContext(List<BundleTypeDefinition> bundleDefinitions)
         {
             var styleContext = new BundleContext();
+
             foreach (var bundleDefinition in bundleDefinitions)
             {
                 var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
                 contributer.AddStyles(styleContext);
-            };
+            }
+
             return styleContext;
         }
 
@@ -102,9 +105,11 @@ namespace Volo.Abp.Cli.Bundling
             content = UpdatePlaceholders(content, StylePlaceholderStart, StylePlaceholderEnd, styleDefinitions);
             content = UpdatePlaceholders(content, ScriptPlaceholderStart, ScriptPlaceholderEnd, scriptDefinitions);
 
-            using var writer = new StreamWriter(htmlFilePath, false, fileEncoding);
-            await writer.WriteAsync(content);
-            await writer.FlushAsync();
+            using (var writer = new StreamWriter(htmlFilePath, false, fileEncoding))
+            {
+                await writer.WriteAsync(content);
+                await writer.FlushAsync();
+            }
         }
 
         private string UpdatePlaceholders(string content, string placeholderStart, string placeholderEnd, string definitions)
@@ -118,23 +123,21 @@ namespace Volo.Abp.Cli.Bundling
         private string GenerateStyleDefinitions(BundleContext context)
         {
             var builder = new StringBuilder();
+
             builder.AppendLine($"{StylePlaceholderStart}");
+
             foreach (var style in context.BundleDefinitions)
             {
-                if (style.AdditionalProperties != null && style.AdditionalProperties.Any())
+                builder.Append($"\t<link href=\"{style.Source}\" rel=\"stylesheet\" ");
+
+                foreach (var additionalProperty in style.AdditionalProperties)
                 {
-                    builder.Append($"\t<link href=\"{style.Source}\" rel=\"stylesheet\" ");
-                    foreach (var additionalProperty in style.AdditionalProperties)
-                    {
-                        builder.Append($"{additionalProperty.Key}={additionalProperty.Value} ");
-                    }
-                    builder.AppendLine("/>");
+                    builder.Append($"{additionalProperty.Key}={additionalProperty.Value} ");
                 }
-                else
-                {
-                    builder.AppendLine($"\t<link href=\"{style.Source}\" rel=\"stylesheet\" />");
-                }
+
+                builder.AppendLine("/>");
             }
+
             builder.Append($"\t{StylePlaceholderEnd}");
 
             return builder.ToString();
@@ -142,6 +145,8 @@ namespace Volo.Abp.Cli.Bundling
 
         private string GenerateScriptDefinitions(BundleContext context)
         {
+            //TODO: refactor as like GenerateStyleDefinitions
+
             var builder = new StringBuilder();
             builder.AppendLine($"{ScriptPlaceholderStart}");
             foreach (var script in context.BundleDefinitions)
@@ -167,27 +172,18 @@ namespace Volo.Abp.Cli.Bundling
 
         private IBundleContributer CreateContributerInstance(Type bundleContributerType)
         {
-            var instance = Activator.CreateInstance(bundleContributerType);
-            return instance.As<IBundleContributer>();
+            return (IBundleContributer) Activator.CreateInstance(bundleContributerType);
         }
 
-        private void ExecuteBundleContributers(List<BundleTypeDefinition> bundleDefinitions, BundleContext styleContext, BundleContext scriptContext)
+        private void FindBundleContributersRecursively(
+            Type module,
+            int level,
+            List<BundleTypeDefinition> bundleDefinitions)
         {
-            foreach (var bundleDefinition in bundleDefinitions)
-            {
-                var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
-                contributer.AddStyles(styleContext);
-                contributer.AddScripts(scriptContext);
-            }
-        }
+            var bundleContributer = module.Assembly
+                .GetTypes()
+                .SingleOrDefault(t => t.IsAssignableTo<IBundleContributer>());
 
-        private void FindBundleContributersRecursively(Type module, int level, List<BundleTypeDefinition> bundleDefinitions)
-        {
-            var dependencyDescriptors = module
-                .GetCustomAttributes()
-                .OfType<IDependedTypesProvider>();
-
-            var bundleContributer = module.Assembly.GetTypes().SingleOrDefault(t => t.IsAssignableTo<IBundleContributer>());
             if (bundleContributer != null)
             {
                 var definition = bundleDefinitions.SingleOrDefault(t => t.BundleContributerType == bundleContributer);
@@ -208,6 +204,10 @@ namespace Volo.Abp.Cli.Bundling
                 }
             }
 
+            var dependencyDescriptors = module
+                .GetCustomAttributes()
+                .OfType<IDependedTypesProvider>();
+
             foreach (var descriptor in dependencyDescriptors)
             {
                 foreach (var dependedModuleType in descriptor.GetDependedTypes())
@@ -219,19 +219,10 @@ namespace Volo.Abp.Cli.Bundling
 
         private Type GetStartupModule(string assemblyPath)
         {
-            var assembly = Assembly.LoadFrom(assemblyPath);
-            return assembly.GetTypes().SingleOrDefault(IsAbpModule);
-
-            static bool IsAbpModule(Type type)
-            {
-                var typeInfo = type.GetTypeInfo();
-
-                return
-                    typeInfo.IsClass &&
-                    !typeInfo.IsAbstract &&
-                    !typeInfo.IsGenericType &&
-                    typeof(IAbpModule).GetTypeInfo().IsAssignableFrom(type);
-            }
+            return Assembly
+                .LoadFrom(assemblyPath)
+                .GetTypes()
+                .SingleOrDefault(AbpModule.IsAbpModule);
         }
 
         private string GetFrameworkFolderPath(string projectDirectory, string frameworkVersion)
@@ -244,15 +235,12 @@ namespace Volo.Abp.Cli.Bundling
             var document = new XmlDocument();
             document.Load(projectFilePath);
             var sdk = document.DocumentElement.GetAttribute("Sdk");
-            if (sdk == SupportedWebAssemblyProjectType)
-            {
-                var frameworkVersion = document.SelectSingleNode("//TargetFramework").InnerText;
-                return frameworkVersion;
-            }
-            else
+            if (sdk != SupportedWebAssemblyProjectType)
             {
                 throw new BundlingException($"Unsupported project type. Project type must be {SupportedWebAssemblyProjectType}.");
             }
+
+            return document.SelectSingleNode("//TargetFramework").InnerText;
         }
 
         private string GetAssemblyFilePath(string directory, string frameworkVersion, string projectFileName)
