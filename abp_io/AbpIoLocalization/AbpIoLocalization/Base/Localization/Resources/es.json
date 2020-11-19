@@ -1,0 +1,33 @@
+{
+  "culture": "es",
+  "texts": {
+    "Volo.AbpIo.Domain:010004": "",
+    "Volo.AbpIo.Domain:010005": "",
+    "Volo.AbpIo.Domain:010006": "",
+    "Volo.AbpIo.Domain:010007": "",
+    "Volo.AbpIo.Domain:010008": "",
+    "Volo.AbpIo.Domain:010009": "",
+    "Volo.AbpIo.Domain:010010": "",
+    "Volo.AbpIo.Domain:010011": "",
+    "Volo.AbpIo.Domain:010012": "",
+    "Volo.AbpIo.Domain:020001": "",
+    "Volo.AbpIo.Domain:020002": "",
+    "Volo.AbpIo.Domain:020003": "",
+    "Volo.AbpIo.Domain:020004": "",
+    "WantToLearn?": "",
+    "ReadyToGetStarted?": "",
+    "JoinOurCommunity": "",
+    "GetStartedUpper": "",
+    "ForkMeOnGitHub": "",
+    "Features": "",
+    "GetStarted": "",
+    "Documents": "",
+    "Community": "",
+    "ContributionGuide": "",
+    "Blog": "",
+    "Commercial": "",
+    "MyAccount": "",
+    "SeeDocuments": "",
+    "Samples": ""
+  }
+}

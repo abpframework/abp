@@ -15,7 +15,6 @@ namespace Volo.Abp.AuditLogging
             }
 
             return queryable
-                .AsSplitQuery()
                 .Include(x => x.Actions)
                 .Include(x => x.EntityChanges).ThenInclude(ec=>ec.PropertyChanges);
         }

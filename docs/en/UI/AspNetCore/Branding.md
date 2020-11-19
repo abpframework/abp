@@ -11,7 +11,7 @@ The screenshot below shows *MyProject* as the application name:
 You can implement the `IBrandingProvider` interface or inherit from the `DefaultBrandingProvider` to set the application name:
 
 ````csharp
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components;
+using Volo.Abp.Ui.Branding;
 using Volo.Abp.DependencyInjection;
 
 namespace MyProject.Web

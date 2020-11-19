@@ -588,11 +588,25 @@
             },
             {
               "text": "Theming",
-              "path": "UI/Blazor/Theming.md"
+              "path": "UI/Blazor/Theming.md",
+              "items": [
+                {
+                  "text": "The Basic Theme",
+                  "path": "UI/Blazor/Basic-Theme.md"
+                }
+              ]
             },
             {
               "text": "Toolbars",
               "path": "UI/Blazor/Toolbars.md"
+            },
+            {
+              "text": "Page Alerts",
+              "path": "UI/Blazor/Page-Alerts.md"
+            },
+            {
+              "text": "Branding",
+              "path": "UI/Blazor/Branding.md"
             },
             {
               "text": "Customization / Overriding Components",

@@ -2,7 +2,7 @@
 
 This document introduces the breaking changes done in the ABP Framework 4.0 and explains how to fix your 3.x based solutions while upgrading to the ABP Framework 4.0.
 
-> See this blog post (TODO: LINK) to learn what's new with the ABP Framework 4.0. This document only focuses on the breaking changes.
+> See [the blog post](https://blog.abp.io/abp/ABP.IO-Platform-v4.0-RC-Has-Been-Released-based-on-.NET-5.0) to learn what's new with the ABP Framework 4.0. This document only focuses on the breaking changes.
 
 ## Overall
 

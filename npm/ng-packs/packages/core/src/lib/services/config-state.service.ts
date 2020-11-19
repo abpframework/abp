@@ -15,7 +15,7 @@ export class ConfigStateService {
   }
 
   setState = (state: ApplicationConfiguration.Response) => {
-    this.store.patch(state);
+    this.store.set(state);
   };
 
   getOne$(key: string) {

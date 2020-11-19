@@ -31,6 +31,6 @@ export class EnvironmentService {
   }
 
   setState(environment: Environment) {
-    this.store.patch(environment);
+    this.store.set(environment);
   }
 }

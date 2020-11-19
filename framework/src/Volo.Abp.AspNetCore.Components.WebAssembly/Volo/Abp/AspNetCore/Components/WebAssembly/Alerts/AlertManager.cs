@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using Volo.Abp.AspNetCore.Components.Alerts;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.Alerts
 {
