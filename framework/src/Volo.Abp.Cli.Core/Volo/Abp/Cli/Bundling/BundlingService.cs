@@ -180,12 +180,19 @@ namespace Volo.Abp.Cli.Bundling
             int level,
             List<BundleTypeDefinition> bundleDefinitions)
         {
-            var bundleContributer = module.Assembly
+            var bundleContributers = module.Assembly
                 .GetTypes()
-                .SingleOrDefault(t => t.IsAssignableTo<IBundleContributer>());
+                .Where(t => t.IsAssignableTo<IBundleContributor>())
+                .ToList();
 
-            if (bundleContributer != null)
+            if (bundleContributers.Count > 1)
             {
+                throw new BundlingException($"Each project must contain only one class implementing {nameof(IBundleContributor)}");
+            }
+
+            if (bundleContributers.Any())
+            {
+                var bundleContributer = bundleContributers[0];
                 var definition = bundleDefinitions.SingleOrDefault(t => t.BundleContributerType == bundleContributer);
                 if (definition != null)
                 {
