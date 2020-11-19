@@ -9,11 +9,7 @@ import { RestService } from './rest.service';
   providedIn: 'root',
 })
 export class ApplicationConfigurationService {
-  get apiName(): string {
-    return this.environment.getEnvironment().application?.name;
-  }
-
-  constructor(private rest: RestService, private environment: EnvironmentService) {}
+  constructor(private rest: RestService) {}
 
   getConfiguration(): Observable<ApplicationConfiguration.Response> {
     const request: Rest.Request<null> = {
@@ -21,8 +17,6 @@ export class ApplicationConfigurationService {
       url: '/api/abp/application-configuration',
     };
 
-    return this.rest.request<null, ApplicationConfiguration.Response>(request, {
-      apiName: this.apiName,
-    });
+    return this.rest.request<null, ApplicationConfiguration.Response>(request, {});
   }
 }
