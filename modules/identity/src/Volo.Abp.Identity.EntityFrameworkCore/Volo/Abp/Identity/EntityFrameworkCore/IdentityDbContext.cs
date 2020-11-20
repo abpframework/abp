@@ -28,11 +28,23 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            optionsBuilder.NamingConventionsRewriteName(AbpIdentityDbProperties.DbNamingConvention);
+
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ConfigureIdentity();
+
+            builder.NamingConventionsRewriteName(AbpIdentityDbProperties.DbNamingConvention);
+
         }
+
     }
 }

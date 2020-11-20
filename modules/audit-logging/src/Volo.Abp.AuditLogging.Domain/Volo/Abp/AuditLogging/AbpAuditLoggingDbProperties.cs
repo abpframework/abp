@@ -9,5 +9,8 @@ namespace Volo.Abp.AuditLogging
         public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
         public const string ConnectionStringName = "AbpAuditLogging";
+
+        public static string DbNamingConvention = AbpCommonDbProperties.DbNamingConvention;
+
     }
 }

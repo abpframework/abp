@@ -7,5 +7,8 @@
         public static string DbSchema { get; set; } = null;
 
         public const string ConnectionStringName = "AbpIdentityServer";
+
+        public static string DbNamingConvention = "Default";
+
     }
 }

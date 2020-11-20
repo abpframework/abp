@@ -15,11 +15,23 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            optionsBuilder.NamingConventionsRewriteName(AbpSettingManagementDbProperties.DbNamingConvention);
+
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ConfigureSettingManagement();
+
+            builder.NamingConventionsRewriteName(AbpSettingManagementDbProperties.DbNamingConvention);
+
         }
+
     }
 }

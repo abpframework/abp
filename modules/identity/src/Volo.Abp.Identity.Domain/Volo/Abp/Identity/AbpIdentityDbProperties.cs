@@ -9,5 +9,8 @@ namespace Volo.Abp.Identity
         public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
         public const string ConnectionStringName = "AbpIdentity";
+        
+        public static string DbNamingConvention = AbpCommonDbProperties.DbNamingConvention;
+
     }
 }

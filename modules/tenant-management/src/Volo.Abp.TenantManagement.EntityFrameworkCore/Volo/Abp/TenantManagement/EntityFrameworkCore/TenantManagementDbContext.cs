@@ -16,11 +16,23 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            optionsBuilder.NamingConventionsRewriteName(AbpTenantManagementDbProperties.DbNamingConvention);
+
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ConfigureTenantManagement();
+
+            builder.NamingConventionsRewriteName(AbpTenantManagementDbProperties.DbNamingConvention);
+
         }
+
     }
 }

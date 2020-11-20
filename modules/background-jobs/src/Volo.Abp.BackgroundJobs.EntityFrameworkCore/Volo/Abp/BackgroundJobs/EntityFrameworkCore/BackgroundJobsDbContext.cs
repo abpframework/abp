@@ -9,9 +9,17 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
     {
         public DbSet<BackgroundJobRecord> BackgroundJobs { get; set; }
 
-        public BackgroundJobsDbContext(DbContextOptions<BackgroundJobsDbContext> options) 
+        public BackgroundJobsDbContext(DbContextOptions<BackgroundJobsDbContext> options)
             : base(options)
         {
+
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            optionsBuilder.NamingConventionsRewriteName(BackgroundJobsDbProperties.DbNamingConvention);
 
         }
 
@@ -20,6 +28,10 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
             base.OnModelCreating(builder);
 
             builder.ConfigureBackgroundJobs();
+
+            builder.NamingConventionsRewriteName(BackgroundJobsDbProperties.DbNamingConvention);
+
         }
+
     }
 }

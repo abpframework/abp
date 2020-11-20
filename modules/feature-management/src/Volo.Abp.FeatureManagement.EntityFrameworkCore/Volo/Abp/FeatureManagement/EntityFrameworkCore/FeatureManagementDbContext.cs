@@ -9,9 +9,17 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
     {
         public DbSet<FeatureValue> FeatureValues { get; set; }
 
-        public FeatureManagementDbContext(DbContextOptions<FeatureManagementDbContext> options) 
+        public FeatureManagementDbContext(DbContextOptions<FeatureManagementDbContext> options)
             : base(options)
         {
+
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            optionsBuilder.NamingConventionsRewriteName(FeatureManagementDbProperties.DbNamingConvention);
 
         }
 
@@ -20,6 +28,11 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
             base.OnModelCreating(builder);
 
             builder.ConfigureFeatureManagement();
+
+            builder.NamingConventionsRewriteName(FeatureManagementDbProperties.DbNamingConvention);
+
         }
+
+
     }
 }

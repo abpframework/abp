@@ -9,5 +9,8 @@ namespace Volo.Abp.FeatureManagement
         public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
         public const string ConnectionStringName = "AbpFeatureManagement";
+
+        public static string DbNamingConvention = AbpCommonDbProperties.DbNamingConvention;
+
     }
 }
