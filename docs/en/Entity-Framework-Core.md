@@ -336,9 +336,9 @@ builder.Entity<OrderLine>(b =>
 
 When you query an `Order`, you may want to **include** all the `OrderLine`s in a single query or you may want to **load them later** on demand.
 
-> Actually these are not directly related to the ABP Framework. You can follow the EF Core documentation to learn all the details. This section will cover some topics related to the ABP Framework.
+> Actually these are not directly related to the ABP Framework. You can follow the [EF Core documentation](https://docs.microsoft.com/en-us/ef/core/querying/related-data/) to learn all the details. This section will cover some topics related to the ABP Framework.
 
-### Load With Details
+### Eager Loading / Load With Details
 
 You have different options when you want to load the related entities while querying an entity.
 
@@ -471,9 +471,79 @@ The repository patters tries to encapsulate the EF Core, so your options are lim
 * Create a custom repository method and use the complete EF Core API.
 * Reference to the `Volo.Abp.EntityFrameworkCore` package from your project. In this way, you can directly use `Include` and `ThenInclude` in your code.
 
-### Lazy Loading
+See also [eager loading document](https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager) of the EF Core.
 
-TODO
+### Explicit / Lazy Loading
+
+If you don't include relations while querying an entity and later need to access to a navigation property or collection, you have different options.
+
+#### EnsurePropertyLoadedAsync / EnsureCollectionLoadedAsync
+
+Repositories provide `EnsurePropertyLoadedAsync` and `EnsureCollectionLoadedAsync` extension methods to **explicitly load** a navigation property or sub collection.
+
+**Example: Load Lines of an Order when needed**
+
+````csharp
+public async Task TestWithDetails(Guid id)
+{
+    var order = await _orderRepository.GetAsync(id, includeDetails: false);
+    //order.Lines is empty on this stage
+
+    await _orderRepository.EnsureCollectionLoadedAsync(order, x => x.Lines);
+    //order.Lines is filled now
+}
+````
+
+`EnsurePropertyLoadedAsync` and `EnsureCollectionLoadedAsync` methods do nothing if the property or collection was already loaded. So, calling multiple times has no problem.
+
+See also [explicit loading document](https://docs.microsoft.com/en-us/ef/core/querying/related-data/explicit) of the EF Core.
+
+#### Lazy Loading with Proxies
+
+Explicit loading may not be possible in some cases, especially when you don't have a reference to the `Repository` or `DbContext`. Lazy Loading is a feature of the EF Core that loads the related properties / collections when you first access to it.
+
+To enable lazy loading;
+
+1. Install the [Microsoft.EntityFrameworkCore.Proxies](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Proxies/) package into your project (typically to the EF Core integration project)
+2. Configure `UseLazyLoadingProxies` for your `DbContext` (in the `ConfigureServices` method of your module in your EF Core project). Example:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.PreConfigure<MyCrmDbContext>(opts =>
+    {
+        opts.DbContextOptions.UseLazyLoadingProxies(); //Enable lazy loading
+    });
+    
+    options.UseSqlServer();
+});
+````
+
+3. Make your navigation properties and collections `virtual`. Examples:
+
+````csharp
+public virtual ICollection<OrderLine> Lines { get; set; } //virtual collection
+public virtual Order Order { get; set; } //virtual navigation property
+````
+
+Once you enable lazy loading and arrange your entities, you can freely access to the navigation properties and collections:
+
+````csharp
+public async Task TestWithDetails(Guid id)
+{
+    var order = await _orderRepository.GetAsync(id);
+    //order.Lines is empty on this stage
+
+    var lines = order.Lines;
+    //order.Lines is filled (lazy loaded)
+}
+````
+
+Whenever you access to a property/collection, EF Core automatically performs an additional query to load the property/collection from the database.
+
+> Lazy loading should be carefully used since it may cause performance problems in some specific cases.
+
+See also [lazy loading document](https://docs.microsoft.com/en-us/ef/core/querying/related-data/lazy) of the EF Core.
 
 ## Access to the EF Core API
 
@@ -649,22 +719,21 @@ context.Services.AddAbpDbContext<OtherDbContext>(options =>
 
 In this example, `OtherDbContext` implements `IBookStoreDbContext`. This feature allows you to have multiple DbContext (one per module) on development, but single DbContext (implements all interfaces of all DbContexts) on runtime.
 
-### Enabling split queries globally by default
+### Split Queries
 
-Abp enables split queries globally by default for better performance. You can also change it as needed, such as:
+ABP enables [split queries](https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries) globally by default for better performance. You can change it as needed.
+
+**Example**
 
 ````csharp
 Configure<AbpDbContextOptions>(options =>
 {
     options.UseSqlServer(optionsBuilder =>
     {
-        //Change QuerySplittingBehavior
         optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
     });
 });
 ````
-
-For more information, please refer to https://docs.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.querysplittingbehavior?view=efcore-5.0
 
 ## See Also
 
