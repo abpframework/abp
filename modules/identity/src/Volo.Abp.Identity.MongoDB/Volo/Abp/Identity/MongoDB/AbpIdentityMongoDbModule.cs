@@ -19,6 +19,7 @@ namespace Volo.Abp.Identity.MongoDB
                 options.AddRepository<IdentityClaimType, MongoIdentityRoleRepository>();
                 options.AddRepository<OrganizationUnit, MongoIdentityRoleRepository>();
                 options.AddRepository<IdentitySecurityLog, MongoIdentitySecurityLogRepository>();
+                options.AddRepository<IdentityLinkUser, MongoIdentityLinkUserRepository>();
             });
         }
     }

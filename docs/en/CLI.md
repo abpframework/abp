@@ -16,6 +16,12 @@ To update an existing installation:
 dotnet tool update -g Volo.Abp.Cli
 ````
 
+## Global Options
+
+While each command may have a set of options, there are some global options those can be used with any command;
+
+* `--skip-cli-version-check`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
+
 ## Commands
 
 Here, the list of all available commands before explaining their details:
@@ -25,13 +31,17 @@ Here, the list of all available commands before explaining their details:
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
-* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints on the server.
+* **`get-source`**: Downloads the source code of a module.
+* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
+* **`remove-proxy`**: Removes previously generated client side proxies.
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`logout`**: Logouts from your computer if you've authenticated before.
+* **`build`**: Builds a GIT repository and depending repositories or a single .NET solution.
+* **`bundle`**: Generates script and style references for an ABP Blazor project. 
 
 ### help
 
@@ -77,6 +87,8 @@ abp new Acme.BookStore
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
       * `angular`: Angular. There are some additional options for this template:
+        * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
+      * `blazor`: Blazor. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
       * `none`: Without UI. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
@@ -148,6 +160,8 @@ abp add-package Volo.Abp.MongoDB
 
 Adds a [multi-package application module](Modules/Index) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
+It can also create a new module for your solution and add it to your solution. See `--new-template` option.
+
 > A business module generally consists of several packages (because of layering, different database provider options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
 
 Usage
@@ -156,43 +170,96 @@ Usage
 abp add-module <module-name> [options]
 ````
 
-Example:
+Examples:
 
 ```bash
 abp add-module Volo.Blogging
 ```
 
-* This example add the Volo.Blogging module to the solution.
+* This example adds the `Volo.Blogging` module to the solution.
+
+```bash
+abp add-module ProductManagement --new --add-to-solution-file
+```
+
+* This command creates a fresh new module customized for your solution (named `ProductManagement`) and adds it to your solution.
+
 
 #### Options
 
 * `--solution` or `-s`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
 * `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
 * `-sp` or `--startup-project`: Relative path to the project folder of the startup project. Default value is the current folder.
-* `--with-source-code`: Add source code of the module instead of NuGet/NPM packages.
+* `--new`: Creates a fresh new module (customized for your solution) and adds it to your solution.
+* `--with-source-code`: Downloads the source code of the module to your solution folder and uses local project references instead of NuGet/NPM packages. This options is always `True` if `--new` is used.
+* `--add-to-solution-file`: Adds the downloaded/created module to your solution file, so you will also see the projects of the module when you open the solution on a IDE. (only available when `--with-source-code` is `True`.)
+
+### get-source
+
+Downloads the source code of a module to your computer.
+
+Usage
+
+````bash
+abp get-source <module-name> [options]
+````
+
+Example:
+
+```bash
+abp get-source Volo.Blogging
+
+abp get-source Volo.Blogging --local-framework-ref --abp-path D:\GitHub\abp
+```
+
+#### Options
+
+* `--output-folder` or `-o`: Specifies the directory that source code will be downloaded in. If not specified, current directory is used.
+* `--version` or `-v`: Specifies the version of the  source code that will be downloaded. If not specified, latest version is used.
+* `--preview`: If no version option is specified, this option specifies if latest [preview version](Previews.md) will be used instead of latest stable version.
+* `-- local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
 
 ### generate-proxy
 
-Generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running `generate-proxy` command, your host must be up and running.
+Generates Angular service proxies for your HTTP APIs to make easy to consume your services from the client side. Your host (server) application must be up and running before running this command.
 
 Usage:
 
 ````bash
-abp generate-proxy [options] 
+abp generate-proxy
 ````
 
 #### Options
 
-* `--apiUrl` or `-a`: Specifies the root URL of the HTTP API. The default value is being retrieved from the `environment.ts` file for the Angular application. Make sure your host is up and running before running `abp generate-proxy`.
-* `--ui` or `-u`: Specifies the UI framework. Default value is `angular` and it is the only UI framework supported for now. Creates TypeScript code.
-* `--module` or `-m`: Specifies the module name. Default module name is `app`, which indicates your own application (you typically want this since every module is responsible to maintain its own client proxies). Set `all` for to generate proxies for all the modules.
+* `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
+* `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
+* `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+* `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+* `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
 
-Example usage with the options:
+> See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
+
+### remove-proxy
+
+Removes previously generated proxy code from the Angular application. Your host (server) application must be up and running before running this command.
+
+This can be especially useful when you generate proxies for multiple modules before and need to remove one of them later.
+
+Usage:
 
 ````bash
-abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
+abp remove-proxy
 ````
 
+#### Options
+
+* `--module` or `-m`: Specifies the name of the backend module you wish to remove proxies for. Default value: `app`.
+* `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
+* `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+* `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+* `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+
+> See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
 ### switch-to-preview
 
@@ -206,7 +273,7 @@ abp switch-to-preview [options]
 
 #### Options
 
-`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 
 ### switch-to-nightly
@@ -221,7 +288,7 @@ abp switch-to-nightly [options]
 
 #### Options
 
-`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### switch-to-stable
 
@@ -234,7 +301,7 @@ abp switch-to-stable [options]
 ````
 #### Options
 
-`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### translate
 
@@ -306,3 +373,48 @@ Logs you out by removing the session token from your computer.
 abp logout
 ```
 
+### build
+
+This command builds a GIT repository and it's depending repositories or a single .NET solution File. In order ```build``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain one of;
+
+* A .NET solution file (*.sln)
+* abp-build-config.json (suggested to add this to .gitignore)
+
+Usage:
+
+````bash
+abp build [options]
+````
+
+Example:
+
+```
+abp build --build-name "prod" --dotnet-build-arguments "\"--no-dependencies\""
+```
+
+#### Options
+
+* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
+* ```--build-name``` or ```-n```: Specifies a name for the build. This option is useful when same repository is used for more than one different builds. 
+* ```--dotnet-build-arguments``` or ```-a```: Arguments to pass ```dotnet build``` when building project files.  This parameter must be passed like ```"\"{params}\""``` .
+* ```--force``` or ```-f```: Forces to build projects even they are not changed from the last successful build.
+
+For more details, see [build command documentation](CLI-BuildCommand.md).
+
+
+#### bundle
+
+This command generates script and style references for an ABP Blazor project and updates the **index.html** file. It helps developers to manage dependencies required by ABP modules easily.  In order ```bundle``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain a Blazor project file(*.csproj).
+
+Usage:
+
+````bash
+abp bundle [options]
+````
+
+#### Options
+
+* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a Blazor project file.
+* ```--force``` or ```-f```: Forces to build project before generating references.
+
+For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)

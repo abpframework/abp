@@ -1,0 +1,7 @@
+{
+  "culture": "hu",
+  "texts": {
+    "ThisFieldIsRequired": "Ez a mező kötelező",
+    "MaxLenghtErrorMessage": "Ez a mező legfeljebb „{0}” karakter lehet"
+  }
+}

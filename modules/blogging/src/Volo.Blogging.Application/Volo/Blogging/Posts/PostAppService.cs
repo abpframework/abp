@@ -187,9 +187,7 @@ namespace Volo.Blogging.Posts
 
         private async Task<string> RenameUrlIfItAlreadyExistAsync(Guid blogId, string url, Post existingPost = null)
         {
-            var postList = await _postRepository.GetListAsync();
-
-            if (postList.Where(p => p.Url == url).WhereIf(existingPost != null, p => existingPost.Id != p.Id).Any())
+            if (await _postRepository.IsPostUrlInUseAsync(blogId, url, existingPost?.Id))
             {
                 return url + "-" + Guid.NewGuid().ToString().Substring(0, 5);
             }

@@ -28,6 +28,14 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         [HttpGet]
+        [Route("get-exception2")]
+        public Task GetException2Async()
+        {
+            throw new BusinessException("Volo.Abp.Http.DynamicProxying:10001")
+                .WithData("0","TEST");
+        }
+
+        [HttpGet]
         [Route("get-with-datetime-parameter")]
         public Task<DateTime> GetWithDateTimeParameterAsync(DateTime dateTime1)
         {

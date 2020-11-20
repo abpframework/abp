@@ -2,6 +2,11 @@
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.CarouselsModel
 @{
     ViewData["Title"] = "Carousels";
+
+    var firstSlide = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgODAwIDQwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4jaG9sZGVyXzE2MzQzY2ZiNzEyIHRleHQgeyBmaWxsOiM0NDQ7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtZmFtaWx5OkhlbHZldGljYSwgbW9ub3NwYWNlO2ZvbnQtc2l6ZTo0MHB0IH0gPC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNjM0M2NmYjcxMiI+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiM2NjYiPjwvcmVjdD48Zz48dGV4dCB4PSIyNDcuMjkxNjcxNzUyOTI5NyIgeT0iMjE4LjMiPkZpcnN0IHNsaWRlPC90ZXh0PjwvZz48L2c+PC9zdmc+";
+    var secondSlide = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgODAwIDQwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4jaG9sZGVyXzE2MzQzY2ZiNzEyIHRleHQgeyBmaWxsOiM0NDQ7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtZmFtaWx5OkhlbHZldGljYSwgbW9ub3NwYWNlO2ZvbnQtc2l6ZTo0MHB0IH0gPC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNjM0M2NmYjcxMiI+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiM2NjYiPjwvcmVjdD48Zz48dGV4dCB4PSIyNDcuMjkxNjcxNzUyOTI5NyIgeT0iMjE4LjMiPlNlY29uZCBzbGlkZTwvdGV4dD48L2c+PC9nPjwvc3ZnPg==";
+    var thirdSlide = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgODAwIDQwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4jaG9sZGVyXzE2MzQzY2ZiNzE0IHRleHQgeyBmaWxsOiMzMzM7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtZmFtaWx5OkhlbHZldGljYSwgbW9ub3NwYWNlO2ZvbnQtc2l6ZTo0MHB0IH0gPC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNjM0M2NmYjcxNCI+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiM1NTUiPjwvcmVjdD48Zz48dGV4dCB4PSIyNzYuOTc0OTk4NDc0MTIxMSIgeT0iMjE4LjMiPlRoaXJkIHNsaWRlPC90ZXh0PjwvZz48L2c+PC9zdmc+";
+
 }
 
 @section styles {
@@ -31,11 +36,10 @@
 
 <div class="demo-with-code">
     <div class="demo-area">
-
         <abp-carousel indicators="false" controls="false">
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3EFirst slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3ESecond slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb714 text %7B fill%3A%23333%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb714&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23555&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;276.9749984741211&quot; y%3D&quot;218.3&quot;%3EThird slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
+            <abp-carousel-item src="@firstSlide"></abp-carousel-item>
+            <abp-carousel-item src="@secondSlide"></abp-carousel-item>
+            <abp-carousel-item src="@thirdSlide"></abp-carousel-item>
         </abp-carousel>
     </div>
     <div class="code-area">
@@ -76,9 +80,9 @@
     <div class="demo-area">
 
         <abp-carousel indicators="false">
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3EFirst slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3ESecond slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb714 text %7B fill%3A%23333%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb714&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23555&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;276.9749984741211&quot; y%3D&quot;218.3&quot;%3EThird slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
+            <abp-carousel-item src="@firstSlide"></abp-carousel-item>
+            <abp-carousel-item src="@secondSlide"></abp-carousel-item>
+            <abp-carousel-item src="@thirdSlide"></abp-carousel-item>
         </abp-carousel>
     </div>
     <div class="code-area">
@@ -127,9 +131,9 @@
     <div class="demo-area">
 
         <abp-carousel>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3EFirst slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3ESecond slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb714 text %7B fill%3A%23333%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb714&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23555&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;276.9749984741211&quot; y%3D&quot;218.3&quot;%3EThird slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
+            <abp-carousel-item src="@firstSlide"></abp-carousel-item>
+            <abp-carousel-item src="@secondSlide"></abp-carousel-item>
+            <abp-carousel-item src="@thirdSlide"></abp-carousel-item>
         </abp-carousel>
     </div>
     <div class="code-area">
@@ -183,7 +187,7 @@
     <div class="demo-area">
 
         <abp-carousel>
-            <abp-carousel-item caption-title="Second slide label" caption="Lorem ipsum dolor sit amet, consectetur adipiscing elit." src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3EFirst slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
+            <abp-carousel-item caption-title="Second slide label" caption="Lorem ipsum dolor sit amet, consectetur adipiscing elit." src="@firstSlide"></abp-carousel-item>
         </abp-carousel>
     </div>
     <div class="code-area">
@@ -234,9 +238,9 @@
     <div class="demo-area">
 
         <abp-carousel indicators="false" crossfade="true">
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3EFirst slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb712 text %7B fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb712&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23666&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;247.2916717529297&quot; y%3D&quot;218.3&quot;%3ESecond slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
-            <abp-carousel-item src="data:image/svg+xml;charset=UTF-8,%3Csvg width%3D&quot;800&quot; height%3D&quot;400&quot; xmlns%3D&quot;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&quot; viewBox%3D&quot;0 0 800 400&quot; preserveAspectRatio%3D&quot;none&quot;%3E%3Cdefs%3E%3Cstyle type%3D&quot;text%2Fcss&quot;%3E%23holder_16343cfb714 text %7B fill%3A%23333%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C monospace%3Bfont-size%3A40pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D&quot;holder_16343cfb714&quot;%3E%3Crect width%3D&quot;800&quot; height%3D&quot;400&quot; fill%3D&quot;%23555&quot;%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D&quot;276.9749984741211&quot; y%3D&quot;218.3&quot;%3EThird slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"></abp-carousel-item>
+            <abp-carousel-item src="@firstSlide"></abp-carousel-item>
+            <abp-carousel-item src="@secondSlide"></abp-carousel-item>
+            <abp-carousel-item src="@thirdSlide"></abp-carousel-item>
         </abp-carousel>
     </div>
     <div class="code-area">

@@ -53,6 +53,10 @@
     "ResetPassword_Information": "Please enter your new password.",
     "YourPasswordIsSuccessfullyReset": "Your password is successfully reset.",
     "GoToTheApplication": "Go to the application",
-    "BackToLogin": "Back to login"
+    "BackToLogin": "Back to login",
+    "ProfileTab:Password": "Change password",
+    "ProfileTab:PersonalInfo": "Personal info",
+    "ReturnToApplication": "Return to application",
+    "Volo.Account:InvalidEmailAddress": "Can not find the given email address: {0}"
   }
 }

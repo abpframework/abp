@@ -48,6 +48,7 @@
     "ConfirmPassword": "Potrditev (ponovitev) gesla",
     "ResetPassword_Information": "Prosimo vnesite vaše novo geslo.",
     "YourPasswordIsSuccessfullyReset": "Vaše geslo je uspešno ponastavljeno.",
-    "BackToLogin": "Nazaj na prijavo"
+    "BackToLogin": "Nazaj na prijavo",
+    "Volo.Account:InvalidEmailAddress": "Navedenega e-poštnega naslova ni mogoče najti: {0}"
   }
 }

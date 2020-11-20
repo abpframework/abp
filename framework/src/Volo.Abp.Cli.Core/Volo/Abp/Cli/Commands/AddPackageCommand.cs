@@ -115,7 +115,6 @@ namespace Volo.Abp.Cli.Commands
             throw new CliUsageException(sb.ToString());
         }
 
-
         public static class Options
         {
             public static class Project

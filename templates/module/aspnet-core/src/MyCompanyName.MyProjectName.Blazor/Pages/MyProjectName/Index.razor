@@ -1,0 +1,8 @@
+@page "/MyProjectName"
+@using Microsoft.Extensions.Localization
+@using global::MyCompanyName.MyProjectName.Localization
+@inject IStringLocalizer<MyProjectNameResource> L
+@{
+}
+<h1>MyProjectName</h1>
+<p>@L["SamplePageMessage"]</p>

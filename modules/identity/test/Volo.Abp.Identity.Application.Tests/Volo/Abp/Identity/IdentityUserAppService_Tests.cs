@@ -98,7 +98,6 @@ namespace Volo.Abp.Identity
             {
                 UserName = johnNash.UserName,
                 LockoutEnabled = true,
-                TwoFactorEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
                 Password = "123qwe4R*",
                 Email = CreateRandomEmail(),
@@ -135,7 +134,7 @@ namespace Volo.Abp.Identity
         {
             //Get user
             var johnNash = await _userAppService.GetAsync(_testData.UserJohnId);
-            
+
             //Act
 
             var input = new IdentityUserUpdateDto
@@ -144,7 +143,6 @@ namespace Volo.Abp.Identity
                 Surname = "Nash-updated",
                 UserName = johnNash.UserName,
                 LockoutEnabled = true,
-                TwoFactorEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
                 Email = CreateRandomEmail(),
                 RoleNames = new[] { "admin", "moderator" },

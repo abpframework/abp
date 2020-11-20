@@ -1,5 +1,6 @@
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { switchMap, tap, pluck } from 'rxjs/operators';
+import { pluck, tap } from 'rxjs/operators';
 import {
   CreateRole,
   CreateUser,
@@ -8,14 +9,15 @@ import {
   GetRoleById,
   GetRoles,
   GetUserById,
+  GetUserRoles,
   GetUsers,
   UpdateRole,
   UpdateUser,
-  GetUserRoles,
 } from '../actions/identity.actions';
 import { Identity } from '../models/identity';
-import { IdentityService } from '../services/identity.service';
-import { Injectable } from '@angular/core';
+import { IdentityRoleService } from '../proxy/identity/identity-role.service';
+import { IdentityUserService } from '../proxy/identity/identity-user.service';
+import { IdentityRoleDto, IdentityUserDto } from '../proxy/identity/models';
 
 @State<Identity.State>({
   name: 'IdentityState',
@@ -24,7 +26,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class IdentityState {
   @Selector()
-  static getRoles({ roles }: Identity.State): Identity.RoleItem[] {
+  static getRoles({ roles }: Identity.State): IdentityRoleDto[] {
     return roles.items || [];
   }
 
@@ -34,7 +36,7 @@ export class IdentityState {
   }
 
   @Selector()
-  static getUsers({ users }: Identity.State): Identity.UserItem[] {
+  static getUsers({ users }: Identity.State): IdentityUserDto[] {
     return users.items || [];
   }
 
@@ -43,11 +45,14 @@ export class IdentityState {
     return users.totalCount || 0;
   }
 
-  constructor(private identityService: IdentityService) {}
+  constructor(
+    private identityUserService: IdentityUserService,
+    private identityRoleService: IdentityRoleService,
+  ) {}
 
   @Action(GetRoles)
   getRoles({ patchState }: StateContext<Identity.State>, { payload }: GetRoles) {
-    return this.identityService.getRoles(payload).pipe(
+    return this.identityRoleService.getList(payload).pipe(
       tap(roles =>
         patchState({
           roles,
@@ -58,7 +63,7 @@ export class IdentityState {
 
   @Action(GetRoleById)
   getRole({ patchState }: StateContext<Identity.State>, { payload }: GetRoleById) {
-    return this.identityService.getRoleById(payload).pipe(
+    return this.identityRoleService.get(payload).pipe(
       tap(selectedRole =>
         patchState({
           selectedRole,
@@ -69,22 +74,22 @@ export class IdentityState {
 
   @Action(DeleteRole)
   deleteRole(_, { payload }: GetRoleById) {
-    return this.identityService.deleteRole(payload);
+    return this.identityRoleService.delete(payload);
   }
 
   @Action(CreateRole)
   addRole(_, { payload }: CreateRole) {
-    return this.identityService.createRole(payload);
+    return this.identityRoleService.create(payload);
   }
 
   @Action(UpdateRole)
   updateRole({ getState }: StateContext<Identity.State>, { payload }: UpdateRole) {
-    return this.identityService.updateRole({ ...getState().selectedRole, ...payload });
+    return this.identityRoleService.update(payload.id, { ...getState().selectedRole, ...payload });
   }
 
   @Action(GetUsers)
   getUsers({ patchState }: StateContext<Identity.State>, { payload }: GetUsers) {
-    return this.identityService.getUsers(payload).pipe(
+    return this.identityUserService.getList(payload).pipe(
       tap(users =>
         patchState({
           users,
@@ -95,7 +100,7 @@ export class IdentityState {
 
   @Action(GetUserById)
   getUser({ patchState }: StateContext<Identity.State>, { payload }: GetUserById) {
-    return this.identityService.getUserById(payload).pipe(
+    return this.identityUserService.get(payload).pipe(
       tap(selectedUser =>
         patchState({
           selectedUser,
@@ -106,22 +111,22 @@ export class IdentityState {
 
   @Action(DeleteUser)
   deleteUser(_, { payload }: GetUserById) {
-    return this.identityService.deleteUser(payload);
+    return this.identityUserService.delete(payload);
   }
 
   @Action(CreateUser)
   addUser(_, { payload }: CreateUser) {
-    return this.identityService.createUser(payload);
+    return this.identityUserService.create(payload);
   }
 
   @Action(UpdateUser)
   updateUser({ getState }: StateContext<Identity.State>, { payload }: UpdateUser) {
-    return this.identityService.updateUser({ ...getState().selectedUser, ...payload });
+    return this.identityUserService.update(payload.id, { ...getState().selectedUser, ...payload });
   }
 
   @Action(GetUserRoles)
   getUserRoles({ patchState }: StateContext<Identity.State>, { payload }: GetUserRoles) {
-    return this.identityService.getUserRoles(payload).pipe(
+    return this.identityUserService.getRoles(payload).pipe(
       pluck('items'),
       tap(selectedUserRoles =>
         patchState({

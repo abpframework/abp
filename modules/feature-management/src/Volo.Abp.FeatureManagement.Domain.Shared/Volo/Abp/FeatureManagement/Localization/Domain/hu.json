@@ -1,0 +1,11 @@
+{
+    "culture": "hu",
+    "texts": {
+      "Features": "Funkciók",
+      "NoFeatureFoundMessage": "Nincs elérhető funkció.",
+      "Permission:FeatureManagement": "Funkciókezelés",
+      "Permission:FeatureManagement.ManageHostFeatures": "Host funkciók kezelése",
+      "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "A (z) {0} szolgáltatás értéke érvénytelen!"
+    }
+  }
+  

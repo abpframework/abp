@@ -53,7 +53,7 @@ export class ExtensibleFormPropComponent implements OnChanges {
   }
 
   getComponent(prop: FormProp): string {
-    if (prop.options) return 'select';
+    if (prop.options && prop.type !== ePropType.MultiSelect) return 'select';
 
     switch (prop.type) {
       case ePropType.Boolean:
@@ -66,6 +66,8 @@ export class ExtensibleFormPropComponent implements OnChanges {
         return 'textarea';
       case ePropType.Time:
         return 'time';
+      case ePropType.MultiSelect:
+        return 'multiselect';
       default:
         return 'input';
     }

@@ -23,3 +23,13 @@ export function readFileInTree(tree: Tree, filePath: string): ts.SourceFile {
   const text = buffer.toString('utf-8');
   return ts.createSourceFile(filePath, text, ts.ScriptTarget.Latest, true);
 }
+
+export function removeDefaultPlaceholders<T>(oldParams: T) {
+  const newParams: Record<string, any> = {};
+
+  Object.entries(oldParams).forEach(([key, value]) => {
+    newParams[key] = value === '__default' ? undefined : value;
+  });
+
+  return newParams as T;
+}

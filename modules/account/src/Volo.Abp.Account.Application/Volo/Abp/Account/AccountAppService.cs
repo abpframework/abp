@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Account.Emailing;
+using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
@@ -26,6 +26,7 @@ namespace Volo.Abp.Account
             AccountEmailer = accountEmailer;
             IdentitySecurityLogManager = identitySecurityLogManager;
             UserManager = userManager;
+            LocalizationResource = typeof(AccountResource);
         }
 
         public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
@@ -66,8 +67,7 @@ namespace Volo.Abp.Account
             var user = await UserManager.FindByEmailAsync(email);
             if (user == null)
             {
-                throw new BusinessException("Volo.Account:InvalidEmailAddress")
-                    .WithData("Email", email);
+                throw new UserFriendlyException(L["Volo.Account:InvalidEmailAddress", email]);
             }
 
             return user;

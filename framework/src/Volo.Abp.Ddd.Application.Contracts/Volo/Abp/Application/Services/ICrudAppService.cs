@@ -9,7 +9,7 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface ICrudAppService<TEntityDto, in TKey, in TGetListInput>
-        : ICrudAppService<TEntityDto, TKey, TGetListInput, TEntityDto, TEntityDto>
+        : ICrudAppService<TEntityDto, TKey, TGetListInput, TEntityDto>
     {
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -7,7 +8,6 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Comments;
-using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 {
@@ -15,7 +15,8 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
     [Widget(
         ScriptTypes = new[] {typeof(CommentingScriptBundleContributor)},
         StyleTypes = new[] {typeof(CommentingStyleBundleContributor)},
-        RefreshUrl = "/CmsKitPublicWidgets/Commenting"
+        RefreshUrl = "/CmsKitPublicWidgets/Commenting",
+        AutoInitialize = true
     )]
     public class CommentingViewComponent : AbpViewComponent
     {
@@ -44,7 +45,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
                 EntityId = entityId,
                 EntityType = entityType,
                 LoginUrl = loginUrl,
-                Comments = result.Items
+                Comments = result.Items.OrderByDescending(i=> i.CreationTime).ToList()
             };
 
             return View("~/Pages/CmsKit/Shared/Components/Commenting/Default.cshtml", viewModel);

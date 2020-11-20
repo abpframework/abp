@@ -1,6 +1,8 @@
 import {
   apply,
+  callRule,
   forEach,
+  MergeStrategy,
   mergeWith,
   Rule,
   SchematicContext,
@@ -13,6 +15,13 @@ export function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
     const rule = mergeWith(apply(source, [...rules, overwriteFileIfExists(tree)]));
 
     return rule(tree, _context);
+  };
+}
+
+export function mergeAndAllowDelete(host: Tree, rule: Rule) {
+  return async (tree: Tree, context: SchematicContext) => {
+    const nextTree = await callRule(rule, tree, context).toPromise();
+    host.merge(nextTree, MergeStrategy.AllowDeleteConflict);
   };
 }
 

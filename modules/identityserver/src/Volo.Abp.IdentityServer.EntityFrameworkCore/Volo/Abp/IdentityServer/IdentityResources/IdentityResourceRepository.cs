@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -19,7 +19,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         }
 
-        public virtual async Task<List<IdentityResource>> GetListByScopesAsync(
+        public virtual async Task<List<IdentityResource>> GetListByScopeNameAsync(
             string[] scopeNames,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -57,6 +57,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .Where(x => x.Name == name)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 

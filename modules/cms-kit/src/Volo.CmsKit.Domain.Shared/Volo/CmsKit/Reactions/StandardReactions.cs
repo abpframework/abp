@@ -8,7 +8,11 @@
         public const string Confused = "_CF";
         public const string Eyes = "_EY";
         public const string Heart = "_HE";
-        public const string Hooray = "_HO";
+        public const string HeartBroken = "_HB";
+        public const string Wink = "_WI";
+        public const string Pray = "_PR";
         public const string Rocket = "_RO";
+        public const string Victory = "_VI";
+        public const string Rock = "_RC";
     }
 }

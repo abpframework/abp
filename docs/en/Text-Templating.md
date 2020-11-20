@@ -187,9 +187,9 @@ var result = await _templateRenderer.RenderAsync(
 
 In this case, we haven't created a model class, but created an anonymous object as the model.
 
-### PascalCase vs camelCase
+### PascalCase vs snake_case
 
-PascalCase property names (like `UserName`) is used as camelCase (like `userName`) in the templates.
+PascalCase property names (like `UserName`) is used as snake_case (like `user_name`) in the templates.
 
 ## Localization
 

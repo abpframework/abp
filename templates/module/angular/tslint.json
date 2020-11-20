@@ -70,7 +70,8 @@
     ],
     "semicolon": {
       "options": [
-        "always"
+        "always",
+        "ignore-bound-class-methods"
       ]
     },
     "space-before-function-paren": {
@@ -131,6 +132,7 @@
     "template-banana-in-box": true,
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true
+    "use-pipe-transform-interface": true,
+    "object-literal-shorthand": false
   }
 }

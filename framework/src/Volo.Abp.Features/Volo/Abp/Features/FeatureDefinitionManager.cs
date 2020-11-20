@@ -62,6 +62,11 @@ namespace Volo.Abp.Features
             return FeatureDefinitions.GetOrDefault(name);
         }
 
+        public IReadOnlyList<FeatureGroupDefinition> GetGroups()
+        {
+            return FeatureGroupDefinitions.Values.ToImmutableList();
+        }
+
         protected virtual Dictionary<string, FeatureDefinition> CreateFeatureDefinitions()
         {
             var features = new Dictionary<string, FeatureDefinition>();
@@ -78,7 +83,7 @@ namespace Volo.Abp.Features
         }
 
         protected virtual void AddFeatureToDictionaryRecursively(
-            Dictionary<string, FeatureDefinition> features, 
+            Dictionary<string, FeatureDefinition> features,
             FeatureDefinition feature)
         {
             if (features.ContainsKey(feature.Name))

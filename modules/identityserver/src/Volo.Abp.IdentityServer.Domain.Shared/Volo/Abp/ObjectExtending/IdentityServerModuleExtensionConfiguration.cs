@@ -23,6 +23,15 @@ namespace Volo.Abp.ObjectExtending
             );
         }
 
+        public IdentityServerModuleExtensionConfiguration ConfigureApiScope(
+            Action<EntityExtensionConfiguration> configureAction)
+        {
+            return this.ConfigureEntity(
+                IdentityServerModuleExtensionConsts.EntityNames.ApiScope,
+                configureAction
+            );
+        }
+
         public IdentityServerModuleExtensionConfiguration ConfigureIdentityResource(
             Action<EntityExtensionConfiguration> configureAction)
         {

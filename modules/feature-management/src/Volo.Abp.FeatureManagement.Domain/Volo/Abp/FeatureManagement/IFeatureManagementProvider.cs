@@ -8,6 +8,9 @@ namespace Volo.Abp.FeatureManagement
     {
         string Name { get; }
 
+        //TODO: Other better method name.
+        bool Compatible(string providerName);
+
         Task<string> GetOrNullAsync([NotNull] FeatureDefinition feature, [CanBeNull] string providerKey);
 
         Task SetAsync([NotNull] FeatureDefinition feature, [NotNull] string value, [CanBeNull] string providerKey);

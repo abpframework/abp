@@ -1,7 +1,3 @@
-/**
- * TODO: Document & prepare typescript definitions
- * TODO: Refactor & test more
- */
 var abp = abp || {};
 
 $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only for the form we are working on! Also this should be decided by the form itself!
@@ -12,7 +8,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
     abp.ModalManager = (function () {
 
-        var CallbackList = function () { //TODO: To a seperated file
+        var CallbackList = function () {
             var _callbacks = [];
 
             return {
@@ -67,12 +63,11 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _$modal = _$modalContainer.find('.modal');
                 _$form = _$modalContainer.find('form');
                 if (_$form.length) {
-                    //TODO: data-ajaxForm comparison seems wrong!
-                    if (_$form.attr('data-ajaxForm') === undefined || _$form.attr('data-ajaxForm') === false) {
+                    if (_$form.attr('data-ajaxForm') !== 'false') {
                         _$form.abpAjaxForm();
                     }
 
-                    if (_$form.attr('data-check-form-on-close') === undefined || _$form.attr('data-check-form-on-close') != 'false') {
+                    if (_$form.attr('data-check-form-on-close') !== 'false') {
                         _$form.needConfirmationOnUnsavedClose(_$modal);
                     }
 

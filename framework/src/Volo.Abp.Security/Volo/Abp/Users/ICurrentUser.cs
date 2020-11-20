@@ -15,8 +15,14 @@ namespace Volo.Abp.Users
         string UserName { get; }
 
         [CanBeNull]
+        string Name { get; }
+
+        [CanBeNull]
+        string SurName { get; }
+
+        [CanBeNull]
         string PhoneNumber { get; }
-        
+
         bool PhoneNumberVerified { get; }
 
         [CanBeNull]

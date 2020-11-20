@@ -9,10 +9,10 @@ namespace Volo.Abp.Validation
 {
     public class ObjectValidator : IObjectValidator, ITransientDependency
     {
-        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected AbpValidationOptions Options { get; }
 
-        public ObjectValidator(IOptions<AbpValidationOptions> options, IHybridServiceScopeFactory serviceScopeFactory)
+        public ObjectValidator(IOptions<AbpValidationOptions> options, IServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
@@ -56,7 +56,7 @@ namespace Volo.Abp.Validation
             {
                 foreach (var contributorType in Options.ObjectValidationContributors)
                 {
-                    var contributor = (IObjectValidationContributor) 
+                    var contributor = (IObjectValidationContributor)
                         scope.ServiceProvider.GetRequiredService(contributorType);
                     contributor.AddErrors(context);
                 }

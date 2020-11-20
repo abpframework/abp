@@ -1,0 +1,25 @@
+{
+  "culture": "es",
+  "texts": {
+    "InternalServerErrorMessage": "Un error interno ocurrido durante tu Solicitud!",
+    "ValidationErrorMessage": "Tu Solicitud no es valida.",
+    "ValidationNarrativeErrorMessageTitle": "Los siguientes errores fueron detectados durante la validación.",
+    "DefaultErrorMessage": "Un error ha ocurrido!",
+    "DefaultErrorMessageDetail": "Detalles del error no enviado por el servidor.",
+    "DefaultErrorMessage401": "Tu no estás autenticado!",
+    "DefaultErrorMessage401Detail": "Tu deberías iniciar sesión para realizar esta operación.",
+    "DefaultErrorMessage403": "Tu no estás autorizado!",
+    "DefaultErrorMessage403Detail": "No tienes permitido realizar esta operación!",
+    "DefaultErrorMessage404": "Recurso no encontrado!",
+    "DefaultErrorMessage404Detail": "El recurso solitiado podría no encontrarse en el servidor!",
+    "EntityNotFoundErrorMessage": "No hay una entidad {0} con id = {1}!",
+    "Error": "Error",
+    "UnhandledException": "Excepción no manejada!",
+    "401Message": "No autorizado",
+    "403Message": "Prohibido",
+    "404Message": "Página no encuentrada",
+    "500Message": "Error interno de servidor",
+    "403MessageDetail": "Tu no estás autorizado para realizar esta operación!",
+    "404MessageDetail": "Disculpa, no hay nada en esta dirección."
+  }
+}

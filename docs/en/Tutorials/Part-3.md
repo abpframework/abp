@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider. 
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,9 +28,10 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 {{if UI == "MVC" && DB == "EF"}}
@@ -656,8 +640,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto } from './models';
-import { BookService } from './services';
+import { BookService, BookDto } from '@proxy/books';
 
 @Component({
   selector: 'app-book',
@@ -673,7 +656,7 @@ export class BookComponent implements OnInit {
   constructor(public readonly list: ListService, private bookService: BookService) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;
@@ -749,8 +732,8 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models'; // add BookType
-import { BookService } from './services';
+// import bookTypeOptions from @proxy/books
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
 @Component({
@@ -764,12 +747,8 @@ export class BookComponent implements OnInit {
 
   form: FormGroup; // add this line
 
-  bookType = BookType; // add this line
-
   // add bookTypes as a list of BookType enum members
-  bookTypes = Object.keys(this.bookType).filter(
-    (key) => typeof this.bookType[key] === 'number'
-  );
+  bookTypes = bookTypeOptions;
 
   isModalOpen = false;
 
@@ -780,7 +759,7 @@ export class BookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;
@@ -808,7 +787,7 @@ export class BookComponent implements OnInit {
       return;
     }
 
-    this.bookService.createByInput(this.form.value).subscribe(() => {
+    this.bookService.create(this.form.value).subscribe(() => {
       this.isModalOpen = false;
       this.form.reset();
       this.list.get();
@@ -819,7 +798,6 @@ export class BookComponent implements OnInit {
 
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
 * Added `form: FormGroup` property.
-* Added `bookType` property so that you can reach `BookType` enum members from template.
 * Added `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
 * Injected `FormBuilder` into the constructor. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
 * Added `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
@@ -844,7 +822,7 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="bookType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
+        <option [ngValue]="type.value" *ngFor="let type of bookTypes"> {%{{{ type.key }}}%}</option>
       </select>
     </div>
 
@@ -910,8 +888,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models';
-import { BookService } from './services';
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 // added this line
@@ -931,11 +908,7 @@ export class BookComponent implements OnInit {
 
   form: FormGroup;
 
-  bookType = BookType;
-
-  bookTypes = Object.keys(this.bookType).filter(
-    (key) => typeof this.bookType[key] === 'number'
-  );
+  bookTypes = bookTypeOptions;
 
   isModalOpen = false;
 
@@ -946,7 +919,7 @@ export class BookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;
@@ -972,7 +945,7 @@ export class BookComponent implements OnInit {
       return;
     }
 
-    this.bookService.createByInput(this.form.value).subscribe(() => {
+    this.bookService.create(this.form.value).subscribe(() => {
       this.isModalOpen = false;
       this.form.reset();
       this.list.get();
@@ -995,8 +968,7 @@ Open `/src/app/book/book.component.ts` and replace the content as shown below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType, CreateUpdateBookDto } from './models';
-import { BookService } from './services';
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
@@ -1009,15 +981,11 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  selectedBook = new BookDto(); // declare selectedBook
+  selectedBook = {} as BookDto; // declare selectedBook
 
   form: FormGroup;
 
-  bookType = BookType;
-
-  bookTypes = Object.keys(this.bookType).filter(
-    (key) => typeof this.bookType[key] === 'number'
-  );
+  bookTypes = bookTypeOptions;
 
   isModalOpen = false;
 
@@ -1028,7 +996,7 @@ export class BookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;
@@ -1036,14 +1004,14 @@ export class BookComponent implements OnInit {
   }
 
   createBook() {
-    this.selectedBook = new BookDto(); // reset the selected book
+    this.selectedBook = {} as BookDto; // reset the selected book
     this.buildForm();
     this.isModalOpen = true;
   }
 
   // Add editBook method
   editBook(id: string) {
-    this.bookService.getById(id).subscribe((book) => {
+    this.bookService.get(id).subscribe((book) => {
       this.selectedBook = book;
       this.buildForm();
       this.isModalOpen = true;
@@ -1069,8 +1037,8 @@ export class BookComponent implements OnInit {
     }
 
     const request = this.selectedBook.id
-      ? this.bookService.updateByIdAndInput(this.form.value, this.selectedBook.id)
-      : this.bookService.createByInput(this.form.value);
+      ? this.bookService.update(this.selectedBook.id, this.form.value)
+      : this.bookService.create(this.form.value);
 
     request.subscribe(() => {
       this.isModalOpen = false;
@@ -1155,7 +1123,7 @@ constructor(
 delete(id: string) {
   this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
     if (status === Confirmation.Status.confirm) {
-      this.bookService.deleteById(id).subscribe(() => this.list.get());
+      this.bookService.delete(id).subscribe(() => this.list.get());
     }
   });
 }
@@ -1188,6 +1156,435 @@ The final actions dropdown UI looks like below:
 Clicking the "Delete" action calls the `delete` method which then shows a confirmation popup as shown below:
 
 ![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
+
+{{end}}
+
+{{if UI == "Blazor"}}
+
+## Creating a New Book
+
+In this section, you will learn how to create a new modal dialog form to create a new book. Since we've inherited from the `AbpCrudPageBase`, we only need to develop the view part.
+
+### Add "New Button" Button
+
+Open the `Books.razor` and replace the `<CardHeader>` section with the following code:
+
+````xml
+<CardHeader>
+    <Row Class="justify-content-between">
+        <Column ColumnSize="ColumnSize.IsAuto">
+            <h2>@L["Books"]</h2>
+        </Column>
+        <Column ColumnSize="ColumnSize.IsAuto">
+            <Button Color="Color.Primary"
+                    Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
+        </Column>
+    </Row>
+</CardHeader>
+````
+
+This will change the card header by adding a "New book" button to the right side:
+
+![blazor-add-book-button](images/blazor-add-book-button.png)
+
+Now, we can add a modal that will be opened when we click to the button.
+
+### Book Creation Modal
+
+Open the `Books.razor` and add the following code to the end of the page:
+
+````xml
+<Modal @ref="@CreateModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["NewBook"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["Type"]</FieldLabel>
+                        <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                            @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                            {
+                                <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
+                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["PublishDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Price"]</FieldLabel>
+                        <NumericEdit TValue="float" @bind-Value="NewEntity.Price"/>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+````
+
+This code requires a service; Inject the `AbpBlazorMessageLocalizerHelper<T>` at the top of the file, just before the `@inherits...` line:
+
+````csharp
+@inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
+````
+
+* The form implements validation and the `AbpBlazorMessageLocalizerHelper` is used to simply localize the validation messages.
+* `CreateModal` object, `CloseCreateModalAsync` and `CreateEntityAsync` method are defined by the base class. See the [Blazorise documentation](https://blazorise.com/docs/) if you want to understand the `Modal` and the other components.
+
+That's all. Run the application and try to add a new book:
+
+![blazor-new-book-modal](images/blazor-new-book-modal.png)
+
+## Updating a Book
+
+Editing a books is similar to the creating a new book.
+
+### Actions Dropdown
+
+Open the `Books.razor` and add the following `DataGridEntityActionsColumn` section inside the `DataGridColumns` as the first item:
+
+````xml
+<DataGridEntityActionsColumn TItem="BookDto" @ref="@EntityActionsColumn">
+    <DisplayTemplate>
+        <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
+            <EntityAction TItem="BookDto"
+                          Text="@L["Edit"]"
+                          Clicked="() => OpenEditModalAsync(context)" />
+        </EntityActions>
+    </DisplayTemplate>
+</DataGridEntityActionsColumn>
+````
+
+* `OpenEditModalAsync` is defined in the base class which takes the entity (book) to edit.
+
+`DataGridEntityActionsColumn` component is used to show an "Actions" dropdown for each row in the `DataGrid`.  `DataGridEntityActionsColumn` shows a **single button** instead of a dropdown if there is only one available action inside it:
+
+![blazor-edit-book-action](images/blazor-edit-book-action-2.png)
+
+### Edit Modal
+
+We can now define a modal to edit the book. Add the following code to the end of the `Books.razor` page:
+
+````xml
+<Modal @ref="@EditModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingEntity.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["Type"]</FieldLabel>
+                        <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                            @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                            {
+                                <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
+                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["PublishDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Price"]</FieldLabel>
+                        <NumericEdit TValue="float" @bind-Value="EditingEntity.Price"/>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+````
+
+### AutoMapper Configuration
+
+The base `AbpCrudPageBase` uses the [object to object mapping](../Object-To-Object-Mapping.md) system to convert an incoming `BookDto` object to a `CreateUpdateBookDto` object. So, we need to define the mapping.
+
+Open the `BookStoreBlazorAutoMapperProfile` inside the `Acme.BookStore.Blazor` project and change the content as the following:
+
+````csharp
+using Acme.BookStore.Books;
+using AutoMapper;
+
+namespace Acme.BookStore.Blazor
+{
+    public class BookStoreBlazorAutoMapperProfile : Profile
+    {
+        public BookStoreBlazorAutoMapperProfile()
+        {
+            CreateMap<BookDto, CreateUpdateBookDto>();
+        }
+    }
+}
+````
+
+* We've just added the `CreateMap<BookDto, CreateUpdateBookDto>();` line to define the mapping.
+
+### Test the Editing Modal
+
+You can now run the application and try to edit a book.
+
+![blazor-edit-book-modal](images/blazor-edit-book-modal.png)
+
+> Tip: Try to leave the *Name* field empty and submit the form to show the validation error message.
+
+## Deleting a Book
+
+Open the `Books.razor` page and add the following `EntityAction` under the "Edit" action inside the `EntityActions`:
+
+````xml
+<EntityAction TItem="BookDto"
+              Text="@L["Delete"]"
+              Clicked="() => DeleteEntityAsync(context)"
+              ConfirmationMessage="@() => GetDeleteConfirmationMessage(context)" />
+````
+
+* `DeleteEntityAsync` is defined in the base class that deletes the entity by performing a call to the server.
+* `ConfirmationMessage` is a callback to show a confirmation message before executing the action.
+* `GetDeleteConfirmationMessage` is defined in the base class. You can override this method (or pass another value to the `ConfirmationMessage` parameter) to customize the localization message.
+
+The "Actions" button becomes a dropdown since it has two actions now:
+
+![blazor-edit-book-action](images/blazor-delete-book-action.png)
+
+Run the application and try to delete a book.
+
+## Full CRUD UI Code
+
+Here the complete code to create the book management CRUD page, that has been developed in the last two parts:
+
+````xml
+@page "/books"
+@using Volo.Abp.Application.Dtos
+@using Acme.BookStore.Books
+@using Acme.BookStore.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<BookStoreResource> L
+@inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
+@inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<Card>
+    <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h2>@L["Books"]</h2>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <Button Color="Color.Primary"
+                        Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="BookDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="BookDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="BookDto"
+                                          Text="@L["Edit"]"
+                                          Clicked="() => OpenEditModalAsync(context)" />
+                            <EntityAction TItem="BookDto"
+                                          Text="@L["Delete"]"
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Name)"
+                                Caption="@L["Name"]"></DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Type)"
+                                Caption="@L["Type"]">
+                    <DisplayTemplate>
+                        @L[$"Enum:BookType:{(int) context.Type}"]
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.PublishDate)"
+                                Caption="@L["PublishDate"]">
+                    <DisplayTemplate>
+                        @context.PublishDate.ToShortDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.Price)"
+                                Caption="@L["Price"]">
+                </DataGridColumn>
+                <DataGridColumn TItem="BookDto"
+                                Field="@nameof(BookDto.CreationTime)"
+                                Caption="@L["CreationTime"]">
+                    <DisplayTemplate>
+                        @context.CreationTime.ToLongDateString()
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<Modal @ref="@CreateModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["NewBook"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewEntity.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["Type"]</FieldLabel>
+                        <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                            @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                            {
+                                <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
+                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["PublishDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Price"]</FieldLabel>
+                        <NumericEdit TValue="float" @bind-Value="NewEntity.Price"/>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="@EditModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@EditingEntity.Name</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync"/>
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingEntity.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["Type"]</FieldLabel>
+                        <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                            @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
+                            {
+                                <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
+                                    @L[$"Enum:BookType:{bookTypeValue}"]
+                                </SelectItem>
+                            }
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["PublishDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel>@L["Price"]</FieldLabel>
+                        <NumericEdit TValue="float" @bind-Value="EditingEntity.Price"/>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateEntityAsync">@L["Save"]</Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+````
 
 {{end}}
 

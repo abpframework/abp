@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ReplaceableTemplateDirective } from '../directives';
 import { ReplaceableComponents } from '../models';
+import { Router } from '@angular/router';
+import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 
 @Component({
   selector: 'abp-default-component',
@@ -48,15 +50,15 @@ class ExternalComponent {
 }
 
 describe('ReplaceableTemplateDirective', () => {
-  const selectResponse = new Subject();
-  const mockSelect = jest.fn(() => selectResponse);
-
   let spectator: SpectatorDirective<ReplaceableTemplateDirective>;
+  const get$Res = new BehaviorSubject(undefined);
+
   const createDirective = createDirectiveFactory({
     directive: ReplaceableTemplateDirective,
-    providers: [{ provide: Store, useValue: { select: mockSelect } }],
     declarations: [DefaultComponent, ExternalComponent],
     entryComponents: [ExternalComponent],
+    mocks: [Router],
+    providers: [{ provide: ReplaceableComponentsService, useValue: { get$: () => get$Res } }],
   });
 
   describe('without external component', () => {
@@ -72,7 +74,7 @@ describe('ReplaceableTemplateDirective', () => {
         `,
         { hostProps: { oneWay: { label: 'Test' }, twoWay: false, twoWayChange, someOutput } },
       );
-      selectResponse.next(undefined);
+
       const component = spectator.query(DefaultComponent);
       spectator.directive.context.initTemplate(component);
       spectator.detectChanges();
@@ -114,7 +116,8 @@ describe('ReplaceableTemplateDirective', () => {
         `,
         { hostProps: { oneWay: { label: 'Test' }, twoWay: false, twoWayChange, someOutput } },
       );
-      selectResponse.next({ component: ExternalComponent, key: 'TestModule.TestComponent' });
+
+      get$Res.next({ component: ExternalComponent, key: 'TestModule.TestComponent' });
     });
 
     afterEach(() => twoWayChange.mockClear());
@@ -150,7 +153,7 @@ describe('ReplaceableTemplateDirective', () => {
       const externalComponent = spectator.query(ExternalComponent);
       spectator.setHostInput({ oneWay: 'test' });
       externalComponent.data.inputs.twoWay = true;
-      selectResponse.next({ component: null, key: 'TestModule.TestComponent' });
+      get$Res.next({ component: null, key: 'TestModule.TestComponent' });
       spectator.detectChanges();
       const component = spectator.query(DefaultComponent);
       spectator.directive.context.initTemplate(component);
@@ -161,14 +164,14 @@ describe('ReplaceableTemplateDirective', () => {
     });
 
     it('should reset default component subscriptions', () => {
-      selectResponse.next({ component: null, key: 'TestModule.TestComponent' });
+      get$Res.next({ component: null, key: 'TestModule.TestComponent' });
       const component = spectator.query(DefaultComponent);
       spectator.directive.context.initTemplate(component);
       spectator.detectChanges();
       const unsubscribe = jest.fn(() => {});
       spectator.directive.defaultComponentSubscriptions.twoWayChange.unsubscribe = unsubscribe;
 
-      selectResponse.next({ component: ExternalComponent, key: 'TestModule.TestComponent' });
+      get$Res.next({ component: ExternalComponent, key: 'TestModule.TestComponent' });
       expect(unsubscribe).toHaveBeenCalled();
     });
   });

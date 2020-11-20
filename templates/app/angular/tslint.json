@@ -88,7 +88,8 @@
     ],
     "semicolon": {
       "options": [
-        "always"
+        "always",
+        "ignore-bound-class-methods"
       ]
     },
     "space-before-function-paren": {
@@ -111,6 +112,7 @@
     "no-outputs-metadata-property": true,
     "template-banana-in-box": true,
     "template-no-negated-async": true,
+    "object-literal-shorthand": false,
     "typedef-whitespace": {
       "options": [
         {

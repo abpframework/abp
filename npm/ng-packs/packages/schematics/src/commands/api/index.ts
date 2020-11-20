@@ -1,4 +1,4 @@
-import { normalize, strings } from '@angular-devkit/core';
+import { normalize } from '@angular-devkit/core';
 import {
   applyTemplates,
   branchAndMerge,
@@ -10,37 +10,45 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { Exception } from '../../enums';
-import { ServiceGeneratorParams } from '../../models';
+import { GenerateProxySchema, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
   buildDefaultPath,
-  createApiDefinitionReader,
   createControllerToServiceMapper,
   createImportRefsToModelReducer,
   createImportRefToEnumMapper,
+  createProxyConfigReader,
+  createProxyConfigWriterCreator,
+  createRootNamespaceGetter,
   EnumGeneratorParams,
+  generateProxyConfigJson,
   getEnumNamesFromImports,
   interpolate,
   ModelGeneratorParams,
+  removeDefaultPlaceholders,
   resolveProject,
   serializeParameters,
 } from '../../utils';
 import * as cases from '../../utils/text';
-import { Schema as GenerateProxySchema } from './schema';
 
-export default function(params: GenerateProxySchema) {
-  const solution = params.solution;
-  const moduleName = strings.camelize(params.module || 'app');
+export default function(schema: GenerateProxySchema) {
+  const params = removeDefaultPlaceholders(schema);
+  const moduleName = params.module || 'app';
 
   return chain([
     async (tree: Tree, _context: SchematicContext) => {
+      const getRootNamespace = createRootNamespaceGetter(params);
+      const solution = await getRootNamespace(tree);
+
       const target = await resolveProject(tree, params.target!);
       const targetPath = buildDefaultPath(target.definition);
-      const readApiDefinition = createApiDefinitionReader(
-        `${targetPath}/shared/api-definition.json`,
-      );
-      const data = readApiDefinition(tree);
+      const readProxyConfig = createProxyConfigReader(targetPath);
+      const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
+      const data = readProxyConfig(tree);
       const types = data.types;
+      const modules = data.modules;
+      if (!types || !modules) throw new SchematicsException(Exception.InvalidApiDefinition);
+
       const definition = data.modules[moduleName];
       if (!definition)
         throw new SchematicsException(interpolate(Exception.InvalidModule, moduleName));
@@ -74,7 +82,14 @@ export default function(params: GenerateProxySchema) {
         modelImports,
       });
 
-      return branchAndMerge(chain([generateServices, generateModels, generateEnums]));
+      if (!data.generated.includes(moduleName)) data.generated.push(moduleName);
+      data.generated.sort();
+      const json = generateProxyConfigJson(data);
+      const overwriteProxyConfig = createProxyConfigWriter('overwrite', json);
+
+      return branchAndMerge(
+        chain([generateServices, generateModels, generateEnums, overwriteProxyConfig]),
+      );
     },
   ]);
 }

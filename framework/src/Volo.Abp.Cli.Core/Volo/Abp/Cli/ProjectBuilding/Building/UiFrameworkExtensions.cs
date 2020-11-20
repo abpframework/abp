@@ -9,6 +9,7 @@
                 case UiFramework.None: return "none";
                 case UiFramework.Mvc: return "mvc";
                 case UiFramework.Angular: return "angular";
+                case UiFramework.Blazor: return "blazor";
                 case UiFramework.NotSpecified: return "NotSpecified";
                 default: return "NotSpecified";
             }

@@ -67,7 +67,7 @@ With the options above, the toast overlay looks like this:
 
 ![toast](./images/toast.png)
 
-### How to Remove a Toast Overlay
+### How to Remove a Toast Overlay
 
 The open toast overlay can be removed manually via the `remove` method by passing the `id` of toast:
 
@@ -85,7 +85,103 @@ The all open toasts can be removed manually via the `clear` method:
 ```js
 this.toaster.clear();
 ```
+## Replacing ToasterService with 3rd party toaster libraries
 
+If you want the ABP Framework to utilize 3rd party libraries for the toasters instead of the built-in one, you can provide a service that implements `Toaster.Service` interface, and provide it as follows (ngx-toastr library used in example):
+
+> You can use *LocalizationService* for toaster messages translations. 
+```js
+// your-custom-toaster.service.ts
+import { Injectable } from '@angular/core';
+import { Config, LocalizationService } from '@abp/ng.core';
+import { Toaster } from '@abp/ng.theme.shared';
+import { ToastrService } from 'ngx-toastr';
+
+@Injectable()
+export class CustomToasterService implements Toaster.Service {
+  constructor(private toastr: ToastrService, private localizationService: LocalizationService) {}
+
+  error(
+    message: Config.LocalizationParam,
+    title?: Config.LocalizationParam,
+    options?: Partial<Toaster.ToastOptions>,
+  ) {
+    return this.show(message, title, 'error', options);
+  }
+
+  clear(): void {
+    this.toastr.clear();
+  }
+
+  info(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam | undefined,
+    options: Partial<Toaster.ToastOptions> | undefined,
+  ): Toaster.ToasterId {
+    return this.show(message, title, 'info', options);
+  }
+
+  remove(id: number): void {
+    this.toastr.remove(id);
+  }
+
+  show(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    severity: Toaster.Severity,
+    options: Partial<Toaster.ToastOptions>,
+  ): Toaster.ToasterId {
+    const translatedMessage = this.localizationService.instant(message);
+    const translatedTitle = this.localizationService.instant(title);
+    const toasterOptions = {
+      positionClass: 'toast-bottom-right',
+      tapToDismiss: options.tapToDismiss,
+      ...(options.sticky && {
+        extendedTimeOut: 0,
+        timeOut: 0,
+      }),
+    };
+    const activeToast = this.toastr.show(
+      translatedMessage,
+      translatedTitle,
+      toasterOptions,
+      `toast-${severity}`,
+    );
+    return activeToast.toastId;
+  }
+
+  success(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam | undefined,
+    options: Partial<Toaster.ToastOptions> | undefined,
+  ): Toaster.ToasterId {
+    return this.show(message, title, 'success', options);
+  }
+
+  warn(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam | undefined,
+    options: Partial<Toaster.ToastOptions> | undefined,
+  ): Toaster.ToasterId {
+    return this.show(message, title, 'warning', options);
+  }
+}
+```
+```js
+// app.module.ts
+
+import { ToasterService } from '@abp/ng.theme.shared';
+
+@NgModule({
+  providers: [
+      // ...
+      {
+        provide: ToasterService,
+        useClass: CustomToasterService,
+      },  
+  ]
+})
+```
 ## API
 
 ### success
@@ -153,7 +249,3 @@ Removes all open toasts.
 ## See Also
 
 - [Confirmation Popup](./Confirmation-Service.md)
-
-## What's Next?
-
-- [Config State](./Config-State.md)

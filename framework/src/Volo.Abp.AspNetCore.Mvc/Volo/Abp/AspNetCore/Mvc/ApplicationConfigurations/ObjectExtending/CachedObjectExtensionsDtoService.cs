@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
@@ -49,7 +50,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             }
 
             FillEnums(objectExtensionsDto);
-              
+
             return objectExtensionsDto;
         }
 
@@ -140,6 +141,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                     OnTable = new ExtensionPropertyUiTableDto
                     {
                         IsVisible = propertyConfig.UI.OnTable.IsVisible
+                    },
+                    Lookup = new ExtensionPropertyUiLookupDto
+                    {
+                        Url = propertyConfig.UI.Lookup.Url,
+                        ResultListPropertyName = propertyConfig.UI.Lookup.ResultListPropertyName,
+                        DisplayPropertyName = propertyConfig.UI.Lookup.DisplayPropertyName,
+                        ValuePropertyName = propertyConfig.UI.Lookup.ValuePropertyName,
+                        FilterParamName = propertyConfig.UI.Lookup.FilterParamName
                     }
                 }
             };

@@ -153,6 +153,19 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -
 
 > 请参阅[应用程序模板文档](Startup-Templates/Application.md)详细了解解决方案结构.
 
+{{ if DB == "Mongo" }}
+
+> [启动模板](Startup-templates/Index.md)默认在 `.MongoDB` 项目中**禁用**了工作单元事务. 如果你的MongoDB服务器支持事务,你可以手动启用工作单元的事务:
+
+  ```csharp
+  Configure<AbpUnitOfWorkDefaultOptions>(options =>
+  {
+      options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
+  });
+  ```
+
+{{ end }}
+
 ## 创建数据库
 
 ### 连接字符串

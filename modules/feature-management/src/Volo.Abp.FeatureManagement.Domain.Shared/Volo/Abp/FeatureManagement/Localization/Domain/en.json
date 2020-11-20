@@ -2,6 +2,9 @@
   "culture": "en",
   "texts": {
     "Features": "Features",
-    "NoFeatureFoundMessage": "There isn't any available feature."
+    "NoFeatureFoundMessage": "There isn't any available feature.",
+    "Permission:FeatureManagement": "Feature management",
+    "Permission:FeatureManagement.ManageHostFeatures": "Manage Host features",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "{0} feature value is not valid!"
   }
 }

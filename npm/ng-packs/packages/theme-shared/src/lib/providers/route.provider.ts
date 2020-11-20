@@ -6,9 +6,9 @@ export const THEME_SHARED_ROUTE_PROVIDERS = [
   { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
 ];
 
-export function configureRoutes(routes: RoutesService) {
+export function configureRoutes(routesService: RoutesService) {
   return () => {
-    routes.add([
+    routesService.add([
       {
         path: undefined,
         name: eThemeSharedRouteNames.Administration,

@@ -689,7 +689,7 @@ var abp = abp || {};
     abp.security.antiForgery = abp.security.antiForgery || {};
 
     abp.security.antiForgery.tokenCookieName = 'XSRF-TOKEN';
-    abp.security.antiForgery.tokenHeaderName = 'X-XSRF-TOKEN';
+    abp.security.antiForgery.tokenHeaderName = 'RequestVerificationToken';
 
     abp.security.antiForgery.getToken = function () {
         return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);
@@ -706,18 +706,18 @@ var abp = abp || {};
 
     var toLocal = function (date) {
         return new Date(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes(),
-            date.getUTCSeconds(),
-            date.getUTCMilliseconds()
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds(),
+            date.getMilliseconds()
         );
     };
 
     var toUtc = function (date) {
-        Date.UTC(
+        return Date.UTC(
             date.getUTCFullYear(),
             date.getUTCMonth(),
             date.getUTCDate(),
@@ -750,5 +750,20 @@ var abp = abp || {};
             return toUtc(date);
         }
     };
+    
+    /* FEATURES *************************************************/
 
+    abp.features = abp.features || {};
+
+    abp.features.values = abp.features.values || {};
+
+    abp.features.isEnabled = function(name){
+        var value = abp.features.get(name);
+        return value == 'true' || value == 'True';
+    }
+
+    abp.features.get = function (name) {
+        return abp.features.values[name];
+    };
+    
 })();

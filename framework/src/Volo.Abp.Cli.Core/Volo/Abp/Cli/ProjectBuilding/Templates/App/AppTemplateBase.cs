@@ -25,6 +25,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
             RandomizeSslPorts(context, steps);
+            RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
             CleanupFolderHierarchy(context, steps);
 
@@ -65,10 +66,20 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     ConfigureWithAngularUi(context, steps);
                     break;
 
+
+                case UiFramework.Blazor:
+                    ConfigureWithBlazorUi(context, steps);
+                    break;
+
                 case UiFramework.Mvc:
                 case UiFramework.NotSpecified:
                     ConfigureWithMvcUi(context, steps);
                     break;
+            }
+
+            if (context.BuildArgs.UiFramework != UiFramework.Blazor)
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
             }
 
             if (context.BuildArgs.UiFramework != UiFramework.Angular)
@@ -91,6 +102,26 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+            }
+            else
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
+            }
+        }
+
+        private static void ConfigureWithBlazorUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+
+            if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+                steps.Add(new BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep());
             }
             else
             {
@@ -153,6 +184,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     }
                 )
             );
+        }
+
+        private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RandomizeStringEncryptionStep());
         }
 
         private static void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

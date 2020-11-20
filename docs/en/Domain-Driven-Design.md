@@ -19,15 +19,19 @@ ABP follows DDD principles and patterns to achieve a layered application model w
 - **Domain Layer**: Includes business objects and the core (domain) business rules. This is the heart of the application.
 - **Infrastructure Layer**: Provides generic technical capabilities that support higher layers mostly using 3rd-party libraries.
 
+DDD mostly interest in the **Domain** and the **Application** layers, rather than the Infrastructure and the Presentation layers.
+
 ## Contents
+
+See the following documents to learn what ABP Framework provides to you to implement DDD in your project.
 
 * **Domain Layer**
   * [Entities & Aggregate Roots](Entities.md)
-  * Value Objects
   * [Repositories](Repositories.md)
-  * Domain Services
-  * Specifications
+  * [Domain Services](Domain-Services.md)
+  * [Value Objects](Value-Objects.md)
+  * [Specifications](Specifications.md)
 * **Application Layer**
   * [Application Services](Application-Services.md)
   * [Data Transfer Objects (DTOs)](Data-Transfer-Objects.md)
-  * Unit of Work
+  * [Unit of Work](Unit-Of-Work.md)

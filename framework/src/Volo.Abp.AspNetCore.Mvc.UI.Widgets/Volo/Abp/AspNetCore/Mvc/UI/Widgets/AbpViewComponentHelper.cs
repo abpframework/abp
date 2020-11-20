@@ -65,7 +65,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             {
                 wrapperAttributesBuilder.Append($" data-refresh-url=\"{widget.RefreshUrl}\"");
             }
-            
+
+            if (widget.AutoInitialize)
+            {
+                wrapperAttributesBuilder.Append(" data-widget-auto-init=\"true\"");
+            }
+
             return new HtmlContentBuilder()
                 .AppendHtml($"<div {wrapperAttributesBuilder}>")
                 .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments))

@@ -13,7 +13,7 @@ export interface EnumGeneratorParams {
 }
 
 export function isEnumImport(path: string) {
-  return path.includes('/enums/');
+  return path.endsWith('.enum');
 }
 
 export function getEnumNamesFromImports(serviceImports: Record<string, string[]>) {

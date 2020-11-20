@@ -18,13 +18,14 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
-        public virtual async Task<Client> FindByCliendIdAsync(
+        public virtual async Task<Client> FindByClientIdAsync(
             string clientId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(x => x.ClientId)
                 .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
         }
 
@@ -53,7 +54,7 @@ namespace Volo.Abp.IdentityServer.Clients
             return await DbSet.AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
         }
 
-        public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
+        public async override Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             foreach (var clientGrantType in DbContext.Set<ClientGrantType>().Where(x => x.ClientId == id))
             {

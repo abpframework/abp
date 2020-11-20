@@ -83,6 +83,14 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 
         [HttpPost]
         [Route("checkPassword")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public virtual Task<AbpLoginResult> CheckPasswordCompatible(UserLoginInfo login)
+        {
+            return CheckPassword(login);
+        }
+
+        [HttpPost]
+        [Route("check-password")]
         public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
         {
             ValidateLoginInfo(login);

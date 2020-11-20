@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Features;
 using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
@@ -15,15 +16,14 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
         [BindProperty(SupportsGet = true)]
         public string ProviderName { get; set; }
 
-        [Required]
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
         public string ProviderKey { get; set; }
 
         [BindProperty]
-        public List<FeatureViewModel> Features { get; set; }
+        public List<FeatureGroupViewModel> FeatureGroups { get; set; }
 
-        public FeatureListDto FeatureListDto { get; set; }
+        public GetFeatureListResultDto FeatureListResultDto { get; set; }
 
         protected IFeatureAppService FeatureAppService { get; }
 
@@ -34,16 +34,20 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
             FeatureAppService = featureAppService;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
-            FeatureListDto = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
+            ValidateModel();
+
+            FeatureListResultDto = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
+
+            return Page();
         }
 
         public virtual async Task<IActionResult> OnPostAsync()
         {
             var features = new UpdateFeaturesDto
             {
-                Features = Features.Select(f => new UpdateFeatureDto
+                Features = FeatureGroups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
                 {
                     Name = f.Name,
                     Value = f.Type == nameof(ToggleStringValueType) ? f.BoolValue.ToString() : f.Value
@@ -55,12 +59,21 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
             return NoContent();
         }
 
+        public virtual bool IsDisabled(string providerName)
+        {
+            return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
+        }
 
         public class ProviderInfoViewModel
         {
             public string ProviderName { get; set; }
 
             public string ProviderKey { get; set; }
+        }
+
+        public class FeatureGroupViewModel
+        {
+            public List<FeatureViewModel> Features { get; set; }
         }
 
         public class FeatureViewModel

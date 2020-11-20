@@ -1,4 +1,4 @@
-# Content Projection
+# Projecting Angular Content
 
 You can use the `ContentProjectionService` in @abp/ng.core package in order to project content in an easy and explicit way.
 
@@ -71,8 +71,3 @@ projectContent<T extends Type<any> | TemplateRef<any>>(
 
 - `projectionStrategy` parameter is the primary focus here and is explained above.
 - `injector` parameter is the `Injector` instance you can pass to the projected content. It is not used in `TemplateProjectionStrategy`.
-
-
-## What's Next?
-
-- [TrackByService](./Track-By-Service.md)

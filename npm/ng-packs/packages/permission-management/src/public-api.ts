@@ -9,3 +9,4 @@ export * from './lib/enums/components';
 export * from './lib/models';
 export * from './lib/services';
 export * from './lib/states';
+export * from './lib/proxy';

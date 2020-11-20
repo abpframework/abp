@@ -1,0 +1,14 @@
+{
+  "culture": "ar",
+  "texts": {
+    "VirtualFileExplorer": "مستكشف الملفات الافتراضي",
+    "VirtualFileType": "نوع الملف الظاهري",
+    "Menu:VirtualFileExplorer": "مستكشف الملفات الافتراضي",
+    "LastUpdateTime": "وقت التحديث الأخير",
+    "VirtualFileName": "اسم الملف الظاهري",
+    "FileContent": "محتوى الملف",
+    "Size": "المقاس",
+    "BackToRoot": "العودة إلى الجذر",
+    "EmptyFileInfoList": "لا توجد أى ملفات افتراضية"
+  }
+}

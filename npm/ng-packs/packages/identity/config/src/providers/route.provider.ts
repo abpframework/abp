@@ -8,9 +8,9 @@ export const IDENTITY_ROUTE_PROVIDERS = [
   { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
 ];
 
-export function configureRoutes(routes: RoutesService) {
+export function configureRoutes(routesService: RoutesService) {
   return () => {
-    routes.add([
+    routesService.add([
       {
         path: '/identity',
         name: eIdentityRouteNames.IdentityManagement,

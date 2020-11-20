@@ -54,7 +54,7 @@ namespace Volo.Abp.BlobStoring.Aws
             Check.NotNullOrWhiteSpace(configuration.AccessKeyId, nameof(configuration.AccessKeyId));
             Check.NotNullOrWhiteSpace(configuration.SecretAccessKey, nameof(configuration.SecretAccessKey));
 
-            return new AmazonS3Client(configuration.AccessKeyId, configuration.SecretAccessKey, configuration.Region);
+            return new AmazonS3Client(configuration.AccessKeyId, configuration.SecretAccessKey, region);
         }
 
         protected virtual AWSCredentials GetAwsCredentials(

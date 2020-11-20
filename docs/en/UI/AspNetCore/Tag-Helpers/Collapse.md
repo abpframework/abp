@@ -6,7 +6,7 @@
 
 Basic usage:
 
-````xml
+````html
 <abp-button button-type="Primary" abp-collapse-id="collapseExample" text="Button with data-target" />
 <a abp-button="Primary" abp-collapse-id="collapseExample"> Link with href </a>
 

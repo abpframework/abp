@@ -342,12 +342,12 @@ public class DistrictAppService
     {
     }
 
-    protected override async Task DeleteByIdAsync(DistrictKey id)
+    protected async override Task DeleteByIdAsync(DistrictKey id)
     {
         await Repository.DeleteAsync(d => d.CityId == id.CityId && d.Name == id.Name);
     }
 
-    protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
+    protected async override Task<District> GetEntityByIdAsync(DistrictKey id)
     {
         return await AsyncQueryableExecuter.FirstOrDefaultAsync(
             Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
@@ -400,7 +400,7 @@ public class MyPeopleAppService : CrudAppService<Person, PersonDto, Guid>
     {
     }
 
-    protected override async Task CheckDeletePolicyAsync()
+    protected async override Task CheckDeletePolicyAsync()
     {
         await AuthorizationService.CheckAsync("...");
     }
@@ -444,6 +444,68 @@ These methods are used to convert Entities to DTOs and vice verse. They uses the
 * `MapToEntityAsync` method has two overloads;
   * `MapToEntityAsync(TCreateInput)` is used to create an entity from `TCreateInput`.
   * `MapToEntityAsync(TUpdateInput, TEntity)` is used to update an existing entity from `TUpdateInput`.
+
+## Miscellaneous
+
+### Working with Streams
+
+`Stream` object itself is not serializable. So, you may have problems if you directly use `Stream` as the parameter or the return value for your application service. ABP Framework provides a special type, `IRemoteStreamContent` to be used to get or return streams in the application services.
+
+**Example: Application Service Interface that can be used to get and return streams**
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
+
+namespace MyProject.Test
+{
+    public interface ITestAppService : IApplicationService
+    {
+        Task Upload(Guid id, IRemoteStreamContent streamContent);
+        Task<IRemoteStreamContent> Download(Guid id);
+    }
+}
+````
+
+**Example: Application Service Implementation that can be used to get and return streams**
+
+````csharp
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
+
+namespace MyProject.Test
+{
+    public class TestAppService : ApplicationService, ITestAppService
+    {
+        public Task<IRemoteStreamContent> Download(Guid id)
+        {
+            var fs = new FileStream("C:\\Temp\\" + id + ".blob", FileMode.OpenOrCreate);
+            return Task.FromResult(
+                (IRemoteStreamContent) new RemoteStreamContent(fs) {
+                    ContentType = "application/octet-stream" 
+                }
+            );
+        }
+
+        public async Task Upload(Guid id, IRemoteStreamContent streamContent)
+        {
+            using (var fs = new FileStream("C:\\Temp\\" + id + ".blob", FileMode.Create))
+            {
+                await streamContent.GetStream().CopyToAsync(fs);
+                await fs.FlushAsync();
+            }
+        }
+    }
+}
+````
+
+`IRemoteStreamContent` is compatible with the [Auto API Controller](API/Auto-API-Controllers.md) and [Dynamic C# HTTP Proxy](API/Dynamic-CSharp-API-Clients.md) systems.
 
 ## Lifetime
 

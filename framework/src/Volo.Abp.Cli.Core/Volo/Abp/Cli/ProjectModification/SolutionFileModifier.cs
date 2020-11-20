@@ -10,16 +10,71 @@ namespace Volo.Abp.Cli.ProjectModification
 {
     public class SolutionFileModifier : ITransientDependency
     {
-        public async Task AddModuleToSolutionFileAsync(ModuleWithMastersInfo module, string solutionFile)
+        public async Task RemoveProjectFromSolutionFileAsync(string solutionFile, string projectName)
         {
-            await AddModule(module, solutionFile);
+            var solutionFileContent = File.ReadAllText(solutionFile);
+            solutionFileContent.NormalizeLineEndings();
+            var lines = solutionFileContent.Split(new[] {Environment.NewLine, "\n"}, StringSplitOptions.None);
+            File.WriteAllText(solutionFile, RemoveProject(lines.ToList(), projectName).JoinAsString(Environment.NewLine));
         }
 
-        private async Task AddModule(ModuleWithMastersInfo module, string solutionFile)
+        public async Task AddModuleToSolutionFileAsync(ModuleWithMastersInfo module, string solutionFile)
+        {
+            await AddModuleAsync(module, solutionFile);
+        }
+
+        private List<string> RemoveProject(List<string> solutionFileLines, string projectName)
+        {
+            var projectKey = FindProjectKey(solutionFileLines, projectName);
+
+            if (projectKey == null)
+            {
+                return solutionFileLines;
+            }
+
+            var newSolutionFileLines = new List<string>();
+            var firstOccurence = true;
+
+            for (var i = 0; i < solutionFileLines.Count; ++i)
+            {
+                if (solutionFileLines[i].Contains(projectKey))
+                {
+                    if (firstOccurence)
+                    {
+                        firstOccurence = false;
+                        ++i; //Skip "EndProject" line too.
+                    }
+
+                    continue;
+                }
+
+                newSolutionFileLines.Add(solutionFileLines[i]);
+            }
+
+            return newSolutionFileLines;
+        }
+
+        private string FindProjectKey(List<string> solutionFileLines, string projectName)
+        {
+            var projectNameWithQuotes = $"\"{projectName}\"";
+            foreach (var solutionFileLine in solutionFileLines)
+            {
+                if (solutionFileLine.Contains(projectNameWithQuotes))
+                {
+                    var curlyBracketStartIndex = solutionFileLine.LastIndexOf("{", StringComparison.OrdinalIgnoreCase);
+                    var curlyBracketEndIndex = solutionFileLine.LastIndexOf("}", StringComparison.OrdinalIgnoreCase);
+                    return solutionFileLine.Substring(curlyBracketStartIndex + 1, curlyBracketEndIndex - curlyBracketStartIndex - 1);
+                }
+            }
+
+            return null;
+        }
+
+        private async Task AddModuleAsync(ModuleWithMastersInfo module, string solutionFile)
         {
             var srcModuleFolderId = await AddNewFolderAndGetIdOrGetExistingId(solutionFile, module.Name, await AddNewFolderAndGetIdOrGetExistingId(solutionFile, "modules"));
             var testModuleFolderId = await AddNewFolderAndGetIdOrGetExistingId(solutionFile, module.Name + ".Tests", await AddNewFolderAndGetIdOrGetExistingId(solutionFile, "test"));
-            
+
             var file = File.ReadAllText(solutionFile);
             var lines = file.Split(Environment.NewLine).ToList();
 
@@ -52,7 +107,7 @@ namespace Volo.Abp.Cli.ProjectModification
                               + Environment.NewLine + "EndProject";
 
                 lines.InsertAfter(l => l.Trim().Equals("EndProject"), newProjectLine);
-                
+
                 var newPostSolutionLine =
                     "		{" + projectGuid + "}.Debug|Any CPU.ActiveCfg = Debug|Any CPU" + Environment.NewLine +
                     "		{" + projectGuid + "}.Debug|Any CPU.Build.0 = Debug|Any CPU" + Environment.NewLine +
@@ -60,7 +115,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     "		{" + projectGuid + "}.Release|Any CPU.Build.0 = Release|Any CPU";
 
                 lines.InsertAfter(l=>l.Contains("GlobalSection") && l.Contains("ProjectConfigurationPlatforms"), newPostSolutionLine);
-                
+
                 var newPreSolutionLine =
                     "		{"+ projectGuid + "} = {"+ parentFolderId + "}";
 
@@ -73,7 +128,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 foreach (var masterModule in module.MasterModuleInfos)
                 {
-                    await AddModule(masterModule, solutionFile);
+                    await AddModuleAsync(masterModule, solutionFile);
                 }
             }
         }

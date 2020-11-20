@@ -16,22 +16,24 @@ namespace Volo.Abp.Identity
         where TStartupModule : IAbpModule
     {
         private readonly IOrganizationUnitRepository _organizationUnitRepository;
+        private readonly IIdentityRoleRepository _identityRoleRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IdentityTestData _testData;
         private readonly IGuidGenerator _guidGenerator;
         private readonly OrganizationUnitManager _organizationUnitManager;
-        private readonly IIdentityRoleRepository _identityRoleRepository;
+        private readonly IdentityUserManager _identityUserManager;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IIdentityUserRepository _identityUserRepository;
 
         public OrganizationUnitRepository_Tests()
         {
             _organizationUnitRepository = ServiceProvider.GetRequiredService<IOrganizationUnitRepository>();
+            _identityRoleRepository = ServiceProvider.GetRequiredService<IIdentityRoleRepository>();
             _lookupNormalizer = ServiceProvider.GetRequiredService<ILookupNormalizer>();
             _testData = GetRequiredService<IdentityTestData>();
             _guidGenerator = GetRequiredService<IGuidGenerator>();
             _organizationUnitManager = GetRequiredService<OrganizationUnitManager>();
-            _identityRoleRepository = GetRequiredService<IIdentityRoleRepository>();
+            _identityUserManager = GetRequiredService<IdentityUserManager>();
             _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
             _identityUserRepository = GetRequiredService<IIdentityUserRepository>();
         }
@@ -45,17 +47,100 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetAllChildrenWithParentCodeAsync()
         {
-            (await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(0), _guidGenerator.Create())).ShouldNotBeNull();
+            (await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(0),
+                _guidGenerator.Create())).ShouldNotBeNull();
         }
 
         [Fact]
         public async Task GetListAsync()
         {
             var ouIds = (await _organizationUnitRepository.GetListAsync(includeDetails: true))
-                        .Select(ou => ou.Id).Take(2);
+                .Select(ou => ou.Id).Take(2);
             var ous = await _organizationUnitRepository.GetListAsync(ouIds);
             ous.Count.ShouldBe(2);
             ous.ShouldContain(ou => ou.Id == ouIds.First());
+        }
+
+        [Fact]
+        public async Task AddMemberToOrganizationUnit()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var ou111 = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU111"));
+                var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                    _lookupNormalizer.NormalizeName("david"));
+                user.ShouldNotBeNull();
+
+                user.OrganizationUnits.Count.ShouldBe(1);
+                await _identityUserManager.AddToOrganizationUnitAsync(user.Id, ou111.Id);
+
+                await uow.CompleteAsync();
+            }
+
+            var updatedUser = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                _lookupNormalizer.NormalizeName("david"));
+            updatedUser.OrganizationUnits.Count.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task AddRoleToOrganizationUnit()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var ou111 = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU111"));
+                ou111.Roles.Count.ShouldBe(2);
+                var roleSupporter = await _identityRoleRepository.FindByNormalizedNameAsync(
+                    _lookupNormalizer.NormalizeName("supporter"));
+
+                await _organizationUnitManager.AddRoleToOrganizationUnitAsync(roleSupporter.Id, ou111.Id);
+                await uow.CompleteAsync();
+            }
+
+            var ou111Updated = await _organizationUnitRepository.GetAsync(
+                _lookupNormalizer.NormalizeName("OU111"));
+            ou111Updated.Roles.Count.ShouldBeGreaterThan(2);
+        }
+
+        [Fact]
+        public async Task RemoveRoleFromOrganizationUnit()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var ou111 = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU111"));
+                ou111.Roles.ShouldContain(q => q.RoleId == _testData.RoleModeratorId);
+
+                await _organizationUnitManager.RemoveRoleFromOrganizationUnitAsync(_testData.RoleModeratorId, ou111.Id);
+                await uow.CompleteAsync();
+            }
+
+            var ou111Updated = await _organizationUnitRepository.GetAsync(
+                _lookupNormalizer.NormalizeName("OU111"));
+            ou111Updated.Roles.ShouldNotContain(q => q.RoleId == _testData.RoleModeratorId);
+        }
+
+        [Fact]
+        public async Task RemoveOrganizationUnitFromUser()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var ou112 = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU112"));
+                var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                    _lookupNormalizer.NormalizeName("david"));
+
+                user.OrganizationUnits.Count.ShouldBe(1);
+                user.OrganizationUnits.ShouldContain(q => q.OrganizationUnitId == ou112.Id);
+
+                await _identityUserManager.RemoveFromOrganizationUnitAsync(user.Id, ou112.Id);
+                await uow.CompleteAsync();
+            }
+
+            var updatedUser = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                _lookupNormalizer.NormalizeName("david"));
+            updatedUser.OrganizationUnits.Count.ShouldBe(0);
         }
 
         [Fact]
@@ -79,6 +164,7 @@ namespace Volo.Abp.Identity
             ou.Roles.ShouldNotBeNull();
             ou.Roles.Any().ShouldBeTrue();
         }
+
         [Fact]
         public async Task GetOrganizationUnitRolesAsync()
         {
@@ -95,7 +181,8 @@ namespace Volo.Abp.Identity
         {
             OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", includeDetails: true);
 
-            var ou111Roles = await _organizationUnitRepository.GetRolesAsync(ou, sorting: "name desc", maxResultCount: 1, includeDetails: true);
+            var ou111Roles = await _organizationUnitRepository.GetRolesAsync(ou, sorting: "name desc",
+                maxResultCount: 1, includeDetails: true);
             ou111Roles.Count.ShouldBe(1);
             ou111Roles.ShouldContain(n => n.Name == "moderator");
         }
@@ -105,9 +192,10 @@ namespace Volo.Abp.Identity
         {
             OrganizationUnit ou1 = await _organizationUnitRepository.GetAsync("OU111", true);
             OrganizationUnit ou2 = await _organizationUnitRepository.GetAsync("OU112", true);
-            var users = await _identityUserRepository.GetUsersInOrganizationsListAsync(new List<Guid> { ou1.Id, ou2.Id });
+            var users = await _identityUserRepository.GetUsersInOrganizationsListAsync(new List<Guid> {ou1.Id, ou2.Id});
             users.Count.ShouldBeGreaterThan(0);
         }
+
         [Fact]
         public async Task GetMembersInOrganizationUnitWithParamsAsync()
         {
@@ -147,12 +235,12 @@ namespace Volo.Abp.Identity
         public async Task GetMembersCountOfOrganizationUnitWithParamsAsync()
         {
             OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
-            var usersCount = await _organizationUnitRepository.GetMembersCountAsync(ou,"n");
+            var usersCount = await _organizationUnitRepository.GetMembersCountAsync(ou, "n");
 
             usersCount.ShouldBeGreaterThan(1);
             usersCount.ShouldBeLessThanOrEqualTo(5);
 
-            usersCount = await _organizationUnitRepository.GetMembersCountAsync(ou,"undefined-username");
+            usersCount = await _organizationUnitRepository.GetMembersCountAsync(ou, "undefined-username");
             usersCount.ShouldBe(0);
         }
 
@@ -195,6 +283,44 @@ namespace Volo.Abp.Identity
 
                 await uow.CompleteAsync();
             }
+        }
+
+        [Fact]
+        public async Task GetUnaddedUsersOfOrganizationUnitAsync()
+        {
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var unaddedUsers = await _organizationUnitRepository.GetUnaddedUsersAsync(ou);
+
+            unaddedUsers.ShouldNotContain(u => u.UserName == "john.nash");
+            unaddedUsers.ShouldContain(u => u.UserName == "administrator");
+        }
+
+        [Fact]
+        public async Task GetUnaddedRolesOfOrganizationUnitAsync()
+        {
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var unaddedRoles = await _organizationUnitRepository.GetUnaddedRolesAsync(ou);
+
+            unaddedRoles.ShouldNotContain(u => u.Name == "manager");
+            unaddedRoles.ShouldNotContain(u => u.Name == "moderator");
+            unaddedRoles.ShouldContain(u => u.Name.Contains("admin"));
+        }
+
+        [Fact]
+        public async Task GetUnaddedUsersCountOfOrganizationUnitAsync()
+        {
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var count = await _organizationUnitRepository.GetUnaddedUsersCountAsync(ou);
+            count.ShouldBeGreaterThan(0);
+
+        }
+
+        [Fact]
+        public async Task GetUnaddedRolesCountOfOrganizationUnitAsync()
+        {
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var count = await _organizationUnitRepository.GetUnaddedRolesCountAsync(ou);
+            count.ShouldBeGreaterThan(0);
         }
     }
 }

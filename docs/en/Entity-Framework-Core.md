@@ -92,7 +92,7 @@ protected override void OnModelCreating(ModelBuilder builder)
         b.ToTable("Books");
 
         //Configure the base properties
-        b.ConfigureByConvention(); 
+        b.ConfigureByConvention();
 
         //Configure other properties (if you are using the fluent API)
         b.Property(x => x.Name).IsRequired().HasMaxLength(128);
@@ -113,7 +113,7 @@ If you have multiple databases in your application, you can configure the connec
 [ConnectionStringName("MySecondConnString")]
 public class MyDbContext : AbpDbContext<MyDbContext>
 {
-    
+
 }
 ```
 
@@ -254,7 +254,7 @@ If you want to replace default repository implementation with your custom reposi
 context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
 {
     options.AddDefaultRepositories();
-    
+
     //Replaces IRepository<Book, Guid>
     options.AddRepository<Book, BookRepository>();
 });
@@ -263,7 +263,7 @@ context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
 This is especially important when you want to **override a base repository method** to customize it. For instance, you may want to override `DeleteAsync` method to delete a specific entity in a more efficient way:
 
 ````csharp
-public override async Task DeleteAsync(
+public async override Task DeleteAsync(
     Guid id,
     bool autoSave = false,
     CancellationToken cancellationToken = default)
@@ -365,7 +365,7 @@ public class MyRepositoryBase<TEntity>
     : EfCoreRepository<BookStoreDbContext, TEntity>
       where TEntity : class, IEntity
 {
-    public MyRepositoryBase(IDbContextProvider<BookStoreDbContext> dbContextProvider) 
+    public MyRepositoryBase(IDbContextProvider<BookStoreDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
     }
@@ -395,7 +395,7 @@ context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
         typeof(MyRepositoryBase<,>),
         typeof(MyRepositoryBase<>)
     );
-    
+
     //...
 });
 ```

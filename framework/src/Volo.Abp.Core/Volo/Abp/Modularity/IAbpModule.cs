@@ -1,6 +1,4 @@
-﻿using Volo.Abp.DependencyInjection;
-
-namespace Volo.Abp.Modularity
+﻿namespace Volo.Abp.Modularity
 {
     public interface IAbpModule
     {

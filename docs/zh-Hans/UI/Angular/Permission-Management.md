@@ -4,7 +4,7 @@
 
 你可以使用 `ConfigState` 的 `getGrantedPolicy` 选择器获取经过身份验证的用户的权限.
 
-你可以从Store中获取权限的布尔值:
+你可以获取权限的布尔值:
 
 ```js
 import { Store } from '@ngxs/store';
@@ -78,4 +78,4 @@ const routes: Routes = [
 
 ## 下一步是什么?
 
-* [确认弹层](./Confirmation-Service.md)
+* [多租户](./Multi-Tenancy.md)

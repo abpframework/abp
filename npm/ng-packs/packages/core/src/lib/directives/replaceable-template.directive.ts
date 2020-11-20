@@ -10,15 +10,14 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import { Store } from '@ngxs/store';
 import compare from 'just-compare';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import snq from 'snq';
 import { ABP } from '../models/common';
 import { ReplaceableComponents } from '../models/replaceable-components';
+import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 import { SubscriptionService } from '../services/subscription.service';
-import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 
 @Directive({ selector: '[abpReplaceableTemplate]', providers: [SubscriptionService] })
 export class ReplaceableTemplateDirective implements OnInit, OnChanges {
@@ -45,7 +44,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
     private templateRef: TemplateRef<any>,
     private cfRes: ComponentFactoryResolver,
     private vcRef: ViewContainerRef,
-    private store: Store,
+    private replaceableComponents: ReplaceableComponentsService,
     private subscription: SubscriptionService,
   ) {
     this.context = {
@@ -58,8 +57,8 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    const component$ = this.store
-      .select(ReplaceableComponentsState.getComponent(this.data.componentKey))
+    const component$ = this.replaceableComponents
+      .get$(this.data.componentKey)
       .pipe(
         filter(
           (res = {} as ReplaceableComponents.ReplaceableComponent) =>

@@ -2,11 +2,11 @@
 
 ## Introduction
 
-`abp-badge` and  `abp-badge-pill` are abp tags for badges.
+`abp-badge` and  `abp-badge-pill` are ABP Tag Helper attributes for `a` and `span` html tags.
 
 Basic usage:
 
-````csharp
+````html
 <span abp-badge="Primary">Primary</span>
 <a abp-badge="Info" href="#">Info</a>
 <a abp-badge-pill="Danger" href="#">Danger</a>
@@ -22,8 +22,7 @@ See the [badges demo page](https://bootstrap-taghelpers.abp.io/Components/Badges
 
 * Indicates the type of the badge. Should be one of the following values:
 
-  * `_` (default value)
-  * `Default` (default value)
+  * `Default` 
   * `Primary`
   * `Secondary`
   * `Success`
@@ -35,6 +34,7 @@ See the [badges demo page](https://bootstrap-taghelpers.abp.io/Components/Badges
 
 Example:
 
-````csharp
+````html
 <span abp-badge-pill="Danger">Danger</span>
 ````
+

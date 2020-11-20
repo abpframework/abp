@@ -263,7 +263,7 @@ context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
 在你想要覆盖默认仓储方法对其自定义时,这一点非常需要. 例如你可能希望自定义`DeleteAsync`方法覆盖默认实现
 
 ````csharp
-public override async Task DeleteAsync(
+public async override Task DeleteAsync(
     Guid id,
     bool autoSave = false,
     CancellationToken cancellationToken = default)
@@ -325,7 +325,10 @@ public class BookService
 ObjectExtensionManager.Instance
     .MapEfCoreProperty<IdentityRole, string>(
         "Title",
-        builder => { builder.HasMaxLength(64); }
+        (entityBuilder, propertyBuilder) =>
+        {
+            propertyBuilder.HasMaxLength(64);
+        }
     );
 ````
 
@@ -362,7 +365,7 @@ public class MyRepositoryBase<TEntity>
     : EfCoreRepository<BookStoreDbContext, TEntity>
       where TEntity : class, IEntity
 {
-    public MyRepositoryBase(IDbContextProvider<BookStoreDbContext> dbContextProvider) 
+    public MyRepositoryBase(IDbContextProvider<BookStoreDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
     }

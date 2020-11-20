@@ -1,16 +1,20 @@
 import { PermissionDirective } from '../directives/permission.directive';
-import { SpectatorDirective, createDirectiveFactory, SpyObject } from '@ngneat/spectator/jest';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
+import { PermissionService } from '../services';
+import { mockStore } from './utils/common.utils';
 
 describe('PermissionDirective', () => {
   let spectator: SpectatorDirective<PermissionDirective>;
   let directive: PermissionDirective;
-  const grantedPolicy$ = new Subject();
-
+  const grantedPolicy$ = new Subject<boolean>();
   const createDirective = createDirectiveFactory({
     directive: PermissionDirective,
-    providers: [{ provide: Store, useValue: { select: () => grantedPolicy$ } }],
+    providers: [
+      { provide: Store, useValue: mockStore },
+      { provide: PermissionService, useValue: { getGrantedPolicy$: () => grantedPolicy$ } },
+    ],
   });
 
   describe('with condition', () => {

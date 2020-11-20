@@ -151,10 +151,20 @@ public class Book : AggregateRoot<Guid>, IIsActive
 
 ABP使用[EF Core的全局过滤](https://docs.microsoft.com/en-us/ef/core/querying/filters)系统用于[EF Core 集成](Entity-Framework-Core.md). 所以它很好的集成到EF Core中,即使你直接使用 `DbContext` 它也可以正常工作.
 
-实现自定义过滤的最佳方法是为重写你的 `DbContext` 的 `CreateFilterExpression` 方法. 示例:
+实现自定义过滤的最佳方法是为重写你的 `DbContext` 的 `ShouldFilterEntity` 和 `CreateFilterExpression` 方法. 示例:
 
 ````csharp
 protected bool IsActiveFilterEnabled => DataFilter?.IsEnabled<IIsActive>() ?? false;
+
+protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
+{
+    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
+    {
+        return true;
+    }
+
+    return base.ShouldFilterEntity<TEntity>(entityType);
+}
 
 protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
 {
@@ -174,7 +184,7 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 ````
 
 * 添加 `IsActiveFilterEnabled` 属性用于检查是否启用了 `IIsActive` . 内部使用了之前介绍到的 `IDataFilter` 服务.
-* 重写 `CreateFilterExpression` 方法检查给定实体是否实现 `IIsActive` 接口,在必要时组合表达式.
+* 重写 `ShouldFilterEntity` 和 `CreateFilterExpression` 方法检查给定实体是否实现 `IIsActive` 接口,在必要时组合表达式.
 
 ### MongoDB
 

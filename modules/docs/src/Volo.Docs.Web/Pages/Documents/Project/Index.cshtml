@@ -295,7 +295,7 @@
                             <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                                 <article class="docs-body">
 
-                                    @if (Model.DocumentLanguageIsDifferent)
+                                    @if (Model.DocumentLanguageCode != Model.LanguageCode)
                                     {
                                         <abp-alert alert-type="Warning" dismissible="true" class="mb-0">
                                             @L["DocumentNotFoundInSelectedLanguage"]
@@ -305,7 +305,10 @@
                                 </article>
 
                                 <div id="crawler_link" style="display:none;">
-
+                                    @foreach (var query in Model.AlternativeOptionLinkQueries)
+                                    {
+                                        <a href="@($"{Request.Path}?{query}")"> @query </a>
+                                    }
                                 </div>
                             </div>
                         </div>

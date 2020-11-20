@@ -1,7 +1,5 @@
 # Dynamic Forms
 
-`Warning:` Before getting into this document, be sure that you have clearly understood [abp form elements](Form-elements.md) document.
-
 ## Introduction
 
 `abp-dynamic-form` creates a bootstrap form for a given c# model. 
@@ -273,3 +271,7 @@ You can set it yourself by using `[Display()]` attribute of Asp.Net Core. You ca
 [Display(Name = "Name")]
 public string Name { get; set; }
 ````
+
+## See Also
+
+* [Form Elements](Form-elements.md)

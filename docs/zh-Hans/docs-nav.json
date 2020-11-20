@@ -4,21 +4,20 @@
       "text": "入门",
       "items": [
         {
-          "text": "从启动模板开始",
+          "text": "Web应用程序",
           "path": "Getting-Started.md"
         },
         {
-          "text": "从空项目开始",
-          "items": [
-            {
-              "text": "使用ASP.NET Core Web Application",
-              "path": "Getting-Started-AspNetCore-Application.md"
-            },
-            {
-              "text": "使用Console Application",
-              "path": "Getting-Started-Console-Application.md"
-            }
-          ]
+          "text": "控制台应用程序",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF应用程序",
+          "path": "Startup-Templates/WPF.md"
+        },
+        {
+          "text": "空Web应用程序",
+          "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
     },
@@ -65,10 +64,6 @@
               "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
             }
           ]
-        },
-        {
-          "text": "\"如何\" 指南",
-          "path": "How-To/Index.md"
         },
         {
           "text": "从ASP.NET Boilerplate迁移",
@@ -180,6 +175,14 @@
             {
               "text": "RabbitMQ 集成",
               "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+            },
+            {
+              "text": "Kafka 集成",
+              "path": "Distributed-Event-Bus-Kafka-Integration.md"
+            },
+            {
+              "text": "Rebus 集成",
+              "path": "Distributed-Event-Bus-Rebus-Integration.md"
             }
           ]
         }
@@ -196,6 +199,19 @@
           "text": "对象到对象映射",
           "path": "Object-To-Object-Mapping.md"
 
+        },
+        {
+          "text": "邮件发送",
+          "items": [
+            {
+              "text": "邮件发送系统",
+              "path": "Emailing.md"
+            },
+            {
+              "text": "MailKit集成",
+              "path": "MailKit.md"
+            }
+          ]
         },
         {
           "text": "BLOB存储",
@@ -394,6 +410,10 @@
               "path": "UI/Angular/Migration-Guide-v3.md"
             },
             {
+              "text": "环境",
+              "path": "UI/Angular/Environment.md"
+            },
+            {
               "text": "服务代理",
               "path": "UI/Angular/Service-Proxies.md"
             },
@@ -408,6 +428,10 @@
             {
               "text": "权限管理",
               "path": "UI/Angular/Permission-Management.md"
+            },
+            {
+              "text": "多租户",
+              "path": "UI/Angular/Multi-Tenancy.md"
             },
             {
               "text": "确认弹层",
@@ -607,6 +631,10 @@
         {
           "text": "控制台",
           "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
         }
       ]
     },
@@ -632,12 +660,20 @@
       "path": "Microservice-Architecture.md"
     },
     {
+      "text": "预览版本",
+      "path": "Previews.md"
+    },
+    {
       "text": "每日构建",
       "path": "Nightly-Builds.md"
     },
     {
       "text": "路线图",
       "path": "Road-Map.md"
+    },
+    {
+      "text": "升级",
+      "path": "Upgrading.md"
     },
     {
       "text": "贡献指南",

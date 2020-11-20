@@ -1,0 +1,6 @@
+{
+    "culture": "hu",
+    "texts": {
+      "MaxResultCountExceededExceptionMessage": "{0} nem lehet több mint {1}! Csökkentse {2}.{3} a szerver oldalon, hogy több redeményt kapjon."
+    }
+}

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Http.Localization;
 using Volo.Abp.Localization;
 using Xunit;
 
@@ -30,6 +32,13 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.GetException1Async());
             exception.Error.Message.ShouldBe("This is an error message!");
+        }
+
+        [Fact]
+        public async Task GetException2Async()
+        {
+            var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.GetException2Async());
+            exception.Error.Message.ShouldBe("Business exception with data: TEST");
         }
 
         [Fact]
