@@ -7,7 +7,6 @@ import {
   Inject,
   Input,
   OnDestroy,
-  OnInit,
   Optional,
   Output,
   Renderer2,
@@ -33,7 +32,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   styleUrls: ['./modal.component.scss'],
   providers: [ModalService, SubscriptionService],
 })
-export class ModalComponent implements OnDestroy, OnInit {
+export class ModalComponent implements OnDestroy {
   @Input()
   get visible(): boolean {
     return this._visible;
@@ -61,7 +60,7 @@ export class ModalComponent implements OnDestroy, OnInit {
 
   @Input() size: ModalSize = 'lg';
 
-  @Input() suppressUnsavedChangesWarning: boolean;
+  @Input() suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
 
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
@@ -138,12 +137,6 @@ export class ModalComponent implements OnDestroy, OnInit {
       this.renderer.removeClass(document.body, 'modal-open');
       this.disappear.emit();
       this.destroy$.next();
-    }
-  }
-
-  ngOnInit() {
-    if (typeof this.suppressUnsavedChangesWarning === 'undefined') {
-      this.suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
     }
   }
 
