@@ -58,11 +58,11 @@ namespace Volo.Abp.AutoFilterer.Tests.Volo.Abp.AutoFilterer
             List<Book> source)
         {
             // Arrange
-            int count = 2;
+            int skip = 3, take = 2;
             var repository = new MockingMemoryRepository<TestDbContext, Book, Guid>(mockProvider.Object, source.AsQueryable());
             var sut = new BooksAppService(repository) { ServiceProvider = this.ServiceProvider };
 
-            var filter = new BookFilterDto { PerPage = count };
+            var filter = new BookFilterDto { SkipCount = skip, MaxResultCount = take };
 
             // Act
             var actual = await sut.GetListAsync(filter);
@@ -126,6 +126,8 @@ namespace Volo.Abp.AutoFilterer.Tests.Volo.Abp.AutoFilterer
             actual.TotalCount.ShouldBe(expectedCount);
             actual.Items.Count.ShouldBe(expectedItems.Count);
         }
+
+        #region Testing Environment
 
         [DependsOn(
             typeof(AbpAutofacModule),
@@ -215,5 +217,7 @@ namespace Volo.Abp.AutoFilterer.Tests.Volo.Abp.AutoFilterer
                 return seed;
             }
         }
+
+        #endregion
     }
 }
