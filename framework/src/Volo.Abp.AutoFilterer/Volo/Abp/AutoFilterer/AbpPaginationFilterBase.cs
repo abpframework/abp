@@ -29,7 +29,7 @@ namespace Volo.Abp.AutoFilterer
 
         public string Sorting
         {
-            get => base.Sort + " " + GetAbpStringKeyword(base.SortBy);
+            get => base.Sort + " " + GetAbpStringKeyword(this.SortBy);
             set => SetSortingByAbpKeyword(value);
         }
 
