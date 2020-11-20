@@ -21,7 +21,7 @@ using Xunit;
 
 namespace Volo.Abp.AutoFilterer.Tests
 {
-    public class ApplicationService_AutoFilterer_Tests : AbpIntegratedTest<TestModule>
+    public class AbpPaginationFilterBase_Tests : AbpIntegratedTest<TestModule>
     {
         [Fact]
         public void Should_Have_SwaggerOperatorFilters()
@@ -43,7 +43,7 @@ namespace Volo.Abp.AutoFilterer.Tests
             // Arrange
             int skip = 3, take = 2;
             var repository = new MockingMemoryRepository<TestDbContext, Book, Guid>(mockProvider.Object, source.AsQueryable());
-            var sut = new BooksAppService(repository) { ServiceProvider = this.ServiceProvider };
+            var sut = CreateAppService(repository);
 
             var filter = new BookFilterDto { SkipCount = skip, MaxResultCount = take };
 
@@ -68,7 +68,7 @@ namespace Volo.Abp.AutoFilterer.Tests
             string searchText = "a";
             var queryable = source.AsQueryable();
             var repository = new MockingMemoryRepository<TestDbContext, Book, Guid>(mockProvider.Object, queryable);
-            var sut = new BooksAppService(repository) { ServiceProvider = this.ServiceProvider };
+            var sut =CreateAppService(repository);
 
             var filter = new BookFilterDto { Filter = searchText };
 
@@ -94,7 +94,7 @@ namespace Volo.Abp.AutoFilterer.Tests
             string sorting = nameof(Book.Title) + " DESC";
             var queryable = source.AsQueryable();
             var repository = new MockingMemoryRepository<TestDbContext, Book, Guid>(mockProvider.Object, queryable);
-            var sut = new BooksAppService(repository) { ServiceProvider = this.ServiceProvider };
+            var sut = CreateAppService(repository);
 
             var filter = new BookFilterDto { Sorting = sorting };
 
@@ -111,6 +111,11 @@ namespace Volo.Abp.AutoFilterer.Tests
 
             for (int i = 0; i < actual.Items.Count; i++)
                 actual.Items[i].Title.ShouldBe(expectedItems[i].Title);
+        }
+
+        private BooksAppService CreateAppService(IRepository<Book, Guid> repository)
+        {
+            return new BooksAppService(repository) { ServiceProvider = this.ServiceProvider };
         }
 
 
