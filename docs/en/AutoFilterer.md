@@ -41,7 +41,6 @@ public class YourModule : AbpModule
 - Create your filter dto via using `AbpFilterBase` instead of AutoFilterer's default `FilterBase`.
 
 ```csharp
-[PossibleSortings(typeof(BookDto))] // Each property of return dto.
 public class BookFilterDto : AbpFilterBase // <-- Careful here
 {
     [CompareTo("Title", "Description")] // Properties of Entity to compare.
