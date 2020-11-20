@@ -12,11 +12,10 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected const string PermissionProviderName = "R";
 
         protected PermissionManagementModal PermissionManagementModal;
+        
         protected string ManagePermissionsPolicyName;
-
+        
         protected bool HasManagePermissionsPermission { get; set; }
-
-        protected bool ShouldShowEntityActions { get; set; }
 
         public RoleManagement()
         {
@@ -27,6 +26,13 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             UpdatePolicyName = IdentityPermissions.Roles.Update;
             DeletePolicyName = IdentityPermissions.Roles.Delete;
             ManagePermissionsPolicyName = IdentityPermissions.Roles.ManagePermissions;
+        }
+
+        protected override async Task SetPermissionsAsync()
+        {
+            await base.SetPermissionsAsync();
+
+            HasManagePermissionsPermission = await AuthorizationService.IsGrantedAsync(IdentityPermissions.Roles.ManagePermissions);
         }
 
         protected override string GetDeleteConfirmationMessage(IdentityRoleDto entity)
