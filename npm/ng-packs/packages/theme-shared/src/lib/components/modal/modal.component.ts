@@ -4,8 +4,11 @@ import {
   ContentChild,
   ElementRef,
   EventEmitter,
+  Inject,
   Input,
   OnDestroy,
+  OnInit,
+  Optional,
   Output,
   Renderer2,
   TemplateRef,
@@ -18,6 +21,7 @@ import { fadeAnimation } from '../../animations/modal.animations';
 import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ModalService } from '../../services/modal.service';
+import { SUPPRESS_UNSAVED_CHANGES_WARNING } from '../../tokens/suppress-unsaved-changes-warning.token';
 import { ButtonComponent } from '../button/button.component';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -29,7 +33,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   styleUrls: ['./modal.component.scss'],
   providers: [ModalService, SubscriptionService],
 })
-export class ModalComponent implements OnDestroy {
+export class ModalComponent implements OnDestroy, OnInit {
   @Input()
   get visible(): boolean {
     return this._visible;
@@ -56,6 +60,8 @@ export class ModalComponent implements OnDestroy {
   @Input() modalClass = '';
 
   @Input() size: ModalSize = 'lg';
+
+  @Input() suppressUnsavedChangesWarning: boolean;
 
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
@@ -104,6 +110,9 @@ export class ModalComponent implements OnDestroy {
     private confirmationService: ConfirmationService,
     private modalService: ModalService,
     private subscription: SubscriptionService,
+    @Optional()
+    @Inject(SUPPRESS_UNSAVED_CHANGES_WARNING)
+    private suppressUnsavedChangesWarningToken: boolean,
   ) {
     this.initToggleStream();
   }
@@ -132,6 +141,12 @@ export class ModalComponent implements OnDestroy {
     }
   }
 
+  ngOnInit() {
+    if (typeof this.suppressUnsavedChangesWarning === 'undefined') {
+      this.suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
   }
@@ -139,7 +154,7 @@ export class ModalComponent implements OnDestroy {
   close() {
     if (this.busy) return;
 
-    if (this.isFormDirty) {
+    if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
       if (this.isConfirmationOpen) return;
 
       this.isConfirmationOpen = true;
