@@ -446,6 +446,23 @@ context.Services.AddAbpDbContext<OtherDbContext>(options =>
 
 In this example, `OtherDbContext` implements `IBookStoreDbContext`. This feature allows you to have multiple DbContext (one per module) on development, but single DbContext (implements all interfaces of all DbContexts) on runtime.
 
+### Enabling split queries globally by default
+
+Abp enables split queries globally by default for better performance. You can also change it as needed, such as:
+
+````csharp
+Configure<AbpDbContextOptions>(options =>
+{
+    options.UseSqlServer(optionsBuilder =>
+    {
+        //Change QuerySplittingBehavior
+        optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
+    });
+});
+````
+
+For more information, please refer to https://docs.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.querysplittingbehavior?view=efcore-5.0
+
 ## See Also
 
 * [Entities](Entities.md)
