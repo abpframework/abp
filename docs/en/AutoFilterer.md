@@ -38,7 +38,9 @@ public class YourModule : AbpModule
 
 ## Using the AutoFilterer
 
-- Create your filter dto via using `AbpFilterBase` instead of AutoFilterer's default `FilterBase`.
+### AbpFilterBase
+
+- Create your filter dto via inheriting from `AbpFilterBase` instead of AutoFilterer's default `FilterBase`.
 
 ```csharp
 public class BookFilterDto : AbpFilterBase // <-- Careful here
@@ -79,7 +81,9 @@ public class BookAppService :
 
 ---
 
-- Even you can use `AbpAutoFiltererBase` to use AutoFilter's paging & sorting algorithm. When you use `AbpFilterBase`, paging and sorting will be provided over **IPagedAndSortedResultRequest**  by Abp Framework.
+### AbpPaginationFilterBase
+
+- Even you can use `AbpPaginationFilterBase` to use AutoFilter's paging & sorting algorithm. When you use `AbpFilterBase`, paging and sorting will be provided over **IPagedAndSortedResultRequest**  by Abp Framework.
 
 ```csharp
 // ** You should define possible sorting parameters:
@@ -101,7 +105,6 @@ public class BookFilterDto : AbpPaginationFilterBase // <-- Inherit from
      */
 }
 ```
-
 ---
 
 Follow [the AutoFilterer documentation](https://github.com/enisn/AutoFilterer/wiki) to create filter classes.  Example:
