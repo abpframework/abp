@@ -3,42 +3,25 @@ using AutoFilterer.Enums;
 using AutoFilterer.Extensions;
 using AutoFilterer.Swagger.OperationFilters;
 using AutoFilterer.Types;
-using AutoMapper;
-using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
 using Moq;
 using Shouldly;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Autofac;
 using Volo.Abp.AutoFilterer.Tests.Volo.Abp.TestBase;
-using Volo.Abp.AutoMapper;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Domain.Repositories.MemoryDb;
-using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Linq;
 using Volo.Abp.MemoryDb;
-using Volo.Abp.Modularity;
-using Volo.Abp.Swashbuckle;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.AutoFilterer.Tests.Volo.Abp.AutoFilterer
+namespace Volo.Abp.AutoFilterer.Tests
 {
-    public class ApplicationService_AutoFilterer_Tests : AbpIntegratedTest<ApplicationService_AutoFilterer_Tests.TestModule>
+    public class ApplicationService_AutoFilterer_Tests : AbpIntegratedTest<TestModule>
     {
         [Fact]
         public void Should_Have_SwaggerOperatorFilters()
@@ -93,7 +76,7 @@ namespace Volo.Abp.AutoFilterer.Tests.Volo.Abp.AutoFilterer
             var actual = await sut.GetListAsync(filter);
 
             var expectedItems = queryable.ApplyFilter(filter).ToList();
-            var expectedCount = filter.ApplyFilterWithoutPagination(queryable).Count();
+            var expectedCount = filter.ApplyFilterWithoutPaginationAndOrdering(queryable).Count();
 
             // Assert
             actual.Items.ShouldNotBeNull();
@@ -119,66 +102,17 @@ namespace Volo.Abp.AutoFilterer.Tests.Volo.Abp.AutoFilterer
             var actual = await sut.GetListAsync(filter);
 
             var expectedItems = queryable.ApplyFilter(filter).ToList();
-            var expectedCount = filter.ApplyFilterWithoutPagination(queryable).Count();
+            var expectedCount = filter.ApplyFilterWithoutPaginationAndOrdering(queryable).Count();
 
             // Assert
             actual.Items.ShouldNotBeNull();
             actual.TotalCount.ShouldBe(expectedCount);
             actual.Items.Count.ShouldBe(expectedItems.Count);
+
+            for (int i = 0; i < actual.Items.Count; i++)
+                actual.Items[i].Title.ShouldBe(expectedItems[i].Title);
         }
 
-        #region Testing Environment
-
-        [DependsOn(
-            typeof(AbpAutofacModule),
-            typeof(AbpSwashbuckleModule),
-            typeof(AbpAutoMapperModule),
-            typeof(AbpAutoFiltererModule)
-            )]
-        public class TestModule : AbpModule
-        {
-            public override void ConfigureServices(ServiceConfigurationContext context)
-            {
-                ConfigureSwaggerServices(context.Services);
-                ConfigureAutoMapper();
-                context.Services.AddTransient<IAsyncQueryableExecuter, AsyncQueryableExecuter>();
-            }
-
-            private void ConfigureSwaggerServices(IServiceCollection services)
-            {
-                services.AddSwaggerGen(
-                    options =>
-                    {
-                        options.SwaggerDoc("v1", new OpenApiInfo { Title = "Bookstore API", Version = "v1" });
-                        options.DocInclusionPredicate((docName, description) => true);
-                        options.CustomSchemaIds(type => type.FullName);
-                    }
-                );
-            }
-
-            private void ConfigureAutoMapper()
-            {
-                Configure<AbpAutoMapperOptions>(options => options.AddMaps<TestModule>());
-            }
-        }
-        public class TestDbContext : MemoryDbContext
-        {
-            public DbSet<Book> Books { get; set; }
-        }
-        public class Book : AuditedAggregateRoot<Guid>
-        {
-            public string Title { get; set; }
-            public int TotalPage { get; set; }
-            public DateTime PublishDate { get; set; }
-        }
-
-        [AutoMap(typeof(Book), ReverseMap = true)]
-        public class BookDto : AuditedEntityDto<Guid>
-        {
-            public string Title { get; set; }
-            public int TotalPage { get; set; }
-            public DateTime PublishDate { get; set; }
-        }
 
         [PossibleSortings(typeof(BookDto))]
         public class BookFilterDto : AbpPaginationFilterBase
@@ -200,24 +134,5 @@ namespace Volo.Abp.AutoFilterer.Tests.Volo.Abp.AutoFilterer
             {
             }
         }
-
-        public class MockingMemoryRepository<TDbContext, TEntity, TKey> : MemoryDbRepository<TDbContext, TEntity, TKey>
-            where TDbContext : MemoryDbContext
-            where TEntity : class, IEntity<TKey>
-        {
-            private readonly IQueryable<TEntity> seed;
-
-            public MockingMemoryRepository(IMemoryDatabaseProvider<TDbContext> databaseProvider, IQueryable<TEntity> seed) : base(databaseProvider)
-            {
-                this.seed = seed;
-            }
-
-            protected override IQueryable<TEntity> GetQueryable()
-            {
-                return seed;
-            }
-        }
-
-        #endregion
     }
 }
