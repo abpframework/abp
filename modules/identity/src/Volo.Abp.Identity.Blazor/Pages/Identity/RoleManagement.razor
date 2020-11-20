@@ -141,4 +141,7 @@
     </Modal>
 }
 
-<PermissionManagementModal @ref="PermissionManagementModal" />
+@if (HasManagePermissionsPermission)
+{
+    <PermissionManagementModal @ref="PermissionManagementModal" />
+}
