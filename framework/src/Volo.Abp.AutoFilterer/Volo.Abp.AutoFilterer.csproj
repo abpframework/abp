@@ -12,8 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoFilterer.Swagger" Version="2.4.0" />
-    <PackageReference Include="AutoFilterer" Version="2.4.3" />
+    <PackageReference Include="AutoFilterer" Version="2.5.0" />
+    <PackageReference Include="AutoFilterer.Swagger" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>
