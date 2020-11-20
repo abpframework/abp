@@ -458,7 +458,7 @@ public async Task TestWithoutDetails(Guid id)
 **Example: Get list of entities with details**
 
 ````csharp
-public async Task TestWithDetails(Guid id)
+public async Task TestWithDetails()
 {
     var orders = await _orderRepository.GetListAsync(includeDetails: true);
 }
