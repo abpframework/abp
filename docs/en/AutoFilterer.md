@@ -38,11 +38,11 @@ public class YourModule : AbpModule
 
 ## Using the AutoFilterer
 
-- Create your filter dto via using `AbpPaginationFilterBase` instead of AutoFilterer's default.
+- Create your filter dto via using `AbpFilterBase` instead of AutoFilterer's default `FilterBase`.
 
 ```csharp
 [PossibleSortings(typeof(BookDto))] // Each property of return dto.
-public class BookFilterDto : AbpPaginationFilterBase // <-- Careful here
+public class BookFilterDto : AbpFilterBase // <-- Careful here
 {
     [CompareTo("Title", "Description")] // Properties of Entity to compare.
     [StringFilterOptions(StringFilterOption.Contains)] // Use Contains method instead of exact value.
@@ -77,6 +77,33 @@ public class BookAppService :
     }
 }
 ```
+
+---
+
+- Even you can use `AbpAutoFiltererBase` to use AutoFilter's paging & sorting algorithm. When you use `AbpFilterBase`, paging and sorting will be provided over **IPagedAndSortedResultRequest**  by Abp Framework.
+
+```csharp
+// ** You should define possible sorting parameters:
+[PossibleSortings(typeof(BookDto))] // Each property of return dto.
+// [PossibleSortings("Title", "Price", "CreationTime")] // <-- Or one by one
+public class BookFilterDto : AbpPaginationFilterBase // <-- Inherit from
+{
+    [CompareTo("Title", "Description")] // Properties of Entity to compare.
+    [StringFilterOptions(StringFilterOption.Contains)] // Use Contains method instead of exact value.
+    public string Filter { get; set; }
+
+    [ArraySearchFilter] // Gets only these types of books.
+    public BookType[] Type { get; set; }
+
+    public Range<float> Price { get; set; } // To filter between Price range.
+
+    /* ... 
+     * Any other properties to filter.
+     */
+}
+```
+
+---
 
 Follow [the AutoFilterer documentation](https://github.com/enisn/AutoFilterer/wiki) to create filter classes.  Example:
 
