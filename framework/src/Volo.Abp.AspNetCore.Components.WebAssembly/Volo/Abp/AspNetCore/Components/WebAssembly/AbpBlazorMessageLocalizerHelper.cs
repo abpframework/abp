@@ -33,19 +33,15 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
             foreach (var argument in arguments)
             {
                 // first try to localize with "DisplayName:{Name}"
-                string localization = stringLocalizer[$"DisplayName:{argument}"];
+                var localization = stringLocalizer[$"DisplayName:{argument}"];
 
-                if (!string.IsNullOrEmpty(localization) && !localization.StartsWith("DisplayName:"))
-                    yield return localization;
+                if (localization.ResourceNotFound)
+                {
+                    // then try to localize with just "{Name}"
+                    localization = stringLocalizer[argument];
+                }
 
-                // then try to localize with just "{Name}"
-                localization = stringLocalizer[argument];
-
-                if (!string.IsNullOrEmpty(localization) && localization != argument)
-                    yield return localization;
-
-                // no localization found so just return what we got
-                yield return argument;
+                yield return localization;
             }
         }
     }
