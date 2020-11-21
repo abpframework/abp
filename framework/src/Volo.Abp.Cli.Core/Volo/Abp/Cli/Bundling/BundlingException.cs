@@ -1,10 +1,9 @@
-﻿using System;
-
-namespace Volo.Abp.Cli.Bundling
+﻿namespace Volo.Abp.Cli.Bundling
 {
-    public class BundlingException : Exception
+    public class BundlingException : AbpException
     {
-        public BundlingException(string message) : base(message)
+        public BundlingException(string message)
+            : base(message)
         {
 
         }
