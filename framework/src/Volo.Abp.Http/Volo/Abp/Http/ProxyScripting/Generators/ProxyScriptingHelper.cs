@@ -82,7 +82,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
 
             foreach (var pathParameter in pathParameters)
             {
-                url = url.Replace($"{{{pathParameter.Name}}}", $"' + {pathParameter.Name} + '");
+                url = url.Replace($"{{{pathParameter.Name}}}", $"' + {pathParameter.ParameterName ?? pathParameter.Name} + '");
             }
 
             return url;
