@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Http.Modeling;
@@ -82,7 +82,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
 
             foreach (var pathParameter in pathParameters)
             {
-                url = url.Replace($"{{{pathParameter.Name}}}", $"' + {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(pathParameter)} + '");
+                url = url.Replace($"{{{pathParameter.Name}}}", $"' + {pathParameter.Name} + '");
             }
 
             return url;
