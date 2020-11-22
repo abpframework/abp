@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.BlazoriseUI
 {
-    public class BlazoriseUIBundleContributer : IBundleContributer
+    public class BlazoriseUIBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {
