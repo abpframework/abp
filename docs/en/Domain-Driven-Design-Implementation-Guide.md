@@ -58,7 +58,9 @@ In the Clean Architecture, each layer only **depends on the layer directly insid
 
 ### Core Building Blocks
 
-DDD mostly focuses on the Domain & Application Layers and ignores the Presentation and Infrastructure. They are seen as *details* and the business layers should not depend on them.
+DDD mostly **focuses on the Domain & Application Layers** and ignores the Presentation and Infrastructure. They are seen as *details* and the business layers should not depend on them.
+
+That doesn't mean the Presentation and Infrastructure layers are not important. They are very important. UI frameworks and database providers have their own rules and best practices that you need to know and apply. However these are not in the topics of DDD.
 
 This section introduces the essential building blocks of the Domain & Application Layers.
 
