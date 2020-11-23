@@ -139,6 +139,10 @@ ABP's startup solution has two projects for the Entity Framework Core integratio
 
 There is one more project, `IssueTracking.DbMigrator`, that is a simple Console Application that **migrates** the database schema and **[seeds](Data-Seeding.md) the initial** data when you execute it. It is a useful **utility application** that you can use it in development as well as in production environment.
 
+### Dependencies of the Projects in the Solution
+
+TODO
+
 ### Execution Flow a DDD Based Application
 
 TODO
