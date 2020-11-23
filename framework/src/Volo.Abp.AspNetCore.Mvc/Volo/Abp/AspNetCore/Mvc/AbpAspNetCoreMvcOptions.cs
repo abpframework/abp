@@ -1,4 +1,6 @@
-﻿using Volo.Abp.AspNetCore.Mvc.Conventions;
+﻿using System;
+using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.Conventions;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -8,9 +10,12 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public AbpConventionalControllerOptions ConventionalControllers { get; }
 
+        public HashSet<Type> IgnoredControllersOnModelExclusion { get; }
+
         public AbpAspNetCoreMvcOptions()
         {
             ConventionalControllers = new AbpConventionalControllerOptions();
+            IgnoredControllersOnModelExclusion = new HashSet<Type>();
         }
     }
 }
