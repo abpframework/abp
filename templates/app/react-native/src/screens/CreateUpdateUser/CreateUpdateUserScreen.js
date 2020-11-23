@@ -27,7 +27,7 @@ function CreateUpdateUserScreen({ navigation, route, startLoading, stopLoading }
     startLoading({ key: 'saveUser' });
     let request;
     if (data.id) {
-      request = updateUser(user, userId)
+      request = updateUser(data, userId)
     } else {
       request = createUser(data);
     }
