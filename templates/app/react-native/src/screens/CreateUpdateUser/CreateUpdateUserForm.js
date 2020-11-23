@@ -138,7 +138,7 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
                   <Input
                     abpInput
                     ref={emailRef}
-                    onSubmitEditing={() => passwordRef.current._root.focus()}
+                    onSubmitEditing={() => phoneNumberRef.current._root.focus()}
                     returnKeyType="next"
                     onChangeText={handleChange('email')}
                     onBlur={handleBlur('email')}
@@ -151,7 +151,8 @@ function CreateUpdateUserForm({ editingUser = {}, submit, remove }) {
                   <Label abpLabel>{i18n.t('AbpIdentity::PhoneNumber')}</Label>
                   <Input
                     abpInput
-                    ref={passwordRef}
+                    ref={phoneNumberRef}
+                    onSubmitEditing={() => passwordRef.current._root.focus()}
                     returnKeyType={!editingUser.id ? 'next' : 'default'}
                     onChangeText={handleChange('phoneNumber')}
                     onBlur={handleBlur('phoneNumber')}
