@@ -23,7 +23,7 @@ function CreateUpdateUserScreen({ navigation, route, startLoading, stopLoading }
     }
   }, []);
 
-  const submit = (data) => {
+  const submit = data => {
     startLoading({ key: 'saveUser' });
     let request;
     if (data.id) {
@@ -61,7 +61,7 @@ CreateUpdateUserScreen.propTypes = {
 
 export default connectToRedux({
   component: CreateUpdateUserScreen,
-  stateProps: (state) => ({ loading: createLoadingSelector()(state) }),
+  stateProps: state => ({ loading: createLoadingSelector()(state) }),
   dispatchProps: {
     startLoading: LoadingActions.start,
     stopLoading: LoadingActions.stop,
