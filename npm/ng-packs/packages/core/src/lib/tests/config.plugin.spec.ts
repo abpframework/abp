@@ -6,6 +6,7 @@ const options: ABP.Root = {
   environment: {
     production: false,
   },
+  registerLocaleFn: () => Promise.resolve(),
 };
 
 const event = new InitState();

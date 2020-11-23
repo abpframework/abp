@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -8,5 +9,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         //TODO: Rename to GetResult? (CheckAsync throws exception by naming convention)
         Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
+
+        Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context);
     }
 }

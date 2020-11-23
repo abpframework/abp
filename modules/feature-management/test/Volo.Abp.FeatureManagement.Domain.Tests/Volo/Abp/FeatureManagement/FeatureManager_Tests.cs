@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Features;
@@ -111,5 +112,47 @@ namespace Volo.Abp.FeatureManagement
                 (await _featureChecker.IsEnabledAsync(TestFeatureDefinitionProvider.SocialLogins)).ShouldBeTrue();
             }
         }
+
+
+        [Fact]
+        public async Task Should_Get_FeatureValues_With_Provider_For_A_Provider()
+        {
+            var featureNameValueWithGrantedProviders = await _featureManager.GetAllWithProviderAsync(
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Enterprise.ToString()
+            );
+
+            featureNameValueWithGrantedProviders.ShouldContain(x =>
+                x.Name == TestFeatureDefinitionProvider.SocialLogins
+                && x.Value == true.ToString().ToLowerInvariant() &&
+                x.Provider.Name == EditionFeatureValueProvider.ProviderName);
+
+            featureNameValueWithGrantedProviders.ShouldContain(x =>
+                x.Name == TestFeatureDefinitionProvider.EmailSupport &&
+                x.Value == true.ToString().ToLowerInvariant() &&
+                x.Provider.Name == EditionFeatureValueProvider.ProviderName);
+
+            //Default Value
+            featureNameValueWithGrantedProviders.ShouldContain(x =>
+                x.Name == TestFeatureDefinitionProvider.DailyAnalysis &&
+                x.Value == false.ToString().ToLowerInvariant() &&
+                x.Provider.Name == DefaultValueFeatureValueProvider.ProviderName);
+
+            featureNameValueWithGrantedProviders.ShouldContain(x =>
+                x.Name == TestFeatureDefinitionProvider.UserCount &&
+                x.Value == "20" &&
+                x.Provider.Name == EditionFeatureValueProvider.ProviderName);
+
+            featureNameValueWithGrantedProviders.ShouldContain(x =>
+                x.Name == TestFeatureDefinitionProvider.ProjectCount &&
+                x.Value == "3" &&
+                x.Provider.Name == EditionFeatureValueProvider.ProviderName);
+
+            featureNameValueWithGrantedProviders.ShouldContain(x =>
+                x.Name == TestFeatureDefinitionProvider.BackupCount &&
+                x.Value == "5" &&
+                x.Provider.Name == EditionFeatureValueProvider.ProviderName);
+        }
+
     }
 }

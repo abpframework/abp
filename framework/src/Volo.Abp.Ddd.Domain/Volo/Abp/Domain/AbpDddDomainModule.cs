@@ -6,6 +6,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Specifications;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
@@ -22,7 +23,8 @@ namespace Volo.Abp.Domain
         typeof(AbpTimingModule),
         typeof(AbpUnitOfWorkModule),
         typeof(AbpObjectMappingModule),
-        typeof(AbpExceptionHandlingModule)
+        typeof(AbpExceptionHandlingModule),
+        typeof(AbpSpecificationsModule)
         )]
     public class AbpDddDomainModule : AbpModule
     {

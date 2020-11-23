@@ -1,0 +1,23 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "Menu:TenantManagement": "Mandantenverwaltung",
+    "Tenants": "Mandanten",
+    "NewTenant": "Neuer Mandant",
+    "TenantName": "Mandantenname",
+    "DisplayName:TenantName": "Mandantenname",
+    "TenantDeletionConfirmationMessage": "Der Mandant '{0}' wird gelöscht. Bestätigen Sie das?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Standard-Connection String",
+    "DisplayName:UseSharedDatabase": "Verwenden Sie die freigegebene Datenbank",
+    "ManageHostFeatures": "Host-Features verwalten",
+    "Permission:TenantManagement": "Mandantenverwaltung",
+    "Permission:Create": "Erstellen",
+    "Permission:Edit": "Bearbeiten",
+    "Permission:Delete": "Löschen",
+    "Permission:ManageConnectionStrings": "Connection Strings verwalten",
+    "Permission:ManageFeatures": "Features verwalten",
+    "DisplayName:AdminEmailAddress": "Admin-E-Mail-Adresse",
+    "DisplayName:AdminPassword": "Admin-Passwort"
+  }
+}

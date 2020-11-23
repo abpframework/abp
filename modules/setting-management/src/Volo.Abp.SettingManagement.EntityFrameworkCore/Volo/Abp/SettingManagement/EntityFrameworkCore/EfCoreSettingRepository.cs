@@ -30,5 +30,13 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
                     s => s.ProviderName == providerName && s.ProviderKey == providerKey
                 ).ToListAsync();
         }
+
+        public virtual async Task<List<Setting>> GetListAsync(string[] names, string providerName, string providerKey)
+        {
+            return await DbSet
+                .Where(
+                    s => names.Contains(s.Name) && s.ProviderName == providerName && s.ProviderKey == providerKey
+                ).ToListAsync();
+        }
     }
 }

@@ -5,23 +5,23 @@
 @inject IJSRuntime JsRuntime
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
-    <Dropdown>
-        <DropdownToggle Color="Color.None">
+    <BarDropdown>
+        <BarDropdownToggle>
             @_currentLanguage.DisplayName
-        </DropdownToggle>
-        <DropdownMenu>
+        </BarDropdownToggle>
+        <BarDropdownMenu RightAligned="true">
             @foreach (var language in _otherLanguages)
             {
-                <DropdownItem Clicked="() => ChangeLanguageAsync(language)">@language.DisplayName</DropdownItem>
+                <BarDropdownItem Clicked="() => ChangeLanguageAsync(language)">@language.DisplayName</BarDropdownItem>
             }
-        </DropdownMenu>
-    </Dropdown>
+        </BarDropdownMenu>
+    </BarDropdown>
 }
 @code {
     private IReadOnlyList<LanguageInfo> _otherLanguages;
     private LanguageInfo _currentLanguage;
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         var selectedLanguageName = await JsRuntime.InvokeAsync<string>(
             "localStorage.getItem",

@@ -43,7 +43,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             IdentityServerEvents = identityServerEvents;
         }
 
-        public override async Task<IActionResult> OnGetAsync()
+        public async override Task<IActionResult> OnGetAsync()
         {
             LoginInput = new LoginInputModel();
 
@@ -98,7 +98,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return Page();
         }
 
-        public override async Task<IActionResult> OnPostAsync(string action)
+        public async override Task<IActionResult> OnPostAsync(string action)
         {
             if (action == "Cancel")
             {
@@ -173,7 +173,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }
 
-        public override async Task<IActionResult> OnPostExternalLogin(string provider)
+        public async override Task<IActionResult> OnPostExternalLogin(string provider)
         {
             if (AccountOptions.WindowsAuthenticationSchemeName == provider)
             {

@@ -9,4 +9,5 @@ export const enum ePropType {
   String = 'string',
   Text = 'text',
   Time = 'time',
+  MultiSelect = 'multiselect',
 }

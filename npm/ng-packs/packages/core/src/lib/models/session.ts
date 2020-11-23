@@ -1,9 +1,9 @@
-import { ABP } from '../models';
+import { ApplicationConfiguration } from './application-configuration';
 
 export namespace Session {
   export interface State {
     language: string;
-    tenant: ABP.BasicItem;
+    tenant: ApplicationConfiguration.CurrentTenant;
     sessionDetail: SessionDetail;
   }
 

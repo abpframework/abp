@@ -37,6 +37,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .Where(x => x.Name == name)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 

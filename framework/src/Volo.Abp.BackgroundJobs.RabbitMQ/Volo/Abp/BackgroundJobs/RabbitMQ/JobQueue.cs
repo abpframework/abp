@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Volo.Abp.ExceptionHandling;
@@ -23,7 +22,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected JobQueueConfiguration QueueConfiguration { get; }
         protected IChannelAccessor ChannelAccessor { get; private set; }
         protected EventingBasicConsumer Consumer { get; private set; }
-        
+
         public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
         protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
@@ -95,7 +94,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return;
             }
 
-            using (await SyncObj.LockAsync())
+            using (await SyncObj.LockAsync(cancellationToken))
             {
                 await EnsureInitializedAsync();
             }
@@ -151,7 +150,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         }
 
         protected virtual Task PublishAsync(
-            TArgs args, 
+            TArgs args,
             BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {

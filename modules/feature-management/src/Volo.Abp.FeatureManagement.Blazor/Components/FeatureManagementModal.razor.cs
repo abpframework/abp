@@ -6,8 +6,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
-using Volo.Abp.FeatureManagement.Localization;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Validation.StringValues;
@@ -19,8 +18,6 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         [Inject] protected IFeatureAppService FeatureAppService { get; set; }
         
         [Inject] protected IUiMessageService UiMessageService { get; set; }
-        
-        [Inject] protected IStringLocalizer<AbpFeatureManagementResource> L { get; set; }
         
         [Inject] protected IStringLocalizerFactory HtmlLocalizerFactory { get; set; }
         
@@ -111,7 +108,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             }
             else
             {
-                await UiMessageService.WarnAsync(L["Volo.Abp.FeatureManagement:InvalidFeatureValue", feature.DisplayName]);
+                await UiMessageService.Warn(L["Volo.Abp.FeatureManagement:InvalidFeatureValue", feature.DisplayName]);
             }
         }
 

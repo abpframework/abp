@@ -18,6 +18,11 @@ namespace Volo.Abp.Cli.ProjectModification
             File.WriteAllText(solutionFile, RemoveProject(lines.ToList(), projectName).JoinAsString(Environment.NewLine));
         }
 
+        public async Task AddModuleToSolutionFileAsync(ModuleWithMastersInfo module, string solutionFile)
+        {
+            await AddModuleAsync(module, solutionFile);
+        }
+
         private List<string> RemoveProject(List<string> solutionFileLines, string projectName)
         {
             var projectKey = FindProjectKey(solutionFileLines, projectName);
@@ -65,12 +70,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return null;
         }
 
-        public async Task AddModuleToSolutionFileAsync(ModuleWithMastersInfo module, string solutionFile)
-        {
-            await AddModule(module, solutionFile);
-        }
-
-        private async Task AddModule(ModuleWithMastersInfo module, string solutionFile)
+        private async Task AddModuleAsync(ModuleWithMastersInfo module, string solutionFile)
         {
             var srcModuleFolderId = await AddNewFolderAndGetIdOrGetExistingId(solutionFile, module.Name, await AddNewFolderAndGetIdOrGetExistingId(solutionFile, "modules"));
             var testModuleFolderId = await AddNewFolderAndGetIdOrGetExistingId(solutionFile, module.Name + ".Tests", await AddNewFolderAndGetIdOrGetExistingId(solutionFile, "test"));
@@ -128,7 +128,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 foreach (var masterModule in module.MasterModuleInfos)
                 {
-                    await AddModule(masterModule, solutionFile);
+                    await AddModuleAsync(masterModule, solutionFile);
                 }
             }
         }

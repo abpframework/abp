@@ -57,6 +57,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .Where(x => x.Name == name)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 

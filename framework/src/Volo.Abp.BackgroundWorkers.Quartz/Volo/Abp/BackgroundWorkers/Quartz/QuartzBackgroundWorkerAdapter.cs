@@ -57,7 +57,7 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
                 .Build();
         }
 
-        public override async Task Execute(IJobExecutionContext context)
+        public async override Task Execute(IJobExecutionContext context)
         {
             var worker = (IBackgroundWorker) ServiceProvider.GetService(typeof(TWorker));
             var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Volo.Abp.DependencyInjection;
@@ -10,24 +13,38 @@ namespace Volo.Abp.Cli.ProjectModification
 {
     public class AngularModuleSourceCodeAdder : ITransientDependency
     {
+        public ILogger<SolutionModuleAdder> Logger { get; set; }
+
+        public AngularModuleSourceCodeAdder()
+        {
+            Logger = NullLogger<SolutionModuleAdder>.Instance;
+        }
+
         public async Task AddAsync(string solutionFilePath, string angularPath)
         {
-            var angularProjectsPath = Path.Combine(angularPath, "projects");
-
-            var projects = await CopyAndGetNamesOfAngularProjectsAsync(solutionFilePath, angularProjectsPath);
-
-            if (!projects.Any())
+            try
             {
-                return;
+                var angularProjectsPath = Path.Combine(angularPath, "projects");
+
+                var projects = await CopyAndGetNamesOfAngularProjectsAsync(solutionFilePath, angularProjectsPath);
+
+                if (!projects.Any())
+                {
+                    return;
+                }
+
+                await ReplaceProjectNamesAndCopySourCodeRequirementsToProjectsAsync(angularProjectsPath, projects);
+
+                await RemoveRedundantFilesAsync(angularProjectsPath, projects);
+
+                await AddPathsToTsConfigAsync(angularPath, angularProjectsPath, projects);
+
+                await AddProjectToAngularJsonAsync(angularPath, projects);
             }
-
-            await ReplaceProjectNamesAndCopySourCodeRequirementsToProjectsAsync(angularProjectsPath, projects);
-
-            await RemoveRedundantFilesAsync(angularProjectsPath, projects);
-
-            await AddPathsToTsConfigAsync(angularPath, angularProjectsPath, projects);
-
-            await AddProjectToAngularJsonAsync(angularPath, projects);
+            catch (Exception e)
+            {
+                Logger.LogError( "Unable to add angular source code: " + e.Message);
+            }
         }
 
         private async Task AddProjectToAngularJsonAsync(string angularPath, List<string> projects)

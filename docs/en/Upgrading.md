@@ -16,6 +16,17 @@ Run this command in the terminal while you are in the root folder of your soluti
 
 > If your solution has the Angular UI, you probably have `aspnet-core` and `angular` folders in the solution. Run this command in the parent folder of these two folders.
 
+### Database Migrations
+
+> Warning: Be careful if you are migrating your database since you may have data loss in some cases. Carefully check the generated migration code before executing it. It is suggested to take a backup of your current database.
+
+When you upgrade to a new version, it is good to check if there is a database schema change and upgrade your database schema if your database provider is **Entity Framework Core**;
+
+* Use `Add-Migration "Upgraded_To_Abp_4_1"` or a similar command in the Package Manager Console (PMC) to create a new migration (Set the `EntityFrameworkCore.DbMigrations` as the Default project in the PMC and `.DbMigrator` as the Startup Project in the Solution Explorer, in the Visual Studio).
+* Run the `.DbMigrator` application to upgrade the database and seed the initial data.
+
+If `Add-Migration` generates an empty migration, you can use `Remove-Migration` to delete it before executing the `.DbMigrator`.
+
 ## The Blog Posts
 
 Sometimes we introduce new features/changes that requires to make changes in the startup template. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your solution.

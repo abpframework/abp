@@ -75,7 +75,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
         }
 
-        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
             {
@@ -252,10 +252,22 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     await response.Content.ReadAsStringAsync()
                 );
 
-                throw new AbpRemoteCallException(errorResponse.Error);
+                throw new AbpRemoteCallException(errorResponse.Error)
+                {
+                    HttpStatusCode = (int) response.StatusCode
+                };
             }
 
-            throw new AbpException($"Remote service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");
+            throw new AbpRemoteCallException(
+                new RemoteServiceErrorInfo
+                {
+                    Message = response.ReasonPhrase,
+                    Code = response.StatusCode.ToString()
+                }
+            )
+            {
+                HttpStatusCode = (int) response.StatusCode
+            };
         }
 
         protected virtual CancellationToken GetCancellationToken()

@@ -34,7 +34,7 @@ namespace MyCompanyName.MyProjectName
             _application = _host.Services.GetService<IAbpApplicationWithExternalServiceProvider>();
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected async override void OnStartup(StartupEventArgs e)
         {
             Log.Logger = new LoggerConfiguration()
 #if DEBUG
@@ -66,7 +66,7 @@ namespace MyCompanyName.MyProjectName
             }
         }
 
-        protected override async void OnExit(ExitEventArgs e)
+        protected async override void OnExit(ExitEventArgs e)
         {
             _application.Shutdown();
             await _host.StopAsync();

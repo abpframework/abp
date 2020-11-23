@@ -2,6 +2,7 @@
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Ratings;
@@ -18,6 +19,7 @@ namespace Volo.CmsKit
         private readonly ICommentRepository _commentRepository;
         private readonly ReactionManager _reactionManager;
         private readonly IRatingRepository _ratingRepository;
+        private readonly ICurrentTenant _currentTenant;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -25,7 +27,8 @@ namespace Volo.CmsKit
             CmsKitTestData cmsKitTestData,
             ICommentRepository commentRepository,
             ReactionManager reactionManager,
-            IRatingRepository ratingRepository)
+            IRatingRepository ratingRepository,
+            ICurrentTenant currentTenant)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -33,17 +36,21 @@ namespace Volo.CmsKit
             _commentRepository = commentRepository;
             _reactionManager = reactionManager;
             _ratingRepository = ratingRepository;
+            _currentTenant = currentTenant;
         }
 
         public async Task SeedAsync(DataSeedContext context)
         {
-            await SeedUsersAsync();
+            using (_currentTenant.Change(context?.TenantId))
+            {
+                await SeedUsersAsync();
 
-            await SeedCommentsAsync();
+                await SeedCommentsAsync();
 
-            await SeedReactionsAsync();
+                await SeedReactionsAsync();
 
-            await SeedRatingsAsync();
+                await SeedRatingsAsync();
+            }
         }
 
         private async Task SeedUsersAsync()
@@ -148,21 +155,21 @@ namespace Volo.CmsKit
                     4,
                     _cmsKitTestData.User1Id
                 ));
-            
+
             await _ratingRepository.InsertAsync(new Rating(_guidGenerator.Create(),
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
                 5,
                 _cmsKitTestData.User1Id
             ));
-            
+
             await _ratingRepository.InsertAsync(new Rating(_guidGenerator.Create(),
                 _cmsKitTestData.EntityType2,
                 _cmsKitTestData.EntityId2,
                 5,
                 _cmsKitTestData.User2Id
             ));
-            
+
             await _ratingRepository.InsertAsync(new Rating(_guidGenerator.Create(),
                 _cmsKitTestData.EntityType2,
                 _cmsKitTestData.EntityId2,

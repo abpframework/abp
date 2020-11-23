@@ -160,7 +160,7 @@ public interface IBookRepository : IRepository<Book, Guid>
 实现`IBookRepository`接口的例子:
 
 ```csharp
-public class BookRepository : 
+public class BookRepository :
     MongoDbRepository<BookStoreMongoDbContext, Book, Guid>,
     IBookRepository
 {
@@ -200,9 +200,9 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 当你想**重写基础仓储方法**时,这一点尤为重要.例如,你想要重写`DeleteAsync`方法,以便更有效的删除实体:
 
 ```csharp
-public override async Task DeleteAsync(
-    Guid id, 
-    bool autoSave = false, 
+public async override Task DeleteAsync(
+    Guid id,
+    bool autoSave = false,
     CancellationToken cancellationToken = default)
 {
     //TODO: 自定义实现删除方法

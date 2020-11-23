@@ -54,7 +54,7 @@ namespace Volo.Abp.IdentityServer.Clients
             return await DbSet.AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
         }
 
-        public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
+        public async override Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             foreach (var clientGrantType in DbContext.Set<ClientGrantType>().Where(x => x.ClientId == id))
             {

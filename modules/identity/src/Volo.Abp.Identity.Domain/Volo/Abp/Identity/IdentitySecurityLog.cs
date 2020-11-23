@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -35,12 +34,12 @@ namespace Volo.Abp.Identity
 
         protected IdentitySecurityLog()
         {
-            ExtraProperties = new Dictionary<string, object>();
+
         }
 
         public IdentitySecurityLog(IGuidGenerator guidGenerator, SecurityLogInfo securityLogInfo)
+            : base(guidGenerator.Create())
         {
-            Id = guidGenerator.Create();
             TenantId = securityLogInfo.TenantId;
             TenantName = securityLogInfo.TenantName.Truncate(IdentitySecurityLogConsts.MaxTenantNameLength);
 
@@ -57,8 +56,6 @@ namespace Volo.Abp.Identity
             ClientId = securityLogInfo.ClientId.Truncate(IdentitySecurityLogConsts.MaxClientIdLength);
             CorrelationId = securityLogInfo.CorrelationId.Truncate(IdentitySecurityLogConsts.MaxCorrelationIdLength);
             BrowserInfo = securityLogInfo.BrowserInfo.Truncate(IdentitySecurityLogConsts.MaxBrowserInfoLength);
-
-            ExtraProperties = securityLogInfo.ExtraProperties;
         }
     }
 }

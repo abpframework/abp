@@ -33,7 +33,7 @@ namespace Volo.Abp.Identity.AspNetCore
             AbpOptions = options.Value;
         }
 
-        public override async Task<SignInResult> PasswordSignInAsync(
+        public async override Task<SignInResult> PasswordSignInAsync(
             string userName,
             string password,
             bool isPersistent,

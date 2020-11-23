@@ -22,7 +22,10 @@ namespace Volo.Abp.IdentityServer.MongoDB
 
         public async Task<ApiScope> GetByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.Name == scopeName, GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable()
+                .Where(x => x.Name == scopeName)
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
@@ -30,6 +33,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             var query = from scope in GetMongoQueryable()
                 where scopeNames.Contains(scope.Name)
+                orderby scope.Id
                 select scope;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));

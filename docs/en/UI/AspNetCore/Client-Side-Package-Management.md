@@ -76,7 +76,8 @@ module.exports = {
         "@libs": "./wwwroot/libs"
     },
     clean: [
-        "@libs"
+        "@libs",
+        "!@libs/**/foo.txt"
     ],
     mappings: {
         
@@ -85,7 +86,7 @@ module.exports = {
 ````
 
 * **aliases** section defines standard aliases (placeholders) that can be used in the mapping paths. **@node_modules** and **@libs** are required (by the standard packages), you can define your own aliases to reduce duplication.
-* **clean** section is a list of folders to clean before copying the files.
+* **clean** section is a list of folders to clean before copying the files. Glob matching and negation is enabled, so you can fine-tune what to delete and keep. The example above will clean everything inside `./wwwroot/libs`, but keep any `foo.txt` files.
 * **mappings** section is a list of mappings of files/folders to copy. This example does not copy any resource itself, but depends on a standard package.
 
 An example mapping configuration is shown below:

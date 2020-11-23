@@ -23,6 +23,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .Where(ar => ar.Name == apiResourceName)
+                .OrderBy(ar => ar.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 

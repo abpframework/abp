@@ -1,7 +1,11 @@
-import { ApplicationConfiguration, ConfigState, AuthService } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import {
+  ApplicationConfiguration,
+  AuthService,
+  ConfigStateService,
+  EnvironmentService,
+} from '@abp/ng.core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,7 +13,7 @@ import { Observable } from 'rxjs';
   // tslint:disable-next-line: component-max-inline-declarations
   template: `
     <ng-template #loginBtn>
-      <a role="button" class="nav-link" routerLink="/account/login">{{
+      <a role="button" class="nav-link pointer" (click)="initLogin()">{{
         'AbpAccount::Login' | abpLocalization
       }}</a>
     </ng-template>
@@ -37,7 +41,7 @@ import { Observable } from 'rxjs';
         aria-labelledby="dropdownMenuLink"
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
-        <a class="dropdown-item" routerLink="/account/manage-profile"
+        <a class="dropdown-item" [href]="manageProfileUrl"
           ><i class="fa fa-cog mr-1"></i>{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
@@ -47,17 +51,31 @@ import { Observable } from 'rxjs';
     </div>
   `,
 })
-export class CurrentUserComponent implements OnInit {
-  @Select(ConfigState.getOne('currentUser'))
-  currentUser$: Observable<ApplicationConfiguration.CurrentUser>;
+export class CurrentUserComponent {
+  currentUser$: Observable<ApplicationConfiguration.CurrentUser> = this.configState.getOne$(
+    'currentUser',
+  );
 
   get smallScreen(): boolean {
     return window.innerWidth < 992;
   }
 
-  constructor(private authService: AuthService, private router: Router) {}
+  get manageProfileUrl() {
+    return `${this.environment.getEnvironment().oAuthConfig.issuer}/Account/Manage?returnUrl=${
+      window.location.href
+    }`;
+  }
 
-  ngOnInit() {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private configState: ConfigStateService,
+    private environment: EnvironmentService,
+  ) {}
+
+  initLogin() {
+    this.authService.initLogin();
+  }
 
   logout() {
     this.authService.logout().subscribe(() => {
