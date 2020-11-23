@@ -2,9 +2,11 @@
 
 ## Introduction
 
+This is a **practical guide** for implementing the Domain Driven Design (DDD). While the implementation details relies on the ABP Framework infrastructure, core concepts, principles and patterns are applicable in any kind of solution, even if it is not a .NET solution.
+
 ### Goals
 
-This is an **integrative guide** for implementing the Domain Driven Design (DDD). The goals of this document are;
+The goals of this document are;
 
 * **Introduce and explain** the DDD architecture, concepts, principles, patterns and building blocks.
 * Explain the **layered architecture** & solution structure offered by the ABP Framework.
@@ -69,7 +71,7 @@ This section introduces the essential building blocks of the Domain & Applicatio
 * **Entity**: An [Entity](Entities.md) is an object with its own properties (state, data) and methods that implements the business logic that is executed on these properties. An entity is represented by its unique identifier (Id). Two entity object with different Ids are considered as different entities.
 * **Value Object**: A [Value Object](Value-Objects.md) is another kind of domain object that is identified by its properties rather than a unique Id. That means two Value Objects with same properties are considered as the same object. Value objects are generally implemented as immutable and mostly are much simpler than the Entities.
 * **Aggregate & Aggregate Root**: An [Aggregate](Entities.md) is a cluster of objects (entities and value objects) bound together by an **Aggregate Root** object. The Aggregate Root is a specific type of an entity with some additional responsibilities.
-* **Repository**: A [Repository](Repositories.md) is a collection-like interface that is used by the Domain and Application Layers to access to the data persistence system (the database). It hides the complexity of the DBMS from the business code.
+* **Repository** (interface): A [Repository](Repositories.md) is a collection-like interface that is used by the Domain and Application Layers to access to the data persistence system (the database). It hides the complexity of the DBMS from the business code. Domain Layer contains the `interface`s of the repositories.
 * **Domain Service**: A [Domain Service](Domain-Services.md) is a stateless service that implements core business rules of the domain. It is useful to implement domain logic that depends on multiple aggregate (entity) type or some external services.
 * **Specification**: A [Specification](Specifications.md) is used to define named, reusable and combinable filters for entities and other business objects.
 * **Domain Event**: A [Domain Event](Event-Bus.md) is a way of informing other services in a loosely coupled manner, when a domain specific event occurs.
@@ -83,6 +85,34 @@ This section introduces the essential building blocks of the Domain & Applicatio
 ## Implementation: The Big Picture
 
 ### Layering of a .NET Solution
+
+The picture below shows a Visual Studio Solution created using the ABP's [application startup template](Startup-Templates/Application.md):
+
+![domain-driven-design-vs-solution](images/domain-driven-design-vs-solution.png)
+
+The solution name is `IssueTracking` and it consists of multiple projects. The solution is layered by considering **DDD principles** as well as **development** and **deployment** practicals. The sub sections below explains the projects in the solution;
+
+#### The Domain Layer
+
+The Domain Layer is splitted into two projects;
+
+* `IssueTracking.Domain` is the **essential domain layer** that contains all the **building blocks** (entities, value objects, domain services, specifications, repository interfaces, etc.) introduced before.
+* `IssueTracking.Domain.Shared` is a thin project that contains some types those belong to the Domain Layer, but shared with all other layers. For example, it may contain some constants and `enum`s related to the Domain Objects but need to be **reused by other layers**.
+
+#### The Application Layer
+
+The Application Layer is also splitted into two projects;
+
+* `IssueTracking.Application.Contracts` contains the application service **interfaces** and the **DTO**s used by these interfaces. This project can be shared by the client applications (including the UI).
+* `IssueTracking.Application` is the **essential application layer** that **implements** the interfaces defined in the Contracts project.
+
+#### The Presentation Layer
+
+`IssueTracking.Web` is an ASP.NET Core MVC / Razor Pages application for this example.
+
+> ABP Framework also supports different kind of UI frameworks including [Angular](UI/Angular/Quick-Start.md) and [Blazor](UI/Blazor/Overall.md). In these cases, the `IssueTracking.Web` doesn't exist in the solution. Instead, an `IssueTracking.HttpApi.Host` application will be in the solution to serve the HTTP APIs as a standalone endpoint to be consumed by the UI applications via HTTP API calls.
+
+#### The Infrastructure Layer
 
 TODO
 
