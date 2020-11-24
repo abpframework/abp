@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
     public static class ModuleExtensionConfigurationHelper
     {
+        private static object SyncLock = new object();
+
         public static void ApplyEntityConfigurationToEntity(
             string moduleName,
             string entityName,
             Type entityType)
         {
-            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, entityName))
+            lock (SyncLock)
             {
-                if (propertyConfig.Entity.IsAvailable &&
-                    entityType != null)
+                foreach (var propertyConfig in GetPropertyConfigurations(moduleName, entityName))
                 {
-                    ApplyPropertyConfigurationToTypes(propertyConfig, new[] { entityType });
+                    if (propertyConfig.Entity.IsAvailable &&
+                        entityType != null)
+                    {
+                        ApplyPropertyConfigurationToTypes(propertyConfig, new[] { entityType });
+                    }
                 }
             }
         }
@@ -29,29 +33,32 @@ namespace Volo.Abp.ObjectExtending.Modularity
             Type[] createApiTypes = null,
             Type[] updateApiTypes = null)
         {
-            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
+            lock (SyncLock)
             {
-                if (!propertyConfig.IsAvailableToClients)
+                foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
                 {
-                    continue;
-                }
+                    if (!propertyConfig.IsAvailableToClients)
+                    {
+                        continue;
+                    }
 
-                if (propertyConfig.Api.OnGet.IsAvailable &&
-                    getApiTypes != null)
-                {
-                    ApplyPropertyConfigurationToTypes(propertyConfig, getApiTypes);
-                }
+                    if (propertyConfig.Api.OnGet.IsAvailable &&
+                        getApiTypes != null)
+                    {
+                        ApplyPropertyConfigurationToTypes(propertyConfig, getApiTypes);
+                    }
 
-                if (propertyConfig.Api.OnCreate.IsAvailable &&
-                    createApiTypes != null)
-                {
-                    ApplyPropertyConfigurationToTypes(propertyConfig, createApiTypes);
-                }
+                    if (propertyConfig.Api.OnCreate.IsAvailable &&
+                        createApiTypes != null)
+                    {
+                        ApplyPropertyConfigurationToTypes(propertyConfig, createApiTypes);
+                    }
 
-                if (propertyConfig.Api.OnUpdate.IsAvailable &&
-                    updateApiTypes != null)
-                {
-                    ApplyPropertyConfigurationToTypes(propertyConfig, updateApiTypes);
+                    if (propertyConfig.Api.OnUpdate.IsAvailable &&
+                        updateApiTypes != null)
+                    {
+                        ApplyPropertyConfigurationToTypes(propertyConfig, updateApiTypes);
+                    }
                 }
             }
         }
@@ -62,23 +69,26 @@ namespace Volo.Abp.ObjectExtending.Modularity
             Type[] createFormTypes = null,
             Type[] editFormTypes = null)
         {
-            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, entityName))
+            lock (SyncLock)
             {
-                if (!propertyConfig.IsAvailableToClients)
+                foreach (var propertyConfig in GetPropertyConfigurations(moduleName, entityName))
                 {
-                    continue;
-                }
+                    if (!propertyConfig.IsAvailableToClients)
+                    {
+                        continue;
+                    }
 
-                if (propertyConfig.UI.OnCreateForm.IsVisible &&
-                    createFormTypes != null)
-                {
-                    ApplyPropertyConfigurationToTypes(propertyConfig, createFormTypes);
-                }
+                    if (propertyConfig.UI.OnCreateForm.IsVisible &&
+                        createFormTypes != null)
+                    {
+                        ApplyPropertyConfigurationToTypes(propertyConfig, createFormTypes);
+                    }
 
-                if (propertyConfig.UI.OnEditForm.IsVisible &&
-                    editFormTypes != null)
-                {
-                    ApplyPropertyConfigurationToTypes(propertyConfig, editFormTypes);
+                    if (propertyConfig.UI.OnEditForm.IsVisible &&
+                        editFormTypes != null)
+                    {
+                        ApplyPropertyConfigurationToTypes(propertyConfig, editFormTypes);
+                    }
                 }
             }
         }
@@ -93,29 +103,32 @@ namespace Volo.Abp.ObjectExtending.Modularity
             Type[] createApiTypes = null,
             Type[] updateApiTypes = null)
         {
-            if (entityType != null)
+            lock (SyncLock)
             {
-                ApplyEntityConfigurationToEntity(
+                if (entityType != null)
+                {
+                    ApplyEntityConfigurationToEntity(
+                        moduleName,
+                        entityName,
+                        entityType
+                    );
+                }
+
+                ApplyEntityConfigurationToApi(
                     moduleName,
                     entityName,
-                    entityType
+                    getApiTypes: getApiTypes,
+                    createApiTypes: createApiTypes,
+                    updateApiTypes: updateApiTypes
+                );
+
+                ApplyEntityConfigurationToUi(
+                    moduleName,
+                    entityName,
+                    createFormTypes: createFormTypes,
+                    editFormTypes: editFormTypes
                 );
             }
-
-            ApplyEntityConfigurationToApi(
-                moduleName,
-                entityName,
-                getApiTypes: getApiTypes,
-                createApiTypes: createApiTypes,
-                updateApiTypes: updateApiTypes
-            );
-
-            ApplyEntityConfigurationToUi(
-                moduleName,
-                entityName,
-                createFormTypes: createFormTypes,
-                editFormTypes: editFormTypes
-            );
         }
 
         [NotNull]
@@ -123,41 +136,47 @@ namespace Volo.Abp.ObjectExtending.Modularity
             string moduleName,
             string entityName)
         {
-            var moduleConfig = ObjectExtensionManager.Instance.Modules().GetOrDefault(moduleName);
-            if (moduleConfig == null)
+            lock (SyncLock)
             {
-                return Array.Empty<ExtensionPropertyConfiguration>();
-            }
+                var moduleConfig = ObjectExtensionManager.Instance.Modules().GetOrDefault(moduleName);
+                if (moduleConfig == null)
+                {
+                    return Array.Empty<ExtensionPropertyConfiguration>();
+                }
 
-            var objectConfig = moduleConfig.Entities.GetOrDefault(entityName);
-            if (objectConfig == null)
-            {
-                return Array.Empty<ExtensionPropertyConfiguration>();
-            }
+                var objectConfig = moduleConfig.Entities.GetOrDefault(entityName);
+                if (objectConfig == null)
+                {
+                    return Array.Empty<ExtensionPropertyConfiguration>();
+                }
 
-            return objectConfig.GetProperties();
+                return objectConfig.GetProperties();
+            }
         }
 
         public static void ApplyPropertyConfigurationToTypes(
             ExtensionPropertyConfiguration propertyConfig,
             Type[] types)
         {
-            ObjectExtensionManager.Instance
-                .AddOrUpdateProperty(
-                    types,
-                    propertyConfig.Type,
-                    propertyConfig.Name,
-                    property =>
-                    {
-                        property.Attributes.Clear();
-                        property.Attributes.AddRange(propertyConfig.Attributes);
-                        property.DisplayName = propertyConfig.DisplayName;
-                        property.Validators.AddRange(propertyConfig.Validators);
-                        property.DefaultValue = propertyConfig.DefaultValue;
-                        property.DefaultValueFactory = propertyConfig.DefaultValueFactory;
-                        property.Lookup = propertyConfig.UI.Lookup;
-                    }
-                );
+            lock (SyncLock)
+            {
+                ObjectExtensionManager.Instance
+                    .AddOrUpdateProperty(
+                        types,
+                        propertyConfig.Type,
+                        propertyConfig.Name,
+                        property =>
+                        {
+                            property.Attributes.Clear();
+                            property.Attributes.AddRange(propertyConfig.Attributes);
+                            property.DisplayName = propertyConfig.DisplayName;
+                            property.Validators.AddRange(propertyConfig.Validators);
+                            property.DefaultValue = propertyConfig.DefaultValue;
+                            property.DefaultValueFactory = propertyConfig.DefaultValueFactory;
+                            property.Lookup = propertyConfig.UI.Lookup;
+                        }
+                    );
+            }
         }
     }
 }
