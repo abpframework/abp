@@ -85,8 +85,7 @@ namespace Volo.Abp.Identity
 
         private static void AddAbpIdentityOptionsFactory(IServiceCollection services)
         {
-            services.Replace(ServiceDescriptor.Transient<IOptionsFactory<IdentityOptions>, AbpIdentityOptionsFactory>());
-            services.Replace(ServiceDescriptor.Scoped<IOptions<IdentityOptions>, OptionsManager<IdentityOptions>>());
+            services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();
         }
     }
 }

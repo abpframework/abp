@@ -51,14 +51,17 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected IAuthenticationSchemeProvider SchemeProvider { get; }
         protected AbpAccountOptions AccountOptions { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public bool ShowCancelButton { get; set; }
 
         public LoginModel(
             IAuthenticationSchemeProvider schemeProvider,
-            IOptions<AbpAccountOptions> accountOptions)
+            IOptions<AbpAccountOptions> accountOptions,
+            IOptions<IdentityOptions> identityOptions)
         {
             SchemeProvider = schemeProvider;
+            IdentityOptions = identityOptions;
             AccountOptions = accountOptions.Value;
         }
 
@@ -90,6 +93,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
+
+            await IdentityOptions.SetAsync();
 
             var result = await SignInManager.PasswordSignInAsync(
                 LoginInput.UserNameOrEmailAddress,
