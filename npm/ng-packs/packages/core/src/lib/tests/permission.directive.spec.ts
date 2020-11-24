@@ -66,10 +66,8 @@ describe('PermissionDirective', () => {
     });
 
     it('should remove the element from DOM', () => {
-      expect(spectator.query('#test-element')).toBeTruthy();
-      expect(spectator.directive.subscription).toBeUndefined();
+      expect(spectator.query('#test-element')).toBeFalsy();
       spectator.setHostInput({ condition: 'test' });
-      expect(spectator.directive.subscription).toBeTruthy();
       grantedPolicy$.next(true);
       expect(spectator.query('#test-element')).toBeTruthy();
       grantedPolicy$.next(false);
