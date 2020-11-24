@@ -100,12 +100,5 @@ namespace MyCompanyName.MyProjectName.Blazor
                 options.AddMaps<MyProjectNameBlazorModule>();
             });
         }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider
-                .UseBootstrapProviders()
-                .UseFontAwesomeIcons();
-        }
     }
 }

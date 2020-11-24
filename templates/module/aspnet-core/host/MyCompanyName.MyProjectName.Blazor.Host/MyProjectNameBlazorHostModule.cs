@@ -95,12 +95,5 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
                 options.AddMaps<MyProjectNameBlazorHostModule>();
             });
         }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider
-                .UseBootstrapProviders()
-                .UseFontAwesomeIcons();
-        }
     }
 }
