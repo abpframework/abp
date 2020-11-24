@@ -2,11 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { getRemoteEnv } from '../utils/environment-utils';
 import { SetEnvironment } from '../actions/config.actions';
 import { Config } from '../models/config';
 import { deepMerge } from '../utils/object-utils';
+import { Environment } from '../models/environment';
+import { EnvironmentService } from '../services';
 
 @Component({
   selector: 'abp-dummy',
@@ -18,13 +20,13 @@ describe('EnvironmentUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    mocks: [Store, HttpClient],
+    mocks: [EnvironmentService, Store, HttpClient],
   });
 
   beforeEach(() => (spectator = createComponent()));
 
   describe('#getRemoteEnv', () => {
-    const environment: Config.Environment = {
+    const environment: Environment = {
       production: false,
       hmr: false,
       application: {
@@ -83,7 +85,10 @@ describe('EnvironmentUtils', () => {
       const dispatchSpy = jest.spyOn(store, 'dispatch');
       const http = spectator.inject(HttpClient);
       const requestSpy = jest.spyOn(http, 'request');
+      const environmentService = spectator.inject(EnvironmentService);
+      const setStateSpy = jest.spyOn(environmentService, 'setState');
 
+      injectorSpy.mockReturnValueOnce(environmentService);
       injectorSpy.mockReturnValueOnce(http);
       injectorSpy.mockReturnValueOnce(store);
 
@@ -94,7 +99,7 @@ describe('EnvironmentUtils', () => {
       getRemoteEnv(injector, environment);
 
       expect(requestSpy).toHaveBeenCalledWith('GET', '/assets/appsettings.json', { headers: {} });
-      expect(dispatchSpy).toHaveBeenCalledWith(new SetEnvironment(expectedValue));
+      expect(setStateSpy).toHaveBeenCalledWith(expectedValue);
     }
   });
 });
