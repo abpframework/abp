@@ -9,6 +9,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Threading;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
@@ -21,6 +22,8 @@ namespace Volo.Abp.Identity
         )]
     public class AbpIdentityDomainModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<AbpIdentityDomainModule>();
@@ -58,29 +61,32 @@ namespace Volo.Abp.Identity
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.User,
-                typeof(IdentityUser)
-            );
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.User,
+                    typeof(IdentityUser)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.Role,
-                typeof(IdentityRole)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.Role,
+                    typeof(IdentityRole)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.ClaimType,
-                typeof(IdentityClaimType)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.ClaimType,
+                    typeof(IdentityClaimType)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityModuleExtensionConsts.ModuleName,
-                IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
-                typeof(OrganizationUnit)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
+                    typeof(OrganizationUnit)
+                );
+            });
         }
 
         private static void AddAbpIdentityOptionsFactory(IServiceCollection services)
