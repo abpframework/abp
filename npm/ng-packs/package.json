@@ -83,7 +83,7 @@
     "ng-packagr": "^11.0.1",
     "ng-zorro-antd": "^10.1.1",
     "ngxs-schematic": "^1.1.9",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.0",
     "protractor": "~7.0.0",
     "rxjs": "~6.6.3",
     "snq": "^1.0.3",
