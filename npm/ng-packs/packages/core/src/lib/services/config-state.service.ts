@@ -14,9 +14,9 @@ export class ConfigStateService {
     return this.store.sliceUpdate;
   }
 
-  setState = (state: ApplicationConfiguration.Response) => {
+  setState(state: ApplicationConfiguration.Response) {
     this.store.set(state);
-  };
+  }
 
   getOne$(key: string) {
     return this.store.sliceState(state => state[key]);
