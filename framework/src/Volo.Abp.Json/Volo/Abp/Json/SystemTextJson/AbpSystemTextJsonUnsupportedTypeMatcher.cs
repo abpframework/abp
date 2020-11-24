@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -13,7 +14,7 @@ namespace Volo.Abp.Json.SystemTextJson
             Options = options.Value;
         }
 
-        public virtual bool Match(Type type)
+        public virtual bool Match([CanBeNull]Type type)
         {
             return Options.UnsupportedTypes.Contains(type);
         }
