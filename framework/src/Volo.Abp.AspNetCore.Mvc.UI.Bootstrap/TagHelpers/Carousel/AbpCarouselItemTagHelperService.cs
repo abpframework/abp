@@ -66,10 +66,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             }
 
             var title = new TagBuilder("h5");
-            title.InnerHtml.Append(TagHelper.CaptionTitle);
+            title.InnerHtml.AppendHtml(TagHelper.CaptionTitle);
 
             var caption = new TagBuilder("p");
-            caption.InnerHtml.Append(TagHelper.Caption);
+            caption.InnerHtml.AppendHtml(TagHelper.Caption);
 
             var wrapper = new TagBuilder("div");
             wrapper.AddCssClass("carousel-caption d-none d-md-block");
