@@ -13,7 +13,7 @@ import {
   Icon,
 } from 'native-base';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useRef  } from 'react';
 import { View } from 'react-native';
 import * as Yup from 'yup';
 import { login } from '../../api/AccountAPI';
@@ -32,6 +32,7 @@ const ValidationSchema = Yup.object().shape({
 function LoginScreen({ startLoading, stopLoading, setToken, fetchAppConfig }) {
   const [showTenantSelection, setShowTenantSelection] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const passwordRef = useRef(null)
 
   const toggleTenantSelection = () => {
     setShowTenantSelection(!showTenantSelection);
@@ -77,6 +78,9 @@ function LoginScreen({ startLoading, stopLoading, setToken, fetchAppConfig }) {
                     onChangeText={handleChange('username')}
                     onBlur={handleBlur('username')}
                     value={values.username}
+                    onSubmitEditing={() => passwordRef.current._root.focus()}
+                    returnKeyType="next"
+                    autoCapitalize = 'none'
                   />
                 </InputGroup>
                 <ValidationMessage>{errors.username}</ValidationMessage>
@@ -88,6 +92,8 @@ function LoginScreen({ startLoading, stopLoading, setToken, fetchAppConfig }) {
                       onChangeText={handleChange('password')}
                       onBlur={handleBlur('password')}
                       value={values.password}
+                      ref={passwordRef}
+                      autoCapitalize = 'none'
                     />
                     <Icon
                       name={showPassword ? 'eye-off' : 'eye'}
