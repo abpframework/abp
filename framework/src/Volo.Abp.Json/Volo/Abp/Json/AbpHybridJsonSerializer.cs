@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -18,17 +19,19 @@ namespace Volo.Abp.Json
             ServiceScopeFactory = serviceScopeFactory;
         }
 
-        public string Serialize(object obj, bool camelCase = true, bool indented = false)
+        public string Serialize([CanBeNull]object obj, bool camelCase = true, bool indented = false)
         {
             using (var scope = ServiceScopeFactory.CreateScope())
             {
-                var serializerProvider = GetSerializerProvider(scope.ServiceProvider, obj.GetType());
+                var serializerProvider = GetSerializerProvider(scope.ServiceProvider, obj?.GetType());
                 return serializerProvider.Serialize(obj, camelCase, indented);
             }
         }
 
-        public T Deserialize<T>(string jsonString, bool camelCase = true)
+        public T Deserialize<T>([NotNull]string jsonString, bool camelCase = true)
         {
+            Check.NotNull(jsonString, nameof(jsonString));
+
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var serializerProvider = GetSerializerProvider(scope.ServiceProvider, typeof(T));
@@ -36,8 +39,10 @@ namespace Volo.Abp.Json
             }
         }
 
-        public object Deserialize(Type type, string jsonString, bool camelCase = true)
+        public object Deserialize(Type type, [NotNull]string jsonString, bool camelCase = true)
         {
+            Check.NotNull(jsonString, nameof(jsonString));
+
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var serializerProvider = GetSerializerProvider(scope.ServiceProvider, type);
@@ -45,7 +50,7 @@ namespace Volo.Abp.Json
             }
         }
 
-        protected virtual IJsonSerializerProvider GetSerializerProvider(IServiceProvider serviceProvider, Type type)
+        protected virtual IJsonSerializerProvider GetSerializerProvider(IServiceProvider serviceProvider, [CanBeNull]Type type)
         {
             foreach (var providerType in Options.Providers.Reverse())
             {
