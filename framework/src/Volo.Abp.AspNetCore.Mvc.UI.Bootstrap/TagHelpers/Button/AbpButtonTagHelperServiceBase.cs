@@ -69,7 +69,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             }
 
             var span = new TagBuilder("span");
-            span.InnerHtml.Append(TagHelper.Text);
+            span.InnerHtml.AppendHtml(TagHelper.Text);
             output.Content.AppendHtml(span);
         }
 

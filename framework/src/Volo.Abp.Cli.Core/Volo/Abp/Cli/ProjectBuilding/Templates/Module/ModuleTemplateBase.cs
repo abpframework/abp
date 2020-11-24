@@ -36,6 +36,10 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
             ));
 
             steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
                 "MyCompanyName.MyProjectName.Web.Host",
                 projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Host"
             ));
@@ -63,7 +67,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
         {
             steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
         }
-        
+
         private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
