@@ -308,11 +308,11 @@ An aggregate (with the root entity and sub-collections) should be serializable a
 
 The following rules will already bring the serializability.
 
-#### Aggregate / Aggregate Root Principles Rules
+#### Aggregate / Aggregate Root Rules & Best Practices
 
 The following rules ensures implementing the principles introduced above.
 
-##### Rule: Reference Other Aggregates Only By Id
+##### Reference Other Aggregates Only By Id
 
 The first rule says an Aggregate should reference to other aggregates only by their Id. That means you can not add navigation properties to other aggregates.
 
@@ -335,7 +335,7 @@ In MongoDB, it is naturally not suitable to have such navigation properties/coll
 
 However, EF Core & relational database developers may find this restrictive rule unnecessary since EF Core can handle it on database read and write. We see this an important rule that helps to **reduce the complexity** of the domain prevents potential problems and we strongly suggest to implement this rule. However, if you think it is practical to ignore this rule, see the *Discussion About the Database Independence Principle* section above.
 
-##### Tip: Keep Aggregates Small
+##### Keep Aggregates Small
 
 One good practice is to keep an aggregate simple and small. This is because an aggregate will be loaded and saved as a single unit and reading/writing a big object has performance problems. See the example below:
 
@@ -356,4 +356,21 @@ So, determine your aggregate boundaries and size based on the following consider
 In practical;
 
 * Most of the aggregate roots will **not have sub-collections**.
-* A sub-collection should not have more than, say, **100-150 items** inside it. If you think a collection potentially can have more items, don't define the collection as a part of the aggregate and consider to extract another aggregate root for the entity inside the collection.
+* A sub-collection should not have more than **100-150 items** inside it at the most case. If you think a collection potentially can have more items, don't define the collection as a part of the aggregate and consider to extract another aggregate root for the entity inside the collection.
+
+##### Primary Keys of the Aggregate Roots and Entities
+
+* An aggregate root typically has a single `Id` property for its identifier (Primark Key: PK). We prefer `Guid` as the PK of an aggregate root entity (see the [Guid Genertation document](Guid-Generation.md) to learn why).
+* An entity (that's not the aggregate root) in an aggregate can use a composite primary key.
+
+For example, see the Aggregate root and the Entity below:
+
+![domain-driven-design-entity-primary-keys](images/domain-driven-design-entity-primary-keys.png)
+
+* `Organization` has a `Guid` identifier (`Id`).
+* `OrganizationUser` is a sub-collection of an `Organization` and has a composite primary key consists of the `OrganizationId` and `UserId`.
+
+That doesn't mean sub-collection entities should always have composite PKs. They may have single `Id` properties when it's needed.
+
+> Composite PKs are actually a concept of relational databases since the sub-collection entities have their own tables and needs to a PK. On the other hand, for example, in MongoDB you don't need to define PK for the sub-collection entities at all since they are stored as a part of the aggregate root.
+
