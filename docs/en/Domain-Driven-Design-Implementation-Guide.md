@@ -236,6 +236,8 @@ The examples will use some concepts those are used by GitHub, like `Issue`, `Rep
 
 As said before, an [Aggregate](Entities.md) is a cluster of objects (entities and value objects) bound together by an Aggregate Root object. This section will introduce the principles and rules related to the Aggregates.
 
+> We refer the term *Entity* both for *Aggregate Root* and *sub-collection entities* unless we explicitly write *Aggregate Root* or *sub-collection entity*.
+
 #### Aggregate / Aggregate Root Principles
 
 ##### Business Rules
@@ -358,7 +360,7 @@ In practical;
 * Most of the aggregate roots will **not have sub-collections**.
 * A sub-collection should not have more than **100-150 items** inside it at the most case. If you think a collection potentially can have more items, don't define the collection as a part of the aggregate and consider to extract another aggregate root for the entity inside the collection.
 
-##### Primary Keys of the Aggregate Roots and Entities
+##### Primary Keys of the Aggregate Roots / Entities
 
 * An aggregate root typically has a single `Id` property for its identifier (Primark Key: PK). We prefer `Guid` as the PK of an aggregate root entity (see the [Guid Genertation document](Guid-Generation.md) to learn why).
 * An entity (that's not the aggregate root) in an aggregate can use a composite primary key.
@@ -373,4 +375,113 @@ For example, see the Aggregate root and the Entity below:
 That doesn't mean sub-collection entities should always have composite PKs. They may have single `Id` properties when it's needed.
 
 > Composite PKs are actually a concept of relational databases since the sub-collection entities have their own tables and needs to a PK. On the other hand, for example, in MongoDB you don't need to define PK for the sub-collection entities at all since they are stored as a part of the aggregate root.
+
+##### Constructors of the Aggregate Roots / Entities
+
+The constructor is where the lifecycle of an entity begins. There are a some responsibilities of a well designed constructor:
+
+* Gets the **required entity properties** as parameters to **create a valid entity**. Should force to pass only for the required parameters and may get non-required properties as optional parameters.
+* **Checks validity** of the parameters.
+* Initializes **sub-collections**.
+
+**Example: `Issue` (Aggregate Root) constructor**
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+
+namespace IssueTracking.Issues
+{
+    public class Issue : AggregateRoot<Guid>
+    {
+        public Guid RepositoryId { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public Guid? AssignedUserId { get; set; }
+        public bool IsClosed { get; set; }
+        public IssueCloseReason? CloseReason { get; set; } //enum
+
+        public ICollection<IssueLabel> Labels { get; set; }
+
+        public Issue(
+            Guid id,
+            Guid repositoryId,
+            string title,
+            string text = null,
+            Guid? assignedUserId = null
+            ) : base(id)
+        {
+            RepositoryId = repositoryId;
+            Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+            
+            Text = text;
+            AssignedUserId = assignedUserId;
+            
+            Labels = new Collection<IssueLabel>();
+        }
+
+        private Issue() { /* for deserialization & ORMs */ }
+    }
+}
+````
+
+* `Issue` class properly **forces to create a valid entity** by taking minimum necessary properties in its constructor as parameters.
+* The constructor **validates** the inputs (`Check.NotNullOrWhiteSpace(...)` throws `ArgumentException` if the given value is empty).
+* It **initializes the sub-collections**, so you don't get a null reference exception when you try to use the `Labels` collection after creating the `Issue`.
+* The constructor also **takes the `id`** and passes to the `base` class. We don't generate `Guid`s inside the constructor to be able to delegate this responsibility to another service (see [Guid Generation](Guid-Generation.md)).
+* Private **empty constructor** is necessary for ORMs. We made it `private` to prevent accidently using it in our own code.
+
+> See the [Entities](Entities.md) document to learn more about creating entities with the ABP Framework.
+
+##### Entity Property Accessors & Methods
+
+The example above seems strange to you. For example, we force to pass a non-null `Title` in the constructor. However, the developer may then set the `Title` property to `null` without any control. This is because the example code above just focuses on the constructor.
+
+If we declare all the properties with **public setters** (like the example `Issue` class above), we can't force **validity** and **integrity** of the entity in its lifecycle. So;
+
+* Use **private setter** for a property when you need to perform any **logic** while setting that property.
+* Define public methods to manipulate such properties.
+
+**Example: Methods to change the properties in a controlled way**
+
+````csharp
+using System;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+
+namespace IssueTracking.Issues
+{
+    public class Issue : AggregateRoot<Guid>
+    {
+        public Guid RepositoryId { get; private set; } //Never changes
+        public string Title { get; private set; } //Needs validation
+        public string Text { get; set; } //No validation
+        public Guid? AssignedUserId { get; set; } //No validation
+        public bool IsClosed { get; set; } //Should change with CloseReason
+        public IssueCloseReason? CloseReason { get; set; } //Should change with IsClosed
+
+        //...
+
+        public void SetTitle(string title)
+        {
+            Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+        }
+
+        public void Close(IssueCloseReason reason)
+        {
+            IsClosed = true;
+            CloseReason = reason;
+        }
+
+        public void ReOpen()
+        {
+            IsClosed = false;
+            CloseReason = null;
+        }
+    }
+}
+````
 
