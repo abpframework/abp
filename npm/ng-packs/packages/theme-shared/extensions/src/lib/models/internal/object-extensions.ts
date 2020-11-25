@@ -11,12 +11,12 @@ export interface EntityExtensionDto {
 export interface ExtensionEnumDto {
   fields: ExtensionEnumFieldDto[];
   localizationResource?: string;
-  transformed?: any; // UI
+  transformed?: any;
 }
 
 export interface ExtensionEnumFieldDto {
   name?: string;
-  value: any; // UI, was object
+  value: any;
 }
 
 export interface ExtensionPropertyApiCreateDto {
@@ -39,18 +39,18 @@ export interface ExtensionPropertyApiUpdateDto {
 
 export interface ExtensionPropertyAttributeDto {
   typeSimple?: string;
-  config: Record<string, any>; // UI, was Record<string, object>
+  config: Record<string, any>;
 }
 
 export interface ExtensionPropertyDto {
   type?: string;
-  typeSimple?: ePropType; // UI, was string
+  typeSimple?: ePropType;
   displayName: LocalizableStringDto;
   api: ExtensionPropertyApiDto;
   ui: ExtensionPropertyUiDto;
   attributes: ExtensionPropertyAttributeDto[];
-  configuration: Record<string, any>; // UI, was Record<string, object>;
-  defaultValue: any; // UI, was object
+  configuration: Record<string, any>;
+  defaultValue: any;
 }
 
 export interface ExtensionPropertyUiDto {
@@ -73,7 +73,7 @@ export interface ExtensionPropertyUiLookupDto {
 }
 
 export interface ExtensionPropertyUiTableDto {
-  isSortable?: boolean; // UI
+  isSortable?: boolean;
   isVisible: boolean;
 }
 
