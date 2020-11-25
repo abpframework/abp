@@ -186,6 +186,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return RedirectToPage("./Login");
             }
 
+            await IdentityOptions.SetAsync();
+
             var loginInfo = await SignInManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
@@ -259,6 +261,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
         {
+            await IdentityOptions.SetAsync();
+
             var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
 
             var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);

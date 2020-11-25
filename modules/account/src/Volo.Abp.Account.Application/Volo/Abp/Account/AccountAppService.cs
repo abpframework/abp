@@ -16,7 +16,6 @@ namespace Volo.Abp.Account
         protected IdentityUserManager UserManager { get; }
         protected IAccountEmailer AccountEmailer { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
-
         protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public AccountAppService(
