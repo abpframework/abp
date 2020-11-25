@@ -7,6 +7,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.TenantManagement
 {
@@ -17,6 +18,8 @@ namespace Volo.Abp.TenantManagement
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpTenantManagementDomainModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<AbpTenantManagementDomainModule>();
@@ -34,11 +37,14 @@ namespace Volo.Abp.TenantManagement
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                TenantManagementModuleExtensionConsts.ModuleName,
-                TenantManagementModuleExtensionConsts.EntityNames.Tenant,
-                typeof(Tenant)
-            );
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    TenantManagementModuleExtensionConsts.ModuleName,
+                    TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                    typeof(Tenant)
+                );
+            });
         }
     }
 }

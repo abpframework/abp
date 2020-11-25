@@ -3,6 +3,7 @@ using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.AuditLogging
 {
@@ -11,25 +12,30 @@ namespace Volo.Abp.AuditLogging
     [DependsOn(typeof(AbpAuditLoggingDomainSharedModule))]
     public class AbpAuditLoggingDomainModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+            OneTimeRunner.Run(() =>            
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
                 AuditLoggingModuleExtensionConsts.ModuleName,
                 AuditLoggingModuleExtensionConsts.EntityNames.AuditLog,
                 typeof(AuditLog)
-            );
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                AuditLoggingModuleExtensionConsts.ModuleName,
-                AuditLoggingModuleExtensionConsts.EntityNames.AuditLogAction,
-                typeof(AuditLogAction)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    AuditLoggingModuleExtensionConsts.ModuleName,
+                    AuditLoggingModuleExtensionConsts.EntityNames.AuditLogAction,
+                    typeof(AuditLogAction)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                AuditLoggingModuleExtensionConsts.ModuleName,
-                AuditLoggingModuleExtensionConsts.EntityNames.EntityChange,
-                typeof(EntityChange)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    AuditLoggingModuleExtensionConsts.ModuleName,
+                    AuditLoggingModuleExtensionConsts.EntityNames.EntityChange,
+                    typeof(EntityChange)
+                );
+            });
         }
     }
 }
