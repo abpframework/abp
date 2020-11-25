@@ -11,7 +11,7 @@ import {
   ReplaceableComponentsService,
   RoutesService,
 } from '../services';
-import { mockRoutesService } from './utils';
+import { mockRoutesService } from './routes.service.spec';
 
 @Component({
   selector: 'abp-layout-application',
