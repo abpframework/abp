@@ -334,3 +334,26 @@ So, when you have an `Issue` and need to have `GitRepository` related to this is
 In MongoDB, it is naturally not suitable to have such navigation properties/collections. If you do that, you find a copy of the destination aggregate object in the database collection of the source aggregate since it is being serialized to JSON on save.
 
 However, EF Core & relational database developers may find this restrictive rule unnecessary since EF Core can handle it on database read and write. We see this an important rule that helps to **reduce the complexity** of the domain prevents potential problems and we strongly suggest to implement this rule. However, if you think it is practical to ignore this rule, see the *Discussion About the Database Independence Principle* section above.
+
+##### Tip: Keep Aggregates Small
+
+One good practice is to keep an aggregate simple and small. This is because an aggregate will be loaded and saved as a single unit and reading/writing a big object has performance problems. See the example below:
+
+![domain-driven-design-aggregate-keep-small](images/domain-driven-design-aggregate-keep-small.png)
+
+Role aggregate has a collection of `UserRole` value objects to track the users assigned for this role. Notice that `UserRole` is not another aggregate and it is not a problem for the rule *Reference Other Aggregates Only By Id*. However, it is a problem in practical. A role may be assigned to thousands (even millions) of users in a real life scenario and it is a significant performance problem to load thousands of items whenever you query a `Role` from database (remember: Aggregates are loaded by their sub-collections as a single unit).
+
+On the other hand, `User` may have such a `Roles` collection since a user doesn't have much roles in practical and it can be useful to have a list of roles while you are working with a User Aggregate.
+
+If you think careful, there is one more problem when Role and User both have the list of relation if you use a **non-relational database, like MongoDB**. In this case, the same information is duplicated in different collections and it will be hard to maintain data consistency (whenever you add an item to User.Roles, you need to add it to Role.Users too).
+
+So, determine your aggregate boundaries and size based on the following considerations;
+
+* Objects used together.
+* Query (load/save) performance and memory consumption.
+* Data integrity, validity and consistency.
+
+In practical;
+
+* Most of the aggregate roots will **not have sub-collections**.
+* A sub-collection should not have more than, say, **100-150 items** inside it. If you think a collection potentially can have more items, don't define the collection as a part of the aggregate and consider to extract another aggregate root for the entity inside the collection.
