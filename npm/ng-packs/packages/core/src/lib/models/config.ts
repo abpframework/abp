@@ -1,6 +1,10 @@
 import { ApplicationConfiguration } from './application-configuration';
 import { ABP } from './common';
 import { Environment as IEnvironment } from './environment';
+import {
+  LocalizationParam as ILocalizationParam,
+  LocalizationWithDefault as ILocalizationWithDefault,
+} from './localization';
 
 export namespace Config {
   /**
@@ -37,18 +41,9 @@ export namespace Config {
     default: ApiConfig;
   }
 
-  /**
-   * @deprecated Use LocalizationWithDefault interface instead. To be deleted in v5.0.
-   */
-  export interface LocalizationWithDefault {
-    key: string;
-    defaultValue: string;
-  }
+  export type LocalizationWithDefault = ILocalizationWithDefault;
 
-  /**
-   * @deprecated Use LocalizationParam interface instead. To be deleted in v5.0.
-   */
-  export type LocalizationParam = string | LocalizationWithDefault;
+  export type LocalizationParam = ILocalizationParam;
 
   /**
    * @deprecated Use customMergeFn type instead. To be deleted in v5.0.
