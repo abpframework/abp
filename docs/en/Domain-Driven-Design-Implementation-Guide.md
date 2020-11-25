@@ -92,6 +92,8 @@ The picture below shows a Visual Studio Solution created using the ABP's [applic
 
 The solution name is `IssueTracking` and it consists of multiple projects. The solution is layered by considering **DDD principles** as well as **development** and **deployment** practicals. The sub sections below explains the projects in the solution;
 
+> Your solution structure may be slightly different if you choose a different UI or Database provider. However, the Domain and Application layers will be same and this is the essential point for the DDD perspective. See the [Application Startup Template](Startup-Templates/Application.md) document if you want to know more about the solution structure.
+
 #### The Domain Layer
 
 The Domain Layer is splitted into two projects;
@@ -169,8 +171,43 @@ This design decision potentially allows you to use Entities and EF Core objects 
 
 ### Execution Flow a DDD Based Application
 
-TODO
+The figure below shows a typical request flow for a web application that has been developed based on DDD patterns.
+
+![](images/domain-driven-design-web-request-flow.png)
+
+* The request typically begins by a user interaction on the UI (a *use case*) that causes an HTTP request to the server.
+* An MVC Controller or a Razor Page Handler in the Presentation Layer (or in the Distributed Services Layer) handles the request and can perform some cross cutting concerns in this stage ([Authorization](Authorization.md), [Validation](Validation.md), [Exception Handling](Exception-Handling.md), etc.). A Controller/Page injects the related Application Service interface and calls its method(s) by sending and receiving DTOs.
+* The Application Service use the Domain Objects (Entities, Repository interfaces, Domain Services, etc.) to implement the *use case*. Application Layer implements some cross cutting concerns (Authorization, Validation, etc.). An Application Service method should be a [Unit Of Work](Unit-Of-Work.md). That means it should be atomic.
+
+Most of the cross cutting concerns are **automatically and conventionally implemented by the ABP Framework** and you typically don't need to write code for them.
 
 ### Common Principles
 
-TODO
+Before going into details, let's see some overall DDD principles;
+
+#### Database Provider / ORM Independence
+
+The domain and application layers should be ORM / Database Provider agnostic. They only depends on the Repository interfaces and the Repository interfaces doesn't use any ORM specific objects.
+
+Here, the main reasons of this principle;
+
+1. To make your domain/application **infrastructure independent** since the infrastructure may change in the future or you may need to support a second database type later.
+2. To make your domain/application **focus on the business code** by hiding the infrastructure details behind the repositories.
+3. To make your **automated tests** easier since you can mock the repositories in this case.
+
+> As a respect to this principle, none of the projects in the solution has reference to the `EntityFrameworkCore` project, except the startup application.
+
+##### Discussion About the Database Independence Principle
+
+Especially, the **reason 1** deeply effects your domain **object design** (especially, the entity relations) and **application code**. Assume that you are using [Entity Framework Core](Entity-Framework-Core.md) with a relational database. If you try to make your application so that it is possible to switch to [MongoDB](MongoDB.md) later, you can't use some very **useful EF Core features**. Examples;
+
+* You can't assume [Change Tracking](https://docs.microsoft.com/en-us/ef/core/querying/tracking) since MongoDB provider can't do it. So, you always need to explicitly update the changed entities.
+* You can't use [Navigation Properties](https://docs.microsoft.com/en-us/ef/core/modeling/relationships) (or Collections) to other Aggregates in your entities since this is not possible for a Document Database. See the "Rule: Reference Other Aggregates Only By Id" section for more info.
+
+If you think such features are **important** for you and you **will never move away** from the EF Core, we believe that it is worth **relaxing this principle**. We still suggest to use the repository pattern to hide the infrastructure details. But you can assume that you are using EF Core while designing your entity relations and writing your application code. You can even reference to the EF Core NuGet Package from your application layer to be able to directly use the asynchronous LINQ extension methods, like `ToListAsync()` (see the *IQueryable & Async Operations* section in the [Repositories](Repositories.md) document for more info).
+
+#### Presentation Technology Agnostic
+
+The presentation technology (UI Framework) is one of the most changed parts of a real world application. It is very important to design the **Domain and Application Layers** to be completely **unaware** of the presentation technology/framework.
+
+This principle is relatively easy to implement and ABP's startup template makes it even easier.
