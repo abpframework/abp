@@ -6,7 +6,7 @@ import { mockPermissionService } from './utils/permission-service.spec.utils';
 
 const updateStream$ = new Subject();
 
-const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
+export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
   const injector = new DummyInjector({
     PermissionService: mockPermissionService(),
     ConfigStateService: { createOnUpdateStream: () => updateStream$ },
