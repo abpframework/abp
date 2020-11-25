@@ -347,7 +347,7 @@ Role aggregate has a collection of `UserRole` value objects to track the users a
 
 On the other hand, `User` may have such a `Roles` collection since a user doesn't have much roles in practical and it can be useful to have a list of roles while you are working with a User Aggregate.
 
-If you think careful, there is one more problem when Role and User both have the list of relation if you use a **non-relational database, like MongoDB**. In this case, the same information is duplicated in different collections and it will be hard to maintain data consistency (whenever you add an item to User.Roles, you need to add it to Role.Users too).
+If you think careful, there is one more problem when Role and User both have the list of relation if you use a **non-relational database, like MongoDB**. In this case, the same information is duplicated in different collections and it will be hard to maintain data consistency (whenever you add an item to `User.Roles`, you need to add it to `Role.Users` too).
 
 So, determine your aggregate boundaries and size based on the following considerations;
 
