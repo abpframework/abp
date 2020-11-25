@@ -62,22 +62,25 @@ MySQL connection strings are different than SQL Server connection strings. So, c
 
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
 
-## Change the Migrations DbContext
+## Change the Migrations DbContext Factory
 
-MySQL DBMS has some slight differences than the SQL Server. Some module database mapping configuration (especially the field lengths) causes problems with MySQL. For example, some of the the [IdentityServer module](Modules/IdentityServer.md) tables has such problems and it provides an option to configure the fields based on your DBMS.
+The startup template also contains a ***YourProjectName*MigrationsDbContextFactory** whis is needed for EF Core console commands (like [Add-Migration](https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/#generating--running-migrations) and [Update-Database](https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/#generating--running-migrations) commands). When we switch to mysql, we also need to modify the `DbContextOptionsBuilder`
 
-The startup template contains a *YourProjectName*MigrationsDbContext which is responsible to maintain and migrate the database schema. This DbContext basically calls extension methods of the depended modules to configure their database tables.
-
-Open the *YourProjectName*MigrationsDbContext and change the `builder.ConfigureIdentityServer();` line as shown below:
+Find the following code part inside the *YourProjectName*MigrationsDbContextFactory class:
 
 ````csharp
-builder.ConfigureIdentityServer(options =>
-{
-    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
-});
+var builder = new DbContextOptionsBuilder<TestMigrationsDbContext>()
+    .UseSqlServer(configuration.GetConnectionString("Default"));
 ````
 
-Then `ConfigureIdentityServer()` method will set the field lengths to not exceed the MySQL limits. Refer to related module documentation if you have any problem while creating or executing the database migrations.
+Replace it with the following code part:
+
+````csharp
+var builder = new DbContextOptionsBuilder<TestMigrationsDbContext>()
+    .UseMySql(configuration.GetConnectionString("Default"));
+````
+
+Refer to related module documentation if you have any problem while creating or executing the database migrations.
 
 ## Re-Generate the Migrations
 
@@ -105,5 +108,6 @@ builder.ConfigureIdentityServer(options =>
     options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
 });
 ```
+No need to manually set database provider after v2.9+ ([Change history](https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.IdentityServer.EntityFrameworkCore/Volo/Abp/IdentityServer/EntityFrameworkCore/IdentityServerModelBuilderConfigurationOptions.cs))
 
 Related discussions: https://github.com/abpframework/abp/issues/1920
