@@ -220,4 +220,96 @@ DDD **ignores reporting** and mass querying. That doesn't mean they are not impo
 
 ## Implementation: The Building Blocks
 
+This is the essential part of this guide. We will introduce and explain some **explicit rules** with examples. You can follow these rules and apply in your solutions while implementing the Domain Driven Design.
+
+### The Example Domain
+
+The examples will use some concepts those are used by GitHub, like `Issue`, `Repository`, `Label` and `User`, you already familiar with. The figure below shows some of the aggregates, aggregate roots, entities, value object and the relations between them:
+
+![domain driven design example schema](images/domain-driven-design-example-domain-schema.png)
+
+**Issue Aggregate** consists of an `Issue` Aggregate Root that contains `Comment` and `IssueLabel` collections. Other aggregates are shown as simple since we will focus on the Issue Aggregate:
+
+![domain-driven-design-issue-aggregate-diagram](images/domain-driven-design-issue-aggregate-diagram.png)
+
+### Aggregates
+
+As said before, an [Aggregate](Entities.md) is a cluster of objects (entities and value objects) bound together by an Aggregate Root object. This section will introduce the principles and rules related to the Aggregates.
+
+#### Aggregate / Aggregate Root Principles
+
+##### Business Rules
+
+Entities are responsible to implement the business rules related to the properties of their own. The *Aggregate Root Entities* are also responsible for their sub-collection entities.
+
+An aggregate should maintain its self **integrity** and **validity** by implementing domain rules and constraints. That means, unlike the DTOs, Entities have **methods to implement some business logic**. Actually, we should try to implement business rules in the entities wherever possible.
+
+##### Single Unit
+
+An aggregate is **retrieved and saved as a single unit**, with all the sub-collections and properties. For example, if you want to add a `Comment` to an `Issue`, you need to;
+
+* Get the `Issue` from database with including all the sub-collections (`Comment`s and `IssueLabel`s).
+* Use methods on the `Issue` class to add a new comment, like `Issue.AddComment(...);`.
+* Save the `Issue` (with all sub-collections) to the database as a single database operation (update).
+
+That may seem strange to the developers used to work with **EF Core & Relational Databases** before. Getting the `Issue` with all details seems **unnecessary and inefficient**. Why don't we just execute an SQL `Insert` command to database without querying any data?
+
+The answer is that we should **implement the business** rules and preserve the data **consistency** and **integrity** in the **code**. If we have a business rule like "*Users can not comment on the locked issues*", how can we check the `Issue`'s lock state without retrieving it from the database? So, we can execute the business rules only if the related objects available in the application code.
+
+On the other hand, **MongoDB** developers will find this rule very natural. In MongoDB, an aggregate object (with sub-collections) is saved in a **single collection** in the database (while it is distributed into several tables in a relational database). So, when you get an aggregate, all the sub-collections are already retrieved as a part of the query, without any additional configuration.
+
+ABP Framework helps to implement this principle in your applications.
+
+**Example: Add a comment to an issue**
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueAppService(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    [Authorize]
+    public async Task CreateCommentAsync(CreateCommentDto input)
+    {
+        var issue = await _issueRepository.GetAsync(input.IssueId);
+        issue.AddComment(CurrentUser.GetId(), input.Text);
+        await _issueRepository.UpdateAsync(issue);
+    }
+}
+````
+
+`_issueRepository.GetAsync` method retrieves the `Issue` with all details (sub-collections) as a single unit by default. While this works out of the box for MongoDB, you need to configure your aggregate details for the EF Core. But, once you configure, repositories automatically handle it. `_issueRepository.GetAsync` method gets an optional parameter, `includeDetails`, that you can pass `false` to disable this behavior when you need it.
+
+> See the *Loading Related Entities* section of the [EF Core document](Entity-Framework-Core.md) for the configuration and alternative scenarios.
+
+`Issue.AddComment` gets a `userId` and comment `text`, implements the necessary business rules and adds the comment to the Comments collection of the `Issue`.
+
+Finally, we use `_issueRepository.UpdateAsync` to save changes to the database.
+
+> EF Core has a **change tracking** feature. So, you actually don't need to call `_issueRepository.UpdateAsync`. It will be automatically saved thanks to ABP's Unit Of Work system that automatically calls `DbContext.SaveChanges()` at the end of the method. However, for MongoDB, you need to explicitly update the changed entity.
+>
+> So, if you want to write your code Database Provider independent, you should always call the `UpdateAsync` method for the changed entities.
+
+##### Transaction Boundary
+
+An aggregate is generally considered as a transaction boundary. If a use case works with a single aggregate, reads and saves it as a single unit, all the changes made to the aggregate objects are saved together as an atomic operation and you don't need to an explicit database transaction.
+
+However, in real life, you may need to change **more than one aggregate instances** in a single use case and you need to use database transactions to ensure **atomic update** and **data consistency**. Because of that, ABP Framework uses an explicit database transaction for a use case (an application service method boundary). See the [Unit Of Work](Unit-Of-Work.md) documentation for more info.
+
+##### Serializability
+
+An aggregate (with the root entity and sub-collections) should be serializable and transferrable on the wire as a single unit. For example, MongoDB serializes the aggregate to JSON document while saving to the database and deserializes from JSON while reading from the database.
+
+> This requirement is not necessary when you use relational databases and ORMs. However, it is an important practice of Domain Driven Design.
+
+The following rules will already bring the serializability.
+
+#### Aggregate / Aggregate Root Principles Rules
+
+The following rules ensures to implement the principles introduced above.
+
 TODO
