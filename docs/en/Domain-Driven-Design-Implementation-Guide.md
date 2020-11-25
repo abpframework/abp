@@ -217,3 +217,7 @@ In some cases, you may need to have **duplicate logic** in the application and p
 DDD focuses on how the domain objects **changes and interactions**; How to create an entity and change its properties by preserving the data **integrity/validity** and implementing the **business rules**.
 
 DDD **ignores reporting** and mass querying. That doesn't mean they are not important. If your application doesn't have fancy dashboards and reports, who would use it? However, reporting is another topic. You typically want to use the full power of the SQL Server or even use a separate data source (like ElasticSearch) for reporting purpose. You will write optimized queries, create indexes and even stored procedures(!). You are free to do all as long as you don't mix all these into your business logic.
+
+## Implementation: The Building Blocks
+
+TODO
