@@ -1,6 +1,6 @@
 import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
-import { EnvironmentService, ProfileService, RestService } from '../services';
 import { Store } from '@ngxs/store';
+import { EnvironmentService, ProfileService, RestService } from '../services';
 import { CORE_OPTIONS } from '../tokens';
 
 describe('ProfileService', () => {
@@ -9,8 +9,12 @@ describe('ProfileService', () => {
 
   const createHttp = createHttpFactory({
     dataService: ProfileService,
-    providers: [RestService, { provide: CORE_OPTIONS, useValue: {} }],
-    mocks: [Store, EnvironmentService],
+    providers: [
+      RestService,
+      { provide: CORE_OPTIONS, useValue: {} },
+      { provide: Store, useValue: {} },
+    ],
+    mocks: [EnvironmentService],
   });
 
   beforeEach(() => {

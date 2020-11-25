@@ -1,6 +1,5 @@
-import { Component, Injector } from '@angular/core';
+import { Component } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import clone from 'just-clone';
 import { BehaviorSubject } from 'rxjs';
 import { FindTenantResultDto } from '../models/find-tenant-result-dto';

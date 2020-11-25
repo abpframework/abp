@@ -1,7 +1,5 @@
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { LocalizationPipe } from '../pipes';
-import { Store } from '@ngxs/store';
-import { ConfigState } from '../states';
 import { LocalizationService } from '../services';
 
 describe('LocalizationPipe', () => {
@@ -11,7 +9,7 @@ describe('LocalizationPipe', () => {
 
   const createService = createServiceFactory({
     service: LocalizationPipe,
-    mocks: [Store, LocalizationService],
+    mocks: [LocalizationService],
   });
 
   beforeEach(() => {

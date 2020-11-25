@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-import { NgxsModule } from '@ngxs/store';
 import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
@@ -94,7 +93,7 @@ describe('DynamicLayoutComponent', () => {
       },
       ReplaceableComponentsService,
     ],
-    imports: [RouterModule, DummyLayoutModule, NgxsModule.forRoot()],
+    imports: [RouterModule, DummyLayoutModule],
     routes: [
       { path: '', component: RouterOutletComponent },
       {

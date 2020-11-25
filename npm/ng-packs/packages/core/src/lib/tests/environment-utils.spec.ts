@@ -1,14 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
-import { BehaviorSubject, of, Subject } from 'rxjs';
-import { getRemoteEnv } from '../utils/environment-utils';
-import { SetEnvironment } from '../actions/config.actions';
+import { BehaviorSubject, of } from 'rxjs';
 import { Config } from '../models/config';
-import { deepMerge } from '../utils/object-utils';
 import { Environment } from '../models/environment';
 import { EnvironmentService } from '../services';
+import { getRemoteEnv } from '../utils/environment-utils';
+import { deepMerge } from '../utils/object-utils';
 
 @Component({
   selector: 'abp-dummy',
@@ -20,7 +18,7 @@ describe('EnvironmentUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    mocks: [EnvironmentService, Store, HttpClient],
+    mocks: [EnvironmentService, HttpClient],
   });
 
   beforeEach(() => (spectator = createComponent()));
@@ -81,8 +79,6 @@ describe('EnvironmentUtils', () => {
     function setupTestAndRun(strategy: Pick<Config.RemoteEnv, 'mergeStrategy'>, expectedValue) {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
-      const store = spectator.inject(Store);
-      const dispatchSpy = jest.spyOn(store, 'dispatch');
       const http = spectator.inject(HttpClient);
       const requestSpy = jest.spyOn(http, 'request');
       const environmentService = spectator.inject(EnvironmentService);
@@ -90,10 +86,9 @@ describe('EnvironmentUtils', () => {
 
       injectorSpy.mockReturnValueOnce(environmentService);
       injectorSpy.mockReturnValueOnce(http);
-      injectorSpy.mockReturnValueOnce(store);
+      injectorSpy.mockReturnValueOnce({});
 
       requestSpy.mockReturnValue(new BehaviorSubject(customEnv));
-      dispatchSpy.mockReturnValue(of(true));
 
       environment.remoteEnv.mergeStrategy = strategy.mergeStrategy;
       getRemoteEnv(injector, environment);

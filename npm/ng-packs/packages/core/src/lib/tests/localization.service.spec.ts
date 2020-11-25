@@ -1,8 +1,7 @@
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
-import { BehaviorSubject, of } from 'rxjs';
+import { of } from 'rxjs';
 import {
   ApplicationConfigurationService,
   ConfigStateService,

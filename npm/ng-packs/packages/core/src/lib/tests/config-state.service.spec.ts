@@ -1,9 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
-import { of, ReplaySubject, timer } from 'rxjs';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { ApplicationConfiguration } from '../models/application-configuration';
-import { ApplicationConfigurationService, ConfigStateService } from '../services';
+import { ConfigStateService } from '../services';
 
 export const CONFIG_STATE_DATA = ({
   environment: {
