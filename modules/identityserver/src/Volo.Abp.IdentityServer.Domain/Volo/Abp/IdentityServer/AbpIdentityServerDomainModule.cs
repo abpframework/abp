@@ -20,6 +20,7 @@ using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.Validation;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -34,6 +35,8 @@ namespace Volo.Abp.IdentityServer
         )]
     public class AbpIdentityServerDomainModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<AbpIdentityServerDomainModule>();
@@ -102,23 +105,26 @@ namespace Volo.Abp.IdentityServer
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.Client,
-                typeof(Client)
-            );
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.Client,
+                    typeof(Client)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.IdentityResource,
-                typeof(IdentityResource)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.IdentityResource,
+                    typeof(IdentityResource)
+                );
 
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                IdentityServerModuleExtensionConsts.ModuleName,
-                IdentityServerModuleExtensionConsts.EntityNames.ApiResource,
-                typeof(ApiResource)
-            );
+                ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                    IdentityServerModuleExtensionConsts.ModuleName,
+                    IdentityServerModuleExtensionConsts.EntityNames.ApiResource,
+                    typeof(ApiResource)
+                );
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
