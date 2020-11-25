@@ -460,8 +460,8 @@ namespace IssueTracking.Issues
         public string Title { get; private set; } //Needs validation
         public string Text { get; set; } //No validation
         public Guid? AssignedUserId { get; set; } //No validation
-        public bool IsClosed { get; set; } //Should change with CloseReason
-        public IssueCloseReason? CloseReason { get; set; } //Should change with IsClosed
+        public bool IsClosed { get; private set; } //Should change with CloseReason
+        public IssueCloseReason? CloseReason { get; private set; } //Should change with IsClosed
 
         //...
 
@@ -485,3 +485,11 @@ namespace IssueTracking.Issues
 }
 ````
 
+* `RepositoryId` setter made private and there is no way to change it after creating an `Issue` because this is what we want for this domain: An issue can't be moved to another repository.
+* `Title` setter made private and `SetTitle` method has been created if you want to change it later in a controlled way.
+* `Text` and `AssignedUserId` has public setter since there is no restriction on them. They can be null or any other value. We think it is unnecessary to define separate methods to set them. If we need later, we can add methods and make the setters private. Breaking changes are not problem in the domain layer since the domain layer is an internal project, it is not exposed to clients.
+* `IsClosed` and `IssueCloseReason` are pair properties. Defined `Close` and `ReOpen` methods to change them together. In this way, we prevent to close an issue without any reason.
+
+##### Business Logic & Exceptions in the Entities
+
+TODO
