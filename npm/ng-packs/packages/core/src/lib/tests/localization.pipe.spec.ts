@@ -2,27 +2,30 @@ import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spect
 import { LocalizationPipe } from '../pipes';
 import { Store } from '@ngxs/store';
 import { ConfigState } from '../states';
+import { LocalizationService } from '../services';
 
 describe('LocalizationPipe', () => {
   let spectator: SpectatorService<LocalizationPipe>;
   let pipe: LocalizationPipe;
-  let store: SpyObject<Store>;
+  let localizationService: SpyObject<LocalizationService>;
 
-  const createService = createServiceFactory({ service: LocalizationPipe, mocks: [Store] });
+  const createService = createServiceFactory({
+    service: LocalizationPipe,
+    mocks: [Store, LocalizationService],
+  });
 
   beforeEach(() => {
     spectator = createService();
     pipe = spectator.inject(LocalizationPipe);
-    store = spectator.inject(Store);
+    localizationService = spectator.inject(LocalizationService);
   });
 
   it('should call getLocalization selector', () => {
-    const storeSpy = jest.spyOn(store, 'selectSnapshot');
-    const configStateSpy = jest.spyOn(ConfigState, 'getLocalization');
+    const translateSpy = jest.spyOn(localizationService, 'instant');
 
     pipe.transform('test', '1', '2');
     pipe.transform('test2', ['3', '4'] as any);
-    expect(configStateSpy).toHaveBeenCalledWith('test', '1', '2');
-    expect(configStateSpy).toHaveBeenCalledWith('test2', '3', '4');
+    expect(translateSpy).toHaveBeenCalledWith('test', '1', '2');
+    expect(translateSpy).toHaveBeenCalledWith('test2', '3', '4');
   });
 });
