@@ -310,6 +310,27 @@ The following rules will already bring the serializability.
 
 #### Aggregate / Aggregate Root Principles Rules
 
-The following rules ensures to implement the principles introduced above.
+The following rules ensures implementing the principles introduced above.
 
-TODO
+##### Rule: Reference Other Aggregates Only By Id
+
+The first rule says an Aggregate should reference to other aggregates only by their Id. That means you can not add navigation properties to other aggregates.
+
+* This rule make possible to implement the serializability principle.
+* It also prevents different aggregates manipulate each other and leaking business logic of an aggregate to one another.
+
+You see two aggregate roots, `GitRepository` and `Issue` in the example below;
+
+![domain-driven-design-reference-by-id-sample](images/domain-driven-design-reference-by-id-sample.png)
+
+* `GitRepository` should not have a collection of `Issue`s since they are different aggregates.
+* `Issue` should not have a navigation property for the related `GitRepository` since it is a different aggregate.
+* `Issue` can have `RepositoryId` (as a `Guid`).
+
+So, when you have an `Issue` and need to have `GitRepository` related to this issue, you need to explicitly query it from database by the `RepositoryId`.
+
+###### For EF Core & Relational Databases
+
+In MongoDB, it is naturally not suitable to have such navigation properties/collections. If you do that, you find a copy of the destination aggregate object in the database collection of the source aggregate since it is being serialized to JSON on save.
+
+However, EF Core & relational database developers may find this restrictive rule unnecessary since EF Core can handle it on database read and write. We see this an important rule that helps to **reduce the complexity** of the domain prevents potential problems and we strongly suggest to implement this rule. However, if you think it is practical to ignore this rule, see the *Discussion About the Database Independence Principle* section above.
