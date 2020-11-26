@@ -117,3 +117,31 @@ You don't need to make anything unless you need to change the `AntiforgeryOption
 })
 export class AppModule {}
 ```
+
+**Note:** XSRF-TOKEN is only valid if both frontend application and APIs run on the same domain. Therefore, when you make a request, you should use a relative path. 
+
+For example, let's say your APIs is hosted at `https://testdomain.com/ws`
+and your angular application is hosted at `https://testdomain.com/admin`
+
+So if your API request should look like this `https://testdomain.com/ws/api/identity/users`
+
+your `environment.prod.ts` has to be as follows:
+
+```typescript
+export const environment = {
+  production: true,
+  // ....
+  apis: {
+    default: {
+      url: '/ws', // <- just use the context root here
+     // ...
+    },
+  },
+} as Config.Environment;
+```
+
+Let's talk about why.
+
+First, take a look at [Angular's code](https://github.com/angular/angular/blob/master/packages/common/http/src/xsrf.ts#L81)
+
+It does not intercept any request that starts with `http://` or `https://`. There is a good reason for that. Any cross-site request does not need this token for security. This verification is only valid if the request is made to the same domain from which the web page is served. So, simply put, if you serve everything from a single domain, you just use a relative path.
