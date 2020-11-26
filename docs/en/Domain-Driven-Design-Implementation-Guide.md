@@ -675,3 +675,287 @@ This method perfectly guarantee to apply the business logic when you want to ass
 * It makes **hard to use** the entity. The code that uses the entity now needs to inject `IUserIssueService` and pass to the `AssignToAsync` method.
 
 An alternative way of implementing this business logic is to introduce a **Domain Service**, which will be explained later.
+
+### Repositories
+
+A [Repository](Repositories.md) is a collection-like interface that is used by the Domain and Application Layers to access to the data persistence system (the database) to read and write the Business Objects, generally the Aggregates.
+
+Common Repository principles are;
+
+* Define a repository **interface in the Domain Layer** (because it is used in the Domain and Application Layers), **implement in the Infrastructure Layer** (*EntityFrameworkCore* project in the startup template).
+* **Do not include business logic** inside the repositories.
+* Repository interface should be **database provider / ORM independent**. For example, do not return a `DbSet` from a repository method. `DbSet` is an object provided by the EF Core.
+* **Create repositories for aggregate roots**, not for all entities. Because, sub-collection entities (of an aggregate) should be accessed over the aggregate root.
+
+#### Do Not Include Domain Logic in Repositories
+
+While this rule seems obvious at the beginning, it is easy to leak business logic into repositories.
+
+**Example: Get inactive issues from a repository**
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+
+namespace IssueTracking.Issues
+{
+    public interface IIssueRepository : IRepository<Issue, Guid>
+    {
+        Task<List<Issue>> GetInActiveIssuesAsync();
+    }
+}
+````
+
+`IIssueRepository` extends the standard `IRepository<...>` interface by adding a `GetInActiveIssuesAsync` method. This repository works with such an `Issue` class:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+}
+````
+
+(the code shows only the properties we need for this example)
+
+The rule says the repository shouldn't know the business rules. The question here is "**What is an inactive issue**? Is it a business rule definition?"
+
+Let's see the implementation to understand it:
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using IssueTracking.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
+
+namespace IssueTracking.Issues
+{
+    public class EfCoreIssueRepository : 
+        EfCoreRepository<IssueTrackingDbContext, Issue, Guid>,
+        IIssueRepository
+    {
+        public EfCoreIssueRepository(
+            IDbContextProvider<IssueTrackingDbContext> dbContextProvider) 
+            : base(dbContextProvider)
+        {
+        }
+
+        public async Task<List<Issue>> GetInActiveIssuesAsync()
+        {
+            var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+
+            return await DbSet.Where(i =>
+
+                //Open
+                !i.IsClosed &&
+
+                //Assigned to nobody
+                i.AssignedUserId == null &&
+
+                //Created 30+ days ago
+                i.CreationTime < daysAgo30 &&
+
+                //No comment or the last comment was 30+ days ago
+                (i.LastCommentTime == null || i.LastCommentTime < daysAgo30)
+
+            ).ToListAsync();
+        }
+    }
+}
+````
+
+(Used EF Core for the implementation. See the [EF Core integration document](Entity-Framework-Core.md) to learn how to create custom repositories with the EF Core.)
+
+When we check the `GetInActiveIssuesAsync` implementation, we see a **business rule that defines an in-active issue**: The issue should be **open**, **assigned to nobody**, **created 30+ days ago** and has **no comment in the last 30 days**.
+
+This is an implicit definition of business rule that is hidden inside a repository method. The problem occurs when we need to reuse this business logic.
+
+For example, let's say that we want to add an `bool IsInActive()` method on the `Issue` entity. In this way, we can check activeness when we have an issue entity.
+
+Let's see the implementation:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+
+    public bool IsInActive()
+    {
+        var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+        return
+            //Open
+            !IsClosed &&
+
+            //Assigned to nobody
+            AssignedUserId == null &&
+
+            //Created 30+ days ago
+            CreationTime < daysAgo30 &&
+
+            //No comment or the last comment was 30+ days ago
+            (LastCommentTime == null || LastCommentTime < daysAgo30);
+    }
+}
+````
+
+We had to copy/paste/modify the code. What if the definition of the activeness changes? We should not forget to update both places. This is a duplication of a business logic, which is pretty dangerous.
+
+A good solution to this problem is the *Specification Pattern*!
+
+### Specifications
+
+A specification is a **named**, **reusable**, **combinable** and **testable** class to filter the Domain Objects based on the business rules.
+
+ABP Framework provides necessary infrastructure to easily create specification classes and use them inside your application code. Let's implement the in-active issue filter as a specification class:
+
+````csharp
+using System;
+using System.Linq.Expressions;
+using Volo.Abp.Specifications;
+
+namespace IssueTracking.Issues
+{
+    public class InActiveIssueSpecification : Specification<Issue>
+    {
+        public override Expression<Func<Issue, bool>> ToExpression()
+        {
+            var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+            return i =>
+
+                //Open
+                !i.IsClosed &&
+
+                //Assigned to nobody
+                i.AssignedUserId == null &&
+
+                //Created 30+ days ago
+                i.CreationTime < daysAgo30 &&
+
+                //No comment or the last comment was 30+ days ago
+                (i.LastCommentTime == null || i.LastCommentTime < daysAgo30);
+        }
+    }
+}
+````
+
+`Specification<T>` base class simplifies to create a specification class by defining an expression. Just moved the expression here, from the repository.
+
+Now, we can re-use the `InActiveIssueSpecification` in the `Issue` entity and `EfCoreIssueRepository` classes.
+
+#### Using within the Entity
+
+`Specification` class provides an `IsSatisfiedBy` method that returns `true` if the given object (entity) satisfies the specification. We can re-write the `Issue.IsInActive` method as shown below:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+
+    public bool IsInActive()
+    {
+        return new InActiveIssueSpecification().IsSatisfiedBy(this);
+    }
+}
+````
+
+Just created a new instance of the `InActiveIssueSpecification` and used its `IsSatisfiedBy` method to re-use the expression defined by the specification.
+
+#### Using with the Repositories
+
+First, starting from the repository interface:
+
+````csharp
+public interface IIssueRepository : IRepository<Issue, Guid>
+{
+    Task<List<Issue>> GetIssuesAsync(ISpecification<Issue> spec);
+}
+````
+
+Renamed `GetInActiveIssuesAsync` to simple `GetIssuesAsync` by taking a specification object. Since the **specification (the filter) has been moved out of the repository**, we no longer need to create different methods to get issues with different conditions (like `GetAssignedIssues(...)`, `GetLockedIssues(...)`, etc.)
+
+Updated implementation of the repository can be like that:
+
+````csharp
+public class EfCoreIssueRepository :
+    EfCoreRepository<IssueTrackingDbContext, Issue, Guid>,
+    IIssueRepository
+{
+    public EfCoreIssueRepository(
+        IDbContextProvider<IssueTrackingDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    public async Task<List<Issue>> GetIssuesAsync(ISpecification<Issue> spec)
+    {
+        return await DbSet
+            .Where(spec.ToExpression())
+            .ToListAsync();
+    }
+}
+````
+
+Since `ToExpression()` method returns an expression, it can be directly passed to the `Where` method to filter the entities.
+
+Finally, we can pass any Specification instance to the `GetIssuesAsync` method:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IIssueRepository _issueRepository;
+
+    public IssueAppService(IIssueRepository issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync()
+    {
+        var issues = await _issueRepository.GetIssuesAsync(
+            new InActiveIssueSpecification()
+        );
+    }
+}
+````
+
+##### With Default Repositories
+
+Actually, you don't have to create custom repositories to be able to use specifications. The standard `IRepository` already extends the `IQueryable`, so you can use the standard LINQ extension methods over it:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueAppService(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync()
+    {
+        var issues = AsyncExecuter.ToListAsync(
+            _issueRepository.Where(new InActiveIssueSpecification())
+        );
+    }
+}
+````
+
+`AsyncExecuter` is a utility provided by the ABP Framework to use asynchronous LINQ extension methods (like `ToListAsync` here) without depending on the EF Core NuGet package. See the [Repositories document](Repositories.md) for more information.
