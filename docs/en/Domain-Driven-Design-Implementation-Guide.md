@@ -492,4 +492,135 @@ namespace IssueTracking.Issues
 
 ##### Business Logic & Exceptions in the Entities
 
-TODO
+When you implement validation and business logic in the entities, you frequently need to manage exceptional cases. In these cases;
+
+* Create **domain specific exceptions**.
+* **Throw these exceptions** in the entity methods when necessary.
+
+**Example**
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    
+    public bool IsLocked { get; private set; }
+    public bool IsClosed { get; private set; }
+    public IssueCloseReason? CloseReason { get; private set; }
+
+    public void Close(IssueCloseReason reason)
+    {
+        IsClosed = true;
+        CloseReason = reason;
+    }
+
+    public void ReOpen()
+    {
+        if (IsLocked)
+        {
+            throw new IssueStateException(
+                "Can not open a locked issue! Unlock it first."
+            );
+        }
+
+        IsClosed = false;
+        CloseReason = null;
+    }
+
+    public void Lock()
+    {
+        if (!IsClosed)
+        {
+            throw new IssueStateException(
+                "Can not open a locked issue! Unlock it first."
+            );
+        }
+
+        IsLocked = true;
+    }
+
+    public void Unlock()
+    {
+        IsLocked = false;
+    }
+}
+````
+
+There are two business rules here;
+
+* A locked issue can not be re-opened.
+* You can not lock an open issue.
+
+`Issue` class throws a `IssueStateException` in these cases to force business rules:
+
+````csharp
+using System;
+
+namespace IssueTracking.Issues
+{
+    public class IssueStateException : Exception
+    {
+        public IssueStateException(string message)
+            : base(message)
+        {
+            
+        }
+    }
+}
+````
+
+There are two potential problems of throwing such exceptions;
+
+1. In case of such an exception, should the **end user** see the exception (error) message? If so, how do you **localize** the exception message? You can not use the [localization](Localization.md) system, because you can't inject and use `IStringLocalizer` in the entities.
+2. For a web application or HTTP API, what **HTTP Status Code** should return to the client?
+
+ABP's [Exception Handling](Exception-Handling.md) system solves these problems (and more).
+
+**Example: Throwing a business exception with code**
+
+````csharp
+using Volo.Abp;
+
+namespace IssueTracking.Issues
+{
+    public class IssueStateException : BusinessException
+    {
+        public IssueStateException(string code)
+            : base(code)
+        {
+            
+        }
+    }
+}
+````
+
+* `IssueStateException` class inherits the `BusinessException` class. ABP returns 403 (forbidden) HTTP Status code by default (instead of 500 - Internal Server Error) for the exceptions derived from the `BusinessException`.
+* The `code` is used as a key in the localization resource file to find the localized message.
+
+Now, we can change the `ReOpen` method as shown below:
+
+````csharp
+public void ReOpen()
+{
+    if (IsLocked)
+    {
+        throw new IssueStateException("IssueTracking:CanNotOpenLockedIssue");
+    }
+
+    IsClosed = false;
+    CloseReason = null;
+}
+````
+
+> Use constants instead of magic strings.
+
+And add an entry to the localization resource. Example entry for the English language:
+
+````json
+"IssueTracking:CanNotOpenLockedIssue": "Can not open a locked issue! Unlock it first."
+````
+
+* ABP automatically uses this localized message (based on the current language) to show to the end user when you throw the exception.
+* The exception code (`IssueTracking:CanNotOpenLockedIssue` here) is also sent to the client, so it may handle the error case programmatically.
+
+> For this example, you could directly throw `BusinessException` instead of defining a specialized `IssueStateException`. The result will be same. See the [exception handling document](Exception-Handling.md) for all the details.
