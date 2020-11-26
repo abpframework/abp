@@ -817,7 +817,7 @@ A good solution to this problem is the *Specification Pattern*!
 
 ### Specifications
 
-A specification is a **named**, **reusable**, **combinable** and **testable** class to filter the Domain Objects based on the business rules.
+A [specification](Specifications.md) is a **named**, **reusable**, **combinable** and **testable** class to filter the Domain Objects based on the business rules.
 
 ABP Framework provides necessary infrastructure to easily create specification classes and use them inside your application code. Let's implement the in-active issue filter as a specification class:
 
@@ -959,3 +959,58 @@ public class IssueAppService : ApplicationService, IIssueAppService
 ````
 
 `AsyncExecuter` is a utility provided by the ABP Framework to use asynchronous LINQ extension methods (like `ToListAsync` here) without depending on the EF Core NuGet package. See the [Repositories document](Repositories.md) for more information.
+
+#### Combining the Specifications
+
+One powerful side of the Specifications is they are combinable. Assume that we've another specification that returns `true` only if the `Issue` is in a Milestone:
+
+````csharp
+public class MilestoneSpecification : Specification<Issue>
+{
+    public Guid MilestoneId { get; }
+
+    public MilestoneSpecification(Guid milestoneId)
+    {
+        MilestoneId = milestoneId;
+    }
+
+    public override Expression<Func<Issue, bool>> ToExpression()
+    {
+        return i => i.MilestoneId == MilestoneId;
+    }
+}
+````
+
+This Specification is *parametric* as a difference from the `InActiveIssueSpecification`. We can combine both specifications to get a list of inactive issues in a specific milestone:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueAppService(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync(Guid milestoneId)
+    {
+        var issues = AsyncExecuter.ToListAsync(
+            _issueRepository
+                .Where(
+                    new InActiveIssueSpecification()
+                        .And(new MilestoneSpecification(milestoneId))
+                        .ToExpression()
+                )
+        );
+    }
+}
+````
+
+The example above uses the `And` extension method to combine the specifications. There are more combining methods are available, like `Or(...)` and `AndNot(...)`.
+
+> See the [Specifications document](Specifications.md) for more details about the specification infrastructure provided by the ABP Framework.
+
+### Domain Services
+
+TODO
