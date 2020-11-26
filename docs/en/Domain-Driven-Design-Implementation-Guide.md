@@ -624,3 +624,48 @@ And add an entry to the localization resource. Example entry for the English lan
 * The exception code (`IssueTracking:CanNotOpenLockedIssue` here) is also sent to the client, so it may handle the error case programmatically.
 
 > For this example, you could directly throw `BusinessException` instead of defining a specialized `IssueStateException`. The result will be same. See the [exception handling document](Exception-Handling.md) for all the details.
+
+##### Business Logic in Entities Requiring External Services
+
+It is simple to implement a business rule in an entity method when the business logic only uses to the properties of that entity. What if the business logic requires to **query database** or **use any external services** that should be resolved from the [dependency injection](Dependency-Injection.md) system. Remember; **Entities can not inject services**.
+
+There are two common ways of implementing such a business logic:
+
+* Implement the business logic on an entity method and **get external dependencies as parameters** of the method.
+* Create a **Domain Service**.
+
+Domain Services will be explained later. But, now let's see how it can be implemented in the entity class.
+
+**Example: Business Rule: Can not assign more than 3 open issues to a user concurrently**
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; private set; }
+
+    public async Task AssignToAsync(AppUser user, IUserIssueService userIssueService)
+    {
+        var openIssueCount = await userIssueService.GetOpenIssueCountAsync(user.Id);
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        AssignedUserId = user.Id;
+    }
+
+    public void CleanAssignment()
+    {
+        AssignedUserId = null;
+    }
+}
+````
+
+* `AssignedUserId` property setter made private. So, the only way to change it to use the `AssignToAsync` and `CleanAssignment` methods.
+* `AssignToAsync` gets an `AppUser` entity. Actually, it only uses the `user.Id`, so you could get a `Guid` value, like `userId`. However, this way ensures that the `Guid` value is `Id` of an existing user and not a random `Guid` value.
+* `IUserIssueService` is an arbitrary service that is used to get open issue count for a user. It's the responsibility of the code part (that calls the `AssignToAsync`) to resolve the `IUserIssueService` and pass here.
+* `AssignToAsync` throws exception if the business rule doesn't meet.
+* Finally, if everything is correct, `AssignedUserId` property is set.
+
