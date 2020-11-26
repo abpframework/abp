@@ -78,6 +78,8 @@ namespace Volo.Abp.Identity
 
         public virtual async Task UpdateUserAsync(IdentityUser user, string providerName)
         {
+            await IdentityOptions.SetAsync();
+
             var externalUser = await GetUserInfoAsync(user);
             NormalizeExternalLoginUserInfo(externalUser, user.UserName);
 
