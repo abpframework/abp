@@ -1105,4 +1105,78 @@ While there is a tradeoff between two approaches, we prefer to create Domain Ser
 
 ### Application Services
 
+An [Application Service](Application-Services.md) is a stateless service that implements **use cases** of the application. An application service typically **gets and returns DTOs**. It is used by the Presentation Layer. It **uses and coordinates the domain objects** (entities, repositories, etc.) to implement use cases.
+
+Common principles of an application service are;
+
+* Implement the **application logic** that is specific to the current use case. Do not implement the core domain logic inside the application services. We will come back to differences between Application  Domain logics.
+* **Never get or return entities** for an application service method. This breaks the encapsulation of the Domain Layer. Always get and return DTOs.
+
+**Example: Assign an Issue to a User**
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using IssueTracking.Users;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace IssueTracking.Issues
+{
+    public class IssueAppService : ApplicationService, IIssueAppService
+    {
+        private readonly IssueManager _issueManager;
+        private readonly IRepository<Issue, Guid> _issueRepository;
+        private readonly IRepository<AppUser, Guid> _userRepository;
+
+        public IssueAppService(
+            IssueManager issueManager,
+            IRepository<Issue, Guid> issueRepository,
+            IRepository<AppUser, Guid> userRepository)
+        {
+            _issueManager = issueManager;
+            _issueRepository = issueRepository;
+            _userRepository = userRepository;
+        }
+
+        [Authorize]
+        public async Task AssignAsync(IssueAssignDto input)
+        {
+            var issue = await _issueRepository.GetAsync(input.IssueId);
+            var user = await _userRepository.GetAsync(input.UserId);
+
+            await _issueManager.AssignToAsync(issue, user);
+
+            await _issueRepository.UpdateAsync(issue);
+        }
+    }
+}
+````
+
+An application service method typically has three steps those are implemented here;
+
+1. Get the related domain objects from database to implement the use case.
+2. Use domain objects (domain services, entities, etc.) to perform the actual operation.
+3. Update the changed entities in the database.
+
+> The last *Update* is not necessary if your are using EF Core since it has a Change Tracking system. If you want to take advantage of this EF Core feature, please see the *Discussion About the Database Independence Principle* section above.
+
+`IssueAssignDto` in this example is a simple DTO class:
+
+````csharp
+using System;
+
+namespace IssueTracking.Issues
+{
+    public class IssueAssignDto
+    {
+        public Guid IssueId { get; set; }
+        public Guid UserId { get; set; }
+    }
+}
+````
+
+### Data Transfer Objects
+
 TODO
