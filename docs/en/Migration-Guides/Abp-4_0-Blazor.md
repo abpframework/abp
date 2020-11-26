@@ -27,7 +27,7 @@ using Volo.Abp.Bundling;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
-    public class MyProjectNameBundleContributer : IBundleContributor
+    public class MyProjectNameBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {

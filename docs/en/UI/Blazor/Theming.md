@@ -76,7 +76,7 @@ using Volo.Abp.Bundling;
 
 namespace MyTheme
 {
-    public class MyThemeBundleContributer : IBundleContributor
+    public class MyThemeBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {
