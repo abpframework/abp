@@ -669,3 +669,9 @@ public class Issue : AggregateRoot<Guid>
 * `AssignToAsync` throws exception if the business rule doesn't meet.
 * Finally, if everything is correct, `AssignedUserId` property is set.
 
+This method perfectly guarantee to apply the business logic when you want to assign an issue to a user. However, it has some problems;
+
+* It makes the entity class **depends on an external service** which makes the entity **complicated**.
+* It makes **hard to use** the entity. The code that uses the entity now needs to inject `IUserIssueService` and pass to the `AssignToAsync` method.
+
+An alternative way of implementing this business logic is to introduce a **Domain Service**, which will be explained later.
