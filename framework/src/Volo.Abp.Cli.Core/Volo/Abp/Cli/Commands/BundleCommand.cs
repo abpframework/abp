@@ -28,6 +28,26 @@ namespace Volo.Abp.Cli.Commands
             var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Short) ||
                              commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
 
+            var bundle = commandLineArgs.Options.ContainsKey(Options.Bundle.Short) ||
+                             commandLineArgs.Options.ContainsKey(Options.Bundle.Long);
+
+            var minify = commandLineArgs.Options.ContainsKey(Options.Minify.Short) ||
+                             commandLineArgs.Options.ContainsKey(Options.Minify.Long);
+
+            var name = commandLineArgs.Options.GetOrNull(
+                Options.Name.Short,
+                Options.Name.Long
+            );
+
+            if ((minify || bundle) && name.IsNullOrEmpty())
+            {
+                throw new CliUsageException(
+                    "Please specify bundle name." +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
+            }
+
             if (!Directory.Exists(workingDirectory))
             {
                 throw new CliUsageException(
@@ -39,7 +59,7 @@ namespace Volo.Abp.Cli.Commands
 
             try
             {
-                await BundlingService.BundleAsync(workingDirectory, forceBuild);
+                await BundlingService.BundleAsync(workingDirectory, forceBuild, bundle, minify, name);
             }
             catch (BundlingException ex)
             {
@@ -83,6 +103,24 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "f";
                 public const string Long = "force";
+            }
+
+            public static class Bundle
+            {
+                public const string Short = "b";
+                public const string Long = "bundle";
+            }
+
+            public static class Minify
+            {
+                public const string Short = "m";
+                public const string Long = "minify";
+            }
+
+            public static class Name
+            {
+                public const string Short = "n";
+                public const string Long = "name";
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,22 +9,25 @@ using System.Threading.Tasks;
 using System.Xml;
 using Volo.Abp.Bundling;
 using Volo.Abp.Cli.Build;
+using Volo.Abp.Cli.Bundling.Scripts;
+using Volo.Abp.Cli.Bundling.Styles;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Minify.Scripts;
+using Volo.Abp.Minify.Styles;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Cli.Bundling
 {
     public class BundlingService : IBundlingService, ITransientDependency
     {
-        const string StylePlaceholderStart = "<!--ABP:Styles-->";
-        const string StylePlaceholderEnd = "<!--/ABP:Styles-->";
-        const string ScriptPlaceholderStart = "<!--ABP:Scripts-->";
-        const string ScriptPlaceholderEnd = "<!--/ABP:Scripts-->";
-        const string SupportedWebAssemblyProjectType = "Microsoft.NET.Sdk.BlazorWebAssembly";
-
         public IDotNetProjectBuilder DotNetProjectBuilder { get; set; }
+        public IJavascriptMinifier JsMinifier { get; set; }
+        public ICssMinifier CssMinifier { get; set; }
+        public ILogger<BundlingService> Logger { get; set; }
+        public IScriptBundler ScriptBundler { get; set; }
+        public IStyleBundler StyleBundler { get; set; }
 
-        public async Task BundleAsync(string directory, bool forceBuild)
+        public async Task BundleAsync(string directory, bool forceBuild, bool bundle, bool minify, string bundleName)
         {
             var projectFiles = Directory.GetFiles(directory, "*.csproj");
             if (!projectFiles.Any())
@@ -44,7 +48,8 @@ namespace Volo.Abp.Cli.Bundling
             }
 
             var frameworkVersion = GetTargetFrameworkVersion(projectFilePath);
-            var assemblyFilePath = GetAssemblyFilePath(directory, frameworkVersion, Path.GetFileNameWithoutExtension(projectFilePath));
+            var projectName = Path.GetFileNameWithoutExtension(projectFilePath);
+            var assemblyFilePath = PathHelper.GetAssemblyFilePath(directory, frameworkVersion, projectName);
             var startupModule = GetStartupModule(assemblyFilePath);
 
             var bundleDefinitions = new List<BundleTypeDefinition>();
@@ -53,8 +58,27 @@ namespace Volo.Abp.Cli.Bundling
 
             var styleContext = GetStyleContext(bundleDefinitions);
             var scriptContext = GetScriptContext(bundleDefinitions);
-            var styleDefinitions = GenerateStyleDefinitions(styleContext);
-            var scriptDefinitions = GenerateScriptDefinitions(scriptContext);
+            string styleDefinitions;
+            string scriptDefinitions;
+
+            if (bundle || minify)
+            {
+                var options = new BundleOptions
+                {
+                    Directory = directory,
+                    FrameworkVersion = frameworkVersion,
+                    ProjectFileName = projectName,
+                    BundleName = bundleName
+                };
+
+                styleDefinitions = StyleBundler.Bundle(options, styleContext);
+                scriptDefinitions = ScriptBundler.Bundle(options, scriptContext);
+            }
+            else
+            {
+                styleDefinitions = GenerateStyleDefinitions(styleContext);
+                scriptDefinitions = GenerateScriptDefinitions(scriptContext);
+            }
 
             await UpdateDependenciesInHtmlFileAsync(directory, styleDefinitions, scriptDefinitions);
         }
@@ -88,7 +112,7 @@ namespace Volo.Abp.Cli.Bundling
 
         private async Task UpdateDependenciesInHtmlFileAsync(string directory, string styleDefinitions, string scriptDefinitions)
         {
-            var htmlFilePath = Path.Combine(directory, "wwwroot", "index.html");
+            var htmlFilePath = Path.Combine(PathHelper.GetWwwRootPath(directory), "index.html");
             if (!File.Exists(htmlFilePath))
             {
                 throw new BundlingException($"index.html file could not be found in the following path:{htmlFilePath}");
@@ -102,8 +126,8 @@ namespace Volo.Abp.Cli.Bundling
                 content = await reader.ReadToEndAsync();
             }
 
-            content = UpdatePlaceholders(content, StylePlaceholderStart, StylePlaceholderEnd, styleDefinitions);
-            content = UpdatePlaceholders(content, ScriptPlaceholderStart, ScriptPlaceholderEnd, scriptDefinitions);
+            content = UpdatePlaceholders(content, BundlingConsts.StylePlaceholderStart, BundlingConsts.StylePlaceholderEnd, styleDefinitions);
+            content = UpdatePlaceholders(content, BundlingConsts.ScriptPlaceholderStart, BundlingConsts.ScriptPlaceholderEnd, scriptDefinitions);
 
             using (var writer = new StreamWriter(htmlFilePath, false, fileEncoding))
             {
@@ -124,7 +148,7 @@ namespace Volo.Abp.Cli.Bundling
         {
             var builder = new StringBuilder();
 
-            builder.AppendLine($"{StylePlaceholderStart}");
+            builder.AppendLine($"{BundlingConsts.StylePlaceholderStart}");
 
             foreach (var style in context.BundleDefinitions)
             {
@@ -138,7 +162,7 @@ namespace Volo.Abp.Cli.Bundling
                 builder.AppendLine("/>");
             }
 
-            builder.Append($"    {StylePlaceholderEnd}");
+            builder.Append($"    {BundlingConsts.StylePlaceholderEnd}");
 
             return builder.ToString();
         }
@@ -146,7 +170,7 @@ namespace Volo.Abp.Cli.Bundling
         private string GenerateScriptDefinitions(BundleContext context)
         {
             var builder = new StringBuilder();
-            builder.AppendLine($"{ScriptPlaceholderStart}");
+            builder.AppendLine($"{BundlingConsts.ScriptPlaceholderStart}");
             foreach (var script in context.BundleDefinitions)
             {
                 builder.Append($"    <script src=\"{script.Source}\"");
@@ -156,7 +180,7 @@ namespace Volo.Abp.Cli.Bundling
                 }
                 builder.AppendLine("></script>");
             }
-            builder.Append($"    {ScriptPlaceholderEnd}");
+            builder.Append($"    {BundlingConsts.ScriptPlaceholderEnd}");
 
             return builder.ToString();
         }
@@ -223,28 +247,17 @@ namespace Volo.Abp.Cli.Bundling
                 .SingleOrDefault(AbpModule.IsAbpModule);
         }
 
-        private string GetFrameworkFolderPath(string projectDirectory, string frameworkVersion)
-        {
-            return Path.Combine(projectDirectory, "bin", "Debug", frameworkVersion, "wwwroot", "_framework"); ;
-        }
-
         private string GetTargetFrameworkVersion(string projectFilePath)
         {
             var document = new XmlDocument();
             document.Load(projectFilePath);
             var sdk = document.DocumentElement.GetAttribute("Sdk");
-            if (sdk != SupportedWebAssemblyProjectType)
+            if (sdk != BundlingConsts.SupportedWebAssemblyProjectType)
             {
-                throw new BundlingException($"Unsupported project type. Project type must be {SupportedWebAssemblyProjectType}.");
+                throw new BundlingException($"Unsupported project type. Project type must be {BundlingConsts.SupportedWebAssemblyProjectType}.");
             }
 
             return document.SelectSingleNode("//TargetFramework").InnerText;
-        }
-
-        private string GetAssemblyFilePath(string directory, string frameworkVersion, string projectFileName)
-        {
-            var outputDirectory = GetFrameworkFolderPath(directory, frameworkVersion);
-            return Path.Combine(outputDirectory, projectFileName + ".dll");
         }
     }
 }
