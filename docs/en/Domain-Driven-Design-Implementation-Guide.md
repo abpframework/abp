@@ -1013,4 +1013,96 @@ The example above uses the `And` extension method to combine the specifications.
 
 ### Domain Services
 
+Domain Services implement domain logic that;
+
+* Depends on **services and repositories**.
+* Needs to work with **multiple aggregates**, so the logic doesn't properly fit in any of the aggregates.
+
+Domain Services work with Domain Objects. Their methods can **get and return entities, value objects, primitive types**... etc. However, **they don't get/return DTOs**. DTOs is a part of the Application Layer.
+
+**Example: Assigning an issue to a user**
+
+Remember how issue assignment has been implemented in the `Issue` entity:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; private set; }
+
+    public async Task AssignToAsync(AppUser user, IUserIssueService userIssueService)
+    {
+        var openIssueCount = await userIssueService.GetOpenIssueCountAsync(user.Id);
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        AssignedUserId = user.Id;
+    }
+
+    public void CleanAssignment()
+    {
+        AssignedUserId = null;
+    }
+}
+````
+
+Here, we will move this logic into a Domain Service.
+
+First, changing the `Issue` class:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; internal set; }
+}
+````
+
+* Removed the assign-related methods.
+* Changed `AssignedUserId` property's setter from `private` to `internal`, to allow to set it from the Domain Service.
+
+The next step is to create a domain service, named `IssueManager`, that has `AssignToAsync` to assign the given issue to the given user.
+
+````csharp
+public class IssueManager : DomainService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueManager(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task AssignToAsync(Issue issue, AppUser user)
+    {
+        var openIssueCount = await _issueRepository.CountAsync(
+            i => i.AssignedUserId == user.Id && !i.IsClosed
+        );
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        issue.AssignedUserId = user.Id;
+    }
+}
+````
+
+`IssueManager` can inject any service dependency and use to query open issue count on the user.
+
+> We prefer and suggest to use the `Manager` suffix for the Domain Services.
+
+The only problem of this design is that `Issue.AssignedUserId` is now open to set out of the class. However, it is not `public`. It is `internal` and changing it is possible only inside the same Assembly, the `IssueTracking.Domain` project for this example solution. We think this is reasonable;
+
+* Domain Layer developers are already aware of domain rules and they use the `IssueManager`.
+* Application Layer developers are already forces to use the `IssueManager` since they don't directly set it.
+
+While there is a tradeoff between two approaches, we prefer to create Domain Services when the business logic requires to work with external services.
+
+### Application Services
+
 TODO
