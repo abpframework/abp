@@ -62,7 +62,6 @@ namespace MyCompanyName.MyProjectName.Blazor
         private void ConfigureBlazorise(ServiceConfigurationContext context)
         {
             context.Services
-                .AddBlazorise()
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
         }

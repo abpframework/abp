@@ -492,4 +492,691 @@ namespace IssueTracking.Issues
 
 ##### Business Logic & Exceptions in the Entities
 
+When you implement validation and business logic in the entities, you frequently need to manage exceptional cases. In these cases;
+
+* Create **domain specific exceptions**.
+* **Throw these exceptions** in the entity methods when necessary.
+
+**Example**
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    
+    public bool IsLocked { get; private set; }
+    public bool IsClosed { get; private set; }
+    public IssueCloseReason? CloseReason { get; private set; }
+
+    public void Close(IssueCloseReason reason)
+    {
+        IsClosed = true;
+        CloseReason = reason;
+    }
+
+    public void ReOpen()
+    {
+        if (IsLocked)
+        {
+            throw new IssueStateException(
+                "Can not open a locked issue! Unlock it first."
+            );
+        }
+
+        IsClosed = false;
+        CloseReason = null;
+    }
+
+    public void Lock()
+    {
+        if (!IsClosed)
+        {
+            throw new IssueStateException(
+                "Can not open a locked issue! Unlock it first."
+            );
+        }
+
+        IsLocked = true;
+    }
+
+    public void Unlock()
+    {
+        IsLocked = false;
+    }
+}
+````
+
+There are two business rules here;
+
+* A locked issue can not be re-opened.
+* You can not lock an open issue.
+
+`Issue` class throws a `IssueStateException` in these cases to force business rules:
+
+````csharp
+using System;
+
+namespace IssueTracking.Issues
+{
+    public class IssueStateException : Exception
+    {
+        public IssueStateException(string message)
+            : base(message)
+        {
+            
+        }
+    }
+}
+````
+
+There are two potential problems of throwing such exceptions;
+
+1. In case of such an exception, should the **end user** see the exception (error) message? If so, how do you **localize** the exception message? You can not use the [localization](Localization.md) system, because you can't inject and use `IStringLocalizer` in the entities.
+2. For a web application or HTTP API, what **HTTP Status Code** should return to the client?
+
+ABP's [Exception Handling](Exception-Handling.md) system solves these problems (and more).
+
+**Example: Throwing a business exception with code**
+
+````csharp
+using Volo.Abp;
+
+namespace IssueTracking.Issues
+{
+    public class IssueStateException : BusinessException
+    {
+        public IssueStateException(string code)
+            : base(code)
+        {
+            
+        }
+    }
+}
+````
+
+* `IssueStateException` class inherits the `BusinessException` class. ABP returns 403 (forbidden) HTTP Status code by default (instead of 500 - Internal Server Error) for the exceptions derived from the `BusinessException`.
+* The `code` is used as a key in the localization resource file to find the localized message.
+
+Now, we can change the `ReOpen` method as shown below:
+
+````csharp
+public void ReOpen()
+{
+    if (IsLocked)
+    {
+        throw new IssueStateException("IssueTracking:CanNotOpenLockedIssue");
+    }
+
+    IsClosed = false;
+    CloseReason = null;
+}
+````
+
+> Use constants instead of magic strings.
+
+And add an entry to the localization resource. Example entry for the English language:
+
+````json
+"IssueTracking:CanNotOpenLockedIssue": "Can not open a locked issue! Unlock it first."
+````
+
+* ABP automatically uses this localized message (based on the current language) to show to the end user when you throw the exception.
+* The exception code (`IssueTracking:CanNotOpenLockedIssue` here) is also sent to the client, so it may handle the error case programmatically.
+
+> For this example, you could directly throw `BusinessException` instead of defining a specialized `IssueStateException`. The result will be same. See the [exception handling document](Exception-Handling.md) for all the details.
+
+##### Business Logic in Entities Requiring External Services
+
+It is simple to implement a business rule in an entity method when the business logic only uses to the properties of that entity. What if the business logic requires to **query database** or **use any external services** that should be resolved from the [dependency injection](Dependency-Injection.md) system. Remember; **Entities can not inject services**.
+
+There are two common ways of implementing such a business logic:
+
+* Implement the business logic on an entity method and **get external dependencies as parameters** of the method.
+* Create a **Domain Service**.
+
+Domain Services will be explained later. But, now let's see how it can be implemented in the entity class.
+
+**Example: Business Rule: Can not assign more than 3 open issues to a user concurrently**
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; private set; }
+
+    public async Task AssignToAsync(AppUser user, IUserIssueService userIssueService)
+    {
+        var openIssueCount = await userIssueService.GetOpenIssueCountAsync(user.Id);
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        AssignedUserId = user.Id;
+    }
+
+    public void CleanAssignment()
+    {
+        AssignedUserId = null;
+    }
+}
+````
+
+* `AssignedUserId` property setter made private. So, the only way to change it to use the `AssignToAsync` and `CleanAssignment` methods.
+* `AssignToAsync` gets an `AppUser` entity. Actually, it only uses the `user.Id`, so you could get a `Guid` value, like `userId`. However, this way ensures that the `Guid` value is `Id` of an existing user and not a random `Guid` value.
+* `IUserIssueService` is an arbitrary service that is used to get open issue count for a user. It's the responsibility of the code part (that calls the `AssignToAsync`) to resolve the `IUserIssueService` and pass here.
+* `AssignToAsync` throws exception if the business rule doesn't meet.
+* Finally, if everything is correct, `AssignedUserId` property is set.
+
+This method perfectly guarantee to apply the business logic when you want to assign an issue to a user. However, it has some problems;
+
+* It makes the entity class **depends on an external service** which makes the entity **complicated**.
+* It makes **hard to use** the entity. The code that uses the entity now needs to inject `IUserIssueService` and pass to the `AssignToAsync` method.
+
+An alternative way of implementing this business logic is to introduce a **Domain Service**, which will be explained later.
+
+### Repositories
+
+A [Repository](Repositories.md) is a collection-like interface that is used by the Domain and Application Layers to access to the data persistence system (the database) to read and write the Business Objects, generally the Aggregates.
+
+Common Repository principles are;
+
+* Define a repository **interface in the Domain Layer** (because it is used in the Domain and Application Layers), **implement in the Infrastructure Layer** (*EntityFrameworkCore* project in the startup template).
+* **Do not include business logic** inside the repositories.
+* Repository interface should be **database provider / ORM independent**. For example, do not return a `DbSet` from a repository method. `DbSet` is an object provided by the EF Core.
+* **Create repositories for aggregate roots**, not for all entities. Because, sub-collection entities (of an aggregate) should be accessed over the aggregate root.
+
+#### Do Not Include Domain Logic in Repositories
+
+While this rule seems obvious at the beginning, it is easy to leak business logic into repositories.
+
+**Example: Get inactive issues from a repository**
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+
+namespace IssueTracking.Issues
+{
+    public interface IIssueRepository : IRepository<Issue, Guid>
+    {
+        Task<List<Issue>> GetInActiveIssuesAsync();
+    }
+}
+````
+
+`IIssueRepository` extends the standard `IRepository<...>` interface by adding a `GetInActiveIssuesAsync` method. This repository works with such an `Issue` class:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+}
+````
+
+(the code shows only the properties we need for this example)
+
+The rule says the repository shouldn't know the business rules. The question here is "**What is an inactive issue**? Is it a business rule definition?"
+
+Let's see the implementation to understand it:
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using IssueTracking.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
+
+namespace IssueTracking.Issues
+{
+    public class EfCoreIssueRepository : 
+        EfCoreRepository<IssueTrackingDbContext, Issue, Guid>,
+        IIssueRepository
+    {
+        public EfCoreIssueRepository(
+            IDbContextProvider<IssueTrackingDbContext> dbContextProvider) 
+            : base(dbContextProvider)
+        {
+        }
+
+        public async Task<List<Issue>> GetInActiveIssuesAsync()
+        {
+            var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+
+            return await DbSet.Where(i =>
+
+                //Open
+                !i.IsClosed &&
+
+                //Assigned to nobody
+                i.AssignedUserId == null &&
+
+                //Created 30+ days ago
+                i.CreationTime < daysAgo30 &&
+
+                //No comment or the last comment was 30+ days ago
+                (i.LastCommentTime == null || i.LastCommentTime < daysAgo30)
+
+            ).ToListAsync();
+        }
+    }
+}
+````
+
+(Used EF Core for the implementation. See the [EF Core integration document](Entity-Framework-Core.md) to learn how to create custom repositories with the EF Core.)
+
+When we check the `GetInActiveIssuesAsync` implementation, we see a **business rule that defines an in-active issue**: The issue should be **open**, **assigned to nobody**, **created 30+ days ago** and has **no comment in the last 30 days**.
+
+This is an implicit definition of business rule that is hidden inside a repository method. The problem occurs when we need to reuse this business logic.
+
+For example, let's say that we want to add an `bool IsInActive()` method on the `Issue` entity. In this way, we can check activeness when we have an issue entity.
+
+Let's see the implementation:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+
+    public bool IsInActive()
+    {
+        var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+        return
+            //Open
+            !IsClosed &&
+
+            //Assigned to nobody
+            AssignedUserId == null &&
+
+            //Created 30+ days ago
+            CreationTime < daysAgo30 &&
+
+            //No comment or the last comment was 30+ days ago
+            (LastCommentTime == null || LastCommentTime < daysAgo30);
+    }
+}
+````
+
+We had to copy/paste/modify the code. What if the definition of the activeness changes? We should not forget to update both places. This is a duplication of a business logic, which is pretty dangerous.
+
+A good solution to this problem is the *Specification Pattern*!
+
+### Specifications
+
+A [specification](Specifications.md) is a **named**, **reusable**, **combinable** and **testable** class to filter the Domain Objects based on the business rules.
+
+ABP Framework provides necessary infrastructure to easily create specification classes and use them inside your application code. Let's implement the in-active issue filter as a specification class:
+
+````csharp
+using System;
+using System.Linq.Expressions;
+using Volo.Abp.Specifications;
+
+namespace IssueTracking.Issues
+{
+    public class InActiveIssueSpecification : Specification<Issue>
+    {
+        public override Expression<Func<Issue, bool>> ToExpression()
+        {
+            var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+            return i =>
+
+                //Open
+                !i.IsClosed &&
+
+                //Assigned to nobody
+                i.AssignedUserId == null &&
+
+                //Created 30+ days ago
+                i.CreationTime < daysAgo30 &&
+
+                //No comment or the last comment was 30+ days ago
+                (i.LastCommentTime == null || i.LastCommentTime < daysAgo30);
+        }
+    }
+}
+````
+
+`Specification<T>` base class simplifies to create a specification class by defining an expression. Just moved the expression here, from the repository.
+
+Now, we can re-use the `InActiveIssueSpecification` in the `Issue` entity and `EfCoreIssueRepository` classes.
+
+#### Using within the Entity
+
+`Specification` class provides an `IsSatisfiedBy` method that returns `true` if the given object (entity) satisfies the specification. We can re-write the `Issue.IsInActive` method as shown below:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+
+    public bool IsInActive()
+    {
+        return new InActiveIssueSpecification().IsSatisfiedBy(this);
+    }
+}
+````
+
+Just created a new instance of the `InActiveIssueSpecification` and used its `IsSatisfiedBy` method to re-use the expression defined by the specification.
+
+#### Using with the Repositories
+
+First, starting from the repository interface:
+
+````csharp
+public interface IIssueRepository : IRepository<Issue, Guid>
+{
+    Task<List<Issue>> GetIssuesAsync(ISpecification<Issue> spec);
+}
+````
+
+Renamed `GetInActiveIssuesAsync` to simple `GetIssuesAsync` by taking a specification object. Since the **specification (the filter) has been moved out of the repository**, we no longer need to create different methods to get issues with different conditions (like `GetAssignedIssues(...)`, `GetLockedIssues(...)`, etc.)
+
+Updated implementation of the repository can be like that:
+
+````csharp
+public class EfCoreIssueRepository :
+    EfCoreRepository<IssueTrackingDbContext, Issue, Guid>,
+    IIssueRepository
+{
+    public EfCoreIssueRepository(
+        IDbContextProvider<IssueTrackingDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    public async Task<List<Issue>> GetIssuesAsync(ISpecification<Issue> spec)
+    {
+        return await DbSet
+            .Where(spec.ToExpression())
+            .ToListAsync();
+    }
+}
+````
+
+Since `ToExpression()` method returns an expression, it can be directly passed to the `Where` method to filter the entities.
+
+Finally, we can pass any Specification instance to the `GetIssuesAsync` method:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IIssueRepository _issueRepository;
+
+    public IssueAppService(IIssueRepository issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync()
+    {
+        var issues = await _issueRepository.GetIssuesAsync(
+            new InActiveIssueSpecification()
+        );
+    }
+}
+````
+
+##### With Default Repositories
+
+Actually, you don't have to create custom repositories to be able to use specifications. The standard `IRepository` already extends the `IQueryable`, so you can use the standard LINQ extension methods over it:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueAppService(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync()
+    {
+        var issues = AsyncExecuter.ToListAsync(
+            _issueRepository.Where(new InActiveIssueSpecification())
+        );
+    }
+}
+````
+
+`AsyncExecuter` is a utility provided by the ABP Framework to use asynchronous LINQ extension methods (like `ToListAsync` here) without depending on the EF Core NuGet package. See the [Repositories document](Repositories.md) for more information.
+
+#### Combining the Specifications
+
+One powerful side of the Specifications is they are combinable. Assume that we've another specification that returns `true` only if the `Issue` is in a Milestone:
+
+````csharp
+public class MilestoneSpecification : Specification<Issue>
+{
+    public Guid MilestoneId { get; }
+
+    public MilestoneSpecification(Guid milestoneId)
+    {
+        MilestoneId = milestoneId;
+    }
+
+    public override Expression<Func<Issue, bool>> ToExpression()
+    {
+        return i => i.MilestoneId == MilestoneId;
+    }
+}
+````
+
+This Specification is *parametric* as a difference from the `InActiveIssueSpecification`. We can combine both specifications to get a list of inactive issues in a specific milestone:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueAppService(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync(Guid milestoneId)
+    {
+        var issues = AsyncExecuter.ToListAsync(
+            _issueRepository
+                .Where(
+                    new InActiveIssueSpecification()
+                        .And(new MilestoneSpecification(milestoneId))
+                        .ToExpression()
+                )
+        );
+    }
+}
+````
+
+The example above uses the `And` extension method to combine the specifications. There are more combining methods are available, like `Or(...)` and `AndNot(...)`.
+
+> See the [Specifications document](Specifications.md) for more details about the specification infrastructure provided by the ABP Framework.
+
+### Domain Services
+
+Domain Services implement domain logic that;
+
+* Depends on **services and repositories**.
+* Needs to work with **multiple aggregates**, so the logic doesn't properly fit in any of the aggregates.
+
+Domain Services work with Domain Objects. Their methods can **get and return entities, value objects, primitive types**... etc. However, **they don't get/return DTOs**. DTOs is a part of the Application Layer.
+
+**Example: Assigning an issue to a user**
+
+Remember how issue assignment has been implemented in the `Issue` entity:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; private set; }
+
+    public async Task AssignToAsync(AppUser user, IUserIssueService userIssueService)
+    {
+        var openIssueCount = await userIssueService.GetOpenIssueCountAsync(user.Id);
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        AssignedUserId = user.Id;
+    }
+
+    public void CleanAssignment()
+    {
+        AssignedUserId = null;
+    }
+}
+````
+
+Here, we will move this logic into a Domain Service.
+
+First, changing the `Issue` class:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; internal set; }
+}
+````
+
+* Removed the assign-related methods.
+* Changed `AssignedUserId` property's setter from `private` to `internal`, to allow to set it from the Domain Service.
+
+The next step is to create a domain service, named `IssueManager`, that has `AssignToAsync` to assign the given issue to the given user.
+
+````csharp
+public class IssueManager : DomainService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueManager(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task AssignToAsync(Issue issue, AppUser user)
+    {
+        var openIssueCount = await _issueRepository.CountAsync(
+            i => i.AssignedUserId == user.Id && !i.IsClosed
+        );
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        issue.AssignedUserId = user.Id;
+    }
+}
+````
+
+`IssueManager` can inject any service dependency and use to query open issue count on the user.
+
+> We prefer and suggest to use the `Manager` suffix for the Domain Services.
+
+The only problem of this design is that `Issue.AssignedUserId` is now open to set out of the class. However, it is not `public`. It is `internal` and changing it is possible only inside the same Assembly, the `IssueTracking.Domain` project for this example solution. We think this is reasonable;
+
+* Domain Layer developers are already aware of domain rules and they use the `IssueManager`.
+* Application Layer developers are already forces to use the `IssueManager` since they don't directly set it.
+
+While there is a tradeoff between two approaches, we prefer to create Domain Services when the business logic requires to work with external services.
+
+### Application Services
+
+An [Application Service](Application-Services.md) is a stateless service that implements **use cases** of the application. An application service typically **gets and returns DTOs**. It is used by the Presentation Layer. It **uses and coordinates the domain objects** (entities, repositories, etc.) to implement use cases.
+
+Common principles of an application service are;
+
+* Implement the **application logic** that is specific to the current use case. Do not implement the core domain logic inside the application services. We will come back to differences between Application  Domain logics.
+* **Never get or return entities** for an application service method. This breaks the encapsulation of the Domain Layer. Always get and return DTOs.
+
+**Example: Assign an Issue to a User**
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using IssueTracking.Users;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace IssueTracking.Issues
+{
+    public class IssueAppService : ApplicationService, IIssueAppService
+    {
+        private readonly IssueManager _issueManager;
+        private readonly IRepository<Issue, Guid> _issueRepository;
+        private readonly IRepository<AppUser, Guid> _userRepository;
+
+        public IssueAppService(
+            IssueManager issueManager,
+            IRepository<Issue, Guid> issueRepository,
+            IRepository<AppUser, Guid> userRepository)
+        {
+            _issueManager = issueManager;
+            _issueRepository = issueRepository;
+            _userRepository = userRepository;
+        }
+
+        [Authorize]
+        public async Task AssignAsync(IssueAssignDto input)
+        {
+            var issue = await _issueRepository.GetAsync(input.IssueId);
+            var user = await _userRepository.GetAsync(input.UserId);
+
+            await _issueManager.AssignToAsync(issue, user);
+
+            await _issueRepository.UpdateAsync(issue);
+        }
+    }
+}
+````
+
+An application service method typically has three steps those are implemented here;
+
+1. Get the related domain objects from database to implement the use case.
+2. Use domain objects (domain services, entities, etc.) to perform the actual operation.
+3. Update the changed entities in the database.
+
+> The last *Update* is not necessary if your are using EF Core since it has a Change Tracking system. If you want to take advantage of this EF Core feature, please see the *Discussion About the Database Independence Principle* section above.
+
+`IssueAssignDto` in this example is a simple DTO class:
+
+````csharp
+using System;
+
+namespace IssueTracking.Issues
+{
+    public class IssueAssignDto
+    {
+        public Guid IssueId { get; set; }
+        public Guid UserId { get; set; }
+    }
+}
+````
+
+### Data Transfer Objects
+
 TODO
