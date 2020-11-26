@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import { BehaviorSubject, of } from 'rxjs';
-import { getRemoteEnv } from '../utils/environment-utils';
-import { SetEnvironment } from '../actions/config.actions';
 import { Config } from '../models/config';
+import { Environment } from '../models/environment';
+import { EnvironmentService } from '../services';
+import { getRemoteEnv } from '../utils/environment-utils';
 import { deepMerge } from '../utils/object-utils';
 
 @Component({
@@ -18,13 +18,13 @@ describe('EnvironmentUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    mocks: [Store, HttpClient],
+    mocks: [EnvironmentService, HttpClient],
   });
 
   beforeEach(() => (spectator = createComponent()));
 
   describe('#getRemoteEnv', () => {
-    const environment: Config.Environment = {
+    const environment: Environment = {
       production: false,
       hmr: false,
       application: {
@@ -79,22 +79,22 @@ describe('EnvironmentUtils', () => {
     function setupTestAndRun(strategy: Pick<Config.RemoteEnv, 'mergeStrategy'>, expectedValue) {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
-      const store = spectator.inject(Store);
-      const dispatchSpy = jest.spyOn(store, 'dispatch');
       const http = spectator.inject(HttpClient);
       const requestSpy = jest.spyOn(http, 'request');
+      const environmentService = spectator.inject(EnvironmentService);
+      const setStateSpy = jest.spyOn(environmentService, 'setState');
 
+      injectorSpy.mockReturnValueOnce(environmentService);
       injectorSpy.mockReturnValueOnce(http);
-      injectorSpy.mockReturnValueOnce(store);
+      injectorSpy.mockReturnValueOnce({});
 
       requestSpy.mockReturnValue(new BehaviorSubject(customEnv));
-      dispatchSpy.mockReturnValue(of(true));
 
       environment.remoteEnv.mergeStrategy = strategy.mergeStrategy;
       getRemoteEnv(injector, environment);
 
       expect(requestSpy).toHaveBeenCalledWith('GET', '/assets/appsettings.json', { headers: {} });
-      expect(dispatchSpy).toHaveBeenCalledWith(new SetEnvironment(expectedValue));
+      expect(setStateSpy).toHaveBeenCalledWith(expectedValue);
     }
   });
 });

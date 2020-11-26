@@ -220,4 +220,276 @@ DDD **ignores reporting** and mass querying. That doesn't mean they are not impo
 
 ## Implementation: The Building Blocks
 
+This is the essential part of this guide. We will introduce and explain some **explicit rules** with examples. You can follow these rules and apply in your solutions while implementing the Domain Driven Design.
+
+### The Example Domain
+
+The examples will use some concepts those are used by GitHub, like `Issue`, `Repository`, `Label` and `User`, you already familiar with. The figure below shows some of the aggregates, aggregate roots, entities, value object and the relations between them:
+
+![domain driven design example schema](images/domain-driven-design-example-domain-schema.png)
+
+**Issue Aggregate** consists of an `Issue` Aggregate Root that contains `Comment` and `IssueLabel` collections. Other aggregates are shown as simple since we will focus on the Issue Aggregate:
+
+![domain-driven-design-issue-aggregate-diagram](images/domain-driven-design-issue-aggregate-diagram.png)
+
+### Aggregates
+
+As said before, an [Aggregate](Entities.md) is a cluster of objects (entities and value objects) bound together by an Aggregate Root object. This section will introduce the principles and rules related to the Aggregates.
+
+> We refer the term *Entity* both for *Aggregate Root* and *sub-collection entities* unless we explicitly write *Aggregate Root* or *sub-collection entity*.
+
+#### Aggregate / Aggregate Root Principles
+
+##### Business Rules
+
+Entities are responsible to implement the business rules related to the properties of their own. The *Aggregate Root Entities* are also responsible for their sub-collection entities.
+
+An aggregate should maintain its self **integrity** and **validity** by implementing domain rules and constraints. That means, unlike the DTOs, Entities have **methods to implement some business logic**. Actually, we should try to implement business rules in the entities wherever possible.
+
+##### Single Unit
+
+An aggregate is **retrieved and saved as a single unit**, with all the sub-collections and properties. For example, if you want to add a `Comment` to an `Issue`, you need to;
+
+* Get the `Issue` from database with including all the sub-collections (`Comment`s and `IssueLabel`s).
+* Use methods on the `Issue` class to add a new comment, like `Issue.AddComment(...);`.
+* Save the `Issue` (with all sub-collections) to the database as a single database operation (update).
+
+That may seem strange to the developers used to work with **EF Core & Relational Databases** before. Getting the `Issue` with all details seems **unnecessary and inefficient**. Why don't we just execute an SQL `Insert` command to database without querying any data?
+
+The answer is that we should **implement the business** rules and preserve the data **consistency** and **integrity** in the **code**. If we have a business rule like "*Users can not comment on the locked issues*", how can we check the `Issue`'s lock state without retrieving it from the database? So, we can execute the business rules only if the related objects available in the application code.
+
+On the other hand, **MongoDB** developers will find this rule very natural. In MongoDB, an aggregate object (with sub-collections) is saved in a **single collection** in the database (while it is distributed into several tables in a relational database). So, when you get an aggregate, all the sub-collections are already retrieved as a part of the query, without any additional configuration.
+
+ABP Framework helps to implement this principle in your applications.
+
+**Example: Add a comment to an issue**
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueAppService(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    [Authorize]
+    public async Task CreateCommentAsync(CreateCommentDto input)
+    {
+        var issue = await _issueRepository.GetAsync(input.IssueId);
+        issue.AddComment(CurrentUser.GetId(), input.Text);
+        await _issueRepository.UpdateAsync(issue);
+    }
+}
+````
+
+`_issueRepository.GetAsync` method retrieves the `Issue` with all details (sub-collections) as a single unit by default. While this works out of the box for MongoDB, you need to configure your aggregate details for the EF Core. But, once you configure, repositories automatically handle it. `_issueRepository.GetAsync` method gets an optional parameter, `includeDetails`, that you can pass `false` to disable this behavior when you need it.
+
+> See the *Loading Related Entities* section of the [EF Core document](Entity-Framework-Core.md) for the configuration and alternative scenarios.
+
+`Issue.AddComment` gets a `userId` and comment `text`, implements the necessary business rules and adds the comment to the Comments collection of the `Issue`.
+
+Finally, we use `_issueRepository.UpdateAsync` to save changes to the database.
+
+> EF Core has a **change tracking** feature. So, you actually don't need to call `_issueRepository.UpdateAsync`. It will be automatically saved thanks to ABP's Unit Of Work system that automatically calls `DbContext.SaveChanges()` at the end of the method. However, for MongoDB, you need to explicitly update the changed entity.
+>
+> So, if you want to write your code Database Provider independent, you should always call the `UpdateAsync` method for the changed entities.
+
+##### Transaction Boundary
+
+An aggregate is generally considered as a transaction boundary. If a use case works with a single aggregate, reads and saves it as a single unit, all the changes made to the aggregate objects are saved together as an atomic operation and you don't need to an explicit database transaction.
+
+However, in real life, you may need to change **more than one aggregate instances** in a single use case and you need to use database transactions to ensure **atomic update** and **data consistency**. Because of that, ABP Framework uses an explicit database transaction for a use case (an application service method boundary). See the [Unit Of Work](Unit-Of-Work.md) documentation for more info.
+
+##### Serializability
+
+An aggregate (with the root entity and sub-collections) should be serializable and transferrable on the wire as a single unit. For example, MongoDB serializes the aggregate to JSON document while saving to the database and deserializes from JSON while reading from the database.
+
+> This requirement is not necessary when you use relational databases and ORMs. However, it is an important practice of Domain Driven Design.
+
+The following rules will already bring the serializability.
+
+#### Aggregate / Aggregate Root Rules & Best Practices
+
+The following rules ensures implementing the principles introduced above.
+
+##### Reference Other Aggregates Only By Id
+
+The first rule says an Aggregate should reference to other aggregates only by their Id. That means you can not add navigation properties to other aggregates.
+
+* This rule make possible to implement the serializability principle.
+* It also prevents different aggregates manipulate each other and leaking business logic of an aggregate to one another.
+
+You see two aggregate roots, `GitRepository` and `Issue` in the example below;
+
+![domain-driven-design-reference-by-id-sample](images/domain-driven-design-reference-by-id-sample.png)
+
+* `GitRepository` should not have a collection of `Issue`s since they are different aggregates.
+* `Issue` should not have a navigation property for the related `GitRepository` since it is a different aggregate.
+* `Issue` can have `RepositoryId` (as a `Guid`).
+
+So, when you have an `Issue` and need to have `GitRepository` related to this issue, you need to explicitly query it from database by the `RepositoryId`.
+
+###### For EF Core & Relational Databases
+
+In MongoDB, it is naturally not suitable to have such navigation properties/collections. If you do that, you find a copy of the destination aggregate object in the database collection of the source aggregate since it is being serialized to JSON on save.
+
+However, EF Core & relational database developers may find this restrictive rule unnecessary since EF Core can handle it on database read and write. We see this an important rule that helps to **reduce the complexity** of the domain prevents potential problems and we strongly suggest to implement this rule. However, if you think it is practical to ignore this rule, see the *Discussion About the Database Independence Principle* section above.
+
+##### Keep Aggregates Small
+
+One good practice is to keep an aggregate simple and small. This is because an aggregate will be loaded and saved as a single unit and reading/writing a big object has performance problems. See the example below:
+
+![domain-driven-design-aggregate-keep-small](images/domain-driven-design-aggregate-keep-small.png)
+
+Role aggregate has a collection of `UserRole` value objects to track the users assigned for this role. Notice that `UserRole` is not another aggregate and it is not a problem for the rule *Reference Other Aggregates Only By Id*. However, it is a problem in practical. A role may be assigned to thousands (even millions) of users in a real life scenario and it is a significant performance problem to load thousands of items whenever you query a `Role` from database (remember: Aggregates are loaded by their sub-collections as a single unit).
+
+On the other hand, `User` may have such a `Roles` collection since a user doesn't have much roles in practical and it can be useful to have a list of roles while you are working with a User Aggregate.
+
+If you think careful, there is one more problem when Role and User both have the list of relation if you use a **non-relational database, like MongoDB**. In this case, the same information is duplicated in different collections and it will be hard to maintain data consistency (whenever you add an item to `User.Roles`, you need to add it to `Role.Users` too).
+
+So, determine your aggregate boundaries and size based on the following considerations;
+
+* Objects used together.
+* Query (load/save) performance and memory consumption.
+* Data integrity, validity and consistency.
+
+In practical;
+
+* Most of the aggregate roots will **not have sub-collections**.
+* A sub-collection should not have more than **100-150 items** inside it at the most case. If you think a collection potentially can have more items, don't define the collection as a part of the aggregate and consider to extract another aggregate root for the entity inside the collection.
+
+##### Primary Keys of the Aggregate Roots / Entities
+
+* An aggregate root typically has a single `Id` property for its identifier (Primark Key: PK). We prefer `Guid` as the PK of an aggregate root entity (see the [Guid Genertation document](Guid-Generation.md) to learn why).
+* An entity (that's not the aggregate root) in an aggregate can use a composite primary key.
+
+For example, see the Aggregate root and the Entity below:
+
+![domain-driven-design-entity-primary-keys](images/domain-driven-design-entity-primary-keys.png)
+
+* `Organization` has a `Guid` identifier (`Id`).
+* `OrganizationUser` is a sub-collection of an `Organization` and has a composite primary key consists of the `OrganizationId` and `UserId`.
+
+That doesn't mean sub-collection entities should always have composite PKs. They may have single `Id` properties when it's needed.
+
+> Composite PKs are actually a concept of relational databases since the sub-collection entities have their own tables and needs to a PK. On the other hand, for example, in MongoDB you don't need to define PK for the sub-collection entities at all since they are stored as a part of the aggregate root.
+
+##### Constructors of the Aggregate Roots / Entities
+
+The constructor is where the lifecycle of an entity begins. There are a some responsibilities of a well designed constructor:
+
+* Gets the **required entity properties** as parameters to **create a valid entity**. Should force to pass only for the required parameters and may get non-required properties as optional parameters.
+* **Checks validity** of the parameters.
+* Initializes **sub-collections**.
+
+**Example: `Issue` (Aggregate Root) constructor**
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+
+namespace IssueTracking.Issues
+{
+    public class Issue : AggregateRoot<Guid>
+    {
+        public Guid RepositoryId { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public Guid? AssignedUserId { get; set; }
+        public bool IsClosed { get; set; }
+        public IssueCloseReason? CloseReason { get; set; } //enum
+
+        public ICollection<IssueLabel> Labels { get; set; }
+
+        public Issue(
+            Guid id,
+            Guid repositoryId,
+            string title,
+            string text = null,
+            Guid? assignedUserId = null
+            ) : base(id)
+        {
+            RepositoryId = repositoryId;
+            Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+            
+            Text = text;
+            AssignedUserId = assignedUserId;
+            
+            Labels = new Collection<IssueLabel>();
+        }
+
+        private Issue() { /* for deserialization & ORMs */ }
+    }
+}
+````
+
+* `Issue` class properly **forces to create a valid entity** by taking minimum necessary properties in its constructor as parameters.
+* The constructor **validates** the inputs (`Check.NotNullOrWhiteSpace(...)` throws `ArgumentException` if the given value is empty).
+* It **initializes the sub-collections**, so you don't get a null reference exception when you try to use the `Labels` collection after creating the `Issue`.
+* The constructor also **takes the `id`** and passes to the `base` class. We don't generate `Guid`s inside the constructor to be able to delegate this responsibility to another service (see [Guid Generation](Guid-Generation.md)).
+* Private **empty constructor** is necessary for ORMs. We made it `private` to prevent accidently using it in our own code.
+
+> See the [Entities](Entities.md) document to learn more about creating entities with the ABP Framework.
+
+##### Entity Property Accessors & Methods
+
+The example above seems strange to you. For example, we force to pass a non-null `Title` in the constructor. However, the developer may then set the `Title` property to `null` without any control. This is because the example code above just focuses on the constructor.
+
+If we declare all the properties with **public setters** (like the example `Issue` class above), we can't force **validity** and **integrity** of the entity in its lifecycle. So;
+
+* Use **private setter** for a property when you need to perform any **logic** while setting that property.
+* Define public methods to manipulate such properties.
+
+**Example: Methods to change the properties in a controlled way**
+
+````csharp
+using System;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+
+namespace IssueTracking.Issues
+{
+    public class Issue : AggregateRoot<Guid>
+    {
+        public Guid RepositoryId { get; private set; } //Never changes
+        public string Title { get; private set; } //Needs validation
+        public string Text { get; set; } //No validation
+        public Guid? AssignedUserId { get; set; } //No validation
+        public bool IsClosed { get; private set; } //Should change with CloseReason
+        public IssueCloseReason? CloseReason { get; private set; } //Should change with IsClosed
+
+        //...
+
+        public void SetTitle(string title)
+        {
+            Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+        }
+
+        public void Close(IssueCloseReason reason)
+        {
+            IsClosed = true;
+            CloseReason = reason;
+        }
+
+        public void ReOpen()
+        {
+            IsClosed = false;
+            CloseReason = null;
+        }
+    }
+}
+````
+
+* `RepositoryId` setter made private and there is no way to change it after creating an `Issue` because this is what we want for this domain: An issue can't be moved to another repository.
+* `Title` setter made private and `SetTitle` method has been created if you want to change it later in a controlled way.
+* `Text` and `AssignedUserId` has public setter since there is no restriction on them. They can be null or any other value. We think it is unnecessary to define separate methods to set them. If we need later, we can add methods and make the setters private. Breaking changes are not problem in the domain layer since the domain layer is an internal project, it is not exposed to clients.
+* `IsClosed` and `IssueCloseReason` are pair properties. Defined `Close` and `ReOpen` methods to change them together. In this way, we prevent to close an issue without any reason.
+
+##### Business Logic & Exceptions in the Entities
+
 TODO

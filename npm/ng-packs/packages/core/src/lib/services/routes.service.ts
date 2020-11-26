@@ -1,5 +1,4 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
-import { Actions } from '@ngxs/store';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ABP } from '../models/common';
 import { pushValueTo } from '../utils/array-utils';
@@ -137,7 +136,6 @@ export abstract class AbstractTreeService<T extends object> {
 export abstract class AbstractNavTreeService<T extends ABP.Nav>
   extends AbstractTreeService<T>
   implements OnDestroy {
-  protected actions: Actions;
   private subscription: Subscription;
   private permissionService: PermissionService;
   readonly id = 'name';

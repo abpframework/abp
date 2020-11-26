@@ -1,8 +1,4 @@
-import { ApplicationConfiguration, ConfigState } from '@abp/ng.core';
-import { HttpClient } from '@angular/common/http';
-import { SpectatorService } from '@ngneat/spectator';
-import { createServiceFactory } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
+import { ConfigStateService } from '@abp/ng.core';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ePropType } from '../lib/enums/props.enum';
@@ -13,40 +9,30 @@ import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
 } from '../lib/utils/state.util';
-import { OAuthService } from 'angular-oauth2-oidc';
+
+const configState = new ConfigStateService();
+configState.setState(createMockState() as any);
 
 describe('State Utils', () => {
-  let spectator: SpectatorService<Store>;
-  let store: Store;
-
-  const createService = createServiceFactory({
-    service: Store,
-    imports: [NgxsModule.forRoot([ConfigState])],
-    mocks: [HttpClient, OAuthService],
-  });
-
-  beforeEach(() => {
-    spectator = createService();
-    store = spectator.service;
-    store.reset(createMockState());
-  });
-
   describe('#getObjectExtensionEntitiesFromStore', () => {
     it('should return observable entities of an existing module', async () => {
-      const entities = await getObjectExtensionEntitiesFromStore(store, 'Identity').toPromise();
+      const entities = await getObjectExtensionEntitiesFromStore(
+        configState,
+        'Identity',
+      ).toPromise();
       expect('Role' in entities).toBe(true);
     });
 
     it('should return observable empty object if module does not exist', async () => {
-      const entities = await getObjectExtensionEntitiesFromStore(store, 'Saas').toPromise();
+      const entities = await getObjectExtensionEntitiesFromStore(configState, 'Saas').toPromise();
       expect(entities).toEqual({});
     });
 
     it('should not emit when object extensions do not exist', done => {
-      store.reset({ ConfigState: {} });
+      const emptyConfigState = new ConfigStateService();
       const emit = jest.fn();
 
-      getObjectExtensionEntitiesFromStore(store, 'Identity').subscribe(emit);
+      getObjectExtensionEntitiesFromStore(emptyConfigState, 'Identity').subscribe(emit);
 
       setTimeout(() => {
         expect(emit).not.toHaveBeenCalled();
@@ -58,7 +44,7 @@ describe('State Utils', () => {
   describe('#mapEntitiesToContributors', () => {
     it('should return contributors from given entities', async () => {
       const contributors = await of(createMockEntities())
-        .pipe(mapEntitiesToContributors(store, 'AbpIdentity'), take(1))
+        .pipe(mapEntitiesToContributors(configState, 'AbpIdentity'), take(1))
         .toPromise();
 
       const propList = new EntityPropList();
@@ -86,50 +72,48 @@ describe('State Utils', () => {
   });
 });
 
-function createMockState(): MockState {
+function createMockState() {
   return {
-    ConfigState: {
-      objectExtensions: {
-        modules: {
-          Identity: {
-            entities: createMockEntities(),
-            configuration: null,
-          },
-        },
-        enums: {
-          'MyCompanyName.MyProjectName.MyEnum': {
-            fields: [
-              {
-                name: 'MyEnumValue0',
-                value: 0,
-              },
-              {
-                name: 'MyEnumValue1',
-                value: 1,
-              },
-              {
-                name: 'MyEnumValue2',
-                value: 2,
-              },
-            ],
-            localizationResource: null,
-          },
+    objectExtensions: {
+      modules: {
+        Identity: {
+          entities: createMockEntities(),
+          configuration: null,
         },
       },
-      localization: {
-        values: {
-          Default: {},
-          AbpIdentity: {},
+      enums: {
+        'MyCompanyName.MyProjectName.MyEnum': {
+          fields: [
+            {
+              name: 'MyEnumValue0',
+              value: 0,
+            },
+            {
+              name: 'MyEnumValue1',
+              value: 1,
+            },
+            {
+              name: 'MyEnumValue2',
+              value: 2,
+            },
+          ],
+          localizationResource: null,
         },
-        defaultResourceName: 'Default',
-        currentCulture: null,
-        languages: [],
       },
+    },
+    localization: {
+      values: {
+        Default: {},
+        AbpIdentity: {},
+      },
+      defaultResourceName: 'Default',
+      currentCulture: null,
+      languages: [],
     },
   };
 }
 
-function createMockEntities(): ObjectExtensions.Entities {
+function createMockEntities(): Record<string, ObjectExtensions.EntityExtensionDto> {
   return {
     Role: {
       properties: {
@@ -159,6 +143,7 @@ function createMockEntities(): ObjectExtensions.Entities {
             onEditForm: {
               isVisible: true,
             },
+            lookup: {},
           },
           attributes: [
             {
@@ -174,6 +159,7 @@ function createMockEntities(): ObjectExtensions.Entities {
             },
           ],
           configuration: {},
+          defaultValue: null,
         },
         IsHero: {
           type: 'System.Boolean',
@@ -201,9 +187,11 @@ function createMockEntities(): ObjectExtensions.Entities {
             onEditForm: {
               isVisible: true,
             },
+            lookup: {},
           },
           attributes: [],
           configuration: {},
+          defaultValue: null,
         },
         AsOf: {
           type: 'System.Date',
@@ -234,9 +222,11 @@ function createMockEntities(): ObjectExtensions.Entities {
             onEditForm: {
               isVisible: false,
             },
+            lookup: {},
           },
           attributes: [],
           configuration: {},
+          defaultValue: null,
         },
         MyEnum: {
           type: 'MyCompanyName.MyProjectName.MyEnum',
@@ -264,6 +254,7 @@ function createMockEntities(): ObjectExtensions.Entities {
             onEditForm: {
               isVisible: false,
             },
+            lookup: {},
           },
           attributes: [
             {
@@ -292,12 +283,5 @@ function createMockEntities(): ObjectExtensions.Entities {
       configuration: {},
     },
     ClaimType: null,
-  };
-}
-
-interface MockState {
-  ConfigState: {
-    localization: ApplicationConfiguration.Localization;
-    objectExtensions: ObjectExtensions.Item;
   };
 }

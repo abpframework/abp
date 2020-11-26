@@ -6,7 +6,10 @@ export function createDisplayNameLocalizationPipeKeyGenerator(
 ) {
   const generateLocalizationPipeKey = createLocalizationPipeKeyGenerator(localization);
 
-  return (displayName: ObjectExtensions.DisplayName, fallback: ObjectExtensions.DisplayName) => {
+  return (
+    displayName: ObjectExtensions.LocalizableStringDto,
+    fallback: ObjectExtensions.LocalizableStringDto,
+  ) => {
     if (displayName && displayName.name)
       return generateLocalizationPipeKey(
         [displayName.resource],
