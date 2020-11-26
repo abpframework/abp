@@ -19,7 +19,7 @@ describe('Date Utils', () => {
   let config: ConfigStateService;
 
   beforeEach(() => {
-    config = new ConfigStateService(undefined);
+    config = new ConfigStateService();
   });
 
   describe('#getShortDateFormat', () => {

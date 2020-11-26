@@ -8,7 +8,7 @@ import { ReplaceableComponentsService } from '../services/replaceable-components
 
 @Component({
   selector: 'abp-default-component',
-  template: ` <p>default</p> `,
+  template: ' <p>default</p> ',
   exportAs: 'abpDefaultComponent',
 })
 class DefaultComponent implements OnInit {
@@ -34,7 +34,7 @@ class DefaultComponent implements OnInit {
 
 @Component({
   selector: 'abp-external-component',
-  template: ` <p>external</p> `,
+  template: ' <p>external</p> ',
 })
 class ExternalComponent {
   constructor(
