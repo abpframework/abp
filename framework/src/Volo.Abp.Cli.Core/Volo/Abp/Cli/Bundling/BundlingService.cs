@@ -89,7 +89,7 @@ namespace Volo.Abp.Cli.Bundling
 
             foreach (var bundleDefinition in bundleDefinitions)
             {
-                var contributor = CreateContributerInstance(bundleDefinition.BundleContributerType);
+                var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
                 contributor.AddScripts(scriptContext);
             }
 
@@ -103,7 +103,7 @@ namespace Volo.Abp.Cli.Bundling
 
             foreach (var bundleDefinition in bundleDefinitions)
             {
-                var contributor = CreateContributerInstance(bundleDefinition.BundleContributerType);
+                var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
                 contributor.AddStyles(styleContext);
             }
 
@@ -185,9 +185,9 @@ namespace Volo.Abp.Cli.Bundling
             return builder.ToString();
         }
 
-        private IBundleContributor CreateContributerInstance(Type bundleContributerType)
+        private IBundleContributor CreateContributorInstance(Type bundleContributorType)
         {
-            return (IBundleContributor)Activator.CreateInstance(bundleContributerType);
+            return (IBundleContributor)Activator.CreateInstance(bundleContributorType);
         }
 
         private void FindBundleContributorsRecursively(
@@ -208,7 +208,7 @@ namespace Volo.Abp.Cli.Bundling
             if (bundleContributors.Any())
             {
                 var bundleContributor = bundleContributors[0];
-                var definition = bundleDefinitions.SingleOrDefault(t => t.BundleContributerType == bundleContributor);
+                var definition = bundleDefinitions.SingleOrDefault(t => t.BundleContributorType == bundleContributor);
                 if (definition != null)
                 {
                     if (definition.Level < level)
@@ -221,7 +221,7 @@ namespace Volo.Abp.Cli.Bundling
                     bundleDefinitions.Add(new BundleTypeDefinition
                     {
                         Level = level,
-                        BundleContributerType = bundleContributor
+                        BundleContributorType = bundleContributor
                     });
                 }
             }
