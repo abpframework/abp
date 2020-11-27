@@ -21,7 +21,7 @@ namespace Volo.Abp.Cli.Bundling.Scripts
             var lastModifiedTicks = File.GetLastWriteTime(bundleFilePath).Ticks;
             var builder = new StringBuilder();
             builder.AppendLine($"{BundlingConsts.ScriptPlaceholderStart}");
-            builder.AppendLine($"    <script src=\"{Path.GetFileName(bundleFilePath)}?_v ={lastModifiedTicks}\"></script>");
+            builder.AppendLine($"    <script src=\"{Path.GetFileName(bundleFilePath)}?_v={lastModifiedTicks}\"></script>");
             builder.Append($"    {BundlingConsts.ScriptPlaceholderEnd}");
             return builder.ToString();
         }

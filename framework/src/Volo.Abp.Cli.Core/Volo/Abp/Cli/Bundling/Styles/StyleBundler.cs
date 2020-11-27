@@ -20,7 +20,7 @@ namespace Volo.Abp.Cli.Bundling.Styles
             var lastModifiedTicks = File.GetLastWriteTime(bundleFilePath).Ticks;
             var builder = new StringBuilder();
             builder.AppendLine($"{BundlingConsts.StylePlaceholderStart}");
-            builder.AppendLine($"    <link href=\"{Path.GetFileName(bundleFilePath)}?_v ={lastModifiedTicks}\" rel=\"stylesheet\"/>");
+            builder.AppendLine($"    <link href=\"{Path.GetFileName(bundleFilePath)}?_v={lastModifiedTicks}\" rel=\"stylesheet\"/>");
             builder.Append($"    {BundlingConsts.StylePlaceholderEnd}");
             return builder.ToString();
         }
