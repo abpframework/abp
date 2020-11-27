@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApplicationConfiguration } from '../models/application-configuration';
+import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { InternalStore } from '../utils/internal-store-utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigStateService {
-  private readonly store = new InternalStore({} as ApplicationConfiguration.Response);
+  private readonly store = new InternalStore({} as ApplicationConfigurationDto);
 
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
 
-  setState(state: ApplicationConfiguration.Response) {
+  setState(state: ApplicationConfigurationDto) {
     this.store.set(state);
   }
 
@@ -26,11 +26,11 @@ export class ConfigStateService {
     return this.store.state[key];
   }
 
-  getAll$(): Observable<ApplicationConfiguration.Response> {
+  getAll$(): Observable<ApplicationConfigurationDto> {
     return this.store.sliceState(state => state);
   }
 
-  getAll(): ApplicationConfiguration.Response {
+  getAll(): ApplicationConfigurationDto {
     return this.store.state;
   }
 
