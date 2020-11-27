@@ -1,4 +1,4 @@
-import { Config, RestOccurError } from '@abp/ng.core';
+import { Config, LocalizationParam, RestOccurError } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   ApplicationRef,
@@ -87,10 +87,7 @@ export class ErrorHandler {
 
   private listenToRouterError() {
     this.actions
-      .pipe(
-        ofActionSuccessful(RouterError),
-        filter(this.filterRouteErrors),
-      )
+      .pipe(ofActionSuccessful(RouterError), filter(this.filterRouteErrors))
       .subscribe(() => this.show404Page());
   }
 
@@ -233,8 +230,8 @@ export class ErrorHandler {
   }
 
   private showError(
-    message?: Config.LocalizationParam,
-    title?: Config.LocalizationParam,
+    message?: LocalizationParam,
+    title?: LocalizationParam,
     body?: any,
   ): Observable<Confirmation.Status> {
     if (body) {
