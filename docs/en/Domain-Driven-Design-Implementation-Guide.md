@@ -1310,3 +1310,75 @@ ABP Framework automatically validates input DTOs, throws `AbpValidationException
 > Some developers think it is better to separate the validation rules and DTO classes. We think the declarative (Data Annotation) approach is practical and useful and doesn't cause any design problem. However, ABP also supports [FluentValidation integration](FluentValidation.md) if you prefer the other approach.
 
 > See the [Validation document](Validation.md) for all validation options.
+
+#### Output DTO Best Practices
+
+* Keep output **DTO count minimum**. **Reuse** where possible (exception: Do not reuse input DTOs as output DTOs).
+* Output DTOs can contain **more properties** than used in the client code.
+* Return entity DTO from **Create** and **Update** methods.
+
+The main goals of these suggestions are;
+
+* Make client code easy to develop and extend;
+  * Dealing with **similar, but not same** DTOs are problematic on the client side.
+  * It is common to **need to other properties** on the UI/client in the future. Returning all properties (by considering security and privileges) of an entity makes client code easy to improve without requiring to touch to the backend code.
+  * If you are opening your API to **3rd-party clients**, you can't know requirements of each client.
+* Make the server side code easy to develop and extend;
+  * You have less class to **understand and maintain**.
+  * You can reuse the Entity->DTO **object mapping** code.
+  * Returning same types from different methods make it easy and clear to create **new methods**.
+
+**Example: Returning Different DTO types from different methods**
+
+````csharp
+public interface IUserAppService : IApplicationService
+{
+    UserDto Get(Guid id);    
+    List<UserNameAndEmailDto> GetUserNameAndEmail(Guid id);    
+    List<string> GetRoles(Guid id);
+    List<UserListDto> GetList();
+    UserCreateResultDto Create(UserCreationDto input);
+    UserUpdateResultDto Update(UserUpdateDto input);
+}
+````
+
+*(We haven't used async methods to make the example cleaner, but you use async in your real code!)*
+
+The example code above returns different DTO types for each method. As you can guess, there will be a lot of code duplications for querying data, mapping entities to DTOs.
+
+The `IUserAppService` service above can be simplified:
+
+````csharp
+public interface IUserAppService : IApplicationService
+{
+    UserDto Get(Guid id);
+    List<UserDto> GetList();
+    UserDto Create(UserCreationDto input);
+    UserDto Update(UserUpdateDto input);
+}
+````
+
+With a single output DTO:
+
+````csharp
+public class UserDto
+{
+    public Guid Id { get; set; }
+    public string UserName { get; set; }
+    public string Email { get; set; }
+    public DateTime CreationTime { get; set; }
+    public List<string> Roles { get; set; }
+}
+````
+
+* Removed `GetUserNameAndEmail` and `GetRoles` since `Get` method already returns the necessary information.
+* `GetList` now returns same with `Get`.
+* `Create` and `Update` also returns the same `UserDto`.
+
+Using the same DTO has a lot of advantages as explained before. For example, think a scenario where you show a **data grid** of Users on the UI. After updating a user, you can get the return value and **update it on the UI**. So, you don't need to call `GetList` again. This is why we suggest to return the entity DTO (`UserDto` here) as return value from the `Create` and `Update` operations.
+
+##### Discussion
+
+Some of the output DTO suggestions may not fit every scenario. These suggestions can be ignored for **performance** reasons, especially when **large data sets** returned or when you create services for your own UI and you have **too many concurrent requests**.
+
+In these cases, you may want to create **specialized output DTOs with minimal information**. The suggestions above are especially for applications where **maintaining the codebase** is more important than **negligible performance lost**.
