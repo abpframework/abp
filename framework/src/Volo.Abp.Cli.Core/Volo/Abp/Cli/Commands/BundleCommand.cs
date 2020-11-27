@@ -42,7 +42,7 @@ namespace Volo.Abp.Cli.Commands
             if ((minify || bundle) && name.IsNullOrEmpty())
             {
                 throw new CliUsageException(
-                    "Please specify bundle name." +
+                    "Please specify a bundle name." +
                     Environment.NewLine + Environment.NewLine +
                     GetUsageInfo()
                 );
@@ -85,6 +85,10 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("-wd|--working-directory <directory-path>                (default: empty)");
             sb.AppendLine("-f | --force                                            (default: false)");
+            sb.AppendLine("-f | --force                                            (default: false)");
+            sb.AppendLine("-b | --bundle                                           (default: false)");
+            sb.AppendLine("-m | --minify                                           (default: false)");
+            sb.AppendLine("-n | --name                                             (default: empty)");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
