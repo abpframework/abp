@@ -13,6 +13,7 @@ import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
 import { interpolate } from '../utils/string-utils';
 import compare from 'just-compare';
+import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 
 /**
  * @deprecated Use ConfigStateService instead. To be deleted in v5.0.
@@ -245,7 +246,7 @@ export class ConfigState {
     const apiName = 'default';
     const api = this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
     return this.http
-      .get<ApplicationConfiguration.Response>(`${api}/api/abp/application-configuration`)
+      .get<ApplicationConfigurationDto>(`${api}/api/abp/application-configuration`)
       .pipe(
         tap(configuration => this.configState.setState(configuration)),
         catchError((err: HttpErrorResponse) => {
