@@ -3,13 +3,13 @@ import { Injectable, Injector, isDevMode, NgZone, Optional, SkipSelf } from '@an
 import { Router } from '@angular/router';
 import { noop, Observable, Subject } from 'rxjs';
 import { filter, map, mapTo, switchMap, tap } from 'rxjs/operators';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { ABP } from '../models/common';
 import { Config } from '../models/config';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
 import { interpolate } from '../utils/string-utils';
-import { ApplicationConfigurationService } from './application-configuration.service';
 import { ConfigStateService } from './config-state.service';
 import { SessionStateService } from './session-state.service';
 
@@ -37,7 +37,7 @@ export class LocalizationService {
     @SkipSelf()
     otherInstance: LocalizationService,
     private configState: ConfigStateService,
-    private appConfigService: ApplicationConfigurationService,
+    private appConfigService: AbpApplicationConfigurationService,
   ) {
     if (otherInstance) throw new Error('LocalizationService should have only one instance.');
 
@@ -53,7 +53,7 @@ export class LocalizationService {
         ),
         switchMap(lang =>
           this.appConfigService
-            .getConfiguration()
+            .get()
             .pipe(tap(res => this.configState.setState(res)))
             .pipe(mapTo(lang)),
         ),
@@ -144,7 +144,7 @@ export class LocalizationService {
 }
 
 function getLocalization(
-  state: ApplicationConfiguration.Response,
+  state: ApplicationConfigurationDto,
   key: string | Config.LocalizationWithDefault,
   ...interpolateParams: string[]
 ) {
