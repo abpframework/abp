@@ -1179,4 +1179,134 @@ namespace IssueTracking.Issues
 
 ### Data Transfer Objects
 
-TODO
+A [DTO](Data-Transfer-Objects.md) is a simple object that is used to transfer state (data) between the Application and Presentation Layers. So, Application Service methods gets and returns DTOs.
+
+#### Common DTO Principles & Best Practices
+
+* A DTO **should be serializable**, by its nature. Because, most of the time it is transferred over network. So, it should have a **parameterless (empty) constructor**.
+* Should not contain any **business logic**.
+* **Never** inherit from or reference to **entities**.
+
+**Input DTOs** (those are passed to the Application Service methods) have different natures than **Output DTOs** (those are returned from the Application Service methods). So, they will be treated differently. 
+
+#### Input DTO Best Practices
+
+##### Do not Define Unused Properties for Input DTOs
+
+Define **only the properties needed** for the use case! Otherwise, it will be **confusing for the clients** to use the Application Service method. You can surely define **optional properties**, but they should effect how the use case is working, when the client provides them.
+
+This rule seems unnecessary first. Who would define unused parameters (input DTO properties) for a method? But it happens, especially when you try to reuse input DTOs.
+
+##### Do not Re-Use Input DTOs
+
+Define a **specialized input DTO for each use case** (Application Service method). Otherwise, some properties are not used in some cases and this violates the rule defined above: *Do not Define Unused Properties for Input DTOs*.
+
+Sometimes, it seems appealing to reuse the same DTO class for two use cases, because they are almost same. Even if they are same now, they will probably become different by the time and you will come the same problem. **Code duplication is a better practice than coupling use cases**.
+
+Another way of reusing input DTOs is **inheriting** DTOs from each other. While this can be useful in some rare cases, most of the time it brings you to the same point.
+
+**Example: User Application Service**
+
+````csharp
+public interface IUserAppService : IApplicationService
+{
+    Task CreateAsync(UserDto input);
+    Task UpdateAsync(UserDto input);
+    Task ChangePasswordAsync(UserDto input);
+}
+````
+
+`IUserAppService` uses `UserDto` as the input DTO in all methods (use cases). `UserDto` is defined below:
+
+````csharp
+public class UserDto
+{
+    public Guid Id { get; set; }
+    public string UserName { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public DateTime CreationTime { get; set; }
+}
+````
+
+For this example;
+
+* `Id` is not used in *Create* since the server determines it.
+* `Password` is not used in *Update* since we have another method for it.
+* `CreationTime` is never used since we can't allow client to send the Creation Time. It should be set in the server.
+
+A true implementation can be like that:
+
+````csharp
+public interface IUserAppService : IApplicationService
+{
+    Task CreateAsync(UserCreationDto input);
+    Task UpdateAsync(UserUpdateDto input);
+    Task ChangePasswordAsync(UserChangePasswordDto input);
+}
+````
+
+With the given input DTO classes:
+
+````csharp
+public class UserCreationDto
+{
+    public string UserName { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+}
+
+public class UserUpdateDto
+{
+    public Guid Id { get; set; }
+    public string UserName { get; set; }
+    public string Email { get; set; }
+}
+
+public class UserChangePasswordDto
+{
+    public Guid Id { get; set; }
+    public string Password { get; set; }
+}
+````
+
+This is more maintainable approach, while it seems you write more code.
+
+**Exceptional Case**: There can be some exceptions for this rule: If you always want to develop two methods **in parallel**, they may share the same input DTO (by inheritance or direct reuse). For example, if you have a reporting page that has some filters and you have multiple Application Service methods (like screen report, excel report and csv report methods) use the same filters but returns different results, you may want to reuse the same filter input DTO to **couple these use cases**. Because, in this example, whenever you change a filter, you have to make the necessary changes in all the methods to have a consistent reporting system.
+
+##### Input DTO Validation Logic
+
+* Implement only **formal validation** inside the DTO. Use Data Annotation Validation Attributes or implement `IValidatableObject` for formal validation.
+* **Do not perform domain validation**. For example, don't try to check unique username constraint in the DTOs.
+
+**Example: Using Data Annotation Attributes**
+
+````csharp
+using System.ComponentModel.DataAnnotations;
+
+namespace IssueTracking.Users
+{
+    public class UserCreationDto
+    {
+        [Required]
+        [StringLength(UserConsts.MaxUserNameLength)]
+        public string UserName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [StringLength(UserConsts.MaxEmailLength)]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(UserConsts.MaxEmailLength,
+                      MinimumLength = UserConsts.MinPasswordLength)]
+        public string Password { get; set; }
+    }
+}
+````
+
+ABP Framework automatically validates input DTOs, throws `AbpValidationException` and returns HTTP Status `400` to the client in case of an invalid input.
+
+> Some developers think it is better to separate the validation rules and DTO classes. We think the declarative (Data Annotation) approach is practical and useful and doesn't cause any design problem. However, ABP also supports [FluentValidation integration](FluentValidation.md) if you prefer the other approach.
+
+> See the [Validation document](Validation.md) for all validation options.
