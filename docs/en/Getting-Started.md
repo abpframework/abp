@@ -34,7 +34,11 @@ The following tools should be installed on your development machine:
 
 <sup id="f-editor"><b>1</b></sup> _You can use another editor instead of Visual Studio as long as it supports .NET Core and ASP.NET Core._ <sup>[↩](#a-editor)</sup>
 
+{{ if UI != "Blazor" }}
+
 <sup id="f-yarn"><b>2</b></sup> _Yarn v2 works differently and is not supported._ <sup>[↩](#a-yarn)</sup>
+
+{{ end }}
 
 ### Install the ABP CLI
 
