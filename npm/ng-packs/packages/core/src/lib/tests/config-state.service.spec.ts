@@ -1,5 +1,9 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { ApplicationConfiguration } from '../models/application-configuration';
+import {
+  ApplicationConfigurationDto,
+  CurrentUserDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from '../services';
 
 export const CONFIG_STATE_DATA = ({
@@ -86,14 +90,14 @@ export const CONFIG_STATE_DATA = ({
     userName: null,
     email: null,
     roles: [],
-  } as ApplicationConfiguration.CurrentUser,
+  } as CurrentUserDto,
   features: {
     values: {
       'Chat.Enable': 'True',
     },
   },
   registerLocaleFn: () => Promise.resolve(),
-} as any) as ApplicationConfiguration.Response;
+} as any) as ApplicationConfigurationDto;
 
 describe('ConfigState', () => {
   let spectator: SpectatorService<ConfigStateService>;
