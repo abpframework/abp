@@ -53,7 +53,7 @@ namespace Volo.Abp.Cli.Bundling
             var startupModule = GetStartupModule(assemblyFilePath);
 
             var bundleDefinitions = new List<BundleTypeDefinition>();
-            FindBundleContributersRecursively(startupModule, 0, bundleDefinitions);
+            FindBundleContributorsRecursively(startupModule, 0, bundleDefinitions);
             bundleDefinitions = bundleDefinitions.OrderByDescending(t => t.Level).ToList();
 
             var styleContext = GetStyleContext(bundleDefinitions);
@@ -89,8 +89,8 @@ namespace Volo.Abp.Cli.Bundling
 
             foreach (var bundleDefinition in bundleDefinitions)
             {
-                var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
-                contributer.AddScripts(scriptContext);
+                var contributor = CreateContributerInstance(bundleDefinition.BundleContributerType);
+                contributor.AddScripts(scriptContext);
             }
 
             scriptContext.Add("_framework/blazor.webassembly.js");
@@ -103,8 +103,8 @@ namespace Volo.Abp.Cli.Bundling
 
             foreach (var bundleDefinition in bundleDefinitions)
             {
-                var contributer = CreateContributerInstance(bundleDefinition.BundleContributerType);
-                contributer.AddStyles(styleContext);
+                var contributor = CreateContributerInstance(bundleDefinition.BundleContributerType);
+                contributor.AddStyles(styleContext);
             }
 
             return styleContext;
@@ -190,25 +190,25 @@ namespace Volo.Abp.Cli.Bundling
             return (IBundleContributor)Activator.CreateInstance(bundleContributerType);
         }
 
-        private void FindBundleContributersRecursively(
+        private void FindBundleContributorsRecursively(
             Type module,
             int level,
             List<BundleTypeDefinition> bundleDefinitions)
         {
-            var bundleContributers = module.Assembly
+            var bundleContributors = module.Assembly
                 .GetTypes()
                 .Where(t => t.IsAssignableTo<IBundleContributor>())
                 .ToList();
 
-            if (bundleContributers.Count > 1)
+            if (bundleContributors.Count > 1)
             {
                 throw new BundlingException($"Each project must contain only one class implementing {nameof(IBundleContributor)}");
             }
 
-            if (bundleContributers.Any())
+            if (bundleContributors.Any())
             {
-                var bundleContributer = bundleContributers[0];
-                var definition = bundleDefinitions.SingleOrDefault(t => t.BundleContributerType == bundleContributer);
+                var bundleContributor = bundleContributors[0];
+                var definition = bundleDefinitions.SingleOrDefault(t => t.BundleContributerType == bundleContributor);
                 if (definition != null)
                 {
                     if (definition.Level < level)
@@ -221,7 +221,7 @@ namespace Volo.Abp.Cli.Bundling
                     bundleDefinitions.Add(new BundleTypeDefinition
                     {
                         Level = level,
-                        BundleContributerType = bundleContributer
+                        BundleContributerType = bundleContributor
                     });
                 }
             }
@@ -234,7 +234,7 @@ namespace Volo.Abp.Cli.Bundling
             {
                 foreach (var dependedModuleType in descriptor.GetDependedTypes())
                 {
-                    FindBundleContributersRecursively(dependedModuleType, level + 1, bundleDefinitions);
+                    FindBundleContributorsRecursively(dependedModuleType, level + 1, bundleDefinitions);
                 }
             }
         }
