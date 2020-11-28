@@ -1401,9 +1401,102 @@ There are some reasons why you **should not use** input DTO to Entity auto mappi
 
 While some of these problems can be solved through mapping configurations (For example, AutoMapper allows to define custom mapping rules), it makes your business code **implicit/hidden** and **tightly coupled** to the infrastructure. We think the business code should be explicit, clear and easy to understand.
 
-#### Example: Creating an Entity
+See the *Entity Creation* section below for an example implementation of the suggestions made in this section.
 
-TODO
+## Implementation: Examples
 
+This section will demonstrate some example use cases and discuss alternative scenarios.
 
+### Entity Creation
 
+Creating an object from an Entity / Aggregate Root class is the first step of the lifecycle of that entity. The *Aggregate / Aggregate Root Rules & Best Practices* section suggests to **create a primary constructor** for the Entity class that guarantees to **create a valid entity**. So, whenever we need to create an instance of that entity, we should always **use that constructor**.
+
+See the `Issue` Aggregate Root class below:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    public Guid RepositoryId { get; private set; }
+    public string Title { get; private set; }
+    public string Text { get; set; }
+    public Guid? AssignedUserId { get; internal set; }
+
+    public Issue(
+        Guid id,
+        Guid repositoryId,
+        string title,
+        string text = null
+        ) : base(id)
+    {
+        RepositoryId = repositoryId;
+        Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+        Text = text; //Allow empty/null
+    }
+    
+    private Issue() { /* Empty constructor is for ORMs */ }
+
+    public void SetTitle(string title)
+    {
+        Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+    }
+
+    //...
+}
+````
+
+* This class guarantees to create a valid entity by its constructor.
+* If you need to change the `Title` later, you need to use the `SetTitle` method which continues to keep `Title` in a valid state.
+* If you want to assign this issue to a user, you need to use `IssueManager` (it implements some business rules before the assignment - see the *Domain Services* section above to remember).
+* The `Text` property has a public setter, because it also accepts null values and haven't any validation rule for this example. It is also optional in the constructor.
+
+Let's see an Application Service method that is used to create an issue:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IssueManager _issueManager;
+    private readonly IRepository<Issue, Guid> _issueRepository;
+    private readonly IRepository<AppUser, Guid> _userRepository;
+
+    public IssueAppService(
+        IssueManager issueManager,
+        IRepository<Issue, Guid> issueRepository,
+        IRepository<AppUser, Guid> userRepository)
+    {
+        _issueManager = issueManager;
+        _issueRepository = issueRepository;
+        _userRepository = userRepository;
+    }
+
+    public async Task<IssueDto> CreateAsync(IssueCreationDto input)
+    {
+        // Create a valid entity
+        var issue = new Issue(
+            GuidGenerator.Create(),
+            input.RepositoryId,
+            input.Title,
+            input.Text
+        );
+
+        // Apply additional domain actions
+        if (input.AssignedUserId.HasValue)
+        {
+            var user = await _userRepository.GetAsync(input.AssignedUserId.Value);
+            await _issueManager.AssignToAsync(issue, user);
+        }
+
+        // Save
+        await _issueRepository.InsertAsync(issue);
+
+        // Return a DTO represents the new Issue
+        return ObjectMapper.Map<Issue, IssueDto>(issue);
+    }
+}
+````
+
+`CreateAsync` method;
+
+* Uses the `Issue` **constructor** to create a valid issue. It passes the `Id` using the [IGuidGenerator](Guid-Generation.md) service. It doesn't use auto object mapping here.
+* If client wants to **assign this issue to a user** on object creation, it uses the `IssueManager` to do it by allowing the `IssueManager` to perform the necessary checks before this assignment.
+* **Saves** the entity to the database.
+* Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by mapping from the `Issue` entity.
