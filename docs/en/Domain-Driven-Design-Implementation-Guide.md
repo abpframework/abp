@@ -1383,3 +1383,27 @@ Using the same DTO has a lot of advantages as explained before. For example, thi
 Some of the output DTO suggestions may not fit every scenario. These suggestions can be ignored for **performance** reasons, especially when **large data sets** returned or when you create services for your own UI and you have **too many concurrent requests**.
 
 In these cases, you may want to create **specialized output DTOs with minimal information**. The suggestions above are especially for applications where **maintaining the codebase** is more important than **negligible performance lost**.
+
+#### Object to Object Mapping
+
+Automatic [object to object mapping](Object-To-Object-Mapping.md) is a useful approach to copy values from one object to another when two objects have same or similar properties.
+
+DTO and Entity classes generally have same/similar properties and you typically need to create DTO objects from Entities. ABP's [object to object mapping system](Object-To-Object-Mapping.md) with [AutoMapper](http://automapper.org/) integration makes these operations much easier comparing to manual mapping.
+
+* **Use** auto object mapping only for **Entity to output DTO** mappings.
+* **Do not use** auto object mapping for **input DTO to Entity** mappings.
+
+There are some reasons why you **should not use** input DTO to Entity auto mapping;
+
+1. An Entity class typically has a **constructor** that takes parameters and ensures valid object creation. Auto object mapping operation generally requires an empty constructor.
+2. Most of the entity properties will have **private setters** and you should use methods to change these properties in a controlled way.
+3. You typically need to **carefully validate and process** the user/client input rather than blindly mapping to the entity properties.
+
+While some of these problems can be solved through mapping configurations (For example, AutoMapper allows to define custom mapping rules), it makes your business code **implicit/hidden** and **tightly coupled** to the infrastructure. We think the business code should be explicit, clear and easy to understand.
+
+#### Example: Creating an Entity
+
+TODO
+
+
+
