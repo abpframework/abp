@@ -1499,7 +1499,7 @@ public class IssueAppService : ApplicationService, IIssueAppService
 * Uses the `Issue` **constructor** to create a valid issue. It passes the `Id` using the [IGuidGenerator](Guid-Generation.md) service. It doesn't use auto object mapping here.
 * If client wants to **assign this issue to a user** on object creation, it uses the `IssueManager` to do it by allowing the `IssueManager` to perform the necessary checks before this assignment.
 * **Saves** the entity to the database.
-* Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by mapping from the `Issue` entity.
+* Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by **mapping** from the new `Issue` entity.
 
 #### Applying Domain Rules on Entity Creation
 
@@ -1622,8 +1622,9 @@ public class IssueAppService : ApplicationService, IIssueAppService
 // *** IssueCreationDto class ***
 public class IssueCreationDto
 {
-    public string Title { get; set; }
     public Guid RepositoryId { get; set; }
+    [Required]
+    public string Title { get; set; }
     public Guid? AssignedUserId { get; set; }
     public string Text { get; set; }
 }
@@ -1654,4 +1655,108 @@ For this example, a simple question can help us to make the decision: "If we hav
 * You may have a button on the UI that **converts** something (for example, a discussion) to an issue.
 
 We can give more examples. All of these are should be implemented by **different Application Service methods** (see the *Multiple Application Layers* section below), but they **always** follow the rule: Title of the new issue can not be same of any existing issue! That's why this logic is a **core domain logic**, should be located in the Domain Layer and **should not be duplicated** in all these application service methods.
+
+### Updating / Manipulating An Entity
+
+Once an entity is created, it is updated/manipulated by the use cases until it is deleted from the system. There can be different type of use cases directly or indirectly changes an entity.
+
+In this section, we will discuss a typical update operation that changes multiple properties of an `Issue`.
+
+This time, beginning from the *Update* DTO:
+
+````csharp
+public class UpdateIssueDto
+{
+    [Required]
+    public string Title { get; set; }
+    public string Text { get; set; }
+    public Guid? AssignedUserId { get; set; }
+}
+````
+
+By comparing to `IssueCreationDto`, you see no `RepositoryId`. Because, our system doesn't allow to move issues across repositories (think as GitHub repositories). Only `Title` is required and the other properties are optional.
+
+Let's see the *Update* implementation in the `IssueAppService`:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IssueManager _issueManager;
+    private readonly IRepository<Issue, Guid> _issueRepository;
+    private readonly IRepository<AppUser, Guid> _userRepository;
+
+    public IssueAppService(
+        IssueManager issueManager,
+        IRepository<Issue, Guid> issueRepository,
+        IRepository<AppUser, Guid> userRepository)
+    {
+        _issueManager = issueManager;
+        _issueRepository = issueRepository;
+        _userRepository = userRepository;
+    }
+
+    public async Task<IssueDto> UpdateAsync(Guid id, UpdateIssueDto input)
+    {
+        // Get entity from database
+        var issue = await _issueRepository.GetAsync(id);
+
+        // Change Title
+        await _issueManager.ChangeTitleAsync(issue, input.Title);
+
+        // Change Assigned User
+        if (input.AssignedUserId.HasValue)
+        {
+            var user = await _userRepository.GetAsync(input.AssignedUserId.Value);
+            await _issueManager.AssignToAsync(issue, user);
+        }
+
+        // Change Text (no business rule, all values accepted)
+        issue.Text = input.Text;
+
+        // Update entity in the database
+        await _issueRepository.UpdateAsync(issue);
+
+        // Return a DTO represents the new Issue
+        return ObjectMapper.Map<Issue, IssueDto>(issue);
+    }
+}
+````
+
+* `UpdateAsync` method gets `id` as a separate parameter. It is not included in the `UpdateIssueDto`. This is a design decision that helps ABP to properly define HTTP routes when you [auto expose](API/Auto-API-Controllers.md) this service as an HTTP API endpoint. So, that's not related to DDD.
+* It starts by **getting** the `Issue` entity **from database**.
+* Uses `IssueManager`'s `ChangeTitleAsync` instead of directly calling `Issue.SetTitle(...)`. Because we need to implement the **duplicate Title check** as just done in the *Entity Creation*. This requires some changes in the `Issue` and `IssueManager` classes (will be explained below).
+* Uses `IssueManager`'s `AssignToAsync` method if the **assigned user** is being changed with this request.
+* Directly sets the `Issue.Text` since there is **no business rule** for that. If we need later, we can always refactor.
+* **Saves changes** to database. Again, saving changed entities is a responsibility of the Application Service method that coordinates the business objects and the transaction. If `IssueManager` had saved internally in `ChangeTitleAsync` and `AssignToAsync` method, there would be double database operation (see the *Discussion: Why not saved Issue to database in the `IssueManager`?* above).
+* Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by **mapping** from the updated `Issue` entity.
+
+As said, we need some changes in the `Issue` and `IssueManager` classes.
+
+First, made `SetTitle` internal on the `Issue` class:
+
+````csharp
+internal void SetTitle(string title)
+{
+    Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+}
+````
+
+Then added a new method on the `IssueManager` to change the Title:
+
+````csharp
+public async Task ChangeTitleAsync(Issue issue, string title)
+{
+    if (issue.Title == title)
+    {
+        return;
+    }
+
+    if (await _issueRepository.AnyAsync(i => i.Title == title))
+    {
+        throw new BusinessException("IssueTracking:IssueWithSameTitleExists");
+    }
+
+    issue.SetTitle(title);
+}
+````
 
