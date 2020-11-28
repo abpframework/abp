@@ -1500,3 +1500,148 @@ public class IssueAppService : ApplicationService, IIssueAppService
 * If client wants to **assign this issue to a user** on object creation, it uses the `IssueManager` to do it by allowing the `IssueManager` to perform the necessary checks before this assignment.
 * **Saves** the entity to the database.
 * Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by mapping from the `Issue` entity.
+
+#### Applying Domain Rules on Entity Creation
+
+The example `Issue` entity has no business rule on entity creation, except some formal validations in the constructor. However, there maybe scenarios where entity creation should check some extra business rules.
+
+For example, assume that you **don't want** to allow to create an issue if there is already an issue with **exactly the same `Title`**. Where to implement this rule? It is **not proper** to implement this rule in the **Application Service**, because it is a **core business (domain) rule** that should always be checked.
+
+This rule should be implemented in a **Domain Service**, `IssueManager` in this case. So, we need to force the Application Layer always to use the `IssueManager` to create a new `Issue.`
+
+First, we can make the `Issue` constructor `internal`, instead of `public`:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+
+    internal Issue(
+        Guid id,
+        Guid repositoryId,
+        string title,
+        string text = null
+        ) : base(id)
+    {
+        RepositoryId = repositoryId;
+        Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+        Text = text; //Allow empty/null
+    }
+        
+    //...
+}
+````
+
+This prevents Application Services to directly use the constructor, so they will use the `IssueManager`. Then we can add a `CreateAsync` method to the `IssueManager`:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Domain.Services;
+
+namespace IssueTracking.Issues
+{
+    public class IssueManager : DomainService
+    {
+        private readonly IRepository<Issue, Guid> _issueRepository;
+
+        public IssueManager(IRepository<Issue, Guid> issueRepository)
+        {
+            _issueRepository = issueRepository;
+        }
+
+        public async Task<Issue> CreateAsync(
+            Guid repositoryId,
+            string title,
+            string text = null)
+        {
+            if (await _issueRepository.AnyAsync(i => i.Title == title))
+            {
+                throw new BusinessException("IssueTracking:IssueWithSameTitleExists");
+            }
+
+            return new Issue(
+                GuidGenerator.Create(),
+                repositoryId,
+                title,
+                text
+            );
+        }
+    }
+}
+````
+
+* `CreateAsync` method checks if there is already an issue with the same title and throws a business exception in this case.
+* If there is no duplication, it create and returns a new `Issue`.
+
+The `IssueAppService` is changed as shown below in order to use the `IssueManager`'s `CreateAsync` method:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IssueManager _issueManager;
+    private readonly IRepository<Issue, Guid> _issueRepository;
+    private readonly IRepository<AppUser, Guid> _userRepository;
+
+    public IssueAppService(
+        IssueManager issueManager,
+        IRepository<Issue, Guid> issueRepository,
+        IRepository<AppUser, Guid> userRepository)
+    {
+        _issueManager = issueManager;
+        _issueRepository = issueRepository;
+        _userRepository = userRepository;
+    }
+
+    public async Task<IssueDto> CreateAsync(IssueCreationDto input)
+    {
+        // Create a valid entity using the IssueManager
+        var issue = await _issueManager.CreateAsync(
+            input.RepositoryId,
+            input.Title,
+            input.Text
+        );
+
+        // Apply additional domain actions
+        if (input.AssignedUserId.HasValue)
+        {
+            var user = await _userRepository.GetAsync(input.AssignedUserId.Value);
+            await _issueManager.AssignToAsync(issue, user);
+        }
+
+        // Save
+        await _issueRepository.InsertAsync(issue);
+
+        // Return a DTO represents the new Issue
+        return ObjectMapper.Map<Issue, IssueDto>(issue);
+    }
+}
+````
+
+##### Discussion: Why not saved Issue to database in the `IssueManager`?
+
+You may ask "**Why `IssueManager` hasn't saved the `Issue` into the database?**". We think it is the responsibility of the Application Service.
+
+Because, the Application Service may require additional changes/operations on the `Issue` object before saving it. If Domain Service saves it, then the *Save* operation is duplicated;
+
+* It causes performance lost because of double database round trip.
+* It requires explicit database transaction that covers both operations.
+* If additional actions cancel the entity creation because of a business rule, the transaction should be rolled back in the database.
+
+When you check the `IssueAppService`, you see the advantage of **not saving** `Issue` to database in the `IssueManager.CreateAsync`. Otherwise, we would need to perform one *Insert* (in the `IssueManager`) and one *Update* (after the Assignment).
+
+##### Discussion: Why not implemented the duplicate Title check in the Application Service?
+
+We could simple say "Because it is a **core domain logic** and should be implemented in the Domain Layer". However, it brings a new question "**How did you decide** that it is a core domain logic, but not an application logic?" (we will discuss the difference later in mode details).
+
+For this example, a simple question can help us to make the decision: "If we have another way (use case) of creating an issue, should we still apply the same rule? Is that rule should *always* be implemented". You may think "Why we have a second way of creating an issue?". However, in real life, you have;
+
+* End users of the application may create issues in your application's standard UI.
+* You may have a second back office application that is used by your own employee and you may want to provide a way of creating issues (probably with different authorization rules in this case).
+* You may have an HTTP API that is open to 3rd-party companies and they create issues.
+* You may have a background worker service that do something and creates issues if it detects some problems. In this way, it will create an issue without any user interaction (and probably without any standard authorization check).
+* You may have a button on the UI that converts something (for example, a discussion) to an issues.
+
+We can give more examples. All of these are should be implemented by different Application Service methods (see the *Multiple Application Layers* section below), but they always follow the rule: Title of the new issue can not be same of any existing issue! That's why this logic is a core domain logic, should be located in the Domain Layer and should not be duplicated in all these application service methods.
