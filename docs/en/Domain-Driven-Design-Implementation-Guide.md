@@ -1644,7 +1644,7 @@ When you check the `IssueAppService`, you see the advantage of **not saving** `I
 
 ##### Discussion: Why not implemented the duplicate Title check in the Application Service?
 
-We could simple say "Because it is a **core domain logic** and should be implemented in the Domain Layer". However, it brings a new question "**How did you decide** that it is a core domain logic, but not an application logic?" (we will discuss the difference later in mode details).
+We could simple say "Because it is a **core domain logic** and should be implemented in the Domain Layer". However, it brings a new question "**How did you decide** that it is a core domain logic, but not an application logic?" (we will discuss the difference later with more details).
 
 For this example, a simple question can help us to make the decision: "If we have another way (use case) of creating an issue, should we still apply the same rule? Is that rule should *always* be implemented". You may think "Why we have a second way of creating an issue?". However, in real life, you have;
 
