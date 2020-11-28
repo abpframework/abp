@@ -1616,7 +1616,16 @@ public class IssueAppService : ApplicationService, IIssueAppService
 
         // Return a DTO represents the new Issue
         return ObjectMapper.Map<Issue, IssueDto>(issue);
-    }
+    }    
+}
+
+// *** IssueCreationDto class ***
+public class IssueCreationDto
+{
+    public string Title { get; set; }
+    public Guid RepositoryId { get; set; }
+    public Guid? AssignedUserId { get; set; }
+    public string Text { get; set; }
 }
 ````
 
@@ -1638,10 +1647,11 @@ We could simple say "Because it is a **core domain logic** and should be impleme
 
 For this example, a simple question can help us to make the decision: "If we have another way (use case) of creating an issue, should we still apply the same rule? Is that rule should *always* be implemented". You may think "Why we have a second way of creating an issue?". However, in real life, you have;
 
-* End users of the application may create issues in your application's standard UI.
-* You may have a second back office application that is used by your own employee and you may want to provide a way of creating issues (probably with different authorization rules in this case).
-* You may have an HTTP API that is open to 3rd-party companies and they create issues.
-* You may have a background worker service that do something and creates issues if it detects some problems. In this way, it will create an issue without any user interaction (and probably without any standard authorization check).
-* You may have a button on the UI that converts something (for example, a discussion) to an issues.
+* **End users** of the application may create issues in your application's standard UI.
+* You may have a second **back office** application that is used by your own employee and you may want to provide a way of creating issues (probably with different authorization rules in this case).
+* You may have an HTTP API that is open to **3rd-party clients** and they create issues.
+* You may have a **background worker** service that do something and creates issues if it detects some problems. In this way, it will create an issue without any user interaction (and probably without any standard authorization check).
+* You may have a button on the UI that **converts** something (for example, a discussion) to an issue.
 
-We can give more examples. All of these are should be implemented by different Application Service methods (see the *Multiple Application Layers* section below), but they always follow the rule: Title of the new issue can not be same of any existing issue! That's why this logic is a core domain logic, should be located in the Domain Layer and should not be duplicated in all these application service methods.
+We can give more examples. All of these are should be implemented by **different Application Service methods** (see the *Multiple Application Layers* section below), but they **always** follow the rule: Title of the new issue can not be same of any existing issue! That's why this logic is a **core domain logic**, should be located in the Domain Layer and **should not be duplicated** in all these application service methods.
+
