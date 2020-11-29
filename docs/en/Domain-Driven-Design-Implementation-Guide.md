@@ -1885,6 +1885,8 @@ public class OrganizationAppService : ApplicationService
         );
 
         var organization = await _organizationManager.CreateAsync(input.Name);
+        
+        await _organizationManager.InsertAsync(organization);
 
         await _emailSender.SendAsync(
             "systemadmin@issuetracking.com",
@@ -1907,6 +1909,7 @@ Let's see the `CreateAsync` method part by part to discuss if the code part shou
 * **CORRECT**: Application Service methods should be unit of work (transactional). ABP's [Unit Of Work](Unit-Of-Work.md) system makes this automatic (even without need to add `[UnitOfWork]` attribute for the Application Services).
 * **CORRECT**: [Authorization](Authorization.md) should be done in the application layer. Here, it is done by using the `[Authorize]` attribute.
 * **CORRECT**: Payment (an infrastructure service) is called to charge money for this operation (Creating an Organization is a paid thing in our business).
+* **CORRECT**: Application Service method is responsible to save changes to the database.
 * **CORRECT**: We can send [email](Emailing.md) as a notification to the system admin.
 * **WRONG**: Do not return entities from the Application Services. Return a DTO instead.
 
@@ -1920,6 +1923,49 @@ However, **being important is not sufficient** to consider a code as a Core Busi
 * A background-working data import/integration/synchronization system may also need to create organizations without any payment operation.
 
 As you see, **payment is not a necessary operation to create a valid organization**. It is a use case specific application logic.
+
+**Example: CRUD Operations**
+
+````csharp
+public class IssueAppService
+{
+    private readonly IssueManager _issueManager;
+
+    public IssueAppService(IssueManager issueManager)
+    {
+        _issueManager = issueManager;
+    }
+
+    public async Task<IssueDto> GetAsync(Guid id)
+    {
+        return await _issueManager.GetAsync(id);
+    }
+
+    public async Task CreateAsync(IssueCreationDto input)
+    {
+        await _issueManager.CreateAsync(input);
+    }
+
+    public async Task UpdateAsync(UpdateIssueDto input)
+    {
+        await _issueManager.UpdateAsync(input);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await _issueManager.DeleteAsync(id);
+    }
+}
+````
+
+This Application Service **does nothing** itself and **delegates all the work** to the *Domain Service*. It even passes the DTOs to the `IssueManager`.
+
+* **Do not** create Domain Service methods just for simple **CRUD** operations **without any domain logic**.
+* **Never** pass **DTOs** to or return **DTOs** from the Domain Services.
+
+Application Services can directly work with repositories to query, create, update or delete data unless there are some domain logics should be performed during these operations. In such cases, create Domain Service methods, but only for those really necessary.
+
+> Do not create such CRUD domain service methods just by thinking that they may be needed in the future ([YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it))! Do it when you need and refactor the existing code. Since the Application Layer gracefully abstracts the Domain Layer, the refactoring process doesn't affect the UI Layer and other clients.
 
 ## Reference Books
 
