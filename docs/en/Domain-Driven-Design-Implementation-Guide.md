@@ -1403,7 +1403,7 @@ While some of these problems can be solved through mapping configurations (For e
 
 See the *Entity Creation* section below for an example implementation of the suggestions made in this section.
 
-## Implementation: Examples
+## Example Use Cases
 
 This section will demonstrate some example use cases and discuss alternative scenarios.
 
@@ -1759,4 +1759,43 @@ public async Task ChangeTitleAsync(Issue issue, string title)
     issue.SetTitle(title);
 }
 ````
+
+## Domain Logic & Application Logic
+
+As mentioned before, *Business Logic* in the Domain Driven Design is splitted into two parts (layers): *Domain Logic* and *Application Logic*:
+
+![domain-driven-design-domain-vs-application-logic](images/domain-driven-design-domain-vs-application-logic.png)
+
+Domain Logic consists of the *Core Domain Rules* of the system while Application Logic implements application specific *Use Cases*.
+
+While the definition is clear, the implementation may not be easy. You may be undecided which code should stand in the Application Layer, which code should be in the Domain Layer.  This section tries to explain the differences.
+
+### Multiple Application Layers
+
+DDD helps to **deal with complexity** when your system is large. Especially, if there are **multiple applications**  are being developed on a **single domain,** then the **Domain Logic vs Application Logic separation** becomes much more important.
+
+Assume that you are building a system that has multiple applications;
+
+* A **Public Web Site Application**, built with ASP.NET Core MVC, to show your products to users. Such a web site doesn't require authentication to see the products. The users login to the web site, only if they are performing some actions (like adding a product to the basket).
+* A **Back Office Application**, built with Angular UI (that uses REST APIs). This application used by office workers of the company to manage the system (like editing product descriptions).
+* A **Mobile Application** that has much simpler UI compared to the Public Web Site. It may communicate to the server via REST APIs or another technology (like TCP sockets).
+
+![domain-driven-design-multiple-applications](images/domain-driven-design-multiple-applications.png)
+
+Every application will have different **requirements**, different **use cases** (Application Service methods), different **DTOs**, different **validation** and **authorization** rules... etc.
+
+Mixing all these logics into a single application layer makes your services contain too many `if`s with **complicated business logic** makes your code **hard to develop, maintain and test** and leads to potential bugs.
+
+If you've multiple applications with a single domain;
+
+* Create **separate application layers** for each application/client type and implement application specific business logic in these separate layers.
+* Use a **single domain layer** to share the core domain logic.
+
+Such a design makes it even more important to distinguish between Domain logic and Application Logic.
+
+To be more clear about the implementation, you can create different projects (`.csproj`) for each application types. For example;
+
+* `IssueTracker.Admin.Application` & `IssueTracker.Admin.Application.Contacts` projects for the Back Office (admin) Application.
+* `IssueTracker.Public.Application` & `IssueTracker.Public.Application.Contracts` projects for the Public Web Application.
+* `IssueTracker.Mobile.Application` & `IssueTracker.Mobile.Application.Contracts` projects for the Public Web Application.
 
