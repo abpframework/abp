@@ -251,6 +251,7 @@ public class MyService : ITransientDependency
 ````
 
 Pre-built modules already handles this. However, if you have used `IdentityOptions` directly in your code, you also need to follow this new pattern.
+Please make sure that the injected `IOptions<IdentityOptions>` service and the service consuming it are in the same scope of dependency injection container.
 
 ## ASP.NET Core MVC / Razor Pages UI
 
