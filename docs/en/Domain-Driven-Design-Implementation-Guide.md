@@ -1799,3 +1799,124 @@ To be more clear about the implementation, you can create different projects (`.
 * `IssueTracker.Public.Application` & `IssueTracker.Public.Application.Contracts` projects for the Public Web Application.
 * `IssueTracker.Mobile.Application` & `IssueTracker.Mobile.Application.Contracts` projects for the Public Web Application.
 
+### Examples
+
+This section contains some Application Service and Domain Service examples to discuss how to decide to place business logic inside these services.
+
+**Example: Creating a new `Organization` in a Domain Service**
+
+````csharp
+public class OrganizationManager : DomainService
+{
+    private readonly IRepository<Organization> _organizationRepository;
+    private readonly ICurrentUser _currentUser;
+    private readonly IAuthorizationService _authorizationService;
+    private readonly IEmailSender _emailSender;
+
+    public OrganizationManager(
+        IRepository<Organization> organizationRepository, 
+        ICurrentUser currentUser, 
+        IAuthorizationService authorizationService, 
+        IEmailSender emailSender)
+    {
+        _organizationRepository = organizationRepository;
+        _currentUser = currentUser;
+        _authorizationService = authorizationService;
+        _emailSender = emailSender;
+    }
+
+    public async Task<Organization> CreateAsync(string name)
+    {
+        if (await _organizationRepository.AnyAsync(x => x.Name == name))
+        {
+            throw new BusinessException("IssueTracking:DuplicateOrganizationName");
+        }
+
+        await _authorizationService.CheckAsync("OrganizationCreationPermission");
+
+        Logger.LogDebug($"Creating organization {name} by {_currentUser.UserName}");
+
+        var organization = new Organization();
+
+        await _emailSender.SendAsync(
+            "systemadmin@issuetracking.com",
+            "New Organization",
+            "A new organization created with name: " + name
+        );
+
+        return organization;
+    }
+}
+````
+
+Let's see the `CreateAsync` method part by part to discuss if the code part should be in the Domain Service, or not;
+
+* **CORRECT**: It first checks for **duplicate organization name** and and throws exception in this case. This is something related to core domain rule and we never allow duplicated names.
+* **WRONG**: Domain Services should not perform **authorization**. [Authorization](Authorization.md) should be done in the Application Layer.
+* **WRONG**: It logs a message with including the [Current User](CurrentUser.md)'s `UserName`. Domain service should not be depend on the Current User. Domain Services should be usable even if there is no user in the system. Current User (Session) should be a Presentation/Application Layer related concept.
+* **WRONG**: It sends an [email](Emailing.md) about this new organization creation. We think this is also a use case specific business logic. You may want to create different type of emails in different use cases or don't need to send emails in some cases.
+
+**Example: Creating a new `Organization` in an Application Service**
+
+````csharp
+public class OrganizationAppService : ApplicationService
+{
+    private readonly OrganizationManager _organizationManager;
+    private readonly IPaymentService _paymentService;
+    private readonly IEmailSender _emailSender;
+
+    public OrganizationAppService(
+        OrganizationManager organizationManager,
+        IPaymentService paymentService, 
+        IEmailSender emailSender)
+    {
+        _organizationManager = organizationManager;
+        _paymentService = paymentService;
+        _emailSender = emailSender;
+    }
+
+    [UnitOfWork]
+    [Authorize("OrganizationCreationPermission")]
+    public async Task<Organization> CreateAsync(CreateOrganizationDto input)
+    {
+        await _paymentService.ChargeAsync(
+            CurrentUser.Id,
+            GetOrganizationPrice()
+        );
+
+        var organization = await _organizationManager.CreateAsync(input.Name);
+
+        await _emailSender.SendAsync(
+            "systemadmin@issuetracking.com",
+            "New Organization",
+            "A new organization created with name: " + input.Name
+        );
+
+        return organization; // !!!
+    }
+
+    private double GetOrganizationPrice()
+    {
+        return 42; //Gets from somewhere else...
+    }
+}
+````
+
+Let's see the `CreateAsync` method part by part to discuss if the code part should be in the Application Service, or not;
+
+* **CORRECT**: Application Service methods should be unit of work (transactional). ABP's [Unit Of Work](Unit-Of-Work.md) system makes this automatic (even without need to add `[UnitOfWork]` attribute for the Application Services).
+* **CORRECT**: [Authorization](Authorization.md) should be done in the application layer. Here, it is done by using the `[Authorize]` attribute.
+* **CORRECT**: Payment (an infrastructure service) is called to charge money for this operation (Creating an Organization is a paid thing in our business).
+* **CORRECT**: We can send [email](Emailing.md) as a notification to the system admin.
+* **WRONG**: Do not return entities from the Application Services. Return a DTO instead.
+
+**Discussion: Why not moving the payment logic inside the domain service?**
+
+You may wonder why the payment code is not inside the `OrganizationManager`. It is an **important thing** and we never want to **miss the payment**.
+
+However, **being important is not sufficient** to consider a code as a Core Business Logic. We may have **other use cases** where we don't charge money to create a new Organization. Examples;
+
+* An admin user can use a Back Office Application to create a new organization without any payment.
+* A background-working data import/integration/synchronization system may also need to create organizations without any payment operation.
+
+As you see, **payment is not a necessary operation to create a valid organization**. It is a use case specific application logic.
