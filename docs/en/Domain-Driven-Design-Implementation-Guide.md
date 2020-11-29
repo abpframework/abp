@@ -1920,3 +1920,11 @@ However, **being important is not sufficient** to consider a code as a Core Busi
 * A background-working data import/integration/synchronization system may also need to create organizations without any payment operation.
 
 As you see, **payment is not a necessary operation to create a valid organization**. It is a use case specific application logic.
+
+## Reference Books
+
+If you seriously interest in the Domain Driven Design and building large scale enterprise systems, the following books are suggested as reference books;
+
+* "*Domain Driven Design*" by Eric Evans
+* "*Implementing Domain Driven Design*" by Vaughn Vernon
+* "*Clean Architecture*" by Robert C. Martin
