@@ -1797,7 +1797,7 @@ To be more clear about the implementation, you can create different projects (`.
 
 * `IssueTracker.Admin.Application` & `IssueTracker.Admin.Application.Contacts` projects for the Back Office (admin) Application.
 * `IssueTracker.Public.Application` & `IssueTracker.Public.Application.Contracts` projects for the Public Web Application.
-* `IssueTracker.Mobile.Application` & `IssueTracker.Mobile.Application.Contracts` projects for the Public Web Application.
+* `IssueTracker.Mobile.Application` & `IssueTracker.Mobile.Application.Contracts` projects for the Mobile Application.
 
 ### Examples
 
