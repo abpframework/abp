@@ -12,6 +12,7 @@ The goals of this document are;
 * Explain the **layered architecture** & solution structure offered by the ABP Framework.
 * Introduce **explicit rules** to implement DDD patterns and best practices by giving **concrete examples**.
 * Show what **ABP Framework provides** you as the infrastructure for implementing DDD in a proper way.
+* And finally, provide **suggestions** based on software development **best practices** and our experiences to create a **maintainable codebase**.
 
 ### Simple Code!
 
@@ -492,4 +493,1270 @@ namespace IssueTracking.Issues
 
 ##### Business Logic & Exceptions in the Entities
 
-TODO
+When you implement validation and business logic in the entities, you frequently need to manage exceptional cases. In these cases;
+
+* Create **domain specific exceptions**.
+* **Throw these exceptions** in the entity methods when necessary.
+
+**Example**
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    
+    public bool IsLocked { get; private set; }
+    public bool IsClosed { get; private set; }
+    public IssueCloseReason? CloseReason { get; private set; }
+
+    public void Close(IssueCloseReason reason)
+    {
+        IsClosed = true;
+        CloseReason = reason;
+    }
+
+    public void ReOpen()
+    {
+        if (IsLocked)
+        {
+            throw new IssueStateException(
+                "Can not open a locked issue! Unlock it first."
+            );
+        }
+
+        IsClosed = false;
+        CloseReason = null;
+    }
+
+    public void Lock()
+    {
+        if (!IsClosed)
+        {
+            throw new IssueStateException(
+                "Can not open a locked issue! Unlock it first."
+            );
+        }
+
+        IsLocked = true;
+    }
+
+    public void Unlock()
+    {
+        IsLocked = false;
+    }
+}
+````
+
+There are two business rules here;
+
+* A locked issue can not be re-opened.
+* You can not lock an open issue.
+
+`Issue` class throws a `IssueStateException` in these cases to force business rules:
+
+````csharp
+using System;
+
+namespace IssueTracking.Issues
+{
+    public class IssueStateException : Exception
+    {
+        public IssueStateException(string message)
+            : base(message)
+        {
+            
+        }
+    }
+}
+````
+
+There are two potential problems of throwing such exceptions;
+
+1. In case of such an exception, should the **end user** see the exception (error) message? If so, how do you **localize** the exception message? You can not use the [localization](Localization.md) system, because you can't inject and use `IStringLocalizer` in the entities.
+2. For a web application or HTTP API, what **HTTP Status Code** should return to the client?
+
+ABP's [Exception Handling](Exception-Handling.md) system solves these problems (and more).
+
+**Example: Throwing a business exception with code**
+
+````csharp
+using Volo.Abp;
+
+namespace IssueTracking.Issues
+{
+    public class IssueStateException : BusinessException
+    {
+        public IssueStateException(string code)
+            : base(code)
+        {
+            
+        }
+    }
+}
+````
+
+* `IssueStateException` class inherits the `BusinessException` class. ABP returns 403 (forbidden) HTTP Status code by default (instead of 500 - Internal Server Error) for the exceptions derived from the `BusinessException`.
+* The `code` is used as a key in the localization resource file to find the localized message.
+
+Now, we can change the `ReOpen` method as shown below:
+
+````csharp
+public void ReOpen()
+{
+    if (IsLocked)
+    {
+        throw new IssueStateException("IssueTracking:CanNotOpenLockedIssue");
+    }
+
+    IsClosed = false;
+    CloseReason = null;
+}
+````
+
+> Use constants instead of magic strings.
+
+And add an entry to the localization resource. Example entry for the English language:
+
+````json
+"IssueTracking:CanNotOpenLockedIssue": "Can not open a locked issue! Unlock it first."
+````
+
+* ABP automatically uses this localized message (based on the current language) to show to the end user when you throw the exception.
+* The exception code (`IssueTracking:CanNotOpenLockedIssue` here) is also sent to the client, so it may handle the error case programmatically.
+
+> For this example, you could directly throw `BusinessException` instead of defining a specialized `IssueStateException`. The result will be same. See the [exception handling document](Exception-Handling.md) for all the details.
+
+##### Business Logic in Entities Requiring External Services
+
+It is simple to implement a business rule in an entity method when the business logic only uses to the properties of that entity. What if the business logic requires to **query database** or **use any external services** that should be resolved from the [dependency injection](Dependency-Injection.md) system. Remember; **Entities can not inject services**.
+
+There are two common ways of implementing such a business logic:
+
+* Implement the business logic on an entity method and **get external dependencies as parameters** of the method.
+* Create a **Domain Service**.
+
+Domain Services will be explained later. But, now let's see how it can be implemented in the entity class.
+
+**Example: Business Rule: Can not assign more than 3 open issues to a user concurrently**
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; private set; }
+
+    public async Task AssignToAsync(AppUser user, IUserIssueService userIssueService)
+    {
+        var openIssueCount = await userIssueService.GetOpenIssueCountAsync(user.Id);
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        AssignedUserId = user.Id;
+    }
+
+    public void CleanAssignment()
+    {
+        AssignedUserId = null;
+    }
+}
+````
+
+* `AssignedUserId` property setter made private. So, the only way to change it to use the `AssignToAsync` and `CleanAssignment` methods.
+* `AssignToAsync` gets an `AppUser` entity. Actually, it only uses the `user.Id`, so you could get a `Guid` value, like `userId`. However, this way ensures that the `Guid` value is `Id` of an existing user and not a random `Guid` value.
+* `IUserIssueService` is an arbitrary service that is used to get open issue count for a user. It's the responsibility of the code part (that calls the `AssignToAsync`) to resolve the `IUserIssueService` and pass here.
+* `AssignToAsync` throws exception if the business rule doesn't meet.
+* Finally, if everything is correct, `AssignedUserId` property is set.
+
+This method perfectly guarantee to apply the business logic when you want to assign an issue to a user. However, it has some problems;
+
+* It makes the entity class **depends on an external service** which makes the entity **complicated**.
+* It makes **hard to use** the entity. The code that uses the entity now needs to inject `IUserIssueService` and pass to the `AssignToAsync` method.
+
+An alternative way of implementing this business logic is to introduce a **Domain Service**, which will be explained later.
+
+### Repositories
+
+A [Repository](Repositories.md) is a collection-like interface that is used by the Domain and Application Layers to access to the data persistence system (the database) to read and write the Business Objects, generally the Aggregates.
+
+Common Repository principles are;
+
+* Define a repository **interface in the Domain Layer** (because it is used in the Domain and Application Layers), **implement in the Infrastructure Layer** (*EntityFrameworkCore* project in the startup template).
+* **Do not include business logic** inside the repositories.
+* Repository interface should be **database provider / ORM independent**. For example, do not return a `DbSet` from a repository method. `DbSet` is an object provided by the EF Core.
+* **Create repositories for aggregate roots**, not for all entities. Because, sub-collection entities (of an aggregate) should be accessed over the aggregate root.
+
+#### Do Not Include Domain Logic in Repositories
+
+While this rule seems obvious at the beginning, it is easy to leak business logic into repositories.
+
+**Example: Get inactive issues from a repository**
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+
+namespace IssueTracking.Issues
+{
+    public interface IIssueRepository : IRepository<Issue, Guid>
+    {
+        Task<List<Issue>> GetInActiveIssuesAsync();
+    }
+}
+````
+
+`IIssueRepository` extends the standard `IRepository<...>` interface by adding a `GetInActiveIssuesAsync` method. This repository works with such an `Issue` class:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+}
+````
+
+(the code shows only the properties we need for this example)
+
+The rule says the repository shouldn't know the business rules. The question here is "**What is an inactive issue**? Is it a business rule definition?"
+
+Let's see the implementation to understand it:
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using IssueTracking.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
+
+namespace IssueTracking.Issues
+{
+    public class EfCoreIssueRepository : 
+        EfCoreRepository<IssueTrackingDbContext, Issue, Guid>,
+        IIssueRepository
+    {
+        public EfCoreIssueRepository(
+            IDbContextProvider<IssueTrackingDbContext> dbContextProvider) 
+            : base(dbContextProvider)
+        {
+        }
+
+        public async Task<List<Issue>> GetInActiveIssuesAsync()
+        {
+            var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+
+            return await DbSet.Where(i =>
+
+                //Open
+                !i.IsClosed &&
+
+                //Assigned to nobody
+                i.AssignedUserId == null &&
+
+                //Created 30+ days ago
+                i.CreationTime < daysAgo30 &&
+
+                //No comment or the last comment was 30+ days ago
+                (i.LastCommentTime == null || i.LastCommentTime < daysAgo30)
+
+            ).ToListAsync();
+        }
+    }
+}
+````
+
+(Used EF Core for the implementation. See the [EF Core integration document](Entity-Framework-Core.md) to learn how to create custom repositories with the EF Core.)
+
+When we check the `GetInActiveIssuesAsync` implementation, we see a **business rule that defines an in-active issue**: The issue should be **open**, **assigned to nobody**, **created 30+ days ago** and has **no comment in the last 30 days**.
+
+This is an implicit definition of business rule that is hidden inside a repository method. The problem occurs when we need to reuse this business logic.
+
+For example, let's say that we want to add an `bool IsInActive()` method on the `Issue` entity. In this way, we can check activeness when we have an issue entity.
+
+Let's see the implementation:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+
+    public bool IsInActive()
+    {
+        var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+        return
+            //Open
+            !IsClosed &&
+
+            //Assigned to nobody
+            AssignedUserId == null &&
+
+            //Created 30+ days ago
+            CreationTime < daysAgo30 &&
+
+            //No comment or the last comment was 30+ days ago
+            (LastCommentTime == null || LastCommentTime < daysAgo30);
+    }
+}
+````
+
+We had to copy/paste/modify the code. What if the definition of the activeness changes? We should not forget to update both places. This is a duplication of a business logic, which is pretty dangerous.
+
+A good solution to this problem is the *Specification Pattern*!
+
+### Specifications
+
+A [specification](Specifications.md) is a **named**, **reusable**, **combinable** and **testable** class to filter the Domain Objects based on the business rules.
+
+ABP Framework provides necessary infrastructure to easily create specification classes and use them inside your application code. Let's implement the in-active issue filter as a specification class:
+
+````csharp
+using System;
+using System.Linq.Expressions;
+using Volo.Abp.Specifications;
+
+namespace IssueTracking.Issues
+{
+    public class InActiveIssueSpecification : Specification<Issue>
+    {
+        public override Expression<Func<Issue, bool>> ToExpression()
+        {
+            var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
+            return i =>
+
+                //Open
+                !i.IsClosed &&
+
+                //Assigned to nobody
+                i.AssignedUserId == null &&
+
+                //Created 30+ days ago
+                i.CreationTime < daysAgo30 &&
+
+                //No comment or the last comment was 30+ days ago
+                (i.LastCommentTime == null || i.LastCommentTime < daysAgo30);
+        }
+    }
+}
+````
+
+`Specification<T>` base class simplifies to create a specification class by defining an expression. Just moved the expression here, from the repository.
+
+Now, we can re-use the `InActiveIssueSpecification` in the `Issue` entity and `EfCoreIssueRepository` classes.
+
+#### Using within the Entity
+
+`Specification` class provides an `IsSatisfiedBy` method that returns `true` if the given object (entity) satisfies the specification. We can re-write the `Issue.IsInActive` method as shown below:
+
+````csharp
+public class Issue : AggregateRoot<Guid>, IHasCreationTime
+{
+    public bool IsClosed { get; private set; }
+    public Guid? AssignedUserId { get; private set; }
+    public DateTime CreationTime { get; private set; }
+    public DateTime? LastCommentTime { get; private set; }
+    //...
+
+    public bool IsInActive()
+    {
+        return new InActiveIssueSpecification().IsSatisfiedBy(this);
+    }
+}
+````
+
+Just created a new instance of the `InActiveIssueSpecification` and used its `IsSatisfiedBy` method to re-use the expression defined by the specification.
+
+#### Using with the Repositories
+
+First, starting from the repository interface:
+
+````csharp
+public interface IIssueRepository : IRepository<Issue, Guid>
+{
+    Task<List<Issue>> GetIssuesAsync(ISpecification<Issue> spec);
+}
+````
+
+Renamed `GetInActiveIssuesAsync` to simple `GetIssuesAsync` by taking a specification object. Since the **specification (the filter) has been moved out of the repository**, we no longer need to create different methods to get issues with different conditions (like `GetAssignedIssues(...)`, `GetLockedIssues(...)`, etc.)
+
+Updated implementation of the repository can be like that:
+
+````csharp
+public class EfCoreIssueRepository :
+    EfCoreRepository<IssueTrackingDbContext, Issue, Guid>,
+    IIssueRepository
+{
+    public EfCoreIssueRepository(
+        IDbContextProvider<IssueTrackingDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    public async Task<List<Issue>> GetIssuesAsync(ISpecification<Issue> spec)
+    {
+        return await DbSet
+            .Where(spec.ToExpression())
+            .ToListAsync();
+    }
+}
+````
+
+Since `ToExpression()` method returns an expression, it can be directly passed to the `Where` method to filter the entities.
+
+Finally, we can pass any Specification instance to the `GetIssuesAsync` method:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IIssueRepository _issueRepository;
+
+    public IssueAppService(IIssueRepository issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync()
+    {
+        var issues = await _issueRepository.GetIssuesAsync(
+            new InActiveIssueSpecification()
+        );
+    }
+}
+````
+
+##### With Default Repositories
+
+Actually, you don't have to create custom repositories to be able to use specifications. The standard `IRepository` already extends the `IQueryable`, so you can use the standard LINQ extension methods over it:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueAppService(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync()
+    {
+        var issues = AsyncExecuter.ToListAsync(
+            _issueRepository.Where(new InActiveIssueSpecification())
+        );
+    }
+}
+````
+
+`AsyncExecuter` is a utility provided by the ABP Framework to use asynchronous LINQ extension methods (like `ToListAsync` here) without depending on the EF Core NuGet package. See the [Repositories document](Repositories.md) for more information.
+
+#### Combining the Specifications
+
+One powerful side of the Specifications is they are combinable. Assume that we've another specification that returns `true` only if the `Issue` is in a Milestone:
+
+````csharp
+public class MilestoneSpecification : Specification<Issue>
+{
+    public Guid MilestoneId { get; }
+
+    public MilestoneSpecification(Guid milestoneId)
+    {
+        MilestoneId = milestoneId;
+    }
+
+    public override Expression<Func<Issue, bool>> ToExpression()
+    {
+        return i => i.MilestoneId == MilestoneId;
+    }
+}
+````
+
+This Specification is *parametric* as a difference from the `InActiveIssueSpecification`. We can combine both specifications to get a list of inactive issues in a specific milestone:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueAppService(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task DoItAsync(Guid milestoneId)
+    {
+        var issues = AsyncExecuter.ToListAsync(
+            _issueRepository
+                .Where(
+                    new InActiveIssueSpecification()
+                        .And(new MilestoneSpecification(milestoneId))
+                        .ToExpression()
+                )
+        );
+    }
+}
+````
+
+The example above uses the `And` extension method to combine the specifications. There are more combining methods are available, like `Or(...)` and `AndNot(...)`.
+
+> See the [Specifications document](Specifications.md) for more details about the specification infrastructure provided by the ABP Framework.
+
+### Domain Services
+
+Domain Services implement domain logic that;
+
+* Depends on **services and repositories**.
+* Needs to work with **multiple aggregates**, so the logic doesn't properly fit in any of the aggregates.
+
+Domain Services work with Domain Objects. Their methods can **get and return entities, value objects, primitive types**... etc. However, **they don't get/return DTOs**. DTOs is a part of the Application Layer.
+
+**Example: Assigning an issue to a user**
+
+Remember how issue assignment has been implemented in the `Issue` entity:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; private set; }
+
+    public async Task AssignToAsync(AppUser user, IUserIssueService userIssueService)
+    {
+        var openIssueCount = await userIssueService.GetOpenIssueCountAsync(user.Id);
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        AssignedUserId = user.Id;
+    }
+
+    public void CleanAssignment()
+    {
+        AssignedUserId = null;
+    }
+}
+````
+
+Here, we will move this logic into a Domain Service.
+
+First, changing the `Issue` class:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+    public Guid? AssignedUserId { get; internal set; }
+}
+````
+
+* Removed the assign-related methods.
+* Changed `AssignedUserId` property's setter from `private` to `internal`, to allow to set it from the Domain Service.
+
+The next step is to create a domain service, named `IssueManager`, that has `AssignToAsync` to assign the given issue to the given user.
+
+````csharp
+public class IssueManager : DomainService
+{
+    private readonly IRepository<Issue, Guid> _issueRepository;
+
+    public IssueManager(IRepository<Issue, Guid> issueRepository)
+    {
+        _issueRepository = issueRepository;
+    }
+
+    public async Task AssignToAsync(Issue issue, AppUser user)
+    {
+        var openIssueCount = await _issueRepository.CountAsync(
+            i => i.AssignedUserId == user.Id && !i.IsClosed
+        );
+
+        if (openIssueCount >= 3)
+        {
+            throw new BusinessException("IssueTracking:ConcurrentOpenIssueLimit");
+        }
+
+        issue.AssignedUserId = user.Id;
+    }
+}
+````
+
+`IssueManager` can inject any service dependency and use to query open issue count on the user.
+
+> We prefer and suggest to use the `Manager` suffix for the Domain Services.
+
+The only problem of this design is that `Issue.AssignedUserId` is now open to set out of the class. However, it is not `public`. It is `internal` and changing it is possible only inside the same Assembly, the `IssueTracking.Domain` project for this example solution. We think this is reasonable;
+
+* Domain Layer developers are already aware of domain rules and they use the `IssueManager`.
+* Application Layer developers are already forces to use the `IssueManager` since they don't directly set it.
+
+While there is a tradeoff between two approaches, we prefer to create Domain Services when the business logic requires to work with external services.
+
+### Application Services
+
+An [Application Service](Application-Services.md) is a stateless service that implements **use cases** of the application. An application service typically **gets and returns DTOs**. It is used by the Presentation Layer. It **uses and coordinates the domain objects** (entities, repositories, etc.) to implement use cases.
+
+Common principles of an application service are;
+
+* Implement the **application logic** that is specific to the current use case. Do not implement the core domain logic inside the application services. We will come back to differences between Application  Domain logics.
+* **Never get or return entities** for an application service method. This breaks the encapsulation of the Domain Layer. Always get and return DTOs.
+
+**Example: Assign an Issue to a User**
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using IssueTracking.Users;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace IssueTracking.Issues
+{
+    public class IssueAppService : ApplicationService, IIssueAppService
+    {
+        private readonly IssueManager _issueManager;
+        private readonly IRepository<Issue, Guid> _issueRepository;
+        private readonly IRepository<AppUser, Guid> _userRepository;
+
+        public IssueAppService(
+            IssueManager issueManager,
+            IRepository<Issue, Guid> issueRepository,
+            IRepository<AppUser, Guid> userRepository)
+        {
+            _issueManager = issueManager;
+            _issueRepository = issueRepository;
+            _userRepository = userRepository;
+        }
+
+        [Authorize]
+        public async Task AssignAsync(IssueAssignDto input)
+        {
+            var issue = await _issueRepository.GetAsync(input.IssueId);
+            var user = await _userRepository.GetAsync(input.UserId);
+
+            await _issueManager.AssignToAsync(issue, user);
+
+            await _issueRepository.UpdateAsync(issue);
+        }
+    }
+}
+````
+
+An application service method typically has three steps those are implemented here;
+
+1. Get the related domain objects from database to implement the use case.
+2. Use domain objects (domain services, entities, etc.) to perform the actual operation.
+3. Update the changed entities in the database.
+
+> The last *Update* is not necessary if your are using EF Core since it has a Change Tracking system. If you want to take advantage of this EF Core feature, please see the *Discussion About the Database Independence Principle* section above.
+
+`IssueAssignDto` in this example is a simple DTO class:
+
+````csharp
+using System;
+
+namespace IssueTracking.Issues
+{
+    public class IssueAssignDto
+    {
+        public Guid IssueId { get; set; }
+        public Guid UserId { get; set; }
+    }
+}
+````
+
+### Data Transfer Objects
+
+A [DTO](Data-Transfer-Objects.md) is a simple object that is used to transfer state (data) between the Application and Presentation Layers. So, Application Service methods gets and returns DTOs.
+
+#### Common DTO Principles & Best Practices
+
+* A DTO **should be serializable**, by its nature. Because, most of the time it is transferred over network. So, it should have a **parameterless (empty) constructor**.
+* Should not contain any **business logic**.
+* **Never** inherit from or reference to **entities**.
+
+**Input DTOs** (those are passed to the Application Service methods) have different natures than **Output DTOs** (those are returned from the Application Service methods). So, they will be treated differently. 
+
+#### Input DTO Best Practices
+
+##### Do not Define Unused Properties for Input DTOs
+
+Define **only the properties needed** for the use case! Otherwise, it will be **confusing for the clients** to use the Application Service method. You can surely define **optional properties**, but they should effect how the use case is working, when the client provides them.
+
+This rule seems unnecessary first. Who would define unused parameters (input DTO properties) for a method? But it happens, especially when you try to reuse input DTOs.
+
+##### Do not Re-Use Input DTOs
+
+Define a **specialized input DTO for each use case** (Application Service method). Otherwise, some properties are not used in some cases and this violates the rule defined above: *Do not Define Unused Properties for Input DTOs*.
+
+Sometimes, it seems appealing to reuse the same DTO class for two use cases, because they are almost same. Even if they are same now, they will probably become different by the time and you will come the same problem. **Code duplication is a better practice than coupling use cases**.
+
+Another way of reusing input DTOs is **inheriting** DTOs from each other. While this can be useful in some rare cases, most of the time it brings you to the same point.
+
+**Example: User Application Service**
+
+````csharp
+public interface IUserAppService : IApplicationService
+{
+    Task CreateAsync(UserDto input);
+    Task UpdateAsync(UserDto input);
+    Task ChangePasswordAsync(UserDto input);
+}
+````
+
+`IUserAppService` uses `UserDto` as the input DTO in all methods (use cases). `UserDto` is defined below:
+
+````csharp
+public class UserDto
+{
+    public Guid Id { get; set; }
+    public string UserName { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public DateTime CreationTime { get; set; }
+}
+````
+
+For this example;
+
+* `Id` is not used in *Create* since the server determines it.
+* `Password` is not used in *Update* since we have another method for it.
+* `CreationTime` is never used since we can't allow client to send the Creation Time. It should be set in the server.
+
+A true implementation can be like that:
+
+````csharp
+public interface IUserAppService : IApplicationService
+{
+    Task CreateAsync(UserCreationDto input);
+    Task UpdateAsync(UserUpdateDto input);
+    Task ChangePasswordAsync(UserChangePasswordDto input);
+}
+````
+
+With the given input DTO classes:
+
+````csharp
+public class UserCreationDto
+{
+    public string UserName { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+}
+
+public class UserUpdateDto
+{
+    public Guid Id { get; set; }
+    public string UserName { get; set; }
+    public string Email { get; set; }
+}
+
+public class UserChangePasswordDto
+{
+    public Guid Id { get; set; }
+    public string Password { get; set; }
+}
+````
+
+This is more maintainable approach, while it seems you write more code.
+
+**Exceptional Case**: There can be some exceptions for this rule: If you always want to develop two methods **in parallel**, they may share the same input DTO (by inheritance or direct reuse). For example, if you have a reporting page that has some filters and you have multiple Application Service methods (like screen report, excel report and csv report methods) use the same filters but returns different results, you may want to reuse the same filter input DTO to **couple these use cases**. Because, in this example, whenever you change a filter, you have to make the necessary changes in all the methods to have a consistent reporting system.
+
+##### Input DTO Validation Logic
+
+* Implement only **formal validation** inside the DTO. Use Data Annotation Validation Attributes or implement `IValidatableObject` for formal validation.
+* **Do not perform domain validation**. For example, don't try to check unique username constraint in the DTOs.
+
+**Example: Using Data Annotation Attributes**
+
+````csharp
+using System.ComponentModel.DataAnnotations;
+
+namespace IssueTracking.Users
+{
+    public class UserCreationDto
+    {
+        [Required]
+        [StringLength(UserConsts.MaxUserNameLength)]
+        public string UserName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [StringLength(UserConsts.MaxEmailLength)]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(UserConsts.MaxEmailLength,
+                      MinimumLength = UserConsts.MinPasswordLength)]
+        public string Password { get; set; }
+    }
+}
+````
+
+ABP Framework automatically validates input DTOs, throws `AbpValidationException` and returns HTTP Status `400` to the client in case of an invalid input.
+
+> Some developers think it is better to separate the validation rules and DTO classes. We think the declarative (Data Annotation) approach is practical and useful and doesn't cause any design problem. However, ABP also supports [FluentValidation integration](FluentValidation.md) if you prefer the other approach.
+
+> See the [Validation document](Validation.md) for all validation options.
+
+#### Output DTO Best Practices
+
+* Keep output **DTO count minimum**. **Reuse** where possible (exception: Do not reuse input DTOs as output DTOs).
+* Output DTOs can contain **more properties** than used in the client code.
+* Return entity DTO from **Create** and **Update** methods.
+
+The main goals of these suggestions are;
+
+* Make client code easy to develop and extend;
+  * Dealing with **similar, but not same** DTOs are problematic on the client side.
+  * It is common to **need to other properties** on the UI/client in the future. Returning all properties (by considering security and privileges) of an entity makes client code easy to improve without requiring to touch to the backend code.
+  * If you are opening your API to **3rd-party clients**, you can't know requirements of each client.
+* Make the server side code easy to develop and extend;
+  * You have less class to **understand and maintain**.
+  * You can reuse the Entity->DTO **object mapping** code.
+  * Returning same types from different methods make it easy and clear to create **new methods**.
+
+**Example: Returning Different DTO types from different methods**
+
+````csharp
+public interface IUserAppService : IApplicationService
+{
+    UserDto Get(Guid id);    
+    List<UserNameAndEmailDto> GetUserNameAndEmail(Guid id);    
+    List<string> GetRoles(Guid id);
+    List<UserListDto> GetList();
+    UserCreateResultDto Create(UserCreationDto input);
+    UserUpdateResultDto Update(UserUpdateDto input);
+}
+````
+
+*(We haven't used async methods to make the example cleaner, but you use async in your real code!)*
+
+The example code above returns different DTO types for each method. As you can guess, there will be a lot of code duplications for querying data, mapping entities to DTOs.
+
+The `IUserAppService` service above can be simplified:
+
+````csharp
+public interface IUserAppService : IApplicationService
+{
+    UserDto Get(Guid id);
+    List<UserDto> GetList();
+    UserDto Create(UserCreationDto input);
+    UserDto Update(UserUpdateDto input);
+}
+````
+
+With a single output DTO:
+
+````csharp
+public class UserDto
+{
+    public Guid Id { get; set; }
+    public string UserName { get; set; }
+    public string Email { get; set; }
+    public DateTime CreationTime { get; set; }
+    public List<string> Roles { get; set; }
+}
+````
+
+* Removed `GetUserNameAndEmail` and `GetRoles` since `Get` method already returns the necessary information.
+* `GetList` now returns same with `Get`.
+* `Create` and `Update` also returns the same `UserDto`.
+
+Using the same DTO has a lot of advantages as explained before. For example, think a scenario where you show a **data grid** of Users on the UI. After updating a user, you can get the return value and **update it on the UI**. So, you don't need to call `GetList` again. This is why we suggest to return the entity DTO (`UserDto` here) as return value from the `Create` and `Update` operations.
+
+##### Discussion
+
+Some of the output DTO suggestions may not fit every scenario. These suggestions can be ignored for **performance** reasons, especially when **large data sets** returned or when you create services for your own UI and you have **too many concurrent requests**.
+
+In these cases, you may want to create **specialized output DTOs with minimal information**. The suggestions above are especially for applications where **maintaining the codebase** is more important than **negligible performance lost**.
+
+#### Object to Object Mapping
+
+Automatic [object to object mapping](Object-To-Object-Mapping.md) is a useful approach to copy values from one object to another when two objects have same or similar properties.
+
+DTO and Entity classes generally have same/similar properties and you typically need to create DTO objects from Entities. ABP's [object to object mapping system](Object-To-Object-Mapping.md) with [AutoMapper](http://automapper.org/) integration makes these operations much easier comparing to manual mapping.
+
+* **Use** auto object mapping only for **Entity to output DTO** mappings.
+* **Do not use** auto object mapping for **input DTO to Entity** mappings.
+
+There are some reasons why you **should not use** input DTO to Entity auto mapping;
+
+1. An Entity class typically has a **constructor** that takes parameters and ensures valid object creation. Auto object mapping operation generally requires an empty constructor.
+2. Most of the entity properties will have **private setters** and you should use methods to change these properties in a controlled way.
+3. You typically need to **carefully validate and process** the user/client input rather than blindly mapping to the entity properties.
+
+While some of these problems can be solved through mapping configurations (For example, AutoMapper allows to define custom mapping rules), it makes your business code **implicit/hidden** and **tightly coupled** to the infrastructure. We think the business code should be explicit, clear and easy to understand.
+
+See the *Entity Creation* section below for an example implementation of the suggestions made in this section.
+
+## Implementation: Examples
+
+This section will demonstrate some example use cases and discuss alternative scenarios.
+
+### Entity Creation
+
+Creating an object from an Entity / Aggregate Root class is the first step of the lifecycle of that entity. The *Aggregate / Aggregate Root Rules & Best Practices* section suggests to **create a primary constructor** for the Entity class that guarantees to **create a valid entity**. So, whenever we need to create an instance of that entity, we should always **use that constructor**.
+
+See the `Issue` Aggregate Root class below:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    public Guid RepositoryId { get; private set; }
+    public string Title { get; private set; }
+    public string Text { get; set; }
+    public Guid? AssignedUserId { get; internal set; }
+
+    public Issue(
+        Guid id,
+        Guid repositoryId,
+        string title,
+        string text = null
+        ) : base(id)
+    {
+        RepositoryId = repositoryId;
+        Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+        Text = text; //Allow empty/null
+    }
+    
+    private Issue() { /* Empty constructor is for ORMs */ }
+
+    public void SetTitle(string title)
+    {
+        Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+    }
+
+    //...
+}
+````
+
+* This class guarantees to create a valid entity by its constructor.
+* If you need to change the `Title` later, you need to use the `SetTitle` method which continues to keep `Title` in a valid state.
+* If you want to assign this issue to a user, you need to use `IssueManager` (it implements some business rules before the assignment - see the *Domain Services* section above to remember).
+* The `Text` property has a public setter, because it also accepts null values and haven't any validation rule for this example. It is also optional in the constructor.
+
+Let's see an Application Service method that is used to create an issue:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IssueManager _issueManager;
+    private readonly IRepository<Issue, Guid> _issueRepository;
+    private readonly IRepository<AppUser, Guid> _userRepository;
+
+    public IssueAppService(
+        IssueManager issueManager,
+        IRepository<Issue, Guid> issueRepository,
+        IRepository<AppUser, Guid> userRepository)
+    {
+        _issueManager = issueManager;
+        _issueRepository = issueRepository;
+        _userRepository = userRepository;
+    }
+
+    public async Task<IssueDto> CreateAsync(IssueCreationDto input)
+    {
+        // Create a valid entity
+        var issue = new Issue(
+            GuidGenerator.Create(),
+            input.RepositoryId,
+            input.Title,
+            input.Text
+        );
+
+        // Apply additional domain actions
+        if (input.AssignedUserId.HasValue)
+        {
+            var user = await _userRepository.GetAsync(input.AssignedUserId.Value);
+            await _issueManager.AssignToAsync(issue, user);
+        }
+
+        // Save
+        await _issueRepository.InsertAsync(issue);
+
+        // Return a DTO represents the new Issue
+        return ObjectMapper.Map<Issue, IssueDto>(issue);
+    }
+}
+````
+
+`CreateAsync` method;
+
+* Uses the `Issue` **constructor** to create a valid issue. It passes the `Id` using the [IGuidGenerator](Guid-Generation.md) service. It doesn't use auto object mapping here.
+* If client wants to **assign this issue to a user** on object creation, it uses the `IssueManager` to do it by allowing the `IssueManager` to perform the necessary checks before this assignment.
+* **Saves** the entity to the database.
+* Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by **mapping** from the new `Issue` entity.
+
+#### Applying Domain Rules on Entity Creation
+
+The example `Issue` entity has no business rule on entity creation, except some formal validations in the constructor. However, there maybe scenarios where entity creation should check some extra business rules.
+
+For example, assume that you **don't want** to allow to create an issue if there is already an issue with **exactly the same `Title`**. Where to implement this rule? It is **not proper** to implement this rule in the **Application Service**, because it is a **core business (domain) rule** that should always be checked.
+
+This rule should be implemented in a **Domain Service**, `IssueManager` in this case. So, we need to force the Application Layer always to use the `IssueManager` to create a new `Issue.`
+
+First, we can make the `Issue` constructor `internal`, instead of `public`:
+
+````csharp
+public class Issue : AggregateRoot<Guid>
+{
+    //...
+
+    internal Issue(
+        Guid id,
+        Guid repositoryId,
+        string title,
+        string text = null
+        ) : base(id)
+    {
+        RepositoryId = repositoryId;
+        Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+        Text = text; //Allow empty/null
+    }
+        
+    //...
+}
+````
+
+This prevents Application Services to directly use the constructor, so they will use the `IssueManager`. Then we can add a `CreateAsync` method to the `IssueManager`:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Domain.Services;
+
+namespace IssueTracking.Issues
+{
+    public class IssueManager : DomainService
+    {
+        private readonly IRepository<Issue, Guid> _issueRepository;
+
+        public IssueManager(IRepository<Issue, Guid> issueRepository)
+        {
+            _issueRepository = issueRepository;
+        }
+
+        public async Task<Issue> CreateAsync(
+            Guid repositoryId,
+            string title,
+            string text = null)
+        {
+            if (await _issueRepository.AnyAsync(i => i.Title == title))
+            {
+                throw new BusinessException("IssueTracking:IssueWithSameTitleExists");
+            }
+
+            return new Issue(
+                GuidGenerator.Create(),
+                repositoryId,
+                title,
+                text
+            );
+        }
+    }
+}
+````
+
+* `CreateAsync` method checks if there is already an issue with the same title and throws a business exception in this case.
+* If there is no duplication, it create and returns a new `Issue`.
+
+The `IssueAppService` is changed as shown below in order to use the `IssueManager`'s `CreateAsync` method:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IssueManager _issueManager;
+    private readonly IRepository<Issue, Guid> _issueRepository;
+    private readonly IRepository<AppUser, Guid> _userRepository;
+
+    public IssueAppService(
+        IssueManager issueManager,
+        IRepository<Issue, Guid> issueRepository,
+        IRepository<AppUser, Guid> userRepository)
+    {
+        _issueManager = issueManager;
+        _issueRepository = issueRepository;
+        _userRepository = userRepository;
+    }
+
+    public async Task<IssueDto> CreateAsync(IssueCreationDto input)
+    {
+        // Create a valid entity using the IssueManager
+        var issue = await _issueManager.CreateAsync(
+            input.RepositoryId,
+            input.Title,
+            input.Text
+        );
+
+        // Apply additional domain actions
+        if (input.AssignedUserId.HasValue)
+        {
+            var user = await _userRepository.GetAsync(input.AssignedUserId.Value);
+            await _issueManager.AssignToAsync(issue, user);
+        }
+
+        // Save
+        await _issueRepository.InsertAsync(issue);
+
+        // Return a DTO represents the new Issue
+        return ObjectMapper.Map<Issue, IssueDto>(issue);
+    }    
+}
+
+// *** IssueCreationDto class ***
+public class IssueCreationDto
+{
+    public Guid RepositoryId { get; set; }
+    [Required]
+    public string Title { get; set; }
+    public Guid? AssignedUserId { get; set; }
+    public string Text { get; set; }
+}
+````
+
+##### Discussion: Why not saved Issue to database in the `IssueManager`?
+
+You may ask "**Why `IssueManager` hasn't saved the `Issue` into the database?**". We think it is the responsibility of the Application Service.
+
+Because, the Application Service may require additional changes/operations on the `Issue` object before saving it. If Domain Service saves it, then the *Save* operation is duplicated;
+
+* It causes performance lost because of double database round trip.
+* It requires explicit database transaction that covers both operations.
+* If additional actions cancel the entity creation because of a business rule, the transaction should be rolled back in the database.
+
+When you check the `IssueAppService`, you see the advantage of **not saving** `Issue` to database in the `IssueManager.CreateAsync`. Otherwise, we would need to perform one *Insert* (in the `IssueManager`) and one *Update* (after the Assignment).
+
+##### Discussion: Why not implemented the duplicate Title check in the Application Service?
+
+We could simple say "Because it is a **core domain logic** and should be implemented in the Domain Layer". However, it brings a new question "**How did you decide** that it is a core domain logic, but not an application logic?" (we will discuss the difference later with more details).
+
+For this example, a simple question can help us to make the decision: "If we have another way (use case) of creating an issue, should we still apply the same rule? Is that rule should *always* be implemented". You may think "Why we have a second way of creating an issue?". However, in real life, you have;
+
+* **End users** of the application may create issues in your application's standard UI.
+* You may have a second **back office** application that is used by your own employee and you may want to provide a way of creating issues (probably with different authorization rules in this case).
+* You may have an HTTP API that is open to **3rd-party clients** and they create issues.
+* You may have a **background worker** service that do something and creates issues if it detects some problems. In this way, it will create an issue without any user interaction (and probably without any standard authorization check).
+* You may have a button on the UI that **converts** something (for example, a discussion) to an issue.
+
+We can give more examples. All of these are should be implemented by **different Application Service methods** (see the *Multiple Application Layers* section below), but they **always** follow the rule: Title of the new issue can not be same of any existing issue! That's why this logic is a **core domain logic**, should be located in the Domain Layer and **should not be duplicated** in all these application service methods.
+
+### Updating / Manipulating An Entity
+
+Once an entity is created, it is updated/manipulated by the use cases until it is deleted from the system. There can be different type of use cases directly or indirectly changes an entity.
+
+In this section, we will discuss a typical update operation that changes multiple properties of an `Issue`.
+
+This time, beginning from the *Update* DTO:
+
+````csharp
+public class UpdateIssueDto
+{
+    [Required]
+    public string Title { get; set; }
+    public string Text { get; set; }
+    public Guid? AssignedUserId { get; set; }
+}
+````
+
+By comparing to `IssueCreationDto`, you see no `RepositoryId`. Because, our system doesn't allow to move issues across repositories (think as GitHub repositories). Only `Title` is required and the other properties are optional.
+
+Let's see the *Update* implementation in the `IssueAppService`:
+
+````csharp
+public class IssueAppService : ApplicationService, IIssueAppService
+{
+    private readonly IssueManager _issueManager;
+    private readonly IRepository<Issue, Guid> _issueRepository;
+    private readonly IRepository<AppUser, Guid> _userRepository;
+
+    public IssueAppService(
+        IssueManager issueManager,
+        IRepository<Issue, Guid> issueRepository,
+        IRepository<AppUser, Guid> userRepository)
+    {
+        _issueManager = issueManager;
+        _issueRepository = issueRepository;
+        _userRepository = userRepository;
+    }
+
+    public async Task<IssueDto> UpdateAsync(Guid id, UpdateIssueDto input)
+    {
+        // Get entity from database
+        var issue = await _issueRepository.GetAsync(id);
+
+        // Change Title
+        await _issueManager.ChangeTitleAsync(issue, input.Title);
+
+        // Change Assigned User
+        if (input.AssignedUserId.HasValue)
+        {
+            var user = await _userRepository.GetAsync(input.AssignedUserId.Value);
+            await _issueManager.AssignToAsync(issue, user);
+        }
+
+        // Change Text (no business rule, all values accepted)
+        issue.Text = input.Text;
+
+        // Update entity in the database
+        await _issueRepository.UpdateAsync(issue);
+
+        // Return a DTO represents the new Issue
+        return ObjectMapper.Map<Issue, IssueDto>(issue);
+    }
+}
+````
+
+* `UpdateAsync` method gets `id` as a separate parameter. It is not included in the `UpdateIssueDto`. This is a design decision that helps ABP to properly define HTTP routes when you [auto expose](API/Auto-API-Controllers.md) this service as an HTTP API endpoint. So, that's not related to DDD.
+* It starts by **getting** the `Issue` entity **from database**.
+* Uses `IssueManager`'s `ChangeTitleAsync` instead of directly calling `Issue.SetTitle(...)`. Because we need to implement the **duplicate Title check** as just done in the *Entity Creation*. This requires some changes in the `Issue` and `IssueManager` classes (will be explained below).
+* Uses `IssueManager`'s `AssignToAsync` method if the **assigned user** is being changed with this request.
+* Directly sets the `Issue.Text` since there is **no business rule** for that. If we need later, we can always refactor.
+* **Saves changes** to database. Again, saving changed entities is a responsibility of the Application Service method that coordinates the business objects and the transaction. If `IssueManager` had saved internally in `ChangeTitleAsync` and `AssignToAsync` method, there would be double database operation (see the *Discussion: Why not saved Issue to database in the `IssueManager`?* above).
+* Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by **mapping** from the updated `Issue` entity.
+
+As said, we need some changes in the `Issue` and `IssueManager` classes.
+
+First, made `SetTitle` internal on the `Issue` class:
+
+````csharp
+internal void SetTitle(string title)
+{
+    Title = Check.NotNullOrWhiteSpace(title, nameof(title));
+}
+````
+
+Then added a new method on the `IssueManager` to change the Title:
+
+````csharp
+public async Task ChangeTitleAsync(Issue issue, string title)
+{
+    if (issue.Title == title)
+    {
+        return;
+    }
+
+    if (await _issueRepository.AnyAsync(i => i.Title == title))
+    {
+        throw new BusinessException("IssueTracking:IssueWithSameTitleExists");
+    }
+
+    issue.SetTitle(title);
+}
+````
+

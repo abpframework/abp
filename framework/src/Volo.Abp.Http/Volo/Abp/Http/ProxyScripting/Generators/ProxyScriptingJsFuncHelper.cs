@@ -110,9 +110,11 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
 
         public static string GetParamNameInJsFunc(ParameterApiDescriptionModel parameterInfo)
         {
+            var parameterInfoName = string.Join(".", parameterInfo.Name.Split(".").Select(x => NormalizeJsVariableName(x.ToCamelCase())));
+
             return parameterInfo.Name == parameterInfo.NameOnMethod
-                ? NormalizeJsVariableName(parameterInfo.Name.ToCamelCase(), ".")
-                : NormalizeJsVariableName(parameterInfo.NameOnMethod.ToCamelCase()) + "." + NormalizeJsVariableName(parameterInfo.Name.ToCamelCase(), ".");
+                ? parameterInfoName
+                : NormalizeJsVariableName(parameterInfo.NameOnMethod.ToCamelCase()) + "." + parameterInfoName;
         }
 
         public static string CreateJsObjectLiteral(ParameterApiDescriptionModel[] parameters, int indent = 0)
@@ -133,9 +135,11 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
 
         public static string GetFormPostParamNameInJsFunc(ParameterApiDescriptionModel parameterInfo)
         {
+            var parameterInfoName = string.Join(".", parameterInfo.Name.Split(".").Select(x => NormalizeJsVariableName(x.ToCamelCase())));
+
             return parameterInfo.Name == parameterInfo.NameOnMethod
-                ? NormalizeJsVariableName((parameterInfo.DescriptorName + parameterInfo.Name).ToCamelCase(), ".")
-                : NormalizeJsVariableName(parameterInfo.NameOnMethod.ToCamelCase()) + "." + NormalizeJsVariableName((parameterInfo.DescriptorName + parameterInfo.Name).ToCamelCase(), ".");
+                ? parameterInfoName
+                : NormalizeJsVariableName(parameterInfo.NameOnMethod.ToCamelCase()) + "." + parameterInfoName;
         }
 
         public static string CreateJsFormPostData(ParameterApiDescriptionModel[] parameters, int indent)
@@ -158,10 +162,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
 
         public static string GenerateJsFuncParameterList(ActionApiDescriptionModel action, string ajaxParametersName)
         {
-            var paramsIsFromForm = action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.Form);
-            var methodParamNames = paramsIsFromForm
-                ? action.Parameters.Select(p => p.DescriptorName + p.Name).Distinct().ToList()
-                : action.ParametersOnMethod.Select(p => p.Name).Distinct().ToList();
+            var methodParamNames = action.ParametersOnMethod.Select(p => p.Name).Distinct().ToList();
             methodParamNames.Add(ajaxParametersName);
             return methodParamNames.Select(prmName => NormalizeJsVariableName(prmName.ToCamelCase())).JoinAsString(", ");
         }
