@@ -1104,6 +1104,8 @@ The only problem of this design is that `Issue.AssignedUserId` is now open to se
 
 While there is a tradeoff between two approaches, we prefer to create Domain Services when the business logic requires to work with external services.
 
+> If you don't have a good reason, we think **there is no need to create interfaces** (like `IIssueManager` for the `IssueManager`) for Domain Services.
+
 ### Application Services
 
 An [Application Service](Application-Services.md) is a stateless service that implements **use cases** of the application. An application service typically **gets and returns DTOs**. It is used by the Presentation Layer. It **uses and coordinates the domain objects** (entities, repositories, etc.) to implement use cases.
