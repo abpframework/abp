@@ -253,6 +253,10 @@ public class MyService : ITransientDependency
 Pre-built modules already handles this. However, if you have used `IdentityOptions` directly in your code, you also need to follow this new pattern.
 Please make sure that the injected `IOptions<IdentityOptions>` service and the service consuming it are in the same scope of dependency injection container.
 
+### LDAP module full async
+
+In order to solve the problem of async over sync, `ILdapManager` uses async method instead of sync. And use [`ldap4net`](https://github.com/flamencist/ldap4net) to replace [`Novell.Directory.Ldap.NETStandard`](https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard) package.
+
 ## ASP.NET Core MVC / Razor Pages UI
 
 See the [ASP.NET Core MVC / Razor Pages UI Migration Guide](Abp-4_0-MVC-Razor-Pages.md).
