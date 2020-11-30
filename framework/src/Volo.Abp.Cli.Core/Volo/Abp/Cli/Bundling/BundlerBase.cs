@@ -38,7 +38,7 @@ namespace Volo.Abp.Cli.Bundling
         {
             foreach (var suffix in _minFileSuffixes)
             {
-                if (fileName.EndsWith($".{suffix}.{FileExtension}", StringComparison.InvariantCultureIgnoreCase))
+                if (fileName.EndsWith($".{suffix}{FileExtension}", StringComparison.InvariantCultureIgnoreCase))
                 {
                     return true;
                 }
