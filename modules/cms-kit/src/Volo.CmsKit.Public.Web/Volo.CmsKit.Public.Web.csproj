@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.CmsKit.Common.Web\Volo.CmsKit.Common.Web.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Public.HttpApi\Volo.CmsKit.Public.HttpApi.csproj" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

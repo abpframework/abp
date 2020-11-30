@@ -28,8 +28,6 @@ namespace Volo.Abp.Domain.Repositories
             string sorting,
             bool includeDetails = false,
             CancellationToken cancellationToken = default);
-
-
     }
 
     public interface IReadOnlyBasicRepository<TEntity, TKey> : IReadOnlyBasicRepository<TEntity>
