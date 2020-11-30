@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
+using Volo.Abp.Threading;
 
 namespace Microsoft.AspNetCore.RequestLocalization
 {
