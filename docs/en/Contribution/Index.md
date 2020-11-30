@@ -26,7 +26,7 @@ If you have a feature idea for the framework or modules, [create an issue](https
 
 ## Document Translation
 
-You may want to translate the complete [documentation](https://abp.io/documents/) (including this one) to your mother language. If so, follow these steps:
+You may want to translate the complete [documentation](https://docs.abp.io) (including this one) to your mother language. If so, follow these steps:
 
 * Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
 * To add a new language, create a new folder inside the [docs](https://github.com/abpframework/abp/tree/master/docs) folder. Folder names can be "en", "es", "fr", "tr" and so on based on the language (see [all culture codes](https://msdn.microsoft.com/en-us/library/hh441729.aspx)).
