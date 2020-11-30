@@ -914,7 +914,72 @@
     },
     {
       "text": "Application Modules",
-      "path": "Modules/Index.md"
+      "items": [
+        {
+          "text": "Overall",
+          "path": "Modules/Index.md"
+        },
+        {
+          "text": "Account",
+          "path": "Modules/Account.md"
+        },
+        {
+          "text": "Audit Logging",
+          "path": "Modules/Audit-Logging.md"
+        },
+        {
+          "text": "Background Jobs",
+          "path": "Modules/Background-Jobs.md"
+        },
+        {
+          "text": "Blogging",
+          "path": "Modules/Blogging.md"
+        },
+        {
+          "text": "Client Simulation",
+          "path": "Modules/Client-Simulation.md"
+        },
+        {
+          "text": "CMS Kit",
+          "path": "Modules/Cms-Kit.md"
+        },
+        {
+          "text": "Docs",
+          "path": "Modules/Docs.md"
+        },
+        {
+          "text": "Feature Management",
+          "path": "Modules/Feature-Management.md"
+        },
+        {
+          "text": "Identity",
+          "path": "Modules/Identity.md"
+        },
+        {
+          "text": "IdentityServer",
+          "path": "Modules/IdentityServer.md"
+        },
+        {
+          "text": "Permission Management",
+          "path": "Modules/Permission-Management.md"
+        },
+        {
+          "text": "Setting Management",
+          "path": "Modules/Setting-Management.md"
+        },
+        {
+          "text": "Tenant Management",
+          "path": "Modules/Tenant-Management.md"
+        },
+        {
+          "text": "Users",
+          "path": "Modules/Users.md"
+        },
+        {
+          "text": "Virtual File Explorer",
+          "path": "Modules/Virtual-File-Explorer.md"
+        }
+      ]
     },
     {
       "text": "Release Information",
