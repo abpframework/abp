@@ -2,7 +2,7 @@ import {
   ABP,
   ApplicationLocalizationConfigurationDto,
   ConfigStateService,
-  ExtensionPropertyUiDto,
+  ExtensionPropertyUiLookupDto,
 } from '@abp/ng.core';
 import { Observable, pipe, zip } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
@@ -121,7 +121,7 @@ function createPropertiesToContributorsMapper<T = any>(
 
     Object.keys(properties).forEach((name: string) => {
       const property = properties[name];
-      const lookup = property.ui || ({} as ExtensionPropertyUiDto);
+      const lookup = property.ui.lookup || ({} as ExtensionPropertyUiLookupDto);
       const type = getTypeaheadType(lookup, name) || getTypeFromProperty(property);
       const displayName = generateDisplayName(property.displayName, { name, resource });
 
