@@ -50,24 +50,29 @@ describe('State Utils', () => {
       const propList = new EntityPropList();
       contributors.prop.Role.forEach(callback => callback(propList));
 
-      expect(propList.length).toBe(3);
+      expect(propList.length).toBe(4);
       expect(propList.head.value.name).toBe('Title');
       expect(propList.head.next.value.name).toBe('IsHero');
       expect(propList.head.next.next.value.name).toBe('MyEnum');
+      expect(propList.head.next.next.next.value.name).toBe('Foo_Text');
 
       const createFormList = new FormPropList();
       contributors.createForm.Role.forEach(callback => callback(createFormList));
 
-      expect(createFormList.length).toBe(2);
+      expect(createFormList.length).toBe(4);
       expect(createFormList.head.value.name).toBe('Title');
       expect(createFormList.head.next.value.name).toBe('MyEnum');
+      expect(createFormList.head.next.next.value.name).toBe('Foo');
+      expect(createFormList.head.next.next.next.value.name).toBe('Foo_Text');
 
       const editFormList = new FormPropList();
       contributors.editForm.Role.forEach(callback => callback(editFormList));
 
-      expect(editFormList.length).toBe(2);
+      expect(editFormList.length).toBe(4);
       expect(editFormList.head.value.name).toBe('Title');
       expect(editFormList.head.next.value.name).toBe('IsHero');
+      expect(editFormList.head.next.next.value.name).toBe('Foo');
+      expect(editFormList.head.next.next.next.value.name).toBe('Foo_Text');
     });
   });
 });
@@ -274,6 +279,83 @@ function createMockEntities(): Record<string, ObjectExtensions.EntityExtensionDt
           ],
           configuration: {},
           defaultValue: 2,
+        },
+        Foo: {
+          type: 'System.String',
+          typeSimple: ePropType.String,
+          displayName: null,
+          api: {
+            onGet: {
+              isAvailable: false,
+            },
+            onCreate: {
+              isAvailable: true,
+            },
+            onUpdate: {
+              isAvailable: true,
+            },
+          },
+          ui: {
+            onTable: {
+              isVisible: false,
+            },
+            onCreateForm: {
+              isVisible: true,
+            },
+            onEditForm: {
+              isVisible: true,
+            },
+            lookup: {
+              url: '/api/identity/roles',
+              resultListPropertyName: 'items',
+              displayPropertyName: 'text',
+              valuePropertyName: 'id',
+              filterParamName: 'filter',
+            },
+          },
+          attributes: [],
+          configuration: {},
+          defaultValue: null,
+        },
+        Foo_Text: {
+          type: 'System.String',
+          typeSimple: ePropType.String,
+          displayName: {
+            name: 'Foo',
+            resource: '_',
+          },
+          api: {
+            onGet: {
+              isAvailable: true,
+            },
+            onCreate: {
+              isAvailable: true,
+            },
+            onUpdate: {
+              isAvailable: true,
+            },
+          },
+          ui: {
+            onTable: {
+              isVisible: true,
+            },
+            onCreateForm: {
+              isVisible: true,
+            },
+            onEditForm: {
+              isVisible: true,
+            },
+            lookup: {
+              url: null,
+              resultListPropertyName: 'items',
+              displayPropertyName: 'text',
+              valuePropertyName: 'id',
+              filterParamName: 'filter',
+            },
+          },
+          attributes: [],
+          configuration: {},
+          defaultValue: null,
         },
       },
       configuration: {},

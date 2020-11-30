@@ -1,4 +1,9 @@
-import { ABP, ApplicationLocalizationConfigurationDto, ConfigStateService } from '@abp/ng.core';
+import {
+  ABP,
+  ApplicationLocalizationConfigurationDto,
+  ConfigStateService,
+  ExtensionPropertyUiDto,
+} from '@abp/ng.core';
 import { Observable, pipe, zip } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { ePropType } from '../enums/props.enum';
@@ -9,6 +14,7 @@ import { PropCallback } from '../models/props';
 import { createEnum, createEnumOptions, createEnumValueResolver } from './enum.util';
 import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.util';
 import { createExtraPropertyValueResolver } from './props.util';
+import { createTypeaheadOptions, getTypeaheadType } from './typeahead.util';
 import { getValidatorsFromProperty } from './validation.util';
 
 function selectObjectExtensions(
@@ -115,7 +121,8 @@ function createPropertiesToContributorsMapper<T = any>(
 
     Object.keys(properties).forEach((name: string) => {
       const property = properties[name];
-      const type = getTypeFromProperty(property);
+      const lookup = property.ui || ({} as ExtensionPropertyUiDto);
+      const type = getTypeaheadType(lookup, name) || getTypeFromProperty(property);
       const displayName = generateDisplayName(property.displayName, { name, resource });
 
       if (property.ui.onTable.isVisible) {
@@ -148,6 +155,7 @@ function createPropertiesToContributorsMapper<T = any>(
         const validators = () => getValidatorsFromProperty(property);
         let options: PropCallback<any, Observable<ABP.Option<any>[]>>;
         if (type === ePropType.Enum) options = createEnumOptions(name, enums[property.type]);
+        else if (type === ePropType.Typeahead) options = createTypeaheadOptions(lookup);
 
         const formProp = new FormProp({
           type,
