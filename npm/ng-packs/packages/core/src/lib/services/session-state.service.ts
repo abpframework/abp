@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import compare from 'just-compare';
 import { filter, take } from 'rxjs/operators';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { Session } from '../models/session';
+import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
 import { InternalStore } from '../utils/internal-store-utils';
 import { ConfigStateService } from './config-state.service';
 
@@ -78,7 +78,7 @@ export class SessionStateService {
     return this.store.sliceState(state => state.tenant);
   }
 
-  setTenant(tenant: ApplicationConfiguration.CurrentTenant) {
+  setTenant(tenant: CurrentTenantDto) {
     if (compare(tenant, this.store.state.tenant)) return;
 
     this.store.patch({ tenant });

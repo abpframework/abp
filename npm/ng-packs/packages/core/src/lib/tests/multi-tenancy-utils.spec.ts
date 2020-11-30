@@ -2,9 +2,12 @@ import { Component } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import clone from 'just-clone';
 import { BehaviorSubject } from 'rxjs';
-import { FindTenantResultDto } from '../models/find-tenant-result-dto';
-import { EnvironmentService } from '../services';
-import { MultiTenancyService } from '../services/multi-tenancy.service';
+import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy/abp-tenant.service';
+import {
+  CurrentTenantDto,
+  FindTenantResultDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+import { EnvironmentService, MultiTenancyService } from '../services';
 import { parseTenantFromUrl } from '../utils';
 
 const environment = {
@@ -54,15 +57,17 @@ describe('MultiTenancyUtils', () => {
   const createComponent = createComponentFactory({
     component: DummyComponent,
     mocks: [EnvironmentService, MultiTenancyService],
+    providers: [{ provide: AbpTenantService, useValue: { findTenantByName: () => {} } }],
   });
 
   beforeEach(() => (spectator = createComponent()));
 
   describe('#parseTenantFromUrl', () => {
-    test('should get the tenancyName, set replaced environment and call the findTenantByName method of MultiTenancyService', async () => {
+    test('should get the tenancyName, set replaced environment and call the findTenantByName method of AbpTenantService', async () => {
       const environmentService = spectator.inject(EnvironmentService);
       const multiTenancyService = spectator.inject(MultiTenancyService);
-      const findTenantByNameSpy = jest.spyOn(multiTenancyService, 'findTenantByName');
+      const abpTenantService = spectator.inject(AbpTenantService);
+      const findTenantByNameSpy = jest.spyOn(abpTenantService, 'findTenantByName');
       const getEnvironmentSpy = jest.spyOn(environmentService, 'getEnvironment');
       const setStateSpy = jest.spyOn(environmentService, 'setState');
 
@@ -77,6 +82,7 @@ describe('MultiTenancyUtils', () => {
       const mockInjector = {
         get: arg => {
           if (arg === EnvironmentService) return environmentService;
+          if (arg === AbpTenantService) return abpTenantService;
           if (arg === MultiTenancyService) return multiTenancyService;
         },
       };
@@ -98,7 +104,10 @@ describe('MultiTenancyUtils', () => {
 
       expect(setStateSpy).toHaveBeenCalledWith(replacedEnv);
       expect(findTenantByNameSpy).toHaveBeenCalledWith('abp', { __tenant: '' });
-      expect(multiTenancyService.domainTenant).toEqual({ id: '1', name: 'abp' });
+      expect(multiTenancyService.domainTenant).toEqual({
+        id: '1',
+        name: 'abp',
+      } as CurrentTenantDto);
     });
   });
 });

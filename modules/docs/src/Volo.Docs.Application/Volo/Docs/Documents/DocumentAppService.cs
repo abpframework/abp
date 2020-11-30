@@ -247,10 +247,7 @@ namespace Volo.Docs.Documents
                 return await GetDocumentAsync(documentName, project, languageCode, version);
             }
 
-            //Only the latest version (dev) of the document needs to update the cache.
-            if (!project.LatestVersionBranchName.IsNullOrWhiteSpace() &&
-                document.Version == project.LatestVersionBranchName &&
-                document.LastCachedTime + _cacheTimeout < DateTime.Now)
+            if (document.LastCachedTime + _cacheTimeout < DateTime.Now)
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version, document);
             }

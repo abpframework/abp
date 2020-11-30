@@ -1,4 +1,4 @@
-import { ABP, ApplicationConfiguration, ConfigStateService } from '@abp/ng.core';
+import { ABP, ApplicationLocalizationConfigurationDto, ConfigStateService } from '@abp/ng.core';
 import { Observable, pipe, zip } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { ePropType } from '../enums/props.enum';
@@ -19,7 +19,7 @@ function selectObjectExtensions(
 
 function selectLocalization(
   configState: ConfigStateService,
-): Observable<ApplicationConfiguration.Localization> {
+): Observable<ApplicationLocalizationConfigurationDto> {
   return configState.getOne$('localization');
 }
 
