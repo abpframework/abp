@@ -56,7 +56,7 @@
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@ngneat/inspector": "^1.0.0",
     "@ngneat/spectator": "^5.13.0",
-    "@ngx-validate/core": "^0.0.12",
+    "@ngx-validate/core": "^0.0.13",
     "@ngxs/devtools-plugin": "^3.7.0",
     "@ngxs/logger-plugin": "^3.7.0",
     "@ngxs/router-plugin": "^3.7.0",
