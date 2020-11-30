@@ -230,6 +230,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
+            sb.AppendLine("----no-random-port                          (Use template's default ports)");
             sb.AppendLine("--separate-identity-server                  (if supported by the template)");
             sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
             sb.AppendLine("");
