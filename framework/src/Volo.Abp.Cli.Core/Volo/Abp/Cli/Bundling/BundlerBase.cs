@@ -16,7 +16,7 @@ namespace Volo.Abp.Cli.Bundling
         private static string[] _minFileSuffixes = { "min", "prod" };
 
         protected IMinifier Minifier { get; }
-        protected ILogger<BundlerBase> Logger { get; set; }
+        public ILogger<BundlerBase> Logger { get; set; }
         public abstract string FileExtension { get; }
         public abstract string GenerateDefinition(string bundleFilePath);
 
