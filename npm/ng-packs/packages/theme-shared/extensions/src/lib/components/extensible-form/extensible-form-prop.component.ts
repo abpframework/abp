@@ -4,14 +4,22 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  OnChanges,
   Optional,
   SimpleChanges,
   SkipSelf,
-  OnChanges,
 } from '@angular/core';
-import { ControlContainer, Validators, ValidatorFn } from '@angular/forms';
+import {
+  ControlContainer,
+  FormGroup,
+  FormGroupDirective,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { NgbDateAdapter, NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import snq from 'snq';
 import { DateAdapter } from '../../adapters/date.adapter';
 import { TimeAdapter } from '../../adapters/time.adapter';
 import { ePropType } from '../../enums/props.enum';
@@ -38,6 +46,8 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   @Input() prop: FormProp;
 
+  asterisk = '';
+
   options$: Observable<ABP.Option<any>[]> = of([]);
 
   validators: ValidatorFn[] = [];
@@ -46,15 +56,55 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   disabled: boolean;
 
-  constructor(public readonly cdRef: ChangeDetectorRef, public readonly track: TrackByService) {}
+  private readonly form: FormGroup;
 
-  get asterisk(): string {
-    return this.validators.some(validator => validator === Validators.required) ? '*' : '';
+  typeaheadModel: any;
+
+  setTypeaheadValue(selectedOption: ABP.Option<string>) {
+    this.typeaheadModel = selectedOption || { key: null, value: null };
+    const { key, value } = this.typeaheadModel;
+    const [keyControl, valueControl] = this.getTypeaheadControls();
+    keyControl.setValue(key);
+    valueControl.setValue(value);
+    valueControl.markAsDirty();
+    valueControl.markAsTouched();
+  }
+
+  search = (text$: Observable<string>) =>
+    text$
+      ? text$.pipe(
+          debounceTime(300),
+          distinctUntilChanged(),
+          switchMap(text => this.prop.options(this.data, text)),
+        )
+      : of([]);
+
+  typeaheadFormatter = (option: ABP.Option<any>) => option.key;
+
+  get isInvalid() {
+    const control = this.form.get(this.prop.name);
+    return control.touched && control.invalid;
+  }
+
+  constructor(
+    public readonly cdRef: ChangeDetectorRef,
+    public readonly track: TrackByService,
+    groupDirective: FormGroupDirective,
+  ) {
+    this.form = groupDirective.form;
+  }
+
+  private getTypeaheadControls() {
+    const { name } = this.prop;
+    const { [name + '_Text']: key, [name]: value } = this.form.controls;
+    return [key, value];
+  }
+
+  private setAsterisk() {
+    this.asterisk = this.validators.some(v => v === Validators.required) ? '*' : '';
   }
 
   getComponent(prop: FormProp): string {
-    if (prop.options && prop.type !== ePropType.MultiSelect) return 'select';
-
     switch (prop.type) {
       case ePropType.Boolean:
         return 'checkbox';
@@ -62,14 +112,18 @@ export class ExtensibleFormPropComponent implements OnChanges {
         return 'date';
       case ePropType.DateTime:
         return 'dateTime';
+      case ePropType.Hidden:
+        return 'hidden';
+      case ePropType.MultiSelect:
+        return 'multiselect';
       case ePropType.Text:
         return 'textarea';
       case ePropType.Time:
         return 'time';
-      case ePropType.MultiSelect:
-        return 'multiselect';
+      case ePropType.Typeahead:
+        return 'typeahead';
       default:
-        return 'input';
+        return prop.options ? 'select' : 'input';
     }
   }
 
@@ -92,14 +146,15 @@ export class ExtensibleFormPropComponent implements OnChanges {
   }
 
   ngOnChanges({ prop }: SimpleChanges) {
-    const options = prop.currentValue.options;
-    const readonly = prop.currentValue.readonly;
-    const disabled = prop.currentValue.disabled;
-    const validators = prop.currentValue.validators;
+    const currentProp = snq<FormProp>(() => prop.currentValue);
+    const { options, readonly, disabled, validators } = currentProp || {};
 
     if (options) this.options$ = options(this.data);
     if (readonly) this.readonly = readonly(this.data);
     if (disabled) this.disabled = disabled(this.data);
-    if (validators) this.validators = validators(this.data);
+    if (validators) {
+      this.validators = validators(this.data);
+      this.setAsterisk();
+    }
   }
 }
