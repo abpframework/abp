@@ -38,7 +38,7 @@ namespace Volo.Abp.AspNetCore
             AddAspNetServices(context.Services);
             context.Services.AddObjectAccessor<IApplicationBuilder>();
 
-            context.Services.Replace(ServiceDescriptor.Transient<IOptionsFactory<RequestLocalizationOptions>, AbpRequestLocalizationOptionsFactory>());
+            context.Services.AddAbpDynamicOptions<RequestLocalizationOptions, AbpRequestLocalizationOptionsManager>();
         }
 
         private static void AddAspNetServices(IServiceCollection services)

@@ -244,13 +244,28 @@ public class MyService : ITransientDependency
     public async Task DoItAsync()
     {
         await _options.SetAsync();
-        
+
         var requiredLength = _options.Value.Password.RequiredLength;
     }
 }
 ````
 
 Pre-built modules already handles this. However, if you have used `IdentityOptions` directly in your code, you also need to follow this new pattern.
+Please make sure that the injected `IOptions<IdentityOptions>` service and the service consuming it are in the same scope of dependency injection container.
+
+### LDAP module full async
+
+In order to solve the problem of async over sync, `ILdapManager` uses async method instead of sync. And use [`ldap4net`](https://github.com/flamencist/ldap4net) to replace [`Novell.Directory.Ldap.NETStandard`](https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard) package.
+
+### Dynamic external login provider system
+
+You need to change the `WithDynamicOptions` method and pass the `Handler` class of the external login provider.
+Use the `goto definition` function in Visual Studio or Rider to check `Handler` in the extension method like `AddGoogle`.
+
+```csharp
+- WithDynamicOptions<GoogleOptions>()
++ WithDynamicOptions<GoogleOptions, GoogleHandler>()
+````
 
 ## ASP.NET Core MVC / Razor Pages UI
 

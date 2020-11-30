@@ -446,7 +446,7 @@ As an example you can see ABP Framework documentation:
 
 #### Conditional sections feature (Using Scriban)
 
-Docs module uses [Scriban](<https://github.com/lunet-io/scriban/tree/master/doc> ) for conditionally show or hide some parts of a document. In order to use that feature, you have to create a JSON file as **Parameter document** per every language. It will contain all the key-values, as well as their display names.
+Docs module uses [Scriban](https://github.com/lunet-io/scriban/tree/master/doc) for conditionally show or hide some parts of a document. In order to use that feature, you have to create a JSON file as **Parameter document** per every language. It will contain all the key-values, as well as their display names.
 
 For example, [en/docs-params.json](https://github.com/abpio/abp-commercial-docs/blob/master/en/docs-params.json):
 
@@ -537,7 +537,7 @@ Also, **Document_Language_Code** and **Document_Version** keys are pre-defined i
 
 ------
 
-**IMPORTANT NOTICE**: Scriban uses "{{" and "}}" for syntax. Therefore, you must use escape blocks if you are going to use those in your document (an Angular document, for example). See [Scriban docs](<https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block> ) for more information.
+**IMPORTANT NOTICE**: Scriban uses "{{" and "}}" for syntax. Therefore, you must use escape blocks if you are going to use those in your document (an Angular document, for example). See [Scriban docs](https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block) for more information.
 
 ### 8- Creating the Navigation Document
 
