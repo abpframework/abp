@@ -68,7 +68,8 @@ namespace Volo.Abp.Cli.Bundling
                     Directory = directory,
                     FrameworkVersion = frameworkVersion,
                     ProjectFileName = projectName,
-                    BundleName = bundleName
+                    BundleName = bundleName,
+                    Minify = minify
                 };
 
                 styleDefinitions = StyleBundler.Bundle(options, styleContext);
