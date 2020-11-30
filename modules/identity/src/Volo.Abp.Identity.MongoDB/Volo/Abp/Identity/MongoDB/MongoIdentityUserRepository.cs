@@ -25,7 +25,7 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .OrderBy(x => x.NormalizedUserName)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     u => u.NormalizedUserName == normalizedUserName,
                     GetCancellationToken(cancellationToken)
@@ -92,7 +92,7 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .OrderBy(x => x.NormalizedEmail).FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
+                .OrderBy(x => x.Id).FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityUser>> GetListByClaimAsync(
@@ -112,7 +112,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
             var role = await DbContext.Roles.AsQueryable()
                 .Where(x => x.NormalizedName == normalizedRoleName)
-                .OrderBy(x => x.NormalizedName)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
             if (role == null)

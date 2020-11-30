@@ -24,7 +24,7 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .OrderBy(x => x.NormalizedName)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
         }
 

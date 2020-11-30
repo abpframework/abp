@@ -26,7 +26,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .OrderBy(x => x.NormalizedUserName)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     u => u.NormalizedUserName == normalizedUserName,
                     GetCancellationToken(cancellationToken)
@@ -91,7 +91,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .OrderBy(x => x.NormalizedEmail)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
         }
 
@@ -113,7 +113,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             var role = await DbContext.Roles
                 .Where(x => x.NormalizedName == normalizedRoleName)
-                .OrderBy(x => x.NormalizedName)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
             if (role == null)
