@@ -260,7 +260,7 @@ In order to solve the problem of async over sync, `ILdapManager` uses async meth
 ### Dynamic external login provider system
 
 You need to change the `WithDynamicOptions` method and pass the `Handler` class of the external login provider.
-Use the `goto definition` function in Visual Studio or Rider to check `Hanler` in the extension method like `AddGoogle`.
+Use the `goto definition` function in Visual Studio or Rider to check `Handler` in the extension method like `AddGoogle`.
 
 ```csharp
 - WithDynamicOptions<GoogleOptions>()
