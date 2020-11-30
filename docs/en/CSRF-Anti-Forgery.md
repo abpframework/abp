@@ -25,7 +25,7 @@ ABP Framework provides `[AbpValidateAntiForgeryToken]` and `[AbpAutoValidateAnti
 
 ABP Framework also automates the following infrastructure;
 
-* Server side sets a **special cookie**, named `XSRF-TOKEN` by default, that is used make the antiforgery token value available to the browser. This is **done automatically** (by the [application configuration](Application-Configuration.md) endpoint). Nothing to do in the client side.
+* Server side sets a **special cookie**, named `XSRF-TOKEN` by default, that is used make the antiforgery token value available to the browser. This is **done automatically** (by the [application configuration](API/Application-Configuration.md) endpoint). Nothing to do in the client side.
 * In the client side, it reads the token from the cookie and sends it in the **HTTP header** (named `RequestVerificationToken` by default). This is implemented for all the supported UI types.
 * Server side validates the antiforgery token **only for same and cross site requests** made by the browser. It bypasses the validation for non-browser clients.
 
