@@ -34,7 +34,7 @@ ABP offers a complete, modular and layered software architecture based on [Domai
 
 * See the [Modularity](Module-Development-Basics.md) document to understand the module system.
 * [Implementing Domain Driven Design](Domain-Driven-Design-Implementation-Guide.md) document is an ultimate guide for who want to understand and implement the DDD.
-* [Microservice Architecture](Microservice-Architecture.md) document.
+* [Microservice Architecture](Microservice-Architecture.md) document introduces how ABP helps to create a microservice solution.
 
 ### Infrastructure
 
