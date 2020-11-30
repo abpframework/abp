@@ -5,11 +5,8 @@ import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
 import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
-import {
-  ApplicationConfigurationService,
-  ReplaceableComponentsService,
-  RoutesService,
-} from '../services';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ReplaceableComponentsService, RoutesService } from '../services';
 import { mockRoutesService } from './routes.service.spec';
 
 @Component({
@@ -85,7 +82,7 @@ describe('DynamicLayoutComponent', () => {
     component: RouterOutletComponent,
     stubsEnabled: false,
     declarations: [DummyComponent, DynamicLayoutComponent],
-    mocks: [ApplicationConfigurationService, HttpClient],
+    mocks: [AbpApplicationConfigurationService, HttpClient],
     providers: [
       {
         provide: RoutesService,

@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { BehaviorSubject, of } from 'rxjs';
-import { Config } from '../models/config';
-import { Environment } from '../models/environment';
+import { BehaviorSubject } from 'rxjs';
+import { Environment, RemoteEnv } from '../models/environment';
 import { EnvironmentService } from '../services';
 import { getRemoteEnv } from '../utils/environment-utils';
 import { deepMerge } from '../utils/object-utils';
@@ -76,7 +75,7 @@ describe('EnvironmentUtils', () => {
       ({ strategy, expected }) => setupTestAndRun({ mergeStrategy: strategy }, expected),
     );
 
-    function setupTestAndRun(strategy: Pick<Config.RemoteEnv, 'mergeStrategy'>, expectedValue) {
+    function setupTestAndRun(strategy: Pick<RemoteEnv, 'mergeStrategy'>, expectedValue) {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
       const http = spectator.inject(HttpClient);

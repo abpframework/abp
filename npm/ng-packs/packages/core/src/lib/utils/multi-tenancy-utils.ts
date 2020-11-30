@@ -3,6 +3,8 @@ import clone from 'just-clone';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { Environment } from '../models/environment';
+import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy/abp-tenant.service';
+import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
 import { EnvironmentService } from '../services/environment.service';
 import { MultiTenancyService } from '../services/multi-tenancy.service';
 import { createTokenParser } from './string-utils';
@@ -20,6 +22,7 @@ function getCurrentTenancyName(appBaseUrl: string): string {
 export async function parseTenantFromUrl(injector: Injector) {
   const environmentService = injector.get(EnvironmentService);
   const multiTenancyService = injector.get(MultiTenancyService);
+  const abpTenantService = injector.get(AbpTenantService);
 
   const baseUrl = environmentService.getEnvironment()?.application?.baseUrl || '';
   const tenancyName = getCurrentTenancyName(baseUrl);
@@ -30,10 +33,10 @@ export async function parseTenantFromUrl(injector: Injector) {
 
     return of(null)
       .pipe(
-        switchMap(() => multiTenancyService.findTenantByName(tenancyName, { __tenant: '' })),
+        switchMap(() => abpTenantService.findTenantByName(tenancyName, { __tenant: '' })),
         tap(res => {
           multiTenancyService.domainTenant = res.success
-            ? { id: res.tenantId, name: res.name }
+            ? ({ id: res.tenantId, name: res.name } as CurrentTenantDto)
             : null;
         }),
       )

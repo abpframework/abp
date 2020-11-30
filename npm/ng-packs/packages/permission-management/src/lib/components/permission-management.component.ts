@@ -1,7 +1,7 @@
 import {
-  ApplicationConfiguration,
-  ApplicationConfigurationService,
+  AbpApplicationConfigurationService,
   ConfigStateService,
+  CurrentUserDto,
 } from '@abp/ng.core';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output, TrackByFunction } from '@angular/core';
@@ -118,7 +118,7 @@ export class PermissionManagementComponent
   constructor(
     protected store: Store,
     protected configState: ConfigStateService,
-    protected appConfigService: ApplicationConfigurationService,
+    protected appConfigService: AbpApplicationConfigurationService,
   ) {}
 
   getChecked(name: string) {
@@ -254,9 +254,7 @@ export class PermissionManagementComponent
       .pipe(
         switchMap(() =>
           this.shouldFetchAppConfig()
-            ? this.appConfigService
-                .getConfiguration()
-                .pipe(tap(res => this.configState.setState(res)))
+            ? this.appConfigService.get().pipe(tap(res => this.configState.setState(res)))
             : of(null),
         ),
         finalize(() => (this.modalBusy = false)),
@@ -300,9 +298,7 @@ export class PermissionManagementComponent
   }
 
   shouldFetchAppConfig() {
-    const currentUser = this.configState.getOne(
-      'currentUser',
-    ) as ApplicationConfiguration.CurrentUser;
+    const currentUser = this.configState.getOne('currentUser') as CurrentUserDto;
 
     if (this.providerName === 'R') return currentUser.roles.some(role => role === this.providerKey);
 

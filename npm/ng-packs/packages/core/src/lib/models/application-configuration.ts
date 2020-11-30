@@ -1,6 +1,9 @@
 import { ABP } from './common';
 
 export namespace ApplicationConfiguration {
+  /**
+   * @deprecated Use the ApplicationConfigurationDto interface instead. To be deleted in v5.0.
+   */
   export interface Response {
     localization: Localization;
     auth: Auth;
@@ -10,6 +13,9 @@ export namespace ApplicationConfiguration {
     features: Value;
   }
 
+  /**
+   * @deprecated Use the ApplicationLocalizationConfigurationDto interface instead. To be deleted in v5.0.
+   */
   export interface Localization {
     currentCulture: CurrentCulture;
     defaultResourceName: string;
@@ -17,10 +23,16 @@ export namespace ApplicationConfiguration {
     values: LocalizationValue;
   }
 
+  /**
+   * @deprecated Use the Record<string, Record<string, string>> type instead. To be deleted in v5.0.
+   */
   export interface LocalizationValue {
     [key: string]: { [key: string]: string };
   }
 
+  /**
+   * @deprecated Use the LanguageInfo interface instead. To be deleted in v5.0.
+   */
   export interface Language {
     cultureName: string;
     uiCultureName: string;
@@ -28,6 +40,9 @@ export namespace ApplicationConfiguration {
     flagIcon: string;
   }
 
+  /**
+   * @deprecated Use the CurrentCultureDto interface instead. To be deleted in v5.0.
+   */
   export interface CurrentCulture {
     cultureName: string;
     dateTimeFormat: DateTimeFormat;
@@ -40,6 +55,9 @@ export namespace ApplicationConfiguration {
     twoLetterIsoLanguageName: string;
   }
 
+  /**
+   * @deprecated Use the DateTimeFormatDto interface instead. To be deleted in v5.0.
+   */
   export interface DateTimeFormat {
     calendarAlgorithmType: string;
     dateSeparator: string;
@@ -49,19 +67,31 @@ export namespace ApplicationConfiguration {
     shortTimePattern: string;
   }
 
+  /**
+   * @deprecated Use the ApplicationAuthConfigurationDto interface instead. To be deleted in v5.0.
+   */
   export interface Auth {
     policies: Policy;
     grantedPolicies: Policy;
   }
 
+  /**
+   * @deprecated Use the Record<string, boolean> type instead. To be deleted in v5.0.
+   */
   export interface Policy {
     [key: string]: boolean;
   }
 
+  /**
+   * @deprecated To be deleted in v5.0.
+   */
   export interface Value {
     values: ABP.Dictionary<string>;
   }
 
+  /**
+   * @deprecated Use the CurrentUserDto interface instead. To be deleted in v5.0.
+   */
   export interface CurrentUser {
     email: string;
     emailVerified: false;
@@ -76,6 +106,9 @@ export namespace ApplicationConfiguration {
     surName: string;
   }
 
+  /**
+   * @deprecated Use the CurrentTenantDto interface instead. To be deleted in v5.0.
+   */
   export interface CurrentTenant {
     id: string;
     name: string;
