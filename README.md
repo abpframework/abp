@@ -103,4 +103,4 @@ ABP is a community-driven open source project. See [the contribution guide](http
 
 ## Support the ABP Framework
 
-**Love ABP Framework? Please give a star to this repository :star:**​ 
+Love ABP Framework? **Please give a star** to this repository :star:
