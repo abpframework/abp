@@ -136,7 +136,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
-        
+
         public override IQueryable<AuditLog> WithDetails()
         {
             return GetQueryable().IncludeDetails();
@@ -147,8 +147,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             var entityChange = await DbContext.Set<EntityChange>()
                                     .AsNoTracking()
                                     .IncludeDetails()
-                                    .OrderBy(x => x.Id)
                                     .Where(x => x.Id == entityChangeId)
+                                    .OrderBy(x => x.Id)
                                     .FirstOrDefaultAsync();
 
             if (entityChange == null)

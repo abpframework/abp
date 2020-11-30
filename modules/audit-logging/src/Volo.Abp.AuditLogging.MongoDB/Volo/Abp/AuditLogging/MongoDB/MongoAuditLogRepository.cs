@@ -144,8 +144,8 @@ namespace Volo.Abp.AuditLogging.MongoDB
         public virtual async Task<EntityChange> GetEntityChange(Guid entityChangeId)
         {
             var entityChange = (await GetMongoQueryable()
-                .OrderBy(x => x.Id)
                 .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
+                .OrderBy(x => x.Id)
                 .FirstAsync()).EntityChanges.FirstOrDefault(x => x.Id == entityChangeId);
 
 
