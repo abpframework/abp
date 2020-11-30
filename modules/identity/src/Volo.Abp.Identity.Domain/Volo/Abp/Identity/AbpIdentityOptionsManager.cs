@@ -1,43 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Options;
 using Volo.Abp.Settings;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity
 {
-    public class AbpIdentityOptionsFactory : AbpOptionsFactory<IdentityOptions>
+    public class AbpIdentityOptionsManager : AbpDynamicOptionsManager<IdentityOptions>
     {
         protected ISettingProvider SettingProvider { get; }
 
-        public AbpIdentityOptionsFactory(
-            IEnumerable<IConfigureOptions<IdentityOptions>> setups,
-            IEnumerable<IPostConfigureOptions<IdentityOptions>> postConfigures,
+        public AbpIdentityOptionsManager(IOptionsFactory<IdentityOptions> factory,
             ISettingProvider settingProvider)
-            : base(setups, postConfigures)
+            : base(factory)
         {
             SettingProvider = settingProvider;
         }
 
-        public override IdentityOptions Create(string name)
-        {
-            var options = base.Create(name);
-
-            OverrideOptions(options);
-
-            return options;
-        }
-
-        protected virtual void OverrideOptions(IdentityOptions options)
-        {
-            AsyncHelper.RunSync(()=>OverrideOptionsAsync(options));
-        }
-
-        protected virtual async Task OverrideOptionsAsync(IdentityOptions options)
+        protected override async Task OverrideOptionsAsync(string name, IdentityOptions options)
         {
             options.Password.RequiredLength = await SettingProvider.GetAsync(IdentitySettingNames.Password.RequiredLength, options.Password.RequiredLength);
             options.Password.RequiredUniqueChars = await SettingProvider.GetAsync(IdentitySettingNames.Password.RequiredUniqueChars, options.Password.RequiredUniqueChars);
@@ -52,7 +34,6 @@ namespace Volo.Abp.Identity
 
             options.SignIn.RequireConfirmedEmail = await SettingProvider.GetAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail, options.SignIn.RequireConfirmedEmail);
             options.SignIn.RequireConfirmedPhoneNumber = await SettingProvider.GetAsync(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, options.SignIn.RequireConfirmedPhoneNumber);
-
         }
     }
 }

@@ -107,6 +107,7 @@ abp new Acme.BookStore
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
 * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
+* `--no-random-port`: Uses template's default ports.
 
 ### update
 

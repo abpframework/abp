@@ -219,7 +219,53 @@ These properties implemented with `protected set` in the `Entity` and `Aggregate
 
 `IHasExtraProperties.ExtraProperties` was a regular `Dictionary<string, object>`. With the version 4.0, it is replaced with `ExtraPropertyDictionary` class which inherits the `Dictionary<string, object>`. 
 
-Most of the applications don't be affected by this change. If you've directly implemented this interface, replace the standard dictionary the the `ExtraPropertyDictionary`.
+Most of the applications don't be affected by this change. If you've directly implemented this interface, replace the standard dictionary to the `ExtraPropertyDictionary`.
+
+## Other Changes
+
+### IdentityOptions Usage
+
+Previously, when you inject `IOptions<IdentityOptions>`, you get a dynamically overridden options value. For example, when you get `IdentityOptions.Password.RequiredLength`, the value is being changed based on the setting (`IdentitySettingNames.Password.RequiredLength`) of the current tenant. That means `IdentityOptions` changes per tenant. However, this caused an [issue](https://github.com/abpframework/abp/issues/6318) and we [had to change](https://github.com/abpframework/abp/pull/6333) the usage.
+
+With the version 4.0, you need to inject `IOptions<IdentityOptions>` and call the new `SetAsync` method before using it, to be able to override the options by the settings. Otherwise, you get the default (statically configured) values of the options.
+
+Example usage:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IOptions<IdentityOptions> _options;
+
+    public MyService(IOptions<IdentityOptions> options)
+    {
+        _options = options;
+    }
+
+    public async Task DoItAsync()
+    {
+        await _options.SetAsync();
+
+        var requiredLength = _options.Value.Password.RequiredLength;
+    }
+}
+````
+
+Pre-built modules already handles this. However, if you have used `IdentityOptions` directly in your code, you also need to follow this new pattern.
+Please make sure that the injected `IOptions<IdentityOptions>` service and the service consuming it are in the same scope of dependency injection container.
+
+### LDAP module full async
+
+In order to solve the problem of async over sync, `ILdapManager` uses async method instead of sync. And use [`ldap4net`](https://github.com/flamencist/ldap4net) to replace [`Novell.Directory.Ldap.NETStandard`](https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard) package.
+
+### Dynamic external login provider system
+
+You need to change the `WithDynamicOptions` method and pass the `Handler` class of the external login provider.
+Use the `goto definition` function in Visual Studio or Rider to check `Handler` in the extension method like `AddGoogle`.
+
+```csharp
+- WithDynamicOptions<GoogleOptions>()
++ WithDynamicOptions<GoogleOptions, GoogleHandler>()
+````
 
 ## ASP.NET Core MVC / Razor Pages UI
 

@@ -56,7 +56,7 @@ namespace Volo.Abp.Identity
                 options.ClaimsIdentity.RoleClaimType = AbpClaimTypes.Role;
             });
 
-            AddAbpIdentityOptionsFactory(context.Services);
+            context.Services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();
         }
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
@@ -87,12 +87,6 @@ namespace Volo.Abp.Identity
                     typeof(OrganizationUnit)
                 );
             });
-        }
-
-        private static void AddAbpIdentityOptionsFactory(IServiceCollection services)
-        {
-            services.Replace(ServiceDescriptor.Transient<IOptionsFactory<IdentityOptions>, AbpIdentityOptionsFactory>());
-            services.Replace(ServiceDescriptor.Scoped<IOptions<IdentityOptions>, OptionsManager<IdentityOptions>>());
         }
     }
 }
