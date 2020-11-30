@@ -5,28 +5,19 @@ ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to 
 ## Getting Started
 
 * [Getting Started Guide](Getting-Started.md) is the easiest way to start a new web application with the ABP Framework.
-
 * [Web Application Development Tutorial](Tutorials/Part-1.md) is a complete tutorial to develop a full stack web application.
+
+### UI Framework Options
+
+<img width="500" src="images/ui-options.png">
+
+### Database Provider Options
+
+<img width="500" src="images/db-options.png">
 
 ## Exploring the Documentation
 
-ABP has a comprehensive documentation that not only explains the ABP Framework, but also includes guides and samples to help you on creating a maintainable solution by introducing and discussing common software development principle and practices.
-
-### Multiple UI & Database Options
-
-ABP Framework has been designed to be **independent** of any UI Framework or Database Provider.
-
-The following **UI Frameworks** are officially supported and maintained;
-
-* [MVC / Razor Pages](UI/AspNetCore/Overall.md)
-* [Blazor](UI/Blazor/Overall.md)
-* [Angular](UI/Angular/Quick-Start.md)
-
-And the following **Database Providers** are provided out of the box;
-
-* [Entity Framework Core](Entity-Framework-Core.md)
-* [MongoDB](MongoDB.md)
-* [Dapper](Dapper.md)
+ABP has a **comprehensive documentation** that not only explains the ABP Framework, but also includes **guides** and **samples** to help you on creating a **maintainable solution** by introducing and discussing common **software development principle and best practices**.
 
 ### Architecture
 
@@ -55,19 +46,27 @@ Application Modules provides pre-built application functionalities;
 
 See the [Application Modules](Modules/Index.md) document for all pre-built modules.
 
+### Startup Templates
+
+The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
+
 ## ABP Community
 
 ### The Source Code
 
 ABP is hosted on GitHub. See [the source code](https://github.com/abpframework).
 
-### Samples
-
-See the [sample projects](Samples/Index.md) built with the ABP Framework.
-
 ### ABP Community Web Site
 
 The [ABP Community](https://community.abp.io/) is a website to publish articles and share knowledge about the ABP Framework. You can also create content for the community!
+
+### Blog
+
+Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happenings in the ABP Framework.
+
+### Samples
+
+See the [sample projects](Samples/Index.md) built with the ABP Framework.
 
 ### Want to Contribute?
 

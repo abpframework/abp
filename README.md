@@ -79,7 +79,7 @@ The [ABP Community](https://community.abp.io/) is a website to publish **article
 
 ### Blog
 
-Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happening in the ABP Framework.
+Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happenings in the ABP Framework.
 
 ### Samples
 
