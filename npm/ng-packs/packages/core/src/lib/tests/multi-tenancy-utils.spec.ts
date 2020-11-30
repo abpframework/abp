@@ -1,9 +1,9 @@
-import { Component, Injector } from '@angular/core';
+import { Component } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import clone from 'just-clone';
 import { BehaviorSubject } from 'rxjs';
 import { FindTenantResultDto } from '../models/find-tenant-result-dto';
+import { EnvironmentService } from '../services';
 import { MultiTenancyService } from '../services/multi-tenancy.service';
 import { parseTenantFromUrl } from '../utils';
 
@@ -53,33 +53,34 @@ describe('MultiTenancyUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    mocks: [Store, MultiTenancyService],
+    mocks: [EnvironmentService, MultiTenancyService],
   });
 
   beforeEach(() => (spectator = createComponent()));
 
   describe('#parseTenantFromUrl', () => {
     test('should get the tenancyName, set replaced environment and call the findTenantByName method of MultiTenancyService', async () => {
-      const injector = spectator.inject(Injector);
-      const injectorSpy = jest.spyOn(injector, 'get');
-      const store = spectator.inject(Store);
-      const selectSnapshotSpy = jest.spyOn(store, 'selectSnapshot');
-      const dispatchSpy = jest.spyOn(store, 'dispatch');
+      const environmentService = spectator.inject(EnvironmentService);
       const multiTenancyService = spectator.inject(MultiTenancyService);
       const findTenantByNameSpy = jest.spyOn(multiTenancyService, 'findTenantByName');
+      const getEnvironmentSpy = jest.spyOn(environmentService, 'getEnvironment');
+      const setStateSpy = jest.spyOn(environmentService, 'setState');
 
-      injectorSpy.mockReturnValueOnce(spectator.inject(Store));
-      injectorSpy.mockReturnValueOnce(multiTenancyService);
-      selectSnapshotSpy.mockReturnValue(clone(environment));
+      getEnvironmentSpy.mockReturnValue(clone(environment));
 
       setHref('https://abp.volosoft.com/');
 
-      dispatchSpy.mockReturnValue(new BehaviorSubject(true));
       findTenantByNameSpy.mockReturnValue(
         new BehaviorSubject({ name: 'abp', tenantId: '1', success: true } as FindTenantResultDto),
       );
 
-      parseTenantFromUrl(injector);
+      const mockInjector = {
+        get: arg => {
+          if (arg === EnvironmentService) return environmentService;
+          if (arg === MultiTenancyService) return multiTenancyService;
+        },
+      };
+      parseTenantFromUrl(mockInjector);
 
       const replacedEnv = {
         ...environment,
@@ -95,7 +96,7 @@ describe('MultiTenancyUtils', () => {
         },
       };
 
-      expect(dispatchSpy).toHaveBeenCalledWith({ environment: replacedEnv });
+      expect(setStateSpy).toHaveBeenCalledWith(replacedEnv);
       expect(findTenantByNameSpy).toHaveBeenCalledWith('abp', { __tenant: '' });
       expect(multiTenancyService.domainTenant).toEqual({ id: '1', name: 'abp' });
     });

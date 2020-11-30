@@ -13,6 +13,8 @@ So, ABP Framework **provides a menu infrastructure** where;
 
 In order to add menu items (or manipulate the existing items) you need to create a class implementing the `IMenuContributor` interface.
 
+> The [application startup template](../../Startup-Templates/Application.md) already contains an implementation of the `IMenuContributor`. So, you can add items inside that class instead of creating a new one.
+
 **Example: Add a *CRM* menu item with *Customers* and *Orders* sub menu items**
 
 ```csharp
@@ -65,6 +67,16 @@ Configure<AbpNavigationOptions>(options =>
     options.MenuContributors.Add(new MyProjectMenuContributor());
 });
 ````
+
+This example uses some localization keys as display names those should be defined in the localization file:
+
+````json
+"Menu:CRM": "CRM",
+"Menu:Orders": "Orders",
+"Menu:Customers": "Customers"
+````
+
+See the [localization document](../../Localization.md) to learn more about the localization.
 
 When you run the application, you will see the menu items added to the main menu:
 

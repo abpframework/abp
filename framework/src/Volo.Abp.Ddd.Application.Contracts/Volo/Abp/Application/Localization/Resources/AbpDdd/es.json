@@ -1,6 +1,6 @@
 {
   "culture": "es",
   "texts": {
-    "MaxResultCountExceededExceptionMessage": "{0} no puede tener m·s de {1}! Incremente {2}.{3} en el lado del servidor para obtener m·s resultados."
+    "MaxResultCountExceededExceptionMessage": "{0} no puede ser m√°s de {1}! Aumente {2}. {3} en el lado del servidor para permitir m√°s resultados."
   }
 }

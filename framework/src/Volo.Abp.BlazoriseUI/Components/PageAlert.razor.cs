@@ -5,7 +5,7 @@ using System.Linq;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Alerts;
+using Volo.Abp.AspNetCore.Components.Alerts;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
@@ -47,7 +47,7 @@ namespace Volo.Abp.BlazoriseUI.Components
                 {
                     Alerts.Add(new AlertWrapper
                     {
-                        AlertMessage = (AspNetCore.Components.WebAssembly.Alerts.AlertMessage)item,
+                        AlertMessage = (AspNetCore.Components.Alerts.AlertMessage)item,
                         IsVisible = true
                     });
                 }

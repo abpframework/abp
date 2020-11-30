@@ -28,7 +28,7 @@ Adding a new language to your ABP project is pretty simple.  Let's add the Germa
     * open `MyProjectNameDomainModule.cs` and in `ConfigureServices` you'll find `Configure<AbpLocalizationOptions>`. If you have `HttpApi.Host` project then you need to add this in `MyProjectNameHttpApiHostModule.cs`
 
     ```
-    options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsche", "de"));
+    options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
     ```
 
     ![Add to languages](add-to-languages.png)

@@ -13,7 +13,11 @@ export function createTypeSimplifier() {
       /System\.([0-9A-Za-z.]+)/g,
       (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
     );
-    return type.split('.').pop()!;
+
+    const regexp = new RegExp(/.*(?<=\.)(?<generic>.+)<.*(?<=[\.<])(?<genericType>.+)>/gm);
+    const { generic, genericType } = regexp.exec(type)?.groups ?? {};
+
+    return generic ? `${generic}<${genericType}>` : type.split('.').pop()!;
   });
 
   return (type: string) => {

@@ -24,6 +24,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected AssignedRoleViewModel[] EditUserRoles;
 
         protected string ManagePermissionsPolicyName;
+        
+        protected bool HasManagePermissionsPermission { get; set; }
 
         protected string CreateModalSelectedTab = DefaultSelectedTab;
 
@@ -40,13 +42,19 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             ManagePermissionsPolicyName = IdentityPermissions.Users.ManagePermissions;
         }
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
             Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
+        
+        protected override async Task SetPermissionsAsync()
+        {
+            await base.SetPermissionsAsync();
 
+            HasManagePermissionsPermission = await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
+        }
 
         protected override Task OpenCreateModalAsync()
         {
@@ -69,7 +77,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             return base.OnCreatingEntityAsync();
         }
 
-        protected async override Task OpenEditModalAsync(IdentityUserDto entity)
+        protected override async Task OpenEditModalAsync(IdentityUserDto entity)
         {
             EditModalSelectedTab = DefaultSelectedTab;
 

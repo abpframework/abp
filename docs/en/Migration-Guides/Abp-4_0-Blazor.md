@@ -27,7 +27,7 @@ using Volo.Abp.Bundling;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
-    public class MyProjectNameBundleContributer : IBundleContributer
+    public class MyProjectNameBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {
@@ -85,4 +85,4 @@ If you've derived your pages from the `AbpCrudPageBase` class, then you may need
 ## Others
 
 - Refactored namespaces for some Blazor components ([#6015](https://github.com/abpframework/abp/issues/6015)).
-- Removed Async Suffix from IUiMessageService ([#6123](https://github.com/abpframework/abp/pull/6123)).
+- Removed Async Suffix from IUiMessageService methods ([#6123](https://github.com/abpframework/abp/pull/6123)).

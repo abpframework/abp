@@ -3,9 +3,9 @@ using Volo.Abp.AspNetCore.Components;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
-    public class MyProjectNameComponentBase : AbpComponentBase
+    public abstract class MyProjectNameComponentBase : AbpComponentBase
     {
-        public MyProjectNameComponentBase()
+        protected MyProjectNameComponentBase()
         {
             LocalizationResource = typeof(MyProjectNameResource);
         }
