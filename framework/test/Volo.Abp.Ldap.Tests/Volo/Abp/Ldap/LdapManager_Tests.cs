@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System.Threading.Tasks;
+using Shouldly;
 using Volo.Abp.Testing;
 using Xunit;
 
@@ -19,10 +20,11 @@ namespace Volo.Abp.Ldap
         }
 
         [Fact(Skip = "Required Ldap environment")]
-        public void Authenticate()
+        public async Task AuthenticateAsync()
         {
-            _ldapManager.Authenticate("cn=abp,dc=abp,dc=io", "123qwe").ShouldBe(true);
-            _ldapManager.Authenticate("NoExists", "123qwe").ShouldBe(false);
+            (await _ldapManager.AuthenticateAsync("cn=abp,dc=abp,dc=io", "123qwe")).ShouldBe(true);
+            (await _ldapManager.AuthenticateAsync("cn=abp,dc=abp,dc=io", "123123")).ShouldBe(false);
+            (await _ldapManager.AuthenticateAsync("NoExists", "123qwe")).ShouldBe(false);
         }
     }
 }

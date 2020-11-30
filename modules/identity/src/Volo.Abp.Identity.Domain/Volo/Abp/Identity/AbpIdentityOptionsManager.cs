@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity
             SettingProvider = settingProvider;
         }
 
-        protected override async Task OverrideOptionsAsync(IdentityOptions options)
+        protected override async Task OverrideOptionsAsync(string name, IdentityOptions options)
         {
             options.Password.RequiredLength = await SettingProvider.GetAsync(IdentitySettingNames.Password.RequiredLength, options.Password.RequiredLength);
             options.Password.RequiredUniqueChars = await SettingProvider.GetAsync(IdentitySettingNames.Password.RequiredUniqueChars, options.Password.RequiredUniqueChars);
