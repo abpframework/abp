@@ -22,6 +22,31 @@
       ]
     },
     {
+      "text": "Startup Templates",
+      "items": [
+        {
+          "text": "Overall",
+          "path": "Startup-Templates/Index.md"
+        },
+        {
+          "text": "Application",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "Module",
+          "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "Console",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
+        }
+      ]
+    },
+    {
       "text": "Tutorials",
       "items": [
         {
@@ -68,50 +93,14 @@
               "path": "Tutorials/Part-10.md"
             }
           ]
-        }
-      ]
-    },
-    {
-      "text": "Guides",
-      "items": [
+        },
         {
-          "text": "Customizing the Application Modules",
-          "path": "Customizing-Application-Modules-Guide.md",
-          "items": [
-            {
-              "text": "Extending Entities",
-              "path": "Customizing-Application-Modules-Extending-Entities.md"
-            },
-            {
-              "text": "Overriding Services",
-              "path": "Customizing-Application-Modules-Overriding-Services.md"
-            },
-            {
-              "text": "Overriding the User Interface",
-              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
-            }
-          ]
+          "text": "Community Articles",
+          "path": "https://community.abp.io/"
         },
         {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
-        }
-      ]
-    },
-    {
-      "text": "CLI",
-      "path": "CLI.md"
-    },
-    {
-      "text": "Authentication & Security",
-      "items": [
-        {
-          "text": "Social/External Logins",
-          "path": "Authentication/Social-External-Logins.md"
-        },
-        {
-          "text": "CSRF/XSRF & Anti Forgery",
-          "path": "CSRF-Anti-Forgery.md"
         }
       ]
     },
@@ -135,10 +124,6 @@
               "path": "Autofac-Integration.md"
             }
           ]
-        },
-        {
-          "text": "Virtual File System",
-          "path": "Virtual-File-System.md"
         },
         {
           "text": "Localization",
@@ -177,12 +162,96 @@
           "path": "Logging.md"
         },
         {
-          "text": "Audit Logging",
-          "path": "Audit-Logging.md"
-        },
-        {
           "text": "Settings",
           "path": "Settings.md"
+        },
+        {
+          "text": "Connection Strings",
+          "path": "Connection-Strings.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
+        }
+      ]
+    },
+    {
+      "text": "Infrastructure",
+      "items": [
+        {
+          "text": "Background Jobs",
+          "path": "Background-Jobs.md",
+          "items": [
+            {
+              "text": "Hangfire Integration",
+              "path": "Background-Jobs-Hangfire.md"
+            },
+            {
+              "text": "RabbitMQ Integration",
+              "path": "Background-Jobs-RabbitMq.md"
+            },
+            {
+              "text": "Quartz Integration",
+              "path": "Background-Jobs-Quartz.md"
+            }
+          ]
+        },
+        {
+          "text": "Background Workers",
+          "path": "Background-Workers.md",
+          "items": [
+            {
+              "text": "Quartz Integration",
+              "path": "Background-Workers-Quartz.md"
+            }
+          ]
+        },
+        {
+          "text": "Event Bus",
+          "items": [
+            {
+              "text": "Overall",
+              "path": "Event-Bus.md"
+            },
+            {
+              "text": "Local Event Bus",
+              "path": "Local-Event-Bus.md"
+            },
+            {
+              "text": "Distributed Event Bus",
+              "path": "Distributed-Event-Bus.md",
+              "items": [
+                {
+                  "text": "RabbitMQ Integration",
+                  "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+                },
+                {
+                  "text": "Kafka Integration",
+                  "path": "Distributed-Event-Bus-Kafka-Integration.md"
+                },
+                {
+                  "text": "Rebus Integration",
+                  "path": "Distributed-Event-Bus-Rebus-Integration.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Data Seeding",
+          "path": "Data-Seeding.md"
+        },
+        {
+          "text": "Virtual File System",
+          "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "CSRF/XSRF & Anti Forgery",
+          "path": "CSRF-Anti-Forgery.md"
+        },
+        {
+          "text": "Audit Logging",
+          "path": "Audit-Logging.md"
         },
         {
           "text": "Features",
@@ -192,46 +261,6 @@
           "text": "Data Filtering",
           "path": "Data-Filtering.md"
         },
-        {
-          "text": "Object Extensions",
-          "path": "Object-Extensions.md"
-        }
-      ]
-    },
-    {
-      "text": "Event Bus",
-      "items": [
-        {
-          "text": "Overall",
-          "path": "Event-Bus.md"
-        },
-        {
-          "text": "Local Event Bus",
-          "path": "Local-Event-Bus.md"
-        },
-        {
-          "text": "Distributed Event Bus",
-          "path": "Distributed-Event-Bus.md",
-          "items": [
-            {
-              "text": "RabbitMQ Integration",
-              "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
-            },
-            {
-              "text": "Kafka Integration",
-              "path": "Distributed-Event-Bus-Kafka-Integration.md"
-            },
-            {
-              "text": "Rebus Integration",
-              "path": "Distributed-Event-Bus-Rebus-Integration.md"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "text": "Services",
-      "items": [
         {
           "text": "Current User",
           "path": "CurrentUser.md"
@@ -310,77 +339,104 @@
       ]
     },
     {
-      "text": "Multi Tenancy",
-      "path": "Multi-Tenancy.md"
-    },
-    {
-      "text": "Module Development",
+      "text": "Architecture",
       "items": [
         {
-          "text": "Basics",
-          "path": "Module-Development-Basics.md"
-        },
-        {
-          "text": "Plug-In Modules"
-        },
-        {
-          "text": "Best Practices",
-          "path": "Best-Practices/Index.md"
-        }
-      ]
-    },
-    {
-      "text": "Domain Driven Design",
-      "items": [
-        {
-          "text": "Overall",
-          "path": "Domain-Driven-Design.md"
-        },
-        {
-          "text": "Domain Layer",
+          "text": "Modularity",
           "items": [
             {
-              "text": "Entities & Aggregate Roots",
-              "path": "Entities.md"
+              "text": "Basics",
+              "path": "Module-Development-Basics.md"
             },
             {
-              "text": "Value Objects",
-              "path": "Value-Objects.md"
+              "text": "Plug-In Modules"
             },
             {
-              "text": "Repositories",
-              "path": "Repositories.md"
+              "text": "Customizing the Application Modules",
+              "path": "Customizing-Application-Modules-Guide.md",
+              "items": [
+                {
+                  "text": "Extending Entities",
+                  "path": "Customizing-Application-Modules-Extending-Entities.md"
+                },
+                {
+                  "text": "Overriding Services",
+                  "path": "Customizing-Application-Modules-Overriding-Services.md"
+                },
+                {
+                  "text": "Overriding the User Interface",
+                  "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+                }
+              ]
             },
             {
-              "text": "Domain Services",
-              "path": "Domain-Services.md"
-            },
-            {
-              "text": "Specifications",
-              "path": "Specifications.md"
+              "text": "Best Practices",
+              "path": "Best-Practices/Index.md"
             }
           ]
         },
         {
-          "text": "Application Layer",
+          "text": "Domain Driven Design",
           "items": [
             {
-              "text": "Application Services",
-              "path": "Application-Services.md"
+              "text": "Overall",
+              "path": "Domain-Driven-Design.md"
             },
             {
-              "text": "Data Transfer Objects",
-              "path": "Data-Transfer-Objects.md"
+              "text": "Domain Layer",
+              "items": [
+                {
+                  "text": "Entities & Aggregate Roots",
+                  "path": "Entities.md"
+                },
+                {
+                  "text": "Value Objects",
+                  "path": "Value-Objects.md"
+                },
+                {
+                  "text": "Repositories",
+                  "path": "Repositories.md"
+                },
+                {
+                  "text": "Domain Services",
+                  "path": "Domain-Services.md"
+                },
+                {
+                  "text": "Specifications",
+                  "path": "Specifications.md"
+                }
+              ]
             },
             {
-              "text": "Unit Of Work",
-              "path": "Unit-Of-Work.md"
+              "text": "Application Layer",
+              "items": [
+                {
+                  "text": "Application Services",
+                  "path": "Application-Services.md"
+                },
+                {
+                  "text": "Data Transfer Objects",
+                  "path": "Data-Transfer-Objects.md"
+                },
+                {
+                  "text": "Unit Of Work",
+                  "path": "Unit-Of-Work.md"
+                }
+              ]
+            },
+            {
+              "text": "Guide: Implementing DDD",
+              "path": "Domain-Driven-Design-Implementation-Guide.md"
             }
           ]
         },
         {
-          "text": "Guide: Implementing DDD",
-          "path": "Domain-Driven-Design-Implementation-Guide.md"
+          "text": "Multi Tenancy",
+          "path": "Multi-Tenancy.md"
+        },
+        {
+          "text": "Microservices",
+          "path": "Microservice-Architecture.md"
         }
       ]
     },
@@ -784,57 +840,44 @@
           "path": "Data-Access.md"
         },
         {
-          "text": "Connection Strings",
-          "path": "Connection-Strings.md"
-        },
-        {
-          "text": "Database Providers",
+          "text": "Entity Framework Core",
+          "path": "Entity-Framework-Core.md",
           "items": [
             {
-              "text": "Entity Framework Core",
-              "path": "Entity-Framework-Core.md",
+              "text": "Database Migrations",
+              "path": "Entity-Framework-Core-Migrations.md"
+            },
+            {
+              "text": "Switch DBMS",
+              "path": "Entity-Framework-Core-Other-DBMS.md",
               "items": [
                 {
-                  "text": "Database Migrations",
-                  "path": "Entity-Framework-Core-Migrations.md"
+                  "text": "To MySQL",
+                  "path": "Entity-Framework-Core-MySQL.md"
                 },
                 {
-                  "text": "Switch DBMS",
-                  "path": "Entity-Framework-Core-Other-DBMS.md",
-                  "items": [
-                    {
-                      "text": "To MySQL",
-                      "path": "Entity-Framework-Core-MySQL.md"
-                    },
-                    {
-                      "text": "To PostgreSQL",
-                      "path": "Entity-Framework-Core-PostgreSQL.md"
-                    },
-                    {
-                      "text": "To Oracle",
-                      "path": "Entity-Framework-Core-Oracle.md"
-                    },
-                    {
-                      "text": "To SQLite",
-                      "path": "Entity-Framework-Core-SQLite.md"
-                    }
-                  ]
+                  "text": "To PostgreSQL",
+                  "path": "Entity-Framework-Core-PostgreSQL.md"
+                },
+                {
+                  "text": "To Oracle",
+                  "path": "Entity-Framework-Core-Oracle.md"
+                },
+                {
+                  "text": "To SQLite",
+                  "path": "Entity-Framework-Core-SQLite.md"
                 }
               ]
-            },
-            {
-              "text": "MongoDB",
-              "path": "MongoDB.md"
-            },
-            {
-              "text": "Dapper",
-              "path": "Dapper.md"
             }
           ]
         },
         {
-          "text": "Data Seeding",
-          "path": "Data-Seeding.md"
+          "text": "MongoDB",
+          "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper",
+          "path": "Dapper.md"
         }
       ]
     },
@@ -848,66 +891,8 @@
       ]
     },
     {
-      "text": "Background",
-      "items": [
-        {
-          "text": "Background Jobs",
-          "path": "Background-Jobs.md",
-          "items": [
-            {
-              "text": "Hangfire Integration",
-              "path": "Background-Jobs-Hangfire.md"
-            },
-            {
-              "text": "RabbitMQ Integration",
-              "path": "Background-Jobs-RabbitMq.md"
-            },
-            {
-              "text": "Quartz Integration",
-              "path": "Background-Jobs-Quartz.md"
-            }
-          ]
-        },
-        {
-          "text": "Background Workers",
-          "path": "Background-Workers.md",
-          "items": [
-            {
-              "text": "Quartz Integration",
-              "path": "Background-Workers-Quartz.md"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "text": "Testing",
       "path": "Testing.md"
-    },
-    {
-      "text": "Startup Templates",
-      "items": [
-        {
-          "text": "Overall",
-          "path": "Startup-Templates/Index.md"
-        },
-        {
-          "text": "Application",
-          "path": "Startup-Templates/Application.md"
-        },
-        {
-          "text": "Module",
-          "path": "Startup-Templates/Module.md"
-        },
-        {
-          "text": "Console",
-          "path": "Startup-Templates/Console.md"
-        },
-        {
-          "text": "WPF",
-          "path": "Startup-Templates/WPF.md"
-        }
-      ]
     },
     {
       "text": "Samples",
@@ -924,39 +909,114 @@
     },
     {
       "text": "Application Modules",
-      "path": "Modules/Index.md"
+      "items": [
+        {
+          "text": "Overall",
+          "path": "Modules/Index.md"
+        },
+        {
+          "text": "Account",
+          "path": "Modules/Account.md"
+        },
+        {
+          "text": "Audit Logging",
+          "path": "Modules/Audit-Logging.md"
+        },
+        {
+          "text": "Background Jobs",
+          "path": "Modules/Background-Jobs.md"
+        },
+        {
+          "text": "Blogging",
+          "path": "Modules/Blogging.md"
+        },
+        {
+          "text": "Client Simulation",
+          "path": "Modules/Client-Simulation.md"
+        },
+        {
+          "text": "CMS Kit",
+          "path": "Modules/Cms-Kit.md"
+        },
+        {
+          "text": "Docs",
+          "path": "Modules/Docs.md"
+        },
+        {
+          "text": "Feature Management",
+          "path": "Modules/Feature-Management.md"
+        },
+        {
+          "text": "Identity",
+          "path": "Modules/Identity.md"
+        },
+        {
+          "text": "IdentityServer",
+          "path": "Modules/IdentityServer.md"
+        },
+        {
+          "text": "Permission Management",
+          "path": "Modules/Permission-Management.md"
+        },
+        {
+          "text": "Setting Management",
+          "path": "Modules/Setting-Management.md"
+        },
+        {
+          "text": "Tenant Management",
+          "path": "Modules/Tenant-Management.md"
+        },
+        {
+          "text": "Users",
+          "path": "Modules/Users.md"
+        },
+        {
+          "text": "Virtual File Explorer",
+          "path": "Modules/Virtual-File-Explorer.md"
+        }
+      ]
     },
     {
-      "text": "Microservice Architecture",
-      "path": "Microservice-Architecture.md"
+      "text": "Release Information",
+      "items": [
+        {
+          "text": "Upgrading",
+          "path": "Upgrading.md"
+        },
+        {
+          "text": "Official Packages",
+          "path": "https://abp.io/packages"
+        },
+        {
+          "text": "Preview Releases",
+          "path": "Previews.md"
+        },
+        {
+          "text": "Nightly Builds",
+          "path": "Nightly-Builds.md"
+        },
+        {
+          "text": "Road Map",
+          "path": "Road-Map.md"
+        }
+      ]
     },
     {
-      "text": "Preview Releases",
-      "path": "Previews.md"
-    },
-    {
-      "text": "Nightly Builds",
-      "path": "Nightly-Builds.md"
-    },
-    {
-      "text": "Road Map",
-      "path": "Road-Map.md"
-    },
-    {
-      "text": "Upgrading",
-      "path": "Upgrading.md"
+      "text": "Reference",
+      "items": [
+        {
+          "text": "CLI",
+          "path": "CLI.md"
+        },
+        {
+          "text": "API Documentation",
+          "path": "{ApiDocumentationUrl}"
+        }
+      ]
     },
     {
       "text": "Contribution Guide",
       "path": "Contribution/Index.md"
-    },
-    {
-      "text": "API Documentation",
-      "path": "{ApiDocumentationUrl}"
-    },
-    {
-      "text": "Official Packages",
-      "path": "https://abp.io/packages"
     }
   ]
 }
