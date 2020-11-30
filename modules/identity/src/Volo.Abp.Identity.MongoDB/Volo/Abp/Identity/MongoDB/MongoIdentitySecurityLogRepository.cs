@@ -85,7 +85,7 @@ namespace Volo.Abp.Identity.MongoDB
         public async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
+            return await GetMongoQueryable().OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
                 GetCancellationToken(cancellationToken));
         }
 

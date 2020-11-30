@@ -80,6 +80,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
+                .OrderBy(x=>x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -112,6 +113,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             var role = await DbContext.Roles
                 .Where(x => x.NormalizedName == normalizedRoleName)
+                .OrderBy(x => x.NormalizedName)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
             if (role == null)
