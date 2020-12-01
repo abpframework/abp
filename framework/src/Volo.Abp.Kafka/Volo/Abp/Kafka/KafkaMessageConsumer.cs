@@ -118,7 +118,7 @@ namespace Volo.Abp.Kafka
                     catch (ConsumeException ex)
                     {
                         Logger.LogException(ex, LogLevel.Warning);
-                        AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
+                        await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
                     }
                 }
             }, TaskCreationOptions.LongRunning);
