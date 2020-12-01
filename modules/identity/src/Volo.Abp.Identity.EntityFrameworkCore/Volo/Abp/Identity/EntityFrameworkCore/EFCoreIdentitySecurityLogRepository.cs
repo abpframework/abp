@@ -80,7 +80,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            return await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId, GetCancellationToken(cancellationToken));
+            return await DbSet.OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId, GetCancellationToken(cancellationToken));
         }
 
         protected virtual IQueryable<IdentitySecurityLog> GetListQuery(

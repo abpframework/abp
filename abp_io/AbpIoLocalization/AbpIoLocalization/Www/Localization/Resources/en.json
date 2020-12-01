@@ -45,7 +45,7 @@
     "CompleteArchitectureInfo": "Modern architecture to create maintainable software solutions.",
     "DomainDrivenDesignBasedLayeringModelExplanation": "Helps you to implement a DDD based layered architecture and build a maintainable code base.",
     "DomainDrivenDesignBasedLayeringModelExplanationCont": "Provides startup templates, abstractions, base classes, services, documentation and guides to help you to develop your application based on DDD patterns & principles.",
-    "MicroserviceCompatibleModelExplanation": "The core framework & pre-build modules are designed the microservice architecture in mind.",
+    "MicroserviceCompatibleModelExplanation": "The core framework & pre-build modules are designed with microservice architecture in mind.",
     "MicroserviceCompatibleModelExplanationCont": "Provides infrastructure, integrations, samples and documentation to implement microservice solutions easier, while it doesn\u2019t bring additional complexity if you want a monolithic application.",
     "ModularInfo": "ABP provides a module system that allows you to develop reusable application modules, tie into application lifecycle events, and express dependencies between core parts of your system.",
     "PreBuiltModulesThemes": "Pre-Built Modules & Themes",

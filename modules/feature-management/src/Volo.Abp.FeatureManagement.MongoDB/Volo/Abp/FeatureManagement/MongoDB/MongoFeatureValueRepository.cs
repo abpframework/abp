@@ -19,6 +19,7 @@ namespace Volo.Abp.FeatureManagement.MongoDB
         public virtual async Task<FeatureValue> FindAsync(string name, string providerName, string providerKey)
         {
             return await GetMongoQueryable()
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey);
         }
 
