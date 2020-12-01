@@ -21,7 +21,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected BackgroundJobConfiguration JobConfiguration { get; }
         protected JobQueueConfiguration QueueConfiguration { get; }
         protected IChannelAccessor ChannelAccessor { get; private set; }
-        protected EventingBasicConsumer Consumer { get; private set; }
+        protected AsyncEventingBasicConsumer Consumer { get; private set; }
 
         public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
@@ -135,7 +135,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
             if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
             {
-                var Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
+                Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
                 Consumer.Received += MessageReceived;
 
                 //TODO: What BasicConsume returns?
