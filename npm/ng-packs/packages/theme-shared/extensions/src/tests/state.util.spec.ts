@@ -51,28 +51,28 @@ describe('State Utils', () => {
       contributors.prop.Role.forEach(callback => callback(propList));
 
       expect(propList.length).toBe(4);
-      expect(propList.head.value.name).toBe('title');
-      expect(propList.head.next.value.name).toBe('isHero');
-      expect(propList.head.next.next.value.name).toBe('myEnum');
-      expect(propList.head.next.next.next.value.name).toBe('foo_Text');
+      expect(propList.head.value.name).toBe('Title');
+      expect(propList.head.next.value.name).toBe('IsHero');
+      expect(propList.head.next.next.value.name).toBe('MyEnum');
+      expect(propList.head.next.next.next.value.name).toBe('Foo_Text');
 
       const createFormList = new FormPropList();
       contributors.createForm.Role.forEach(callback => callback(createFormList));
 
       expect(createFormList.length).toBe(4);
-      expect(createFormList.head.value.name).toBe('title');
-      expect(createFormList.head.next.value.name).toBe('myEnum');
-      expect(createFormList.head.next.next.value.name).toBe('foo');
-      expect(createFormList.head.next.next.next.value.name).toBe('foo_Text');
+      expect(createFormList.head.value.name).toBe('Title');
+      expect(createFormList.head.next.value.name).toBe('MyEnum');
+      expect(createFormList.head.next.next.value.name).toBe('Foo');
+      expect(createFormList.head.next.next.next.value.name).toBe('Foo_Text');
 
       const editFormList = new FormPropList();
       contributors.editForm.Role.forEach(callback => callback(editFormList));
 
       expect(editFormList.length).toBe(4);
-      expect(editFormList.head.value.name).toBe('title');
-      expect(editFormList.head.next.value.name).toBe('isHero');
-      expect(editFormList.head.next.next.value.name).toBe('foo');
-      expect(editFormList.head.next.next.next.value.name).toBe('foo_Text');
+      expect(editFormList.head.value.name).toBe('Title');
+      expect(editFormList.head.next.value.name).toBe('IsHero');
+      expect(editFormList.head.next.next.value.name).toBe('Foo');
+      expect(editFormList.head.next.next.next.value.name).toBe('Foo_Text');
     });
   });
 });
