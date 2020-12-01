@@ -1,4 +1,9 @@
-import { ABP, ApplicationLocalizationConfigurationDto, ConfigStateService } from '@abp/ng.core';
+import {
+  ABP,
+  ApplicationLocalizationConfigurationDto,
+  ConfigStateService,
+  ExtensionPropertyUiLookupDto,
+} from '@abp/ng.core';
 import { Observable, pipe, zip } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { ePropType } from '../enums/props.enum';
@@ -6,9 +11,11 @@ import { EntityProp, EntityPropList } from '../models/entity-props';
 import { FormProp, FormPropList } from '../models/form-props';
 import { ObjectExtensions } from '../models/object-extensions';
 import { PropCallback } from '../models/props';
+import { jsonNetCamelCase } from './case.util';
 import { createEnum, createEnumOptions, createEnumValueResolver } from './enum.util';
 import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.util';
 import { createExtraPropertyValueResolver } from './props.util';
+import { createTypeaheadOptions, getTypeaheadType } from './typeahead.util';
 import { getValidatorsFromProperty } from './validation.util';
 
 function selectObjectExtensions(
@@ -115,7 +122,9 @@ function createPropertiesToContributorsMapper<T = any>(
 
     Object.keys(properties).forEach((name: string) => {
       const property = properties[name];
-      const type = getTypeFromProperty(property);
+      const propName = jsonNetCamelCase(name);
+      const lookup = property.ui.lookup || ({} as ExtensionPropertyUiLookupDto);
+      const type = getTypeaheadType(lookup, name) || getTypeFromProperty(property);
       const displayName = generateDisplayName(property.displayName, { name, resource });
 
       if (property.ui.onTable.isVisible) {
@@ -123,12 +132,12 @@ function createPropertiesToContributorsMapper<T = any>(
         const columnWidth = type === ePropType.Boolean ? 150 : 250;
         const valueResolver =
           type === ePropType.Enum
-            ? createEnumValueResolver(property.type, enums[property.type], name)
-            : createExtraPropertyValueResolver<T>(name);
+            ? createEnumValueResolver(property.type, enums[property.type], propName)
+            : createExtraPropertyValueResolver<T>(propName);
 
         const entityProp = new EntityProp<T>({
           type,
-          name,
+          name: propName,
           displayName,
           sortable,
           columnWidth,
@@ -147,11 +156,12 @@ function createPropertiesToContributorsMapper<T = any>(
         const defaultValue = property.defaultValue;
         const validators = () => getValidatorsFromProperty(property);
         let options: PropCallback<any, Observable<ABP.Option<any>[]>>;
-        if (type === ePropType.Enum) options = createEnumOptions(name, enums[property.type]);
+        if (type === ePropType.Enum) options = createEnumOptions(propName, enums[property.type]);
+        else if (type === ePropType.Typeahead) options = createTypeaheadOptions(lookup);
 
         const formProp = new FormProp({
           type,
-          name,
+          name: propName,
           displayName,
           options,
           defaultValue,

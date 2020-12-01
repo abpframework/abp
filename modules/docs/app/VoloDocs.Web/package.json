@@ -3,7 +3,7 @@
   "name": "volo.docstestapp",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.0.0-rc.4",
-    "@abp/docs": "^4.0.0-rc.4"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.0.0-rc.5",
+    "@abp/docs": "^4.0.0-rc.5"
   }
 }
