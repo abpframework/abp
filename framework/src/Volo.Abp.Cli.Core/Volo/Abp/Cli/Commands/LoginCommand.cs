@@ -94,9 +94,9 @@ namespace Volo.Abp.Cli.Commands
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var apiKeyResult = JsonSerializer.Deserialize<bool>(responseContent);
+                var result = JsonSerializer.Deserialize<bool>(responseContent);
 
-                return apiKeyResult;
+                return result;
             }
         }
 
