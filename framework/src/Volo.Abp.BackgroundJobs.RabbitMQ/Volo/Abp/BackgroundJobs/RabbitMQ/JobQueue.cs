@@ -135,7 +135,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
             if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
             {
-                Consumer = new EventingBasicConsumer(ChannelAccessor.Channel);
+                var Consumer = new AsyncEventingBasicConsumer(ChannelAccessor.Channel);
                 Consumer.Received += MessageReceived;
 
                 //TODO: What BasicConsume returns?
@@ -173,7 +173,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             return properties;
         }
 
-        protected virtual void MessageReceived(object sender, BasicDeliverEventArgs ea)
+        protected virtual async Task MessageReceived(object sender, BasicDeliverEventArgs ea)
         {
             using (var scope = ServiceScopeFactory.CreateScope())
             {
@@ -185,7 +185,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
                 try
                 {
-                    AsyncHelper.RunSync(() => JobExecuter.ExecuteAsync(context));
+                    await JobExecuter.ExecuteAsync(context);
                     ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                 }
                 catch (BackgroundJobExecutionException)
