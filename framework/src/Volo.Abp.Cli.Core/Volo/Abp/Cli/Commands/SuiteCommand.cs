@@ -151,7 +151,7 @@ namespace Volo.Abp.Cli.Commands
         private void ShowSuiteManualInstallCommand()
         {
             Logger.LogInformation("You can also run the following command to install ABP Suite.");
-            Logger.LogInformation("dotnet tool install -g Volo.Abp.Suite");
+            Logger.LogInformation("dotnet tool install -g Volo.Abp.Suite --add-source https://nuget.abp.io/<your-private-key>/v3/index.json");
         }
 
         private async Task UpdateSuiteAsync(string version = null, bool preview = false)
@@ -227,7 +227,7 @@ namespace Volo.Abp.Cli.Commands
         private void ShowSuiteManualUpdateCommand()
         {
             Logger.LogError("You can also run the following command to update ABP Suite.");
-            Logger.LogError("dotnet tool update -g Volo.Abp.Suite");
+            Logger.LogError("dotnet tool update -g Volo.Abp.Suite --add-source https://nuget.abp.io/<your-private-key>/v3/index.json");
         }
 
         private static void RemoveSuite()
