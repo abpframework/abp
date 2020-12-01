@@ -22,6 +22,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import snq from 'snq';
 import { DateAdapter } from '../../adapters/date.adapter';
 import { TimeAdapter } from '../../adapters/time.adapter';
+import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
 import { ePropType } from '../../enums/props.enum';
 import { FormProp } from '../../models/form-props';
 import { PropData } from '../../models/props';
@@ -96,8 +97,12 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   private getTypeaheadControls() {
     const { name } = this.prop;
-    const { [name + '_Text']: key, [name]: value } = this.form.controls;
-    return [key, value];
+    const textSuffix = '_Text';
+    const extraPropName = `${EXTRA_PROPERTIES_KEY}.${name}`;
+    const keyControl =
+      this.form.get(extraPropName + textSuffix) || this.form.get(name + textSuffix);
+    const valueControl = this.form.get(extraPropName) || this.form.get(name);
+    return [keyControl, valueControl];
   }
 
   private setAsterisk() {
@@ -156,5 +161,9 @@ export class ExtensibleFormPropComponent implements OnChanges {
       this.validators = validators(this.data);
       this.setAsterisk();
     }
+
+    const [keyControl, valueControl] = this.getTypeaheadControls();
+    if (keyControl && valueControl)
+      this.typeaheadModel = { key: keyControl.value, value: valueControl.value };
   }
 }
