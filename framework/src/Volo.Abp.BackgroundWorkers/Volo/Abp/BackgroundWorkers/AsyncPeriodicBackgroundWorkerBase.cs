@@ -36,21 +36,23 @@ namespace Volo.Abp.BackgroundWorkers
 
         private void Timer_Elapsed(object sender, System.EventArgs e)
         {
+            // Discard the result
+            _ = DoWorkAsync();
+        }
+
+        private async Task DoWorkAsync()
+        {
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 try
                 {
-                    AsyncHelper.RunSync(
-                        () => DoWorkAsync(new PeriodicBackgroundWorkerContext(scope.ServiceProvider))
-                    );
+                    await DoWorkAsync(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
                 }
                 catch (Exception ex)
                 {
-                    AsyncHelper.RunSync(
-                        () => scope.ServiceProvider
-                            .GetRequiredService<IExceptionNotifier>()
-                            .NotifyAsync(new ExceptionNotificationContext(ex))
-                    );
+                    await scope.ServiceProvider
+                        .GetRequiredService<IExceptionNotifier>()
+                        .NotifyAsync(new ExceptionNotificationContext(ex));
 
                     Logger.LogException(ex);
                 }

@@ -38,7 +38,7 @@ namespace Volo.Abp.RabbitMQ
 
         public RabbitMqMessageConsumer(
             IConnectionPool connectionPool,
-            AbpTimer timer, 
+            AbpTimer timer,
             IExceptionNotifier exceptionNotifier)
         {
             ConnectionPool = connectionPool;
@@ -119,7 +119,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
-                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
+                _ = ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
             }
         }
 
@@ -186,7 +186,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
-                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
+                _ = ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
             }
         }
 
@@ -204,7 +204,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                await ExceptionNotifier.NotifyAsync(ex);
+                _ = ExceptionNotifier.NotifyAsync(ex);
             }
         }
 
@@ -222,7 +222,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
-                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
+                _ = ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
             }
         }
 

@@ -101,7 +101,7 @@ namespace Volo.Abp.Threading
             catch(Exception ex)
             {
                 Logger.LogException(ex);
-                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex));
+                _ = ExceptionNotifier.NotifyAsync(ex);
             }
             finally
             {
