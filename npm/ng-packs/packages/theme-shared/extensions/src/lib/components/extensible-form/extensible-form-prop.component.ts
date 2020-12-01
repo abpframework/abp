@@ -1,4 +1,4 @@
-import { ABP, AbpValidators, TrackByService } from '@abp/ng.core';
+import { ABP, TrackByService } from '@abp/ng.core';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -168,5 +168,5 @@ export class ExtensibleFormPropComponent implements OnChanges {
 }
 
 function isRequired(validator: ValidatorFn) {
-  return validator === Validators.required || validator === AbpValidators.required;
+  return validator === Validators.required || validator.toString().includes('required');
 }
