@@ -121,6 +121,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 return (T)(object)stringContent;
             }
 
+            if(responseContent.Headers.ContentLength == 0)
+            {
+                return default(T);
+            }
+
             return JsonSerializer.Deserialize<T>(await responseContent.ReadAsStringAsync());
         }
 
