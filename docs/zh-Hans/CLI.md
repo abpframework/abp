@@ -26,7 +26,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`add-package`**: 添加ABP包到项目.
 * **`add-module`**: 添加[应用模块](https://docs.abp.io/en/abp/latest/Modules/Index)到解决方案.
 * **`generate-proxy`**: 生成客户端代理以使用服务器上的HTTP API端点.
-* **`switch-to-preview`**: 切换解决方案所有ABP相关包为[夜间构建](Nightly-Builds.md)版本.
+* **`switch-to-nightly`**: 切换解决方案所有ABP相关包为[夜间构建](Nightly-Builds.md)版本.
 * **`switch-to-stable`**: 切换解决方案所有ABP相关包为最新的稳定版本.
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
