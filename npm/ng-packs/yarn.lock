@@ -2491,6 +2491,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@ngx-validate/core@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.13.tgz#954c6d247df8107668f23a39db24ca45c274f3d9"
+  integrity sha512-H0RohQz1AAx8J5KlbP0+hcApukA5uVxWg2eQve5YuKYpaD4sC8T613ZzoJEFVua5AfKbWqMXm4hx8mG3ISm7Ig==
+  dependencies:
+    tslib "^1.9.0"
+
 "@ngxs/devtools-plugin@^3.7.0":
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/@ngxs/devtools-plugin/-/devtools-plugin-3.7.0.tgz#5b6b3e63411da527fcee1e8280714e1b95a838c7"
