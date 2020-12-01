@@ -121,7 +121,7 @@ namespace Volo.Abp.Kafka
                         AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
                     }
                 }
-            });
+            }, TaskCreationOptions.LongRunning);
         }
 
         protected virtual async Task HandleIncomingMessage(ConsumeResult<string, byte[]> consumeResult)
