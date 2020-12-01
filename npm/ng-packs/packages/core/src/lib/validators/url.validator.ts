@@ -6,8 +6,6 @@ export interface UrlError {
 
 export function validateUrl(): ValidatorFn {
   return (control: AbstractControl): UrlError | null => {
-    if (control.pristine) return null;
-
     if (['', null, undefined].indexOf(control.value) > -1) return null;
 
     return isValidUrl(control.value) ? null : { url: true };
