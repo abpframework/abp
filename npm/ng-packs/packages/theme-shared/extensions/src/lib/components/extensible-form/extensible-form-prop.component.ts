@@ -65,10 +65,9 @@ export class ExtensibleFormPropComponent implements OnChanges {
     this.typeaheadModel = selectedOption || { key: null, value: null };
     const { key, value } = this.typeaheadModel;
     const [keyControl, valueControl] = this.getTypeaheadControls();
+    if (valueControl.value && !value) valueControl.markAsDirty();
     keyControl.setValue(key);
     valueControl.setValue(value);
-    valueControl.markAsDirty();
-    valueControl.markAsTouched();
   }
 
   search = (text$: Observable<string>) =>
@@ -106,7 +105,7 @@ export class ExtensibleFormPropComponent implements OnChanges {
   }
 
   private setAsterisk() {
-    this.asterisk = this.validators.some(v => v === Validators.required) ? '*' : '';
+    this.asterisk = this.validators.some(isRequired) ? '*' : '';
   }
 
   getComponent(prop: FormProp): string {
@@ -166,4 +165,8 @@ export class ExtensibleFormPropComponent implements OnChanges {
     if (keyControl && valueControl)
       this.typeaheadModel = { key: keyControl.value, value: valueControl.value };
   }
+}
+
+function isRequired(validator: ValidatorFn) {
+  return validator === Validators.required || validator.toString().includes('required');
 }
