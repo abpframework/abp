@@ -91,9 +91,10 @@ export class AuditedEntityDto<TPrimaryKey = string> extends CreationAuditedEntit
   }
 }
 
-export class AuditedEntityWithUserDto<TUserDto, TPrimaryKey = string> extends AuditedEntityDto<
-  TPrimaryKey
-> {
+export class AuditedEntityWithUserDto<
+  TUserDto,
+  TPrimaryKey = string
+> extends AuditedEntityDto<TPrimaryKey> {
   creator?: TUserDto;
   lastModifier?: TUserDto;
 
@@ -145,9 +146,9 @@ export class ExtensibleEntityDto<TKey = string> extends ExtensibleObject {
   }
 }
 
-export class ExtensibleCreationAuditedEntityDto<TPrimaryKey = string> extends ExtensibleEntityDto<
-  TPrimaryKey
-> {
+export class ExtensibleCreationAuditedEntityDto<
+  TPrimaryKey = string
+> extends ExtensibleEntityDto<TPrimaryKey> {
   creationTime: Date | string;
   creatorId?: string;
 

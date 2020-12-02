@@ -25,6 +25,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
             CancellationToken cancellationToken = default)
         {
             return await DbSet
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(s =>
                     s.Name == name &&
                     s.ProviderName == providerName &&

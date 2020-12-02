@@ -6,57 +6,65 @@
 @using Volo.Abp.TenantManagement.Localization
 @inject AbpBlazorMessageLocalizerHelper<AbpTenantManagementResource> LH
 @inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
-@* ************************* PAGE HEADER ************************* *@
-<Row Class="justify-content-between">
-    <Column ColumnSize="ColumnSize.IsAuto">
-        <Heading Size="HeadingSize.Is1">@L["Tenants"]</Heading>
-    </Column>
-    <Column ColumnSize="ColumnSize.IsAuto">
-        @if (HasCreatePermission)
-        {
-            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewTenant"]</Button>
-        }
-    </Column>
-</Row>
 
-@* ************************* DATA GRID ************************* *@
-<DataGrid TItem="TenantDto"
-          Data="Entities"
-          ReadData="OnDataGridReadAsync"
-          TotalItems="TotalCount"
-          ShowPager="true"
-          PageSize="PageSize">
-    <DataGridColumns>
-        <DataGridEntityActionsColumn TItem="TenantDto" @ref="@EntityActionsColumn">
-            <DisplayTemplate>
-                <EntityActions TItem="TenantDto" EntityActionsColumn="@EntityActionsColumn">
-                    <EntityAction TItem="TenantDto"
-                                  RequiredPolicy="@UpdatePolicyName"
-                                  Clicked="() => OpenEditModalAsync(context)"
-                                  Text="@L["Edit"]"></EntityAction>
-                    <EntityAction TItem="TenantDto"
-                                  RequiredPolicy="@ManageConnectionStringsPolicyName"
-                                  Clicked="() => OpenEditConnectionStringModalAsync(context)"
-                                  Text="@L["ConnectionStrings"]"></EntityAction>
-                    <EntityAction TItem="TenantDto"
-                                  RequiredPolicy="@ManageFeaturesPolicyName"
-                                  Clicked="() => FeatureManagementModal.OpenAsync(FeatureProviderName, context.Id.ToString())"
-                                  Text="@L["Features"]"></EntityAction>
-                    <EntityAction TItem="TenantDto"
-                                  RequiredPolicy="@DeletePolicyName"
-                                  Clicked="() => DeleteEntityAsync(context)"
-                                  ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)"
-                                  Text="@L["Delete"]"></EntityAction>
-                </EntityActions>
-            </DisplayTemplate>
-        </DataGridEntityActionsColumn>
-        <DataGridColumn TItem="TenantDto" Field="@nameof(TenantDto.Name)" Caption="@L["TenantName"].Value">
-            <DisplayTemplate>
-                @(context.Name)
-            </DisplayTemplate>
-        </DataGridColumn>
-    </DataGridColumns>
-</DataGrid>
+<Card>
+    <CardHeader>
+        @* ************************* PAGE HEADER ************************* *@
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <Heading Size="HeadingSize.Is1">@L["Tenants"]</Heading>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                @if (HasCreatePermission)
+                {
+                    <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">
+                        <Icon Margin="Margin.Is1.FromRight" Name="IconName.Add"></Icon>@L["NewTenant"]
+                    </Button>
+                }
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        @* ************************* DATA GRID ************************* *@
+        <DataGrid TItem="TenantDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="TenantDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="TenantDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="TenantDto"
+                                          RequiredPolicy="@UpdatePolicyName"
+                                          Clicked="() => OpenEditModalAsync(context)"
+                                          Text="@L["Edit"]"></EntityAction>
+                            <EntityAction TItem="TenantDto"
+                                          RequiredPolicy="@ManageConnectionStringsPolicyName"
+                                          Clicked="() => OpenEditConnectionStringModalAsync(context)"
+                                          Text="@L["ConnectionStrings"]"></EntityAction>
+                            <EntityAction TItem="TenantDto"
+                                          RequiredPolicy="@ManageFeaturesPolicyName"
+                                          Clicked="() => FeatureManagementModal.OpenAsync(FeatureProviderName, context.Id.ToString())"
+                                          Text="@L["Features"]"></EntityAction>
+                            <EntityAction TItem="TenantDto"
+                                          RequiredPolicy="@DeletePolicyName"
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)"
+                                          Text="@L["Delete"]"></EntityAction>
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="TenantDto" Field="@nameof(TenantDto.Name)" Caption="@L["TenantName"].Value">
+                    <DisplayTemplate>
+                        @(context.Name)
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
 
 @* ************************* CREATE MODAL ************************* *@
 @if (HasCreatePermission)
@@ -148,7 +156,7 @@
 }
 
 @* ************************* EDIT CONNECTION STRING MODAL ************************* *@
-@if (HasUpdatePermission)
+@if (HasManageConnectionStringsPermission)
 {
     <Modal @ref="@ManageConnectionStringModal">
         <ModalBackdrop />

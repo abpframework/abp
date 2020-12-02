@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { Rest } from '../models/rest';
-import { EnvironmentService } from './environment.service';
+import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { RestService } from './rest.service';
 
+/**
+ * @deprecated Use AbpApplicationConfigurationService instead. To be deleted in v5.0.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class ApplicationConfigurationService {
   constructor(private rest: RestService) {}
 
-  getConfiguration(): Observable<ApplicationConfiguration.Response> {
+  getConfiguration(): Observable<ApplicationConfigurationDto> {
     const request: Rest.Request<null> = {
       method: 'GET',
       url: '/api/abp/application-configuration',
     };
 
-    return this.rest.request<null, ApplicationConfiguration.Response>(request, {});
+    return this.rest.request<null, ApplicationConfigurationDto>(request, {});
   }
 }

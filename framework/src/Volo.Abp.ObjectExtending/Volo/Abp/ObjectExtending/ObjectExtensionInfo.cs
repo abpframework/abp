@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using JetBrains.Annotations;
@@ -12,10 +13,10 @@ namespace Volo.Abp.ObjectExtending
         public Type Type { get; }
 
         [NotNull]
-        protected Dictionary<string, ObjectExtensionPropertyInfo> Properties { get; }
+        protected ConcurrentDictionary<string, ObjectExtensionPropertyInfo> Properties { get; }
 
         [NotNull]
-        public Dictionary<object, object> Configuration { get; }
+        public ConcurrentDictionary<object, object> Configuration { get; }
 
         [NotNull]
         public List<Action<ObjectExtensionValidationContext>> Validators { get; }
@@ -23,8 +24,8 @@ namespace Volo.Abp.ObjectExtending
         public ObjectExtensionInfo([NotNull] Type type)
         {
             Type = Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
-            Properties = new Dictionary<string, ObjectExtensionPropertyInfo>();
-            Configuration = new Dictionary<object, object>();
+            Properties = new ConcurrentDictionary<string, ObjectExtensionPropertyInfo>();
+            Configuration = new ConcurrentDictionary<object, object>();
             Validators = new List<Action<ObjectExtensionValidationContext>>();
         }
 
@@ -56,7 +57,7 @@ namespace Volo.Abp.ObjectExtending
 
             var propertyInfo = Properties.GetOrAdd(
                 propertyName,
-                () => new ObjectExtensionPropertyInfo(this, propertyType, propertyName)
+                _ => new ObjectExtensionPropertyInfo(this, propertyType, propertyName)
             );
 
             configureAction?.Invoke(propertyInfo);

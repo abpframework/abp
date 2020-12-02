@@ -109,7 +109,7 @@ There are more options of a menu item (the constructor of the `ApplicationMenuIt
 
 As seen above, a menu contributor contributes to the menu dynamically. So, you can perform any custom logic or get menu items from any source.
 
-One use case is the [authorization](Authorization.md). You typically want to add menu items by checking a permission.
+One use case is the [authorization](../../Authorization.md). You typically want to add menu items by checking a permission.
 
 **Example: Check if the current user has a permission**
 

@@ -53,7 +53,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                     anchor.Attributes.Add(attr.Name, attr.Value.ToString());
                 }
 
-                anchor.InnerHtml.Append(title);
+                anchor.InnerHtml.AppendHtml(title);
 
                 return anchor.ToHtmlString();
             }
@@ -73,7 +73,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                     anchor.Attributes.Add(attr.Name, attr.Value.ToString());
                 }
 
-                anchor.InnerHtml.Append(title);
+                anchor.InnerHtml.AppendHtml(title);
 
                 var listItem = new TagBuilder("li");
                 listItem.AddCssClass("nav-item");

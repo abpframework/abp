@@ -1,4 +1,4 @@
-import { ApplicationConfiguration, ConfigStateService, SessionStateService } from '@abp/ng.core';
+import { ConfigStateService, LanguageInfo, SessionStateService } from '@abp/ng.core';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -48,9 +48,7 @@ export class LanguagesComponent {
     return window.innerWidth < 992;
   }
 
-  languages$: Observable<ApplicationConfiguration.Language[]> = this.configState.getDeep$(
-    'localization.languages',
-  );
+  languages$: Observable<LanguageInfo[]> = this.configState.getDeep$('localization.languages');
 
   get defaultLanguage$(): Observable<string> {
     return this.languages$.pipe(
@@ -64,7 +62,7 @@ export class LanguagesComponent {
     );
   }
 
-  get dropdownLanguages$(): Observable<ApplicationConfiguration.Language[]> {
+  get dropdownLanguages$(): Observable<LanguageInfo[]> {
     return this.languages$.pipe(
       map(
         languages =>
