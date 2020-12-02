@@ -25,6 +25,7 @@ namespace Volo.Abp.PermissionManagement.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(s =>
                     s.Name == name &&
                     s.ProviderName == providerName &&

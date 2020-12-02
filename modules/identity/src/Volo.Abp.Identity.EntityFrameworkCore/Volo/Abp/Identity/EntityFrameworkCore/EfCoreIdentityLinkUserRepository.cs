@@ -20,7 +20,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public async Task<IdentityLinkUser> FindAsync(IdentityLinkUserInfo sourceLinkUserInfo, IdentityLinkUserInfo targetLinkUserInfo, CancellationToken cancellationToken = default)
         {
-            return await DbSet.FirstOrDefaultAsync(x =>
+            return await DbSet
+                .OrderBy(x => x.Id).FirstOrDefaultAsync(x =>
                     x.SourceUserId == sourceLinkUserInfo.UserId && x.SourceTenantId == sourceLinkUserInfo.TenantId &&
                     x.TargetUserId == targetLinkUserInfo.UserId && x.TargetTenantId == targetLinkUserInfo.TenantId ||
                     x.TargetUserId == sourceLinkUserInfo.UserId && x.TargetTenantId == sourceLinkUserInfo.TenantId &&

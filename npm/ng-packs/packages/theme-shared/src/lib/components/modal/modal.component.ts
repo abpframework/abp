@@ -4,8 +4,10 @@ import {
   ContentChild,
   ElementRef,
   EventEmitter,
+  Inject,
   Input,
   OnDestroy,
+  Optional,
   Output,
   Renderer2,
   TemplateRef,
@@ -18,6 +20,7 @@ import { fadeAnimation } from '../../animations/modal.animations';
 import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ModalService } from '../../services/modal.service';
+import { SUPPRESS_UNSAVED_CHANGES_WARNING } from '../../tokens/suppress-unsaved-changes-warning.token';
 import { ButtonComponent } from '../button/button.component';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -56,6 +59,8 @@ export class ModalComponent implements OnDestroy {
   @Input() modalClass = '';
 
   @Input() size: ModalSize = 'lg';
+
+  @Input() suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
 
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
@@ -104,6 +109,9 @@ export class ModalComponent implements OnDestroy {
     private confirmationService: ConfirmationService,
     private modalService: ModalService,
     private subscription: SubscriptionService,
+    @Optional()
+    @Inject(SUPPRESS_UNSAVED_CHANGES_WARNING)
+    private suppressUnsavedChangesWarningToken: boolean,
   ) {
     this.initToggleStream();
   }
@@ -139,7 +147,7 @@ export class ModalComponent implements OnDestroy {
   close() {
     if (this.busy) return;
 
-    if (this.isFormDirty) {
+    if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
       if (this.isConfirmationOpen) return;
 
       this.isConfirmationOpen = true;

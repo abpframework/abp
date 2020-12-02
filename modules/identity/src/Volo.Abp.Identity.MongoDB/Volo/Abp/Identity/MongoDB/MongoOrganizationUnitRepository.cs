@@ -76,6 +76,7 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     ou => ou.DisplayName == displayName,
                     GetCancellationToken(cancellationToken)

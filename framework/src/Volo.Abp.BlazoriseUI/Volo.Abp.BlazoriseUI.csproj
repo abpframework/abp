@@ -12,9 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise" Version="0.9.2-rc4" />
-        <PackageReference Include="Blazorise.DataGrid" Version="0.9.2-rc4" />
-        <PackageReference Include="Blazorise.Snackbar" Version="0.9.2-rc4" />
+        <PackageReference Include="Blazorise" Version="0.9.3-preview2" />
+        <PackageReference Include="Blazorise.DataGrid" Version="0.9.3-preview2" />
+        <PackageReference Include="Blazorise.Snackbar" Version="0.9.3-preview2" />
     </ItemGroup>
 
 </Project>

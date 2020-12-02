@@ -18,6 +18,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         public virtual async Task<FeatureValue> FindAsync(string name, string providerName, string providerKey)
         {
             return await DbSet
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey
                 );

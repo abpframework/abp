@@ -11,6 +11,7 @@ using Volo.Abp.TenantManagement.Localization;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.TenantManagement.Web
 {
@@ -20,6 +21,8 @@ namespace Volo.Abp.TenantManagement.Web
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpTenantManagementWebModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
@@ -62,13 +65,16 @@ namespace Volo.Abp.TenantManagement.Web
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleExtensionConfigurationHelper
-                .ApplyEntityConfigurationToUi(
-                    TenantManagementModuleExtensionConsts.ModuleName,
-                    TenantManagementModuleExtensionConsts.EntityNames.Tenant,
-                    createFormTypes: new[] { typeof(Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.CreateModalModel.TenantInfoModel) },
-                    editFormTypes: new[] { typeof(Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.EditModalModel.TenantInfoModel) }
-                );
+            OneTimeRunner.Run(() =>
+            {
+                ModuleExtensionConfigurationHelper
+                    .ApplyEntityConfigurationToUi(
+                        TenantManagementModuleExtensionConsts.ModuleName,
+                        TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                        createFormTypes: new[] { typeof(Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.CreateModalModel.TenantInfoModel) },
+                        editFormTypes: new[] { typeof(Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.EditModalModel.TenantInfoModel) }
+                    );
+            });
         }
     }
 }

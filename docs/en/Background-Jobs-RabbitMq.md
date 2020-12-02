@@ -90,7 +90,7 @@ Using these options classes can be combined with the `appsettings.json` way. Con
 
 By default, each job type uses a separate queue. Queue names are calculated by combining a standard prefix and the job name. Default prefix is `AbpBackgroundJobs.` So, if the job name is `EmailSending` then the queue name in the RabbitMQ becomes `AbpBackgroundJobs.EmailSending`
 
-> Use `BackgroundJobName` attribute on the background job class to specify the job name. Otherwise, the job name will be the full name (with namespace) of the job class.
+> Use `BackgroundJobName` attribute on the background **job argument** class to specify the job name. Otherwise, the job name will be the full name (with namespace) of the job class.
 
 #### Job Connections
 
@@ -106,9 +106,9 @@ By default, all the job types use the `Default` RabbitMQ connection.
 Configure<AbpRabbitMqBackgroundJobOptions>(options =>
 {
     options.DefaultQueueNamePrefix = "my_app_jobs.";
-    options.JobQueues[typeof(EmailSendingJob)] =
+    options.JobQueues[typeof(EmailSendingArgs)] =
         new JobQueueConfiguration(
-            typeof(EmailSendingJob),
+            typeof(EmailSendingArgs),
             queueName: "my_app_jobs.emails",
             connectionName: "SecondConnection"
         );
@@ -116,7 +116,7 @@ Configure<AbpRabbitMqBackgroundJobOptions>(options =>
 ````
 
 * This example sets the default queue name prefix to `my_app_jobs.`. If different applications use the same RabbitMQ server, it would be important to use different prefixes for each application to not consume jobs of each other.
-* Also specifies a different connection string for the `EmailSendingJob`.
+* Also specifies a different connection string for the `EmailSendingArgs`.
 
 `JobQueueConfiguration` class has some additional options in its constructor;
 
@@ -127,3 +127,7 @@ Configure<AbpRabbitMqBackgroundJobOptions>(options =>
 * `autoDelete` (optional, default: `false`)
 
 See the RabbitMQ documentation if you want to understand the `durable`, `exclusive` and `autoDelete` options better, while most of the times the default configuration is what you want. 
+
+## See Also
+
+* [Background Jobs](Background-Jobs.md)

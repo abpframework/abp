@@ -4,9 +4,9 @@ Some modules may require additional styles or scripts that need to be referenced
 
 To update script & style references without worrying about dependencies, ordering, etc in a project, you can use the [bundle command](../../CLI.md#bundle).
 
-You can also add custom styles and scripts and let ABP manage them for you. In your Blazor project, you can create a class implementing `IBundleContributer` interface.
+You can also add custom styles and scripts and let ABP manage them for you. In your Blazor project, you can create a class implementing `IBundleContributor` interface.
 
-`IBundleContributer` interface contains two methods.
+`IBundleContributor` interface contains two methods.
 
 * `AddScripts(...)`
 * `AddStyles(...)`
@@ -17,7 +17,7 @@ Both methods get `BundleContext` as a parameter. You can add scripts and styles 
 ```csharp
 namespace MyProject.Blazor
 {
-    public class MyProjectBundleContributer : IBundleContributer
+    public class MyProjectBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {
@@ -33,6 +33,6 @@ namespace MyProject.Blazor
 }
 ```
 
-> There is a BundleContributer class implementing `IBundleContributer` interface coming by default with the startup templates. So, most of the time, you don't need to add it manually.
+> There is a BundleContributor class implementing `IBundleContributor` interface coming by default with the startup templates. So, most of the time, you don't need to add it manually.
 
 > Bundle command adds style and script references individually. Bundling and minification support will be added to incoming releases.

@@ -1,4 +1,4 @@
-import { ApplicationConfiguration, ConfigStateService } from '@abp/ng.core';
+import { ApplicationLocalizationConfigurationDto, ConfigStateService } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
 import { Injectable, Optional } from '@angular/core';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -51,7 +51,7 @@ export class DateParserFormatter extends NgbDateParserFormatter {
   format(date: NgbDateStruct): string {
     const { shortDatePattern } = (this.configState.getOne(
       'localization',
-    ) as ApplicationConfiguration.Localization).currentCulture.dateTimeFormat;
+    ) as ApplicationLocalizationConfigurationDto).currentCulture.dateTimeFormat;
 
     if (date && this.datePipe) {
       return this.datePipe.transform(

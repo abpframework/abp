@@ -1,9 +1,14 @@
+import {
+  ContentProjectionService,
+  LocalizationParam,
+  PROJECTION_STRATEGY,
+  Strict,
+} from '@abp/ng.core';
 import { ComponentRef, Injectable } from '@angular/core';
-import { Toaster } from '../models';
 import { ReplaySubject } from 'rxjs';
-import { Config, ContentProjectionService, PROJECTION_STRATEGY, Strict } from '@abp/ng.core';
 import snq from 'snq';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
+import { Toaster } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +39,8 @@ export class ToasterService implements ToasterContract {
    * @param options Spesific style or structural options for individual toast
    */
   info(
-    message: Config.LocalizationParam,
-    title?: Config.LocalizationParam,
+    message: LocalizationParam,
+    title?: LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     return this.show(message, title, 'info', options);
@@ -48,8 +53,8 @@ export class ToasterService implements ToasterContract {
    * @param options Spesific style or structural options for individual toast
    */
   success(
-    message: Config.LocalizationParam,
-    title?: Config.LocalizationParam,
+    message: LocalizationParam,
+    title?: LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     return this.show(message, title, 'success', options);
@@ -62,8 +67,8 @@ export class ToasterService implements ToasterContract {
    * @param options Spesific style or structural options for individual toast
    */
   warn(
-    message: Config.LocalizationParam,
-    title?: Config.LocalizationParam,
+    message: LocalizationParam,
+    title?: LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     return this.show(message, title, 'warning', options);
@@ -76,8 +81,8 @@ export class ToasterService implements ToasterContract {
    * @param options Spesific style or structural options for individual toast
    */
   error(
-    message: Config.LocalizationParam,
-    title?: Config.LocalizationParam,
+    message: LocalizationParam,
+    title?: LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {
     return this.show(message, title, 'error', options);
@@ -92,8 +97,8 @@ export class ToasterService implements ToasterContract {
    */
 
   show(
-    message: Config.LocalizationParam,
-    title: Config.LocalizationParam = null,
+    message: LocalizationParam,
+    title: LocalizationParam = null,
     severity: Toaster.Severity = 'neutral',
     options = {} as Partial<Toaster.ToastOptions>,
   ): Toaster.ToasterId {

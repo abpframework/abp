@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
@@ -33,17 +34,19 @@ namespace Volo.Abp.Account.Web.Pages.Account
             IOptions<AbpAccountOptions> accountOptions,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
-            IEventService identityServerEvents)
+            IEventService identityServerEvents,
+            IOptions<IdentityOptions> identityOptions)
             :base(
                 schemeProvider,
-                accountOptions)
+                accountOptions,
+                identityOptions)
         {
             Interaction = interaction;
             ClientStore = clientStore;
             IdentityServerEvents = identityServerEvents;
         }
 
-        public async override Task<IActionResult> OnGetAsync()
+        public override async Task<IActionResult> OnGetAsync()
         {
             LoginInput = new LoginInputModel();
 
@@ -98,7 +101,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return Page();
         }
 
-        public async override Task<IActionResult> OnPostAsync(string action)
+        public override async Task<IActionResult> OnPostAsync(string action)
         {
             if (action == "Cancel")
             {
@@ -119,6 +122,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             await CheckLocalLoginAsync();
 
             ValidateModel();
+
+            await IdentityOptions.SetAsync();
 
             ExternalProviders = await GetExternalProviders();
 
@@ -173,7 +178,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }
 
-        public async override Task<IActionResult> OnPostExternalLogin(string provider)
+        public override async Task<IActionResult> OnPostExternalLogin(string provider)
         {
             if (AccountOptions.WindowsAuthenticationSchemeName == provider)
             {
