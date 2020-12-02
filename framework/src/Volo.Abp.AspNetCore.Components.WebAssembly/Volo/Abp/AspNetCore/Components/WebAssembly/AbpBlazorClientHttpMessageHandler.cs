@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using Volo.Abp.DependencyInjection;
@@ -15,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 
         private readonly ICookieService _cookieService;
 
-        private readonly IConfiguration _configuration;
+        private readonly NavigationManager _navigationManager;
 
         private const string AntiForgeryCookieName = "XSRF-TOKEN";
 
@@ -24,11 +25,11 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
         public AbpBlazorClientHttpMessageHandler(
             IJSRuntime jsRuntime,
             ICookieService cookieService,
-            IConfiguration configuration)
+            NavigationManager navigationManager)
         {
             _jsRuntime = jsRuntime;
             _cookieService = cookieService;
-            _configuration = configuration;
+            _navigationManager = navigationManager;
         }
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -56,8 +57,9 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 
         private async Task SetAntiForgeryTokenAsync(HttpRequestMessage request)
         {
-            var selfUri = new Uri(_configuration["App:SelfUrl"]);
+            var selfUri = new Uri(_navigationManager.Uri);
 
+            Console.WriteLine("----------"+selfUri);
             if (request.Method == HttpMethod.Get || request.Method == HttpMethod.Head || request.RequestUri.Host != selfUri.Host || request.RequestUri.Port != selfUri.Port)
             {
                 return;
