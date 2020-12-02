@@ -59,13 +59,13 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
         {
             var selfUri = new Uri(_navigationManager.Uri);
 
-            Console.WriteLine("----------"+selfUri);
             if (request.Method == HttpMethod.Get || request.Method == HttpMethod.Head || request.RequestUri.Host != selfUri.Host || request.RequestUri.Port != selfUri.Port)
             {
                 return;
             }
 
             var token = await _cookieService.GetAsync(AntiForgeryCookieName);
+
             if (!token.IsNullOrWhiteSpace())
             {
                 request.Headers.Add(AntiForgeryHeaderName, token);
