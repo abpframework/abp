@@ -21,6 +21,7 @@
     "@abp/ng.setting-management": "~4.0.0-rc.5",
     "@abp/ng.tenant-management": "~4.0.0-rc.5",
     "@abp/ng.theme.basic": "~4.0.0-rc.5",
+    "@abp/ng.theme.shared": "~4.0.0-rc.5",
     "@angular/animations": "~11.0.0",
     "@angular/common": "~11.0.0",
     "@angular/compiler": "~11.0.0",
