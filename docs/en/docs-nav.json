@@ -998,6 +998,10 @@
         {
           "text": "Road Map",
           "path": "Road-Map.md"
+        },
+        {
+          "text": "Migration Guides",
+          "path": "Migration-Guides/Index.md"
         }
       ]
     },
