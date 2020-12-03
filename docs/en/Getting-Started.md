@@ -9,14 +9,14 @@
 }
 ````
 
-This tutorial explains how to create a new web application using the [application startup template](Startup-Templates/Application.md).
+This tutorial explains how to create a new solution using the [application startup template](Startup-Templates/Application.md) and run the application.
 
 > This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider. For other options, please change the preference on top of this document.
 
 
 ## Setup Your Development Environment
 
-First things first! Let's setup your development environment before creating the first project.
+First things first! Let's setup your development environment before creating the project.
 
 ### Pre-Requirements
 
@@ -42,11 +42,7 @@ The following tools should be installed on your development machine:
 
 ### Install the ABP CLI
 
-[ABP CLI](./CLI.md) is a command line interface that is used to automate some common tasks for ABP based solutions.
-
-> ABP CLI is a free & open source tool for the ABP framework.
-
-First, you need to install the ABP CLI using the following command:
+[ABP CLI](./CLI.md) is a command line interface that is used to automate some common tasks for ABP based solutions. First, you need to install the ABP CLI using the following command:
 
 ````shell
 dotnet tool install -g Volo.Abp.Cli
@@ -66,9 +62,9 @@ Use the `new` command of the ABP CLI to create a new project:
 abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC"}} --tiered{{else}} --separate-identity-server{{end}}{{end}}
 ````
 
-> You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore. 
+*You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore.* 
 
-> Alternatively, you can select the "Direct Download" tab from the [ABP Framework web site](https://abp.io/get-started) to create a new solution.
+> Alternatively, you can create and download projects from [ABP Framework web site](https://abp.io/get-started).
 
 {{ if Tiered == "Yes" }}
 
@@ -86,7 +82,7 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 ### ABP CLI Commands & Options
 
-[ABP CLI document](./CLI.md) covers all of the available commands and options for the ABP CLI. This document uses the [application startup template](Startup-Templates/Application.md) to create a new web application. See the [ABP Startup Templates](Startup-Templates/Index.md) document for other templates.
+> [ABP CLI document](./CLI.md) covers all of the available commands and options.
 
 ### The Solution Structure
 
@@ -96,16 +92,16 @@ The solution has a layered structure (based on the [Domain Driven Design](Domain
 
 #### MongoDB Transactions
 
-The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
+The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable the it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
 
   ```csharp
-  Configure<AbpUnitOfWorkDefaultOptions>(options =>
-  {
-      options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
-  });
+Configure<AbpUnitOfWorkDefaultOptions>(options =>
+{
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
+});
   ```
 
-> Or you can delete this code since this is already the default behavior.
+> Or you can delete that code since `Auto` is already the default behavior.
 
 {{ end }}
 
@@ -205,7 +201,7 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 {{ if Tiered == "Yes" }}
 
-> Tiered solutions use Redis as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
+> Tiered solutions use **Redis** as the distributed cache. Ensure that it is installed and running in your local computer. If you are using a remote Redis Server, set the configuration in the `appsettings.json` files of the projects below.
 
 1. Ensure that the `.IdentityServer` project is the startup project. Run this application that will open a **login** page in your browser.
 
@@ -313,6 +309,7 @@ If you want to include a [React Native](https://reactnative.dev/) project in you
 
 See the [Getting Started with the React Native](Getting-Started-React-Native.md) document to learn how to configure and run the React Native application.
 
-## Next
+## See Also
 
 * [Web Application Development Tutorial](Tutorials/Part-1.md)
+* [Application Startup Template](Startup-Templates/Application.md)
