@@ -7,7 +7,7 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Users;
 
-namespace MyCompanyName.MyProjectName.Blazor
+namespace MyCompanyName.MyProjectName.Blazor.Menus
 {
     public class MyProjectNameMenuContributor : IMenuContributor
     {
@@ -37,7 +37,7 @@ namespace MyCompanyName.MyProjectName.Blazor
             context.Menu.Items.Insert(
                 0,
                 new ApplicationMenuItem(
-                    "MyProjectName.Home",
+                    MyProjectNameMenus.Home,
                     l["Menu:Home"],
                     "/",
                     icon: "fas fa-home"
