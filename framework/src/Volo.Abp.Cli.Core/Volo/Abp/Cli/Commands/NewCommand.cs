@@ -191,7 +191,7 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
-            if (AppTemplateBase.IsAppTemplate(template))
+            if (AppTemplateBase.IsAppTemplate(template ?? AppTemplate.TemplateName))
             {
                 var isCommercial = template == AppProTemplate.TemplateName;
                 OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
@@ -200,6 +200,8 @@ namespace Volo.Abp.Cli.Commands
 
         private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
         {
+            uiFramework = uiFramework == UiFramework.NotSpecified || uiFramework == UiFramework.None ? UiFramework.Mvc : uiFramework;
+
             var urlPrefix = commercial ? "commercial" : "www";
 
             var tieredYesNo = tiered ? "yes" : "no";
