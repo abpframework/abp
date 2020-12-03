@@ -21,7 +21,7 @@ ABP框架已经有以下存储提供程序的实现;
 * [Azure](Blob-Storing-Azure.md): 将BLOG存储在 [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/)中.
 * [Aliyun](Blob-Storing-Aliyun.md): 将BLOB存储在[Aliyun Storage Service](https://help.aliyun.com/product/31815.html)中.
 * [Ninio](Blob-Storing-Minio.md): 将BLOB存储在[MinIO Object storage](https://min.io/)中.
-* [Aws](Blob-Storing-Aws.md): 将BLOB存储在[Amazon Simple Storage Service](https://min.io/)中.
+* [Aws](Blob-Storing-Aws.md): 将BLOB存储在[Amazon Simple Storage Service](https://aws.amazon.com/s3/)中.
 
 以后会实现更多的提供程序,你可以为自己喜欢的提供程序创建[请求](https://github.com/abpframework/abp/issues/new),或者你也可以[自己实现](Blob-Storing-Custom-Provider.md)它并[贡献](Contribution/Index.md)到ABP框架.
 

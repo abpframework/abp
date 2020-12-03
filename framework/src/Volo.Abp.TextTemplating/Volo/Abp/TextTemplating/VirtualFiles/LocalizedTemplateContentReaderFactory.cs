@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
@@ -27,7 +27,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                 return reader;
             }
 
-            using (await SyncObj.LockAsync().ConfigureAwait(false))
+            using (await SyncObj.LockAsync())
             {
                 if (ReaderCache.TryGetValue(templateDefinition.Name, out reader))
                 {

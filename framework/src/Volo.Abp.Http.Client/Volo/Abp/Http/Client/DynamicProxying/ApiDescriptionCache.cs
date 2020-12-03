@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Threading;
@@ -24,10 +23,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         }
 
         public async Task<ApplicationApiDescriptionModel> GetAsync(
-            string baseUrl, 
+            string baseUrl,
             Func<Task<ApplicationApiDescriptionModel>> factory)
         {
-            using (await _semaphore.LockAsync(CancellationTokenProvider.Token).ConfigureAwait(false))
+            using (await _semaphore.LockAsync(CancellationTokenProvider.Token))
             {
                 var model = _cache.GetOrDefault(baseUrl);
                 if (model == null)

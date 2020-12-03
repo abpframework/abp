@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 
 namespace Volo.Abp.Threading
 {
@@ -21,7 +20,7 @@ namespace Volo.Abp.Threading
                 return;
             }
 
-            using (await _semaphore.LockAsync().ConfigureAwait(false))
+            using (await _semaphore.LockAsync())
             {
                 if (_runBefore)
                 {

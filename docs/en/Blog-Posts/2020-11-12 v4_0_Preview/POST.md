@@ -1,23 +1,23 @@
 # ABP Framework 4.0 RC Has Been Published based on .NET 5.0!
 
-Today, we have released the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/)) `4.0.0-rc.1` that is based on the **.NET 5.0**. This blog post introduces the new features and important changes in the new version.
+Today, we have released the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/)) 4.0.0 RC that is based on the **.NET 5.0**. This blog post introduces the new features and important changes in the new version.
 
 > **The planned release date for the [4.0.0 final](https://github.com/abpframework/abp/milestone/45) version is November 26, 2020**.
 
-## Get Started with the 4.0 RC.1
+## Get Started with the 4.0 RC
 
-If you want to try the version `4.0.0-rc.1` today, follow the steps below;
+If you want to try the version `4.0.0` today, follow the steps below;
 
-1) **Upgrade** the ABP CLI to the version `4.0.0-rc.1` using a command line terminal:
+1) **Upgrade** the ABP CLI to the version `4.0.0-rc.3` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 4.0.0-rc.1
+dotnet tool update Volo.Abp.Cli -g --version 4.0.0-rc.3
 ````
 
 **or install** if you haven't installed before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 4.0.0-rc.1
+dotnet tool install Volo.Abp.Cli -g --version 4.0.0-rc.3
 ````
 
 2) Create a **new application** with the `--preview` option:

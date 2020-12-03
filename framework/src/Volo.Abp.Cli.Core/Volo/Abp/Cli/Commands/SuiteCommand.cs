@@ -31,7 +31,10 @@ namespace Volo.Abp.Cli.Commands
         {
             var operationType = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
 
-            var preview = commandLineArgs.Options.ContainsKey(Options.Preview.Long);
+            var preview = commandLineArgs.Options.ContainsKey(Options.Preview.Short) ||
+                          commandLineArgs.Options.ContainsKey(Options.Preview.Long);
+
+            var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
 
             switch (operationType)
             {
@@ -42,11 +45,11 @@ namespace Volo.Abp.Cli.Commands
                     break;
 
                 case "install":
-                    await InstallSuiteAsync(preview);
+                    await InstallSuiteAsync(version, preview);
                     break;
 
                 case "update":
-                    await UpdateSuiteAsync(preview);
+                    await UpdateSuiteAsync(version, preview);
                     break;
 
                 case "remove":
@@ -70,7 +73,8 @@ namespace Volo.Abp.Cli.Commands
         {
             var dotnetToolList = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g");
 
-            var suiteLine = dotnetToolList.Split(Environment.NewLine).FirstOrDefault(l => l.ToLower().StartsWith("volo.abp.suite "));
+            var suiteLine = dotnetToolList.Split(Environment.NewLine)
+                .FirstOrDefault(l => l.ToLower().StartsWith("volo.abp.suite "));
 
             if (string.IsNullOrEmpty(suiteLine))
             {
@@ -80,9 +84,23 @@ namespace Volo.Abp.Cli.Commands
             return suiteLine.Split(" ", StringSplitOptions.RemoveEmptyEntries)[1];
         }
 
-        private async Task InstallSuiteAsync(bool preview = false)
+        private async Task InstallSuiteAsync(string version = null, bool preview = false)
         {
-            Logger.LogInformation("Installing ABP Suite...");
+            var infoText = "Installing ABP Suite ";
+            if (version != null)
+            {
+                infoText += "v" + version + "... ";
+            }
+            else if (preview)
+            {
+                infoText += "latest preview version...";
+            }
+            else
+            {
+                infoText += "latest version...";
+            }
+
+            Logger.LogInformation(infoText);
 
             var nugetIndexUrl = await _nuGetIndexUrlService.GetAsync();
 
@@ -93,9 +111,25 @@ namespace Volo.Abp.Cli.Commands
 
             try
             {
-                var versionOption = await GetVersionOption(preview);
+                var versionOption = string.Empty;
 
-                var result = CmdHelper.RunCmd($"dotnet tool install {SuitePackageName} {versionOption} --add-source {nugetIndexUrl} -g");
+                if (preview)
+                {
+                    var latestPreviewVersion = await GetLatestPreviewVersion();
+                    if (latestPreviewVersion != null)
+                    {
+                        versionOption = $" --version {latestPreviewVersion}";
+                        Logger.LogInformation("Latest preview version is " + latestPreviewVersion);
+                    }
+                }
+                else if (version != null)
+                {
+                    versionOption = $" --version {version}";
+                }
+
+                var result = CmdHelper.RunCmd(
+                    $"dotnet tool install {SuitePackageName}{versionOption} --add-source {nugetIndexUrl} -g"
+                );
 
                 if (result == 0)
                 {
@@ -117,25 +151,55 @@ namespace Volo.Abp.Cli.Commands
         private void ShowSuiteManualInstallCommand()
         {
             Logger.LogInformation("You can also run the following command to install ABP Suite.");
-            Logger.LogInformation("dotnet tool install -g Volo.Abp.Suite");
+            Logger.LogInformation("dotnet tool install -g Volo.Abp.Suite --add-source https://nuget.abp.io/<your-private-key>/v3/index.json");
         }
 
-        private async Task UpdateSuiteAsync(bool preview = false)
+        private async Task UpdateSuiteAsync(string version = null, bool preview = false)
         {
-            Logger.LogInformation("Updating ABP Suite...");
+            var infoText = "Updating ABP Suite ";
+            if (version != null)
+            {
+                infoText += "to the " + version + "... ";
+            }
+            else if (preview)
+            {
+                infoText += "to the latest preview version...";
+            }
+            else
+            {
+                infoText += "...";
+            }
+
+            Logger.LogInformation(infoText);
 
             var nugetIndexUrl = await _nuGetIndexUrlService.GetAsync();
-
             if (nugetIndexUrl == null)
             {
+                Logger.LogError("Cannot find your NuGet service URL!");
                 return;
             }
 
             try
             {
-                var versionOption = await GetVersionOption(preview);
+                var versionOption = string.Empty;
 
-                var result = CmdHelper.RunCmd($"dotnet tool update {SuitePackageName} {versionOption} --add-source {nugetIndexUrl} -g");
+                if (preview)
+                {
+                    var latestPreviewVersion = await GetLatestPreviewVersion();
+                    if (latestPreviewVersion != null)
+                    {
+                        versionOption = $" --version {latestPreviewVersion}";
+                        Logger.LogInformation("Latest preview version is " + latestPreviewVersion);
+                    }
+                }
+                else if (version != null)
+                {
+                    versionOption = $" --version {version}";
+                }
+
+                var result = CmdHelper.RunCmd(
+                    $"dotnet tool update {SuitePackageName}{versionOption} --add-source {nugetIndexUrl} -g"
+                );
 
                 if (result != 0)
                 {
@@ -149,29 +213,21 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        private async Task<string> GetVersionOption(bool preview)
+        private async Task<string> GetLatestPreviewVersion()
         {
-            if (preview)
-            {
-                var latestVersion = await GetLatestSuiteVersionAsync(true);
-                if (latestVersion.IsPrerelease)
-                {
-                    return $"--version {latestVersion.ToString()}";
-                }
-            }
+            var latestPreviewVersion = await _nuGetService
+                .GetLatestVersionOrNullAsync(
+                    packageId: SuitePackageName,
+                    includeReleaseCandidates: true
+                );
 
-            return "";
-        }
-
-        private async Task<SemanticVersion> GetLatestSuiteVersionAsync(bool preview)
-        {
-            return await _nuGetService.GetLatestVersionOrNullAsync(SuitePackageName, includeReleaseCandidates: preview);
+            return latestPreviewVersion.IsPrerelease ? latestPreviewVersion.ToString() : null;
         }
 
         private void ShowSuiteManualUpdateCommand()
         {
             Logger.LogError("You can also run the following command to update ABP Suite.");
-            Logger.LogError("dotnet tool update -g Volo.Abp.Suite");
+            Logger.LogError("dotnet tool update -g Volo.Abp.Suite --add-source https://nuget.abp.io/<your-private-key>/v3/index.json");
         }
 
         private static void RemoveSuite()
@@ -185,7 +241,8 @@ namespace Volo.Abp.Cli.Commands
             {
                 if (!GlobalToolHelper.IsGlobalToolInstalled("abp-suite"))
                 {
-                    Logger.LogWarning("ABP Suite is not installed! To install it you can run the command: \"abp suite install\"");
+                    Logger.LogWarning(
+                        "ABP Suite is not installed! To install it you can run the command: \"abp suite install\"");
                     return;
                 }
             }
@@ -236,6 +293,13 @@ namespace Volo.Abp.Cli.Commands
             public static class Preview
             {
                 public const string Long = "preview";
+                public const string Short = "p";
+            }
+
+            public static class Version
+            {
+                public const string Long = "version";
+                public const string Short = "v";
             }
         }
     }

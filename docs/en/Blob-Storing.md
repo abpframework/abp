@@ -21,7 +21,7 @@ The ABP Framework has already the following storage provider implementations;
 * [Azure](Blob-Storing-Azure.md): Stores BLOBs on the [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
 * [Aliyun](Blob-Storing-Aliyun.md): Stores BLOBs on the [Aliyun Storage Service](https://help.aliyun.com/product/31815.html).
 * [Minio](Blob-Storing-Minio.md): Stores BLOBs on the [MinIO Object storage](https://min.io/).
-* [Aws](Blob-Storing-Aws.md): Stores BLOBs on the[Amazon Simple Storage Service](https://min.io/).
+* [Aws](Blob-Storing-Aws.md): Stores BLOBs on the[Amazon Simple Storage Service](https://aws.amazon.com/s3/).
 
 More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](Blob-Storing-Custom-Provider.md) and [contribute](Contribution/Index.md) to the ABP Framework.
 
