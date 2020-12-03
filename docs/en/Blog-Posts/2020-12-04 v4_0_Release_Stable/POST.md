@@ -8,6 +8,21 @@ As a nice coincidence, today is the **4th year** since the first commit made in 
 
 ![abp-contribution-graph-4-years](abp-contribution-graph-4-years.png)
 
+### Some Statistics
+
+Some statistics only from the main [abp repository](https://github.com/abpframework/abp).
+
+* **15,297 commits** done.
+* **3,764 issues** are closed.
+* **2,133 pull requests** are merged.
+* **158 contributors**.
+* **88 releases** published.
+
+Some statistics on Nuget:
+
+* **1,000,000 downloads** only for the core package.
+* **220 NuGet packages**.
+
 TODO
 
 ## What's New With 4.0?
