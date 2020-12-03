@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -187,6 +190,32 @@ namespace Volo.Abp.Cli.Commands
             }
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
+
+            if (template == AppTemplate.TemplateName)
+            {
+                OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"));
+            }
+        }
+
+        private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered)
+        {
+            var tieredYesNo = tiered ? "yes" : "no";
+
+            var url = $"https://www.abp.io/project-created-success?UI={uiFramework}&DB={databaseProvider}&Tiered={tieredYesNo}";
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                url = url.Replace("&", "^&");
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
         }
 
         private bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
@@ -195,7 +224,7 @@ namespace Volo.Abp.Cli.Commands
 
             if (longKey == false)
             {
-                return  commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Short);
+                return commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Short);
             }
 
             return longKey;
