@@ -108,14 +108,6 @@
       "text": "Fundamentals",
       "items": [
         {
-          "text": "Configuration",
-          "path": "Configuration.md"
-        },
-        {
-          "text": "Options",
-          "path": "Options.md"
-        },
-        {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
           "items": [
@@ -126,12 +118,16 @@
           ]
         },
         {
-          "text": "Localization",
-          "path": "Localization.md"
+          "text": "Configuration",
+          "path": "Configuration.md"
         },
         {
-          "text": "Exception Handling",
-          "path": "Exception-Handling.md"
+          "text": "Options",
+          "path": "Options.md"
+        },
+        {
+          "text": "Authorization",
+          "path": "Authorization.md"
         },
         {
           "text": "Validation",
@@ -144,8 +140,8 @@
           ]
         },
         {
-          "text": "Authorization",
-          "path": "Authorization.md"
+          "text": "Localization",
+          "path": "Localization.md"
         },
         {
           "text": "Caching",
@@ -158,8 +154,8 @@
           ]
         },
         {
-          "text": "Logging",
-          "path": "Logging.md"
+          "text": "Exception Handling",
+          "path": "Exception-Handling.md"
         },
         {
           "text": "Settings",
@@ -172,12 +168,20 @@
         {
           "text": "Object Extensions",
           "path": "Object-Extensions.md"
+        },
+        {
+          "text": "Logging",
+          "path": "Logging.md"
         }
       ]
     },
     {
       "text": "Infrastructure",
       "items": [
+        {
+          "text": "Audit Logging",
+          "path": "Audit-Logging.md"
+        },
         {
           "text": "Background Jobs",
           "path": "Background-Jobs.md",
@@ -203,82 +207,6 @@
             {
               "text": "Quartz Integration",
               "path": "Background-Workers-Quartz.md"
-            }
-          ]
-        },
-        {
-          "text": "Event Bus",
-          "items": [
-            {
-              "text": "Overall",
-              "path": "Event-Bus.md"
-            },
-            {
-              "text": "Local Event Bus",
-              "path": "Local-Event-Bus.md"
-            },
-            {
-              "text": "Distributed Event Bus",
-              "path": "Distributed-Event-Bus.md",
-              "items": [
-                {
-                  "text": "RabbitMQ Integration",
-                  "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
-                },
-                {
-                  "text": "Kafka Integration",
-                  "path": "Distributed-Event-Bus-Kafka-Integration.md"
-                },
-                {
-                  "text": "Rebus Integration",
-                  "path": "Distributed-Event-Bus-Rebus-Integration.md"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "text": "Data Seeding",
-          "path": "Data-Seeding.md"
-        },
-        {
-          "text": "Virtual File System",
-          "path": "Virtual-File-System.md"
-        },
-        {
-          "text": "CSRF/XSRF & Anti Forgery",
-          "path": "CSRF-Anti-Forgery.md"
-        },
-        {
-          "text": "Audit Logging",
-          "path": "Audit-Logging.md"
-        },
-        {
-          "text": "Features",
-          "path": "Features.md"
-        },
-        {
-          "text": "Data Filtering",
-          "path": "Data-Filtering.md"
-        },
-        {
-          "text": "Current User",
-          "path": "CurrentUser.md"
-        },
-        {
-          "text": "Object to object mapping",
-          "path": "Object-To-Object-Mapping.md"
-        },
-        {
-          "text": "Email Sending",
-          "items": [
-            {
-              "text": "Email Sending System",
-              "path": "Emailing.md"
-            },
-            {
-              "text": "MailKit Integration",
-              "path": "MailKit.md"
             }
           ]
         },
@@ -325,16 +253,88 @@
           ]
         },
         {
-          "text": "Text Templating",
-          "path": "Text-Templating.md"
+          "text": "CSRF/XSRF & Anti Forgery",
+          "path": "CSRF-Anti-Forgery.md"
+        },
+        {
+          "text": "Current User",
+          "path": "CurrentUser.md"
+        },
+        {
+          "text": "Data Filtering",
+          "path": "Data-Filtering.md"
+        },
+        {
+          "text": "Data Seeding",
+          "path": "Data-Seeding.md"
+        },
+        {
+          "text": "Email Sending",
+          "items": [
+            {
+              "text": "Email Sending System",
+              "path": "Emailing.md"
+            },
+            {
+              "text": "MailKit Integration",
+              "path": "MailKit.md"
+            }
+          ]
+        },
+        {
+          "text": "Event Bus",
+          "items": [
+            {
+              "text": "Overall",
+              "path": "Event-Bus.md"
+            },
+            {
+              "text": "Local Event Bus",
+              "path": "Local-Event-Bus.md"
+            },
+            {
+              "text": "Distributed Event Bus",
+              "path": "Distributed-Event-Bus.md",
+              "items": [
+                {
+                  "text": "RabbitMQ Integration",
+                  "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+                },
+                {
+                  "text": "Kafka Integration",
+                  "path": "Distributed-Event-Bus-Kafka-Integration.md"
+                },
+                {
+                  "text": "Rebus Integration",
+                  "path": "Distributed-Event-Bus-Rebus-Integration.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Features",
+          "path": "Features.md"
         },
         {
           "text": "GUID Generation",
           "path": "Guid-Generation.md"
         },
         {
+          "text": "Object to Object Mapping",
+          "path": "Object-To-Object-Mapping.md"
+        },
+        {
+          "text": "Text Templating",
+          "path": "Text-Templating.md"
+        },
+        {
           "text": "Timing",
           "path": "Timing.md"
+        },
+        {
+          "text": "Virtual File System",
+          "path": "Virtual-File-System.md"
         }
       ]
     },
