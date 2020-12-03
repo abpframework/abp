@@ -261,10 +261,6 @@ Ensure that the `.HttpApi.Host` project is the startup project and run the appli
 
 You can see the application APIs and test them here. Get [more info](https://swagger.io/tools/swagger-ui/) about the Swagger UI.
 
-> ##### Authorization for the Swagger UI
->
-> Most of the HTTP APIs require authentication & authorization. If you want to test authorized APIs, manually go to the `/Account/Login` page, enter `admin` as the username and `1q2w3E*` as the password to login to the application. Then you will be able to execute authorized APIs too.
-
 {{ end # UI }}
 
 {{ if UI == "Blazor" }}
