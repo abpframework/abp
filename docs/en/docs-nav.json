@@ -686,10 +686,6 @@
           "text": "Angular",
           "items": [
             {
-              "text": "Migration Guide v2.x to v3",
-              "path": "UI/Angular/Migration-Guide-v3.md"
-            },
-            {
               "text": "Quick Start",
               "path": "UI/Angular/Quick-Start.md"
             },
