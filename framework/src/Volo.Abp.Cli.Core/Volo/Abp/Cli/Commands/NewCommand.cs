@@ -201,7 +201,7 @@ namespace Volo.Abp.Cli.Commands
         {
             var tieredYesNo = tiered ? "yes" : "no";
 
-            var url = $"https://www.abp.io/project-created-success?UI={uiFramework}&DB={databaseProvider}&Tiered={tieredYesNo}";
+            var url = $"https://www.abp.io/project-created-success?UI={uiFramework.ToString("g").ToLower()}&DB={databaseProvider.ToString("g").ToLower()}&Tiered={tieredYesNo}";
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
