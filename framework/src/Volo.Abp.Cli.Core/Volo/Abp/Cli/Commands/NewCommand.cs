@@ -3,18 +3,22 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Auth;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -25,7 +29,8 @@ namespace Volo.Abp.Cli.Commands
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
         public ITemplateInfoProvider TemplateInfoProvider { get; }
 
-        public NewCommand(TemplateProjectBuilder templateProjectBuilder, ITemplateInfoProvider templateInfoProvider)
+        public NewCommand(TemplateProjectBuilder templateProjectBuilder
+            , ITemplateInfoProvider templateInfoProvider)
         {
             TemplateProjectBuilder = templateProjectBuilder;
             TemplateInfoProvider = templateInfoProvider;
@@ -193,7 +198,7 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
-            if (AppTemplateBase.IsAppTemplate(template ?? TemplateInfoProvider.GetDefault().Name))
+            if (AppTemplateBase.IsAppTemplate(template ?? (await TemplateInfoProvider.GetDefaultAsync()).Name))
             {
                 var isCommercial = template == AppProTemplate.TemplateName;
                 OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
