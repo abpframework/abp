@@ -23,10 +23,12 @@ namespace Volo.Abp.Cli.Commands
         public ILogger<NewCommand> Logger { get; set; }
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
+        public ITemplateInfoProvider TemplateInfoProvider { get; }
 
-        public NewCommand(TemplateProjectBuilder templateProjectBuilder)
+        public NewCommand(TemplateProjectBuilder templateProjectBuilder, ITemplateInfoProvider templateInfoProvider)
         {
             TemplateProjectBuilder = templateProjectBuilder;
+            TemplateInfoProvider = templateInfoProvider;
 
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -191,7 +193,7 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
-            if (AppTemplateBase.IsAppTemplate(template ?? AppTemplate.TemplateName))
+            if (AppTemplateBase.IsAppTemplate(template ?? TemplateInfoProvider.GetDefault().Name))
             {
                 var isCommercial = template == AppProTemplate.TemplateName;
                 OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
@@ -203,9 +205,7 @@ namespace Volo.Abp.Cli.Commands
             uiFramework = uiFramework == UiFramework.NotSpecified || uiFramework == UiFramework.None ? UiFramework.Mvc : uiFramework;
 
             var urlPrefix = commercial ? "commercial" : "www";
-
             var tieredYesNo = tiered ? "yes" : "no";
-
             var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
