@@ -1,4 +1,3 @@
-import { strings } from '@angular-devkit/core';
 import { SYSTEM_TYPES } from '../constants';
 import { VOLO_REGEX } from '../constants/volo';
 import { eImportKeyword } from '../enums';
@@ -8,16 +7,22 @@ import { relativePathToEnum, relativePathToModel } from './path';
 import { parseGenerics } from './tree';
 
 export function createTypeSimplifier() {
-  const parseType = createTypeParser(type => {
-    type = type.replace(
+  const parseType = createTypeParser(t => {
+    let type = t.replace(
       /System\.([0-9A-Za-z.]+)/g,
-      (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
+      (_, match) => SYSTEM_TYPES.get(match) ?? 'any',
     );
+
+    type = /any</.test(type) ? 'any' : type;
 
     const regexp = new RegExp(/.*(?<=\.)(?<generic>.+)<.*(?<=[\.<])(?<genericType>.+)>/gm);
     const { generic, genericType } = regexp.exec(type)?.groups ?? {};
 
-    return generic ? `${generic}<${genericType}>` : type.split('.').pop()!;
+    return generic
+      ? generic === 'any'
+        ? 'any'
+        : `${generic}<${genericType}>`
+      : type.split('.').pop()!;
   });
 
   return (type: string) => {
