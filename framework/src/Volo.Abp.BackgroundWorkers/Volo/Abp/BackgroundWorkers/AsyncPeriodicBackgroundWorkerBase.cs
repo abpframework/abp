@@ -11,15 +11,15 @@ namespace Volo.Abp.BackgroundWorkers
     public abstract class AsyncPeriodicBackgroundWorkerBase : BackgroundWorkerBase
     {
         protected IServiceScopeFactory ServiceScopeFactory { get; }
-        protected AbpTimer Timer { get; }
+        protected AbpAsyncTimer Timer { get; }
 
         protected AsyncPeriodicBackgroundWorkerBase(
-            AbpTimer timer,
+            AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Timer = timer;
-            Timer.Elapsed += Timer_Elapsed;
+            Timer.Elapsed = Timer_Elapsed;
         }
 
         public async override Task StartAsync(CancellationToken cancellationToken = default)
@@ -34,10 +34,9 @@ namespace Volo.Abp.BackgroundWorkers
             await base.StopAsync(cancellationToken);
         }
 
-        private void Timer_Elapsed(object sender, System.EventArgs e)
+        private async Task Timer_Elapsed(AbpAsyncTimer timer)
         {
-            // Discard the result
-            _ = DoWorkAsync();
+            await DoWorkAsync();
         }
 
         private async Task DoWorkAsync()

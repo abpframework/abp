@@ -47,9 +47,8 @@ namespace Volo.Abp.BackgroundWorkers
                 }
                 catch (Exception ex)
                 {
-                    _ = scope.ServiceProvider
-                        .GetRequiredService<IExceptionNotifier>()
-                        .NotifyAsync(new ExceptionNotificationContext(ex));
+                    var exceptionNotifier = scope.ServiceProvider.GetRequiredService<IExceptionNotifier>();
+                    AsyncHelper.RunSync(() => exceptionNotifier.NotifyAsync(new ExceptionNotificationContext(ex)));
 
                     Logger.LogException(ex);
                 }
