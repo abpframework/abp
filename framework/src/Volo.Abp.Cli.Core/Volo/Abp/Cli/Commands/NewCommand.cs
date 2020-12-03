@@ -191,17 +191,20 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
-            if (template == AppTemplate.TemplateName)
+            if (AppTemplateBase.IsAppTemplate(template))
             {
-                OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"));
+                var isCommercial = template == AppProTemplate.TemplateName;
+                OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
             }
         }
 
-        private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered)
+        private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
         {
+            var urlPrefix = commercial ? "commercial" : "www";
+
             var tieredYesNo = tiered ? "yes" : "no";
 
-            var url = $"https://www.abp.io/project-created-success?UI={uiFramework.ToString("g").ToLower()}&DB={databaseProvider.ToString("g").ToLower()}&Tiered={tieredYesNo}";
+            var url = $"https://{urlPrefix}.abp.io/project-created-success?UI={uiFramework.ToString("g").ToLower()}&DB={databaseProvider.ToString("g").ToLower()}&Tiered={tieredYesNo}";
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
