@@ -3,7 +3,7 @@
 
     <!-- All Microsoft packages -->
     <MicrosoftPackageVersion>5.0.0</MicrosoftPackageVersion>
-    
+
     <!-- Microsoft.NET.Test.Sdk https://www.nuget.org/packages/Microsoft.NET.Test.Sdk -->
     <MicrosoftNETTestSdkPackageVersion>16.8.3</MicrosoftNETTestSdkPackageVersion>
 
