@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
@@ -12,10 +10,12 @@ namespace Volo.Abp.PermissionManagement
 
         public TestPermissionManagementProvider(
             IPermissionGrantRepository permissionGrantRepository,
+            IPermissionStore permissionStore,
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant)
             : base(
                 permissionGrantRepository,
+                permissionStore,
                 guidGenerator,
                 currentTenant)
         {
