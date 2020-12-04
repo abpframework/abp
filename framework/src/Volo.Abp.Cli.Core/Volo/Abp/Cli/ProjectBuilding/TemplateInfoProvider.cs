@@ -70,26 +70,33 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 return false;
             }
 
-            var url = $"{CliUrls.WwwAbpIo}api/license/check-user";
-
-            using (var client = new CliHttpClient())
+            try
             {
-                var response = await client.GetHttpResponseMessageWithRetryAsync(
-                    url,
-                    CancellationTokenProvider.Token,
-                    Logger);
+                var url = $"{CliUrls.WwwAbpIo}api/license/check-user";
 
-                if (!response.IsSuccessStatusCode)
+                using (var client = new CliHttpClient())
                 {
-                    throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                    var response = await client.GetHttpResponseMessageWithRetryAsync(
+                        url,
+                        CancellationTokenProvider.Token,
+                        Logger);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                    }
+
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<bool>(responseContent);
+
+                    return result;
                 }
-
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<bool>(responseContent);
-
-                return result;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }
