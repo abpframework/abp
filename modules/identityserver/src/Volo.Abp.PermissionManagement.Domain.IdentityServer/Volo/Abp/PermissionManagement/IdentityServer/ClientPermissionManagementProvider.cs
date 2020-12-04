@@ -11,10 +11,12 @@ namespace Volo.Abp.PermissionManagement.IdentityServer
 
         public ClientPermissionManagementProvider(
             IPermissionGrantRepository permissionGrantRepository,
+            IPermissionStore permissionStore,
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant)
             : base(
                 permissionGrantRepository,
+                permissionStore,
                 guidGenerator,
                 currentTenant)
         {
