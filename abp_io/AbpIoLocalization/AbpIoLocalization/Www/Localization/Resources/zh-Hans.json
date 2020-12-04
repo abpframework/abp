@@ -186,7 +186,7 @@
     "Optional": "可选的",
     "LocalFrameworkRef": "保留框架包的本地项目引用.",
     "BlobStoring": "BLOB存储",
-    "BlobStoringExplanation": "BLOB存储系统提供了BloB的抽象. ABP提供了一些预构建的存储提供程序集成(Azure,AWS,文件系统,数据库等),你可以轻松的在你的应用程序中使用它们.",
+    "BlobStoringExplanation": "BLOB存储系统提供了BLOB的抽象. ABP提供了一些预构建的存储提供程序集成(Azure,AWS,文件系统,数据库等),你可以轻松的在你的应用程序中使用它们.",
     "TextTemplating": "文本模板",
     "TextTemplatingExplanation": "文本模板是基于模板和模型(数据对象)使用动态渲染内容. 例如你可以使用预构建的模板来创建动态的电子邮件内容.",
     "MultipleUIOptions": "多个UI选项",
