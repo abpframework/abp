@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                 return null;
             }
 
-            if (!context.Metadata.ContainerType.IsAssignableTo<IHasExtraProperties>())
+            if (context.Metadata.ContainerType == null || !context.Metadata.ContainerType.IsAssignableTo<IHasExtraProperties>())
             {
                 return null;
             }
