@@ -184,6 +184,13 @@
     "ABPCLIExamplesInfo": "<strong>new</strong>命令创建一个 <strong>分层的MVC应用程序</strong> 使用 <strong>Entity Framework Core</strong> 做为数据库提供程序. 它还有其他选项. 示例:",
     "SeeCliDocumentForMoreInformation": "参阅 <a href=\"{0}\">ABP CLI 文档</a> 获得更多选项或选择上方的 \"直接下载\" 标签.",
     "Optional": "可选的",
-    "LocalFrameworkRef": "保留框架包的本地项目引用."
+    "LocalFrameworkRef": "保留框架包的本地项目引用.",
+    "BlobStoring": "BLOB存储",
+    "BlobStoringExplanation": "BLOB存储系统提供了BLOB的抽象. ABP提供了一些预构建的存储提供程序集成(Azure,AWS,文件系统,数据库等),你可以轻松的在你的应用程序中使用它们.",
+    "TextTemplating": "文本模板",
+    "TextTemplatingExplanation": "文本模板是基于模板和模型(数据对象)使用动态渲染内容. 例如你可以使用预构建的模板来创建动态的电子邮件内容.",
+    "MultipleUIOptions": "多个UI选项",
+    "MultipleDBOptions": "多个数据库提供程序",
+    "MultipleUIOptionsExplanation": "核心框架设计为独立与UI,可以和任何类型的UI系统一起使用. 同时提供了多个开箱即用的预构建集成选项."
   }
 }
