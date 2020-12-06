@@ -1,8 +1,11 @@
-import { ApplicationConfiguration, createLocalizationPipeKeyGenerator } from '@abp/ng.core';
+import {
+  ApplicationLocalizationConfigurationDto,
+  createLocalizationPipeKeyGenerator,
+} from '@abp/ng.core';
 import { ObjectExtensions } from '../models/object-extensions';
 
 export function createDisplayNameLocalizationPipeKeyGenerator(
-  localization: ApplicationConfiguration.Localization,
+  localization: ApplicationLocalizationConfigurationDto,
 ) {
   const generateLocalizationPipeKey = createLocalizationPipeKeyGenerator(localization);
 

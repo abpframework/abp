@@ -1,22 +1,20 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font';
-import i18n from 'i18n-js';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useMemo } from 'react';
-import { Platform, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import i18n from 'i18n-js';
 import { Root } from 'native-base';
-import Loading from '../Loading/Loading';
-import { connectToRedux } from '../../utils/ReduxConnect';
-import { createLanguageSelector } from '../../store/selectors/AppSelectors';
-import { createTokenSelector } from '../../store/selectors/PersistentStorageSelectors';
+import PropTypes from 'prop-types';
+import React, { useEffect, useMemo } from 'react';
+import { Platform, StatusBar } from 'react-native';
+import { getEnvVars } from '../../../Environment';
+import { LocalizationContext } from '../../contexts/LocalizationContext';
+import AuthNavigator from '../../navigators/AuthNavigator';
+import DrawerNavigator from '../../navigators/DrawerNavigator';
 import AppActions from '../../store/actions/AppActions';
 import PersistentStorageActions from '../../store/actions/PersistentStorageActions';
-import { LocalizationContext } from '../../contexts/LocalizationContext';
+import { createLanguageSelector } from '../../store/selectors/AppSelectors';
+import { createTokenSelector } from '../../store/selectors/PersistentStorageSelectors';
+import { connectToRedux } from '../../utils/ReduxConnect';
 import { isTokenValid } from '../../utils/TokenUtils';
-import DrawerNavigator from '../../navigators/DrawerNavigator';
-import AuthNavigator from '../../navigators/AuthNavigator';
-import { getEnvVars } from '../../../Environment';
+import Loading from '../Loading/Loading';
 
 const { localization } = getEnvVars();
 
@@ -32,7 +30,6 @@ i18n.t = (key, ...args) => {
 
 function AppContainer({ language, fetchAppConfig, token, setToken }) {
   const platform = Platform.OS;
-  const [isReady, setIsReady] = useState(false);
 
   const localizationContext = useMemo(
     () => ({
@@ -52,19 +49,13 @@ function AppContainer({ language, fetchAppConfig, token, setToken }) {
 
   useEffect(() => {
     fetchAppConfig();
-
-    Font.loadAsync({
-      Roboto: require('native-base/Fonts/Roboto.ttf'),
-      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-      ...Ionicons.font,
-    }).then(() => setIsReady(true));
   }, []);
 
   return (
     <>
       <StatusBar barStyle={platform === 'ios' ? 'dark-content' : 'light-content'} />
       <Root>
-        {isReady && language ? (
+        {language ? (
           <LocalizationContext.Provider value={localizationContext}>
             <NavigationContainer>
               {isValid ? <DrawerNavigator /> : <AuthNavigator />}

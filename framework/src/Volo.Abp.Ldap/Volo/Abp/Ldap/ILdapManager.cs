@@ -1,7 +1,9 @@
-﻿namespace Volo.Abp.Ldap
+﻿using System.Threading.Tasks;
+
+namespace Volo.Abp.Ldap
 {
     public interface ILdapManager
     {
-        bool Authenticate(string username, string password);
+        Task<bool> AuthenticateAsync(string username, string password);
     }
 }

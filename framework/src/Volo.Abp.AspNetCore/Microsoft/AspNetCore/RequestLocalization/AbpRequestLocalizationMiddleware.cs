@@ -23,12 +23,10 @@ namespace Microsoft.AspNetCore.RequestLocalization
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+
             var middleware = new RequestLocalizationMiddleware(
                 next,
-                new OptionsWrapper<RequestLocalizationOptions>(
-                    await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
-),
-                _loggerFactory
+                new OptionsWrapper<RequestLocalizationOptions>(await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()), _loggerFactory
             );
 
             await middleware.Invoke(context);

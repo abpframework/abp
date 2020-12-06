@@ -18,8 +18,7 @@ namespace Volo.Abp.Ldap
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Replace(ServiceDescriptor.Transient<IOptionsFactory<AbpLdapOptions>, AbpAbpLdapOptionsFactory>());
-            context.Services.Replace(ServiceDescriptor.Scoped<IOptions<AbpLdapOptions>, OptionsManager<AbpLdapOptions>>());
+            context.Services.AddAbpDynamicOptions<AbpLdapOptions, AbpAbpLdapOptionsManager>();
 
             var configuration = context.Services.GetConfiguration();
             var ldapConfiguration = configuration["Ldap"];

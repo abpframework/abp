@@ -24,7 +24,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
 
         public virtual async Task<List<AuditLog>> GetListAsync(
             string sorting = null,
-            int maxResultCount = 50, 
+            int maxResultCount = 50,
             int skipCount = 0,
             DateTime? startTime = null,
             DateTime? endTime = null,
@@ -145,9 +145,10 @@ namespace Volo.Abp.AuditLogging.MongoDB
         {
             var entityChange = (await GetMongoQueryable()
                 .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
+                .OrderBy(x => x.Id)
                 .FirstAsync()).EntityChanges.FirstOrDefault(x => x.Id == entityChangeId);
-            
-            
+
+
             if (entityChange == null)
             {
                 throw new EntityNotFoundException(typeof(EntityChange));
@@ -174,7 +175,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
             var auditLogs = await query.As<IMongoQueryable<EntityChange>>()
                 .PageBy<EntityChange, IMongoQueryable<EntityChange>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
-            
+
             return auditLogs.AsQueryable().OrderBy(sorting ?? "changeTime desc").ToList();
         }
 
@@ -188,7 +189,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
             CancellationToken cancellationToken = default)
         {
             var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
-            
+
             var count = await query.As<IMongoQueryable<EntityChange>>().LongCountAsync(GetCancellationToken(cancellationToken));
 
             return count;
@@ -216,7 +217,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
                             .ToListAsync();
 
             var entityChanges = auditLogs.SelectMany(x => x.EntityChanges).ToList();
-            
+
             entityChanges.RemoveAll(x => x.EntityId != entityId || x.EntityTypeFullName != entityTypeFullName);
 
             return entityChanges.Select(x => new EntityChangeWithUsername()
