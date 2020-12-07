@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Auditing;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 using Volo.Abp.ExceptionHandling;
@@ -28,6 +29,9 @@ namespace Volo.Abp.Domain
         )]
     public class AbpDddDomainModule : AbpModule
     {
-
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddConventionalRegistrar(new AbpRepositoryConventionalRegistrar());
+        }
     }
 }
