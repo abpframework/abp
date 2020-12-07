@@ -708,6 +708,10 @@
             {
               "text": "Global Scripts & Styles",
               "path": "UI/Blazor/Global-Scripts-Styles.md"
+            },
+            {
+              "text": "Routing",
+              "path": "UI/Blazor/Routing.md"
             }
           ]
         },
