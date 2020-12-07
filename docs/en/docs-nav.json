@@ -680,6 +680,10 @@
                   "path": "UI/Blazor/CurrentUser.md"
                 },
                 {
+                  "text": "Current Tenant",
+                  "path": "UI/Blazor/CurrentTenant.md"
+                },
+                {
                   "text": "Notification",
                   "path": "UI/Blazor/Notification.md"
                 },
