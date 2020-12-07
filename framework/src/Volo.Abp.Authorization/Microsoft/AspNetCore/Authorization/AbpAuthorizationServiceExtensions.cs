@@ -105,7 +105,7 @@ namespace Microsoft.AspNetCore.Authorization
             if (!await authorizationService.IsGrantedAsync(resource, requirement))
             {
                 throw new AbpAuthorizationException(code: AbpAuthorizationErrorCodes.GivenRequirementHasNotGrantedForGivenResource)
-                    .WithData("PolicyName", resource);
+                    .WithData("ResourceName", resource);
             }
         }
 
