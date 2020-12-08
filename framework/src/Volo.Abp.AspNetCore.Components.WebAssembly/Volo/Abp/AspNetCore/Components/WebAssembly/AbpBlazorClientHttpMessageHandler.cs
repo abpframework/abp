@@ -57,9 +57,15 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 
         private async Task SetAntiForgeryTokenAsync(HttpRequestMessage request)
         {
+            if (request.Method == HttpMethod.Get || request.Method == HttpMethod.Head ||
+                request.Method == HttpMethod.Trace || request.Method == HttpMethod.Options)
+            {
+                return;
+            }
+
             var selfUri = new Uri(_navigationManager.Uri);
 
-            if (request.Method == HttpMethod.Get || request.Method == HttpMethod.Head || request.RequestUri.Host != selfUri.Host || request.RequestUri.Port != selfUri.Port)
+            if (request.RequestUri.Host != selfUri.Host || request.RequestUri.Port != selfUri.Port)
             {
                 return;
             }
