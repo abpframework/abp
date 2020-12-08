@@ -635,38 +635,75 @@
               "path": "UI/Blazor/Localization.md"
             },
             {
-              "text": "Settings",
-              "path": "UI/Blazor/Settings.md"
-            },
-            {
-              "text": "Notification",
-              "path": "UI/Blazor/Notification.md"
-            },
-            {
-              "text": "Message",
-              "path": "UI/Blazor/Message.md"
-            },
-            {
               "text": "Theming",
-              "path": "UI/Blazor/Theming.md",
               "items": [
+                {
+                  "text": "Overall",
+                  "path": "UI/Blazor/Theming.md"
+                },
                 {
                   "text": "The Basic Theme",
                   "path": "UI/Blazor/Basic-Theme.md"
+                },
+                {
+                  "text": "Branding",
+                  "path": "UI/Blazor/Branding.md"
+                },
+                {
+                  "text": "Page Header",
+                  "path": "UI/Blazor/Page-Header.md"
+                },
+                {
+                  "text": "Toolbars",
+                  "path": "UI/Blazor/Toolbars.md"
                 }
               ]
             },
             {
-              "text": "Toolbars",
-              "path": "UI/Blazor/Toolbars.md"
+              "text": "Security",
+              "items": [
+                {
+                  "text": "Authentication",
+                  "path": "UI/Blazor/Authentication.md"
+                },
+                {
+                  "text": "Authorization",
+                  "path": "UI/Blazor/Authorization.md"
+                }
+              ]
             },
             {
-              "text": "Page Alerts",
-              "path": "UI/Blazor/Page-Alerts.md"
+              "text": "Services",
+              "items": [
+                {
+                  "text": "Current User",
+                  "path": "UI/Blazor/CurrentUser.md"
+                },
+                {
+                  "text": "Current Tenant",
+                  "path": "UI/Blazor/CurrentTenant.md"
+                },
+                {
+                  "text": "Notification",
+                  "path": "UI/Blazor/Notification.md"
+                },
+                {
+                  "text": "Message",
+                  "path": "UI/Blazor/Message.md"
+                },
+                {
+                  "text": "Page Alerts",
+                  "path": "UI/Blazor/Page-Alerts.md"
+                }
+              ]
             },
             {
-              "text": "Branding",
-              "path": "UI/Blazor/Branding.md"
+              "text": "Settings",
+              "path": "UI/Blazor/Settings.md"
+            },
+            {
+              "text": "Error Handling",
+              "path": "UI/Blazor/Error-Handling.md"
             },
             {
               "text": "Customization / Overriding Components",
@@ -677,8 +714,8 @@
               "path": "UI/Blazor/Global-Scripts-Styles.md"
             },
             {
-              "text": "Authentication",
-              "path": "UI/Blazor/Authentication.md"
+              "text": "Routing",
+              "path": "UI/Blazor/Routing.md"
             }
           ]
         },
