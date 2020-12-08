@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
@@ -10,12 +11,12 @@ namespace Volo.Abp.Threading
     /// <summary>
     /// A robust timer implementation that ensures no overlapping occurs. It waits exactly specified <see cref="Period"/> between ticks.
     /// </summary>
-    public class AbpTimer : ITransientDependency
+    public class AbpAsyncTimer : ITransientDependency
     {
         /// <summary>
-        /// This event is raised periodically according to Period of Timer.
+        /// This func is raised periodically according to Period of Timer.
         /// </summary>
-        public event EventHandler Elapsed;
+        public Func<AbpAsyncTimer, Task> Elapsed = _ => Task.CompletedTask;
 
         /// <summary>
         /// Task period of timer (as milliseconds).
@@ -28,7 +29,7 @@ namespace Volo.Abp.Threading
         /// </summary>
         public bool RunOnStart { get; set; }
 
-        public ILogger<AbpTimer> Logger { get; set; }
+        public ILogger<AbpAsyncTimer> Logger { get; set; }
 
         public IExceptionNotifier ExceptionNotifier { get; set; }
 
@@ -36,10 +37,10 @@ namespace Volo.Abp.Threading
         private volatile bool _performingTasks;
         private volatile bool _isRunning;
 
-        public AbpTimer()
+        public AbpAsyncTimer()
         {
             ExceptionNotifier = NullExceptionNotifier.Instance;
-            Logger = NullLogger<AbpTimer>.Instance;
+            Logger = NullLogger<AbpAsyncTimer>.Instance;
 
             _taskTimer = new Timer(
                 TimerCallBack,
@@ -94,14 +95,19 @@ namespace Volo.Abp.Threading
                 _performingTasks = true;
             }
 
+            _ = Timer_Elapsed();
+        }
+
+        private async Task Timer_Elapsed()
+        {
             try
             {
-                Elapsed.InvokeSafely(this, new EventArgs());
+                await Elapsed(this);
             }
             catch(Exception ex)
             {
                 Logger.LogException(ex);
-                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex));
+                await ExceptionNotifier.NotifyAsync(ex);
             }
             finally
             {
