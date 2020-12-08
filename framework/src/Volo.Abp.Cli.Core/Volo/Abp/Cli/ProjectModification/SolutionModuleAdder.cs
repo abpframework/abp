@@ -139,6 +139,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var args = new CommandLineArgs("bundle");
 
             args.Options.Add(BundleCommand.Options.WorkingDirectory.Short, Path.GetDirectoryName(blazorProject));
+            args.Options.Add(BundleCommand.Options.ForceBuild.Short, string.Empty);
 
             await BundleCommand.ExecuteAsync(args);
         }
