@@ -176,7 +176,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <Button form="UserCreateForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+                    <SubmitButton Form="UserCreateForm" Clicked="@CreateEntityAsync">@L["Save"]</SubmitButton>
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -287,7 +287,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <Button form="UserEditForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
+                    <SubmitButton Form="UserEditForm" Clicked="@UpdateEntityAsync">@L["Save"]</SubmitButton>
                 </ModalFooter>
             </Form>
         </ModalContent>
