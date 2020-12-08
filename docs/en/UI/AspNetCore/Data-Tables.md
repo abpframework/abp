@@ -105,6 +105,32 @@ The `abp.libs.datatables.createAjax` method (used in the example above) adapts r
 
 This works automatically, so most of the times you don't need to know how it works. See the [DTO document](../../Data-Transfer-Objects.md) if you want to learn more about `IPagedAndSortedResultRequest`, `IPagedResult` and other standard interfaces and base DTO classes those are used in client to server communication.
 
+The `createAjax` also supports you to customize request parameters and handle the responses.
+
+**Example:**
+
+````csharp
+var inputAction = function () {
+    return {
+        id: $('#Id').val(),
+        name: $('#Name').val(),
+    };
+};
+
+var responseCallback = function(result) {
+
+    // your custom code.
+
+    return {
+        recordsTotal: result.totalCount,
+        recordsFiltered: result.totalCount,
+        data: result.items
+    };
+};
+
+ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList, inputAction, responseCallback)
+````
+
 ### Row Actions
 
 `rowAction` is an option defined by the ABP Framework to the column definitions to show a drop down button to take actions for a row in the table.
