@@ -65,47 +65,48 @@ namespace Volo.Abp.Cli.NuGet
 
             using (var client = new CliHttpClient(setBearerToken: false))
             {
-                var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+                using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
                     url,
                     cancellationToken: CancellationTokenProvider.Token,
                     logger: Logger
-                );
-
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-
-                var responseContent = await responseMessage.Content.ReadAsStringAsync();
-
-                List<SemanticVersion> versions;
-
-                if (!includeNightly && !includeReleaseCandidates)
+                ))
                 {
-                    versions = JsonSerializer
-                    .Deserialize<NuGetVersionResultDto>(responseContent)
-                    .Versions
-                    .Select(SemanticVersion.Parse)
-                    .OrderByDescending(v=> v, new VersionComparer()).ToList();
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
-                    versions = versions.Where(x => !x.IsPrerelease).ToList();
-                }
-                else if (!includeNightly && includeReleaseCandidates)
-                {
-                    versions = JsonSerializer
-                        .Deserialize<NuGetVersionResultDto>(responseContent)
-                        .Versions
-                        .Where(v=> !v.Contains("-preview"))
-                        .Select(SemanticVersion.Parse)
-                        .OrderByDescending(v=> v, new VersionComparer()).ToList();
-                }
-                else
-                {
-                    versions = JsonSerializer
-                        .Deserialize<NuGetVersionResultDto>(responseContent)
-                        .Versions
-                        .Select(SemanticVersion.Parse)
-                        .OrderByDescending(v=> v, new VersionComparer()).ToList();
-                }
+                    var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-                return versions.Any() ? versions.Max() : null;
+                    List<SemanticVersion> versions;
+
+                    if (!includeNightly && !includeReleaseCandidates)
+                    {
+                        versions = JsonSerializer
+                            .Deserialize<NuGetVersionResultDto>(responseContent)
+                            .Versions
+                            .Select(SemanticVersion.Parse)
+                            .OrderByDescending(v => v, new VersionComparer()).ToList();
+
+                        versions = versions.Where(x => !x.IsPrerelease).ToList();
+                    }
+                    else if (!includeNightly && includeReleaseCandidates)
+                    {
+                        versions = JsonSerializer
+                            .Deserialize<NuGetVersionResultDto>(responseContent)
+                            .Versions
+                            .Where(v => !v.Contains("-preview"))
+                            .Select(SemanticVersion.Parse)
+                            .OrderByDescending(v => v, new VersionComparer()).ToList();
+                    }
+                    else
+                    {
+                        versions = JsonSerializer
+                            .Deserialize<NuGetVersionResultDto>(responseContent)
+                            .Versions
+                            .Select(SemanticVersion.Parse)
+                            .OrderByDescending(v => v, new VersionComparer()).ToList();
+                    }
+
+                    return versions.Any() ? versions.Max() : null;
+                }
             }
         }
 
@@ -122,30 +123,26 @@ namespace Volo.Abp.Cli.NuGet
         private async Task<List<string>> GetProPackageListAsync()
         {
             using var client = new CliHttpClient();
-
             var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/proPackageNames";
 
-            var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
-                url: url,
-                cancellationToken: CancellationTokenProvider.Token,
-                logger: Logger
-            );
-
-            if (responseMessage.IsSuccessStatusCode)
+            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
             {
-                return JsonSerializer.Deserialize<List<string>>(await responseMessage.Content.ReadAsStringAsync());
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<List<string>>(await responseMessage.Content.ReadAsStringAsync());
+                }
+
+                var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
+                var remoteServiceErrorMessage = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+
+                if (remoteServiceErrorMessage != null)
+                {
+                    exceptionMessage += remoteServiceErrorMessage;
+                }
+
+                Logger.LogError(exceptionMessage);
+                return null;
             }
-
-            var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
-            var remoteServiceErrorMessage = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
-
-            if (remoteServiceErrorMessage != null)
-            {
-                exceptionMessage += remoteServiceErrorMessage;
-            }
-
-            Logger.LogError(exceptionMessage);
-            return null;
         }
 
         public class NuGetVersionResultDto

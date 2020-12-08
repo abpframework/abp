@@ -58,7 +58,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             async Task UpdateAsync(string file)
             {
-                var updated = await UpdatePackagesInFile(file, includePreviews,includeReleaseCandidates, switchToStable);
+                var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates, switchToStable);
                 packagesUpdated.TryAdd(file, updated);
             }
 
@@ -157,18 +157,19 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 using (var client = new CliHttpClient(TimeSpan.FromMinutes(1)))
                 {
-                    var response = await client.GetHttpResponseMessageWithRetryAsync(
-                        url: $"{CliUrls.WwwAbpIo}api/myget/apikey/",
-                        cancellationToken: CancellationTokenProvider.Token,
-                        logger: Logger
-                    );
-
-                    return Encoding.Default.GetString(await response.Content.ReadAsByteArrayAsync());
+                    using (var response = await client.GetHttpResponseMessageWithRetryAsync(
+                        $"{CliUrls.WwwAbpIo}api/myget/apikey/",
+                        CancellationTokenProvider.Token,
+                        Logger
+                    ))
+                    {
+                        return Encoding.Default.GetString(await response.Content.ReadAsByteArrayAsync());
+                    }
                 }
             }
             catch (Exception)
             {
-                return "";
+                return string.Empty;
             }
         }
 
@@ -217,7 +218,7 @@ namespace Volo.Abp.Cli.ProjectModification
             bool includeReleaseCandidates = false,
             bool switchToStable = false)
         {
-            var currentVersion = (string) package.Value;
+            var currentVersion = (string)package.Value;
 
             var version = "";
             if ((includePreviews || (!switchToStable && currentVersion.Contains("-preview"))) && !includeReleaseCandidates)
@@ -290,12 +291,12 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
         {
-            var dependencyList = new[] {"dependencies", "devDependencies", "peerDependencies"};
+            var dependencyList = new[] { "dependencies", "devDependencies", "peerDependencies" };
             var abpPackages = new List<JProperty>();
 
             foreach (var dependencyListName in dependencyList)
             {
-                var dependencies = (JObject) fileObject[dependencyListName];
+                var dependencies = (JObject)fileObject[dependencyListName];
 
                 if (dependencies == null)
                 {
