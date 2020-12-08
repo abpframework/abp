@@ -129,6 +129,7 @@ abp update [options]
 * `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
 * `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 * `--check-all`: Check the new version of each package separately. Default is `false`.
+* `--version` or `-v`: Specifies the version to use for update. If not specified, latest version is used.
 
 ### add-package
 
