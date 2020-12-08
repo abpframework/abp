@@ -26,19 +26,15 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private readonly PackageJsonFileFinder _packageJsonFileFinder;
         private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
-        private readonly MyGetPackageListFinder _myGetPackageListFinder;
         private readonly Dictionary<string, string> _fileVersionStorage = new Dictionary<string, string>();
-        private MyGetApiResponse _myGetApiResponse;
 
         public NpmPackagesUpdater(
             PackageJsonFileFinder packageJsonFileFinder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker,
-            MyGetPackageListFinder myGetPackageListFinder,
             ICancellationTokenProvider cancellationTokenProvider)
         {
             _packageJsonFileFinder = packageJsonFileFinder;
             _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
-            _myGetPackageListFinder = myGetPackageListFinder;
             CancellationTokenProvider = cancellationTokenProvider;
             Logger = NullLogger<NpmPackagesUpdater>.Instance;
         }
@@ -103,7 +99,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private static async Task<bool> NpmrcFileExistAsync(string directoryName)
         {
-            return File.Exists(Path.Combine(directoryName, ".npmrc"));
+            var result = File.Exists(Path.Combine(directoryName, ".npmrc"));
+            return await Task.FromResult(result);
         }
 
         private async Task CreateNpmrcFileAsync(string directoryName)
@@ -220,8 +217,9 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var currentVersion = (string)package.Value;
 
-            var version = "";
-            if ((includePreviews || (!switchToStable && currentVersion.Contains("-preview"))) && !includeReleaseCandidates)
+            string version;
+
+            if ((includePreviews || (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) && !includeReleaseCandidates)
             {
                 version = "preview";
             }
@@ -244,8 +242,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
             package.Value.Replace(version);
 
-            Logger.LogInformation(
-                $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
+            Logger.LogInformation($"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
+
             return true;
         }
 
@@ -259,13 +257,11 @@ namespace Volo.Abp.Cli.ProjectModification
             return version.Split("-", StringSplitOptions.RemoveEmptyEntries).Length > 1;
         }
 
-        protected virtual async Task<string> GetLatestVersion(
-            JProperty package,
-            bool includeReleaseCandidates = false)
+        protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false)
         {
             if (_fileVersionStorage.ContainsKey(package.Name))
             {
-                return _fileVersionStorage[package.Name];
+                return await Task.FromResult(_fileVersionStorage[package.Name]);
             }
 
             var versionListAsJson = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions");
@@ -279,14 +275,14 @@ namespace Volo.Abp.Cli.ProjectModification
             if (string.IsNullOrEmpty(newVersion))
             {
                 _fileVersionStorage[package.Name] = newVersion;
-                return newVersion;
+                return await Task.FromResult(newVersion);
             }
 
             var newVersionWithPrefix = $"~{newVersion}";
 
             _fileVersionStorage[package.Name] = newVersionWithPrefix;
 
-            return newVersionWithPrefix;
+            return await Task.FromResult(newVersionWithPrefix);
         }
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
