@@ -107,3 +107,8 @@ export function createTypeAdapter() {
   const simplifyType = createTypeSimplifier();
   return (type: string) => parseGenerics(type, node => simplifyType(node.data)).toString();
 }
+
+// naming here is depictive only
+export function extendsSelf(type: string, base: string) {
+  return removeGenerics(base) === removeGenerics(type);
+}
