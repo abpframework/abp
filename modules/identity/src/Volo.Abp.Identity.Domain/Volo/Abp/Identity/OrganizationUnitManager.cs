@@ -109,11 +109,13 @@ namespace Volo.Abp.Identity
             organizationUnit.ParentId = parentId;
 
             await ValidateOrganizationUnitAsync(organizationUnit);
-
+            await OrganizationUnitRepository.UpdateAsync(organizationUnit);
+            
             //Update Children Codes
             foreach (var child in children)
             {
                 child.Code = OrganizationUnit.AppendCode(organizationUnit.Code, OrganizationUnit.GetRelativeCode(child.Code, oldCode));
+                await OrganizationUnitRepository.UpdateAsync(child);
             }
         }
 
