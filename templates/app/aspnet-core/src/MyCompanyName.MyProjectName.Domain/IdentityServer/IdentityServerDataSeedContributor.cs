@@ -311,7 +311,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             {
                 foreach (var origin in corsOrigins)
                 {
-                    if (client.FindCorsOrigin(origin) == null)
+                    if (!origin.IsNullOrWhiteSpace() && client.FindCorsOrigin(origin) == null)
                     {
                         client.AddCorsOrigin(origin);
                     }
