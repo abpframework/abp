@@ -95,18 +95,16 @@ namespace Volo.Abp.Cli.NuGet
 
             using (var client = new CliHttpClient(setBearerToken: false))
             {
-                var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+                using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
                     url,
                     cancellationToken: CancellationTokenProvider.Token,
                     logger: Logger
-                );
-
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-
-                var responseContent = await responseMessage.Content.ReadAsStringAsync();
-
-                return JsonSerializer
-                    .Deserialize<NuGetVersionResultDto>(responseContent).Versions;
+                ))
+                {
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                    var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
+                }
             }
         }
 
@@ -126,27 +124,28 @@ namespace Volo.Abp.Cli.NuGet
 
             var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/proPackageNames";
 
-            var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
                 url: url,
                 cancellationToken: CancellationTokenProvider.Token,
                 logger: Logger
-            );
-
-            if (responseMessage.IsSuccessStatusCode)
+            ))
             {
-                return JsonSerializer.Deserialize<List<string>>(await responseMessage.Content.ReadAsStringAsync());
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<List<string>>(await responseMessage.Content.ReadAsStringAsync());
+                }
+
+                var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
+                var remoteServiceErrorMessage = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+
+                if (remoteServiceErrorMessage != null)
+                {
+                    exceptionMessage += remoteServiceErrorMessage;
+                }
+
+                Logger.LogError(exceptionMessage);
+                return null;
             }
-
-            var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
-            var remoteServiceErrorMessage = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
-
-            if (remoteServiceErrorMessage != null)
-            {
-                exceptionMessage += remoteServiceErrorMessage;
-            }
-
-            Logger.LogError(exceptionMessage);
-            return null;
         }
 
         public class NuGetVersionResultDto
