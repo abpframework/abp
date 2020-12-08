@@ -11,7 +11,6 @@ import { EntityProp, EntityPropList } from '../models/entity-props';
 import { FormProp, FormPropList } from '../models/form-props';
 import { ObjectExtensions } from '../models/object-extensions';
 import { PropCallback } from '../models/props';
-import { jsonNetCamelCase } from './case.util';
 import { createEnum, createEnumOptions, createEnumValueResolver } from './enum.util';
 import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.util';
 import { createExtraPropertyValueResolver } from './props.util';
@@ -122,7 +121,7 @@ function createPropertiesToContributorsMapper<T = any>(
 
     Object.keys(properties).forEach((name: string) => {
       const property = properties[name];
-      const propName = jsonNetCamelCase(name);
+      const propName = name;
       const lookup = property.ui.lookup || ({} as ExtensionPropertyUiLookupDto);
       const type = getTypeaheadType(lookup, name) || getTypeFromProperty(property);
       const displayName = generateDisplayName(property.displayName, { name, resource });

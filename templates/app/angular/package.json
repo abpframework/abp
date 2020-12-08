@@ -12,10 +12,13 @@
   },
   "private": true,
   "dependencies": {
-    "@abp/ng.identity": "~4.0.0-rc.5",
-    "@abp/ng.setting-management": "~4.0.0-rc.5",
-    "@abp/ng.tenant-management": "~4.0.0-rc.5",
-    "@abp/ng.theme.basic": "~4.0.0-rc.5",
+    "@abp/ng.components": "~4.0.0",
+    "@abp/ng.core": "~4.0.0",
+    "@abp/ng.identity": "~4.0.0",
+    "@abp/ng.setting-management": "~4.0.0",
+    "@abp/ng.tenant-management": "~4.0.0",
+    "@abp/ng.theme.basic": "~4.0.0",
+    "@abp/ng.theme.shared": "~4.0.0",
     "@angular/animations": "~11.0.0",
     "@angular/common": "~11.0.0",
     "@angular/compiler": "~11.0.0",
@@ -29,7 +32,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@abp/ng.schematics": "~3.3.1",
+    "@abp/ng.schematics": "~4.0.0",
     "@angular-devkit/build-angular": "~0.1100.0",
     "@angular/cli": "~11.0.0",
     "@angular/compiler-cli": "~11.0.0",
@@ -37,7 +40,7 @@
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
-    "codelyzer": "^6.0.0",
+    "codelyzer": "^6.0.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.1.1",
@@ -49,6 +52,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.2"
+    "typescript": "~4.0.3"
   }
 }
