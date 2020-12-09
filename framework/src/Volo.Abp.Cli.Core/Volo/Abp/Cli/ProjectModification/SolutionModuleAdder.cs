@@ -451,9 +451,11 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var module = new ModuleWithMastersInfo();
 
+            var moduleProjectName = module.Name.Split('.').Last();
+
             module.Name = moduleName;
             module.DisplayName = moduleName;
-            module.EfCoreConfigureMethodName = $"{module.Name}.EntityFrameworkCore:Configure{module.Name}";
+            module.EfCoreConfigureMethodName = $"{module.Name}.EntityFrameworkCore:Configure{moduleProjectName}";
             module.MasterModuleInfos = new List<ModuleWithMastersInfo>();
 
             module.NugetPackages = new List<NugetPackageInfo>
@@ -461,61 +463,61 @@ namespace Volo.Abp.Cli.ProjectModification
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.Application",
-                    ModuleClass = $"{module.Name}.{module.Name}ApplicationModule",
+                    ModuleClass = $"{module.Name}.{moduleProjectName}ApplicationModule",
                     Target = NuGetPackageTarget.Application
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.Application.Contracts",
-                    ModuleClass = $"{module.Name}.{module.Name}ApplicationContractsModule",
+                    ModuleClass = $"{module.Name}.{moduleProjectName}ApplicationContractsModule",
                     Target = NuGetPackageTarget.ApplicationContracts
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.Blazor",
-                    ModuleClass = $"{module.Name}.Blazor.{module.Name}BlazorModule",
+                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorModule",
                     Target = NuGetPackageTarget.Blazor
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.Domain",
-                    ModuleClass = $"{module.Name}.{module.Name}DomainModule",
+                    ModuleClass = $"{module.Name}.{moduleProjectName}DomainModule",
                     Target = NuGetPackageTarget.Domain
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.Domain.Shared",
-                    ModuleClass = $"{module.Name}.{module.Name}DomainSharedModule",
+                    ModuleClass = $"{module.Name}.{moduleProjectName}DomainSharedModule",
                     Target = NuGetPackageTarget.DomainShared
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.EntityFrameworkCore",
-                    ModuleClass = $"{module.Name}.EntityFrameworkCore.{module.Name}EntityFrameworkCoreModule",
+                    ModuleClass = $"{module.Name}.EntityFrameworkCore.{moduleProjectName}EntityFrameworkCoreModule",
                     Target = NuGetPackageTarget.EntityFrameworkCore
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.HttpApi",
-                    ModuleClass = $"{module.Name}.{module.Name}HttpApiModule",
+                    ModuleClass = $"{module.Name}.{moduleProjectName}HttpApiModule",
                     Target = NuGetPackageTarget.HttpApi
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.HttpApi.Client",
-                    ModuleClass = $"{module.Name}.{module.Name}HttpApiClientModule",
+                    ModuleClass = $"{module.Name}.{moduleProjectName}HttpApiClientModule",
                     Target = NuGetPackageTarget.HttpApiClient
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.MongoDB",
-                    ModuleClass = $"{module.Name}.MongoDB.{module.Name}MongoDbModule",
+                    ModuleClass = $"{module.Name}.MongoDB.{moduleProjectName}MongoDbModule",
                     Target = NuGetPackageTarget.MongoDB
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.Web",
-                    ModuleClass = $"{module.Name}.Web.{module.Name}WebModule",
+                    ModuleClass = $"{module.Name}.Web.{moduleProjectName}WebModule",
                     Target = NuGetPackageTarget.Web
                 },
             };
