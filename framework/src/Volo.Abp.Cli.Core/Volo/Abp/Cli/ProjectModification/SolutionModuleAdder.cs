@@ -125,8 +125,7 @@ namespace Volo.Abp.Cli.ProjectModification
             string[] projectFiles)
         {
             var moduleDirectory = Path.Combine(solutionDirectory, "modules", module.Name);
-            var moduleSolutionFile =
-                Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly).First();
+            var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly).First();
             var isProjectTiered = await IsProjectTiered(projectFiles);
 
             if (!projectFiles.Any(p => p.EndsWith(".Blazor.csproj")))
@@ -149,6 +148,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.EntityFrameworkCore, isProjectTiered);
                 await RemoveProjectByPostFix(module, moduleSolutionFile, "test", ".EntityFrameworkCore.Tests");
+                await ChangeDomainTestReferenceToMongoDB(module, moduleSolutionFile);
             }
         }
 
@@ -183,12 +183,27 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), targetFolder);
             var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith(postFix));
-            await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, Path.GetDirectoryName(projectFolderPath));
+            await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, new DirectoryInfo(projectFolderPath).Name);
 
             if (Directory.Exists(projectFolderPath))
             {
                 Directory.Delete(projectFolderPath, true);
             }
+
+        }
+
+        private async Task ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)
+        {
+            var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "test");
+            var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith("Domain.Tests"));
+
+            var csprojFile = Directory.GetFiles(projectFolderPath).First(p => p.EndsWith(".csproj"));
+            var moduleFile = Directory.GetFiles(projectFolderPath).First(p => p.EndsWith("DomainTestModule.cs"));
+
+            File.WriteAllText(csprojFile, File.ReadAllText(csprojFile).Replace("EntityFrameworkCore","MongoDB"));
+            File.WriteAllText(moduleFile, File.ReadAllText(moduleFile)
+                .Replace(".EntityFrameworkCore;",".MongoDB;")
+                .Replace("EntityFrameworkCoreTestModule","MongoDbTestModule"));
         }
 
         private async Task AddAngularPackages(string solutionFilePath, ModuleWithMastersInfo module)
@@ -261,7 +276,9 @@ namespace Volo.Abp.Cli.ProjectModification
                 );
             }
 
-            await DeleteAppAndDemoFolderAsync(targetModuleFolder);
+            await DeleteRedundantHostProjects(targetModuleFolder,"app");
+            await DeleteRedundantHostProjects(targetModuleFolder,"demo");
+            await DeleteRedundantHostProjects(targetModuleFolder,"host");
 
             if (module.MasterModuleInfos == null)
             {
@@ -286,24 +303,22 @@ namespace Volo.Abp.Cli.ProjectModification
             await NewCommand.ExecuteAsync(args);
         }
 
-        private async Task DeleteAppAndDemoFolderAsync(string targetModuleFolder)
+        private async Task DeleteRedundantHostProjects(string targetModuleFolder, string folderName)
         {
-            var appFolder = Path.Combine(targetModuleFolder, "app");
-            if (Directory.Exists(appFolder))
-            {
-                Directory.Delete(appFolder, true);
-            }
+            var moduleSolutionFile = Directory.GetFiles(targetModuleFolder, "*.sln", SearchOption.TopDirectoryOnly).First();
 
-            var demoFolder = Path.Combine(targetModuleFolder, "demo");
-            if (Directory.Exists(demoFolder))
+            var folder = Path.Combine(targetModuleFolder, folderName);
+            if (Directory.Exists(folder))
             {
-                Directory.Delete(demoFolder, true);
-            }
+                var projects = Directory.GetDirectories(folder);
 
-            var hostFolder = Path.Combine(targetModuleFolder, "host");
-            if (Directory.Exists(hostFolder))
-            {
-                Directory.Delete(hostFolder, true);
+                foreach (var project in projects)
+                {
+                    await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile,
+                        new DirectoryInfo(project).Name);
+                }
+
+                Directory.Delete(folder, true);
             }
         }
 
@@ -449,14 +464,15 @@ namespace Volo.Abp.Cli.ProjectModification
         private async Task<ModuleWithMastersInfo> GetEmptyModuleProjectInfoAsync(string moduleName,
             bool newProTemplate = false)
         {
-            var module = new ModuleWithMastersInfo();
+            var module = new ModuleWithMastersInfo
+            {
+                Name = moduleName,
+                DisplayName = moduleName,
+                MasterModuleInfos = new List<ModuleWithMastersInfo>()
+            };
 
             var moduleProjectName = module.Name.Split('.').Last();
-
-            module.Name = moduleName;
-            module.DisplayName = moduleName;
             module.EfCoreConfigureMethodName = $"{module.Name}.EntityFrameworkCore:Configure{moduleProjectName}";
-            module.MasterModuleInfos = new List<ModuleWithMastersInfo>();
 
             module.NugetPackages = new List<NugetPackageInfo>
             {
