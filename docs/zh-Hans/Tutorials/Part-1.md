@@ -374,7 +374,7 @@ namespace Acme.BookStore
         public BookStoreApplicationAutoMapperProfile()
         {
             CreateMap<Book, BookDto>();
-            CreateMap<CreateUpdateBookDto, Book>();
+            CreateMap<CreateUpdateBookDto, Book>(MemberList.Source);
         }
     }
 }
