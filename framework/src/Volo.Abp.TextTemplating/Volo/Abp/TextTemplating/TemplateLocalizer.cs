@@ -46,5 +46,20 @@ namespace Volo.Abp.TextTemplating
             var args = arguments.Skip(1).Where(x => x != null && !x.ToString().IsNullOrWhiteSpace()).ToArray();
             return args.Any() ? _localizer[name.ToString(), args] : _localizer[name.ToString()];
         }
+
+        public int RequiredParameterCount => 1;
+
+        public int ParameterCount => ScriptFunctionCall.MaximumParameterCount - 1;
+
+        public ScriptVarParamKind VarParamKind => ScriptVarParamKind.Direct;
+
+        public Type ReturnType => typeof(object);
+
+        public ScriptParameterInfo GetParameterInfo(int index)
+        {
+            return index == 0
+                ? new ScriptParameterInfo(typeof(string), "template_name")
+                : new ScriptParameterInfo(typeof(object), "value");
+        }
     }
 }
