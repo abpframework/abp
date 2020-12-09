@@ -33,6 +33,7 @@ export class TreeComponent {
   @Output() readonly expandedKeysChange = new EventEmitter<string[]>();
   @Output() readonly selectedNodeChange = new EventEmitter();
   @Output() readonly dropOver = new EventEmitter<DropEvent>();
+  @Input() noAnimation = true;
   @Input() draggable: boolean;
   @Input() checkable: boolean;
   @Input() checkStrictly: boolean;

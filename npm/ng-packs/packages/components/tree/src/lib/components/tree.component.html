@@ -12,6 +12,7 @@
   (nzExpandChange)="onExpandedKeysChange($event)"
   (nzCheckBoxChange)="onCheckboxChange($event)"
   (nzOnDrop)="onDrop($event)"
+  [nzNoAnimation]="noAnimation"
 ></nz-tree>
 <ng-template #treeTemplate let-node>
   <div
