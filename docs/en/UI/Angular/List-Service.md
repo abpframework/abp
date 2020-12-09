@@ -68,6 +68,50 @@ Bind `ListService` to ngx-datatable like this:
 </ngx-datatable>
 ```
 
+## Extending query with custom variables
+
+You can extend the query parameter of the `ListService`'s `hookToQuery` method.
+
+Firstly, you should pass your own type to `ListService` as shown below:
+
+```typescript
+constructor(public readonly list: ListService<BooksSearchParamsDto>) { }
+```
+
+Then update the `bookStreamCreator` constant like following:
+
+```typescript
+const bookStreamCreator = (query) => this.bookService.getList({...query, name: 'name here'});
+```
+
+You can also create your params object.
+
+Define a variable like this:
+
+```typescript
+booksSearchParams = {} as BooksSearchParamsDto;
+```
+
+Update the `bookStreamCreator` constant:
+
+```typescript
+const bookStreamCreator = (query) => this.bookService.getList({...query, ...this.booksSearchParams});
+```
+
+Then you can place inputs to the HTML:
+
+```html
+<div class="form-group">
+  <input
+    class="form control"
+    placeholder="Name"
+    (keyup.enter)="list.get()"
+    [(ngModel)]="booksSearchParams.name"
+  />
+</div>
+```
+
+`ListService` emits the hookToQuery stream when you call the `this.list.get()` method.
 
 ## Usage with Observables
 
