@@ -53,7 +53,7 @@ This part covers the **server side** tests. There are several test projects in t
 Each project is used to test the related project. Test projects use the following libraries for testing:
 
 * [Xunit](https://xunit.github.io/) as the main test framework.
-* [Shoudly](http://shouldly.readthedocs.io/en/latest/) as the assertion library.
+* [Shoudly](https://github.com/shouldly/shouldly) as the assertion library.
 * [NSubstitute](http://nsubstitute.github.io/) as the mocking library.
 
 {{if DB=="EF"}}
