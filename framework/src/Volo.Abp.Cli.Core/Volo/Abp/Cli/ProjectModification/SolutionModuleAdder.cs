@@ -163,6 +163,11 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var package in packages)
             {
+                if (target == NuGetPackageTarget.Web && package.Name.StartsWith("Volo.Abp.Account"))
+                {
+                    continue;
+                }
+
                 await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, package.Name);
 
                 var projectPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "src", package.Name);
@@ -523,7 +528,9 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual async Task<bool> IsProjectTiered(string[] projectFiles)
         {
             return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
-                .Any(p => p.EndsWith(".IdentityServer") || p.EndsWith(".HttpApi.Host"));
+                .Any(p =>p.EndsWith(".HttpApi.Host"))
+                && projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
+                .Any(p => p.EndsWith(".IdentityServer"));
         }
     }
 }
