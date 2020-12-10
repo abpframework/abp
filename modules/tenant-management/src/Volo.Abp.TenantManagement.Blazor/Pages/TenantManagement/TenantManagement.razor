@@ -114,7 +114,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Form="TenantCreateForm" Clicked="@CreateEntityAsync">@L["Save"]</SubmitButton>
+                    <SubmitButton Form="TenantCreateForm" Clicked="@CreateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -148,7 +148,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Form="TenantEditForm" Clicked="@UpdateEntityAsync">@L["Save"]</SubmitButton>
+                    <SubmitButton Form="TenantEditForm" Clicked="@UpdateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -187,7 +187,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditConnectionStringModal">@L["Cancel"]</Button>
-                    <SubmitButton Form="ConnectionStringEditForm" Clicked="@UpdateConnectionStringAsync">@L["Save"]</SubmitButton>
+                    <SubmitButton Form="ConnectionStringEditForm" Clicked="@UpdateConnectionStringAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
