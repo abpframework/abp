@@ -150,6 +150,12 @@ ABP makes this possible by auto registering components to and resolving the comp
 
 Resolving a component from the Dependency Injection system makes it possible to easily replace components of a depended module.
 
+## Error Handling
+
+Blazor, by default, shows a yellow line at the bottom of the page if any unhandled exception occurs. However, this is not useful in a real application.
+
+ABP provides an [automatic error handling system](Error-Handling.md) for the Blazor UI.
+
 ## Customization
 
 While the theme and some modules come as NuGet packages, you can still replace/override and customize them on need. See the [Customization / Overriding Components](Customization-Overriding-Components.md) document.

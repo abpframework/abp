@@ -325,7 +325,14 @@
      * AJAX extension for datatables                                         *
      *************************************************************************/
     (function () {
-        datatables.createAjax = function (serverMethod, inputAction) {
+        datatables.createAjax = function (serverMethod, inputAction, responseCallback) {
+            responseCallback = responseCallback || function(result) {
+                return {
+                    recordsTotal: result.totalCount,
+                    recordsFiltered: result.totalCount,
+                    data: result.items
+                };
+            }
             return function (requestData, callback, settings) {
                 var input = inputAction ? inputAction(requestData, settings) : {};
 
@@ -359,11 +366,7 @@
 
                 if (callback) {
                     serverMethod(input).then(function (result) {
-                        callback({
-                            recordsTotal: result.totalCount,
-                            recordsFiltered: result.totalCount,
-                            data: result.items
-                        });
+                        callback(responseCallback(result));
                     });
                 }
             };

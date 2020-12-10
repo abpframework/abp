@@ -1029,7 +1029,7 @@ namespace Volo.Abp.Caching
 
         protected virtual void HandleException(Exception ex)
         {
-            AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
+            _ = HandleExceptionAsync(ex);
         }
 
         protected virtual async Task HandleExceptionAsync(Exception ex)

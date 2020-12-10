@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Blogging.Blogs;
@@ -55,7 +56,7 @@ namespace Volo.Blogging
                 Url = title.Replace(" ", "-")
             });
 
-            newPostDto.Id.ShouldNotBeNull();
+            newPostDto.Id.ShouldNotBe(Guid.Empty);
 
             UsingDbContext(context =>
             {
@@ -87,7 +88,7 @@ namespace Volo.Blogging
                 Content = newContent,
                 Url = newTitle.Replace(" ", "-")
             });
-            
+
             UsingDbContext(context =>
             {
                 var post = context.Posts.FirstOrDefault(q => q.Id == oldPost.Id);

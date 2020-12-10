@@ -84,9 +84,11 @@ namespace Volo.Docs.GitHub.Documents
             }
 
             var authors = GetAuthors(commits);
+
+            document.RemoveAllContributors();
             foreach (var author in authors)
             {
-                document.AddContributor(author.Login, author.HtmlUrl, author.AvatarUrl);
+                document.AddContributor(author.Login, author.HtmlUrl, author.AvatarUrl, author.CommitCount);
             }
 
             return document;
@@ -114,20 +116,35 @@ namespace Volo.Docs.GitHub.Documents
                 : null;
         }
 
-        private static List<Author> GetAuthors(IReadOnlyList<GitHubCommit> commits)
+        private static List<DocumentAuthor> GetAuthors(IReadOnlyList<GitHubCommit> commits)
         {
             if (commits == null || !commits.Any())
             {
-                return new List<Author>();
+                return new List<DocumentAuthor>();
             }
 
-            return commits
+            var authorsOrderedAndGrouped = commits
                 .Where(x => x.Author != null)
                 .Select(x => x.Author)
                 .GroupBy(x => x.Id)
-                .OrderByDescending(x => x.Count())
-                .Select(x => x.FirstOrDefault())
-                .ToList();
+                .OrderByDescending(x => x.Count());
+
+            var documentAuthors = new List<DocumentAuthor>();
+
+            foreach (var authorGroup in authorsOrderedAndGrouped)
+            {
+                var author =  authorGroup.FirstOrDefault();
+                var documentAuthor = new DocumentAuthor
+                {
+                    CommitCount = authorGroup.Count(),
+                    AvatarUrl = author.AvatarUrl,
+                    HtmlUrl = author.HtmlUrl,
+                    Login = author.Login
+                };
+                documentAuthors.Add(documentAuthor);
+            }
+
+            return documentAuthors;
         }
 
         private static DateTime GetLastCommitDate(IReadOnlyList<GitHubCommit> commits)

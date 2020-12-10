@@ -2,6 +2,7 @@ export const SYSTEM_TYPES = new Map([
   ['Bool', 'boolean'],
   ['Byte', 'number'],
   ['Char', 'string'],
+  ['Collections.Generic.Dictionary', 'Record'],
   ['DateTime', 'string'],
   ['DateTimeOffset', 'string'],
   ['Decimal', 'number'],

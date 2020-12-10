@@ -91,7 +91,7 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy" (disappear)="form = null">
+<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy" (disappear)="form = null">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
   </ng-template>

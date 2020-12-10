@@ -2,7 +2,7 @@
 
     <Import Project="..\..\..\configureawait.props" />
     <Import Project="..\..\..\common.props" />
-    
+
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>Volo.Abp.Swashbuckle</AssemblyName>
@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
     <ItemGroup>

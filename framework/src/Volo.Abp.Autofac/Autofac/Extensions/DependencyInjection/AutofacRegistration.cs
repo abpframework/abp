@@ -29,6 +29,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Autofac.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Autofac;
 using Volo.Abp;
 using Volo.Abp.Modularity;
 
@@ -188,6 +189,7 @@ namespace Autofac.Extensions.DependencyInjection
                             .RegisterGeneric(descriptor.ImplementationType)
                             .As(descriptor.ServiceType)
                             .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
+                            .FindConstructorsWith(new AbpAutofacConstructorFinder())
                             .ConfigureAbpConventions(moduleContainer, registrationActionList);
                     }
                     else
@@ -196,6 +198,7 @@ namespace Autofac.Extensions.DependencyInjection
                             .RegisterType(descriptor.ImplementationType)
                             .As(descriptor.ServiceType)
                             .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
+                            .FindConstructorsWith(new AbpAutofacConstructorFinder())
                             .ConfigureAbpConventions(moduleContainer, registrationActionList);
                     }
                 }

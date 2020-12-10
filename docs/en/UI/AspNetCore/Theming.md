@@ -32,7 +32,7 @@ All the themes must depend on the [@abp/aspnetcore.mvc.ui.theme.shared](https://
 * [Twitter Bootstrap](https://getbootstrap.com/) as the fundamental HTML/CSS framework.
 * [JQuery](https://jquery.com/) for DOM manipulation.
 * [DataTables.Net](https://datatables.net/) for data grids.
-* [JQuery Validation](https://jqueryvalidation.org/) for client side & [unobtrusive](https://github.com/aspnet/jquery-validation-unobtrusive) validation
+* [JQuery Validation](https://github.com/jquery-validation/jquery-validation) for client side & [unobtrusive](https://github.com/aspnet/jquery-validation-unobtrusive) validation
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
 * [SweetAlert](https://sweetalert.js.org/) to show fancy alert message and confirmation dialogs.
 * [Toastr](https://github.com/CodeSeven/toastr) to show toast notifications.
