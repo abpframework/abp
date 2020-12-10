@@ -1,15 +1,18 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using Volo.Abp.Features.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Validation;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Features
 {
     [DependsOn(
-        typeof(AbpLocalizationAbstractionsModule),
+        typeof(AbpLocalizationModule),
         typeof(AbpMultiTenancyModule),
         typeof(AbpValidationModule)
         )]
@@ -28,6 +31,23 @@ namespace Volo.Abp.Features
                 options.ValueProviders.Add<DefaultValueFeatureValueProvider>();
                 options.ValueProviders.Add<EditionFeatureValueProvider>();
                 options.ValueProviders.Add<TenantFeatureValueProvider>();
+            });
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpFeatureResource>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<AbpFeatureResource>("en")
+                    .AddVirtualJson("/Volo/Abp/Features/Localization");
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Volo.Feature", typeof(AbpFeatureResource));
             });
         }
 

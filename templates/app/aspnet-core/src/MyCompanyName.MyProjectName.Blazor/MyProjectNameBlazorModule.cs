@@ -17,6 +17,7 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.Identity.Blazor;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.TenantManagement.Blazor;
+using MyCompanyName.MyProjectName.Blazor.Menus;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {

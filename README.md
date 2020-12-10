@@ -9,8 +9,8 @@ ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to 
 
 ## Getting Started
 
-- [Getting Started Guide](https://docs.abp.io/en/abp/4.0/Getting-Started) is the easiest way to start a new web application with the ABP Framework.
-- [Web Application Development Tutorial](https://docs.abp.io/en/abp/4.0/Tutorials/Part-1) is a complete tutorial to develop a full stack web application.
+- [Getting Started Guide](https://docs.abp.io/en/abp/latest/Getting-Started) is the easiest way to start a new web application with the ABP Framework.
+- [Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1) is a complete tutorial to develop a full stack web application.
 
 ### Quick Start
 
@@ -44,32 +44,32 @@ ABP provides a **full stack developer experience**.
 
 <img src="docs/en/images/ddd-microservice-simple.png">
 
-ABP offers a complete, **modular** and **layered** software architecture based on **[Domain Driven Design](https://docs.abp.io/en/abp/latest/Domain-Driven-Design)** principles and patterns. It also provides the necessary infrastructure and guiding to [implement this architecture](https://docs.abp.io/en/abp/4.0/Domain-Driven-Design-Implementation-Guide).
+ABP offers a complete, **modular** and **layered** software architecture based on **[Domain Driven Design](https://docs.abp.io/en/abp/latest/Domain-Driven-Design)** principles and patterns. It also provides the necessary infrastructure and guiding to [implement this architecture](https://docs.abp.io/en/abp/latest/Domain-Driven-Design-Implementation-Guide).
 
 ABP Framework is suitable for **[microservice solutions](https://docs.abp.io/en/abp/latest/Microservice-Architecture)** as well as monolithic applications.
 
 ### Infrastructure
 
-There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like [Event Bus](https://docs.abp.io/en/abp/4.0/Event-Bus), [Background Job System](https://docs.abp.io/en/abp/4.0/Background-Jobs), [Audit Logging](https://docs.abp.io/en/abp/4.0/Audit-Logging), [BLOB Storing](https://docs.abp.io/en/abp/4.0/Blob-Storing), [Data Seeding](https://docs.abp.io/en/abp/4.0/Data-Seeding), [Data Filtering](https://docs.abp.io/en/abp/4.0/Data-Filtering), etc.
+There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like [Event Bus](https://docs.abp.io/en/abp/latest/Event-Bus), [Background Job System](https://docs.abp.io/en/abp/latest/Background-Jobs), [Audit Logging](https://docs.abp.io/en/abp/latest/Audit-Logging), [BLOB Storing](https://docs.abp.io/en/abp/latest/Blob-Storing), [Data Seeding](https://docs.abp.io/en/abp/latest/Data-Seeding), [Data Filtering](https://docs.abp.io/en/abp/latest/Data-Filtering), etc.
 
 ### Cross Cutting Concerns
 
-ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](https://docs.abp.io/en/abp/4.0/Exception-Handling), [Validation](https://docs.abp.io/en/abp/4.0/Validation), [Authorization](https://docs.abp.io/en/abp/4.0/Authorization), [Localization](https://docs.abp.io/en/abp/4.0/Localization), [Caching](https://docs.abp.io/en/abp/4.0/Caching), [Dependency Injection](https://docs.abp.io/en/abp/4.0/Dependency-Injection), [Setting Management](https://docs.abp.io/en/abp/4.0/Settings), etc.
+ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](https://docs.abp.io/en/abp/latest/Exception-Handling), [Validation](https://docs.abp.io/en/abp/latest/Validation), [Authorization](https://docs.abp.io/en/abp/latest/Authorization), [Localization](https://docs.abp.io/en/abp/latest/Localization), [Caching](https://docs.abp.io/en/abp/latest/Caching), [Dependency Injection](https://docs.abp.io/en/abp/latest/Dependency-Injection), [Setting Management](https://docs.abp.io/en/abp/latest/Settings), etc.
 
 ### Application Modules
 
 ABP is a modular framework and the Application Modules provide **pre-built application functionalities**;
 
-- [**Account**](https://docs.abp.io/en/abp/4.0/Modules/Account): Provides UI for the account management and allows user to login/register to the application.
-- **[Identity](https://docs.abp.io/en/abp/4.0/Modules/Identity)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
-- [**IdentityServer**](https://docs.abp.io/en/abp/4.0/Modules/IdentityServer): Integrates to IdentityServer4.
-- [**Tenant Management**](https://docs.abp.io/en/abp/4.0/Modules/Tenant-Management): Manages tenants for a [multi-tenant](https://docs.abp.io/en/abp/4.0/Multi-Tenancy) (SaaS) application.
+- [**Account**](https://docs.abp.io/en/abp/latest/Modules/Account): Provides UI for the account management and allows user to login/register to the application.
+- **[Identity](https://docs.abp.io/en/abp/latest/Modules/Identity)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
+- [**IdentityServer**](https://docs.abp.io/en/abp/latest/Modules/IdentityServer): Integrates to IdentityServer4.
+- [**Tenant Management**](https://docs.abp.io/en/abp/latest/Modules/Tenant-Management): Manages tenants for a [multi-tenant](https://docs.abp.io/en/abp/latest/Multi-Tenancy) (SaaS) application.
 
-See the [Application Modules](https://docs.abp.io/en/abp/4.0/Modules/Index) document for all pre-built modules.
+See the [Application Modules](https://docs.abp.io/en/abp/latest/Modules/Index) document for all pre-built modules.
 
 ### Startup Templates
 
-The [Startup templates](https://docs.abp.io/en/abp/4.0/Startup-Templates/Index) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
+The [Startup templates](https://docs.abp.io/en/abp/latest/Startup-Templates/Index) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
 
 ## ABP Community
 
@@ -83,11 +83,11 @@ Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happenings in th
 
 ### Samples
 
-See the [sample projects](https://docs.abp.io/en/abp/4.0/Samples/Index) built with the ABP Framework.
+See the [sample projects](https://docs.abp.io/en/abp/latest/Samples/Index) built with the ABP Framework.
 
 ### Want to Contribute?
 
-ABP is a community-driven open source project. See [the contribution guide](https://docs.abp.io/en/abp/4.0/Contribution/Index) if you want to be a part of this project.
+ABP is a community-driven open source project. See [the contribution guide](https://docs.abp.io/en/abp/latest/Contribution/Index) if you want to be a part of this project.
 
 ## Official Links
 

@@ -9,11 +9,11 @@ namespace Volo.CmsKit.Admin.Web.Menus
         {
             if (context.Menu.Name == StandardMenus.Main)
             {
-                await ConfigureMainMenu(context);
+                await ConfigureMainMenuAsync(context);
             }
         }
 
-        private Task ConfigureMainMenu(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             //Add main menu items.
 

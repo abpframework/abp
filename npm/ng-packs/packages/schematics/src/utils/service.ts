@@ -83,8 +83,8 @@ export function createActionToSignatureMapper() {
     signature.parameters = action.parametersOnMethod.map(p => {
       const type = adaptType(p.typeSimple);
       const parameter = new Property({ name: p.name, type });
-      if (p.defaultValue) parameter.default = ` = ${p.defaultValue}`;
-      else if (p.isOptional) parameter.optional = '?';
+      parameter.setDefault(p.defaultValue);
+      parameter.setOptional(p.isOptional);
       return parameter;
     });
 
