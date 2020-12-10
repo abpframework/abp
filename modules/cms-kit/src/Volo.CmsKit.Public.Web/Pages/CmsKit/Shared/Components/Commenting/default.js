@@ -121,11 +121,6 @@
                 $form.submit(function (e) {
                     e.preventDefault();
                     var formAsObject = $form.serializeFormToObject();
-
-                    if (formAsObject.repliedCommentId == ''){
-                        formAsObject.repliedCommentId = null;
-                    }
-
                     volo.cmsKit.public.comments.commentPublic.create(
                         $commentArea.attr('data-entity-type'),
                         $commentArea.attr('data-entity-id'),
