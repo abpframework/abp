@@ -7,10 +7,12 @@
   [nzData]="nodes"
   [nzTreeTemplate]="treeTemplate"
   [nzExpandedKeys]="expandedKeys"
-  [nzExpandedIcon]="expandedIconTemplate?.template"
+  [nzExpandedIcon]="expandedIconTemplate?.template || defaultIconTemplate"
   (nzExpandChange)="onExpandedKeysChange($event)"
   (nzCheckBoxChange)="onCheckboxChange($event)"
   (nzOnDrop)="onDrop($event)"
+  [nzNoAnimation]="noAnimation"
+  (nzContextMenu)="dropdowns[$event.node?.key]?.toggle()"
 ></nz-tree>
 <ng-template #treeTemplate let-node>
   <div
@@ -19,22 +21,76 @@
     [title]="node.title"
     (click)="onSelectedNodeChange(node)"
   >
-    <ng-container
-      *ngTemplateOutlet="
-        customNodeTemplate?.template || defaultNodeTemplate;
-        context: { $implicit: node }
-      "
-    ></ng-container>
+    <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"></ng-container>
 
-    <ng-template #defaultNodeTemplate>
-      <span>{{ node.title }}</span>
+    <ng-template #nodeTemplate let-node>
+      <div class="d-inline-block">
+        <ng-container
+          *ngTemplateOutlet="
+            customNodeTemplate ? customNodeTemplate?.template : defaultNodeTemplate;
+            context: { $implicit: node }
+          "
+        ></ng-container>
+      </div>
+
+      <div
+        #dropdown="ngbDropdown"
+        *ngIf="menu"
+        class="d-inline-block ml-1"
+        ngbDropdown
+        placement="bottom"
+        container="body"
+        (abpInit)="initDropdown(node.key, dropdown)"
+      >
+        <i
+          class="fas fa-caret-down text-muted"
+          ngbDropdownToggle
+          [class.dropdown-toggle]="false"
+        ></i>
+        <div ngbDropdownMenu>
+          <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }"></ng-template>
+        </div>
+      </div>
     </ng-template>
 
-    <div *ngIf="menu" class="ellipsis" ngbDropdown placement="bottom" container="body">
-      <i class="fas fa-ellipsis-h" ngbDropdownToggle [class.dropdown-toggle]="false"></i>
-      <div ngbDropdownMenu>
-        <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }"></ng-template>
-      </div>
-    </div>
+    <ng-template #defaultNodeTemplate let-node>
+      <span>{{ node.title }}</span>
+    </ng-template>
   </div>
+</ng-template>
+
+<ng-template #defaultIconTemplate let-node let-origin="origin">
+  <i style="line-height: 28px" aria-hidden="true">
+    <ng-container *ngTemplateOutlet="node.isExpanded ? minusIcon : plusIcon"></ng-container
+  ></i>
+</ng-template>
+
+<ng-template #minusIcon>
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+  >
+    <path
+      d="M11.5 0c6.347 0 11.5 5.153 11.5 11.5s-5.153 11.5-11.5 11.5-11.5-5.153-11.5-11.5 5.153-11.5 11.5-11.5zm0 1c5.795 0 10.5 4.705 10.5 10.5s-4.705 10.5-10.5 10.5-10.5-4.705-10.5-10.5 4.705-10.5 10.5-10.5zm-6.5 10h13v1h-13v-1z"
+    />
+  </svg>
+</ng-template>
+
+<ng-template #plusIcon>
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+  >
+    <path
+      d="M11.5 0c6.347 0 11.5 5.153 11.5 11.5s-5.153 11.5-11.5 11.5-11.5-5.153-11.5-11.5 5.153-11.5 11.5-11.5zm0 1c5.795 0 10.5 4.705 10.5 10.5s-4.705 10.5-10.5 10.5-10.5-4.705-10.5-10.5 4.705-10.5 10.5-10.5zm.5 10h6v1h-6v6h-1v-6h-6v-1h6v-6h1v6z"
+    />
+  </svg>
 </ng-template>
