@@ -1,22 +1,22 @@
-# How to Setup Azure Active Directory and Integrate Abp Angular Application
+# How to Setup Azure Active Directory and Integrate ABP Angular Application
 
-This guide demonstrates how to register an application to Azure Active Directory and integrate AzureAD to an ABP angular application that enables users to sign in using OAuth 2.0 with credentials from **Azure Active Directory**. 
+This guide demonstrates how to register an application to Azure Active Directory and integrate AzureAD to an ABP Angular application that enables users to sign in using OAuth 2.0 with credentials from **Azure Active Directory**. 
 
 ## Authentication Flow
 
-Abp angular applications use **Authentication Code with PKCE** (specs [here](https://tools.ietf.org/html/rfc7636)) which is the most suitable flow for spa applications by the time this article is written since implicit flow is deprecated. 
+ABP Angular application uses **Authentication Code with PKCE** (specs [here](https://tools.ietf.org/html/rfc7636)) which is the most suitable flow for SPA applications by the time this article is written since implicit flow is deprecated. 
 
 The most common question is; 
 
-> Where to put OpenId connection code in angular project?
+> Where to put OpenId connection code in the Angular project?
 
-The answer is, **you don't**. Abp angular application is integrated with backend code (HttpApi.Host project) where it loads the configurations, **permissions** etc. For none-tiered angular applications, **HttpApi.Host** project also has IdentityServer4 embedded; also serving as **Authorization Server**. Angular application authentication flow is shown below.
+The answer is, **you don't**. ABP Angular application is integrated with the backend (HttpApi.Host project) where it loads the configurations, **permissions** etc. For none-tiered angular applications, **HttpApi.Host** project also has IdentityServer4 embedded; also serving as **Authorization Server**. Angular application authentication flow is shown below.
 
 <img src="auth-diagram.jpeg" alt="auth-diagram" style="zoom:50%;" />
 
 > What if I want Azure AD as my authorization server and not IdentityServer?
 
-This means your application will be using AzureAD user store for authentication. By registering both angular app and HttpApi to AzureAD, authentication might work but **authorization won't**. Users need to be registered to Abp identity system for auditing, permissions etc. So the flow should be 3rd party registration.
+This means your application will be using AzureAD user store for authentication. By registering both Angular app and HttpApi to AzureAD, authentication might work but **authorization won't**. Users need to be registered to ABP identity system for auditing, permissions etc. So the flow should be 3rd party registration.
 
 ## Setting up OpenId Connection
 

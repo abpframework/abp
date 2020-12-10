@@ -8,6 +8,7 @@
   },
   "peerDependencies": {
     "@abp/ng.core": ">=4.0.0",
+    "@abp/ng.theme.shared": ">=4.0.0",
     "@ng-bootstrap/ng-bootstrap": ">=6.0.0"
   },
   "dependencies": {
