@@ -104,7 +104,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Form="RoleCreateForm" Clicked="@CreateEntityAsync">@L["Save"]</SubmitButton>
+                    <SubmitButton Form="RoleCreateForm" Clicked="@CreateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -142,7 +142,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Form="RoleEditForm" Clicked="@UpdateEntityAsync">@L["Save"]</SubmitButton>
+                    <SubmitButton Form="RoleEditForm" Clicked="@UpdateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
