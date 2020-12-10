@@ -266,7 +266,7 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        protected virtual async Task OnSearchAsync()
+        protected virtual async Task SearchEntitiesAsync()
         {
             CurrentPage = 1;
 
