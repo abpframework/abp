@@ -81,6 +81,18 @@ namespace Volo.Abp.Identity.Web
                         );
                     }
                 );
+                
+                options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Roles.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<IdentityResource>("NewRole"),
+                            icon: "plus",
+                            name: "CreateRole",
+                            requiredPolicyName: IdentityPermissions.Roles.Create
+                        );
+                    }
+                );
             });
         }
 
