@@ -44,7 +44,7 @@
     "LoggedOutTitle": "Abgemeldet",
     "LoggedOutText": "Sie wurden abgemeldet und werden bald weitergeleitet.",
     "ReturnToText": "Klicken Sie hier, um zu {0} umzuleiten",
-    "OrLoginWith": "Oder melden Sie sich an mit;",
+    "OrLoginWith": "Oder melden Sie sich an mit:",
     "ForgotPassword": "Passwort vergessen?",
     "SendPasswordResetLink_Information": "Ein Link zum Zurücksetzen des Passworts wird an Ihre E-Mail gesendet. Wenn Sie innerhalb weniger Minuten keine E-Mail erhalten, versuchen Sie es erneut.",
     "PasswordResetMailSentMessage": "E-Mail zur Kontowiederherstellung an Ihre E-Mail-Adresse gesendet. Wenn Sie diese E-Mail nicht innerhalb von 15 Minuten in Ihrem Posteingang sehen, suchen Sie sie in Ihrem Junk-Mail-Ordner. Wenn Sie es dort finden, markieren Sie es bitte als -Kein Junk-. ",

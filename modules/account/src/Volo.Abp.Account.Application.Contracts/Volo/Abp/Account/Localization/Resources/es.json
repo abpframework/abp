@@ -44,7 +44,7 @@
     "LoggedOutTitle": "Sesión cerrada",
     "LoggedOutText": "La sesión ha sido cerrada y serás redireccionado en breve.",
     "ReturnToText": "Haz click aquí para redirigirte a {0}",
-    "OrLoginWith": "O inicia sesión con;",
+    "OrLoginWith": "O inicia sesión con:",
     "ForgotPassword": "¿Olvidaste la contraseña?",
     "SendPasswordResetLink_Information": "Un link para resetear la contraseña será enviado a tu e-mail. Si no recibes el e-mail en unos minutos, por favor re-intenta.",
     "PasswordResetMailSentMessage": "Un e-mail para recuperar la cuenta ha sido enviado a tu e-mail. Si no recibes el e-mail en unos minutos, por favor re-intentalo.",
