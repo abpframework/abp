@@ -17,8 +17,6 @@ import { LIST_QUERY_DEBOUNCE_TIME } from '../tokens/list.token';
 export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDestroy {
   private _filter = '';
   set filter(value: string) {
-    if (this._filter !== value) this._page = 0;
-
     this._filter = value;
     this.get();
   }
