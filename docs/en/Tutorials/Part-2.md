@@ -604,6 +604,7 @@ Open the `Books.razor` and replace the content as the following:
         <DataGrid TItem="BookDto"
                   Data="Entities"
                   ReadData="OnDataGridReadAsync"
+                  CurrentPage="CurrentPage"
                   TotalItems="TotalCount"
                   ShowPager="true"
                   PageSize="PageSize">
