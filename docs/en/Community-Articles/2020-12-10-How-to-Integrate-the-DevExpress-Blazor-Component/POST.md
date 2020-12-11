@@ -20,8 +20,6 @@ In this article, I will create a new startup template with EF Core as a database
 abp new DevExpressSample -u blazor
 ````
 
-After the download is finished, open the solution in the Visual Studio (or your favorite IDE):
-
 ![initial-project](initial-project.png)
 
 * Our project boilerplate will be ready after the download is finished. Then, we can open the solution in the Visual Studio (or any other IDE) and run the `DevExpressSample.DbMigrator` to create the database and seed initial data (which creates the admin user, admin role, permissions etc.)
