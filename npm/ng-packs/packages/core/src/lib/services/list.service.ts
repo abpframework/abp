@@ -35,6 +35,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
     return this._maxResultCount;
   }
 
+  private _skipCount = 0;
   private _page = 0;
   set page(value: number) {
     if (value === this._page) return;
@@ -81,6 +82,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
   }
 
   get = () => {
+    this.resetPageWhenUnchanged();
     this._query$.next(({
       filter: this._filter || undefined,
       maxResultCount: this._maxResultCount,
@@ -109,6 +111,15 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
 
   ngOnDestroy() {
     this.destroy$.next();
+  }
+
+  private resetPageWhenUnchanged() {
+    const skipCount = this._page * this._maxResultCount;
+
+    if (skipCount === this._skipCount) {
+      this._page = 0;
+      this._skipCount = 0;
+    } else this._skipCount = skipCount;
   }
 }
 
