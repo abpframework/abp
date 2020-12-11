@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
@@ -206,6 +207,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected override async Task OnInitializedAsync()
         {
+            await SetToolbarItemsAsync();
             await SetEntityActionsAsync();
             await SetTableColumnsAsync();
             await SetBreadcrumbItemsAsync();
@@ -459,6 +461,11 @@ namespace Volo.Abp.BlazoriseUI
         }
 
         protected virtual ValueTask SetTableColumnsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+        
+        protected virtual ValueTask SetToolbarItemsAsync()
         {
             return ValueTask.CompletedTask;
         }
