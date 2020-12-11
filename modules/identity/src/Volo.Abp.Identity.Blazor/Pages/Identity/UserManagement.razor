@@ -10,19 +10,10 @@
 <Card>
     <CardHeader>
         @* ************************* PAGE HEADER ************************* *@
-        <Row Class="justify-content-between">
-            <Column ColumnSize="ColumnSize.IsAuto">
-                <h1>@L["Users"]</h1>
-            </Column>
-            <Column ColumnSize="ColumnSize.IsAuto">
-                @if (HasCreatePermission)
-                {
-                    <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">
-                        <Icon Margin="Margin.Is1.FromRight" Name="IconName.Add"></Icon>@L["NewUser"]
-                    </Button>
-                }
-            </Column>
-        </Row>
+        <Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout.PageHeader Title="@L["Users"]"
+                                                                              BreadcrumbItems="@BreadcrumbItems"
+                                                                              PageName="@typeof(UserManagement).FullName">
+        </Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout.PageHeader>
     </CardHeader>
     <CardBody>
         @* ************************* DATA GRID ************************* *@

@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Extensibility;
 using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
+using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
@@ -28,12 +30,15 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected AssignedRoleViewModel[] EditUserRoles;
 
         protected string ManagePermissionsPolicyName;
-        
+
         protected bool HasManagePermissionsPermission { get; set; }
 
         protected string CreateModalSelectedTab = DefaultSelectedTab;
 
         protected string EditModalSelectedTab = DefaultSelectedTab;
+
+        [Inject]
+        protected IOptions<AbpPageToolbarOptions> ToolbarOptions { get; set; }
 
         public UserManagement()
         {
@@ -52,7 +57,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
             Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
-        
+
         protected override async Task SetPermissionsAsync()
         {
             await base.SetPermissionsAsync();
@@ -141,7 +146,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     }
                 });
 
-            return ValueTask.CompletedTask;
+            return base.SetEntityActionsAsync();
         }
 
         protected override ValueTask SetTableColumnsAsync()
@@ -172,8 +177,24 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                         Data = nameof(IdentityUserDto.PhoneNumber),
                     }
                 });
-            
-            return ValueTask.CompletedTask;
+
+            return base.SetEntityActionsAsync();
+        }
+
+        protected override ValueTask SetBreadcrumbItemsAsync()
+        {
+            //BreadcrumbItems.Add(new(L["Users"]));
+            return base.SetBreadcrumbItemsAsync();
+        }
+
+        protected override ValueTask SetToolbarItemsAsync()
+        {
+            ToolbarOptions.Value.Configure<UserManagement>(toolbar =>
+            {
+                toolbar.AddButton(L["NewUser"], OpenCreateModalAsync, IconName.Add, requiredPolicyName: CreatePolicyName);
+            });
+
+            return base.SetToolbarItemsAsync();
         }
     }
 

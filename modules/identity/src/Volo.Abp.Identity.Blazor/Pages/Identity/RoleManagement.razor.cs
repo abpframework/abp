@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Extensibility;
 using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
+using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars;
+using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
@@ -22,6 +25,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected string ManagePermissionsPolicyName;
 
         protected bool HasManagePermissionsPermission { get; set; }
+
+        [Inject]
+        protected IOptions<AbpPageToolbarOptions> ToolbarOptions { get; set; }
 
         public RoleManagement()
         {
@@ -66,7 +72,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     }
                 });
 
-            return ValueTask.CompletedTask;
+            return base.SetEntityActionsAsync();
         }
 
         protected override ValueTask SetTableColumnsAsync()
@@ -121,10 +127,10 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                         }
                     },
                 });
-            
-            return ValueTask.CompletedTask;
+
+            return base.SetTableColumnsAsync();
         }
-        
+
         protected override async Task SetPermissionsAsync()
         {
             await base.SetPermissionsAsync();
@@ -135,6 +141,22 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected override string GetDeleteConfirmationMessage(IdentityRoleDto entity)
         {
             return string.Format(L["RoleDeletionConfirmationMessage"], entity.Name);
+        }
+
+        protected override ValueTask SetBreadcrumbItemsAsync()
+        {
+            //BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Roles"]));
+            return base.SetBreadcrumbItemsAsync();
+        }
+
+        protected override ValueTask SetToolbarItemsAsync()
+        {
+            ToolbarOptions.Value.Configure<RoleManagement>(toolbar =>
+            {
+                toolbar.AddButton(L["NewRole"], OpenCreateModalAsync, IconName.Add, requiredPolicyName: CreatePolicyName);
+            });
+
+            return base.SetToolbarItemsAsync();
         }
     }
 }
