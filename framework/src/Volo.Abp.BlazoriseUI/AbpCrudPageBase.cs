@@ -206,6 +206,8 @@ namespace Volo.Abp.BlazoriseUI
 
         protected override async Task OnInitializedAsync()
         {
+            await SetEntityActionsAsync();
+            await SetTableColumnsAsync();
             await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();
         }
@@ -447,6 +449,16 @@ namespace Volo.Abp.BlazoriseUI
         }
 
         protected virtual ValueTask SetBreadcrumbItemsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        protected virtual ValueTask SetEntityActionsAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        protected virtual ValueTask SetTableColumnsAsync()
         {
             return ValueTask.CompletedTask;
         }

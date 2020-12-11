@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
 {
@@ -13,7 +14,12 @@ namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
 
         public List<TableColumn> Get<T>()
         {
-            return TableColumns.GetOrAdd(typeof(T).FullName, () => new List<TableColumn>());
+            return Get(typeof(T));
+        }
+        
+        public List<TableColumn> Get(Type type)
+        {
+            return TableColumns.GetOrAdd(type.FullName, () => new List<TableColumn>());
         }
     }
 }

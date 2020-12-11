@@ -1,5 +1,6 @@
 ﻿@typeparam TItem
 @using Blazorise.DataGrid;
+@using Volo.Abp.AspNetCore.Components.Extensibility
 
 
 <DataGrid TItem="TItem"
@@ -9,7 +10,7 @@
           ShowPager="@ShowPager"
           PageSize="@PageSize">
     <DataGridColumns>
-        @foreach (var column in Columns)
+        @foreach (var column in UIExtensions.Instance.TableColumns.Get(Page))
         {
             if (column.Actions.Any())
             {

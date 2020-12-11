@@ -1,4 +1,5 @@
-﻿using Blazorise.DataGrid;
+﻿using System;
+using Blazorise.DataGrid;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
@@ -24,8 +25,8 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter]
         public int PageSize { get; set; }
 
-        [Parameter]
-        public List<TableColumn> Columns { get; set; }
+        [Parameter] 
+        public Type Page { get; set; }        
 
     }
 }
