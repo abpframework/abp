@@ -7,9 +7,9 @@ namespace Volo.Abp.AspNetCore.Components.Extensibility
     {
         public static UIExtensions Instance { get; protected set; } = new UIExtensions();
 
-        public EntityActionsConfiguration EntityActions { get; set; }
+        public EntityActionsConfiguration EntityActions { get; }
 
-        public TableColumnsConfiguration TableColumns { get; set; }
+        public TableColumnsConfiguration TableColumns { get; }
 
         public UIExtensions()
         {
