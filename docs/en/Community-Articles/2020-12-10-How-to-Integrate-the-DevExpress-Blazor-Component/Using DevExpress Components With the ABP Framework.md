@@ -8,7 +8,13 @@ Hi, in this step by step article, I will show you how to integrate [DevExpress](
 
 ## Create the Project
 
-ABP Framework offers startup templates to get into the business faster. We can download a new startup template using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
+> ABP Framework offers startup templates to get into business faster.
+
+In this article, I will create a new startup template with EF Core as a database provider and Blazor for UI framework. But if you already have a project with Blazor UI, you don't need to create a new startup template, you can directly implement the following steps to your existing project.
+
+> If you already have a project with the Blazor UI, you can skip this section.
+
+* Before starting to development, we will create a solution named `DevExpressSample` (or whatever you want). We will create a new startup template with EF Core as a database provider and Blazor for UI framework by using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
 
 ````bash
 abp new DevExpressSample -u blazor
@@ -81,7 +87,7 @@ This example has been created by following [this documentation](https://demos.de
 
 ## The Sample Application
 
-We have created a sample application with [Data Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGrid-1) examples.
+We have created a sample application with [Data Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxDataGrid-1) example.
 
 ### The Source Code
 
