@@ -18,11 +18,11 @@ In this article, I will create a new startup template with EF Core as a database
 abp new TelerikComponents --ui blazor --database-provider ef
 ```
 
-* Our project boilerplate will be ready after the download is finished. Then, we can open the solution in the Visual Studio (or any other IDE) and run the `TelerikComponents.DbMigrator` to create the database and seed initial data (which creates the admin user, admin role, permissions etc.)
+* Our project boilerplate will be ready after the download is finished. Then, we can open the solution in the Visual Studio (or any other IDE) and run the `TelerikComponents.DbMigrator` to create the database and seed initial data (which creates the admin user, admin role, permissions, etc.)
 
-* After database and initial data created,
-* Run the `TelerikComponents.HttpApi.Host` to see our server side working and 
-* Run the `TelerikComponents.Blazor` to see our UI working properly.
+* After the database and initial data created,
+* Run the `TelerikComponents.HttpApi.Host` to see our server-side working and 
+* Run the `TelerikComponents.Blazor` to see our UI working.
 
 > _Default login credentials for admin: username is **admin** and password is **1q2w3E\***_
 
@@ -32,15 +32,17 @@ abp new TelerikComponents --ui blazor --database-provider ef
 
 * First thing we need to do is downloading the [Progress Control Panel](https://www.telerik.com/download-trial-file/v2/control-panel?_ga=2.212029332.1667119438.1607582144-1944255175.1605161949) to get Telerik Blazor Components on our development machine.
 
-* Or if you will use the Telerik Blazor Components for the first time or you don't have an active licence you can click [here](https://www.telerik.com/login/v2/download-b?ReturnUrl=https%3a%2f%2fwww.telerik.com%2fdownload-trial-file%2fv2-b%2fui-for-blazor%3f_ga%3d2.212029332.1667119438.1607582144-1944255175.1605161949#register) to download free trial.
+* If you will use the Telerik Blazor Components for the first time or you don't have an active license you can click [here](https://www.telerik.com/login/v2/download-b?ReturnUrl=https%3a%2f%2fwww.telerik.com%2fdownload-trial-file%2fv2-b%2fui-for-blazor%3f_ga%3d2.212029332.1667119438.1607582144-1944255175.1605161949#register) to download free trial.
 
->**Notes:** To download Telerik Blazor packages via NuGet, we need to setup Telerik NuGet package source. We can state it in installer as below. In this way, we can download the required Telerik Blazor packages via NuGet.
+> You can find the more installation details from [here](https://docs.telerik.com/blazor-ui/getting-started/client-blazor?_ga=2.55603115.1667119438.1607582144-1944255175.1605161949&_gac=1.261851647.1607669357.CjwKCAiAq8f-BRBtEiwAGr3DgUDhBT25rs7hU0EQ8K-AfeUVxs3hSoIuIAuBOZ17CNPI4ZEArORPExoCyd4QAvD_BwE#step-0---download-the-components).
+
+>**Notes:** To download Telerik Blazor packages via NuGet, we need to setup Telerik NuGet package source. We can state it in the installer as below. In this way, we can download the required Telerik Blazor packages via NuGet.
 
 ![setup-nuget-package-source](./automated-nuget-feed-setup.png)
 
 ### Step 1 (Configurations)
 
-* We need to install the `Telerik.UI.for.Blazor` Nuget package to our Blazor project (`TelerikComponents.Blazor`). We need to choose package source to **telerik.com** for Visual Studio to see this package.
+* We need to install the `Telerik.UI.for.Blazor` Nuget package to our Blazor project (`*.Blazor`). We need to choose package source to **telerik.com** for Visual Studio to see this package.
 
 * If you use trial version of Telerik, you can download **Telerik.UI.for.Blazor.Trial** package via NuGet.
 
@@ -58,36 +60,24 @@ abp new TelerikComponents --ui blazor --database-provider ef
     </head>
 ```
 
-* After that, we need to add the Telerik Blazor Components to our application's service collection. So just open the `Program.cs` and update the class with the following content.
+* After that, we need to add the Telerik Blazor Components to our application's service collection. So just open the `TelerikComponentsBlazorModule` and update the `ConfigureServices` method with the following content.
 
 ```csharp
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace TelerikComponents.Blazor
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    public class Program
-    {
-        public static async Task Main(string[] args)
-        {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+    var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
+    var builder = context.Services.GetSingletonInstance<WebAssemblyHostBuilder>();
 
-            var application = builder.AddApplication<TelerikComponentsBlazorModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            var host = builder.Build();
-
-            await application.InitializeAsync(host.Services);
-
-            //add this line for be able to use the components
-            builder.Services.AddTelerikBlazor(); 
+    ConfigureAuthentication(builder);
+    ConfigureHttpClient(context, environment);
+    ConfigureBlazorise(context);
+    ConfigureRouter(context);
+    ConfigureUI(builder);
+    ConfigureMenu(context);
+    ConfigureAutoMapper(context);
             
-            await host.RunAsync();
-        }
-    }
+    //add this line to be able to use the components
+    builder.Services.AddTelerikBlazor();
 }
 ```
 
@@ -188,34 +178,29 @@ namespace TelerikComponents.Blazor
 
 * Let's create a sample application for use other Telerik Blazor Components (like DataGrid).
 
-* We will use [jsonplaceholder](https://jsonplaceholder.typicode.com/) as **Mock Data** to listing, adding, updating and deleting posts. 
+* We will use [jsonplaceholder](https://jsonplaceholder.typicode.com/) as **mock data** to the listing, adding, updating and deleting posts. 
 
-* Firstly, we can create a folder named `Posts` and inside this folder we can create the classes which are highlighted at the following screenshot.
+* Firstly, we can create a folder named `Posts` and inside this folder, we can create the classes which are highlighted in the following screenshot.
 
 ![sample-application](./sample-application.jpg)
 
-* And fill the classes with the following contents.
+* After classes created we can fill the classes with the following contents.
 
 **Post.cs**
 ```csharp
 using System;
-using Newtonsoft.Json;
 
 namespace TelerikComponents.Posts
 {
     [Serializable]
     public class Post
     {
-        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("title")]
         public string Title { get; set; }
 
-        [JsonProperty("body")]
         public string Body { get; set; }
 
-        [JsonProperty("userId")]
         public int UserId { get; set; }
     }
 }
@@ -224,26 +209,20 @@ namespace TelerikComponents.Posts
 **Comment.cs**
 ```csharp
 using System;
-using Newtonsoft.Json;
 
 namespace TelerikComponents.Posts
 {
     [Serializable]
     public class Comment
     {
-        [JsonProperty("postId")]
         public int PostId { get; set; }
 
-        [JsonProperty("id")]
         public int Id { get; set; }
         
-        [JsonProperty("name")] 
         public string Name { get; set; }
 
-        [JsonProperty("email")]
         public string Email { get; set; }
 
-        [JsonProperty("body")]
         public string Body { get; set; }
     }
 }
@@ -271,8 +250,9 @@ namespace TelerikComponents.Posts
     }
 }
 ```
+* In here, we basically created two class (which are **Post** and **Comment**). These classes are used to hold data returned as JSON.
 
-* After that, we need to implement `IPostAppService`. For achieve this, we can create a folder named `Posts` in **.Application** layer and inside this folder we can create a class named `PostAppService` with the following content.
+* After that, we need to implement `IPostAppService`. For achieve this, we can create a folder named `Posts` in **\*.Application** layer and inside this folder we can create a class named `PostAppService` with the following content.
 
 **PostAppService.cs**
 ```csharp
@@ -391,7 +371,7 @@ namespace TelerikComponents.Posts
 }
 ```
 
-* In here, we've implemented `IPostAppService` methods by using [jsonplaceholder](https://jsonplaceholder.typicode.co) api. These endpoints provided us basic crud functionallity.
+* In here, we've implemented `IPostAppService` methods by using [jsonplaceholder](https://jsonplaceholder.typicode.co) API. These endpoints provide us basic crud functionallity.
 
 * After the implemenation, we can start to create the user interface.
 
@@ -494,7 +474,6 @@ namespace TelerikComponents.Blazor.Pages
         {
             var post = (Post) args.Item;
             
-            //this endpoint does not change the original record
             await PostAppService.UpdatePostAsync(post.Id, post);
             
             var matchingPost = GridData.FirstOrDefault(x => x.Id == post.Id);
@@ -517,7 +496,6 @@ namespace TelerikComponents.Blazor.Pages
         {
             var post = (Post) args.Item;
 
-            //this endpoint does not change the original record
             var addedPost = await PostAppService.AddPostAsync(post);
             
             GridData.Insert(0, addedPost);
