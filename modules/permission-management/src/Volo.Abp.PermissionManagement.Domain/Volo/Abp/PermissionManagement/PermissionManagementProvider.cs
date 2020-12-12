@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
@@ -11,24 +10,20 @@ namespace Volo.Abp.PermissionManagement
 
         protected IPermissionGrantRepository PermissionGrantRepository { get; }
 
-        protected IPermissionStore PermissionStore { get; }
-
         protected IGuidGenerator GuidGenerator { get; }
 
         protected ICurrentTenant CurrentTenant { get; }
 
         protected PermissionManagementProvider(
             IPermissionGrantRepository permissionGrantRepository,
-            IPermissionStore permissionStore,
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant)
         {
             PermissionGrantRepository = permissionGrantRepository;
-            PermissionStore = permissionStore;
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
         }
-
+        
         public virtual async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
         {
             if (providerName != Name)
@@ -37,7 +32,7 @@ namespace Volo.Abp.PermissionManagement
             }
 
             return new PermissionValueProviderGrantInfo(
-                await PermissionStore.IsGrantedAsync(name, providerName, providerKey),
+                await PermissionGrantRepository.FindAsync(name, providerName, providerKey) != null,
                 providerKey
             );
         }
