@@ -46,7 +46,7 @@
                                    asp-for="Role.ExtraProperties[propertyInfo.Name]"
                                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                    asp-format="@propertyInfo.GetInputFormatOrNull()"
-                                   value="@Model.Role.GetProperty(propertyInfo.Name)" />
+                                   value="@propertyInfo.GetInputValueOrNull(Model.Role.GetProperty(propertyInfo.Name))" />
                     }
                 }
             }

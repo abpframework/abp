@@ -51,7 +51,7 @@
                                            asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
                                            label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                            asp-format="@propertyInfo.GetInputFormatOrNull()"
-                                           value="@Model.UserInfo.GetProperty(propertyInfo.Name)" />
+                                           value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.GetProperty(propertyInfo.Name))" />
                             }
                         }
                     }

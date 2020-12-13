@@ -41,7 +41,7 @@
                                    asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
                                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                    asp-format="@propertyInfo.GetInputFormatOrNull()"
-                                   value="@Model.Tenant.GetProperty(propertyInfo.Name)" />
+                                   value="@propertyInfo.GetInputValueOrNull(Model.Tenant.GetProperty(propertyInfo.Name))" />
                     }
                 }
             }
