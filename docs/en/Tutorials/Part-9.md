@@ -868,7 +868,6 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
         <DataGrid TItem="AuthorDto"
                   Data="AuthorList"
                   ReadData="OnDataGridReadAsync"
-                  CurrentPage="CurrentPage"
                   TotalItems="TotalCount"
                   ShowPager="true"
                   PageSize="PageSize">
