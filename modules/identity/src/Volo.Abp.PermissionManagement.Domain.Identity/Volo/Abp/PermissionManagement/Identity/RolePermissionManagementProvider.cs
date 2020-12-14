@@ -15,13 +15,11 @@ namespace Volo.Abp.PermissionManagement.Identity
 
         public RolePermissionManagementProvider(
             IPermissionGrantRepository permissionGrantRepository,
-            IPermissionStore permissionStore,
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant,
             IUserRoleFinder userRoleFinder)
             : base(
                 permissionGrantRepository,
-                permissionStore,
                 guidGenerator,
                 currentTenant)
         {
@@ -33,7 +31,7 @@ namespace Volo.Abp.PermissionManagement.Identity
             if (providerName == Name)
             {
                 return new PermissionValueProviderGrantInfo(
-                    await PermissionStore.IsGrantedAsync(name, providerName, providerKey),
+                    await PermissionGrantRepository.FindAsync(name, providerName, providerKey) != null,
                     providerKey
                 );
             }
