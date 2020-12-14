@@ -45,7 +45,7 @@
                                           Text="@L["Edit"]"></EntityAction>
                             <EntityAction TItem="IdentityRoleDto"
                                           RequiredPolicy="@ManagePermissionsPolicyName"
-                                          Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.Name)"
+                                          Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.Name, context.Name)"
                                           Text="@L["Permissions"]"></EntityAction>
                             <EntityAction TItem="IdentityRoleDto"
                                           RequiredPolicy="@DeletePolicyName"

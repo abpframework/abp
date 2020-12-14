@@ -38,8 +38,6 @@ export function getInitialData(injector: Injector) {
         tap(() => checkAccessToken(injector)),
         tap(() => {
           const currentTenant = configState.getOne('currentTenant') as CurrentTenantDto;
-          if (!currentTenant?.id) return;
-
           injector.get(SessionStateService).setTenant(currentTenant);
         }),
       )

@@ -1,6 +1,11 @@
 import { ListService } from '@abp/ng.core';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
+import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
+import {
+  EXTENSIONS_IDENTIFIER,
+  FormPropData,
+  generateFormFromProps,
+} from '@abp/ng.theme.shared/extensions';
 import {
   Component,
   Injector,
@@ -9,14 +14,7 @@ import {
   TrackByFunction,
   ViewChild,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
@@ -29,6 +27,7 @@ import {
   GetUsers,
   UpdateUser,
 } from '../../actions/identity.actions';
+import { eIdentityComponents } from '../../enums/components';
 import { Identity } from '../../models/identity';
 import { IdentityUserService } from '../../proxy/identity/identity-user.service';
 import {
@@ -41,7 +40,13 @@ import { IdentityState } from '../../states/identity.state';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
-  providers: [ListService],
+  providers: [
+    ListService,
+    {
+      provide: EXTENSIONS_IDENTIFIER,
+      useValue: eIdentityComponents.Users,
+    },
+  ],
 })
 export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsers)
@@ -83,11 +88,11 @@ export class UsersComponent implements OnInit {
 
   constructor(
     public readonly list: ListService<GetIdentityUsersInput>,
-    private injector: Injector,
-    private confirmationService: ConfirmationService,
-    private fb: FormBuilder,
-    private store: Store,
-    private identityUserService: IdentityUserService,
+    protected confirmationService: ConfirmationService,
+    protected userService: IdentityUserService,
+    protected fb: FormBuilder,
+    protected store: Store,
+    protected injector: Injector,
   ) {}
 
   ngOnInit() {
@@ -95,19 +100,14 @@ export class UsersComponent implements OnInit {
   }
 
   buildForm() {
-    this.identityUserService.getAssignableRoles().subscribe(({ items }) => {
+    const data = new FormPropData(this.injector, this.selected);
+    this.form = generateFormFromProps(data);
+
+    this.userService.getAssignableRoles().subscribe(({ items }) => {
       this.roles = items;
-      this.form = this.fb.group({
-        userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
-        email: [
-          this.selected.email || '',
-          [Validators.required, Validators.email, Validators.maxLength(256)],
-        ],
-        name: [this.selected.name || '', [Validators.maxLength(64)]],
-        surname: [this.selected.surname || '', [Validators.maxLength(64)]],
-        phoneNumber: [this.selected.phoneNumber || '', [Validators.maxLength(16)]],
-        lockoutEnabled: [this.selected.id ? this.selected.lockoutEnabled : true],
-        roleNames: this.fb.array(
+      this.form.addControl(
+        'roleNames',
+        this.fb.array(
           this.roles.map(role =>
             this.fb.group({
               [role.name]: [
@@ -118,16 +118,7 @@ export class UsersComponent implements OnInit {
             }),
           ),
         ),
-      });
-
-      const passwordValidators = getPasswordValidators(this.injector);
-
-      this.form.addControl('password', new FormControl('', [...passwordValidators]));
-
-      if (!this.selected.userName) {
-        this.form.get('password').setValidators([...passwordValidators, Validators.required]);
-        this.form.get('password').updateValueAndValidity();
-      }
+      );
     });
   }
 
