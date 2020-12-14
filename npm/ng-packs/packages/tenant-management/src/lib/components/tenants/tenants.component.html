@@ -5,26 +5,7 @@
         <h5 class="card-title">{{ 'AbpTenantManagement::Tenants' | abpLocalization }}</h5>
       </div>
       <div class="text-right col col-md-6">
-        <button
-          *abpPermission="'FeatureManagement.ManageHostFeatures'"
-          id="manage-host-features"
-          class="btn btn-primary mr-1"
-          type="button"
-          (click)="openFeaturesModal(null)"
-        >
-          <i class="fa fa-plus mr-1"></i>
-          <span>{{ 'AbpTenantManagement::ManageHostFeatures' | abpLocalization }}</span>
-        </button>
-        <button
-          *abpPermission="'AbpTenantManagement.Tenants.Create'"
-          id="create-tenants"
-          class="btn btn-primary"
-          type="button"
-          (click)="addTenant()"
-        >
-          <i class="fa fa-plus mr-1"></i>
-          <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
-        </button>
+        <abp-page-toolbar [record]="data$ | async"></abp-page-toolbar>
       </div>
     </div>
   </div>
