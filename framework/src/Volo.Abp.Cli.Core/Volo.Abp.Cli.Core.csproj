@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Volo\Abp\Cli\Utils\ConfigReaderHelper.cs" />
+  </ItemGroup>
+
 </Project>
