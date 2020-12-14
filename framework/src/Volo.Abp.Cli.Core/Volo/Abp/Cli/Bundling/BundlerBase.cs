@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,12 +14,13 @@ namespace Volo.Abp.Cli.Bundling
 {
     public abstract class BundlerBase : IBundler, ITransientDependency
     {
-        private static string[] _minFileSuffixes = { "min", "prod" };
+        private static string[] _minFileSuffixes = {"min", "prod"};
 
         protected IMinifier Minifier { get; }
         public ILogger<BundlerBase> Logger { get; set; }
         public abstract string FileExtension { get; }
-        public abstract string GenerateDefinition(string bundleFilePath);
+        public abstract string GenerateDefinition(string bundleFilePath,
+            List<BundleDefinition> bundleDefinitionsExcludingFromBundle);
 
         protected BundlerBase(IMinifier minifier)
         {
@@ -27,11 +29,15 @@ namespace Volo.Abp.Cli.Bundling
 
         public string Bundle(BundleOptions options, BundleContext context)
         {
-            var bundleFilePath = Path.Combine(PathHelper.GetWwwRootPath(options.Directory), $"{options.BundleName}{FileExtension}");
-            var bundledContent = BundleFiles(options, context);
+            var bundleFilePath = Path.Combine(PathHelper.GetWwwRootPath(options.Directory),
+                $"{options.BundleName}{FileExtension}");
+            var bundleFileDefinitions = context.BundleDefinitions.Where(t => t.ExcludeFromBundle == false).ToList();
+            var fileDefinitionsExcludingFromBundle = context.BundleDefinitions.Where(t => t.ExcludeFromBundle).ToList();
+            
+            var bundledContent = BundleFiles(options, bundleFileDefinitions);
             File.WriteAllText(bundleFilePath, bundledContent);
 
-            return GenerateDefinition(bundleFilePath);
+            return GenerateDefinition(bundleFilePath,fileDefinitionsExcludingFromBundle);
         }
 
         private bool IsMinFile(string fileName)
@@ -47,34 +53,40 @@ namespace Volo.Abp.Cli.Bundling
             return false;
         }
 
-        private string BundleFiles(BundleOptions options, BundleContext context)
+        private string BundleFiles(BundleOptions options, List<BundleDefinition> bundleDefinitions)
         {
-            var staticAssetsFilePath = Path.Combine(options.Directory, "bin", "Debug", options.FrameworkVersion, $"{options.ProjectFileName}.StaticWebAssets.xml");
+            var staticAssetsFilePath = Path.Combine(options.Directory, "bin", "Debug", options.FrameworkVersion,
+                $"{options.ProjectFileName}.StaticWebAssets.xml");
             if (!File.Exists(staticAssetsFilePath))
             {
-                throw new BundlingException("Unable to find static web assets file. You need to build the project to generate static web assets file.");
+                throw new BundlingException(
+                    "Unable to find static web assets file. You need to build the project to generate static web assets file.");
             }
 
             var staticAssetsDefinitions = new XmlDocument();
             staticAssetsDefinitions.Load(staticAssetsFilePath);
 
             var builder = new StringBuilder();
-            foreach (var definition in context.BundleDefinitions)
+            foreach (var definition in bundleDefinitions)
             {
                 string content;
                 if (definition.Source.StartsWith("_content"))
                 {
                     var pathFragments = definition.Source.Split('/').ToList();
                     var basePath = $"{pathFragments[0]}/{pathFragments[1]}";
-                    var path = staticAssetsDefinitions.SelectSingleNode($"//ContentRoot[@BasePath='{basePath}']").Attributes["Path"].Value;
+                    var path = staticAssetsDefinitions.SelectSingleNode($"//ContentRoot[@BasePath='{basePath}']")
+                        .Attributes["Path"].Value;
                     var absolutePath = definition.Source.Replace(basePath, path);
                     content = GetFileContent(absolutePath, options.Minify);
                 }
                 else if (definition.Source.StartsWith("_framework"))
                 {
                     var slashIndex = definition.Source.IndexOf('/');
-                    var fileName = definition.Source.Substring(slashIndex + 1, definition.Source.Length - slashIndex - 1);
-                    var filePath = Path.Combine(PathHelper.GetFrameworkFolderPath(options.Directory, options.FrameworkVersion), fileName);
+                    var fileName =
+                        definition.Source.Substring(slashIndex + 1, definition.Source.Length - slashIndex - 1);
+                    var filePath =
+                        Path.Combine(PathHelper.GetFrameworkFolderPath(options.Directory, options.FrameworkVersion),
+                            fileName);
                     content = GetFileContent(filePath, false);
                 }
                 else
@@ -83,7 +95,8 @@ namespace Volo.Abp.Cli.Bundling
                     content = GetFileContent(filePath, options.Minify);
                 }
 
-                content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(options.Directory, "wwwroot"), content);
+                content = ProcessBeforeAddingToTheBundle(definition.Source, Path.Combine(options.Directory, "wwwroot"),
+                    content);
                 builder.AppendLine(content);
             }
 
@@ -101,14 +114,17 @@ namespace Volo.Abp.Cli.Bundling
                 }
                 catch (NUglifyException ex)
                 {
-                    Logger.LogWarning($"Unable to minify the file: {Path.GetFileName(filePath)}. Adding file to the bundle without minification.", ex);
+                    Logger.LogWarning(
+                        $"Unable to minify the file: {Path.GetFileName(filePath)}. Adding file to the bundle without minification.",
+                        ex);
                 }
             }
 
             return content;
         }
 
-        protected virtual string ProcessBeforeAddingToTheBundle(string referencePath, string bundleDirectory, string fileContent)
+        protected virtual string ProcessBeforeAddingToTheBundle(string referencePath, string bundleDirectory,
+            string fileContent)
         {
             return fileContent;
         }

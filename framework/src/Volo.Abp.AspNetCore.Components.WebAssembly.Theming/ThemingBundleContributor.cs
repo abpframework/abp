@@ -4,12 +4,12 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming
 {
     public class ThemingBundleContributor : IBundleContributor
     {
-        public void AddScripts(BundleContext context)
+        public void AddScripts(BundleContext context, BundleParameterDictionary parameters)
         {
 
         }
 
-        public void AddStyles(BundleContext context)
+        public void AddStyles(BundleContext context, BundleParameterDictionary parameters)
         {
             context.BundleDefinitions.Insert(0, new BundleDefinition
             {
