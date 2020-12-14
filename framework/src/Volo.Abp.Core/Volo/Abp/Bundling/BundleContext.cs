@@ -11,11 +11,13 @@ namespace Volo.Abp.Bundling
             BundleDefinitions = new List<BundleDefinition>();
         }
 
-        public void Add(string source, Dictionary<string, string> additionalProperties = null)
+        public void Add(string source, bool excludeFromBundle = false,
+            Dictionary<string, string> additionalProperties = null)
         {
             var bundleDefinition = new BundleDefinition
             {
                 Source = source,
+                ExcludeFromBundle = excludeFromBundle
             };
 
             if (additionalProperties != null)
@@ -23,7 +25,8 @@ namespace Volo.Abp.Bundling
                 bundleDefinition.AdditionalProperties = additionalProperties;
             }
 
-            BundleDefinitions.AddIfNotContains((item) => item.Source == bundleDefinition.Source, () => bundleDefinition);
+            BundleDefinitions.AddIfNotContains((item) => item.Source == bundleDefinition.Source,
+                () => bundleDefinition);
         }
     }
 }

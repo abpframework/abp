@@ -4,13 +4,13 @@ namespace Volo.Abp.BlazoriseUI
 {
     public class BlazoriseUIBundleContributor : IBundleContributor
     {
-        public void AddScripts(BundleContext context)
+        public void AddScripts(BundleContext context, BundleParameterDictionary parameters)
         {
             context.Add("_content/Blazorise/blazorise.js");
             context.Add("_content/Blazorise.Bootstrap/blazorise.bootstrap.js");
         }
 
-        public void AddStyles(BundleContext context)
+        public void AddStyles(BundleContext context, BundleParameterDictionary parameters)
         {
             context.Add("_content/Blazorise/blazorise.css");
             context.Add("_content/Blazorise.Bootstrap/blazorise.bootstrap.css");
