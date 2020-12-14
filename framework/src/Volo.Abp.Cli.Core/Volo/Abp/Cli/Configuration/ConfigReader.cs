@@ -18,12 +18,17 @@ namespace Volo.Abp.Cli.Configuration
 
             if (!File.Exists(settingsFilePath))
             {
-                throw new Exception();
+                throw new FileNotFoundException($"appsettings file could not be found. Path:{settingsFilePath}");
             }
 
             var settingsFileContent = File.ReadAllText(settingsFilePath);
 
-            using (var document = JsonDocument.Parse(settingsFileContent))
+            var documentOptions = new JsonDocumentOptions
+            {
+                CommentHandling = JsonCommentHandling.Skip
+            };
+            
+            using (var document = JsonDocument.Parse(settingsFileContent,documentOptions))
             {
                 var element = document.RootElement.GetProperty("AbpCli");
                 var configText = element.GetRawText();
@@ -32,9 +37,11 @@ namespace Volo.Abp.Cli.Configuration
                     Converters =
                     {
                         new JsonStringEnumConverter()
-                    }
+                    },
+                    ReadCommentHandling = JsonCommentHandling.Skip
                 };
-                return JsonSerializer.Deserialize<AbpCliConfig>(configText,options);
+                
+                return JsonSerializer.Deserialize<AbpCliConfig>(configText, options);
             }
         }
     }
