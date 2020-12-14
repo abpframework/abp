@@ -39,7 +39,7 @@ export class ReplaceableComponentsService {
       replaceableComponents.push(replaceableComponent);
     }
 
-    this.store.patch(replaceableComponents);
+    this.store.set(replaceableComponents);
 
     if (reload) reloadRoute(this.router, this.ngZone);
   }

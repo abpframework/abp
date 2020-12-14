@@ -56,7 +56,6 @@ namespace Volo.Abp.ObjectExtending.Modularity
             {
                 AddLookupTextProperty(propertyInfo);
                 propertyInfo.UI.OnTable.IsVisible = false;
-                propertyInfo.Api.OnGet.IsAvailable = false;
             }
             return this;
         }
