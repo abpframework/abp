@@ -16,6 +16,12 @@ import {
 import { GetTenantsInput, TenantDto } from '../../proxy/models';
 import { TenantService } from '../../proxy/tenant.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
+import {
+  EXTENSIONS_IDENTIFIER,
+  FormPropData,
+  generateFormFromProps,
+} from '@abp/ng.theme.shared/extensions';
+import { eTenantManagementComponents } from '../../enums/components';
 
 interface SelectedModalContent {
   type: 'saveConnStr' | 'saveTenant';
@@ -27,6 +33,13 @@ interface SelectedModalContent {
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
   providers: [ListService],
+  providers: [
+    ListService,
+    {
+      provide: EXTENSIONS_IDENTIFIER,
+      useValue: eTenantManagementComponents.Tenants,
+    },
+  ],
 })
 export class TenantsComponent implements OnInit {
   @Select(TenantManagementState.get)
