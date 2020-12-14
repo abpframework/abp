@@ -51,36 +51,7 @@
 
 <ng-template #tenantModalTemplate>
   <form [formGroup]="tenantForm" (ngSubmit)="save()" validateOnSubmit>
-    <div class="mt-2">
-      <div class="form-group">
-        <label for="name">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>
-        <input type="text" id="name" class="form-control" formControlName="name" autofocus />
-      </div>
-      <div class="form-group" *ngIf="tenantForm.controls.adminEmailAddress">
-        <label for="name">{{
-          'AbpTenantManagement::DisplayName:AdminEmailAddress' | abpLocalization
-        }}</label>
-        <input
-          autocomplete="email"
-          type="email"
-          id="admin-email-address"
-          class="form-control"
-          formControlName="adminEmailAddress"
-        />
-      </div>
-      <div class="form-group" *ngIf="tenantForm.controls.adminPassword">
-        <label for="name">{{
-          'AbpTenantManagement::DisplayName:AdminPassword' | abpLocalization
-        }}</label>
-        <input
-          autocomplete="new-password"
-          type="password"
-          id="admin-password"
-          class="form-control"
-          formControlName="adminPassword"
-        />
-      </div>
-    </div>
+    <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
   </form>
 </ng-template>
 
