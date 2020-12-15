@@ -1,9 +1,10 @@
 ﻿var abp = abp || {};
 
 (function () {
+
     abp.SwaggerUIBundle = function (configObject) {
 
-        abp.setAntiForgeryToken();
+        fetch("/abp/Swashbuckle/SetCsrfCookie");
 
         configObject.requestInterceptor = function (request) {
 
@@ -15,9 +16,5 @@
         };
 
         return SwaggerUIBundle(configObject);
-    }
-
-    abp.setAntiForgeryToken = function(){
-        fetch("/api/abp/application-configuration");
     }
 })();
