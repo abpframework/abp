@@ -42,7 +42,7 @@ export class ApiInterceptor implements HttpInterceptor {
     }
 
     const tenant = this.sessionState.getTenant();
-    if (!existingHeaders?.has('__tenant') && tenant) {
+    if (!existingHeaders?.has('__tenant') && tenant?.id) {
       headers['__tenant'] = tenant.id;
     }
 
