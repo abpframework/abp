@@ -9,8 +9,16 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/abpframework/abp/</RepositoryUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- https://github.com/dotnet/sourcelink -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

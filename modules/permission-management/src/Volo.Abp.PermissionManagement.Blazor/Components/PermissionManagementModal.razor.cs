@@ -65,14 +65,14 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             }
         }
         
-        public async Task OpenAsync(string providerName, string providerKey)
+        public async Task OpenAsync(string providerName, string providerKey, string entityDisplayName = null)
         {
             _providerName = providerName;
             _providerKey = providerKey;
 
             var result = await PermissionAppService.GetAsync(_providerName, _providerKey);
 
-            _entityDisplayName = result.EntityDisplayName;
+            _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
             _groups = result.Groups;
 
             _grantedPermissionCount = 0;

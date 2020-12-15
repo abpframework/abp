@@ -27,18 +27,6 @@
     cursor: pointer;
     padding-left: 8px;
     border: 1px solid transparent;
-
-    &:hover {
-      background-color: transparent;
-      border: 1px solid var(--primary);
-      color: var(--text-color);
-    }
-
-    &.selected {
-      background-color: transparent;
-      color: var(--white);
-      background-color: var(--primary);
-    }
   }
 
   .ellipsis {

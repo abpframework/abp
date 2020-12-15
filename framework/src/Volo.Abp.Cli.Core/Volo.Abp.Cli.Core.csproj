@@ -15,10 +15,10 @@
   <ItemGroup>
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="NuGet.Versioning" Version="5.6.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
-    <PackageReference Include="System.Security.Permissions" Version="4.7.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.6.0" />
+    <PackageReference Include="NuGet.Versioning" Version="5.8.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="System.Security.Permissions" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
