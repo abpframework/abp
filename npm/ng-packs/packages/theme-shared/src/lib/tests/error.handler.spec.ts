@@ -4,7 +4,6 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
 import { NavigationError, ResolveEnd, RouterModule } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { Navigate, RouterDataResolved, RouterError } from '@ngxs/router-plugin';
 import { Actions, NgxsModule, ofActionDispatched, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
@@ -177,18 +176,7 @@ describe('ErrorHandler', () => {
     );
   });
 
-  test('should call error method of ConfirmationService when authenticated error occurs with _AbpErrorFormat header', done => {
-    spectator
-      .inject(Actions)
-      .pipe(ofActionDispatched(Navigate))
-      .subscribe(({ path, queryParams, extras }) => {
-        expect(path).toEqual(['/account/login']);
-        expect(queryParams).toBeNull();
-        expect(extras).toEqual({ state: { redirectUrl: '/x' } });
-
-        done();
-      });
-
+  test('should call error method of ConfirmationService when authenticated error occurs with _AbpErrorFormat header', () => {
     const headers: HttpHeaders = new HttpHeaders({
       _AbpErrorFormat: '_AbpErrorFormat',
     });
