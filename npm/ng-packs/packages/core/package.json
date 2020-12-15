@@ -9,7 +9,6 @@
   "dependencies": {
     "@abp/utils": "^4.0.1",
     "@angular/localize": "~10.0.10",
-    "@ngxs/router-plugin": "^3.7.0",
     "@ngxs/store": "^3.7.0",
     "angular-oauth2-oidc": "^10.0.0",
     "just-clone": "^3.1.0",
