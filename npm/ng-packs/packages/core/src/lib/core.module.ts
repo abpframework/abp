@@ -143,11 +143,22 @@ export class TestCoreModule {}
   providers: [LocalizationPipe],
 })
 export class CoreModule {
-  static forTest({ baseHref = '/' } = {} as ABP.Test): ModuleWithProviders<TestCoreModule> {
+  static forTest(
+    { baseHref = '/', ...options } = {} as ABP.Test,
+  ): ModuleWithProviders<TestCoreModule> {
     return {
       ngModule: TestCoreModule,
       providers: [
         { provide: APP_BASE_HREF, useValue: baseHref },
+        {
+          provide: 'CORE_OPTIONS',
+          useValue: options,
+        },
+        {
+          provide: CORE_OPTIONS,
+          useFactory: coreOptionsFactory,
+          deps: ['CORE_OPTIONS'],
+        },
         {
           provide: LocalizationPipe,
           useClass: MockLocalizationPipe,
