@@ -36,6 +36,6 @@ export class InternalStore<State> {
   }
 
   reset() {
-    this.patch(this.initialState);
+    this.set(this.initialState);
   }
 }

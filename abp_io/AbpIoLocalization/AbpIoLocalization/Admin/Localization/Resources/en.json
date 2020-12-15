@@ -194,6 +194,9 @@
     "CoverImage": "Cover Image",
     "RemoveCacheConfirmationMessage": "Are you sure you remove the cache for \"{0}\" article?",
     "SuccessfullyRemoved": "Successfully cleared",
-    "RemoveCache": "Remove Cache"
+    "RemoveCache": "Remove Cache",
+    "Language": "Language",
+    "Optional": "Optional",
+    "CreateArticleLanguageInfo": "The language in which the article is written"
   }
 }
