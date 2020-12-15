@@ -4,7 +4,7 @@
 
     abp.SwaggerUIBundle = function (configObject) {
 
-        fetch("/abp/Swashbuckle/SetCsrfCookie");
+        fetch(`${abp.appPath}abp/Swashbuckle/SetCsrfCookie`);
 
         configObject.requestInterceptor = function (request) {
 
