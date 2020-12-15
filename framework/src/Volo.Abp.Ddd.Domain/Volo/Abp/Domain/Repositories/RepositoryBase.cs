@@ -16,14 +16,6 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
         where TEntity : class, IEntity
     {
-        public IDataFilter DataFilter { get; set; }
-
-        public ICurrentTenant CurrentTenant { get; set; }
-
-        public IAsyncQueryableExecuter AsyncExecuter { get; set; }
-
-        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
-
         public virtual Type ElementType => GetQueryable().ElementType;
 
         public virtual Expression Expression => GetQueryable().Expression;

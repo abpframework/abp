@@ -32,6 +32,8 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public virtual IGuidGenerator GuidGenerator { get; set; }
 
+        public IEfCoreBulkOperationProvider BulkOperationProvider { get; set; }
+
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
@@ -110,9 +112,30 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public override async Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.InsertManyAsync<TDbContext, TEntity>(
+                    this,
+                    entities,
+                    autoSave,
+                    cancellationToken
+                );
+                return;
+            }
+
+            await base.InsertManyAsync(entities, autoSave, cancellationToken);
+        }
+
         protected override IQueryable<TEntity> GetQueryable()
         {
             return DbSet.AsQueryable();
+        }
+
+        protected override Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            return DbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async override Task<TEntity> FindAsync(

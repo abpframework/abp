@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
@@ -20,8 +21,10 @@ namespace Volo.Abp.Domain.Repositories
         [NotNull]
         Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
 
+        Task InsertManyAsync([NotNull] IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
+
         /// <summary>
-        /// Updates an existing entity. 
+        /// Updates an existing entity.
         /// </summary>
         /// <param name="autoSave">
         /// Set true to automatically save changes to database.
