@@ -2,6 +2,9 @@
 
 (function () {
     abp.SwaggerUIBundle = function (configObject) {
+
+        abp.setAntiForgeryToken();
+
         configObject.requestInterceptor = function (request) {
 
             var antiForgeryToken = abp.security.antiForgery.getToken();
@@ -12,5 +15,9 @@
         };
 
         return SwaggerUIBundle(configObject);
+    }
+
+    abp.setAntiForgeryToken = function(){
+        fetch("/api/abp/application-configuration");
     }
 })();
