@@ -3,7 +3,6 @@ import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angu
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
@@ -113,7 +112,6 @@ export class BaseCoreModule {}
     BaseCoreModule,
     LocalizationModule,
     NgxsModule.forFeature([ProfileState]),
-    NgxsRouterPluginModule.forRoot(),
     OAuthModule.forRoot(),
     HttpClientXsrfModule.withOptions({
       cookieName: 'XSRF-TOKEN',
