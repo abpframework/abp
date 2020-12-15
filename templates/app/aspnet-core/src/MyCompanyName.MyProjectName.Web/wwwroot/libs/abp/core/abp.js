@@ -1,769 +1,706 @@
-var abp = abp || {};
-(function () {
-
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+var abp;
+(function (abp) {
     /* Application paths *****************************************/
-
     //Current application root path (including virtual directory if exists).
-    abp.appPath = abp.appPath || '/';
-
+    abp.appPath = abp.appPath || "/";
     abp.pageLoadTime = new Date();
-
     //Converts given path to absolute path using abp.appPath variable.
-    abp.toAbsAppPath = function (path) {
-        if (path.indexOf('/') == 0) {
+    function toAbsAppPath(path) {
+        if (path.indexOf("/") == 0) {
             path = path.substring(1);
         }
-
         return abp.appPath + path;
-    };
-
+    }
+    abp.toAbsAppPath = toAbsAppPath;
     /* LOGGING ***************************************************/
     //Implements Logging API that provides secure & controlled usage of console.log
-
-    abp.log = abp.log || {};
-
-    abp.log.levels = {
-        DEBUG: 1,
-        INFO: 2,
-        WARN: 3,
-        ERROR: 4,
-        FATAL: 5
-    };
-
-    abp.log.level = abp.log.levels.DEBUG;
-
-    abp.log.log = function (logObject, logLevel) {
-        if (!window.console || !window.console.log) {
-            return;
-        }
-
-        if (logLevel != undefined && logLevel < abp.log.level) {
-            return;
-        }
-
-        console.log(logObject);
-    };
-
-    abp.log.debug = function (logObject) {
-        abp.log.log("DEBUG: ", abp.log.levels.DEBUG);
-        abp.log.log(logObject, abp.log.levels.DEBUG);
-    };
-
-    abp.log.info = function (logObject) {
-        abp.log.log("INFO: ", abp.log.levels.INFO);
-        abp.log.log(logObject, abp.log.levels.INFO);
-    };
-
-    abp.log.warn = function (logObject) {
-        abp.log.log("WARN: ", abp.log.levels.WARN);
-        abp.log.log(logObject, abp.log.levels.WARN);
-    };
-
-    abp.log.error = function (logObject) {
-        abp.log.log("ERROR: ", abp.log.levels.ERROR);
-        abp.log.log(logObject, abp.log.levels.ERROR);
-    };
-
-    abp.log.fatal = function (logObject) {
-        abp.log.log("FATAL: ", abp.log.levels.FATAL);
-        abp.log.log(logObject, abp.log.levels.FATAL);
-    };
-
-    /* LOCALIZATION ***********************************************/
-
-    abp.localization = abp.localization || {};
-
-    abp.localization.values = {};
-
-    abp.localization.localize = function (key, sourceName) {
-        if (sourceName === '_') { //A convention to suppress the localization
-            return key;
-        }
-
-        sourceName = sourceName || abp.localization.defaultResourceName;
-        if (!sourceName) {
-            abp.log.warn('Localization source name is not specified and the defaultResourceName was not defined!');
-            return key;
-        }
-
-        var source = abp.localization.values[sourceName];
-        if (!source) {
-            abp.log.warn('Could not find localization source: ' + sourceName);
-            return key;
-        }
-
-        var value = source[key];
-        if (value == undefined) {
-            return key;
-        }
-
-        var copiedArguments = Array.prototype.slice.call(arguments, 0);
-        copiedArguments.splice(1, 1);
-        copiedArguments[0] = value;
-
-        return abp.utils.formatString.apply(this, copiedArguments);
-    };
-
-    abp.localization.isLocalized = function (key, sourceName) {
-        if (sourceName === '_') { //A convention to suppress the localization
-            return true;
-        }
-
-        sourceName = sourceName || abp.localization.defaultResourceName;
-        if (!sourceName) {
-            return false;
-        }
-
-        var source = abp.localization.values[sourceName];
-        if (!source) {
-            return false;
-        }
-
-        var value = source[key];
-        if (value === undefined) {
-            return false;
-        }
-
-        return true;
-    };
-
-    abp.localization.getResource = function (name) {
-        return function () {
-            var copiedArguments = Array.prototype.slice.call(arguments, 0);
-            copiedArguments.splice(1, 0, name);
-            return abp.localization.localize.apply(this, copiedArguments);
-        };
-    };
-
-    abp.localization.defaultResourceName = undefined;
-    abp.localization.currentCulture = {
-        cultureName: undefined
-    };
-
-    var getMapValue = function (packageMaps, packageName, language) {
-        language = language || abp.localization.currentCulture.name;
-        if (!packageMaps || !packageName || !language) {
-            return language;
-        }
-
-        var packageMap = packageMaps[packageName];
-        if (!packageMap) {
-            return language;
-        }
-
-        for (var i = 0; i < packageMap.length; i++) {
-            var map = packageMap[i];
-            if (map.name === language){
-                return map.value;
+    var log;
+    (function (log_1) {
+        var levels;
+        (function (levels) {
+            levels[levels["DEBUG"] = 1] = "DEBUG";
+            levels[levels["INFO"] = 2] = "INFO";
+            levels[levels["WARN"] = 3] = "WARN";
+            levels[levels["ERROR"] = 4] = "ERROR";
+            levels[levels["FATAL"] = 5] = "FATAL";
+        })(levels = log_1.levels || (log_1.levels = {}));
+        log_1.level = levels.DEBUG;
+        function log(logObject, logLevel) {
+            if (!window.console || !window.console.log) {
+                return;
             }
+            if (logLevel != undefined && logLevel < log_1.level) {
+                return;
+            }
+            console.log(logObject);
         }
-
-        return language;
-    };
-
-    abp.localization.getLanguagesMap = function (packageName, language) {
-        return getMapValue(abp.localization.languagesMap, packageName, language);
-    };
-
-    abp.localization.getLanguageFilesMap = function (packageName, language) {
-        return getMapValue(abp.localization.languageFilesMap, packageName, language);
-    };
-
-    /* AUTHORIZATION **********************************************/
-
-    abp.auth = abp.auth || {};
-
-    abp.auth.policies = abp.auth.policies || {};
-
-    abp.auth.grantedPolicies = abp.auth.grantedPolicies || {};
-
-    abp.auth.isGranted = function (policyName) {
-        return abp.auth.policies[policyName] != undefined && abp.auth.grantedPolicies[policyName] != undefined;
-    };
-
-    abp.auth.isAnyGranted = function () {
-        if (!arguments || arguments.length <= 0) {
-            return true;
+        log_1.log = log;
+        function debug(logObject) {
+            log("DEBUG: ", levels.DEBUG);
+            log(logObject, levels.DEBUG);
         }
-
-        for (var i = 0; i < arguments.length; i++) {
-            if (abp.auth.isGranted(arguments[i])) {
+        log_1.debug = debug;
+        function info(logObject) {
+            log("INFO: ", levels.INFO);
+            log(logObject, levels.INFO);
+        }
+        log_1.info = info;
+        function warn(logObject) {
+            log("WARN: ", levels.WARN);
+            log(logObject, levels.WARN);
+        }
+        log_1.warn = warn;
+        function error(logObject) {
+            log("ERROR: ", levels.ERROR);
+            log(logObject, levels.ERROR);
+        }
+        log_1.error = error;
+        function fatal(logObject) {
+            log("FATAL: ", levels.FATAL);
+            log(logObject, levels.FATAL);
+        }
+        log_1.fatal = fatal;
+    })(log = abp.log || (abp.log = {}));
+    /* LOCALIZATION ***********************************************/
+    var localization;
+    (function (localization) {
+        localization.values = {};
+        localization.defaultResourceName = undefined;
+        localization.currentCulture = {
+            cultureName: undefined,
+            name: undefined,
+        };
+        // TODO: TEST-REFACTORED
+        function localize(key, sourceName) {
+            var _a;
+            var args = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                args[_i - 2] = arguments[_i];
+            }
+            if (sourceName === "_") {
+                //A convention to suppress the localization
+                return key;
+            }
+            sourceName = sourceName || abp.localization.defaultResourceName;
+            if (!sourceName) {
+                abp.log.warn("Localization source name is not specified and the defaultResourceName was not defined!");
+                return key;
+            }
+            var source = abp.localization.values[sourceName];
+            if (!source) {
+                abp.log.warn("Could not find localization source: " + sourceName);
+                return key;
+            }
+            var value = source[key];
+            if (value == undefined) {
+                return key;
+            }
+            return (_a = abp.utils).formatString.apply(_a, __spreadArrays([value], args));
+        }
+        localization.localize = localize;
+        function isLocalized(key, sourceName) {
+            if (sourceName === "_") {
+                //A convention to suppress the localization
                 return true;
             }
-        }
-
-        return false;
-    };
-
-    abp.auth.areAllGranted = function () {
-        if (!arguments || arguments.length <= 0) {
-            return true;
-        }
-
-        for (var i = 0; i < arguments.length; i++) {
-            if (!abp.auth.isGranted(arguments[i])) {
+            sourceName = sourceName || localization.defaultResourceName;
+            if (!sourceName) {
                 return false;
             }
+            var source = localization.values[sourceName];
+            if (!source) {
+                return false;
+            }
+            var value = source[key];
+            if (value === undefined) {
+                return false;
+            }
+            return true;
         }
-
-        return true;
-    };
-
-    abp.auth.tokenCookieName = 'Abp.AuthToken';
-
-    abp.auth.setToken = function (authToken, expireDate) {
-        abp.utils.setCookieValue(abp.auth.tokenCookieName, authToken, expireDate, abp.appPath, abp.domain);
-    };
-
-    abp.auth.getToken = function () {
-        return abp.utils.getCookieValue(abp.auth.tokenCookieName);
-    }
-
-    abp.auth.clearToken = function () {
-        abp.auth.setToken();
-    }
-
+        localization.isLocalized = isLocalized;
+        // TODO: TEST-REFACTORED
+        function getResource(name) {
+            return function (key) {
+                var _a;
+                var args = [];
+                for (var _i = 1; _i < arguments.length; _i++) {
+                    args[_i - 1] = arguments[_i];
+                }
+                return (_a = abp.localization).localize.apply(_a, __spreadArrays([key, name], args));
+            };
+        }
+        localization.getResource = getResource;
+        function getMapValue(packageMaps, packageName, language) {
+            language = language || localization.currentCulture.name;
+            if (!packageMaps || !packageName || !language) {
+                return language;
+            }
+            var packageMap = packageMaps[packageName];
+            if (!packageMap) {
+                return language;
+            }
+            for (var i = 0; i < packageMap.length; i++) {
+                var map = packageMap[i];
+                if (map.name === language) {
+                    return map.value;
+                }
+            }
+            return language;
+        }
+        function getLanguagesMap(packageName, language) {
+            return getMapValue(localization.languagesMap, packageName, language);
+        }
+        localization.getLanguagesMap = getLanguagesMap;
+        function getLanguageFilesMap(packageName, language) {
+            return getMapValue(localization.languageFilesMap, packageName, language);
+        }
+        localization.getLanguageFilesMap = getLanguageFilesMap;
+    })(localization = abp.localization || (abp.localization = {}));
+    /* AUTHORIZATION **********************************************/
+    var auth;
+    (function (auth) {
+        auth.policies = abp.auth.policies || {};
+        auth.grantedPolicies = abp.auth.grantedPolicies || {};
+        auth.tokenCookieName = "Abp.AuthToken";
+        function isGranted(policyName) {
+            return !(auth.policies[policyName] && auth.grantedPolicies[policyName]);
+        }
+        auth.isGranted = isGranted;
+        // TODO: TEST-REFACTORED
+        function isAnyGranted() {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            if (!args || args.length <= 0) {
+                return true;
+            }
+            return args.some(isGranted);
+        }
+        auth.isAnyGranted = isAnyGranted;
+        // TODO: TEST-REFACTORED
+        function areAllGranted() {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            if (!args || args.length <= 0) {
+                return true;
+            }
+            return args.every(isGranted);
+        }
+        auth.areAllGranted = areAllGranted;
+        function setToken(authToken, expireDate) {
+            abp.utils.setCookieValue(abp.auth.tokenCookieName, authToken, expireDate, abp.appPath
+            // TODO: DELETE-WITH-CARE following parameter existed before but it is not being used and its value is null
+            // abp.domain
+            );
+        }
+        auth.setToken = setToken;
+        function getToken() {
+            return abp.utils.getCookieValue(abp.auth.tokenCookieName);
+        }
+        auth.getToken = getToken;
+        function clearToken() {
+            setToken();
+        }
+        auth.clearToken = clearToken;
+    })(auth = abp.auth || (abp.auth = {}));
     /* SETTINGS *************************************************/
-
-    abp.setting = abp.setting || {};
-
-    abp.setting.values = abp.setting.values || {};
-
-    abp.setting.get = function (name) {
-        return abp.setting.values[name];
-    };
-
-    abp.setting.getBoolean = function (name) {
-        var value = abp.setting.get(name);
-        return value == 'true' || value == 'True';
-    };
-
-    abp.setting.getInt = function (name) {
-        return parseInt(abp.setting.values[name]);
-    };
-
+    var setting;
+    (function (setting) {
+        setting.values = abp.setting.values || {};
+        function get(name) {
+            return setting.values[name];
+        }
+        setting.get = get;
+        function getBoolean(name) {
+            var value = get(name);
+            return value == "true" || value == "True";
+        }
+        setting.getBoolean = getBoolean;
+        function getInt(name) {
+            return parseInt(setting.values[name]);
+        }
+        setting.getInt = getInt;
+    })(setting = abp.setting || (abp.setting = {}));
     /* NOTIFICATION *********************************************/
     //Defines Notification API, not implements it
-
-    abp.notify = abp.notify || {};
-
-    abp.notify.success = function (message, title, options) {
-        abp.log.warn('abp.notify.success is not implemented!');
-    };
-
-    abp.notify.info = function (message, title, options) {
-        abp.log.warn('abp.notify.info is not implemented!');
-    };
-
-    abp.notify.warn = function (message, title, options) {
-        abp.log.warn('abp.notify.warn is not implemented!');
-    };
-
-    abp.notify.error = function (message, title, options) {
-        abp.log.warn('abp.notify.error is not implemented!');
-    };
-
+    var notify;
+    (function (notify) {
+        function success(message, title, options) {
+            abp.log.warn("abp.notify.success is not implemented!");
+        }
+        notify.success = success;
+        function info(message, title, options) {
+            abp.log.warn("abp.notify.info is not implemented!");
+        }
+        notify.info = info;
+        function warn(message, title, options) {
+            abp.log.warn("abp.notify.warn is not implemented!");
+        }
+        notify.warn = warn;
+        function error(message, title, options) {
+            abp.log.warn("abp.notify.error is not implemented!");
+        }
+        notify.error = error;
+    })(notify = abp.notify || (abp.notify = {}));
     /* MESSAGE **************************************************/
     //Defines Message API, not implements it
-
-    abp.message = abp.message || {};
-
-    abp.message._showMessage = function (message, title) {
-        alert((title || '') + ' ' + message);
-    };
-
-    abp.message.info = function (message, title) {
-        abp.log.warn('abp.message.info is not implemented!');
-        return abp.message._showMessage(message, title);
-    };
-
-    abp.message.success = function (message, title) {
-        abp.log.warn('abp.message.success is not implemented!');
-        return abp.message._showMessage(message, title);
-    };
-
-    abp.message.warn = function (message, title) {
-        abp.log.warn('abp.message.warn is not implemented!');
-        return abp.message._showMessage(message, title);
-    };
-
-    abp.message.error = function (message, title) {
-        abp.log.warn('abp.message.error is not implemented!');
-        return abp.message._showMessage(message, title);
-    };
-
-    abp.message.confirm = function (message, titleOrCallback, callback) {
-        abp.log.warn('abp.message.confirm is not properly implemented!');
-
-        if (titleOrCallback && !(typeof titleOrCallback == 'string')) {
-            callback = titleOrCallback;
+    var message;
+    (function (message) {
+        function _showMessage(msg, title) {
+            if (title === void 0) { title = ""; }
+            alert(title + " " + msg);
         }
-
-        var result = confirm(message);
-        callback && callback(result);
-    };
-
+        message._showMessage = _showMessage;
+        function info(msg, title) {
+            abp.log.warn("abp.message.info is not implemented!");
+            return _showMessage(msg, title);
+        }
+        message.info = info;
+        function success(msg, title) {
+            abp.log.warn("abp.message.success is not implemented!");
+            return _showMessage(msg, title);
+        }
+        message.success = success;
+        function warn(msg, title) {
+            abp.log.warn("abp.message.warn is not implemented!");
+            return _showMessage(msg, title);
+        }
+        message.warn = warn;
+        function error(msg, title) {
+            abp.log.warn("abp.message.error is not implemented!");
+            return _showMessage(msg, title);
+        }
+        message.error = error;
+        function confirm(msg, titleOrCallback, callback) {
+            abp.log.warn("abp.message.confirm is not properly implemented!");
+            if (titleOrCallback && !(typeof titleOrCallback == "string")) {
+                callback = titleOrCallback;
+            }
+            var result = confirm(msg);
+            callback && callback(result);
+        }
+        message.confirm = confirm;
+    })(message = abp.message || (abp.message = {}));
     /* UI *******************************************************/
-
-    abp.ui = abp.ui || {};
-
+    var ui;
+    (function (ui) {
+        /* opts: { //Can be an object with options or a string for query a selector
+         *  elm: a query selector (optional - default: document.body)
+         *  busy: boolean (optional - default: false)
+         *  promise: A promise with always or finally handler (optional - auto unblocks the ui if provided)
+         * }
+         */
+        function block(opts) {
+            if (!opts) {
+                opts = {};
+            }
+            else if (typeof opts == "string") {
+                opts = {
+                    elm: opts,
+                };
+            }
+            var $elm = document.querySelector(opts.elm) || document.body;
+            if (opts.busy) {
+                $abpBlockArea.classList.add("abp-block-area-busy");
+            }
+            else {
+                $abpBlockArea.classList.remove("abp-block-area-busy");
+            }
+            if (document.querySelector(opts.elm)) {
+                $abpBlockArea.style.position = "absolute";
+            }
+            else {
+                $abpBlockArea.style.position = "fixed";
+            }
+            $elm.appendChild($abpBlockArea);
+            if (opts.promise) {
+                if (opts.promise.always) {
+                    //jQuery.Deferred style
+                    opts.promise.always(function () {
+                        unblock({
+                            $elm: opts.elm,
+                        });
+                    });
+                }
+                else if (opts.promise["finally"]) {
+                    //Q style
+                    opts.promise["finally"](function () {
+                        unblock({
+                            $elm: opts.elm,
+                        });
+                    });
+                }
+            }
+        }
+        ui.block = block;
+        /* opts: {
+         *
+         * }
+         */
+        function unblock(opts) {
+            var element = document.querySelector(".abp-block-area");
+            if (element) {
+                element.classList.add("abp-block-area-disappearing");
+                setTimeout(function () {
+                    if (element) {
+                        element.classList.remove("abp-block-area-disappearing");
+                        element.parentElement.removeChild(element);
+                    }
+                }, 250);
+            }
+        }
+        ui.unblock = unblock;
+        /* UI BUSY */
+        //Defines UI Busy API, not implements it
+        function setBusy(opts) {
+            if (!opts) {
+                opts = {
+                    busy: true,
+                };
+            }
+            else if (typeof opts == "string") {
+                opts = {
+                    elm: opts,
+                    busy: true,
+                };
+            }
+            block(opts);
+        }
+        ui.setBusy = setBusy;
+        function clearBusy(opts) {
+            unblock(opts);
+        }
+        ui.clearBusy = clearBusy;
+    })(ui = abp.ui || (abp.ui = {}));
     /* UI BLOCK */
     //Defines UI Block API and implements basically
-
-    var $abpBlockArea = document.createElement('div');
-    $abpBlockArea.classList.add('abp-block-area');
-
-    /* opts: { //Can be an object with options or a string for query a selector
-     *  elm: a query selector (optional - default: document.body)
-     *  busy: boolean (optional - default: false)
-     *  promise: A promise with always or finally handler (optional - auto unblocks the ui if provided)
-     * }
-     */
-    abp.ui.block = function (opts) {
-        if (!opts) {
-            opts = {};
-        } else if (typeof opts == 'string') {
-            opts = {
-                elm: opts
-            };
+    var $abpBlockArea = document.createElement("div");
+    $abpBlockArea.classList.add("abp-block-area");
+    // TODO: TEST-REFACTORED
+    var EventBus = /** @class */ (function () {
+        function EventBus() {
+            this._callbacks = {};
         }
-
-        var $elm = document.querySelector(opts.elm) || document.body;
-
-        if (opts.busy) {
-            $abpBlockArea.classList.add('abp-block-area-busy');
-        } else {
-            $abpBlockArea.classList.remove('abp-block-area-busy');
-        }
-
-        if (document.querySelector(opts.elm)) {
-            $abpBlockArea.style.position = 'absolute';
-        } else {
-            $abpBlockArea.style.position = 'fixed';
-        }
-
-        $elm.appendChild($abpBlockArea);
-
-        if (opts.promise) {
-            if (opts.promise.always) { //jQuery.Deferred style
-                opts.promise.always(function () {
-                    abp.ui.unblock({
-                        $elm: opts.elm
-                    });
-                });
-            } else if (opts.promise['finally']) { //Q style
-                opts.promise['finally'](function () {
-                    abp.ui.unblock({
-                        $elm: opts.elm
-                    });
-                });
+        EventBus.prototype.on = function (eventName, callback) {
+            if (!this._callbacks[eventName]) {
+                this._callbacks[eventName] = [];
             }
-        }
-    };
-
-    /* opts: {
-     *
-     * }
-     */
-    abp.ui.unblock = function (opts) {
-        var element = document.querySelector('.abp-block-area');
-        if (element) {
-            element.classList.add('abp-block-area-disappearing');
-            setTimeout(function () {
-                if (element) {
-                    element.classList.remove('abp-block-area-disappearing');
-                    element.parentElement.removeChild(element);
-                }
-            }, 250);
-        }
-    };
-
-    /* UI BUSY */
-    //Defines UI Busy API, not implements it
-
-    abp.ui.setBusy = function (opts) {
-        if (!opts) {
-            opts = {
-                busy: true
-            };
-        } else if (typeof opts == 'string') {
-            opts = {
-                elm: opts,
-                busy: true
-            };
-        }
-
-        abp.ui.block(opts);
-    };
-
-    abp.ui.clearBusy = function (opts) {
-        abp.ui.unblock(opts);
-    };
-
-    /* SIMPLE EVENT BUS *****************************************/
-
-    abp.event = (function () {
-
-        var _callbacks = {};
-
-        var on = function (eventName, callback) {
-            if (!_callbacks[eventName]) {
-                _callbacks[eventName] = [];
-            }
-
-            _callbacks[eventName].push(callback);
+            this._callbacks[eventName].push(callback);
         };
-
-        var off = function (eventName, callback) {
-            var callbacks = _callbacks[eventName];
+        // TODO: TEST-REFACTORED
+        EventBus.prototype.off = function (eventName, callback) {
+            var callbacks = this._callbacks[eventName];
             if (!callbacks) {
                 return;
             }
-
-            var index = -1;
-            for (var i = 0; i < callbacks.length; i++) {
-                if (callbacks[i] === callback) {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index < 0) {
-                return;
-            }
-
-            _callbacks[eventName].splice(index, 1);
+            this._callbacks[eventName] = callbacks.filter(function (c) { return c === callback; });
         };
-
-        var trigger = function (eventName) {
-            var callbacks = _callbacks[eventName];
+        // TODO: TEST-REFACTORED
+        EventBus.prototype.trigger = function (eventName) {
+            var _this = this;
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            var callbacks = this._callbacks[eventName];
             if (!callbacks || !callbacks.length) {
                 return;
             }
-
-            var args = Array.prototype.slice.call(arguments, 1);
-            for (var i = 0; i < callbacks.length; i++) {
-                callbacks[i].apply(this, args);
-            }
+            callbacks.forEach(function (callback) { return callback.apply(_this, args); });
         };
-
-        // Public interface ///////////////////////////////////////////////////
-
-        return {
-            on: on,
-            off: off,
-            trigger: trigger
-        };
-    })();
-
-
+        return EventBus;
+    }());
+    abp.EventBus = EventBus;
+    abp.event = new EventBus();
     /* UTILS ***************************************************/
-
-    abp.utils = abp.utils || {};
-
-    /* Creates a name namespace.
-    *  Example:
-    *  var taskService = abp.utils.createNamespace(abp, 'services.task');
-    *  taskService will be equal to abp.services.task
-    *  first argument (root) must be defined first
-    ************************************************************/
-    abp.utils.createNamespace = function (root, ns) {
-        var parts = ns.split('.');
-        for (var i = 0; i < parts.length; i++) {
-            if (typeof root[parts[i]] == 'undefined') {
-                root[parts[i]] = {};
+    var utils;
+    (function (utils) {
+        /* Creates a name namespace.
+         *  Example:
+         *  var taskService = abp.utils.createNamespace(abp, 'services.task');
+         *  taskService will be equal to abp.services.task
+         *  first argument (root) must be defined first
+         ************************************************************/
+        function createNamespace(root, ns) {
+            var parts = ns.split(".");
+            for (var i = 0; i < parts.length; i++) {
+                if (typeof root[parts[i]] == "undefined") {
+                    root[parts[i]] = {};
+                }
+                root = root[parts[i]];
             }
-
-            root = root[parts[i]];
+            return root;
         }
-
-        return root;
-    };
-
-    /* Find and replaces a string (search) to another string (replacement) in
-    *  given string (str).
-    *  Example:
-    *  abp.utils.replaceAll('This is a test string', 'is', 'X') = 'ThX X a test string'
-    ************************************************************/
-    abp.utils.replaceAll = function (str, search, replacement) {
-        var fix = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        return str.replace(new RegExp(fix, 'g'), replacement);
-    };
-
-    /* Formats a string just like string.format in C#.
-    *  Example:
-    *  abp.utils.formatString('Hello {0}','Tuana') = 'Hello Tuana'
-    ************************************************************/
-    abp.utils.formatString = function () {
-        if (arguments.length < 1) {
+        utils.createNamespace = createNamespace;
+        /* Find and replaces a string (search) to another string (replacement) in
+         *  given string (str).
+         *  Example:
+         *  abp.utils.replaceAll('This is a test string', 'is', 'X') = 'ThX X a test string'
+         ************************************************************/
+        function replaceAll(str, search, replacement) {
+            var fix = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            return str.replace(new RegExp(fix, "g"), replacement);
+        }
+        utils.replaceAll = replaceAll;
+        // TODO: TEST-REFACTORED
+        /* Formats a string just like string.format in C#.
+         *  Example:
+         *  abp.utils.formatString('Hello {0}','Tuana') = 'Hello Tuana'
+         ************************************************************/
+        function formatString(str) {
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            if (!args.length) {
+                return str;
+            }
+            for (var i = 0; i < args.length; i++) {
+                var placeHolder = "{" + i + "}";
+                str = replaceAll(str, placeHolder, args[i]);
+            }
+            return str;
+        }
+        utils.formatString = formatString;
+        function toPascalCase(str) {
+            if (!str || !str.length) {
+                return str;
+            }
+            if (str.length === 1) {
+                return str.charAt(0).toUpperCase();
+            }
+            return str.charAt(0).toUpperCase() + str.substr(1);
+        }
+        utils.toPascalCase = toPascalCase;
+        function toCamelCase(str) {
+            if (!str || !str.length) {
+                return str;
+            }
+            if (str.length === 1) {
+                return str.charAt(0).toLowerCase();
+            }
+            return str.charAt(0).toLowerCase() + str.substr(1);
+        }
+        utils.toCamelCase = toCamelCase;
+        function truncateString(str, maxLength) {
+            if (!str || !str.length || str.length <= maxLength) {
+                return str;
+            }
+            return str.substr(0, maxLength);
+        }
+        utils.truncateString = truncateString;
+        function truncateStringWithPostfix(str, maxLength, postfix) {
+            postfix = postfix || "...";
+            if (!str || !str.length || str.length <= maxLength) {
+                return str;
+            }
+            if (maxLength <= postfix.length) {
+                return postfix.substr(0, maxLength);
+            }
+            return str.substr(0, maxLength - postfix.length) + postfix;
+        }
+        utils.truncateStringWithPostfix = truncateStringWithPostfix;
+        function isFunction(obj) {
+            return !!(obj && obj.constructor && obj.call && obj.apply);
+        }
+        utils.isFunction = isFunction;
+        /**
+         * parameterInfos should be an array of { name, value } objects
+         * where name is query string parameter name and value is it's value.
+         * includeQuestionMark is true by default.
+         */
+        function buildQueryString(parameterInfos, includeQuestionMark) {
+            if (includeQuestionMark === undefined) {
+                includeQuestionMark = true;
+            }
+            var qs = "";
+            function addSeperator() {
+                if (!qs.length) {
+                    if (includeQuestionMark) {
+                        qs = qs + "?";
+                    }
+                }
+                else {
+                    qs = qs + "&";
+                }
+            }
+            for (var i = 0; i < parameterInfos.length; ++i) {
+                var parameterInfo = parameterInfos[i];
+                if (parameterInfo.value === undefined) {
+                    continue;
+                }
+                if (parameterInfo.value === null) {
+                    parameterInfo.value = "";
+                }
+                addSeperator();
+                if (parameterInfo.value.toJSON &&
+                    typeof parameterInfo.value.toJSON === "function") {
+                    qs =
+                        qs +
+                            parameterInfo.name +
+                            "=" +
+                            encodeURIComponent(parameterInfo.value.toJSON());
+                }
+                else if (Array.isArray(parameterInfo.value) &&
+                    parameterInfo.value.length) {
+                    for (var j = 0; j < parameterInfo.value.length; j++) {
+                        if (j > 0) {
+                            addSeperator();
+                        }
+                        qs =
+                            qs +
+                                parameterInfo.name +
+                                "[" +
+                                j +
+                                "]=" +
+                                encodeURIComponent(parameterInfo.value[j]);
+                    }
+                }
+                else {
+                    qs =
+                        qs +
+                            parameterInfo.name +
+                            "=" +
+                            encodeURIComponent(parameterInfo.value);
+                }
+            }
+            return qs;
+        }
+        utils.buildQueryString = buildQueryString;
+        /**
+         * Sets a cookie value for given key.
+         * This is a simple implementation created to be used by ABP.
+         * Please use a complete cookie library if you need.
+         * @param {string} key
+         * @param {string} value
+         * @param {Date} expireDate (optional). If not specified the cookie will expire at the end of session.
+         * @param {string} path (optional)
+         */
+        function setCookieValue(key, value, expireDate, path) {
+            var cookieValue = encodeURIComponent(key) + "=";
+            if (value) {
+                cookieValue = cookieValue + encodeURIComponent(value);
+            }
+            if (expireDate) {
+                cookieValue = cookieValue + "; expires=" + expireDate.toUTCString();
+            }
+            if (path) {
+                cookieValue = cookieValue + "; path=" + path;
+            }
+            document.cookie = cookieValue;
+        }
+        utils.setCookieValue = setCookieValue;
+        /**
+         * Gets a cookie with given key.
+         * This is a simple implementation created to be used by ABP.
+         * Please use a complete cookie library if you need.
+         * @param {string} key
+         * @returns {string} Cookie value or null
+         */
+        function getCookieValue(key) {
+            var equalities = document.cookie.split("; ");
+            for (var i = 0; i < equalities.length; i++) {
+                if (!equalities[i]) {
+                    continue;
+                }
+                var splitted = equalities[i].split("=");
+                if (splitted.length != 2) {
+                    continue;
+                }
+                if (decodeURIComponent(splitted[0]) === key) {
+                    return decodeURIComponent(splitted[1] || "");
+                }
+            }
             return null;
         }
-
-        var str = arguments[0];
-
-        for (var i = 1; i < arguments.length; i++) {
-            var placeHolder = '{' + (i - 1) + '}';
-            str = abp.utils.replaceAll(str, placeHolder, arguments[i]);
-        }
-
-        return str;
-    };
-
-    abp.utils.toPascalCase = function (str) {
-        if (!str || !str.length) {
-            return str;
-        }
-
-        if (str.length === 1) {
-            return str.charAt(0).toUpperCase();
-        }
-
-        return str.charAt(0).toUpperCase() + str.substr(1);
-    }
-
-    abp.utils.toCamelCase = function (str) {
-        if (!str || !str.length) {
-            return str;
-        }
-
-        if (str.length === 1) {
-            return str.charAt(0).toLowerCase();
-        }
-
-        return str.charAt(0).toLowerCase() + str.substr(1);
-    }
-
-    abp.utils.truncateString = function (str, maxLength) {
-        if (!str || !str.length || str.length <= maxLength) {
-            return str;
-        }
-
-        return str.substr(0, maxLength);
-    };
-
-    abp.utils.truncateStringWithPostfix = function (str, maxLength, postfix) {
-        postfix = postfix || '...';
-
-        if (!str || !str.length || str.length <= maxLength) {
-            return str;
-        }
-
-        if (maxLength <= postfix.length) {
-            return postfix.substr(0, maxLength);
-        }
-
-        return str.substr(0, maxLength - postfix.length) + postfix;
-    };
-
-    abp.utils.isFunction = function (obj) {
-        return !!(obj && obj.constructor && obj.call && obj.apply);
-    };
-
-    /**
-     * parameterInfos should be an array of { name, value } objects
-     * where name is query string parameter name and value is it's value.
-     * includeQuestionMark is true by default.
-     */
-    abp.utils.buildQueryString = function (parameterInfos, includeQuestionMark) {
-        if (includeQuestionMark === undefined) {
-            includeQuestionMark = true;
-        }
-
-        var qs = '';
-
-        function addSeperator() {
-            if (!qs.length) {
-                if (includeQuestionMark) {
-                    qs = qs + '?';
-                }
-            } else {
-                qs = qs + '&';
+        utils.getCookieValue = getCookieValue;
+        /**
+         * Deletes cookie for given key.
+         * This is a simple implementation created to be used by ABP.
+         * Please use a complete cookie library if you need.
+         * @param {string} key
+         * @param {string} path (optional)
+         */
+        function deleteCookie(key, path) {
+            var cookieValue = encodeURIComponent(key) + "=";
+            cookieValue =
+                cookieValue +
+                    "; expires=" +
+                    new Date(new Date().getTime() - 86400000).toUTCString();
+            if (path) {
+                cookieValue = cookieValue + "; path=" + path;
             }
+            document.cookie = cookieValue;
         }
-
-        for (var i = 0; i < parameterInfos.length; ++i) {
-            var parameterInfo = parameterInfos[i];
-            if (parameterInfo.value === undefined) {
-                continue;
-            }
-
-            if (parameterInfo.value === null) {
-                parameterInfo.value = '';
-            }
-
-            addSeperator();
-
-            if (parameterInfo.value.toJSON && typeof parameterInfo.value.toJSON === "function") {
-                qs = qs + parameterInfo.name + '=' + encodeURIComponent(parameterInfo.value.toJSON());
-            } else if (Array.isArray(parameterInfo.value) && parameterInfo.value.length) {
-                for (var j = 0; j < parameterInfo.value.length; j++) {
-                    if (j > 0) {
-                        addSeperator();
-                    }
-
-                    qs = qs + parameterInfo.name + '[' + j + ']=' + encodeURIComponent(parameterInfo.value[j]);
-                }
-            } else {
-                qs = qs + parameterInfo.name + '=' + encodeURIComponent(parameterInfo.value);
-            }
-        }
-
-        return qs;
-    }
-
-    /**
-     * Sets a cookie value for given key.
-     * This is a simple implementation created to be used by ABP.
-     * Please use a complete cookie library if you need.
-     * @param {string} key
-     * @param {string} value
-     * @param {Date} expireDate (optional). If not specified the cookie will expire at the end of session.
-     * @param {string} path (optional)
-     */
-    abp.utils.setCookieValue = function (key, value, expireDate, path) {
-        var cookieValue = encodeURIComponent(key) + '=';
-
-        if (value) {
-            cookieValue = cookieValue + encodeURIComponent(value);
-        }
-
-        if (expireDate) {
-            cookieValue = cookieValue + "; expires=" + expireDate.toUTCString();
-        }
-
-        if (path) {
-            cookieValue = cookieValue + "; path=" + path;
-        }
-
-        document.cookie = cookieValue;
-    };
-
-    /**
-     * Gets a cookie with given key.
-     * This is a simple implementation created to be used by ABP.
-     * Please use a complete cookie library if you need.
-     * @param {string} key
-     * @returns {string} Cookie value or null
-     */
-    abp.utils.getCookieValue = function (key) {
-        var equalities = document.cookie.split('; ');
-        for (var i = 0; i < equalities.length; i++) {
-            if (!equalities[i]) {
-                continue;
-            }
-
-            var splitted = equalities[i].split('=');
-            if (splitted.length != 2) {
-                continue;
-            }
-
-            if (decodeURIComponent(splitted[0]) === key) {
-                return decodeURIComponent(splitted[1] || '');
-            }
-        }
-
-        return null;
-    };
-
-    /**
-     * Deletes cookie for given key.
-     * This is a simple implementation created to be used by ABP.
-     * Please use a complete cookie library if you need.
-     * @param {string} key
-     * @param {string} path (optional)
-     */
-    abp.utils.deleteCookie = function (key, path) {
-        var cookieValue = encodeURIComponent(key) + '=';
-
-        cookieValue = cookieValue + "; expires=" + (new Date(new Date().getTime() - 86400000)).toUTCString();
-
-        if (path) {
-            cookieValue = cookieValue + "; path=" + path;
-        }
-
-        document.cookie = cookieValue;
-    }
-
+        utils.deleteCookie = deleteCookie;
+    })(utils = abp.utils || (abp.utils = {}));
     /* SECURITY ***************************************/
-    abp.security = abp.security || {};
-    abp.security.antiForgery = abp.security.antiForgery || {};
-
-    abp.security.antiForgery.tokenCookieName = 'XSRF-TOKEN';
-    abp.security.antiForgery.tokenHeaderName = 'RequestVerificationToken';
-
-    abp.security.antiForgery.getToken = function () {
-        return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);
-    };
-
+    var security;
+    (function (security) {
+        security.antiForgery = abp.security.antiForgery || {};
+        security.antiForgery.tokenCookieName = "XSRF-TOKEN";
+        security.antiForgery.tokenHeaderName = "RequestVerificationToken";
+        security.antiForgery.getToken = function () {
+            return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);
+        };
+    })(security = abp.security || (abp.security = {}));
     /* CLOCK *****************************************/
-    abp.clock = abp.clock || {};
-
-    abp.clock.kind = 'Unspecified';
-
-    abp.clock.supportsMultipleTimezone = function () {
-        return abp.clock.kind === 'Utc';
-    };
-
-    var toLocal = function (date) {
-        return new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            date.getHours(),
-            date.getMinutes(),
-            date.getSeconds(),
-            date.getMilliseconds()
-        );
-    };
-
-    var toUtc = function (date) {
-        return Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes(),
-            date.getUTCSeconds(),
-            date.getUTCMilliseconds()
-        );
-    };
-
-    abp.clock.now = function () {
-        if (abp.clock.kind === 'Utc') {
-            return toUtc(new Date());
+    var clock;
+    (function (clock) {
+        clock.kind = "Unspecified";
+        function supportsMultipleTimezone() {
+            return clock.kind === "Utc";
         }
-        return new Date();
-    };
-
-    abp.clock.normalize = function (date) {
-        var kind = abp.clock.kind;
-
-        if (kind === 'Unspecified') {
-            return date;
+        clock.supportsMultipleTimezone = supportsMultipleTimezone;
+        function toLocal(date) {
+            return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
         }
-
-        if (kind === 'Local') {
-            return toLocal(date);
+        function toUtc(date) {
+            return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
         }
-
-        if (kind === 'Utc') {
-            return toUtc(date);
+        function now() {
+            if (clock.kind === "Utc") {
+                return toUtc(new Date());
+            }
+            return new Date();
         }
-    };
-    
+        clock.now = now;
+        function normalize(date) {
+            if (clock.kind === "Unspecified") {
+                return date;
+            }
+            if (clock.kind === "Local") {
+                return toLocal(date);
+            }
+            if (clock.kind === "Utc") {
+                return toUtc(date);
+            }
+        }
+        clock.normalize = normalize;
+    })(clock = abp.clock || (abp.clock = {}));
     /* FEATURES *************************************************/
-
-    abp.features = abp.features || {};
-
-    abp.features.values = abp.features.values || {};
-
-    abp.features.isEnabled = function(name){
-        var value = abp.features.get(name);
-        return value == 'true' || value == 'True';
-    }
-
-    abp.features.get = function (name) {
-        return abp.features.values[name];
-    };
-    
-})();
+    var features;
+    (function (features) {
+        features.values = abp.features.values || {};
+        function isEnabled(name) {
+            var value = get(name);
+            return value == "true" || value == "True";
+        }
+        features.isEnabled = isEnabled;
+        function get(name) {
+            return features.values[name];
+        }
+        features.get = get;
+    })(features = abp.features || (abp.features = {}));
+})(abp || (abp = {}));
+//# sourceMappingURL=abp.js.map

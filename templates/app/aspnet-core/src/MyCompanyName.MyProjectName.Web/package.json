@@ -1,8 +1,12 @@
 {
-  "version": "1.0.0",
-  "name": "my-app",
-  "private": true,
-  "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.0.0"
-  }
+    "version": "1.0.0",
+    "name": "my-app",
+    "private": true,
+    "dependencies": {
+        "@abp/aspnetcore.mvc.ui.theme.basic": "^4.0.0",
+        "@abp/core": "^4.0.1"
+    },
+    "devDependencies": {
+        "@types/jquery": "^3.5.5"
+    }
 }

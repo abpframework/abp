@@ -1,0 +1,16 @@
+﻿{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "declaration": true,
+    "sourceMap": true,
+    "target": "es5",
+    "strict": false,
+    "module": "none",
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["src/**/*"],
+  "compileOnSave": true
+}

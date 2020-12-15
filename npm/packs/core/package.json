@@ -4,8 +4,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "@abp/utils": "^4.0.0"
   },
-  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
 }

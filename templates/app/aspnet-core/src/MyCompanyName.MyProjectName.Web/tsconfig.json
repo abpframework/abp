@@ -1,0 +1,15 @@
+﻿{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "noImplicitAny": false,
+        "noEmitOnError": true,
+        "removeComments": false,
+        "sourceMap": true,
+        "target": "es5",
+        "strict": false,
+        "module": "none",
+        "typeRoots": ["node_modules/@types"]
+    },
+    "include": ["Pages/**/*", "node_modules/@abp/core"],
+    "compileOnSave": true
+}
