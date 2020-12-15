@@ -55,7 +55,7 @@ namespace Volo.Abp.Domain.Repositories
         {
             if (UnitOfWorkManager?.Current != null)
             {
-                return UnitOfWorkManager?.Current.SaveChangesAsync(cancellationToken);
+                return UnitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
             }
 
             return Task.CompletedTask;
@@ -63,7 +63,33 @@ namespace Volo.Abp.Domain.Repositories
 
         public abstract Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
 
+        public virtual async Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            foreach (var entity in entities)
+            {
+                await UpdateAsync(entity, cancellationToken: cancellationToken);
+            }
+
+            if (autoSave)
+            {
+                await SaveChangesAsync(cancellationToken);
+            }
+        }
+
         public abstract Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
+
+        public virtual async Task DeleteManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            foreach (var entity in entities)
+            {
+                await DeleteAsync(entity, cancellationToken: cancellationToken);
+            }
+
+            if (autoSave)
+            {
+                await SaveChangesAsync(cancellationToken);
+            }
+        }
 
         public abstract Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default);
 
