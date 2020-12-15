@@ -12,7 +12,7 @@ export namespace ABP {
     sendNullsAsQueryParam?: boolean;
   }
 
-  export interface Test {
+  export interface Test extends Partial<Root> {
     baseHref?: Router;
   }
 
