@@ -55,7 +55,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>Awaitable <see cref="Task"/>.</returns>
 
-        Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task UpdateManyAsync([NotNull] IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
         /// <summary>
         /// Deletes an entity.
         /// </summary>
@@ -93,5 +93,17 @@ namespace Volo.Abp.Domain.Repositories
         /// </param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default);  //TODO: Return true if deleted
+
+        /// <summary>
+        /// Deletes multiple entities by primary keys.
+        /// </summary>
+        /// <param name="ids">Primary keys of the each entity.</param>
+        /// <param name="autoSave">
+        /// Set true to automatically save changes to database.
+        /// This is useful for ORMs / database APIs those only save changes with an explicit method call, but you need to immediately save changes to the database.
+        /// </param>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Awaitable <see cref="Task"/>.</returns>
+        Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default);
     }
 }
