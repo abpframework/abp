@@ -59,7 +59,6 @@
     "@ngx-validate/core": "^0.0.13",
     "@ngxs/devtools-plugin": "^3.7.0",
     "@ngxs/logger-plugin": "^3.7.0",
-    "@ngxs/router-plugin": "^3.7.0",
     "@ngxs/store": "^3.7.0",
     "@schematics/angular": "~10.0.5",
     "@swimlane/ngx-datatable": "^18.0.0",
