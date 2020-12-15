@@ -1,14 +1,14 @@
-import { CoreModule, RestOccurError } from '@abp/ng.core';
+import { RestOccurError } from '@abp/ng.core';
+import { CoreTestingModule } from '@abp/ng.core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
-import { NavigationError, ResolveEnd, RouterModule } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { Actions, NgxsModule, ofActionDispatched, Store } from '@ngxs/store';
+import { NgxsModule, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
-import { DEFAULT_ERROR_MESSAGES, ErrorHandler, DEFAULT_ERROR_LOCALIZATIONS } from '../handlers';
+import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
 import { ConfirmationService } from '../services';
 import { httpErrorConfigFactory } from '../tokens/http-error.token';
 
@@ -16,7 +16,7 @@ import { httpErrorConfigFactory } from '../tokens/http-error.token';
   exports: [HttpErrorWrapperComponent],
   declarations: [HttpErrorWrapperComponent],
   entryComponents: [HttpErrorWrapperComponent],
-  imports: [CoreModule],
+  imports: [CoreTestingModule],
 })
 class MockModule {}
 
@@ -31,12 +31,7 @@ const CONFIRMATION_BUTTONS = {
 describe('ErrorHandler', () => {
   const createService = createServiceFactory({
     service: ErrorHandler,
-    imports: [
-      RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
-      NgxsModule.forRoot([]),
-      CoreModule,
-      MockModule,
-    ],
+    imports: [NgxsModule.forRoot([]), CoreTestingModule.forTest(), MockModule],
     mocks: [OAuthService],
     providers: [
       { provide: APP_BASE_HREF, useValue: '/' },
