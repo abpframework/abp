@@ -5,10 +5,12 @@ namespace Volo.Abp.Bundling
     public class BundleContext
     {
         public List<BundleDefinition> BundleDefinitions { get; set; }
-
+        public BundleParameterDictionary Parameters { get; set; }
+        
         public BundleContext()
         {
             BundleDefinitions = new List<BundleDefinition>();
+            Parameters = new BundleParameterDictionary();
         }
 
         public void Add(string source, bool excludeFromBundle = false,

@@ -79,7 +79,7 @@ namespace Volo.Abp.Cli.Bundling
                     Directory = directory,
                     FrameworkVersion = frameworkVersion,
                     ProjectFileName = projectName,
-                    BundleName = bundleConfig.Name,
+                    BundleName = bundleConfig.Name.IsNullOrEmpty() ? "global" : bundleConfig.Name,
                     Minify = bundleConfig.Mode == BundlingMode.BundleAndMinify
                 };
 
@@ -98,12 +98,15 @@ namespace Volo.Abp.Cli.Bundling
         private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions,
             BundleParameterDictionary parameters)
         {
-            var scriptContext = new BundleContext();
+            var scriptContext = new BundleContext
+            {
+                Parameters = parameters
+            };
 
             foreach (var bundleDefinition in bundleDefinitions)
             {
                 var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
-                contributor.AddScripts(scriptContext, parameters);
+                contributor.AddScripts(scriptContext);
             }
 
             scriptContext.Add("_framework/blazor.webassembly.js");
@@ -113,12 +116,15 @@ namespace Volo.Abp.Cli.Bundling
         private BundleContext GetStyleContext(List<BundleTypeDefinition> bundleDefinitions,
             BundleParameterDictionary parameters)
         {
-            var styleContext = new BundleContext();
+            var styleContext = new BundleContext
+            {
+                Parameters = parameters
+            };
 
             foreach (var bundleDefinition in bundleDefinitions)
             {
                 var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
-                contributor.AddStyles(styleContext, parameters);
+                contributor.AddStyles(styleContext);
             }
 
             return styleContext;
