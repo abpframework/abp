@@ -4,6 +4,6 @@ namespace Volo.Abp.Cli.Bundling
 {
     public interface IBundlingService
     {
-        Task BundleAsync(string directory, bool forceBuild, bool bundle, bool minify, string bundleName);
+        Task BundleAsync(string directory, bool forceBuild);
     }
 }
