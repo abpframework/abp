@@ -46,7 +46,8 @@ export class FormSubmitDirective implements OnInit {
 
     const keyup$ = fromEvent(this.host.nativeElement as HTMLElement, 'keyup').pipe(
       debounceTime(this.debounce),
-      filter((key: KeyboardEvent) => key && key.key === 'Enter'),
+      filter(event => !(event.target instanceof HTMLTextAreaElement)),
+      filter((event: KeyboardEvent) => event && event.key === 'Enter'),
     );
 
     this.subscription.addOne(keyup$, () => {
