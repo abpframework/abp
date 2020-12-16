@@ -25,6 +25,16 @@ export class InternalStore<State> {
 
   constructor(private initialState: State) {}
 
+  patch(state: Partial<State>) {
+    let patchedState = state as State;
+
+    if (typeof state === 'object' && !Array.isArray(state)) {
+      patchedState = { ...this.state, ...state };
+    }
+
+    this.state$.next(patchedState);
+    this.update$.next(patchedState);
+  }
 
   deepPatch(state: DeepPartial<State>) {
     this.state$.next(deepMerge(this.state, state));
