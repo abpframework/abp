@@ -158,7 +158,8 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
     			context.Services.AddMicrosoftIdentityWebAppAuthentication(
                     configuration: configuration,
                     configSectionName: "AzureAd",
-                    openIdConnectScheme:"AzureAD");
+                    openIdConnectScheme:"AzureAD",
+                    cookieScheme:null);
 		}
 ````
 
