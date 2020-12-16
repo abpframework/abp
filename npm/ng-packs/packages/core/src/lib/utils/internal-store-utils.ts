@@ -25,7 +25,8 @@ export class InternalStore<State> {
 
   constructor(private initialState: State) {}
 
-  patch(state: DeepPartial<State>) {
+
+  deepPatch(state: DeepPartial<State>) {
     this.state$.next(deepMerge(this.state, state));
     this.update$.next(state);
   }
