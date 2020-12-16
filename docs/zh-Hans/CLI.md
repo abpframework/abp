@@ -126,6 +126,7 @@ abp update [options]
 * `--solution-path` 或 `-sp`: 指定解决方案路径/目录. 默认使用当前目录
 * `--solution-name` 或 `-sn`: 指定解决方案名称. 默认在目录中搜索`*.sln`文件.
 * `--check-all`: 分别检查每个包的新版本. 默认是 `false`.
+* `--version` or `-v`: 指定用于升级的版本. 如果没有指定,则使用最新版本.
 
 ### add-package
 

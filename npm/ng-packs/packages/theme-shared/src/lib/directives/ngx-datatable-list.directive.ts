@@ -68,22 +68,22 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   private subscribeToQuery() {
-    this.querySubscription.add(
-      this.list.query$.subscribe(() => {
-        if (this.list.page !== this.table.offset) this.table.offset = this.list.page;
-      }),
-    );
+    if (!this.querySubscription.closed) this.querySubscription.unsubscribe();
+
+    this.querySubscription = this.list.query$.subscribe(() => {
+      const offset = this.list.page;
+      if (this.table.offset !== offset) this.table.offset = offset;
+    });
   }
 
   ngOnChanges({ list }: SimpleChanges) {
+    this.subscribeToQuery();
+
     if (!list.firstChange) return;
 
     const { maxResultCount, page } = list.currentValue;
     this.table.limit = maxResultCount;
     this.table.offset = page;
-
-    this.querySubscription.unsubscribe();
-    this.subscribeToQuery();
   }
 
   ngOnDestroy() {
