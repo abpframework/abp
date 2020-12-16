@@ -82,6 +82,28 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
+        public override async Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            foreach (var entity in entities)
+            {
+                await ApplyAbpConceptsForAddedEntityAsync(entity);
+            }
+
+            if (SessionHandle != null)
+            {
+                await Collection.InsertManyAsync(
+                    SessionHandle,
+                    entities,
+                    cancellationToken: cancellationToken);
+            }
+            else
+            {
+                await Collection.InsertManyAsync(
+                    entities,
+                    cancellationToken: cancellationToken);
+            }
+        }
+
         public async override Task<TEntity> UpdateAsync(
             TEntity entity,
             bool autoSave = false,
@@ -130,6 +152,55 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
 
             return entity;
+        }
+
+        public override async Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var isSoftDeleteEntity = typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity));
+
+            foreach (var entity in entities)
+            {
+                SetModificationAuditProperties(entity);
+
+                if (isSoftDeleteEntity)
+                {
+                    SetDeletionAuditProperties(entity);
+                    await TriggerEntityDeleteEventsAsync(entity);
+                }
+                else
+                {
+                    await TriggerEntityUpdateEventsAsync(entity);
+                }
+
+                await TriggerDomainEventsAsync(entity);
+
+                SetNewConcurrencyStamp(entity);
+            }
+
+            var entitiesCount = entities.Count();
+            BulkWriteResult result;
+
+            if (SessionHandle != null)
+            {
+                result = await Collection.BulkWriteAsync(SessionHandle, GetReplaceRequests());
+            }
+            else
+            {
+                result = await Collection.BulkWriteAsync(GetReplaceRequests());
+            }
+
+            if (result.MatchedCount < entitiesCount)
+            {
+                ThrowOptimisticConcurrencyException();
+            }
+
+            IEnumerable<WriteModel<TEntity>> GetReplaceRequests()
+            {
+                foreach (var entity in entities)
+                {
+                    yield return new ReplaceOneModel<TEntity>(CreateEntityFilter(entity), entity);
+                }
+            }
         }
 
         public async override Task DeleteAsync(
@@ -189,6 +260,67 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 }
 
                 if (result.DeletedCount <= 0)
+                {
+                    ThrowOptimisticConcurrencyException();
+                }
+            }
+        }
+
+        public override async Task DeleteManyAsync(
+            IEnumerable<TEntity> entities,
+            bool autoSave = false,
+            CancellationToken cancellationToken = default)
+        {
+            foreach (var entity in entities)
+            {
+                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+                var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
+            }
+
+            var entitiesCount = entities.Count();
+
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                UpdateResult updateResult;
+                if (SessionHandle != null)
+                {
+                    updateResult = await Collection.UpdateManyAsync(
+                        SessionHandle,
+                        CreateEntitiesFilter(entities),
+                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
+                        );
+                }
+                else
+                {
+                    updateResult = await Collection.UpdateManyAsync(
+                        CreateEntitiesFilter(entities),
+                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
+                        );
+                }
+
+                if (updateResult.MatchedCount < entitiesCount)
+                {
+                    ThrowOptimisticConcurrencyException();
+                }
+            }
+            else
+            {
+                DeleteResult deleteResult;
+                if (SessionHandle != null)
+                {
+                    deleteResult = await Collection.DeleteManyAsync(
+                        SessionHandle,
+                        CreateEntitiesFilter(entities)
+                        );
+                }
+                else
+                {
+                    deleteResult = await Collection.DeleteManyAsync(
+                        CreateEntitiesFilter(entities)
+                        );
+                }
+
+                if (deleteResult.DeletedCount < entitiesCount)
                 {
                     ThrowOptimisticConcurrencyException();
                 }
@@ -269,6 +401,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             throw new NotImplementedException(
                 $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
             );
+        }
+
+        protected virtual FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
+        {
+            throw new NotImplementedException(
+              $"{nameof(CreateEntitiesFilter)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
+          );
         }
 
         protected virtual async Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
@@ -483,9 +622,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return RepositoryFilterer.CreateEntityFilter(entity, withConcurrencyStamp, concurrencyStamp);
         }
 
+        protected override FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
+        {
+            return RepositoryFilterer.CreateEntitiesFilter(entities, withConcurrencyStamp);
+        }
+
         public async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+
         }
     }
 }
