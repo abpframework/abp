@@ -16,6 +16,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MongoDB.Volo.Abp.Domain.Repositories.MongoDB;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
@@ -45,6 +46,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         public IGuidGenerator GuidGenerator { get; set; }
 
         public IAuditPropertySetter AuditPropertySetter { get; set; }
+
+        public IMongoDbBulkOperationProvider BulkOperationProvider { get; set; }
 
         public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
         {
@@ -87,6 +90,12 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             foreach (var entity in entities)
             {
                 await ApplyAbpConceptsForAddedEntityAsync(entity);
+            }
+
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.InsertManyAsync(this, entities, autoSave, cancellationToken);
+                return;
             }
 
             if (SessionHandle != null)
@@ -175,6 +184,12 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 await TriggerDomainEventsAsync(entity);
 
                 SetNewConcurrencyStamp(entity);
+            }
+
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.UpdateManyAsync(this, entities, autoSave, cancellationToken);
+                return;
             }
 
             var entitiesCount = entities.Count();
@@ -275,6 +290,12 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             {
                 await ApplyAbpConceptsForDeletedEntityAsync(entity);
                 var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
+            }
+
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.DeleteManyAsync(this, entities, autoSave, cancellationToken);
+                return;
             }
 
             var entitiesCount = entities.Count();

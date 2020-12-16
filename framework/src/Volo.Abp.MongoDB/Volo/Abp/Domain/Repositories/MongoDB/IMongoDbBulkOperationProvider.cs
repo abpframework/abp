@@ -17,7 +17,7 @@ namespace Volo.Abp.MongoDB.Volo.Abp.Domain.Repositories.MongoDB
            where TEntity : class, IEntity;
 
 
-        Task UpdateManyAsync<TDbContext, TEntity>(
+        Task UpdateManyAsync<TEntity>(
             IMongoDbRepository<TEntity> repository,
             IEnumerable<TEntity> entities,
             bool autoSave,
@@ -26,7 +26,7 @@ namespace Volo.Abp.MongoDB.Volo.Abp.Domain.Repositories.MongoDB
             where TEntity : class, IEntity;
 
 
-        Task DeleteManyAsync<TDbContext, TEntity>(
+        Task DeleteManyAsync<TEntity>(
             IMongoDbRepository<TEntity> repository,
             IEnumerable<TEntity> entities,
             bool autoSave,
