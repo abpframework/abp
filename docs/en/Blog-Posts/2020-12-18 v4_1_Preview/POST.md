@@ -120,6 +120,28 @@ Module extensibility system (mentioned above) for the Blazor UI is in developmen
 
 ## What's new with the ABP Commercial 4.1
 
+### Blazor UI Improvements
+
+We continue to complete missing modules and functionalities for the Blazor UI.
+
+#### Organization Unit Management
+
+TODO
+
+#### IdentityServer UI
+
+TODO
+
+### Suite: Navigation Property Selection with Typeahead
+
+TODO
+
+### Spanish Language Translation
+
+TODO
+
+### Coming: Public Website with Integrated CMS Features
+
 TODO
 
 ## Other News
@@ -128,6 +150,7 @@ TODO
 
 A lot of new contents have been published in the ABP Community Web Site in the last two weeks:
 
+* [How to Integrate the Telerik Blazor Components to the ABP Blazor UI](https://community.abp.io/articles/how-to-integrate-the-telerik-blazor-components-to-the-abp-blazor-ui-q8g31abb) by [EngincanV](https://github.com/EngincanV)
 * [Using DevExpress Blazor UI Components With the ABP Framework](https://community.abp.io/articles/using-devexpress-blazor-ui-components-with-the-abp-framework-wrpoa8rw) by [@berkansasmaz](https://github.com/berkansasmaz)
 * [Creating a new UI theme by copying the Basic Theme (for MVC UI)](https://community.abp.io/articles/creating-a-new-ui-theme-by-copying-the-basic-theme-for-mvc-ui-yt9b18io) by [@ebubekirdinc](https://github.com/ebubekirdinc)
 * [Using Angular Material Components With the ABP Framework](https://community.abp.io/members/muhammedaltug) by [@muhammedaltug](https://github.com/muhammedaltug)
