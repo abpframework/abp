@@ -78,6 +78,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
                 classNames.Append("modal-dialog-centered");
             }
 
+            if (TagHelper.Scrollable ?? false)
+            {
+                classNames.Append(" ");
+                classNames.Append("modal-dialog-scrollable");
+            }
+
             if (TagHelper.Size != AbpModalSize.Default)
             {
                 classNames.Append(" ");
