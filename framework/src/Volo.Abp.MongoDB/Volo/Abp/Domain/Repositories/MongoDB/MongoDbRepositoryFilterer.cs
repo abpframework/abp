@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
@@ -23,13 +24,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
             {
-                filters.Add(Builders<TEntity>.Filter.Eq(e => ((ISoftDelete) e).IsDeleted, false));
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((ISoftDelete)e).IsDeleted, false));
             }
 
             if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
             {
                 var tenantId = CurrentTenant.Id;
-                filters.Add(Builders<TEntity>.Filter.Eq(e => ((IMultiTenant) e).TenantId, tenantId));
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((IMultiTenant)e).TenantId, tenantId));
             }
         }
     }
@@ -72,8 +73,28 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
             return Builders<TEntity>.Filter.And(
                 Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id),
-                Builders<TEntity>.Filter.Eq(e => ((IHasConcurrencyStamp) e).ConcurrencyStamp, concurrencyStamp)
+                Builders<TEntity>.Filter.Eq(e => ((IHasConcurrencyStamp)e).ConcurrencyStamp, concurrencyStamp)
             );
+        }
+
+        public FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool applyFilters = false)
+        {
+            return CreateEntitiesFilter(entities.Select(s => s.Id), applyFilters);
+        }
+
+        public FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TKey> ids, bool applyFilters = false)
+        {
+            var filters = new List<FilterDefinition<TEntity>>()
+            {
+                Builders<TEntity>.Filter.In(e => e.Id, ids),
+            };
+
+            if (applyFilters)
+            {
+                AddGlobalFilters(filters);
+            }
+
+            return Builders<TEntity>.Filter.And(filters);
         }
     }
 }
