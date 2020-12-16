@@ -26,7 +26,7 @@ dotnet tool install Volo.Abp.Cli -g --version 4.1.0-rc.1
 abp new BookStore --preview
 ````
 
-See the [ABP CLI documentation](https://docs.abp.io/en/abp/3.3/CLI) for all the available options.
+See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all the available options.
 
 > You can also use the *Direct Download* tab on the [Get Started](https://abp.io/get-started) page by selecting the **Preview checkbox**.
 
