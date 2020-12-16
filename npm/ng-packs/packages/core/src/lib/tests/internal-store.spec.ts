@@ -18,24 +18,48 @@ const mockInitialState = {
 type MockState = typeof mockInitialState;
 
 const deepPatch1: DeepPartial<MockState> = { foo: { bar: { baz: [() => {}] } } };
-const expected1: MockState = clone(mockInitialState);
-expected1.foo.bar.baz = deepPatch1.foo.bar.baz;
+const deepPatchExpected1: MockState = clone(mockInitialState);
+deepPatchExpected1.foo.bar.baz = deepPatch1.foo.bar.baz;
 
 const deepPatch2: DeepPartial<MockState> = { foo: { bar: { qux: Promise.resolve() } } };
-const expected2: MockState = clone(mockInitialState);
-expected2.foo.bar.qux = deepPatch2.foo.bar.qux;
+const deepPatchExpected2: MockState = clone(mockInitialState);
+deepPatchExpected2.foo.bar.qux = deepPatch2.foo.bar.qux;
 
 const deepPatch3: DeepPartial<MockState> = { foo: { n: 1 } };
-const expected3: MockState = clone(mockInitialState);
-expected3.foo.n = deepPatch3.foo.n;
+const deepPatchExpected3: MockState = clone(mockInitialState);
+deepPatchExpected3.foo.n = deepPatch3.foo.n;
 
 const deepPatch4: DeepPartial<MockState> = { x: 'X' };
-const expected4: MockState = clone(mockInitialState);
-expected4.x = deepPatch4.x;
+const deepPatchExpected4: MockState = clone(mockInitialState);
+deepPatchExpected4.x = deepPatch4.x;
 
 const deepPatch5: DeepPartial<MockState> = { a: true };
-const expected5: MockState = clone(mockInitialState);
-expected5.a = deepPatch5.a;
+const deepPatchExpected5: MockState = clone(mockInitialState);
+deepPatchExpected5.a = deepPatch5.a;
+
+const patch1: Partial<MockState> = {
+  foo: { bar: { baz: [() => {}] } } as typeof mockInitialState.foo,
+};
+const patchExpected1: MockState = clone(mockInitialState);
+patchExpected1.foo = patch1.foo;
+
+const patch2: Partial<MockState> = {
+  foo: { bar: { qux: Promise.resolve() } } as typeof mockInitialState.foo,
+};
+const patchExpected2: MockState = clone(mockInitialState);
+patchExpected2.foo = patch2.foo;
+
+const patch3: Partial<MockState> = { foo: { n: 1 } as typeof mockInitialState.foo };
+const patchExpected3: MockState = clone(mockInitialState);
+patchExpected3.foo = patch3.foo;
+
+const patch4: Partial<MockState> = { x: 'X' };
+const patchExpected4: MockState = clone(mockInitialState);
+patchExpected4.x = patch4.x;
+
+const patch5: Partial<MockState> = { a: true };
+const patchExpected5: MockState = clone(mockInitialState);
+patchExpected5.a = patch5.a;
 
 describe('Internal Store', () => {
   describe('sliceState', () => {
@@ -59,18 +83,35 @@ describe('Internal Store', () => {
     );
   });
 
-  describe('patchState', () => {
+  describe('deepPatchState', () => {
     test.each`
       patch         | expected
-      ${deepPatch1} | ${expected1}
-      ${deepPatch2} | ${expected2}
-      ${deepPatch3} | ${expected3}
-      ${deepPatch4} | ${expected4}
-      ${deepPatch5} | ${expected5}
+      ${deepPatch1} | ${deepPatchExpected1}
+      ${deepPatch2} | ${deepPatchExpected2}
+      ${deepPatch3} | ${deepPatchExpected3}
+      ${deepPatch4} | ${deepPatchExpected4}
+      ${deepPatch5} | ${deepPatchExpected5}
     `('should set state as $expected when patch is $patch', ({ patch, expected }) => {
       const store = new InternalStore(mockInitialState);
 
       store.deepPatch(patch);
+
+      expect(store.state).toEqual(expected);
+    });
+  });
+
+  describe('patchState', () => {
+    test.each`
+      patch     | expected
+      ${patch1} | ${patchExpected1}
+      ${patch2} | ${patchExpected2}
+      ${patch3} | ${patchExpected3}
+      ${patch4} | ${patchExpected4}
+      ${patch5} | ${patchExpected5}
+    `('should set state as $expected when patch is $patch', ({ patch, expected }) => {
+      const store = new InternalStore(mockInitialState);
+
+      store.patch(patch);
 
       expect(store.state).toEqual(expected);
     });
