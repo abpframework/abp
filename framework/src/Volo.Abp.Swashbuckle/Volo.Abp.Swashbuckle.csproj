@@ -26,6 +26,8 @@
     <ItemGroup>
       <None Remove="wwwroot\swagger\ui\abp.swagger.js" />
       <EmbeddedResource Include="wwwroot\swagger\ui\abp.swagger.js" />
+      <None Remove="wwwroot\swagger\ui\abp.js" />
+      <EmbeddedResource Include="wwwroot\swagger\ui\abp.js" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc;
+﻿using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
