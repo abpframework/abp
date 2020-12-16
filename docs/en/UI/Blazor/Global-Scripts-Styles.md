@@ -34,5 +34,3 @@ namespace MyProject.Blazor
 ```
 
 > There is a BundleContributor class implementing `IBundleContributor` interface coming by default with the startup templates. So, most of the time, you don't need to add it manually.
-
-> Bundle command adds style and script references individually. Bundling and minification support will be added to incoming releases.

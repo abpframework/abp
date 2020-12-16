@@ -32,9 +32,93 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/3.3/CLI) for all the 
 
 ## What's new with the ABP Framework 4.1
 
-TODO
+### Module Entity Extensions
 
-## What's new with the ABP Commercial 4.0
+Module Entity Extension system provides a simple way of adding new properties to an existing entity defined by a module that is used by your application. This feature is now available also for the open source modules (identity and tenant-management). [The documentation](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) has been moved into the ABP Framework's documentation.
+
+**Example: Add "SocialSecurityNumber" property to the `IdentityUser` entity**
+
+````csharp
+ObjectExtensionManager.Instance.Modules()
+    .ConfigureIdentity(identity =>
+    {
+        identity.ConfigureUser(user =>
+        {
+            user.AddOrUpdateProperty<string>( //property type: string
+                "SocialSecurityNumber", //property name
+                property =>
+                {
+                    //validation rules
+                    property.Attributes.Add(new RequiredAttribute());
+                    property.Attributes.Add(
+                        new StringLengthAttribute(64) {
+                            MinimumLength = 4
+                        }
+                    );
+
+                    //...other configurations for this property
+                }
+            );
+        });
+    });
+````
+
+The new property becomes available on the UI, API and the database. You can even define navigation properties. This provides an easy way to extend existing modules while using them as NuGet packages. See [the document](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) for details.
+
+### Blazor UI Improvements
+
+Since the Blazor UI is relatively new in the ABP Framework, we continue to add features and make enhancements to fill the gap between other supported UI types.
+
+#### Bundling & Minification
+
+In the version 4.1, we had introduced the `abp bundle` command for the Blazor UI to add global script and style files of the depended modules into the `index.html`. It was a preparation for a real bundling & minification system. With the version 4.2, this command has been completed.
+
+Whenever you add a new module to your Blazor application, just type the `abp bundle` command in a command line terminal;
+
+* It finds all the global script/style files in your application and the modules your application directly or indirectly depends on, ordered by the module dependencies.
+* Bundles all the scripts into a single file and minified the file (same for the styles).
+* Add the single bundle file to the `index.html` file.
+
+Added a configuration into the `appsettings.json` file in the Blazor application in the application startup template to control the bundling mode:
+
+````js
+{
+  "AbpCli": {
+    "Bundle": {
+      "Mode": "BundleAndMinify"
+    }
+  }
+}
+````
+
+Possible values are;
+
+* `BundleAndMinify`: Bundle all the files into a single file and minify the content.
+* `Bundle`: Bundle all files into a single file, but not minify.
+* `None`: Add files individually, do not bundle.
+
+See the [Global Scripts & Styles](https://docs.abp.io/en/abp/4.1/UI/Blazor/Global-Scripts-Styles) document for details.
+
+#### SubmitButton
+
+`SubmitButton` is a new component that simplifies to save a form:
+
+````html
+<SubmitButton Form="UserEditForm" Clicked="@UpdateEntityAsync" />
+````
+
+The main advantages of using this component instead of a standard `Button` with submit type is; It automatically blocks the submit button until the save operation has fully completed. This prevents multiple clicks by user.
+
+There are some attributes to customize the component.
+
+#### Other Blazor UI highlights
+
+* Implemented some **animations** (like opening/closing modals and dropdowns).
+* Automatically **focus** to the first input when you open a modal form.
+
+Module extensibility system (mentioned above) for the Blazor UI is in development and not available yet.
+
+## What's new with the ABP Commercial 4.1
 
 TODO
 
