@@ -106,7 +106,7 @@ namespace Volo.Abp.Cli.Bundling
             foreach (var bundleDefinition in bundleDefinitions)
             {
                 var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
-                contributor.AddScripts(scriptContext, parameters);
+                contributor.AddScripts(scriptContext);
             }
 
             scriptContext.Add("_framework/blazor.webassembly.js");
@@ -124,7 +124,7 @@ namespace Volo.Abp.Cli.Bundling
             foreach (var bundleDefinition in bundleDefinitions)
             {
                 var contributor = CreateContributorInstance(bundleDefinition.BundleContributorType);
-                contributor.AddStyles(styleContext, parameters);
+                contributor.AddStyles(styleContext);
             }
 
             return styleContext;
