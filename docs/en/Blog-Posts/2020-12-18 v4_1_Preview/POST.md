@@ -126,23 +126,31 @@ We continue to complete missing modules and functionalities for the Blazor UI.
 
 #### Organization Unit Management
 
-TODO
+Organization Management UI has been implemented for the Blazor UI. Example screenshot:
+
+![blazor-organization-units](blazor-organization-units.png)
 
 #### IdentityServer UI
 
-TODO
+IdentityServer Management UI is also available for the Blazor UI now:
+
+![blazor-identityserver-ui](blazor-identityserver-ui.png)
 
 ### Suite: Navigation Property Selection with Typeahead
 
-TODO
+We had introduced auto-complete select style navigation property selection. With this release, it is fully supported by all the UI options. So, when you create an CRUD page with ABP Suite for entity that has 1 to Many relation to another entity, you can simply select the target entity with a typeahead style select component. Example screenshot:
+
+TODO: Screenshot
 
 ### Spanish Language Translation
 
-TODO
+We continue to add new language supports for the UI. In this version, translated the UI to **Spanish** language.
+
+![spanish-commercial-translation](spanish-commercial-translation.png)
 
 ### Coming: Public Website with Integrated CMS Features
 
-TODO
+In the next version, the application startup template will come with a public website application option. CMS Kit module will be installed in the website by default, that means newsletter, contact form, comments and some other new features will be directly usable in your applications.
 
 ## Other News
 
