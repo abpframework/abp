@@ -638,6 +638,15 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return DeleteAsync(x => x.Id.Equals(id), autoSave, cancellationToken);
         }
 
+        public virtual async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var entities = await GetMongoQueryable()
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
+        }
+
         protected override FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
         {
             return RepositoryFilterer.CreateEntityFilter(entity, withConcurrencyStamp, concurrencyStamp);
@@ -646,11 +655,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         protected override FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
         {
             return RepositoryFilterer.CreateEntitiesFilter(entities, withConcurrencyStamp);
-        }
-
-        public async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-
         }
     }
 }
