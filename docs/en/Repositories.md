@@ -166,7 +166,7 @@ public class MyCustomEfCoreBulkOperationProvider : IEfCoreBulkOperationProvider,
 }
 ```
 
-
+> **WARNING:** ConcurrencyStamp can't be checked at bulk operations!
 
 
 ## Custom Repositories
