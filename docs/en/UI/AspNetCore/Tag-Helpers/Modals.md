@@ -33,6 +33,13 @@ A value indicates the positioning of the modal. Should be one of the following v
 * `false` (default value)
 * `true`
 
+### Scrollable
+
+A value indicates the scrolling of the modal. Should be one of the following values:
+
+* `false` (default value)
+* `true`
+
 ### size
 
 A value indicates the size of the modal. Should be one of the following values:
