@@ -152,6 +152,10 @@ We continue to add new language supports for the UI. In this version, translated
 
 In the next version, the application startup template will come with a public website application option. CMS Kit module will be installed in the website by default, that means newsletter, contact form, comments and some other new features will be directly usable in your applications.
 
+An early screenshot from the public website application home page:
+
+![abp-commercial-public-website](abp-commercial-public-website.png)
+
 ## Other News
 
 ### ABP Community Contents
