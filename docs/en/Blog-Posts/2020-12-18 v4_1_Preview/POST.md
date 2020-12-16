@@ -30,6 +30,10 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 > You can also use the *Direct Download* tab on the [Get Started](https://abp.io/get-started) page by selecting the **Preview checkbox**.
 
+## Breaking Changes
+
+This version has a minor breaking change if you'd injected a repository by class. This is not a problem for 99% of the applications. However, see [#6677](https://github.com/abpframework/abp/issues/6677) for the solution if that's a breaking change for your application.
+
 ## What's new with the ABP Framework 4.1
 
 ### Module Entity Extensions
