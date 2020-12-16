@@ -14,7 +14,7 @@ namespace Volo.Abp.Domain.Repositories
         {
             if (!typeof(IRepository).IsAssignableFrom(type))
             {
-                return false;
+                return true;
             }
 
             return base.IsConventionalRegistrationDisabled(type);
