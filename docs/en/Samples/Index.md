@@ -27,6 +27,9 @@ While there is no Razor Pages & MongoDB combination, you can check both document
 
 ### Other Samples
 
+* Event Organizer: A sample application to create events (meetups) and allow others to register the events. Developed using EF Core and Blazor UI.
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/EventOrganizer)
+  * [Article](https://community.abp.io/articles/creating-an-event-organizer-application-with-the-blazor-ui-wbe0sf2z)
 * **Entity Framework Migrations**: A solution to demonstrate how to split your application into multiple databases each database contains different modules.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo)
   * [EF Core database migrations document](../Entity-Framework-Core-Migrations.md)
