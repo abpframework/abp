@@ -144,7 +144,7 @@ IdentityServer Management UI is also available for the Blazor UI now:
 
 We had introduced auto-complete select style navigation property selection. With this release, it is fully supported by all the UI options. So, when you create an CRUD page with ABP Suite for entity that has 1 to Many relation to another entity, you can simply select the target entity with a typeahead style select component. Example screenshot:
 
-TODO: Screenshot
+![type-ahead](type-ahead.png)
 
 ### Spanish Language Translation
 
