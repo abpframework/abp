@@ -46,7 +46,7 @@ namespace Volo.Abp.Application.Services
             Repository = repository;
         }
 
-        protected override async Task<TEntity> GetEntityByIdAsync(TKey id)
+        protected async override Task<TEntity> GetEntityByIdAsync(TKey id)
         {
             return await Repository.GetAsync(id);
         }

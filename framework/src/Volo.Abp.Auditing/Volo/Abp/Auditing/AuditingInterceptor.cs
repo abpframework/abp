@@ -18,7 +18,7 @@ namespace Volo.Abp.Auditing
             _auditingManager = auditingManager;
         }
 
-        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {
@@ -46,8 +46,8 @@ namespace Volo.Abp.Auditing
         }
 
         protected virtual bool ShouldIntercept(
-            IAbpMethodInvocation invocation, 
-            out AuditLogInfo auditLog, 
+            IAbpMethodInvocation invocation,
+            out AuditLogInfo auditLog,
             out AuditLogActionInfo auditLogAction)
         {
             auditLog = null;
@@ -73,7 +73,7 @@ namespace Volo.Abp.Auditing
             auditLogAction = _auditingHelper.CreateAuditLogAction(
                 auditLog,
                 invocation.TargetObject.GetType(),
-                invocation.Method, 
+                invocation.Method,
                 invocation.Arguments
             );
 

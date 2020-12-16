@@ -4,7 +4,7 @@ Prism.languages.lolcode = {
 		/\bBTW.+/
 	],
 	'string': {
-		pattern: /"(?::.|[^"])*"/,
+		pattern: /"(?::.|[^":])*"/,
 		inside: {
 			'variable': /:\{[^}]+\}/,
 			'symbol': [

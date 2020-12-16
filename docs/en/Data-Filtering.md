@@ -32,6 +32,8 @@ namespace Acme.BookStore
 
 > `ISoftDelete` filter is enabled by default and you can not get deleted entities from database unless you explicitly disable it. See the `IDataFilter` service below.
 
+> Soft-delete entities can be hard-deleted when you use `HardDeleteAsync` method on the repositories.
+
 ### IMultiTenant
 
 [Multi-tenancy](Multi-Tenancy.md) is an efficient way of creating SaaS applications. Once you create a multi-tenant application, you typically want to isolate data between tenants. Implement `IMultiTenant` interface to make your entity "multi-tenant aware".

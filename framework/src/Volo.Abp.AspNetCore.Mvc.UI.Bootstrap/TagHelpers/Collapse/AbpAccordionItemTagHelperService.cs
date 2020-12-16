@@ -9,7 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 {
     public class AbpAccordionItemTagHelperService : AbpTagHelperService<AbpAccordionItemTagHelper>
     {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             SetRandomIdIfNotProvided();
 
@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             button.Attributes.Add("data-target", "#" + GetContentId());
             button.Attributes.Add("aria-expanded", "true");
             button.Attributes.Add("aria-controls", GetContentId());
-            button.InnerHtml.Append(TagHelper.Title);
+            button.InnerHtml.AppendHtml(TagHelper.Title);
 
             var h5 = new TagBuilder("h5");
             h5.AddCssClass("mb-0");

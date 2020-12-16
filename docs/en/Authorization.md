@@ -234,7 +234,7 @@ context
 
 When you write this code inside your permission definition provider, it finds the "role deletion" permission of the [Identity Module](Modules/Identity.md) and disabled the permission, so no one can delete a role on the application.
 
-> Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined. 
+> Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined.
 
 ## IAuthorizationService
 
@@ -354,7 +354,7 @@ public class SystemAdminPermissionValueProvider : PermissionValueProvider
 
     public override string Name => "SystemAdmin";
 
-    public override async Task<PermissionGrantResult>
+    public async override Task<PermissionGrantResult>
            CheckAsync(PermissionValueCheckContext context)
     {
         if (context.Principal?.FindFirst("User_Type")?.Value == "SystemAdmin")
@@ -406,5 +406,5 @@ This is already done for the startup template integration tests.
 ## See Also
 
 * [Permission Management Module](Modules/Permission-Management.md)
-* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](API/JavaScript-API/Auth.md)
+* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](UI/AspNetCore/JavaScript-API/Auth.md)
 * [Permission Management in Angular UI](UI/Angular/Permission-Management.md)

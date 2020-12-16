@@ -111,9 +111,3 @@ class DemoComponent {
   trackByTenantAccountId = trackByDeep<Item>('tenant', 'account', 'id');
 }
 ```
-
-
-
-## What's Next?
-
-- [Inserting Scripts & Styles to DOM](./Dom-Insertion-Service.md)

@@ -75,16 +75,47 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 
 Then the route for getting a book will be '**/api/volosoft/book-store/book/{id}**'. This sample uses two-level root path, but you generally use a single level depth.
 
-* Continues with the **normalized controller/service name**. Normalization removes 'AppService', 'ApplicationService' and 'Service' postfixes and converts it to **camelCase**. If your application service class name is 'BookAppService' then it becomes only '/book'.
+* Continues with the **normalized controller/service name**. Normalization removes 'AppService', 'ApplicationService' and 'Service' postfixes and converts it to **kebab-case**. If your application service class name is 'ReadingBookAppService' then it becomes only '/reading-book'.
   * If you want to customize naming, then set the `UrlControllerNameNormalizer` option. It's a func delegate which allows you to determine the name per controller/service.
 * If the method has an '**id**' parameter then it adds '**/{id}**' ro the route.
 * Then it adds the action name if necessary. Action name is obtained from the method name on the service and normalized by;
   * Removing '**Async**' postfix. If the method name is 'GetPhonesAsync' then it becomes 'GetPhones'.
   * Removing **HTTP method prefix**. 'GetList', 'GetAll', 'Get', 'Put', 'Update', 'Delete', 'Remove', 'Create', 'Add', 'Insert', 'Post' and 'Patch' prefixes are removed based on the selected HTTP method. So, 'GetPhones' becomes 'Phones' since 'Get' prefix is a duplicate for a GET request.
-  * Converting the result to **camelCase**.
+  * Converting the result to **kebab-case**.
   * If the resulting action name is **empty** then it's not added to the route. If it's not empty, it's added to the route (like '/phones'). For 'GetAllAsync' method name it will be empty, for 'GetPhonesAsync' method name it will be 'phones'.
   * Normalization can be customized by setting the `UrlActionNameNormalizer` option. It's an action delegate that is called for every method.
 * If there is another parameter with 'Id' postfix, then it's also added to the route as the final route segment (like '/phoneId').
+
+#### Customizing the Route Calculation
+
+`IConventionalRouteBuilder` is used to build the route. It is implemented by the `ConventionalRouteBuilder` by default and works as explained above. You can replace/override this service to customize the route calculation strategy.
+
+#### Version 3.x Style Route Calculation
+
+The route calculation was different before the version 4.0. It was using camelCase conventions, while the ABP Framework version 4.0+ uses kebab-case. If you use the old route calculation strategy, follow one of the approaches;
+
+* Set `UseV3UrlStyle` to `true` in the options of the `options.ConventionalControllers.Create(...)` method. Example:
+
+````csharp
+options.ConventionalControllers
+    .Create(typeof(BookStoreApplicationModule).Assembly, opts =>
+        {
+            opts.UseV3UrlStyle = true;
+        });
+````
+
+This approach effects only the controllers for the `BookStoreApplicationModule`.
+
+* Set `UseV3UrlStyle` to `true` for the `AbpConventionalControllerOptions` to set it globally. Example:
+
+```csharp
+Configure<AbpConventionalControllerOptions>(options =>
+{
+    options.UseV3UrlStyle = true;
+});
+```
+
+Setting it globally effects all the modules in a modular application.
 
 ## Service Selection
 

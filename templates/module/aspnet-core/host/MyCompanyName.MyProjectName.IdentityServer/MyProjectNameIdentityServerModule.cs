@@ -40,6 +40,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
@@ -74,7 +75,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(MyProjectNameApplicationContractsModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwashbuckleModule)
         )]
     public class MyProjectNameIdentityServerModule : AbpModule
     {
@@ -103,6 +105,7 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
@@ -125,7 +128,7 @@ namespace MyCompanyName.MyProjectName
                 .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
+                    options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                     options.Audience = configuration["AuthServer:ApiName"];
                 });
 
@@ -199,7 +202,7 @@ namespace MyCompanyName.MyProjectName
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });

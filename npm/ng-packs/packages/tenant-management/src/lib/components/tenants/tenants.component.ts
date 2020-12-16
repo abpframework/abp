@@ -1,7 +1,7 @@
-import { ABP, ListService, PagedResultDto } from '@abp/ng.core';
+import { ListService, PagedResultDto } from '@abp/ng.core';
 import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -14,7 +14,7 @@ import {
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
 import { GetTenantsInput, TenantDto } from '../../proxy/models';
-import { TenantManagementService } from '../../services/tenant-management.service';
+import { TenantService } from '../../proxy/tenant.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
 
 interface SelectedModalContent {
@@ -101,8 +101,9 @@ export class TenantsComponent implements OnInit {
 
   constructor(
     public readonly list: ListService<GetTenantsInput>,
+    private injector: Injector,
     private confirmationService: ConfirmationService,
-    private tenantService: TenantManagementService,
+    private tenantService: TenantService,
     private fb: FormBuilder,
     private store: Store,
   ) {}
@@ -115,7 +116,7 @@ export class TenantsComponent implements OnInit {
     const tenantForm = this.fb.group({
       name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
       adminEmailAddress: [null, [Validators.required, Validators.maxLength(256), Validators.email]],
-      adminPassword: [null, [Validators.required, ...getPasswordValidators(this.store)]],
+      adminPassword: [null, [Validators.required, ...getPasswordValidators(this.injector)]],
     });
 
     if (this.hasSelectedTenant) {
@@ -205,10 +206,7 @@ export class TenantsComponent implements OnInit {
         });
     } else {
       this.tenantService
-        .updateDefaultConnectionString({
-          id: this.selected.id,
-          defaultConnectionString: this.connectionString,
-        })
+        .updateDefaultConnectionString(this.selected.id, this.connectionString)
         .pipe(
           take(1),
           finalize(() => (this.modalBusy = false)),

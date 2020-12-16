@@ -45,7 +45,7 @@ Run the following command to generate a layout in `angular` folder:
 yarn ng generate component my-application-layout
 ```
 
-Add the following code in your layout template (`my-layout.component.html`) where you want the page to be loaded.
+Add the following code in your layout template (`my-application-layout.component.html`) where you want the page to be loaded.
 
 ```html
 <router-outlet></router-outlet>
@@ -547,7 +547,3 @@ The final UI looks like below:
 ## See Also
 
 - [How to Replace PermissionManagementComponent](./Permission-Management-Component-Replacement.md)
-
-## What's Next?
-
-- [Custom Setting Page](./Custom-Setting-Page.md)

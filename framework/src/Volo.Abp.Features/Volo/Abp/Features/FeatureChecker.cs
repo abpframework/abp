@@ -34,8 +34,8 @@ namespace Volo.Abp.Features
                 true
             );
         }
-        
-        public override async Task<string> GetOrNullAsync(string name)
+
+        public async override Task<string> GetOrNullAsync(string name)
         {
             var featureDefinition = FeatureDefinitionManager.Get(name);
             var providers = Enumerable

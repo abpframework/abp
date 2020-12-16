@@ -57,7 +57,7 @@ namespace Volo.Abp.Application.Services
 
         protected override Task<TEntityDto> MapToGetListOutputDtoAsync(TEntity entity)
         {
-            return base.MapToGetOutputDtoAsync(entity);
+            return MapToGetOutputDtoAsync(entity);
         }
 
         protected override TEntityDto MapToGetListOutputDto(TEntity entity)
@@ -80,12 +80,12 @@ namespace Volo.Abp.Application.Services
             Repository = repository;
         }
 
-        protected override async Task DeleteByIdAsync(TKey id)
+        protected async override Task DeleteByIdAsync(TKey id)
         {
             await Repository.DeleteAsync(id);
         }
 
-        protected override async Task<TEntity> GetEntityByIdAsync(TKey id)
+        protected async override Task<TEntity> GetEntityByIdAsync(TKey id)
         {
             return await Repository.GetAsync(id);
         }

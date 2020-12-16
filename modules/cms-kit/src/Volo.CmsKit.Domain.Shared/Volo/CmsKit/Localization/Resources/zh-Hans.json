@@ -1,0 +1,22 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "PickYourReaction": "选择你的回应",
+    "YourComment": "你的评论",
+    "YourReply": "你的回复",
+    "Comments": "评论",
+    "Send": "发送",
+    "Delete": "删除",
+    "Reply": "回复",
+    "Update": "更新",
+    "Edit": "修改",
+    "LoginToAddComment": "登录添加评论",
+    "LoginToReply": "登录进行回复",
+    "MessageDeletionConfirmationMessage": "这条评论将被完全删除",
+    "CommentAuthorizationExceptionMessage": "这些评论不允许公开显示",
+    "Undo": "撤消",
+    "RatingUndoMessage": "您的评分将被撤消",
+    "LoginToRate": "登录进行评分",
+    "Star": "星"
+  }
+}

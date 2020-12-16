@@ -45,12 +45,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
                     sb.AppendLine(GetSaveButton());
                     break;
                 case AbpModalButtons.Save | AbpModalButtons.Cancel:
-                    sb.AppendLine(GetSaveButton());
                     sb.AppendLine(GetCancelButton());
+                    sb.AppendLine(GetSaveButton());
                     break;
                 case AbpModalButtons.Save | AbpModalButtons.Close:
-                    sb.AppendLine(GetSaveButton());
                     sb.AppendLine(GetCloseButton());
+                    sb.AppendLine(GetSaveButton());
                     break;
             }
 
@@ -72,6 +72,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             element.AddCssClass("btn-primary");
             element.Attributes.Add("data-busy-text", _localizer["SavingWithThreeDot"]);
             element.InnerHtml.AppendHtml(icon);
+            element.InnerHtml.AppendHtml(" ");
             element.InnerHtml.AppendHtml(span);
 
             return element.ToHtmlString();

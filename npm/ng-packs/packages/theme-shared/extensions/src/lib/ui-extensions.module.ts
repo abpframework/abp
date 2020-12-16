@@ -5,6 +5,7 @@ import {
   NgbDatepickerModule,
   NgbDropdownModule,
   NgbTimepickerModule,
+  NgbTypeaheadModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { DateTimePickerComponent } from './components/date-time-picker/date-time-picker.component';
@@ -43,6 +44,7 @@ import { PropDataDirective } from './directives/prop-data.directive';
     NgbDatepickerModule,
     NgbDropdownModule,
     NgbTimepickerModule,
+    NgbTypeaheadModule,
   ],
 })
 export class UiExtensionsModule {}

@@ -37,5 +37,5 @@ Prism.languages.ocaml = {
 	'boolean': /\b(?:false|true)\b/,
 	// Custom operators are allowed
 	'operator': /:=|[=<>@^|&+\-*\/$%!?~][!$%&*+\-.\/:<=>?@^|~]*|\b(?:and|asr|land|lor|lsl|lsr|lxor|mod|or)\b/,
-	'punctuation': /[(){}\[\]|_.,:;]/
+	'punctuation': /[(){}\[\]|.,:;]|\b_\b/
 };

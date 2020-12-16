@@ -1,0 +1,23 @@
+{
+  "culture": "es",
+  "texts": {
+    "Menu:TenantManagement": "Gestión de tenants",
+    "Tenants": "Inquilinos",
+    "NewTenant": "Nuevo inquilino",
+    "TenantName": "Nombre del inquilino",
+    "DisplayName:TenantName": "Nombre del inquilino",
+    "TenantDeletionConfirmationMessage": "Se eliminará el inquilino '{0}'. Confirmas eso?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Connection String predeterminado",
+    "DisplayName:UseSharedDatabase": "Usar la base de datos compartida",
+    "ManageHostFeatures": "Administrar funciones de host",
+    "Permission:TenantManagement": "Gestión de tenants",
+    "Permission:Create": "Crear",
+    "Permission:Edit": "Editar",
+    "Permission:Delete": "Borrar",
+    "Permission:ManageConnectionStrings": "Gestión de cadenas de conexión",
+    "Permission:ManageFeatures": "Gestión de características",
+    "DisplayName:AdminEmailAddress": "Dirección de e-mail de administrador",
+    "DisplayName:AdminPassword": "Contraseña de administrador"
+  }
+}

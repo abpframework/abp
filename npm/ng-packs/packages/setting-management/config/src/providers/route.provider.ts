@@ -14,9 +14,9 @@ export const SETTING_MANAGEMENT_ROUTE_PROVIDERS = [
   },
 ];
 
-export function configureRoutes(routes: RoutesService) {
+export function configureRoutes(routesService: RoutesService) {
   return () => {
-    routes.add([
+    routesService.add([
       {
         name: eSettingManagementRouteNames.Settings,
         path: '/setting-management',
@@ -29,13 +29,15 @@ export function configureRoutes(routes: RoutesService) {
   };
 }
 
-export function hideRoutes(routes: RoutesService, tabs: SettingTabsService) {
+export function hideRoutes(routesService: RoutesService, settingTabsService: SettingTabsService) {
   return () => {
-    tabs.visible$
+    settingTabsService.visible$
       .pipe(
         debounceTime(0),
         map(nodes => !nodes.length),
       )
-      .subscribe(invisible => routes.patch(eSettingManagementRouteNames.Settings, { invisible }));
+      .subscribe(invisible =>
+        routesService.patch(eSettingManagementRouteNames.Settings, { invisible }),
+      );
   };
 }

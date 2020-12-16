@@ -11,22 +11,22 @@ namespace Volo.Abp.Http.Modeling
         /// <summary>
         /// "app".
         /// </summary>
-        public const string DefaultRootPath = "app"; 
+        public const string DefaultRootPath = "app";
 
         /// <summary>
         /// "Default".
         /// </summary>
-        public const string DefaultRemoteServiceName = "Default"; 
-        
+        public const string DefaultRemoteServiceName = "Default";
+
         public string RootPath { get; set; }
 
         public string RemoteServiceName { get; set; }
 
         public IDictionary<string, ControllerApiDescriptionModel> Controllers { get; set; }
 
-        private ModuleApiDescriptionModel()
+        public ModuleApiDescriptionModel()
         {
-            
+
         }
 
         public static ModuleApiDescriptionModel Create(string rootPath, string remoteServiceName)
@@ -53,7 +53,7 @@ namespace Volo.Abp.Http.Modeling
         {
             return Controllers.GetOrAdd(uniqueName, () => ControllerApiDescriptionModel.Create(name, type, ignoredInterfaces));
         }
-        
+
         public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)
         {
             var subModel = Create(RootPath, RemoteServiceName);

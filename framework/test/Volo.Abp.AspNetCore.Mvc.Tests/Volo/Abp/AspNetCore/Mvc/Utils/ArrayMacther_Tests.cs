@@ -10,7 +10,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Utils
             new[] { "p1", "p2", "p3", "p4", "p5" },
             new[] { "p1", "p2", "p2", "p2", "p3", "p4", "p5", "p5" })
             ]
-        public void Should_Find_Correct_Items(string[] sourceArray, string[] destinationArray, string[] expectedArray)
+        public void Should_Find_Correct_Items(
+            string[] sourceArray,
+            string[] destinationArray,
+            string[] expectedArray)
         {
             var result = ArrayMatcher.Match(sourceArray, destinationArray);
             Assert.Equal(expectedArray, result);

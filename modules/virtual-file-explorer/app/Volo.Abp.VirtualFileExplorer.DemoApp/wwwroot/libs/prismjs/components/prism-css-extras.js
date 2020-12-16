@@ -8,8 +8,8 @@
 		inside: selectorInside = {
 			'pseudo-element': /:(?:after|before|first-letter|first-line|selection)|::[-\w]+/,
 			'pseudo-class': /:[-\w]+/,
-			'class': /\.[-:.\w]+/,
-			'id': /#[-:.\w]+/,
+			'class': /\.[-\w]+/,
+			'id': /#[-\w]+/,
 			'attribute': {
 				pattern: RegExp('\\[(?:[^[\\]"\']|' + string.source + ')*\\]'),
 				greedy: true,
@@ -27,11 +27,11 @@
 							'punctuation': /\|$/
 						}
 					},
-					'attribute': {
+					'attr-name': {
 						pattern: /^(\s*)[-\w\xA0-\uFFFF]+/,
 						lookbehind: true
 					},
-					'value': [
+					'attr-value': [
 						string,
 						{
 							pattern: /(=\s*)[-\w\xA0-\uFFFF]+(?=\s*$)/,
@@ -55,7 +55,13 @@
 					lookbehind: true
 				}
 			],
-			'punctuation': /[()]/
+			'combinator': />|\+|~|\|\|/,
+
+			// the `tag` token has been existed and removed.
+			// because we can't find a perfect tokenize to match it.
+			// if you want to add it, please read https://github.com/PrismJS/prism/pull/2373 first.
+
+			'punctuation': /[(),]/,
 		}
 	};
 
@@ -69,7 +75,7 @@
 	});
 
 	var unit = {
-		pattern: /(\d)(?:%|[a-z]+)/,
+		pattern: /(\b\d+)(?:%|[a-z]+\b)/,
 		lookbehind: true
 	};
 	// 123 -123 .123 -.123 12.3 -12.3
@@ -101,6 +107,7 @@
 				}
 			}
 		],
+		// it's important that there is no boundary assertion after the hex digits
 		'entity': /\\[\da-f]{1,8}/i,
 		'unit': unit,
 		'number': number

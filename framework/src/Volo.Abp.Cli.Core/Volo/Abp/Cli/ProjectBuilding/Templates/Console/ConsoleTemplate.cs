@@ -10,7 +10,7 @@
         public ConsoleTemplate()
             : base(TemplateName)
         {
-            DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Getting-Started-Console-Application";
+            DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/Console";
         }
     }
 }

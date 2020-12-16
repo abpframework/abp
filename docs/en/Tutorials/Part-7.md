@@ -74,6 +74,10 @@ Open the **Package Manager Console** on Visual Studio and ensure that the **Defa
 
 Run the following command to create a new database migration:
 
+````bash
+Add-Migration "Added_Authors"
+````
+
 ![bookstore-add-migration-authors](images/bookstore-add-migration-authors.png)
 
 This will create a new migration class. Then run the `Update-Database` command to create the table on the database.

@@ -20,7 +20,7 @@ namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly
             AccessTokenProvider = accessTokenProvider;
         }
 
-        public override async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
+        public async override Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
         {
             if (context.RemoteService.GetUseCurrentAccessToken() != false)
             {

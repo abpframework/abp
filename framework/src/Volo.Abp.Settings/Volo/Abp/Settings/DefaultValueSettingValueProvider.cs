@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Settings
 {
@@ -8,7 +10,7 @@ namespace Volo.Abp.Settings
 
         public override string Name => ProviderName;
 
-        public DefaultValueSettingValueProvider(ISettingStore settingStore) 
+        public DefaultValueSettingValueProvider(ISettingStore settingStore)
             : base(settingStore)
         {
 
@@ -17,6 +19,11 @@ namespace Volo.Abp.Settings
         public override Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             return Task.FromResult(setting.DefaultValue);
+        }
+
+        public override Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+        {
+            return Task.FromResult(settings.Select(x => new SettingValue(x.Name, x.DefaultValue)).ToList());
         }
     }
 }

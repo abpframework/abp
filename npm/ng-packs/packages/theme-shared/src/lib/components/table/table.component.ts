@@ -13,7 +13,7 @@ import {
 
 /**
  *
- * @deprecated use ngx-datatale instead.
+ * @deprecated To be deleted in v5.0. Use ngx-datatale instead.
  */
 @Component({
   selector: 'abp-table',

@@ -17,7 +17,8 @@ namespace Volo.Abp.Cli.Http
     {
         public static TimeSpan DefaultTimeout { get; set; } = TimeSpan.FromMinutes(1);
 
-        public CliHttpClient(TimeSpan? timeout = null) : base(new CliHttpClientHandler())
+        public CliHttpClient(TimeSpan? timeout = null)
+            : base(new CliHttpClientHandler())
         {
             Timeout = timeout ?? DefaultTimeout;
 

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
@@ -33,10 +34,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
             IOptions<AbpAccountOptions> accountOptions,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
-            IEventService identityServerEvents)
+            IEventService identityServerEvents,
+            IOptions<IdentityOptions> identityOptions)
             :base(
                 schemeProvider,
-                accountOptions)
+                accountOptions,
+                identityOptions)
         {
             Interaction = interaction;
             ClientStore = clientStore;
@@ -76,9 +79,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-            if (context?.ClientId != null)
+            if (context?.Client?.ClientId != null)
             {
-                var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
+                var client = await ClientStore.FindEnabledClientByIdAsync(context?.Client?.ClientId);
                 if (client != null)
                 {
                     EnableLocalLogin = client.EnableLocalLogin;
@@ -108,7 +111,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     return Redirect("~/");
                 }
 
-                await Interaction.GrantConsentAsync(context, ConsentResponse.Denied);
+                await Interaction.GrantConsentAsync(context, new ConsentResponse()
+                {
+                    Error = AuthorizationError.AccessDenied
+                });
 
                 return Redirect(ReturnUrl);
             }
@@ -116,6 +122,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             await CheckLocalLoginAsync();
 
             ValidateModel();
+
+            await IdentityOptions.SetAsync();
 
             ExternalProviders = await GetExternalProviders();
 

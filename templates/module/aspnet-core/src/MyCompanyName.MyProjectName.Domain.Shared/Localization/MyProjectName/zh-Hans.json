@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "ManageYourProfile":  "管理个人资料" 
+    "ManageYourProfile": "管理个人资料",
+    "SamplePageMessage": "MyProjectName模块的示例页面"
   }
 }

@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs.Hangfire
 {
@@ -22,7 +20,7 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
             Options = options.Value;
         }
 
-        public void Execute(TArgs args)
+        public async Task ExecuteAsync(TArgs args)
         {
             if (!Options.IsJobExecutionEnabled)
             {
@@ -39,7 +37,7 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
             {
                 var jobType = Options.GetJob(typeof(TArgs)).JobType;
                 var context = new JobExecutionContext(scope.ServiceProvider, jobType, args);
-                AsyncHelper.RunSync(() => JobExecuter.ExecuteAsync(context));
+                await JobExecuter.ExecuteAsync(context);
             }
         }
     }

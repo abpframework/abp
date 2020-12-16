@@ -583,19 +583,18 @@ When you click to the Books menu item under the Book Store parent, you are being
 
 We will use the [Blazorise library](https://blazorise.com/) as the UI component kit. It is a very powerful library that supports major HTML/CSS frameworks, including the Bootstrap.
 
-ABP Framework provides a generic base class, `BlazoriseCrudPageBase<...>`, to create CRUD style pages. This base class is compatible to the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `BlazoriseCrudPageBase` to automate the standard CRUD stuff.
+ABP Framework provides a generic base class, `AbpCrudPageBase<...>`, to create CRUD style pages. This base class is compatible to the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpCrudPageBase` to automate the code behind for the standard CRUD stuff.
 
 Open the `Books.razor` and replace the content as the following:
 
 ````xml
 @page "/books"
 @using Volo.Abp.Application.Dtos
-@using Volo.Abp.BlazoriseUI
 @using Acme.BookStore.Books
 @using Acme.BookStore.Localization
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<BookStoreResource> L
-@inherits BlazoriseCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+@inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
 
 <Card>
     <CardHeader>
@@ -620,14 +619,14 @@ Open the `Books.razor` and replace the content as the following:
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
-                                Field="@nameof(BookDto.PublishDate)" 
+                                Field="@nameof(BookDto.PublishDate)"
                                 Caption="@L["PublishDate"]">
                     <DisplayTemplate>
                         @context.PublishDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
-                                Field="@nameof(BookDto.Price)" 
+                                Field="@nameof(BookDto.Price)"
                                 Caption="@L["Price"]">
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -645,15 +644,15 @@ Open the `Books.razor` and replace the content as the following:
 
 > If you see some syntax errors, you can ignore them if your application properly built and run. Visual Studio still has some bugs with Blazor.
 
-* Inherited from the `BlazoriseCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
+* Inherited from the `AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
 * `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base blass.
 * Injected `IStringLocalizer<BookStoreResource>` (as `L` object) and used for localization.
 
 While the code above pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
 
-#### About the BlazoriseCrudPageBase
+#### About the AbpCrudPageBase
 
-We will continue to benefit from the `BlazoriseCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call server side HTTP APIs in your Blazor applications.
+We will continue to benefit from the `AbpCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call server side HTTP APIs in your Blazor applications.
 
 ## Run the Final Application
 

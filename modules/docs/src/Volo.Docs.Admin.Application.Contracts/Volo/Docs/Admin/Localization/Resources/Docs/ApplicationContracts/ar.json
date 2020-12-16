@@ -43,7 +43,6 @@
     "RemovedFromCache": "تم الحذف من ذاكرة التخزين",
     "RemoveFromCacheConfirmation": "هل أنت متأكد من حذف هذا العنصر من ذاكرة التخزين؟",
     "ReIndexDocumentConfirmation": "هل أنت متأكد من إعادة فهرسة هذا العنصر؟",
-    "DeleteDocumentFromDbConfirmation": "هل أنت متأكد من حذف هذا العنصر من قاعدة البيانات؟",
     "DeleteFromDatabase": "حذف من قاعدة البيانات",
     "Deleted": "محذوف",
     "Search": "بحث",

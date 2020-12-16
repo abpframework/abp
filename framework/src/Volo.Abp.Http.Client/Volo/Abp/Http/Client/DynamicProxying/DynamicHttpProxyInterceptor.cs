@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http.Client.Authentication;
+using Volo.Abp.Http.Client.Content;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
@@ -73,7 +75,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
         }
 
-        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
             {
@@ -103,17 +105,31 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private async Task<T> MakeRequestAndGetResultAsync<T>(IAbpMethodInvocation invocation)
         {
-            var responseAsString = await MakeRequestAsync(invocation);
+            var responseContent = await MakeRequestAsync(invocation);
 
-            if (typeof(T) == typeof(string))
+            if (typeof(T) == typeof(IRemoteStreamContent))
             {
-                return (T)Convert.ChangeType(responseAsString, typeof(T));
+                /* returning a class that holds a reference to response
+                 * content just to be sure that GC does not dispose of
+                 * it before we finish doing our work with the stream */
+                return (T)((object)new ReferencedRemoteStreamContent(await responseContent.ReadAsStreamAsync(), responseContent));
             }
 
-            return JsonSerializer.Deserialize<T>(responseAsString);
+            var stringContent = await responseContent.ReadAsStringAsync();
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)stringContent;
+            }
+
+            if (stringContent.IsNullOrWhiteSpace())
+            {
+                return default;
+            }
+
+            return JsonSerializer.Deserialize<T>(stringContent);
         }
 
-        private async Task<string> MakeRequestAsync(IAbpMethodInvocation invocation)
+        private async Task<HttpContent> MakeRequestAsync(IAbpMethodInvocation invocation)
         {
             var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
             var remoteServiceConfig = AbpRemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
@@ -140,14 +156,16 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 )
             );
 
-            var response = await client.SendAsync(requestMessage, GetCancellationToken());
+            var response = await client.SendAsync(requestMessage,
+                HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
+                GetCancellationToken());
 
             if (!response.IsSuccessStatusCode)
             {
                 await ThrowExceptionForResponseAsync(response);
             }
 
-            return await response.Content.ReadAsStringAsync();
+            return response.Content;
         }
 
         private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
@@ -239,10 +257,22 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     await response.Content.ReadAsStringAsync()
                 );
 
-                throw new AbpRemoteCallException(errorResponse.Error);
+                throw new AbpRemoteCallException(errorResponse.Error)
+                {
+                    HttpStatusCode = (int) response.StatusCode
+                };
             }
 
-            throw new AbpException($"Remote service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");
+            throw new AbpRemoteCallException(
+                new RemoteServiceErrorInfo
+                {
+                    Message = response.ReasonPhrase,
+                    Code = response.StatusCode.ToString()
+                }
+            )
+            {
+                HttpStatusCode = (int) response.StatusCode
+            };
         }
 
         protected virtual CancellationToken GetCancellationToken()

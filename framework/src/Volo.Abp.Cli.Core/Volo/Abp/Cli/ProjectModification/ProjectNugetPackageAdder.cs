@@ -50,7 +50,8 @@ namespace Volo.Abp.Cli.ProjectModification
             );
         }
 
-        public Task AddAsync(string projectFile, NugetPackageInfo package, string version = null)
+        public Task AddAsync(string projectFile, NugetPackageInfo package, string version = null,
+            bool useDotnetCliToInstall = true)
         {
             var projectFileContent = File.ReadAllText(projectFile);
 
@@ -66,21 +67,30 @@ namespace Volo.Abp.Cli.ProjectModification
 
             using (DirectoryHelper.ChangeCurrentDirectory(Path.GetDirectoryName(projectFile)))
             {
-                Logger.LogInformation($"Installing '{package.Name}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");
+                Logger.LogInformation(
+                    $"Installing '{package.Name}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");
 
-                var versionOption = version == null ? "" : $" -v {version}";
-
-                CmdHelper.Run("dotnet", $"add package {package.Name}{versionOption}");
+                if (useDotnetCliToInstall)
+                {
+                    AddUsingDotnetCli(package, version);
+                }
+                else
+                {
+                    AddToCsprojManuallyAsync(projectFile, package, version);
+                }
 
                 var moduleFiles = ModuleClassFinder.Find(projectFile, "AbpModule");
                 if (moduleFiles.Count == 0)
                 {
-                    throw new CliUsageException($"Could not find a class derived from AbpModule in the project {projectFile}");
+                    throw new CliUsageException(
+                        $"Could not find a class derived from AbpModule in the project {projectFile}");
                 }
 
                 if (moduleFiles.Count > 1)
                 {
-                    throw new CliUsageException($"There are multiple classes derived from AbpModule in the project {projectFile}: " + moduleFiles.JoinAsString(", "));
+                    throw new CliUsageException(
+                        $"There are multiple classes derived from AbpModule in the project {projectFile}: " +
+                        moduleFiles.JoinAsString(", "));
                 }
 
                 ModuleClassDependcyAdder.Add(moduleFiles.First(), package.ModuleClass);
@@ -91,9 +101,60 @@ namespace Volo.Abp.Cli.ProjectModification
             return Task.CompletedTask;
         }
 
+        private Task AddUsingDotnetCli(NugetPackageInfo package, string version = null)
+        {
+            var versionOption = version == null ? "" : $" -v {version}";
+
+            CmdHelper.Run("dotnet", $"add package {package.Name}{versionOption}");
+
+            return Task.CompletedTask;
+        }
+
+        private Task AddToCsprojManuallyAsync(string projectFile, NugetPackageInfo package, string version = null)
+        {
+            var projectFileContent = File.ReadAllText(projectFile);
+            var doc = new XmlDocument() {PreserveWhitespace = true};
+            doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
+
+            var itemGroupNodes = doc.SelectNodes("/Project/ItemGroup");
+            XmlNode itemGroupNode = null;
+
+            if (itemGroupNodes == null || itemGroupNodes.Count < 1)
+            {
+                var projectNodes = doc.SelectNodes("/Project");
+                var projectNode = projectNodes[0];
+
+                itemGroupNode = doc.CreateElement("ItemGroup");
+                projectNode.AppendChild(itemGroupNode);
+            }
+            else
+            {
+                itemGroupNode = itemGroupNodes[0];
+            }
+
+            var packageReferenceNode = doc.CreateElement("PackageReference");
+
+            var includeAttr = doc.CreateAttribute("Include");
+            includeAttr.Value = package.Name;
+            packageReferenceNode.Attributes.Append(includeAttr);
+
+            if (version != null)
+            {
+                var versionAttr = doc.CreateAttribute("Version");
+                versionAttr.Value = version;
+                packageReferenceNode.Attributes.Append(versionAttr);
+            }
+
+            itemGroupNode.AppendChild(packageReferenceNode);
+
+            File.WriteAllText(projectFile, doc.OuterXml);
+
+            return Task.CompletedTask;
+        }
+
         private string GetAbpVersionOrNull(string projectFileContent)
         {
-            var doc = new XmlDocument() { PreserveWhitespace = true };
+            var doc = new XmlDocument() {PreserveWhitespace = true};
 
             doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
 

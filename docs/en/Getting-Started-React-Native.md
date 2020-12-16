@@ -27,13 +27,13 @@ You have multiple options to initiate a new React Native project that works with
 
 ### 1. Using ABP CLI
 
-ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with a React Native application. Simply [install the ABP CLI](../../CLI.md) and run the following command in your terminal:
+ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with a React Native application. Simply [install the ABP CLI](CLI.md) and run the following command in your terminal:
 
 ```shell
 abp new MyCompanyName.MyProjectName -csf -u <angular or mvc> -m react-native
 ```
 
-> To see further options in the CLI, please visit the [CLI manual](../../CLI.md).
+> To see further options in the CLI, please visit the [CLI manual](CLI.md).
 
 This command will prepare a solution with an **Angular** or an **MVC** (depends on your choice), a **.NET Core**, and a **React Native** project in it.
 

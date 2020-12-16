@@ -166,7 +166,7 @@ namespace Volo.BloggingTestApp
 
             app.UseAuthentication();
 
-            app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+            app.UseAbpRequestLocalization();
 
             app.UseConfiguredEndpoints();
 

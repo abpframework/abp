@@ -1,0 +1,10 @@
+{
+    "culture": "hu",
+    "texts": {
+      "Permissions": "Engedélyek",
+      "OnlyProviderPermissons": "Csak ez a szolgáltató",
+      "All": "Összes",
+      "SelectAllInAllTabs": "Adjon meg minden engedélyt",
+      "SelectAllInThisTab": "Mindet kiválaszt"
+    }
+  }

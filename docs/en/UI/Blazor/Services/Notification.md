@@ -1,3 +1,0 @@
-# Blazor UI Notification
-
-`UiNotificationService` is used to show toastr style notifications on the user interface. The documentation is in progress...

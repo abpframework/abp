@@ -96,18 +96,13 @@ namespace Volo.CmsKit
             {
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
             });
-
-            //Updates AbpClaimTypes to be compatible with identity server claims.
-            AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-            AbpClaimTypes.UserName = JwtClaimTypes.Name;
-            AbpClaimTypes.Role = JwtClaimTypes.Role;
-            AbpClaimTypes.Email = JwtClaimTypes.Email;
 
             context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -171,7 +166,6 @@ namespace Volo.CmsKit
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
-            app.UseAbpClaimsMap();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();

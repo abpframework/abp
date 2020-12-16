@@ -27,3 +27,5 @@ Prism.languages.renpy= {
 
 	'punctuation' : /[{}[\];(),.:]/
 };
+
+Prism.languages.rpy = Prism.languages.renpy;

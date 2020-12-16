@@ -90,9 +90,3 @@ Depending on the library, the `.forLazy` static method may also receive some opt
 ---
 
 <sup id="f-modify-route"><b>1</b></sup> _Libraries expect to work at a predefined path. Please check [how to patch a navigation element](./Modifying-the-Menu.md#how-to-patch-or-remove-a-navigation-element), if you want to use a different path from the default one (e.g. '/identity')._ <sup>[↩](#a-modify-route)</sup>
-
----
-
-## What's Next?
-
-- [Service Proxies](./Service-Proxies.md)

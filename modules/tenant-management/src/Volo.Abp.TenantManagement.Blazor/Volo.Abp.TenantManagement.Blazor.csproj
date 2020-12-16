@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <RazorLangVersion>3.0</RazorLangVersion>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Blazor\Volo.Abp.FeatureManagement.Blazor.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.TenantManagement.HttpApi.Client\Volo.Abp.TenantManagement.HttpApi.Client.csproj" />
   </ItemGroup>

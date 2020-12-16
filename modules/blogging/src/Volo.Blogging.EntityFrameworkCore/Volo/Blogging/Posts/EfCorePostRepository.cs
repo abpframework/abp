@@ -23,6 +23,18 @@ namespace Volo.Blogging.Posts
             return await DbSet.Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToListAsync();
         }
 
+        public Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null)
+        {
+            var query = DbSet.Where(p => blogId == p.BlogId && p.Url == url);
+
+            if (excludingPostId != null)
+            {
+                query = query.Where(p => excludingPostId != p.Id);
+            }
+
+            return query.AnyAsync();
+        }
+
         public async Task<Post> GetPostByUrl(Guid blogId, string url)
         {
             var post = await DbSet.FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);

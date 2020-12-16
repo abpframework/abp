@@ -1,8 +1,12 @@
-import { TrackByService, GetAppConfiguration } from '@abp/ng.core';
+import {
+  AbpApplicationConfigurationService,
+  ConfigStateService,
+  TrackByService,
+} from '@abp/ng.core';
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
 import { FeaturesService } from '../../proxy/feature-management/features.service';
 import {
@@ -65,6 +69,8 @@ export class FeatureManagementComponent
     public readonly track: TrackByService,
     protected service: FeaturesService,
     protected store: Store,
+    protected configState: ConfigStateService,
+    protected appConfigService: AbpApplicationConfigurationService,
   ) {}
 
   openModal() {
@@ -97,7 +103,7 @@ export class FeatureManagementComponent
     Object.keys(this.features).forEach(key => {
       this.features[key].forEach(feature => {
         if (feature.value !== feature.initialValue)
-          changedFeatures.push({ name: feature.name, value: feature.value });
+          changedFeatures.push({ name: feature.name, value: `${feature.value}` });
       });
     });
 
@@ -115,7 +121,10 @@ export class FeatureManagementComponent
 
         if (!this.providerKey) {
           // to refresh host's features
-          this.store.dispatch(new GetAppConfiguration());
+          this.appConfigService
+            .get()
+            .pipe(tap(res => this.configState.setState(res)))
+            .subscribe();
         }
       });
   }

@@ -843,15 +843,8 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 ````xml
 @page "/authors"
 @using Acme.BookStore.Authors
-@using Acme.BookStore.Localization
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.Extensions.Localization
-@using Volo.Abp.ObjectMapping
+@inherits BookStoreComponentBase
 @inject IAuthorAppService AuthorAppService
-@inject IStringLocalizer<BookStoreResource> L
-@inject IAuthorizationService AuthorizationService
-@inject IUiMessageService UiMessageService
-@inject IObjectMapper ObjectMapper
 <Card>
     <CardHeader>
         <Row>
@@ -1048,10 +1041,10 @@ namespace Acme.BookStore.Blazor.Pages
         {
             CanCreateAuthor = await AuthorizationService
                 .IsGrantedAsync(BookStorePermissions.Authors.Create);
-            
+
             CanEditAuthor = await AuthorizationService
                 .IsGrantedAsync(BookStorePermissions.Authors.Edit);
-            
+
             CanDeleteAuthor = await AuthorizationService
                 .IsGrantedAsync(BookStorePermissions.Authors.Delete);
         }
@@ -1105,7 +1098,7 @@ namespace Acme.BookStore.Blazor.Pages
         private async Task DeleteAuthorAsync(AuthorDto author)
         {
             var confirmMessage = L["AuthorDeletionConfirmationMessage", author.Name];
-            if (!await UiMessageService.ConfirmAsync(confirmMessage))
+            if (!await Message.Confirm(confirmMessage))
             {
                 return;
             }
@@ -1176,6 +1169,20 @@ We should complete the localizations we've used above. Open the `en.json` file u
 "BirthDate": "Birth date",
 "NewAuthor": "New author"
 ````
+
+### Run the Application
+
+Run and login to the application. **If you don't see the Authors menu item under the Book Store menu, that means you don't have the permission yet.** Go to the `identity/roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
+
+![bookstore-author-permissions](images/bookstore-author-permissions.png)
+
+As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
+
+![bookstore-authors-page](images/bookstore-authors-blazor-ui.png)
+
+That's all! This is a fully working CRUD page, you can create, edit and delete the authors.
+
+> **Tip**: If you run the `.DbMigrator` console application after defining a new permission, it automatically grants these new permissions to the admin role and you don't need to manually grant the permissions yourself.
 
 {{end}}
 

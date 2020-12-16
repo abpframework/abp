@@ -2,17 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-import { Actions, NgxsModule, Store } from '@ngxs/store';
-import { NEVER } from 'rxjs';
 import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
-import {
-  ApplicationConfigurationService,
-  RoutesService,
-  ReplaceableComponentsService,
-} from '../services';
-import { ReplaceableComponentsState } from '../states';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ReplaceableComponentsService, RoutesService } from '../services';
+import { mockRoutesService } from './routes.service.spec';
 
 @Component({
   selector: 'abp-layout-application',
@@ -87,20 +82,15 @@ describe('DynamicLayoutComponent', () => {
     component: RouterOutletComponent,
     stubsEnabled: false,
     declarations: [DummyComponent, DynamicLayoutComponent],
-    mocks: [ApplicationConfigurationService, HttpClient],
+    mocks: [AbpApplicationConfigurationService, HttpClient],
     providers: [
       {
         provide: RoutesService,
-        useFactory: () =>
-          new RoutesService(NEVER, ({
-            selectSnapshot() {
-              return true;
-            },
-          } as unknown) as Store),
+        useFactory: () => mockRoutesService(),
       },
       ReplaceableComponentsService,
     ],
-    imports: [RouterModule, DummyLayoutModule, NgxsModule.forRoot()],
+    imports: [RouterModule, DummyLayoutModule],
     routes: [
       { path: '', component: RouterOutletComponent },
       {

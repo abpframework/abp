@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Volo.Docs.Documents
 {
     public class NavigationNode
     {
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
         public string Text { get; set; }
 
-        [JsonProperty("path")]
+        [JsonPropertyName("path")]
         public string Path { get; set; }
 
-        [JsonProperty("items")]
+        [JsonPropertyName("items")]
         public List<NavigationNode> Items { get; set; }
 
         public bool IsLeaf => !HasChildItems;

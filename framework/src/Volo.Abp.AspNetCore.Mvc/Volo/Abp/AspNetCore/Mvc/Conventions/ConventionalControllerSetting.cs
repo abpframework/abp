@@ -18,6 +18,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         [NotNull]
         public HashSet<Type> ControllerTypes { get; } //TODO: Internal?
 
+        /// <summary>
+        /// Set true to use the old style URL path style.
+        /// Default: null (uses the value of the <see cref="AbpConventionalControllerOptions.UseV3UrlStyle"/>).
+        /// </summary>
+        public bool? UseV3UrlStyle { get; set; }
+
         [NotNull]
         public string RootPath
         {
@@ -57,9 +63,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         public List<ApiVersion> ApiVersions { get; }
 
         public Action<ApiVersioningOptions> ApiVersionConfigurer { get; set; }
-        
+
         public ConventionalControllerSetting(
-            [NotNull] Assembly assembly, 
+            [NotNull] Assembly assembly,
             [NotNull] string rootPath,
             [NotNull] string remoteServiceName)
         {

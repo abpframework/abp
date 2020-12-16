@@ -26,6 +26,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     u => u.NormalizedUserName == normalizedUserName,
                     GetCancellationToken(cancellationToken)
@@ -41,14 +42,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         where userRole.UserId == id
                         select role.Name;
             var organizationUnitIds = DbContext.Set<IdentityUserOrganizationUnit>().Where(q => q.UserId == id).Select(q => q.OrganizationUnitId).ToArray();
-            
+
             var organizationRoleIds = await (
                 from ouRole in DbContext.Set<OrganizationUnitRole>()
-                join ou in DbContext.Set<OrganizationUnit>() on ouRole.OrganizationUnitId equals ou.Id 
+                join ou in DbContext.Set<OrganizationUnit>() on ouRole.OrganizationUnitId equals ou.Id
                 where organizationUnitIds.Contains(ouRole.OrganizationUnitId)
                 select ouRole.RoleId
             ).ToListAsync(GetCancellationToken(cancellationToken));
-            
+
             var orgUnitRoleNameQuery = DbContext.Roles.Where(r => organizationRoleIds.Contains(r.Id)).Select(n => n.Name);
             var resultQuery = query.Union(orgUnitRoleNameQuery);
             return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
@@ -60,7 +61,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
                         join roleOu in DbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
-                        join ou in DbContext.Set<OrganizationUnit>() on roleOu.OrganizationUnitId equals ou.Id 
+                        join ou in DbContext.Set<OrganizationUnit>() on roleOu.OrganizationUnitId equals ou.Id
                         join userOuRoles in DbContext.Roles on roleOu.RoleId equals userOuRoles.Id
                         where userOu.UserId == id
                         select userOuRoles.Name;
@@ -79,6 +80,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
+                .OrderBy(x=>x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -89,6 +91,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
         }
 
@@ -110,6 +113,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             var role = await DbContext.Roles
                 .Where(x => x.NormalizedName == normalizedRoleName)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
             if (role == null)

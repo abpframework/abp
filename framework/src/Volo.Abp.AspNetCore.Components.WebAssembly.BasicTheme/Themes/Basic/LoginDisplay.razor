@@ -1,13 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Volo.Abp.Users
+@using Volo.Abp.MultiTenancy
 @inject ICurrentUser CurrentUser
+@inject ICurrentTenant CurrentTenant
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
 <AuthorizeView>
     <Authorized>
         <Dropdown>
             <DropdownToggle Color="Color.None">
-                @CurrentUser.UserName
+                @if (CurrentTenant.Name != null)
+                {
+                    <span><i>@CurrentTenant.Name</i>\@CurrentUser.UserName</span>
+                }
+                else
+                {
+                    <span>@CurrentUser.UserName</span>
+                }
             </DropdownToggle>
             <DropdownMenu>
                 @if (Menu != null)
@@ -17,9 +26,6 @@
                         <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
                     }
                 }
-                <a class="dropdown-item" href="@ServerAccountUrl">
-                    @UiLocalizer["ManageYourAccount"]
-                </a>
                 <DropdownDivider />
                 <DropdownItem Clicked="BeginSignOut">Logout</DropdownItem>
             </DropdownMenu>

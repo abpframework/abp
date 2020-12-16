@@ -1,13 +1,8 @@
 ﻿@page "/"
-@using Volo.Abp.Users
 @using Volo.Abp.MultiTenancy
-@using System.Security.Claims
-@using Microsoft.Extensions.Localization
-@using MyCompanyName.MyProjectName.Localization
-@inject ICurrentUser CurrentUser
+@inherits MyProjectNameComponentBase
 @inject ICurrentTenant CurrentTenant
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject IStringLocalizer<MyProjectNameResource> L
 <div class="container">
     <div class="p-5 text-center">
         <Badge Color="Color.Success" class="mb-4">
@@ -18,12 +13,12 @@
 
         <p class="lead px-lg-5 mx-lg-5">@L["LongWelcomeMessage"]</p>
 
-        @if (!CurrentUser.IsAuthenticated)
+        @if ( !CurrentUser.IsAuthenticated )
         {
             <a class="btn btn-primary" href="/authentication/login">
                 <i class="fa fa-sign-in-alt"></i> @L["Login"]
             </a>
-        }    
+        }
     </div>
 
     <div class="my-3 text-center">
@@ -158,17 +153,3 @@
         </p>
     </div>
 </div>
-
-@code
-{
-    private IEnumerable<Claim> _claims;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if (authState.User.Identity.IsAuthenticated)
-        {
-            _claims = authState.User.Claims;
-        }
-    }
-}

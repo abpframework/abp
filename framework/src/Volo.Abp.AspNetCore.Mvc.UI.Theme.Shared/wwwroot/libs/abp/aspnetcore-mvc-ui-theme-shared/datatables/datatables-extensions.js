@@ -217,6 +217,7 @@
 
         var renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             var columns;
+			
             if (tableInstance.aoColumns) {
                 columns = tableInstance.aoColumns;
             } else {
@@ -267,6 +268,54 @@
                     }
 
                     renderRowActions(this, nRow, aData, iDisplayIndex, iDisplayIndexFull);
+                }
+            });
+
+       //Delay for processing indicator
+        var defaultDelayForProcessingIndicator = 500;
+        var _existingDefaultFnPreDrawCallback = $.fn.dataTable.defaults.fnPreDrawCallback;
+        $.extend(true,
+            $.fn.dataTable.defaults,
+            {
+                fnPreDrawCallback: function (settings) {
+                    if (_existingDefaultFnPreDrawCallback) {
+                        _existingDefaultFnPreDrawCallback(settings);
+                    }
+
+                    var $tableWrapper = $(settings.nTableWrapper);
+                    var $processing = $tableWrapper.find(".dataTables_processing");
+                    var timeoutHandles = [];
+                    var cancelHandles = [];
+
+                    $tableWrapper.on('processing.dt',
+                        function (e, settings, processing) {
+                            if ((settings.oInit.processingDelay !== undefined && settings.oInit.processingDelay < 1) || defaultDelayForProcessingIndicator < 1) {
+                                return;
+                            }
+
+                            if (processing) {
+                                $processing.hide();
+
+                                var delay = settings.oInit.processingDelay === undefined
+                                    ? defaultDelayForProcessingIndicator
+                                    : settings.oInit.processingDelay;
+
+                                cancelHandles[settings.nTableWrapper.id] = false;
+
+                                timeoutHandles[settings.nTableWrapper.id] = setTimeout(function () {
+                                    if (cancelHandles[settings.nTableWrapper.id] === true) {
+                                        return;
+                                    }
+
+                                    $processing.show();
+                                }, delay);
+                            }
+                            else {
+                                clearTimeout(timeoutHandles[settings.nTableWrapper.id]);
+                                cancelHandles[settings.nTableWrapper.id] = true;
+                                $processing.hide();
+                            }
+                        });
                 }
             });
 

@@ -168,7 +168,7 @@ namespace Volo.Abp.Identity
                 }
 
             }
-            catch (Exception e)
+            catch
             {
                 throw;
             }

@@ -75,9 +75,12 @@ If you had created a data seed contributor as described in the [first part](Part
 Add a new test class, named `BookAppService_Tests` in the `Books` namespace (folder) of the `Acme.BookStore.Application.Tests` project:
 
 ````csharp
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books
@@ -123,7 +126,7 @@ public async Task Should_Create_A_Valid_Book()
         {
             Name = "New test book 42",
             Price = 10,
-            PublishDate = System.DateTime.Now,
+            PublishDate = DateTime.Now,
             Type = BookType.ScienceFiction
         }
     );
@@ -205,7 +208,7 @@ namespace Acme.BookStore.Books
                 {
                     Name = "New test book 42",
                     Price = 10,
-                    PublishDate = System.DateTime.Now,
+                    PublishDate = DateTime.Now,
                     Type = BookType.ScienceFiction
                 }
             );

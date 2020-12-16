@@ -1,9 +1,12 @@
-﻿using Localization.Resources.AbpUi;
+﻿using System.Collections.Generic;
+using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.FeatureManagement.JsonConverters;
 
 namespace Volo.Abp.FeatureManagement
 {
@@ -27,6 +30,11 @@ namespace Volo.Abp.FeatureManagement
                 options.Resources
                     .Get<AbpFeatureManagementResource>()
                     .AddBaseTypes(typeof(AbpUiResource));
+            });
+
+            Configure<JsonOptions>(options =>
+            {
+                options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter());
             });
         }
     }

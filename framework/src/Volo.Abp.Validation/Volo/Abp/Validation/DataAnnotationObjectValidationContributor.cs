@@ -45,12 +45,18 @@ namespace Volo.Abp.Validation
             AddErrors(errors, validatingObject);
 
             //Validate items of enumerable
-            if (validatingObject is IEnumerable)
+            if (validatingObject is IEnumerable enumerable)
             {
-                if (!(validatingObject is IQueryable))
+                if (!(enumerable is IQueryable))
                 {
-                    foreach (var item in (validatingObject as IEnumerable))
+                    foreach (var item in enumerable)
                     {
+                        //Do not recursively validate for primitive objects
+                        if (item == null || TypeHelper.IsPrimitiveExtended(item.GetType()))
+                        {
+                            break;
+                        }
+
                         ValidateObjectRecursively(errors, item, currentDepth + 1);
                     }
                 }

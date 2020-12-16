@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4;
@@ -18,13 +18,17 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public virtual bool Enabled { get; set; }
 
-        public virtual List<ApiSecret> Secrets { get; protected set; }
+        public virtual string AllowedAccessTokenSigningAlgorithms { get; set; }
 
-        public virtual List<ApiScope> Scopes { get; protected set; }
+        public virtual bool ShowInDiscoveryDocument { get; set; } = true;
+
+        public virtual List<ApiResourceSecret> Secrets { get; protected set; }
+
+        public virtual List<ApiResourceScope> Scopes { get; protected set; }
 
         public virtual List<ApiResourceClaim> UserClaims { get; protected set; }
 
-        public virtual Dictionary<string, string> Properties { get; protected set; }
+        public virtual List<ApiResourceProperty> Properties { get; protected set; }
 
         protected ApiResource()
         {
@@ -44,21 +48,21 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
             Enabled = true;
 
-            Secrets = new List<ApiSecret>();
-            Scopes = new List<ApiScope>();
+            Secrets = new List<ApiResourceSecret>();
+            Scopes = new List<ApiResourceScope>();
             UserClaims = new List<ApiResourceClaim>();
-            Properties = new Dictionary<string, string>();
+            Properties = new List<ApiResourceProperty>();
 
-            Scopes.Add(new ApiScope(id, name, displayName, description));
+            Scopes.Add(new ApiResourceScope(id, name));
         }
 
         public virtual void AddSecret(
-            [NotNull] string value, 
+            [NotNull] string value,
             DateTime? expiration = null,
             string type = IdentityServerConstants.SecretTypes.SharedSecret,
             string description = null)
         {
-            Secrets.Add(new ApiSecret(Id, value, expiration, type, description));
+            Secrets.Add(new ApiResourceSecret(Id, value, expiration, type, description));
         }
 
         public virtual void RemoveSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
@@ -66,22 +70,16 @@ namespace Volo.Abp.IdentityServer.ApiResources
             Secrets.RemoveAll(s => s.Value == value && s.Type == type);
         }
 
-        public virtual ApiSecret FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
+        public virtual ApiResourceSecret FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
         {
             return Secrets.FirstOrDefault(s => s.Type == type && s.Value == value);
         }
 
-        public virtual ApiScope AddScope(
-            [NotNull] string name,
-            string displayName = null,
-            string description = null,
-            bool required = false,
-            bool emphasize = false,
-            bool showInDiscoveryDocument = true)
+        public virtual ApiResourceScope AddScope([NotNull] string scope)
         {
-            var scope = new ApiScope(Id, name, displayName, description, required, emphasize, showInDiscoveryDocument);
-            Scopes.Add(scope);
-            return scope;
+            var apiResourceScope = new ApiResourceScope(Id, scope);
+            Scopes.Add(apiResourceScope);
+            return apiResourceScope;
         }
 
         public virtual void AddUserClaim([NotNull] string type)
@@ -111,21 +109,37 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public virtual void RemoveAllScopes()
         {
-            foreach (var scope in Scopes)
-            {
-                scope.RemoveAllUserClaims();
-            }
             Scopes.Clear();
         }
 
-        public virtual void RemoveScope(string name)
+        public virtual void RemoveScope(string scope)
         {
-            Scopes.RemoveAll(r => r.Name == name);
+            Scopes.RemoveAll(r => r.Scope == scope);
         }
 
-        public virtual ApiScope FindScope(string name)
+        public virtual ApiResourceScope FindScope(string scope)
         {
-            return Scopes.FirstOrDefault(r => r.Name == name);
+            return Scopes.FirstOrDefault(r => r.Scope == scope);
+        }
+
+        public virtual void AddProperty([NotNull] string key, string value)
+        {
+            Properties.Add(new ApiResourceProperty(Id, key, value));
+        }
+
+        public virtual void RemoveAllProperties()
+        {
+            Properties.Clear();
+        }
+
+        public virtual void RemoveProperty(string key)
+        {
+            Properties.RemoveAll(r => r.Key == key);
+        }
+
+        public virtual ApiResourceProperty FindProperty(string key)
+        {
+            return Properties.FirstOrDefault(r => r.Key == key);
         }
     }
 }

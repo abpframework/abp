@@ -14,11 +14,21 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             if (context.ExistingConnection != null)
             {
-                return context.DbContextOptions.UseMySql(context.ExistingConnection, mySQLOptionsAction);
+                return context.DbContextOptions.UseMySql(context.ExistingConnection,
+                    ServerVersion.AutoDetect(context.ConnectionString), optionsBuilder =>
+                    {
+                        optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                        mySQLOptionsAction?.Invoke(optionsBuilder);
+                    });
             }
             else
             {
-                return context.DbContextOptions.UseMySql(context.ConnectionString, mySQLOptionsAction);
+                return context.DbContextOptions.UseMySql(context.ConnectionString,
+                    ServerVersion.AutoDetect(context.ConnectionString), optionsBuilder =>
+                    {
+                        optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                        mySQLOptionsAction?.Invoke(optionsBuilder);
+                    });
             }
         }
     }

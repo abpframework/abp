@@ -282,9 +282,20 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
+            var parameterDescriptionNames = apiDescription
+                .ParameterDescriptions
+                .Select(p => p.Name)
+                .ToArray();
+
+            var methodParameterNames = method
+                .GetParameters()
+                .Where(IsNotFromServicesParameter)
+                .Select(GetMethodParamName)
+                .ToArray();
+
             var matchedMethodParamNames = ArrayMatcher.Match(
-                apiDescription.ParameterDescriptions.Select(p => p.Name).ToArray(),
-                method.GetParameters().Select(GetMethodParamName).ToArray()
+                parameterDescriptionNames,
+                methodParameterNames
             );
 
             for (var i = 0; i < apiDescription.ParameterDescriptions.Count; i++)
@@ -308,6 +319,11 @@ namespace Volo.Abp.AspNetCore.Mvc
                     )
                 );
             }
+        }
+
+        private static bool IsNotFromServicesParameter(ParameterInfo parameterInfo)
+        {
+            return !parameterInfo.IsDefined(typeof(FromServicesAttribute), true);
         }
 
         public string GetMethodParamName(ParameterInfo parameterInfo)

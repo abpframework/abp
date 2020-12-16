@@ -27,6 +27,9 @@
     "Blog": "Blog",
     "Commercial": "Commercial",
     "MyAccount": "My account",
-    "SeeDocuments": "See Documents"
+    "Permission:License": "License",
+    "Permission:UserInfo": "Usere info",
+    "SeeDocuments": "See Documents",
+    "Samples": "Samples"
   }
 }

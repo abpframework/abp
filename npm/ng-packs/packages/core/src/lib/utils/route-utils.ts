@@ -1,22 +1,16 @@
+import { NgZone } from '@angular/core';
 import { PRIMARY_OUTLET, Router, UrlSegmentGroup } from '@angular/router';
 import { ABP } from '../models/common';
 import { RoutesService } from '../services/routes.service';
-import { TreeNode } from './tree-utils';
 import { noop } from './common-utils';
-import { NgZone } from '@angular/core';
+import { TreeNode } from './tree-utils';
 
-export function findRoute(routes: RoutesService, path: string): TreeNode<ABP.Route> {
-  const node = routes.find(route => route.path === path);
+export function findRoute(routesService: RoutesService, path: string): TreeNode<ABP.Route> {
+  const node = routesService.find(route => route.path === path);
 
   return node || path === '/'
     ? node
-    : findRoute(
-        routes,
-        path
-          .split('/')
-          .slice(0, -1)
-          .join('/'),
-      );
+    : findRoute(routesService, path.split('/').slice(0, -1).join('/') || '/');
 }
 
 export function getRoutePath(router: Router, url = router.url) {

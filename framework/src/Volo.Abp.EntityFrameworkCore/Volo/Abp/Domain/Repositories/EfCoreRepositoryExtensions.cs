@@ -5,32 +5,29 @@ using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    //TODO: Should work for any IRepository implementation
-
     public static class EfCoreRepositoryExtensions
     {
-        public static DbContext GetDbContext<TEntity, TKey>(this IReadOnlyBasicRepository<TEntity, TKey> repository)
-            where TEntity : class, IEntity<TKey>
+        public static DbContext GetDbContext<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+            where TEntity : class, IEntity
         {
             return repository.ToEfCoreRepository().DbContext;
         }
 
-        public static DbSet<TEntity> GetDbSet<TEntity, TKey>(this IReadOnlyBasicRepository<TEntity, TKey> repository)
-            where TEntity : class, IEntity<TKey>
+        public static DbSet<TEntity> GetDbSet<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+            where TEntity : class, IEntity
         {
             return repository.ToEfCoreRepository().DbSet;
         }
 
-        public static IEfCoreRepository<TEntity, TKey> ToEfCoreRepository<TEntity, TKey>(this IReadOnlyBasicRepository<TEntity, TKey> repository)
-            where TEntity : class, IEntity<TKey>
+        public static IEfCoreRepository<TEntity> ToEfCoreRepository<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+            where TEntity : class, IEntity
         {
-            var efCoreRepository = repository as IEfCoreRepository<TEntity, TKey>;
-            if (efCoreRepository == null)
+            if (repository is IEfCoreRepository<TEntity> efCoreRepository)
             {
-                throw new ArgumentException("Given repository does not implement " + typeof(IEfCoreRepository<TEntity, TKey>).AssemblyQualifiedName, nameof(repository));
+                return efCoreRepository;
             }
 
-            return efCoreRepository;
+            throw new ArgumentException("Given repository does not implement " + typeof(IEfCoreRepository<TEntity>).AssemblyQualifiedName, nameof(repository));
         }
     }
 }

@@ -44,7 +44,9 @@
 			lookbehind: true
 		},
 		'namespace': {
-			pattern: /(\b(?:exports|import(?:\s+static)?|module|open|opens|package|provides|requires|to|transitive|uses|with)\s+)[a-z]\w*(?:\.[a-z]\w*)+/,
+			pattern: RegExp(
+				/(\b(?:exports|import(?:\s+static)?|module|open|opens|package|provides|requires|to|transitive|uses|with)\s+)(?!<keyword>)[a-z]\w*(?:\.[a-z]\w*)*\.?/
+					.source.replace(/<keyword>/g, function () { return keywords.source; })),
 			lookbehind: true,
 			inside: {
 				'punctuation': /\./,

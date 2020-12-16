@@ -59,7 +59,7 @@ namespace Volo.Abp.Uow.MongoDB
             }
 
             var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
-            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, null);
+            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, null);
 
             return dbContext;
         }
@@ -90,11 +90,11 @@ namespace Volo.Abp.Uow.MongoDB
                     new MongoDbTransactionApi(session)
                 );
 
-                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, session);
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
             }
             else
             {
-                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, activeTransaction.SessionHandle);
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, activeTransaction.SessionHandle);
             }
 
             return dbContext;

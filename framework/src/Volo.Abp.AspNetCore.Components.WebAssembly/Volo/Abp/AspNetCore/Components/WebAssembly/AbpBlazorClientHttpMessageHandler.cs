@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
             _jsRuntime = jsRuntime;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             await SetLanguageAsync(request, cancellationToken);
 

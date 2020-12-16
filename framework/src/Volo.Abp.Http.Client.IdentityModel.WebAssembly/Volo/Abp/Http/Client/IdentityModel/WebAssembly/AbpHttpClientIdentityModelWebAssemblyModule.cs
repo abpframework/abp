@@ -1,5 +1,6 @@
-﻿using System;
+﻿using IdentityModel;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly
 {
@@ -8,6 +9,14 @@ namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly
     )]
     public class AbpHttpClientIdentityModelWebAssemblyModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            AbpClaimTypes.UserName = JwtClaimTypes.PreferredUserName;
+            AbpClaimTypes.Name = JwtClaimTypes.GivenName;
+            AbpClaimTypes.SurName = JwtClaimTypes.FamilyName;
+            AbpClaimTypes.UserId = JwtClaimTypes.Subject;
+            AbpClaimTypes.Role = JwtClaimTypes.Role;
+            AbpClaimTypes.Email = JwtClaimTypes.Email;
+        }
     }
 }

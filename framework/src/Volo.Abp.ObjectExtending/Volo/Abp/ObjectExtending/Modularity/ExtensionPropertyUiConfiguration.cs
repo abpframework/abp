@@ -13,11 +13,15 @@ namespace Volo.Abp.ObjectExtending.Modularity
         [NotNull]
         public ExtensionPropertyUiFormConfiguration OnEditForm { get; }
 
+        [NotNull]
+        public ExtensionPropertyLookupConfiguration Lookup { get; set; }
+
         public ExtensionPropertyUiConfiguration()
         {
             OnTable = new ExtensionPropertyUiTableConfiguration();
             OnCreateForm = new ExtensionPropertyUiFormConfiguration();
             OnEditForm = new ExtensionPropertyUiFormConfiguration();
+            Lookup = new ExtensionPropertyLookupConfiguration();
         }
     }
 }

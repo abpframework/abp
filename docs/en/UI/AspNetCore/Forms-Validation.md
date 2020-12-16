@@ -152,7 +152,7 @@ However, if you want to **render the form body yourself** (for example, you may 
 
 Both of the Dynamic Form and the Form Tag Helpers **automatically validate** the input based on the data annotation attributes and shows validation error messages on the user interface. Error messages are **automatically localized** based on the current culture.
 
-**Example: User leaves empty a requires string property**
+**Example: User leaves empty a required string property**
 
 ![abp-form-input-validation-error](../../images/abp-form-input-validation-error.png)
 

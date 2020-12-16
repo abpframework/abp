@@ -10,11 +10,11 @@ Prism.languages.hpkp = {
 		alias: 'keyword'
 	},
 	'safe': {
-		pattern: /\d{7,}/,
+		pattern: /\b\d{7,}\b/,
 		alias: 'selector'
 	},
 	'unsafe': {
-		pattern: /\d{1,6}/,
+		pattern: /\b\d{1,6}\b/,
 		alias: 'function'
 	}
 };

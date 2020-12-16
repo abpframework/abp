@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending
@@ -57,6 +57,9 @@ namespace Volo.Abp.ObjectExtending
         [CanBeNull]
         public Func<object> DefaultValueFactory { get; set; }
 
+        [NotNull]
+        public ExtensionPropertyLookupConfiguration Lookup { get; set; }
+
         public ObjectExtensionPropertyInfo(
             [NotNull] ObjectExtensionInfo objectExtension,
             [NotNull] Type type,
@@ -72,6 +75,7 @@ namespace Volo.Abp.ObjectExtending
 
             Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
             DefaultValue = TypeHelper.GetDefaultValue(Type);
+            Lookup = new ExtensionPropertyLookupConfiguration();
         }
 
         public object GetDefaultValue()

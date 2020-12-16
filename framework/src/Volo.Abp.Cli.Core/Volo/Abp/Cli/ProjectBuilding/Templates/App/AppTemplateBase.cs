@@ -25,6 +25,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
             RandomizeSslPorts(context, steps);
+            RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
             CleanupFolderHierarchy(context, steps);
 
@@ -160,6 +161,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
                 steps.Add(new AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+
+                if (context.BuildArgs.MobileApp == MobileApp.ReactNative)
+                {
+                    steps.Add(new ReactEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+                }
             }
             else
             {
@@ -172,6 +178,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            if (context.BuildArgs.ExtraProperties.ContainsKey("no-random-port"))
+            {
+                return;
+            }
+
             steps.Add(new TemplateRandomSslPortStep(
                     new List<string>
                     {
@@ -183,6 +194,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     }
                 )
             );
+        }
+
+        private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RandomizeStringEncryptionStep());
         }
 
         private static void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
