@@ -187,7 +187,9 @@ We enabled the [GitHub Discussions for the abp repository](https://github.com/ab
 
 ## About the Next Release(s)
 
-Beginning from the next version (4.2.0), we are starting to spend more effort on the **CMS Kit module**. The purpose of this module is to provide CMS primitives (e.g. **comments, tags, reactions, contents**...) and features (e.g. **blog, pages, surveys**) as pre-built and reusable components. Current blog module will be a part of the CMS Kit module. We will continue to prepare documents, guides, tutorials and examples. And surely, we will continue to make enhancements and optimizations on the current features.
+Beginning from the next version (4.2.0), we are starting to spend more effort on the **CMS Kit module**. The purpose of this module is to provide CMS primitives (e.g. **comments, tags, reactions, contents**...) and features (e.g. **blog, pages, surveys**) as pre-built and reusable components. Current blog module will be a part of the CMS Kit module.
+
+We will continue to prepare documents, guides, tutorials and examples. And surely, we will continue to make enhancements and optimizations on the current features.
 
 > The planned preview release date for the version 4.2.0 is January 14, 2021 and the final (stable) version release date is January 28, 2021.
 
