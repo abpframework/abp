@@ -1,6 +1,6 @@
 # ABP Framework 4.1 RC Has Been Published
 
-Today, we have released the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/)) 4.1.0 RC. This blog post introduces the new features, important changes in the new version.
+Today, we have released the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/)) 4.1.0 RC. This blog post introduces the new features and important changes in this new version.
 
 > **The planned release date for the [4.1.0 final](https://github.com/abpframework/abp/milestone/47) version is January 4, 2021**.
 
@@ -32,7 +32,7 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all t
 
 ## Breaking Changes
 
-This version has a minor breaking change if you'd injected a repository by class. This is not a problem for 99% of the applications. However, see [#6677](https://github.com/abpframework/abp/issues/6677) for the solution if that's a breaking change for your application.
+This version has a minor breaking change if you'd injected a repository by class. This is not a problem for 99% of the applications. However, see [#6677](https://github.com/abpframework/abp/issues/6677) for the solution if that's a breaking change for you.
 
 ## What's new with the ABP Framework 4.1
 
@@ -108,19 +108,17 @@ See the [Global Scripts & Styles](https://docs.abp.io/en/abp/4.1/UI/Blazor/Globa
 `SubmitButton` is a new component that simplifies to save a form:
 
 ````html
-<SubmitButton Form="UserEditForm" Clicked="@UpdateEntityAsync" />
+<SubmitButton Clicked="UpdateEntityAsync" />
 ````
 
-The main advantages of using this component instead of a standard `Button` with submit type is; It automatically blocks the submit button until the save operation has fully completed. This prevents multiple clicks by user.
-
-There are some attributes to customize the component.
+The main advantages of using this component instead of a standard `Button` with submit type is; It automatically blocks the submit button until the save operation has fully completed. This prevents multiple clicks by user. And it is shorter than doing all manually. See the [document](https://docs.abp.io/en/abp/4.1/UI/Blazor/SubmitButton).
 
 #### Other Blazor UI highlights
 
 * Implemented some **animations** (like opening/closing modals and dropdowns).
 * Automatically **focus** to the first input when you open a modal form.
 
-Module extensibility system (mentioned above) for the Blazor UI is in development and not available yet.
+Module extensibility system (mentioned above) for the Blazor UI is under development and not available yet.
 
 ## What's new with the ABP Commercial 4.1
 
@@ -201,4 +199,4 @@ Follow the [GitHub milestones](https://github.com/abpframework/abp/milestones) f
 
 ## Feedback
 
-Please check out the ABP Framework 4.1.0 RC and [provide feedback](https://github.com/abpframework/abp/issues/new) to help us to release a more stable version. **The planned release date for the [4.1.0 final](https://github.com/abpframework/abp/milestone/45) version is January 4, 2021.**.
+Please check out the ABP Framework 4.1.0 RC and [provide feedback](https://github.com/abpframework/abp/issues/new) to help us to release a more stable version. **The planned release date for the [4.1.0 final](https://github.com/abpframework/abp/milestone/45) version is January 4, 2021**.
