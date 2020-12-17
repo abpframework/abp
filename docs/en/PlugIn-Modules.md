@@ -211,3 +211,23 @@ If you have configured the main application like described above (see Basic Usag
 
 ![simple-plugin-output](images/simple-plugin-output.png)
 
+## Discussions
+
+In real world, your plug-in may have some external dependencies. Also, your application might be designed to support plug-ins. All these are your own system requirements. What ABP does is just loading modules on the application startup. What you do inside that modules is up to you.
+
+However, we can provide a few suggestions for some common cases.
+
+### Library Dependencies
+
+For package/dll dependencies, you can copy the related dlls to the plug-in folder. ABP automatically loads all assemblies in the folder and your plug-in will work as expected.
+
+> See [Microsoft's documentation](https://docs.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support#plugin-with-library-dependencies) for some additional explanations for that case.
+
+### Database Schema
+
+If your module uses a relational database and [Entity Framework Core](Entity-Framework-Core.md), it will need to have its tables available in the database. There are different ways to ensure the tables have been created when an application uses the plug-in. Some examples;
+
+1. The Plugin may check if the database tables does exists and create the tables on the application startup or migrate them if the plug-in has been updated and requires some schema changes. You can use EF Core's migration API to do that.
+2. You can improve the `DbMigrator` application to find migrations of the plug-ins and execute them.
+
+There may be other solutions. For example, if your DB admin doesn't allow you to change the database schema in the application code, you may need to manually send a SQL file to the database admin to apply it to the database.
