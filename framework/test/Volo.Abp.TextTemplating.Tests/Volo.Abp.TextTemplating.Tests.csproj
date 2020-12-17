@@ -10,8 +10,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\TextTemplating\Localization\**\*.json" />
     <None Remove="Volo\Abp\TextTemplating\Localization\**\*.json" />
-    <EmbeddedResource Include="Volo\Abp\TextTemplating\SampleTemplates\**\*.tpl" />
-    <None Remove="Volo\Abp\TextTemplating\SampleTemplates\**\*.tpl" />
+    <EmbeddedResource Include="Volo\Abp\TextTemplating\SampleTemplates\**\*.tpl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

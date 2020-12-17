@@ -6,6 +6,7 @@
 @using Volo.Abp.ObjectExtending
 @using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
+@using Volo.Abp.Data
 @model CreateModalModel
 @inject IHtmlLocalizer<AbpTenantManagementResource> L
 @inject IStringLocalizerFactory StringLocalizerFactory
@@ -31,8 +32,8 @@
                         <abp-select asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
                                     label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                     autocomplete-api-url="@propertyInfo.Lookup.Url"
-                                    autocomplete-selected-item-name="@Model.Tenant.ExtraProperties[propertyInfo.Name+"_Text"]"
-                                    autocomplete-selected-item-value="@Model.Tenant.ExtraProperties[propertyInfo.Name]"
+                                    autocomplete-selected-item-name="@Model.Tenant.GetProperty(propertyInfo.Name+"_Text")"
+                                    autocomplete-selected-item-value="@Model.Tenant.GetProperty(propertyInfo.Name)"
                                     autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
                                     autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
                                     autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
@@ -44,7 +45,7 @@
                                    asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
                                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                    asp-format="@propertyInfo.GetInputFormatOrNull()"
-                                   value="@propertyInfo.GetInputValueOrNull(Model.Tenant.ExtraProperties[propertyInfo.Name])" />
+                                   value="@propertyInfo.GetInputValueOrNull(Model.Tenant.GetProperty(propertyInfo.Name))" />
                     }
                 }
             }

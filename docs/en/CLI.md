@@ -419,4 +419,4 @@ abp bundle [options]
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a Blazor project file.
 * ```--force``` or ```-f```: Forces to build project before generating references.
 
-For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
+`bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)

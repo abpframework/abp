@@ -175,7 +175,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
-        protected int CurrentPage;
+        protected int CurrentPage = 1;
         protected string CurrentSorting;
         protected int? TotalCount;
         protected TGetListInput GetListInput = new TGetListInput();
@@ -255,7 +255,7 @@ namespace Volo.Abp.BlazoriseUI
 
             if (GetListInput is IPagedResultRequest pagedResultRequestInput)
             {
-                pagedResultRequestInput.SkipCount = CurrentPage * PageSize;
+                pagedResultRequestInput.SkipCount = (CurrentPage - 1) * PageSize;
             }
 
             if (GetListInput is ILimitedResultRequest limitedResultRequestInput)
@@ -266,13 +266,22 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
+        protected virtual async Task SearchEntitiesAsync()
+        {
+            CurrentPage = 1;
+
+            await GetEntitiesAsync();
+
+            StateHasChanged();
+        }
+
         protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TListViewModel> e)
         {
             CurrentSorting = e.Columns
                 .Where(c => c.Direction != SortDirection.None)
                 .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
-            CurrentPage = e.Page - 1;
+            CurrentPage = e.Page;
 
             await GetEntitiesAsync();
 

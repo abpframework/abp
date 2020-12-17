@@ -44,7 +44,7 @@
                                           Text="@L["Edit"]" />
                             <EntityAction TItem="IdentityUserDto"
                                           RequiredPolicy="@ManagePermissionsPolicyName"
-                                          Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.Id.ToString())"
+                                          Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.Id.ToString(), context.Name)"
                                           Text="@L["Permissions"]" />
                             <EntityAction TItem="IdentityUserDto"
                                           RequiredPolicy="@DeletePolicyName"
@@ -176,7 +176,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <Button form="UserCreateForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+                    <SubmitButton Form="UserCreateForm" Clicked="@CreateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -287,7 +287,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <Button form="UserEditForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
+                    <SubmitButton Form="UserEditForm" Clicked="@UpdateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>

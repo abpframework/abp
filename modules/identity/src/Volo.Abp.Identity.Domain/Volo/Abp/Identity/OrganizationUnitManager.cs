@@ -117,6 +117,8 @@ namespace Volo.Abp.Identity
                 child.Code = OrganizationUnit.AppendCode(organizationUnit.Code, OrganizationUnit.GetRelativeCode(child.Code, oldCode));
                 await OrganizationUnitRepository.UpdateAsync(child);
             }
+
+            await OrganizationUnitRepository.UpdateAsync(organizationUnit);
         }
 
         public virtual async Task<string> GetCodeOrDefaultAsync(Guid id)
