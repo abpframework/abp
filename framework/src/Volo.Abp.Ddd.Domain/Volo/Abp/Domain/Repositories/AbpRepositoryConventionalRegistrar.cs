@@ -8,8 +8,6 @@ namespace Volo.Abp.Domain.Repositories
 {
     public class AbpRepositoryConventionalRegistrar : DefaultConventionalRegistrar
     {
-        public static bool ExposeRepositoryClasses { get; set; }
-
         protected override bool IsConventionalRegistrationDisabled(Type type)
         {
             if (!typeof(IRepository).IsAssignableFrom(type))
@@ -20,14 +18,14 @@ namespace Volo.Abp.Domain.Repositories
             return base.IsConventionalRegistrationDisabled(type);
         }
 
-        protected override List<Type> GetExposedServiceTypes(Type type)
+        protected override List<Type> GetExposedServiceTypes(IServiceCollection services, Type type)
         {
-            if (ExposeRepositoryClasses)
+            if (services.ExecutePreConfiguredActions<AbpRepositoryConventionalRegistrarOptions>().ExposeRepositoryClasses)
             {
-                return base.GetExposedServiceTypes(type);
+                return base.GetExposedServiceTypes(services, type);
             }
 
-            return base.GetExposedServiceTypes(type)
+            return base.GetExposedServiceTypes(services, type)
                 .Where(x => x.IsInterface)
                 .ToList();
         }

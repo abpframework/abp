@@ -26,7 +26,7 @@ namespace Volo.Abp.DependencyInjection
                 return;
             }
 
-            var exposedServiceTypes = GetExposedServiceTypes(type);
+            var exposedServiceTypes = GetExposedServiceTypes(services, type);
 
             TriggerServiceExposing(services, type, exposedServiceTypes);
 
@@ -54,7 +54,7 @@ namespace Volo.Abp.DependencyInjection
             }
         }
 
-        protected virtual List<Type> GetExposedServiceTypes(Type type)
+        protected virtual List<Type> GetExposedServiceTypes(IServiceCollection services, Type type)
         {
             return ExposedServiceExplorer.GetExposedServices(type);
         }
