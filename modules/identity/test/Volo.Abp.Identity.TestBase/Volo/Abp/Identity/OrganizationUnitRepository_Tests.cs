@@ -322,5 +322,15 @@ namespace Volo.Abp.Identity
             var count = await _organizationUnitRepository.GetUnaddedRolesCountAsync(ou);
             count.ShouldBeGreaterThan(0);
         }
+        [Fact]
+        public async Task MoveOrganizationUnitAsync()
+        {
+            var ou1 = await _organizationUnitRepository.GetAsync("OU1");
+            var ou2 = await _organizationUnitRepository.GetAsync("OU2");
+            ou2.ParentId.ShouldBeNull();
+            await _organizationUnitManager.MoveAsync(ou2.Id, ou1.Id);
+            ou2 = await _organizationUnitRepository.GetAsync("OU2");
+            ou2.ParentId.ShouldBe(ou1.Id);
+        }
     }
 }
