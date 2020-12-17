@@ -53,4 +53,4 @@ There are two more built-in Plug-In Source implementations:
 * `PlugInSources.AddFiles()` gets a list of assembly (typically `dll`) files. This is a shortcut of using `FilePlugInSource` class.
 * `PlugInSources.AddTypes()` gets a list of module class types. If you use this, you need to load the assemblies of the modules yourself, but it provides flexibility when needed. This is a shortcut of using `TypePlugInSource` class.
 
-If you need, you can implement your own `IPlugInSource` implementation and add to the `options.PlugInSources` just like the others.
+If you need, you can create your own `IPlugInSource` implementation and add to the `options.PlugInSources` just like the others.
