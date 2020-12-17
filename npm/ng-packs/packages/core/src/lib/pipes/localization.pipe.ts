@@ -22,13 +22,3 @@ export class LocalizationPipe implements PipeTransform {
     );
   }
 }
-
-@Injectable()
-@Pipe({
-  name: 'abpLocalization',
-})
-export class MockLocalizationPipe implements PipeTransform {
-  transform(value: string | Config.LocalizationWithDefault = '', ..._: string[]) {
-    return typeof value === 'string' ? value : value.defaultValue;
-  }
-}
