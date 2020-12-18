@@ -35,7 +35,10 @@ class BookComponent {
   constructor(
     public readonly list: ListService,
     private bookService: BookService,
-  ) {}
+  ) {
+    // change ListService defaults here
+    this.list.maxResultCount = 20;
+  }
 
   ngOnInit() {
     // A function that gets query and returns an observable
