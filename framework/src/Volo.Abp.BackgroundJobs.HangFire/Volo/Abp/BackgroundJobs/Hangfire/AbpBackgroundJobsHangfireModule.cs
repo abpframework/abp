@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -13,6 +14,21 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
     )]
     public class AbpBackgroundJobsHangfireModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddTransient(serviceProvider =>
+            {
+                return new DashboardOptions
+                {
+                    DisplayNameFunc = (_, job) =>
+                    {
+                        var backgroundJobOptions = serviceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
+                        return backgroundJobOptions.GetJob(job.Args.First().GetType()).JobName;
+                    }
+                };
+            });
+        }
+
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
             var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
