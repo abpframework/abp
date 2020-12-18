@@ -17,16 +17,7 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddTransient(serviceProvider =>
-            {
-                return new DashboardOptions
-                {
-                    DisplayNameFunc = (_, job) =>
-                    {
-                        var backgroundJobOptions = serviceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
-                        return backgroundJobOptions.GetJob(job.Args.First().GetType()).JobName;
-                    }
-                };
-            });
+                serviceProvider.GetRequiredService<AbpDashboardOptionsProvider>().Get());
         }
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
