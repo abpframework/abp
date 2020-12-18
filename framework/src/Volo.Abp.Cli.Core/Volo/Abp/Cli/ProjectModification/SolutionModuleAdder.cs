@@ -217,11 +217,27 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private async Task ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)
         {
-            var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "test");
-            var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith("Domain.Tests"));
+            var testPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "test");
 
-            var csprojFile = Directory.GetFiles(projectFolderPath).First(p => p.EndsWith(".csproj"));
-            var moduleFile = Directory.GetFiles(projectFolderPath).First(p => p.EndsWith("DomainTestModule.cs"));
+            if (!Directory.Exists(testPath))
+            {
+                return;
+            }
+
+            var projectFolderPath = Directory.GetDirectories(testPath).FirstOrDefault(d=> d.EndsWith("Domain.Tests"));
+
+            if (projectFolderPath == null)
+            {
+                return;
+            }
+
+            var csprojFile = Directory.GetFiles(projectFolderPath).FirstOrDefault(p => p.EndsWith(".csproj"));
+            var moduleFile = Directory.GetFiles(projectFolderPath).FirstOrDefault(p => p.EndsWith("DomainTestModule.cs"));
+
+            if (csprojFile == null || moduleFile == null)
+            {
+                return;
+            }
 
             File.WriteAllText(csprojFile, File.ReadAllText(csprojFile).Replace("EntityFrameworkCore","MongoDB"));
             File.WriteAllText(moduleFile, File.ReadAllText(moduleFile)
