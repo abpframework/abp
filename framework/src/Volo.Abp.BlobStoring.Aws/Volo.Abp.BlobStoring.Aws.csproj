@@ -17,8 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AWSSDK.S3" Version="3.3.111.27" />
-      <PackageReference Include="AWSSDK.SecurityToken" Version="3.3.105.30" />
+      <PackageReference Include="AWSSDK.S3" Version="3.5.6.1" />
+      <PackageReference Include="AWSSDK.SecurityToken" Version="3.5.1.25" />
     </ItemGroup>
 
 </Project>

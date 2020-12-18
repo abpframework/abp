@@ -105,41 +105,41 @@
             $('#TwitterShareLink').attr(
                 'href',
                 'https://twitter.com/intent/tweet?text=' +
-                    encodeURI(
-                        pageHeader +
-                            ' | ' +
-                            projectName +
-                            ' | ' +
-                            window.location.href
-                    )
+                encodeURI(
+                    pageHeader +
+                    ' | ' +
+                    projectName +
+                    ' | ' +
+                    window.location.href
+                )
             );
 
             $('#LinkedinShareLink').attr(
                 'href',
                 'https://www.linkedin.com/shareArticle?' +
-                    'url=' +
-                    encodeURI(window.location.href) +
-                    '&' +
-                    'mini=true&' +
-                    'summary=' +
-                    encodeURI(projectName) +
-                    '&' +
-                    'title=' +
-                    encodeURI(pageHeader) +
-                    '&' +
-                    'source=' +
-                    encodeURI($('#GoToMainWebSite').attr('href'))
+                'url=' +
+                encodeURI(window.location.href) +
+                '&' +
+                'mini=true&' +
+                'summary=' +
+                encodeURI(projectName) +
+                '&' +
+                'title=' +
+                encodeURI(pageHeader) +
+                '&' +
+                'source=' +
+                encodeURI($('#GoToMainWebSite').attr('href'))
             );
 
             $('#EmailShareLink').attr(
                 'href',
                 'mailto:?' +
-                    'body=' +
-                    encodeURI('I want you to look at ' + window.location.href) +
-                    '&' +
-                    'subject=' +
-                    encodeURI(pageHeader + ' | ' + projectName) +
-                    '&'
+                'body=' +
+                encodeURI('I want you to look at ' + window.location.href) +
+                '&' +
+                'subject=' +
+                encodeURI(pageHeader + ' | ' + projectName) +
+                '&'
             );
         };
 
@@ -228,12 +228,27 @@
                 );
             };
 
+            var initCookies = function () {
+                var cookie = abp.utils.getCookieValue('AbpDocsPreferences');
+
+                if (!cookie || cookie == null || cookie === null) {
+                    setCookies();
+                } else {
+                    var uri = window.location.href.toString();
+
+                    if (uri.indexOf('?') > 0) {
+                        setCookies();
+                    }
+                }
+            };
+
             $('.doc-section-combobox').change(function () {
                 setCookies();
                 clearQueryString();
                 location.reload();
             });
 
+            initCookies();
             setQueryString();
         };
 

@@ -15,7 +15,7 @@ namespace Microsoft.AspNetCore.Builder
 
             return app.UseSwaggerUI(options =>
             {
-                options.InjectJavascript("/libs/abp/core/abp.js");
+                options.InjectJavascript("/swagger/ui/abp.js");
                 options.InjectJavascript("/swagger/ui/abp.swagger.js");
                 options.IndexStream = () => resolver.Resolver();
 

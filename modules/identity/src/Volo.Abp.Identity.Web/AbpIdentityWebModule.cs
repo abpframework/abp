@@ -2,9 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Web.Navigation;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -63,6 +65,34 @@ namespace Volo.Abp.Identity.Web
                 options.Conventions.AuthorizePage("/Identity/Roles/Index", IdentityPermissions.Roles.Default);
                 options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
                 options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
+            });
+            
+            
+            Configure<AbpPageToolbarOptions>(options =>
+            {
+                options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<IdentityResource>("NewUser"),
+                            icon: "plus",
+                            name: "CreateUser",
+                            requiredPolicyName: IdentityPermissions.Users.Create
+                        );
+                    }
+                );
+                
+                options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Roles.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<IdentityResource>("NewRole"),
+                            icon: "plus",
+                            name: "CreateRole",
+                            requiredPolicyName: IdentityPermissions.Roles.Create
+                        );
+                    }
+                );
             });
         }
 

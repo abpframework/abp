@@ -44,7 +44,7 @@
     "LoggedOutTitle": "Kijelentkezett",
     "LoggedOutText": "Kijelentkeztünk, és hamarosan átirányítjuk.",
     "ReturnToText": "Kattintson ide a(z) {0} címre történő átirányításhoz",
-    "OrLoginWith": "Vagy jelentkezzen be",
+    "OrLoginWith": "Vagy jelentkezzen be:",
     "ForgotPassword": "Elfelejtette a jelszavát?",
     "SendPasswordResetLink_Information": "Jelszó-visszaállítási linket küldünk az e-mailre a jelszó visszaállításához. Ha néhány percen belül nem kap e-mailt, próbálkozzon újra.",
     "PasswordResetMailSentMessage": "A fiók-helyreállítási e-mailt az Ön e-mail címére küldtük. Ha 15 percen belül nem látja ezt az e-mailt a beérkező levelek között, keresse meg a levélszemét mappájában. Ha ott találja, kérjük, jelölje meg: -Nem szemét-.",

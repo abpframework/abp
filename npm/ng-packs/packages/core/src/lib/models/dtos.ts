@@ -25,7 +25,7 @@ export class LimitedResultRequestDto {
 
   constructor(initialValues: Partial<LimitedResultRequestDto> = {}) {
     for (const key in initialValues) {
-      if (initialValues.hasOwnProperty(key)) {
+      if (initialValues.hasOwnProperty(key) && initialValues[key] !== undefined) {
         this[key] = initialValues[key];
       }
     }

@@ -103,3 +103,8 @@ div.dataTables_wrapper div.dataTables_length label {
 .navbar-nav>.nav-item>div>button{
     color:#fff;
 }
+
+.btn span.spinner-border {
+    margin-right: .5rem;
+}
+

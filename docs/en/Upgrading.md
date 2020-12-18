@@ -27,11 +27,15 @@ When you upgrade to a new version, it is good to check if there is a database sc
 
 If `Add-Migration` generates an empty migration, you can use `Remove-Migration` to delete it before executing the `.DbMigrator`.
 
-## The Blog Posts
+## The Blog Posts & Guides
 
 Sometimes we introduce new features/changes that requires to make changes in the startup template. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your solution.
 
-Whenever you upgrade your solution, it is strongly suggested to check the [ABP BLOG](https://blog.abp.io/?_ga=2.177248992.411298747.1597771169-1910388957.1594128976) to learn the new features and changes coming with the new version. We regularly publish posts and write these kind of changes. If the changes are not trivial, we also provide migration guides.
+Whenever you upgrade your solution, it is strongly suggested to check the [ABP BLOG](https://blog.abp.io/) to learn the new features and changes coming with the new version. We regularly publish posts and write these kind of changes.
+
+### Migration Guides
+
+We prepare migration guides if the new version brings breaking changes for existing applications. See the [Migration Guides](Migration-Guides/Index.md) page for all the guides.
 
 ## Semantic Versioning & Breaking Changes
 

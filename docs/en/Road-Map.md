@@ -2,6 +2,7 @@
 
 You can always check the milestone planning and the prioritized backlog issues on [the GitHub repository](https://github.com/abpframework/abp/milestones) for a detailed road map. Here, a list of some major items in the backlog;
 
+* CMS Kit: A set of reusable, extensible and composable Content Management System features.
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](https://docs.abp.io/en/abp/latest/Modules/Index))
 * [#236](https://github.com/abpframework/abp/issues/236) Resource based authorization system
 * [#6132](https://github.com/abpframework/abp/issues/6132) A New Theme alternative to the Basic Theme

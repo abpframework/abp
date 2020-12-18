@@ -129,6 +129,7 @@ abp update [options]
 * `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
 * `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 * `--check-all`: Check the new version of each package separately. Default is `false`.
+* `--version` or `-v`: Specifies the version to use for update. If not specified, latest version is used.
 
 ### add-package
 
@@ -418,4 +419,4 @@ abp bundle [options]
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a Blazor project file.
 * ```--force``` or ```-f```: Forces to build project before generating references.
 
-For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
+`bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)

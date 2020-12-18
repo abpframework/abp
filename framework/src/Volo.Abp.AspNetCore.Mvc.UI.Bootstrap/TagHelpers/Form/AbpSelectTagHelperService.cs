@@ -86,12 +86,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 selectTagHelper.Items = GetSelectItems(context, output);
             }
-            else
+            else if(!TagHelper.AutocompleteSelectedItemName.IsNullOrEmpty())
             {
-                selectTagHelper.Items = new SelectListItem[]
-                    {
-                        new SelectListItem(TagHelper.AutocompleteSelectedItemName,TagHelper.AutocompleteSelectedItemValue,true)
-                    };
+                selectTagHelper.Items = new[]
+                {
+                    new SelectListItem(TagHelper.AutocompleteSelectedItemName,
+                        TagHelper.AutocompleteSelectedItemValue, false)
+                };
             }
 
             var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);

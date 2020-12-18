@@ -5,16 +5,7 @@
         <h5 class="card-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>
       </div>
       <div class="text-right col col-md-6">
-        <button
-          *abpPermission="'AbpIdentity.Users.Create'"
-          id="create-role"
-          class="btn btn-primary"
-          type="button"
-          (click)="add()"
-        >
-          <i class="fa fa-plus mr-1"></i>
-          <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
-        </button>
+        <abp-page-toolbar [record]="data$ | async"></abp-page-toolbar>
       </div>
     </div>
   </div>
@@ -30,170 +21,22 @@
       </div>
     </div>
 
-    <ngx-datatable [rows]="data$ | async" [count]="totalCount$ | async" [list]="list" default>
-      <ngx-datatable-column
-        [name]="'AbpIdentity::Actions' | abpLocalization"
-        [maxWidth]="150"
-        [sortable]="false"
-      >
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          <div ngbDropdown container="body" class="d-inline-block">
-            <button
-              class="btn btn-primary btn-sm dropdown-toggle"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              ngbDropdownToggle
-            >
-              <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
-            </button>
-            <div ngbDropdownMenu>
-              <button
-                *abpPermission="'AbpIdentity.Users.Update'"
-                ngbDropdownItem
-                (click)="edit(row.id)"
-              >
-                {{ 'AbpIdentity::Edit' | abpLocalization }}
-              </button>
-              <button
-                *abpPermission="'AbpIdentity.Users.ManagePermissions'"
-                ngbDropdownItem
-                (click)="openPermissionsModal(row.id)"
-              >
-                {{ 'AbpIdentity::Permissions' | abpLocalization }}
-              </button>
-              <button
-                *abpPermission="'AbpIdentity.Users.Delete'"
-                ngbDropdownItem
-                (click)="delete(row.id, row.userName)"
-              >
-                {{ 'AbpIdentity::Delete' | abpLocalization }}
-              </button>
-            </div>
-          </div>
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column
-        [width]="200"
-        [name]="'AbpIdentity::UserName' | abpLocalization"
-        prop="userName"
-      ></ngx-datatable-column>
-      <ngx-datatable-column
-        [width]="200"
-        [name]="'AbpIdentity::EmailAddress' | abpLocalization"
-        prop="email"
-      ></ngx-datatable-column>
-      <ngx-datatable-column
-        [width]="200"
-        [name]="'AbpIdentity::PhoneNumber' | abpLocalization"
-        prop="phoneNumber"
-      ></ngx-datatable-column>
-    </ngx-datatable>
+    <abp-extensible-table
+      [data]="data$ | async"
+      [recordsTotal]="totalCount$ | async"
+      [list]="list"
+    ></abp-extensible-table>
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy" (disappear)="form = null">
+<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
-    <ng-template #loaderRef
-      ><div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div
-    ></ng-template>
-
-    <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">
-      <ul ngbNav #nav="ngbNav" class="nav-tabs">
-        <li ngbNavItem>
-          <a ngbNavLink>{{ 'AbpIdentity::UserInformations' | abpLocalization }}</a>
-          <ng-template ngbNavContent>
-            <div class="form-group">
-              <label for="user-name">{{ 'AbpIdentity::UserName' | abpLocalization }}</label
-              ><span> * </span>
-              <input
-                type="text"
-                id="user-name"
-                class="form-control"
-                formControlName="userName"
-                autofocus
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="name">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label>
-              <input type="text" id="name" class="form-control" formControlName="name" />
-            </div>
-
-            <div class="form-group">
-              <label for="surname">{{
-                'AbpIdentity::DisplayName:Surname' | abpLocalization
-              }}</label>
-              <input type="text" id="surname" class="form-control" formControlName="surname" />
-            </div>
-
-            <div class="form-group">
-              <label for="password">{{ 'AbpIdentity::Password' | abpLocalization }}</label
-              ><span *ngIf="!selected.userName"> * </span>
-              <input
-                type="password"
-                id="password"
-                autocomplete="new-password"
-                class="form-control"
-                formControlName="password"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="email">{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</label
-              ><span> * </span>
-              <input type="text" id="email" class="form-control" formControlName="email" />
-            </div>
-
-            <div class="form-group">
-              <label for="phone-number">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</label>
-              <input
-                type="text"
-                id="phone-number"
-                class="form-control"
-                formControlName="phoneNumber"
-              />
-            </div>
-
-            <div class="custom-checkbox custom-control mb-2">
-              <input
-                type="checkbox"
-                id="lockout-checkbox"
-                class="custom-control-input"
-                formControlName="lockoutEnabled"
-              />
-              <label class="custom-control-label" for="lockout-checkbox">{{
-                'AbpIdentity::DisplayName:LockoutEnabled' | abpLocalization
-              }}</label>
-            </div>
-          </ng-template>
-        </li>
-
-        <li ngbNavItem>
-          <a ngbNavLink>{{ 'AbpIdentity::Roles' | abpLocalization }}</a>
-          <ng-template ngbNavContent>
-            <div
-              *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"
-              class="custom-checkbox custom-control mb-2"
-            >
-              <input
-                type="checkbox"
-                class="custom-control-input"
-                [attr.id]="'roles-' + i"
-                [formControl]="roleGroup.controls[roles[i].name]"
-              />
-              <label class="custom-control-label" [attr.for]="'roles-' + i">{{
-                roles[i].name
-              }}</label>
-            </div>
-          </ng-template>
-        </li>
-      </ul>
-
-      <div class="mt-2 fade-in-top" [ngbNavOutlet]="nav"></div>
+    <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
     </form>
   </ng-template>
 
@@ -201,7 +44,7 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form?.invalid">{{
+    <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">{{
       'AbpIdentity::Save' | abpLocalization
     }}</abp-button>
   </ng-template>

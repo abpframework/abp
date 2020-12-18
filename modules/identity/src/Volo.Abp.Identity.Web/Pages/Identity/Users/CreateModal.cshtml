@@ -6,9 +6,11 @@
 @using Volo.Abp.Identity.Web.Pages.Identity.Users
 @using Volo.Abp.Localization
 @using Volo.Abp.ObjectExtending
+@using Volo.Abp.Data
 @model CreateModalModel
 @inject IHtmlLocalizer<IdentityResource> L
 @inject IStringLocalizerFactory StringLocalizerFactory
+
 @{
     Layout = null;
 }
@@ -36,8 +38,8 @@
                                 <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
                                             label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                             autocomplete-api-url="@propertyInfo.Lookup.Url"
-                                            autocomplete-selected-item-name="@Model.UserInfo.ExtraProperties[propertyInfo.Name+"_Text"]"
-                                            autocomplete-selected-item-value="@Model.UserInfo.ExtraProperties[propertyInfo.Name]"
+                                            autocomplete-selected-item-name="@Model.UserInfo.GetProperty(propertyInfo.Name+"_Text")"
+                                            autocomplete-selected-item-value="@Model.UserInfo.GetProperty(propertyInfo.Name)"
                                             autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
                                             autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
                                             autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
@@ -49,7 +51,7 @@
                                            asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
                                            label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                            asp-format="@propertyInfo.GetInputFormatOrNull()"
-                                           value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.ExtraProperties[propertyInfo.Name])" />
+                                           value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.GetProperty(propertyInfo.Name))" />
                             }
                         }
                     }

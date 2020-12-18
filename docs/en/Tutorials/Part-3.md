@@ -1386,7 +1386,7 @@ Open the `Books.razor` page and add the following `EntityAction` under the "Edit
 <EntityAction TItem="BookDto"
               Text="@L["Delete"]"
               Clicked="() => DeleteEntityAsync(context)"
-              ConfirmationMessage="@() => GetDeleteConfirmationMessage(context)" />
+              ConfirmationMessage="() => GetDeleteConfirmationMessage(context)" />
 ````
 
 * `DeleteEntityAsync` is defined in the base class that deletes the entity by performing a call to the server.
@@ -1429,6 +1429,7 @@ Here the complete code to create the book management CRUD page, that has been de
         <DataGrid TItem="BookDto"
                   Data="Entities"
                   ReadData="OnDataGridReadAsync"
+                  CurrentPage="CurrentPage"
                   TotalItems="TotalCount"
                   ShowPager="true"
                   PageSize="PageSize">
