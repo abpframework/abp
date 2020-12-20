@@ -182,7 +182,10 @@ namespace System
         public void RemovePostFix_Tests()
         {
             //null case
-            (null as string).RemovePreFix("Test").ShouldBeNull();
+            (null as string).RemovePostFix("Test").ShouldBeNull();
+
+            //empty case
+            string.Empty.RemovePostFix("Test").ShouldBe(string.Empty);
 
             //Simple case
             "MyTestAppService".RemovePostFix("AppService").ShouldBe("MyTest");
@@ -202,6 +205,12 @@ namespace System
         [Fact]
         public void RemovePreFix_Tests()
         {
+            //null case
+            (null as string).RemovePreFix("Test").ShouldBeNull();
+
+            //empty case
+            string.Empty.RemovePreFix("Test").ShouldBe(string.Empty);
+
             "Home.Index".RemovePreFix("NotMatchedPostfix").ShouldBe("Home.Index");
             "Home.About".RemovePreFix("Home.").ShouldBe("About");
 
