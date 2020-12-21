@@ -94,7 +94,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
             if (BulkOperationProvider != null)
             {
-                await BulkOperationProvider.InsertManyAsync(this, entities, autoSave, cancellationToken);
+                await BulkOperationProvider.InsertManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
                 return;
             }
 
@@ -188,7 +188,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
             if (BulkOperationProvider != null)
             {
-                await BulkOperationProvider.UpdateManyAsync(this, entities, autoSave, cancellationToken);
+                await BulkOperationProvider.UpdateManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
                 return;
             }
 
@@ -292,7 +292,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
             if (BulkOperationProvider != null)
             {
-                await BulkOperationProvider.DeleteManyAsync(this, entities, autoSave, cancellationToken);
+                await BulkOperationProvider.DeleteManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
                 return;
             }
 

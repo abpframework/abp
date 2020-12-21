@@ -394,6 +394,7 @@ public class MyCustomMongoDbBulkOperationProvider : IMongoDbBulkOperationProvide
 {
     public async Task DeleteManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
                                                 IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
                                                 bool autoSave,
                                                 CancellationToken cancellationToken)
         where TEntity : class, IEntity
@@ -403,6 +404,7 @@ public class MyCustomMongoDbBulkOperationProvider : IMongoDbBulkOperationProvide
 
     public async Task InsertManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
                                                 IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
                                                 bool autoSave,
                                                 CancellationToken cancellationToken)
         where TEntity : class, IEntity
@@ -411,9 +413,10 @@ public class MyCustomMongoDbBulkOperationProvider : IMongoDbBulkOperationProvide
     }
 
     public async Task UpdateManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
-                                            IEnumerable<TEntity> entities,
-                                            bool autoSave,
-                                            CancellationToken cancellationToken)
+                                                IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
+                                                bool autoSave,
+                                                CancellationToken cancellationToken)
         where TEntity : class, IEntity
     {
         // Your logic here.
