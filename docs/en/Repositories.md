@@ -88,86 +88,9 @@ If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method
 See the [Data Filtering](Data-Filtering.md) documentation for more about soft-delete.
 
 ## Bulk Operations
-You can execute bulk operations with `InsertMany`, `UpdateMany`, `DeleteMany` methods.
-
-Both providers `MongoDb` and `Ef Core` support bulk operations.
-
-### Customization
-
-If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IMongoDbBulkOperationProvider` for MongoDb and `IEfCoreBulkOperationProvider` for Ef Core.
-
-- MongoDb Customization:
-
-```csharp
-public class MyCustomMongoDbBulkOperationProvider : IMongoDbBulkOperationProvider, ITransientDependency
-{
-    public async Task DeleteManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
-                                                IEnumerable<TEntity> entities,
-                                                bool autoSave,
-                                                CancellationToken cancellationToken)
-        where TEntity : class, IEntity
-    {
-        // Your logic here.
-    }
-
-    public async Task InsertManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
-                                                IEnumerable<TEntity> entities,
-                                                bool autoSave,
-                                                CancellationToken cancellationToken)
-        where TEntity : class, IEntity
-    {
-        // Your logic here.
-    }
-
-    public async Task UpdateManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
-                                            IEnumerable<TEntity> entities,
-                                            bool autoSave,
-                                            CancellationToken cancellationToken)
-        where TEntity : class, IEntity
-    {
-        // Your logic here.
-    }
-}
-```
-
-- Entitiy Framework Core Customization
-```csharp
-public class MyCustomEfCoreBulkOperationProvider : IEfCoreBulkOperationProvider, ITransientDependency
-{
-    public async Task DeleteManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
-                                                            IEnumerable<TEntity> entities,
-                                                            bool autoSave,
-                                                            CancellationToken cancellationToken)
-        where TDbContext : IEfCoreDbContext
-        where TEntity : class, IEntity
-    {
-        // Your logic here.
-    }
-
-    public async Task InsertManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
-                                                            IEnumerable<TEntity> entities,
-                                                            bool autoSave,
-                                                            CancellationToken cancellationToken)
-        where TDbContext : IEfCoreDbContext
-        where TEntity : class, IEntity
-    {
-        // Your logic here.
-    }
-
-    public async Task UpdateManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
-                                                            IEnumerable<TEntity> entities,
-                                                            bool autoSave,
-                                                            CancellationToken cancellationToken)
-        where TDbContext : IEfCoreDbContext
-        where TEntity : class, IEntity
-    {
-        // Your logic here.
-    }
-}
-```
+You can execute bulk operations with `InsertManyAsync`, `UpdateManyAsync`, `DeleteManyAsync` methods.
 
 > **WARNING:** ConcurrencyStamp can't be checked at bulk operations!
-
 
 ## Custom Repositories
 
