@@ -211,7 +211,7 @@ namespace System
             //empty case
             string.Empty.RemovePreFix("Test").ShouldBe(string.Empty);
 
-            "Home.Index".RemovePreFix("NotMatchedPostfix").ShouldBe("Home.Index");
+            "Home.Index".RemovePreFix("NotMatchedPrefix").ShouldBe("Home.Index");
             "Home.About".RemovePreFix("Home.").ShouldBe("About");
 
             //Ignore case
