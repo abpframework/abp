@@ -24,33 +24,53 @@ namespace Volo.Abp.Domain.Repositories
 
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
+        [Obsolete("This method will be removed in future versions.")]
         public virtual Type ElementType => GetQueryable().ElementType;
 
+        [Obsolete("This method will be removed in future versions.")]
         public virtual Expression Expression => GetQueryable().Expression;
 
+        [Obsolete("This method will be removed in future versions.")]
         public virtual IQueryProvider Provider => GetQueryable().Provider;
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public virtual IQueryable<TEntity> WithDetails()
         {
             return GetQueryable();
         }
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public virtual IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
             return GetQueryable();
         }
 
+        public virtual Task<IQueryable<TEntity>> WithDetailsAsync()
+        {
+            return GetQueryableAsync();
+        }
+
+        public virtual Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return GetQueryableAsync();
+        }
+
+        [Obsolete("This method will be removed in future versions.")]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
+        [Obsolete("This method will be removed in future versions.")]
         public IEnumerator<TEntity> GetEnumerator()
         {
             return GetQueryable().GetEnumerator();
         }
 
+        [Obsolete("Use GetQueryableAsync method.")]
         protected abstract IQueryable<TEntity> GetQueryable();
+
+        public abstract Task<IQueryable<TEntity>> GetQueryableAsync();
 
         public abstract Task<TEntity> FindAsync(
             Expression<Func<TEntity, bool>> predicate,

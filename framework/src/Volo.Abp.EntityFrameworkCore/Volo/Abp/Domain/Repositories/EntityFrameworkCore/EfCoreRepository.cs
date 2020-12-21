@@ -19,11 +19,34 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         where TDbContext : IEfCoreDbContext
         where TEntity : class, IEntity
     {
-        public virtual DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
+        [Obsolete("Use GetDbContextAsync() method.")]
+        protected virtual TDbContext DbContext => _dbContextProvider.GetDbContext();
 
+        [Obsolete("Use GetDbContextAsync() method.")]
         DbContext IEfCoreRepository<TEntity>.DbContext => DbContext.As<DbContext>();
 
-        protected virtual TDbContext DbContext => _dbContextProvider.GetDbContext();
+        async Task<DbContext> IEfCoreRepository<TEntity>.GetDbContextAsync()
+        {
+            return await GetDbContextAsync() as DbContext;
+        }
+
+        protected virtual Task<TDbContext> GetDbContextAsync()
+        {
+            return _dbContextProvider.GetDbContextAsync();
+        }
+
+        [Obsolete("Use GetDbSetAsync() method.")]
+        public virtual DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
+
+        Task<DbSet<TEntity>> IEfCoreRepository<TEntity>.GetDbSetAsync()
+        {
+            return GetDbSetAsync();
+        }
+
+        protected async Task<DbSet<TEntity>> GetDbSetAsync()
+        {
+            return (await GetDbContextAsync()).Set<TEntity>();
+        }
 
         protected virtual AbpEntityOptions<TEntity> AbpEntityOptions => _entityOptionsLazy.Value;
 
@@ -45,64 +68,72 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             );
         }
 
-        public async override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             CheckAndSetId(entity);
 
-            var savedEntity = DbSet.Add(entity).Entity;
+            var dbContext = await GetDbContextAsync();
+
+            var savedEntity = (await dbContext.Set<TEntity>().AddAsync(entity, GetCancellationToken(cancellationToken))).Entity;
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
             }
 
             return savedEntity;
         }
 
-        public async override Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            DbContext.Attach(entity);
+            var dbContext = await GetDbContextAsync();
 
-            var updatedEntity = DbContext.Update(entity).Entity;
+            dbContext.Attach(entity);
+
+            var updatedEntity = dbContext.Update(entity).Entity;
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
             }
 
             return updatedEntity;
         }
 
-        public async override Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            DbSet.Remove(entity);
+            var dbContext = await GetDbContextAsync();
+
+            dbContext.Set<TEntity>().Remove(entity);
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
             }
         }
 
-        public async override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return includeDetails
-                ? await WithDetails().ToListAsync(GetCancellationToken(cancellationToken))
-                : await DbSet.ToListAsync(GetCancellationToken(cancellationToken));
+                ? await (await WithDetailsAsync()).ToListAsync(GetCancellationToken(cancellationToken))
+                : await (await GetDbSetAsync()).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
-            return await DbSet.LongCountAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync()).LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async override Task<List<TEntity>> GetPagedListAsync(
+        public override async Task<List<TEntity>> GetPagedListAsync(
             int skipCount,
             int maxResultCount,
             string sorting,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var queryable = includeDetails ? WithDetails() : DbSet;
+            var queryable = includeDetails
+                ? await WithDetailsAsync()
+                : await GetDbSetAsync();
 
             return await queryable
                 .OrderBy(sorting)
@@ -110,39 +141,48 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        [Obsolete("Use GetQueryableAsync method.")]
         protected override IQueryable<TEntity> GetQueryable()
         {
             return DbSet.AsQueryable();
         }
 
-        public async override Task<TEntity> FindAsync(
+        public override async Task<IQueryable<TEntity>> GetQueryableAsync()
+        {
+            return (await GetDbSetAsync()).AsQueryable();
+        }
+
+        public override async Task<TEntity> FindAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return includeDetails
-                ? await WithDetails()
+                ? await (await WithDetailsAsync())
                     .Where(predicate)
                     .SingleOrDefaultAsync(GetCancellationToken(cancellationToken))
-                : await DbSet
+                : await (await GetDbSetAsync())
                     .Where(predicate)
                     .SingleOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entities = await GetQueryable()
+            var dbContext = await GetDbContextAsync();
+            var dbSet = dbContext.Set<TEntity>();
+
+            var entities = await dbSet
                 .Where(predicate)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
             foreach (var entity in entities)
             {
-                DbSet.Remove(entity);
+                dbSet.Remove(entity);
             }
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
             }
         }
 
@@ -152,7 +192,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             CancellationToken cancellationToken = default)
             where TProperty : class
         {
-            await DbContext
+            await (await GetDbContextAsync())
                 .Entry(entity)
                 .Collection(propertyExpression)
                 .LoadAsync(GetCancellationToken(cancellationToken));
@@ -164,12 +204,13 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             CancellationToken cancellationToken = default)
             where TProperty : class
         {
-            await DbContext
+            await (await GetDbContextAsync())
                 .Entry(entity)
                 .Reference(propertyExpression)
                 .LoadAsync(GetCancellationToken(cancellationToken));
         }
 
+        [Obsolete("Use WithDetailsAsync")]
         public override IQueryable<TEntity> WithDetails()
         {
             if (AbpEntityOptions.DefaultWithDetailsFunc == null)
@@ -180,6 +221,17 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return AbpEntityOptions.DefaultWithDetailsFunc(GetQueryable());
         }
 
+        public override async Task<IQueryable<TEntity>> WithDetailsAsync()
+        {
+            if (AbpEntityOptions.DefaultWithDetailsFunc == null)
+            {
+                return await base.WithDetailsAsync();
+            }
+
+            return AbpEntityOptions.DefaultWithDetailsFunc(await GetQueryableAsync());
+        }
+
+        [Obsolete("Use WithDetailsAsync method.")]
         public override IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
             var query = GetQueryable();
@@ -195,6 +247,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return query;
         }
 
+        [Obsolete("This method will be deleted in future versions.")]
         public IAsyncEnumerator<TEntity> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             return DbSet.AsAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
@@ -251,8 +304,8 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return includeDetails
-                ? await WithDetails().FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
-                : await DbSet.FindAsync(new object[] {id}, GetCancellationToken(cancellationToken));
+                ? await (await WithDetailsAsync()).FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
+                : await (await GetDbSetAsync()).FindAsync(new object[] {id}, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
