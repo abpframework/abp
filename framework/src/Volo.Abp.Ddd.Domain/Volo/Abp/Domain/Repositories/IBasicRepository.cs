@@ -54,8 +54,8 @@ namespace Volo.Abp.Domain.Repositories
         /// This is useful for ORMs / database APIs those only save changes with an explicit method call, but you need to immediately save changes to the database.</param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>Awaitable <see cref="Task"/>.</returns>
-
         Task UpdateManyAsync([NotNull] IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Deletes an entity.
         /// </summary>

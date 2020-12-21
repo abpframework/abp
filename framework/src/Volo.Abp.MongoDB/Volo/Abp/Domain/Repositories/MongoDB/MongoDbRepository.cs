@@ -195,26 +195,24 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             var entitiesCount = entities.Count();
             BulkWriteResult result;
 
+            List<WriteModel<TEntity>> replaceRequests = new List<WriteModel<TEntity>>();
+            foreach (var entity in entities)
+            {
+                replaceRequests.Add(new ReplaceOneModel<TEntity>(CreateEntityFilter(entity), entity));
+            }
+
             if (SessionHandle != null)
             {
-                result = await Collection.BulkWriteAsync(SessionHandle, GetReplaceRequests());
+                result = await Collection.BulkWriteAsync(SessionHandle, replaceRequests);
             }
             else
             {
-                result = await Collection.BulkWriteAsync(GetReplaceRequests());
+                result = await Collection.BulkWriteAsync(replaceRequests);
             }
 
             if (result.MatchedCount < entitiesCount)
             {
                 ThrowOptimisticConcurrencyException();
-            }
-
-            IEnumerable<WriteModel<TEntity>> GetReplaceRequests()
-            {
-                foreach (var entity in entities)
-                {
-                    yield return new ReplaceOneModel<TEntity>(CreateEntityFilter(entity), entity);
-                }
             }
         }
 
