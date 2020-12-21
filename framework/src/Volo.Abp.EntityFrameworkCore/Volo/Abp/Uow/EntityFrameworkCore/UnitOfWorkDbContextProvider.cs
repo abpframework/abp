@@ -181,14 +181,14 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             {
                 var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
 
-                var dbtransaction = unitOfWork.Options.IsolationLevel.HasValue
+                var dbTransaction = unitOfWork.Options.IsolationLevel.HasValue
                     ? await dbContext.Database.BeginTransactionAsync(unitOfWork.Options.IsolationLevel.Value)
                     : await dbContext.Database.BeginTransactionAsync();
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
                     new EfCoreTransactionApi(
-                        dbtransaction,
+                        dbTransaction,
                         dbContext
                     )
                 );
