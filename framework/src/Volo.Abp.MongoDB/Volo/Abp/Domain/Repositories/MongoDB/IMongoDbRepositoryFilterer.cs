@@ -16,7 +16,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null);
 
         /// <summary>
-        /// Creates 'In' filter for mongoDb.
+        /// Creates filter for given entities.
         /// </summary>
         /// <remarks>
         /// Visit https://docs.mongodb.com/manual/reference/operator/query/in/ to get more information about 'in' operator.
@@ -27,7 +27,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool applyFilters = false);
 
         /// <summary>
-        /// Creates 'In' filter for mongoDb.
+        /// Creates filter for given ids.
         /// </summary>
         /// <remarks>
         /// Visit https://docs.mongodb.com/manual/reference/operator/query/in/ to get more information about 'in' operator.

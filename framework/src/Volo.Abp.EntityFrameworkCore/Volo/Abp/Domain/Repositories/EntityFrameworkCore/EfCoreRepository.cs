@@ -344,17 +344,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             await DeleteAsync(entity, autoSave, cancellationToken);
         }
 
-        public async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        public async virtual Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            foreach (var id in ids)
-            {
-                await DeleteAsync(id, cancellationToken: cancellationToken);
-            }
+            var entities = await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
 
-            if (autoSave)
-            {
-                await SaveChangesAsync(cancellationToken);
-            }
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
     }
 }

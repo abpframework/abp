@@ -16,7 +16,6 @@ namespace Volo.Abp.MongoDB.Volo.Abp.Domain.Repositories.MongoDB
        )
            where TEntity : class, IEntity;
 
-
         Task UpdateManyAsync<TEntity>(
             IMongoDbRepository<TEntity> repository,
             IEnumerable<TEntity> entities,
@@ -24,7 +23,6 @@ namespace Volo.Abp.MongoDB.Volo.Abp.Domain.Repositories.MongoDB
             CancellationToken cancellationToken
         )
             where TEntity : class, IEntity;
-
 
         Task DeleteManyAsync<TEntity>(
             IMongoDbRepository<TEntity> repository,
