@@ -7,6 +7,7 @@
         MySQL,
         PostgreSQL,
         Oracle,
+        OracleDevart,
         SQLite
     }
 }

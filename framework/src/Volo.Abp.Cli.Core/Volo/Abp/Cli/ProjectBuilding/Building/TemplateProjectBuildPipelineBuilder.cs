@@ -32,7 +32,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
                 pipeline.Steps.Add(new RemoveRootFolderStep());
             }
 
-
             if (context.BuildArgs.ConnectionString != null)
             {
                 pipeline.Steps.Add(new ConnectionStringChangeStep());
