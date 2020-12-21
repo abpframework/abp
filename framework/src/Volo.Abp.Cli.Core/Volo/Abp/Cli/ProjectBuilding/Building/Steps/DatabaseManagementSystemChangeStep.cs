@@ -14,7 +14,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                         ChangeEntityFrameworkCoreDependency(context,"Volo.Abp.EntityFrameworkCore.MySQL",
                             "Volo.Abp.EntityFrameworkCore.MySQL",
                             "AbpEntityFrameworkCoreMySQLModule");
-                        ChangeUseSqlServer(context,"UseMySql");
+                        AddMySqlServerVersion(context);
+                        ChangeUseSqlServer(context,"UseMySQL", "UseMySql");
                     break;
 
                     case DatabaseManagementSystem.PostgreSQL:
@@ -50,6 +51,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             }
         }
 
+        private void AddMySqlServerVersion(ProjectBuildContext context)
+        {
+            var dbContextFactoryFile = context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
+
+            dbContextFactoryFile.ReplaceText("configuration.GetConnectionString(\"Default\")",
+                "configuration.GetConnectionString(\"Default\"), MySqlServerVersion.LatestSupportedServerVersion");
+        }
+
         private void ChangeEntityFrameworkCoreDependency(ProjectBuildContext context, string newPackageName, string newModuleNamespace, string newModuleClass)
         {
             var efCoreProjectFile = context.Files.First(f => f.Name.EndsWith("EntityFrameworkCore.csproj", StringComparison.OrdinalIgnoreCase));
@@ -60,15 +69,20 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             efCoreModuleClass.ReplaceText("AbpEntityFrameworkCoreSqlServerModule", newModuleClass);
         }
 
-        private void ChangeUseSqlServer(ProjectBuildContext context, string newUseMethod)
+        private void ChangeUseSqlServer(ProjectBuildContext context, string newUseMethodForEfModule, string newUseMethodForDbContext = null)
         {
+            if (newUseMethodForDbContext == null)
+            {
+                newUseMethodForDbContext = newUseMethodForEfModule;
+            }
+
             var oldUseMethod = "UseSqlServer";
 
             var efCoreModuleClass = context.Files.First(f => f.Name.EndsWith("EntityFrameworkCoreModule.cs", StringComparison.OrdinalIgnoreCase));
-            efCoreModuleClass.ReplaceText(oldUseMethod, newUseMethod);
+            efCoreModuleClass.ReplaceText(oldUseMethod, newUseMethodForEfModule);
 
             var dbContextFactoryFile = context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
-            dbContextFactoryFile.ReplaceText(oldUseMethod, newUseMethod);
+            dbContextFactoryFile.ReplaceText(oldUseMethod, newUseMethodForDbContext);
         }
     }
 }

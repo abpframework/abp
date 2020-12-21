@@ -101,13 +101,6 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("DBMS: " + databaseManagementSystem);
             }
 
-            if (databaseManagementSystem != DatabaseManagementSystem.NotSpecified
-                && databaseManagementSystem != DatabaseManagementSystem.SQLServer
-                && connectionString == null)
-            {
-                throw new CliUsageException($"Connection string must be set if a Database Management System other than SQLServer is set. Use \"--{Options.ConnectionString.Long}\" parameter to set connection string");
-            }
-
             var uiFramework = GetUiFramework(commandLineArgs);
             if (uiFramework != UiFramework.NotSpecified)
             {
@@ -305,7 +298,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-ts|--template-source <template-source>     (your local or network abp template source)");
             sb.AppendLine("-csf|--create-solution-folder               (default: true)");
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
-            sb.AppendLine("--dbms <database-management-system>         (your database management system. Requires --connection-string to be set)");
+            sb.AppendLine("--dbms <database-management-system>         (your database management system)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
             sb.AppendLine("--no-random-port                            (Use template's default ports)");
@@ -328,7 +321,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
             sb.AppendLine("  abp new Acme.BookStore -csf false");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
-            sb.AppendLine("  abp new Acme.BookStore --dbms mysql --connection-string \"Server=myServerName\\myInstanceName;Database=myDatabase;User Id=myUsername;Password=myPassword\"");
+            sb.AppendLine("  abp new Acme.BookStore --dbms mysql");
             sb.AppendLine("  abp new Acme.BookStore --connection-string \"Server=myServerName\\myInstanceName;Database=myDatabase;User Id=myUsername;Password=myPassword\"");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");

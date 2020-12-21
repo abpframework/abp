@@ -38,7 +38,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
             catch (Exception e)
             {
-                Logger.LogWarning($"\"Re-creating migrations process failed.");
+                Logger.LogWarning("Re-creating migrations process failed.");
                 throw e;
             }
         }
