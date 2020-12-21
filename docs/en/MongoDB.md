@@ -385,7 +385,6 @@ In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. Th
 
 ### Customize Bulk Operations
 
-
 If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IMongoDbBulkOperationProvider`.
 
 - You may use example template below:
