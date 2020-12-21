@@ -6,8 +6,6 @@ namespace Volo.Abp.Http.ProxyScripting
     {
         public string GeneratorType { get; set; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
         public bool UseCache { get; set; }
 
         public string[] Modules { get; set; }

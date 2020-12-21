@@ -70,7 +70,14 @@ namespace Volo.Abp.Http.ProxyScripting
 
         private string CreateCacheKey(ProxyScriptingModel model)
         {
-            return _jsonSerializer.Serialize(model).ToMd5();
+            return _jsonSerializer.Serialize(new
+            {
+                model.GeneratorType,
+                model.Modules,
+                model.Controllers,
+                model.Actions,
+                model.Properties
+            }).ToMd5();
         }
     }
 }
