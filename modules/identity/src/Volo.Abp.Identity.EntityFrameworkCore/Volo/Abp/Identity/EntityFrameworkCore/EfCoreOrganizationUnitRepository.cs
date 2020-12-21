@@ -240,7 +240,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return GetQueryable().IncludeDetails();
         }
 
-        public override async Task<IQueryable<OrganizationUnit>> WithDetailsAsync(params Expression<Func<OrganizationUnit, object>>[] propertySelectors)
+        public override async Task<IQueryable<OrganizationUnit>> WithDetailsAsync()
         {
             return (await GetQueryableAsync()).IncludeDetails();
         }
