@@ -18,6 +18,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             pipeline.Steps.Add(new ProjectReferenceReplaceStep());
             pipeline.Steps.Add(new TemplateCodeDeleteStep());
             pipeline.Steps.Add(new SolutionRenameStep());
+            pipeline.Steps.Add(new DatabaseManagementSystemChangeStep());
 
             if (context.Template.Name == AppProTemplate.TemplateName ||
                 context.Template.Name == ModuleProTemplate.TemplateName)
@@ -30,6 +31,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             {
                 pipeline.Steps.Add(new RemoveRootFolderStep());
             }
+
 
             if (context.BuildArgs.ConnectionString != null)
             {
