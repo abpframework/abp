@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
@@ -14,6 +16,8 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
     public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         where TDbContext : IEfCoreDbContext
     {
+        public ILogger<UnitOfWorkDbContextProvider<TDbContext>> Logger { get; set; }
+
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
 
@@ -23,10 +27,16 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
+
+            Logger = NullLogger<UnitOfWorkDbContextProvider<TDbContext>>.Instance;
         }
 
+        [Obsolete("Use GetDbContextAsync method.")]
         public TDbContext GetDbContext()
         {
+            Logger.LogWarning("UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead!");
+            Logger.LogWarning(Environment.StackTrace);
+
             var unitOfWork = _unitOfWorkManager.Current;
             if (unitOfWork == null)
             {
