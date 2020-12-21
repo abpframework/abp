@@ -36,6 +36,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                         ChangeEntityFrameworkCoreDependency(context,"Volo.Abp.EntityFrameworkCore.Oracle.Devart",
                             "Volo.Abp.EntityFrameworkCore.Oracle.Devart",
                             "AbpEntityFrameworkCoreOracleDevartModule");
+                        AdjustOracleDbContextOptionsBuilder(context);
                         ChangeUseSqlServer(context,"UseOracle");
                         break;
 
@@ -49,6 +50,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     default:
                         return;
             }
+        }
+
+        private void AdjustOracleDbContextOptionsBuilder(ProjectBuildContext context)
+        {
+            var dbContextFactoryFile = context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
+
+            dbContextFactoryFile.ReplaceText("new DbContextOptionsBuilder",
+                $"(DbContextOptionsBuilder<{context.BuildArgs.SolutionName.ProjectName}MigrationsDbContext>) new DbContextOptionsBuilder");
         }
 
         private void AddMySqlServerVersion(ProjectBuildContext context)
