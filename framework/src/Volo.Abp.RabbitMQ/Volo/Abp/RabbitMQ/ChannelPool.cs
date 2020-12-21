@@ -37,7 +37,18 @@ namespace Volo.Abp.RabbitMQ
 
             var poolItem = Channels.GetOrAdd(
                 channelName,
-                _ => new ChannelPoolItem(CreateChannel(channelName, connectionName))
+                _ =>
+                {
+                    lock (Channels)
+                    {
+                        if (Channels.TryGetValue(_, out ChannelPoolItem channelPoolItem))
+                        {
+                            return channelPoolItem;
+                        }
+                        return new ChannelPoolItem(CreateChannel(_, connectionName));
+                    }
+
+                }
             );
 
             poolItem.Acquire();
@@ -108,7 +119,7 @@ namespace Volo.Abp.RabbitMQ
 
             Logger.LogInformation($"Disposed RabbitMQ Channel Pool ({Channels.Count} channels in {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms).");
 
-            if(poolDisposeStopwatch.Elapsed.TotalSeconds > 5.0)
+            if (poolDisposeStopwatch.Elapsed.TotalSeconds > 5.0)
             {
                 Logger.LogWarning($"Disposing RabbitMQ Channel Pool got time greather than expected: {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
             }

@@ -27,10 +27,20 @@ namespace Volo.Abp.RabbitMQ
 
             return Connections.GetOrAdd(
                 connectionName,
-                () => Options
-                    .Connections
-                    .GetOrDefault(connectionName)
-                    .CreateConnection()
+                (_) =>
+                {
+
+                    lock (Connections)
+                    {
+                        if (Connections.TryGetValue(_, out IConnection connection))
+                        {
+                            return connection;
+                        }
+
+                        return Options.Connections.GetOrDefault(_).CreateConnection();
+                    }
+
+                }
             );
         }
 
