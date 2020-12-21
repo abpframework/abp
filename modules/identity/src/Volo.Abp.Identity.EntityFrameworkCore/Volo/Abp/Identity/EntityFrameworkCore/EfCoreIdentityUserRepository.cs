@@ -188,7 +188,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await this.WhereIf(
+            return await (await GetDbSetAsync())
+                .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
