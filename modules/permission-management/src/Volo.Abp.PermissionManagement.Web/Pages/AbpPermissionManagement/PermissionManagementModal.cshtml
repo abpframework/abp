@@ -35,6 +35,7 @@
                                 {
                                     var permission = group.Permissions[j];
                                     <abp-input asp-for="@permission.IsGranted"
+                                               id="Groups_@(i)__Permissions_@(j)__IsGranted"
                                                name="Groups[@(i)].Permissions[@(j)].IsGranted"
                                                label="@permission.GetShownName(Model.ProviderName)"
                                                disabled="@permission.IsDisabled(Model.ProviderName)"
