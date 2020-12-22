@@ -18,12 +18,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             pipeline.Steps.Add(new ProjectReferenceReplaceStep());
             pipeline.Steps.Add(new TemplateCodeDeleteStep());
             pipeline.Steps.Add(new SolutionRenameStep());
-            pipeline.Steps.Add(new DatabaseManagementSystemChangeStep());
 
             if (context.Template.Name == AppProTemplate.TemplateName ||
                 context.Template.Name == ModuleProTemplate.TemplateName)
             {
                 pipeline.Steps.Add(new LicenseCodeReplaceStep());
+            }
+
+            if (context.Template.Name == AppTemplate.TemplateName ||
+                context.Template.Name == AppProTemplate.TemplateName)
+            {
+                pipeline.Steps.Add(new DatabaseManagementSystemChangeStep());
             }
 
             if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor)
