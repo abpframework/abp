@@ -221,10 +221,10 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 {
     var expression = base.CreateFilterExpression<TEntity>();
 
-    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
+    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity))&&IsActiveFilterEnabled)
     {
         Expression<Func<TEntity, bool>> isActiveFilter =
-            e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
+            e => EF.Property<bool>(e, "IsActive");
         expression = expression == null 
             ? isActiveFilter 
             : CombineExpressions(expression, isActiveFilter);
