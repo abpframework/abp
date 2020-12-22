@@ -20,12 +20,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         [HtmlAttributeName("abp-id-name")]
         public ModelExpression IdNameFor { get; set; }
 
-        private readonly ModelExpressionProvider _modelExpressionProvider;
         private readonly MvcViewOptions _mvcViewOptions;
 
-        public AbpIdNameTagHelper(ModelExpressionProvider modelExpressionProvider, IOptions<MvcViewOptions> mvcViewOptions)
+        public AbpIdNameTagHelper(IOptions<MvcViewOptions> mvcViewOptions)
         {
-            _modelExpressionProvider = modelExpressionProvider;
             _mvcViewOptions = mvcViewOptions.Value;
         }
 
