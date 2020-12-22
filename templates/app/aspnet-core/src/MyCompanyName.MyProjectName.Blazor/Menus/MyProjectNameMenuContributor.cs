@@ -39,7 +39,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Menus
                 new ApplicationMenuItem(
                     MyProjectNameMenus.Home,
                     l["Menu:Home"],
-                    "",
+                    "/",
                     icon: "fas fa-home"
                 )
             );

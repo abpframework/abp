@@ -17,6 +17,7 @@
     "paths": {
       "@abp/ng.core": ["packages/core/src/public-api.ts"],
       "@abp/ng.core/locale": ["packages/core/locale/src/public-api.ts"],
+      "@abp/ng.core/testing": ["packages/core/testing/src/public-api.ts"],
       "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
       "@abp/ng.theme.shared/extensions": ["packages/theme-shared/extensions/src/public-api.ts"],
       "@abp/ng.components/tree": ["packages/components/tree/src/public-api.ts"],

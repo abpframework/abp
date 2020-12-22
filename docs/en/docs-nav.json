@@ -349,7 +349,8 @@
               "path": "Module-Development-Basics.md"
             },
             {
-              "text": "Plug-In Modules"
+              "text": "Plug-In Modules",
+              "path": "PlugIn-Modules.md"
             },
             {
               "text": "Customizing the Application Modules",
@@ -694,6 +695,15 @@
                 {
                   "text": "Page Alerts",
                   "path": "UI/Blazor/Page-Alerts.md"
+                }
+              ]
+            },
+            {
+              "text": "Other Components",
+              "items": [
+                {
+                  "text": "SubmitButton",
+                  "path": "UI/Blazor/SubmitButton.md"
                 }
               ]
             },

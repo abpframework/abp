@@ -33,6 +33,7 @@
     "EmailNotValid": "Please enter a valid email address.",
     "JoinOurMarketingNewsletter": "Join our marketing newsletter",
     "WouldLikeToReceiveMarketingMaterials": "I would like to receive marketing materials like product deals & special offers.",
-    "StartUsingYourLicenseNow": "Start using your license now!"
+    "StartUsingYourLicenseNow": "Start using your license now!",
+    "WelcomePage": "Welcome Page"
    }
 }
