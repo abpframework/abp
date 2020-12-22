@@ -251,9 +251,6 @@ paket-files/
 .idea/
 *.sln.iml
 
-# Asp.NET Core Environments
-appsettings.*.json
-
 # CmsKit
 host/Volo.CmsKit.IdentityServer/Logs/logs.txt
 host/Volo.CmsKit.HttpApi.Host/Logs/logs.txt
