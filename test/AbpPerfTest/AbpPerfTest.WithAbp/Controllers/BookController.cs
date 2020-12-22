@@ -2,28 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AbpPerfTest.WithoutAbp.Dtos;
-using AbpPerfTest.WithoutAbp.Entities;
-using AbpPerfTest.WithoutAbp.EntityFramework;
+using AbpPerfTest.WithAbp.Dtos;
+using AbpPerfTest.WithAbp.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories;
 
-namespace AbpPerfTest.WithoutAbp.Controllers
+namespace AbpPerfTest.WithAbp.Controllers
 {
     [Route("api/books")]
     public class BookController : Controller
     {
-        private readonly BookDbContext _bookDbContext;
+        private readonly IRepository<Book, Guid> _bookRepository;
 
-        public BookController(BookDbContext bookDbContext)
+        public BookController(IRepository<Book, Guid> bookRepository)
         {
-            _bookDbContext = bookDbContext;
+            _bookRepository = bookRepository;
         }
 
         [HttpGet]
         public async Task<List<BookDto>> GetListAsync()
         {
-            var books = await _bookDbContext.Books.ToListAsync();
+            var books = await _bookRepository.GetListAsync();
 
             return books
                 .Select(b => new BookDto
@@ -40,7 +39,7 @@ namespace AbpPerfTest.WithoutAbp.Controllers
         [Route("{id}")]
         public async Task<BookDto> GetAsync(Guid id)
         {
-            var book = await _bookDbContext.Books.SingleAsync(b => b.Id == id);
+            var book = await _bookRepository.GetAsync(id);
 
             return new BookDto
             {
@@ -61,8 +60,7 @@ namespace AbpPerfTest.WithoutAbp.Controllers
                 IsAvailable = input.IsAvailable
             };
 
-            await _bookDbContext.Books.AddAsync(book);
-            await _bookDbContext.SaveChangesAsync();
+            await _bookRepository.InsertAsync(book);
 
             return book.Id;
         }
@@ -71,23 +69,18 @@ namespace AbpPerfTest.WithoutAbp.Controllers
         [Route("{id}")]
         public async Task UpdateAsync(Guid id, CreateUpdateBookDto input)
         {
-            var book = await _bookDbContext.Books.SingleAsync(b => b.Id == id);
+            var book = await _bookRepository.GetAsync(id);
 
             book.Name = input.Name;
             book.Price = input.Price;
             book.IsAvailable = input.IsAvailable;
-
-            await _bookDbContext.SaveChangesAsync();
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task DeleteAsync(Guid id)
         {
-            var book = await _bookDbContext.Books.SingleAsync(b => b.Id == id);
-
-            _bookDbContext.Books.Remove(book);
-            await _bookDbContext.SaveChangesAsync();
+            await _bookRepository.DeleteAsync(id);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace AbpPerfTest.WithoutAbp.Entities
+namespace AbpPerfTest.WithAbp.Dtos
 {
-    public class Book
+    public class BookDto
     {
         public Guid Id { get; set; }
 
@@ -11,10 +11,5 @@ namespace AbpPerfTest.WithoutAbp.Entities
         public float Price { get; set; }
 
         public bool IsAvailable { get; set; }
-
-        public Book()
-        {
-            Id = Guid.NewGuid();
-        }
     }
 }

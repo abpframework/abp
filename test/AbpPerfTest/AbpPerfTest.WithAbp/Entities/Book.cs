@@ -1,11 +1,10 @@
 ﻿using System;
+using Volo.Abp.Domain.Entities;
 
-namespace AbpPerfTest.WithoutAbp.Entities
+namespace AbpPerfTest.WithAbp.Entities
 {
-    public class Book
+    public class Book : BasicAggregateRoot<Guid>
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
 
         public float Price { get; set; }
