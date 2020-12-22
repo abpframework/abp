@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Components.Extensibility
 
         public TableColumnsConfiguration TableColumns { get; }
 
-        public UIExtensions()
+        private UIExtensions()
         {
             EntityActions = new EntityActionsConfiguration();
             TableColumns = new TableColumnsConfiguration();
