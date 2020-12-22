@@ -6,7 +6,7 @@ using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
-    public partial class AbpDataGrid<TItem> : ComponentBase
+    public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
     {
         protected Dictionary<string, DataGridEntityActionsColumn<TItem>> ActionColumns = new Dictionary<string, DataGridEntityActionsColumn<TItem>>();
 

@@ -20,14 +20,14 @@
     </CardHeader>
     <CardBody>
         @* ************************* DATA GRID ************************* *@
-        <AbpDataGrid TItem="IdentityRoleDto"
+        <AbpExtensibleDataGrid TItem="IdentityRoleDto"
                      Data="Entities"
                      ReadData="OnDataGridReadAsync"
                      TotalItems="TotalCount"
                      ShowPager="true"
                      PageSize="PageSize"
                      Page="typeof(RoleManagement)">
-        </AbpDataGrid>
+        </AbpExtensibleDataGrid>
     </CardBody>
 </Card>
 

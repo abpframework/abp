@@ -17,14 +17,14 @@
     </CardHeader>
     <CardBody>
         @* ************************* DATA GRID ************************* *@
-        <AbpDataGrid TItem="IdentityUserDto"
+        <AbpExtensibleDataGrid TItem="IdentityUserDto"
                              Data="Entities"
                              ReadData="OnDataGridReadAsync"
                              TotalItems="TotalCount"
                              ShowPager="true"
                              PageSize="PageSize"
                              Page="typeof(UserManagement)">
-        </AbpDataGrid>
+        </AbpExtensibleDataGrid>
     </CardBody>
 </Card>
 
