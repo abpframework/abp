@@ -36,7 +36,7 @@
                         <li class="list-group-item">
                             <div class="form-check">
                                 <label asp-for="@identityScope.Checked" for="ConsentInput_IdentityScopes_@(i)__Checked" class="form-check-label">
-                                    <input name="ConsentInput.IdentityScopes[@i].Checked" id="ConsentInput_IdentityScopes_@(i)__Checked" asp-for="@identityScope.Checked" class="form-check-input"  />
+                                    <input abp-id-name="@Model.ConsentInput.IdentityScopes[i].Checked" asp-for="@identityScope.Checked" class="form-check-input"  />
                                     @identityScope.DisplayName
                                     @if (identityScope.Required)
                                     {
@@ -44,7 +44,7 @@
                                     }
                                 </label>
                             </div>
-                            <input name="ConsentInput.IdentityScopes[@i].Name" id="ConsentInput_IdentityScopes_@(i)Name" asp-for="@identityScope.Name" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
+                            <input abp-id-name="@Model.ConsentInput.IdentityScopes[i].Name" asp-for="@identityScope.Name" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
                             @if (identityScope.Description != null)
                             {
                                 <div class="consent-description">
@@ -67,7 +67,7 @@
                         <li class="list-group-item">
                             <div class="form-check">
                                 <label asp-for="@apiScope.Checked" for="ConsentInput_ApiScopes_@(i)__Checked" class="form-check-label">
-                                    <input name="ConsentInput.ApiScopes[@i].Checked" id="ConsentInput_ApiScopes_@(i)__Checked" asp-for="@apiScope.Checked" class="form-check-input" disabled="@apiScope.Required" />
+                                    <input abp-id-name="@Model.ConsentInput.ApiScopes[i].Checked" asp-for="@apiScope.Checked" class="form-check-input" disabled="@apiScope.Required" />
                                     @apiScope.DisplayName
                                     @if (apiScope.Required)
                                     {
@@ -75,7 +75,7 @@
                                     }
                                 </label>
                             </div>
-                            <input name="ConsentInput.ApiScopes[@i].Name" id="ConsentInput_ApiScopes_@(i)Name" asp-for="@apiScope.Name" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
+                            <input abp-id-name="@Model.ConsentInput.ApiScopes[i].Name" asp-for="@apiScope.Name" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
                             @if (apiScope.Description != null)
                             {
                                 <div class="consent-description">
