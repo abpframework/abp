@@ -1,17 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
-using Volo.CmsKit.Domain.Shared.Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Contents
+namespace Volo.CmsKit.Contents
 {
     public class Content : FullAuditedAggregateRoot<Guid>
     {
-        public string Value { get; set; }
         public string EntityType { get; set; }
+        
         public string EntityId { get; set; }
+        
+        public string Value { get; set; }
+
+        protected Content()
+        {
+            
+        }
+        public Content(Guid id, [NotNull] string entityType, [NotNull] string entityId, [NotNull] string value) : base(id)
+        {
+            EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), ContentConsts.MaxEntityTypeLength);
+            EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), ContentConsts.MaxEntityIdLength);
+            Value = Check.NotNullOrWhiteSpace(value, nameof(value), ContentConsts.MaxValueLength);
+        }
     }
 }
