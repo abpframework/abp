@@ -41,7 +41,7 @@
                                                group-data-permission-name="@permission.Name"
                                                group-data-parent-name="@(permission.ParentName ?? "")"
                                                group-style="margin-left: @(permission.Depth * 20)px"/>
-                                    <input asp-for="@permission.Name" id="Groups_@(i)__Permissions@(j).Name" name="Groups[@(i)].Permissions[@(j)].Name"/>
+                                    <input asp-for="@permission.Name" id="Groups_@(i)__Permissions_@(j)__Name" name="Groups[@(i)].Permissions[@(j)].Name"/>
                                 }
                             </div>
                         </div>
