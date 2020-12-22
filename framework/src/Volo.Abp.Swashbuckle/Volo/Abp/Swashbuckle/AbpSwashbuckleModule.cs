@@ -1,9 +1,12 @@
-﻿using Volo.Abp.Modularity;
+﻿using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Swashbuckle
 {
-    [DependsOn(typeof(AbpVirtualFileSystemModule))]
+    [DependsOn(
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpAspNetCoreMvcModule))]
     public class AbpSwashbuckleModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

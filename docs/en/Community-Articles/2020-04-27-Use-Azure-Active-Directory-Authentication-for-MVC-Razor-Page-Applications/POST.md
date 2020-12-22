@@ -6,9 +6,9 @@ Adding Azure Active Directory is pretty straightforward in ABP framework. Couple
 
 Two different **alternative approaches** for AzureAD integration will be demonstrated for better coverage.
 
-1. **AddAzureAD**: This approach uses Microsoft [AzureAD UI nuget package](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.AzureAD.UI/) which is very popular when users search the web about how to integrate AzureAD to their web application.
-
+1. ~~**AddAzureAD**: This approach uses Microsoft [AzureAD UI nuget package](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.AzureAD.UI/) which is very popular when users search the web about how to integrate AzureAD to their web application.~~ Now marked **Obsolete** (see https://github.com/aspnet/Announcements/issues/439). 
 2. **AddOpenIdConnect**: This approach uses default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for not only AzureAD but for all OpenId connections.
+3. **AddMicrosoftIdentityWebAppAuthentication:** This approach uses newly introduced [Microsoft.Identity.Web nuget package](https://www.nuget.org/packages/Microsoft.Identity.Web/) to replace AddAzureAD.
 
 > There is **no difference** in functionality between these approaches. AddAzureAD is an abstracted way of OpenIdConnection ([source](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADAuthenticationBuilderExtensions.cs#L122)) with predefined cookie settings.
 >
@@ -134,13 +134,50 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
 And that's it, integration is completed. Keep on mind that you can connect any other external authentication providers. 
 
+## 3. AddMicrosoftIdentityWebAppAuthentication
+
+With .Net 5.0, AzureAd is marked [obsolete](https://github.com/dotnet/aspnetcore/issues/25807) and will not be supported in the near future. However its expanded functionality is available in [microsoft-identity-web](https://github.com/AzureAD/microsoft-identity-web/wiki) packages.
+
+Add (or replace with) the new nuget package Microsoft.Identity.Web nuget package](https://www.nuget.org/packages/Microsoft.Identity.Web/).
+
+In your **.Web** project; you update the  `ConfigureAuthentication` method located in your **ApplicationWebModule** with the following while having the AzureAd appsettings section as defined before:
+
+````csharp
+private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
+        {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
+            context.Services.AddAuthentication()
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "Acme.BookStore";
+                });
+            
+    			context.Services.AddMicrosoftIdentityWebAppAuthentication(
+                    configuration: configuration,
+                    configSectionName: "AzureAd",
+                    openIdConnectScheme:"AzureAD",
+                    cookieScheme:null);
+		}
+````
+
+And that's all to add new Microsoft-Identity-Web. 
+
+> **Don't forget to:**
+>
+> * Pass **cookieScheme** parameter as **null** or your [*GetExternalLoginInfoAsync* method will always return null](https://github.com/AzureAD/microsoft-identity-web/issues/133#). 
+
+Keep in mind that [Microsoft-Identity-Web](https://github.com/AzureAD/microsoft-identity-web) is relatively new and keeps getting new enhancements, features and documentation.
+
 ## The Source Code
 
 You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization).
 
 # FAQ
 
-* Help! `GetExternalLoginInfoAsync` returns `null`!
+* Help! `GetExternalLoginInfoAsync` returns `null`! (Using obsolute **AddAzureAD**)
 
   * There can be 2 reasons for this;
 
@@ -158,6 +195,11 @@ You can find the source code of the completed example [here](https://github.com/
        ````
 
 
+* Help! `GetExternalLoginInfoAsync` returns `null`! (Using **AddMicrosoftIdentityWebAppAuthentication**)
+
+  
+  * Pass cookieScheme parameter as **null**. (See [this issue](https://github.com/AzureAD/microsoft-identity-web/issues/133)).
+  
 * Help! I am getting ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** error! 
 
   

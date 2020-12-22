@@ -8,7 +8,6 @@
   "whitelistedNonPeerDependencies": [
     "@abp/utils",
     "@angular/localize",
-    "@ngxs/router-plugin",
     "@ngxs/store",
     "angular-oauth2-oidc",
     "just-compare",

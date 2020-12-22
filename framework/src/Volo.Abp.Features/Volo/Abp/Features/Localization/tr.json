@@ -1,0 +1,8 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Volo.Feature:010001": "Bu özellik etkin değil: {FeatureName}",
+    "Volo.Feature:010002": "Gerekli özellikler etkinleştirilmemiş. Bu özelliklerin tümü etkinleştirilmelidir: {FeatureNames}",
+    "Volo.Feature:010003": "Gerekli özellikler etkinleştirilmemiş. Bu özelliklerden en az birinin etkinleştirilmesi gerekir: {FeatureNames}"
+  }
+}

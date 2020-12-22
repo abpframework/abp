@@ -156,6 +156,9 @@
     "RemainingQuestionCount": "Kalan soru sayısı",
     "TotalQuestionMustBeGreaterWarningMessage": "Toplam soru sayısı kalan soru sayısından büyük olmalıdır!",
     "QuestionCountsMustBeGreaterThanZero": "Toplam soru sayısı ve kalan soru sayısı sıfır veya sıfırdan daha büyük olmalıdır!",
-    "UnlimitedQuestionCount": "Sınırsız soru sayısı"
+    "UnlimitedQuestionCount": "Sınırsız soru sayısı",
+    "Language": "Dil",
+    "Optional": "Opsiyonel",
+    "CreateArticleLanguageInfo": "Makalenin yazıldığı dil"
   }
 }

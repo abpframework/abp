@@ -1,8 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
@@ -27,7 +28,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                 return reader;
             }
 
-            using (await SyncObj.LockAsync().ConfigureAwait(false))
+            using (await SyncObj.LockAsync())
             {
                 if (ReaderCache.TryGetValue(templateDefinition.Name, out reader))
                 {
@@ -52,7 +53,13 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             var fileInfo = VirtualFileProvider.GetFileInfo(virtualPath);
             if (!fileInfo.Exists)
             {
-                throw new AbpException("Could not find a file/folder at the location: " + virtualPath);
+                var directoryContents = VirtualFileProvider.GetDirectoryContents(virtualPath);
+                if (!directoryContents.Exists)
+                {
+                    throw new AbpException("Could not find a file/folder at the location: " + virtualPath);
+                }
+
+                fileInfo = new VirtualDirectoryFileInfo(virtualPath, virtualPath, DateTimeOffset.UtcNow);
             }
 
             if (fileInfo.IsDirectory)

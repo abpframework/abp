@@ -5,26 +5,7 @@
         <h5 class="card-title">{{ 'AbpTenantManagement::Tenants' | abpLocalization }}</h5>
       </div>
       <div class="text-right col col-md-6">
-        <button
-          *abpPermission="'FeatureManagement.ManageHostFeatures'"
-          id="manage-host-features"
-          class="btn btn-primary mr-1"
-          type="button"
-          (click)="openFeaturesModal(null)"
-        >
-          <i class="fa fa-plus mr-1"></i>
-          <span>{{ 'AbpTenantManagement::ManageHostFeatures' | abpLocalization }}</span>
-        </button>
-        <button
-          *abpPermission="'AbpTenantManagement.Tenants.Create'"
-          id="create-tenants"
-          class="btn btn-primary"
-          type="button"
-          (click)="addTenant()"
-        >
-          <i class="fa fa-plus mr-1"></i>
-          <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
-        </button>
+        <abp-page-toolbar [record]="data$ | async"></abp-page-toolbar>
       </div>
     </div>
   </div>
@@ -41,60 +22,11 @@
       </div>
     </div>
 
-    <ngx-datatable [rows]="data$ | async" [count]="totalCount$ | async" [list]="list" default>
-      <ngx-datatable-column
-        [name]="'AbpTenantManagement::Actions' | abpLocalization"
-        [maxWidth]="150"
-        [sortable]="false"
-      >
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          <div ngbDropdown container="body" class="d-inline-block">
-            <button
-              class="btn btn-primary btn-sm dropdown-toggle"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              ngbDropdownToggle
-            >
-              <i class="fa fa-cog mr-1"></i>{{ 'AbpTenantManagement::Actions' | abpLocalization }}
-            </button>
-            <div ngbDropdownMenu>
-              <button
-                *abpPermission="'AbpTenantManagement.Tenants.Update'"
-                ngbDropdownItem
-                (click)="editTenant(row.id)"
-              >
-                {{ 'AbpTenantManagement::Edit' | abpLocalization }}
-              </button>
-              <button
-                *abpPermission="'AbpTenantManagement.Tenants.ManageConnectionStrings'"
-                ngbDropdownItem
-                (click)="onEditConnectionString(row.id)"
-              >
-                {{ 'AbpTenantManagement::Permission:ManageConnectionStrings' | abpLocalization }}
-              </button>
-              <button
-                *abpPermission="'AbpTenantManagement.Tenants.ManageFeatures'"
-                ngbDropdownItem
-                (click)="openFeaturesModal(row.id)"
-              >
-                {{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}
-              </button>
-              <button
-                *abpPermission="'AbpTenantManagement.Tenants.Delete'"
-                ngbDropdownItem
-                (click)="delete(row.id, row.name)"
-              >
-                {{ 'AbpTenantManagement::Delete' | abpLocalization }}
-              </button>
-            </div>
-          </div>
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column
-        [name]="'AbpTenantManagement::TenantName' | abpLocalization"
-        prop="name"
-      ></ngx-datatable-column>
-    </ngx-datatable>
+    <abp-extensible-table
+      [data]="data$ | async"
+      [recordsTotal]="totalCount$ | async"
+      [list]="list"
+    ></abp-extensible-table>
   </div>
 </div>
 
@@ -119,36 +51,7 @@
 
 <ng-template #tenantModalTemplate>
   <form [formGroup]="tenantForm" (ngSubmit)="save()" validateOnSubmit>
-    <div class="mt-2">
-      <div class="form-group">
-        <label for="name">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>
-        <input type="text" id="name" class="form-control" formControlName="name" autofocus />
-      </div>
-      <div class="form-group" *ngIf="tenantForm.controls.adminEmailAddress">
-        <label for="name">{{
-          'AbpTenantManagement::DisplayName:AdminEmailAddress' | abpLocalization
-        }}</label>
-        <input
-          autocomplete="email"
-          type="email"
-          id="admin-email-address"
-          class="form-control"
-          formControlName="adminEmailAddress"
-        />
-      </div>
-      <div class="form-group" *ngIf="tenantForm.controls.adminPassword">
-        <label for="name">{{
-          'AbpTenantManagement::DisplayName:AdminPassword' | abpLocalization
-        }}</label>
-        <input
-          autocomplete="new-password"
-          type="password"
-          id="admin-password"
-          class="form-control"
-          formControlName="adminPassword"
-        />
-      </div>
-    </div>
+    <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
   </form>
 </ng-template>
 

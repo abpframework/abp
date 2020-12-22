@@ -151,6 +151,8 @@ export default `
 }
 ngb-typeahead-window {
   width: 100%;
+  max-height: 25em;
+  overflow-y: scroll !important;
 }
 
 @keyframes fadeInTop {

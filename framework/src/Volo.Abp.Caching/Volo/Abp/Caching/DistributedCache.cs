@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -499,7 +498,7 @@ namespace Volo.Abp.Caching
                 return value;
             }
 
-            using (await SyncSemaphore.LockAsync(token).ConfigureAwait(false))
+            using (await SyncSemaphore.LockAsync(token))
             {
                 value = await GetAsync(key, hideErrors, considerUow, token);
                 if (value != null)
@@ -1030,7 +1029,7 @@ namespace Volo.Abp.Caching
 
         protected virtual void HandleException(Exception ex)
         {
-            AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
+            _ = HandleExceptionAsync(ex);
         }
 
         protected virtual async Task HandleExceptionAsync(Exception ex)

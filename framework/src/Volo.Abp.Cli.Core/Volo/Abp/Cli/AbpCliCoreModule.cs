@@ -3,6 +3,7 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.Domain;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
+using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Cli
@@ -10,7 +11,8 @@ namespace Volo.Abp.Cli
     [DependsOn(
         typeof(AbpDddDomainModule),
         typeof(AbpJsonModule),
-        typeof(AbpIdentityModelModule)
+        typeof(AbpIdentityModelModule),
+        typeof(AbpMinifyModule)
     )]
     public class AbpCliCoreModule : AbpModule
     {

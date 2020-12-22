@@ -699,6 +699,15 @@
               ]
             },
             {
+              "text": "Other Components",
+              "items": [
+                {
+                  "text": "SubmitButton",
+                  "path": "UI/Blazor/SubmitButton.md"
+                }
+              ]
+            },
+            {
               "text": "Settings",
               "path": "UI/Blazor/Settings.md"
             },
