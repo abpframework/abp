@@ -22,7 +22,7 @@ namespace AbpPerfTest.WithAbp.Controllers
         [HttpGet]
         public async Task<List<BookDto>> GetListAsync()
         {
-            var books = await _bookRepository.GetListAsync();
+            var books = await _bookRepository.GetPagedListAsync(0, 10, "Id");
 
             return books
                 .Select(b => new BookDto
@@ -51,7 +51,7 @@ namespace AbpPerfTest.WithAbp.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> CreateAsync(CreateUpdateBookDto input)
+        public async Task<Guid> CreateAsync([FromBody] CreateUpdateBookDto input)
         {
             var book = new Book
             {
@@ -67,7 +67,7 @@ namespace AbpPerfTest.WithAbp.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task UpdateAsync(Guid id, CreateUpdateBookDto input)
+        public async Task UpdateAsync(Guid id, [FromBody] CreateUpdateBookDto input)
         {
             var book = await _bookRepository.GetAsync(id);
 
