@@ -3,6 +3,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Users;
@@ -24,6 +25,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 options.AddRepository<UserReaction, EfCoreUserReactionRepository>();
                 options.AddRepository<Comment, EfCoreCommentRepository>();
                 options.AddRepository<Rating, EfCoreRatingRepository>();
+                options.AddRepository<Content, EfCoreContentRepository>();
             });
         }
     }

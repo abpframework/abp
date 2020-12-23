@@ -8,6 +8,7 @@ using Volo.CmsKit.Comments;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Users;
 using Volo.Abp.Users.EntityFrameworkCore;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Ratings;
 
@@ -93,6 +94,19 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     r.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId, x.CreatorId});
                 });
             }
+
+            builder.Entity<Content>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Contents", options.Schema);
+                
+                b.ConfigureByConvention();
+                
+                b.Property(x => x.EntityType).IsRequired().HasMaxLength(ContentConsts.MaxEntityTypeLength);
+                b.Property(x => x.EntityId).IsRequired().HasMaxLength(ContentConsts.MaxEntityIdLength);
+                b.Property(x => x.Value).IsRequired().HasMaxLength(ContentConsts.MaxValueLength);
+                
+                b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
+            });
         }
     }
 }
