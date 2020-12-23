@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
@@ -20,15 +22,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         private readonly HtmlEncoder _htmlEncoder;
         private readonly IHtmlGenerator _htmlGenerator;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IStringLocalizer<AbpUiResource> _localizer;
 
         public AbpDynamicFormTagHelperService(
             HtmlEncoder htmlEncoder,
             IHtmlGenerator htmlGenerator,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IStringLocalizer<AbpUiResource> localizer)
         {
             _htmlEncoder = htmlEncoder;
             _htmlGenerator = htmlGenerator;
             _serviceProvider = serviceProvider;
+            _localizer = localizer;
         }
 
         public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -191,7 +196,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var abpButtonTagHelper = _serviceProvider.GetRequiredService<AbpButtonTagHelper>();
             var attributes = new TagHelperAttributeList { new TagHelperAttribute("type", "submit") };
-            abpButtonTagHelper.Text = "Submit";
+            abpButtonTagHelper.Text = _localizer["Submit"];
             abpButtonTagHelper.ButtonType = AbpButtonType.Primary;
 
             return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
