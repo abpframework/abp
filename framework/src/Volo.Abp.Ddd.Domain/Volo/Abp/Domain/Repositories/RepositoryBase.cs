@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +17,6 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
         where TEntity : class, IEntity
     {
-        public IDataFilter DataFilter { get; set; }
-
-        public ICurrentTenant CurrentTenant { get; set; }
-
-        public IAsyncQueryableExecuter AsyncExecuter { get; set; }
-
-        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
-
         [Obsolete("This method will be removed in future versions.")]
         public virtual Type ElementType => GetQueryable().ElementType;
 
@@ -128,6 +121,19 @@ namespace Volo.Abp.Domain.Repositories
             }
 
             await DeleteAsync(entity, autoSave, cancellationToken);
+        }
+
+        public async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            foreach (var id in ids)
+            {
+                await DeleteAsync(id, cancellationToken: cancellationToken);
+            }
+
+            if (autoSave)
+            {
+                await SaveChangesAsync(cancellationToken);
+            }
         }
     }
 }

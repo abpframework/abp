@@ -33,7 +33,7 @@ namespace AbpPerfTest.WithAbp
 
             Configure<AbpUnitOfWorkDefaultOptions>(options =>
             {
-                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
             });
         }
 

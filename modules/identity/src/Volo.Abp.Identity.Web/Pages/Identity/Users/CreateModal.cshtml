@@ -59,8 +59,9 @@
                 <abp-tab title="@L["Roles"].Value">
                     @for (var i = 0; i < Model.Roles.Length; i++)
                     {
-                        <abp-input asp-for="@Model.Roles[i].IsAssigned" label="@Model.Roles[i].Name" />
-                        <input asp-for="@Model.Roles[i].Name" />
+                        var role = Model.Roles[i];
+                        <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
+                        <input abp-id-name="@Model.Roles[i].Name" asp-for="@role.Name" />
                     }
                 </abp-tab>
             </abp-tabs>

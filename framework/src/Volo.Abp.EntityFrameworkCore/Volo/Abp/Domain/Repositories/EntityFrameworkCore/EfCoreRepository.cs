@@ -1,13 +1,15 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Nito.AsyncEx;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
@@ -55,6 +57,8 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public virtual IGuidGenerator GuidGenerator { get; set; }
 
+        public IEfCoreBulkOperationProvider BulkOperationProvider { get; set; }
+
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
@@ -84,6 +88,32 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return savedEntity;
         }
 
+        public override async Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            foreach (var entity in entities)
+            {
+                CheckAndSetId(entity);
+            }
+
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.InsertManyAsync<TDbContext, TEntity>(
+                    this,
+                    entities,
+                    autoSave,
+                    cancellationToken
+                );
+                return;
+            }
+
+            await DbSet.AddRangeAsync(entities);
+
+            if (autoSave)
+            {
+                await DbContext.SaveChangesAsync();
+            }
+        }
+
         public override async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
@@ -100,6 +130,28 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return updatedEntity;
         }
 
+        public override async Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.UpdateManyAsync<TDbContext, TEntity>(
+                    this,
+                    entities,
+                    autoSave,
+                    cancellationToken
+                    );
+
+                return;
+            }
+
+            DbSet.UpdateRange(entities);
+
+            if (autoSave)
+            {
+                await DbContext.SaveChangesAsync();
+            }
+        }
+
         public override async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
@@ -109,6 +161,27 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             if (autoSave)
             {
                 await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+            }
+        }
+
+        public override async Task DeleteManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.DeleteManyAsync<TDbContext, TEntity>(
+                    this,
+                    entities,
+                    autoSave,
+                    cancellationToken);
+
+                return;
+            }
+
+            DbSet.RemoveRange(entities);
+
+            if (autoSave)
+            {
+                await DbContext.SaveChangesAsync();
             }
         }
 
@@ -150,6 +223,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public override async Task<IQueryable<TEntity>> GetQueryableAsync()
         {
             return (await GetDbSetAsync()).AsQueryable();
+        }
+
+        protected override Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            return DbContext.SaveChangesAsync(cancellationToken);
         }
 
         public override async Task<TEntity> FindAsync(
@@ -317,6 +395,13 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             }
 
             await DeleteAsync(entity, autoSave, cancellationToken);
+        }
+
+        public async virtual Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var entities = await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
+
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
     }
 }

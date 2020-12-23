@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AbpPerfTest.WithAbp.Dtos;
 using AbpPerfTest.WithAbp.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories;
 
 namespace AbpPerfTest.WithAbp.Controllers
@@ -22,7 +23,7 @@ namespace AbpPerfTest.WithAbp.Controllers
         [HttpGet]
         public async Task<List<BookDto>> GetListAsync()
         {
-            var books = await _bookRepository.GetPagedListAsync(0, 10, "Id");
+            var books = await _bookRepository.OrderBy(x => x.Id).Take(10).ToListAsync();
 
             return books
                 .Select(b => new BookDto
