@@ -1,8 +1,0 @@
-{
-  "culture": "ru",
-  "texts": {
-    "Features": "Функциональные возможности",
-    "NoFeatureFoundMessage": "Нет доступных функциональных возможностей.",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Недопустимое значение функции {0}!"
-  }
-}
