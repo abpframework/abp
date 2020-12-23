@@ -1,3 +1,0 @@
-## Dynamic Proxying / Interceptors
-
-TODO

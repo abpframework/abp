@@ -1,3 +1,0 @@
-# Extension Methods & Helpers
-
-Façam

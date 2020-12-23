@@ -1,4 +1,0 @@
-**/*
-!dist/**/*
-!abp.resourcemapping.js
-!ngcc.config.js

@@ -1,3 +1,0 @@
-# Tenant Management Module
-
-TODO

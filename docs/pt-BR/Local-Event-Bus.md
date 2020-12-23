@@ -1,3 +1,0 @@
-# Local Event Bus
-
-Façam
