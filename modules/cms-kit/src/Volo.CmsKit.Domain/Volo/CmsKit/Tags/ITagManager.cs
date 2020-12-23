@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags
 {
     public interface ITagManager : IDomainService
     {

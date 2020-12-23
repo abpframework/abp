@@ -1,15 +1,11 @@
 ﻿using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
-using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Tags
+namespace Volo.CmsKit.Tags
 {
     public class TagManager : DomainService, ITagManager
     {
