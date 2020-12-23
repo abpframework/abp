@@ -29,6 +29,5 @@ namespace Volo.CmsKit.Contents
             
             TenantId = tenantId;
         }
-
     }
 }
