@@ -18,7 +18,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">20</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">2000</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1000</stringProp>
         <stringProp name="ThreadGroup.ramp_time">10</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>

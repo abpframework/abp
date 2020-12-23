@@ -23,7 +23,7 @@ namespace AbpPerfTest.WithAbp.Controllers
         [HttpGet]
         public async Task<List<BookDto>> GetListAsync()
         {
-            var books = await _bookRepository.OrderBy(x => x.Id).Take(10).ToListAsync();
+            var books = await (await _bookRepository.GetQueryableAsync()).OrderBy(x => x.Id).Take(10).ToListAsync();
 
             return books
                 .Select(b => new BookDto
