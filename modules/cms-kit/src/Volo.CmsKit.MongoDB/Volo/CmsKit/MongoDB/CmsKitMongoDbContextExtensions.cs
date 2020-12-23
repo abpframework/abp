@@ -2,6 +2,7 @@
 using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Users;
@@ -40,6 +41,11 @@ namespace Volo.CmsKit.MongoDB
             builder.Entity<Rating>(x =>
             {
                 x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Ratings";
+            });
+            
+            builder.Entity<Content>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Contents";
             });
         }
     }
