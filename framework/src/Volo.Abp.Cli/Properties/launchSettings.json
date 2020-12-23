@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Volo.Abp.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "bundle --skip-version-check",
+      "workingDirectory": "C:\\Github\\volo\\abp\\templates\\app-pro\\aspnet-core\\src\\MyCompanyName.MyProjectName.Blazor"
+    }
+  }
+}

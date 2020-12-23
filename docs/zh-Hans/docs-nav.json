@@ -338,53 +338,57 @@
               "path": "Best-Practices/Index.md"
             }
           ]
-        }
-      ]
-    },
-    {
-      "text": "领域驱动设计",
-      "items": [
-        {
-          "text": "概述",
-          "path": "Domain-Driven-Design.md"
         },
         {
-          "text": "领域层",
+          "text": "领域驱动设计",
           "items": [
             {
-              "text": "实体&聚合根",
-              "path": "Entities.md"
+              "text": "概述",
+              "path": "Domain-Driven-Design.md"
             },
             {
-              "text": "值对象"
+              "text": "领域层",
+              "items": [
+                {
+                  "text": "实体&聚合根",
+                  "path": "Entities.md"
+                },
+                {
+                  "text": "值对象"
+                },
+                {
+                  "text": "仓储",
+                  "path": "Repositories.md"
+                },
+                {
+                  "text": "领域服务"
+                },
+                {
+                  "text": "规约",
+                  "path": "Specifications.md"
+                }
+              ]
             },
             {
-              "text": "仓储",
-              "path": "Repositories.md"
+              "text": "应用服务层",
+              "items": [
+                {
+                  "text": "应用服务",
+                  "path": "Application-Services.md"
+                },
+                {
+                  "text": "数据传输对象(DTO)",
+                  "path": "Data-Transfer-Objects.md"
+                },
+                {
+                  "text": "工作单元",
+                  "path": "Unit-Of-Work.md"
+                }
+              ]
             },
             {
-              "text": "领域服务"
-            },
-            {
-              "text": "规约",
-              "path": "Specifications.md"
-            }
-          ]
-        },
-        {
-          "text": "应用服务层",
-          "items": [
-            {
-              "text": "应用服务",
-              "path": "Application-Services.md"
-            },
-            {
-              "text": "数据传输对象(DTO)",
-              "path": "Data-Transfer-Objects.md"
-            },
-            {
-              "text": "工作单元",
-              "path": "Unit-Of-Work.md"
+              "text": "指南: 实现DDD",
+              "path": "Domain-Driven-Design-Implementation-Guide.md"
             }
           ]
         },

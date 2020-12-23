@@ -161,6 +161,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
                 steps.Add(new AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+
+                if (context.BuildArgs.MobileApp == MobileApp.ReactNative)
+                {
+                    steps.Add(new ReactEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+                }
             }
             else
             {

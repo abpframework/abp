@@ -1,17 +1,24 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Auth;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -20,10 +27,13 @@ namespace Volo.Abp.Cli.Commands
         public ILogger<NewCommand> Logger { get; set; }
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
+        public ITemplateInfoProvider TemplateInfoProvider { get; }
 
-        public NewCommand(TemplateProjectBuilder templateProjectBuilder)
+        public NewCommand(TemplateProjectBuilder templateProjectBuilder
+            , ITemplateInfoProvider templateInfoProvider)
         {
             TemplateProjectBuilder = templateProjectBuilder;
+            TemplateInfoProvider = templateInfoProvider;
 
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -187,6 +197,35 @@ namespace Volo.Abp.Cli.Commands
             }
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
+
+            if (AppTemplateBase.IsAppTemplate(template ?? (await TemplateInfoProvider.GetDefaultAsync()).Name))
+            {
+                var isCommercial = template == AppProTemplate.TemplateName;
+                OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
+            }
+        }
+
+        private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
+        {
+            uiFramework = uiFramework == UiFramework.NotSpecified || uiFramework == UiFramework.None ? UiFramework.Mvc : uiFramework;
+
+            var urlPrefix = commercial ? "commercial" : "www";
+            var tieredYesNo = tiered ? "yes" : "no";
+            var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                url = url.Replace("&", "^&");
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
         }
 
         private bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
@@ -195,7 +234,7 @@ namespace Volo.Abp.Cli.Commands
 
             if (longKey == false)
             {
-                return  commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Short);
+                return commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Short);
             }
 
             return longKey;
@@ -230,7 +269,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
-            sb.AppendLine("----no-random-port                          (Use template's default ports)");
+            sb.AppendLine("--no-random-port                            (Use template's default ports)");
             sb.AppendLine("--separate-identity-server                  (if supported by the template)");
             sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
             sb.AppendLine("");

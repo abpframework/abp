@@ -2,11 +2,15 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
+using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -15,10 +19,16 @@ namespace Volo.Abp.Cli.Commands
         public ILogger<LoginCommand> Logger { get; set; }
 
         protected AuthService AuthService { get; }
+        public ICancellationTokenProvider CancellationTokenProvider { get; }
+        public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
 
-        public LoginCommand(AuthService authService)
+        public LoginCommand(AuthService authService,
+            ICancellationTokenProvider cancellationTokenProvider,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
         {
             AuthService = authService;
+            CancellationTokenProvider = cancellationTokenProvider;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             Logger = NullLogger<LoginCommand>.Instance;
         }
 
@@ -31,6 +41,14 @@ namespace Volo.Abp.Cli.Commands
                     Environment.NewLine + Environment.NewLine +
                     GetUsageInfo()
                 );
+            }
+
+            var organization = commandLineArgs.Options.GetOrNull(Options.Organization.Short, Options.Organization.Long);
+
+            if (string.IsNullOrWhiteSpace(organization) && await CheckMultipleOrganizationsAsync(commandLineArgs.Target))
+            {
+                Logger.LogError($"You have multiple organizations, please specify your organization with `--organization` parameter.");
+                return;
             }
 
             var password = commandLineArgs.Options.GetOrNull(Options.Password.Short, Options.Password.Long);
@@ -51,10 +69,31 @@ namespace Volo.Abp.Cli.Commands
             await AuthService.LoginAsync(
                 commandLineArgs.Target,
                 password,
-                commandLineArgs.Options.GetOrNull(Options.Organization.Short, Options.Organization.Long)
+                organization
             );
 
             Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
+        }
+
+        private async Task<bool> CheckMultipleOrganizationsAsync(string username)
+        {
+            var url = $"{CliUrls.WwwAbpIo}api/license/check-multiple-organizations?username={username}";
+
+            using (var client = new CliHttpClient())
+            {
+                using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
+                {
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                    }
+
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<bool>(responseContent);
+                }
+            }
         }
 
         public string GetUsageInfo()

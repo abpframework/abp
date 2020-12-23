@@ -8,63 +8,71 @@
 @inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
 
 @inherits AbpCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
-@* ************************* PAGE HEADER ************************* *@
-<Row Class="justify-content-between">
-    <Column ColumnSize="ColumnSize.IsAuto">
-        <h1>@L["Users"]</h1>
-    </Column>
-    <Column ColumnSize="ColumnSize.IsAuto">
-        @if (HasCreatePermission)
-        {
-            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewUser"]</Button>
-        }
-    </Column>
-</Row>
 
-@* ************************* DATA GRID ************************* *@
-<DataGrid TItem="IdentityUserDto"
-          Data="Entities"
-          ReadData="OnDataGridReadAsync"
-          TotalItems="TotalCount"
-          ShowPager="true"
-          PageSize="PageSize">
-    <DataGridColumns>
-        <DataGridEntityActionsColumn TItem="IdentityUserDto" @ref="@EntityActionsColumn">
-            <DisplayTemplate>
-                <EntityActions TItem="IdentityUserDto" EntityActionsColumn="@EntityActionsColumn">
-                    <EntityAction TItem="IdentityUserDto"
-                                  RequiredPolicy="@UpdatePolicyName"
-                                  Clicked="() => OpenEditModalAsync(context)"
-                                  Text="@L["Edit"]" />
-                    <EntityAction TItem="IdentityUserDto"
-                                  RequiredPolicy="@ManagePermissionsPolicyName"
-                                  Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.Id.ToString())"
-                                  Text="@L["Permissions"]" />
-                    <EntityAction TItem="IdentityUserDto"
-                                  RequiredPolicy="@DeletePolicyName"
-                                  Clicked="() => DeleteEntityAsync(context)"
-                                  ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)"
-                                  Text="@L["Delete"]" />
-                </EntityActions>
-            </DisplayTemplate>
-        </DataGridEntityActionsColumn>
-        <DataGridColumn TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.UserName)" Caption="@L["UserName"].Value">
-            <DisplayTemplate>
-                @(context.As<IdentityUserDto>().UserName)
-            </DisplayTemplate>
-        </DataGridColumn>
-        <DataGridColumn TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.Email)" Caption="@L["Email"].Value">
-            <DisplayTemplate>
-                @(context.As<IdentityUserDto>().Email)
-            </DisplayTemplate>
-        </DataGridColumn>
-        <DataGridColumn TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.PhoneNumber)" Caption="@L["PhoneNumber"].Value">
-            <DisplayTemplate>
-                @(context.As<IdentityUserDto>().PhoneNumber)
-            </DisplayTemplate>
-        </DataGridColumn>
-    </DataGridColumns>
-</DataGrid>
+<Card>
+    <CardHeader>
+        @* ************************* PAGE HEADER ************************* *@
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h1>@L["Users"]</h1>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                @if (HasCreatePermission)
+                {
+                    <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">
+                        <Icon Margin="Margin.Is1.FromRight" Name="IconName.Add"></Icon>@L["NewUser"]
+                    </Button>
+                }
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        @* ************************* DATA GRID ************************* *@
+        <DataGrid TItem="IdentityUserDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="IdentityUserDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="IdentityUserDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="IdentityUserDto"
+                                          RequiredPolicy="@UpdatePolicyName"
+                                          Clicked="() => OpenEditModalAsync(context)"
+                                          Text="@L["Edit"]" />
+                            <EntityAction TItem="IdentityUserDto"
+                                          RequiredPolicy="@ManagePermissionsPolicyName"
+                                          Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName, context.Id.ToString(), context.Name)"
+                                          Text="@L["Permissions"]" />
+                            <EntityAction TItem="IdentityUserDto"
+                                          RequiredPolicy="@DeletePolicyName"
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)"
+                                          Text="@L["Delete"]" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+                <DataGridColumn TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.UserName)" Caption="@L["UserName"].Value">
+                    <DisplayTemplate>
+                        @(context.As<IdentityUserDto>().UserName)
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.Email)" Caption="@L["Email"].Value">
+                    <DisplayTemplate>
+                        @(context.As<IdentityUserDto>().Email)
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.PhoneNumber)" Caption="@L["PhoneNumber"].Value">
+                    <DisplayTemplate>
+                        @(context.As<IdentityUserDto>().PhoneNumber)
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
 
 @* ************************* CREATE MODAL ************************* *@
 @if (HasCreatePermission)
@@ -72,7 +80,7 @@
     <Modal @ref="CreateModal">
         <ModalBackdrop />
         <ModalContent Centered="true">
-            <Form id="UserCreateForm">
+            <Form>
                 <ModalHeader>
                     <ModalTitle>@L["NewUser"]</ModalTitle>
                     <CloseButton Clicked="CloseCreateModalAsync" />
@@ -89,7 +97,7 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                            <TextEdit @bind-Text="NewEntity.UserName">
+                                            <TextEdit @bind-Text="NewEntity.UserName" Autofocus="true">
                                                 <Feedback>
                                                     <ValidationError />
                                                 </Feedback>
@@ -168,7 +176,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <Button form="UserCreateForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
+                    <SubmitButton Clicked="@CreateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -181,7 +189,7 @@
     <Modal @ref="EditModal">
         <ModalBackdrop />
         <ModalContent Centered="true">
-            <Form id="UserEditForm">
+            <Form>
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
                     <CloseButton Clicked="CloseEditModalAsync" />
@@ -200,7 +208,7 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                            <TextEdit @bind-Text="EditingEntity.UserName">
+                                            <TextEdit @bind-Text="EditingEntity.UserName" Autofocus="true">
                                                 <Feedback>
                                                     <ValidationError />
                                                 </Feedback>
@@ -279,7 +287,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <Button form="UserEditForm" Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
+                    <SubmitButton Clicked="@UpdateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>

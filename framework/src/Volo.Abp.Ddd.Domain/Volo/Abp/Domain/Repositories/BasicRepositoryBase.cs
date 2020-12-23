@@ -9,11 +9,10 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class BasicRepositoryBase<TEntity> : 
-        IBasicRepository<TEntity>, 
+    public abstract class BasicRepositoryBase<TEntity> :
+        IBasicRepository<TEntity>,
         IServiceProviderAccessor,
-        IUnitOfWorkEnabled,
-        ITransientDependency
+        IUnitOfWorkEnabled
         where TEntity : class, IEntity
     {
         public IServiceProvider ServiceProvider { get; set; }
@@ -59,7 +58,7 @@ namespace Volo.Abp.Domain.Repositories
         }
 
         public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
-        
+
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entity = await FindAsync(id, cancellationToken: cancellationToken);

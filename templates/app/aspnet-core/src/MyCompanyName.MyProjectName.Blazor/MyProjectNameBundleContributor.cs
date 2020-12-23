@@ -6,6 +6,7 @@ namespace MyCompanyName.MyProjectName.Blazor
     {
         public void AddScripts(BundleContext context)
         {
+
         }
 
         public void AddStyles(BundleContext context)

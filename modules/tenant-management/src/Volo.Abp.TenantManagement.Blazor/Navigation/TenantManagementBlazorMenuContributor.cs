@@ -22,7 +22,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Navigation
 
             if (await context.IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
             {
-                tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "/tenant-management/tenants"));
+                tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "tenant-management/tenants"));
             }
         }
     }

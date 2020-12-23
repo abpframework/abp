@@ -67,10 +67,7 @@ namespace Volo.Abp.Cli.Http
                 };
             }
 
-            if (!cancellationToken.HasValue)
-            {
-                cancellationToken = CancellationToken.None;
-            }
+            cancellationToken ??= CancellationToken.None;
 
             return await HttpPolicyExtensions
                 .HandleTransientHttpError()
