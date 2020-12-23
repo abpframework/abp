@@ -39,7 +39,7 @@ namespace Volo.Abp.UI.Navigation.Urls
 
         public bool IsRedirectAllowedUrl(string url)
         {
-            return Options.RedirectAllowedUrls.Any(url.Contains);
+            return Options.RedirectAllowedUrls.Any(url.StartsWith);
         }
 
         protected virtual Task<string> GetConfiguredUrl(string appName, string urlName)
