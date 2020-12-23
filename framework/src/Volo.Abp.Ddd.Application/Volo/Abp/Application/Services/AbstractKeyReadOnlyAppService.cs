@@ -166,7 +166,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <typeparam name="TEntity"/> to <typeparam name="TGetOutputDto"/>.
+        /// Maps <typeparamref name="TEntity"/> to <typeparamref name="TGetOutputDto"/>.
         /// It internally calls the <see cref="MapToGetOutputDto"/> by default.
         /// It can be overriden for custom mapping.
         /// Overriding this has higher priority than overriding the <see cref="MapToGetOutputDto"/>
@@ -177,7 +177,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <typeparam name="TEntity"/> to <typeparam name="TGetOutputDto"/>.
+        /// Maps <typeparamref name="TEntity"/> to <typeparamref name="TGetOutputDto"/>.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overriden for custom mapping.
         /// </summary>
@@ -187,7 +187,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps a list of <typeparam name="TEntity"/> to <typeparam name="TGetListOutputDto"/> objects.
+        /// Maps a list of <typeparamref name="TEntity"/> to <typeparamref name="TGetListOutputDto"/> objects.
         /// It uses <see cref="MapToGetListOutputDtoAsync"/> method for each item in the list.
         /// </summary>
         protected virtual async Task<List<TGetListOutputDto>> MapToGetListOutputDtosAsync(List<TEntity> entities)
@@ -203,7 +203,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <typeparam name="TEntity"/> to <typeparam name="TGetListOutputDto"/>.
+        /// Maps <typeparamref name="TEntity"/> to <typeparamref name="TGetListOutputDto"/>.
         /// It internally calls the <see cref="MapToGetListOutputDto"/> by default.
         /// It can be overriden for custom mapping.
         /// Overriding this has higher priority than overriding the <see cref="MapToGetListOutputDto"/>
@@ -214,7 +214,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <typeparam name="TEntity"/> to <typeparam name="TGetListOutputDto"/>.
+        /// Maps <typeparamref name="TEntity"/> to <typeparamref name="TGetListOutputDto"/>.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overriden for custom mapping.
         /// </summary>
