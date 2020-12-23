@@ -127,6 +127,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 b.ToTable(options.TablePrefix + "EntityTags", options.Schema);
                 
                 b.ConfigureByConvention();
+
+                b.HasKey(x => new { x.TenantId, x.EntityId, x.TagId });
                 
                 b.Property(x => x.EntityId).IsRequired();
                 b.Property(x => x.TagId).IsRequired();
