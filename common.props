@@ -3,14 +3,6 @@
     <LangVersion>latest</LangVersion>
     <Version>4.0.2</Version>
     <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
-    <PackageIconUrl>https://abp.io/assets/abp_nupkg.png</PackageIconUrl>
-    <PackageProjectUrl>https://abp.io/</PackageProjectUrl>
-    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/abpframework/abp/</RepositoryUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
-  </ItemGroup>
 </Project>

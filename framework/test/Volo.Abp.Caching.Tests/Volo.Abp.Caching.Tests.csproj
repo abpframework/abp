@@ -5,7 +5,6 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Volo.Abp.Caching.Tests</AssemblyName>
-    <PackageId>Volo.Abp.Caching.Tests</PackageId>
     <RootNamespace />
   </PropertyGroup>
 

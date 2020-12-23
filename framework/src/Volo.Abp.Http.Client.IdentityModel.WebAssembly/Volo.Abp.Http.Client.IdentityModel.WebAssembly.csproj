@@ -1,25 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="..\..\..\configureawait.props" />
-    <Import Project="..\..\..\common.props" />
+  <Import Project="..\..\..\configureawait.props" />
+  <Import Project="..\..\..\common.props" />
 
-    <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <AssemblyName>Volo.Abp.Http.Client.IdentityModel.WebAssembly</AssemblyName>
-        <PackageId>Volo.Abp.Http.Client.IdentityModel.WebAssembly</PackageId>
-        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-        <RootNamespace />
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Volo.Abp.Http.Client.IdentityModel.WebAssembly</AssemblyName>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace />
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0" />
-    </ItemGroup>
+  <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Volo.Abp.Http.Client.IdentityModel\Volo.Abp.Http.Client.IdentityModel.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Http.Client.IdentityModel\Volo.Abp.Http.Client.IdentityModel.csproj" />
+  </ItemGroup>
 
 </Project>

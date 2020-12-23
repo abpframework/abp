@@ -7,9 +7,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Bootstrap</AssemblyName>
-    <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Bootstrap</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 

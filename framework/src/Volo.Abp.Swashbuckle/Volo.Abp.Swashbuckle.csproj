@@ -1,30 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="..\..\..\configureawait.props" />
-    <Import Project="..\..\..\common.props" />
-    
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <AssemblyName>Volo.Abp.Swashbuckle</AssemblyName>
-        <PackageId>Volo.Abp.Swashbuckle</PackageId>
-        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-        <RootNamespace />
-    </PropertyGroup>
+  <Import Project="..\..\..\configureawait.props" />
+  <Import Project="..\..\..\common.props" />
 
-    <ItemGroup>
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Abp.Swashbuckle</AssemblyName>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace />
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <None Remove="wwwroot\swagger\ui\abp.swagger.js" />
-      <EmbeddedResource Include="wwwroot\swagger\ui\abp.swagger.js" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="wwwroot\swagger\ui\abp.swagger.js" />
+    <EmbeddedResource Include="wwwroot\swagger\ui\abp.swagger.js" />
+  </ItemGroup>
 
 </Project>

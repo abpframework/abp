@@ -5,7 +5,6 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Volo.Abp.Auditing.Tests</AssemblyName>
-    <PackageId>Volo.Abp.Auditing.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RootNamespace />
   </PropertyGroup>
