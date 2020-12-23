@@ -11,6 +11,7 @@ using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -106,6 +107,31 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 b.Property(x => x.Value).IsRequired().HasMaxLength(ContentConsts.MaxValueLength);
                 
                 b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
+            });
+            
+            builder.Entity<Tag>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Tags", options.Schema);
+                
+                b.ConfigureByConvention();
+                
+                b.Property(x => x.EntityType).IsRequired().HasMaxLength(TagConsts.MaxEntityTypeLength);
+                b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength);
+                b.Property(x => x.ColorHex).IsRequired().HasMaxLength(TagConsts.MaxColorHexLength);
+                
+                b.HasIndex(x => new { x.TenantId, x.Name });
+            });
+            
+            builder.Entity<EntityTag>(b =>
+            {
+                b.ToTable(options.TablePrefix + "EntityTags", options.Schema);
+                
+                b.ConfigureByConvention();
+                
+                b.Property(x => x.EntityId).IsRequired();
+                b.Property(x => x.TagId).IsRequired();
+                
+                b.HasIndex(x => new { x.TenantId, x.EntityId, x.TagId });
             });
         }
     }

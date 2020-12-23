@@ -8,9 +8,11 @@ using Volo.CmsKit.MongoDB.Comments;
 using Volo.CmsKit.MongoDB.Contents;
 using Volo.CmsKit.MongoDB.Ratings;
 using Volo.CmsKit.MongoDB.Reactions;
+using Volo.CmsKit.MongoDB.Tags;
 using Volo.CmsKit.MongoDB.Users;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.MongoDB
@@ -31,6 +33,8 @@ namespace Volo.CmsKit.MongoDB
                 options.AddRepository<Comment, MongoCommentRepository>();
                 options.AddRepository<Rating, MongoRatingRepository>();
                 options.AddRepository<Content, MongoContentRepository>();
+                options.AddRepository<Tag, MongoTagRepository>();
+                options.AddRepository<EntityTag, MongoEntityTagRepository>();
             });
         }
     }

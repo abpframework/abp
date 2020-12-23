@@ -5,7 +5,9 @@ using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
+using Tag = MongoDB.Driver.Tag;
 
 namespace Volo.CmsKit.MongoDB
 {
@@ -21,6 +23,10 @@ namespace Volo.CmsKit.MongoDB
         public IMongoCollection<Rating> Ratings => Collection<Rating>();
 
         public IMongoCollection<Content> Contents => Collection<Content>();
+        
+        public IMongoCollection<Tag> Tags => Collection<Tag>();
+        
+        public IMongoCollection<EntityTag> EntityTags => Collection<EntityTag>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
