@@ -114,28 +114,33 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override async Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            foreach (var entity in entities)
+            var entityArray = entities.ToArray();
+
+            foreach (var entity in entityArray)
             {
                 await ApplyAbpConceptsForAddedEntityAsync(entity);
             }
 
+            var dbContext = await GetDbContextAsync(GetCancellationToken(cancellationToken));
+            var collection = dbContext.Collection<TEntity>();
+
             if (BulkOperationProvider != null)
             {
-                await BulkOperationProvider.InsertManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
+                await BulkOperationProvider.InsertManyAsync(this, entityArray, dbContext.SessionHandle, autoSave, cancellationToken);
                 return;
             }
 
-            if (SessionHandle != null)
+            if (dbContext.SessionHandle != null)
             {
-                await Collection.InsertManyAsync(
-                    SessionHandle,
-                    entities,
+                await collection.InsertManyAsync(
+                    dbContext.SessionHandle,
+                    entityArray,
                     cancellationToken: cancellationToken);
             }
             else
             {
-                await Collection.InsertManyAsync(
-                    entities,
+                await collection.InsertManyAsync(
+                    entityArray,
                     cancellationToken: cancellationToken);
             }
         }
@@ -193,12 +198,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public override async Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var isSoftDeleteEntity = typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity));
+            var entityArray = entities.ToArray();
 
-            foreach (var entity in entities)
+            foreach (var entity in entityArray)
             {
                 SetModificationAuditProperties(entity);
 
+                var isSoftDeleteEntity = typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity));
                 if (isSoftDeleteEntity)
                 {
                     SetDeletionAuditProperties(entity);
@@ -214,31 +220,34 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 SetNewConcurrencyStamp(entity);
             }
 
+            cancellationToken = GetCancellationToken(cancellationToken);
+            var dbContext = await GetDbContextAsync(cancellationToken);
+
             if (BulkOperationProvider != null)
             {
-                await BulkOperationProvider.UpdateManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
+                await BulkOperationProvider.UpdateManyAsync(this, entityArray, dbContext.SessionHandle, autoSave, cancellationToken);
                 return;
             }
 
-            var entitiesCount = entities.Count();
             BulkWriteResult result;
 
             List<WriteModel<TEntity>> replaceRequests = new List<WriteModel<TEntity>>();
-            foreach (var entity in entities)
+            foreach (var entity in entityArray)
             {
                 replaceRequests.Add(new ReplaceOneModel<TEntity>(CreateEntityFilter(entity), entity));
             }
 
-            if (SessionHandle != null)
+            var collection = dbContext.Collection<TEntity>();
+            if (dbContext.SessionHandle != null)
             {
-                result = await Collection.BulkWriteAsync(SessionHandle, replaceRequests);
+                result = await collection.BulkWriteAsync(dbContext.SessionHandle, replaceRequests, cancellationToken: cancellationToken);
             }
             else
             {
-                result = await Collection.BulkWriteAsync(replaceRequests);
+                result = await collection.BulkWriteAsync(replaceRequests, cancellationToken: cancellationToken);
             }
 
-            if (result.MatchedCount < entitiesCount)
+            if (result.MatchedCount < entityArray.Length)
             {
                 ThrowOptimisticConcurrencyException();
             }
@@ -315,35 +324,40 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
-            foreach (var entity in entities)
+            var entityArray = entities.ToArray();
+
+            foreach (var entity in entityArray)
             {
                 await ApplyAbpConceptsForDeletedEntityAsync(entity);
-                var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
+                SetNewConcurrencyStamp(entity);
             }
+
+            var dbContext = await GetDbContextAsync(GetCancellationToken(cancellationToken));
+            var collection = dbContext.Collection<TEntity>();
 
             if (BulkOperationProvider != null)
             {
-                await BulkOperationProvider.DeleteManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
+                await BulkOperationProvider.DeleteManyAsync(this, entityArray, dbContext.SessionHandle, autoSave, cancellationToken);
                 return;
             }
 
-            var entitiesCount = entities.Count();
+            var entitiesCount = entityArray.Count();
 
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
             {
                 UpdateResult updateResult;
-                if (SessionHandle != null)
+                if (dbContext.SessionHandle != null)
                 {
-                    updateResult = await Collection.UpdateManyAsync(
-                        SessionHandle,
-                        CreateEntitiesFilter(entities),
+                    updateResult = await collection.UpdateManyAsync(
+                        dbContext.SessionHandle,
+                        CreateEntitiesFilter(entityArray),
                         Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
                         );
                 }
                 else
                 {
-                    updateResult = await Collection.UpdateManyAsync(
-                        CreateEntitiesFilter(entities),
+                    updateResult = await collection.UpdateManyAsync(
+                        CreateEntitiesFilter(entityArray),
                         Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
                         );
                 }
@@ -356,17 +370,17 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             else
             {
                 DeleteResult deleteResult;
-                if (SessionHandle != null)
+                if (dbContext.SessionHandle != null)
                 {
-                    deleteResult = await Collection.DeleteManyAsync(
-                        SessionHandle,
-                        CreateEntitiesFilter(entities)
+                    deleteResult = await collection.DeleteManyAsync(
+                        dbContext.SessionHandle,
+                        CreateEntitiesFilter(entityArray)
                         );
                 }
                 else
                 {
-                    deleteResult = await Collection.DeleteManyAsync(
-                        CreateEntitiesFilter(entities)
+                    deleteResult = await collection.DeleteManyAsync(
+                        CreateEntitiesFilter(entityArray)
                         );
                 }
 
@@ -689,9 +703,11 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public virtual async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entities = await GetMongoQueryable()
+            cancellationToken = GetCancellationToken(cancellationToken);
+
+            var entities = await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x => ids.Contains(x.Id))
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(cancellationToken);
 
             await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
