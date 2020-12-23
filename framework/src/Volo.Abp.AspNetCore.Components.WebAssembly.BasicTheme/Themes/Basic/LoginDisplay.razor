@@ -38,9 +38,16 @@
 </AuthorizeView>
 @code{
 
-    private async Task NavigateToAsync(string uri, string target = "_self")
+    private async Task NavigateToAsync(string uri, string target = null)
     {
-        await JsRuntime.InvokeVoidAsync("open", uri, target);
+        if (target == "_blank")
+        {
+            await JsRuntime.InvokeVoidAsync("open", uri, target);
+        }
+        else
+        {
+            Navigation.NavigateTo(uri);
+        }
     }
 
     private async Task BeginSignOut()
