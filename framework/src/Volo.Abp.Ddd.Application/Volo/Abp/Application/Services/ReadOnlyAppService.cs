@@ -38,7 +38,7 @@ namespace Volo.Abp.Application.Services
         where TGetOutputDto : IEntityDto<TKey>
         where TGetListOutputDto : IEntityDto<TKey>
     {
-        protected new IReadOnlyRepository<TEntity, TKey> Repository { get; }
+        protected IReadOnlyRepository<TEntity, TKey> Repository { get; }
 
         protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
         : base(repository)
@@ -46,7 +46,7 @@ namespace Volo.Abp.Application.Services
             Repository = repository;
         }
 
-        protected async override Task<TEntity> GetEntityByIdAsync(TKey id)
+        protected override async Task<TEntity> GetEntityByIdAsync(TKey id)
         {
             return await Repository.GetAsync(id);
         }
