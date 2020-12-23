@@ -59,7 +59,6 @@ context.Services.Replace(
 ### 示例: 重写服务方法
 
 ````csharp
-//[RemoteService(IsEnabled = false)] // 如果你在使用动态控制器,为了避免为应用服务创建重复的控制器, 你可以禁用远程访问.
 [Dependency(ReplaceServices = true)]
 [ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService), typeof(MyIdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
@@ -76,7 +75,7 @@ public class MyIdentityUserAppService : IdentityUserAppService
     {
     }
 
-    public override async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+    public async override Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
         if (input.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -109,33 +108,33 @@ public class MyIdentityUserManager : IdentityUserManager
 {
     public MyIdentityUserManager(
         IdentityUserStore store,
-        IIdentityRoleRepository roleRepository, 
+        IIdentityRoleRepository roleRepository,
         IIdentityUserRepository userRepository,
-        IOptions<IdentityOptions> optionsAccessor, 
+        IOptions<IdentityOptions> optionsAccessor,
         IPasswordHasher<IdentityUser> passwordHasher,
-        IEnumerable<IUserValidator<IdentityUser>> userValidators, 
-        IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, 
+        IEnumerable<IUserValidator<IdentityUser>> userValidators,
+        IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators,
         ILookupNormalizer keyNormalizer,
         IdentityErrorDescriber errors,
         IServiceProvider services,
-        ILogger<IdentityUserManager> logger, 
-        ICancellationTokenProvider cancellationTokenProvider) : 
+        ILogger<IdentityUserManager> logger,
+        ICancellationTokenProvider cancellationTokenProvider) :
         base(store,
             roleRepository,
-            userRepository, 
-            optionsAccessor, 
-            passwordHasher, 
-            userValidators, 
+            userRepository,
+            optionsAccessor,
+            passwordHasher,
+            userValidators,
             passwordValidators,
-            keyNormalizer, 
-            errors, 
-            services, 
-            logger, 
+            keyNormalizer,
+            errors,
+            services,
+            logger,
             cancellationTokenProvider)
     {
     }
 
-    public override async Task<IdentityResult> CreateAsync(IdentityUser user)
+    public async override Task<IdentityResult> CreateAsync(IdentityUser user)
     {
         if (user.PhoneNumber.IsNullOrWhiteSpace())
         {
@@ -251,8 +250,8 @@ ObjectExtensionManager.Instance
     .AddOrUpdateProperty<string>(
         new[]
         {
-            typeof(IdentityUserDto), 
-            typeof(IdentityUserCreateDto), 
+            typeof(IdentityUserDto),
+            typeof(IdentityUserCreateDto),
             typeof(IdentityUserUpdateDto)
         },
         "SocialSecurityNumber"

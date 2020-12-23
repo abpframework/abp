@@ -6,22 +6,14 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
 {
     public partial class NavMenu
     {
-        [Inject] protected IMenuManager MenuManager { get; set; }
+        [Inject]
+        protected IMenuManager MenuManager { get; set; }
 
         protected ApplicationMenu Menu { get; set; }
 
-        private bool collapseNavMenu = true;
-
-        private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-        protected override async Task OnInitializedAsync()
+        protected async override Task OnInitializedAsync()
         {
             Menu = await MenuManager.GetAsync(StandardMenus.Main);
-        }
-
-        private void ToggleNavMenu()
-        {
-            collapseNavMenu = !collapseNavMenu;
         }
     }
 }

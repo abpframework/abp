@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { SetLanguage, ConfigState, ApplicationConfiguration, SessionState } from '@abp/ng.core';
+import { ConfigStateService, LanguageInfo, SessionStateService } from '@abp/ng.core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import snq from 'snq';
@@ -44,13 +43,12 @@ import snq from 'snq';
     </div>
   `,
 })
-export class LanguagesComponent implements OnInit {
+export class LanguagesComponent {
   get smallScreen(): boolean {
     return window.innerWidth < 992;
   }
 
-  @Select(ConfigState.getDeep('localization.languages'))
-  languages$: Observable<ApplicationConfiguration.Language[]>;
+  languages$: Observable<LanguageInfo[]> = this.configState.getDeep$('localization.languages');
 
   get defaultLanguage$(): Observable<string> {
     return this.languages$.pipe(
@@ -64,7 +62,7 @@ export class LanguagesComponent implements OnInit {
     );
   }
 
-  get dropdownLanguages$(): Observable<ApplicationConfiguration.Language[]> {
+  get dropdownLanguages$(): Observable<LanguageInfo[]> {
     return this.languages$.pipe(
       map(
         languages =>
@@ -75,14 +73,12 @@ export class LanguagesComponent implements OnInit {
   }
 
   get selectedLangCulture(): string {
-    return this.store.selectSnapshot(SessionState.getLanguage);
+    return this.sessionState.getLanguage();
   }
 
-  constructor(private store: Store) {}
-
-  ngOnInit() {}
+  constructor(private sessionState: SessionStateService, private configState: ConfigStateService) {}
 
   onChangeLang(cultureName: string) {
-    this.store.dispatch(new SetLanguage(cultureName));
+    this.sessionState.setLanguage(cultureName);
   }
 }

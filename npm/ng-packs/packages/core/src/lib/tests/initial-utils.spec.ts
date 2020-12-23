@@ -1,14 +1,22 @@
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
-import { GetAppConfiguration } from '../actions';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
+import {
+  AuthService,
+  ConfigStateService,
+  EnvironmentService,
+  SessionStateService,
+} from '../services';
 import * as AuthFlowStrategy from '../strategies/auth-flow.strategy';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
 import * as environmentUtils from '../utils/environment-utils';
 import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
+
+const environment = { oAuthConfig: { issuer: 'test' } };
 
 @Component({
   selector: 'abp-dummy',
@@ -20,34 +28,63 @@ describe('InitialUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    mocks: [Store, OAuthService],
+    mocks: [
+      EnvironmentService,
+      ConfigStateService,
+      AbpApplicationConfigurationService,
+      AuthService,
+      OAuthService,
+      SessionStateService,
+    ],
     providers: [
-      { provide: CORE_OPTIONS, useValue: { environment: { oAuthConfig: { issuer: 'test' } } } },
+      {
+        provide: CORE_OPTIONS,
+        useValue: {
+          environment,
+          registerLocaleFn: () => Promise.resolve(),
+        },
+      },
     ],
   });
 
   beforeEach(() => (spectator = createComponent()));
 
   describe('#getInitialData', () => {
-    test('should dispatch GetAppConfiguration and return', async () => {
-      const injector = spectator.inject(Injector);
-      const injectorSpy = jest.spyOn(injector, 'get');
-      const store = spectator.inject(Store);
-      const dispatchSpy = jest.spyOn(store, 'dispatch');
+    test('should call the getConfiguration method of ApplicationConfigurationService and set states', async () => {
+      const environmentService = spectator.inject(EnvironmentService);
+      const configStateService = spectator.inject(ConfigStateService);
+      const sessionStateService = spectator.inject(SessionStateService);
+      const applicationConfigurationService = spectator.inject(AbpApplicationConfigurationService);
       const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
       const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
       parseTenantFromUrlSpy.mockReturnValue(Promise.resolve());
       getRemoteEnvSpy.mockReturnValue(Promise.resolve());
 
-      injectorSpy.mockReturnValueOnce(store);
-      injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
-      injectorSpy.mockReturnValueOnce({ init: () => null });
-      injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => false });
-      dispatchSpy.mockReturnValue(of('test'));
+      const appConfigRes = {
+        currentTenant: { id: 'test', name: 'testing' },
+      } as ApplicationConfigurationDto;
 
-      expect(typeof getInitialData(injector)).toBe('function');
-      expect(await getInitialData(injector)()).toBe('test');
-      expect(dispatchSpy.mock.calls[0][0] instanceof GetAppConfiguration).toBeTruthy();
+      const getConfigurationSpy = jest.spyOn(applicationConfigurationService, 'get');
+      getConfigurationSpy.mockReturnValue(of(appConfigRes));
+
+      const environmentSetStateSpy = jest.spyOn(environmentService, 'setState');
+      const configSetStateSpy = jest.spyOn(configStateService, 'setState');
+      const sessionSetTenantSpy = jest.spyOn(sessionStateService, 'setTenant');
+
+      const configStateGetOneSpy = jest.spyOn(configStateService, 'getOne');
+      configStateGetOneSpy.mockReturnValue(appConfigRes.currentTenant);
+
+      const mockInjector = {
+        get: spectator.inject,
+      };
+
+      await getInitialData(mockInjector)();
+
+      expect(typeof getInitialData(mockInjector)).toBe('function');
+      expect(environmentSetStateSpy).toHaveBeenCalledWith(environment);
+      expect(getConfigurationSpy).toHaveBeenCalled();
+      expect(configSetStateSpy).toHaveBeenCalledWith(appConfigRes);
+      expect(sessionSetTenantSpy).toHaveBeenCalledWith(appConfigRes.currentTenant);
     });
   });
 
@@ -57,14 +94,10 @@ describe('InitialUtils', () => {
       const injectorSpy = jest.spyOn(injector, 'get');
       const clearOAuthStorageSpy = jest.spyOn(AuthFlowStrategy, 'clearOAuthStorage');
 
-      injectorSpy.mockReturnValue({ hasValidAccessToken: () => true });
+      injectorSpy.mockReturnValueOnce({ getDeep: () => false });
+      injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => true });
 
-      checkAccessToken(
-        {
-          selectSnapshot: () => false,
-        } as any,
-        injector,
-      );
+      checkAccessToken(injector);
       expect(clearOAuthStorageSpy).toHaveBeenCalled();
     });
   });
@@ -73,10 +106,9 @@ describe('InitialUtils', () => {
     test('should resolve registerLocale', async () => {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
-      const store = spectator.inject(Store);
-      store.selectSnapshot.andCallFake(selector => selector({ SessionState: { language: 'tr' } }));
-      injectorSpy.mockReturnValueOnce(store);
-      injectorSpy.mockReturnValueOnce({ cultureNameLocaleFileMap: {} });
+      const sessionState = spectator.inject(SessionStateService);
+      injectorSpy.mockReturnValueOnce(sessionState);
+      injectorSpy.mockReturnValueOnce({ registerLocaleFn: () => Promise.resolve() });
       expect(typeof localeInitializer(injector)).toBe('function');
       expect(await localeInitializer(injector)()).toBe('resolved');
     });

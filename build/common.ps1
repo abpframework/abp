@@ -16,7 +16,9 @@ $solutionPaths = @(
 		"../modules/tenant-management",
 		"../modules/audit-logging",
 		"../modules/background-jobs",
-		"../modules/account"
+		"../modules/account",
+		"../modules/cms-kit",
+		"../modules/blob-storing-database"
 	)
 
 if ($full -eq "-f")
@@ -29,6 +31,8 @@ if ($full -eq "-f")
 		"../modules/blogging",
 		"../templates/module/aspnet-core",
 		"../templates/app/aspnet-core",
+		"../templates/console",
+		"../templates/wpf",
 		"../abp_io/AbpIoLocalization"
 	) 
 }else{ 

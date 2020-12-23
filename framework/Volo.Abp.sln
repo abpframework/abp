@@ -347,11 +347,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Autofac.WebAssembl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Authentication.OpenIdConnect", "src\Volo.Abp.AspNetCore.Authentication.OpenIdConnect\Volo.Abp.AspNetCore.Authentication.OpenIdConnect.csproj", "{DEFE3DB2-EA4F-4F90-87FC-B25D64427BC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Rebus", "src\Volo.Abp.EventBus.Rebus\Volo.Abp.EventBus.Rebus.csproj", "{F689967F-1EF1-4D75-8BA4-2F2F3506B1F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Rebus", "src\Volo.Abp.EventBus.Rebus\Volo.Abp.EventBus.Rebus.csproj", "{F689967F-1EF1-4D75-8BA4-2F2F3506B1F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.ExceptionHandling", "src\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj", "{B9D1ADCB-D552-4626-A1F1-78FF72C1E822}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.ExceptionHandling", "src\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj", "{B9D1ADCB-D552-4626-A1F1-78FF72C1E822}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components", "src\Volo.Abp.AspNetCore.Components\Volo.Abp.AspNetCore.Components.csproj", "{89840441-5A3A-4FD7-9CB4-E5B52FAEF72A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Swashbuckle", "src\Volo.Abp.Swashbuckle\Volo.Abp.Swashbuckle.csproj", "{DD9519E0-5A68-48DC-A051-7BF2AC922F3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.Tests", "test\Volo.Abp.Json.Tests\Volo.Abp.Json.Tests.csproj", "{00D07595-993C-40FC-BD90-0DD6331414D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Tests", "test\Volo.Abp.Http.Tests\Volo.Abp.Http.Tests.csproj", "{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1047,10 +1053,22 @@ Global
 		{B9D1ADCB-D552-4626-A1F1-78FF72C1E822}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9D1ADCB-D552-4626-A1F1-78FF72C1E822}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9D1ADCB-D552-4626-A1F1-78FF72C1E822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89840441-5A3A-4FD7-9CB4-E5B52FAEF72A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89840441-5A3A-4FD7-9CB4-E5B52FAEF72A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89840441-5A3A-4FD7-9CB4-E5B52FAEF72A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89840441-5A3A-4FD7-9CB4-E5B52FAEF72A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DD9519E0-5A68-48DC-A051-7BF2AC922F3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DD9519E0-5A68-48DC-A051-7BF2AC922F3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD9519E0-5A68-48DC-A051-7BF2AC922F3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD9519E0-5A68-48DC-A051-7BF2AC922F3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D07595-993C-40FC-BD90-0DD6331414D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D07595-993C-40FC-BD90-0DD6331414D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00D07595-993C-40FC-BD90-0DD6331414D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00D07595-993C-40FC-BD90-0DD6331414D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1228,7 +1246,10 @@ Global
 		{DEFE3DB2-EA4F-4F90-87FC-B25D64427BC5} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{F689967F-1EF1-4D75-8BA4-2F2F3506B1F3} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{B9D1ADCB-D552-4626-A1F1-78FF72C1E822} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{89840441-5A3A-4FD7-9CB4-E5B52FAEF72A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{DD9519E0-5A68-48DC-A051-7BF2AC922F3E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{00D07595-993C-40FC-BD90-0DD6331414D3} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

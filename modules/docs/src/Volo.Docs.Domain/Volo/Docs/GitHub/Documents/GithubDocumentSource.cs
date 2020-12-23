@@ -307,7 +307,7 @@ namespace Volo.Docs.GitHub.Documents
 
             var configAsJson = await DownloadWebContentAsStringAsync(url, token, userAgent);
 
-            if (!JsonConvertExtensions.TryDeserializeObject<LanguageConfig>(configAsJson, out var languageConfig))
+            if (!DocsJsonSerializerHelper.TryDeserialize<LanguageConfig>(configAsJson, out var languageConfig))
             {
                 throw new UserFriendlyException($"Cannot validate language config file '{DocsDomainConsts.LanguageConfigFileName}' for the project {project.Name} - v{version}.");
             }

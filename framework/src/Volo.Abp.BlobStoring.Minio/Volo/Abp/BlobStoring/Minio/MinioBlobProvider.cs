@@ -16,7 +16,7 @@ namespace Volo.Abp.BlobStoring.Minio
             MinioBlobNameCalculator = minioBlobNameCalculator;
         }
 
-        public override async Task SaveAsync(BlobProviderSaveArgs args)
+        public async override Task SaveAsync(BlobProviderSaveArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetMinioConfiguration();
@@ -36,7 +36,7 @@ namespace Volo.Abp.BlobStoring.Minio
             await client.PutObjectAsync(containerName, blobName, args.BlobStream, args.BlobStream.Length);
         }
 
-        public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
@@ -51,7 +51,7 @@ namespace Volo.Abp.BlobStoring.Minio
             return false;
         }
 
-        public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
@@ -60,7 +60,7 @@ namespace Volo.Abp.BlobStoring.Minio
             return await BlobExistsAsync(client, containerName, blobName);
         }
 
-        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
@@ -69,10 +69,10 @@ namespace Volo.Abp.BlobStoring.Minio
             if (!await BlobExistsAsync(client, containerName, blobName))
             {
                 return null;
-            }      
-               
+            }
+
             var memoryStream = new MemoryStream();
-            await client.GetObjectAsync(containerName, blobName,  (stream) => 
+            await client.GetObjectAsync(containerName, blobName,  (stream) =>
             {
                     if (stream != null)
                     {
@@ -118,13 +118,13 @@ namespace Volo.Abp.BlobStoring.Minio
                     await client.StatObjectAsync(containerName, blobName);
                 }
                 catch (Exception e)
-                {                   
+                {
                     if (e is ObjectNotFoundException)
                     {
                         return false;
-                    }                
-                    
-                    throw;                    
+                    }
+
+                    throw;
                 }
 
                 return true;

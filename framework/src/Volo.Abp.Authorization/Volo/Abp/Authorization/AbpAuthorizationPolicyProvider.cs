@@ -23,7 +23,7 @@ namespace Volo.Abp.Authorization
             _options = options.Value;
         }
 
-        public override async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
+        public async override Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
             var policy = await base.GetPolicyAsync(policyName);
             if (policy != null)

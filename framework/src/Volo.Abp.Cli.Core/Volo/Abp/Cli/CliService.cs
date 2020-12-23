@@ -20,13 +20,13 @@ namespace Volo.Abp.Cli
         public ILogger<CliService> Logger { get; set; }
         protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
         protected ICommandSelector CommandSelector { get; }
-        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected NuGetService NuGetService { get; }
 
         public CliService(
             ICommandLineArgumentParser commandLineArgumentParser,
             ICommandSelector commandSelector,
-            IHybridServiceScopeFactory serviceScopeFactory,
+            IServiceScopeFactory serviceScopeFactory,
             NuGetService nugetService)
         {
             CommandLineArgumentParser = commandLineArgumentParser;

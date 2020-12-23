@@ -18,7 +18,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             Interaction = interaction;
         }
 
-        public override async Task<IActionResult> OnGetAsync()
+        public async override Task<IActionResult> OnGetAsync()
         {
             await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
             {

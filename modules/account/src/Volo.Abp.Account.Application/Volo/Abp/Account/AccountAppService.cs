@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Emailing;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Settings;
@@ -15,23 +16,29 @@ namespace Volo.Abp.Account
         protected IdentityUserManager UserManager { get; }
         protected IAccountEmailer AccountEmailer { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public AccountAppService(
             IdentityUserManager userManager,
             IIdentityRoleRepository roleRepository,
             IAccountEmailer accountEmailer,
-            IdentitySecurityLogManager identitySecurityLogManager)
+            IdentitySecurityLogManager identitySecurityLogManager,
+            IOptions<IdentityOptions> identityOptions)
         {
             RoleRepository = roleRepository;
             AccountEmailer = accountEmailer;
             IdentitySecurityLogManager = identitySecurityLogManager;
             UserManager = userManager;
+            IdentityOptions = identityOptions;
+
             LocalizationResource = typeof(AccountResource);
         }
 
         public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
         {
             await CheckSelfRegistrationAsync();
+
+            await IdentityOptions.SetAsync();
 
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.EmailAddress, CurrentTenant.Id);
 
@@ -52,6 +59,8 @@ namespace Volo.Abp.Account
 
         public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
         {
+            await IdentityOptions.SetAsync();
+
             var user = await UserManager.GetByIdAsync(input.UserId);
             (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
 

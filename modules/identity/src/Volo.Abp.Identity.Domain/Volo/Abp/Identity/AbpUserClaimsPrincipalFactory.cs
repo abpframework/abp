@@ -24,7 +24,7 @@ namespace Volo.Abp.Identity
         }
 
         [UnitOfWork]
-        public override async Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
+        public async override Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
         {
             var principal = await base.CreateAsync(user);
             var identity = principal.Identities.First();
@@ -38,6 +38,7 @@ namespace Volo.Abp.Identity
             {
                 identity.AddIfNotContains(new Claim(AbpClaimTypes.Name, user.Name));
             }
+
             if (!user.Surname.IsNullOrWhiteSpace())
             {
                 identity.AddIfNotContains(new Claim(AbpClaimTypes.SurName, user.Surname));
@@ -47,12 +48,14 @@ namespace Volo.Abp.Identity
             {
                 identity.AddIfNotContains(new Claim(AbpClaimTypes.PhoneNumber, user.PhoneNumber));
             }
+
             identity.AddIfNotContains(new Claim(AbpClaimTypes.PhoneNumberVerified, user.PhoneNumberConfirmed.ToString()));
 
             if (!user.Email.IsNullOrWhiteSpace())
             {
                 identity.AddIfNotContains(new Claim(AbpClaimTypes.Email, user.Email));
             }
+
             identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
 
             return principal;

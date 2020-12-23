@@ -54,7 +54,7 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
         Timer.Period = 600000; //10 minutes
     }
 
-    protected override async Task DoWorkAsync(
+    protected async override Task DoWorkAsync(
         PeriodicBackgroundWorkerContext workerContext)
     {
         Logger.LogInformation("Starting: Setting status of inactive users...");

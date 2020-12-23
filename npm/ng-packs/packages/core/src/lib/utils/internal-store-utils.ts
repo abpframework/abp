@@ -30,7 +30,12 @@ export class InternalStore<State> {
     this.update$.next(state);
   }
 
+  set(state: State) {
+    this.state$.next(state);
+    this.update$.next(state);
+  }
+
   reset() {
-    this.patch(this.initialState);
+    this.set(this.initialState);
   }
 }

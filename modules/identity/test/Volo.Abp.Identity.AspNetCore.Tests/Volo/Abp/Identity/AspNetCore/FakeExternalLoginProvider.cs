@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -14,12 +16,14 @@ namespace Volo.Abp.Identity.AspNetCore
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant,
             IdentityUserManager userManager,
-            IIdentityUserRepository identityUserRepository)
+            IIdentityUserRepository identityUserRepository,
+            IOptions<IdentityOptions> identityOptions)
             : base(
                 guidGenerator,
                 currentTenant,
                 userManager,
-                identityUserRepository)
+                identityUserRepository,
+                identityOptions)
         {
 
         }

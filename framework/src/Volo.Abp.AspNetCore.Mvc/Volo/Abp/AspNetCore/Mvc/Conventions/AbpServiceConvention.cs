@@ -23,12 +23,15 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
     {
         public ILogger<AbpServiceConvention> Logger { get; set; }
 
-        private readonly AbpAspNetCoreMvcOptions _options;
+        protected AbpAspNetCoreMvcOptions Options { get; }
+        protected IConventionalRouteBuilder ConventionalRouteBuilder { get; }
 
         public AbpServiceConvention(
-            IOptions<AbpAspNetCoreMvcOptions> options)
+            IOptions<AbpAspNetCoreMvcOptions> options,
+            IConventionalRouteBuilder conventionalRouteBuilder)
         {
-            _options = options.Value;
+            ConventionalRouteBuilder = conventionalRouteBuilder;
+            Options = options.Value;
 
             Logger = NullLogger<AbpServiceConvention>.Instance;
         }
@@ -74,10 +77,21 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
             foreach (var controllerModel in application.Controllers)
             {
+                if (!controllerModel.ControllerType.IsDefined(typeof(ExposeServicesAttribute), false))
+                {
+                    continue;
+                }
+
+                if (Options.IgnoredControllersOnModelExclusion.Contains(controllerModel.ControllerType))
+                {
+                    continue;
+                }
+
                 var baseControllerTypes = controllerModel.ControllerType
                     .GetBaseClasses(typeof(Controller), includeObject: false)
                     .Where(t => !t.IsAbstract)
                     .ToArray();
+
                 if (baseControllerTypes.Length > 0)
                 {
                     derivedControllerModels.Add(controllerModel);
@@ -131,7 +145,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                 return false;
             }
 
-            if (_options.ConventionalControllers
+            if (Options.ConventionalControllers
                 .FormBodyBindingIgnoredTypes
                 .Any(t => t.IsAssignableFrom(parameter.ParameterInfo.ParameterType)))
             {
@@ -306,95 +320,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         [CanBeNull]
         protected virtual ConventionalControllerSetting GetControllerSettingOrNull(Type controllerType)
         {
-            return _options.ConventionalControllers.ConventionalControllerSettings.GetSettingOrNull(controllerType);
+            return Options.ConventionalControllers.ConventionalControllerSettings.GetSettingOrNull(controllerType);
         }
 
         protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
         {
             return new AttributeRouteModel(
                 new RouteAttribute(
-                    CalculateRouteTemplate(rootPath, controllerName, action, httpMethod, configuration)
-                )
-            );
-        }
-
-        protected virtual string CalculateRouteTemplate(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
-        {
-            var controllerNameInUrl = NormalizeUrlControllerName(rootPath, controllerName, action, httpMethod, configuration);
-
-            var url = $"api/{rootPath}/{controllerNameInUrl.ToCamelCase()}";
-
-            //Add {id} path if needed
-            var idParameterModel = action.Parameters.FirstOrDefault(p => p.ParameterName == "id");
-            if (idParameterModel != null)
-            {
-                if (TypeHelper.IsPrimitiveExtended(idParameterModel.ParameterType, includeEnums: true))
-                {
-                    url += "/{id}";
-                }
-                else
-                {
-                    var properties = idParameterModel
-                        .ParameterType
-                        .GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-                    foreach (var property in properties)
-                    {
-                        url += "/{" + property.Name + "}";
-                    }
-                }
-            }
-
-            //Add action name if needed
-            var actionNameInUrl = NormalizeUrlActionName(rootPath, controllerName, action, httpMethod, configuration);
-            if (!actionNameInUrl.IsNullOrEmpty())
-            {
-                url += $"/{actionNameInUrl.ToCamelCase()}";
-
-                //Add secondary Id
-                var secondaryIds = action.Parameters.Where(p => p.ParameterName.EndsWith("Id", StringComparison.Ordinal)).ToList();
-                if (secondaryIds.Count == 1)
-                {
-                    url += $"/{{{secondaryIds[0].ParameterName}}}";
-                }
-            }
-
-            return url;
-        }
-
-        protected virtual string NormalizeUrlActionName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
-        {
-            var actionNameInUrl = HttpMethodHelper
-                .RemoveHttpMethodPrefix(action.ActionName, httpMethod)
-                .RemovePostFix("Async");
-
-            if (configuration?.UrlActionNameNormalizer == null)
-            {
-                return actionNameInUrl;
-            }
-
-            return configuration.UrlActionNameNormalizer(
-                new UrlActionNameNormalizerContext(
-                    rootPath,
-                    controllerName,
-                    action,
-                    actionNameInUrl,
-                    httpMethod
-                )
-            );
-        }
-
-        protected virtual string NormalizeUrlControllerName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
-        {
-            if (configuration?.UrlControllerNameNormalizer == null)
-            {
-                return controllerName;
-            }
-
-            return configuration.UrlControllerNameNormalizer(
-                new UrlControllerNameNormalizerContext(
-                    rootPath,
-                    controllerName
+                    ConventionalRouteBuilder.Build(rootPath, controllerName, action, httpMethod, configuration)
                 )
             );
         }

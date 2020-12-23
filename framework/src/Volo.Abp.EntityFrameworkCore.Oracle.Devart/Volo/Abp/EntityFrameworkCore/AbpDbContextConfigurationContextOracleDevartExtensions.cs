@@ -15,11 +15,19 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             if (useExistingConnectionIfAvailable && context.ExistingConnection != null)
             {
-                return context.DbContextOptions.UseOracle(context.ExistingConnection, oracleOptionsAction);
+                return context.DbContextOptions.UseOracle(context.ExistingConnection, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    oracleOptionsAction?.Invoke(optionsBuilder);
+                });
             }
             else
             {
-                return context.DbContextOptions.UseOracle(context.ConnectionString, oracleOptionsAction);
+                return context.DbContextOptions.UseOracle(context.ConnectionString, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    oracleOptionsAction?.Invoke(optionsBuilder);
+                });
             }
         }
     }

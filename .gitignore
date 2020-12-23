@@ -6,6 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.editorconfig
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -305,3 +306,6 @@ modules/virtual-file-explorer/app/Volo.Abp.VirtualFileExplorer.DemoApp/Logs/
 /modules/client-simulation/demo/Volo.ClientSimulation.Demo/package-lock.json
 abp-build-config.json
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/Pages/Test/
+
+# Identity Server temp signature file
+tempkey.jwk

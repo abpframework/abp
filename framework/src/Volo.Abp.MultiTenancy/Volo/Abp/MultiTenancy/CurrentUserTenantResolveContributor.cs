@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Users;
 
@@ -9,16 +10,16 @@ namespace Volo.Abp.MultiTenancy
 
         public override string Name => ContributorName;
 
-        public override void Resolve(ITenantResolveContext context)
+        public override Task ResolveAsync(ITenantResolveContext context)
         {
             var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
-            if (currentUser.IsAuthenticated != true)
+            if (currentUser.IsAuthenticated)
             {
-                return;
+                context.Handled = true;
+                context.TenantIdOrName = currentUser.TenantId?.ToString();
             }
 
-            context.Handled = true;
-            context.TenantIdOrName = currentUser.TenantId?.ToString();
+            return Task.CompletedTask;
         }
     }
 }

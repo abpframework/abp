@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
-using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using System.Linq.Dynamic.Core;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.IdentityServer.MongoDB
@@ -18,18 +19,27 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
         }
 
-        public virtual async Task<ApiResource> FindByNameAsync(string name, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(ar => ar.Name == name)
+                .Where(ar => ar.Name == apiResourceName)
+                .OrderBy(ar => ar.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .Where(ar => apiResourceNames.Contains(ar.Name))
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListByScopesAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(ar => ar.Scopes.Any(x => scopeNames.Contains(x.Name)))
+                .Where(ar => ar.Scopes.Any(x => scopeNames.Contains(x.Scope)))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -54,7 +64,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
 
         public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken);
+            return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name, GetCancellationToken(cancellationToken));
         }
     }
 }

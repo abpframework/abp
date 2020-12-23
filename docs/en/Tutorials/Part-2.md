@@ -590,7 +590,6 @@ Open the `Books.razor` and replace the content as the following:
 ````xml
 @page "/books"
 @using Volo.Abp.Application.Dtos
-@using Volo.Abp.BlazoriseUI
 @using Acme.BookStore.Books
 @using Acme.BookStore.Localization
 @using Microsoft.Extensions.Localization
@@ -620,14 +619,14 @@ Open the `Books.razor` and replace the content as the following:
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
-                                Field="@nameof(BookDto.PublishDate)" 
+                                Field="@nameof(BookDto.PublishDate)"
                                 Caption="@L["PublishDate"]">
                     <DisplayTemplate>
                         @context.PublishDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
-                                Field="@nameof(BookDto.Price)" 
+                                Field="@nameof(BookDto.Price)"
                                 Caption="@L["Price"]">
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"

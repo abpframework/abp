@@ -18,6 +18,8 @@
     "401Message": "Unauthorized",
     "403Message": "Forbidden",
     "404Message": "Page not found",
-    "500Message": "Internal Server Error"
+    "500Message": "Internal Server Error",
+    "403MessageDetail": "You are not authorized to perform this operation!",
+    "404MessageDetail": "Sorry, there's nothing at this address."
   }
 }

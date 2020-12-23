@@ -8,4 +8,8 @@ ABP框架被设计为与数据库无关, 它通过[仓储](Repositories.md)和[�
 * [MongoDB](MongoDB.md)
 * [Dapper](Dapper.md)
 
-在以后的版本中可能会添加更多的提供程序.
+## 另请参阅
+
+* [连接字符串](Connection-Strings.md)
+* [种子数据](Data-Seeding.md)
+* [数据过滤](Data-Filtering.md)

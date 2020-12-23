@@ -173,6 +173,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            if (context.BuildArgs.ExtraProperties.ContainsKey("no-random-port"))
+            {
+                return;
+            }
+
             steps.Add(new TemplateRandomSslPortStep(
                     new List<string>
                     {

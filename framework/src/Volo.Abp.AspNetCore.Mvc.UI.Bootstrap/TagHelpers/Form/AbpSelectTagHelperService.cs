@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -35,7 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             _stringLocalizerFactory = stringLocalizerFactory;
         }
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output);
 
@@ -78,9 +79,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var selectTagHelper = new SelectTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
-                Items = GetSelectItems(context, output),
                 ViewContext = TagHelper.ViewContext
             };
+
+            if (TagHelper.AutocompleteApiUrl.IsNullOrEmpty())
+            {
+                selectTagHelper.Items = GetSelectItems(context, output);
+            }
+            else if(!TagHelper.AutocompleteSelectedItemName.IsNullOrEmpty())
+            {
+                selectTagHelper.Items = new[]
+                {
+                    new SelectListItem(TagHelper.AutocompleteSelectedItemName,
+                        TagHelper.AutocompleteSelectedItemValue, false)
+                };
+            }
 
             var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
 
@@ -88,8 +101,24 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
             AddDisabledAttribute(selectTagHelperOutput);
             AddInfoTextId(selectTagHelperOutput);
+            AddAutocompleteAttributes(selectTagHelperOutput);
 
             return selectTagHelperOutput;
+        }
+
+        protected virtual void AddAutocompleteAttributes(TagHelperOutput output)
+        {
+            if (!TagHelper.AutocompleteApiUrl.IsNullOrEmpty())
+            {
+                output.Attributes.AddClass("auto-complete-select");
+                output.Attributes.Add("data-autocomplete-api-url", TagHelper.AutocompleteApiUrl);
+                output.Attributes.Add("data-autocomplete-items-property", TagHelper.AutocompleteItemsPropertyName);
+                output.Attributes.Add("data-autocomplete-display-property", TagHelper.AutocompleteDisplayPropertyName);
+                output.Attributes.Add("data-autocomplete-value-property", TagHelper.AutocompleteValuePropertyName);
+                output.Attributes.Add("data-autocomplete-filter-param-name", TagHelper.AutocompleteFilterParamName);
+                output.Attributes.Add("data-autocomplete-selected-item-name", TagHelper.AutocompleteSelectedItemName);
+                output.Attributes.Add("data-autocomplete-selected-item-value", TagHelper.AutocompleteSelectedItemValue);
+            }
         }
 
         protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
@@ -140,7 +169,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 var label = new TagBuilder("label");
                 label.Attributes.Add("for", GetIdAttributeValue(selectTag));
-                label.InnerHtml.Append(TagHelper.Label);
+                label.InnerHtml.AppendHtml(TagHelper.Label);
 
                 return label.ToHtmlString() + GetRequiredSymbol(context, output);
             }

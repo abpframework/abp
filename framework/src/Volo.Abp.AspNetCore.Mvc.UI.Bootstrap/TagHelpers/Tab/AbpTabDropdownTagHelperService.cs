@@ -9,7 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 {
     public class AbpTabDropdownTagHelperService : AbpTagHelperService<AbpTabDropdownTagHelper>
     {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             if (string.IsNullOrWhiteSpace(TagHelper.Name))
             {
@@ -40,7 +40,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             anchor.Attributes.Add("role", "button");
             anchor.Attributes.Add("aria-haspopup", "true");
             anchor.Attributes.Add("aria-expanded", "false");
-            anchor.InnerHtml.Append(title);
+            anchor.InnerHtml.AppendHtml(title);
 
             var menu = new TagBuilder("div");
             menu.AddCssClass("dropdown-menu");

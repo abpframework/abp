@@ -12,8 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Authorization;
+using Volo.Abp.BlazoriseUI.Components;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
@@ -151,7 +153,7 @@ namespace Volo.Abp.BlazoriseUI
             TListViewModel,
             TCreateViewModel,
             TUpdateViewModel>
-        : OwningComponentBase
+        : AbpComponentBase
         where TAppService : ICrudAppService<
             TGetOutputDto,
             TGetListOutputDto,
@@ -169,21 +171,24 @@ namespace Volo.Abp.BlazoriseUI
         where TUpdateViewModel : class, new()
     {
         [Inject] protected TAppService AppService { get; set; }
-        [Inject] protected IUiMessageService UiMessageService { get; set; }
         [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
-        [Inject] protected IAuthorizationService AuthorizationService { get; set; }
 
         protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
-        protected int CurrentPage;
+        protected int CurrentPage = 1;
         protected string CurrentSorting;
         protected int? TotalCount;
+        protected TGetListInput GetListInput = new TGetListInput();
         protected IReadOnlyList<TListViewModel> Entities = Array.Empty<TListViewModel>();
         protected TCreateViewModel NewEntity;
         protected TKey EditingEntityId;
         protected TUpdateViewModel EditingEntity;
         protected Modal CreateModal;
         protected Modal EditModal;
+        protected Validations CreateValidationsRef;
+        protected Validations EditValidationsRef;
+        protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
+        protected DataGridEntityActionsColumn<TListViewModel> EntityActionsColumn;
 
         protected string CreatePolicyName { get; set; }
         protected string UpdatePolicyName { get; set; }
@@ -193,44 +198,6 @@ namespace Volo.Abp.BlazoriseUI
         public bool HasUpdatePermission { get; set; }
         public bool HasDeletePermission { get; set; }
 
-        protected Type ObjectMapperContext { get; set; }
-
-        protected IObjectMapper ObjectMapper
-        {
-            get
-            {
-                if (_objectMapper != null)
-                {
-                    return _objectMapper;
-                }
-
-                if (ObjectMapperContext == null)
-                {
-                    return LazyGetRequiredService(ref _objectMapper);
-                }
-
-                return LazyGetRequiredService(
-                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
-                    ref _objectMapper
-                );
-            }
-        }
-
-        private IObjectMapper _objectMapper;
-
-        protected TService LazyGetRequiredService<TService>(ref TService reference)
-            => LazyGetRequiredService(typeof(TService), ref reference);
-
-        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
-        {
-            if (reference == null)
-            {
-                reference = (TRef)ScopedServices.GetRequiredService(serviceType);
-            }
-
-            return reference;
-        }
-
         protected AbpCrudPageBase()
         {
             NewEntity = new TCreateViewModel();
@@ -239,6 +206,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected override async Task OnInitializedAsync()
         {
+            await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();
         }
 
@@ -262,8 +230,8 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task GetEntitiesAsync()
         {
-            var input = await CreateGetListInputAsync();
-            var result = await AppService.GetListAsync(input);
+            await UpdateGetListInputAsync();
+            var result = await AppService.GetListAsync(GetListInput);
             Entities = MapToListViewModel(result.Items);
             TotalCount = (int?)result.TotalCount;
         }
@@ -278,26 +246,33 @@ namespace Volo.Abp.BlazoriseUI
             return ObjectMapper.Map<IReadOnlyList<TGetListOutputDto>, List<TListViewModel>>(dtos);
         }
 
-        protected virtual Task<TGetListInput> CreateGetListInputAsync()
+        protected virtual Task UpdateGetListInputAsync()
         {
-            var input = new TGetListInput();
-
-            if (input is ISortedResultRequest sortedResultRequestInput)
+            if (GetListInput is ISortedResultRequest sortedResultRequestInput)
             {
                 sortedResultRequestInput.Sorting = CurrentSorting;
             }
 
-            if (input is IPagedResultRequest pagedResultRequestInput)
+            if (GetListInput is IPagedResultRequest pagedResultRequestInput)
             {
-                pagedResultRequestInput.SkipCount = CurrentPage * PageSize;
+                pagedResultRequestInput.SkipCount = (CurrentPage - 1) * PageSize;
             }
 
-            if (input is ILimitedResultRequest limitedResultRequestInput)
+            if (GetListInput is ILimitedResultRequest limitedResultRequestInput)
             {
                 limitedResultRequestInput.MaxResultCount = PageSize;
             }
 
-            return Task.FromResult(input);
+            return Task.CompletedTask;
+        }
+
+        protected virtual async Task SearchEntitiesAsync()
+        {
+            CurrentPage = 1;
+
+            await GetEntitiesAsync();
+
+            StateHasChanged();
         }
 
         protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TListViewModel> e)
@@ -306,7 +281,7 @@ namespace Volo.Abp.BlazoriseUI
                 .Where(c => c.Direction != SortDirection.None)
                 .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
-            CurrentPage = e.Page - 1;
+            CurrentPage = e.Page;
 
             await GetEntitiesAsync();
 
@@ -315,9 +290,16 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task OpenCreateModalAsync()
         {
+            CreateValidationsRef?.ClearAll();
+
             await CheckCreatePolicyAsync();
 
             NewEntity = new TCreateViewModel();
+
+            // Mapper will not notify Blazor that binded values are changed
+            // so we need to notify it manually by calling StateHasChanged
+            await InvokeAsync(() => StateHasChanged());
+
             CreateModal.Show();
         }
 
@@ -327,13 +309,19 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        protected virtual async Task OpenEditModalAsync(TKey id)
+        protected virtual async Task OpenEditModalAsync(TListViewModel entity)
         {
+            EditValidationsRef?.ClearAll();
+
             await CheckUpdatePolicyAsync();
 
-            var entityDto = await AppService.GetAsync(id);
-            EditingEntityId = id;
+            var entityDto = await AppService.GetAsync(entity.Id);
+
+            EditingEntityId = entity.Id;
             EditingEntity = MapToEditingEntity(entityDto);
+
+            await InvokeAsync(() => StateHasChanged());
+
             EditModal.Show();
         }
 
@@ -370,30 +358,61 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task CreateEntityAsync()
         {
-            await CheckCreatePolicyAsync();
-            var createInput = MapToCreateInput(NewEntity);
-            await AppService.CreateAsync(createInput);
-            await GetEntitiesAsync();
-            CreateModal.Hide();
+            if (CreateValidationsRef?.ValidateAll() ?? true)
+            {
+                await OnCreatingEntityAsync();
+
+                await CheckCreatePolicyAsync();
+                var createInput = MapToCreateInput(NewEntity);
+                await AppService.CreateAsync(createInput);
+                await GetEntitiesAsync();
+
+                await OnCreatedEntityAsync();
+
+                CreateModal.Hide();
+            }
+        }
+
+        protected virtual Task OnCreatingEntityAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task OnCreatedEntityAsync()
+        {
+            return Task.CompletedTask;
         }
 
         protected virtual async Task UpdateEntityAsync()
         {
-            await CheckUpdatePolicyAsync();
-            var updateInput = MapToUpdateInput(EditingEntity);
-            await AppService.UpdateAsync(EditingEntityId, updateInput);
-            await GetEntitiesAsync();
-            EditModal.Hide();
+            if (EditValidationsRef?.ValidateAll() ?? true)
+            {
+                await OnUpdatingEntityAsync();
+
+                await CheckUpdatePolicyAsync();
+                var updateInput = MapToUpdateInput(EditingEntity);
+                await AppService.UpdateAsync(EditingEntityId, updateInput);
+                await GetEntitiesAsync();
+
+                await OnUpdatedEntityAsync();
+
+                EditModal.Hide();
+            }
+        }
+
+        protected virtual Task OnUpdatingEntityAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task OnUpdatedEntityAsync()
+        {
+            return Task.CompletedTask;
         }
 
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
         {
             await CheckDeletePolicyAsync();
-
-            if (!await UiMessageService.ConfirmAsync(GetDeleteConfirmationMessage(entity)))
-            {
-                return;
-            }
 
             await AppService.DeleteAsync(entity.Id);
             await GetEntitiesAsync();
@@ -434,6 +453,11 @@ namespace Volo.Abp.BlazoriseUI
             }
 
             await AuthorizationService.CheckAsync(policyName);
+        }
+
+        protected virtual ValueTask SetBreadcrumbItemsAsync()
+        {
+            return ValueTask.CompletedTask;
         }
     }
 }

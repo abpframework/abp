@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
 
         protected ApplicationMenu Menu { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected async override Task OnInitializedAsync()
         {
             Menu = await MenuManager.GetAsync(StandardMenus.User);
 

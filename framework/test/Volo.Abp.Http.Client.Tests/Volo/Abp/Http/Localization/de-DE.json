@@ -1,0 +1,6 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "Volo.Abp.Http.DynamicProxying:10001": "Geschäftsausnahme mit Daten: {0}"
+  }
+}

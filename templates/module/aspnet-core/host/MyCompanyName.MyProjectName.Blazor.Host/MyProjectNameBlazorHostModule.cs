@@ -61,7 +61,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
         private void ConfigureBlazorise(ServiceConfigurationContext context)
         {
             context.Services
-                .AddBlazorise()
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
         }
@@ -77,7 +76,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
 
         private static void ConfigureUI(WebAssemblyHostBuilder builder)
         {
-            builder.RootComponents.Add<App>("app");
+            builder.RootComponents.Add<App>("#ApplicationContainer");
         }
 
         private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)
@@ -94,13 +93,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
             {
                 options.AddMaps<MyProjectNameBlazorHostModule>();
             });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider
-                .UseBootstrapProviders()
-                .UseFontAwesomeIcons();
         }
     }
 }

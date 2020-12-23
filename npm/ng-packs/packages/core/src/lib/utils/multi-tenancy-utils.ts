@@ -1,11 +1,12 @@
 import { Injector } from '@angular/core';
-import { Store } from '@ngxs/store';
 import clone from 'just-clone';
+import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { SetEnvironment } from '../actions';
-import { Config } from '../models/config';
+import { Environment } from '../models/environment';
+import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy/abp-tenant.service';
+import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+import { EnvironmentService } from '../services/environment.service';
 import { MultiTenancyService } from '../services/multi-tenancy.service';
-import { ConfigState } from '../states/config.state';
 import { createTokenParser } from './string-utils';
 
 const tenancyPlaceholder = '{0}';
@@ -19,22 +20,23 @@ function getCurrentTenancyName(appBaseUrl: string): string {
 }
 
 export async function parseTenantFromUrl(injector: Injector) {
-  const store: Store = injector.get(Store);
+  const environmentService = injector.get(EnvironmentService);
   const multiTenancyService = injector.get(MultiTenancyService);
-  const environment = store.selectSnapshot(ConfigState.getOne('environment')) as Config.Environment;
+  const abpTenantService = injector.get(AbpTenantService);
 
-  const { baseUrl = '' } = environment.application;
+  const baseUrl = environmentService.getEnvironment()?.application?.baseUrl || '';
   const tenancyName = getCurrentTenancyName(baseUrl);
 
   if (tenancyName) {
     multiTenancyService.isTenantBoxVisible = false;
+    setEnvironment(injector, tenancyName);
 
-    return setEnvironment(store, tenancyName)
+    return of(null)
       .pipe(
-        switchMap(() => multiTenancyService.findTenantByName(tenancyName, { __tenant: '' })),
+        switchMap(() => abpTenantService.findTenantByName(tenancyName, { __tenant: '' })),
         tap(res => {
           multiTenancyService.domainTenant = res.success
-            ? { id: res.tenantId, name: res.name }
+            ? ({ id: res.tenantId, name: res.name } as CurrentTenantDto)
             : null;
         }),
       )
@@ -44,10 +46,10 @@ export async function parseTenantFromUrl(injector: Injector) {
   return Promise.resolve();
 }
 
-function setEnvironment(store: Store, tenancyName: string) {
-  const environment = clone(
-    store.selectSnapshot(ConfigState.getOne('environment')),
-  ) as Config.Environment;
+function setEnvironment(injector: Injector, tenancyName: string) {
+  const environmentService = injector.get(EnvironmentService);
+
+  const environment = clone(environmentService.getEnvironment()) as Environment;
 
   if (environment.application.baseUrl) {
     environment.application.baseUrl = environment.application.baseUrl.replace(
@@ -70,5 +72,5 @@ function setEnvironment(store: Store, tenancyName: string) {
     });
   });
 
-  return store.dispatch(new SetEnvironment(environment));
+  return environmentService.setState(environment);
 }

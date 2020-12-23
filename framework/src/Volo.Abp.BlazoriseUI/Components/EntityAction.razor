@@ -1,0 +1,21 @@
+﻿@typeparam TItem
+@using Blazorise
+
+@if (ParentActions.Type == ActionType.Dropdown)
+{
+    if (IsVisible && Primary == false)
+    {
+        <DropdownItem Clicked="@ActionClickedAsync">@Text</DropdownItem>
+    }
+}
+else
+{
+    if (IsVisible)
+    {
+        <Blazorise.Button Block="true"
+                          Color="@Color"
+                          Clicked="@ActionClickedAsync">
+            @Text
+        </Blazorise.Button>
+    }
+}

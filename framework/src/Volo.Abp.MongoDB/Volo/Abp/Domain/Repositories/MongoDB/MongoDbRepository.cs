@@ -55,7 +55,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             GuidGenerator = SimpleGuidGenerator.Instance;
         }
 
-        public override async Task<TEntity> InsertAsync(
+        public async override Task<TEntity> InsertAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -81,7 +81,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public override async Task<TEntity> UpdateAsync(
+        public async override Task<TEntity> UpdateAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -131,7 +131,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public override async Task DeleteAsync(
+        public async override Task DeleteAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -194,17 +194,17 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
         }
 
-        public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        public async override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public async override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public override async Task<List<TEntity>> GetPagedListAsync(
+        public async override Task<List<TEntity>> GetPagedListAsync(
             int skipCount,
             int maxResultCount,
             string sorting,
@@ -218,7 +218,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public override async Task DeleteAsync(
+        public async override Task DeleteAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -238,7 +238,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return GetMongoQueryable();
         }
 
-        public override async Task<TEntity> FindAsync(
+        public async override Task<TEntity> FindAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)

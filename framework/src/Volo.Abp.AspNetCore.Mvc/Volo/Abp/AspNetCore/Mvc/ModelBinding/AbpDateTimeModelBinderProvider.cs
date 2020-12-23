@@ -6,6 +6,7 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 {
+
     public class AbpDateTimeModelBinderProvider : IModelBinderProvider
     {
         public IModelBinder GetBinder(ModelBinderProviderContext context)

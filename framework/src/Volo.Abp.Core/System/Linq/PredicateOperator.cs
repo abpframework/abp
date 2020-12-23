@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
 namespace System.Linq
@@ -244,15 +247,6 @@ namespace System.Linq
 
         /// <summary></summary>
         public bool TailCall => Predicate.TailCall;
-#endif
-
-#if !(NET35 || WINDOWS_APP || NETSTANDARD || PORTABLE || PORTABLE40 || UAP)
-        /// <summary></summary>
-        public void CompileToMethod(MethodBuilder method) { Predicate.CompileToMethod(method); }
-
-        /// <summary></summary>
-        public void CompileToMethod(MethodBuilder method, DebugInfoGenerator debugInfoGenerator) { Predicate.CompileToMethod(method, debugInfoGenerator); }
-
 #endif
 
         #endregion

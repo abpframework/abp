@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Auditing;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -135,15 +136,27 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
-        
+
         public override IQueryable<AuditLog> WithDetails()
         {
             return GetQueryable().IncludeDetails();
         }
 
-        public Task<EntityChange> GetEntityChange(Guid entityChangeId)
+        public virtual async Task<EntityChange> GetEntityChange(Guid entityChangeId)
         {
-            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails().Where(x => x.Id == entityChangeId).FirstAsync();
+            var entityChange = await DbContext.Set<EntityChange>()
+                                    .AsNoTracking()
+                                    .IncludeDetails()
+                                    .Where(x => x.Id == entityChangeId)
+                                    .OrderBy(x => x.Id)
+                                    .FirstOrDefaultAsync();
+
+            if (entityChange == null)
+            {
+                throw new EntityNotFoundException(typeof(EntityChange));
+            }
+
+            return entityChange;
         }
 
         public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(

@@ -1,13 +1,10 @@
 import { Injector } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { AuthConfig, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
-import { GetAppConfiguration } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
-import { RestService } from '../services/rest.service';
-import { ConfigState } from '../states/config.state';
+import { ConfigStateService } from '../services/config-state.service';
+import { EnvironmentService } from '../services/environment.service';
 
 export const oAuthStorage = localStorage;
 
@@ -15,6 +12,8 @@ export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
 
   protected store: Store;
+  protected environment: EnvironmentService;
+  protected configState: ConfigStateService;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
   abstract checkIfInternalAuth(): boolean;
@@ -26,13 +25,15 @@ export abstract class AuthFlowStrategy {
 
   constructor(protected injector: Injector) {
     this.store = injector.get(Store);
+    this.environment = injector.get(EnvironmentService);
+    this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService);
-    this.oAuthConfig = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
+    this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
   }
 
   async init(): Promise<any> {
     const shouldClear = shouldStorageClear(
-      this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.clientId')),
+      this.environment.getEnvironment().oAuthConfig.clientId,
       oAuthStorage,
     );
     if (shouldClear) clearOAuthStorage(oAuthStorage);
@@ -76,46 +77,9 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   destroy() {}
 }
 
-export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
-  readonly isInternalAuth = true;
-
-  login() {
-    const router = this.injector.get(Router);
-    router.navigateByUrl('/account/login');
-  }
-
-  checkIfInternalAuth() {
-    return true;
-  }
-
-  logout() {
-    const rest = this.injector.get(RestService);
-
-    const issuer = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.issuer'));
-    return rest
-      .request(
-        {
-          method: 'GET',
-          url: '/api/account/logout',
-        },
-        null,
-        issuer,
-      )
-      .pipe(
-        tap(() => this.oAuthService.logOut()),
-        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
-      );
-  }
-
-  destroy() {}
-}
-
 export const AUTH_FLOW_STRATEGY = {
   Code(injector: Injector) {
     return new AuthCodeFlowStrategy(injector);
-  },
-  Password(injector: Injector) {
-    return new AuthPasswordFlowStrategy(injector);
   },
 };
 

@@ -6,8 +6,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
-using Volo.Abp.FeatureManagement.Localization;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Validation.StringValues;
@@ -17,28 +16,26 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
     public partial class FeatureManagementModal
     {
         [Inject] protected IFeatureAppService FeatureAppService { get; set; }
-        
+
         [Inject] protected IUiMessageService UiMessageService { get; set; }
-        
-        [Inject] protected IStringLocalizer<AbpFeatureManagementResource> L { get; set; }
-        
+
         [Inject] protected IStringLocalizerFactory HtmlLocalizerFactory { get; set; }
-        
+
         [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
 
         protected Modal Modal;
-        
+
         protected string ProviderName;
         protected string ProviderKey;
 
         protected string SelectedTabName;
-        
+
         protected List<FeatureGroupDto> Groups { get; set; }
 
         protected Dictionary<string, bool> ToggleValues;
 
         protected Dictionary<string, string> SelectionStringValues;
-        
+
         public virtual async Task OpenAsync([NotNull]string providerName, string providerKey = null)
         {
             ProviderName = providerName;
@@ -46,11 +43,11 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
 
             ToggleValues = new Dictionary<string, bool>();
             SelectionStringValues = new Dictionary<string, string>();
-            
+
             Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey)).Groups;
 
             SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
-            
+
             foreach (var featureGroupDto in Groups)
             {
                 foreach (var featureDto in featureGroupDto.Features)
@@ -69,13 +66,13 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
 
             Modal.Show();
         }
-        
+
         public virtual Task CloseModal()
         {
             Modal.Hide();
             return Task.CompletedTask;
         }
-        
+
         protected virtual async Task SaveAsync()
         {
             var features = new UpdateFeaturesDto
@@ -83,21 +80,21 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
                 Features = Groups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
                 {
                     Name = f.Name,
-                    Value = f.ValueType is ToggleStringValueType ? ToggleValues[f.Name].ToString() : 
+                    Value = f.ValueType is ToggleStringValueType ? ToggleValues[f.Name].ToString() :
                             f.ValueType is SelectionStringValueType ? SelectionStringValues[f.Name] : f.Value
                 }).ToList()
             };
-            
+
             await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
-            
+
             Modal.Hide();
         }
-        
+
         protected virtual string GetNormalizedGroupName(string name)
         {
             return "FeatureGroup_" + name.Replace(".", "_");
         }
-        
+
         protected virtual bool IsDisabled(string providerName)
         {
             return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
@@ -105,13 +102,13 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
 
         protected virtual async Task OnFeatureValueChangedAsync(string value, FeatureDto feature)
         {
-            if (feature.ValueType.Validator.IsValid(value))
+            if (feature?.ValueType?.Validator.IsValid(value) == true)
             {
                 feature.Value = value;
             }
             else
             {
-                await UiMessageService.WarnAsync(L["Volo.Abp.FeatureManagement:InvalidFeatureValue", feature.DisplayName]);
+                await UiMessageService.Warn(L["Volo.Abp.FeatureManagement:InvalidFeatureValue", feature.DisplayName]);
             }
         }
 
@@ -119,7 +116,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         {
             SelectionStringValues[featureName] = value;
         }
-        
+
         protected virtual IStringLocalizer CreateStringLocalizer(string resourceName)
         {
             var resource = LocalizationOptions.Value.Resources.Values.FirstOrDefault(x => x.ResourceName == resourceName);

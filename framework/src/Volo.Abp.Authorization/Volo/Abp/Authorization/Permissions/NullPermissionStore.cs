@@ -19,5 +19,10 @@ namespace Volo.Abp.Authorization.Permissions
         {
             return TaskCache.FalseResult;
         }
+
+        public Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
+        {
+            return Task.FromResult(new MultiplePermissionGrantResult(names, PermissionGrantResult.Prohibited));
+        }
     }
 }

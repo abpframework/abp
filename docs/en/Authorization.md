@@ -234,7 +234,7 @@ context
 
 When you write this code inside your permission definition provider, it finds the "role deletion" permission of the [Identity Module](Modules/Identity.md) and disabled the permission, so no one can delete a role on the application.
 
-> Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined. 
+> Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined.
 
 ## IAuthorizationService
 
@@ -280,21 +280,11 @@ public async Task CreateAsync(CreateAuthorDto input)
 
 ## Check a Permission in JavaScript
 
-You may need to check a policy/permission on the client side.
+See the following documents to learn how to re-use the authorization system on the client side:
 
-### MVC UI
-
-For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API.
-
-**Example: Check if a given permission has been granted for the current user**
-
-```js
-abp.auth.isGranted('MyPermissionName');
-```
-
-### Angular UI
-
-See the [permission management document](UI/Angular/Permission-Management.md) for the Angular UI.
+* [ASP.NET Core MVC / Razor Pages UI: Authorization](UI/AspNetCore/JavaScript-API/Auth.md)
+* [Angular UI Authorization](UI/Angular/Permission-Management.md)
+* [Blazor UI Authorization](UI/Blazor/Authorization.md)
 
 ## Permission Management
 
@@ -354,7 +344,7 @@ public class SystemAdminPermissionValueProvider : PermissionValueProvider
 
     public override string Name => "SystemAdmin";
 
-    public override async Task<PermissionGrantResult>
+    public async override Task<PermissionGrantResult>
            CheckAsync(PermissionValueCheckContext context)
     {
         if (context.Principal?.FindFirst("User_Type")?.Value == "SystemAdmin")
@@ -406,5 +396,5 @@ This is already done for the startup template integration tests.
 ## See Also
 
 * [Permission Management Module](Modules/Permission-Management.md)
-* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](API/JavaScript-API/Auth.md)
+* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](UI/AspNetCore/JavaScript-API/Auth.md)
 * [Permission Management in Angular UI](UI/Angular/Permission-Management.md)

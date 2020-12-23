@@ -1,6 +1,6 @@
 {
   "name": "@abp/utils",
-  "version": "3.3.2",
+  "version": "4.0.1",
   "scripts": {
     "prepublish": "yarn install --ignore-scripts && node prepublish.js",
     "ng": "ng",

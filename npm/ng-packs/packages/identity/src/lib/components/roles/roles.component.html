@@ -51,14 +51,15 @@
               >
                 {{ 'AbpIdentity::Permissions' | abpLocalization }}
               </button>
-              <button
-                *ngIf="!row.isStatic"
-                [abpPermission]="'AbpIdentity.Roles.Delete'"
-                ngbDropdownItem
-                (click)="delete(row.id, row.name)"
-              >
-                {{ 'AbpIdentity::Delete' | abpLocalization }}
-              </button>
+              <ng-container *ngIf="!row.isStatic">
+                <button
+                  *abpPermission="'AbpIdentity.Roles.Delete'"
+                  ngbDropdownItem
+                  (click)="delete(row.id, row.name)"
+                >
+                  {{ 'AbpIdentity::Delete' | abpLocalization }}
+                </button>
+              </ng-container>
             </div>
           </div>
         </ng-template>

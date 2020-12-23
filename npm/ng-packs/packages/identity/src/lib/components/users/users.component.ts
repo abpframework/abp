@@ -1,7 +1,14 @@
 import { ListService } from '@abp/ng.core';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  TemplateRef,
+  TrackByFunction,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -23,14 +30,12 @@ import {
   UpdateUser,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
-import { IdentityRoleService } from '../../proxy/identity/identity-role.service';
 import { IdentityUserService } from '../../proxy/identity/identity-user.service';
 import {
   GetIdentityUsersInput,
   IdentityRoleDto,
   IdentityUserDto,
 } from '../../proxy/identity/models';
-import { IdentityService } from '../../services/identity.service';
 import { IdentityState } from '../../states/identity.state';
 
 @Component({
@@ -78,10 +83,10 @@ export class UsersComponent implements OnInit {
 
   constructor(
     public readonly list: ListService<GetIdentityUsersInput>,
+    private injector: Injector,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
-    private identityService: IdentityService,
     private identityUserService: IdentityUserService,
   ) {}
 
@@ -115,7 +120,7 @@ export class UsersComponent implements OnInit {
         ),
       });
 
-      const passwordValidators = getPasswordValidators(this.store);
+      const passwordValidators = getPasswordValidators(this.injector);
 
       this.form.addControl('password', new FormControl('', [...passwordValidators]));
 

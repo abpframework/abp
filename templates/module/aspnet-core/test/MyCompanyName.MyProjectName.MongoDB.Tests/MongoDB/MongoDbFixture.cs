@@ -10,7 +10,7 @@ namespace MyCompanyName.MyProjectName.MongoDB
 
         static MongoDbFixture()
         {
-            MongoDbRunner = MongoDbRunner.Start();
+            MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 20);
             ConnectionString = MongoDbRunner.ConnectionString;
         }
 

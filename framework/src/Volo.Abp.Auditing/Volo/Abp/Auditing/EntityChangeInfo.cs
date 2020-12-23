@@ -25,13 +25,13 @@ namespace Volo.Abp.Auditing
 
         public List<EntityPropertyChangeInfo> PropertyChanges { get; set; }
 
-        public Dictionary<string, object> ExtraProperties { get; }
+        public ExtraPropertyDictionary ExtraProperties { get; }
 
         public virtual object EntityEntry { get; set; } //TODO: Try to remove since it breaks serializability
 
         public EntityChangeInfo()
         {
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
         }
 
         public virtual void Merge(EntityChangeInfo changeInfo)

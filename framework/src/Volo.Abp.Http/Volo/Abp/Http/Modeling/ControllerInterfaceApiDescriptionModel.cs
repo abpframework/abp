@@ -7,9 +7,9 @@ namespace Volo.Abp.Http.Modeling
     {
         public string Type { get; set; }
 
-        private ControllerInterfaceApiDescriptionModel()
+        public ControllerInterfaceApiDescriptionModel()
         {
-            
+
         }
 
         public static ControllerInterfaceApiDescriptionModel Create(Type type)

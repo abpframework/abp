@@ -1,0 +1,7 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Standard-Sprache",
+    "Description:Abp.Localization.DefaultLanguage": "Die Standard-Sprache der Anwendung."
+  }
+}

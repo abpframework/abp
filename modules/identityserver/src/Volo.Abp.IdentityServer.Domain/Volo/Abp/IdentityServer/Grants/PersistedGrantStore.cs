@@ -44,10 +44,10 @@ namespace Volo.Abp.IdentityServer.Grants
             return ObjectMapper.Map<PersistedGrant, IdentityServer4.Models.PersistedGrant>(persistedGrant);
         }
 
-        public virtual async Task<IEnumerable<IdentityServer4.Models.PersistedGrant>> GetAllAsync(string subjectId)
+        public virtual async Task<IEnumerable<IdentityServer4.Models.PersistedGrant>> GetAllAsync(PersistedGrantFilter filter)
         {
-            var persistedGrants = await PersistentGrantRepository.GetListBySubjectIdAsync(subjectId);
-            return persistedGrants.Select(x => ObjectMapper.Map<PersistedGrant, IdentityServer4.Models.PersistedGrant>(x));
+            var persistedGrants = await PersistentGrantRepository.GetListAsync(filter.SubjectId, filter.SessionId, filter.ClientId, filter.Type);
+            return ObjectMapper.Map<List<PersistedGrant>, List<IdentityServer4.Models.PersistedGrant>>(persistedGrants);
         }
 
         public virtual async Task RemoveAsync(string key)
@@ -61,14 +61,9 @@ namespace Volo.Abp.IdentityServer.Grants
             await PersistentGrantRepository.DeleteAsync(persistedGrant);
         }
 
-        public virtual async Task RemoveAllAsync(string subjectId, string clientId)
+        public virtual async Task RemoveAllAsync(PersistedGrantFilter filter)
         {
-            await PersistentGrantRepository.DeleteAsync(subjectId, clientId);
-        }
-
-        public virtual async Task RemoveAllAsync(string subjectId, string clientId, string type)
-        {
-            await PersistentGrantRepository.DeleteAsync(subjectId, clientId, type);
+            await PersistentGrantRepository.DeleteAsync(filter.SubjectId, filter.SessionId, filter.ClientId, filter.Type);
         }
     }
 }

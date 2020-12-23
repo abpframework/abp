@@ -21,9 +21,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
         public AbpPaginationTagHelperService(
-            IHtmlGenerator generator, 
-            HtmlEncoder encoder, 
-            IAbpTagHelperLocalizer tagHelperLocalizer, 
+            IHtmlGenerator generator,
+            HtmlEncoder encoder,
+            IAbpTagHelperLocalizer tagHelperLocalizer,
             IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             _stringLocalizerFactory = stringLocalizerFactory;
         }
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             if (TagHelper.Model.ShownItemsCount <= 0)
             {

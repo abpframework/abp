@@ -36,6 +36,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
             ));
 
             steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Blazor.Host",
+                projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Host"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
                 "MyCompanyName.MyProjectName.Web.Host",
                 projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Host"
             ));
@@ -50,6 +59,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
 
         private void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            if (context.BuildArgs.ExtraProperties.ContainsKey("no-random-port"))
+            {
+                return;
+            }
+
             steps.Add(new TemplateRandomSslPortStep(new List<string>
             {
                 "https://localhost:44300",
@@ -63,7 +77,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
         {
             steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
         }
-        
+
         private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));

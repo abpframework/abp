@@ -2,6 +2,32 @@
 
 We have released the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/)) `3.3.0-rc.1` today. This blog post introduces the new features and important changes in the new version.
 
+## Get Started with the 3.3 RC.1
+
+If you want to try the version `3.3.0-rc.1` today, follow the steps below;
+
+1) **Upgrade** the ABP CLI to the version `3.3.0-rc.1` using a command line terminal:
+
+````bash
+dotnet tool update Volo.Abp.Cli -g --version 3.3.0-rc.1
+````
+
+**or install** if you haven't installed before:
+
+````bash
+dotnet tool install Volo.Abp.Cli -g --version 3.3.0-rc.1
+````
+
+2) Create a **new application** with the `--preview` option:
+
+````bash
+abp new BookStore --preview
+````
+
+See the [ABP CLI documentation](https://docs.abp.io/en/abp/3.3/CLI) for all the available options.
+
+> You can also use the *Direct Download* tab on the [Get Started](https://abp.io/get-started) page by selecting the Preview checkbox.
+
 ## What's new with the ABP Framework 3.3
 
 ### The Blazor UI
@@ -20,19 +46,19 @@ We are still working on the fundamentals. So, the next version may introduce bre
 
 #### Breaking Changes on the Blazor UI
 
-There are some breaking changes with the Blazor UI. If you've built an application and upgrade it, your application might not properly work. See [the migration guide](https://github.com/abpframework/abp/blob/dev/docs/en/Migration-Guides/BlazorUI-3_3.md) for the changes you need to do after upgrading your application.
+There are some breaking changes with the Blazor UI. If you've built an application and upgrade it, your application might not properly work. See [the migration guide](https://docs.abp.io/en/abp/3.3/Migration-Guides/BlazorUI-3_3) for the changes you need to do after upgrading your application.
 
 ### Automatic Validation for AntiForgery Token for HTTP APIs
 
-Starting with the version 3.3, all your HTTP API endpoints are **automatically protected** against CSRF attacks, unless you disable it for your application.
+Starting with the version 3.3, all your HTTP API endpoints are **automatically protected** against CSRF attacks, unless you disable it for your application. So, no configuration needed, just upgrade the ABP Framework.
 
-[See the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/CSRF-Anti-Forgery.md) to understand why you need it and how ABP Framework solves the problem.
+[See the documentation](https://docs.abp.io/en/abp/3.3/CSRF-Anti-Forgery) to if you want to understand why you need it and how ABP Framework solves the problem.
 
 ### Rebus Integration Package for the Distributed Event Bus
 
 [Rebus](https://github.com/rebus-org/Rebus) describes itself as "Simple and lean service bus implementation for .NET". There are a lot of integration packages like RabbitMQ and Azure Service Bus for the Rebus. The new [Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/Volo.Abp.EventBus.Rebus) package allows you to use the Rebus as the [distributed event bus](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) for the ABP Framework.
 
-See [the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Distributed-Event-Bus-Rebus-Integration.md) to learn how to use Rebus with the ABP Framework.
+See [the documentation](https://docs.abp.io/en/abp/3.3/Distributed-Event-Bus-Rebus-Integration) to learn how to use Rebus with the ABP Framework.
 
 ### Async Repository LINQ Extension Methods
 
@@ -180,7 +206,14 @@ There are still missing features and modules. However, we are working on it to h
 
 #### Breaking Changes on the Blazor UI
 
-There are some breaking changes with the Blazor UI. If you've built an application and upgrade it, your application might not properly work. See the [ABP Commercial Blazor UI v 3.3 Migration Guide](https://github.com/abpio/abp-commercial-docs/blob/dev/en/migration-guides/blazor-ui-3_3.md) for the changes you need to do after upgrading your application.
+There are some breaking changes with the Blazor UI. If you've built an application and upgrade it, your application might not properly work. See the [ABP Commercial Blazor UI v 3.3 Migration Guide](https://docs.abp.io/en/commercial/3.3/migration-guides/blazor-ui-3_3) for the changes you need to do after upgrading your application.
+
+#### Known Issues
+
+When you create a new project, profile management doesn't work, you get an exception because it can't find the `/libs/cropperjs/css/cropper.min.css` file. To fix the issue;
+
+* Add `"@volo/account": "^3.3.0-rc.1"` to the `package.json` in the `.Host` project.
+* Run `yarn` (or `npm install`), then `gulp` on a command line terminal in the root folder of the `.Host` project.
 
 ### Multi-Tenant Social Logins
 
@@ -216,7 +249,7 @@ Besides the new features introduced in this post, we've done a lot of small othe
 
 ## New Articles
 
-The core ABP Framework team & the community continue to publish new articles on the ABP Community web site. The recently published articles are;
+The core ABP Framework team & the community continue to publish new articles on the [ABP Community](https://community.abp.io/) web site. The recently published articles are;
 
 * [Replacing Email Templates and Sending Emails](https://community.abp.io/articles/replacing-email-templates-and-sending-emails-jkeb8zzh) (by [@EngincanV](https://community.abp.io/members/EngincanV))
 * [How to Add Custom Properties to the User Entity](https://community.abp.io/articles/how-to-add-custom-property-to-the-user-entity-6ggxiddr) (by [@berkansasmaz](https://community.abp.io/members/berkansasmaz))

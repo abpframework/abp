@@ -101,7 +101,7 @@ namespace Volo.Docs.Documents
                 input.Version
             );
 
-            if (!JsonConvertExtensions.TryDeserializeObject<NavigationNode>(navigationDocument.Content,
+            if (!DocsJsonSerializerHelper.TryDeserialize<NavigationNode>(navigationDocument.Content,
                 out var navigationNode))
             {
                 throw new UserFriendlyException(
@@ -213,7 +213,7 @@ namespace Volo.Docs.Documents
                     input.Version
                 );
 
-                if (!JsonConvertExtensions.TryDeserializeObject<DocumentParametersDto>(document.Content,out var documentParameters))
+                if (!DocsJsonSerializerHelper.TryDeserialize<DocumentParametersDto>(document.Content,out var documentParameters))
                 {
                     throw new UserFriendlyException(
                         $"Cannot validate document parameters file '{project.ParametersDocumentName}' for the project {project.Name}.");
@@ -247,10 +247,7 @@ namespace Volo.Docs.Documents
                 return await GetDocumentAsync(documentName, project, languageCode, version);
             }
 
-            //Only the latest version (dev) of the document needs to update the cache.
-            if (!project.LatestVersionBranchName.IsNullOrWhiteSpace() &&
-                document.Version == project.LatestVersionBranchName &&
-                document.LastCachedTime + _cacheTimeout < DateTime.Now)
+            if (document.LastCachedTime + _cacheTimeout < DateTime.Now)
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version, document);
             }
