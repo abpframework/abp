@@ -23,7 +23,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken));
         }
@@ -50,7 +50,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
@@ -72,9 +72,15 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                 ).CountAsync(cancellationToken: cancellationToken);
         }
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public override IQueryable<Tenant> WithDetails()
         {
             return GetQueryable().IncludeDetails();
+        }
+
+        public override async Task<IQueryable<Tenant>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }
