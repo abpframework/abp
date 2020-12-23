@@ -63,8 +63,7 @@ While there is no Razor Pages & MongoDB combination, you can check both document
 * **GRPC Demo**: Shows how to add a gRPC service to an ABP Framework based web application and consume it from a console application.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo)
 * **Telerik Blazor Integration**: Shows how to install and use Telerik Blazor components with the ABP Framework.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/DevExpress-Blazor)
-  * [Article](https://community.abp.io/articles/using-devexpress-blazor-ui-components-with-the-abp-framework-wrpoa8rw)
+  * [Article](https://community.abp.io/articles/how-to-integrate-the-telerik-blazor-components-to-the-abp-blazor-ui-q8g31abb)
 * **Angular Material Integration**: Implemented the web application tutorial using the Angular Material library.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/AcmeBookStoreAngularMaterial)
   * [Article](https://community.abp.io/articles/using-angular-material-components-with-the-abp-framework-af8ft6t9)

@@ -133,7 +133,7 @@ namespace System
         {
             if (str.IsNullOrEmpty())
             {
-                return null;
+                return str;
             }
 
             if (postFixes.IsNullOrEmpty())
@@ -174,7 +174,7 @@ namespace System
         {
             if (str.IsNullOrEmpty())
             {
-                return null;
+                return str;
             }
 
             if (preFixes.IsNullOrEmpty())
