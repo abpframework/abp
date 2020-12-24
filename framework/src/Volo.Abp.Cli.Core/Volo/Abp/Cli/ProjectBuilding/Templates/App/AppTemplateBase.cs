@@ -24,6 +24,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
+            RemoveUnnecessaryPorts(context, steps);
             RandomizeSslPorts(context, steps);
             RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
@@ -174,6 +175,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
             }
+        }
+
+        private static void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RemoveUnnecessaryPortsStep());
         }
 
         private static void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
