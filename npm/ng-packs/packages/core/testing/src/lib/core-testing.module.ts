@@ -21,7 +21,7 @@ import { MockLocalizationPipe } from './pipes/mock-localization.pipe';
   declarations: [MockLocalizationPipe],
 })
 export class CoreTestingModule {
-  static forTest(
+  static withConfig(
     { baseHref = '/', routes = [], ...options } = {} as ABP.Test,
   ): ModuleWithProviders<CoreTestingModule> {
     return {
