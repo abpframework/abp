@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -169,27 +168,28 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             await TriggerDomainEventsAsync(entity);
         }
 
-        public override Task<TEntity> FindAsync(
+        public override async Task<TEntity> FindAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable().Where(predicate).SingleOrDefault());
+            return (await GetQueryableAsync()).Where(predicate).SingleOrDefault();
         }
 
-        public async override Task DeleteAsync(
+        public override async Task DeleteAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
-            var entities = GetQueryable().Where(predicate).ToList();
+            var entities = (await GetQueryableAsync()).Where(predicate).ToList();
+
             foreach (var entity in entities)
             {
                 await DeleteAsync(entity, autoSave, cancellationToken);
             }
         }
 
-        public async override Task<TEntity> InsertAsync(
+        public override async Task<TEntity> InsertAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -201,7 +201,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return entity;
         }
 
-        public async override Task<TEntity> UpdateAsync(
+        public override async Task<TEntity> UpdateAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -225,7 +225,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return entity;
         }
 
-        public async override Task DeleteAsync(
+        public override async Task DeleteAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -243,27 +243,27 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             }
         }
 
-        public override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable().ToList());
+            return (await GetQueryableAsync()).ToList();
         }
 
-        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable().LongCount());
+            return (await GetQueryableAsync()).LongCount();
         }
 
-        public override Task<List<TEntity>> GetPagedListAsync(
+        public override async Task<List<TEntity>> GetPagedListAsync(
             int skipCount,
             int maxResultCount,
             string sorting,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable()
+            return (await GetQueryableAsync())
                 .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
-                .ToList());
+                .ToList();
         }
     }
 
@@ -307,9 +307,9 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return entity;
         }
 
-        public virtual Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable().FirstOrDefault(e => e.Id.Equals(id)));
+            return (await GetQueryableAsync()).FirstOrDefault(e => e.Id.Equals(id));
         }
 
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -317,10 +317,10 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             await DeleteAsync(x => x.Id.Equals(id), autoSave, cancellationToken);
         }
 
-        public virtual async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteManyAsync(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entities = await AsyncExecuter.ToListAsync(GetQueryable().Where(x => ids.Contains(x.Id)));
-            DeleteManyAsync(entities, autoSave, cancellationToken);
+            var entities = await AsyncExecuter.ToListAsync((await GetQueryableAsync()).Where(x => ids.Contains(x.Id)), cancellationToken);
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
     }
 }
