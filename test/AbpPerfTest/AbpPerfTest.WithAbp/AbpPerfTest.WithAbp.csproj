@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="4.0.2" />
+        <PackageReference Include="Volo.Abp.Autofac" Version="4.0.2" />
+        <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="4.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+</Project>

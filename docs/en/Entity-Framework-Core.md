@@ -735,6 +735,47 @@ Configure<AbpDbContextOptions>(options =>
 });
 ````
 
+### Customize Bulk Operations
+
+If you have better logic or using an external library for bulk operations, you can override the logic via implementing`IEfCoreBulkOperationProvider`.
+
+- You may use example template below:
+
+```csharp
+public class MyCustomEfCoreBulkOperationProvider : IEfCoreBulkOperationProvider, ITransientDependency
+{
+    public async Task DeleteManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
+                                                            IEnumerable<TEntity> entities,
+                                                            bool autoSave,
+                                                            CancellationToken cancellationToken)
+        where TDbContext : IEfCoreDbContext
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task InsertManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
+                                                            IEnumerable<TEntity> entities,
+                                                            bool autoSave,
+                                                            CancellationToken cancellationToken)
+        where TDbContext : IEfCoreDbContext
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task UpdateManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
+                                                            IEnumerable<TEntity> entities,
+                                                            bool autoSave,
+                                                            CancellationToken cancellationToken)
+        where TDbContext : IEfCoreDbContext
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+}
+```
+
 ## See Also
 
 * [Entities](Entities.md)

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
@@ -15,6 +16,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MongoDB.Volo.Abp.Domain.Repositories.MongoDB;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
@@ -44,6 +46,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         public IGuidGenerator GuidGenerator { get; set; }
 
         public IAuditPropertySetter AuditPropertySetter { get; set; }
+
+        public IMongoDbBulkOperationProvider BulkOperationProvider { get; set; }
 
         public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
         {
@@ -79,6 +83,34 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
 
             return entity;
+        }
+
+        public override async Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            foreach (var entity in entities)
+            {
+                await ApplyAbpConceptsForAddedEntityAsync(entity);
+            }
+
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.InsertManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
+                return;
+            }
+
+            if (SessionHandle != null)
+            {
+                await Collection.InsertManyAsync(
+                    SessionHandle,
+                    entities,
+                    cancellationToken: cancellationToken);
+            }
+            else
+            {
+                await Collection.InsertManyAsync(
+                    entities,
+                    cancellationToken: cancellationToken);
+            }
         }
 
         public async override Task<TEntity> UpdateAsync(
@@ -129,6 +161,59 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
 
             return entity;
+        }
+
+        public override async Task UpdateManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var isSoftDeleteEntity = typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity));
+
+            foreach (var entity in entities)
+            {
+                SetModificationAuditProperties(entity);
+
+                if (isSoftDeleteEntity)
+                {
+                    SetDeletionAuditProperties(entity);
+                    await TriggerEntityDeleteEventsAsync(entity);
+                }
+                else
+                {
+                    await TriggerEntityUpdateEventsAsync(entity);
+                }
+
+                await TriggerDomainEventsAsync(entity);
+
+                SetNewConcurrencyStamp(entity);
+            }
+
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.UpdateManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
+                return;
+            }
+
+            var entitiesCount = entities.Count();
+            BulkWriteResult result;
+
+            List<WriteModel<TEntity>> replaceRequests = new List<WriteModel<TEntity>>();
+            foreach (var entity in entities)
+            {
+                replaceRequests.Add(new ReplaceOneModel<TEntity>(CreateEntityFilter(entity), entity));
+            }
+
+            if (SessionHandle != null)
+            {
+                result = await Collection.BulkWriteAsync(SessionHandle, replaceRequests);
+            }
+            else
+            {
+                result = await Collection.BulkWriteAsync(replaceRequests);
+            }
+
+            if (result.MatchedCount < entitiesCount)
+            {
+                ThrowOptimisticConcurrencyException();
+            }
         }
 
         public async override Task DeleteAsync(
@@ -188,6 +273,73 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 }
 
                 if (result.DeletedCount <= 0)
+                {
+                    ThrowOptimisticConcurrencyException();
+                }
+            }
+        }
+
+        public override async Task DeleteManyAsync(
+            IEnumerable<TEntity> entities,
+            bool autoSave = false,
+            CancellationToken cancellationToken = default)
+        {
+            foreach (var entity in entities)
+            {
+                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+                var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
+            }
+
+            if (BulkOperationProvider != null)
+            {
+                await BulkOperationProvider.DeleteManyAsync(this, entities, SessionHandle, autoSave, cancellationToken);
+                return;
+            }
+
+            var entitiesCount = entities.Count();
+
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            {
+                UpdateResult updateResult;
+                if (SessionHandle != null)
+                {
+                    updateResult = await Collection.UpdateManyAsync(
+                        SessionHandle,
+                        CreateEntitiesFilter(entities),
+                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
+                        );
+                }
+                else
+                {
+                    updateResult = await Collection.UpdateManyAsync(
+                        CreateEntitiesFilter(entities),
+                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
+                        );
+                }
+
+                if (updateResult.MatchedCount < entitiesCount)
+                {
+                    ThrowOptimisticConcurrencyException();
+                }
+            }
+            else
+            {
+                DeleteResult deleteResult;
+                if (SessionHandle != null)
+                {
+                    deleteResult = await Collection.DeleteManyAsync(
+                        SessionHandle,
+                        CreateEntitiesFilter(entities)
+                        );
+                }
+                else
+                {
+                    deleteResult = await Collection.DeleteManyAsync(
+                        CreateEntitiesFilter(entities)
+                        );
+                }
+
+                if (deleteResult.DeletedCount < entitiesCount)
                 {
                     ThrowOptimisticConcurrencyException();
                 }
@@ -268,6 +420,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             throw new NotImplementedException(
                 $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
             );
+        }
+
+        protected virtual FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
+        {
+            throw new NotImplementedException(
+              $"{nameof(CreateEntitiesFilter)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
+          );
         }
 
         protected virtual async Task ApplyAbpConceptsForAddedEntityAsync(TEntity entity)
@@ -477,9 +636,23 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return DeleteAsync(x => x.Id.Equals(id), autoSave, cancellationToken);
         }
 
+        public virtual async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var entities = await GetMongoQueryable()
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
+        }
+
         protected override FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
         {
             return RepositoryFilterer.CreateEntityFilter(entity, withConcurrencyStamp, concurrencyStamp);
+        }
+
+        protected override FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
+        {
+            return RepositoryFilterer.CreateEntitiesFilter(entities, withConcurrencyStamp);
         }
     }
 }
