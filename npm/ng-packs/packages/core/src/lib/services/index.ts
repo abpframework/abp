@@ -13,6 +13,7 @@ export * from './permission.service';
 export * from './profile-state.service';
 export * from './profile.service';
 export * from './replaceable-components.service';
+export * from './resource-wait.service';
 export * from './rest.service';
 export * from './router-wait.service';
 export * from './routes.service';
