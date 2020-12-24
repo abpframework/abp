@@ -11,8 +11,8 @@ using Volo.CmsKit.EntityFrameworkCore;
 namespace Volo.CmsKit.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20201224075340_Added_ContentAndTags")]
-    partial class Added_ContentAndTags
+    [Migration("20201224140744_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1251,17 +1251,17 @@ namespace Volo.CmsKit.Migrations
 
             modelBuilder.Entity("Volo.CmsKit.Tags.EntityTag", b =>
                 {
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TenantId");
-
-                    b.Property<Guid>("EntityId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("EntityId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("TagId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TenantId", "EntityId", "TagId");
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("EntityId", "TagId");
 
                     b.HasIndex("TenantId", "EntityId", "TagId");
 
@@ -1306,7 +1306,6 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("ExtraProperties");
 
                     b.Property<string>("HexColor")
-                        .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
