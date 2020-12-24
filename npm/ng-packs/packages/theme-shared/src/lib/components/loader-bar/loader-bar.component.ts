@@ -106,7 +106,6 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     this.progressLevel = 0;
     this.interval = timer(0, this.intervalPeriod).subscribe(this.reportProgress);
     this.timer.unsubscribe();
-    this.cdRef.detectChanges();
   }
 
   stopLoading() {
