@@ -312,8 +312,24 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         [Obsolete("Use WithDetailsAsync method.")]
         public override IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
-            var query = GetQueryable();
+            return IncludeDetails(
+                GetQueryable(),
+                propertySelectors
+            );
+        }
 
+        public override async Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return IncludeDetails(
+                await GetQueryableAsync(),
+                propertySelectors
+            );
+        }
+
+        private static IQueryable<TEntity> IncludeDetails(
+            IQueryable<TEntity> query,
+            Expression<Func<TEntity, object>>[] propertySelectors)
+        {
             if (!propertySelectors.IsNullOrEmpty())
             {
                 foreach (var propertySelector in propertySelectors)
