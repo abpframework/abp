@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Contents;
@@ -9,6 +11,21 @@ namespace Volo.CmsKit.MongoDB.Contents
     {
         public MongoContentRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
+        }
+
+        public Task<Content> FindAsync(
+            string entityType,
+            string entityId,
+            Guid? tenantId = null,
+            CancellationToken cancellationToken = default)
+        {
+            return FindAsync(x =>
+                    !x.IsDeleted &&
+                    x.EntityType == entityType &&
+                    x.EntityId == entityId &&
+                    x.TenantId == tenantId,
+                cancellationToken: cancellationToken
+                );
         }
     }
 }

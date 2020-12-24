@@ -12,5 +12,12 @@ namespace Volo.CmsKit
     )]
     public class CmsKitCommonApplicationModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddMaps<CmsKitCommonApplicationModule>(validate: true);
+            });
+        }
     }
 }
