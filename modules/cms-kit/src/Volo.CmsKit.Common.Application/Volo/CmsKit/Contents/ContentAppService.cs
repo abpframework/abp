@@ -9,14 +9,14 @@ namespace Volo.CmsKit.Contents
 {
     public class ContentAppService : CmsKitAppServiceBase, IContentAppService
     {
-        private readonly IContentRepository _contentRepository;
+        protected readonly IContentRepository ContentRepository;
 
         public ContentAppService(IContentRepository contentRepository)
         {
-            _contentRepository = contentRepository;
+            ContentRepository = contentRepository;
         }
 
-        public async Task<ContentDto> GetAsync(GetContentInput input)
+        public virtual async Task<ContentDto> GetAsync(GetContentInput input)
         {
             var entity = await _contentRepository.FindAsync(
                 input.EntityType,
