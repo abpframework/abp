@@ -55,6 +55,9 @@
     "BackToLogin": "返回登錄",
     "ProfileTab:Password": "更改密碼",
     "ProfileTab:PersonalInfo": "個人信息",
-    "ReturnToApplication": "返回到應用程序"
+    "ReturnToApplication": "返回到應用程序",
+    "PasswordReset": "重設密碼",
+    "PasswordResetInfoInEmail": "我們收到了帳戶恢復請求!如果你發起了此請求,請單擊以下鏈接以重置密碼.",
+    "ResetMyPassword": "重置我的密碼"
   }
 }
