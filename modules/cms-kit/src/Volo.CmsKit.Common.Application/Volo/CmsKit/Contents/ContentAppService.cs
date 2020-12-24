@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.CmsKit.Common.Application.Contracts.Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Contents
 {
@@ -15,9 +16,12 @@ namespace Volo.CmsKit.Contents
             _contentRepository = contentRepository;
         }
 
-        public async Task<ContentDto> GetAsync(string entityType, string entityId)
+        public async Task<ContentDto> GetAsync(GetContentInput input)
         {
-            var entity = await _contentRepository.FindAsync(entityType, entityId); // Tenant???
+            var entity = await _contentRepository.FindAsync(
+                input.EntityType,
+                input.EntityId,
+                CurrentTenant.Id);
 
             return ObjectMapper.Map<Content, ContentDto>(entity);
         }

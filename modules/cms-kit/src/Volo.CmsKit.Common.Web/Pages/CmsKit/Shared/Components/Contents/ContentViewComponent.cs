@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+using Volo.CmsKit.Common.Application.Contracts.Volo.CmsKit.Contents;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Web.Contents;
 
@@ -30,7 +31,12 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
             string entityType,
             string entityId)
         {
-            var content = await contentAppService.GetAsync(entityType, entityId);
+            var content = await contentAppService.GetAsync(new GetContentInput
+            {
+                EntityId = entityId,
+                EntityType = entityType
+            });
+
             var viewModel = new ContentViewModel
             {
                 EntityId = entityId,
