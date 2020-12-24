@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
@@ -20,13 +22,16 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
         public UnitOfWorkDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
-            IConnectionStringResolver connectionStringResolver)
+            IConnectionStringResolver connectionStringResolver,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
+            _cancellationTokenProvider = cancellationTokenProvider;
 
             Logger = NullLogger<UnitOfWorkDbContextProvider<TDbContext>>.Instance;
         }
@@ -194,8 +199,8 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
 
                 var dbTransaction = unitOfWork.Options.IsolationLevel.HasValue
-                    ? await dbContext.Database.BeginTransactionAsync(unitOfWork.Options.IsolationLevel.Value)
-                    : await dbContext.Database.BeginTransactionAsync();
+                    ? await dbContext.Database.BeginTransactionAsync(unitOfWork.Options.IsolationLevel.Value, GetCancellationToken())
+                    : await dbContext.Database.BeginTransactionAsync(GetCancellationToken());
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
@@ -215,17 +220,22 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
                 if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
-                    await dbContext.Database.UseTransactionAsync(activeTransaction.DbContextTransaction.GetDbTransaction());
+                    await dbContext.Database.UseTransactionAsync(activeTransaction.DbContextTransaction.GetDbTransaction(), GetCancellationToken());
                 }
                 else
                 {
-                    await dbContext.Database.BeginTransactionAsync(); //TODO: Why not using the new created transaction?
+                    await dbContext.Database.BeginTransactionAsync(GetCancellationToken()); //TODO: Why not using the new created transaction?
                 }
 
                 activeTransaction.AttendedDbContexts.Add(dbContext);
 
                 return dbContext;
             }
+        }
+
+        protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
+        {
+            return _cancellationTokenProvider.FallbackToProvider(preferredValue);
         }
     }
 }

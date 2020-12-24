@@ -6,6 +6,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.MongoDB
 {
@@ -14,13 +15,16 @@ namespace Volo.Abp.Uow.MongoDB
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
         public UnitOfWorkMongoDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
-            IConnectionStringResolver connectionStringResolver)
+            IConnectionStringResolver connectionStringResolver,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
+            _cancellationTokenProvider = cancellationTokenProvider;
         }
 
         [Obsolete("Use CreateDbContextAsync")]
@@ -183,7 +187,7 @@ namespace Volo.Abp.Uow.MongoDB
 
             if (activeTransaction?.SessionHandle == null)
             {
-                var session = await client.StartSessionAsync(cancellationToken: cancellationToken);
+                var session = await client.StartSessionAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
                 if (unitOfWork.Options.Timeout.HasValue)
                 {
@@ -205,6 +209,11 @@ namespace Volo.Abp.Uow.MongoDB
             }
 
             return dbContext;
+        }
+
+        protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
+        {
+            return _cancellationTokenProvider.FallbackToProvider(preferredValue);
         }
     }
 }
