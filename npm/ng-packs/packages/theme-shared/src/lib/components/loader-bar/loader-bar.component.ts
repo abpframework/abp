@@ -41,9 +41,9 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
   progressLevel = 0;
 
-  interval: Subscription;
+  interval = new Subscription();
 
-  timer: Subscription;
+  timer = new Subscription();
 
   intervalPeriod = 350;
 
@@ -94,11 +94,11 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    if (this.interval) this.interval.unsubscribe();
+    this.interval.unsubscribe();
   }
 
   startLoading() {
-    if (this.isLoading || (this.interval && !this.interval.closed)) return;
+    if (this.isLoading || !this.interval.closed) return;
 
     this.isLoading = true;
     this.progressLevel = 0;
@@ -107,12 +107,12 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   }
 
   stopLoading() {
-    if (this.interval) this.interval.unsubscribe();
+    this.interval.unsubscribe();
 
     this.progressLevel = 100;
     this.isLoading = false;
 
-    if (this.timer && !this.timer.closed) return;
+    if (!this.timer.closed) return;
 
     this.timer = timer(this.stopDelay).subscribe(this.clearProgress);
   }
