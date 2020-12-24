@@ -18,7 +18,7 @@ namespace Volo.CmsKit.Contents
 
         public virtual async Task<ContentDto> GetAsync(GetContentInput input)
         {
-            var entity = await _contentRepository.FindAsync(
+            var entity = await ContentRepository.FindAsync(
                 input.EntityType,
                 input.EntityId,
                 CurrentTenant.Id);
