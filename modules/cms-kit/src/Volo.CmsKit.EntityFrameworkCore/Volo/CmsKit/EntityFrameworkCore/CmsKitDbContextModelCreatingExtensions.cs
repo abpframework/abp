@@ -117,7 +117,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 
                 b.Property(x => x.EntityType).IsRequired().HasMaxLength(TagConsts.MaxEntityTypeLength);
                 b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength);
-                b.Property(x => x.HexColor).IsRequired().HasMaxLength(TagConsts.MaxColorHexLength);
+                b.Property(x => x.HexColor).HasMaxLength(TagConsts.MaxColorHexLength);
                 
                 b.HasIndex(x => new { x.TenantId, x.Name });
             });
@@ -128,7 +128,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 
                 b.ConfigureByConvention();
 
-                b.HasKey(x => new { x.TenantId, x.EntityId, x.TagId });
+                b.HasKey(x => new { x.EntityId, x.TagId });
                 
                 b.Property(x => x.EntityId).IsRequired();
                 b.Property(x => x.TagId).IsRequired();

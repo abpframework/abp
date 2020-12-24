@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using MongoDB.Driver.Linq;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
@@ -53,6 +54,11 @@ namespace Volo.CmsKit.MongoDB.Tags
                 x.Name == name &&
                 x.TenantId == tenantId,
                cancellationToken: cancellationToken);
+        }
+
+        public Task<List<Tag>> GetAllRelatedTagsAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }

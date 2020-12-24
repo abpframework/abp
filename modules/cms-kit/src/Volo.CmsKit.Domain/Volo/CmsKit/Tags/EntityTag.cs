@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Tags
     {
         public virtual Guid TagId { get; set; }
 
-        public virtual Guid EntityId { get; set; }
+        public virtual string EntityId { get; set; }
         
         public virtual Guid? TenantId { get; }
         
@@ -16,7 +16,7 @@ namespace Volo.CmsKit.Tags
         {
         }
 
-        public EntityTag(Guid tagId, Guid entityId, Guid? tenantId = null)
+        public EntityTag(Guid tagId, string entityId, Guid? tenantId = null)
         {
             TagId = tagId;
             EntityId = entityId;
@@ -25,7 +25,7 @@ namespace Volo.CmsKit.Tags
 
         public override object[] GetKeys()
         {
-            return new object[] { TagId, EntityId, TenantId };
+            return new object[] { TagId, EntityId };
         }
 
     }
