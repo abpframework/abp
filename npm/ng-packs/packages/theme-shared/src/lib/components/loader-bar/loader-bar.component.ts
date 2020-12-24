@@ -1,9 +1,7 @@
-import { SubscriptionService } from '@abp/ng.core';
+import { SubscriptionService, HttpWaitService, RouterWaitService } from '@abp/ng.core';
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { combineLatest, Subscription, timer } from 'rxjs';
-import { RouterWaitService } from '../../../../../core/src/lib/services/router-wait.service';
-import { HttpWaitService } from '../../../../../core/src/lib/services/http-wait.service';
 
 @Component({
   selector: 'abp-loader-bar',
