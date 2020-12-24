@@ -80,12 +80,12 @@ namespace Volo.Abp.Application.Services
             Repository = repository;
         }
 
-        protected async override Task DeleteByIdAsync(TKey id)
+        protected override async Task DeleteByIdAsync(TKey id)
         {
             await Repository.DeleteAsync(id);
         }
 
-        protected async override Task<TEntity> GetEntityByIdAsync(TKey id)
+        protected override async Task<TEntity> GetEntityByIdAsync(TKey id)
         {
             return await Repository.GetAsync(id);
         }
