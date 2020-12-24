@@ -71,7 +71,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             }
 
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-            var connectionString = _connectionStringResolver.Resolve(connectionStringName);
+            var connectionString = await _connectionStringResolver.ResolveAsync(connectionStringName);
 
             var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
 

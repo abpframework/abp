@@ -64,7 +64,7 @@ namespace Volo.Abp.Uow.MongoDB
                     $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
             }
 
-            var connectionString = _connectionStringResolver.Resolve<TMongoDbContext>();
+            var connectionString = await _connectionStringResolver.ResolveAsync<TMongoDbContext>();
             var dbContextKey = $"{typeof(TMongoDbContext).FullName}_{connectionString}";
 
             var mongoUrl = new MongoUrl(connectionString);

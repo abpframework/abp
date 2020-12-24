@@ -28,12 +28,14 @@ namespace Volo.Abp.TenantManagement.MongoDB
                 .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken));
         }
 
+        [Obsolete("Use FindByNameAsync method.")]
         public virtual Tenant FindByName(string name, bool includeDetails = true)
         {
             return GetMongoQueryable()
                 .FirstOrDefault(t => t.Name == name);
         }
 
+        [Obsolete("Use FindAsync method.")]
         public virtual Tenant FindById(Guid id, bool includeDetails = true)
         {
             return GetMongoQueryable()

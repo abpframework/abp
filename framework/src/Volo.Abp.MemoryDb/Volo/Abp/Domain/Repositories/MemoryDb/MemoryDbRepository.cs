@@ -21,9 +21,21 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
     {
         //TODO: Add dbcontext just like mongodb implementation!
 
+        [Obsolete("Use GetCollectionAsync method.")]
         public virtual IMemoryDatabaseCollection<TEntity> Collection => Database.Collection<TEntity>();
 
+        public async Task<IMemoryDatabaseCollection<TEntity>> GetCollectionAsync()
+        {
+            return (await GetDatabaseAsync()).Collection<TEntity>();
+        }
+
+        [Obsolete("Use GetDatabaseAsync method.")]
         public virtual IMemoryDatabase Database => DatabaseProvider.GetDatabase();
+
+        public Task<IMemoryDatabase> GetDatabaseAsync()
+        {
+            return DatabaseProvider.GetDatabaseAsync();
+        }
 
         protected IMemoryDatabaseProvider<TMemoryDbContext> DatabaseProvider { get; }
 
@@ -52,9 +64,9 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return ApplyDataFilters(Collection.AsQueryable());
         }
 
-        public override Task<IQueryable<TEntity>> GetQueryableAsync()
+        public override async Task<IQueryable<TEntity>> GetQueryableAsync()
         {
-            return Task.FromResult(ApplyDataFilters(Collection.AsQueryable()));
+            return ApplyDataFilters((await GetCollectionAsync()).AsQueryable());
         }
 
         protected virtual async Task TriggerDomainEventsAsync(object entity)
@@ -196,7 +208,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
             await ApplyAbpConceptsForAddedEntityAsync(entity);
 
-            Collection.Add(entity);
+            (await GetCollectionAsync()).Add(entity);
 
             return entity;
         }
@@ -220,7 +232,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
             await TriggerDomainEventsAsync(entity);
 
-            Collection.Update(entity);
+            (await GetCollectionAsync()).Update(entity);
 
             return entity;
         }
@@ -235,11 +247,11 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
             {
                 softDeleteEntity.IsDeleted = true;
-                Collection.Update(entity);
+                (await GetCollectionAsync()).Update(entity);
             }
             else
             {
-                Collection.Remove(entity);
+                (await GetCollectionAsync()).Remove(entity);
             }
         }
 
@@ -276,13 +288,13 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
         }
 
-        public override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            SetIdIfNeeded(entity);
-            return base.InsertAsync(entity, autoSave, cancellationToken);
+            await SetIdIfNeededAsync(entity);
+            return await base.InsertAsync(entity, autoSave, cancellationToken);
         }
 
-        protected virtual void SetIdIfNeeded(TEntity entity)
+        protected virtual async Task SetIdIfNeededAsync(TEntity entity)
         {
             if (typeof(TKey) == typeof(int) ||
                 typeof(TKey) == typeof(long) ||
@@ -290,7 +302,8 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             {
                 if (EntityHelper.HasDefaultId(entity))
                 {
-                    EntityHelper.TrySetId(entity, () => Database.GenerateNextId<TEntity, TKey>());
+                    var nextId = (await GetDatabaseAsync()).GenerateNextId<TEntity, TKey>();
+                    EntityHelper.TrySetId(entity, () => nextId);
                 }
             }
         }
