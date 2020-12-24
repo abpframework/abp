@@ -8,16 +8,16 @@ namespace Volo.CmsKit.Contents
 {
     public class ContentAppService : CmsKitAppServiceBase, IContentAppService
     {
-        private readonly IContentRepository _contentRepository;
+        protected readonly IContentRepository ContentRepository;
 
         public ContentAppService(IContentRepository contentRepository)
         {
-            _contentRepository = contentRepository;
+            ContentRepository = contentRepository;
         }
 
-        public async Task<ContentDto> GetAsync(string entityType, string entityId)
+        public virtual async Task<ContentDto> GetAsync(string entityType, string entityId)
         {
-            var entity = await _contentRepository.FindAsync(entityType, entityId); // Tenant???
+            var entity = await ContentRepository.FindAsync(entityType, entityId); // Tenant???
 
             return ObjectMapper.Map<Content, ContentDto>(entity);
         }
