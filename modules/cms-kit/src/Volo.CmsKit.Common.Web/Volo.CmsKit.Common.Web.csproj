@@ -35,4 +35,8 @@
         <Content Remove="Components\**\*.css" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Pages\CmsKit\Shared\Components\Tags\default.css" />
+    </ItemGroup>
+
 </Project>
