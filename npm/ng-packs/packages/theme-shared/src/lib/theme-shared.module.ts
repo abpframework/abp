@@ -69,12 +69,16 @@ export class BaseThemeSharedModule {}
   exports: [BaseThemeSharedModule],
 })
 export class ThemeSharedModule {
-  constructor(private errorHandler: ErrorHandler) {}
-
   static forRoot(options = {} as RootParams): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
       providers: [
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [ErrorHandler],
+          useFactory: noop,
+        },
         THEME_SHARED_ROUTE_PROVIDERS,
         {
           provide: APP_INITIALIZER,
