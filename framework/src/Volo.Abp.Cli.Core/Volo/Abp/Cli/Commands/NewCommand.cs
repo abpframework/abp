@@ -208,6 +208,7 @@ namespace Volo.Abp.Cli.Commands
         private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
         {
             uiFramework = uiFramework == UiFramework.NotSpecified || uiFramework == UiFramework.None ? UiFramework.Mvc : uiFramework;
+            databaseProvider = databaseProvider == DatabaseProvider.NotSpecified ? DatabaseProvider.EntityFrameworkCore : databaseProvider;
 
             var urlPrefix = commercial ? "commercial" : "www";
             var tieredYesNo = tiered ? "yes" : "no";
