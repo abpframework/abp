@@ -26,8 +26,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected bool HasManagePermissionsPermission { get; set; }
 
-        [Inject]
-        protected IOptions<AbpPageToolbarOptions> ToolbarOptions { get; set; }
+        protected PageToolbar Toolbar { get; set; }
+        
+        private List<TableColumn> RoleManagementTableColumns => TableColumns.Get<RoleManagement>();
 
         public RoleManagement()
         {
@@ -38,23 +39,26 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             UpdatePolicyName = IdentityPermissions.Roles.Update;
             DeletePolicyName = IdentityPermissions.Roles.Delete;
             ManagePermissionsPolicyName = IdentityPermissions.Roles.ManagePermissions;
+            Toolbar = new PageToolbar();
         }
 
         protected override ValueTask SetEntityActionsAsync()
         {
-            UIExtensions.Instance
-                .EntityActions
+            EntityActions
                 .Get<RoleManagement>()
-                .AddIfNotContains(new EntityAction[]
+                .AddRange(new EntityAction[]
                 {
                     new EntityAction
                     {
                         Text = L["Edit"],
                         RequiredPolicy = UpdatePolicyName,
-                        Clicked = async (data) => await OpenEditModalAsync(data.As<IdentityRoleDto>())
+                        Clicked = async (data) =>
+                        {
+                            await OpenEditModalAsync(data.As<IdentityRoleDto>());
+                        }
                     },
                     new EntityAction
-                    {
+                    { 
                         Text = L["Permissions"],
                         RequiredPolicy = ManagePermissionsPolicyName,
                         Clicked = async (data) =>
@@ -77,15 +81,14 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override ValueTask SetTableColumnsAsync()
         {
-            UIExtensions.Instance
-                .TableColumns
+            TableColumns
                 .Get<RoleManagement>()
-                .AddIfNotContains(new TableColumn[]
+                .AddRange(new TableColumn[]
                 {
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = UIExtensions.Instance.EntityActions.Get<RoleManagement>()
+                        Actions = EntityActions.Get<RoleManagement>()
                     },
                     new TableColumn
                     {
@@ -151,10 +154,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override ValueTask SetToolbarItemsAsync()
         {
-            ToolbarOptions.Value.Configure<RoleManagement>(toolbar =>
-            {
-                toolbar.AddButton(L["NewRole"], OpenCreateModalAsync, IconName.Add, requiredPolicyName: CreatePolicyName);
-            });
+            Toolbar.AddButton(L["NewRole"], OpenCreateModalAsync, IconName.Add,
+                requiredPolicyName: CreatePolicyName);
 
             return base.SetToolbarItemsAsync();
         }

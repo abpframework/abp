@@ -30,15 +30,16 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected AssignedRoleViewModel[] EditUserRoles;
 
         protected string ManagePermissionsPolicyName;
-
+        
         protected bool HasManagePermissionsPermission { get; set; }
 
         protected string CreateModalSelectedTab = DefaultSelectedTab;
 
         protected string EditModalSelectedTab = DefaultSelectedTab;
 
-        [Inject]
-        protected IOptions<AbpPageToolbarOptions> ToolbarOptions { get; set; }
+        protected PageToolbar Toolbar { get; set; }
+
+        private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
 
         public UserManagement()
         {
@@ -49,6 +50,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             UpdatePolicyName = IdentityPermissions.Users.Update;
             DeletePolicyName = IdentityPermissions.Users.Delete;
             ManagePermissionsPolicyName = IdentityPermissions.Users.ManagePermissions;
+            Toolbar = new PageToolbar();
         }
 
         protected override async Task OnInitializedAsync()
@@ -62,7 +64,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         {
             await base.SetPermissionsAsync();
 
-            HasManagePermissionsPermission = await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
+            HasManagePermissionsPermission =
+                await AuthorizationService.IsGrantedAsync(IdentityPermissions.Users.ManagePermissions);
         }
 
         protected override Task OpenCreateModalAsync()
@@ -116,10 +119,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override ValueTask SetEntityActionsAsync()
         {
-            UIExtensions.Instance
-                .EntityActions
+            EntityActions
                 .Get<UserManagement>()
-                .AddIfNotContains(new EntityAction[]
+                .AddRange(new EntityAction[]
                 {
                     new EntityAction
                     {
@@ -151,15 +153,14 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override ValueTask SetTableColumnsAsync()
         {
-            UIExtensions.Instance
-                .TableColumns
+            TableColumns
                 .Get<UserManagement>()
-                .AddIfNotContains(new TableColumn[]
+                .AddRange(new TableColumn[]
                 {
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = UIExtensions.Instance.EntityActions.Get<UserManagement>()
+                        Actions = EntityActions.Get<UserManagement>()
                     },
                     new TableColumn
                     {
@@ -189,11 +190,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override ValueTask SetToolbarItemsAsync()
         {
-            ToolbarOptions.Value.Configure<UserManagement>(toolbar =>
-            {
-                toolbar.AddButton(L["NewUser"], OpenCreateModalAsync, IconName.Add, requiredPolicyName: CreatePolicyName);
-            });
-
+            Toolbar.AddButton(L["NewUser"], OpenCreateModalAsync, IconName.Add,
+                    requiredPolicyName: CreatePolicyName);
+            
             return base.SetToolbarItemsAsync();
         }
     }

@@ -10,48 +10,51 @@
           ShowPager="@ShowPager"
           PageSize="@PageSize">
     <DataGridColumns>
-        @foreach (var column in UIExtensions.Instance.TableColumns.Get(Page))
+        @if (Columns != null)
         {
-            if (column.Actions.Any())
+            @foreach (var column in Columns)
             {
-                <DataGridEntityActionsColumn TItem="TItem" @ref="ActionColumns[column.Title]" Caption="@column.Title">
-                    <DisplayTemplate>
-                        <EntityActions TItem="TItem" EntityActionsColumn="ActionColumns[column.Title]">
-                            @foreach (var action in column.Actions)
-                            {
-                                if (action.ConfirmationMessage != null)
-                                {
-                                    <EntityAction TItem="TItem"
-                                                  RequiredPolicy="@action.RequiredPolicy"
-                                                  Clicked="async () => await action.Clicked(context)"
-                                                  ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
-                                                  Text="@action.Text"></EntityAction>
-                                }
-                                else
-                                {
-                                    <EntityAction TItem="TItem"
-                                                  RequiredPolicy="@action.RequiredPolicy"
-                                                  Clicked="async () => await action.Clicked(context)"
-                                                  Text="@action.Text"></EntityAction>
-                                }
-                            }
-                        </EntityActions>
-                    </DisplayTemplate>
-                </DataGridEntityActionsColumn>
-            }
-            else
-            {
-                @if (column.Render != null)
+                if (column.Actions.Any())
                 {
-                    <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title">
+                    <DataGridEntityActionsColumn TItem="TItem" @ref="ActionColumns[column.Title]" Caption="@column.Title">
                         <DisplayTemplate>
-                            @column.Render.Invoke(context)
+                            <EntityActions TItem="TItem" EntityActionsColumn="ActionColumns[column.Title]">
+                                @foreach (var action in column.Actions)
+                                {
+                                    if (action.ConfirmationMessage != null)
+                                    {
+                                        <EntityAction TItem="TItem"
+                                                      RequiredPolicy="@action.RequiredPolicy"
+                                                      Clicked="async () => await action.Clicked(context)"
+                                                      ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
+                                                      Text="@action.Text"></EntityAction>
+                                    }
+                                    else
+                                    {
+                                        <EntityAction TItem="TItem"
+                                                      RequiredPolicy="@action.RequiredPolicy"
+                                                      Clicked="async () => await action.Clicked(context)"
+                                                      Text="@action.Text"></EntityAction>
+                                    }
+                                }
+                            </EntityActions>
                         </DisplayTemplate>
-                    </DataGridColumn>
+                    </DataGridEntityActionsColumn>
                 }
                 else
                 {
-                    <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" />
+                    @if (column.Render != null)
+                    {
+                        <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title">
+                            <DisplayTemplate>
+                                @column.Render.Invoke(context)
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    }
+                    else
+                    {
+                        <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title"/>
+                    }
                 }
             }
         }

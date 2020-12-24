@@ -26,7 +26,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         public int PageSize { get; set; }
 
         [Parameter] 
-        public Type Page { get; set; }        
+        public IEnumerable<TableColumn> Columns { get; set; }        
 
     }
 }

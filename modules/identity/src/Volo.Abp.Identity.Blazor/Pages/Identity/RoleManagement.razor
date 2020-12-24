@@ -15,18 +15,18 @@
         @* ************************* PAGE HEADER ************************* *@
         <Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout.PageHeader Title="@L["Roles"]" 
                                                                               BreadcrumbItems="@BreadcrumbItems" 
-                                                                              PageName="@typeof(RoleManagement).FullName">
+                                                                              Toolbar="@Toolbar">
         </Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout.PageHeader>
     </CardHeader>
     <CardBody>
         @* ************************* DATA GRID ************************* *@
         <AbpExtensibleDataGrid TItem="IdentityRoleDto"
-                     Data="Entities"
-                     ReadData="OnDataGridReadAsync"
-                     TotalItems="TotalCount"
+                     Data="@Entities"
+                     ReadData="@OnDataGridReadAsync"
+                     TotalItems="@TotalCount"
                      ShowPager="true"
-                     PageSize="PageSize"
-                     Page="typeof(RoleManagement)">
+                     PageSize="@PageSize"
+                     Columns="@RoleManagementTableColumns">
         </AbpExtensibleDataGrid>
     </CardBody>
 </Card>

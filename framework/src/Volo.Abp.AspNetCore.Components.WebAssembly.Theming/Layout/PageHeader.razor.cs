@@ -26,23 +26,24 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout
 
         [Parameter]
         public List<BlazoriseUI.BreadcrumbItem> BreadcrumbItems { get; set; }
+        
+        [Parameter] 
+        public PageToolbar Toolbar { get; set; }
 
         [Parameter]
         public string PageName { get; set; }
 
-
-        public PageHeader(IPageToolbarManager pageToolbarManager)
+        public PageHeader()
         {
             BreadcrumbItems = new List<BlazoriseUI.BreadcrumbItem>();
             ToolbarItemRenders = new List<RenderFragment>();
-            PageToolbarManager = pageToolbarManager;
         }
 
         protected override async Task OnInitializedAsync()
         {
-            if (!PageName.IsNullOrEmpty())
+            if (Toolbar!=null)
             {
-                var toolbarItems = await PageToolbarManager.GetItemsAsync(PageName);
+                var toolbarItems = await PageToolbarManager.GetItemsAsync(Toolbar);
 
                 ToolbarItemRenders.Clear();
 

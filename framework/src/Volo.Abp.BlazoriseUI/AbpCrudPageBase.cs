@@ -14,6 +14,8 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
+using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
+using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
@@ -190,6 +192,8 @@ namespace Volo.Abp.BlazoriseUI
         protected Validations EditValidationsRef;
         protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
         protected DataGridEntityActionsColumn<TListViewModel> EntityActionsColumn;
+        protected EntityActionDictionary EntityActions { get; set; }
+        protected TableColumnDictionary TableColumns { get; set; }
 
         protected string CreatePolicyName { get; set; }
         protected string UpdatePolicyName { get; set; }
@@ -203,13 +207,15 @@ namespace Volo.Abp.BlazoriseUI
         {
             NewEntity = new TCreateViewModel();
             EditingEntity = new TUpdateViewModel();
+            TableColumns = new TableColumnDictionary();
+            EntityActions = new EntityActionDictionary();
         }
 
         protected override async Task OnInitializedAsync()
         {
-            await SetToolbarItemsAsync();
             await SetEntityActionsAsync();
             await SetTableColumnsAsync();
+            await SetToolbarItemsAsync();
             await SetBreadcrumbItemsAsync();
             await SetPermissionsAsync();
         }
@@ -420,6 +426,7 @@ namespace Volo.Abp.BlazoriseUI
 
             await AppService.DeleteAsync(entity.Id);
             await GetEntitiesAsync();
+            await InvokeAsync(() => StateHasChanged());
         }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)

@@ -12,7 +12,7 @@
         @* ************************* PAGE HEADER ************************* *@
         <Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout.PageHeader Title="@L["Users"]"
                                                                               BreadcrumbItems="@BreadcrumbItems"
-                                                                              PageName="@typeof(UserManagement).FullName">
+                                                                              Toolbar="@Toolbar">
         </Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout.PageHeader>
     </CardHeader>
     <CardBody>
@@ -23,7 +23,7 @@
                              TotalItems="TotalCount"
                              ShowPager="true"
                              PageSize="PageSize"
-                             Page="typeof(UserManagement)">
+                             Columns="@UserManagementTableColumns">
         </AbpExtensibleDataGrid>
     </CardBody>
 </Card>
