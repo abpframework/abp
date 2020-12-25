@@ -5,6 +5,8 @@ namespace Volo.CmsKit.Pages
 {
     public interface IPageAppService
     {
+        Task<PageDto> GetAsync(Guid id);
+        
         Task<PageDto> CreatePageAsync(CreatePageInputDto input);
 
         Task<PageDto> CreatePageWithContentAsync(CreatePageWithContentInputDto input);
@@ -15,6 +17,6 @@ namespace Volo.CmsKit.Pages
         
         Task UpdatePageContentAsync(Guid id, UpdatePageContentInputDto input);
 
-        Task DeletePageAsync(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }

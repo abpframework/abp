@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.CmsKit.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Volo.Abp;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Common.HttpApi.Volo.CmsKit.Controllers.Tags
+namespace Volo.CmsKit.Controllers.Tags
 {
+    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [Area("cms-kit")]
+    [Route("api/cms-kit/tags")]
     public class TagController : CmsKitControllerBase, ITagAppService
     {
         protected readonly ITagAppService TagAppService;
@@ -14,6 +18,7 @@ namespace Volo.CmsKit.Common.HttpApi.Volo.CmsKit.Controllers.Tags
             TagAppService = tagAppService;
         }
 
+        [HttpGet]
         public Task<List<TagDto>> GetAllRelatedTagsAsync(GetRelatedTagsInput input)
         {
             return TagAppService.GetAllRelatedTagsAsync(input);

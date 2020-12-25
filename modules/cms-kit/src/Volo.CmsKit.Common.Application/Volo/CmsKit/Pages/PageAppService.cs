@@ -17,6 +17,13 @@ namespace Volo.CmsKit.Pages
             ContentRepository = contentRepository;
         }
 
+        public virtual async Task<PageDto> GetAsync(Guid id)
+        {
+            var page = await PageRepository.GetAsync(id);
+
+            return ObjectMapper.Map<Page, PageDto>(page);
+        }
+
         public virtual async Task<PageDto> CreatePageAsync(CreatePageInputDto input)
         {
             var page = await CreatePageAsync(input.Title, input.Url, input.Description);
@@ -76,7 +83,7 @@ namespace Volo.CmsKit.Pages
             await ContentRepository.UpdateAsync(pageContent);
         }
 
-        public virtual async Task DeletePageAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             await ContentRepository.DeleteAsync(nameof(Page), id.ToString(), CurrentTenant?.Id, CancellationToken.None);
             await PageRepository.DeleteAsync(id, cancellationToken: CancellationToken.None);
