@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Web.Contents;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
+namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Contents
 {
     [ViewComponent(Name = "CmsContent")]
     public class ContentViewComponent : AbpViewComponent
