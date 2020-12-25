@@ -13,5 +13,7 @@ namespace Volo.CmsKit.Contents
             [NotNull] string entityId,
             Guid? tenantId = null,
             CancellationToken cancellationToken = default);
+
+        Task DeleteAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default);
     }
 }

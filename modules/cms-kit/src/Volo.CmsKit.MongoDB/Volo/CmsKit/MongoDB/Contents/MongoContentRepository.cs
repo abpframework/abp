@@ -27,5 +27,14 @@ namespace Volo.CmsKit.MongoDB.Contents
                 cancellationToken: cancellationToken
                 );
         }
+
+        public Task DeleteAsync(string entityType, string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(x =>
+                    x.EntityType == entityType &&
+                    x.EntityId == entityId &&
+                    x.TenantId == tenantId,
+                cancellationToken: cancellationToken);
+        }
     }
 }
