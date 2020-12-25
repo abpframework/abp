@@ -1,5 +1,5 @@
 import { EventEmitter, Type } from '@angular/core';
-import { Router, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { Subject } from 'rxjs';
 import { eLayoutType } from '../enums/common';
 import { Environment } from './environment';
@@ -13,7 +13,7 @@ export namespace ABP {
   }
 
   export interface Test extends Partial<Root> {
-    baseHref?: Router;
+    baseHref?: string;
     routes?: Routes;
   }
 
