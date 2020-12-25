@@ -6,7 +6,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Uow
 {
-    public class AspNetCoreUnitOfWorkTransactionBehaviourProvider : IUnitOfWorkTransactionBehaviourProvider, ITransientDependency
+    public class AspNetCoreUnitOfWorkTransactionBehaviourProvider : IUnitOfWorkTransactionBehaviourProvider, ISingletonDependency
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
