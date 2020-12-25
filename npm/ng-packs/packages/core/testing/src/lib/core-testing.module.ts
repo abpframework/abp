@@ -8,6 +8,7 @@ import {
 } from '@abp/ng.core';
 import { APP_BASE_HREF } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRoutes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockRestService } from './services/mock-rest.service';
@@ -18,7 +19,7 @@ import { MockRestService } from './services/mock-rest.service';
  */
 @NgModule({
   exports: [RouterTestingModule, BaseCoreModule],
-  imports: [RouterTestingModule, BaseCoreModule],
+  imports: [NoopAnimationsModule, RouterTestingModule, BaseCoreModule],
 })
 export class CoreTestingModule {
   static withConfig(
