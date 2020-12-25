@@ -1,4 +1,11 @@
-import { ABP, BaseCoreModule, coreOptionsFactory, CORE_OPTIONS, RestService } from '@abp/ng.core';
+import {
+  ABP,
+  BaseCoreModule,
+  coreOptionsFactory,
+  CORE_OPTIONS,
+  LIST_QUERY_DEBOUNCE_TIME,
+  RestService,
+} from '@abp/ng.core';
 import { APP_BASE_HREF } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { provideRoutes } from '@angular/router';
@@ -15,7 +22,7 @@ import { MockRestService } from './services/mock-rest.service';
 })
 export class CoreTestingModule {
   static withConfig(
-    { baseHref = '/', routes = [], ...options } = {} as ABP.Test,
+    { baseHref = '/', listQueryDebounceTime = 0, routes = [], ...options } = {} as ABP.Test,
   ): ModuleWithProviders<CoreTestingModule> {
     return {
       ngModule: CoreTestingModule,
@@ -29,6 +36,10 @@ export class CoreTestingModule {
           provide: CORE_OPTIONS,
           useFactory: coreOptionsFactory,
           deps: ['CORE_OPTIONS'],
+        },
+        {
+          provide: LIST_QUERY_DEBOUNCE_TIME,
+          useValue: listQueryDebounceTime,
         },
         {
           provide: RestService,
