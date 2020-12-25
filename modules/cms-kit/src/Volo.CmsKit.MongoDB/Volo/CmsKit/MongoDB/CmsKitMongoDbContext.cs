@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
@@ -27,6 +28,8 @@ namespace Volo.CmsKit.MongoDB
         public IMongoCollection<Tag> Tags => Collection<Tag>();
         
         public IMongoCollection<EntityTag> EntityTags => Collection<EntityTag>();
+        
+        public IMongoCollection<Page> Pages => Collection<Page>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {

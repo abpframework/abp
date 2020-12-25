@@ -3,6 +3,7 @@ using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
@@ -57,6 +58,11 @@ namespace Volo.CmsKit.MongoDB
             builder.Entity<EntityTag>(x =>
             {
                 x.CollectionName = CmsKitDbProperties.DbTablePrefix + "EntityTags";
+            });
+            
+            builder.Entity<Page>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Pages";
             });
         }
     }

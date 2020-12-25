@@ -10,6 +10,7 @@ using Volo.CmsKit.Users;
 using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Tags;
 
@@ -134,6 +135,19 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 b.Property(x => x.TagId).IsRequired();
                 
                 b.HasIndex(x => new { x.TenantId, x.EntityId, x.TagId });
+            });
+            
+            builder.Entity<Page>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Pages", options.Schema);
+                
+                b.ConfigureByConvention();
+                
+                b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
+                b.Property(x => x.Url).IsRequired().HasMaxLength(PageConsts.MaxUrlLength);
+                b.Property(x => x.Description).HasMaxLength(PageConsts.MaxDescriptionLength);
+                
+                b.HasIndex(x => new { x.TenantId, x.Url });
             });
         }
     }

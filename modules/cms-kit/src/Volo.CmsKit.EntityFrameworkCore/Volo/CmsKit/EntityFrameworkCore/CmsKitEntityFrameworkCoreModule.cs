@@ -4,6 +4,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
@@ -29,6 +30,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 options.AddRepository<Content, EfCoreContentRepository>();
                 options.AddRepository<Tag, EfCoreTagRepository>();
                 options.AddRepository<EntityTag, EfCoreEntityTagRepository>();
+                options.AddRepository<Page, EfCorePageRepository>();
             });
         }
     }

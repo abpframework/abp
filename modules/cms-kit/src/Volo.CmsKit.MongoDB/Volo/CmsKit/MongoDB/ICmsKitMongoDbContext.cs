@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
@@ -27,5 +28,7 @@ namespace Volo.CmsKit.MongoDB
         IMongoCollection<Tag> Tags { get; }
         
         IMongoCollection<EntityTag> EntityTags { get; }
+        
+        IMongoCollection<Page> Pages { get; }
     }
 }
