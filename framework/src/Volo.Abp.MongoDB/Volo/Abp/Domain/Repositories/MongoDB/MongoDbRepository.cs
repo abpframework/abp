@@ -460,7 +460,11 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         [Obsolete("Use GetMongoQueryableAsync method.")]
         public virtual IMongoQueryable<TEntity> GetMongoQueryable()
         {
-            return ApplyDataFilters(SessionHandle != null ? Collection.AsQueryable(SessionHandle) : Collection.AsQueryable());
+            return ApplyDataFilters(
+                SessionHandle != null
+                    ? Collection.AsQueryable(SessionHandle)
+                    : Collection.AsQueryable()
+            );
         }
 
         public async Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default)
