@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Volo.Abp.Data;
@@ -13,6 +15,8 @@ namespace Volo.Abp.Uow.MongoDB
     public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContextProvider<TMongoDbContext>
         where TMongoDbContext : IAbpMongoDbContext
     {
+        public ILogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>> Logger { get; set; }
+
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
@@ -25,11 +29,20 @@ namespace Volo.Abp.Uow.MongoDB
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
             _cancellationTokenProvider = cancellationTokenProvider;
+
+            Logger = NullLogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>>.Instance;
         }
 
         [Obsolete("Use CreateDbContextAsync")]
         public TMongoDbContext GetDbContext()
         {
+            Logger.LogWarning(
+                "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +
+                "You are probably using LINQ (LINQ extensions) directly on a repository. In this case, use repository.GetQueryableAsync() method " +
+                "to obtain an IQueryable<T> instance and use LINQ (LINQ extensions) on this object. "
+            );
+            Logger.LogWarning(Environment.StackTrace.Truncate(2048));
+
             var unitOfWork = _unitOfWorkManager.Current;
             if (unitOfWork == null)
             {
