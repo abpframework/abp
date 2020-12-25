@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Contents
         
         public virtual string EntityId { get; set; }
         
-        public virtual string Value { get; set; }
+        public virtual string Value { get; protected set; }
 
         protected Content()
         {
@@ -25,9 +25,14 @@ namespace Volo.CmsKit.Contents
         {
             EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), ContentConsts.MaxEntityTypeLength);
             EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), ContentConsts.MaxEntityIdLength);
-            Value = Check.NotNullOrWhiteSpace(value, nameof(value), ContentConsts.MaxValueLength);
+            SetValue(value);
             
             TenantId = tenantId;
+        }
+
+        public void SetValue([NotNull] string value)
+        {
+            Value = Check.NotNullOrWhiteSpace(value, nameof(value), ContentConsts.MaxValueLength);
         }
     }
 }
