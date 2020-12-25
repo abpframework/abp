@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
@@ -9,6 +10,7 @@ namespace Volo.Abp.AspNetCore.Uow
     public class AspNetCoreUnitOfWorkTransactionBehaviourProvider : IUnitOfWorkTransactionBehaviourProvider, ISingletonDependency
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AspNetCoreUnitOfWorkTransactionBehaviourProviderOptions _options;
 
         public virtual bool? IsTransactional
         {
@@ -20,10 +22,16 @@ namespace Volo.Abp.AspNetCore.Uow
                     return null;
                 }
 
-                //IdentityServer endpoint (TODO: Better to move to the IDS module)
-                if (httpContext.Request.Path.Value?.StartsWith("/connect/", StringComparison.OrdinalIgnoreCase) == true)
+                var currentUrl = httpContext.Request.Path.Value;
+                if (currentUrl != null)
                 {
-                    return false;
+                    foreach (var url in _options.NonTransactionalUrls)
+                    {
+                        if (currentUrl.StartsWith(url, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return false;
+                        }
+                    }
                 }
 
                 return !string.Equals(
@@ -33,9 +41,12 @@ namespace Volo.Abp.AspNetCore.Uow
             }
         }
 
-        public AspNetCoreUnitOfWorkTransactionBehaviourProvider(IHttpContextAccessor httpContextAccessor)
+        public AspNetCoreUnitOfWorkTransactionBehaviourProvider(
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<AspNetCoreUnitOfWorkTransactionBehaviourProviderOptions> options)
         {
             _httpContextAccessor = httpContextAccessor;
+            _options = options.Value;
         }
     }
 }
