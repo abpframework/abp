@@ -8,6 +8,12 @@ namespace Volo.CmsKit.Contents
 {
     public interface IContentRepository : IBasicRepository<Content, Guid>
     {
+        Task<Content> GetAsync(
+            [NotNull] string entityType,
+            [NotNull] string entityId,
+            Guid? tenantId = null,
+            CancellationToken cancellationToken = default);
+        
         Task<Content> FindAsync(
             [NotNull] string entityType,
             [NotNull] string entityId,

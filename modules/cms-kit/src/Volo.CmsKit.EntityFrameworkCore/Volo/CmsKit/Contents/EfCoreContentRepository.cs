@@ -13,6 +13,21 @@ namespace Volo.CmsKit.Contents
         {
         }
 
+        public Task<Content> GetAsync(
+            string entityType,
+            string entityId,
+            Guid? tenantId = null,
+            CancellationToken cancellationToken = default)
+        {
+            return GetAsync(x =>
+                    !x.IsDeleted &&
+                    x.EntityType == entityType &&
+                    x.EntityId == entityId &&
+                    x.TenantId == tenantId,
+                cancellationToken: cancellationToken
+            );
+        }
+        
         public Task<Content> FindAsync(
             string entityType,
             string entityId,
