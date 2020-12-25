@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.MongoDB.Tags
 {
-    public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Tag, Guid>, ITagRepository
+    public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.CmsKit.Tags.Tag, Guid>, ITagRepository
     {
         public MongoTagRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
@@ -30,7 +31,7 @@ namespace Volo.CmsKit.MongoDB.Tags
                         cancellationToken);
         }
 
-        public Task<Tag> GetAsync(
+        public Task<Volo.CmsKit.Tags.Tag> GetAsync(
             [NotNull] string entityType,
             [NotNull] string name,
             Guid? tenantId,
@@ -43,7 +44,7 @@ namespace Volo.CmsKit.MongoDB.Tags
                cancellationToken: cancellationToken);
         }
 
-        public Task<Tag> FindAsync(
+        public Task<Volo.CmsKit.Tags.Tag> FindAsync(
             [NotNull] string entityType,
             [NotNull] string name,
             Guid? tenantId,
@@ -56,9 +57,24 @@ namespace Volo.CmsKit.MongoDB.Tags
                cancellationToken: cancellationToken);
         }
 
-        public Task<List<Tag>> GetAllRelatedTagsAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Volo.CmsKit.Tags.Tag>> GetAllRelatedTagsAsync(
+            [NotNull] string entityType,
+            [NotNull] string entityId,
+            Guid? tenantId = null,
+            CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var entityTagIds = await DbContext.EntityTags.AsQueryable()
+                .Where(q => q.EntityId == entityId)
+                .Select(q => q.EntityId)
+                .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+            var query = GetMongoQueryable()
+                .Where(x => x.EntityType == entityType &&
+                            x.TenantId == tenantId &&
+                            entityTagIds.Contains(x.Id.ToString()));
+
+            var result = await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+            return result;
         }
     }
 }
