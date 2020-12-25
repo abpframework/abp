@@ -64,7 +64,7 @@ namespace Volo.CmsKit.MongoDB.Tags
             CancellationToken cancellationToken = default)
         {
             var entityTagIds = await DbContext.EntityTags.AsQueryable()
-                .Where(q => q.EntityId == entityId)
+                .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
                 .Select(q => q.EntityId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
