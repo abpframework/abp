@@ -19,27 +19,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
     public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
     {
-        public ILogger<AbpExceptionFilter> Logger { get; set; }
-
-        private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
-        private readonly IHttpExceptionStatusCodeFinder _statusCodeFinder;
-        private readonly IJsonSerializer _jsonSerializer;
-        private readonly AbpExceptionHandlingOptions _exceptionHandlingOptions;
-
-        public AbpExceptionFilter(
-            IExceptionToErrorInfoConverter errorInfoConverter,
-            IHttpExceptionStatusCodeFinder statusCodeFinder,
-            IJsonSerializer jsonSerializer,
-            IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
-        {
-            _errorInfoConverter = errorInfoConverter;
-            _statusCodeFinder = statusCodeFinder;
-            _jsonSerializer = jsonSerializer;
-            _exceptionHandlingOptions = exceptionHandlingOptions.Value;
-
-            Logger = NullLogger<AbpExceptionFilter>.Instance;
-        }
-
         public async Task OnExceptionAsync(ExceptionContext context)
         {
             if (!ShouldHandleException(context))
@@ -78,9 +57,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             //TODO: Trigger an AbpExceptionHandled event or something like that.
 
             context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-            context.HttpContext.Response.StatusCode = (int)_statusCodeFinder.GetStatusCode(context.HttpContext, context.Exception);
+            context.HttpContext.Response.StatusCode = (int) context.HttpContext.RequestServices
+                .GetRequiredService<IHttpExceptionStatusCodeFinder>()
+                .GetStatusCode(context.HttpContext, context.Exception);
 
-            var remoteServiceErrorInfo = _errorInfoConverter.Convert(context.Exception, _exceptionHandlingOptions.SendExceptionsDetailsToClients);
+            var remoteServiceErrorInfo = context.HttpContext.RequestServices
+                .GetRequiredService<IExceptionToErrorInfoConverter>().Convert(context.Exception,
+                    context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>()
+                        .Value.SendExceptionsDetailsToClients);
 
             context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
 
@@ -88,10 +72,15 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var remoteServiceErrorInfoBuilder = new StringBuilder();
             remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
-            remoteServiceErrorInfoBuilder.AppendLine( _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
-            Logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+            remoteServiceErrorInfoBuilder.AppendLine(context.HttpContext.RequestServices
+                .GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
 
-            Logger.LogException(context.Exception, logLevel);
+            var logger = context.HttpContext.RequestServices.GetService<ILogger<AbpExceptionFilter>>() ??
+                         NullLogger<AbpExceptionFilter>.Instance;
+
+            logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+
+            logger.LogException(context.Exception, logLevel);
 
             await context.HttpContext
                 .RequestServices

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
@@ -12,15 +13,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 {
     public class AbpUowActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
-
-        public AbpUowActionFilter(IUnitOfWorkManager unitOfWorkManager, IOptions<AbpUnitOfWorkDefaultOptions> options)
-        {
-            _unitOfWorkManager = unitOfWorkManager;
-            _defaultOptions = options.Value;
-        }
-
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (!context.ActionDescriptor.IsControllerAction())
@@ -45,20 +37,22 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 
             var options = CreateOptions(context, unitOfWorkAttr);
 
+            var unitOfWorkManager = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWorkManager>();
+
             //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
-            if (_unitOfWorkManager.TryBeginReserved(AbpUnitOfWorkMiddleware.UnitOfWorkReservationName, options))
+            if (unitOfWorkManager.TryBeginReserved(AbpUnitOfWorkMiddleware.UnitOfWorkReservationName, options))
             {
                 var result = await next();
                 if (!Succeed(result))
                 {
-                    await RollbackAsync(context);
+                    await RollbackAsync(context, unitOfWorkManager);
                 }
 
                 return;
             }
 
             //Begin a new, independent unit of work
-            using (var uow = _unitOfWorkManager.Begin(options))
+            using (var uow = unitOfWorkManager.Begin(options))
             {
                 var result = await next();
                 if (Succeed(result))
@@ -76,7 +70,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 
             if (unitOfWorkAttribute?.IsTransactional == null)
             {
-                options.IsTransactional = _defaultOptions.CalculateIsTransactional(
+                var abpUnitOfWorkDefaultOptions = context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
+                options.IsTransactional = abpUnitOfWorkDefaultOptions.CalculateIsTransactional(
                     autoValue: !string.Equals(context.HttpContext.Request.Method, HttpMethod.Get.Method, StringComparison.OrdinalIgnoreCase)
                 );
             }
@@ -84,9 +79,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             return options;
         }
 
-        private async Task RollbackAsync(ActionExecutingContext context)
+        private async Task RollbackAsync(ActionExecutingContext context, IUnitOfWorkManager unitOfWorkManager)
         {
-            var currentUow = _unitOfWorkManager.Current;
+            var currentUow = unitOfWorkManager.Current;
             if (currentUow != null)
             {
                 await currentUow.RollbackAsync(context.HttpContext.RequestAborted);

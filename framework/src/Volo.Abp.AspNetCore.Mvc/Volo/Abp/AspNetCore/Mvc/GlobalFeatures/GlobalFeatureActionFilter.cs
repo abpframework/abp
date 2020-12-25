@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
@@ -13,13 +14,6 @@ namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
 {
     public class GlobalFeatureActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        public ILogger<GlobalFeatureActionFilter> Logger { get; set; }
-
-        public GlobalFeatureActionFilter()
-        {
-            Logger = NullLogger<GlobalFeatureActionFilter>.Instance;
-        }
-
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (!context.ActionDescriptor.IsControllerAction())
@@ -30,7 +24,11 @@ namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
 
             if (!IsGlobalFeatureEnabled(context.Controller.GetType(), out var attribute))
             {
-                Logger.LogWarning($"The '{context.Controller.GetType().FullName}' controller needs to enable '{attribute.Name}' feature.");
+                var logger =
+                    context.HttpContext.RequestServices.GetRequiredService<ILogger<GlobalFeatureActionFilter>>() ??
+                    NullLogger<GlobalFeatureActionFilter>.Instance;
+
+                logger.LogWarning($"The '{context.Controller.GetType().FullName}' controller needs to enable '{attribute.Name}' feature.");
                 context.Result = new NotFoundResult();
                 return;
             }
