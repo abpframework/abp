@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Volo.CmsKit.Common.Application.Contracts.Volo.CmsKit.Contents;
 using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Controllers.Contents

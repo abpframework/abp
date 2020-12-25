@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Common.Application.Volo.CmsKit
+namespace Volo.CmsKit
 {
     public class CmsKitCommonApplicationAutoMapperProfile : Profile
     {
@@ -11,6 +12,8 @@ namespace Volo.CmsKit.Common.Application.Volo.CmsKit
             CreateMap<Content, ContentDto>();
 
             CreateMap<Tag, TagDto>();
+            
+            CreateMap<Page, PageDto>();
         }
     }
 }

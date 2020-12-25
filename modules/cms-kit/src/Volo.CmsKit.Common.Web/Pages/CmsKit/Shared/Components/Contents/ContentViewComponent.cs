@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-using Volo.CmsKit.Common.Application.Contracts.Volo.CmsKit.Contents;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Web.Contents;
 

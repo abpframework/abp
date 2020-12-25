@@ -1,4 +1,4 @@
-﻿namespace Volo.CmsKit.Common.Application.Contracts.Volo.CmsKit.Contents
+﻿namespace Volo.CmsKit.Contents
 {
     public class GetContentInput
     {

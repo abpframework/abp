@@ -12,27 +12,22 @@ namespace Volo.CmsKit.Pages
 
         public virtual string Title { get; set; }
 
+        public virtual string Url { get; set; }
+        
         public virtual string Description { get; set; }
         
-        public virtual string Url { get; set; }
-
         protected Page()
         {
             
         }
 
-        public Page(Guid id, [NotNull] string title, [CanBeNull] string description, [CanBeNull] string url = null, Guid? tenantId = null) : base(id)
+        public Page(Guid id, [NotNull] string title, [NotNull] string url, [CanBeNull] string description, Guid? tenantId = null) : base(id)
         {
             Title = Check.NotNullOrWhiteSpace(title, nameof(title), PageConsts.MaxTitleLength);
+            Url = Check.NotNullOrWhiteSpace(url, nameof(url), PageConsts.MaxUrlLength);
             Description = Check.Length(description, nameof(description), PageConsts.MaxDescriptionLength);
-            SetUrl(url);
             
             TenantId = tenantId;
-        }
-
-        public virtual void SetUrl(string url)
-        {
-            Url = Check.Length(url, nameof(url), PageConsts.MaxUrlLength);   
         }
     }
 }
