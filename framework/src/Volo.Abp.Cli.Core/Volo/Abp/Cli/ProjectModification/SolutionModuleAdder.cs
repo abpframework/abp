@@ -206,6 +206,12 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), targetFolder);
             var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith(postFix));
+
+            if(projectFolderPath == null)
+            {
+                return;
+            }
+
             await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, new DirectoryInfo(projectFolderPath).Name);
 
             if (Directory.Exists(projectFolderPath))
