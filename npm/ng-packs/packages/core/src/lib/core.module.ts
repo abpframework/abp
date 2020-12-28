@@ -52,6 +52,7 @@ export function storageFactory(): OAuthStorage {
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    LocalizationModule,
 
     AbstractNgModelComponent,
     AutofocusDirective,
@@ -76,6 +77,7 @@ export function storageFactory(): OAuthStorage {
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    LocalizationModule,
   ],
   declarations: [
     AbstractNgModelComponent,
@@ -94,6 +96,7 @@ export function storageFactory(): OAuthStorage {
     StopPropagationDirective,
     VisibilityDirective,
   ],
+  providers: [LocalizationPipe],
   entryComponents: [
     RouterOutletComponent,
     DynamicLayoutComponent,
@@ -125,9 +128,8 @@ export class RootCoreModule {}
  * CoreModule is the module that is publicly available
  */
 @NgModule({
-  exports: [BaseCoreModule, LocalizationModule],
-  imports: [BaseCoreModule, LocalizationModule],
-  providers: [LocalizationPipe],
+  exports: [BaseCoreModule],
+  imports: [BaseCoreModule],
 })
 export class CoreModule {
   static forRoot(options = {} as ABP.Root): ModuleWithProviders<RootCoreModule> {

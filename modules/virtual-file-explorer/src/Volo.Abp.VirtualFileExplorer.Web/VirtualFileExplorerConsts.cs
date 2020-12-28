@@ -2,6 +2,6 @@
 {
     public static class VirtualFileExplorerConsts
     {
-        public static string[] AllowFileInfoTypes = new[] {"VirtualDirectoryFileInfo", "EmbeddedResourceFileInfo"};
+        public static readonly string[] AllowFileInfoTypes = {"VirtualDirectoryFileInfo", "EmbeddedResourceFileInfo", "ManifestDirectoryInfo" , "ManifestFileInfo"};
     }
 }
