@@ -1,7 +1,0 @@
-{
-  "profiles": {
-    "Volo.Abp.Cli": {
-      "commandName": "Project"
-    }
-  }
-}
