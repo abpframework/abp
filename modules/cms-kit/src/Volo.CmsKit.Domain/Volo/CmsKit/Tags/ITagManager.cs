@@ -10,6 +10,7 @@ namespace Volo.CmsKit.Tags
     public interface ITagManager : IDomainService
     {
         Task<Tag> InsertAsync(
+            Guid id,
             [NotNull] string entityType,
             [NotNull] string name,
             Guid? tenantId = null,

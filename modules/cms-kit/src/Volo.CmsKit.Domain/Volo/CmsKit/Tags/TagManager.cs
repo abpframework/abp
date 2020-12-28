@@ -26,13 +26,14 @@ namespace Volo.CmsKit.Tags
 
             if (entity == null)
             {
-                entity = await InsertAsync(entityType, name, tenantId, cancellationToken);
+                entity = await InsertAsync(GuidGenerator.Create(), entityType, name, tenantId, cancellationToken);
             }
 
             return entity;
         }
 
         public async Task<Tag> InsertAsync(
+            Guid id,
             [NotNull] string entityType,
             [NotNull] string name,
             Guid? tenantId = null,
@@ -45,6 +46,7 @@ namespace Volo.CmsKit.Tags
 
             return await _tagRepository.InsertAsync(
                             new Tag(
+                                id,
                                 entityType,
                                 name,
                                 tenantId),

@@ -19,9 +19,10 @@ namespace Volo.CmsKit.Tags
         }
 
         public Tag(
+            Guid id,
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId = null)
+            Guid? tenantId = null) : base(id)
         {
             EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), TagConsts.MaxEntityTypeLength);
             SetName(name);
