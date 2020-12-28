@@ -26,7 +26,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
         protected DbContextFileBuilderConfigureAdder DbContextFileBuilderConfigureAdder { get; }
-        protected EfCoreMigrationAdder EfCoreMigrationAdder { get; }
+        protected EfCoreMigrationManager EfCoreMigrationManager { get; }
         protected DerivedClassFinder DerivedClassFinder { get; }
         protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
@@ -42,7 +42,7 @@ namespace Volo.Abp.Cli.ProjectModification
             IJsonSerializer jsonSerializer,
             ProjectNugetPackageAdder projectNugetPackageAdder,
             DbContextFileBuilderConfigureAdder dbContextFileBuilderConfigureAdder,
-            EfCoreMigrationAdder efCoreMigrationAdder,
+            EfCoreMigrationManager efCoreMigrationManager,
             DerivedClassFinder derivedClassFinder,
             ProjectNpmPackageAdder projectNpmPackageAdder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker,
@@ -57,7 +57,7 @@ namespace Volo.Abp.Cli.ProjectModification
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
             DbContextFileBuilderConfigureAdder = dbContextFileBuilderConfigureAdder;
-            EfCoreMigrationAdder = efCoreMigrationAdder;
+            EfCoreMigrationManager = efCoreMigrationManager;
             DerivedClassFinder = derivedClassFinder;
             ProjectNpmPackageAdder = projectNpmPackageAdder;
             NpmGlobalPackagesChecker = npmGlobalPackagesChecker;
@@ -454,7 +454,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 if (addedNewBuilder)
                 {
-                    EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject);
+                    EfCoreMigrationManager.AddMigration(dbMigrationsProject, module.Name, startupProject);
                 }
 
                 RunMigrator(projectFiles);

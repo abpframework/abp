@@ -27,7 +27,7 @@ import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
-import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
+import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 
 const declarationsWithExports = [
@@ -48,17 +48,11 @@ const declarationsWithExports = [
   LoadingDirective,
   TableSortDirective,
 ];
+
 @NgModule({
   imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
-  declarations: [
-    ...declarationsWithExports,
-    HttpErrorWrapperComponent,
-    ModalContainerComponent,
-  ],
-  exports: [
-    NgxDatatableModule,
-    ...declarationsWithExports,
-  ],
+  declarations: [...declarationsWithExports, HttpErrorWrapperComponent, ModalContainerComponent],
+  exports: [NgxDatatableModule, ...declarationsWithExports],
   providers: [DatePipe],
   entryComponents: [
     HttpErrorWrapperComponent,
@@ -68,13 +62,23 @@ const declarationsWithExports = [
     ConfirmationComponent,
   ],
 })
-export class ThemeSharedModule {
-  constructor(private errorHandler: ErrorHandler) {}
+export class BaseThemeSharedModule {}
 
+@NgModule({
+  imports: [BaseThemeSharedModule],
+  exports: [BaseThemeSharedModule],
+})
+export class ThemeSharedModule {
   static forRoot(options = {} as RootParams): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
       providers: [
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [ErrorHandler],
+          useFactory: noop,
+        },
         THEME_SHARED_ROUTE_PROVIDERS,
         {
           provide: APP_INITIALIZER,
