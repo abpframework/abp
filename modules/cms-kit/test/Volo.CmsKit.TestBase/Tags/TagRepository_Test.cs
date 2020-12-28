@@ -86,7 +86,7 @@ namespace Volo.CmsKit.Tags
         [Fact]
         public async Task Should_Get_Related_Tags()
         {
-            var content_1_tags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityType);
+            var content_1_tags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.EntityId1);
             
             content_1_tags.Count.ShouldBe(_cmsKitTestData.Content_1_Tags.Length);
 
@@ -95,7 +95,7 @@ namespace Volo.CmsKit.Tags
                 _cmsKitTestData.Content_1_Tags.Contains(tag.Name).ShouldBeTrue();
             }
             
-            var content_2_tags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_2_EntityType, _cmsKitTestData.Content_2_EntityType);
+            var content_2_tags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.Content_2_EntityType, _cmsKitTestData.EntityId2);
             
             content_2_tags.Count.ShouldBe(_cmsKitTestData.Content_2_Tags.Length);
 
