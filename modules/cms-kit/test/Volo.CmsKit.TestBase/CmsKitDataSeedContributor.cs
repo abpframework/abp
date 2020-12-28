@@ -5,6 +5,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Users;
@@ -20,7 +21,7 @@ namespace Volo.CmsKit
         private readonly ReactionManager _reactionManager;
         private readonly IRatingRepository _ratingRepository;
         private readonly ICurrentTenant _currentTenant;
-
+        private readonly IContentRepository _contentRepository;
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
             ICmsUserRepository cmsUserRepository,
@@ -28,7 +29,8 @@ namespace Volo.CmsKit
             ICommentRepository commentRepository,
             ReactionManager reactionManager,
             IRatingRepository ratingRepository,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant, 
+            IContentRepository contentRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -37,6 +39,7 @@ namespace Volo.CmsKit
             _reactionManager = reactionManager;
             _ratingRepository = ratingRepository;
             _currentTenant = currentTenant;
+            _contentRepository = contentRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -50,6 +53,8 @@ namespace Volo.CmsKit
                 await SeedReactionsAsync();
 
                 await SeedRatingsAsync();
+
+                await SeedContentsAsync();
             }
         }
 
@@ -176,6 +181,26 @@ namespace Volo.CmsKit
                 1,
                 _cmsKitTestData.User2Id
             ));
+        }
+
+        private async Task SeedContentsAsync()
+        {
+            var content1 = new Content(
+                _guidGenerator.Create(),
+                _cmsKitTestData.Content_1_EntityType,
+                _cmsKitTestData.Content_1_Id,
+                _cmsKitTestData.Content_1
+                );
+            
+            var content2 = new Content(
+                _guidGenerator.Create(),
+                _cmsKitTestData.Content_2_EntityType,
+                _cmsKitTestData.Content_2_Id,
+                _cmsKitTestData.Content_2
+            );
+
+            await _contentRepository.InsertAsync(content1);
+            await _contentRepository.InsertAsync(content2);
         }
     }
 }
