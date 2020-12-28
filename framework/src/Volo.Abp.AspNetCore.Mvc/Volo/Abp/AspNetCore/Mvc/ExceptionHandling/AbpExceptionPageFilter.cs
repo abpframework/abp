@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -69,14 +68,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             //TODO: Trigger an AbpExceptionHandled event or something like that.
 
             context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-            context.HttpContext.Response.StatusCode = (int) context.HttpContext.RequestServices
+            context.HttpContext.Response.StatusCode = (int) context
                 .GetRequiredService<IHttpExceptionStatusCodeFinder>()
                 .GetStatusCode(context.HttpContext, context.Exception);
 
-            var remoteServiceErrorInfo = context.HttpContext.RequestServices
-                .GetRequiredService<IExceptionToErrorInfoConverter>().Convert(context.Exception,
-                    context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>()
-                        .Value.SendExceptionsDetailsToClients);
+            var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+            var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
+            var remoteServiceErrorInfo  = exceptionToErrorInfoConverter.Convert(context.Exception, exceptionHandlingOptions.SendExceptionsDetailsToClients);
 
             context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
 
@@ -84,21 +82,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var remoteServiceErrorInfoBuilder = new StringBuilder();
             remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
-            remoteServiceErrorInfoBuilder.AppendLine(context.HttpContext.RequestServices
-                .GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
+            remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
 
-            var logger = context.HttpContext.RequestServices.GetService<ILogger<AbpExceptionFilter>>() ??
-                         NullLogger<AbpExceptionFilter>.Instance;
+            var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
             logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
 
             logger.LogException(context.Exception, logLevel);
 
-            await context.HttpContext
-                .RequestServices
-                .GetRequiredService<IExceptionNotifier>()
-                .NotifyAsync(
-                    new ExceptionNotificationContext(context.Exception)
-                );
+            await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
 
             context.Exception = null; //Handled!
         }

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
@@ -29,10 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
 
             if (!IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
             {
-                var logger =
-                    context.HttpContext.RequestServices.GetRequiredService<ILogger<GlobalFeatureActionFilter>>() ??
-                    NullLogger<GlobalFeatureActionFilter>.Instance;
-
+                var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
                 logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute.Name}' feature.");
                 context.Result = new NotFoundResult();
                 return;

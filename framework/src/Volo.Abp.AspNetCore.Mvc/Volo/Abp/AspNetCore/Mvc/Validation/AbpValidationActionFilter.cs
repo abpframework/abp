@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Validation
@@ -19,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
                 return;
             }
 
-            context.HttpContext.RequestServices.GetRequiredService<IModelStateValidator>().Validate(context.ModelState);
+            context.GetRequiredService<IModelStateValidator>().Validate(context.ModelState);
             await next();
         }
     }

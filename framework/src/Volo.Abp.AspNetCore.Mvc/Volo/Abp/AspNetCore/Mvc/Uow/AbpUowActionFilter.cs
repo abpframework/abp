@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
@@ -37,7 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 
             var options = CreateOptions(context, unitOfWorkAttr);
 
-            var unitOfWorkManager = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWorkManager>();
+            var unitOfWorkManager = context.GetRequiredService<IUnitOfWorkManager>();
 
             //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
             if (unitOfWorkManager.TryBeginReserved(AbpUnitOfWorkMiddleware.UnitOfWorkReservationName, options))
@@ -70,7 +69,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 
             if (unitOfWorkAttribute?.IsTransactional == null)
             {
-                var abpUnitOfWorkDefaultOptions = context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
+                var abpUnitOfWorkDefaultOptions = context.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
                 options.IsTransactional = abpUnitOfWorkDefaultOptions.CalculateIsTransactional(
                     autoValue: !string.Equals(context.HttpContext.Request.Method, HttpMethod.Get.Method, StringComparison.OrdinalIgnoreCase)
                 );

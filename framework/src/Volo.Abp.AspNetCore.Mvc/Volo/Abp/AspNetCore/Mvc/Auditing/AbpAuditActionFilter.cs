@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
@@ -53,7 +52,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             auditLog = null;
             auditLogAction = null;
 
-            var options = context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+            var options = context.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
             if (!options.IsEnabled)
             {
                 return false;
@@ -64,13 +63,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
                 return false;
             }
 
-            var auditLogScope = context.HttpContext.RequestServices.GetRequiredService<IAuditingManager>().Current;
+            var auditLogScope = context.GetRequiredService<IAuditingManager>().Current;
             if (auditLogScope == null)
             {
                 return false;
             }
 
-            var auditingHelper = context.HttpContext.RequestServices.GetRequiredService<IAuditingHelper>();
+            var auditingHelper = context.GetRequiredService<IAuditingHelper>();
             if (!auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
             {
                 return false;

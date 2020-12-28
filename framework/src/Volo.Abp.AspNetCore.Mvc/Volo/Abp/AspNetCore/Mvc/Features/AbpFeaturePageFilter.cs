@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
@@ -27,9 +26,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
 
             using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.FeatureChecking))
             {
-                await context.HttpContext.RequestServices.GetRequiredService<IMethodInvocationFeatureCheckerService>().CheckAsync(
-                    new MethodInvocationFeatureCheckerContext(methodInfo)
-                );
+                var methodInvocationFeatureCheckerService = context.GetRequiredService<IMethodInvocationFeatureCheckerService>();
+                await methodInvocationFeatureCheckerService.CheckAsync(new MethodInvocationFeatureCheckerContext(methodInfo));
 
                 await next();
             }
