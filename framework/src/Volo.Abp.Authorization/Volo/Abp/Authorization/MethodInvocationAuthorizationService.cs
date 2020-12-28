@@ -1,23 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Authorization
 {
     public class MethodInvocationAuthorizationService : IMethodInvocationAuthorizationService, ITransientDependency
     {
-        private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
-        private readonly IAbpAuthorizationService _abpAuthorizationService;
+        private readonly IServiceProvider _serviceProvider;
 
-        public MethodInvocationAuthorizationService(
-            IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
-            IAbpAuthorizationService abpAuthorizationService)
+        public MethodInvocationAuthorizationService(IServiceProvider serviceProvider)
         {
-            _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
-            _abpAuthorizationService = abpAuthorizationService;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task CheckAsync(MethodInvocationAuthorizationContext context)
@@ -28,7 +26,7 @@ namespace Volo.Abp.Authorization
             }
 
             var authorizationPolicy = await AuthorizationPolicy.CombineAsync(
-                _abpAuthorizationPolicyProvider,
+                _serviceProvider.GetRequiredService<IAbpAuthorizationPolicyProvider>(),
                 GetAuthorizationDataAttributes(context.Method)
             );
 
@@ -36,8 +34,8 @@ namespace Volo.Abp.Authorization
             {
                 return;
             }
-            
-            await _abpAuthorizationService.CheckAsync(authorizationPolicy);
+
+            await _serviceProvider.GetRequiredService<IAbpAuthorizationService>().CheckAsync(authorizationPolicy);
         }
 
         protected virtual bool AllowAnonymous(MethodInvocationAuthorizationContext context)
