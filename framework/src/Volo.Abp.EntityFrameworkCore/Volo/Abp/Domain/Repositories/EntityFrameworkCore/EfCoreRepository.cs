@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,14 +31,13 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         private readonly IDbContextProvider<TDbContext> _dbContextProvider;
         private readonly Lazy<AbpEntityOptions<TEntity>> _entityOptionsLazy;
 
-        public virtual IGuidGenerator GuidGenerator { get; set; }
+        public virtual IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-        public IEfCoreBulkOperationProvider BulkOperationProvider { get; set; }
+        public IEfCoreBulkOperationProvider BulkOperationProvider => LazyServiceProvider.LazyGetRequiredService<IEfCoreBulkOperationProvider>();
 
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
-            GuidGenerator = SimpleGuidGenerator.Instance;
 
             _entityOptionsLazy = new Lazy<AbpEntityOptions<TEntity>>(
                 () => ServiceProvider
@@ -49,15 +47,15 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             );
         }
 
-        public async override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             CheckAndSetId(entity);
 
-            var savedEntity = DbSet.Add(entity).Entity;
+            var savedEntity = (await DbSet.AddAsync(entity, GetCancellationToken(cancellationToken))).Entity;
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await DbContext.SaveChangesAsync(GetCancellationToken(GetCancellationToken(cancellationToken)));
             }
 
             return savedEntity;
@@ -76,20 +74,20 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                     this,
                     entities,
                     autoSave,
-                    cancellationToken
+                    GetCancellationToken(cancellationToken)
                 );
                 return;
             }
 
-            await DbSet.AddRangeAsync(entities);
+            await DbSet.AddRangeAsync(entities, GetCancellationToken(cancellationToken));
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
             }
         }
 
-        public async override Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             DbContext.Attach(entity);
 
@@ -111,7 +109,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                     this,
                     entities,
                     autoSave,
-                    cancellationToken
+                    GetCancellationToken(cancellationToken)
                     );
 
                 return;
@@ -121,11 +119,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
             }
         }
 
-        public async override Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             DbSet.Remove(entity);
 
@@ -152,23 +150,23 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
             }
         }
 
-        public async override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return includeDetails
                 ? await WithDetails().ToListAsync(GetCancellationToken(cancellationToken))
                 : await DbSet.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await DbSet.LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async override Task<List<TEntity>> GetPagedListAsync(
+        public override async Task<List<TEntity>> GetPagedListAsync(
             int skipCount,
             int maxResultCount,
             string sorting,
@@ -190,10 +188,10 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         protected override Task SaveChangesAsync(CancellationToken cancellationToken)
         {
-            return DbContext.SaveChangesAsync(cancellationToken);
+            return DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async override Task<TEntity> FindAsync(
+        public override async Task<TEntity> FindAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
@@ -207,7 +205,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                     .SingleOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entities = await GetQueryable()
                 .Where(predicate)
@@ -344,9 +342,9 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             await DeleteAsync(entity, autoSave, cancellationToken);
         }
 
-        public async virtual Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entities = await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
+            var entities = await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync(GetCancellationToken(cancellationToken));
 
             await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
