@@ -14,6 +14,7 @@ export namespace ABP {
 
   export interface Test extends Partial<Root> {
     baseHref?: string;
+    listQueryDebounceTime?: number;
     routes?: Routes;
   }
 
