@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Modularity;
-using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.CmsKit.Contents
@@ -14,7 +13,7 @@ namespace Volo.CmsKit.Contents
         private readonly CmsKitTestData _cmsKitTestData;
         private readonly IContentRepository _contentRepository;
 
-        public ContentRepository_Tests()
+        protected ContentRepository_Tests()
         {
             _cmsKitTestData = GetRequiredService<CmsKitTestData>();
             _contentRepository = GetRequiredService<IContentRepository>();

@@ -12,7 +12,7 @@ namespace Volo.CmsKit.Tags
 
         public string Name { get; protected set; }
 
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; set; }
 
         protected Tag()
         {

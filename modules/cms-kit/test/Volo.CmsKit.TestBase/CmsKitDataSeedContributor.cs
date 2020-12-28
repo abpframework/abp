@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -8,6 +9,7 @@ using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit
@@ -22,6 +24,8 @@ namespace Volo.CmsKit
         private readonly IRatingRepository _ratingRepository;
         private readonly ICurrentTenant _currentTenant;
         private readonly IContentRepository _contentRepository;
+        private readonly ITagRepository _tagRepository;
+
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
             ICmsUserRepository cmsUserRepository,
@@ -30,7 +34,8 @@ namespace Volo.CmsKit
             ReactionManager reactionManager,
             IRatingRepository ratingRepository,
             ICurrentTenant currentTenant, 
-            IContentRepository contentRepository)
+            IContentRepository contentRepository, 
+            ITagRepository tagRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -40,6 +45,7 @@ namespace Volo.CmsKit
             _ratingRepository = ratingRepository;
             _currentTenant = currentTenant;
             _contentRepository = contentRepository;
+            _tagRepository = tagRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -55,6 +61,8 @@ namespace Volo.CmsKit
                 await SeedRatingsAsync();
 
                 await SeedContentsAsync();
+
+                await SeedTagsAsync();
             }
         }
 
@@ -201,6 +209,26 @@ namespace Volo.CmsKit
 
             await _contentRepository.InsertAsync(content1);
             await _contentRepository.InsertAsync(content2);
+        }
+
+        private async Task SeedTagsAsync()
+        {
+            var content_1_tags =
+                _cmsKitTestData.Content_1_Tags
+                    .Select(x =>
+                        new Tag(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, x)).ToList();
+            
+            var content_2_tags =
+                _cmsKitTestData.Content_2_Tags
+                    .Select(x =>
+                        new Tag(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, x)).ToList();
+            
+            content_1_tags.AddRange(content_2_tags);
+
+            foreach (var tag in content_1_tags)
+            {
+                await _tagRepository.InsertAsync(tag);
+            }
         }
     }
 }
