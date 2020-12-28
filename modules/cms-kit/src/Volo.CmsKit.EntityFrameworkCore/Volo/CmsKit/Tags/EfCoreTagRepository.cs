@@ -64,20 +64,17 @@ namespace Volo.CmsKit.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            var entityTagIds = await DbContext.Set<EntityTag>()
+                .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
+                .Select(q => q.TagId)
+                .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-            var query = DbContext.Set<EntityTag>()
-                .Where(x =>
-                    x.EntityId == entityId &&
-                    x.TenantId == tenantId
-                    )
-                .Join(
-                    DbSet,
-                    o => o.TagId,
-                    i => i.Id,
-                    (entityTag, tag) => tag)
-                .Where(x => x.EntityType == entityType);
+            var query = DbSet
+                .Where(x => x.EntityType == entityType &&
+                            x.TenantId == tenantId &&
+                            entityTagIds.Contains(x.Id));
 
-            return await query.ToListAsync();
+            return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }
