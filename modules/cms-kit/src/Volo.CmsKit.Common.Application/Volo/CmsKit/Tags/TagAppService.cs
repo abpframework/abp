@@ -13,7 +13,8 @@ namespace Volo.CmsKit.Tags
 
         public TagAppService(
             ITagManager tagManager,
-            ITagRepository tagRepository, IEntityTagRepository entityTagRepository)
+            ITagRepository tagRepository, 
+            IEntityTagRepository entityTagRepository)
         {
             TagManager = tagManager;
             TagRepository = tagRepository;
@@ -26,31 +27,6 @@ namespace Volo.CmsKit.Tags
                                                     input.EntityType,
                                                     input.EntityId,
                                                     CurrentTenant.Id);
-
-            if (input.Tags?.Count > 0)
-            {
-                var nonExisting = input.Tags
-                                    .Where(x =>
-                                        !entities.Any(a =>
-                                                a.Name.Equals(x.Trim(),
-                                                StringComparison.InvariantCultureIgnoreCase)));
-
-                foreach (var tag in nonExisting)
-                {
-                    var insertedTag = await TagManager.GetOrAddAsync(
-                                                        input.EntityType,
-                                                        tag,
-                                                        tenantId: CurrentTenant?.Id);
-
-                    await EntityTagRepository.InsertAsync(
-                            new EntityTag(
-                                insertedTag.Id,
-                                input.EntityId,
-                                CurrentTenant?.Id));
-
-                    entities.Add(insertedTag);
-                }
-            }
 
             return ObjectMapper.Map<List<Tag>, List<TagDto>>(entities);
         }

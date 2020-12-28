@@ -26,8 +26,7 @@
                 @await Component.InvokeAsync(typeof(TagViewComponent), new
                 {
                     entityType = "quote",
-                    entityId = "1",
-                    tags = new List<string> {"a", "b"}
+                    entityId = "1"
                 })
             }
         </abp-blockquote>
@@ -92,8 +91,7 @@
             @await Component.InvokeAsync(typeof(TagViewComponent), new
             {
                 entityType = "IndexPage",
-                entityId = Guid.Empty.ToString(),
-                tags = new List<string> {"a", "b"}
+                entityId = Guid.Empty.ToString()
             })
         }
     </abp-column>

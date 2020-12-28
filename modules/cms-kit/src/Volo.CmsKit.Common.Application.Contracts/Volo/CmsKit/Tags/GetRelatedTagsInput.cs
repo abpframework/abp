@@ -10,7 +10,5 @@ namespace Volo.CmsKit.Tags
 
         [Required]
         public string EntityId { get; set; }
-
-        public List<string> Tags { get; set; }
     }
 }
