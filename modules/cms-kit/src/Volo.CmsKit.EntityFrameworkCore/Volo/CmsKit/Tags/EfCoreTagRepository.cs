@@ -72,7 +72,7 @@ namespace Volo.CmsKit.Tags
             var query = DbSet
                 .Where(x => x.EntityType == entityType &&
                             x.TenantId == tenantId &&
-                            entityTagIds.Contains(x.Id.ToString()));
+                            entityTagIds.Contains(x.Id));
 
             return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
         }
