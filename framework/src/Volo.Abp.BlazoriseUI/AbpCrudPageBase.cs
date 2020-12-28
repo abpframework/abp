@@ -13,6 +13,7 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
+using Volo.Abp.AspNetCore.Components.Progression;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
@@ -172,6 +173,7 @@ namespace Volo.Abp.BlazoriseUI
     {
         [Inject] protected TAppService AppService { get; set; }
         [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
+        [Inject] protected IUiPageProgressService PageProgressService { get; set; }
 
         protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
@@ -356,20 +358,46 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
+        protected virtual async Task RunProcess(Func<Task> process)
+        {
+            try
+            {
+                // null means the progress will loop itself
+                await PageProgressService?.Go(null, options =>
+                {
+                    options.Type = UiPageProgressType.Info;
+                });
+
+                await process.Invoke();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // -1 is not valid value so the progress will hide
+                await PageProgressService?.Go(-1);
+            }
+        }
+
         protected virtual async Task CreateEntityAsync()
         {
             if (CreateValidationsRef?.ValidateAll() ?? true)
             {
-                await OnCreatingEntityAsync();
+                await RunProcess(async () =>
+                {
+                    await OnCreatingEntityAsync();
 
-                await CheckCreatePolicyAsync();
-                var createInput = MapToCreateInput(NewEntity);
-                await AppService.CreateAsync(createInput);
-                await GetEntitiesAsync();
+                    await CheckCreatePolicyAsync();
+                    var createInput = MapToCreateInput(NewEntity);
+                    await AppService.CreateAsync(createInput);
+                    await GetEntitiesAsync();
 
-                await OnCreatedEntityAsync();
+                    await OnCreatedEntityAsync();
 
-                CreateModal.Hide();
+                    CreateModal.Hide();
+                });
             }
         }
 
@@ -387,16 +415,19 @@ namespace Volo.Abp.BlazoriseUI
         {
             if (EditValidationsRef?.ValidateAll() ?? true)
             {
-                await OnUpdatingEntityAsync();
+                await RunProcess(async () =>
+                {
+                    await OnUpdatingEntityAsync();
 
-                await CheckUpdatePolicyAsync();
-                var updateInput = MapToUpdateInput(EditingEntity);
-                await AppService.UpdateAsync(EditingEntityId, updateInput);
-                await GetEntitiesAsync();
+                    await CheckUpdatePolicyAsync();
+                    var updateInput = MapToUpdateInput(EditingEntity);
+                    await AppService.UpdateAsync(EditingEntityId, updateInput);
+                    await GetEntitiesAsync();
 
-                await OnUpdatedEntityAsync();
+                    await OnUpdatedEntityAsync();
 
-                EditModal.Hide();
+                    EditModal.Hide();
+                });
             }
         }
 
@@ -412,10 +443,13 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
         {
-            await CheckDeletePolicyAsync();
+            await RunProcess(async () =>
+            {
+                await CheckDeletePolicyAsync();
 
-            await AppService.DeleteAsync(entity.Id);
-            await GetEntitiesAsync();
+                await AppService.DeleteAsync(entity.Id);
+                await GetEntitiesAsync();
+            });
         }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
