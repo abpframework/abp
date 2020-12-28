@@ -21,14 +21,12 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Tags
 
         public virtual async Task<IViewComponentResult> InvokeAsync(
             string entityType,
-            string entityId,
-            IEnumerable<string> tags = null)
+            string entityId)
         {
             var tagDtos = await TagAppService.GetAllRelatedTagsAsync(new GetRelatedTagsInput
             {
                 EntityId = entityId,
-                EntityType = entityType,
-                Tags = tags?.ToList()
+                EntityType = entityType
             });
 
             var viewModel = new TagViewModel
