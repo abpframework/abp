@@ -10,7 +10,7 @@ namespace Volo.CmsKit.Tags
 
         public virtual string EntityId { get; set; }
         
-        public virtual Guid? TenantId { get; }
+        public virtual Guid? TenantId { get; set; }
         
         protected EntityTag()
         {

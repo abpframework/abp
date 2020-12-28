@@ -20,7 +20,7 @@ namespace Volo.CmsKit.MongoDB.Tags
         public Task<bool> AnyAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId,
+            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             return GetMongoQueryable()
@@ -34,7 +34,7 @@ namespace Volo.CmsKit.MongoDB.Tags
         public Task<Volo.CmsKit.Tags.Tag> GetAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId,
+            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             return GetAsync(x =>
@@ -47,7 +47,7 @@ namespace Volo.CmsKit.MongoDB.Tags
         public Task<Volo.CmsKit.Tags.Tag> FindAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId,
+            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             return FindAsync(x =>

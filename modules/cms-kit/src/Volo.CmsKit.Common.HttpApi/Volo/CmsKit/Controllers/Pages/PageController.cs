@@ -25,6 +25,13 @@ namespace Volo.CmsKit.Controllers.Pages
             return PageAppService.GetAsync(id);
         }
 
+        [HttpGet]
+        [Route("url/{url}")]
+        public Task<PageDto> GetByUrlAsync(string url)
+        {
+            return PageAppService.GetByUrlAsync(url);
+        }
+
         [HttpPost]
         [Route("create")]
         public virtual Task<PageDto> CreatePageAsync(CreatePageInputDto input)

@@ -12,34 +12,26 @@ namespace Volo.CmsKit.Tags
 
         public string Name { get; protected set; }
 
-        public string HexColor { get; protected set; }
-
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; set; }
 
         protected Tag()
         {
         }
 
         public Tag(
+            Guid id,
             [NotNull] string entityType,
             [NotNull] string name,
-            [CanBeNull] string hexColor,
-            Guid? tenantId = null)
+            Guid? tenantId = null) : base(id)
         {
             EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), TagConsts.MaxEntityTypeLength);
             SetName(name);
-            SetHexColor(hexColor);
             TenantId = tenantId;
         }
 
         public void SetName(string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), TagConsts.MaxNameLength);
-        }
-
-        public void SetHexColor(string hexColor)
-        {
-            HexColor = Check.Length(hexColor, nameof(hexColor), TagConsts.MaxColorHexLength);
         }
     }
 }

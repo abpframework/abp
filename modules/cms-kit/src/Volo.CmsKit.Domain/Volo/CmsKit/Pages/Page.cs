@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Pages
 {
     public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; set; }
 
         public virtual string Title { get; set; }
 

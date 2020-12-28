@@ -22,7 +22,7 @@ namespace Volo.CmsKit.Tags
         public virtual Task<bool> AnyAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId,
+            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             return DbSet.AnyAsync(x =>
@@ -35,7 +35,7 @@ namespace Volo.CmsKit.Tags
         public virtual Task<Tag> GetAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId,
+            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             return GetAsync(x =>
@@ -48,7 +48,7 @@ namespace Volo.CmsKit.Tags
         public virtual Task<Tag> FindAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId,
+            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             return FindAsync(x =>

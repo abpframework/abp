@@ -16,39 +16,40 @@
 <abp-card>
     <abp-card-body class="p-5">
         <abp-blockquote class="text-center">
-
-            @await Component.InvokeAsync(typeof(ContentViewComponent), new { entityType = "quote", entityId = "1" })
-
-            @await Component.InvokeAsync(typeof(TagViewComponent), new
+            @if (GlobalFeatureManager.Instance.IsEnabled<ContentsFeature>())
             {
-                entityType = "quote",
-                entityId = "1",
-                tags = new List<string> { "a", "b" }
-            })
-
+                @await Component.InvokeAsync(typeof(ContentViewComponent), new {entityType = "quote", entityId = "1"})
+            }
+            
+            @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            {
+                @await Component.InvokeAsync(typeof(TagViewComponent), new
+                {
+                    entityType = "quote",
+                    entityId = "1"
+                })
+            }
         </abp-blockquote>
     </abp-card-body>
 </abp-card>
-
-
 
 <abp-row>
     <abp-column size-md="_6">
         @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
         {
-            @await Component.InvokeAsync(typeof(RatingViewComponent), new { entityType = "quote", entityId = "1" })
+            @await Component.InvokeAsync(typeof(RatingViewComponent), new {entityType = "quote", entityId = "1"})
         }
     </abp-column>
     <abp-column size-md="_6">
         @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
         {
-            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "1" })
+            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new {entityType = "quote", entityId = "1"})
         }
     </abp-column>
     <abp-column size-md="_12">
         @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
         {
-            @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "1" })
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new {entityType = "quote", entityId = "1"})
         }
     </abp-column>
 </abp-row>
@@ -58,7 +59,7 @@
             <p class="h2 mb-4">
                 "Writing code is very simple, but writing simple code is the hardest thing there is!"
             </p>
-            <p class="m-0">   - Halil ibrahim Kalkan <small class="d-block text-muted">Inspired from Johan Cruyff</small></p>
+            <p class="m-0"> - Halil ibrahim Kalkan <small class="d-block text-muted">Inspired from Johan Cruyff</small></p>
         </abp-blockquote>
     </abp-card-body>
 </abp-card>
@@ -66,31 +67,32 @@
     <abp-column size-md="_6">
         @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
         {
-            @await Component.InvokeAsync(typeof(RatingViewComponent), new { entityType = "quote", entityId = "2" })
+            @await Component.InvokeAsync(typeof(RatingViewComponent), new {entityType = "quote", entityId = "2"})
         }
     </abp-column>
     <abp-column size-md="_6">
         @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
         {
-            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "2" })
+            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new {entityType = "quote", entityId = "2"})
         }
     </abp-column>
     <abp-column size-md="_12">
         @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
         {
-            @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "2" })
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new {entityType = "quote", entityId = "2"})
         }
     </abp-column>
 </abp-row>
 
 <abp-row>
     <abp-column size="_12">
-
-        @await Component.InvokeAsync(typeof(TagViewComponent), new
+        @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
         {
-            entityType = "IndexPage",
-            entityId = Guid.Empty.ToString(),
-            tags = new List<string> { "a", "b" }
-        })
+            @await Component.InvokeAsync(typeof(TagViewComponent), new
+            {
+                entityType = "IndexPage",
+                entityId = Guid.Empty.ToString()
+            })
+        }
     </abp-column>
 </abp-row>
