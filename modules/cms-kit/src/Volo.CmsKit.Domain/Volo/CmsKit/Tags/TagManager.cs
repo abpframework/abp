@@ -59,14 +59,14 @@ namespace Volo.CmsKit.Tags
             CancellationToken cancellationToken = default)
         {
             var entity = await _tagRepository.GetAsync(id, cancellationToken: cancellationToken);
-
-            entity.SetName(name);
-
-            if (await _tagRepository.AnyAsync(entity.EntityType, name, entity.TenantId, cancellationToken))
+            
+            if (name != entity.Name && await _tagRepository.AnyAsync(entity.EntityType, name, entity.TenantId, cancellationToken))
             {
                 throw new BusinessException(message: "Tag already exist!"); // Already Exist
             }
 
+            entity.SetName(name);
+            
             return await _tagRepository.UpdateAsync(entity);
         }
     }
