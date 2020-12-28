@@ -24,6 +24,13 @@ namespace Volo.CmsKit.Pages
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
+        public virtual async Task<PageDto> GetByUrlAsync(string url)
+        {
+            var page = await PageRepository.GetByUrlAsync(url);
+            
+            return ObjectMapper.Map<Page, PageDto>(page);
+        }
+
         public virtual async Task<PageDto> CreatePageAsync(CreatePageInputDto input)
         {
             var page = await CreatePageAsync(input.Title, input.Url, input.Description);
