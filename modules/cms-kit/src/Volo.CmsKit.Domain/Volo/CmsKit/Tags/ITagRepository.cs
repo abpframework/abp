@@ -24,7 +24,7 @@ namespace Volo.CmsKit.Tags
         Task<Tag> FindAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId,
+            Guid? tenantId = null,
             CancellationToken cancellationToken = default);
 
         Task<List<Tag>> GetAllRelatedTagsAsync(
