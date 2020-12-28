@@ -26,7 +26,7 @@ namespace Volo.Abp.Cli.Commands
 {
     public class NewCommand : IConsoleCommand, ITransientDependency
     {
-        private readonly EfCoreMigrationRecreater _efCoreMigrationRecreater;
+        private readonly EfCoreMigrationManager _efCoreMigrationManager;
         public ILogger<NewCommand> Logger { get; set; }
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
@@ -34,9 +34,9 @@ namespace Volo.Abp.Cli.Commands
 
         public NewCommand(TemplateProjectBuilder templateProjectBuilder
             , ITemplateInfoProvider templateInfoProvider,
-            EfCoreMigrationRecreater efCoreMigrationRecreater)
+            EfCoreMigrationManager efCoreMigrationManager)
         {
-            _efCoreMigrationRecreater = efCoreMigrationRecreater;
+            _efCoreMigrationManager = efCoreMigrationManager;
             TemplateProjectBuilder = templateProjectBuilder;
             TemplateInfoProvider = templateInfoProvider;
 
@@ -99,13 +99,6 @@ namespace Volo.Abp.Cli.Commands
             if (databaseManagementSystem != DatabaseManagementSystem.NotSpecified)
             {
                 Logger.LogInformation("DBMS: " + databaseManagementSystem);
-            }
-
-            if (databaseManagementSystem != DatabaseManagementSystem.NotSpecified
-                && databaseManagementSystem != DatabaseManagementSystem.SQLServer
-                && connectionString == null)
-            {
-                throw new CliUsageException($"Connection string must be set if a Database Management System other than SQLServer is set. Use \"--{Options.ConnectionString.Long}\" parameter to set connection string");
             }
 
             var uiFramework = GetUiFramework(commandLineArgs);
@@ -215,7 +208,7 @@ namespace Volo.Abp.Cli.Commands
                 }
             }
 
-            ReCreateMigrationsIfNeeded(databaseProvider, databaseManagementSystem, outputFolder);
+            DeleteMigrationsIfNeeded(databaseProvider, databaseManagementSystem, outputFolder);
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
@@ -226,7 +219,7 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        private void ReCreateMigrationsIfNeeded(DatabaseProvider databaseProvider, DatabaseManagementSystem databaseManagementSystem, string outputFolder)
+        private void DeleteMigrationsIfNeeded(DatabaseProvider databaseProvider, DatabaseManagementSystem databaseManagementSystem, string outputFolder)
         {
             if (databaseManagementSystem == DatabaseManagementSystem.NotSpecified || databaseManagementSystem == DatabaseManagementSystem.SQLServer)
             {
@@ -238,9 +231,9 @@ namespace Volo.Abp.Cli.Commands
                 return;
             }
 
-            Logger.LogInformation($"Re-creating migrations... ({databaseManagementSystem})");
+            Logger.LogInformation($"Deleting migrations...");
 
-            _efCoreMigrationRecreater.Recreate(outputFolder);
+            _efCoreMigrationManager.RemoveAllMigrations(outputFolder);
         }
 
         private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
@@ -306,7 +299,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-ts|--template-source <template-source>     (your local or network abp template source)");
             sb.AppendLine("-csf|--create-solution-folder               (default: true)");
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
-            sb.AppendLine("--dbms <database-management-system>         (your database management system. Requires --connection-string to be set)");
+            sb.AppendLine("--dbms <database-management-system>         (your database management system)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
             sb.AppendLine("--no-random-port                            (Use template's default ports)");
@@ -329,7 +322,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
             sb.AppendLine("  abp new Acme.BookStore -csf false");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
-            sb.AppendLine("  abp new Acme.BookStore --dbms mysql --connection-string \"Server=myServerName\\myInstanceName;Database=myDatabase;User Id=myUsername;Password=myPassword\"");
+            sb.AppendLine("  abp new Acme.BookStore --dbms mysql");
             sb.AppendLine("  abp new Acme.BookStore --connection-string \"Server=myServerName\\myInstanceName;Database=myDatabase;User Id=myUsername;Password=myPassword\"");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
