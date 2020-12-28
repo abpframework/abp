@@ -562,7 +562,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
                 !mutableEntityType.IsOwned())
             {
-                if (Clock == null || !Clock.SupportsMultipleTimezone)
+                if (LazyServiceProvider == null || Clock == null || !Clock.SupportsMultipleTimezone)
                 {
                     return;
                 }

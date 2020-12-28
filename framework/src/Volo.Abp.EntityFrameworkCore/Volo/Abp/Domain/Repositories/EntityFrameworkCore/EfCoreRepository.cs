@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -33,7 +33,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public virtual IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-        public IEfCoreBulkOperationProvider BulkOperationProvider => LazyServiceProvider.LazyGetRequiredService<IEfCoreBulkOperationProvider>();
+        public IEfCoreBulkOperationProvider BulkOperationProvider => LazyServiceProvider.LazyGetService<IEfCoreBulkOperationProvider>();
 
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
