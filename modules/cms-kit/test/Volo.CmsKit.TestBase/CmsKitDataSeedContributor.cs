@@ -24,8 +24,9 @@ namespace Volo.CmsKit
         private readonly IRatingRepository _ratingRepository;
         private readonly ICurrentTenant _currentTenant;
         private readonly IContentRepository _contentRepository;
-        private readonly ITagRepository _tagRepository;
-
+        private readonly IEntityTagRepository _entityTagRepository;
+        private readonly ITagManager _tagManager;
+        
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
             ICmsUserRepository cmsUserRepository,
@@ -34,8 +35,9 @@ namespace Volo.CmsKit
             ReactionManager reactionManager,
             IRatingRepository ratingRepository,
             ICurrentTenant currentTenant, 
-            IContentRepository contentRepository, 
-            ITagRepository tagRepository)
+            IContentRepository contentRepository,
+            ITagManager tagManager, 
+            IEntityTagRepository entityTagRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -45,7 +47,8 @@ namespace Volo.CmsKit
             _ratingRepository = ratingRepository;
             _currentTenant = currentTenant;
             _contentRepository = contentRepository;
-            _tagRepository = tagRepository;
+            _tagManager = tagManager;
+            _entityTagRepository = entityTagRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -213,21 +216,18 @@ namespace Volo.CmsKit
 
         private async Task SeedTagsAsync()
         {
-            var content_1_tags =
-                _cmsKitTestData.Content_1_Tags
-                    .Select(x =>
-                        new Tag(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, x)).ToList();
-            
-            var content_2_tags =
-                _cmsKitTestData.Content_2_Tags
-                    .Select(x =>
-                        new Tag(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, x)).ToList();
-            
-            content_1_tags.AddRange(content_2_tags);
-
-            foreach (var tag in content_1_tags)
+            foreach (var tag in _cmsKitTestData.Content_1_Tags)
             {
-                await _tagRepository.InsertAsync(tag);
+                var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, tag);
+
+                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_1_Id));
+            }
+            
+            foreach (var tag in _cmsKitTestData.Content_2_Tags)
+            {
+                var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, tag);
+                
+                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_2_Id));
             }
         }
     }
