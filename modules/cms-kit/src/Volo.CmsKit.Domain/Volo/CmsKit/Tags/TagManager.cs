@@ -19,7 +19,6 @@ namespace Volo.CmsKit.Tags
         public async Task<Tag> GetOrAddAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            [CanBeNull] string hexColor = null,
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
@@ -27,7 +26,7 @@ namespace Volo.CmsKit.Tags
 
             if (entity == null)
             {
-                entity = await InsertAsync(entityType, name, hexColor, tenantId, cancellationToken);
+                entity = await InsertAsync(entityType, name, tenantId, cancellationToken);
             }
 
             return entity;
@@ -36,7 +35,6 @@ namespace Volo.CmsKit.Tags
         public async Task<Tag> InsertAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            [CanBeNull] string hexColor,
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
@@ -49,7 +47,6 @@ namespace Volo.CmsKit.Tags
                             new Tag(
                                 entityType,
                                 name,
-                                hexColor,
                                 tenantId),
                             cancellationToken: cancellationToken);
         }
@@ -57,13 +54,11 @@ namespace Volo.CmsKit.Tags
         public async Task<Tag> UpdateAsync(
             Guid id,
             [NotNull] string name,
-            [CanBeNull] string hexColor,
             CancellationToken cancellationToken = default)
         {
             var entity = await _tagRepository.GetAsync(id, cancellationToken: cancellationToken);
 
             entity.SetName(name);
-            entity.SetHexColor(hexColor);
 
             if (await _tagRepository.AnyAsync(entity.EntityType, name, entity.TenantId, cancellationToken))
             {
