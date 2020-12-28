@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -9,16 +10,14 @@ namespace Volo.Abp.Auditing
 {
     public class AuditingInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly IAuditingHelper _auditingHelper;
-        private readonly IAuditingManager _auditingManager;
+        private readonly IServiceProvider _serviceProvider;
 
-        public AuditingInterceptor(IAuditingHelper auditingHelper, IAuditingManager auditingManager)
+        public AuditingInterceptor(IServiceProvider serviceProvider)
         {
-            _auditingHelper = auditingHelper;
-            _auditingManager = auditingManager;
+            _serviceProvider = serviceProvider;
         }
 
-        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {
@@ -58,19 +57,21 @@ namespace Volo.Abp.Auditing
                 return false;
             }
 
-            var auditLogScope = _auditingManager.Current;
+            var auditingManager = _serviceProvider.GetRequiredService<IAuditingManager>();
+            var auditLogScope = auditingManager.Current;
             if (auditLogScope == null)
             {
                 return false;
             }
 
-            if (!_auditingHelper.ShouldSaveAudit(invocation.Method))
+            var auditingHelper = _serviceProvider.GetRequiredService<IAuditingHelper>();
+            if (!auditingHelper.ShouldSaveAudit(invocation.Method))
             {
                 return false;
             }
 
             auditLog = auditLogScope.Log;
-            auditLogAction = _auditingHelper.CreateAuditLogAction(
+            auditLogAction = auditingHelper.CreateAuditLogAction(
                 auditLog,
                 invocation.TargetObject.GetType(),
                 invocation.Method,
