@@ -66,7 +66,7 @@ namespace Volo.CmsKit.Tags
         {
             var entityTagIds = await DbContext.Set<EntityTag>()
                 .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
-                .Select(q => q.EntityId)
+                .Select(q => q.TagId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
             var query = DbSet
