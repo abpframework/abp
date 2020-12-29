@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -30,7 +30,7 @@ import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
 import { ProfileState } from './states/profile.state';
 import { oAuthStorage } from './strategies/auth-flow.strategy';
-import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
+import { CORE_OPTIONS, coreOptionsFactory } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
