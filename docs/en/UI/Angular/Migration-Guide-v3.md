@@ -470,8 +470,3 @@ Some interfaces have long been marked as deprecated and now they are removed.
 
 - Please check if you are still using [anything listed in this issue](https://github.com/abpframework/abp/issues/4281)
 
-
-## What's Next?
-
-* [Quick Start](./Quick-Start.md)
-

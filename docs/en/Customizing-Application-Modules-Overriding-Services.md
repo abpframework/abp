@@ -59,7 +59,6 @@ In most cases, you will want to change one or a few methods of the current imple
 ### Example: Overriding an Application Service
 
 ````csharp
-//[RemoteService(IsEnabled = false)] // If you use dynamic controller feature you can disable remote service. Prevent creating duplicate controller for the application service.
 [Dependency(ReplaceServices = true)]
 [ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService), typeof(MyIdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
@@ -196,6 +195,15 @@ namespace MyProject.Controllers
 This example replaces the `AccountController` (An API Controller defined in the [Account Module](Modules/Account.md)) and overrides the `SendPasswordResetCodeAsync` method.
 
 **`[ExposeServices(typeof(AccountController))]` is essential** here since it registers this controller for the `AccountController` in the dependency injection system. `[Dependency(ReplaceServices = true)]` is also recommended to clear the old registration (even the ASP.NET Core DI system selects the last registered one).
+
+In addition, The `AccountController` will be removed from [`ApplicationModel`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.applicationmodels.applicationmodel.controllers) because it defines `ExposeServicesAttribute`. If you don't want to remove it, you can configure `AbpAspNetCoreMvcOptions`:
+
+```csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.IgnoredControllersOnModelExclusion.AddIfNotContains(typeof(AccountController));
+});
+```
 
 ### Overriding Other Classes
 

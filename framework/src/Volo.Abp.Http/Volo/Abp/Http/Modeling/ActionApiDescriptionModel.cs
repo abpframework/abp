@@ -31,12 +31,11 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, [NotNull] string httpMethod, [NotNull] IList<string> supportedVersions)
+        public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, [CanBeNull] string httpMethod, [NotNull] IList<string> supportedVersions)
         {
             Check.NotNull(uniqueName, nameof(uniqueName));
             Check.NotNull(method, nameof(method));
             Check.NotNull(url, nameof(url));
-            Check.NotNull(httpMethod, nameof(httpMethod));
             Check.NotNull(supportedVersions, nameof(supportedVersions));
 
             return new ActionApiDescriptionModel

@@ -6,6 +6,7 @@
 @using Volo.Abp.ObjectExtending
 @using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
+@using Volo.Abp.Data
 @model EditModalModel
 @inject IHtmlLocalizer<AbpTenantManagementResource> L
 @inject IStringLocalizerFactory StringLocalizerFactory
@@ -20,18 +21,28 @@
             <abp-input asp-for="Tenant.Name" label="@L["TenantName"].Value" />
             @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.TenantInfoModel>())
             {
-                if (propertyInfo.Type.IsEnum)
+                if (!propertyInfo.Name.EndsWith("_Text"))
                 {
-                    <abp-select asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
-                                label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"></abp-select>
-                }
-                else
-                {
-                    <abp-input type="@propertyInfo.GetInputType()"
-                               asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
-                               label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-                               asp-format="@propertyInfo.GetInputFormatOrNull()"
-                               value="@propertyInfo.GetInputValueOrNull(Model.Tenant.ExtraProperties[propertyInfo.Name])" />
+                    if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                    {
+                        <abp-select asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
+                                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                    autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                    autocomplete-selected-item-name="@Model.Tenant.GetProperty(propertyInfo.Name+"_Text")"
+                                    autocomplete-selected-item-value="@Model.Tenant.GetProperty(propertyInfo.Name)"
+                                    autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                                    autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                                    autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                                    autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>
+                    }
+                    else
+                    {
+                        <abp-input type="@propertyInfo.GetInputType()"
+                                   asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
+                                   label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                   asp-format="@propertyInfo.GetInputFormatOrNull()"
+                                   value="@propertyInfo.GetInputValueOrNull(Model.Tenant.GetProperty(propertyInfo.Name))" />
+                    }
                 }
             }
         </abp-modal-body>

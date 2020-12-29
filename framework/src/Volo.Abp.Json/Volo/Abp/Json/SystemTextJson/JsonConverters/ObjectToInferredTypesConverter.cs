@@ -51,7 +51,8 @@ namespace Volo.Abp.Json.SystemTextJson.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, object objectToWrite, JsonSerializerOptions options)
         {
-            throw new InvalidOperationException("Should not get here.");
+            var newOptions = JsonSerializerOptionsHelper.Create(options, this);
+            JsonSerializer.Serialize(writer, objectToWrite, newOptions);
         }
     }
 }

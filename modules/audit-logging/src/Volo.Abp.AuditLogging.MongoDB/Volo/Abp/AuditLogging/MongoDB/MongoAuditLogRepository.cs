@@ -24,7 +24,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
 
         public virtual async Task<List<AuditLog>> GetListAsync(
             string sorting = null,
-            int maxResultCount = 50, 
+            int maxResultCount = 50,
             int skipCount = 0,
             DateTime? startTime = null,
             DateTime? endTime = null,
@@ -145,9 +145,10 @@ namespace Volo.Abp.AuditLogging.MongoDB
         {
             var entityChange = (await GetMongoQueryable()
                 .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
+                .OrderBy(x => x.Id)
                 .FirstAsync()).EntityChanges.FirstOrDefault(x => x.Id == entityChangeId);
-            
-            
+
+
             if (entityChange == null)
             {
                 throw new EntityNotFoundException(typeof(EntityChange));
@@ -171,16 +172,11 @@ namespace Volo.Abp.AuditLogging.MongoDB
         {
             var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
 
-            var auditLogs = await query.As<IMongoQueryable<AuditLog>>()
-                .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
+            var auditLogs = await query.As<IMongoQueryable<EntityChange>>()
+                .PageBy<EntityChange, IMongoQueryable<EntityChange>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
-            
-            // TODO: Improve this specification
 
-            return auditLogs
-                .SelectMany(x => x.EntityChanges.Where(y =>
-                    IsSatisfiedEntityChange(y, auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName)))
-                .AsQueryable().OrderBy(sorting ?? "changeTime desc").ToList();
+            return auditLogs.AsQueryable().OrderBy(sorting ?? "changeTime desc").ToList();
         }
 
         public virtual async Task<long> GetEntityChangeCountAsync(
@@ -193,8 +189,8 @@ namespace Volo.Abp.AuditLogging.MongoDB
             CancellationToken cancellationToken = default)
         {
             var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
-            var count = await query.As<IMongoQueryable<AuditLog>>()
-                .LongCountAsync(GetCancellationToken(cancellationToken));
+
+            var count = await query.As<IMongoQueryable<EntityChange>>().LongCountAsync(GetCancellationToken(cancellationToken));
 
             return count;
         }
@@ -221,14 +217,14 @@ namespace Volo.Abp.AuditLogging.MongoDB
                             .ToListAsync();
 
             var entityChanges = auditLogs.SelectMany(x => x.EntityChanges).ToList();
-            
+
             entityChanges.RemoveAll(x => x.EntityId != entityId || x.EntityTypeFullName != entityTypeFullName);
 
             return entityChanges.Select(x => new EntityChangeWithUsername()
                 {EntityChange = x, UserName = auditLogs.First(y => y.Id == x.AuditLogId).UserName}).ToList();
         }
 
-        protected virtual IQueryable<AuditLog> GetEntityChangeListQuery(
+        protected virtual IQueryable<EntityChange> GetEntityChangeListQuery(
             Guid? auditLogId = null,
             DateTime? startTime = null,
             DateTime? endTime = null,
@@ -237,56 +233,14 @@ namespace Volo.Abp.AuditLogging.MongoDB
             string entityTypeFullName = null)
         {
             return GetMongoQueryable()
-                    .Where(x => x.EntityChanges != null)
+                    .SelectMany(x => x.EntityChanges)
                     .WhereIf(auditLogId.HasValue, e => e.Id == auditLogId)
-                    .WhereIf(startTime.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeTime >= startTime))
-                    .WhereIf(endTime.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeTime >= endTime))
-                    .WhereIf(changeType.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeType == changeType))
-                    .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityChanges.Any(ec => ec.EntityId == entityId))
+                    .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)
+                    .WhereIf(endTime.HasValue, e => e.ChangeTime <= endTime)
+                    .WhereIf(changeType.HasValue, e => e.ChangeType == changeType)
+                    .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
                     .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
-                        e => e.EntityChanges.Any(ec => ec.EntityTypeFullName.Contains(entityTypeFullName)));
-        }
-
-        protected virtual bool IsSatisfiedEntityChange(
-            EntityChange entityChange, 
-            Guid? auditLogId = null,
-            DateTime? startTime = null,
-            DateTime? endTime = null,
-            EntityChangeType? changeType = null,
-            string entityId = null,
-            string entityTypeFullName = null)
-        {
-            if (auditLogId != null && auditLogId != entityChange.AuditLogId)
-            {
-                return false;
-            }
-
-            if (startTime != null && startTime.Value >= entityChange.ChangeTime)
-            {
-                return false;
-            }
-
-            if (endTime != null && endTime.Value <= entityChange.ChangeTime)
-            {
-                return false;
-            }
-
-            if (changeType != null && changeType != entityChange.ChangeType)
-            {
-                return false;
-            }
-
-            if (entityId != null && entityId != entityChange.EntityId)
-            {
-                return false;
-            }
-
-            if (entityTypeFullName != null && entityChange.EntityTypeFullName.Contains(entityTypeFullName))
-            {
-                return false;
-            }
-
-            return true;
+                        e => e.EntityTypeFullName.Contains(entityTypeFullName));
         }
     }
 }

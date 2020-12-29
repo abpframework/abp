@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -37,7 +38,10 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
-            var newProTemplate = commandLineArgs.Options.ContainsKey(Options.NewProTemplate.Long);
+
+            var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
+            var newProTemplate = !string.IsNullOrEmpty(template) && template == ModuleProTemplate.TemplateName;
+
             var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
 
@@ -91,8 +95,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given solution.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given solution but doesn't create a database migration.");
             sb.AppendLine(@"  abp add-module Volo.Blogging -s Acme.BookStore -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Adds the module to the given solution and specify migration startup project.");
-            sb.AppendLine(@"  abp add-module ProductManagement --new-template -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Crates a new module named `ProductManagement` and adds it to your solution.");
-            sb.AppendLine(@"  abp add-module ProductManagement --new-template --add-to-solution-file -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Crates a new module named `ProductManagement`, adds it to your solution & solution file.");
+            sb.AppendLine(@"  abp add-module ProductManagement --new -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Crates a new module named `ProductManagement` and adds it to your solution.");
+            sb.AppendLine(@"  abp add-module ProductManagement --new --add-to-solution-file -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Crates a new module named `ProductManagement`, adds it to your solution & solution file.");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -176,12 +180,13 @@ namespace Volo.Abp.Cli.Commands
 
             public class NewTemplate
             {
-                public const string Long = "new-template";
+                public const string Long = "new";
             }
 
-            public class NewProTemplate
+            public class Template
             {
-                public const string Long = "new-pro-template";
+                public const string Short = "t";
+                public const string Long = "template";
             }
         }
     }

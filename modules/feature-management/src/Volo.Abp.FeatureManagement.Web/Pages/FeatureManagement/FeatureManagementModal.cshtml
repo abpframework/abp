@@ -32,14 +32,15 @@
                 <abp-tabs name="FeaturesTabs" tab-style="PillVertical" vertical-header-size="_4" class="custom-scroll-container">
                     @for (var i = 0; i < featureGroups.Count; i++)
                     {
-                        <abp-tab title="@featureGroups[i].DisplayName" name="v-pills-tab-@featureGroups[i].GetNormalizedGroupName()">
-                            <h4>@featureGroups[i].DisplayName</h4>
+                        var featureGroup = featureGroups[i];
+                        <abp-tab title="@featureGroup.DisplayName" name="v-pills-tab-@featureGroup.GetNormalizedGroupName()">
+                            <h4>@featureGroup.DisplayName</h4>
                             <hr class="mt-2 mb-3"/>
                             <div class="custom-scroll-content">
                                 <div class="pl-1 pt-1">
-                                    @for (var j = 0; j < featureGroups[i].Features.Count; j++)
+                                    @for (var j = 0; j < featureGroup.Features.Count; j++)
                                     {
-                                        var feature = featureGroups[i].Features[j];
+                                        var feature = featureGroup.Features[j];
                                         var disabled = Model.IsDisabled(feature.Provider.Name);
                                         <div class="mt-2">
 
@@ -48,7 +49,7 @@
 
                                             @if (feature.ValueType is ToggleStringValueType)
                                             {
-                                                <abp-input asp-for="@featureGroups[i].Features[j].Value"
+                                                <abp-input asp-for="@feature.Value"
                                                            type="checkbox"
                                                            name="FeatureGroups[@i].Features[@j].BoolValue"
                                                            label="@feature.DisplayName"
@@ -67,8 +68,9 @@
                                                     type = "number";
                                                 }
 
-                                                <abp-input asp-for="@featureGroups[i].Features[j].Value"
+                                                <abp-input asp-for="@feature.Value"
                                                            label="@feature.DisplayName"
+                                                           name="featureGroups[@i].Features[@j].Value"
                                                            disabled="@disabled"
                                                            type="@type"
                                                            group-data-feature-name="@feature.Name"

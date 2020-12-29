@@ -39,7 +39,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
             TenantInfo = new TenantInfoModel();
         }
 
-        protected async override Task SetPermissionsAsync()
+        protected override async Task SetPermissionsAsync()
         {
             await base.SetPermissionsAsync();
 

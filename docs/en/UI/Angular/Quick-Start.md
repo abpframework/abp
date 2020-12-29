@@ -204,9 +204,3 @@ In addition, you can [deploy your application to certain targets using the Angul
 ---
 
 <sup id="f-dist-folder-name"><b>1</b></sup> _The compiled output will be placed under `/dist` in a folder by the project name._ <sup>[↩](#a-dist-folder-name)</sup>
-
----
-
-## What's Next?
-
-- [Environment Variables](./Environment.md)

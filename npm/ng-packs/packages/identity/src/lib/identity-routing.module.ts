@@ -10,13 +10,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { RolesComponent } from './components/roles/roles.component';
 import { UsersComponent } from './components/users/users.component';
 import { eIdentityComponents } from './enums/components';
+import { IdentityExtensionsGuard } from './guards/extensions.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'roles', pathMatch: 'full' },
   {
     path: '',
     component: DynamicLayoutComponent,
-    canActivate: [AuthGuard, PermissionGuard],
+    canActivate: [AuthGuard, PermissionGuard, IdentityExtensionsGuard],
     children: [
       {
         path: 'roles',

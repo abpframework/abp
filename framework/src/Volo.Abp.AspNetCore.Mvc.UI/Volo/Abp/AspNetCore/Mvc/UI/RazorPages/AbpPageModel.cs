@@ -16,6 +16,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
@@ -125,6 +126,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
 
+        protected IAppUrlProvider AppUrlProvider => LazyGetRequiredService(ref _appUrlProvider);
+        private IAppUrlProvider _appUrlProvider;
+
         protected virtual NoContentResult NoContent() //TODO: Is that true to return empty result like that?
         {
             return new NoContentResult();
@@ -164,6 +168,43 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
             }
 
             return localizer;
+        }
+
+        protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+        {
+            return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
+        }
+
+        protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+        {
+            returnUrl = NormalizeReturnUrl(returnUrl);
+
+            if (!returnUrlHash.IsNullOrWhiteSpace())
+            {
+                returnUrl = returnUrl + returnUrlHash;
+            }
+
+            return returnUrl;
+        }
+
+        private string NormalizeReturnUrl(string returnUrl)
+        {
+            if (returnUrl.IsNullOrEmpty())
+            {
+                return GetAppHomeUrl();
+            }
+
+            if (Url.IsLocalUrl(returnUrl) || AppUrlProvider.IsRedirectAllowedUrl(returnUrl))
+            {
+                return returnUrl;
+            }
+
+            return GetAppHomeUrl();
+        }
+
+        protected virtual string GetAppHomeUrl()
+        {
+            return "~/"; //TODO: ???
         }
     }
 }

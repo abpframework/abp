@@ -5,7 +5,7 @@ const ENV = {
       issuer: 'http://localhost:44305',
       clientId: 'MyProjectName_App',
       clientSecret: '1q2w3e*',
-      scope: 'MyProjectName',
+      scope: 'offline_access MyProjectName',
     },
     localization: {
       defaultResourceName: 'MyProjectName',
@@ -17,7 +17,7 @@ const ENV = {
       issuer: 'http://localhost:44305',
       clientId: 'MyProjectName_App',
       clientSecret: '1q2w3e*',
-      scope: 'MyProjectName',
+      scope: 'offline_access MyProjectName',
     },
     localization: {
       defaultResourceName: 'MyProjectName',

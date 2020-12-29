@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -23,6 +24,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
+
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
+
+            options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
+            options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
         }
     }
 }

@@ -25,14 +25,14 @@ describe('PermissionGuard', () => {
     declarations: [DummyComponent],
     imports: [
       RouterModule.forRoot([
-        {
-          path: 'test',
-          component: DummyComponent,
-          data: {
+    {
+        path: 'test',
+        component: DummyComponent,
+        data: {
             requiredPolicy: 'TestPolicy',
-          },
         },
-      ]),
+    },
+], { relativeLinkResolution: 'legacy' }),
     ],
     providers: [
       {

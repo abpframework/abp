@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             var title = new TagBuilder("h5");
             title.AddCssClass("modal-title");
-            title.InnerHtml.Append(TagHelper.Title);
+            title.InnerHtml.AppendHtml(TagHelper.Title);
 
             return title.ToHtmlString();
         }

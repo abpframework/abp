@@ -22,7 +22,7 @@ namespace Volo.Abp.Users.EntityFrameworkCore
 
         public async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
-            return await this.FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
+            return await this.OrderBy(x => x.Id).FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
@@ -31,8 +31,8 @@ namespace Volo.Abp.Users.EntityFrameworkCore
         }
 
         public async Task<List<TUser>> SearchAsync(
-            string sorting = null, 
-            int maxResultCount = int.MaxValue, 
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
             int skipCount = 0,
             string filter = null,
             CancellationToken cancellationToken = default)
@@ -52,7 +52,7 @@ namespace Volo.Abp.Users.EntityFrameworkCore
         }
 
         public async Task<long> GetCountAsync(
-            string filter = null, 
+            string filter = null,
             CancellationToken cancellationToken = default)
         {
             return await DbSet

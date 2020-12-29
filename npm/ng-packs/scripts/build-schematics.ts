@@ -49,18 +49,22 @@ async function* copyPackageFiles(packageName: string) {
 }
 
 (async () => {
-  await fse.remove(`../dist/${PACKAGE_TO_BUILD}`);
+  try {
+    await fse.remove(`../dist/${PACKAGE_TO_BUILD}`);
 
-  await execa(
-    'tsc',
-    ['-p', `packages/${PACKAGE_TO_BUILD}/tsconfig.json`, '--outDir', `dist/${PACKAGE_TO_BUILD}`],
-    {
-      stdout: 'inherit',
-      cwd: '../',
-    },
-  );
+    await execa(
+      'tsc',
+      ['-p', `packages/${PACKAGE_TO_BUILD}/tsconfig.json`, '--outDir', `dist/${PACKAGE_TO_BUILD}`],
+      {
+        stdout: 'inherit',
+        cwd: '../',
+      },
+    );
 
-  for await (const filecopy of copyPackageFiles(PACKAGE_TO_BUILD)) {
-    // do nothing
+    for await (const filecopy of copyPackageFiles(PACKAGE_TO_BUILD)) {
+      // do nothing
+    }
+  } catch (error) {
+    process.exit(1);
   }
 })();

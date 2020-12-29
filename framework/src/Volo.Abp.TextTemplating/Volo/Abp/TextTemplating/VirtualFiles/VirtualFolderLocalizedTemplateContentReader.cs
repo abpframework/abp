@@ -11,18 +11,18 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
         private Dictionary<string, string> _dictionary;
 
         public async Task ReadContentsAsync(
-            IVirtualFileProvider virtualFileProvider, 
+            IVirtualFileProvider virtualFileProvider,
             string virtualPath)
         {
             _dictionary = new Dictionary<string, string>();
 
-            var directoryInfo = virtualFileProvider.GetFileInfo(virtualPath);
-            if (!directoryInfo.IsDirectory)
+            var directoryContents = virtualFileProvider.GetDirectoryContents(virtualPath);
+            if (!directoryContents.Exists)
             {
-                throw new AbpException("Given virtual path is not a folder: " + virtualPath);
+                throw new AbpException("Could not find a folder at the location: " + virtualPath);
             }
 
-            foreach (var file in virtualFileProvider.GetDirectoryContents(virtualPath))
+            foreach (var file in directoryContents)
             {
                 if (file.IsDirectory)
                 {

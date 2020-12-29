@@ -1,10 +1,11 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Json
 {
     public interface IJsonSerializerProvider
     {
-        bool CanHandle(Type type);
+        bool CanHandle([CanBeNull]Type type);
 
         string Serialize(object obj, bool camelCase = true, bool indented = false);
 

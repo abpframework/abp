@@ -843,15 +843,8 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 ````xml
 @page "/authors"
 @using Acme.BookStore.Authors
-@using Acme.BookStore.Localization
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.Extensions.Localization
-@using Volo.Abp.ObjectMapping
+@inherits BookStoreComponentBase
 @inject IAuthorAppService AuthorAppService
-@inject IStringLocalizer<BookStoreResource> L
-@inject IAuthorizationService AuthorizationService
-@inject IUiMessageService UiMessageService
-@inject IObjectMapper ObjectMapper
 <Card>
     <CardHeader>
         <Row>
@@ -1038,7 +1031,7 @@ namespace Acme.BookStore.Blazor.Pages
             EditingAuthor = new UpdateAuthorDto();
         }
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             await SetPermissionsAsync();
             await GetAuthorsAsync();
@@ -1048,10 +1041,10 @@ namespace Acme.BookStore.Blazor.Pages
         {
             CanCreateAuthor = await AuthorizationService
                 .IsGrantedAsync(BookStorePermissions.Authors.Create);
-            
+
             CanEditAuthor = await AuthorizationService
                 .IsGrantedAsync(BookStorePermissions.Authors.Edit);
-            
+
             CanDeleteAuthor = await AuthorizationService
                 .IsGrantedAsync(BookStorePermissions.Authors.Delete);
         }
@@ -1105,7 +1098,7 @@ namespace Acme.BookStore.Blazor.Pages
         private async Task DeleteAuthorAsync(AuthorDto author)
         {
             var confirmMessage = L["AuthorDeletionConfirmationMessage", author.Name];
-            if (!await UiMessageService.ConfirmAsync(confirmMessage))
+            if (!await Message.Confirm(confirmMessage))
             {
                 return;
             }

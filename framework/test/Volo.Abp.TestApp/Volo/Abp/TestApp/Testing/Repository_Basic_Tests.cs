@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
@@ -114,6 +116,73 @@ namespace Volo.Abp.TestApp.Testing
             await PersonRepository.InsertAsync(person);
 
             person.Id.ShouldNotBe(Guid.Empty);
+        }
+
+        [Fact]
+        public async Task InserManyAsync()
+        {
+            var entities = new List<Person>
+            {
+                new Person(Guid.NewGuid(), "Person 1", 30),
+                new Person(Guid.NewGuid(), "Person 2", 31),
+                new Person(Guid.NewGuid(), "Person 3", 32),
+                new Person(Guid.NewGuid(), "Person 4", 33),
+            };
+
+            await PersonRepository.InsertManyAsync(entities);
+
+            foreach (var entity in entities)
+            {
+                var person = await PersonRepository.FindAsync(entity.Id);
+                person.ShouldNotBeNull();
+            }
+        }
+
+        [Fact]
+        public async Task UpdateManyAsync()
+        {
+            var entities = await PersonRepository.GetListAsync();
+            var random = new Random();
+            entities.ForEach(f => f.Age = random.Next());
+
+            await PersonRepository.UpdateManyAsync(entities);
+
+            foreach (var entity in entities)
+            {
+                var person = await PersonRepository.FindAsync(entity.Id);
+                person.ShouldNotBeNull();
+                person.Age.ShouldBe(entity.Age);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteManyAsync()
+        {
+            var entities = await PersonRepository.GetListAsync();
+
+            await PersonRepository.DeleteManyAsync(entities);
+
+            foreach (var entity in entities)
+            {
+                var person = await PersonRepository.FindAsync(entity.Id);
+                person.ShouldBeNull();
+            }
+        }
+
+        [Fact]
+        public async Task DeleteManyAsync_WithId()
+        {
+            var entities = await PersonRepository.GetListAsync();
+
+            var ids = entities.Select(s => s.Id).ToArray();
+
+            await PersonRepository.DeleteManyAsync(ids);
+
+            foreach (var id in ids)
+            {
+                var person = await PersonRepository.FindAsync(id);
+                person.ShouldBeNull();
+            }
         }
     }
 }

@@ -71,8 +71,3 @@ projectContent<T extends Type<any> | TemplateRef<any>>(
 
 - `projectionStrategy` parameter is the primary focus here and is explained above.
 - `injector` parameter is the `Injector` instance you can pass to the projected content. It is not used in `TemplateProjectionStrategy`.
-
-
-## What's Next?
-
-- [Confirmation Popup](./Confirmation-Service.md)

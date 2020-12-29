@@ -33,6 +33,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         protected IStringLocalizer<AbpIdentityServerResource> Localizer { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
         protected AbpIdentityOptions AbpIdentityOptions { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public AbpResourceOwnerPasswordValidator(
             UserManager<IdentityUser> userManager,
@@ -41,7 +42,8 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
             IStringLocalizer<AbpIdentityServerResource> localizer,
             IOptions<AbpIdentityOptions> abpIdentityOptions,
-            IHybridServiceScopeFactory serviceScopeFactory)
+            IHybridServiceScopeFactory serviceScopeFactory,
+            IOptions<IdentityOptions> identityOptions)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -50,6 +52,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             Localizer = localizer;
             ServiceScopeFactory = serviceScopeFactory;
             AbpIdentityOptions = abpIdentityOptions.Value;
+            IdentityOptions = identityOptions;
         }
 
         /// <summary>
@@ -123,6 +126,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             string errorDescription;
             if (user != null)
             {
+                await IdentityOptions.SetAsync();
                 var result = await SignInManager.CheckPasswordSignInAsync(user, context.Password, true);
                 if (result.Succeeded)
                 {

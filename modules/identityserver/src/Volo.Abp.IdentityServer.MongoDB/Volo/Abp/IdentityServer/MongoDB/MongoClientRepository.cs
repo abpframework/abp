@@ -26,7 +26,10 @@ namespace Volo.Abp.IdentityServer.MongoDB
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable()
+                .Where(x => x.ClientId == clientId)
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Client>> GetListAsync(

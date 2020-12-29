@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.Messages
@@ -14,27 +15,27 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Messages
             JsRuntime = jsRuntime;
         }
 
-        public async Task InfoAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public async Task Info(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             await JsRuntime.InvokeVoidAsync("alert", message);
         }
 
-        public async Task SuccessAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public async Task Success(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             await JsRuntime.InvokeVoidAsync("alert", message);
         }
 
-        public async Task WarnAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public async Task Warn(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             await JsRuntime.InvokeVoidAsync("alert", message);
         }
 
-        public async Task ErrorAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public async Task Error(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             await JsRuntime.InvokeVoidAsync("alert", message);
         }
 
-        public async Task<bool> ConfirmAsync(string message, string title = null, Action<UiMessageOptions> options = null)
+        public async Task<bool> Confirm(string message, string title = null, Action<UiMessageOptions> options = null)
         {
             return await JsRuntime.InvokeAsync<bool>("confirm", message);
         }

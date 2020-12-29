@@ -19,7 +19,12 @@ namespace Volo.Abp.Json
             Configure<AbpJsonOptions>(options =>
             {
                 options.Providers.Add<AbpNewtonsoftJsonSerializerProvider>();
-                options.Providers.Add<AbpSystemTextJsonSerializerProvider>();
+
+                var abpJsonOptions = context.Services.ExecutePreConfiguredActions<AbpJsonOptions>();
+                if (abpJsonOptions.UseHybridSerializer)
+                {
+                    options.Providers.Add<AbpSystemTextJsonSerializerProvider>();
+                }
             });
 
             Configure<AbpNewtonsoftJsonSerializerOptions>(options =>

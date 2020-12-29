@@ -50,7 +50,7 @@ public Guid AuthorId { get; set; }
 
 {{if DB=="EF"}}
 
-> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (just like we will done below) which makes your application code simpler.
+> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity from the `Book` class (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their authors (like we will done below) which makes your application code simpler.
 
 {{end}}
 
@@ -362,7 +362,7 @@ namespace Acme.BookStore.Books
             DeletePolicyName = BookStorePermissions.Books.Create;
         }
 
-        public async override Task<BookDto> GetAsync(Guid id)
+        public override async Task<BookDto> GetAsync(Guid id)
         {
             await CheckGetPolicyAsync();
 
@@ -384,8 +384,8 @@ namespace Acme.BookStore.Books
             return bookDto;
         }
 
-        public async override Task<PagedResultDto<BookDto>>
-            GetListAsync(PagedAndSortedResultRequestDto input)
+        public override async Task<PagedResultDto<BookDto>> GetListAsync(
+            PagedAndSortedResultRequestDto input)
         {
             await CheckGetListPolicyAsync();
 
@@ -911,6 +911,17 @@ You can run the application and try to create a new book or update an existing b
 
 {{else if UI=="NG"}}
 
+### Service Proxy Generation
+
+Since the HTTP APIs have been changed, you need to update Angular client side [service proxies](../UI/Angular/Service-Proxies.md). Before running `generate-proxy` command, your host must be up and running.
+
+Run the following command in the `angular` folder (you may need to stop the angular application):
+
+```bash
+abp generate-proxy
+```
+This command will update the service proxy files under the `/src/app/proxy/` folder.
+
 ### The Book List
 
 Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:
@@ -1082,36 +1093,37 @@ Add the following field to the `@code` section of the `Books.razor` file:
 IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
 ````
 
-And fill it in the `OnInitializedAsync` method, by adding the following code to the end of the method:
+Override the `OnInitializedAsync` method and adding the following code:
 
 ````csharp
-authorList = (await AppService.GetAuthorLookupAsync()).Items;
+protected override async Task OnInitializedAsync()
+{
+    await base.OnInitializedAsync();
+    authorList = (await AppService.GetAuthorLookupAsync()).Items;
+}
 ````
+
+* It is essential to call the `base.OnInitializedAsync()` since `AbpCrudPageBase` has some initialization code to be executed.
 
 The final `@code` block should be the following:
 
 ````csharp
 @code
 {
-    bool canCreateBook;
-    bool canEditBook;
-    bool canDeleteBook;
-
     //ADDED A NEW FIELD
     IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
 
-    protected async override Task OnInitializedAsync()
+    public Books() // Constructor
+    {
+        CreatePolicyName = BookStorePermissions.Books.Create;
+        UpdatePolicyName = BookStorePermissions.Books.Edit;
+        DeletePolicyName = BookStorePermissions.Books.Delete;
+    }
+
+    //GET AUTHORS ON INITIALIZATION
+    protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        canCreateBook = await
-            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create);
-        canEditBook = await
-            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Edit);
-        canDeleteBook = await
-            AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Delete);
-
-        //GET AUTHORS
         authorList = (await AppService.GetAuthorLookupAsync()).Items;
     }
 }

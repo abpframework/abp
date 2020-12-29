@@ -30,6 +30,10 @@
     "UserNameNotFound": "There is no user with username {0}",
     "SuccessfullyAddedToNewsletter": "Thanks you for subscribing to our newsletter!",
     "MyProfile": "My profile",
-    "EmailNotValid": "Please enter a valid email address."
+    "EmailNotValid": "Please enter a valid email address.",
+    "JoinOurMarketingNewsletter": "Join our marketing newsletter",
+    "WouldLikeToReceiveMarketingMaterials": "I would like to receive marketing materials like product deals & special offers.",
+    "StartUsingYourLicenseNow": "Start using your license now!",
+    "WelcomePage": "Welcome Page"
    }
 }

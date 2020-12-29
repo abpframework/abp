@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 
-namespace Volo.Abp.Json
+namespace Volo.Abp.Json.SystemTextJson
 {
     public class AbpSystemTextJsonSerializerOptionsSetup : IConfigureOptions<AbpSystemTextJsonSerializerOptions>
     {
@@ -19,6 +18,12 @@ namespace Volo.Abp.Json
         {
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpDateTimeConverter>());
             options.JsonSerializerOptions.Converters.Add(ServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>());
+
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToEnumFactory());
+            options.JsonSerializerOptions.Converters.Add(new AbpStringToBooleanConverter());
+
+            options.JsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
+            options.JsonSerializerOptions.Converters.Add(new AbpHasExtraPropertiesJsonConverterFactory());
         }
     }
 }

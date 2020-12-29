@@ -1,15 +1,14 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ReplaceableComponents } from '../models/replaceable-components';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { noop } from '../utils/common-utils';
-import { map, filter } from 'rxjs/operators';
 import { InternalStore } from '../utils/internal-store-utils';
 import { reloadRoute } from '../utils/route-utils';
 
 @Injectable({ providedIn: 'root' })
 export class ReplaceableComponentsService {
-  private store: InternalStore<ReplaceableComponents.ReplaceableComponent[]>;
+  private readonly store: InternalStore<ReplaceableComponents.ReplaceableComponent[]>;
 
   get replaceableComponents$(): Observable<ReplaceableComponents.ReplaceableComponent[]> {
     return this.store.sliceState(state => state);
@@ -40,7 +39,7 @@ export class ReplaceableComponentsService {
       replaceableComponents.push(replaceableComponent);
     }
 
-    this.store.patch(replaceableComponents);
+    this.store.set(replaceableComponents);
 
     if (reload) reloadRoute(this.router, this.ngZone);
   }

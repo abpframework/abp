@@ -13,11 +13,11 @@ namespace Volo.Abp.SettingManagement.Blazor.Menus
         {
             if (context.Menu.Name == StandardMenus.Main)
             {
-                await ConfigureMainMenu(context);
+                await ConfigureMainMenuAsync(context);
             }
         }
 
-        private async Task ConfigureMainMenu(MenuConfigurationContext context)
+        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var settingManagementPageOptions = context.ServiceProvider.GetRequiredService<IOptions<SettingManagementComponentOptions>>().Value;
             var settingPageCreationContext = new SettingComponentCreationContext(context.ServiceProvider);
@@ -37,12 +37,12 @@ namespace Volo.Abp.SettingManagement.Blazor.Menus
                     new ApplicationMenuItem(
                         SettingManagementMenus.GroupName,
                         l["Settings"],
-                        "/setting-management",
+                        "setting-management",
                         icon: "fa fa-cog"
                     )
                 );
         }
-        
+
         protected virtual async Task<bool> CheckAnyOfPagePermissionsGranted(
             SettingManagementComponentOptions settingManagementComponentOptions,
             SettingComponentCreationContext settingComponentCreationContext)

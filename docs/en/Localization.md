@@ -162,8 +162,8 @@ Getting the localized text is pretty standard.
 
 Just inject the `IStringLocalizer<TResource>` service and use it like shown below:
 
-````C#
-public class MyService
+````csharp
+public class MyService : ITransientDependency
 {
     private readonly IStringLocalizer<TestResource> _localizer;
 

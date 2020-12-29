@@ -70,7 +70,7 @@ namespace Acme.BookStore.Permissions
 }
 ````
 
-This is a hierarchical way of defining permission names. For example, "create book" permission name was defined as `BookStore.Books.Create`.
+This is a hierarchical way of defining permission names. For example, "create book" permission name was defined as `BookStore.Books.Create`. ABP doesn't force you to a structure, but we find this way useful.
 
 ### Permission Definitions
 
@@ -423,13 +423,13 @@ Open the `/src/app/book/book.component.html` file and replace the create button 
 
 ````html
 <!-- Add the abpPermission directive -->
-<button abpPermission="BookStore.Books.Create" id="create" class="btn btn-primary" type="button" (click)="createBook()">
+<button *abpPermission="'BookStore.Books.Create'" id="create" class="btn btn-primary" type="button" (click)="createBook()">
   <i class="fa fa-plus mr-1"></i>
   <span>{%{{{ '::NewBook' | abpLocalization }}}%}</span>
 </button>
 ````
 
-* Just added `abpPermission="BookStore.Books.Create"` that hides the button if the current user has no permission.
+* Just added `*abpPermission="'BookStore.Books.Create'"` that hides the button if the current user has no permission.
 
 ### Hide the Edit and Delete Actions
 
@@ -443,18 +443,18 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 
 ````html
 <!-- Add the abpPermission directive -->
-<button abpPermission="BookStore.Books.Edit" ngbDropdownItem (click)="editBook(row.id)">
+<button *abpPermission="'BookStore.Books.Edit'" ngbDropdownItem (click)="editBook(row.id)">
   {%{{{ '::Edit' | abpLocalization }}}%}
 </button>
 
 <!-- Add the abpPermission directive -->
-<button abpPermission="BookStore.Books.Delete" ngbDropdownItem (click)="delete(row.id)">
+<button *abpPermission="'BookStore.Books.Delete'" ngbDropdownItem (click)="delete(row.id)">
   {%{{{ '::Delete' | abpLocalization }}}%}
 </button>
 ````
 
-* Added `abpPermission="BookStore.Books.Edit"` that hides the edit action if the current user has no editing permission.
-* Added `abpPermission="BookStore.Books.Delete"` that hides the delete action if the current user has no delete permission.
+* Added `*abpPermission="'BookStore.Books.Edit'"` that hides the edit action if the current user has no editing permission.
+* Added `*abpPermission="'BookStore.Books.Delete'"` that hides the delete action if the current user has no delete permission.
 
 {{else if UI == "Blazor"}}
 
@@ -476,29 +476,29 @@ Adding this attribute prevents to enter this page if the current hasn't logged i
 
 The book management page has a *New Book* button and *Edit* and *Delete* actions for each book. We should hide these buttons/actions if the current user has not granted for the related permissions.
 
-#### Get the Permissions On Initialization
+The base `AbpCrudPageBase` class already has the necessary functionality for these kind of operations.
+
+#### Set the Policy (Permission) Names
 
 Add the following code block to the end of the `Books.razor` file:
 
 ````csharp
 @code
 {
-    bool canCreateBook;
-    bool canEditBook;
-    bool canDeleteBook;
-
-    protected async override Task OnInitializedAsync()
+    public Books() // Constructor
     {
-        await base.OnInitializedAsync();
-
-        canCreateBook =await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create);
-        canEditBook = await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Edit);
-        canDeleteBook = await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Delete);
+        CreatePolicyName = BookStorePermissions.Books.Create;
+        UpdatePolicyName = BookStorePermissions.Books.Edit;
+        DeletePolicyName = BookStorePermissions.Books.Delete;
     }
 }
 ````
 
-We will use these `bool` fields to check the permissions. `AuthorizationService` comes from the base class as an injected property.
+The base `AbpCrudPageBase` class automatically checks these permissions on the related operations. It also defines the given properties for us if we need to check them manually:
+
+* `HasCreatePermission`: True, if the current user has permission to create the entity.
+* `HasUpdatePermission`: True, if the current user has permission to edit/update the entity.
+* `HasDeletePermission`: True, if the current user has permission to delete the entity.
 
 > **Blazor Tip**: While adding the C# code into a `@code` block is fine for small code parts, it is suggested to use the code behind approach to develop a more maintainable code base when the code block becomes longer. We will use this approach for the authors part.
 
@@ -507,32 +507,31 @@ We will use these `bool` fields to check the permissions. `AuthorizationService`
 Wrap the *New Book* button by an `if` block as shown below:
 
 ````xml
-@if (canCreateBook)
+@if (HasCreatePermission)
 {
     <Button Color="Color.Primary"
-            Clicked="OpenCreateModalAsync">
-        @L["NewBook"]
-    </Button>
+            Clicked="OpenCreateModalAsync">@L["NewBook"]</Button>
 }
 ````
 
 #### Hide the Edit/Delete Actions
 
-As similar to the *New Book* button, we can use `if` blocks to conditionally show/hide the *Edit* and *Delete* actions:
+`EntityAction` component defines `RequiredPolicy` attribute (parameter) to conditionally show the action based on the user permissions.
+
+Update the `EntityActions` section as shown below:
 
 ````xml
-@if (canEditBook)
-{
-    <DropdownItem Clicked="() => OpenEditModalAsync(context)">
-        @L["Edit"]
-    </DropdownItem>
-}
-@if (canDeleteBook)
-{
-    <DropdownItem Clicked="() => DeleteEntityAsync(context)">
-        @L["Delete"]
-    </DropdownItem>
-}
+<EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
+    <EntityAction TItem="BookDto"
+                  Text="@L["Edit"]"
+                  RequiredPolicy="@UpdatePolicyName"
+                  Clicked="() => OpenEditModalAsync(context)" />
+    <EntityAction TItem="BookDto"
+                  Text="@L["Delete"]"
+                  RequiredPolicy="@DeletePolicyName"
+                  Clicked="() => DeleteEntityAsync(context)"
+                  ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+</EntityActions>
 ````
 
 #### About the Permission Caching
@@ -587,54 +586,39 @@ if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
 }
 ````
 
-You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return values. The final `BookStoreMenuContributor` class should be the following:
+You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return value. The final `ConfigureMainMenuAsync` method should be the following:
 
 ````csharp
-using System.Threading.Tasks;
-using Acme.BookStore.Localization;
-using Acme.BookStore.Permissions;
-using Volo.Abp.UI.Navigation;
-
-namespace Acme.BookStore.Blazor
+private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
 {
-    public class BookStoreMenuContributor : IMenuContributor
+    var l = context.GetLocalizer<BookStoreResource>();
+
+    context.Menu.Items.Insert(
+        0,
+        new ApplicationMenuItem(
+            "BookStore.Home",
+            l["Menu:Home"],
+            "/",
+            icon: "fas fa-home"
+        )
+    );
+
+    var bookStoreMenu = new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    );
+
+    context.Menu.AddItem(bookStoreMenu);
+
+    //CHECK the PERMISSION
+    if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
     {
-        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
-        {
-            if(context.Menu.DisplayName != StandardMenus.Main)
-            {
-                return;
-            }
-
-            var l = context.GetLocalizer<BookStoreResource>();
-
-            context.Menu.Items.Insert(
-                0,
-                new ApplicationMenuItem(
-                    "BookStore.Home",
-                    l["Menu:Home"],
-                    "/",
-                    icon: "fas fa-home"
-                )
-            );
-
-            var bookStoreMenu = new ApplicationMenuItem(
-                "BooksStore",
-                l["Menu:BookStore"],
-                icon: "fa fa-book"
-            );
-
-            context.Menu.AddItem(bookStoreMenu);
-
-            if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-            {
-                bookStoreMenu.AddItem(new ApplicationMenuItem(
-                    "BooksStore.Books",
-                    l["Menu:Books"],
-                    url: "/books"
-                ));
-            }
-        }
+        bookStoreMenu.AddItem(new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/books"
+        ));
     }
 }
 ````

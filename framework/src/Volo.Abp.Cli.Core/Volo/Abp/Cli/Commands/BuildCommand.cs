@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
@@ -51,24 +52,32 @@ namespace Volo.Abp.Cli.Commands
             var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
             buildConfig.BuildName = buildName;
             buildConfig.ForceBuild = forceBuild;
+            
+            if (string.IsNullOrEmpty(buildConfig.SlFilePath))
+            {
+                var changedProjectFiles = ChangedProjectFinder.FindByRepository(buildConfig);
+                
+                var buildSucceededProjects = DotNetProjectBuilder.BuildProjects(
+                    changedProjectFiles,
+                    dotnetBuildArguments ?? ""
+                );
 
-            Console.WriteLine("Finding changed projects...");
+                var buildStatus = BuildStatusGenerator.Generate(
+                    buildConfig,
+                    changedProjectFiles,
+                    buildSucceededProjects
+                );
 
-            var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
-
-            var buildSucceededProjects = DotNetProjectBuilder.Build(
-                changedProjectFiles,
-                dotnetBuildArguments ?? ""
-            );
-
-            var buildStatus = BuildStatusGenerator.Generate(
-                buildConfig,
-                changedProjectFiles,
-                buildSucceededProjects
-            );
-
-            RepositoryBuildStatusStore.Set(buildName, buildConfig.GitRepository, buildStatus);
-
+                RepositoryBuildStatusStore.Set(buildName, buildConfig.GitRepository, buildStatus);
+            }
+            else
+            {
+                DotNetProjectBuilder.BuildSolution(
+                    buildConfig.SlFilePath,
+                    dotnetBuildArguments ?? ""
+                );
+            }
+            
             sw.Stop();
             Console.WriteLine("Build operation is completed in " + sw.ElapsedMilliseconds + " (ms)");
 

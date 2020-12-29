@@ -27,6 +27,7 @@ namespace Volo.Abp.Cli.Commands
 
             var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Short) ||
                              commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
+            
 
             if (!Directory.Exists(workingDirectory))
             {

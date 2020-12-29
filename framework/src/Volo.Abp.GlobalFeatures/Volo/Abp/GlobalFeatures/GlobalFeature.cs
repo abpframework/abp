@@ -1,4 +1,4 @@
-﻿﻿using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace Volo.Abp.GlobalFeatures
 {

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Volo.Abp.Data;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 {
-    public class ExtraPropertiesValueConverter : ValueConverter<Dictionary<string, object>, string>
+    public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDictionary, string>
     {
         public ExtraPropertiesValueConverter(Type entityType)
             : base(
@@ -17,7 +18,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 
         }
 
-        private static string SerializeObject(Dictionary<string, object> extraProperties, Type entityType)
+        private static string SerializeObject(ExtraPropertyDictionary extraProperties, Type entityType)
         {
             var copyDictionary = new Dictionary<string, object>(extraProperties);
 
@@ -39,11 +40,18 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
             return JsonSerializer.Serialize(copyDictionary);
         }
 
-        private static Dictionary<string, object> DeserializeObject(string extraPropertiesAsJson, Type entityType)
+        private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson, Type entityType)
         {
+            if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
+            {
+                return new ExtraPropertyDictionary();
+            }
+
             var deserializeOptions = new JsonSerializerOptions();
             deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
-            var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(extraPropertiesAsJson, deserializeOptions) ?? new Dictionary<string, object>();
+            var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, deserializeOptions) ??
+                             new ExtraPropertyDictionary();
+
             if (entityType != null)
             {
                 var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);

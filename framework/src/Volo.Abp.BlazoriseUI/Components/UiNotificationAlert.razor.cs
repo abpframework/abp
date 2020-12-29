@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Blazorise;
 using Blazorise.Snackbar;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.AspNetCore.Components.Notifications;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components
@@ -46,7 +48,7 @@ namespace Volo.Abp.BlazoriseUI.Components
             UiNotificationService.NotificationReceived += OnNotificationReceived;
         }
 
-        protected virtual void OnNotificationReceived(object sender, UiNotificationEventArgs e)
+        protected virtual async void OnNotificationReceived(object sender, UiNotificationEventArgs e)
         {
             NotificationType = e.NotificationType;
             Message = e.Message;
@@ -55,7 +57,11 @@ namespace Volo.Abp.BlazoriseUI.Components
 
             var okButtonText = Options?.OkButtonText?.Localize(StringLocalizerFactory);
 
-            SnackbarStack.Push(Message, GetSnackbarColor( e.NotificationType ), okButtonText);
+            await SnackbarStack.PushAsync(Message, Title, GetSnackbarColor( e.NotificationType ), (options) =>
+            {
+                options.CloseButtonIcon = IconName.Times;
+                options.ActionButtonText = okButtonText;
+            });
         }
 
         public virtual void Dispose()

@@ -2,6 +2,6 @@
   "culture": "es",
   "texts": {
     "DisplayName:Abp.Timing.Timezone": "Zona horaria",
-    "Description:Abp.Timing.Timezone": "Zona horaria de la Aplicacion"
+    "Description:Abp.Timing.Timezone": "Zona horaria de aplicación"
   }
 }

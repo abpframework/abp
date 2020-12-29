@@ -77,10 +77,21 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
             foreach (var controllerModel in application.Controllers)
             {
+                if (!controllerModel.ControllerType.IsDefined(typeof(ExposeServicesAttribute), false))
+                {
+                    continue;
+                }
+
+                if (Options.IgnoredControllersOnModelExclusion.Contains(controllerModel.ControllerType))
+                {
+                    continue;
+                }
+
                 var baseControllerTypes = controllerModel.ControllerType
                     .GetBaseClasses(typeof(Controller), includeObject: false)
                     .Where(t => !t.IsAbstract)
                     .ToArray();
+
                 if (baseControllerTypes.Length > 0)
                 {
                     derivedControllerModels.Add(controllerModel);

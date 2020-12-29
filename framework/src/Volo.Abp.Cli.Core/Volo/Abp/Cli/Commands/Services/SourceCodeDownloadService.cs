@@ -37,6 +37,7 @@ namespace Volo.Abp.Cli.Commands.Services
                     moduleName,
                     version,
                     DatabaseProvider.NotSpecified,
+                    DatabaseManagementSystem.NotSpecified,
                     UiFramework.NotSpecified,
                     null,
                     gitHubAbpLocalRepositoryPath,
@@ -53,6 +54,12 @@ namespace Volo.Abp.Cli.Commands.Services
                     var zipEntry = zipInputStream.GetNextEntry();
                     while (zipEntry != null)
                     {
+                        if (IsAngularTestFile(zipEntry.Name))
+                        {
+                            zipEntry = zipInputStream.GetNextEntry();
+                            continue;
+                        }
+
                         var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
                         var directoryName = Path.GetDirectoryName(fullZipToPath);
 
@@ -80,6 +87,44 @@ namespace Volo.Abp.Cli.Commands.Services
             }
 
             Logger.LogInformation($"'{moduleName}' has been successfully downloaded to '{outputFolder}'");
+        }
+
+        private bool IsAngularTestFile(string zipEntryName)
+        {
+            if (string.IsNullOrEmpty(zipEntryName))
+            {
+                return false;
+            }
+
+            if (zipEntryName.Contains(Path.Combine("angular/e2e")))
+            {
+                return true;
+            }
+            if (zipEntryName.Contains(Path.Combine("angular/src")))
+            {
+                return true;
+            }
+            if (zipEntryName.Contains(Path.Combine("angular/node_modules")))
+            {
+                return true;
+            }
+            if (zipEntryName.Contains(Path.Combine("angular/scripts")))
+            {
+                return true;
+            }
+            if (zipEntryName.Contains(Path.Combine("angular/source-code-requirements")))
+            {
+                return true;
+            }
+
+            var fileName = Path.GetFileName(zipEntryName);
+
+            if (!string.IsNullOrEmpty(fileName) && zipEntryName.Equals("angular/" + fileName))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

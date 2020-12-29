@@ -79,6 +79,19 @@ If your entity does not have an Id primary key (it may have a composite primary 
 
 > `IRepository<TEntity>` has a few missing methods those normally works with the `Id` property of an entity. Because of the entity has no `Id` property in that case, these methods are not available. One example is the `Get` method that gets an id and returns the entity with given id. However, you can still use `IQueryable<TEntity>` features to query entities by standard LINQ methods.
 
+### Soft / Hard Delete
+
+`DeleteAsync` method of the repository doesn't delete the entity if the entity is a **soft-delete** entity (that implements `ISoftDelete`). Soft-delete entities are marked as "deleted" in the database. Data Filter system ensures that the soft deleted entities are not retrieved from database normally.
+
+If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method to really delete the entity from database in case of you need it.
+
+See the [Data Filtering](Data-Filtering.md) documentation for more about soft-delete.
+
+## Bulk Operations
+You can execute bulk operations with `InsertManyAsync`, `UpdateManyAsync`, `DeleteManyAsync` methods.
+
+> **WARNING:** ConcurrencyStamp can't be checked at bulk operations!
+
 ## Custom Repositories
 
 Default generic repositories will be sufficient for most cases. However, you may need to create a custom repository class for your entity.

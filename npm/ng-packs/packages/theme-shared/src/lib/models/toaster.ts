@@ -1,4 +1,4 @@
-import { Config } from '@abp/ng.core';
+import { Config, LocalizationParam } from '@abp/ng.core';
 
 export namespace Toaster {
   export interface ToastOptions {
@@ -13,8 +13,8 @@ export namespace Toaster {
   }
 
   export interface Toast {
-    message: Config.LocalizationParam;
-    title?: Config.LocalizationParam;
+    message: LocalizationParam;
+    title?: LocalizationParam;
     severity?: string;
     options?: ToastOptions;
   }
@@ -24,8 +24,8 @@ export namespace Toaster {
 
   export interface Service {
     show: (
-      message: Config.LocalizationParam,
-      title: Config.LocalizationParam,
+      message: LocalizationParam,
+      title: LocalizationParam,
       severity: Toaster.Severity,
       options: Partial<Toaster.ToastOptions>,
     ) => ToasterId;

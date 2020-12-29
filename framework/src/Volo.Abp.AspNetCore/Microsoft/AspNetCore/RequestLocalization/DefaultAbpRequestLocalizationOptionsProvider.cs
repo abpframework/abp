@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
@@ -31,16 +30,6 @@ namespace Microsoft.AspNetCore.RequestLocalization
         public void InitLocalizationOptions(Action<RequestLocalizationOptions> optionsAction = null)
         {
             _optionsAction = optionsAction;
-        }
-
-        public RequestLocalizationOptions GetLocalizationOptions()
-        {
-            if (_requestLocalizationOptions != null)
-            {
-                return _requestLocalizationOptions;
-            }
-
-            return AsyncHelper.RunSync(GetLocalizationOptionsAsync);
         }
 
         public async Task<RequestLocalizationOptions> GetLocalizationOptionsAsync()

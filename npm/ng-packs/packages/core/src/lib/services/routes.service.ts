@@ -1,10 +1,9 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
-import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
 import { pushValueTo } from '../utils/array-utils';
 import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
+import { ConfigStateService } from './config-state.service';
 import { PermissionService } from './permission.service';
 
 export abstract class AbstractTreeService<T extends object> {
@@ -137,7 +136,6 @@ export abstract class AbstractTreeService<T extends object> {
 export abstract class AbstractNavTreeService<T extends ABP.Nav>
   extends AbstractTreeService<T>
   implements OnDestroy {
-  protected actions: Actions;
   private subscription: Subscription;
   private permissionService: PermissionService;
   readonly id = 'name';
@@ -152,9 +150,9 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav>
 
   constructor(protected injector: Injector) {
     super();
-    this.actions = injector.get(Actions);
-    this.subscription = this.actions
-      .pipe(ofActionSuccessful(GetAppConfiguration))
+    const configState = this.injector.get(ConfigStateService);
+    this.subscription = configState
+      .createOnUpdateStream(state => state)
       .subscribe(() => this.refresh());
     this.permissionService = injector.get(PermissionService);
   }

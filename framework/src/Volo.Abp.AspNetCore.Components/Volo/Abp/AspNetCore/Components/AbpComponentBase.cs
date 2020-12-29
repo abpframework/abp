@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.AspNetCore.Components.Alerts;
+using Volo.Abp.AspNetCore.Components.Messages;
+using Volo.Abp.AspNetCore.Components.Notifications;
 using Volo.Abp.Localization;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
@@ -59,6 +61,11 @@ namespace Volo.Abp.AspNetCore.Components
 
         protected IUiNotificationService Notify => LazyGetNonScopedRequiredService(ref _notify);
         private IUiNotificationService _notify;
+
+        protected IAlertManager AlertManager => LazyGetNonScopedRequiredService(ref _alertManager);
+        private IAlertManager _alertManager;
+
+        protected AlertList Alerts => AlertManager.Alerts;
 
         protected IObjectMapper ObjectMapper
         {

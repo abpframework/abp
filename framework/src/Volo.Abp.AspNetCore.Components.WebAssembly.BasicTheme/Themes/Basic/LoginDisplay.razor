@@ -3,6 +3,7 @@
 @using Volo.Abp.MultiTenancy
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
+@inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
 <AuthorizeView>
@@ -23,7 +24,7 @@
                 {
                     @foreach (var menuItem in Menu.Items)
                     {
-                        <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
+                        <DropdownItem Clicked="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</DropdownItem>
                     }
                 }
                 <DropdownDivider />
@@ -37,14 +38,21 @@
 </AuthorizeView>
 @code{
 
-    private void NavigateTo(string uri)
+    private async Task NavigateToAsync(string uri, string target = null)
     {
-        Navigation.NavigateTo(uri);
+        if (target == "_blank")
+        {
+            await JsRuntime.InvokeVoidAsync("open", uri, target);
+        }
+        else
+        {
+            Navigation.NavigateTo(uri);
+        }
     }
 
     private async Task BeginSignOut()
     {
         await SignOutManager.SetSignOutState();
-        NavigateTo("authentication/logout");
+        await NavigateToAsync("authentication/logout");
     }
 }

@@ -74,7 +74,7 @@ export class DynamicLayoutComponent {
   }
 
   private listenToLanguageChange() {
-    this.subscription.addOne(this.localizationService.languageChange, () => {
+    this.subscription.addOne(this.localizationService.languageChange$, () => {
       this.isLayoutVisible = false;
       setTimeout(() => (this.isLayoutVisible = true), 0);
     });
