@@ -69,12 +69,11 @@ namespace Volo.CmsKit.MongoDB.Tags
                 .Select(q => q.TagId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-            var query = await Collection.FindAsync(Builders<Tag>.Filter.And(new[]
-            {
-                Builders<Tag>.Filter.Eq(x =>x.EntityType, entityType),
-                Builders<Tag>.Filter.Eq(x =>x.TenantId, tenantId),
-                Builders<Tag>.Filter.In(x => x.Id, entityTagIds),
-            }));
+            var query = GetMongoQueryable()
+                            .Where(x => 
+                                x.EntityType == entityType &&
+                                x.TenantId == tenantId &&
+                                entityTagIds.Contains(x.Id));
 
             var result = await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
             return result;
