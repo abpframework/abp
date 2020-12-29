@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Controllers;
 
-namespace Volo.CmsKit.Controllers.Contents
+namespace Volo.CmsKit.Public.Contents
 {
     
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
-    [Route("api/cms-kit/contents")]
+    [Route("api/cms-kit-public/contents")]
     public class ContentController : CmsKitControllerBase, IContentAppService
     {
         protected readonly IContentAppService _contentAppService;

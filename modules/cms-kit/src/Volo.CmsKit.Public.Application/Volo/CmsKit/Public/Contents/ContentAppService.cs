@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Contents
+namespace Volo.CmsKit.Public.Contents
 {
     public class ContentAppService : CmsKitAppServiceBase, IContentAppService
     {

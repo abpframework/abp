@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Volo.Abp.AutoMapper;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Contents;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Public.Comments;
+using Volo.CmsKit.Public.Contents;
 using Volo.CmsKit.Public.Pages;
 using Volo.CmsKit.Public.Ratings;
 using Volo.CmsKit.Ratings;
@@ -24,6 +26,8 @@ namespace Volo.CmsKit.Public
                 .Ignore(x=> x.Author);
 
             CreateMap<Rating, RatingDto>();
+            
+            CreateMap<Content, ContentDto>();
             
             CreateMap<Page, PageDto>();
         }

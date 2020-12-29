@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.CmsKit.Contents;
+using Volo.CmsKit.Public.Contents;
 using Volo.CmsKit.Web.Contents;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Contents
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
 {
     [ViewComponent(Name = "CmsContent")]
     public class ContentViewComponent : AbpViewComponent

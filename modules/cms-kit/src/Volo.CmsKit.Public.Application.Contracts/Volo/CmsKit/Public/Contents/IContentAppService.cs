@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Contents
+namespace Volo.CmsKit.Public.Contents
 {
     public interface IContentAppService
     {

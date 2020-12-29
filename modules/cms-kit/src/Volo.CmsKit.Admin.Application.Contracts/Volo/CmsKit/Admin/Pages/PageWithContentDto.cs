@@ -1,6 +1,6 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
-using Volo.CmsKit.Contents;
+using Volo.CmsKit.Admin.Contents;
 
 namespace Volo.CmsKit.Admin.Pages
 {
