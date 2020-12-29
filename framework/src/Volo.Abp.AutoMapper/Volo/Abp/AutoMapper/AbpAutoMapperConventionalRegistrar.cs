@@ -25,7 +25,7 @@ namespace Volo.Abp.AutoMapper
                 return;
             }
 
-            if (OpenTypes.Any(type.ImplementsGenericInterface))
+            if (type.IsClass && !type.IsAbstract && OpenTypes.Any(type.ImplementsGenericInterface))
             {
                 services.TryAddTransient(type);
             }
