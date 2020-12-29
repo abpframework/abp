@@ -16,11 +16,8 @@ namespace Volo.CmsKit.Pages
         private readonly IPageRepository _pageRepository;
         private readonly IContentRepository _contentRepository;
 
-        private readonly IUnitOfWorkManager _uowManager;
-        
         public PageAdminAppService_Tests()
         {
-            _uowManager = GetRequiredService<IUnitOfWorkManager>();
             _data = GetRequiredService<CmsKitTestData>();
             _pageAdminAppService = GetRequiredService<IPageAdminAppService>();
             _pageRepository = GetRequiredService<IPageRepository>();
