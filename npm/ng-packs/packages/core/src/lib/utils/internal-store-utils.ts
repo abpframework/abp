@@ -19,7 +19,7 @@ export class InternalStore<State> {
   ) => this.state$.pipe(map(selector), distinctUntilChanged(compareFn));
 
   sliceUpdate = <Slice>(
-    selector: (state: DeepPartial<State>) => Slice,
+    selector: (state: State) => Slice,
     filterFn = (x: Slice) => x !== undefined,
   ) => this.update$.pipe(map(selector), filter(filterFn));
 
