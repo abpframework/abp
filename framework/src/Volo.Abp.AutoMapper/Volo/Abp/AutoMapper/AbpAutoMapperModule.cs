@@ -16,6 +16,11 @@ namespace Volo.Abp.AutoMapper
     )]
     public class AbpAutoMapperModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddConventionalRegistrar(new AbpAutoMapperConventionalRegistrar());
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper();
