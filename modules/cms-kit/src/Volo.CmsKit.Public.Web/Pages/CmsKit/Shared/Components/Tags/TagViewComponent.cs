@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.CmsKit.Public.Tags;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Tags
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
 {
     [ViewComponent(Name = "CmsTags")]
     public class TagViewComponent : AbpViewComponent
