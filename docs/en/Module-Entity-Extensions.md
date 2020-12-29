@@ -1,5 +1,7 @@
 # Module Entity Extensions
 
+> This feature is not supported by the Blazor UI yet.
+
 ## Introduction
 
 Module entity extension system is a **high level** extension system that allows you to **define new properties** for existing entities of the depended modules. It automatically **adds properties to the entity, database, HTTP API and the user interface** in a single point.
@@ -324,6 +326,108 @@ One of the following names can be used as the localization key:
 * `SuperUser`
 
 Localization system searches for the key with the given order. Localized text are used on the table and the create/edit forms.
+
+### Navigation Properties / Foreign Keys
+
+It is supported to add an extension property to an entity that is Id of another entity (foreign key).
+
+#### Example: Associate a department to a user
+
+````csharp
+ObjectExtensionManager.Instance.Modules()
+    .ConfigureIdentity(identity =>
+    {
+        identity.ConfigureUser(user =>
+        {
+            user.AddOrUpdateProperty<Guid>(
+                "DepartmentId",
+                property =>
+                {
+                    property.UI.Lookup.Url = "/api/departments";
+                    property.UI.Lookup.DisplayPropertyName = "name";
+                }
+            );
+        });
+    });
+````
+
+`UI.Lookup.Url` option takes a URL to get list of departments to select on edit/create forms. This endpoint can be a typical controller, an [auto API controller](API/Auto-API-Controllers.md) or any type of endpoint that returns a proper JSON response.
+
+An example implementation that returns a fixed list of departments (in real life, you get the list from a data source):
+
+````csharp
+[Route("api/departments")]
+public class DepartmentController : AbpController
+{
+    [HttpGet]
+    public async Task<ListResultDto<DepartmentDto>> GetAsync()
+    {
+        return new ListResultDto<DepartmentDto>(
+            new[]
+            {
+                new DepartmentDto
+                {
+                    Id = Guid.Parse("6267f0df-870f-4173-be44-d74b4b56d2bd"),
+                    Name = "Human Resources"
+                },
+                new DepartmentDto
+                {
+                    Id = Guid.Parse("21c7b61f-330c-489e-8b8c-80e0a78a5cc5"),
+                    Name = "Production"
+                }
+            }
+        );
+    }
+}
+````
+
+This API returns such a JSON response:
+
+````json
+{
+    "items": [{
+        "id": "6267f0df-870f-4173-be44-d74b4b56d2bd",
+        "name": "Human Resources"
+    }, {
+        "id": "21c7b61f-330c-489e-8b8c-80e0a78a5cc5",
+        "name": "Production"
+    }]
+}
+````
+
+ABP can now show an auto-complete select component to pick the department while creating or editing a user:
+
+![extension-navigation-property-form](images/extension-navigation-property-form.png)
+
+And shows the department name on the data table:
+
+![extension-navigation-property-form](images/extension-navigation-property-table.png)
+
+#### Lookup Options
+
+`UI.Lookup` has the following options to customize how to read the response returned from the `Url`:
+
+* `Url`: The endpoint to get the list of target entities. This is used on edit and create forms.
+* `DisplayPropertyName`: The property in the JSON response to read the display name of the target entity to show on the UI. Default: `text`.
+* `ValuePropertyName`: The property in the JSON response to read the Id of the target entity. Default: `id`.
+* `FilterParamName`: ABP allows to search/filter the entity list on edit/create forms. This is especially useful if the target list contains a lot of items. In this case, you can return a limited list (top 100, for example) and allow user to search on the list. ABP sends filter text to the server (as a simple query string) with the name of this option. Default: `filter`.
+* `ResultListPropertyName`: By default, returned JSON result should contain the entity list in an `items` array. You can change the name of this field. Default: `items`.
+
+#### Lookup Properties: How Display Name Works?
+
+You may wonder how ABP shows the department name on the data table above.
+
+It is easy to understand how to fill the dropdown on edit and create forms: ABP makes an AJAX request to the given URL. It re-requests whenever user types to filter the items.
+
+However, for the data table, multiple items are shown on the UI and performing a separate AJAX call to get display name of the department for each row would not be so efficient.
+
+Instead, the display name of the foreign entity is also saved as an extra property of the entity (see *Extra Properties* section of the [Entities](Entities.md) document) in addition to Id of the foreign entity. If you check the database, you can see the `DepartmentId_Text` in the `ExtraProperties` field in the database table:
+
+````json
+{"DepartmentId":"21c7b61f-330c-489e-8b8c-80e0a78a5cc5","DepartmentId_Text":"Production"}
+````
+
+So, this is a type of *data duplication*. If your target entity's name changes in the database later, there is no automatic synchronization system. The system works as expected, but you see the old name on the data tables. If that's a problem for you, you should care yourself to update this information when display name of your entity changes.
 
 ## Database Mapping
 
