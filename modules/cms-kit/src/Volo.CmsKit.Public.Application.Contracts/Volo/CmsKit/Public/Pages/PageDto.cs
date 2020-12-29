@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.CmsKit.Pages
+namespace Volo.CmsKit.Public.Pages
 {
     public class PageDto : EntityDto<Guid>
     {

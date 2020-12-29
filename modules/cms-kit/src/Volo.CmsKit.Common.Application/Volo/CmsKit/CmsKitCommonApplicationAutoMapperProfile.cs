@@ -12,8 +12,6 @@ namespace Volo.CmsKit
             CreateMap<Content, ContentDto>();
 
             CreateMap<Tag, TagDto>();
-            
-            CreateMap<Page, PageDto>();
         }
     }
 }

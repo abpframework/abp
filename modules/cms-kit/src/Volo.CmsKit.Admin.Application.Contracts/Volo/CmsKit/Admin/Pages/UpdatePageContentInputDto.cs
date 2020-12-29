@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Volo.Abp.Validation;
-using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Pages
+namespace Volo.CmsKit.Admin.Pages
 {
     public class UpdatePageContentInputDto
     {

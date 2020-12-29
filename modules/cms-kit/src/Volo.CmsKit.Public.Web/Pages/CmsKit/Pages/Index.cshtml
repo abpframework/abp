@@ -1,9 +1,8 @@
 ﻿@page "{pageUrl}"
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.CmsKit.Localization
-@using Volo.CmsKit.Web.Pages.CmsKit.Pages
-@using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Pages
-@model IndexModel
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Pages.IndexModel
 @inject IHtmlLocalizer<CmsKitResource> L
 
 @await Component.InvokeAsync(typeof(DefaultPageViewComponent),

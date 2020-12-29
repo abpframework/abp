@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.CmsKit.Pages;
+using Volo.CmsKit.Public.Pages;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Pages
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
 {
     [ViewComponent(Name = "CmsDefaultPage")]
     public class DefaultPageViewComponent : AbpViewComponent

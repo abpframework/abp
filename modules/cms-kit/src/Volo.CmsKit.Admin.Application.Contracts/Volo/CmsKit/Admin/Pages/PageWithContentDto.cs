@@ -2,7 +2,7 @@
 using Volo.Abp.Application.Dtos;
 using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Pages
+namespace Volo.CmsKit.Admin.Pages
 {
     public class PageWithContentDto : EntityDto<Guid>
     {

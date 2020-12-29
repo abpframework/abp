@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.CmsKit.Pages;
+using Volo.CmsKit.Public.Pages;
+using Volo.CmsKit.Web.Pages;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Pages
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Pages
 {
     public class IndexModel : CommonPageModel
     {

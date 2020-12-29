@@ -3,15 +3,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Pages;
 
-namespace Volo.CmsKit.Pages
+namespace Volo.CmsKit.Admin.Pages
 {
-    public class PageAppService : CmsKitAppServiceBase, IPageAppService
+    public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
     {
         protected readonly IPageRepository PageRepository;
         protected readonly IContentRepository ContentRepository;
 
-        public PageAppService(IPageRepository pageRepository, IContentRepository contentRepository)
+        public PageAdminAppService(IPageRepository pageRepository, IContentRepository contentRepository)
         {
             PageRepository = pageRepository;
             ContentRepository = contentRepository;
@@ -21,13 +22,6 @@ namespace Volo.CmsKit.Pages
         {
             var page = await PageRepository.GetAsync(id);
 
-            return ObjectMapper.Map<Page, PageDto>(page);
-        }
-
-        public virtual async Task<PageDto> GetByUrlAsync(string url)
-        {
-            var page = await PageRepository.GetByUrlAsync(url);
-            
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 
-namespace Volo.CmsKit.Pages
+namespace Volo.CmsKit.Admin.Pages
 {
-    public interface IPageAppService
+    public interface IPageAdminAppService
     {
         Task<PageDto> GetAsync(Guid id);
-
-        Task<PageDto> GetByUrlAsync([NotNull] string url);
         
         Task<PageDto> CreatePageAsync(CreatePageInputDto input);
 

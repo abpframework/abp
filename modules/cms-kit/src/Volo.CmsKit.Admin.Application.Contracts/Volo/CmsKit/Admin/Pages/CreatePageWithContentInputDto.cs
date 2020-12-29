@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Volo.Abp.Validation;
 
-namespace Volo.CmsKit.Pages
+namespace Volo.CmsKit.Admin.Pages
 {
-    public class CreatePageInputDto
+    public class CreatePageWithContentInputDto
     {
         [Required]
         public string Title { get; set; }
@@ -12,5 +11,8 @@ namespace Volo.CmsKit.Pages
         public string Url { get; set; }
 
         public string Description { get; set; }
+        
+        [Required]
+        public string Content { get; set; }
     }
 }
