@@ -19,11 +19,7 @@ namespace Volo.Abp.AutoMapper
         [Fact]
         public void Should_Registered_AutoMapper_Service()
         {
-            GetService<IValueResolver<string, string, string>>().ShouldBeNull();
-            GetService<IMemberValueResolver<string, string, string, string>>().ShouldBeNull();
-            GetService<ITypeConverter<string, string>>().ShouldBeNull();
-            GetService<IValueConverter<string, string>>().ShouldBeNull();
-            GetService<IMappingAction<string, string>>().ShouldBeNull();
+            GetService<CustomMappingActionService>().ShouldNotBeNull();
         }
 
         [Fact]
@@ -34,7 +30,7 @@ namespace Volo.Abp.AutoMapper
                 Name = "Source"
             };
 
-            _objectMapper.Map<SourceModel, DestModel>(sourceModel).Name.ShouldBe(GetRequiredService<TestNameService>().Name);
+            _objectMapper.Map<SourceModel, DestModel>(sourceModel).Name.ShouldBe(nameof(CustomMappingActionService));
         }
 
         public class SourceModel
@@ -47,65 +43,20 @@ namespace Volo.Abp.AutoMapper
             public string Name { get; set; }
         }
 
-        public class TestService :
-            IValueResolver<string, string, string>,
-            IMemberValueResolver<string, string, string, string>,
-            ITypeConverter<string, string>,
-            IValueConverter<string, string>,
-            IMappingAction<string, string>
-        {
-            public string Resolve(string source, string destination, string destMember, ResolutionContext context)
-            {
-                return source;
-            }
-
-            public string Resolve(string source, string destination, string sourceMember, string destMember, ResolutionContext context)
-            {
-                return source;
-            }
-
-            public string Convert(string source, string destination, ResolutionContext context)
-            {
-                return source;
-            }
-
-            public string Convert(string sourceMember, ResolutionContext context)
-            {
-                return sourceMember;
-            }
-
-            public void Process(string source, string destination, ResolutionContext context)
-            {
-
-            }
-        }
-
         public class MapperActionProfile : Profile
         {
             public MapperActionProfile()
             {
-                CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingAction>();
+                CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingActionService>();
             }
         }
 
-        public class CustomMappingAction : IMappingAction<SourceModel, DestModel>
+        public class CustomMappingActionService : IMappingAction<SourceModel, DestModel>
         {
-            private readonly TestNameService _testNameService;
-
-            public CustomMappingAction(TestNameService testNameService)
-            {
-                _testNameService = testNameService;
-            }
-
             public void Process(SourceModel source, DestModel destination, ResolutionContext context)
             {
-                destination.Name = _testNameService.Name;
+                destination.Name = nameof(CustomMappingActionService);
             }
-        }
-
-        public class TestNameService : ITransientDependency
-        {
-            public string Name => nameof(TestNameService);
         }
     }
 }
