@@ -6,7 +6,7 @@ import { ConfigStateService } from './config-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
-  constructor(private configState: ConfigStateService) {}
+  constructor(protected configState: ConfigStateService) {}
 
   getGrantedPolicy$(key: string) {
     return this.getStream().pipe(
@@ -19,7 +19,7 @@ export class PermissionService {
     return this.isPolicyGranted(key, policies);
   }
 
-  private isPolicyGranted(key: string, grantedPolicies: Record<string, boolean>) {
+  protected isPolicyGranted(key: string, grantedPolicies: Record<string, boolean>) {
     if (!key) return true;
 
     const orRegexp = /\|\|/g;
@@ -43,19 +43,19 @@ export class PermissionService {
     return this.getPolicy(key, grantedPolicies);
   }
 
-  private getStream() {
+  protected getStream() {
     return this.configState.getAll$().pipe(map(this.mapToPolicies));
   }
 
-  private getSnapshot() {
+  protected getSnapshot() {
     return this.mapToPolicies(this.configState.getAll());
   }
 
-  private mapToPolicies(applicationConfiguration: ApplicationConfigurationDto) {
-    return snq(() => applicationConfiguration.auth.grantedPolicies);
+  protected mapToPolicies(applicationConfiguration: ApplicationConfigurationDto) {
+    return snq(() => applicationConfiguration.auth.grantedPolicies, {});
   }
 
-  private getPolicy(key: string, grantedPolicies: Record<string, boolean>) {
+  protected getPolicy(key: string, grantedPolicies: Record<string, boolean>) {
     return snq(() => grantedPolicies[key], false);
   }
 }

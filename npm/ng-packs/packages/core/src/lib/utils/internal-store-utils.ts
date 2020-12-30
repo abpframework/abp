@@ -33,7 +33,7 @@ export class InternalStore<State> {
     }
 
     this.state$.next(patchedState);
-    this.update$.next(patchedState);
+    this.update$.next(patchedState as DeepPartial<State>);
   }
 
   deepPatch(state: DeepPartial<State>) {
@@ -43,7 +43,7 @@ export class InternalStore<State> {
 
   set(state: State) {
     this.state$.next(state);
-    this.update$.next(state);
+    this.update$.next(state as DeepPartial<State>);
   }
 
   reset() {
