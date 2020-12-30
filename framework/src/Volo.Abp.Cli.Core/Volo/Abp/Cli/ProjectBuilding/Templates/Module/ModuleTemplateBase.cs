@@ -75,7 +75,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
 
         private static void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
+            steps.Add(new UpdateNuGetConfigStep("/NuGet.Config"));
         }
 
         private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
