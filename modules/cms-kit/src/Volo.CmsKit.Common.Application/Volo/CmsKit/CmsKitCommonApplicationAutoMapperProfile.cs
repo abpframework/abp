@@ -9,11 +9,7 @@ namespace Volo.CmsKit
     {
         public CmsKitCommonApplicationAutoMapperProfile()
         {
-            CreateMap<Content, ContentDto>();
-
             CreateMap<Tag, TagDto>();
-            
-            CreateMap<Page, PageDto>();
         }
     }
 }
