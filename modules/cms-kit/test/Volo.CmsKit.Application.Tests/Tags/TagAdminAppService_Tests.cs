@@ -3,12 +3,8 @@ using NSubstitute;
 using Shouldly;
 using System;
 using System.Threading.Tasks;
-using Volo.Abp;
-using Volo.Abp.Clients;
 using Volo.Abp.Users;
-using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Tags;
-using Volo.CmsKit.Public.Tags;
 using Xunit;
 
 namespace Volo.CmsKit.Tags
@@ -46,7 +42,7 @@ namespace Volo.CmsKit.Tags
         [Fact]
         public async Task ShouldThrowException_WhenTagAlreadyExist()
         {
-            await Should.ThrowAsync<BusinessException>(async () => await _tagAdminAppService.CreateAsync(new TagCreateDto
+            await Should.ThrowAsync<TagAlreadyExistException>(async () => await _tagAdminAppService.CreateAsync(new TagCreateDto
             {
                 EntityType = _cmsKitTestData.Content_1_EntityType,
                 Name = _cmsKitTestData.Content_1_Tags[0],
