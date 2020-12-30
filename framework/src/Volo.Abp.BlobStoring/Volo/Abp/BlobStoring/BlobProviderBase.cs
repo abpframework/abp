@@ -16,7 +16,7 @@ namespace Volo.Abp.BlobStoring
 
         public abstract Task<Stream> GetOrNullAsync(BlobProviderGetArgs args);
 
-        protected string NormalizeContainerName(BlobProviderArgs args, IServiceProvider serviceProvider, string containerName)
+        protected virtual string NormalizeContainerName(BlobProviderArgs args, IServiceProvider serviceProvider, string containerName)
         {
             if (!args.Configuration.NamingNormalizers.Any())
             {
