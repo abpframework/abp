@@ -12,10 +12,5 @@ namespace Volo.CmsKit.Permissions
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
         }
-
-        public static string[] GetAll()
-        {
-            return ReflectionHelper.GetPublicConstantsRecursively(typeof(CmsKitAdminPermissions));
-        }
     }
 }

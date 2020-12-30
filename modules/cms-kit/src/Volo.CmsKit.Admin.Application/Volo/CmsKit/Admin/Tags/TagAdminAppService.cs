@@ -12,6 +12,7 @@ using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Admin.Tags
 {
+    [Authorize(CmsKitAdminPermissions.Tags.Default)]
     public class TagAdminAppService :
         CrudAppService<
             Tag,
@@ -40,28 +41,29 @@ namespace Volo.CmsKit.Admin.Tags
         [Authorize(CmsKitAdminPermissions.Tags.Create)]
         public override async Task<TagDto> CreateAsync(TagCreateDto input)
         {
-            var inserted = await TagManager.InsertAsync(
+            var tag = await TagManager.InsertAsync(
                 GuidGenerator.Create(),
                 input.EntityType,
                 input.Name,
                 CurrentTenant?.Id);
-            return MapToGetOutputDto(inserted);
+            
+            return MapToGetOutputDto(tag);
         }
 
         [Authorize(CmsKitAdminPermissions.Tags.Update)]
         public override async Task<TagDto> UpdateAsync(Guid id, TagUpdateDto input)
         {
-            var updated = await TagManager.UpdateAsync(
+            var tag = await TagManager.UpdateAsync(
                 id,
                 input.Name);
 
-            return MapToGetOutputDto(updated);
+            return MapToGetOutputDto(tag);
         }
         protected override IQueryable<Tag> CreateFilteredQuery(TagGetListInput input)
         {
             return base.CreateFilteredQuery(input)
                     .WhereIf(
-                        !string.IsNullOrEmpty(input.Filter),
+                        !input.Filter.IsNullOrEmpty(),
                         x =>
                             x.Name.ToLower().Contains(input.Filter) ||
                             x.EntityType.ToLower().Contains(input.Filter));
