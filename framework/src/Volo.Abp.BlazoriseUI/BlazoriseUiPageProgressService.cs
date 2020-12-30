@@ -7,7 +7,10 @@ using Volo.Abp.DependencyInjection;
 namespace Volo.Abp.BlazoriseUI
 {
     [Dependency(ReplaceServices = true)]
-    public class BlazoriseUiPageProgressService : IUiPageProgressService, IScopedDependency
+    public class BlazoriseUiPageProgressService : IUiPageProgressService,
+        // WARNING: this is made Singleton because there was an issue with ABP internal DI.
+        // TODO: make it Scoped once the issue is solved.
+        ISingletonDependency
     {
         /// <summary>
         /// An event raised after the notification is received.

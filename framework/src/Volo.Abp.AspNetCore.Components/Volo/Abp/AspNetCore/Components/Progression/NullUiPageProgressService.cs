@@ -4,8 +4,10 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.Progression
 {
-    public class NullUiPageProgressService : IUiPageProgressService, ITransientDependency
+    public class NullUiPageProgressService : IUiPageProgressService, ISingletonDependency
     {
+        public event EventHandler<UiPageProgressEventArgs> ProgressChanged;
+
         public Task Go(int? percentage, Action<UiPageProgressOptions> options = null)
         {
             return Task.CompletedTask;

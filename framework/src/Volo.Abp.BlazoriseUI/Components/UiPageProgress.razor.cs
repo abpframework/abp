@@ -15,7 +15,7 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         protected Color Color { get; set; }
 
-        [Inject] protected BlazoriseUiPageProgressService UiPageProgressService { get; set; }
+        [Inject] protected IUiPageProgressService UiPageProgressService { get; set; }
 
         protected override void OnInitialized()
         {

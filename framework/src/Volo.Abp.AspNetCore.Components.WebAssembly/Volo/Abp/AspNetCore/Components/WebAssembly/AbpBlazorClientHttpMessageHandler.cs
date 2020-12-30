@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
+using Volo.Abp.AspNetCore.Components.Progression;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly
@@ -18,6 +19,8 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 
         private readonly NavigationManager _navigationManager;
 
+        private readonly IUiPageProgressService _uiPageProgressService;
+
         private const string AntiForgeryCookieName = "XSRF-TOKEN";
 
         private const string AntiForgeryHeaderName = "RequestVerificationToken";
@@ -25,19 +28,37 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
         public AbpBlazorClientHttpMessageHandler(
             IJSRuntime jsRuntime,
             ICookieService cookieService,
-            NavigationManager navigationManager)
+            NavigationManager navigationManager,
+            IUiPageProgressService uiPageProgressService)
         {
             _jsRuntime = jsRuntime;
             _cookieService = cookieService;
             _navigationManager = navigationManager;
+            _uiPageProgressService = uiPageProgressService;
         }
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            await SetLanguageAsync(request, cancellationToken);
-            await SetAntiForgeryTokenAsync(request);
+            try
+            {
+                await _uiPageProgressService.Go(null, options =>
+                {
+                    options.Type = UiPageProgressType.Info;
+                });
 
-            return await base.SendAsync(request, cancellationToken);
+                await SetLanguageAsync(request, cancellationToken);
+                await SetAntiForgeryTokenAsync(request);
+
+                return await base.SendAsync(request, cancellationToken);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                await _uiPageProgressService.Go(-1);
+            }
         }
 
         private async Task SetLanguageAsync(HttpRequestMessage request, CancellationToken cancellationToken)
