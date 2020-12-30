@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
+using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Public.Tags
 {
     public interface ITagAppService : IApplicationService
     {

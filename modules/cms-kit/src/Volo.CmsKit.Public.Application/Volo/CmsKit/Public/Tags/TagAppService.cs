@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Tags
+namespace Volo.CmsKit.Public.Tags
 {
     public class TagAppService : CmsKitAppServiceBase, ITagAppService
     {
@@ -13,7 +15,7 @@ namespace Volo.CmsKit.Tags
 
         public TagAppService(
             ITagManager tagManager,
-            ITagRepository tagRepository, 
+            ITagRepository tagRepository,
             IEntityTagRepository entityTagRepository)
         {
             TagManager = tagManager;
