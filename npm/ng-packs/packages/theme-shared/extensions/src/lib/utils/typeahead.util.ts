@@ -2,6 +2,7 @@ import { ABP, ExtensionPropertyUiLookupDto, RestService } from '@abp/ng.core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ePropType } from '../enums/props.enum';
+import { ObjectExtensions } from '../models/object-extensions';
 import { PropCallback } from '../models/props';
 
 const TYPEAHEAD_TEXT_SUFFIX = '_Text';
@@ -43,6 +44,17 @@ export function getTypeaheadType(lookup: ExtensionPropertyUiLookupDto, name: str
     : name.endsWith(TYPEAHEAD_TEXT_SUFFIX)
     ? ePropType.Hidden
     : undefined;
+}
+
+export function createTypeaheadDisplayNameGenerator(
+  displayNameGeneratorFn: ObjectExtensions.DisplayNameGeneratorFn,
+  properties: ObjectExtensions.EntityExtensionProperties,
+): ObjectExtensions.DisplayNameGeneratorFn {
+  return (displayName, fallback) => {
+    let { name, resource } = fallback;
+    name = removeTypeaheadTextSuffix(name);
+    return displayNameGeneratorFn(displayName || properties[name].displayName, { name, resource });
+  };
 }
 
 export function addTypeaheadTextSuffix(name: string) {
