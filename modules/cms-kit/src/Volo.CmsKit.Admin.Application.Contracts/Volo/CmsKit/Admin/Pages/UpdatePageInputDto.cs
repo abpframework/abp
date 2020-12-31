@@ -11,5 +11,8 @@ namespace Volo.CmsKit.Admin.Pages
         public string Url { get; set; }
 
         public string Description { get; set; }
+        
+        [Required]
+        public string Content { get; set; }
     }
 }

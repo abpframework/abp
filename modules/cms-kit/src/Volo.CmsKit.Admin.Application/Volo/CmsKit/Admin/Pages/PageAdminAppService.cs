@@ -1,12 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
+using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Pages
 {
+    [RequiresGlobalFeature(typeof(PagesFeature))]
+    [Authorize(CmsKitAdminPermissions.Pages.Default)]
     public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
     {
         protected readonly IPageRepository PageRepository;
@@ -25,18 +33,28 @@ namespace Volo.CmsKit.Admin.Pages
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
-        public virtual async Task<PageDto> CreatePageAsync(CreatePageInputDto input)
+        public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
         {
-            var page = await CreatePageAsync(input.Title, input.Url, input.Description);
+            var count = await PageRepository.GetCountAsync(input.Filter);
+            var pages = await PageRepository.GetListAsync(
+                input.Filter,
+                input.MaxResultCount,
+                input.SkipCount,
+                input.Sorting
+            );
 
-            await PageRepository.InsertAsync(page);
-            
-            return ObjectMapper.Map<Page, PageDto>(page);
+            return new PagedResultDto<PageDto>(
+                count,
+                ObjectMapper.Map<List<Page>, List<PageDto>>(pages)
+            );
         }
 
-        public virtual async Task<PageDto> CreatePageWithContentAsync(CreatePageWithContentInputDto input)
+        [Authorize(CmsKitAdminPermissions.Pages.Create)]
+        public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
         {
-            var page = await CreatePageAsync(input.Title, input.Url, input.Description);
+            await CheckPageUrlAsync(input.Url);
+
+            var page = new Page(GuidGenerator.Create(), input.Title, input.Url, input.Description, CurrentTenant?.Id);
 
             await PageRepository.InsertAsync(page);
             
@@ -52,7 +70,8 @@ namespace Volo.CmsKit.Admin.Pages
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
-        public virtual async Task<PageDto> UpdatePageAsync(Guid id, UpdatePageInputDto input)
+        [Authorize(CmsKitAdminPermissions.Pages.Update)]
+        public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
         {
             var page = await PageRepository.GetAsync(id);
 
@@ -67,39 +86,30 @@ namespace Volo.CmsKit.Admin.Pages
 
             await PageRepository.UpdateAsync(page);
 
+            var content = await ContentRepository.GetAsync(nameof(Page), page.Id.ToString());
+
+            content.SetValue(input.Content);
+
+            await ContentRepository.UpdateAsync(content);
+            
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
-        public virtual Task<bool> DoesUrlExistAsync(CheckUrlInputDto input)
+        public virtual Task<bool> ExistsAsync(string url)
         {
-            return PageRepository.DoesExistAsync(input.Url);
+            return PageRepository.ExistsAsync(url);
         }
 
-        public virtual async Task UpdatePageContentAsync(Guid id, UpdatePageContentInputDto input)
-        {
-            var pageContent = await ContentRepository.GetAsync(nameof(Page), id.ToString());
-            
-            pageContent.SetValue(input.Content);
-
-            await ContentRepository.UpdateAsync(pageContent);
-        }
-
+        [Authorize(CmsKitAdminPermissions.Pages.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
             await ContentRepository.DeleteAsync(nameof(Page), id.ToString(), CurrentTenant?.Id, CancellationToken.None);
             await PageRepository.DeleteAsync(id, cancellationToken: CancellationToken.None);
         }
 
-        protected virtual async Task<Page> CreatePageAsync(string title, string url, string description)
-        {
-            await CheckPageUrlAsync(url);
-
-            return new Page(GuidGenerator.Create(), title, url, description, CurrentTenant?.Id);
-        }
-
         protected virtual async Task CheckPageUrlAsync(string url)
         {
-            if (await PageRepository.DoesExistAsync(url))
+            if (await PageRepository.ExistsAsync(url))
             {
                 throw new UserFriendlyException("Url exist");
             }
