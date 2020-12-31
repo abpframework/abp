@@ -22,30 +22,35 @@ namespace Volo.CmsKit.Admin.Contents
 
         protected IContentAdminAppService ContentAdminAppService { get; }
 
+        [HttpPost]
         [Authorize(CmsKitAdminPermissions.Contents.Create)]
         public Task<ContentDto> CreateAsync(ContentCreateDto input)
         {
             return ContentAdminAppService.CreateAsync(input);
         }
 
+        [HttpDelete("{id}"]
         [Authorize(CmsKitAdminPermissions.Contents.Delete)]
         public Task DeleteAsync(Guid id)
         {
             return ContentAdminAppService.DeleteAsync(id);
         }
 
+        [HttpGet("{id}"]
         [Authorize(CmsKitAdminPermissions.Contents.Default)]
         public Task<ContentDto> GetAsync(Guid id)
         {
             return ContentAdminAppService.GetAsync(id);
         }
 
+        [HttpGet]
         [Authorize(CmsKitAdminPermissions.Contents.Default)]
         public Task<PagedResultDto<ContentDto>> GetListAsync(ContentGetListInput input)
         {
             return ContentAdminAppService.GetListAsync(input);
         }
 
+        [HttpPut]
         [Authorize(CmsKitAdminPermissions.Contents.Update)]
         public Task<ContentDto> UpdateAsync(Guid id, ContentUpdateDto input)
         {
