@@ -27,26 +27,18 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 configureOptions?.Invoke(options);
 
-                if(options.Events != null)
+                options.Events ??= new OpenIdConnectEvents();
+                var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived ?? (_ => Task.CompletedTask);
+
+                options.Events.OnAuthorizationCodeReceived = receivedContext =>
                 {
-                    var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived;
-                    options.Events.OnAuthorizationCodeReceived = receivedContext =>
-                    {
-                        AbpOnAuthorizationCodeReceived(receivedContext);
-                        return authorizationCodeReceived(receivedContext);
-                    };
-                }
-                else
-                {
-                    options.Events = new OpenIdConnectEvents
-                    {
-                        OnAuthorizationCodeReceived = AbpOnAuthorizationCodeReceived
-                    };
-                }
+                    SetAbpTenantId(receivedContext);
+                    return authorizationCodeReceived.Invoke(receivedContext);
+                };
             });
         }
 
-        private static Task AbpOnAuthorizationCodeReceived(AuthorizationCodeReceivedContext receivedContext)
+        private static void SetAbpTenantId(AuthorizationCodeReceivedContext receivedContext)
         {
             var tenantKey = receivedContext.HttpContext.RequestServices
                 .GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
@@ -56,8 +48,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 receivedContext.TokenEndpointRequest.SetParameter(tenantKey,
                     receivedContext.Request.Cookies[tenantKey]);
             }
-
-            return Task.CompletedTask;
         }
     }
 }
