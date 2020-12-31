@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Admin.Pages
             return PageAdminAppService.CreateAsync(input);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Authorize(CmsKitAdminPermissions.Pages.Update)]
         [Route("{id}")]
         public virtual Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
