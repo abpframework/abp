@@ -10,13 +10,13 @@ using Xunit;
 
 namespace Volo.CmsKit.Tags
 {
-    public class TagAppService_Tests : CmsKitApplicationTestBase
+    public class TagPublicAppService_Tests : CmsKitApplicationTestBase
     {
         private readonly ITagAppService _tagAppService;
         private ICurrentUser _currentUser;
         private readonly CmsKitTestData _cmsKitTestData;
 
-        public TagAppService_Tests()
+        public TagPublicAppService_Tests()
         {
             _tagAppService = GetRequiredService<ITagAppService>();
             _cmsKitTestData = GetRequiredService<CmsKitTestData>();
