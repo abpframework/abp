@@ -52,7 +52,7 @@ namespace Volo.CmsKit.Pages
             return FindAsync(x => x.Url == url, cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public virtual Task<bool> DoesExistAsync(string url, CancellationToken cancellationToken = default)
+        public virtual Task<bool> ExistsAsync(string url, CancellationToken cancellationToken = default)
         {
             return DbSet.AnyAsync(x => x.Url == url, GetCancellationToken(cancellationToken));
         }

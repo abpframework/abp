@@ -79,7 +79,7 @@ namespace Volo.CmsKit.Pages
         [Fact]
         public async Task ShouldBeExistAsync()
         {
-            var page = await _pageRepository.DoesExistAsync(_cmsKitTestData.Page_1_Url);
+            var page = await _pageRepository.ExistsAsync(_cmsKitTestData.Page_1_Url);
 
             page.ShouldBeTrue();
         }
@@ -87,7 +87,7 @@ namespace Volo.CmsKit.Pages
         [Fact]
         public async Task ShouldNotBeExistAsync()
         {
-            var page = await _pageRepository.DoesExistAsync("not-exist-lyrics");
+            var page = await _pageRepository.ExistsAsync("not-exist-lyrics");
 
             page.ShouldBeFalse();
         }

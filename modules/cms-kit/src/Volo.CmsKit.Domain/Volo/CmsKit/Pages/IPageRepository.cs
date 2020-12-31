@@ -21,6 +21,6 @@ namespace Volo.CmsKit.Pages
 
         Task<Page> FindByUrlAsync(string url, CancellationToken cancellationToken = default);
 
-        Task<bool> DoesExistAsync(string url, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(string url, CancellationToken cancellationToken = default);
     }
 }

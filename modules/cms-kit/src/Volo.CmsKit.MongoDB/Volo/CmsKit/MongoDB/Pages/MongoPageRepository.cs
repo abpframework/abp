@@ -57,7 +57,7 @@ namespace Volo.CmsKit.MongoDB.Pages
             return FindAsync(x => x.Url == url, cancellationToken: GetCancellationToken(cancellationToken));
         }
         
-        public virtual Task<bool> DoesExistAsync(string url, CancellationToken cancellationToken = default)
+        public virtual Task<bool> ExistsAsync(string url, CancellationToken cancellationToken = default)
         {
             return GetMongoQueryable().AnyAsync(x => x.Url == url, GetCancellationToken(cancellationToken));
         }
