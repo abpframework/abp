@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -202,16 +203,16 @@ namespace Volo.CmsKit
         private async Task SeedContentsAsync()
         {
             var content1 = new Content(
-                _guidGenerator.Create(),
-                _cmsKitTestData.Content_1_EntityType,
                 _cmsKitTestData.Content_1_Id,
+                _cmsKitTestData.Content_1_EntityType,
+                _cmsKitTestData.Content_1_EntityId,
                 _cmsKitTestData.Content_1
                 );
             
             var content2 = new Content(
-                _guidGenerator.Create(),
-                _cmsKitTestData.Content_2_EntityType,
                 _cmsKitTestData.Content_2_Id,
+                _cmsKitTestData.Content_2_EntityType,
+                _cmsKitTestData.Content_2_EntityId,
                 _cmsKitTestData.Content_2
             );
 
@@ -225,14 +226,14 @@ namespace Volo.CmsKit
             {
                 var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, tag);
 
-                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_1_Id));
+                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_1_EntityId));
             }
             
             foreach (var tag in _cmsKitTestData.Content_2_Tags)
             {
                 var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, tag);
                 
-                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_2_Id));
+                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_2_EntityId));
             }
         }
 
