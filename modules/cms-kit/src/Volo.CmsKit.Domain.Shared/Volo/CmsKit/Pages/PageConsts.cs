@@ -6,6 +6,6 @@
 
         public static int MaxUrlLength { get; set; } = 256;
         
-        public static int MaxDescriptionLength { get; set; } = 515;
+        public static int MaxDescriptionLength { get; set; } = 512;
     }
 }
