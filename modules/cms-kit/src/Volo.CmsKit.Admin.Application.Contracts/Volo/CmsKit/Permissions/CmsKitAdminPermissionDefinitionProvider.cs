@@ -1,5 +1,7 @@
 ﻿using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit.Permissions
@@ -15,12 +17,15 @@ namespace Volo.CmsKit.Permissions
                     .AddChild(CmsKitAdminPermissions.Tags.Create, L("Permission:TagManagement.Create"))
                     .AddChild(CmsKitAdminPermissions.Tags.Update, L("Permission:TagManagement.Update"))
                     .AddChild(CmsKitAdminPermissions.Tags.Delete, L("Permission:TagManagement.Delete"));
-            
-            cmsGroup
-                .AddPermission(CmsKitAdminPermissions.Pages.Default, L("Permission:PageManagement"))
-                .AddChild(CmsKitAdminPermissions.Pages.Create, L("Permission:PageManagement:Create"))
-                .AddChild(CmsKitAdminPermissions.Pages.Update, L("Permission:PageManagement:Update"))
-                .AddChild(CmsKitAdminPermissions.Pages.Delete, L("Permission:PageManagement:Delete"));
+
+            if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+            {
+                cmsGroup
+                    .AddPermission(CmsKitAdminPermissions.Pages.Default, L("Permission:PageManagement"))
+                    .AddChild(CmsKitAdminPermissions.Pages.Create, L("Permission:PageManagement:Create"))
+                    .AddChild(CmsKitAdminPermissions.Pages.Update, L("Permission:PageManagement:Update"))
+                    .AddChild(CmsKitAdminPermissions.Pages.Delete, L("Permission:PageManagement:Delete"));
+            }
         }
 
         private static LocalizableString L(string name)
