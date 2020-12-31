@@ -51,9 +51,11 @@ export function createTypeaheadDisplayNameGenerator(
   properties: ObjectExtensions.EntityExtensionProperties,
 ): ObjectExtensions.DisplayNameGeneratorFn {
   return (displayName, fallback) => {
-    let { name, resource } = fallback;
-    name = removeTypeaheadTextSuffix(name);
-    return displayNameGeneratorFn(displayName || properties[name].displayName, { name, resource });
+    const name = removeTypeaheadTextSuffix(fallback.name);
+    return displayNameGeneratorFn(displayName || properties[name].displayName, {
+      name,
+      resource: fallback.resource,
+    });
   };
 }
 
