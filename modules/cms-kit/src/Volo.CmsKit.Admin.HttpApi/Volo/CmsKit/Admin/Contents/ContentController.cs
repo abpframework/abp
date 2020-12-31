@@ -7,7 +7,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.CmsKit.Admin.Contents;
 using Volo.CmsKit.Permissions;
 
-namespace Volo.CmsKit.Admin.HttpApi.Volo.CmsKit.Admin.Contents
+namespace Volo.CmsKit.Admin.Contents
 {
     [Authorize(CmsKitAdminPermissions.Contents.Default)]
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
