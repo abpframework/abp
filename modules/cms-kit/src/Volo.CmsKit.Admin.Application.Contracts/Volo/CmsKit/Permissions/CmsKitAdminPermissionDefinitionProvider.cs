@@ -20,11 +20,10 @@ namespace Volo.CmsKit.Permissions
 
             if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
             {
-                cmsGroup
-                    .AddPermission(CmsKitAdminPermissions.Pages.Default, L("Permission:PageManagement"))
-                    .AddChild(CmsKitAdminPermissions.Pages.Create, L("Permission:PageManagement:Create"))
-                    .AddChild(CmsKitAdminPermissions.Pages.Update, L("Permission:PageManagement:Update"))
-                    .AddChild(CmsKitAdminPermissions.Pages.Delete, L("Permission:PageManagement:Delete"));
+                var pageManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.Pages.Default, L("Permission:PageManagement"));
+                pageManagement.AddChild(CmsKitAdminPermissions.Pages.Create, L("Permission:PageManagement:Create"));
+                pageManagement.AddChild(CmsKitAdminPermissions.Pages.Update, L("Permission:PageManagement:Update"));
+                pageManagement.AddChild(CmsKitAdminPermissions.Pages.Delete, L("Permission:PageManagement:Delete"));
             }
         }
 
