@@ -1,9 +1,4 @@
-import {
-  ApplicationConfiguration,
-  AuthService,
-  ConfigStateService,
-  EnvironmentService,
-} from '@abp/ng.core';
+import { AuthService, ConfigStateService, CurrentUserDto, EnvironmentService } from '@abp/ng.core';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -52,9 +47,7 @@ import { Observable } from 'rxjs';
   `,
 })
 export class CurrentUserComponent {
-  currentUser$: Observable<ApplicationConfiguration.CurrentUser> = this.configState.getOne$(
-    'currentUser',
-  );
+  currentUser$: Observable<CurrentUserDto> = this.configState.getOne$('currentUser');
 
   get smallScreen(): boolean {
     return window.innerWidth < 992;

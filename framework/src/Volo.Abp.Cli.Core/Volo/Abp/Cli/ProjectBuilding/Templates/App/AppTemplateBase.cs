@@ -24,6 +24,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
+            RemoveUnnecessaryPorts(context, steps);
             RandomizeSslPorts(context, steps);
             RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
@@ -102,6 +103,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
             }
             else
             {
@@ -122,6 +124,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
                 steps.Add(new BlazorAppsettingsFilePortChangeForSeparatedIdentityServersStep());
+                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
             }
             else
             {
@@ -139,6 +142,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
                 steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
+                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
             }
             else
             {
@@ -161,6 +165,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
                 steps.Add(new AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
+
+                if (context.BuildArgs.MobileApp == MobileApp.ReactNative)
+                {
+                    steps.Add(new ReactEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+                }
             }
             else
             {
@@ -171,8 +181,18 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             }
         }
 
+        private static void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RemoveUnnecessaryPortsStep());
+        }
+
         private static void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            if (context.BuildArgs.ExtraProperties.ContainsKey("no-random-port"))
+            {
+                return;
+            }
+
             steps.Add(new TemplateRandomSslPortStep(
                     new List<string>
                     {

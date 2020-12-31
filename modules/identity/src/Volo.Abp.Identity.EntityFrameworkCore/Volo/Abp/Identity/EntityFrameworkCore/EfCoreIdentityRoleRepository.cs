@@ -24,6 +24,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
         }
 

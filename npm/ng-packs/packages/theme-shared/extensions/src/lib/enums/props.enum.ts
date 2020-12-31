@@ -4,10 +4,12 @@ export const enum ePropType {
   DateTime = 'dateTime',
   Email = 'email',
   Enum = 'enum',
+  Hidden = 'hidden',
+  MultiSelect = 'multiselect',
   Number = 'number',
   Password = 'password',
   String = 'string',
   Text = 'text',
   Time = 'time',
-  MultiSelect = 'multiselect',
+  Typeahead = 'typeahead',
 }

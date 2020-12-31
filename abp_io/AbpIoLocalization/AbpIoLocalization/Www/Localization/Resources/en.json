@@ -45,7 +45,7 @@
     "CompleteArchitectureInfo": "Modern architecture to create maintainable software solutions.",
     "DomainDrivenDesignBasedLayeringModelExplanation": "Helps you to implement a DDD based layered architecture and build a maintainable code base.",
     "DomainDrivenDesignBasedLayeringModelExplanationCont": "Provides startup templates, abstractions, base classes, services, documentation and guides to help you to develop your application based on DDD patterns & principles.",
-    "MicroserviceCompatibleModelExplanation": "The core framework & pre-build modules are designed the microservice architecture in mind.",
+    "MicroserviceCompatibleModelExplanation": "The core framework & pre-build modules are designed with microservice architecture in mind.",
     "MicroserviceCompatibleModelExplanationCont": "Provides infrastructure, integrations, samples and documentation to implement microservice solutions easier, while it doesn\u2019t bring additional complexity if you want a monolithic application.",
     "ModularInfo": "ABP provides a module system that allows you to develop reusable application modules, tie into application lifecycle events, and express dependencies between core parts of your system.",
     "PreBuiltModulesThemes": "Pre-Built Modules & Themes",
@@ -184,6 +184,14 @@
     "ABPCLIExamplesInfo": "<strong>new</strong> command creates a <strong>layered MVC application</strong> with <strong>Entity Framework Core</strong> as the database provider. However, it has additional options. Examples:",
     "SeeCliDocumentForMoreInformation": "See the <a href=\"{0}\">ABP CLI document</a> for more options or select the \"Direct Download\" tab above.",
     "Optional": "Optional",
-    "LocalFrameworkRef": "Keep local project reference for the framework packages."
+    "LocalFrameworkRef": "Keep local project reference for the framework packages.",
+    "BlobStoring": "BLOB Storing",
+    "BlobStoringExplanation": "BLOB Storing system provides an abstraction to work with BLOBs. ABP provides some pre-built storage provider integrations (Azure, AWS, File System, Database, etc.) that you can easily use in your applications.",
+    "TextTemplating": "Text Templating",
+    "TextTemplatingExplanation": "Text templating is used to dynamically render contents based on a template and a model (a data object). For example, you can use it to create dynamic email contents with a pre-built template.",
+    "MultipleUIOptions": "Multiple UI Options",
+    "MultipleDBOptions": "Multiple Database Providers",
+    "MultipleUIOptionsExplanation": "The core framework is designed as UI independent and can work with any type of UI system, while there are multiple pre-built and integrated options are provided out of the box.",
+    "MultipleDBOptionsExplanation": "The framework can work with any data source, while the following providers are officially developed and supported;"
   }
 }

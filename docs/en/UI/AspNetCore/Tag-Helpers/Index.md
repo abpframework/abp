@@ -16,7 +16,7 @@ Here, the list of components those are wrapped by the ABP Framework:
 * [Badges](Badges.md)
 * [Blockquote](Blockquote.md)
 * [Borders](Borders.md)
-* [Breadcrumb](Breadcrumb.md)
+* [Breadcrumb](Breadcrumbs.md)
 * [Buttons](Buttons.md)
 * [Cards](Cards.md)
 * [Carousel](Carousel.md)

@@ -16,9 +16,9 @@ namespace Volo.Abp.Options
 
         public virtual Task SetAsync(string name)
         {
-            return OverrideOptionsAsync(base.Get(name));
+            return OverrideOptionsAsync(name, base.Get(name));
         }
 
-        protected abstract Task OverrideOptionsAsync(T options);
+        protected abstract Task OverrideOptionsAsync(string name, T options);
     }
 }

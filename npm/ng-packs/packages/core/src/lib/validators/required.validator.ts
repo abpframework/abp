@@ -10,9 +10,7 @@ export interface RequiredOptions {
 
 export function validateRequired({ allowEmptyStrings }: RequiredOptions = {}): ValidatorFn {
   return (control: AbstractControl): RequiredError | null => {
-    return control.pristine || isValidRequired(control.value, allowEmptyStrings)
-      ? null
-      : { required: true };
+    return isValidRequired(control.value, allowEmptyStrings) ? null : { required: true };
   };
 }
 

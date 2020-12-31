@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using Volo.Abp.DependencyInjection;
 
@@ -12,14 +14,28 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
     {
         private readonly IJSRuntime _jsRuntime;
 
-        public AbpBlazorClientHttpMessageHandler(IJSRuntime jsRuntime)
+        private readonly ICookieService _cookieService;
+
+        private readonly NavigationManager _navigationManager;
+
+        private const string AntiForgeryCookieName = "XSRF-TOKEN";
+
+        private const string AntiForgeryHeaderName = "RequestVerificationToken";
+
+        public AbpBlazorClientHttpMessageHandler(
+            IJSRuntime jsRuntime,
+            ICookieService cookieService,
+            NavigationManager navigationManager)
         {
             _jsRuntime = jsRuntime;
+            _cookieService = cookieService;
+            _navigationManager = navigationManager;
         }
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             await SetLanguageAsync(request, cancellationToken);
+            await SetAntiForgeryTokenAsync(request);
 
             return await base.SendAsync(request, cancellationToken);
         }
@@ -36,6 +52,29 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
             {
                 request.Headers.AcceptLanguage.Clear();
                 request.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(selectedLanguage));
+            }
+        }
+
+        private async Task SetAntiForgeryTokenAsync(HttpRequestMessage request)
+        {
+            if (request.Method == HttpMethod.Get || request.Method == HttpMethod.Head ||
+                request.Method == HttpMethod.Trace || request.Method == HttpMethod.Options)
+            {
+                return;
+            }
+
+            var selfUri = new Uri(_navigationManager.Uri);
+
+            if (request.RequestUri.Host != selfUri.Host || request.RequestUri.Port != selfUri.Port)
+            {
+                return;
+            }
+
+            var token = await _cookieService.GetAsync(AntiForgeryCookieName);
+
+            if (!token.IsNullOrWhiteSpace())
+            {
+                request.Headers.Add(AntiForgeryHeaderName, token);
             }
         }
     }

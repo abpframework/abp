@@ -29,6 +29,7 @@
 	<s:String x:Key="/Default/Environment/InlayHints/CSharpTypeNameHintsOptions/ShowTypeNameHintsForLambdaExpressionParameters/@EntryValue">Never</s:String>
 	<s:String x:Key="/Default/Environment/InlayHints/CSharpTypeNameHintsOptions/ShowTypeNameHintsForLinqQueryRangeVariables/@EntryValue">Never</s:String>
 	<s:String x:Key="/Default/Environment/InlayHints/CSharpTypeNameHintsOptions/ShowTypeNameHintsForPatternMatchingExpressions/@EntryValue">Never</s:String>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EFeature_002EServices_002ECpp_002EDaemon_002EInlayHints_002ETypeNameHints_002ECppTypeNameHintsOptionsMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EFeature_002EServices_002ECpp_002EDaemon_002ETypeNameHints_002ECppTypeNameHintsOptionsMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EFeature_002EServices_002ECSharp_002ETypeNameHints_002ECSharpTypeNameHintsOptionsMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/TypeNameHintsOptions/HideTypeNameHintsWhenTypeNameIsEvidentFromVariableName/@EntryValue">False</s:Boolean>

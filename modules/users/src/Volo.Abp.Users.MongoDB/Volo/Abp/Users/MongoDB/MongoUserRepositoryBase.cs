@@ -23,7 +23,7 @@ namespace Volo.Abp.Users.MongoDB
 
         public virtual async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable().OrderBy(x => x.Id).FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
@@ -32,7 +32,7 @@ namespace Volo.Abp.Users.MongoDB
         }
 
         public async Task<List<TUser>> SearchAsync(
-            string sorting = null, 
+            string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
             string filter = null,

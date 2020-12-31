@@ -106,7 +106,14 @@ abp new Acme.BookStore
 * `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D:\local-template` or `https://.../my-template-file.zip`).
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
 * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
+* `--database-management-system` or `-dbms`: Sets the database management system. Default is **SQL Server**. Supported DBMS's:
+  * `SqlServer`
+  * `MySQL`
+  * `SQLite`
+  * `Oracle-Devart`
+  * `PostgreSQL`
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
+* `--no-random-port`: Uses template's default ports.
 
 ### update
 
@@ -128,6 +135,7 @@ abp update [options]
 * `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
 * `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 * `--check-all`: Check the new version of each package separately. Default is `false`.
+* `--version` or `-v`: Specifies the version to use for update. If not specified, latest version is used.
 
 ### add-package
 
@@ -417,4 +425,4 @@ abp bundle [options]
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a Blazor project file.
 * ```--force``` or ```-f```: Forces to build project before generating references.
 
-For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
+`bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)

@@ -44,7 +44,7 @@
     "LoggedOutTitle": "Sesión cerrada",
     "LoggedOutText": "La sesión ha sido cerrada y serás redireccionado en breve.",
     "ReturnToText": "Haz click aquí para redirigirte a {0}",
-    "OrLoginWith": "O inicia sesión con;",
+    "OrLoginWith": "O inicia sesión con:",
     "ForgotPassword": "¿Olvidaste la contraseña?",
     "SendPasswordResetLink_Information": "Un link para resetear la contraseña será enviado a tu e-mail. Si no recibes el e-mail en unos minutos, por favor re-intenta.",
     "PasswordResetMailSentMessage": "Un e-mail para recuperar la cuenta ha sido enviado a tu e-mail. Si no recibes el e-mail en unos minutos, por favor re-intentalo.",
@@ -57,6 +57,9 @@
     "ProfileTab:Password": "Cambiar contraseña",
     "ProfileTab:PersonalInfo": "Información personal",
     "ReturnToApplication": "Volver a la aplicación",
-    "Volo.Account:InvalidEmailAddress": "No se puede encontrar la dirección de e-mail solicitada: {0}"
+    "Volo.Account:InvalidEmailAddress": "No se puede encontrar la dirección de e-mail solicitada: {0}",
+    "PasswordReset": "Restablecer contraseña",
+    "PasswordResetInfoInEmail": "Recibimos una solicitud de recuperación de cuenta. Si inició esta solicitud, haga clic en el siguiente enlace para restablecer su contraseña.",
+    "ResetMyPassword": "Restablecer mi contraseña"
   }
 }

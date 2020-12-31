@@ -75,6 +75,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     ou => ou.DisplayName == displayName,
                     GetCancellationToken(cancellationToken)

@@ -31,6 +31,10 @@ $commands = (
   "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
   "npm run replace-with-tilde",
   $PacksPublishCommand,
+  "cd scripts",
+  "yarn",
+  "yarn remove-lock-files",
+  "cd ..",
   $UpdateGulpCommand
 )
 

@@ -32,16 +32,6 @@ namespace Microsoft.AspNetCore.RequestLocalization
             _optionsAction = optionsAction;
         }
 
-        public RequestLocalizationOptions GetLocalizationOptions()
-        {
-            if (_requestLocalizationOptions != null)
-            {
-                return _requestLocalizationOptions;
-            }
-
-            return AsyncHelper.RunSync(GetLocalizationOptionsAsync);
-        }
-
         public async Task<RequestLocalizationOptions> GetLocalizationOptionsAsync()
         {
             if (_requestLocalizationOptions == null)

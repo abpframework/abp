@@ -1,4 +1,4 @@
-import { Config, RestOccurError } from '@abp/ng.core';
+import { AuthService, LocalizationParam, RestOccurError } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   ApplicationRef,
@@ -10,8 +10,8 @@ import {
   Injector,
   RendererFactory2,
 } from '@angular/core';
-import { Navigate, RouterDataResolved, RouterError, RouterState } from '@ngxs/router-plugin';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { NavigationError, ResolveEnd, Router } from '@angular/router';
+import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import snq from 'snq';
@@ -72,9 +72,8 @@ export class ErrorHandler {
 
   constructor(
     private actions: Actions,
-    private store: Store,
+    private router: Router,
     private confirmationService: ConfirmationService,
-    private appRef: ApplicationRef,
     private cfRes: ComponentFactoryResolver,
     private rendererFactory: RendererFactory2,
     private injector: Injector,
@@ -86,18 +85,18 @@ export class ErrorHandler {
   }
 
   private listenToRouterError() {
-    this.actions
+    this.router.events
       .pipe(
-        ofActionSuccessful(RouterError),
+        filter(event => event instanceof NavigationError),
         filter(this.filterRouteErrors),
       )
       .subscribe(() => this.show404Page());
   }
 
   private listenToRouterDataResolved() {
-    this.actions
+    this.router.events
       .pipe(
-        ofActionSuccessful(RouterDataResolved),
+        filter(event => event instanceof ResolveEnd),
         filter(() => !!this.componentRef),
       )
       .subscribe(() => {
@@ -233,8 +232,8 @@ export class ErrorHandler {
   }
 
   private showError(
-    message?: Config.LocalizationParam,
-    title?: Config.LocalizationParam,
+    message?: LocalizationParam,
+    title?: LocalizationParam,
     body?: any,
   ): Observable<Confirmation.Status> {
     if (body) {
@@ -262,11 +261,7 @@ export class ErrorHandler {
   }
 
   private navigateToLogin() {
-    this.store.dispatch(
-      new Navigate(['/account/login'], null, {
-        state: { redirectUrl: this.store.selectSnapshot(RouterState.url) },
-      }),
-    );
+    this.injector.get(AuthService).initLogin();
   }
 
   createErrorComponent(instance: Partial<HttpErrorWrapperComponent>) {
@@ -285,14 +280,16 @@ export class ErrorHandler {
     }
 
     this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
+    const appRef = this.injector.get(ApplicationRef);
+
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
-      this.componentRef.instance.appRef = this.appRef;
+      this.componentRef.instance.appRef = appRef;
       this.componentRef.instance.injector = this.injector;
       this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen.component;
     }
 
-    this.appRef.attachView(this.componentRef.hostView);
+    appRef.attachView(this.componentRef.hostView);
     renderer.appendChild(host, (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
 
     const destroy$ = new Subject<void>();
@@ -317,9 +314,9 @@ export class ErrorHandler {
     return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0;
   };
 
-  private filterRouteErrors = (instance: RouterError<any>): boolean => {
+  private filterRouteErrors = (navigationError: NavigationError): boolean => {
     return (
-      snq(() => instance.event.error.indexOf('Cannot match') > -1) &&
+      snq(() => navigationError.error.message.indexOf('Cannot match') > -1) &&
       this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
     );
   };

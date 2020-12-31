@@ -44,7 +44,7 @@
     "LoggedOutTitle": "Signed Out",
     "LoggedOutText": "You have been signed out and you will be redirected soon.",
     "ReturnToText": "Click here to redirect to {0}",
-    "OrLoginWith": "Or login with;",
+    "OrLoginWith": "Or login with:",
     "ForgotPassword": "Forgot password?",
     "SendPasswordResetLink_Information": "A password reset link will be sent to your email to reset your password. If you don't get an email within a few minutes, please re-try.",
     "PasswordResetMailSentMessage": "Account recovery email sent to your e-mail address. If you don't see this email in your inbox within 15 minutes, look for it in your junk mail folder. If you find it there, please mark it as -Not Junk-. ",
@@ -57,6 +57,9 @@
     "ProfileTab:Password": "Change password",
     "ProfileTab:PersonalInfo": "Personal info",
     "ReturnToApplication": "Return to application",
-    "Volo.Account:InvalidEmailAddress": "Can not find the given email address: {0}"
+    "Volo.Account:InvalidEmailAddress": "Can not find the given email address: {0}",
+    "PasswordReset": "Password reset",
+    "PasswordResetInfoInEmail": "We received an account recovery request! If you initiated this request, click the following link to reset your password.",
+    "ResetMyPassword": "Reset my password"
   }
 }

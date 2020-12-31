@@ -2,11 +2,11 @@
 
 ## Introduction
 
-This is a **practical guide** for implementing the Domain Driven Design (DDD). While the implementation details relies on the ABP Framework infrastructure, core concepts, principles and patterns are applicable in any kind of solution, even if it is not a .NET solution.
+This is a **practical guide** for implementing the Domain Driven Design (DDD). While the implementation details rely on the ABP Framework infrastructure, core concepts, principles and patterns are applicable in any kind of solution, even if it is not a .NET solution.
 
 ### Goals
 
-The goals of this document are;
+The goals of this document are to
 
 * **Introduce and explain** the DDD architecture, concepts, principles, patterns and building blocks.
 * Explain the **layered architecture** & solution structure offered by the ABP Framework.
@@ -24,11 +24,11 @@ If we take this famous quote for programming, we can say;
 > **Writing code** is very **simple**, but **writing simple code** is the **hardest thing** there is.
 > &mdash; <cite>???</cite>
 
-In this document, we will introduce **simple rules** those are **easy to implement**.
+In this document, we will introduce **simple rules**, those are **easy to implement**.
 
-Once your **application grows**, it will be **hard to follow** these rules. Sometimes you find **breaking rules** will save your time in a short term. However, the saved time in the short term will bring much **more time loss** in the middle and long term. Your code base becomes **complicated** and hard to maintain. Most of the business applications are **re-written** just because you **can't maintain** it anymore.
+Once your **application grows**, it will be **hard to follow** these rules. Sometimes you find **breaking rules** will save you time in a short term. However, the saved time in the short term will bring much **more time loss** in the middle and long term. Your code base becomes **complicated** and hard to maintain. Most of the business applications are **re-written** just because you **can't maintain** it anymore.
 
-If you **follow the rules and best practices**, your code base will be simpler and easier to maintain. Your application **react to changes** faster.
+If you **follow the rules and best practices**, your code base will be simpler and easier to maintain. Your application **reacts to changes** faster.
 
 ## What is the Domain Driven Design?
 
@@ -46,7 +46,7 @@ There are four fundamental layers of a Domain Driven Based Solution;
 
 ![domain-driven-design-layers](images/domain-driven-design-layers.png)
 
-**Business Logic** places into two layers, the *Domain layer* and the *Application Layer*, while they contains different kinds of business logic;
+**Business Logic** places into two layers, the *Domain layer* and the *Application Layer*, while they contain different kinds of business logic;
 
 * **Domain Layer** implements the core, use-case independent business logic of the domain/system.
 * **Application Layer** implements the use cases of the application based on the domain. A use case can be thought as a user interaction on the User Interface (UI).
@@ -123,7 +123,7 @@ The Application Layer is also splitted into two projects;
 
 * `IssueTracking.HttpApi.Client` project is useful when you have a C# application that needs to consume your HTTP APIs. Once the client application references this project, it can directly [inject](Dependency-Injection.md) & use the Application Services. This is possible by the help of the ABP Framework's [Dynamic C# Client API Proxies System](API/Dynamic-CSharp-API-Clients.md).
 
-> There is a Console Application in `test` folder the solution, named `IssueTracking.HttpApi.Client.ConsoleTestApp`. It simply uses the `IssueTracking.HttpApi.Client` project to consume the APIs exposed by the application. It is just a demo application and you can safely delete it. You can even delete the `IssueTracking.HttpApi.Client` project if you think that you don't need to them.
+> There is a Console Application in the `test` folder of the solution, named `IssueTracking.HttpApi.Client.ConsoleTestApp`. It simply uses the `IssueTracking.HttpApi.Client` project to consume the APIs exposed by the application. It is just a demo application and you can safely delete it. You can even delete the `IssueTracking.HttpApi.Client` project if you think that you don't need to them.
 
 #### The Infrastructure Layer
 
@@ -136,7 +136,7 @@ ABP's startup solution has two projects for the Entity Framework Core integratio
 * `IssueTracking.EntityFrameworkCore` is the essential integration package for the EF Core. Your application's `DbContext`, database mappings, implementations of the repositories and other EF Core related stuff are located here.
 * `IssueTracking.EntityFrameworkCore.DbMigrations` is a special project to manage the Code First database migrations. There is a separate `DbContext` in this project to track the migrations. You typically don't touch this project much except you need to create a new database migration or add an [application module](Modules/Index.md) that has some database tables and naturally requires to create a new database migration.
 
-> You may wonder why there are two projects for the EF Core. It is mostly related to [modularity](Module-Development-Basics.md). Each module has its own independent `DbContext` and your application has also one `DbContext`. `DbMigrations` project contains a **union** of the modules to track and apply a **single migration path**. While most of the times you don't need to know it, you can see the [EF Core migrations](Entity-Framework-Core-Migrations.md) document for more information. 
+> You may wonder why there are two projects for the EF Core. It is mostly related to [modularity](Module-Development-Basics.md). Each module has its own independent `DbContext` and your application has also one `DbContext`. `DbMigrations` project contains a **union** of the modules to track and apply a **single migration path**. While most of the time you don't need to know it, you can see the [EF Core migrations](Entity-Framework-Core-Migrations.md) document for more information. 
 
 #### Other Projects
 
@@ -150,7 +150,7 @@ The diagram below shows the essential dependencies (project references) between 
 
 The projects have been explained before. Now, we can explain the reasons of the dependencies;
 
-* `Domain.Shared` is the project all other projects directly or indirectly depend on. So, all the types in this project are available to all projects.
+* `Domain.Shared` is the project that all other projects directly or indirectly depend on. So, all the types in this project are available to all projects.
 * `Domain` only depends on the `Domain.Shared` because it is already a (shared) part of the domain. For example, an `IssueType` enum in the `Domain.Shared` can be used by an `Issue` entity in the `Domain` project.
 * `Application.Contracts` depends on the `Domain.Shared`. In this way, you can reuse these types in the DTOs. For example, the same `IssueType` enum in the `Domain.Shared` can be used by a `CreateIssueDto` as a property.
 * `Application` depends on the `Application.Contracts` since it implements the Application Service interfaces and uses the DTOs inside it. It also depends on the `Domain` since the Application Services are implemented using the Domain Objects defined inside it.
@@ -163,9 +163,9 @@ The projects have been explained before. Now, we can explain the reasons of the 
 
 When you investigate the solution, you will see two more dependencies shown with the dashed lines in the figure above. `Web` project depends on the `Application` and `EntityFrameworkCore` projects which *theoretically* should not be like that but actually it is.
 
-This is because the `Web` is the final project that runs and hosts the application and the **application needs to the implementations of the Application Services and the Repositories** while running.
+This is because the `Web` is the final project that runs and hosts the application and the **application needs the implementations of the Application Services and the Repositories** while running.
 
-This design decision potentially allows you to use Entities and EF Core objects in the Presentation Layer which is **should be strictly avoided**. However, we find the alternative designs over complicated. Here, two of the alternatives if you want to remove this dependency;
+This design decision potentially allows you to use Entities and EF Core objects in the Presentation Layer which **should be strictly avoided**. However, we find the alternative designs over complicated. Here, two of the alternatives if you want to remove this dependency;
 
 * Convert `Web` project to a razor class library and create a new project, like `Web.Host`, that depends on the `Web`, `Application` and `EntityFrameworkCore` projects and hosts the application. You don't write any UI code here, but use **only for hosting**.
 * Remove `Application` and `EntityFrameworkCore` dependencies from the `Web` project and load their assemblies on application initialization. You can use ABP's [Plug-In Modules](PlugIn-Modules.md) system for that purpose.
@@ -176,9 +176,9 @@ The figure below shows a typical request flow for a web application that has bee
 
 ![](images/domain-driven-design-web-request-flow.png)
 
-* The request typically begins by a user interaction on the UI (a *use case*) that causes an HTTP request to the server.
+* The request typically begins with a user interaction on the UI (a *use case*) that causes an HTTP request to the server.
 * An MVC Controller or a Razor Page Handler in the Presentation Layer (or in the Distributed Services Layer) handles the request and can perform some cross cutting concerns in this stage ([Authorization](Authorization.md), [Validation](Validation.md), [Exception Handling](Exception-Handling.md), etc.). A Controller/Page injects the related Application Service interface and calls its method(s) by sending and receiving DTOs.
-* The Application Service use the Domain Objects (Entities, Repository interfaces, Domain Services, etc.) to implement the *use case*. Application Layer implements some cross cutting concerns (Authorization, Validation, etc.). An Application Service method should be a [Unit Of Work](Unit-Of-Work.md). That means it should be atomic.
+* The Application Service uses the Domain Objects (Entities, Repository interfaces, Domain Services, etc.) to implement the *use case*. Application Layer implements some cross cutting concerns (Authorization, Validation, etc.). An Application Service method should be a [Unit Of Work](Unit-Of-Work.md). That means it should be atomic.
 
 Most of the cross cutting concerns are **automatically and conventionally implemented by the ABP Framework** and you typically don't need to write code for them.
 
@@ -188,7 +188,7 @@ Before going into details, let's see some overall DDD principles;
 
 #### Database Provider / ORM Independence
 
-The domain and application layers should be ORM / Database Provider agnostic. They only depends on the Repository interfaces and the Repository interfaces doesn't use any ORM specific objects.
+The domain and the application layers should be ORM / Database Provider agnostic. They should only depend on the Repository interfaces and the Repository interfaces don't use any ORM specific objects.
 
 Here, the main reasons of this principle;
 
@@ -200,12 +200,12 @@ Here, the main reasons of this principle;
 
 ##### Discussion About the Database Independence Principle
 
-Especially, the **reason 1** deeply effects your domain **object design** (especially, the entity relations) and **application code**. Assume that you are using [Entity Framework Core](Entity-Framework-Core.md) with a relational database. If you try to make your application so that it is possible to switch to [MongoDB](MongoDB.md) later, you can't use some very **useful EF Core features**. Examples;
+Especially, the **reason 1** deeply effects your domain **object design** (especially, the entity relations) and **application code**. Assume that you are using [Entity Framework Core](Entity-Framework-Core.md) with a relational database. If you are willing to make your application switchable to [MongoDB](MongoDB.md) later, you can't use some very **useful EF Core features**. Examples;
 
 * You can't assume [Change Tracking](https://docs.microsoft.com/en-us/ef/core/querying/tracking) since MongoDB provider can't do it. So, you always need to explicitly update the changed entities.
 * You can't use [Navigation Properties](https://docs.microsoft.com/en-us/ef/core/modeling/relationships) (or Collections) to other Aggregates in your entities since this is not possible for a Document Database. See the "Rule: Reference Other Aggregates Only By Id" section for more info.
 
-If you think such features are **important** for you and you **will never move away** from the EF Core, we believe that it is worth **relaxing this principle**. We still suggest to use the repository pattern to hide the infrastructure details. But you can assume that you are using EF Core while designing your entity relations and writing your application code. You can even reference to the EF Core NuGet Package from your application layer to be able to directly use the asynchronous LINQ extension methods, like `ToListAsync()` (see the *IQueryable & Async Operations* section in the [Repositories](Repositories.md) document for more info).
+If you think such features are **important** for you and you **will never stray** from the EF Core, we believe that it is worth **stretching this principle**. We still suggest to use the repository pattern to hide the infrastructure details. But you can assume that you are using EF Core while designing your entity relations and writing your application code. You can even reference to the EF Core NuGet Package from your application layer to be able to directly use the asynchronous LINQ extension methods, like `ToListAsync()` (see the *IQueryable & Async Operations* section in the [Repositories](Repositories.md) document for more info).
 
 #### Presentation Technology Agnostic
 
@@ -217,15 +217,15 @@ In some cases, you may need to have **duplicate logic** in the application and p
 
 DDD focuses on how the domain objects **changes and interactions**; How to create an entity and change its properties by preserving the data **integrity/validity** and implementing the **business rules**.
 
-DDD **ignores reporting** and mass querying. That doesn't mean they are not important. If your application doesn't have fancy dashboards and reports, who would use it? However, reporting is another topic. You typically want to use the full power of the SQL Server or even use a separate data source (like ElasticSearch) for reporting purpose. You will write optimized queries, create indexes and even stored procedures(!). You are free to do all as long as you don't mix all these into your business logic.
+DDD **ignores reporting** and mass querying. That doesn't mean they are not important. If your application doesn't have fancy dashboards and reports, who would use it? However, reporting is another topic. You typically want to use the full power of the SQL Server or even use a separate data source (like ElasticSearch) for reporting purpose. You will write optimized queries, create indexes and even stored procedures(!). You are free to do all these things as long as you don't infect them into your business logic.
 
 ## Implementation: The Building Blocks
 
-This is the essential part of this guide. We will introduce and explain some **explicit rules** with examples. You can follow these rules and apply in your solutions while implementing the Domain Driven Design.
+This is the essential part of this guide. We will introduce and explain some **explicit rules** with examples. You can follow these rules and apply in your solution while implementing the Domain Driven Design.
 
 ### The Example Domain
 
-The examples will use some concepts those are used by GitHub, like `Issue`, `Repository`, `Label` and `User`, you already familiar with. The figure below shows some of the aggregates, aggregate roots, entities, value object and the relations between them:
+The examples will use some concepts those are used by GitHub, like `Issue`, `Repository`, `Label` and `User`, you are already familiar with. The figure below shows some of the aggregates, aggregate roots, entities, value object and the relations between them:
 
 ![domain driven design example schema](images/domain-driven-design-example-domain-schema.png)
 
@@ -319,14 +319,14 @@ The following rules ensures implementing the principles introduced above.
 
 The first rule says an Aggregate should reference to other aggregates only by their Id. That means you can not add navigation properties to other aggregates.
 
-* This rule make possible to implement the serializability principle.
+* This rule makes it possible to implement the serializability principle.
 * It also prevents different aggregates manipulate each other and leaking business logic of an aggregate to one another.
 
 You see two aggregate roots, `GitRepository` and `Issue` in the example below;
 
 ![domain-driven-design-reference-by-id-sample](images/domain-driven-design-reference-by-id-sample.png)
 
-* `GitRepository` should not have a collection of `Issue`s since they are different aggregates.
+* `GitRepository` should not have a collection of the `Issue`s since they are different aggregates.
 * `Issue` should not have a navigation property for the related `GitRepository` since it is a different aggregate.
 * `Issue` can have `RepositoryId` (as a `Guid`).
 
@@ -348,7 +348,7 @@ Role aggregate has a collection of `UserRole` value objects to track the users a
 
 On the other hand, `User` may have such a `Roles` collection since a user doesn't have much roles in practical and it can be useful to have a list of roles while you are working with a User Aggregate.
 
-If you think careful, there is one more problem when Role and User both have the list of relation if you use a **non-relational database, like MongoDB**. In this case, the same information is duplicated in different collections and it will be hard to maintain data consistency (whenever you add an item to `User.Roles`, you need to add it to `Role.Users` too).
+If you think carefully, there is one more problem when Role and User both have the list of relation when use a **non-relational database, like MongoDB**. In this case, the same information is duplicated in different collections and it will be hard to maintain data consistency (whenever you add an item to `User.Roles`, you need to add it to `Role.Users` too).
 
 So, determine your aggregate boundaries and size based on the following considerations;
 
@@ -379,7 +379,7 @@ That doesn't mean sub-collection entities should always have composite PKs. They
 
 ##### Constructors of the Aggregate Roots / Entities
 
-The constructor is where the lifecycle of an entity begins. There are a some responsibilities of a well designed constructor:
+The constructor is located where the lifecycle of an entity begins. There are a some responsibilities of a well designed constructor:
 
 * Gets the **required entity properties** as parameters to **create a valid entity**. Should force to pass only for the required parameters and may get non-required properties as optional parameters.
 * **Checks validity** of the parameters.
@@ -429,7 +429,7 @@ namespace IssueTracking.Issues
 }
 ````
 
-* `Issue` class properly **forces to create a valid entity** by taking minimum necessary properties in its constructor as parameters.
+* `Issue` class properly **forces to create a valid entity** by getting minimum required properties in its constructor as parameters.
 * The constructor **validates** the inputs (`Check.NotNullOrWhiteSpace(...)` throws `ArgumentException` if the given value is empty).
 * It **initializes the sub-collections**, so you don't get a null reference exception when you try to use the `Labels` collection after creating the `Issue`.
 * The constructor also **takes the `id`** and passes to the `base` class. We don't generate `Guid`s inside the constructor to be able to delegate this responsibility to another service (see [Guid Generation](Guid-Generation.md)).
@@ -439,7 +439,7 @@ namespace IssueTracking.Issues
 
 ##### Entity Property Accessors & Methods
 
-The example above seems strange to you. For example, we force to pass a non-null `Title` in the constructor. However, the developer may then set the `Title` property to `null` without any control. This is because the example code above just focuses on the constructor.
+The example above may seem strange to you! For example, we force to pass a non-null `Title` in the constructor. However, the developer may then set the `Title` property to `null` without any control. This is because the example code above just focuses on the constructor.
 
 If we declare all the properties with **public setters** (like the example `Issue` class above), we can't force **validity** and **integrity** of the entity in its lifecycle. So;
 
@@ -461,8 +461,8 @@ namespace IssueTracking.Issues
         public string Title { get; private set; } //Needs validation
         public string Text { get; set; } //No validation
         public Guid? AssignedUserId { get; set; } //No validation
-        public bool IsClosed { get; private set; } //Should change with CloseReason
-        public IssueCloseReason? CloseReason { get; private set; } //Should change with IsClosed
+        public bool IsClosed { get; private set; } //Should be changed with CloseReason
+        public IssueCloseReason? CloseReason { get; private set; } //Should be changed with IsClosed
 
         //...
 
@@ -486,14 +486,14 @@ namespace IssueTracking.Issues
 }
 ````
 
-* `RepositoryId` setter made private and there is no way to change it after creating an `Issue` because this is what we want for this domain: An issue can't be moved to another repository.
+* `RepositoryId` setter made private and there is no way to change it after creating an `Issue` because this is what we want in this domain: An issue can't be moved to another repository.
 * `Title` setter made private and `SetTitle` method has been created if you want to change it later in a controlled way.
-* `Text` and `AssignedUserId` has public setter since there is no restriction on them. They can be null or any other value. We think it is unnecessary to define separate methods to set them. If we need later, we can add methods and make the setters private. Breaking changes are not problem in the domain layer since the domain layer is an internal project, it is not exposed to clients.
+* `Text` and `AssignedUserId` has public setters since there is no restriction on them. They can be null or any other value. We think it is unnecessary to define separate methods to set them. If we need later, we can add methods and make the setters private. Breaking changes are not problem in the domain layer since the domain layer is an internal project, it is not exposed to clients.
 * `IsClosed` and `IssueCloseReason` are pair properties. Defined `Close` and `ReOpen` methods to change them together. In this way, we prevent to close an issue without any reason.
 
 ##### Business Logic & Exceptions in the Entities
 
-When you implement validation and business logic in the entities, you frequently need to manage exceptional cases. In these cases;
+When you implement validation and business logic in the entities, you frequently need to manage the exceptional cases. In these cases;
 
 * Create **domain specific exceptions**.
 * **Throw these exceptions** in the entity methods when necessary.
@@ -552,7 +552,7 @@ There are two business rules here;
 * A locked issue can not be re-opened.
 * You can not lock an open issue.
 
-`Issue` class throws a `IssueStateException` in these cases to force business rules:
+`Issue` class throws an `IssueStateException` in these cases to force the business rules:
 
 ````csharp
 using System;
@@ -575,7 +575,7 @@ There are two potential problems of throwing such exceptions;
 1. In case of such an exception, should the **end user** see the exception (error) message? If so, how do you **localize** the exception message? You can not use the [localization](Localization.md) system, because you can't inject and use `IStringLocalizer` in the entities.
 2. For a web application or HTTP API, what **HTTP Status Code** should return to the client?
 
-ABP's [Exception Handling](Exception-Handling.md) system solves these problems (and more).
+ABP's [Exception Handling](Exception-Handling.md) system solves these and similar problems.
 
 **Example: Throwing a business exception with code**
 
@@ -615,20 +615,20 @@ public void ReOpen()
 
 > Use constants instead of magic strings.
 
-And add an entry to the localization resource. Example entry for the English language:
+And add an entry to the localization resource like below:
 
 ````json
 "IssueTracking:CanNotOpenLockedIssue": "Can not open a locked issue! Unlock it first."
 ````
 
-* ABP automatically uses this localized message (based on the current language) to show to the end user when you throw the exception.
+* When you throw the exception, ABP automatically uses this localized message (based on the current language) to show to the end user.
 * The exception code (`IssueTracking:CanNotOpenLockedIssue` here) is also sent to the client, so it may handle the error case programmatically.
 
 > For this example, you could directly throw `BusinessException` instead of defining a specialized `IssueStateException`. The result will be same. See the [exception handling document](Exception-Handling.md) for all the details.
 
 ##### Business Logic in Entities Requiring External Services
 
-It is simple to implement a business rule in an entity method when the business logic only uses to the properties of that entity. What if the business logic requires to **query database** or **use any external services** that should be resolved from the [dependency injection](Dependency-Injection.md) system. Remember; **Entities can not inject services**.
+It is simple to implement a business rule in an entity method when the business logic only uses the properties of that entity. What if the business logic requires to **query database** or **use any external services** that should be resolved from the [dependency injection](Dependency-Injection.md) system. Remember; **Entities can not inject services!**
 
 There are two common ways of implementing such a business logic:
 
@@ -670,9 +670,9 @@ public class Issue : AggregateRoot<Guid>
 * `AssignToAsync` throws exception if the business rule doesn't meet.
 * Finally, if everything is correct, `AssignedUserId` property is set.
 
-This method perfectly guarantee to apply the business logic when you want to assign an issue to a user. However, it has some problems;
+This method perfectly guarantees to apply the business logic when you want to assign an issue to a user. However, it has some problems;
 
-* It makes the entity class **depends on an external service** which makes the entity **complicated**.
+* It makes the entity class **depending on an external service** which makes the entity **complicated**.
 * It makes **hard to use** the entity. The code that uses the entity now needs to inject `IUserIssueService` and pass to the `AssignToAsync` method.
 
 An alternative way of implementing this business logic is to introduce a **Domain Service**, which will be explained later.
@@ -778,7 +778,7 @@ namespace IssueTracking.Issues
 
 When we check the `GetInActiveIssuesAsync` implementation, we see a **business rule that defines an in-active issue**: The issue should be **open**, **assigned to nobody**, **created 30+ days ago** and has **no comment in the last 30 days**.
 
-This is an implicit definition of business rule that is hidden inside a repository method. The problem occurs when we need to reuse this business logic.
+This is an implicit definition of a business rule that is hidden inside a repository method. The problem occurs when we need to reuse this business logic.
 
 For example, let's say that we want to add an `bool IsInActive()` method on the `Issue` entity. In this way, we can check activeness when we have an issue entity.
 
@@ -963,7 +963,7 @@ public class IssueAppService : ApplicationService, IIssueAppService
 
 #### Combining the Specifications
 
-One powerful side of the Specifications is they are combinable. Assume that we've another specification that returns `true` only if the `Issue` is in a Milestone:
+One powerful side of the Specifications is they are combinable. Assume that we have another specification that returns `true` only if the `Issue` is in a Milestone:
 
 ````csharp
 public class MilestoneSpecification : Specification<Issue>
@@ -1014,7 +1014,7 @@ The example above uses the `And` extension method to combine the specifications.
 
 ### Domain Services
 
-Domain Services implement domain logic that;
+Domain Services implement domain logic which;
 
 * Depends on **services and repositories**.
 * Needs to work with **multiple aggregates**, so the logic doesn't properly fit in any of the aggregates.
@@ -1023,7 +1023,7 @@ Domain Services work with Domain Objects. Their methods can **get and return ent
 
 **Example: Assigning an issue to a user**
 
-Remember how issue assignment has been implemented in the `Issue` entity:
+Remember how an issue assignment has been implemented in the `Issue` entity:
 
 ````csharp
 public class Issue : AggregateRoot<Guid>
@@ -1108,11 +1108,11 @@ While there is a tradeoff between two approaches, we prefer to create Domain Ser
 
 ### Application Services
 
-An [Application Service](Application-Services.md) is a stateless service that implements **use cases** of the application. An application service typically **gets and returns DTOs**. It is used by the Presentation Layer. It **uses and coordinates the domain objects** (entities, repositories, etc.) to implement use cases.
+An [Application Service](Application-Services.md) is a stateless service that implements **use cases** of the application. An application service typically **gets and returns DTOs**. It is used by the Presentation Layer. It **uses and coordinates the domain objects** (entities, repositories, etc.) to implement the use cases.
 
 Common principles of an application service are;
 
-* Implement the **application logic** that is specific to the current use case. Do not implement the core domain logic inside the application services. We will come back to differences between Application  Domain logics.
+* Implement the **application logic** that is specific to the current use-case. Do not implement the core domain logic inside the application services. We will come back to differences between Application  Domain logics.
 * **Never get or return entities** for an application service method. This breaks the encapsulation of the Domain Layer. Always get and return DTOs.
 
 **Example: Assign an Issue to a User**
@@ -1204,7 +1204,7 @@ This rule seems unnecessary first. Who would define unused parameters (input DTO
 
 Define a **specialized input DTO for each use case** (Application Service method). Otherwise, some properties are not used in some cases and this violates the rule defined above: *Do not Define Unused Properties for Input DTOs*.
 
-Sometimes, it seems appealing to reuse the same DTO class for two use cases, because they are almost same. Even if they are same now, they will probably become different by the time and you will come the same problem. **Code duplication is a better practice than coupling use cases**.
+Sometimes, it seems appealing to reuse the same DTO class for two use cases, because they are almost same. Even if they are same now, they will probably become different by the time and you will come to the same problem. **Code duplication is a better practice than coupling use cases**.
 
 Another way of reusing input DTOs is **inheriting** DTOs from each other. While this can be useful in some rare cases, most of the time it brings you to the same point.
 
@@ -1273,7 +1273,7 @@ public class UserChangePasswordDto
 }
 ````
 
-This is more maintainable approach, while it seems you write more code.
+This is more maintainable approach although more code is written.
 
 **Exceptional Case**: There can be some exceptions for this rule: If you always want to develop two methods **in parallel**, they may share the same input DTO (by inheritance or direct reuse). For example, if you have a reporting page that has some filters and you have multiple Application Service methods (like screen report, excel report and csv report methods) use the same filters but returns different results, you may want to reuse the same filter input DTO to **couple these use cases**. Because, in this example, whenever you change a filter, you have to make the necessary changes in all the methods to have a consistent reporting system.
 
@@ -1302,7 +1302,7 @@ namespace IssueTracking.Users
 
         [Required]
         [StringLength(UserConsts.MaxEmailLength,
-                      MinimumLength = UserConsts.MinPasswordLength)]
+        MinimumLength = UserConsts.MinPasswordLength)]
         public string Password { get; set; }
     }
 }
@@ -1325,7 +1325,7 @@ The main goals of these suggestions are;
 * Make client code easy to develop and extend;
   * Dealing with **similar, but not same** DTOs are problematic on the client side.
   * It is common to **need to other properties** on the UI/client in the future. Returning all properties (by considering security and privileges) of an entity makes client code easy to improve without requiring to touch to the backend code.
-  * If you are opening your API to **3rd-party clients**, you can't know requirements of each client.
+  * If you are opening your API to **3rd-party clients** that you don't know requirements of each client.
 * Make the server side code easy to develop and extend;
   * You have less class to **understand and maintain**.
   * You can reuse the Entity->DTO **object mapping** code.
@@ -1345,7 +1345,7 @@ public interface IUserAppService : IApplicationService
 }
 ````
 
-*(We haven't used async methods to make the example cleaner, but you use async in your real code!)*
+*(We didn't use async methods to make the example cleaner, but use async in your real world application!)*
 
 The example code above returns different DTO types for each method. As you can guess, there will be a lot of code duplications for querying data, mapping entities to DTOs.
 
@@ -1375,14 +1375,14 @@ public class UserDto
 ````
 
 * Removed `GetUserNameAndEmail` and `GetRoles` since `Get` method already returns the necessary information.
-* `GetList` now returns same with `Get`.
+* `GetList` now returns the same with `Get`.
 * `Create` and `Update` also returns the same `UserDto`.
 
 Using the same DTO has a lot of advantages as explained before. For example, think a scenario where you show a **data grid** of Users on the UI. After updating a user, you can get the return value and **update it on the UI**. So, you don't need to call `GetList` again. This is why we suggest to return the entity DTO (`UserDto` here) as return value from the `Create` and `Update` operations.
 
 ##### Discussion
 
-Some of the output DTO suggestions may not fit every scenario. These suggestions can be ignored for **performance** reasons, especially when **large data sets** returned or when you create services for your own UI and you have **too many concurrent requests**.
+Some of the output DTO suggestions may not fit in every scenario. These suggestions can be ignored for **performance** reasons, especially when **large data sets** returned or when you create services for your own UI and you have **too many concurrent requests**.
 
 In these cases, you may want to create **specialized output DTOs with minimal information**. The suggestions above are especially for applications where **maintaining the codebase** is more important than **negligible performance lost**.
 
@@ -1449,7 +1449,7 @@ public class Issue : AggregateRoot<Guid>
 * This class guarantees to create a valid entity by its constructor.
 * If you need to change the `Title` later, you need to use the `SetTitle` method which continues to keep `Title` in a valid state.
 * If you want to assign this issue to a user, you need to use `IssueManager` (it implements some business rules before the assignment - see the *Domain Services* section above to remember).
-* The `Text` property has a public setter, because it also accepts null values and haven't any validation rule for this example. It is also optional in the constructor.
+* The `Text` property has a public setter, because it also accepts null values and does not have any validation rules for this example. It is also optional in the constructor.
 
 Let's see an Application Service method that is used to create an issue:
 
@@ -1499,7 +1499,7 @@ public class IssueAppService : ApplicationService, IIssueAppService
 `CreateAsync` method;
 
 * Uses the `Issue` **constructor** to create a valid issue. It passes the `Id` using the [IGuidGenerator](Guid-Generation.md) service. It doesn't use auto object mapping here.
-* If client wants to **assign this issue to a user** on object creation, it uses the `IssueManager` to do it by allowing the `IssueManager` to perform the necessary checks before this assignment.
+* If the client wants to **assign this issue to a user** on object creation, it uses the `IssueManager` to do it by allowing the `IssueManager` to perform the necessary checks before this assignment.
 * **Saves** the entity to the database.
 * Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by **mapping** from the new `Issue` entity.
 
@@ -1576,7 +1576,7 @@ namespace IssueTracking.Issues
 ````
 
 * `CreateAsync` method checks if there is already an issue with the same title and throws a business exception in this case.
-* If there is no duplication, it create and returns a new `Issue`.
+* If there is no duplication, it creates and returns a new `Issue`.
 
 The `IssueAppService` is changed as shown below in order to use the `IssueManager`'s `CreateAsync` method:
 
@@ -1632,9 +1632,9 @@ public class IssueCreationDto
 }
 ````
 
-##### Discussion: Why not saved Issue to database in the `IssueManager`?
+##### Discussion: Why is the Issue not saved to the database in `IssueManager`?
 
-You may ask "**Why `IssueManager` hasn't saved the `Issue` into the database?**". We think it is the responsibility of the Application Service.
+You may ask "**Why didn't `IssueManager` save the `Issue` to the database?**". We think it is the responsibility of the Application Service.
 
 Because, the Application Service may require additional changes/operations on the `Issue` object before saving it. If Domain Service saves it, then the *Save* operation is duplicated;
 
@@ -1642,16 +1642,16 @@ Because, the Application Service may require additional changes/operations on th
 * It requires explicit database transaction that covers both operations.
 * If additional actions cancel the entity creation because of a business rule, the transaction should be rolled back in the database.
 
-When you check the `IssueAppService`, you see the advantage of **not saving** `Issue` to database in the `IssueManager.CreateAsync`. Otherwise, we would need to perform one *Insert* (in the `IssueManager`) and one *Update* (after the Assignment).
+When you check the `IssueAppService`, you will see the advantage of **not saving** `Issue` to the database in the `IssueManager.CreateAsync`. Otherwise, we would need to perform one *Insert* (in the `IssueManager`) and one *Update* (after the Assignment).
 
-##### Discussion: Why not implemented the duplicate Title check in the Application Service?
+##### Discussion: Why is the duplicate Title check not implemented in the Application Service?
 
 We could simple say "Because it is a **core domain logic** and should be implemented in the Domain Layer". However, it brings a new question "**How did you decide** that it is a core domain logic, but not an application logic?" (we will discuss the difference later with more details).
 
-For this example, a simple question can help us to make the decision: "If we have another way (use case) of creating an issue, should we still apply the same rule? Is that rule should *always* be implemented". You may think "Why we have a second way of creating an issue?". However, in real life, you have;
+For this example, a simple question can help us to make the decision: "If we have another way (use case) of creating an issue, should we still apply the same rule? Is that rule should *always* be implemented". You may think "Why do we have a second way of creating an issue?". However, in real life, you have;
 
 * **End users** of the application may create issues in your application's standard UI.
-* You may have a second **back office** application that is used by your own employee and you may want to provide a way of creating issues (probably with different authorization rules in this case).
+* You may have a second **back office** application that is used by your own employees and you may want to provide a way of creating issues (probably with different authorization rules in this case).
 * You may have an HTTP API that is open to **3rd-party clients** and they create issues.
 * You may have a **background worker** service that do something and creates issues if it detects some problems. In this way, it will create an issue without any user interaction (and probably without any standard authorization check).
 * You may have a button on the UI that **converts** something (for example, a discussion) to an issue.
@@ -1660,7 +1660,7 @@ We can give more examples. All of these are should be implemented by **different
 
 ### Updating / Manipulating An Entity
 
-Once an entity is created, it is updated/manipulated by the use cases until it is deleted from the system. There can be different type of use cases directly or indirectly changes an entity.
+Once an entity is created, it is updated/manipulated by the use cases until it is deleted from the system. There can be different types of the use cases directly or indirectly changes an entity.
 
 In this section, we will discuss a typical update operation that changes multiple properties of an `Issue`.
 
@@ -1725,16 +1725,16 @@ public class IssueAppService : ApplicationService, IIssueAppService
 ````
 
 * `UpdateAsync` method gets `id` as a separate parameter. It is not included in the `UpdateIssueDto`. This is a design decision that helps ABP to properly define HTTP routes when you [auto expose](API/Auto-API-Controllers.md) this service as an HTTP API endpoint. So, that's not related to DDD.
-* It starts by **getting** the `Issue` entity **from database**.
+* It starts by **getting** the `Issue` entity **from the database**.
 * Uses `IssueManager`'s `ChangeTitleAsync` instead of directly calling `Issue.SetTitle(...)`. Because we need to implement the **duplicate Title check** as just done in the *Entity Creation*. This requires some changes in the `Issue` and `IssueManager` classes (will be explained below).
 * Uses `IssueManager`'s `AssignToAsync` method if the **assigned user** is being changed with this request.
 * Directly sets the `Issue.Text` since there is **no business rule** for that. If we need later, we can always refactor.
-* **Saves changes** to database. Again, saving changed entities is a responsibility of the Application Service method that coordinates the business objects and the transaction. If `IssueManager` had saved internally in `ChangeTitleAsync` and `AssignToAsync` method, there would be double database operation (see the *Discussion: Why not saved Issue to database in the `IssueManager`?* above).
+* **Saves changes** to the database. Again, saving changed entities is a responsibility of the Application Service method that coordinates the business objects and the transaction. If the `IssueManager` had saved internally in `ChangeTitleAsync` and `AssignToAsync` method, there would be double database operation (see the *Discussion: Why is the Issue not saved to the database in `IssueManager`?* above).
 * Finally uses the `IObjectMapper` to return an `IssueDto` that is automatically created by **mapping** from the updated `Issue` entity.
 
 As said, we need some changes in the `Issue` and `IssueManager` classes.
 
-First, made `SetTitle` internal on the `Issue` class:
+First, made `SetTitle` internal in the `Issue` class:
 
 ````csharp
 internal void SetTitle(string title)
@@ -1743,7 +1743,7 @@ internal void SetTitle(string title)
 }
 ````
 
-Then added a new method on the `IssueManager` to change the Title:
+Then added a new method to the `IssueManager` to change the Title:
 
 ````csharp
 public async Task ChangeTitleAsync(Issue issue, string title)
@@ -1764,7 +1764,7 @@ public async Task ChangeTitleAsync(Issue issue, string title)
 
 ## Domain Logic & Application Logic
 
-As mentioned before, *Business Logic* in the Domain Driven Design is splitted into two parts (layers): *Domain Logic* and *Application Logic*:
+As mentioned before, *Business Logic* in the Domain Driven Design is spitted into two parts (layers): *Domain Logic* and *Application Logic*:
 
 ![domain-driven-design-domain-vs-application-logic](images/domain-driven-design-domain-vs-application-logic.png)
 
@@ -1774,7 +1774,7 @@ While the definition is clear, the implementation may not be easy. You may be un
 
 ### Multiple Application Layers
 
-DDD helps to **deal with complexity** when your system is large. Especially, if there are **multiple applications**  are being developed on a **single domain,** then the **Domain Logic vs Application Logic separation** becomes much more important.
+DDD helps to **deal with complexity** when your system is large. Especially, if there are **multiple applications**  are being developed in a **single domain,** then the **Domain Logic vs Application Logic separation** becomes much more important.
 
 Assume that you are building a system that has multiple applications;
 
@@ -1786,7 +1786,7 @@ Assume that you are building a system that has multiple applications;
 
 Every application will have different **requirements**, different **use cases** (Application Service methods), different **DTOs**, different **validation** and **authorization** rules... etc.
 
-Mixing all these logics into a single application layer makes your services contain too many `if`s with **complicated business logic** makes your code **hard to develop, maintain and test** and leads to potential bugs.
+Mixing all these logics into a single application layer makes your services contain too many `if` conditions with **complicated business logic** makes your code **harder to develop, maintain and test** and leads to potential bugs.
 
 If you've multiple applications with a single domain;
 
@@ -1851,7 +1851,7 @@ public class OrganizationManager : DomainService
 }
 ````
 
-Let's see the `CreateAsync` method part by part to discuss if the code part should be in the Domain Service, or not;
+Let's see the `CreateAsync` method step by step to discuss if the code part should be in the Domain Service, or not;
 
 * **CORRECT**: It first checks for **duplicate organization name** and and throws exception in this case. This is something related to core domain rule and we never allow duplicated names.
 * **WRONG**: Domain Services should not perform **authorization**. [Authorization](Authorization.md) should be done in the Application Layer.
@@ -1906,16 +1906,16 @@ public class OrganizationAppService : ApplicationService
 }
 ````
 
-Let's see the `CreateAsync` method part by part to discuss if the code part should be in the Application Service, or not;
+Let's see the `CreateAsync` method step by step to discuss if the code part should be in the Application Service, or not;
 
 * **CORRECT**: Application Service methods should be unit of work (transactional). ABP's [Unit Of Work](Unit-Of-Work.md) system makes this automatic (even without need to add `[UnitOfWork]` attribute for the Application Services).
 * **CORRECT**: [Authorization](Authorization.md) should be done in the application layer. Here, it is done by using the `[Authorize]` attribute.
-* **CORRECT**: Payment (an infrastructure service) is called to charge money for this operation (Creating an Organization is a paid thing in our business).
+* **CORRECT**: Payment (an infrastructure service) is called to charge money for this operation (Creating an Organization is a paid service in our business).
 * **CORRECT**: Application Service method is responsible to save changes to the database.
 * **CORRECT**: We can send [email](Emailing.md) as a notification to the system admin.
 * **WRONG**: Do not return entities from the Application Services. Return a DTO instead.
 
-**Discussion: Why not moving the payment logic inside the domain service?**
+**Discussion: Why don't we move the payment logic into the domain service?**
 
 You may wonder why the payment code is not inside the `OrganizationManager`. It is an **important thing** and we never want to **miss the payment**.
 
@@ -1924,7 +1924,7 @@ However, **being important is not sufficient** to consider a code as a Core Busi
 * An admin user can use a Back Office Application to create a new organization without any payment.
 * A background-working data import/integration/synchronization system may also need to create organizations without any payment operation.
 
-As you see, **payment is not a necessary operation to create a valid organization**. It is a use case specific application logic.
+As you see, **payment is not a necessary operation to create a valid organization**. It is a use-case specific application logic.
 
 **Example: CRUD Operations**
 
@@ -1967,11 +1967,11 @@ This Application Service **does nothing** itself and **delegates all the work** 
 
 Application Services can directly work with repositories to query, create, update or delete data unless there are some domain logics should be performed during these operations. In such cases, create Domain Service methods, but only for those really necessary.
 
-> Do not create such CRUD domain service methods just by thinking that they may be needed in the future ([YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it))! Do it when you need and refactor the existing code. Since the Application Layer gracefully abstracts the Domain Layer, the refactoring process doesn't affect the UI Layer and other clients.
+> Do not create such CRUD domain service methods just by thinking that they may be needed in the future ([YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it))! Do it when you need and refactor the existing code. Since the Application Layer gracefully abstracts the Domain Layer, the refactoring process doesn't effect the UI Layer and other clients.
 
 ## Reference Books
 
-If you seriously interest in the Domain Driven Design and building large scale enterprise systems, the following books are suggested as reference books;
+If you are more interested in the Domain Driven Design and building large-scale enterprise systems, the following books are recommended as reference books;
 
 * "*Domain Driven Design*" by Eric Evans
 * "*Implementing Domain Driven Design*" by Vaughn Vernon

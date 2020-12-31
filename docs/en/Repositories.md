@@ -87,6 +87,11 @@ If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method
 
 See the [Data Filtering](Data-Filtering.md) documentation for more about soft-delete.
 
+## Bulk Operations
+You can execute bulk operations with `InsertManyAsync`, `UpdateManyAsync`, `DeleteManyAsync` methods.
+
+> **WARNING:** ConcurrencyStamp can't be checked at bulk operations!
+
 ## Custom Repositories
 
 Default generic repositories will be sufficient for most cases. However, you may need to create a custom repository class for your entity.

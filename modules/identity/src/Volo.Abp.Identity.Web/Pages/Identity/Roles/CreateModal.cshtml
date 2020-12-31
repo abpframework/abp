@@ -1,11 +1,13 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Abp.Identity.Localization
 @using Volo.Abp.Identity.Web.Pages.Identity.Roles
 @using Volo.Abp.Localization
 @using Volo.Abp.ObjectExtending
+@using Volo.Abp.Data
 @model CreateModalModel
 @inject IHtmlLocalizer<IdentityResource> L
 @inject IStringLocalizerFactory StringLocalizerFactory
@@ -31,8 +33,8 @@
                         <abp-select asp-for="Role.ExtraProperties[propertyInfo.Name]"
                                     label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                     autocomplete-api-url="@propertyInfo.Lookup.Url"
-                                    autocomplete-selected-item-name="@Model.Role.ExtraProperties[propertyInfo.Name+"_Text"]"
-                                    autocomplete-selected-item-value="@Model.Role.ExtraProperties[propertyInfo.Name]"
+                                    autocomplete-selected-item-name="@Model.Role.GetProperty(propertyInfo.Name+"_Text")"
+                                    autocomplete-selected-item-value="@Model.Role.GetProperty(propertyInfo.Name)"
                                     autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
                                     autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
                                     autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
@@ -44,7 +46,7 @@
                                    asp-for="Role.ExtraProperties[propertyInfo.Name]"
                                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                    asp-format="@propertyInfo.GetInputFormatOrNull()"
-                                   value="@propertyInfo.GetInputValueOrNull(Model.Role.ExtraProperties[propertyInfo.Name])" />
+                                   value="@propertyInfo.GetInputValueOrNull(Model.Role.GetProperty(propertyInfo.Name))" />
                     }
                 }
             }

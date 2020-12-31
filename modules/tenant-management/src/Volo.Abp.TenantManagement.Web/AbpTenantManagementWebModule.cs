@@ -2,8 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -60,6 +62,28 @@ namespace Volo.Abp.TenantManagement.Web
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/CreateModal", TenantManagementPermissions.Tenants.Create);
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/EditModal", TenantManagementPermissions.Tenants.Update);
                 options.Conventions.AuthorizePage("/TenantManagement/Tenants/ConnectionStrings", TenantManagementPermissions.Tenants.ManageConnectionStrings);
+            });
+            
+            Configure<AbpPageToolbarOptions>(options =>
+            {
+                options.Configure<Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<AbpTenantManagementResource>("ManageHostFeatures"),
+                            icon: "cog",
+                            name: "ManageHostFeatures",
+                            requiredPolicyName: FeatureManagementPermissions.ManageHostFeatures
+                        );
+                        
+                        toolbar.AddButton(
+                            LocalizableString.Create<AbpTenantManagementResource>("NewTenant"),
+                            icon: "plus",
+                            name: "CreateTenant",
+                            requiredPolicyName: TenantManagementPermissions.Tenants.Create
+                        );
+                    }
+                );
             });
         }
 

@@ -27,6 +27,7 @@ using System;
 using System.Reflection;
 using Autofac.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
 namespace Autofac.Extensions.DependencyInjection
@@ -116,6 +117,7 @@ namespace Autofac.Extensions.DependencyInjection
                             .RegisterGeneric(service.ImplementationType)
                             .As(service.ServiceType)
                             .ConfigureLifecycle(service.Lifetime)
+                            .FindConstructorsWith(new AbpAutofacConstructorFinder())
                             .ConfigureAbpConventions(moduleContainer, registrationActionList);
                     }
                     else
@@ -124,6 +126,7 @@ namespace Autofac.Extensions.DependencyInjection
                             .RegisterType(service.ImplementationType)
                             .As(service.ServiceType)
                             .ConfigureLifecycle(service.Lifetime)
+                            .FindConstructorsWith(new AbpAutofacConstructorFinder())
                             .ConfigureAbpConventions(moduleContainer, registrationActionList);
                     }
                 }

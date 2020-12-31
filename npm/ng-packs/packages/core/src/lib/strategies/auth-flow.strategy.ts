@@ -3,7 +3,6 @@ import { Store } from '@ngxs/store';
 import { AuthConfig, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
 import { RestOccurError } from '../actions/rest.actions';
-import { ApplicationConfigurationService } from '../services/application-configuration.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
 
@@ -15,7 +14,6 @@ export abstract class AuthFlowStrategy {
   protected store: Store;
   protected environment: EnvironmentService;
   protected configState: ConfigStateService;
-  protected appConfigService: ApplicationConfigurationService;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
   abstract checkIfInternalAuth(): boolean;
@@ -29,7 +27,6 @@ export abstract class AuthFlowStrategy {
     this.store = injector.get(Store);
     this.environment = injector.get(EnvironmentService);
     this.configState = injector.get(ConfigStateService);
-    this.appConfigService = injector.get(ApplicationConfigurationService);
     this.oAuthService = injector.get(OAuthService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
   }
