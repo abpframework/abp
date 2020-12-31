@@ -25,26 +25,39 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.ClaimActions.MapAbpClaimTypes();
 
-                options.Events = new OpenIdConnectEvents
-                {
-                    OnAuthorizationCodeReceived = receivedContext =>
-                    {
-                        var tenantKey = receivedContext.HttpContext.RequestServices
-                            .GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
-
-                        if (receivedContext.HttpContext.Request != null &&
-                            receivedContext.Request.Cookies.ContainsKey(tenantKey))
-                        {
-                            receivedContext.TokenEndpointRequest.SetParameter(tenantKey,
-                                receivedContext.Request.Cookies[tenantKey]);
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
-
                 configureOptions?.Invoke(options);
+
+                if(options.Events != null)
+                {
+                    var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived;
+                    options.Events.OnAuthorizationCodeReceived = receivedContext =>
+                    {
+                        AbpOnAuthorizationCodeReceived(receivedContext);
+                        return authorizationCodeReceived(receivedContext);
+                    };
+                }
+                else
+                {
+                    options.Events = new OpenIdConnectEvents
+                    {
+                        OnAuthorizationCodeReceived = AbpOnAuthorizationCodeReceived
+                    };
+                }
             });
+        }
+
+        private static Task AbpOnAuthorizationCodeReceived(AuthorizationCodeReceivedContext receivedContext)
+        {
+            var tenantKey = receivedContext.HttpContext.RequestServices
+                .GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
+
+            if (receivedContext.Request.Cookies.ContainsKey(tenantKey))
+            {
+                receivedContext.TokenEndpointRequest.SetParameter(tenantKey,
+                    receivedContext.Request.Cookies[tenantKey]);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
