@@ -24,7 +24,7 @@ namespace Volo.CmsKit.MongoDB.Contents
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,
-                cancellationToken: cancellationToken
+                cancellationToken: GetCancellationToken(cancellationToken)
             );
         }
         
@@ -39,7 +39,7 @@ namespace Volo.CmsKit.MongoDB.Contents
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,
-                cancellationToken: cancellationToken
+                cancellationToken: GetCancellationToken(cancellationToken)
                 );
         }
 
@@ -49,7 +49,7 @@ namespace Volo.CmsKit.MongoDB.Contents
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,
-                cancellationToken: cancellationToken);
+                cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }
