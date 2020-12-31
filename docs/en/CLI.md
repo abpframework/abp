@@ -162,7 +162,7 @@ abp add-package Volo.Abp.MongoDB
 
 Adds a [multi-package application module](Modules/Index) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
-It can also create a new module for your solution and add it to your solution. See `--new-template` option.
+It can also create a new module for your solution and add it to your solution. See `--new` option.
 
 > A business module generally consists of several packages (because of layering, different database provider options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
 
