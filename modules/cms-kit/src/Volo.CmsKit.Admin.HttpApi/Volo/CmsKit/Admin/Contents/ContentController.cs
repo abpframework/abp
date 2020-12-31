@@ -29,14 +29,14 @@ namespace Volo.CmsKit.Admin.Contents
             return ContentAdminAppService.CreateAsync(input);
         }
 
-        [HttpDelete("{id}"]
+        [HttpDelete("{id}")]
         [Authorize(CmsKitAdminPermissions.Contents.Delete)]
         public Task DeleteAsync(Guid id)
         {
             return ContentAdminAppService.DeleteAsync(id);
         }
 
-        [HttpGet("{id}"]
+        [HttpGet("{id}")]
         [Authorize(CmsKitAdminPermissions.Contents.Default)]
         public Task<ContentDto> GetAsync(Guid id)
         {
