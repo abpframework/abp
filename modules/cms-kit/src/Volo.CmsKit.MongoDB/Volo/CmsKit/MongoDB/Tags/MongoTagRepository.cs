@@ -29,7 +29,7 @@ namespace Volo.CmsKit.MongoDB.Tags
                             x.EntityType == entityType &&
                             x.Name == name &&
                             x.TenantId == tenantId,
-                        cancellationToken);
+                        GetCancellationToken(cancellationToken));
         }
 
         public Task<Tag> GetAsync(
@@ -42,7 +42,7 @@ namespace Volo.CmsKit.MongoDB.Tags
                 x.EntityType == entityType &&
                 x.Name == name &&
                 x.TenantId == tenantId,
-               cancellationToken: cancellationToken);
+               cancellationToken: GetCancellationToken(cancellationToken));
         }
 
         public Task<Tag> FindAsync(
@@ -55,7 +55,7 @@ namespace Volo.CmsKit.MongoDB.Tags
                 x.EntityType == entityType &&
                 x.Name == name &&
                 x.TenantId == tenantId,
-               cancellationToken: cancellationToken);
+               cancellationToken: GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Tag>> GetAllRelatedTagsAsync(
