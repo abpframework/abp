@@ -9,7 +9,7 @@ using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.HttpApi.Volo.CmsKit.Admin.Contents
 {
-    [Authorize(CmsKitAdminPermissions.Contents.Delete)]
+    [Authorize(CmsKitAdminPermissions.Contents.Default)]
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-admin/contents")]
