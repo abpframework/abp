@@ -4,6 +4,9 @@ import { map } from 'rxjs/operators';
 import { ePropType } from '../enums/props.enum';
 import { PropCallback } from '../models/props';
 
+const TYPEAHEAD_TEXT_SUFFIX = '_Text';
+const TYPEAHEAD_TEXT_SUFFIX_REGEX = /_Text$/;
+
 export function createTypeaheadOptions(
   lookup: ExtensionPropertyUiLookupDto,
 ): PropCallback<any, Observable<ABP.Option<any>[]>> {
@@ -37,7 +40,19 @@ export function createTypeaheadOptions(
 export function getTypeaheadType(lookup: ExtensionPropertyUiLookupDto, name: string) {
   return Boolean(lookup.url)
     ? ePropType.Typeahead
-    : name.endsWith('_Text')
+    : name.endsWith(TYPEAHEAD_TEXT_SUFFIX)
     ? ePropType.Hidden
     : undefined;
+}
+
+export function addTypeaheadTextSuffix(name: string) {
+  return name + TYPEAHEAD_TEXT_SUFFIX;
+}
+
+export function hasTypeaheadTextSuffix(name: string) {
+  return TYPEAHEAD_TEXT_SUFFIX_REGEX.test(name);
+}
+
+export function removeTypeaheadTextSuffix(name: string) {
+  return name.replace(TYPEAHEAD_TEXT_SUFFIX_REGEX, '');
 }
