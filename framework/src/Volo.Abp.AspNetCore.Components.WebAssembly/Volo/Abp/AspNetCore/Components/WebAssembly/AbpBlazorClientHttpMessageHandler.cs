@@ -4,7 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using Volo.Abp.AspNetCore.Components.Progression;
 using Volo.Abp.DependencyInjection;
@@ -29,15 +29,15 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
             IJSRuntime jsRuntime,
             ICookieService cookieService,
             NavigationManager navigationManager,
-            IUiPageProgressService uiPageProgressService)
+            IClientScopeServiceProviderAccessor clientScopeServiceProviderAccessor)
         {
             _jsRuntime = jsRuntime;
             _cookieService = cookieService;
             _navigationManager = navigationManager;
-            _uiPageProgressService = uiPageProgressService;
+            _uiPageProgressService = clientScopeServiceProviderAccessor.ServiceProvider.GetRequiredService<IUiPageProgressService>();
         }
 
-        protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             try
             {
