@@ -51,7 +51,7 @@ This section suggests some approaches if you decided to use pre-built applicatio
 
 ### Module Entity Extension System
 
-Module entity extension system is the **main and high level extension system** that allows you to **define new properties** for existing entities of the depended modules. It automatically **adds properties to the entity, database, HTTP API and the user interface** in a single point.
+> Module entity extension system is the **main and high level extension system** that allows you to **define new properties** for existing entities of the depended modules. It automatically **adds properties to the entity, database, HTTP API and the user interface** in a single point.
 
 See the [Module Entity Extensions document](Module-Entity-Extensions.md) to learn how to use it.
 
@@ -66,7 +66,7 @@ In addition to the extensibility systems, you can partially or completely overri
 * [Overriding Services](Customizing-Application-Modules-Overriding-Services.md)
 * [Overriding the User Interface](Customizing-Application-Modules-Overriding-User-Interface.md)
 
-### Additional UI Extensibility Systems
+### Additional UI Extensibility Points
 
 There are some low level systems that you can control entity actions, table columns and page toolbar of a page defined by a module.
 
