@@ -51,10 +51,6 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 
                 return await base.SendAsync(request, cancellationToken);
             }
-            catch (Exception)
-            {
-                throw;
-            }
             finally
             {
                 await _uiPageProgressService.Go(-1);
