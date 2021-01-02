@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Quartz;
 using Volo.Abp.Modularity;
 using Volo.Abp.Quartz;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz
 {
@@ -45,6 +47,19 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
                 foreach (var work in works)
                 {
                     backgroundWorkerManager.Add(work);
+                }
+            }
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            var options = context.ServiceProvider.GetService<IOptions<AbpBackgroundWorkerOptions>>().Value;
+            if (options.IsEnabled)
+            {
+                var scheduler = context.ServiceProvider.GetService<IScheduler>();
+                if (scheduler.IsStarted)
+                {
+                    AsyncHelper.RunSync(() => scheduler.Shutdown());
                 }
             }
         }
