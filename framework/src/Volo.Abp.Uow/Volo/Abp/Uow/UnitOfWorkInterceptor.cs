@@ -52,7 +52,7 @@ namespace Volo.Abp.Uow
             {
                 var defaultOptions = _serviceProvider.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
                 options.IsTransactional = defaultOptions.CalculateIsTransactional(
-                    autoValue: _transactionBehaviourProvider.IsTransactional
+                    autoValue: _serviceProvider.GetRequiredService<IUnitOfWorkTransactionBehaviourProvider>().IsTransactional
                                ?? !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
                 );
             }
