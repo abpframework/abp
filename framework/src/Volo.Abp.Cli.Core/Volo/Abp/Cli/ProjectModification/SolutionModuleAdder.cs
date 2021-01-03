@@ -205,9 +205,15 @@ namespace Volo.Abp.Cli.ProjectModification
             string postFix)
         {
             var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), targetFolder);
+
+            if (!Directory.Exists(srcPath))
+            {
+                return;
+            }
+
             var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith(postFix));
 
-            if(projectFolderPath == null)
+            if (projectFolderPath == null)
             {
                 return;
             }
@@ -218,7 +224,6 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 Directory.Delete(projectFolderPath, true);
             }
-
         }
 
         private async Task ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)
