@@ -24,13 +24,13 @@ namespace Volo.Abp.Identity.MongoDB
         {
             if (ignoredId == null)
             {
-                return await GetMongoQueryable()
+                return await (await GetMongoQueryableAsync(cancellationToken))
                     .Where(ct => ct.Name == name)
                     .AnyAsync(GetCancellationToken(cancellationToken));
             }
             else
             {
-                return await GetMongoQueryable()
+                return await (await GetMongoQueryableAsync(cancellationToken))
                     .Where(ct => ct.Id != ignoredId && ct.Name == name)
                     .AnyAsync(GetCancellationToken(cancellationToken));
             }
@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity.MongoDB
             string filter,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
@@ -59,7 +59,7 @@ namespace Volo.Abp.Identity.MongoDB
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>

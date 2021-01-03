@@ -26,12 +26,12 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             (ServiceProvider.GetRequiredService<IThirdDbContext>() is TestAppDbContext).ShouldBeTrue();
 
-            using (_unitOfWorkManager.Begin())
+            using (var uow = _unitOfWorkManager.Begin())
             {
-                (_dummyRepository.GetDbContext() is IThirdDbContext).ShouldBeTrue();
-                (_dummyRepository.GetDbContext() is TestAppDbContext).ShouldBeTrue();
+                ((await _dummyRepository.GetDbContextAsync()) is IThirdDbContext).ShouldBeTrue();
+                ((await _dummyRepository.GetDbContextAsync()) is TestAppDbContext).ShouldBeTrue();
 
-                await _unitOfWorkManager.Current.CompleteAsync();
+                await uow.CompleteAsync();
             }
         }
     }

@@ -25,7 +25,17 @@ namespace Volo.Abp.Uow
                 return;
             }
 
-            using (var uow = _serviceProvider.GetRequiredService<IUnitOfWorkManager>().Begin(CreateOptions(invocation, unitOfWorkAttribute)))
+            var options = CreateOptions(invocation, unitOfWorkAttribute);
+            var unitOfWorkManager = _serviceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+            //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
+            if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
+            {
+                await invocation.ProceedAsync();
+                return;
+            }
+
+            using (var uow = unitOfWorkManager.Begin(options))
             {
                 await invocation.ProceedAsync();
                 await uow.CompleteAsync();
@@ -42,7 +52,8 @@ namespace Volo.Abp.Uow
             {
                 var defaultOptions = _serviceProvider.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
                 options.IsTransactional = defaultOptions.CalculateIsTransactional(
-                    autoValue: !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
+                    autoValue: _transactionBehaviourProvider.IsTransactional
+                               ?? !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
                 );
             }
 

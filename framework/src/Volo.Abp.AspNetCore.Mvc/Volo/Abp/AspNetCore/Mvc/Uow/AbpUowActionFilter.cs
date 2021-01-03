@@ -39,7 +39,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             var unitOfWorkManager = context.GetRequiredService<IUnitOfWorkManager>();
 
             //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
-            if (unitOfWorkManager.TryBeginReserved(AbpUnitOfWorkMiddleware.UnitOfWorkReservationName, options))
+            if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
             {
                 var result = await next();
                 if (!Succeed(result))

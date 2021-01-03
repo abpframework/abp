@@ -1,5 +1,12 @@
-import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
-import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { Injectable, Injector, OnDestroy } from '@angular/core';
+import {
+  BehaviorSubject,
+  MonoTypeOperatorFunction,
+  Observable,
+  of,
+  ReplaySubject,
+  Subject,
+} from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -68,7 +75,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
   get query$(): Observable<QueryParamsType> {
     return this._query$
       .asObservable()
-      .pipe(debounceTime(this.delay || 300), shareReplay({ bufferSize: 1, refCount: true }));
+      .pipe(this.delay, shareReplay({ bufferSize: 1, refCount: true }));
   }
 
   private _isLoading$ = new BehaviorSubject(false);
@@ -89,7 +96,11 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
     } as any) as QueryParamsType);
   };
 
-  constructor(@Optional() @Inject(LIST_QUERY_DEBOUNCE_TIME) private delay: number) {
+  private delay: MonoTypeOperatorFunction<QueryParamsType>;
+
+  constructor(injector: Injector) {
+    const delay = injector.get(LIST_QUERY_DEBOUNCE_TIME, 300);
+    this.delay = delay ? debounceTime(delay) : tap();
     this.get();
   }
 
