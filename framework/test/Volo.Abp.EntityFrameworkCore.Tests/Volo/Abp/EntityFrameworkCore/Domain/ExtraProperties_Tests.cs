@@ -44,15 +44,13 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
         [Fact]
         public async Task An_Extra_Property_Configured_As_Extension2()
         {
-            await WithUnitOfWorkAsync(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var entityEntry = CityRepository.GetDbContext().Attach(new City(Guid.NewGuid(), "NewYork"));
+                var entityEntry = (await CityRepository.GetDbContextAsync()).Attach(new City(Guid.NewGuid(), "NewYork"));
                 var indexes = entityEntry.Metadata.GetIndexes().ToList();
                 indexes.ShouldNotBeEmpty();
                 indexes.ShouldContain(x => x.IsUnique);
-                return Task.CompletedTask;
             });
-
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Data;
+﻿using System;
+using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories.MemoryDb;
 using Volo.Abp.MemoryDb;
 
@@ -8,7 +10,7 @@ namespace Volo.Abp.Uow.MemoryDb
         where TMemoryDbContext : MemoryDbContext
     {
         public TMemoryDbContext DbContext { get; }
-        
+
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
         private readonly MemoryDatabaseManager _memoryDatabaseManager;
@@ -16,7 +18,7 @@ namespace Volo.Abp.Uow.MemoryDb
         public UnitOfWorkMemoryDatabaseProvider(
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
-            TMemoryDbContext dbContext, 
+            TMemoryDbContext dbContext,
             MemoryDatabaseManager memoryDatabaseManager)
         {
             _unitOfWorkManager = unitOfWorkManager;
@@ -25,6 +27,12 @@ namespace Volo.Abp.Uow.MemoryDb
             _memoryDatabaseManager = memoryDatabaseManager;
         }
 
+        public Task<TMemoryDbContext> GetDbContextAsync()
+        {
+            return Task.FromResult(DbContext);
+        }
+
+        [Obsolete("Use GetDatabaseAsync method.")]
         public IMemoryDatabase GetDatabase()
         {
             var unitOfWork = _unitOfWorkManager.Current;
@@ -34,6 +42,26 @@ namespace Volo.Abp.Uow.MemoryDb
             }
 
             var connectionString = _connectionStringResolver.Resolve<TMemoryDbContext>();
+            var dbContextKey = $"{typeof(TMemoryDbContext).FullName}_{connectionString}";
+
+            var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+                dbContextKey,
+                () => new MemoryDbDatabaseApi(
+                    _memoryDatabaseManager.Get(connectionString)
+                ));
+
+            return ((MemoryDbDatabaseApi)databaseApi).Database;
+        }
+
+        public async Task<IMemoryDatabase> GetDatabaseAsync()
+        {
+            var unitOfWork = _unitOfWorkManager.Current;
+            if (unitOfWork == null)
+            {
+                throw new AbpException($"A {nameof(IMemoryDatabase)} instance can only be created inside a unit of work!");
+            }
+
+            var connectionString = await _connectionStringResolver.ResolveAsync<TMemoryDbContext>();
             var dbContextKey = $"{typeof(TMemoryDbContext).FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(

@@ -9,11 +9,11 @@ namespace Volo.Abp.DependencyInjection
         IServiceCollection Services { get; }
 
         /// <summary>
-        /// Registers default repositories for this DbContext. 
+        /// Registers default repositories for this DbContext.
         /// </summary>
         /// <param name="includeAllEntities">
         /// Registers repositories only for aggregate root entities by default.
-        /// set <see cref="includeAllEntities"/> to true to include all entities.
+        /// set <paramref name="includeAllEntities"/> to true to include all entities.
         /// </param>
         IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(bool includeAllEntities = false);
 
