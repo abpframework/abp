@@ -7,7 +7,7 @@ export type DeepPartial<T> = Partible<T> extends never
       [K in keyof T]?: DeepPartial<T[K]>;
     };
 
-type Partible<T> = T extends Primitive | Array<any>
+type Partible<T> = T extends Primitive | Array<any> | Node
   ? never
   : {
       [K in keyof T]: T[K] extends Function ? never : T[K];
