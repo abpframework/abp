@@ -10,11 +10,11 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWorkInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public UnitOfWorkInterceptor(IServiceProvider serviceProvider)
+        public UnitOfWorkInterceptor(IServiceScopeFactory serviceScopeFactory)
         {
-            _serviceProvider = serviceProvider;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
@@ -25,24 +25,28 @@ namespace Volo.Abp.Uow
                 return;
             }
 
-            var options = CreateOptions(invocation, unitOfWorkAttribute);
-            var unitOfWorkManager = _serviceProvider.GetRequiredService<IUnitOfWorkManager>();
-
-            //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
-            if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                await invocation.ProceedAsync();
-                return;
-            }
+                var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
 
-            using (var uow = unitOfWorkManager.Begin(options))
-            {
-                await invocation.ProceedAsync();
-                await uow.CompleteAsync();
+                var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+                //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
+                if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
+                {
+                    await invocation.ProceedAsync();
+                    return;
+                }
+
+                using (var uow = unitOfWorkManager.Begin(options))
+                {
+                    await invocation.ProceedAsync();
+                    await uow.CompleteAsync();
+                }
             }
         }
 
-        private AbpUnitOfWorkOptions CreateOptions(IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
+        private AbpUnitOfWorkOptions CreateOptions(IServiceProvider serviceProvider, IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
         {
             var options = new AbpUnitOfWorkOptions();
 
@@ -50,9 +54,9 @@ namespace Volo.Abp.Uow
 
             if (unitOfWorkAttribute?.IsTransactional == null)
             {
-                var defaultOptions = _serviceProvider.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
+                var defaultOptions = serviceProvider.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
                 options.IsTransactional = defaultOptions.CalculateIsTransactional(
-                    autoValue: _serviceProvider.GetRequiredService<IUnitOfWorkTransactionBehaviourProvider>().IsTransactional
+                    autoValue: serviceProvider.GetRequiredService<IUnitOfWorkTransactionBehaviourProvider>().IsTransactional
                                ?? !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
                 );
             }

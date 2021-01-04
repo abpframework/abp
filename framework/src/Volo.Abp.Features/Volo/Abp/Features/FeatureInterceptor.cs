@@ -9,11 +9,11 @@ namespace Volo.Abp.Features
 {
     public class FeatureInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public FeatureInterceptor(IServiceProvider serviceProvider)
+        public FeatureInterceptor(IServiceScopeFactory serviceScopeFactory)
         {
-            _serviceProvider = serviceProvider;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
@@ -30,11 +30,14 @@ namespace Volo.Abp.Features
 
         protected virtual async Task CheckFeaturesAsync(IAbpMethodInvocation invocation)
         {
-            await _serviceProvider.GetRequiredService<IMethodInvocationFeatureCheckerService>().CheckAsync(
-                new MethodInvocationFeatureCheckerContext(
-                    invocation.Method
-                )
-            );
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                await scope.ServiceProvider.GetRequiredService<IMethodInvocationFeatureCheckerService>().CheckAsync(
+                    new MethodInvocationFeatureCheckerContext(
+                        invocation.Method
+                    )
+                );
+            }
         }
     }
 }

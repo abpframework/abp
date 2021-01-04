@@ -10,11 +10,11 @@ namespace Volo.Abp.Auditing
 {
     public class AuditingInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public AuditingInterceptor(IServiceProvider serviceProvider)
+        public AuditingInterceptor(IServiceScopeFactory serviceScopeFactory)
         {
-            _serviceProvider = serviceProvider;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
@@ -57,28 +57,31 @@ namespace Volo.Abp.Auditing
                 return false;
             }
 
-            var auditingManager = _serviceProvider.GetRequiredService<IAuditingManager>();
-            var auditLogScope = auditingManager.Current;
-            if (auditLogScope == null)
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                return false;
+                var auditingManager = scope.ServiceProvider.GetRequiredService<IAuditingManager>();
+                var auditLogScope = auditingManager.Current;
+                if (auditLogScope == null)
+                {
+                    return false;
+                }
+
+                var auditingHelper = scope.ServiceProvider.GetRequiredService<IAuditingHelper>();
+                if (!auditingHelper.ShouldSaveAudit(invocation.Method))
+                {
+                    return false;
+                }
+
+                auditLog = auditLogScope.Log;
+                auditLogAction = auditingHelper.CreateAuditLogAction(
+                    auditLog,
+                    invocation.TargetObject.GetType(),
+                    invocation.Method,
+                    invocation.Arguments
+                );
+
+                return true;
             }
-
-            var auditingHelper = _serviceProvider.GetRequiredService<IAuditingHelper>();
-            if (!auditingHelper.ShouldSaveAudit(invocation.Method))
-            {
-                return false;
-            }
-
-            auditLog = auditLogScope.Log;
-            auditLogAction = auditingHelper.CreateAuditLogAction(
-                auditLog,
-                invocation.TargetObject.GetType(),
-                invocation.Method,
-                invocation.Arguments
-            );
-
-            return true;
         }
     }
 }
