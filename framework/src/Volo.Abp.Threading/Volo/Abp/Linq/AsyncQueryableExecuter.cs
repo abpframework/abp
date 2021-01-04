@@ -8,7 +8,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Linq
 {
-    public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ITransientDependency
+    public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDependency
     {
         protected IEnumerable<IAsyncQueryableProvider> Providers { get; }
 

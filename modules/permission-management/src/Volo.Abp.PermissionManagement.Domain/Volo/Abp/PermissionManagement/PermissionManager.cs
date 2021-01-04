@@ -111,6 +111,16 @@ namespace Volo.Abp.PermissionManagement
             return await PermissionGrantRepository.UpdateAsync(permissionGrant);
         }
 
+        public virtual async Task DeleteAsync(string providerName, string providerKey)
+        {
+            var permissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
+            //TODO: Use DeleteManyAsync method
+            foreach (var permissionGrant in permissionGrants)
+            {
+                await PermissionGrantRepository.DeleteAsync(permissionGrant);
+            }
+        }
+
         protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
         {
             var result = new PermissionWithGrantedProviders(permission.Name, false);

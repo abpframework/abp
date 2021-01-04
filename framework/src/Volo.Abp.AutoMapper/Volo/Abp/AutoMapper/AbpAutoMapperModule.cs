@@ -13,24 +13,23 @@ namespace Volo.Abp.AutoMapper
         typeof(AbpObjectMappingModule),
         typeof(AbpObjectExtendingModule),
         typeof(AbpAuditingModule)
-        )]
+    )]
     public class AbpAutoMapperModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddConventionalRegistrar(new AbpAutoMapperConventionalRegistrar());
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper();
 
-            var mapperAccessor = new MapperAccessor();
-            context.Services.AddSingleton<IMapperAccessor>(_ => mapperAccessor);
-            context.Services.AddSingleton<MapperAccessor>(_ => mapperAccessor);
+            context.Services.AddSingleton<MapperAccessor>(provider => CreateMappings(provider));
+            context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
         }
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-            CreateMappings(context.ServiceProvider);
-        }
-
-        private void CreateMappings(IServiceProvider serviceProvider)
+        private MapperAccessor CreateMappings(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -48,7 +47,7 @@ namespace Volo.Abp.AutoMapper
                 {
                     foreach (var profileType in options.ValidatingProfiles)
                     {
-                        config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
+                        config.AssertConfigurationIsValid(((Profile) Activator.CreateInstance(profileType)).ProfileName);
                     }
                 }
 
@@ -59,7 +58,10 @@ namespace Volo.Abp.AutoMapper
 
                 ValidateAll(mapperConfiguration);
 
-                scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = mapperConfiguration.CreateMapper();
+                return new MapperAccessor
+                {
+                    Mapper = new Mapper(mapperConfiguration, serviceProvider.GetService)
+                };
             }
         }
     }

@@ -17,6 +17,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
             pipeline.Steps.Add(new ProjectReferenceReplaceStep());
             pipeline.Steps.Add(new TemplateCodeDeleteStep());
+
+            if (context.BuildArgs.ConnectionString != null)
+            {
+                pipeline.Steps.Add(new ConnectionStringChangeStep());
+            }
+
             pipeline.Steps.Add(new SolutionRenameStep());
 
             if (context.Template.Name == AppProTemplate.TemplateName ||
@@ -35,11 +41,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
                 && context.BuildArgs.MobileApp == MobileApp.None)
             {
                 pipeline.Steps.Add(new RemoveRootFolderStep());
-            }
-
-            if (context.BuildArgs.ConnectionString != null)
-            {
-                pipeline.Steps.Add(new ConnectionStringChangeStep());
             }
 
             pipeline.Steps.Add(new CreateProjectResultZipStep());

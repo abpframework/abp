@@ -22,7 +22,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             Guid? ignoredId = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(ignoredId != null, ct => ct.Id != ignoredId)
                 .CountAsync(ct => ct.Name == name, GetCancellationToken(cancellationToken)) > 0;
         }
@@ -34,7 +34,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string filter,
             CancellationToken cancellationToken = default)
         {
-            var identityClaimTypes = await DbSet
+            var identityClaimTypes = await (await GetDbSetAsync())
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
@@ -51,7 +51,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
