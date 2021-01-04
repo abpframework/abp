@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -65,6 +66,24 @@ namespace Volo.CmsKit.Admin.Pages
         public virtual Task<bool> ExistsAsync(string url)
         {
             return PageAdminAppService.ExistsAsync(url);
+        }
+
+        [HttpPost]
+        [Route("set-image/{id}")]
+        public virtual Task SetImageAsync(Guid id, [FromBody]RemoteStreamContent content)
+        {
+            return PageAdminAppService.SetImageAsync(id, content);
+        }
+
+        [HttpGet]
+        [Route("image/{id}")]
+        public virtual Task<RemoteStreamContent> GetImageAsync(Guid id)
+        {
+            Response.Headers.Add("Content-Disposition", "inline;");
+            Response.Headers.Add("Accept-Ranges", "bytes");
+            Response.ContentType = "image/xyz";
+            
+            return PageAdminAppService.GetImageAsync(id);
         }
     }
 }

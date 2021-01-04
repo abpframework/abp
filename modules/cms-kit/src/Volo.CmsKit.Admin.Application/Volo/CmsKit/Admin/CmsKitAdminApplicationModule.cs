@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Modularity;
 
 namespace Volo.CmsKit.Admin
@@ -7,6 +8,7 @@ namespace Volo.CmsKit.Admin
     [DependsOn(
         typeof(CmsKitAdminApplicationContractsModule),
         typeof(AbpAutoMapperModule),
+        typeof(AbpBlobStoringModule),
         typeof(CmsKitCommonApplicationModule)
         )]
     public class CmsKitAdminApplicationModule : AbpModule
