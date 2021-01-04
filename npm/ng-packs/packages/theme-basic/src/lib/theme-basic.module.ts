@@ -49,6 +49,12 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
   ],
   entryComponents: [...LAYOUTS, ValidationErrorComponent, CurrentUserComponent, LanguagesComponent],
 })
+export class BaseThemeBasicModule {}
+
+@NgModule({
+  exports: [BaseThemeBasicModule],
+  imports: [BaseThemeBasicModule],
+})
 export class ThemeBasicModule {
   static forRoot(): ModuleWithProviders<ThemeBasicModule> {
     return {
