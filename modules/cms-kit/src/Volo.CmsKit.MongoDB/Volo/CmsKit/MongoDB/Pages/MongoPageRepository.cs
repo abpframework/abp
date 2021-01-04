@@ -22,10 +22,10 @@ namespace Volo.CmsKit.MongoDB.Pages
         {
             return FindAsync(x => x.Url == url);
         }
-        
-        public Task<bool> DoesExistAsync(string url)
+
+        public async Task<bool> DoesExistAsync(string url)
         {
-            return GetMongoQueryable().AnyAsync(x => x.Url == url);
+            return await (await GetMongoQueryableAsync()).AnyAsync(x => x.Url == url);
         }
     }
 }
