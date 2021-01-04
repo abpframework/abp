@@ -20,7 +20,7 @@ namespace Volo.Docs.Projects
 
         public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount)
         {
-            var projects = await DbSet.OrderBy(sorting ?? "Id desc")
+            var projects = await (await GetDbSetAsync()).OrderBy(sorting ?? "Id desc")
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync();
 
@@ -30,8 +30,8 @@ namespace Volo.Docs.Projects
         public async Task<Project> GetByShortNameAsync(string shortName)
         {
             var normalizeShortName = NormalizeShortName(shortName);
-            
-            var project = await DbSet.FirstOrDefaultAsync(p => p.ShortName == normalizeShortName);
+
+            var project = await (await GetDbSetAsync()).FirstOrDefaultAsync(p => p.ShortName == normalizeShortName);
 
             if (project == null)
             {
@@ -44,10 +44,10 @@ namespace Volo.Docs.Projects
         public async Task<bool> ShortNameExistsAsync(string shortName)
         {
             var normalizeShortName = NormalizeShortName(shortName);
-            
-            return await DbSet.AnyAsync(x => x.ShortName == normalizeShortName);
+
+            return await (await GetDbSetAsync()).AnyAsync(x => x.ShortName == normalizeShortName);
         }
-        
+
         private string NormalizeShortName(string shortName)
         {
             return shortName.ToLower();

@@ -19,7 +19,7 @@ namespace Volo.CmsKit.Pages
 
         public virtual Task<int> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return DbSet.WhereIf(
+            return (await GetDbSetAsync()).WhereIf(
                     !filter.IsNullOrWhiteSpace(), 
                     x =>
                             x.Title.Contains(filter)
@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Pages
             string sorting = null,
             CancellationToken cancellationToken = default)
         {
-            return DbSet.WhereIf(
+            return (await GetDbSetAsync()).WhereIf(
                             !filter.IsNullOrWhiteSpace(), 
                             x =>
                                 x.Title.Contains(filter))
@@ -54,7 +54,12 @@ namespace Volo.CmsKit.Pages
 
         public virtual Task<bool> ExistsAsync(string url, CancellationToken cancellationToken = default)
         {
-            return DbSet.AnyAsync(x => x.Url == url, GetCancellationToken(cancellationToken));
+            return (await GetDbSetAsync()).AnyAsync(x => x.Url == url, GetCancellationToken(cancellationToken));
+        }
+        
+        public async Task<bool> DoesExistAsync(string url)
+        {
+            return await (await GetDbSetAsync()).AnyAsync(x => x.Url == url);
         }
     }
 }
