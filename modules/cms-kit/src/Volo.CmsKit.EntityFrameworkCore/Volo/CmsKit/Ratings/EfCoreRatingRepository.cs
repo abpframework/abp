@@ -24,7 +24,9 @@ namespace Volo.CmsKit.Ratings
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var rating = await DbSet.FirstOrDefaultAsync(
+            var dbSet = await GetDbSetAsync();
+
+            var rating = await dbSet.FirstOrDefaultAsync(
                 r => r.EntityType == entityType && r.EntityId == entityId && r.CreatorId == userId,
                 GetCancellationToken(cancellationToken));
 
@@ -37,8 +39,10 @@ namespace Volo.CmsKit.Ratings
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
+            var dbSet = await GetDbSetAsync();
+
             var query = (
-                from rating in DbSet
+                from rating in dbSet
                 where rating.EntityType == entityType && rating.EntityId == entityId
                 group rating by rating.StarCount
                 into g

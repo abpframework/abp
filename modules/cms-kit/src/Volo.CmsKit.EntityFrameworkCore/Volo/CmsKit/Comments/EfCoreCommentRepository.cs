@@ -28,15 +28,19 @@ namespace Volo.CmsKit.Comments
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var query = from comment in DbSet
-                join user in DbContext.Set<CmsUser>() on comment.CreatorId equals user.Id
-                where entityType == comment.EntityType && entityId == comment.EntityId
-                orderby comment.CreationTime
-                select new CommentWithAuthorQueryResultItem
-                {
-                    Comment = comment,
-                    Author = user
-                };
+            var dbSet = await GetDbSetAsync();
+
+            var dbContext = await GetDbContextAsync();
+
+            var query = from comment in dbSet
+                        join user in dbContext.Set<CmsUser>() on comment.CreatorId equals user.Id
+                        where entityType == comment.EntityType && entityId == comment.EntityId
+                        orderby comment.CreationTime
+                        select new CommentWithAuthorQueryResultItem
+                        {
+                            Comment = comment,
+                            Author = user
+                        };
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -45,7 +49,9 @@ namespace Volo.CmsKit.Comments
             Comment comment,
             CancellationToken cancellationToken = default)
         {
-            var replies = await DbSet
+            var dbSet = await GetDbSetAsync();
+
+            var replies = await dbSet
                 .Where(x => x.RepliedCommentId == comment.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
