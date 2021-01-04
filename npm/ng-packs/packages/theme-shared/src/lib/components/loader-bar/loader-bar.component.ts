@@ -77,7 +77,9 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     private subscription: SubscriptionService,
     private httpWaitService: HttpWaitService,
     private routerWaiterService: RouterWaitService,
-  ) {}
+  ) {
+    this.httpWaitService.setDelay(500);
+  }
 
   ngOnInit() {
     this.subscribeLoading();
@@ -102,6 +104,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
     this.isLoading = true;
     this.progressLevel = 0;
+    this.cdRef.detectChanges();
     this.interval = timer(0, this.intervalPeriod).subscribe(this.reportProgress);
     this.timer.unsubscribe();
   }
