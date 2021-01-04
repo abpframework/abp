@@ -19,13 +19,15 @@ namespace Volo.CmsKit.Tags
         {
         }
 
-        public virtual Task<bool> AnyAsync(
+        public virtual async Task<bool> AnyAsync(
             [NotNull] string entityType,
             [NotNull] string name,
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
-            return DbSet.AnyAsync(x =>
+            var dbSet = await GetDbSetAsync();
+
+            return await dbSet.AnyAsync(x =>
                     x.EntityType == entityType &&
                     x.Name == name &&
                     x.TenantId == tenantId,
@@ -64,12 +66,16 @@ namespace Volo.CmsKit.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
-            var entityTagIds = await DbContext.Set<EntityTag>()
+            var dbContext = await GetDbContextAsync();
+
+            var dbSet = await GetDbSetAsync();
+
+            var entityTagIds = await dbContext.Set<EntityTag>()
                 .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
                 .Select(q => q.TagId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-            var query = DbSet
+            var query = dbSet
                 .Where(x => x.EntityType == entityType &&
                             x.TenantId == tenantId &&
                             entityTagIds.Contains(x.Id));

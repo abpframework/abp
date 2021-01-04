@@ -23,9 +23,10 @@ namespace Volo.CmsKit.Pages
             return FindAsync(x => x.Url == url);
         }
 
-        public Task<bool> DoesExistAsync(string url)
+        public async Task<bool> DoesExistAsync(string url)
         {
-            return DbSet.AnyAsync(x => x.Url == url);
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.AnyAsync(x => x.Url == url);
         }
     }
 }
