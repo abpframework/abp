@@ -26,15 +26,19 @@ namespace Volo.CmsKit.MongoDB.Comments
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var authorsQuery = from comment in GetMongoQueryable()
-                join user in DbContext.CmsUsers on comment.CreatorId equals user.Id
+            var dbContext = await GetDbContextAsync();
+
+            var queryable = await GetMongoQueryableAsync();
+
+            var authorsQuery = from comment in queryable
+                               join user in dbContext.CmsUsers on comment.CreatorId equals user.Id
                 where entityType == comment.EntityType && entityId == comment.EntityId
                 orderby comment.CreationTime
                 select user;
 
             var authors = await authorsQuery.ToListAsync(GetCancellationToken(cancellationToken));
 
-            var comments = await GetMongoQueryable()
+            var comments = await queryable
                 .Where(c => c.EntityId == entityId && c.EntityType == entityType)
                 .OrderBy(c => c.CreationTime)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -53,7 +57,9 @@ namespace Volo.CmsKit.MongoDB.Comments
             Comment comment,
             CancellationToken cancellationToken = default)
         {
-            var replies = await GetMongoQueryable()
+            var queryable = await GetMongoQueryableAsync();
+
+            var replies = await queryable
                 .Where(x => x.RepliedCommentId == comment.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
