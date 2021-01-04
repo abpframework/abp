@@ -353,28 +353,20 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        protected virtual async Task RunProcess(Func<Task> process)
-        {
-            await process.Invoke();
-        }
-
         protected virtual async Task CreateEntityAsync()
         {
             if (CreateValidationsRef?.ValidateAll() ?? true)
             {
-                await RunProcess(async () =>
-                {
-                    await OnCreatingEntityAsync();
+                await OnCreatingEntityAsync();
 
-                    await CheckCreatePolicyAsync();
-                    var createInput = MapToCreateInput(NewEntity);
-                    await AppService.CreateAsync(createInput);
-                    await GetEntitiesAsync();
+                await CheckCreatePolicyAsync();
+                var createInput = MapToCreateInput(NewEntity);
+                await AppService.CreateAsync(createInput);
+                await GetEntitiesAsync();
 
-                    await OnCreatedEntityAsync();
+                await OnCreatedEntityAsync();
 
-                    CreateModal.Hide();
-                });
+                CreateModal.Hide();
             }
         }
 
@@ -392,19 +384,16 @@ namespace Volo.Abp.BlazoriseUI
         {
             if (EditValidationsRef?.ValidateAll() ?? true)
             {
-                await RunProcess(async () =>
-                {
-                    await OnUpdatingEntityAsync();
+                await OnUpdatingEntityAsync();
 
-                    await CheckUpdatePolicyAsync();
-                    var updateInput = MapToUpdateInput(EditingEntity);
-                    await AppService.UpdateAsync(EditingEntityId, updateInput);
-                    await GetEntitiesAsync();
+                await CheckUpdatePolicyAsync();
+                var updateInput = MapToUpdateInput(EditingEntity);
+                await AppService.UpdateAsync(EditingEntityId, updateInput);
+                await GetEntitiesAsync();
 
-                    await OnUpdatedEntityAsync();
+                await OnUpdatedEntityAsync();
 
-                    EditModal.Hide();
-                });
+                EditModal.Hide();
             }
         }
 
@@ -420,13 +409,10 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
         {
-            await RunProcess(async () =>
-            {
-                await CheckDeletePolicyAsync();
+            await CheckDeletePolicyAsync();
 
-                await AppService.DeleteAsync(entity.Id);
-                await GetEntitiesAsync();
-            });
+            await AppService.DeleteAsync(entity.Id);
+            await GetEntitiesAsync();
         }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
