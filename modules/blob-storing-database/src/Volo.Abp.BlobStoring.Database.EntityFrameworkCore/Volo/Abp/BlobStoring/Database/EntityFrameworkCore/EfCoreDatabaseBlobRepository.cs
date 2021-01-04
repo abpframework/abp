@@ -20,7 +20,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
             string name,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.FirstOrDefaultAsync(
+            return await (await GetDbSetAsync())
+                .FirstOrDefaultAsync(
                 x => x.ContainerId == containerId && x.Name == name,
                 GetCancellationToken(cancellationToken)
             );
@@ -31,9 +32,11 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
             string name,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(
-                x => x.ContainerId == containerId && x.Name == name,
-                GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .AnyAsync(
+                    x => x.ContainerId == containerId && x.Name == name,
+                    GetCancellationToken(cancellationToken)
+                );
         }
 
         public virtual async Task<bool> DeleteAsync(

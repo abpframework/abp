@@ -18,18 +18,18 @@ namespace Volo.CmsKit.MongoDB.Tags
         {
         }
 
-        public Task<bool> AnyAsync(
+        public async Task<bool> AnyAsync(
             [NotNull] string entityType,
             [NotNull] string name,
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
-            return GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                     .AnyAsync(x =>
                             x.EntityType == entityType &&
                             x.Name == name &&
                             x.TenantId == tenantId,
-                        cancellationToken);
+                        GetCancellationToken(cancellationToken));
         }
 
         public Task<Tag> GetAsync(
@@ -42,7 +42,7 @@ namespace Volo.CmsKit.MongoDB.Tags
                 x.EntityType == entityType &&
                 x.Name == name &&
                 x.TenantId == tenantId,
-               cancellationToken: cancellationToken);
+               cancellationToken: GetCancellationToken(cancellationToken));
         }
 
         public Task<Tag> FindAsync(
@@ -55,7 +55,7 @@ namespace Volo.CmsKit.MongoDB.Tags
                 x.EntityType == entityType &&
                 x.Name == name &&
                 x.TenantId == tenantId,
-               cancellationToken: cancellationToken);
+               cancellationToken: GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Tag>> GetAllRelatedTagsAsync(
@@ -64,17 +64,16 @@ namespace Volo.CmsKit.MongoDB.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
-            var entityTagIds = await DbContext.EntityTags.AsQueryable()
+            var entityTagIds = await (await GetDbContextAsync(cancellationToken)).EntityTags.AsQueryable()
                 .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
                 .Select(q => q.TagId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-            var query = await Collection.FindAsync(Builders<Tag>.Filter.And(new[]
-            {
-                Builders<Tag>.Filter.Eq(x =>x.EntityType, entityType),
-                Builders<Tag>.Filter.Eq(x =>x.TenantId, tenantId),
-                Builders<Tag>.Filter.In(x => x.Id, entityTagIds),
-            }));
+            var query = (await GetMongoQueryableAsync(cancellationToken))
+                            .Where(x =>
+                                x.EntityType == entityType &&
+                                x.TenantId == tenantId &&
+                                entityTagIds.Contains(x.Id));
 
             var result = await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
             return result;

@@ -21,7 +21,7 @@ namespace Volo.Docs.Projects
 
         public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount)
         {
-            var projects = await GetMongoQueryable().OrderBy(sorting ?? "Id desc").As<IMongoQueryable<Project>>()
+            var projects = await (await GetMongoQueryableAsync()).OrderBy(sorting ?? "Id desc").As<IMongoQueryable<Project>>()
                 .PageBy<Project, IMongoQueryable<Project>>(skipCount, maxResultCount)
                 .ToListAsync();
 
@@ -31,8 +31,8 @@ namespace Volo.Docs.Projects
         public async Task<Project> GetByShortNameAsync(string shortName)
         {
             var normalizeShortName = NormalizeShortName(shortName);
-            
-            var project = await GetMongoQueryable().FirstOrDefaultAsync(p => p.ShortName == normalizeShortName);
+
+            var project = await (await GetMongoQueryableAsync()).FirstOrDefaultAsync(p => p.ShortName == normalizeShortName);
 
             if (project == null)
             {
@@ -45,10 +45,10 @@ namespace Volo.Docs.Projects
         public async Task<bool> ShortNameExistsAsync(string shortName)
         {
             var normalizeShortName = NormalizeShortName(shortName);
-            
-            return await GetMongoQueryable().AnyAsync(x => x.ShortName == normalizeShortName);
+
+            return await (await GetMongoQueryableAsync()).AnyAsync(x => x.ShortName == normalizeShortName);
         }
-        
+
         private string NormalizeShortName(string shortName)
         {
             return shortName.ToLower();
