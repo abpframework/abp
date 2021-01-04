@@ -588,7 +588,7 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True"
 }
 ````
 
@@ -596,10 +596,10 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True",
+  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True",
+  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True",
+  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True"
 }
 ````
 
