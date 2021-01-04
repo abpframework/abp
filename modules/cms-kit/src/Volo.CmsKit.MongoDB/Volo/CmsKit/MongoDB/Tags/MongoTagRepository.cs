@@ -18,13 +18,13 @@ namespace Volo.CmsKit.MongoDB.Tags
         {
         }
 
-        public Task<bool> AnyAsync(
+        public async Task<bool> AnyAsync(
             [NotNull] string entityType,
             [NotNull] string name,
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
-            return GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                     .AnyAsync(x =>
                             x.EntityType == entityType &&
                             x.Name == name &&
@@ -64,13 +64,13 @@ namespace Volo.CmsKit.MongoDB.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
-            var entityTagIds = await DbContext.EntityTags.AsQueryable()
+            var entityTagIds = await (await GetDbContextAsync(cancellationToken)).EntityTags.AsQueryable()
                 .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
                 .Select(q => q.TagId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-            var query = GetMongoQueryable()
-                            .Where(x => 
+            var query = (await GetMongoQueryableAsync(cancellationToken))
+                            .Where(x =>
                                 x.EntityType == entityType &&
                                 x.TenantId == tenantId &&
                                 entityTagIds.Contains(x.Id));

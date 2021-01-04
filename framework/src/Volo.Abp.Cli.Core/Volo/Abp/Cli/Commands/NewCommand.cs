@@ -150,6 +150,13 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation("Output folder: " + outputFolder);
 
+            if (connectionString == null &&
+                databaseManagementSystem != DatabaseManagementSystem.NotSpecified &&
+                databaseManagementSystem != DatabaseManagementSystem.SQLServer)
+            {
+                connectionString = GetNewConnectionStringByDbms(databaseManagementSystem, outputFolder);
+            }
+
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
             var result = await TemplateProjectBuilder.BuildAsync(
@@ -216,6 +223,24 @@ namespace Volo.Abp.Cli.Commands
             {
                 var isCommercial = template == AppProTemplate.TemplateName;
                 OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
+            }
+        }
+
+        private string GetNewConnectionStringByDbms(DatabaseManagementSystem databaseManagementSystem, string outputFolder)
+        {
+            switch (databaseManagementSystem)
+            {
+                case DatabaseManagementSystem.MySQL:
+                    return "Server=localhost;Port=3306;Database=MyProjectName;Uid=root;Pwd=myPassword;";
+                case DatabaseManagementSystem.PostgreSQL:
+                    return "User ID=root;Password=myPassword;Host=localhost;Port=5432;Database=MyProjectName;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;";
+                //case DatabaseManagementSystem.Oracle:
+                case DatabaseManagementSystem.OracleDevart:
+                    return "Data Source=MyProjectName;Integrated Security=yes;";
+                case DatabaseManagementSystem.SQLite:
+                    return $"Data Source={Path.Combine(outputFolder,"database\\MyProjectName.db")};Version=3;";
+                default:
+                    return null;
             }
         }
 
