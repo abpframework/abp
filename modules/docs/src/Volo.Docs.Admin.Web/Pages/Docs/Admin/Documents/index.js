@@ -55,7 +55,6 @@
                                     service
                                         .removeFromCache(data.record.id)
                                         .then(function () {
-                                            abp.message.success(l('RemovedFromCache'));
                                             dataTable.ajax.reload();
                                         });
                                 },
