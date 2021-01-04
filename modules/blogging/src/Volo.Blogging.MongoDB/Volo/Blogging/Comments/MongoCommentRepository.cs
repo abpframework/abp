@@ -17,7 +17,7 @@ namespace Volo.Blogging.Comments
 
         public async Task<List<Comment>> GetListOfPostAsync(Guid postId)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync())
                 .Where(a => a.PostId == postId)
                 .OrderBy(a => a.CreationTime)
                 .ToListAsync();
@@ -25,19 +25,19 @@ namespace Volo.Blogging.Comments
 
         public async Task<int> GetCommentCountOfPostAsync(Guid postId)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync())
                 .CountAsync(a => a.PostId == postId);
         }
 
         public async Task<List<Comment>> GetRepliesOfComment(Guid id)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync())
                 .Where(a => a.RepliedCommentId == id).ToListAsync();
         }
 
         public async Task DeleteOfPost(Guid id)
         {
-            var recordsToDelete = GetMongoQueryable().Where(pt => pt.PostId == id);
+            var recordsToDelete = (await GetMongoQueryableAsync()).Where(pt => pt.PostId == id);
 
             foreach (var record in recordsToDelete)
             {
