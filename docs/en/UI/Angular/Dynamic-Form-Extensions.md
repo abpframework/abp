@@ -5,7 +5,7 @@
 
 Form prop extension system allows you to add a new field to the create and/or edit forms for a form or change/remove an already existing one. A "Date of Birth" field was added to the user management page below:
 
-![Form Prop Extension Example: "Date of Birth" Field](images/user-prop-extension-date-of-birth-field-ng.png)
+<img alt="Form Prop Extension Example: 'Date of Birth' Field" src="./images/form-prop-extensions---birthday-field.gif" width="800px" style="max-width:100%">
 
 You can validate the field, perform visibility checks, and do more. You will also have access to the current entity when creating a contibutor for an edit form.
 
@@ -18,16 +18,20 @@ In this example, we will add a "Date of Birth" field in the user management page
 The following code prepares two constants named `identityCreateFormPropContributors` and `identityEditFormPropContributors`, ready to be imported and used in your root module:
 
 ```js
-// form-prop-contributors.ts
+// src/app/form-prop-contributors.ts
 
-import { Validators } from '@angular/forms';
+import {
+  eIdentityComponents,
+  IdentityCreateFormPropContributors,
+  IdentityUserDto,
+} from '@abp/ng.identity';
 import { ePropType, FormProp, FormPropList } from '@abp/ng.theme.shared/extensions';
-import { IdentityCreateFormPropContributors, IdentityEditFormPropContributors, IdentityUserDto } from '@volo/abp.ng.identity';
+import { Validators } from '@angular/forms';
 
 const birthdayProp = new FormProp<IdentityUserDto>({
   type: ePropType.Date,
   name: 'birthday',
-  displayName: 'Date of Birth',
+  displayName: 'AbpIdentity::Birthday',
   validators: () => [Validators.required],
 });
 
@@ -36,63 +40,49 @@ export function birthdayPropContributor(propList: FormPropList<IdentityUserDto>)
 }
 
 export const identityCreateFormPropContributors: IdentityCreateFormPropContributors = {
-  'Identity.UsersComponent': [birthdayPropContributor],
+  // enum indicates the page to add contributors to
+  [eIdentityComponents.Users]: [
+    birthdayPropContributor,
+    // You can add more contributors here
+  ],
 };
 
-export const identityEditFormPropContributors: IdentityEditFormPropContributors = {
-  'Identity.UsersComponent': [birthdayPropContributor],
-};
+export const identityEditFormPropContributors = identityCreateFormPropContributors;
+// you may define different contributors for edit form if you like
 
 ```
 
 
 The list of props, conveniently named as `propList`, is a **doubly linked list**. That is why we have used the `addByIndex` method, which adds the given value to the specified index of the list. You may find [all available methods here](../Common/Utils/Linked-List.md).
 
-> **Important Note 1:** AoT compilation does not support function calls in decorator metadata. This is why we have defined `birthdayPropContributor` as an exported function declaration here. Please do not forget exporting your contributor callbacks and forget about lambda functions (a.k.a. arrow functions). Please refer to [AoT metadata errors](https://angular.io/guide/aot-metadata-errors#function-calls-not-supported) for details.
-
-> **Important Note 2:** Please use one of the following if Ivy is not enabled in your project. Otherwise, you will get an "Expression form not supported." error.
-
-```js
-export const identityCreateFormPropContributors: IdentityCreateFormPropContributors = {
-  'Identity.UsersComponent': [ birthdayPropContributor ],
-};
-
-/* OR */
-
-const identityCreateContributors: IdentityCreateFormPropContributors = {};
-identityCreateContributors[eIdentityComponents.Users] = [ birthdayPropContributor ];
-export const identityCreateFormPropContributors = identityCreateContributors;
-```
-
 ### Step 2. Import and Use Form Prop Contributors
 
 Import `identityCreateFormPropContributors` and `identityEditFormPropContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below:
 
 ```js
+// src/app/app-routing.module.ts
+
+// other imports
 import {
   identityCreateFormPropContributors,
   identityEditFormPropContributors,
 } from './form-prop-contributors';
 
 const routes: Routes = [
+  // other routes
+
   {
-    path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      {
-        path: 'identity',
-        loadChildren: () =>
-          import('@volo/abp.ng.identity').then(m =>
-            m.IdentityModule.forLazy({
-              createFormPropContributors: identityCreateFormPropContributors,
-              editFormPropContributors: identityEditFormPropContributors,
-            }),
-          ),
-      },
-      // other child routes
-    ],
-    // other routes
-  }
+    path: 'identity',
+    loadChildren: () =>
+      import('@abp/ng.identity').then(m =>
+        m.IdentityModule.forLazy({
+          createFormPropContributors: identityCreateFormPropContributors,
+          editFormPropContributors: identityEditFormPropContributors,
+        })
+      ),
+  },
+
+  // other routes
 ];
 ```
 
