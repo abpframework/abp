@@ -242,7 +242,13 @@ namespace Volo.Abp.Domain.Repositories
             where TEntity : class, IEntity
         {
 
+            [Obsolete("Use GetQueryableAsync method.")]
             protected override IQueryable<TEntity> GetQueryable()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override Task<IQueryable<TEntity>> GetQueryableAsync()
             {
                 throw new NotImplementedException();
             }

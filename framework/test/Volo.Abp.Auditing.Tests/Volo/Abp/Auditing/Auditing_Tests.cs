@@ -54,13 +54,13 @@ namespace Volo.Abp.Auditing
 
         public class MyAuditedObject1 : IMyAuditedObject
         {
-            public async virtual Task<ResultObject> DoItAsync(InputObject inputObject)
+            public virtual Task<ResultObject> DoItAsync(InputObject inputObject)
             {
-                return new ResultObject
+                return Task.FromResult(new ResultObject
                 {
                     Value1 = inputObject.Value1 + "-result",
                     Value2 = inputObject.Value2 + 1
-                };
+                });
             }
         }
 
