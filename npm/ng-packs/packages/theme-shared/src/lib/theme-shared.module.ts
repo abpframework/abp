@@ -34,8 +34,9 @@ import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
-import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
+import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
+import { LOADER_DELAY } from './tokens/lodaer-delay.token';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -77,7 +78,7 @@ export class BaseThemeSharedModule {}
 })
 export class ThemeSharedModule {
   static forRoot(
-    { httpErrorConfig, validation = {} } = {} as RootParams,
+    { httpErrorConfig, validation = {}, loaderDelay = 500 } = {} as RootParams,
   ): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
@@ -122,6 +123,10 @@ export class ThemeSharedModule {
         {
           provide: VALIDATION_VALIDATE_ON_SUBMIT,
           useValue: validation.validateOnSubmit,
+        },
+        {
+          provide: LOADER_DELAY,
+          useValue: loaderDelay,
         },
       ],
     };

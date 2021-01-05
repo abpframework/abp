@@ -54,17 +54,21 @@ export class HttpWaitService {
     this.store.patch({ requests });
   }
 
-  addFilter(request: HttpRequestInfo) {
+  addFilter(request: HttpRequestInfo | HttpRequestInfo[]) {
+    const requests = Array.isArray(request) ? request : [request];
     const filteredRequests = [
-      ...this.store.state.filteredRequests.filter(f => !this.isSameRequest(f, request)),
-      request,
+      ...this.store.state.filteredRequests.filter(
+        f => !requests.some(r => this.isSameRequest(f, r)),
+      ),
+      ...requests,
     ];
     this.store.patch({ filteredRequests });
   }
 
-  removeFilter(request: HttpRequestInfo) {
+  removeFilter(request: HttpRequestInfo | HttpRequestInfo[]) {
+    const requests = Array.isArray(request) ? request : [request];
     const filteredRequests = this.store.state.filteredRequests.filter(
-      f => !this.isSameRequest(f, request),
+      f => !requests.some(r => this.isSameRequest(f, r)),
     );
     this.store.patch({ filteredRequests });
   }
