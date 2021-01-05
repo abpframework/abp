@@ -51,14 +51,23 @@ namespace Volo.CmsKit.Contents
         [Fact]
         public async Task ShouldCreateAsync()
         {
+            var entityId = "1-2-3";
+            var entityType = "My.Awesome.Blog";
+            var value = "Some long content";
+
             var created = await _service.CreateAsync(new ContentCreateDto
             {
-                EntityId = "test_case_id",
-                EntityType = "test_case_type",
-                Value = "Some long content"
+                EntityId = entityId,
+                EntityType = entityType,
+                Value = value
             });
 
-            created.ShouldNotBeNull();
+            created.Id.ShouldNotBe(Guid.Empty);
+
+            var content = await _service.GetAsync(created.Id);
+
+            content.ShouldNotBeNull();
+            content.EntityType.ShouldBe(entityType);
         }
 
         [Fact]
