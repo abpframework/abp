@@ -35,8 +35,41 @@
   </ng-template>
 
   <ng-template #abpBody>
-    <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
-      <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+    <ng-template #loaderRef
+      ><div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div
+    ></ng-template>
+
+    <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">
+      <ul ngbNav #nav="ngbNav" class="nav-tabs">
+        <li ngbNavItem>
+          <a ngbNavLink>{{ 'AbpIdentity::UserInformations' | abpLocalization }}</a>
+          <ng-template ngbNavContent>
+            <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+          </ng-template>
+        </li>
+
+        <li ngbNavItem>
+          <a ngbNavLink>{{ 'AbpIdentity::Roles' | abpLocalization }}</a>
+          <ng-template ngbNavContent>
+            <div
+              *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"
+              class="custom-checkbox custom-control mb-2"
+            >
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                [attr.id]="'roles-' + i"
+                [formControl]="roleGroup.controls[roles[i].name]"
+              />
+              <label class="custom-control-label" [attr.for]="'roles-' + i">{{
+                roles[i].name
+              }}</label>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+
+      <div class="mt-2 fade-in-top" [ngbNavOutlet]="nav"></div>
     </form>
   </ng-template>
 
