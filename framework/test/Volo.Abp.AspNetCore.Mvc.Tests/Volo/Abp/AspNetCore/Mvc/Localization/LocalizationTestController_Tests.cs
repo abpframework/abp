@@ -7,14 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Shouldly;
-using Volo.Abp.DependencyInjection;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
     public class LocalizationTestController_Tests : AspNetCoreMvcTestBase
     {
-        class TestRequestCultureProvider : RequestCultureProvider, ITransientDependency
+        class TestRequestCultureProvider : RequestCultureProvider
         {
             public override Task<ProviderCultureResult> DetermineProviderCultureResult(HttpContext httpContext)
             {
@@ -26,9 +25,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
         {
             services.Configure<AbpRequestLocalizationOptions>(options =>
             {
-                options.RequestLocalizationOptionConfigurators.Add((provider, localizationOptions) =>
+                options.RequestLocalizationOptionConfigurators.Add((serviceProvider, localizationOptions) =>
                 {
-                    localizationOptions.RequestCultureProviders.Insert(0, provider.GetRequiredService<TestRequestCultureProvider>());
+                    localizationOptions.RequestCultureProviders.Insert(0, new TestRequestCultureProvider());
                     return Task.CompletedTask;
                 });
             });
