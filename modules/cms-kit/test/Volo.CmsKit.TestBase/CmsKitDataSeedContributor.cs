@@ -215,9 +215,20 @@ namespace Volo.CmsKit
                 _cmsKitTestData.Content_2_EntityId,
                 _cmsKitTestData.Content_2
             );
+            
+            var content3 = new Content(
+                Guid.NewGuid(),
+                "a",
+                "b",
+                "Content"
+            )
+            {
+                IsDeleted = true,
+            };
 
             await _contentRepository.InsertAsync(content1);
             await _contentRepository.InsertAsync(content2);
+            await _contentRepository.InsertAsync(content3);
         }
 
         private async Task SeedTagsAsync()
