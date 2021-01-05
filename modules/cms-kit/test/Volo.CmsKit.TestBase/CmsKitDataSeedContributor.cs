@@ -1,12 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Contents;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit
@@ -20,7 +24,10 @@ namespace Volo.CmsKit
         private readonly ReactionManager _reactionManager;
         private readonly IRatingRepository _ratingRepository;
         private readonly ICurrentTenant _currentTenant;
-
+        private readonly IContentRepository _contentRepository;
+        private readonly IEntityTagRepository _entityTagRepository;
+        private readonly ITagManager _tagManager;
+        private readonly IPageRepository _pageRepository;
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
             ICmsUserRepository cmsUserRepository,
@@ -28,7 +35,11 @@ namespace Volo.CmsKit
             ICommentRepository commentRepository,
             ReactionManager reactionManager,
             IRatingRepository ratingRepository,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant, 
+            IContentRepository contentRepository,
+            ITagManager tagManager, 
+            IEntityTagRepository entityTagRepository, 
+            IPageRepository pageRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -37,6 +48,10 @@ namespace Volo.CmsKit
             _reactionManager = reactionManager;
             _ratingRepository = ratingRepository;
             _currentTenant = currentTenant;
+            _contentRepository = contentRepository;
+            _tagManager = tagManager;
+            _entityTagRepository = entityTagRepository;
+            _pageRepository = pageRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -50,6 +65,12 @@ namespace Volo.CmsKit
                 await SeedReactionsAsync();
 
                 await SeedRatingsAsync();
+
+                await SeedContentsAsync();
+
+                await SeedTagsAsync();
+
+                await SeedPagesAsync();
             }
         }
 
@@ -176,6 +197,58 @@ namespace Volo.CmsKit
                 1,
                 _cmsKitTestData.User2Id
             ));
+        }
+
+        private async Task SeedContentsAsync()
+        {
+            var content1 = new Content(
+                _guidGenerator.Create(),
+                _cmsKitTestData.Content_1_EntityType,
+                _cmsKitTestData.Content_1_Id,
+                _cmsKitTestData.Content_1
+                );
+            
+            var content2 = new Content(
+                _guidGenerator.Create(),
+                _cmsKitTestData.Content_2_EntityType,
+                _cmsKitTestData.Content_2_Id,
+                _cmsKitTestData.Content_2
+            );
+
+            await _contentRepository.InsertAsync(content1);
+            await _contentRepository.InsertAsync(content2);
+        }
+
+        private async Task SeedTagsAsync()
+        {
+            foreach (var tag in _cmsKitTestData.Content_1_Tags)
+            {
+                var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, tag);
+
+                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_1_Id));
+            }
+            
+            foreach (var tag in _cmsKitTestData.Content_2_Tags)
+            {
+                var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, tag);
+                
+                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_2_Id));
+            }
+        }
+
+        private async Task SeedPagesAsync()
+        {
+            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Url, _cmsKitTestData.Page_1_Description);
+            var page1Content = new Content(_guidGenerator.Create(), nameof(Page), page1.Id.ToString(), _cmsKitTestData.Page_1_Content);
+            
+            await _pageRepository.InsertAsync(page1);
+            await _contentRepository.InsertAsync(page1Content);
+            
+            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Url, _cmsKitTestData.Page_2_Description);
+            var page2Content = new Content(_guidGenerator.Create(), nameof(Page), page2.Id.ToString(), _cmsKitTestData.Page_2_Content);
+
+            await _pageRepository.InsertAsync(page2);
+            await _contentRepository.InsertAsync(page2Content);
         }
     }
 }

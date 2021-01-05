@@ -79,7 +79,7 @@
     <Modal @ref="CreateModal">
         <ModalBackdrop />
         <ModalContent Centered="true">
-            <Form id="RoleCreateForm">
+            <Form>
                 <ModalHeader>
                     <ModalTitle>@L["NewRole"]</ModalTitle>
                     <CloseButton Clicked="CloseCreateModalAsync" />
@@ -104,7 +104,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Form="RoleCreateForm" Clicked="@CreateEntityAsync" />
+                    <SubmitButton Clicked="@CreateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -116,7 +116,7 @@
     <Modal @ref="EditModal">
         <ModalBackdrop />
         <ModalContent Centered="true">
-            <Form id="RoleEditForm">
+            <Form>
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
                     <CloseButton Clicked="CloseEditModalAsync" />
@@ -142,7 +142,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Form="RoleEditForm" Clicked="@UpdateEntityAsync" />
+                    <SubmitButton Clicked="@UpdateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,41 +17,53 @@ namespace Volo.Abp.Domain.Repositories
     public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
         where TEntity : class, IEntity
     {
-        public IDataFilter DataFilter { get; set; }
-
-        public ICurrentTenant CurrentTenant { get; set; }
-
-        public IAsyncQueryableExecuter AsyncExecuter { get; set; }
-
-        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
-
+        [Obsolete("This method will be removed in future versions.")]
         public virtual Type ElementType => GetQueryable().ElementType;
 
+        [Obsolete("This method will be removed in future versions.")]
         public virtual Expression Expression => GetQueryable().Expression;
 
+        [Obsolete("This method will be removed in future versions.")]
         public virtual IQueryProvider Provider => GetQueryable().Provider;
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public virtual IQueryable<TEntity> WithDetails()
         {
             return GetQueryable();
         }
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public virtual IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
             return GetQueryable();
         }
 
+        public virtual Task<IQueryable<TEntity>> WithDetailsAsync()
+        {
+            return GetQueryableAsync();
+        }
+
+        public virtual Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return GetQueryableAsync();
+        }
+
+        [Obsolete("This method will be removed in future versions.")]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
+        [Obsolete("This method will be removed in future versions.")]
         public IEnumerator<TEntity> GetEnumerator()
         {
             return GetQueryable().GetEnumerator();
         }
 
+        [Obsolete("Use GetQueryableAsync method.")]
         protected abstract IQueryable<TEntity> GetQueryable();
+
+        public abstract Task<IQueryable<TEntity>> GetQueryableAsync();
 
         public abstract Task<TEntity> FindAsync(
             Expression<Func<TEntity, bool>> predicate,
@@ -108,6 +121,19 @@ namespace Volo.Abp.Domain.Repositories
             }
 
             await DeleteAsync(entity, autoSave, cancellationToken);
+        }
+
+        public async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            foreach (var id in ids)
+            {
+                await DeleteAsync(id, cancellationToken: cancellationToken);
+            }
+
+            if (autoSave)
+            {
+                await SaveChangesAsync(cancellationToken);
+            }
         }
     }
 }

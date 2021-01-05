@@ -21,7 +21,7 @@ namespace Volo.Abp.IdentityServer.Grants
         public async Task<List<PersistedGrant>> GetListAsync(string subjectId, string sessionId, string clientId, string type, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await Filter(subjectId, sessionId, clientId, type)
+            return await (await FilterAsync(subjectId, sessionId, clientId, type))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -29,7 +29,7 @@ namespace Volo.Abp.IdentityServer.Grants
             string key,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.Key == key)
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -39,7 +39,7 @@ namespace Volo.Abp.IdentityServer.Grants
             string subjectId,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.SubjectId == subjectId)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -49,7 +49,7 @@ namespace Volo.Abp.IdentityServer.Grants
             int maxResultCount,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)
@@ -63,21 +63,23 @@ namespace Volo.Abp.IdentityServer.Grants
             string type = null,
             CancellationToken cancellationToken = default)
         {
-            var persistedGrants = await Filter(subjectId, sessionId, clientId, type).ToListAsync(GetCancellationToken(cancellationToken));
+            var persistedGrants = await (await FilterAsync(subjectId, sessionId, clientId, type)).ToListAsync(GetCancellationToken(cancellationToken));
+
+            var dbSet = await GetDbSetAsync();
 
             foreach (var persistedGrant in persistedGrants)
             {
-                DbSet.Remove(persistedGrant);
+                dbSet.Remove(persistedGrant);
             }
         }
 
-        private IQueryable<PersistedGrant> Filter(
+        private async Task<IQueryable<PersistedGrant>> FilterAsync(
             string subjectId,
             string sessionId,
             string clientId,
             string type)
         {
-            return DbSet
+            return (await GetDbSetAsync())
                 .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
                 .WhereIf(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
                 .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)

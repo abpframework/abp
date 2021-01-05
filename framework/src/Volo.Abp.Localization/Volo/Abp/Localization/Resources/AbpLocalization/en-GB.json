@@ -1,0 +1,7 @@
+{
+  "culture": "en-GB",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Default language",
+    "Description:Abp.Localization.DefaultLanguage": "The default language of the application."
+  }
+}

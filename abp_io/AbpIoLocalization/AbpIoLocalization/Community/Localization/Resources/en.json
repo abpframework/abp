@@ -37,7 +37,7 @@
     "CreateArticleTitleInfo": "Title of the article to be shown on the article list.",
     "CreateArticleUrlInfo": "Original GitHub/External URL of the article.",
     "CreateArticleSummaryInfo": "A short summary of the article to be shown on the article list.",
-    "CreateArticleCoverInfo": "For creating an effective article, add a cover photo. Upload 16:9 aspect ratio pictures for the best view.",
+    "CreateArticleCoverInfo": "For creating an effective article, add a cover photo. Upload 16:9 aspect ratio pictures for the best view. Maximum file size: 1MB.",
     "ThisExtensionIsNotAllowed": "This extension is not allowed.",
     "TheFileIsTooLarge": "The file is too large.",
     "GoToTheArticle": "Go to the Article",

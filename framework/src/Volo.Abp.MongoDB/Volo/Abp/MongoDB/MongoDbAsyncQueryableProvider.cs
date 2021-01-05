@@ -12,7 +12,7 @@ using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.MongoDB
 {
-    public class MongoDbAsyncQueryableProvider : IAsyncQueryableProvider, ITransientDependency
+    public class MongoDbAsyncQueryableProvider : IAsyncQueryableProvider, ISingletonDependency
     {
         public bool CanExecute<T>(IQueryable<T> queryable)
         {

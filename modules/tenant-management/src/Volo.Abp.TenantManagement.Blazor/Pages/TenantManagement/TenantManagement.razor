@@ -72,13 +72,12 @@
     <Modal @ref="CreateModal">
         <ModalBackdrop />
         <ModalContent Centered="true">
-            <Form id="TenantCreateForm">
+            <Form>
                 <ModalHeader>
                     <ModalTitle>@L["NewTenant"]</ModalTitle>
                     <CloseButton Clicked="CloseCreateModalAsync" />
                 </ModalHeader>
                 <ModalBody>
-
                     <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
@@ -114,7 +113,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Form="TenantCreateForm" Clicked="@CreateEntityAsync" />
+                    <SubmitButton Clicked="@CreateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -127,7 +126,7 @@
     <Modal @ref="EditModal">
         <ModalBackdrop />
         <ModalContent Centered="true">
-            <Form id="TenantEditForm">
+            <Form>
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
                     <CloseButton Clicked="CloseEditModalAsync" />
@@ -148,7 +147,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Form="TenantEditForm" Clicked="@UpdateEntityAsync" />
+                    <SubmitButton Clicked="@UpdateEntityAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -161,7 +160,7 @@
     <Modal @ref="@ManageConnectionStringModal">
         <ModalBackdrop />
         <ModalContent Centered="true">
-            <Form id="ConnectionStringEditForm">
+            <Form>
                 <ModalHeader>
                     <ModalTitle>@L["ConnectionStrings"]</ModalTitle>
                     <CloseButton Clicked="CloseEditConnectionStringModal" />
@@ -187,7 +186,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditConnectionStringModal">@L["Cancel"]</Button>
-                    <SubmitButton Form="ConnectionStringEditForm" Clicked="@UpdateConnectionStringAsync" />
+                    <SubmitButton Clicked="@UpdateConnectionStringAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>

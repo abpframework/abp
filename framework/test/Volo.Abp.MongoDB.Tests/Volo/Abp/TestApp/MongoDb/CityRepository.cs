@@ -19,13 +19,13 @@ namespace Volo.Abp.TestApp.MongoDB
 
         public async Task<City> FindByNameAsync(string name)
         {
-            return await (await Collection.FindAsync(c => c.Name == name)).FirstOrDefaultAsync();
+            return await (await (await GetCollectionAsync()).FindAsync(c => c.Name == name)).FirstOrDefaultAsync();
         }
 
         public async Task<List<Person>> GetPeopleInTheCityAsync(string cityName)
         {
             var city = await FindByNameAsync(cityName);
-            return await DbContext.People.AsQueryable().Where(p => p.CityId == city.Id).ToListAsync();
+            return await (await GetDbContextAsync()).People.AsQueryable().Where(p => p.CityId == city.Id).ToListAsync();
         }
     }
 }

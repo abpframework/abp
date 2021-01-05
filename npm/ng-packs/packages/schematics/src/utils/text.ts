@@ -10,6 +10,9 @@ export const macro = (text: string) => upper(snake(text));
 export const dir = (text: string) =>
   strings.dasherize(text.replace(/\./g, '/').replace(/\/\//g, '/'));
 
+export const quote = (value: number | string) =>
+  typeof value === 'string' ? `'${value.replace(/'/g, '\\\'')}'` : value;
+
 function _(text: string): string {
   return text.replace(/\./g, '_');
 }
