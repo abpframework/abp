@@ -84,7 +84,9 @@ namespace Volo.Abp.Identity
             input.MapExtraPropertiesTo(user);
 
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+
             await UpdateUserByInput(user, input);
+            (await UserManager.UpdateAsync(user)).CheckErrors();
 
             await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -174,6 +176,7 @@ namespace Volo.Abp.Identity
 
             user.Name = input.Name;
             user.Surname = input.Surname;
+            (await UserManager.UpdateAsync(user)).CheckErrors();
 
             if (input.RoleNames != null)
             {
