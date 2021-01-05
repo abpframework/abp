@@ -118,13 +118,6 @@ namespace Volo.CmsKit.Contents
         }
 
         [Fact]
-        public async Task ShouldThrowEntityNotFoundExceptionWhileDeletingNonExistingAsync()
-        {
-            await Should.ThrowAsync<EntityNotFoundException>(async () => 
-                await _service.DeleteAsync(Guid.NewGuid())); // Freshly generated non-existing id.
-        }
-
-        [Fact]
         public async Task ShouldThrowEntityNotFoundExceptionWhileDeletingAlreadyDeletedAsync()
         {
             await _service.DeleteAsync(_data.Content_2_Id);
