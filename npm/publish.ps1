@@ -50,6 +50,6 @@ foreach ($command in $commands) {
   $timer.Stop()
   $total = $timer.Elapsed
   Write-Output "-------------------------"
-  Write-Output "$command command took $total (Hours:Minutes:Seconds:Milliseconds)"
+  Write-Output "$command command took $total (Hours:Minutes:Seconds.Milliseconds)"
   Write-Output "-------------------------"
 }
