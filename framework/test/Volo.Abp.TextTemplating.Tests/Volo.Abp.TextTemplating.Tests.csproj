@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Volo\Abp\TextTemplating\SampleTemplates\WelcomeEmail\ShowDecimalNumber.tpl" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating\Volo.Abp.TextTemplating.csproj" />
