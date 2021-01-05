@@ -84,7 +84,6 @@ namespace Volo.Abp.Identity
             input.MapExtraPropertiesTo(user);
 
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
-
             await UpdateUserByInput(user, input);
             (await UserManager.UpdateAsync(user)).CheckErrors();
 
