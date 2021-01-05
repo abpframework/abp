@@ -18,6 +18,8 @@ namespace Volo.CmsKit.Admin.Contents
             ContentUpdateDto
             >, IContentAdminAppService
     {
+        protected IContentRepository ContentRepository { get; }
+
         public ContentAdminAppService(
             IRepository<Content, Guid> repository,
             IContentRepository contentRepository) : base(repository)
@@ -30,7 +32,5 @@ namespace Volo.CmsKit.Admin.Contents
             UpdatePolicyName = CmsKitAdminPermissions.Contents.Update;
             DeletePolicyName = CmsKitAdminPermissions.Contents.Delete;
         }
-
-        protected IContentRepository ContentRepository { get; }
     }
 }

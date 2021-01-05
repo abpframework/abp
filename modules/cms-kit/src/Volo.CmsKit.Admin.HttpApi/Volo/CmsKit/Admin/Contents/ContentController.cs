@@ -15,12 +15,12 @@ namespace Volo.CmsKit.Admin.Contents
     [Route("api/cms-kit-admin/contents")]
     public class ContentController : CmsKitAdminController, IContentAdminAppService
     {
+        protected IContentAdminAppService ContentAdminAppService { get; }
+
         public ContentController(IContentAdminAppService contentAdminAppService)
         {
             ContentAdminAppService = contentAdminAppService;
         }
-
-        protected IContentAdminAppService ContentAdminAppService { get; }
 
         [HttpPost]
         [Authorize(CmsKitAdminPermissions.Contents.Create)]
