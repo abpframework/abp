@@ -48,7 +48,6 @@ describe('LoaderBarComponent', () => {
     const httpWaitService = spectator.inject(HttpWaitService);
     httpWaitService.addRequest(new HttpRequest('GET', 'test'));
     expect(spectator.component.interval.closed).toBe(false);
-    /**/
     timer(400).subscribe(() => {
       expect(spectator.component.interval.closed).toBe(true);
       done();
