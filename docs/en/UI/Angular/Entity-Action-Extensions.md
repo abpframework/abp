@@ -153,27 +153,27 @@ Let's employ dependency injection to extend the functionality of `IdentityModule
 
   <abp-modal [(visible)]="isUserQuickViewVisible">
     <ng-template #abpHeader>
-      <h3>{{ user.userName }}</h3>
+      <h3>{%{{{ user.userName }}}%}</h3>
     </ng-template>
 
     <ng-template #abpBody>
       <table class="table table-borderless">
         <tbody>
           <tr>
-            <th scope="row">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</th>
-            <td>{{ user.name }}</td>
+            <th scope="row">{%{{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}}%}</th>
+            <td>{%{{{ user.name }}}%}</td>
           </tr>
           <tr>
-            <th scope="row">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</th>
-            <td>{{ user.surname }}</td>
+            <th scope="row">{%{{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}}%}</th>
+            <td>{%{{{ user.surname }}}%}</td>
           </tr>
           <tr>
-            <th scope="row">{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</th>
-            <td>{{ user.email }}</td>
+            <th scope="row">{%{{{ 'AbpIdentity::EmailAddress' | abpLocalization }}}%}</th>
+            <td>{%{{{ user.email }}}%}</td>
           </tr>
           <tr>
-            <th scope="row">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</th>
-            <td>{{ user.phoneNumber }}</td>
+            <th scope="row">{%{{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}}%}</th>
+            <td>{%{{{ user.phoneNumber }}}%}</td>
           </tr>
         </tbody>
       </table>
@@ -181,7 +181,7 @@ Let's employ dependency injection to extend the functionality of `IdentityModule
 
     <ng-template #abpFooter>
       <button type="button" class="btn btn-secondary" #abpClose>
-        {{ 'AbpUi::Close' | abpLocalization }}
+        {%{{{ 'AbpUi::Close' | abpLocalization }}}%}
       </button>
     </ng-template>
   </abp-modal>
