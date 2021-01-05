@@ -218,8 +218,8 @@ namespace Volo.CmsKit
             
             var content3 = new Content(
                 Guid.NewGuid(),
-                "a",
-                "b",
+                "deleted_entity_type",
+                "deleted_entity_id",
                 "Content"
             )
             {
