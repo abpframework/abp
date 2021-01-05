@@ -20,7 +20,7 @@ namespace Volo.CmsKit.Domain.Volo.CmsKit.Contents
 
         public async Task<Content> InsertAsync(Content content, CancellationToken cancellationToken = default)
         {
-            if (await ContentRepository.ExistAsync(content.EntityType, content.EntityId, content.TenantId, cancellationToken))
+            if (await ContentRepository.ExistsAsync(content.EntityType, content.EntityId, content.TenantId, cancellationToken))
             {
                 throw new ContentAlreadyExistException(content.EntityType, content.EntityId);
             }

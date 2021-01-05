@@ -26,7 +26,7 @@ namespace Volo.CmsKit.Contents
             Guid? tenantId = null, 
             CancellationToken cancellationToken = default);
 
-        Task<bool> ExistAsync(
+        Task<bool> ExistsAsync(
             [NotNull] string entityType,
             [NotNull] string entityId,
             Guid? tenantId = null,

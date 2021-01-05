@@ -54,7 +54,7 @@ namespace Volo.CmsKit.MongoDB.Contents
                 cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> ExistAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public async Task<bool> ExistsAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync()).AnyAsync(x =>
                     !x.IsDeleted &&

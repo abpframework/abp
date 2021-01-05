@@ -58,7 +58,7 @@ namespace Volo.CmsKit.Contents
                         cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> ExistAsync(
+        public async Task<bool> ExistsAsync(
             [NotNull] string entityType,
             [NotNull] string entityId,
             Guid? tenantId = null,
