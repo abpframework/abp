@@ -1,7 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\common.props" />
-
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Volo.CmsKit</RootNamespace>
@@ -10,7 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.CmsKit.Application\Volo.CmsKit.Application.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Domain.Tests\Volo.CmsKit.Domain.Tests.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
   </ItemGroup>
 
 </Project>

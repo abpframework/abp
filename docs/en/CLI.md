@@ -129,6 +129,7 @@ abp update [options]
 * `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
 * `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 * `--check-all`: Check the new version of each package separately. Default is `false`.
+* `--version` or `-v`: Specifies the version to use for update. If not specified, latest version is used.
 
 ### add-package
 
@@ -161,7 +162,7 @@ abp add-package Volo.Abp.MongoDB
 
 Adds a [multi-package application module](Modules/Index) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
-It can also create a new module for your solution and add it to your solution. See `--new-template` option.
+It can also create a new module for your solution and add it to your solution. See `--new` option.
 
 > A business module generally consists of several packages (because of layering, different database provider options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
 
@@ -417,5 +418,7 @@ abp bundle [options]
 
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a Blazor project file.
 * ```--force``` or ```-f```: Forces to build project before generating references.
+
+`bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
 
 For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)

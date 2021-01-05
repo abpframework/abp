@@ -10,7 +10,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\Volo.Abp.Http\Volo.Abp.Http.csproj" />
         <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     </ItemGroup>
 
 </Project>

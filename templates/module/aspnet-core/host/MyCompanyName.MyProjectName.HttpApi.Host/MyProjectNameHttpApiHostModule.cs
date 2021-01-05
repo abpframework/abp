@@ -174,7 +174,7 @@ namespace MyCompanyName.MyProjectName
             app.UseAbpRequestLocalization();
             app.UseAuthorization();
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
 

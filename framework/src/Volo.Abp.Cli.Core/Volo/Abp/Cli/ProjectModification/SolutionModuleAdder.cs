@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
@@ -35,6 +36,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public NugetPackageToLocalReferenceConverter NugetPackageToLocalReferenceConverter { get; }
         public AngularModuleSourceCodeAdder AngularModuleSourceCodeAdder { get; }
         public NewCommand NewCommand { get; }
+        public BundleCommand BundleCommand { get; }
 
         public SolutionModuleAdder(
             IJsonSerializer jsonSerializer,
@@ -49,7 +51,8 @@ namespace Volo.Abp.Cli.ProjectModification
             SolutionFileModifier solutionFileModifier,
             NugetPackageToLocalReferenceConverter nugetPackageToLocalReferenceConverter,
             AngularModuleSourceCodeAdder angularModuleSourceCodeAdder,
-            NewCommand newCommand)
+            NewCommand newCommand,
+            BundleCommand bundleCommand)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -64,6 +67,7 @@ namespace Volo.Abp.Cli.ProjectModification
             NugetPackageToLocalReferenceConverter = nugetPackageToLocalReferenceConverter;
             AngularModuleSourceCodeAdder = angularModuleSourceCodeAdder;
             NewCommand = newCommand;
+            BundleCommand = bundleCommand;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
@@ -118,7 +122,26 @@ namespace Volo.Abp.Cli.ProjectModification
                 await AddAngularPackages(solutionFile, module);
             }
 
+            await RunBundleForBlazorAsync(projectFiles, module);
+
             ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
+        }
+
+        private async Task RunBundleForBlazorAsync(string[] projectFiles, ModuleWithMastersInfo module)
+        {
+            var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
+
+            if (blazorProject == null || !module.NugetPackages.Any(np=> np.Target == NuGetPackageTarget.Blazor))
+            {
+                return;
+            }
+
+            var args = new CommandLineArgs("bundle");
+
+            args.Options.Add(BundleCommand.Options.WorkingDirectory.Short, Path.GetDirectoryName(blazorProject));
+            args.Options.Add(BundleCommand.Options.ForceBuild.Short, string.Empty);
+
+            await BundleCommand.ExecuteAsync(args);
         }
 
         private async Task RemoveUnnecessaryProjectsAsync(string solutionDirectory, ModuleWithMastersInfo module,
@@ -182,14 +205,25 @@ namespace Volo.Abp.Cli.ProjectModification
             string postFix)
         {
             var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), targetFolder);
+
+            if (!Directory.Exists(srcPath))
+            {
+                return;
+            }
+
             var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith(postFix));
+
+            if (projectFolderPath == null)
+            {
+                return;
+            }
+
             await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, new DirectoryInfo(projectFolderPath).Name);
 
             if (Directory.Exists(projectFolderPath))
             {
                 Directory.Delete(projectFolderPath, true);
             }
-
         }
 
         private async Task ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)

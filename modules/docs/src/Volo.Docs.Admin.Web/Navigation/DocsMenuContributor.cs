@@ -13,11 +13,11 @@ namespace Volo.Docs.Admin.Navigation
         {
             if (context.Menu.Name == StandardMenus.Main)
             {
-                await ConfigureMainMenu(context);
+                await ConfigureMainMenuAsync(context);
             }
         }
 
-        private async Task ConfigureMainMenu(MenuConfigurationContext context)
+        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var administrationMenu = context.Menu.GetAdministration();
 

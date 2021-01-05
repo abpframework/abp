@@ -27,7 +27,7 @@
                                 <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPasswordConfirm"/>
                             </Field>
                             <Field>
-                                <Button form="ChangePasswordForm" Color="Color.Primary" Clicked="@ChangePasswordAsync">@L["Save"]</Button>
+                                <SubmitButton Form="ChangePasswordForm" Clicked="@ChangePasswordAsync" />
                             </Field>
                         </EditForm>
                     </TabPanel>
@@ -59,7 +59,7 @@
                                 <TextEdit @bind-Text="@PersonalInfoModel.PhoneNumber"/>
                             </Field>
                             <Field>
-                                <Button form="UpdatePersonalInfoForm" Color="Color.Primary" Clicked="@UpdatePersonalInfoAsync">@L["Save"]</Button>
+                                <SubmitButton Form="UpdatePersonalInfoForm" Clicked="@UpdatePersonalInfoAsync" />
                             </Field>
                         </EditForm>
                     </TabPanel>

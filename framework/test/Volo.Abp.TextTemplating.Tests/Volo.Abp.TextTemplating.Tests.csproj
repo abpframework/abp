@@ -10,8 +10,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\TextTemplating\Localization\**\*.json" />
     <None Remove="Volo\Abp\TextTemplating\Localization\**\*.json" />
-    <EmbeddedResource Include="Volo\Abp\TextTemplating\SampleTemplates\**\*.tpl" />
-    <None Remove="Volo\Abp\TextTemplating\SampleTemplates\**\*.tpl" />
+    <EmbeddedResource Include="Volo\Abp\TextTemplating\SampleTemplates\**\*.tpl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +20,7 @@
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating\Volo.Abp.TextTemplating.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
   </ItemGroup>
 
 </Project>

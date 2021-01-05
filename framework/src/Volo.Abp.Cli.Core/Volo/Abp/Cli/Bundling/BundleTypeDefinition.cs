@@ -6,6 +6,6 @@ namespace Volo.Abp.Cli.Bundling
     {
         public int Level { get; set; }
 
-        public Type BundleContributerType { get; set; }
+        public Type BundleContributorType { get; set; }
     }
 }
