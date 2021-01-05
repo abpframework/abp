@@ -83,7 +83,7 @@ namespace Volo.CmsKit.Contents
                 Value = "Some long content"
             });
 
-            await Should.ThrowAsync<Exception>(async () =>
+            await Should.ThrowAsync<ContentAlreadyExistException>(async () =>
                 await _service.CreateAsync(new ContentCreateDto
                 {
                     EntityId = entityId,
