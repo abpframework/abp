@@ -4,6 +4,7 @@ import {
   CORE_OPTIONS,
   coreOptionsFactory,
   LIST_QUERY_DEBOUNCE_TIME,
+  LOADER_DELAY,
   PermissionService,
   RestService,
 } from '@abp/ng.core';
@@ -14,7 +15,6 @@ import { provideRoutes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockPermissionService } from './services/mock-permission.service';
 import { MockRestService } from './services/mock-rest.service';
-import { LOADER_DELAY } from '../../../src/lib/tokens/lodaer-delay.token';
 
 /**
  * CoreTestingModule is the module that will be used in tests
