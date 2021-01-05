@@ -5,6 +5,7 @@ import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap
 import {
   NgxValidateCoreModule,
   VALIDATION_ERROR_TEMPLATE,
+  VALIDATION_INVALID_CLASSES,
   VALIDATION_TARGET_SELECTOR,
 } from '@ngx-validate/core';
 import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
@@ -69,6 +70,10 @@ export class ThemeBasicModule {
         {
           provide: VALIDATION_TARGET_SELECTOR,
           useValue: '.form-group',
+        },
+        {
+          provide: VALIDATION_INVALID_CLASSES,
+          useValue: 'is-invalid',
         },
       ],
     };
