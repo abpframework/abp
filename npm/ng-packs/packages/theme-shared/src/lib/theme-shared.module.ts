@@ -36,7 +36,6 @@ import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
-import { LOADER_DELAY } from './tokens/lodaer-delay.token';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -78,7 +77,7 @@ export class BaseThemeSharedModule {}
 })
 export class ThemeSharedModule {
   static forRoot(
-    { httpErrorConfig, validation = {}, loaderDelay = 500 } = {} as RootParams,
+    { httpErrorConfig, validation = {} } = {} as RootParams,
   ): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
@@ -123,10 +122,6 @@ export class ThemeSharedModule {
         {
           provide: VALIDATION_VALIDATE_ON_SUBMIT,
           useValue: validation.validateOnSubmit,
-        },
-        {
-          provide: LOADER_DELAY,
-          useValue: loaderDelay,
         },
       ],
     };
