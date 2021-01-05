@@ -5,7 +5,7 @@
 
 Entity prop extension system allows you to add a new column to the data table for an entity or change/remove an already existing one. A "Name" column was added to the user management page below:
 
-![Entity Prop Extension Example: "Name" Column](images/user-prop-extension-name-column-ng.png)
+<img alt="Entity Prop Extension Example: 'Name' Column" src="./images/entity-prop-extensions---name-column.gif" width="800px" style="max-width:100%">
 
 You will have access to the current entity in your code and display its value, make the column sortable, perform visibility checks, and more. You can also render custom HTML in table cells.
 
@@ -18,10 +18,14 @@ In this example, we will add a "Name" column and display the value of the `name`
 The following code prepares a constant named `identityEntityPropContributors`, ready to be imported and used in your root module:
 
 ```js
-// entity-prop-contributors.ts
+// src/app/entity-prop-contributors.ts
 
+import {
+  eIdentityComponents,
+  IdentityEntityPropContributors,
+  IdentityUserDto,
+} from '@abp/ng.identity';
 import { EntityProp, EntityPropList, ePropType } from '@abp/ng.theme.shared/extensions';
-import { IdentityEntityPropContributors, IdentityUserDto } from '@volo/abp.ng.identity';
 
 const nameProp = new EntityProp<IdentityUserDto>({
   type: ePropType.String,
@@ -32,62 +36,45 @@ const nameProp = new EntityProp<IdentityUserDto>({
 });
 
 export function namePropContributor(propList: EntityPropList<IdentityUserDto>) {
-  propList.addAfter(
-    nameProp,
-    'userName',
-    (value, name) => value.name === name,
-  );
+  propList.addAfter(nameProp, 'userName', (value, name) => value.name === name);
 }
 
 export const identityEntityPropContributors: IdentityEntityPropContributors = {
-  'Identity.UsersComponent': [namePropContributor],
+  // enum indicates the page to add contributors to
+  [eIdentityComponents.Users]: [
+    namePropContributor,
+    // You can add more contributors here
+  ],
 };
 
 ```
 
 The list of props, conveniently named as `propList`, is a **doubly linked list**. That is why we have used the `addAfter` method, which adds a node with given value after the first node that has the previous value. You may find [all available methods here](../Common/Utils/Linked-List.md).
 
-> **Important Note 1:** AoT compilation does not support function calls in decorator metadata. This is why we have defined `namePropContributor` as an exported function declaration here. Please do not forget exporting your contributor callbacks and forget about lambda functions (a.k.a. arrow functions). Please refer to [AoT metadata errors](https://angular.io/guide/aot-metadata-errors#function-calls-not-supported) for details.
-
-> **Important Note 2:** Please use one of the following if Ivy is not enabled in your project. Otherwise, you will get an "Expression form not supported." error.
-
-```js
-export const identityEntityPropContributors: IdentityEntityPropContributors = {
-  'Identity.UsersComponent': [ namePropContributor ],
-};
-
-/* OR */
-
-const identityContributors: IdentityEntityPropContributors = {};
-identityContributors[eIdentityComponents.Users] = [ namePropContributor ];
-export const identityEntityPropContributors = identityContributors;
-```
-
 ### Step 2. Import and Use Entity Prop Contributors
 
 Import `identityEntityPropContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below:
 
 ```js
+// src/app/app-routing.module.ts
+
+// other imports
 import { identityEntityPropContributors } from './entity-prop-contributors';
 
 const routes: Routes = [
+  // other routes
+
   {
-    path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      {
-        path: 'identity',
-        loadChildren: () =>
-          import('@volo/abp.ng.identity').then(m =>
-            m.IdentityModule.forLazy({
-              entityPropContributors: identityEntityPropContributors,
-            }),
-          ),
-      },
-      // other child routes
-    ],
-    // other routes
-  }
+    path: 'identity',
+    loadChildren: () =>
+      import('@abp/ng.identity').then(m =>
+        m.IdentityModule.forLazy({
+          entityPropContributors: identityEntityPropContributors,
+        })
+      ),
+  },
+
+  // other routes
 ];
 ```
 
@@ -97,12 +84,18 @@ That is it, `nameProp` entity prop will be added, and you will see the "Name" co
 
 You can use the `valueResolver` to render an HTML string in the table. Imagine we want to show a red times icon (❌) next to unconfirmed emails and phones, instead of showing a green check icon next to confirmed emails and phones. The contributors below would do that for you.
 
-```js
-// entity-prop-contributors.ts
+<img alt="Entity Prop Extension Example: Custom Cell Render" src="./images/entity-prop-extensions---custom-cell.gif" width="800px" style="max-width:100%">
 
-import { EntityProp, EntityPropList, ePropType } from '@abp/ng.theme.shared/extensions';
-import { IdentityUserDto } from '@volo/abp.ng.identity';
-import { IdentityEntityPropContributors } from '@volo/abp.ng.identity/config';
+```js
+// src/app/entity-prop-contributors.ts
+
+import {
+  eIdentityComponents,
+  IdentityEntityPropContributors,
+  IdentityUserDto,
+} from '@abp/ng.identity';
+import { EntityProp, EntityPropList } from '@abp/ng.theme.shared/extensions';
+import { of } from 'rxjs';
 
 export function emailPropContributor(propList: EntityPropList<IdentityUserDto>) {
   const index = propList.indexOf('email', (value, name) => value.name === name);
@@ -138,7 +131,7 @@ export function phonePropContributor(propList: EntityPropList<IdentityUserDto>) 
 }
 
 export const identityEntityPropContributors: IdentityEntityPropContributors = {
-  'Identity.UsersComponent': [emailPropContributor, phonePropContributor],
+  [eIdentityComponents.Users]: [emailPropContributor, phonePropContributor],
 };
 
 ```
