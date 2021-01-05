@@ -62,6 +62,29 @@ namespace Volo.CmsKit.Contents
         }
 
         [Fact]
+        public async Task ShouldNotCreateWithSameParametersAsync()
+        {
+            var entityTtype = "My.Awesome.Book";
+            var entityId = "1";
+
+            await _service.CreateAsync(new ContentCreateDto
+            {
+                EntityId = entityId,
+                EntityType = entityTtype,
+                Value = "Some long content"
+            });
+
+            await Should.ThrowAsync<Exception>(async () =>
+                await _service.CreateAsync(new ContentCreateDto
+                {
+                    EntityId = entityId,
+                    EntityType = entityTtype,
+                    Value = "Yet another long content"
+                })
+            );
+        }
+
+        [Fact]
         public async Task ShouldUpdateAsync()
         {
             string newValue = "Newly created fresh value";
@@ -83,6 +106,22 @@ namespace Volo.CmsKit.Contents
             await _service.DeleteAsync(_data.Content_2_Id);
 
             await Should.ThrowAsync<EntityNotFoundException>(async () => await _service.GetAsync(_data.Content_2_Id));
+        }
+
+        [Fact]
+        public async Task ShouldThrowEntityNotFoundExceptionWhileDeletingNonExistingAsync()
+        {
+            await Should.ThrowAsync<EntityNotFoundException>(async () => 
+                await _service.DeleteAsync(Guid.NewGuid())); // Freshly generated non-existing id.
+        }
+
+        [Fact]
+        public async Task ShouldThrowEntityNotFoundExceptionWhileDeletingAlreadyDeletedAsync()
+        {
+            await _service.DeleteAsync(_data.Content_2_Id);
+
+            Should.ThrowAsync<EntityNotFoundException>(async () =>
+                await _service.DeleteAsync(_data.Content_2_Id));
         }
     }
 }
