@@ -12,11 +12,11 @@ namespace Volo.CmsKit.Domain.Volo.CmsKit.Contents
     public class ContentManager : DomainService, IContentManager
     {
         protected IContentRepository ContentRepository { get; }
+
         public ContentManager(IContentRepository contentRepository)
         {
             ContentRepository = contentRepository;
         }
-
 
         public async Task<Content> InsertAsync(Content content, CancellationToken cancellationToken = default)
         {

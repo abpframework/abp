@@ -45,7 +45,11 @@ namespace Volo.CmsKit.Contents
                 );
         }
 
-        public Task DeleteAsync(string entityType, string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public Task DeleteAsync(
+            string entityType,
+            string entityId,
+            Guid? tenantId = null,
+            CancellationToken cancellationToken = default)
         {
             return DeleteAsync(x =>
                         x.EntityType == entityType &&
@@ -54,7 +58,11 @@ namespace Volo.CmsKit.Contents
                         cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> ExistAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public async Task<bool> ExistAsync(
+            [NotNull] string entityType,
+            [NotNull] string entityId,
+            Guid? tenantId = null,
+            CancellationToken cancellationToken = default)
         {
             var dbSet = await GetDbSetAsync();
             return await dbSet.AnyAsync(x =>
