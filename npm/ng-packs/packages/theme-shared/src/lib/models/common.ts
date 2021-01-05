@@ -4,6 +4,7 @@ import { Validation } from '@ngx-validate/core';
 export interface RootParams {
   httpErrorConfig: HttpErrorConfig;
   validation?: Partial<Validation.Config>;
+  loaderDelay?: number;
 }
 
 export type ErrorScreenErrorCodes = 401 | 403 | 404 | 500;

@@ -3,6 +3,7 @@ import {
   DateParserFormatter,
   DEFAULT_VALIDATION_BLUEPRINTS,
   THEME_SHARED_ROUTE_PROVIDERS,
+  LOADER_DELAY,
 } from '@abp/ng.theme.shared';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -45,6 +46,10 @@ export class ThemeSharedTestingModule {
         {
           provide: VALIDATION_VALIDATE_ON_SUBMIT,
           useValue: validation.validateOnSubmit,
+        },
+        {
+          provide: LOADER_DELAY,
+          useValue: 0,
         },
       ],
     };

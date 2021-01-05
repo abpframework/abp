@@ -4,6 +4,7 @@ import { Subject, timer } from 'rxjs';
 import { LoaderBarComponent } from '../components/loader-bar/loader-bar.component';
 import { HttpWaitService, SubscriptionService } from '@abp/ng.core';
 import { HttpRequest } from '@angular/common/http';
+import { LOADER_DELAY } from '../tokens/lodaer-delay.token';
 
 describe('LoaderBarComponent', () => {
   let spectator: Spectator<LoaderBarComponent>;
@@ -13,7 +14,11 @@ describe('LoaderBarComponent', () => {
   const createComponent = createComponentFactory({
     component: LoaderBarComponent,
     detectChanges: false,
-    providers: [SubscriptionService, { provide: Router, useValue: { events: events$ } }],
+    providers: [
+      SubscriptionService,
+      { provide: Router, useValue: { events: events$ } },
+      { provide: LOADER_DELAY, useValue: 0 },
+    ],
   });
 
   beforeEach(() => {
