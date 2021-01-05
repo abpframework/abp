@@ -2,9 +2,8 @@ import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angula
 import { createComponentFactory, Spectator, SpyObject } from '@ngneat/spectator/jest';
 import { Subject, timer } from 'rxjs';
 import { LoaderBarComponent } from '../components/loader-bar/loader-bar.component';
-import { HttpWaitService, SubscriptionService } from '@abp/ng.core';
+import { HttpWaitService, LOADER_DELAY, SubscriptionService } from '@abp/ng.core';
 import { HttpRequest } from '@angular/common/http';
-import { LOADER_DELAY } from '../tokens/lodaer-delay.token';
 
 describe('LoaderBarComponent', () => {
   let spectator: Spectator<LoaderBarComponent>;
@@ -44,12 +43,12 @@ describe('LoaderBarComponent', () => {
     }, 10);
   });
 
-  test.skip('should be interval unsubscribed', done => {
+  it('should be interval unsubscribed', done => {
     spectator.detectChanges();
     const httpWaitService = spectator.inject(HttpWaitService);
     httpWaitService.addRequest(new HttpRequest('GET', 'test'));
     expect(spectator.component.interval.closed).toBe(false);
-
+    /**/
     timer(400).subscribe(() => {
       expect(spectator.component.interval.closed).toBe(true);
       done();

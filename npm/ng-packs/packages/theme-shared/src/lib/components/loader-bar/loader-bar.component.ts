@@ -1,8 +1,7 @@
 import { HttpWaitService, RouterWaitService, SubscriptionService } from '@abp/ng.core';
-import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { combineLatest, Subscription, timer } from 'rxjs';
-import { LOADER_DELAY } from '../../tokens/lodaer-delay.token';
 
 @Component({
   selector: 'abp-loader-bar',
@@ -77,11 +76,8 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     private cdRef: ChangeDetectorRef,
     private subscription: SubscriptionService,
     private httpWaitService: HttpWaitService,
-    private routerWaiterService: RouterWaitService,
-    @Inject(LOADER_DELAY) delay: number,
-  ) {
-    this.httpWaitService.setDelay(delay);
-  }
+    private routerWaitService: RouterWaitService,
+  ) {}
 
   ngOnInit() {
     this.subscribeLoading();
@@ -89,7 +85,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
   subscribeLoading() {
     this.subscription.addOne(
-      combineLatest([this.httpWaitService.getLoading$(), this.routerWaiterService.getLoading$()]),
+      combineLatest([this.httpWaitService.getLoading$(), this.routerWaitService.getLoading$()]),
       ([httpLoading, routerLoading]) => {
         if (httpLoading || routerLoading) this.startLoading();
         else this.stopLoading();
