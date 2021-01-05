@@ -22,7 +22,6 @@ namespace Volo.CmsKit.Contents
             CancellationToken cancellationToken = default)
         {
             return GetAsync(x =>
-                    !x.IsDeleted &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,
@@ -37,7 +36,6 @@ namespace Volo.CmsKit.Contents
             CancellationToken cancellationToken = default)
         {
             return FindAsync(x =>
-                    !x.IsDeleted &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,

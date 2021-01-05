@@ -21,6 +21,7 @@ namespace Volo.CmsKit.Admin.Contents
             >, IContentAdminAppService
     {
         protected IContentManager ContentManager { get; }
+
         protected IContentRepository ContentRepository { get; }
 
         public ContentAdminAppService(
