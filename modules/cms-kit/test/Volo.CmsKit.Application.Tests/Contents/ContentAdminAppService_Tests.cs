@@ -118,11 +118,11 @@ namespace Volo.CmsKit.Contents
         }
 
         [Fact]
-        public async Task ShouldThrowEntityNotFoundExceptionWhileDeletingAlreadyDeletedAsync()
+        public async Task ShouldNotThrowEntityNotFoundExceptionWhileDeletingAlreadyDeletedAsync()
         {
             await _service.DeleteAsync(_data.Content_2_Id);
 
-            Should.ThrowAsync<EntityNotFoundException>(async () =>
+            await Should.NotThrowAsync(async () =>
                 await _service.DeleteAsync(_data.Content_2_Id));
         }
     }
