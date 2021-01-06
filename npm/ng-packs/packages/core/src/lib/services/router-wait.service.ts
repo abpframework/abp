@@ -1,13 +1,9 @@
-import { Injectable } from '@angular/core';
-import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  Router,
-} from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Injectable, Injector } from '@angular/core';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { filter, map, mapTo, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { InternalStore } from '../utils/internal-store-utils';
+import { of, Subject, timer } from 'rxjs';
+import { LOADER_DELAY } from '../tokens/lodaer-delay.token';
 
 export interface RouterWaitState {
   loading: boolean;
@@ -18,7 +14,10 @@ export interface RouterWaitState {
 })
 export class RouterWaitService {
   private store = new InternalStore<RouterWaitState>({ loading: false });
-  constructor(private router: Router) {
+  private destroy$ = new Subject();
+  private delay: number;
+  constructor(private router: Router, injector: Injector) {
+    this.delay = injector.get(LOADER_DELAY, 500);
     this.router.events
       .pipe(
         filter(
@@ -28,10 +27,18 @@ export class RouterWaitService {
             event instanceof NavigationError ||
             event instanceof NavigationCancel,
         ),
+        map(event => event instanceof NavigationStart),
+        switchMap(condition =>
+          condition
+            ? this.delay === 0
+              ? of(true)
+              : timer(this.delay || 0).pipe(mapTo(true), takeUntil(this.destroy$))
+            : of(false),
+        ),
+        tap(() => this.destroy$.next()),
       )
-      .subscribe(event => {
-        if (event instanceof NavigationStart) this.setLoading(true);
-        else this.setLoading(false);
+      .subscribe(status => {
+        this.setLoading(status);
       });
   }
 

@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpRequest } from '@angular/common/http';
 import { InternalStore } from '../utils/internal-store-utils';
 import { getPathName } from '../utils/http-utils';
-import { debounceTime, tap } from 'rxjs/operators';
+import { map, mapTo, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { of, Subject, timer } from 'rxjs';
+import { LOADER_DELAY } from '../tokens/lodaer-delay.token';
 
 export interface HttpWaitState {
-  requests: Set<HttpRequest<any>>;
+  requests: HttpRequest<any>[];
   filteredRequests: Array<HttpRequestInfo>;
-  delay: number;
 }
 export interface HttpRequestInfo {
   method: string;
@@ -18,10 +19,16 @@ export interface HttpRequestInfo {
 })
 export class HttpWaitService {
   protected store = new InternalStore<HttpWaitState>({
-    requests: new Set(),
+    requests: [],
     filteredRequests: [],
-    delay: 0,
   });
+
+  private delay: number;
+  private destroy$ = new Subject();
+
+  constructor(injector: Injector) {
+    this.delay = injector.get(LOADER_DELAY, 500);
+  }
 
   getLoading() {
     return !!this.applyFilter(this.store.state.requests).length;
@@ -29,8 +36,18 @@ export class HttpWaitService {
 
   getLoading$() {
     return this.store
-      .sliceState(({ requests }) => !!this.applyFilter(requests).length)
-      .pipe(this.debounceWhenLoading());
+      .sliceState(({ requests }) => requests)
+      .pipe(
+        map(requests => !!this.applyFilter(requests).length),
+        switchMap(condition =>
+          condition
+            ? this.delay === 0
+              ? of(true)
+              : timer(this.delay).pipe(mapTo(true), takeUntil(this.destroy$))
+            : of(false),
+        ),
+        tap(() => this.destroy$.next()),
+      );
   }
 
   updateLoading$() {
@@ -38,44 +55,40 @@ export class HttpWaitService {
   }
 
   clearLoading() {
-    this.store.patch({ requests: new Set() });
+    this.store.patch({ requests: [] });
   }
 
   addRequest(request: HttpRequest<any>) {
-    let { requests } = this.store.state;
-    requests = new Set(requests.values());
-    requests.add(request);
-    this.store.patch({ requests });
+    this.store.patch({ requests: [...this.store.state.requests, request] });
   }
 
   deleteRequest(request: HttpRequest<any>) {
-    const { requests } = this.store.state;
-    requests.delete(request);
+    const requests = this.store.state.requests.filter(r => r !== request);
     this.store.patch({ requests });
   }
 
-  addFilter(request: HttpRequestInfo) {
+  addFilter(request: HttpRequestInfo | HttpRequestInfo[]) {
+    const requests = Array.isArray(request) ? request : [request];
     const filteredRequests = [
-      ...this.store.state.filteredRequests.filter(f => !this.isSameRequest(f, request)),
-      request,
+      ...this.store.state.filteredRequests.filter(
+        f => !requests.some(r => this.isSameRequest(f, r)),
+      ),
+      ...requests,
     ];
     this.store.patch({ filteredRequests });
   }
 
-  removeFilter(request: HttpRequestInfo) {
+  removeFilter(request: HttpRequestInfo | HttpRequestInfo[]) {
+    const requests = Array.isArray(request) ? request : [request];
     const filteredRequests = this.store.state.filteredRequests.filter(
-      f => !this.isSameRequest(f, request),
+      f => !requests.some(r => this.isSameRequest(f, r)),
     );
     this.store.patch({ filteredRequests });
   }
 
-  setDelay(delay: number) {
-    this.store.patch({ delay });
-  }
-
-  private applyFilter(requests: Set<HttpRequest<any>>) {
+  private applyFilter(requests: HttpRequest<any>[]) {
     const { filteredRequests } = this.store.state;
-    return Array.from(requests).filter(
+    return requests.filter(
       ({ method, url }) =>
         !filteredRequests.find(filteredRequest =>
           this.isSameRequest(filteredRequest, { method, endpoint: getPathName(url) }),
@@ -86,11 +99,5 @@ export class HttpWaitService {
   private isSameRequest(filteredRequest: HttpRequestInfo, request: HttpRequestInfo) {
     const { method, endpoint } = filteredRequest;
     return endpoint === request.endpoint && method === request.method;
-  }
-
-  private debounceWhenLoading() {
-    return this.store.state.delay && !!this.applyFilter(this.store.state.requests).length
-      ? debounceTime(this.store.state.delay)
-      : tap();
   }
 }

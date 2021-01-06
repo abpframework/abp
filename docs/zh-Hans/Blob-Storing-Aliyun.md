@@ -55,7 +55,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **RoleSessionName** ([NotNull]string): 用来标识临时访问凭证的名称,建议使用不同的应用程序用户来区分.
 * **Policy** (string): 在扮演角色的时候额外添加的权限限制. 请参见[基于RAM Policy的权限控制](https://help.aliyun.com/document_detail/100680.html).
 * **DurationSeconds** (int): 设置临时访问凭证的有效期,单位是s,最小为900,最大为3600. 
-* **ContainerName** (string): 你可以在aliyun中指定容器名称. 如果没有指定它将使用 `BlogContainerName` 属性定义的BLOB容器的名称(请参阅[BLOB存储文档](Blob-Storing.md)). 请注意Aliyun有一些**命名容器的规则**,容器名称必须是有效的DNS名称,[符合以下命名规则](https://help.aliyun.com/knowledge_detail/39668.html):
+* **ContainerName** (string): 你可以在aliyun中指定容器名称. 如果没有指定它将使用 `BlobContainerName` 属性定义的BLOB容器的名称(请参阅[BLOB存储文档](Blob-Storing.md)). 请注意Aliyun有一些**命名容器的规则**,容器名称必须是有效的DNS名称,[符合以下命名规则](https://help.aliyun.com/knowledge_detail/39668.html):
     * 只能包含小写字母,数字和短横线(-)
     * 必须以小写字母和数字开头和结尾
     * Bucket名称的长度限制在**3**到**63**个字符之间

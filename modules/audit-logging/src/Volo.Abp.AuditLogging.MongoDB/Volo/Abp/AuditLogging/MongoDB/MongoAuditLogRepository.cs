@@ -171,11 +171,11 @@ namespace Volo.Abp.AuditLogging.MongoDB
         {
             var query = await GetEntityChangeListQueryAsync(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
 
-            var auditLogs = await query.As<IMongoQueryable<EntityChange>>()
+            return await query
+                .OrderBy(sorting ?? "changeTime desc")
+                .As<IMongoQueryable<EntityChange>>()
                 .PageBy<EntityChange, IMongoQueryable<EntityChange>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
-
-            return auditLogs.AsQueryable().OrderBy(sorting ?? "changeTime desc").ToList();
         }
 
         public virtual async Task<long> GetEntityChangeCountAsync(

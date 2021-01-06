@@ -4,9 +4,9 @@
 
 Entity action extension system allows you to add a new action to the action menu for an entity. A "Click Me" action was added to the user management page below:
 
-![Entity Action Extension Example: "Click Me!" Action](images/user-action-extension-click-me-ng.png)
+<img alt="Entity Action Extension Example: 'Click Me!' Action" src="./images/entity-action-extensions---click-me.gif" width="800px" style="max-width:100%">
 
-You can take any action (open a modal, make an HTTP API call, redirect to another page... etc) by writing your custom code. You can access to the current entity in your code.
+You can take any action (open a modal, make an HTTP API call, redirect to another page... etc) by writing your custom code. You can also access the current entity in your code.
 
 ## How to Set Up
 
@@ -17,10 +17,14 @@ In this example, we will add a "Click Me!" action and alert the current row's `u
 The following code prepares a constant named `identityEntityActionContributors`, ready to be imported and used in your root module:
 
 ```js
-// entity-action-contributors.ts
+// src/app/entity-action-contributors.ts
 
+import {
+  eIdentityComponents,
+  IdentityEntityActionContributors,
+  IdentityUserDto,
+} from '@abp/ng.identity';
 import { EntityAction, EntityActionList } from '@abp/ng.theme.shared/extensions';
-import { IdentityEntityActionContributors, IdentityUserDto } from '@volo/abp.ng.identity';
 
 const alertUserName = new EntityAction<IdentityUserDto>({
   text: 'Click Me!',
@@ -31,9 +35,7 @@ const alertUserName = new EntityAction<IdentityUserDto>({
   // See EntityActionOptions in API section for all options
 });
 
-export function alertUserNameContributor(
-  actionList: EntityActionList<IdentityUserDto>,
-) {
+export function alertUserNameContributor(actionList: EntityActionList<IdentityUserDto>) {
   actionList.addTail(alertUserName);
 }
 
@@ -48,243 +50,199 @@ export const identityEntityActionContributors: IdentityEntityActionContributors 
 
 The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addTail` method, which adds the given value to the end of the list. You may find [all available methods here](../Common/Utils/Linked-List.md).
 
-> **Important Note 1:** AoT compilation does not support function calls in decorator metadata. This is why we have defined `alertUserNameContributor` as an exported function declaration here. Please do not forget exporting your contributor callbacks and forget about lambda functions (a.k.a. arrow functions). Please refer to [AoT metadata errors](https://angular.io/guide/aot-metadata-errors#function-calls-not-supported) for details.
-
-> **Important Note 2:** Please use one of the following if Ivy is not enabled in your project. Otherwise, you will get an "Expression form not supported." error.
-
-```js
-export const identityEntityActionContributors: IdentityEntityActionContributors = {
-  'Identity.UsersComponent': [ alertUserNameContributor ],
-};
-
-/* OR */
-
-const identityContributors: IdentityEntityActionContributors = {};
-identityContributors[eIdentityComponents.Users] = [ alertUserNameContributor ];
-export const identityEntityActionContributors = identityContributors;
-```
-
 ### Step 2. Import and Use Entity Action Contributors
 
 Import `identityEntityActionContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below:
 
 ```js
+// src/app/app-routing.module.ts
+
+// other imports
 import { identityEntityActionContributors } from './entity-action-contributors';
 
 const routes: Routes = [
+  // other routes
+
   {
-    path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      {
-        path: 'identity',
-        loadChildren: () =>
-          import('@volo/abp.ng.identity').then(m =>
-            m.IdentityModule.forLazy({
-              entityActionContributors: identityEntityActionContributors,
-            }),
-          ),
-      },
-      // other child routes
-    ],
-    // other routes
-  }
+    path: 'identity',
+    loadChildren: () =>
+      import('@abp/ng.identity').then(m =>
+        m.IdentityModule.forLazy({
+          entityActionContributors: identityEntityActionContributors,
+        })
+      ),
+  },
+
+  // other routes
 ];
 ```
 
-That is it, `alertUserName` entity action will be added as the last action on the grid dropdown in the users page (`UsersComponent`) of the `IdentityModule`.
+That is it, `alertUserName` entity action will be added as the last action on the grid dropdown in the "Users" page (`UsersComponent`) of the `IdentityModule`.
 
 ## How to Place a Custom Modal and Trigger It by Entity Actions
 
-Incase you need to place a custom modal that will be triggered by an entity action, there are two ways to do it: A quick one and an elaborate one.
+Let's employ dependency injection to extend the functionality of `IdentityModule` and add a quick view action for the User entity. We will take a lazy-loaded approach.
 
-### The Quick Solution
+<img alt="Entity Action Extension Example: Custom Modal" src="./images/entity-action-extensions---custom-modal.gif" width="800px" style="max-width:100%">
 
-1. Place your custom modal inside `AppComponent` template.
+1. Create a folder at this path: `src/app/identity-extended`
+
+2. Add an entity action similar to this:
+  ```js
+  // src/app/identity-extended/entity-action-contributors.ts
+
+  import {
+    eIdentityComponents,
+    IdentityEntityActionContributors,
+    IdentityUserDto,
+  } from '@abp/ng.identity';
+  import { EntityAction, EntityActionList } from '@abp/ng.theme.shared/extensions';
+  import { IdentityExtendedComponent } from './identity-extended.component';
+
+  const quickViewAction = new EntityAction<IdentityUserDto>({
+    text: 'Quick View',
+    action: data => {
+      const component = data.getInjected(IdentityExtendedComponent);
+      component.openUserQuickView(data.record);
+    },
+  });
+
+  export function customModalContributor(actionList: EntityActionList<IdentityUserDto>) {
+    actionList.addTail(quickViewAction);
+  }
+
+  export const identityEntityActionContributors: IdentityEntityActionContributors = {
+    // enum indicates the page to add contributors to
+    [eIdentityComponents.Users]: [
+      customModalContributor,
+      // You can add more contributors here
+    ],
+  };
+  ```
+
+3. Create a parent component to the identity module.
+  ```js
+  // src/app/identity-extended/identity-extended.component.ts
+
+  import { IdentityUserDto } from '@abp/ng.identity';
+  import { Component } from '@angular/core';
+
+  @Component({
+    selector: 'app-identity-extended',
+    templateUrl: './identity-extended.component.html',
+  })
+  export class IdentityExtendedComponent {
+    isUserQuickViewVisible: boolean;
+
+    user: IdentityUserDto;
+
+    openUserQuickView(record: IdentityUserDto) {
+      this.user = new Proxy(record, {
+        get: (target, prop) => target[prop] || '—',
+      });
+      this.isUserQuickViewVisible = true;
+    }
+  }
+  ```
+
+4. Add a router outlet and a modal to the parent component.
   ```html
-  <abp-modal [(visible)]="isModalOpen">
+  <!-- src/app/identity-extended/identity-extended.component.html -->
+
+  <router-outlet></router-outlet>
+
+  <abp-modal [(visible)]="isUserQuickViewVisible">
     <ng-template #abpHeader>
-      <h3><!-- YOUR TITLE HERE --></h3>
+      <h3>{%{{{ user.userName }}}%}</h3>
     </ng-template>
 
     <ng-template #abpBody>
-      <!-- YOUR CONTENT HERE -->
+      <table class="table table-borderless">
+        <tbody>
+          <tr>
+            <th scope="row">{%{{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}}%}</th>
+            <td>{%{{{ user.name }}}%}</td>
+          </tr>
+          <tr>
+            <th scope="row">{%{{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}}%}</th>
+            <td>{%{{{ user.surname }}}%}</td>
+          </tr>
+          <tr>
+            <th scope="row">{%{{{ 'AbpIdentity::EmailAddress' | abpLocalization }}}%}</th>
+            <td>{%{{{ user.email }}}%}</td>
+          </tr>
+          <tr>
+            <th scope="row">{%{{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}}%}</th>
+            <td>{%{{{ user.phoneNumber }}}%}</td>
+          </tr>
+        </tbody>
+      </table>
     </ng-template>
 
     <ng-template #abpFooter>
       <button type="button" class="btn btn-secondary" #abpClose>
-        {%{{{ 'AbpIdentity::Cancel' | abpLocalization }}}%}
+        {%{{{ 'AbpUi::Close' | abpLocalization }}}%}
       </button>
-      
-      <!-- YOUR CONFIRMATION BUTTON HERE -->
     </ng-template>
   </abp-modal>
   ```
 
-2. Add the following inside your `AppComponent` class:
+5. Add a module for the component and load `IdentityModule` as seen below:
   ```js
-  isModalOpen: boolean;
+  // src/app/identity-extended/identity-extended.module.ts
 
-  openModal(/* may take parameters */) {
-    /* and set things before showing the modal */
-    this.isModalOpen = true;
-  }
-  ```
-
-3. Add an entity action similar to this:
-  ```js
-  const customModalAction = new EntityAction<IdentityUserDto>({
-    text: 'Custom Modal Action',
-    action: data => {
-      const component = data.getInjected(AppComponent);
-      component.openModal(/* you may pass parameters */);
-    },
-  });
-  ```
-
-That should work. However, there is a longer but lazy-loading solution, and we are going to use NGXS for it.
-
-### The Elaborate Solution
-
-Consider the modal will be displayed in the Identity module. How can we lazy-load it too?
-
-1. Create a folder called `identity-extended` inside your app folder.
-2. Create a file called `identity-popups.store.ts` in it.
-3. Insert the following code in the new file:
-  ```js
-  import { Action, Selector, State, StateContext } from '@ngxs/store';
-
-  export class ToggleIdentityPopup {
-    static readonly type = '[IdentityPopups] Toggle';
-    constructor(public readonly payload: boolean) {}
-  }
-
-  @State<IdentityPopupsStateModel>({
-    name: 'IdentityPopups',
-    defaults: {
-      isVisible: false,
-    },
-  })
-  export class IdentityPopupsState {
-    @Selector()
-    static isVisible(state: IdentityPopupsStateModel) {
-      return state.isVisible;
-    }
-
-    @Action(ToggleIdentityPopup)
-    toggleModal(
-      context: StateContext<IdentityPopupsStateModel>,
-      { payload }: ToggleIdentityPopup,
-    ) {
-      context.patchState({ isVisible: payload });
-    }
-  }
-
-  interface IdentityPopupsStateModel {
-    isVisible: boolean;
-  }
-  ```
-
-4. Create a file called `identity-extended.module.ts` in the same folder.
-5. Insert the following code in the new file:
-  ```js
   import { CoreModule } from '@abp/ng.core';
+  import { IdentityModule } from '@abp/ng.identity';
   import { ThemeSharedModule } from '@abp/ng.theme.shared';
-  import { Component, NgModule } from '@angular/core';
+  import { NgModule } from '@angular/core';
   import { RouterModule } from '@angular/router';
-  import { NgxsModule, Select, Store } from '@ngxs/store';
-  import { Observable } from 'rxjs';
-  import { IdentityPopupsState, ToggleIdentityPopup } from './identity-popups.store';
-
-  @Component({
-    template: `
-      <router-outlet></router-outlet>
-      <router-outlet name="popup"></router-outlet>
-    `,
-  })
-  export class IdentityOutletComponent {}
-
-  @Component({
-    template: `
-      <abp-modal [visible]="isVisible$ | async" (disappear)="onDisappear()">
-        <ng-template #abpHeader>
-          <h3><!-- YOUR TITLE HERE --></h3>
-        </ng-template>
-
-        <ng-template #abpBody>
-          <!-- YOUR CONTENT HERE -->
-        </ng-template>
-
-        <ng-template #abpFooter>
-          <button type="button" class="btn btn-secondary" #abpClose>
-            {%{{{ 'AbpIdentity::Cancel' | abpLocalization }}}%}
-          </button>
-          
-          <!-- YOUR CONFIRMATION BUTTON HERE -->
-        </ng-template>
-      </abp-modal>
-    `,
-  })
-  export class IdentityPopupsComponent {
-    @Select(IdentityPopupsState.isVisible)
-    isVisible$: Observable<boolean>;
-
-    constructor(private store: Store) {}
-
-    onDisappear() {
-      this.store.dispatch(new ToggleIdentityPopup(false));
-    }
-  }
+  import { identityEntityActionContributors } from './entity-action-contributors';
+  import { IdentityExtendedComponent } from './identity-extended.component';
 
   @NgModule({
-    declarations: [IdentityPopupsComponent, IdentityOutletComponent],
     imports: [
       CoreModule,
       ThemeSharedModule,
-      NgxsModule.forFeature([IdentityPopupsState]),
       RouterModule.forChild([
         {
           path: '',
-          component: IdentityOutletComponent,
+          component: IdentityExtendedComponent,
           children: [
             {
               path: '',
-              outlet: 'popup',
-              component: IdentityPopupsComponent,
-            },
-            {
-              path: '',
-              loadChildren: () => import('@volo/abp.ng.identity').then(m => m.IdentityModule),
+              loadChildren: () =>
+                IdentityModule.forLazy({
+                  entityActionContributors: identityEntityActionContributors,
+                }),
             },
           ],
         },
       ]),
     ],
+    declarations: [IdentityExtendedComponent],
   })
   export class IdentityExtendedModule {}
   ```
 
-6. Change the `identity` path in your `AppRoutingModule` to this:
+6. Load `IdentityExtendedModule` instead of `IdentityModule` in your root routing module.
   ```js
-  {
-    path: 'identity',
-    loadChildren: () =>
-      import('./identity-extended/identity-extended.module').then(m => m.IdentityExtendedModule),
-  },
-  ```
+  // src/app/app-routing.module.ts
 
-7. Add an entity action similar to this:
-  ```js
-  const customModalAction = new EntityAction<IdentityUserDto>({
-    text: 'Custom Modal Action',
-    action: data => {
-      const store = data.getInjected(Store);
-      store.dispatch(new ToggleIdentityPopup(true));
+  const routes: Routes = [
+    // other routes
+
+    {
+      path: 'identity',
+      loadChildren: () =>
+        import('./identity-extended/identity-extended.module')
+          .then(m => m.IdentityExtendedModule),
     },
-  });
+
+    // other routes
+  ];
   ```
 
-It should now be working well with lazy-loading. The files are compact in the description to make it quicker to explain. You may split the files as you wish.
+That's it. As you see, we reached the `IdentityExtendedComponent` through dependency injection and called one of its methods in our action. The specific user was also available via `data.record`, so we were able to display a summary view.
 
 ## API
 
@@ -374,7 +332,7 @@ You may find a full example below.
 ```js
 const options: EntityActionOptions<IdentityUserDto> = {
   action: data => {
-    const component = data.getInjected(UsersComponent);
+    const component = data.getInjected(IdentityExtendedComponent);
     component.unlock(data.record.id);
   },
   text: 'AbpIdentity::Unlock',
