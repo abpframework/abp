@@ -97,15 +97,16 @@ namespace Volo.Abp.TextTemplating
         {
             (await _templateRenderer.RenderAsync(
                 TestTemplates.ShowDecimalNumber,
-                new Dictionary<string, decimal>(new List<KeyValuePair<string, decimal>>{new("amount", 123.45M)}),
+                new Dictionary<string, decimal>(new List<KeyValuePair<string, decimal>> {new("amount", 123.45M)}),
                 cultureName: "en"
             )).ShouldBe("*BEGIN*123.45*END*");
 
             (await _templateRenderer.RenderAsync(
                 TestTemplates.ShowDecimalNumber,
-                new Dictionary<string, decimal>(new List<KeyValuePair<string, decimal>>{new("amount", 123.45M)}),
+                new Dictionary<string, decimal>(new List<KeyValuePair<string, decimal>> {new("amount", 123.45M)}),
                 cultureName: "de"
-            )).ShouldBe("*BEGIN*123,45*END*");        }
+            )).ShouldBe("*BEGIN*123,45*END*");
+        }
 
         private class WelcomeEmailModel
         {
