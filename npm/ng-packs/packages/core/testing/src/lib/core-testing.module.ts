@@ -1,9 +1,11 @@
 import {
   ABP,
   BaseCoreModule,
-  coreOptionsFactory,
   CORE_OPTIONS,
+  coreOptionsFactory,
   LIST_QUERY_DEBOUNCE_TIME,
+  LOADER_DELAY,
+  PermissionService,
   RestService,
 } from '@abp/ng.core';
 import { APP_BASE_HREF } from '@angular/common';
@@ -11,6 +13,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRoutes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockPermissionService } from './services/mock-permission.service';
 import { MockRestService } from './services/mock-rest.service';
 
 /**
@@ -43,8 +46,16 @@ export class CoreTestingModule {
           useValue: listQueryDebounceTime,
         },
         {
+          provide: PermissionService,
+          useClass: MockPermissionService,
+        },
+        {
           provide: RestService,
           useClass: MockRestService,
+        },
+        {
+          provide: LOADER_DELAY,
+          useValue: 0,
         },
         provideRoutes(routes),
       ],

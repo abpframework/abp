@@ -59,7 +59,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **Region** (string): 服务的地区名称.
 * **Policy** (string): JSON格式的IAM策略.
 * **DurationSeconds** (int): 设置临时访问凭证的有效期,单位是s,最小为900,最大为129600.
-* **ContainerName** (string): 你可以在Aws中指定容器名称. 如果没有指定它将使用 `BlogContainerName` 属性定义的BLOB容器的名称(请参阅[BLOB存储文档](Blob-Storing.md)). 请注意Aws有一些**命名容器的规则**,容器名称必须是有效的DNS名称,[符合以下命名规则](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
+* **ContainerName** (string): 你可以在Aws中指定容器名称. 如果没有指定它将使用 `BlobContainerName` 属性定义的BLOB容器的名称(请参阅[BLOB存储文档](Blob-Storing.md)). 请注意Aws有一些**命名容器的规则**,容器名称必须是有效的DNS名称,[符合以下命名规则](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
     * Bucket名称必须介于 3 到 63 个字符之间.
     * Bucket名称只能由小写字母、数字、句点 (.) 和连字符 (-) 组成.
     * Bucket名称必须以字母或数字开头和结尾.

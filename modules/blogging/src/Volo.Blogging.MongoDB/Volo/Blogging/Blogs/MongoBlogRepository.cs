@@ -15,7 +15,7 @@ namespace Volo.Blogging.Blogs
 
         public async Task<Blog> FindByShortNameAsync(string shortName)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(p => p.ShortName == shortName);
+            return await (await GetMongoQueryableAsync()).FirstOrDefaultAsync(p => p.ShortName == shortName);
         }
     }
 }

@@ -12,13 +12,14 @@ namespace Volo.Abp.Domain.Repositories
     {
         #region Contains
 
-        public static Task<bool> ContainsAsync<T>(
+        public static async Task<bool> ContainsAsync<T>(
             [NotNull] this IReadOnlyRepository<T> repository,
             [NotNull] T item,
             CancellationToken cancellationToken = default)
             where T : class, IEntity
         {
-            return repository.AsyncExecuter.ContainsAsync(repository, item, cancellationToken);
+            var queryable = await repository.GetQueryableAsync();
+            return await repository.AsyncExecuter.ContainsAsync(queryable, item, cancellationToken);
         }
 
         #endregion

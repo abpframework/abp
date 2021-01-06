@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Volo.CmsKit.Admin.Pages;
+using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Admin
 {
@@ -6,9 +8,7 @@ namespace Volo.CmsKit.Admin
     {
         public CmsKitAdminApplicationAutoMapperProfile()
         {
-            /* You can configure your AutoMapper mapping configuration here.
-             * Alternatively, you can split your mapping configurations
-             * into multiple profile classes for a better organization. */
+            CreateMap<Page, PageDto>();
         }
     }
 }
