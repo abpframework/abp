@@ -10,15 +10,20 @@ namespace Volo.Abp.Uow
     public class UnitOfWorkInterceptor : AbpInterceptor, ITransientDependency
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IUnitOfWorkTransactionBehaviourProvider _transactionBehaviourProvider;
         private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
 
-        public UnitOfWorkInterceptor(IUnitOfWorkManager unitOfWorkManager, IOptions<AbpUnitOfWorkDefaultOptions> options)
+        public UnitOfWorkInterceptor(
+            IUnitOfWorkManager unitOfWorkManager,
+            IOptions<AbpUnitOfWorkDefaultOptions> options,
+            IUnitOfWorkTransactionBehaviourProvider transactionBehaviourProvider)
         {
             _unitOfWorkManager = unitOfWorkManager;
+            _transactionBehaviourProvider = transactionBehaviourProvider;
             _defaultOptions = options.Value;
         }
 
-        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (!UnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
             {
@@ -26,7 +31,16 @@ namespace Volo.Abp.Uow
                 return;
             }
 
-            using (var uow = _unitOfWorkManager.Begin(CreateOptions(invocation, unitOfWorkAttribute)))
+            var options = CreateOptions(invocation, unitOfWorkAttribute);
+
+            //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
+            if (_unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
+            {
+                await invocation.ProceedAsync();
+                return;
+            }
+
+            using (var uow = _unitOfWorkManager.Begin(options))
             {
                 await invocation.ProceedAsync();
                 await uow.CompleteAsync();
@@ -42,7 +56,8 @@ namespace Volo.Abp.Uow
             if (unitOfWorkAttribute?.IsTransactional == null)
             {
                 options.IsTransactional = _defaultOptions.CalculateIsTransactional(
-                    autoValue: !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
+                    autoValue: _transactionBehaviourProvider.IsTransactional
+                               ?? !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
                 );
             }
 

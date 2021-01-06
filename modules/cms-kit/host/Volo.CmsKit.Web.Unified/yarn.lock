@@ -59,10 +59,18 @@
     bootstrap "^4.5.0"
     bootstrap-v4-rtl "4.4.1-2"
 
-"@abp/core@~4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@abp/core/-/core-4.1.0.tgz#6bdfa378d44cbf8f611d52dddf0915e5bbc188d5"
-  integrity sha512-HXkKCfh8+Yc9iVBsZy7eSoQbkBSdV1QTRAF8+cPgbEpU4x4WlUOy61xqb2pSLFzX9nSma83WhdDyQkzWDBTRZQ==
+
+"@abp/cms-kit@4.1.0-rc.2":
+  version "4.1.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/cms-kit/-/cms-kit-4.1.0-rc.2.tgz#d2790dd3812214ab0c8eba6e9ad2b8019889e056"
+  integrity sha512-bS632Qp3tN+LHVj505lUgwtu2JVOhSf3W6VAXlYG0pSy8n1ltonDZHNKO6iwvnskdPaAA4wgJPWgqjXigChx0Q==
+  dependencies:
+    "@abp/star-rating-svg" "~4.1.0-rc.2"
+
+"@abp/core@~4.1.0-rc.2":
+  version "4.1.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-4.1.0-rc.2.tgz#d306106a53fa56109751be0099785c94f43be56f"
+  integrity sha512-b0mOYSz8hNgZ/hBeYg8hkthJgE8CLyHNa2NcythPoIW8RR5qHmDtGoFnuFovLvLk7r+M4NWyxXRKEshSszIPyA==
   dependencies:
     "@abp/utils" "^4.1.0"
 
@@ -154,10 +162,18 @@
     "@abp/core" "~4.1.0"
     select2 "^4.0.13"
 
-"@abp/sweetalert@~4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@abp/sweetalert/-/sweetalert-4.1.0.tgz#e5c8cb0c84435a0ca97be62c7b9204bbd05ae23d"
-  integrity sha512-VwIp7VD7zzkRMJw3yu7YOlWbIA/JbLYZeyEpNFMIDxAGYG936tVsmH+aQVTovHF/3+VsYf9Da1JjKymLVHkWRg==
+"@abp/star-rating-svg@~4.1.0-rc.2":
+  version "4.1.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/star-rating-svg/-/star-rating-svg-4.1.0-rc.2.tgz#558c681eb591847b3e8f114cbe610e4331f8a0a2"
+  integrity sha512-LNFCfytarGhqS+91lxYHQKMvlbHMDpjU0Knj8qyefNtQ+rbM2CEspWEtcducim+Qn4brqIHRudUvLI+eEC/0yQ==
+  dependencies:
+    "@abp/jquery" "~4.1.0-rc.2"
+    star-rating-svg "^3.5.0"
+
+"@abp/sweetalert@~4.1.0-rc.2":
+  version "4.1.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/sweetalert/-/sweetalert-4.1.0-rc.2.tgz#cdcaf8e9a33cf218a687fd6a42cfe1c85d89c6b7"
+  integrity sha512-sjQd8TF9oUnaQ1OPTGdVyAfWqSZEk4bRbC/qw2CouEOfRLatzkC0JcmzFLN0f5N1am1RQwkFakpENKH7NqTCvg==
   dependencies:
     "@abp/core" "~4.1.0"
     sweetalert "^2.1.2"
@@ -2320,6 +2336,11 @@ stack-trace@0.0.10:
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/stack-trace/-/stack-trace-0.0.10.tgz#547c70b347e8d32b4e108ea1a2a159e5fdde19c0"
   integrity sha1-VHxws0fo0ytOEI6hoqFZ5f3eGcA=
+
+star-rating-svg@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/star-rating-svg/-/star-rating-svg-3.5.0.tgz#72b147015a433da63153fb607af6d51c7c1ea364"
+  integrity sha1-crFHAVpDPaYxU/tgevbVHHweo2Q=
 
 static-extend@^0.1.1:
   version "0.1.2"

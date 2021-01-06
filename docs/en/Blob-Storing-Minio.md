@@ -43,7 +43,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **EndPoint** (string): URL to object storage service. Please refer to MinIO Client SDK for .NET: https://docs.min.io/docs/dotnet-client-quickstart-guide.html
 * **AccessKey** (string): Access key is the user ID that uniquely identifies your account. 
 * **SecretKey** (string): Secret key is the password to your account.
-* **BucketName** (string): You can specify the bucket name in MinIO. If this is not specified, it uses the name of the BLOB container defined with the `BlogContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)).MinIO is the defacto standard for S3 compatibility, So MinIO has some **rules for naming bucket**.  The [following rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html) apply for naming MinIO buckets:
+* **BucketName** (string): You can specify the bucket name in MinIO. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)).MinIO is the defacto standard for S3 compatibility, So MinIO has some **rules for naming bucket**.  The [following rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html) apply for naming MinIO buckets:
     * Bucket names must be between **3** and **63** characters long.
     * Bucket names can consist only of **lowercase** letters, numbers, dots (.), and hyphens (-).
     * Bucket names must begin and end with a letter or number.

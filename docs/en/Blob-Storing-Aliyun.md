@@ -55,7 +55,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **RoleSessionName** ([NotNull]string): Used to identify the temporary access credentials, it is recommended to use different application users to distinguish.
 * **Policy** (string): Additional permission restrictions. See the [document](https://help.aliyun.com/document_detail/100680.html) for details.
 * **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600.
-* **ContainerName** (string): You can specify the container name in Aliyun. If this is not specified, it uses the name of the BLOB container defined with the `BlogContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)). Please note that Aliyun has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://help.aliyun.com/knowledge_detail/39668.html):
+* **ContainerName** (string): You can specify the container name in Aliyun. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)). Please note that Aliyun has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://help.aliyun.com/knowledge_detail/39668.html):
     * Container names must start or end with a letter or number, and can contain only letters, numbers, and the dash (-) character.
     * Container names Must start and end with lowercase letters and numbers.
     * Container names must be from **3** through **63** characters long.

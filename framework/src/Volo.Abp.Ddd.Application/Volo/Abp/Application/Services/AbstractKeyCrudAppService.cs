@@ -132,7 +132,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TCreateInput"/> to <see cref="TEntity"/> to create a new entity.
+        /// Maps <typeparamref name="TCreateInput"/> to <typeparamref name="TEntity"/> to create a new entity.
         /// It uses <see cref="MapToEntity(TCreateInput)"/> by default.
         /// It can be overriden for custom mapping.
         /// Overriding this has higher priority than overriding the <see cref="MapToEntity(TCreateInput)"/>
@@ -143,7 +143,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TCreateInput"/> to <see cref="TEntity"/> to create a new entity.
+        /// Maps <typeparamref name="TCreateInput"/> to <typeparamref name="TEntity"/> to create a new entity.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overriden for custom mapping.
         /// </summary>
@@ -155,7 +155,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Sets Id value for the entity if <see cref="TKey"/> is <see cref="Guid"/>.
+        /// Sets Id value for the entity if <typeparamref name="TKey"/> is <see cref="Guid"/>.
         /// It's used while creating a new entity.
         /// </summary>
         protected virtual void SetIdForGuids(TEntity entity)
@@ -171,7 +171,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TUpdateInput"/> to <see cref="TEntity"/> to update the entity.
+        /// Maps <typeparamref name="TUpdateInput"/> to <typeparamref name="TEntity"/> to update the entity.
         /// It uses <see cref="MapToEntity(TUpdateInput, TEntity)"/> by default.
         /// It can be overriden for custom mapping.
         /// Overriding this has higher priority than overriding the <see cref="MapToEntity(TUpdateInput, TEntity)"/>
@@ -183,7 +183,7 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TUpdateInput"/> to <see cref="TEntity"/> to update the entity.
+        /// Maps <typeparamref name="TUpdateInput"/> to <typeparamref name="TEntity"/> to update the entity.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overriden for custom mapping.
         /// </summary>

@@ -39,6 +39,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
+using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -47,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         typeof(AbpLocalizationModule),
         typeof(AbpApiVersioningAbstractionsModule),
         typeof(AbpAspNetCoreMvcContractsModule),
-        typeof(AbpUiModule),
+        typeof(AbpUiNavigationModule),
         typeof(AbpGlobalFeaturesModule)
         )]
     public class AbpAspNetCoreMvcModule : AbpModule
