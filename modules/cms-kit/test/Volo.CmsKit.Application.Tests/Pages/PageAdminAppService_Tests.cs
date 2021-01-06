@@ -78,7 +78,7 @@ namespace Volo.CmsKit.Pages
         }
         
         [Fact]
-        public async Task ShouldNotCreateAsync()
+        public async Task ShouldNotCreateExistUrlAsync()
         {
             var dto = new CreatePageInputDto
             {
@@ -110,7 +110,7 @@ namespace Volo.CmsKit.Pages
         }
         
         [Fact]
-        public async Task ShouldNotCreateWithContentAsync()
+        public async Task ShouldNotCreateExistUrlWithContentAsync()
         {
             var dto = new CreatePageInputDto
             {
@@ -148,7 +148,7 @@ namespace Volo.CmsKit.Pages
         }
         
         [Fact]
-        public async Task ShouldNotUpdatePageAsync()
+        public async Task ShouldNotUpdateWithExistUrlAsync()
         {
             var dto = new UpdatePageInputDto
             {
