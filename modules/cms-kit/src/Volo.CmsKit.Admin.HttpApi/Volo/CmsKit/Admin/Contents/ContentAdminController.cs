@@ -4,20 +4,23 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Admin.Contents;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Contents
 {
     [Authorize(CmsKitAdminPermissions.Contents.Default)]
+    [RequiresGlobalFeature(typeof(ContentsFeature))]
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-admin/contents")]
-    public class ContentController : CmsKitAdminController, IContentAdminAppService
+    public class ContentAdminController : CmsKitAdminController, IContentAdminAppService
     {
         protected IContentAdminAppService ContentAdminAppService { get; }
 
-        public ContentController(IContentAdminAppService contentAdminAppService)
+        public ContentAdminController(IContentAdminAppService contentAdminAppService)
         {
             ContentAdminAppService = contentAdminAppService;
         }
