@@ -105,8 +105,6 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.ConfigureByConvention();
 
-                    b.HasQueryFilter(x => !x.IsDeleted); // TODO: Find out why default filter doesn't work.
-
                     b.Property(x => x.EntityType).IsRequired().HasMaxLength(ContentConsts.MaxEntityTypeLength);
                     b.Property(x => x.EntityId).IsRequired().HasMaxLength(ContentConsts.MaxEntityIdLength);
                     b.Property(x => x.Value).IsRequired().HasMaxLength(ContentConsts.MaxValueLength);
