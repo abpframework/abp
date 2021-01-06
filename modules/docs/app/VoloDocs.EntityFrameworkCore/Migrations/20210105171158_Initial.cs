@@ -403,6 +403,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 {
                     DocumentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CommitCount = table.Column<int>(type: "int", nullable: false),
                     UserProfileUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
