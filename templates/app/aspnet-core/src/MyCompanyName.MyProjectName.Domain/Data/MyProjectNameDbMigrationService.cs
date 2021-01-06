@@ -41,7 +41,7 @@ namespace MyCompanyName.MyProjectName.Data
         {
             try
             {
-                if (!await CheckMigrationsAsync())
+                if (!await MigrationsFolderExists())
                 {
                     await AddInitialMigration();
                     return;
@@ -87,7 +87,7 @@ namespace MyCompanyName.MyProjectName.Data
             }
 
             Logger.LogInformation("Successfully completed all database migrations.");
-            Logger.LogInformation("You can stop this process safely, if it doesn't stop itself.");
+            Logger.LogInformation("You can safely end this process...");
         }
 
         private async Task MigrateDatabaseSchemaAsync(Tenant tenant = null)
@@ -108,16 +108,11 @@ namespace MyCompanyName.MyProjectName.Data
             await _dataSeeder.SeedAsync(tenant?.Id);
         }
 
-        private async Task<bool> CheckMigrationsAsync()
+        private async Task<bool> MigrationsFolderExists()
         {
             var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
 
-            if (!Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "migrations")))
-            {
-                return false;
-            }
-
-            return true;
+            return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "migrations"));
         }
 
         private async Task AddInitialMigration()
