@@ -9,11 +9,11 @@ using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Admin.Tags
 {
-    public class TagController : CmsKitAdminController, ITagAdminAppService
+    public class TagAdminController : CmsKitAdminController, ITagAdminAppService
     {
         protected ITagAdminAppService TagAdminAppService { get; }
 
-        public TagController(ITagAdminAppService tagAdminAppService)
+        public TagAdminController(ITagAdminAppService tagAdminAppService)
         {
             TagAdminAppService = tagAdminAppService;
         }
