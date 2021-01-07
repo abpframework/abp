@@ -107,6 +107,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
+            var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
+            if (publicWebSite)
+            {
+                Logger.LogInformation("Public Web Site: yes");
+            }
+
             var mobileApp = GetMobilePreference(commandLineArgs);
             if (mobileApp != MobileApp.None)
             {
@@ -168,6 +174,7 @@ namespace Volo.Abp.Cli.Commands
                     databaseManagementSystem,
                     uiFramework,
                     mobileApp,
+                    publicWebSite,
                     gitHubAbpLocalRepositoryPath,
                     gitHubVoloLocalRepositoryPath,
                     templateSource,
@@ -487,6 +494,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "m";
                 public const string Long = "mobile";
+            }
+
+            public static class PublicWebSite
+            {
+                public const string Long = "with-public-website";
             }
 
             public static class TemplateSource
