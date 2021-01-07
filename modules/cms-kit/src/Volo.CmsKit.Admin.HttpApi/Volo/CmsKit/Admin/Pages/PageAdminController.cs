@@ -62,13 +62,6 @@ namespace Volo.CmsKit.Admin.Pages
             return PageAdminAppService.DeleteAsync(id);
         }
 
-        [HttpGet]
-        [Route("exists/{url}")]
-        public virtual Task<bool> ExistsAsync(string url)
-        {
-            return PageAdminAppService.ExistsAsync(url);
-        }
-
         [HttpPost]
         [Authorize(CmsKitAdminPermissions.Pages.Update)]
         [Route("image/{id}")]

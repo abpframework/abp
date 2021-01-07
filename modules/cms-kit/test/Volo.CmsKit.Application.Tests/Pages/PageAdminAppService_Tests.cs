@@ -87,7 +87,9 @@ namespace Volo.CmsKit.Pages
                 Content = "test-content"
             };
 
-            await Should.ThrowAsync<Exception>(async () => await _pageAdminAppService.CreateAsync(dto));
+            var exception = await Should.ThrowAsync<PageUrlAlreadyExistException>(async () => await _pageAdminAppService.CreateAsync(dto));
+            
+            exception.Code.ShouldBe(CmsKitErrorCodes.Pages.UrlAlreadyExist);
         }
         
         [Fact]
@@ -119,7 +121,7 @@ namespace Volo.CmsKit.Pages
                 Content = "my-test-content"
             };
 
-            await Should.ThrowAsync<Exception>(async () => await _pageAdminAppService.CreateAsync(dto));
+            await Should.ThrowAsync<PageUrlAlreadyExistException>(async () => await _pageAdminAppService.CreateAsync(dto));
         }
 
         [Fact]
@@ -161,22 +163,6 @@ namespace Volo.CmsKit.Pages
             await Should.ThrowAsync<Exception>(async () => await _pageAdminAppService.UpdateAsync(_data.Page_1_Id, dto));
         }
 
-        [Fact]
-        public async Task ShouldBeExistAsync()
-        {
-            var doesExist = await _pageAdminAppService.ExistsAsync(_data.Page_1_Url);
-            
-            doesExist.ShouldBeTrue();
-        }
-        
-        [Fact]
-        public async Task ShouldNotBeExistAsync()
-        {
-            var doesExist = await _pageAdminAppService.ExistsAsync(_data.Page_1_Url+ "+");
-            
-            doesExist.ShouldBeFalse();
-        }
-        
         [Fact]
         public async Task ShouldDeleteAsync()
         {

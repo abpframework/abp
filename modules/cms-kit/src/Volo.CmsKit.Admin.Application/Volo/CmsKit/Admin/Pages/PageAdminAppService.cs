@@ -104,11 +104,6 @@ namespace Volo.CmsKit.Admin.Pages
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
-        public virtual Task<bool> ExistsAsync(string url)
-        {
-            return PageRepository.ExistsAsync(url);
-        }
-
         [Authorize(CmsKitAdminPermissions.Pages.Update)]
         public virtual async Task SetImageAsync(Guid id, RemoteStreamContent content)
         {
@@ -135,7 +130,7 @@ namespace Volo.CmsKit.Admin.Pages
         {
             if (await PageRepository.ExistsAsync(url))
             {
-                throw new UserFriendlyException("Url exist");
+                throw new PageUrlAlreadyExistException(url);
             }
         }
     }
