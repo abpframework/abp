@@ -142,8 +142,6 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
         private async Task<TDbContext> CreateDbContextAsync(IUnitOfWork unitOfWork)
         {
-            Logger.LogDebug($"Creating a new DbContext of type {typeof(TDbContext).FullName}");
-
             return unitOfWork.Options.IsTransactional
                 ? await CreateDbContextWithTransactionAsync(unitOfWork)
                 : unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
