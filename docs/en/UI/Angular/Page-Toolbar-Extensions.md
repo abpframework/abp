@@ -4,7 +4,7 @@
 
 Page toolbar extension system allows you to add a new action to the toolbar of a page. A "Click Me" action was added to the user management page below:
 
-![Page Toolbar Extension Example: "Click Me!" Action](images/user-page-toolbar-extension-click-me-ng.png)
+<img alt="Page Toolbar Extension Example: 'Click Me!' Action" src="./images/toolbar-action-extensions---click-me.gif" width="800px" style="max-width:100%">
 
 You can take any action (open a modal, make an HTTP API call, redirect to another page... etc) by writing your custom code. You can also access to page data (the main record, usually an entity list) in your code. Additionally, you can pass in custom components instead of using the default button.
 
@@ -17,10 +17,14 @@ In this example, we will add a "Click Me!" action and log `userName` of all user
 The following code prepares a constant named `identityToolbarActionContributors`, ready to be imported and used in your root module:
 
 ```js
-// toolbar-action-contributors.ts
+// src/app/toolbar-action-contributors.ts
 
-import { ToolbarActionList, ToolbarAction } from '@abp/ng.theme.shared/extensions';
-import { IdentityToolbarActionContributors, IdentityUserDto } from '@volo/abp.ng.identity';
+import {
+  eIdentityComponents,
+  IdentityToolbarActionContributors,
+  IdentityUserDto,
+} from '@abp/ng.identity';
+import { ToolbarAction, ToolbarActionList } from '@abp/ng.theme.shared/extensions';
 
 const logUserNames = new ToolbarAction<IdentityUserDto[]>({
   text: 'Click Me!',
@@ -31,9 +35,7 @@ const logUserNames = new ToolbarAction<IdentityUserDto[]>({
   // See ToolbarActionOptions in API section for all options
 });
 
-export function logUserNamesContributor(
-  actionList: ToolbarActionList<IdentityUserDto[]>
-) {
+export function logUserNamesContributor(actionList: ToolbarActionList<IdentityUserDto[]>) {
   actionList.addHead(logUserNames);
 }
 
@@ -49,33 +51,30 @@ export const identityToolbarActionContributors: IdentityToolbarActionContributor
 
 The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addHead` method, which adds the given value to the beginning of the list. You may find [all available methods here](../Common/Utils/Linked-List.md).
 
-> **Important Note:** AoT compilation does not support function calls in decorator metadata. This is why we have defined `logUserNamesContributor` as an exported function declaration here. Please do not forget exporting your contributor callbacks and forget about lambda functions (a.k.a. arrow functions). Please refer to [AoT metadata errors](https://angular.io/guide/aot-metadata-errors#function-calls-not-supported) for details.
-
 ### Step 2. Import and Use Toolbar Action Contributors
 
 Import `identityToolbarActionContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below:
 
 ```js
+// src/app/app-routing.module.ts
+
+// other imports
 import { identityToolbarActionContributors } from './toolbar-action-contributors';
 
 const routes: Routes = [
+  // other routes
+
   {
-    path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      {
-        path: 'identity',
-        loadChildren: () =>
-          import('@volo/abp.ng.identity').then(m =>
-            m.IdentityModule.forLazy({
-              toolbarActionContributors: identityToolbarActionContributors,
-            }),
-          ),
-      },
-      // other child routes
-    ],
-    // other routes
-  }
+    path: 'identity',
+    loadChildren: () =>
+      import('@abp/ng.identity').then(m =>
+        m.IdentityModule.forLazy({
+          toolbarActionContributors: identityToolbarActionContributors,
+        })
+      ),
+  },
+
+  // other routes
 ];
 ```
 
@@ -85,22 +84,22 @@ That is it, `logUserNames` toolbar action will be added as the first action on t
 
 In this example, we will add a custom "Click Me!" button and log `userName` of all users in the user management page of the [Identity Module](../../Modules/Identity.md) to the console.
 
+<img alt="Page Toolbar Extension Example: Custom Component" src="./images/toolbar-action-extensions---custom-component.gif" width="800px" style="max-width:100%">
+
 ### Step 1. Create A Custom Component
 
 We need to have a component before we can pass it to the toolbar action contributors:
 
 ```js
-// click-me-button.component.ts
+// src/app/click-me-button.component.ts
 
-import { Component, Inject } from '@angular/core';
+import { IdentityUserDto } from '@abp/ng.identity';
 import { ActionData, EXTENSIONS_ACTION_DATA } from '@abp/ng.theme.shared/extensions';
-import { IdentityUserDto } from '@volo/abp.ng.identity';
+import { Component, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-click-me-button',
-  template: `
-    <button class="btn btn-warning" (click)="handleClick()">Click Me!</button>
-  `,
+  template: `<button class="btn btn-warning" (click)="handleClick()">Click Me!</button>`,
 })
 export class ClickMeButtonComponent {
   constructor(
@@ -112,6 +111,7 @@ export class ClickMeButtonComponent {
     this.data.record.forEach(user => console.log(user.userName));
   }
 }
+
 ```
 
 Here, `EXTENSIONS_ACTION_DATA` token provides us the context from the page toolbar. Therefore, we are able to reach the page data via `record`, which is an array of users, i.e. `IdentityUserDto[]`.
@@ -123,11 +123,14 @@ Here, `EXTENSIONS_ACTION_DATA` token provides us the context from the page toolb
 The following code prepares a constant named `identityToolbarActionContributors`, ready to be imported and used in your root module. When `ToolbarComponent` is used instead of `ToolbarAction`, we can pass a component in:
 
 ```js
-// toolbar-action-contributors.ts
+// src/app/toolbar-action-contributors.ts
 
+import {
+  eIdentityComponents,
+  IdentityToolbarActionContributors,
+  IdentityUserDto,
+} from '@abp/ng.identity';
 import { ToolbarActionList, ToolbarComponent } from '@abp/ng.theme.shared/extensions';
-import { IdentityUserDto } from '@volo/abp.ng.identity';
-import { IdentityToolbarActionContributors } from '@volo/abp.ng.identity/config';
 import { ClickMeButtonComponent } from './click-me-button.component';
 
 const logUserNames = new ToolbarComponent<IdentityUserDto[]>({
@@ -135,9 +138,7 @@ const logUserNames = new ToolbarComponent<IdentityUserDto[]>({
   // See ToolbarActionOptions in API section for all options
 });
 
-export function logUserNamesContributor(
-  actionList: ToolbarActionList<IdentityUserDto[]>
-) {
+export function logUserNamesContributor(actionList: ToolbarActionList<IdentityUserDto[]>) {
   actionList.addHead(logUserNames);
 }
 
@@ -153,53 +154,34 @@ export const identityToolbarActionContributors: IdentityToolbarActionContributor
 
 The list of actions, conveniently named as `actionList`, is a **doubly linked list**. That is why we have used the `addHead` method, which adds the given value to the beginning of the list. You may find [all available methods here](../Common/Utils/Linked-List.md).
 
-> **Important Note 1:** AoT compilation does not support function calls in decorator metadata. This is why we have defined `logUserNamesContributor` as an exported function declaration here. Please do not forget exporting your contributor callbacks and forget about lambda functions (a.k.a. arrow functions). Please refer to [AoT metadata errors](https://angular.io/guide/aot-metadata-errors#function-calls-not-supported) for details.
-
-> **Important Note 2:** Please use one of the following if Ivy is not enabled in your project. Otherwise, you will get an "Expression form not supported." error.
-
-```js
-export const identityToolbarActionContributors: IdentityToolbarActionContributors = {
-  'Identity.UsersComponent': [ logUserNamesContributor ],
-};
-
-/* OR */
-
-const identityContributors: IdentityToolbarActionContributors = {};
-identityContributors[eIdentityComponents.Users] = [ logUserNamesContributor ];
-export const identityToolbarActionContributors = identityContributors;
-```
-
 ### Step 3. Import and Use Toolbar Action Contributors
 
-Import `identityToolbarActionContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below. If Ivy is not enabled in your project, do not forget putting `ClickMeButtonComponent` into `entryComponents`:
+Import `identityToolbarActionContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below.
 
 ```js
+// src/app/app-routing.module.ts
+
+// other imports
 import { identityToolbarActionContributors } from './toolbar-action-contributors';
 
 const routes: Routes = [
+  // other routes
+
   {
-    path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      {
-        path: 'identity',
-        loadChildren: () =>
-          import('@volo/abp.ng.identity').then(m =>
-            m.IdentityModule.forLazy({
-              toolbarActionContributors: identityToolbarActionContributors,
-            }),
-          ),
-      },
-      // other child routes
-    ],
-    // other routes
-  }
+    path: 'identity',
+    loadChildren: () =>
+      import('@abp/ng.identity').then(m =>
+        m.IdentityModule.forLazy({
+          toolbarActionContributors: identityToolbarActionContributors,
+        })
+      ),
+  },
+
+  // other routes
 ];
 ```
 
 That is it, `logUserNames` toolbar action will be added as the first action on the page toolbar in the users page (`UsersComponent`) of the `IdentityModule` and it will be triggered by a custom button, i.e. `ClickMeButtonComponent`. Please note that **component projection is not limited to buttons** and you may use other UI components.
-
-![Page Toolbar Extension Example: Custom "Click Me!" Button](images/user-page-toolbar-extension-custom-click-me-ng.png)
 
 ## How to Place a Custom Modal and Trigger It by Toolbar Actions
 

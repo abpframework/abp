@@ -71,9 +71,11 @@
                 });
             };
 
-            $('#filter').keyup(function (e) {
+            $('#filter').on('input', (e) => {
                 filterDocumentItems(e.target.value);
+            })
 
+            $('#filter').keyup(function (e) {
                 if (e.key === 'Enter') {
                     gotoFilteredDocumentIfThereIsOnlyOne();
                 }

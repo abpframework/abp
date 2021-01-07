@@ -27,6 +27,14 @@ namespace Volo.Abp.TextTemplating
                     isLayout: true
                 ).WithVirtualFilePath("/SampleTemplates/TestTemplateLayout1.tpl", true)
             );
+            
+            context.Add(
+                new TemplateDefinition(
+                    TestTemplates.ShowDecimalNumber,
+                    localizationResource: typeof(TestLocalizationSource),
+                    layout: TestTemplates.TestTemplateLayout1
+                ).WithVirtualFilePath("/SampleTemplates/ShowDecimalNumber.tpl", true)
+            );
         }
     }
 }

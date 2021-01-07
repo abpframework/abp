@@ -123,10 +123,9 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
 
             sb.AppendLine("{");
 
-            foreach (var prm in parameters)
-            {
-                sb.AppendLine($"{new string(' ', indent)}  '{prm.Name}': {GetParamNameInJsFunc(prm)}");
-            }
+            sb.AppendLine(parameters
+                .Select(prm => $"{new string(' ', indent)}  '{prm.Name}': {GetParamNameInJsFunc(prm)}")
+                .JoinAsString(", " + Environment.NewLine));
 
             sb.Append(new string(' ', indent) + "}");
 

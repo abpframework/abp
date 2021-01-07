@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -35,6 +39,19 @@ namespace MyCompanyName.MyProjectName.Data
 
         public async Task MigrateAsync()
         {
+            try
+            {
+                if (!await MigrationsFolderExists())
+                {
+                    await AddInitialMigration();
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogWarning("Couldn't determinate if any migrations exist : " + e.Message);
+            }
+
             Logger.LogInformation("Started database migrations...");
 
             await MigrateDatabaseSchemaAsync();
@@ -69,7 +86,8 @@ namespace MyCompanyName.MyProjectName.Data
                 Logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
             }
 
-            Logger.LogInformation("Successfully completed database migrations.");
+            Logger.LogInformation("Successfully completed all database migrations.");
+            Logger.LogInformation("You can safely end this process...");
         }
 
         private async Task MigrateDatabaseSchemaAsync(Tenant tenant = null)
@@ -88,6 +106,77 @@ namespace MyCompanyName.MyProjectName.Data
             Logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
 
             await _dataSeeder.SeedAsync(tenant?.Id);
+        }
+
+        private async Task<bool> MigrationsFolderExists()
+        {
+            var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
+
+            return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "migrations"));
+        }
+
+        private async Task AddInitialMigration()
+        {
+            Logger.LogInformation("Creating initial migration...");
+
+            string argumentPrefix;
+            string fileName;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                argumentPrefix = "-c";
+                fileName = "/bin/bash";
+            }
+            else
+            {
+                argumentPrefix = "/C";
+                fileName = "cmd.exe";
+            }
+
+            var procStartInfo = new ProcessStartInfo( fileName,
+                $"{argumentPrefix} \"abp create-migration-and-run-migrator {GetDbMigrationsProjectFolderPath()}\""
+            );
+
+            try
+            {
+                Process.Start(procStartInfo);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Couldn't run ABP CLI...");
+            }
+        }
+
+        private static string GetDbMigrationsProjectFolderPath()
+        {
+            var slnDirectoryPath = GetSolutionDirectoryPath();
+
+            if (slnDirectoryPath == null)
+            {
+                throw new Exception("Solution folder not found!");
+            }
+
+            var srcDirectoryPath = Path.Combine(slnDirectoryPath, "src");
+
+            return Directory.GetDirectories(srcDirectoryPath)
+                .FirstOrDefault(d => d.EndsWith(".DbMigrations"));
+        }
+
+        private static string GetSolutionDirectoryPath()
+        {
+            var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+
+            while (Directory.GetParent(currentDirectory.FullName) != null)
+            {
+                currentDirectory = Directory.GetParent(currentDirectory.FullName);
+
+                if (Directory.GetFiles(currentDirectory.FullName).FirstOrDefault(f => f.EndsWith(".sln")) != null)
+                {
+                    return currentDirectory.FullName;
+                }
+            }
+
+            return null;
         }
     }
 }

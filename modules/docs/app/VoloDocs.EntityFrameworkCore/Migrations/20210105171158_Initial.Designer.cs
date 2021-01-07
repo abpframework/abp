@@ -11,7 +11,7 @@ using VoloDocs.EntityFrameworkCore;
 namespace VoloDocs.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(VoloDocsDbContext))]
-    [Migration("20201104131104_Initial")]
+    [Migration("20210105171158_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.0-rc.2.20475.6");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
@@ -783,6 +783,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
 
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CommitCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserProfileUrl")
                         .HasColumnType("nvarchar(max)");
