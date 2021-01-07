@@ -9,26 +9,19 @@ namespace Volo.CmsKit.Public.Tags
 {
     public class TagAppService : CmsKitAppServiceBase, ITagAppService
     {
-        protected readonly ITagManager TagManager;
         protected readonly ITagRepository TagRepository;
-        protected readonly IEntityTagRepository EntityTagRepository;
 
-        public TagAppService(
-            ITagManager tagManager,
-            ITagRepository tagRepository,
-            IEntityTagRepository entityTagRepository)
+        public TagAppService(ITagRepository tagRepository)
         {
-            TagManager = tagManager;
             TagRepository = tagRepository;
-            EntityTagRepository = entityTagRepository;
         }
 
-        public virtual async Task<List<TagDto>> GetAllRelatedTagsAsync(GetRelatedTagsInput input)
+        public virtual async Task<List<TagDto>> GetAllRelatedTagsAsync(string entityType, string entityId)
         {
             var entities = await TagRepository.GetAllRelatedTagsAsync(
-                                                    input.EntityType,
-                                                    input.EntityId,
-                                                    CurrentTenant.Id);
+                entityType,
+                entityId,
+                CurrentTenant.Id);
 
             return ObjectMapper.Map<List<Tag>, List<TagDto>>(entities);
         }
