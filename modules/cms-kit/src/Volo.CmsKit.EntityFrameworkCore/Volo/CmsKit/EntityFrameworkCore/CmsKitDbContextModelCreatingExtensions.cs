@@ -41,8 +41,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.ConfigureByConvention();
                     b.ConfigureAbpUser();
 
-                    b.HasIndex(x => new {x.TenantId, x.UserName});
-                    b.HasIndex(x => new {x.TenantId, x.Email});
+                    b.HasIndex(x => new { x.TenantId, x.UserName });
+                    b.HasIndex(x => new { x.TenantId, x.Email });
                 });
             }
 
@@ -93,7 +93,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     r.Property(x => x.EntityType).IsRequired().HasMaxLength(RatingConsts.MaxEntityTypeLength);
                     r.Property(x => x.EntityId).IsRequired().HasMaxLength(RatingConsts.MaxEntityIdLength);
 
-                    r.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId, x.CreatorId});
+                    r.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId, x.CreatorId });
                 });
             }
 
@@ -109,7 +109,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.EntityId).IsRequired().HasMaxLength(ContentConsts.MaxEntityIdLength);
                     b.Property(x => x.Value).IsRequired().HasMaxLength(ContentConsts.MaxValueLength);
 
-                    b.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId});
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
                 });
             }
 
@@ -124,7 +124,11 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.EntityType).IsRequired().HasMaxLength(TagConsts.MaxEntityTypeLength);
                     b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength);
 
-                    b.HasIndex(x => new {x.TenantId, x.Name});
+                    b.HasIndex(x => new
+                    {
+                        x.TenantId,
+                        x.Name
+                    });
                 });
 
                 builder.Entity<EntityTag>(b =>
@@ -133,12 +137,12 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.ConfigureByConvention();
 
-                    b.HasKey(x => new {x.EntityId, x.TagId});
+                    b.HasKey(x => new { x.EntityId, x.TagId });
 
                     b.Property(x => x.EntityId).IsRequired();
                     b.Property(x => x.TagId).IsRequired();
 
-                    b.HasIndex(x => new {x.TenantId, x.EntityId, x.TagId});
+                    b.HasIndex(x => new { x.TenantId, x.EntityId, x.TagId });
                 });
             }
 
@@ -154,7 +158,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.Url).IsRequired().HasMaxLength(PageConsts.MaxUrlLength);
                     b.Property(x => x.Description).HasMaxLength(PageConsts.MaxDescriptionLength);
 
-                    b.HasIndex(x => new {x.TenantId, x.Url});
+                    b.HasIndex(x => new { x.TenantId, x.Url });
                 });
             }
 

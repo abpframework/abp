@@ -12,7 +12,7 @@ import { VALIDATION_ERROR_TEMPLATE, VALIDATION_TARGET_SELECTOR } from '@ngx-vali
   imports: [BaseThemeBasicModule],
 })
 export class ThemeBasicTestingModule {
-  static forRoot(): ModuleWithProviders<ThemeBasicTestingModule> {
+  static withConfig(): ModuleWithProviders<ThemeBasicTestingModule> {
     return {
       ngModule: ThemeBasicTestingModule,
       providers: [

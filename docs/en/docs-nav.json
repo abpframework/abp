@@ -689,7 +689,7 @@
               "items": [
                 {
                   "text": "SubmitButton",
-                  "path": "UI/Blazor/SubmitButton.md"
+                  "path": "UI/Blazor/Components/SubmitButton.md"
                 }
               ]
             },
