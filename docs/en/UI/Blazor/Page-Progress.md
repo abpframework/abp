@@ -1,30 +1,25 @@
 # Blazor UI: Page Progress
 
-Page progress is the newest component introduced with Blazorise and ABP Framework. It is used to show scoped page progress on top of the page and to indicate to the user that currently a long running process is in the work. By default you don't need to do anything to show the progress indicator, as all the work is done automatically by the ABP Framework internals. This means that all calls to the ABP backend(through Rest API) will activate page progress and show the loading indicator.
+Page Progress is used to show a progress bar indicator on top of the page and to show to the user that currently a long running process is in the work.
 
-This doesn't mean that you don't have the control over it. On the contrary. If you also want to show progress for your own processes, it is really easy to do. All you have to do is to use `IUiPageProgressService`.
+By default you don't need to do anything to show the progress indicator, as all the work is done automatically by the ABP Framework internals. This means that all calls to the ABP backend (through your HTTP API) will activate page progress and show the loading indicator.
 
-To use `IUiPageProgressService` you need to inject it into your own Blazor component or page. You have two options of injection.
-
-1. Parameter injection
-2. Constructor injection
-
-Whichever you chose the end result is the same. In this guide we're going to use parameter injection. So let us begin.
+This doesn't mean that you don't have the control over it. On the contrary, if you want to show progress for your own processes, it is really easy to do. All you have to do is to use inject and use the `IUiPageProgressService`.
 
 ## Example
 
-First, inject the `IUiPageProgressService`
+First, inject the `IUiPageProgressService` into your page/component.
 
 ```cs
 @inject IUiPageProgressService pageProgressService
 ```
 
-Next, all you have to do is invoke the `Go` method in `IUiPageProgressService`. It's that simple.
+Next, invoke the `Go` method in `IUiPageProgressService`. It's that simple:
 
 ```cs
 Task OnClick()
 {
-  return pageProgressService.Go(null);
+    return pageProgressService.Go(null);
 }
 ```
 
@@ -53,7 +48,7 @@ pageProgressService.Go(25)
 1. `null` - show _indeterminate_ indicator
 2. `>= 0` and `<= 100` - show the regular _percentage_ progress
 
-## Hiding progress
+### Hiding progress
 
 To hide the progress just set the actual values to something other then the _Valid value_.
 
