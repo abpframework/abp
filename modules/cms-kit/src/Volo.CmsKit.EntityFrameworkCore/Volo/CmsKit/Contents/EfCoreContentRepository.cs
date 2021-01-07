@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -20,7 +22,6 @@ namespace Volo.CmsKit.Contents
             CancellationToken cancellationToken = default)
         {
             return GetAsync(x =>
-                    !x.IsDeleted &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,
@@ -35,7 +36,6 @@ namespace Volo.CmsKit.Contents
             CancellationToken cancellationToken = default)
         {
             return FindAsync(x =>
-                    !x.IsDeleted &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,
@@ -43,9 +43,27 @@ namespace Volo.CmsKit.Contents
                 );
         }
 
-        public Task DeleteAsync(string entityType, string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public Task DeleteAsync(
+            string entityType,
+            string entityId,
+            Guid? tenantId = null,
+            CancellationToken cancellationToken = default)
         {
             return DeleteAsync(x =>
+                        x.EntityType == entityType &&
+                        x.EntityId == entityId &&
+                        x.TenantId == tenantId,
+                        cancellationToken: GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<bool> ExistsAsync(
+            [NotNull] string entityType,
+            [NotNull] string entityId,
+            Guid? tenantId = null,
+            CancellationToken cancellationToken = default)
+        {
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.AnyAsync(x =>
                         x.EntityType == entityType &&
                         x.EntityId == entityId &&
                         x.TenantId == tenantId,
