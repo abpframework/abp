@@ -59,6 +59,10 @@ namespace Volo.Abp.Cli.Commands
             {
                 Logger.LogInformation("Template: " + template);
             }
+            else
+            {
+                template = (await TemplateInfoProvider.GetDefaultAsync()).Name;
+            }
 
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
             if (version != null)
@@ -198,7 +202,8 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
-            if (AppTemplateBase.IsAppTemplate(template ?? (await TemplateInfoProvider.GetDefaultAsync()).Name))
+
+            if (AppTemplateBase.IsAppTemplate(template))
             {
                 var isCommercial = template == AppProTemplate.TemplateName;
                 OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
