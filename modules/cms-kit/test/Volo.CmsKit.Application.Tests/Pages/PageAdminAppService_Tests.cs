@@ -121,7 +121,9 @@ namespace Volo.CmsKit.Pages
                 Content = "my-test-content"
             };
 
-            await Should.ThrowAsync<PageUrlAlreadyExistException>(async () => await _pageAdminAppService.CreateAsync(dto));
+            var exception = await Should.ThrowAsync<PageUrlAlreadyExistException>(async () => await _pageAdminAppService.CreateAsync(dto));
+            
+            exception.Code.ShouldBe(CmsKitErrorCodes.Pages.UrlAlreadyExist);
         }
 
         [Fact]
