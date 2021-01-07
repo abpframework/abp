@@ -24,6 +24,8 @@ namespace Volo.Abp.EntityFrameworkCore
             });
 
             context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
+            context.Services.TryAddTransient(typeof(IDbContextOptionsProvider<>), typeof(AbpDbContextOptionsProvider<>));
+            context.Services.TryAddTransient(typeof(AbpServiceBasedDbContextProvider<>), typeof(AbpServiceBasedDbContextProvider<>));
         }
     }
 }

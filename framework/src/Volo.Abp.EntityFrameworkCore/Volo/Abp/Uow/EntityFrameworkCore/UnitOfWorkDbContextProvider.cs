@@ -16,22 +16,25 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
     //TODO: Implement logic in DefaultDbContextResolver.Resolve in old ABP.
 
     public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
-        where TDbContext : IEfCoreDbContext
+        where TDbContext : AbpDbContext<TDbContext>
     {
         public ILogger<UnitOfWorkDbContextProvider<TDbContext>> Logger { get; set; }
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        private readonly IDbContextOptionsProvider<TDbContext> _dbContextOptionsProvider;
 
         public UnitOfWorkDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            IDbContextOptionsProvider<TDbContext> dbContextOptionsProvider)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
             _cancellationTokenProvider = cancellationTokenProvider;
+            _dbContextOptionsProvider = dbContextOptionsProvider;
 
             Logger = NullLogger<UnitOfWorkDbContextProvider<TDbContext>>.Instance;
         }
@@ -137,7 +140,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         {
             return unitOfWork.Options.IsTransactional
                 ? CreateDbContextWithTransaction(unitOfWork)
-                : unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                : GetDbContextFromServiceProvider(unitOfWork.ServiceProvider);
         }
 
         private async Task<TDbContext> CreateDbContextAsync(IUnitOfWork unitOfWork)
@@ -146,7 +149,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             return unitOfWork.Options.IsTransactional
                 ? await CreateDbContextWithTransactionAsync(unitOfWork)
-                : unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                : await GetDbContextFromServiceProviderAsync(unitOfWork.ServiceProvider);
         }
 
         private TDbContext CreateDbContextWithTransaction(IUnitOfWork unitOfWork)
@@ -156,7 +159,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             if (activeTransaction == null)
             {
-                var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                var dbContext = GetDbContextFromServiceProvider(unitOfWork.ServiceProvider);
 
                 var dbtransaction = unitOfWork.Options.IsolationLevel.HasValue
                     ? dbContext.Database.BeginTransaction(unitOfWork.Options.IsolationLevel.Value)
@@ -176,7 +179,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             {
                 DbContextCreationContext.Current.ExistingConnection = activeTransaction.DbContextTransaction.GetDbTransaction().Connection;
 
-                var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                var dbContext = GetDbContextFromServiceProvider(unitOfWork.ServiceProvider);
 
                 if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
@@ -200,7 +203,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             if (activeTransaction == null)
             {
-                var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                var dbContext = await GetDbContextFromServiceProviderAsync(unitOfWork.ServiceProvider);;
 
                 var dbTransaction = unitOfWork.Options.IsolationLevel.HasValue
                     ? await dbContext.Database.BeginTransactionAsync(unitOfWork.Options.IsolationLevel.Value, GetCancellationToken())
@@ -220,7 +223,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             {
                 DbContextCreationContext.Current.ExistingConnection = activeTransaction.DbContextTransaction.GetDbTransaction().Connection;
 
-                var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                var dbContext = await GetDbContextFromServiceProviderAsync(unitOfWork.ServiceProvider);
 
                 if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
@@ -235,6 +238,16 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
                 return dbContext;
             }
+        }
+
+        private TDbContext GetDbContextFromServiceProvider(IServiceProvider serviceProvider)
+        {
+            return ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider, _dbContextOptionsProvider.GetDbContextOptions());
+        }
+
+        private async Task<TDbContext> GetDbContextFromServiceProviderAsync(IServiceProvider serviceProvider)
+        {
+            return ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider,  await _dbContextOptionsProvider.GetDbContextOptionsAsync());
         }
 
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
