@@ -10,10 +10,8 @@
     <RepositoryUrl>https://github.com/abpframework/abp/</RepositoryUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-    <!-- https://github.com/dotnet/sourcelink -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-
+    <!-- Include symbol files (*.pdb) in the built .nupkg -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
