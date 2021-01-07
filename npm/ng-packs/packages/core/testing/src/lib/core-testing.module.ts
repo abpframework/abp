@@ -1,9 +1,10 @@
 import {
   ABP,
   BaseCoreModule,
-  coreOptionsFactory,
   CORE_OPTIONS,
+  coreOptionsFactory,
   LIST_QUERY_DEBOUNCE_TIME,
+  LOADER_DELAY,
   PermissionService,
   RestService,
 } from '@abp/ng.core';
@@ -51,6 +52,10 @@ export class CoreTestingModule {
         {
           provide: RestService,
           useClass: MockRestService,
+        },
+        {
+          provide: LOADER_DELAY,
+          useValue: 0,
         },
         provideRoutes(routes),
       ],

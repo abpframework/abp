@@ -225,7 +225,7 @@ abp get-source Volo.Blogging --local-framework-ref --abp-path D:\GitHub\abp
 * `--output-folder` or `-o`: Specifies the directory that source code will be downloaded in. If not specified, current directory is used.
 * `--version` or `-v`: Specifies the version of the  source code that will be downloaded. If not specified, latest version is used.
 * `--preview`: If no version option is specified, this option specifies if latest [preview version](Previews.md) will be used instead of latest stable version.
-* `-- local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
+* `--local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
 
 ### generate-proxy
 
@@ -426,3 +426,4 @@ abp bundle [options]
 * ```--force``` or ```-f```: Forces to build project before generating references.
 
 `bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
+

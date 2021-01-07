@@ -22,8 +22,7 @@ namespace Volo.Abp.RabbitMQ
 
         public virtual IConnection Get(string connectionName = null)
         {
-            connectionName = connectionName
-                             ?? RabbitMqConnections.DefaultConnectionName;
+            connectionName ??= RabbitMqConnections.DefaultConnectionName;
 
             return Connections.GetOrAdd(
                 connectionName,
