@@ -8,9 +8,9 @@ namespace Volo.CmsKit.Contents
 {
     public class Content : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
-        public virtual Guid? TenantId { get; set; }
+        public virtual Guid? TenantId { get; protected set; }
         
-        public virtual string EntityType { get; set; }
+        public virtual string EntityType { get; protected set; }
         
         public virtual string EntityId { get; set; }
         
