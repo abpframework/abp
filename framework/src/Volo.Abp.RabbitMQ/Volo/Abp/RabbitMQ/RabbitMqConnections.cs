@@ -9,7 +9,7 @@ namespace Volo.Abp.RabbitMQ
     public class RabbitMqConnections : Dictionary<string, ConnectionFactory>
     {
         public const string DefaultConnectionName = "Default";
-        
+
         [NotNull]
         public ConnectionFactory Default
         {
@@ -19,7 +19,7 @@ namespace Volo.Abp.RabbitMQ
 
         public RabbitMqConnections()
         {
-            Default = new ConnectionFactory();
+            Default = new ConnectionFactory() { DispatchConsumersAsync = true };
         }
 
         public ConnectionFactory GetOrDefault(string connectionName)
