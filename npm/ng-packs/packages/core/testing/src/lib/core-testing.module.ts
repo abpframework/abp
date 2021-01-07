@@ -1,8 +1,8 @@
 import {
   ABP,
   BaseCoreModule,
-  CORE_OPTIONS,
   coreOptionsFactory,
+  CORE_OPTIONS,
   LIST_QUERY_DEBOUNCE_TIME,
   LOADER_DELAY,
   PermissionService,
@@ -34,7 +34,10 @@ export class CoreTestingModule {
         { provide: APP_BASE_HREF, useValue: baseHref },
         {
           provide: 'CORE_OPTIONS',
-          useValue: options,
+          useValue: {
+            skipGetAppConfiguration: true,
+            ...options,
+          },
         },
         {
           provide: CORE_OPTIONS,
