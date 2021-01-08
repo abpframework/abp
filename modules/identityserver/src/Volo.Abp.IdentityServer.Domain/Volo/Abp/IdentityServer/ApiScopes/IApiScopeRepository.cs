@@ -28,6 +28,10 @@ namespace Volo.Abp.IdentityServer.ApiScopes
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+        Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default
+        );
 
         Task<bool> CheckNameExistAsync(
             string name,

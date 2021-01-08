@@ -52,6 +52,15 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .PageBy<ApiScope, IMongoQueryable<ApiScope>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await AsyncExecuter.LongCountAsync((await GetMongoQueryableAsync(cancellationToken))
+                      .WhereIf(!filter.IsNullOrWhiteSpace(),
+                         x => x.Name.Contains(filter) ||
+                         x.Description.Contains(filter) ||
+                         x.DisplayName.Contains(filter)),
+                       GetCancellationToken(cancellationToken));
+        }
 
         public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {

@@ -21,13 +21,24 @@ namespace Volo.Abp.IdentityServer.MongoDB
         public virtual async Task<List<IdentityResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
-                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                         x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||
                          x.DisplayName.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityResource.Name))
                 .As<IMongoQueryable<IdentityResource>>()
                 .PageBy<IdentityResource, IMongoQueryable<IdentityResource>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await AsyncExecuter.LongCountAsync((await GetMongoQueryableAsync(cancellationToken))
+                      .WhereIf(!filter.IsNullOrWhiteSpace(),
+                         x => x.Name.Contains(filter) ||
+                         x.Description.Contains(filter) ||
+                         x.DisplayName.Contains(filter)),
+                       GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<IdentityResource> FindByNameAsync(
