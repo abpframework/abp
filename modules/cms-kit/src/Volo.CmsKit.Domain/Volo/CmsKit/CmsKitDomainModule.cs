@@ -1,6 +1,11 @@
 ﻿using Volo.Abp.Domain;
+using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
+using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Localization;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit
@@ -28,7 +33,20 @@ namespace Volo.CmsKit
                 options.Reactions.AddOrReplace(StandardReactions.HeartBroken);
                 options.Reactions.AddOrReplace(StandardReactions.Rocket);
                 options.Reactions.AddOrReplace(StandardReactions.Pray);
+
+                if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+                {
+                    if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+                    {
+                        options.Tags.AddOrReplace(typeof(Page).Name, L("Page"));
+                    }
+                }
             });
+        }
+
+        private static LocalizableString L(string name)
+        {
+            return LocalizableString.Create<CmsKitResource>(name);
         }
     }
 }

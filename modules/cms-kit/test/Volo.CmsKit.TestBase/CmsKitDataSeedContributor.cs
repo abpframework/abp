@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -29,6 +30,8 @@ namespace Volo.CmsKit
         private readonly IEntityTagRepository _entityTagRepository;
         private readonly ITagManager _tagManager;
         private readonly IPageRepository _pageRepository;
+        private readonly IOptions<CmsKitOptions> _options;
+
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
             ICmsUserRepository cmsUserRepository,
@@ -40,7 +43,8 @@ namespace Volo.CmsKit
             IContentRepository contentRepository,
             ITagManager tagManager, 
             IEntityTagRepository entityTagRepository, 
-            IPageRepository pageRepository)
+            IPageRepository pageRepository,
+            IOptions<CmsKitOptions> options)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -53,6 +57,7 @@ namespace Volo.CmsKit
             _tagManager = tagManager;
             _entityTagRepository = entityTagRepository;
             _pageRepository = pageRepository;
+            _options = options;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -72,7 +77,16 @@ namespace Volo.CmsKit
                 await SeedTagsAsync();
 
                 await SeedPagesAsync();
+
+                await ConfigureCmsKitOptionsAsync();
             }
+        }
+
+        private Task ConfigureCmsKitOptionsAsync()
+        {
+            _options.Value.Tags.AddOrReplace(_cmsKitTestData.TagDefinition_1_EntityType);
+
+            return Task.CompletedTask;
         }
 
         private async Task SeedUsersAsync()

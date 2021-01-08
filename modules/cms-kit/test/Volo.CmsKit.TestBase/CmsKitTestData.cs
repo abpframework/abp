@@ -59,5 +59,7 @@ namespace Volo.CmsKit
         public Guid Page_2_Id { get; } = Guid.NewGuid();
 
         public string Page_2_Content => Content_2;
+
+        public string TagDefinition_1_EntityType => "My.Namespace.CustomType";
     }
 }

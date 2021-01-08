@@ -1,16 +1,15 @@
 ﻿using JetBrains.Annotations;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit
 {
     public class CmsKitOptions
     {
         [NotNull]
-        public ReactionDefinitionDictionary Reactions { get; }
+        public ReactionDefinitionDictionary Reactions { get; } = new ReactionDefinitionDictionary();
 
-        public CmsKitOptions()
-        {
-            Reactions = new ReactionDefinitionDictionary();
-        }
+        [NotNull]
+        public TagDefinitionDictionary Tags { get; } = new TagDefinitionDictionary();
     }
 }

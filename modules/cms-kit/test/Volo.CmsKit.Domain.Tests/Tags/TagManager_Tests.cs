@@ -100,5 +100,15 @@ namespace Volo.CmsKit.Tags
 
             Should.Throw<Exception>(async () => await _tagManager.UpdateAsync(tag.Id, newName));
         }
+
+        [Fact]
+        public async Task ShouldGetTagDefinitionsProperly_WithoutParameter()
+        {
+            var definitions = await _tagManager.GetTagDefinitionsAsync();
+
+            definitions.ShouldNotBeNull();
+            definitions.Count.ShouldBeGreaterThan(1);
+            definitions.ShouldContain(x => x.EntityType == _cmsKitTestData.TagDefinition_1_EntityType);
+        }
     }
 }
