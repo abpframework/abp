@@ -6,30 +6,6 @@ ABP Angular UI is tested like any other Angular application. So, [the guide here
 
 In Angular, unit tests use [Karma](https://karma-runner.github.io/) and [Jasmine](https://jasmine.github.io) by default. Although we like Jest more, we chose not to deviate from these defaults, so **the application template you download will have Karma and Jasmine preconfigured**. You can find the Karma configuration inside the _karma.conf.js_ file in the root folder. You don't have to do anything. Adding a spec file and running `npm test` will work.
 
-You would need a different configuration for your CI environment. To set up a new configuration for your unit tests, find the test project in _angular.json_ file and add one as seen below:
-
-```json
-// angular.json
-
-"test": {
-  "builder": "@angular-devkit/build-angular:karma",
-  "options": { /* several options here */ },
-  "configurations": {
-    "production": {
-      "karmaConfig": "karma.conf.prod.js"
-    }
-  }
-}
-```
-
-Now you can copy the _karma.conf.js_ as _karma.conf.prod.js_ and use any configuration you like in it. Please check [Karma configuration file document](http://karma-runner.github.io/5.2/config/configuration-file.html) for config options.
-
-Finally, don't forget to run your CI tests with the following command:
-
-```sh
-npm test -- --prod
-```
-
 ## Basics
 
 An over-simplified spec file looks like this:
@@ -371,4 +347,30 @@ describe("Country", () => {
     expect(getSpy).toHaveBeenCalledTimes(1);
   });
 });
+```
+
+## CI Configuration
+
+You would need a different configuration for your CI environment. To set up a new configuration for your unit tests, find the test project in _angular.json_ file and add one as seen below:
+
+```json
+// angular.json
+
+"test": {
+  "builder": "@angular-devkit/build-angular:karma",
+  "options": { /* several options here */ },
+  "configurations": {
+    "production": {
+      "karmaConfig": "karma.conf.prod.js"
+    }
+  }
+}
+```
+
+Now you can copy the _karma.conf.js_ as _karma.conf.prod.js_ and use any configuration you like in it. Please check [Karma configuration file document](http://karma-runner.github.io/5.2/config/configuration-file.html) for config options.
+
+Finally, don't forget to run your CI tests with the following command:
+
+```sh
+npm test -- --prod
 ```
