@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -53,14 +54,13 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         private readonly IDbContextProvider<TDbContext> _dbContextProvider;
         private readonly Lazy<AbpEntityOptions<TEntity>> _entityOptionsLazy;
 
-        public IGuidGenerator GuidGenerator { get; set; }
+        public virtual IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-        public IEfCoreBulkOperationProvider BulkOperationProvider { get; set; }
+        public IEfCoreBulkOperationProvider BulkOperationProvider => LazyServiceProvider.LazyGetService<IEfCoreBulkOperationProvider>();
 
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
-            GuidGenerator = SimpleGuidGenerator.Instance;
 
             _entityOptionsLazy = new Lazy<AbpEntityOptions<TEntity>>(
                 () => ServiceProvider
@@ -103,7 +103,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                     this,
                     entityArray,
                     autoSave,
-                    cancellationToken
+                    GetCancellationToken(cancellationToken)
                 );
                 return;
             }
@@ -142,7 +142,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                     this,
                     entities,
                     autoSave,
-                    cancellationToken
+                    GetCancellationToken(cancellationToken)
                     );
 
                 return;

@@ -19,21 +19,23 @@ namespace Volo.Abp.Domain.Repositories
         IUnitOfWorkEnabled
         where TEntity : class, IEntity
     {
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
         public IServiceProvider ServiceProvider { get; set; }
 
-        public IDataFilter DataFilter { get; set; }
+        public IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
-        public ICurrentTenant CurrentTenant { get; set; }
+        public ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
 
-        public IAsyncQueryableExecuter AsyncExecuter { get; set; }
+        public IAsyncQueryableExecuter AsyncExecuter => LazyServiceProvider.LazyGetRequiredService<IAsyncQueryableExecuter>();
 
-        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
+        public IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
-        public ICancellationTokenProvider CancellationTokenProvider { get; set; }
+        public ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
 
         protected BasicRepositoryBase()
         {
-            CancellationTokenProvider = NullCancellationTokenProvider.Instance;
+
         }
 
         public abstract Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);

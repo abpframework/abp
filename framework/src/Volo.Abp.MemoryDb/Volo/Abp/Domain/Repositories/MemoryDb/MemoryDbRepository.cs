@@ -39,23 +39,19 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         protected IMemoryDatabaseProvider<TMemoryDbContext> DatabaseProvider { get; }
 
-        public ILocalEventBus LocalEventBus { get; set; }
+        public ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetService<ILocalEventBus>(NullLocalEventBus.Instance);
 
-        public IDistributedEventBus DistributedEventBus { get; set; }
+        public IDistributedEventBus DistributedEventBus => LazyServiceProvider.LazyGetService<IDistributedEventBus>(NullDistributedEventBus.Instance);
 
-        public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
+        public IEntityChangeEventHelper EntityChangeEventHelper => LazyServiceProvider.LazyGetService<IEntityChangeEventHelper>(NullEntityChangeEventHelper.Instance);
 
-        public IAuditPropertySetter AuditPropertySetter { get; set; }
+        public IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-        public IGuidGenerator GuidGenerator { get; set; }
+        public IAuditPropertySetter AuditPropertySetter => LazyServiceProvider.LazyGetRequiredService<IAuditPropertySetter>();
 
         public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
         {
             DatabaseProvider = databaseProvider;
-
-            LocalEventBus = NullLocalEventBus.Instance;
-            DistributedEventBus = NullDistributedEventBus.Instance;
-            EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
         }
 
         [Obsolete("This method will be removed in future versions.")]
