@@ -3,7 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Features;
 using Volo.Abp.Validation.StringValues;
 
@@ -26,6 +28,8 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
         public GetFeatureListResultDto FeatureListResultDto { get; set; }
 
         protected IFeatureAppService FeatureAppService { get; }
+
+        protected ILocalEventBus LocalEventBus { get; }
 
         public FeatureManagementModal(IFeatureAppService featureAppService)
         {
@@ -55,6 +59,10 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
             };
 
             await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
+
+            await LocalEventBus.PublishAsync(
+                new CurrentApplicationConfigurationCacheResetEventData()
+            );
 
             return NoContent();
         }
