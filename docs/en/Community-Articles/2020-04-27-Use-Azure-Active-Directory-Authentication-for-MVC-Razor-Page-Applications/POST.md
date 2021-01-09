@@ -136,7 +136,7 @@ And that's it, integration is completed. Keep on mind that you can connect any o
 
 ## 3. AddMicrosoftIdentityWebAppAuthentication
 
-With .Net 5.0, AzureAd is marked [obsolute](https://github.com/dotnet/aspnetcore/issues/25807) and will not be supported in the near future. However its expanded functionality is available in [microsoft-identity-web](https://github.com/AzureAD/microsoft-identity-web/wiki) packages.
+With .Net 5.0, AzureAd is marked [obsolete](https://github.com/dotnet/aspnetcore/issues/25807) and will not be supported in the near future. However its expanded functionality is available in [microsoft-identity-web](https://github.com/AzureAD/microsoft-identity-web/wiki) packages.
 
 Add (or replace with) the new nuget package Microsoft.Identity.Web nuget package](https://www.nuget.org/packages/Microsoft.Identity.Web/).
 

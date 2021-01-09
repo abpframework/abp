@@ -21,7 +21,7 @@ namespace Volo.Docs.Documents
         public async Task<List<Document>> GetListByProjectId(Guid projectId,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken: cancellationToken);
+            return await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken: cancellationToken);
         }
 
         public async Task<List<Document>> GetAllAsync(
@@ -45,7 +45,7 @@ namespace Volo.Docs.Documents
             CancellationToken cancellationToken = default)
         {
             var query = ApplyFilterForGetAll(
-                DbSet,
+                await GetDbSetAsync(),
                 projectId: projectId,
                 name: name,
                 version: version,
@@ -87,7 +87,7 @@ namespace Volo.Docs.Documents
             CancellationToken cancellationToken = default)
         {
             var query = ApplyFilterForGetAll(
-                DbSet,
+                await GetDbSetAsync(),
                 projectId: projectId,
                 name: name,
                 version: version,
@@ -111,7 +111,7 @@ namespace Volo.Docs.Documents
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.IncludeDetails(includeDetails)
+            return await (await GetDbSetAsync()).IncludeDetails(includeDetails)
                 .FirstOrDefaultAsync(x =>
                     x.ProjectId == projectId && x.Name == name && x.LanguageCode == languageCode &&
                     x.Version == version,
@@ -127,7 +127,7 @@ namespace Volo.Docs.Documents
 
         public async Task<Document> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(x => x.Id == id).SingleAsync(cancellationToken: cancellationToken);
+            return await (await GetDbSetAsync()).Where(x => x.Id == id).SingleAsync(cancellationToken: cancellationToken);
         }
 
         protected virtual IQueryable<Document> ApplyFilterForGetAll(
@@ -148,7 +148,7 @@ namespace Volo.Docs.Documents
             DateTime? lastCachedTimeMax,
             CancellationToken cancellationToken = default)
         {
-            return DbSet
+            return query
                 .WhereIf(projectId.HasValue,
                     d => d.ProjectId == projectId.Value)
                 .WhereIf(name != null,

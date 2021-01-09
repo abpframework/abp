@@ -39,7 +39,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Menus
                 new ApplicationMenuItem(
                     MyProjectNameMenus.Home,
                     l["Menu:Home"],
-                    "",
+                    "/",
                     icon: "fas fa-home"
                 )
             );
@@ -59,11 +59,10 @@ namespace MyCompanyName.MyProjectName.Blazor.Menus
                 context.Menu.AddItem(new ApplicationMenuItem(
                     "Account.Manage",
                     accountStringLocalizer["ManageYourProfile"],
-                    $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage",
+                    $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
                     icon: "fa fa-cog",
                     order: 1000,
-                    null,
-                    "_blank"));
+                    null));
             }
 
             return Task.CompletedTask;

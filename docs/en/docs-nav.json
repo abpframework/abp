@@ -349,25 +349,12 @@
               "path": "Module-Development-Basics.md"
             },
             {
-              "text": "Plug-In Modules"
+              "text": "Plug-In Modules",
+              "path": "PlugIn-Modules.md"
             },
             {
-              "text": "Customizing the Application Modules",
-              "path": "Customizing-Application-Modules-Guide.md",
-              "items": [
-                {
-                  "text": "Extending Entities",
-                  "path": "Customizing-Application-Modules-Extending-Entities.md"
-                },
-                {
-                  "text": "Overriding Services",
-                  "path": "Customizing-Application-Modules-Overriding-Services.md"
-                },
-                {
-                  "text": "Overriding the User Interface",
-                  "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
-                }
-              ]
+              "text": "Customizing/Extending Modules",
+              "path": "Customizing-Application-Modules-Guide.md"
             },
             {
               "text": "Best Practices",
@@ -698,6 +685,15 @@
               ]
             },
             {
+              "text": "Other Components",
+              "items": [
+                {
+                  "text": "SubmitButton",
+                  "path": "UI/Blazor/Components/SubmitButton.md"
+                }
+              ]
+            },
+            {
               "text": "Settings",
               "path": "UI/Blazor/Settings.md"
             },
@@ -744,6 +740,10 @@
                 {
                   "text": "PWA Configuration",
                   "path": "UI/Angular/PWA-Configuration.md"
+                },
+                {
+                  "text": "Unit Testing",
+                  "path": "UI/Angular/Testing.md"
                 }
               ]
             },

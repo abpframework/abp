@@ -15,13 +15,13 @@ import { EnvironmentService } from './environment.service';
 })
 export class RestService {
   constructor(
-    @Inject(CORE_OPTIONS) private options: ABP.Root,
-    private http: HttpClient,
-    private store: Store,
-    private environment: EnvironmentService,
+    @Inject(CORE_OPTIONS) protected options: ABP.Root,
+    protected http: HttpClient,
+    protected environment: EnvironmentService,
+    protected store: Store,
   ) {}
 
-  private getApiFromStore(apiName: string): string {
+  protected getApiFromStore(apiName: string): string {
     return this.environment.getApiUrl(apiName);
   }
 

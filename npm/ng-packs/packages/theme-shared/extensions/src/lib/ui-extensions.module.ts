@@ -47,4 +47,10 @@ import { PropDataDirective } from './directives/prop-data.directive';
     NgbTypeaheadModule,
   ],
 })
+export class BaseUiExtensionsModule {}
+
+@NgModule({
+  exports: [BaseUiExtensionsModule],
+  imports: [BaseUiExtensionsModule],
+})
 export class UiExtensionsModule {}

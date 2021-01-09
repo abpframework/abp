@@ -1,6 +1,6 @@
 # Working with Lists
 
-`ListService` is a utility service to provide an easy pagination, sorting, and search implementation.
+`ListService` is a utility service to provide easy pagination, sorting, and search implementation.
 
 
 
@@ -35,7 +35,10 @@ class BookComponent {
   constructor(
     public readonly list: ListService,
     private bookService: BookService,
-  ) {}
+  ) {
+    // change ListService defaults here
+    this.list.maxResultCount = 20;
+  }
 
   ngOnInit() {
     // A function that gets query and returns an observable
@@ -164,7 +167,7 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 </ngx-datatable>
 ```
 
-> We do not recommend using NGXS store for CRUD pages, unless your application needs to share list information between components or use it later on in another page.
+> We do not recommend using the NGXS store for CRUD pages unless your application needs to share list information between components or use it later on in another page.
 
 
 ## How to Refresh Table on Create/Update/Delete
@@ -186,7 +189,7 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
   this.store.dispatch(new DeleteBook(id)).subscribe(this.list.get);
 ```
 
-> We donot recommend using NGXS store for CRUD pages, unless your application needs to share list information between components or use it later on in another page.
+> We do not recommend using the NGXS store for CRUD pages unless your application needs to share list information between components or use it later on in another page.
 
 
 ## How to Implement Server-Side Search in a Table
@@ -210,7 +213,7 @@ We had to modify the `ListService` to make it work with `ngx-datatable`. Previou
 ></abp-table>
 ```
 
-As of v3.0, with ngx-datatable, the `page` property has to be set as `0` for inital page. Therefore, if you used `ListService` on your tables before and are going to keep `abp-table`, you need to make the following change:
+As of v3.0, with ngx-datatable, the `page` property has to be set as `0` for the initial page. Therefore, if you used `ListService` on your tables before and are going to keep `abp-table`, you need to make the following change:
 
 ```html
 <!-- other bindings are hidden in favor of brevity -->

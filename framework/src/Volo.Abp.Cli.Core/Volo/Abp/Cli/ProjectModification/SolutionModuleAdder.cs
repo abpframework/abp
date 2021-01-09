@@ -26,7 +26,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
         protected DbContextFileBuilderConfigureAdder DbContextFileBuilderConfigureAdder { get; }
-        protected EfCoreMigrationAdder EfCoreMigrationAdder { get; }
+        protected EfCoreMigrationManager EfCoreMigrationManager { get; }
         protected DerivedClassFinder DerivedClassFinder { get; }
         protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
@@ -42,7 +42,7 @@ namespace Volo.Abp.Cli.ProjectModification
             IJsonSerializer jsonSerializer,
             ProjectNugetPackageAdder projectNugetPackageAdder,
             DbContextFileBuilderConfigureAdder dbContextFileBuilderConfigureAdder,
-            EfCoreMigrationAdder efCoreMigrationAdder,
+            EfCoreMigrationManager efCoreMigrationManager,
             DerivedClassFinder derivedClassFinder,
             ProjectNpmPackageAdder projectNpmPackageAdder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker,
@@ -57,7 +57,7 @@ namespace Volo.Abp.Cli.ProjectModification
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
             DbContextFileBuilderConfigureAdder = dbContextFileBuilderConfigureAdder;
-            EfCoreMigrationAdder = efCoreMigrationAdder;
+            EfCoreMigrationManager = efCoreMigrationManager;
             DerivedClassFinder = derivedClassFinder;
             ProjectNpmPackageAdder = projectNpmPackageAdder;
             NpmGlobalPackagesChecker = npmGlobalPackagesChecker;
@@ -205,23 +205,50 @@ namespace Volo.Abp.Cli.ProjectModification
             string postFix)
         {
             var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), targetFolder);
+
+            if (!Directory.Exists(srcPath))
+            {
+                return;
+            }
+
             var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith(postFix));
+
+            if (projectFolderPath == null)
+            {
+                return;
+            }
+
             await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, new DirectoryInfo(projectFolderPath).Name);
 
             if (Directory.Exists(projectFolderPath))
             {
                 Directory.Delete(projectFolderPath, true);
             }
-
         }
 
         private async Task ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)
         {
-            var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "test");
-            var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith("Domain.Tests"));
+            var testPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "test");
 
-            var csprojFile = Directory.GetFiles(projectFolderPath).First(p => p.EndsWith(".csproj"));
-            var moduleFile = Directory.GetFiles(projectFolderPath).First(p => p.EndsWith("DomainTestModule.cs"));
+            if (!Directory.Exists(testPath))
+            {
+                return;
+            }
+
+            var projectFolderPath = Directory.GetDirectories(testPath).FirstOrDefault(d=> d.EndsWith("Domain.Tests"));
+
+            if (projectFolderPath == null)
+            {
+                return;
+            }
+
+            var csprojFile = Directory.GetFiles(projectFolderPath).FirstOrDefault(p => p.EndsWith(".csproj"));
+            var moduleFile = Directory.GetFiles(projectFolderPath).FirstOrDefault(p => p.EndsWith("DomainTestModule.cs"));
+
+            if (csprojFile == null || moduleFile == null)
+            {
+                return;
+            }
 
             File.WriteAllText(csprojFile, File.ReadAllText(csprojFile).Replace("EntityFrameworkCore","MongoDB"));
             File.WriteAllText(moduleFile, File.ReadAllText(moduleFile)
@@ -438,7 +465,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 if (addedNewBuilder)
                 {
-                    EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject);
+                    EfCoreMigrationManager.AddMigration(dbMigrationsProject, module.Name, startupProject);
                 }
 
                 RunMigrator(projectFiles);

@@ -66,9 +66,7 @@
                 {
                     target: 3,
                     data: 'creationTime',
-                    render: function (date) {
-                        return date;
-                    },
+                    dataFormat: "datetime"
                 },
                 {
                     target: 4,

@@ -57,6 +57,9 @@
     "ProfileTab:Password": "Cambiar contraseña",
     "ProfileTab:PersonalInfo": "Información personal",
     "ReturnToApplication": "Volver a la aplicación",
-    "Volo.Account:InvalidEmailAddress": "No se puede encontrar la dirección de e-mail solicitada: {0}"
+    "Volo.Account:InvalidEmailAddress": "No se puede encontrar la dirección de e-mail solicitada: {0}",
+    "PasswordReset": "Restablecer contraseña",
+    "PasswordResetInfoInEmail": "Recibimos una solicitud de recuperación de cuenta. Si inició esta solicitud, haga clic en el siguiente enlace para restablecer su contraseña.",
+    "ResetMyPassword": "Restablecer mi contraseña"
   }
 }

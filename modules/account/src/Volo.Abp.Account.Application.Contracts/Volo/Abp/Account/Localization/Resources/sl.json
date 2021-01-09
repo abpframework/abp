@@ -49,6 +49,9 @@
     "ResetPassword_Information": "Prosimo vnesite vaše novo geslo.",
     "YourPasswordIsSuccessfullyReset": "Vaše geslo je uspešno ponastavljeno.",
     "BackToLogin": "Nazaj na prijavo",
-    "Volo.Account:InvalidEmailAddress": "Navedenega e-poštnega naslova ni mogoče najti: {0}"
+    "Volo.Account:InvalidEmailAddress": "Navedenega e-poštnega naslova ni mogoče najti: {0}",
+    "PasswordReset": "Ponastavitev gesla",
+    "PasswordResetInfoInEmail": "Prejeta je bila zahteva za obnovitev računa! V kolikor ste vi sprožili zahtevo, kliknite na sledečo povezavo, da ponastavite geslo.",
+    "ResetMyPassword": "Ponastavi geslo"
   }
 }

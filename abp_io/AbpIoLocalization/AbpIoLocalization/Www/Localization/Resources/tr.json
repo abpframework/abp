@@ -156,6 +156,7 @@
     "UiFramework": "UI Framework",
     "EmailAddress": "E-Posta Adresi",
     "Mobile": "Mobil",
-    "ReactNative": "React Native"
+    "ReactNative": "React Native",
+    "SelectLanguage": "Dil seçin"
   }
 }

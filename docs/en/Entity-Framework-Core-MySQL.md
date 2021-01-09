@@ -12,10 +12,10 @@ Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFra
 
 ## UseMySQL()
 
-Find `UseSqlServer()` calls in your solution, replace with `UseMySQL()`. Check the following files:
+Find `UseSqlServer()` calls in your solution. Check the following files:
 
-* *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
-* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project.
+* *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project. Replace `UseSqlServer()` with `UseMySQL()`.
+* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project. Replace `UseSqlServer()` with `UseMySql()`. Then add a new parameter (`ServerVersion`) to `UseMySql()` method. Example: `.UseMySql(configuration.GetConnectionString("Default"), ServerVersion.FromString("8.0.21-mysql"))`. See [this issue](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/pull/1233) for more information about `ServerVersion`)
 
 > Depending on your solution structure, you may find more code files need to be changed.
 

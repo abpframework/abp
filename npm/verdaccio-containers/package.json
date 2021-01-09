@@ -1,0 +1,16 @@
+{
+  "name": "verdaccio-publish",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "node prepare"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.1"
+  },
+  "devDependencies": {}
+}
