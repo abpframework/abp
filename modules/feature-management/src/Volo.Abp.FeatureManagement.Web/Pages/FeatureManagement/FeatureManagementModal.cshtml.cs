@@ -31,11 +31,14 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
 
         protected ILocalEventBus LocalEventBus { get; }
 
-        public FeatureManagementModal(IFeatureAppService featureAppService)
+        public FeatureManagementModal(
+            IFeatureAppService featureAppService,
+            ILocalEventBus localEventBus)
         {
             ObjectMapperContext = typeof(AbpFeatureManagementWebModule);
 
             FeatureAppService = featureAppService;
+            LocalEventBus = localEventBus;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
