@@ -36,12 +36,15 @@ namespace Volo.Abp.Uow.MongoDB
         [Obsolete("Use CreateDbContextAsync")]
         public TMongoDbContext GetDbContext()
         {
-            Logger.LogWarning(
-                "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +
-                "You are probably using LINQ (LINQ extensions) directly on a repository. In this case, use repository.GetQueryableAsync() method " +
-                "to obtain an IQueryable<T> instance and use LINQ (LINQ extensions) on this object. "
-            );
-            Logger.LogWarning(Environment.StackTrace.Truncate(2048));
+            if (!UnitOfWork.DisableObsoleteDbContextCreationWarning.Value)
+            {
+                Logger.LogWarning(
+                    "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +
+                    "You are probably using LINQ (LINQ extensions) directly on a repository. In this case, use repository.GetQueryableAsync() method " +
+                    "to obtain an IQueryable<T> instance and use LINQ (LINQ extensions) on this object. "
+                );
+                Logger.LogWarning(Environment.StackTrace.Truncate(2048));
+            }
 
             var unitOfWork = _unitOfWorkManager.Current;
             if (unitOfWork == null)

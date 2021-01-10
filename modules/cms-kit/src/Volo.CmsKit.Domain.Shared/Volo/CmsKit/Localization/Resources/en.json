@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
+    "CmsKit:0002": "Content already exists!",
     "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display.",
     "Comments": "Comments",
     "Delete": "Delete",
@@ -11,6 +12,10 @@
     "Menu:CMS": "CMS",
     "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
     "Permission:CmsKit": "CmsKit",
+    "Permission:Contents": "Content Management",
+    "Permission:Contents.Create": "Create Content",
+    "Permission:Contents.Delete": "Delete Content",
+    "Permission:Contents.Update": "Update Content",
     "Permission:TagManagement": "Tag Management",
     "Permission:TagManagement.Create": "Create Tag",
     "Permission:TagManagement.Delete": "Delete Tag",

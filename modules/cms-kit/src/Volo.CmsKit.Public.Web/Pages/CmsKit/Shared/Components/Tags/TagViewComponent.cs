@@ -24,11 +24,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
             string entityType,
             string entityId)
         {
-            var tagDtos = await TagAppService.GetAllRelatedTagsAsync(new GetRelatedTagsInput
-            {
-                EntityId = entityId,
-                EntityType = entityType
-            });
+            var tagDtos = await TagAppService.GetAllRelatedTagsAsync(entityType, entityId);
 
             var viewModel = new TagViewModel
             {

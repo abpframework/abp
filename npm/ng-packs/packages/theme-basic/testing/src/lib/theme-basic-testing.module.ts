@@ -5,14 +5,18 @@ import {
   ValidationErrorComponent,
 } from '@abp/ng.theme.basic';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { VALIDATION_ERROR_TEMPLATE, VALIDATION_TARGET_SELECTOR } from '@ngx-validate/core';
+import {
+  VALIDATION_ERROR_TEMPLATE,
+  VALIDATION_INVALID_CLASSES,
+  VALIDATION_TARGET_SELECTOR,
+} from '@ngx-validate/core';
 
 @NgModule({
   exports: [BaseThemeBasicModule],
   imports: [BaseThemeBasicModule],
 })
 export class ThemeBasicTestingModule {
-  static forRoot(): ModuleWithProviders<ThemeBasicTestingModule> {
+  static withConfig(): ModuleWithProviders<ThemeBasicTestingModule> {
     return {
       ngModule: ThemeBasicTestingModule,
       providers: [
@@ -25,6 +29,10 @@ export class ThemeBasicTestingModule {
         {
           provide: VALIDATION_TARGET_SELECTOR,
           useValue: '.form-group',
+        },
+        {
+          provide: VALIDATION_INVALID_CLASSES,
+          useValue: 'is-invalid',
         },
       ],
     };
