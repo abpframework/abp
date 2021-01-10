@@ -72,7 +72,7 @@ namespace Volo.Abp.Account.Emailing
             );
         }
 
-        protected string NormalizeReturnUrl(string returnUrl)
+        protected virtual string NormalizeReturnUrl(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty())
             {
