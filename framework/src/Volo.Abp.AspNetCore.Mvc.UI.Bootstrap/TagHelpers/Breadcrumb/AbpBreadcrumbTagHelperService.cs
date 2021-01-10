@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 {
     public class AbpBreadcrumbTagHelperService : AbpTagHelperService<AbpBreadcrumbTagHelper>
     {
-        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "nav";
             output.Attributes.Add("aria-label", "breadcrumb");
