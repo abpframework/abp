@@ -1,0 +1,12 @@
+{
+  "culture": "en-GB",
+  "texts": {
+    "GivenTenantIsNotAvailable": "Given tenant is not available: {0}",
+    "Tenant": "Tenant",
+    "Switch": "switch",
+    "Name": "Name",
+    "SwitchTenantHint": "Leave the name field blank to switch to the host side.",
+    "SwitchTenant": "Switch tenant",
+    "NotSelected": "Not selected"
+  }
+}

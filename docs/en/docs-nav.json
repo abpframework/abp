@@ -740,6 +740,10 @@
                 {
                   "text": "PWA Configuration",
                   "path": "UI/Angular/PWA-Configuration.md"
+                },
+                {
+                  "text": "Unit Testing",
+                  "path": "UI/Angular/Testing.md"
                 }
               ]
             },

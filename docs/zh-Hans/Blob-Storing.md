@@ -10,7 +10,7 @@ ABP框架为BLOB提供了抽象,并提供了一些可以轻松集成到的预构
 * 你可以**轻松的更改**BLOB存储,而不用改变你的应用程序代码.
 * 如果你想创建**可重用的应用程序模块**,无需假设BLOB的存储方式.
 
-ABP BLOG存储系统兼容ABP框架其他功能,如[多租户](Multi-Tenancy.md).
+ABP BLOB存储系统兼容ABP框架其他功能,如[多租户](Multi-Tenancy.md).
 
 ## BLOB 存储提供程序
 
@@ -18,9 +18,9 @@ ABP框架已经有以下存储提供程序的实现;
 
 * [File System](Blob-Storing-File-System.md):将BLOB作为标准文件存储在本地文件系统的文件夹中.
 * [Database](Blob-Storing-Database.md): 将BLOB存储在数据库中.
-* [Azure](Blob-Storing-Azure.md): 将BLOG存储在 [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/)中.
+* [Azure](Blob-Storing-Azure.md): 将BLOB存储在 [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/)中.
 * [Aliyun](Blob-Storing-Aliyun.md): 将BLOB存储在[Aliyun Storage Service](https://help.aliyun.com/product/31815.html)中.
-* [Ninio](Blob-Storing-Minio.md): 将BLOB存储在[MinIO Object storage](https://min.io/)中.
+* [Minio](Blob-Storing-Minio.md): 将BLOB存储在[MinIO Object storage](https://min.io/)中.
 * [Aws](Blob-Storing-Aws.md): 将BLOB存储在[Amazon Simple Storage Service](https://aws.amazon.com/s3/)中.
 
 以后会实现更多的提供程序,你可以为自己喜欢的提供程序创建[请求](https://github.com/abpframework/abp/issues/new),或者你也可以[自己实现](Blob-Storing-Custom-Provider.md)它并[贡献](Contribution/Index.md)到ABP框架.
@@ -95,9 +95,9 @@ namespace AbpDemo
 ### 读取/获取 BLOB
 
 * `GetAsync`: 返回给定BLOB名称可用于读取BLOB内容的 `Stream` 对象. 使用后始终要**dispose流**. 如果找不到具有给定名称的BLOB,则抛出异常.
-* `GetOrNullAsync`: 与 `GetAsync` 方法相反,如果未找到给定名称的BLOG,则返回 `null`.
+* `GetOrNullAsync`: 与 `GetAsync` 方法相反,如果未找到给定名称的BLOB,则返回 `null`.
 * `GetAllBytesAsync`: 返回 `byte[]` 而不是 `Stream`. 如果找不到具有给定名称的BLOB,则抛出异常.
-* `GetAllBytesOrNullAsync`: 与 `GetAllBytesAsync` 方法相反,如果未找到给定名称的BLOG,则返回 `null`.
+* `GetAllBytesOrNullAsync`: 与 `GetAllBytesAsync` 方法相反,如果未找到给定名称的BLOB,则返回 `null`.
 
 ### 删除 BLOB
 
@@ -300,7 +300,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 ## BLOB 存储 vs 文件管理系统
 
-注意BLOB存储不是一个文件管理系统. 它是一个用于保存,获取和删除命名BLOG的低级别系统. 它不提供目录那样的层次结构,这是典型文件系统所期望的.
+注意BLOB存储不是一个文件管理系统. 它是一个用于保存,获取和删除命名BLOB的低级别系统. 它不提供目录那样的层次结构,这是典型文件系统所期望的.
 
 如果你想创建文件夹并在文件夹之间移动文件,为文件分配权限并在用户之间共享文件,那么你需要在BLOB存储系统上实现你自己的应用程序.
 

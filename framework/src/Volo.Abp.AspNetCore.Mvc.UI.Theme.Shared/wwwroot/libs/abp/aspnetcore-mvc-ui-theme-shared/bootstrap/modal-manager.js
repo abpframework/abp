@@ -55,7 +55,8 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
             function _createContainer() {
                 _removeContainer();
-                _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>').appendTo('body');
+                _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>');
+                $('body').prepend(_$modalContainer);
                 return _$modalContainer;
             }
 

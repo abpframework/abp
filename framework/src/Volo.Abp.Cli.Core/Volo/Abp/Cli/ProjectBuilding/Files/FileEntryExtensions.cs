@@ -15,7 +15,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Files
         {
             RemoveMarkedTemplateCode(file, "<TEMPLATE-REMOVE>");
         }
-        
+
         public static void RemoveTemplateCodeIf(this FileEntry file, string condition)
         {
             RemoveByCondition(file, "IF", condition);
@@ -68,7 +68,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Files
             {
                 if (lines[i].Contains(beginMark))
                 {
-                    while (!lines[i].Contains("</TEMPLATE-REMOVE>") && i < lines.Length)
+                    while (i < lines.Length && !lines[i].Contains("</TEMPLATE-REMOVE>"))
                     {
                         ++i;
                     }

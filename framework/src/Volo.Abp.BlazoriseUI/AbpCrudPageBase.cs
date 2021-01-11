@@ -8,15 +8,12 @@ using JetBrains.Annotations;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
-using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
 {
@@ -439,10 +436,10 @@ namespace Volo.Abp.BlazoriseUI
         }
 
         /// <summary>
-        /// Calls IAuthorizationService.CheckAsync for the given <see cref="policyName"/>.
+        /// Calls IAuthorizationService.CheckAsync for the given <paramref name="policyName"/>.
         /// Throws <see cref="AbpAuthorizationException"/> if given policy was not granted for the current user.
         ///
-        /// Does nothing if <see cref="policyName"/> is null or empty.
+        /// Does nothing if <paramref name="policyName"/> is null or empty.
         /// </summary>
         /// <param name="policyName">A policy name to check</param>
         protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)

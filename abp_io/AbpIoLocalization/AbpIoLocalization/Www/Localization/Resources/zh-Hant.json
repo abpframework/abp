@@ -154,6 +154,7 @@
     "SeeTheDocumentForMoreInformation": "查看<a href=\"{1}\">{0} 文件</a>獲得更多訊息",
     "IndexPageHeroSection": "<span class=\"third-line shine2\"><strong>asp.net core的</strong></span><span class=\"first-line shine\"><strong>開源</strong></span><span class=\"second-line text-uppercase\">Web應用程式<br />框架 </span>",
     "UiFramework": "UI框架",
-    "EmailAddress": "電子信箱地址"
+    "EmailAddress": "電子信箱地址",
+    "SelectLanguage": "选择语言"
   }
 }

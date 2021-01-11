@@ -223,7 +223,7 @@ Pathes of the templates in the virtual file system are shown below:
 * `/Volo/Abp/Emailing/Templates/Layout.tpl`
 * `/Volo/Abp/Emailing/Templates/Message.tpl`
 
-If you add files to the same localization in the virtual file system, your files will override them.
+If you add files to the same location in the virtual file system, your files will override them.
 
 Templates are inline localized, that means you can take the power of the [localization system](Localization.md) to make your templates multi-cultural.
 

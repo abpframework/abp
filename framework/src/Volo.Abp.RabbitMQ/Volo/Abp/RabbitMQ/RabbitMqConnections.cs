@@ -19,7 +19,7 @@ namespace Volo.Abp.RabbitMQ
 
         public RabbitMqConnections()
         {
-            Default = new ConnectionFactory() { DispatchConsumersAsync = true };
+            Default = new ConnectionFactory();
         }
 
         public ConnectionFactory GetOrDefault(string connectionName)

@@ -382,3 +382,44 @@ context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
 ```
 
 In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. This feature allows you to have multiple MongoDbContext (one per module) on development, but single MongoDbContext (implements all interfaces of all MongoDbContexts) on runtime.
+
+### Customize Bulk Operations
+
+If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IMongoDbBulkOperationProvider`.
+
+- You may use example template below:
+
+```csharp
+public class MyCustomMongoDbBulkOperationProvider : IMongoDbBulkOperationProvider, ITransientDependency
+{
+    public async Task DeleteManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
+                                                IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
+                                                bool autoSave,
+                                                CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task InsertManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
+                                                IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
+                                                bool autoSave,
+                                                CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task UpdateManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
+                                                IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
+                                                bool autoSave,
+                                                CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+}
+```

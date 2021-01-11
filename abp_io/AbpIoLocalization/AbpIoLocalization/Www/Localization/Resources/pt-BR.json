@@ -154,6 +154,7 @@
     "SeeTheDocumentForMoreInformation": "Consulte o <a href=\"{1}\">{0} documento</a> para obter mais informações",
     "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>código aberto</strong></span><span class=\"second-line text-uppercase\">Aplicativo da Web<br />Framework </span><span class=\"third-line shine2\"><strong>para o ASP.NET Core</strong></span>",
     "UiFramework": "UI Framework",
-    "EmailAddress": "Endereço de email"
+    "EmailAddress": "Endereço de email",
+    "SelectLanguage": "Selecione o idioma"
   }
 }

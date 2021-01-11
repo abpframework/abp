@@ -86,7 +86,11 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             }
 
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
+
+            //Use DefaultConnectionStringResolver.Resolve when we remove IConnectionStringResolver.Resolve
+#pragma warning disable 618
             var connectionString = serviceProvider.GetRequiredService<IConnectionStringResolver>().Resolve(connectionStringName);
+#pragma warning restore 618
 
             return new DbContextCreationContext(
                 connectionStringName,

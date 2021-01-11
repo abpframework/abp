@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
@@ -23,6 +24,58 @@ namespace Volo.Abp.MultiTenancy
             _serviceProvider = serviceProvider;
         }
 
+        public override async Task<string> ResolveAsync(string connectionStringName = null)
+        {
+            //No current tenant, fallback to default logic
+            if (_currentTenant.Id == null)
+            {
+                return await base.ResolveAsync(connectionStringName);
+            }
+
+            using (var serviceScope = _serviceProvider.CreateScope())
+            {
+                var tenantStore = serviceScope
+                    .ServiceProvider
+                    .GetRequiredService<ITenantStore>();
+
+                var tenant = await tenantStore.FindAsync(_currentTenant.Id.Value);
+
+                if (tenant?.ConnectionStrings == null)
+                {
+                    return await base.ResolveAsync(connectionStringName);
+                }
+
+                //Requesting default connection string
+                if (connectionStringName == null)
+                {
+                    return tenant.ConnectionStrings.Default ??
+                           Options.ConnectionStrings.Default;
+                }
+
+                //Requesting specific connection string
+                var connString = tenant.ConnectionStrings.GetOrDefault(connectionStringName);
+                if (connString != null)
+                {
+                    return connString;
+                }
+
+                /* Requested a specific connection string, but it's not specified for the tenant.
+                 * - If it's specified in options, use it.
+                 * - If not, use tenant's default conn string.
+                 */
+
+                var connStringInOptions = Options.ConnectionStrings.GetOrDefault(connectionStringName);
+                if (connStringInOptions != null)
+                {
+                    return connStringInOptions;
+                }
+
+                return tenant.ConnectionStrings.Default ??
+                       Options.ConnectionStrings.Default;
+            }
+        }
+
+        [Obsolete("Use ResolveAsync method.")]
         public override string Resolve(string connectionStringName = null)
         {
             //No current tenant, fallback to default logic

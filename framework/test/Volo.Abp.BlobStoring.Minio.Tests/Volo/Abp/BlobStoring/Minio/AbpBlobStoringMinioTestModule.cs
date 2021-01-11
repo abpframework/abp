@@ -60,7 +60,7 @@ namespace Volo.Abp.BlobStoring.Minio
             });
         }
 
-        public async override void OnApplicationShutdown(ApplicationShutdownContext context)
+        public override async void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             var minioClient = new MinioClient(_endPoint, _accessKey, _secretKey);
             if (await minioClient.BucketExistsAsync(_randomContainerName))

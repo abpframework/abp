@@ -11,19 +11,19 @@ services:
   identity-server:
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionStrings__Default=Server=sqlserver;Database=CmsKit_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
-      - ConnectionStrings__SqlServerCache=Server=sqlserver;Database=CmsKit_Cache;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__Default=Server=sqlserver;Database=CmsKit_Identity;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__SqlServerCache=Server=sqlserver;Database=CmsKit_Cache;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
     ports:
       - "51600:80"
 
   cms-kit:
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionStrings__Default=Server=sqlserver;Database=CmsKit_ModuleDb;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
-      - ConnectionStrings__AbpSettingManagement=Server=sqlserver;Database=CmsKit_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
-      - ConnectionStrings__AbpPermissionManagement=Server=sqlserver;Database=CmsKit_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
-      - ConnectionStrings__AbpAuditLogging=Server=sqlserver;Database=CmsKit_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
-      - ConnectionStrings__SqlServerCache=Server=sqlserver;Database=CmsKit_Cache;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__Default=Server=sqlserver;Database=CmsKit_ModuleDb;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__AbpSettingManagement=Server=sqlserver;Database=CmsKit_Identity;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__AbpPermissionManagement=Server=sqlserver;Database=CmsKit_Identity;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__AbpAuditLogging=Server=sqlserver;Database=CmsKit_Identity;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
+      - ConnectionStrings__SqlServerCache=Server=sqlserver;Database=CmsKit_Cache;Trusted_Connection=True;User=sa;Password=yourStrong(!)Password;Integrated Security=false
       - AuthServer__Authority=http://identity-server
     ports:
       - "51601:80"
