@@ -26,6 +26,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         {
             SetSolutionAndProjectPathsIfNull(context);
 
+            if (_solutionFilePath == null || _projectFolderPath == null)
+            {
+                return;
+            }
+
             new RemoveFolderStep(_projectFolderPath).Execute(context);
             var solutionFile = context.GetFile(_solutionFilePath);
             solutionFile.NormalizeLineEndings();
@@ -84,12 +89,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             if (_solutionFilePath == null)
             {
                 _solutionFilePath = context.FindFile("/aspnet-core/MyCompanyName.MyProjectName.sln")?.Name ??
-                                    context.FindFile("/MyCompanyName.MyProjectName.sln").Name;
+                                    context.FindFile("/MyCompanyName.MyProjectName.sln")?.Name;
             }
             if (_projectFolderPath == null)
             {
                 _projectFolderPath = context.FindFile("/aspnet-core/src/" + _projectName.EnsureEndsWith('/'))?.Name ??
-                                     context.FindFile("/src/" + _projectName.EnsureEndsWith('/')).Name;
+                                     context.FindFile("/src/" + _projectName.EnsureEndsWith('/'))?.Name;
             }
         }
     }
