@@ -4,5 +4,6 @@
     {
         public const string TagAlreadyExist = "CmsKit:0001";
         public const string ContentAlreadyExist = "CmsKit:0002";
+        public const string EntityNotTaggable = "CmsKit:0003";
     }
 }

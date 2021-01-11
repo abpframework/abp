@@ -29,5 +29,10 @@ namespace Volo.CmsKit.Tags
         {
             return Task.FromResult(options.Tags.Values.ToList());
         }
+
+        public Task<bool> IsDefinedAsync([NotNull] string entityType)
+        {
+            return Task.FromResult(options.Tags.ContainsKey(entityType));
+        }
     }
 }

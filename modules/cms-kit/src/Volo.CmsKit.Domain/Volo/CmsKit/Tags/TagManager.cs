@@ -51,6 +51,11 @@ namespace Volo.CmsKit.Tags
                 throw new TagAlreadyExistException(entityType, name);
             }
 
+            if (!await _tagDefinitionStore.IsDefinedAsync(entityType))
+            {
+                throw new EntityNotTaggableException(entityType); 
+            }
+
             return await _tagRepository.InsertAsync(
                 new Tag(
                     id,

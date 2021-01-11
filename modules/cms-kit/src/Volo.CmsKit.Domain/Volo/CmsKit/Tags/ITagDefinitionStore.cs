@@ -9,5 +9,7 @@ namespace Volo.CmsKit.Tags
         Task<List<TagDefiniton>> GetTagDefinitionsAsync();
 
         Task<TagDefiniton> GetTagDefinitionOrNullAsync([NotNull] string entityType);
+
+        Task<bool> IsDefinedAsync([NotNull] string entityType);
     }
 }
