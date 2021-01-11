@@ -26,7 +26,7 @@ export interface ApplicationFeatureConfigurationDto {
 }
 
 export interface ApplicationLocalizationConfigurationDto {
-  values: Record<string, Dictionary<string, string>>;
+  values: Record<string, Record<string, string>>;
   languages: LanguageInfo[];
   currentCulture: CurrentCultureDto;
   defaultResourceName?: string;

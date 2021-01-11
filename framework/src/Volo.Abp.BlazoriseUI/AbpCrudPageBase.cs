@@ -8,15 +8,12 @@ using JetBrains.Annotations;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
-using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
 {
@@ -175,7 +172,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
-        protected int CurrentPage;
+        protected int CurrentPage = 1;
         protected string CurrentSorting;
         protected int? TotalCount;
         protected TGetListInput GetListInput = new TGetListInput();
@@ -255,7 +252,7 @@ namespace Volo.Abp.BlazoriseUI
 
             if (GetListInput is IPagedResultRequest pagedResultRequestInput)
             {
-                pagedResultRequestInput.SkipCount = CurrentPage * PageSize;
+                pagedResultRequestInput.SkipCount = (CurrentPage - 1) * PageSize;
             }
 
             if (GetListInput is ILimitedResultRequest limitedResultRequestInput)
@@ -266,13 +263,22 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
+        protected virtual async Task SearchEntitiesAsync()
+        {
+            CurrentPage = 1;
+
+            await GetEntitiesAsync();
+
+            StateHasChanged();
+        }
+
         protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TListViewModel> e)
         {
             CurrentSorting = e.Columns
                 .Where(c => c.Direction != SortDirection.None)
                 .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
-            CurrentPage = e.Page - 1;
+            CurrentPage = e.Page;
 
             await GetEntitiesAsync();
 
@@ -430,10 +436,10 @@ namespace Volo.Abp.BlazoriseUI
         }
 
         /// <summary>
-        /// Calls IAuthorizationService.CheckAsync for the given <see cref="policyName"/>.
+        /// Calls IAuthorizationService.CheckAsync for the given <paramref name="policyName"/>.
         /// Throws <see cref="AbpAuthorizationException"/> if given policy was not granted for the current user.
         ///
-        /// Does nothing if <see cref="policyName"/> is null or empty.
+        /// Does nothing if <paramref name="policyName"/> is null or empty.
         /// </summary>
         /// <param name="policyName">A policy name to check</param>
         protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)

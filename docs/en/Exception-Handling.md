@@ -1,11 +1,11 @@
 # Exception Handling
 
-ABP provides a built-in infrastructure and offers a standard model for handling exceptions in a web application.
+ABP provides a built-in infrastructure and offers a standard model for handling exceptions.
 
 * Automatically **handles all exceptions** and sends a standard **formatted error message** to the client for an API/AJAX request.
 * Automatically hides **internal infrastructure errors** and returns a standard error message.
-* Provides a configurable way to **localize** exception messages.
-* Automatically maps standard exceptions to **HTTP status codes** and provides a configurable option to map these to custom exceptions.
+* Provides an easy and configurable way to **localize** exception messages.
+* Automatically maps standard exceptions to **HTTP status codes** and provides a configurable option to map custom exceptions.
 
 ## Automatic Exception Handling
 

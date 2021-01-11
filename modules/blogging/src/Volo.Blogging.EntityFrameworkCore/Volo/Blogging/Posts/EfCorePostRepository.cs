@@ -20,24 +20,24 @@ namespace Volo.Blogging.Posts
 
         public async Task<List<Post>> GetPostsByBlogId(Guid id)
         {
-            return await DbSet.Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToListAsync();
+            return await (await GetDbSetAsync()).Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToListAsync();
         }
 
-        public Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null)
+        public async Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null)
         {
-            var query = DbSet.Where(p => blogId == p.BlogId && p.Url == url);
+            var query = (await GetDbSetAsync()).Where(p => blogId == p.BlogId && p.Url == url);
 
             if (excludingPostId != null)
             {
                 query = query.Where(p => excludingPostId != p.Id);
             }
 
-            return query.AnyAsync();
+            return await query.AnyAsync();
         }
 
         public async Task<Post> GetPostByUrl(Guid blogId, string url)
         {
-            var post = await DbSet.FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);
+            var post = await (await GetDbSetAsync()).FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);
 
             if (post == null)
             {
@@ -51,18 +51,18 @@ namespace Volo.Blogging.Posts
         {
             if (!descending)
             {
-                return await DbSet.Where(x=>x.BlogId==blogId).OrderByDescending(x => x.CreationTime).ToListAsync();
+                return await (await GetDbSetAsync()).Where(x=>x.BlogId==blogId).OrderByDescending(x => x.CreationTime).ToListAsync();
             }
             else
             {
-                return await DbSet.Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync();
+                return await (await GetDbSetAsync()).Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync();
             }
 
         }
 
-        public override IQueryable<Post> WithDetails()
+        public override async Task<IQueryable<Post>> WithDetailsAsync()
         {
-            return GetQueryable().IncludeDetails();
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }

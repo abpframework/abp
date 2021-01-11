@@ -21,7 +21,7 @@ export class TypeNode {
 
     if (!self) return '';
 
-    const representation = self + this.children.filter(String || Boolean).join(', ');
+    const representation = self + this.children.filter(String).join(', ');
 
     if (!this.parent) return representation;
 

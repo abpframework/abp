@@ -24,7 +24,8 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
             string providerKey,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
+                .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(s =>
                     s.Name == name &&
                     s.ProviderName == providerName &&
@@ -38,7 +39,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
             string providerKey,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(s =>
                     s.ProviderName == providerName &&
                     s.ProviderKey == providerKey
@@ -48,7 +49,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
         public virtual async Task<List<PermissionGrant>> GetListAsync(string[] names, string providerName, string providerKey,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(s =>
                     names.Contains(s.Name) &&
                     s.ProviderName == providerName &&

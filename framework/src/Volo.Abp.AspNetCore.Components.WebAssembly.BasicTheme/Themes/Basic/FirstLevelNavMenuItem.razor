@@ -3,14 +3,14 @@
     var elementId = MenuItem.ElementId ?? "MenuItem_" + MenuItem.Name.Replace(".", "_");
     var cssClass = string.IsNullOrEmpty(MenuItem.CssClass) ? string.Empty : MenuItem.CssClass;
     var disabled = MenuItem.IsDisabled ? "disabled" : string.Empty;
-    var url = string.IsNullOrEmpty(MenuItem.Url) ? "#" : MenuItem.Url;
+    var url = MenuItem.Url == null ? "#" : MenuItem.Url.TrimStart('/');
 }
 @if (MenuItem.IsLeaf)
 {
     if (MenuItem.Url != null)
     {
         <li class="nav-item @cssClass @disabled" id="@elementId">
-            <a class="nav-link" href="@url">
+            <a class="nav-link" href="@url" target="@MenuItem.Target">
                 @if (MenuItem.Icon != null)
                 {
                     if (MenuItem.Icon.StartsWith("fa"))

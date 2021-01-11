@@ -34,7 +34,7 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
                     throw new ArgumentException($"{nameof(worker)} type is different from the generic type");
                 }
 
-                var timer = (AbpTimer) worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
+                var timer = (AbpAsyncTimer) worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
                 period = timer?.Period;
             }
             else
@@ -57,7 +57,7 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
                 .Build();
         }
 
-        public async override Task Execute(IJobExecutionContext context)
+        public override async Task Execute(IJobExecutionContext context)
         {
             var worker = (IBackgroundWorker) ServiceProvider.GetService(typeof(TWorker));
             var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);

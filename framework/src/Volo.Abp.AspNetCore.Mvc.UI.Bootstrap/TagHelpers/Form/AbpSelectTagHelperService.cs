@@ -36,7 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             _stringLocalizerFactory = stringLocalizerFactory;
         }
 
-        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output);
 
@@ -86,12 +86,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 selectTagHelper.Items = GetSelectItems(context, output);
             }
-            else
+            else if(!TagHelper.AutocompleteSelectedItemName.IsNullOrEmpty())
             {
-                selectTagHelper.Items = new SelectListItem[]
-                    {
-                        new SelectListItem(TagHelper.AutocompleteSelectedItemName,TagHelper.AutocompleteSelectedItemValue,true)
-                    };
+                selectTagHelper.Items = new[]
+                {
+                    new SelectListItem(TagHelper.AutocompleteSelectedItemName,
+                        TagHelper.AutocompleteSelectedItemValue, false)
+                };
             }
 
             var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
@@ -232,6 +233,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var small = new TagBuilder("small");
             small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
             small.AddCssClass("form-text text-muted");
+            small.InnerHtml.Append(localizedText);
 
             return small.ToHtmlString();
         }

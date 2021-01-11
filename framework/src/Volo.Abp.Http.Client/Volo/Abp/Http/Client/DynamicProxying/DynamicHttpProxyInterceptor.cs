@@ -75,7 +75,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
         }
 
-        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
             {
@@ -121,7 +121,12 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 return (T)(object)stringContent;
             }
 
-            return JsonSerializer.Deserialize<T>(await responseContent.ReadAsStringAsync());
+            if (stringContent.IsNullOrWhiteSpace())
+            {
+                return default;
+            }
+
+            return JsonSerializer.Deserialize<T>(stringContent);
         }
 
         private async Task<HttpContent> MakeRequestAsync(IAbpMethodInvocation invocation)

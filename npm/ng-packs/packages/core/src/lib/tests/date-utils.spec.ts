@@ -1,9 +1,5 @@
-import {
-  ConfigStateService,
-  getShortDateFormat,
-  getShortDateShortTimeFormat,
-  getShortTimeFormat,
-} from '@abp/ng.core';
+import { ConfigStateService } from '../services';
+import { getShortDateFormat, getShortTimeFormat, getShortDateShortTimeFormat } from '../utils';
 
 const dateTimeFormat = {
   calendarAlgorithmType: 'SolarCalendar',

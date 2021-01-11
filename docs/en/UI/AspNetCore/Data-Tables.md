@@ -101,9 +101,35 @@ Here, the all configuration options;
 
 DataTables.Net has its own expected data format while getting results of an AJAX call to the server to get the table data. They are especially related how paging and sorting parameters are sent and received. ABP Framework also offers its own conventions for the client-server [AJAX](JavaScript-API/Ajax.md) communication. 
 
-The `abp.libs.datatables.createAjax` method (used in the example above) adapts request and response data format and perfectly works with the [Dynamic JavaScript Client Proxy](Dynamic-JavaScript-Client-Proxies.md) system.
+The `abp.libs.datatables.createAjax` method (used in the example above) adapts request and response data format and perfectly works with the [Dynamic JavaScript Client Proxy](Dynamic-JavaScript-Proxies.md) system.
 
 This works automatically, so most of the times you don't need to know how it works. See the [DTO document](../../Data-Transfer-Objects.md) if you want to learn more about `IPagedAndSortedResultRequest`, `IPagedResult` and other standard interfaces and base DTO classes those are used in client to server communication.
+
+The `createAjax` also supports you to customize request parameters and handle the responses.
+
+**Example:**
+
+````csharp
+var inputAction = function () {
+    return {
+        id: $('#Id').val(),
+        name: $('#Name').val(),
+    };
+};
+
+var responseCallback = function(result) {
+
+    // your custom code.
+
+    return {
+        recordsTotal: result.totalCount,
+        recordsFiltered: result.totalCount,
+        data: result.items
+    };
+};
+
+ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList, inputAction, responseCallback)
+````
 
 ### Row Actions
 

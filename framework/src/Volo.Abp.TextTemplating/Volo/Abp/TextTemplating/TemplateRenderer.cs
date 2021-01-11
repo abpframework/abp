@@ -144,6 +144,7 @@ namespace Volo.Abp.TextTemplating
             }
 
             context.PushGlobal(scriptObject);
+            context.PushCulture(System.Globalization.CultureInfo.CurrentCulture);
 
             return context;
         }

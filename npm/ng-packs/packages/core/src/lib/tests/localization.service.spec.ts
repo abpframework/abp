@@ -2,11 +2,8 @@ import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { of } from 'rxjs';
-import {
-  ApplicationConfigurationService,
-  ConfigStateService,
-  SessionStateService,
-} from '../services';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ConfigStateService, SessionStateService } from '../services';
 import { LocalizationService } from '../services/localization.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { CONFIG_STATE_DATA } from './config-state.service.spec';
@@ -19,16 +16,19 @@ describe('LocalizationService', () => {
   let configState: SpyObject<ConfigStateService>;
   let router: SpyObject<Router>;
   let service: LocalizationService;
-  let appConfigService: ApplicationConfigurationService;
 
   const createService = createServiceFactory({
     service: LocalizationService,
     entryComponents: [],
-    mocks: [ApplicationConfigurationService, Router],
+    mocks: [Router],
     providers: [
       {
         provide: CORE_OPTIONS,
         useValue: { registerLocaleFn: () => Promise.resolve(), cultureNameLocaleFileMap: {} },
+      },
+      {
+        provide: AbpApplicationConfigurationService,
+        useValue: { get: () => of(CONFIG_STATE_DATA) },
       },
     ],
   });
@@ -40,10 +40,7 @@ describe('LocalizationService', () => {
     router = spectator.inject(Router);
     router.routeReuseStrategy = { shouldReuseRoute } as any;
     service = spectator.service;
-    appConfigService = spectator.inject(ApplicationConfigurationService);
 
-    const getConfigurationSpy = jest.spyOn(appConfigService, 'getConfiguration');
-    getConfigurationSpy.mockReturnValue(of(CONFIG_STATE_DATA));
     configState.setState(CONFIG_STATE_DATA);
     sessionState.setLanguage('tr');
   });

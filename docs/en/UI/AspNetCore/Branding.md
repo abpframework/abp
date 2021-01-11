@@ -20,13 +20,15 @@ namespace MyProject.Web
     public class MyProjectBrandingProvider : DefaultBrandingProvider
     {
         public override string AppName => "Book Store";
+
+        public override string LogoUrl => "logo.png";
     }
 }
 ````
 
 The result will be like shown below:
 
-![branding-appname](../../images/branding-appname.png)
+![bookstore-added-logo](../../images/bookstore-added-logo.png)
 
 `IBrandingProvider` has the following properties:
 
@@ -38,8 +40,4 @@ The result will be like shown below:
 
 ## Overriding the Branding Area
 
-The [Basic Theme](Basic-Theme.md) doesn't implement the logos. However, you can see the [UI Customization Guide](Customization-User-Interface.md) to learn how you can replace the branding area with a custom view component.
-
-An example screenshot with an image is used in the branding area:
-
-![bookstore-added-logo](../../images/bookstore-added-logo.png)
+You can see the [UI Customization Guide](Customization-User-Interface.md) to learn how you can replace the branding area with a custom view component.

@@ -6,7 +6,8 @@ import { tap } from 'rxjs/operators';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { ABP } from '../models/common';
 import { Environment } from '../models/environment';
-import { ApplicationConfigurationService } from '../services/application-configuration.service';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
 import { AuthService } from '../services/auth.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
@@ -20,7 +21,7 @@ export function getInitialData(injector: Injector) {
   const fn = async () => {
     const environmentService = injector.get(EnvironmentService);
     const configState = injector.get(ConfigStateService);
-    const appConfigService = injector.get(ApplicationConfigurationService);
+    const appConfigService = injector.get(AbpApplicationConfigurationService);
     const options = injector.get(CORE_OPTIONS) as ABP.Root;
 
     environmentService.setState(options.environment as Environment);
@@ -31,16 +32,12 @@ export function getInitialData(injector: Injector) {
     if (options.skipGetAppConfiguration) return;
 
     return appConfigService
-      .getConfiguration()
+      .get()
       .pipe(
         tap(res => configState.setState(res)),
         tap(() => checkAccessToken(injector)),
         tap(() => {
-          const currentTenant = configState.getOne(
-            'currentTenant',
-          ) as ApplicationConfiguration.CurrentTenant;
-          if (!currentTenant?.id) return;
-
+          const currentTenant = configState.getOne('currentTenant') as CurrentTenantDto;
           injector.get(SessionStateService).setTenant(currentTenant);
         }),
       )

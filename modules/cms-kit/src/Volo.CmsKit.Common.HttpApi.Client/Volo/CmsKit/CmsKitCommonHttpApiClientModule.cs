@@ -7,7 +7,7 @@ namespace Volo.CmsKit
         typeof(AbpHttpClientModule),
         typeof(CmsKitCommonApplicationContractsModule)
         )]
-    public class CmsKitCommonHttpApiClientModule
+    public class CmsKitCommonHttpApiClientModule : AbpModule
     {
     }
 }

@@ -26,7 +26,7 @@ namespace Volo.Abp.DependencyInjection
                 return;
             }
 
-            var exposedServiceTypes = ExposedServiceExplorer.GetExposedServices(type);
+            var exposedServiceTypes = GetExposedServiceTypes(type);
 
             TriggerServiceExposing(services, type, exposedServiceTypes);
 
@@ -52,6 +52,11 @@ namespace Volo.Abp.DependencyInjection
                     services.Add(serviceDescriptor);
                 }
             }
+        }
+
+        protected virtual List<Type> GetExposedServiceTypes(Type type)
+        {
+            return ExposedServiceExplorer.GetExposedServices(type);
         }
 
         protected virtual ServiceDescriptor CreateServiceDescriptor(
@@ -117,10 +122,10 @@ namespace Volo.Abp.DependencyInjection
 
         protected virtual ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
         {
-            return dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromClassHierarcy(type);
+            return dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromClassHierarchy(type);
         }
 
-        protected virtual ServiceLifetime? GetServiceLifetimeFromClassHierarcy(Type type)
+        protected virtual ServiceLifetime? GetServiceLifetimeFromClassHierarchy(Type type)
         {
             if (typeof(ITransientDependency).GetTypeInfo().IsAssignableFrom(type))
             {

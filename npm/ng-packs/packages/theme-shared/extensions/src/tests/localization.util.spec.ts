@@ -1,3 +1,4 @@
+import { ApplicationLocalizationConfigurationDto } from '@abp/ng.core';
 import { createDisplayNameLocalizationPipeKeyGenerator } from '../lib/utils/localization.util';
 
 describe('Localization Utils', () => {
@@ -10,7 +11,9 @@ describe('Localization Utils', () => {
       defaultResourceName: 'Default',
       currentCulture: null,
       languages: [],
-    });
+      languageFilesMap: null,
+      languagesMap: null,
+    } as ApplicationLocalizationConfigurationDto);
 
     test.each`
       displayName                         | fallback                                | expected

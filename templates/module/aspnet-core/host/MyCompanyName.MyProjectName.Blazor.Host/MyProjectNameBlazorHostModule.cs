@@ -76,7 +76,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
 
         private static void ConfigureUI(WebAssemblyHostBuilder builder)
         {
-            builder.RootComponents.Add<App>("app");
+            builder.RootComponents.Add<App>("#ApplicationContainer");
         }
 
         private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)

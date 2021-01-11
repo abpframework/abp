@@ -15,7 +15,7 @@ foreach($project in $projects) {
     # Create nuget pack
     Set-Location $projectFolder
     Remove-Item -Recurse (Join-Path $projectFolder "bin/Release")
-    & dotnet msbuild /t:pack /p:Configuration=Release /p:SourceLinkCreate=true
+    & dotnet pack -c Release
 
     if (-Not $?) {
         Write-Host ("Packaging failed for the project: " + $projectFolder)

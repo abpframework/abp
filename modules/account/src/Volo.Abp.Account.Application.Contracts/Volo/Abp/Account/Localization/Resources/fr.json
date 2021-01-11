@@ -44,7 +44,7 @@
   "LoggedOutTitle": "Se déconnecter",
   "LoggedOutText": "Vous avez été déconnecté et vous serez bientôt redirigé.",
   "ReturnToText": "Cliquez ici pour rediriger vers {0}",
-  "OrLoginWith": "Ou connectez-vous avec;",
+  "OrLoginWith": "Ou connectez-vous avec:",
   "ForgotPassword": "Vous avez oublié le mot de passe ?",
   "SendPasswordResetLink_Information": "Un lien de réinitialisation du mot de passe sera envoyé à votre adresse e-mail pour réinitialiser votre mot de passe. Si vous ne recevez pas d'e-mail dans quelques minutes, veuillez réessayer.",
   "PasswordResetMailSentMessage": "E-mail de récupération de compte envoyé à votre adresse e-mail. Si vous ne voyez pas cet e-mail dans votre boîte de réception dans les 15 minutes, recherchez-le dans votre dossier de courrier indésirable. Si vous le trouvez là-bas, veuillez le marquer comme -Pas indésirable-.",

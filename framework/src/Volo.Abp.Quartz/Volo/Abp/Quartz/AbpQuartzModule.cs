@@ -16,9 +16,6 @@ namespace Volo.Abp.Quartz
         {
             var options = context.Services.ExecutePreConfiguredActions<AbpQuartzOptions>();
 
-            // TODO: Remove this once Pomelo update MySqlConnector to >= 1.0.0 : https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/pull/1103
-            AdaptMysqlConnector();
-
             context.Services.AddQuartz(options.Properties, build =>
             {
                 // these are the defaults
@@ -55,7 +52,7 @@ namespace Volo.Abp.Quartz
 
             context.Services.AddSingleton(serviceProvider =>
             {
-                return AsyncHelper.RunSync(() => serviceProvider.GetService<ISchedulerFactory>().GetScheduler());
+                return AsyncHelper.RunSync(() => serviceProvider.GetRequiredService<ISchedulerFactory>().GetScheduler());
             });
 
             Configure<AbpQuartzOptions>(quartzOptions =>
@@ -69,7 +66,7 @@ namespace Volo.Abp.Quartz
         {
             var options = context.ServiceProvider.GetRequiredService<IOptions<AbpQuartzOptions>>().Value;
 
-            _scheduler = context.ServiceProvider.GetService<IScheduler>();
+            _scheduler = context.ServiceProvider.GetRequiredService<IScheduler>();
 
             AsyncHelper.RunSync(() => options.StartSchedulerFactory.Invoke(_scheduler));
         }
@@ -79,29 +76,6 @@ namespace Volo.Abp.Quartz
             if (_scheduler.IsStarted)
             {
                 AsyncHelper.RunSync(() => _scheduler.Shutdown());
-            }
-        }
-
-        private void AdaptMysqlConnector()
-        {
-            var mySqlAvailable = System.Type.GetType("MySql.Data.MySqlClient.MySqlConnection, MySqlConnector") != null;
-            if (mySqlAvailable)
-            {
-                // Overriding the default 'MySqlConnector' provider to use the old 'MySql.Data' namespace found in MySqlConnector < 1.0.0
-                DbProvider.RegisterDbMetadata("MySqlConnector", new DbMetadata()
-                {
-                    ProductName = "MySQL, MySqlConnector provider",
-                    AssemblyName = "MySqlConnector",
-                    ConnectionType = System.Type.GetType("MySql.Data.MySqlClient.MySqlConnection, MySqlConnector"),
-                    CommandType = System.Type.GetType("MySql.Data.MySqlClient.MySqlCommand, MySqlConnector"),
-                    ParameterType = System.Type.GetType("MySql.Data.MySqlClient.MySqlParameter, MySqlConnector"),
-                    ParameterDbType = System.Type.GetType("MySql.Data.MySqlClient.MySqlDbType, MySqlConnector"),
-                    ParameterDbTypePropertyName = "MySqlDbType",
-                    ParameterNamePrefix = "?",
-                    ExceptionType = System.Type.GetType("MySql.Data.MySqlClient.MySqlException, MySqlConnector"),
-                    BindByName = true,
-                    DbBinaryTypeName = "Blob"
-                });
             }
         }
     }

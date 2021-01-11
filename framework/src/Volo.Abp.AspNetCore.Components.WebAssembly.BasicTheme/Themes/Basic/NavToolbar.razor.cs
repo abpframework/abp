@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
 
         private List<RenderFragment> ToolbarItemRenders { get; set; } = new List<RenderFragment>();
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             var toolbar = await ToolbarManager.GetAsync(StandardToolbars.Main);
 

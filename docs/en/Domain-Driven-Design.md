@@ -10,7 +10,7 @@ ABP framework provides an **infrastructure** to make **Domain Driven Design** ba
 > - Basing complex designs on a model of the domain;
 > - Initiating a creative collaboration between technical and domain experts to iteratively refine a conceptual model that addresses particular domain problems.
 
-### Layers
+## Layers & Building Blocks
 
 ABP follows DDD principles and patterns to achieve a layered application model which consists of four fundamental layers:
 
@@ -19,11 +19,7 @@ ABP follows DDD principles and patterns to achieve a layered application model w
 - **Domain Layer**: Includes business objects and the core (domain) business rules. This is the heart of the application.
 - **Infrastructure Layer**: Provides generic technical capabilities that support higher layers mostly using 3rd-party libraries.
 
-DDD mostly interest in the **Domain** and the **Application** layers, rather than the Infrastructure and the Presentation layers.
-
-## Contents
-
-See the following documents to learn what ABP Framework provides to you to implement DDD in your project.
+DDD mostly interest in the **Domain** and the **Application** layers, rather than the Infrastructure and the Presentation layers. The following documents explains the **infrastructure** provided by the ABP Framework to implement **Building Blocks** of the DDD:
 
 * **Domain Layer**
   * [Entities & Aggregate Roots](Entities.md)
@@ -35,3 +31,7 @@ See the following documents to learn what ABP Framework provides to you to imple
   * [Application Services](Application-Services.md)
   * [Data Transfer Objects (DTOs)](Data-Transfer-Objects.md)
   * [Unit of Work](Unit-Of-Work.md)
+
+## The Ultimate DDD Implementation Guide
+
+See the [Implementing Domain Driven Design](Domain-Driven-Design-Implementation-Guide.md) guide as a **complete reference**. The Guide explains the Domain Driven Design and introduces explicit **rules and examples** to give a deep understanding of the **implementation details**.

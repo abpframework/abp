@@ -438,7 +438,7 @@ ABP Framework uses and extends ASP.NET Core's [distributed caching abstraction](
 
 ### Logging
 
-ASP.NET Boilerplate uses Castle Windsor's [logging facility](http://docs.castleproject.org/Windsor.Logging-Facility.ashx) as an abstraction and supports multiple logging providers including Log4Net (the default one comes with the startup projects) and Serilog. You typically property-inject the logger:
+ASP.NET Boilerplate uses Castle Windsor's [logging facility](https://github.com/castleproject/Windsor/blob/master/docs/logging-facility.md) as an abstraction and supports multiple logging providers including Log4Net (the default one comes with the startup projects) and Serilog. You typically property-inject the logger:
 
 ````csharp
 using Castle.Core.Logging; //1: Import Logging namespace

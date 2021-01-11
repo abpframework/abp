@@ -2,9 +2,9 @@ import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
-import { ApplicationConfiguration } from '../models';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import {
-  ApplicationConfigurationService,
   AuthService,
   ConfigStateService,
   EnvironmentService,
@@ -31,7 +31,7 @@ describe('InitialUtils', () => {
     mocks: [
       EnvironmentService,
       ConfigStateService,
-      ApplicationConfigurationService,
+      AbpApplicationConfigurationService,
       AuthService,
       OAuthService,
       SessionStateService,
@@ -54,7 +54,7 @@ describe('InitialUtils', () => {
       const environmentService = spectator.inject(EnvironmentService);
       const configStateService = spectator.inject(ConfigStateService);
       const sessionStateService = spectator.inject(SessionStateService);
-      const applicationConfigurationService = spectator.inject(ApplicationConfigurationService);
+      const applicationConfigurationService = spectator.inject(AbpApplicationConfigurationService);
       const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
       const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
       parseTenantFromUrlSpy.mockReturnValue(Promise.resolve());
@@ -62,9 +62,9 @@ describe('InitialUtils', () => {
 
       const appConfigRes = {
         currentTenant: { id: 'test', name: 'testing' },
-      } as ApplicationConfiguration.Response;
+      } as ApplicationConfigurationDto;
 
-      const getConfigurationSpy = jest.spyOn(applicationConfigurationService, 'getConfiguration');
+      const getConfigurationSpy = jest.spyOn(applicationConfigurationService, 'get');
       getConfigurationSpy.mockReturnValue(of(appConfigRes));
 
       const environmentSetStateSpy = jest.spyOn(environmentService, 'setState');

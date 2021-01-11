@@ -1,23 +1,23 @@
-import { strings } from '@angular-devkit/core';
-import { SYSTEM_TYPES } from '../constants';
-import { VOLO_REGEX } from '../constants/volo';
+import { SYSTEM_TYPES, VOLO_REGEX } from '../constants';
 import { eImportKeyword } from '../enums';
 import { Import, TypeWithEnum } from '../models';
+import { extractSimpleGenerics } from './generics';
 import { parseNamespace } from './namespace';
 import { relativePathToEnum, relativePathToModel } from './path';
 import { parseGenerics } from './tree';
 
 export function createTypeSimplifier() {
-  const parseType = createTypeParser(type => {
-    type = type.replace(
+  const parseType = createTypeParser(t => {
+    let type = t.replace(
       /System\.([0-9A-Za-z.]+)/g,
-      (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
+      (_, match) => SYSTEM_TYPES.get(match) ?? 'any',
     );
 
-    const regexp = new RegExp(/.*(?<=\.)(?<generic>.+)<.*(?<=[\.<])(?<genericType>.+)>/gm);
-    const { generic, genericType } = regexp.exec(type)?.groups ?? {};
+    type = /any</.test(type) ? 'any' : type;
 
-    return generic ? `${generic}<${genericType}>` : type.split('.').pop()!;
+    const { identifier, generics } = extractSimpleGenerics(type);
+
+    return generics.length ? `${identifier}<${generics.join(', ')}>` : identifier;
   });
 
   return (type: string) => {
@@ -35,9 +35,7 @@ export function createTypeParser(replacerFn = (t: string) => t) {
 
 export function createTypeNormalizer(replacerFn = (t: string) => t) {
   return (type: string) => {
-    type = normalizeTypeAnnotations(type);
-
-    return replacerFn(type);
+    return replacerFn(normalizeTypeAnnotations(type));
   };
 }
 
@@ -51,8 +49,7 @@ export function flattenDictionaryTypes(types: string[], type: string) {
 }
 
 export function normalizeTypeAnnotations(type: string) {
-  type = type.replace(/\[(.+)+\]/g, '$1[]');
-  return type.replace(/\?/g, '');
+  return type.replace(/\[(.+)+\]/g, '$1[]').replace(/\?/g, '');
 }
 
 export function removeGenerics(type: string) {
@@ -109,4 +106,9 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
 export function createTypeAdapter() {
   const simplifyType = createTypeSimplifier();
   return (type: string) => parseGenerics(type, node => simplifyType(node.data)).toString();
+}
+
+// naming here is depictive only
+export function extendsSelf(type: string, base: string) {
+  return removeGenerics(base) === removeGenerics(type);
 }

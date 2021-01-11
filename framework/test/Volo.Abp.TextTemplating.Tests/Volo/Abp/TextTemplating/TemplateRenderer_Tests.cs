@@ -91,6 +91,22 @@ namespace Volo.Abp.TextTemplating
                 cultureName: "tr"
             )).ShouldBe("*BEGIN*Merhaba John, nasılsın?. Please click to the following link to get an email to reset your password!*END*");
         }
+        
+        [Fact]
+        public async Task Should_Get_Localized_Numbers()
+        {
+            (await _templateRenderer.RenderAsync(
+                TestTemplates.ShowDecimalNumber,
+                new Dictionary<string, decimal>(new List<KeyValuePair<string, decimal>> {new("amount", 123.45M)}),
+                cultureName: "en"
+            )).ShouldBe("*BEGIN*123.45*END*");
+
+            (await _templateRenderer.RenderAsync(
+                TestTemplates.ShowDecimalNumber,
+                new Dictionary<string, decimal>(new List<KeyValuePair<string, decimal>> {new("amount", 123.45M)}),
+                cultureName: "de"
+            )).ShouldBe("*BEGIN*123,45*END*");
+        }
 
         private class WelcomeEmailModel
         {

@@ -41,7 +41,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Inject]
         protected IUiMessageService UiMessageService { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             await SetDefaultValuesAsync();

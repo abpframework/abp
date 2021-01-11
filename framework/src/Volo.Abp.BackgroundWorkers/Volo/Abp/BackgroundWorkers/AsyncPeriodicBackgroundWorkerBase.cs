@@ -11,46 +11,47 @@ namespace Volo.Abp.BackgroundWorkers
     public abstract class AsyncPeriodicBackgroundWorkerBase : BackgroundWorkerBase
     {
         protected IServiceScopeFactory ServiceScopeFactory { get; }
-        protected AbpTimer Timer { get; }
+        protected AbpAsyncTimer Timer { get; }
 
         protected AsyncPeriodicBackgroundWorkerBase(
-            AbpTimer timer,
+            AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Timer = timer;
-            Timer.Elapsed += Timer_Elapsed;
+            Timer.Elapsed = Timer_Elapsed;
         }
 
-        public async override Task StartAsync(CancellationToken cancellationToken = default)
+        public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
             await base.StartAsync(cancellationToken);
             Timer.Start(cancellationToken);
         }
 
-        public async override Task StopAsync(CancellationToken cancellationToken = default)
+        public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             Timer.Stop(cancellationToken);
             await base.StopAsync(cancellationToken);
         }
 
-        private void Timer_Elapsed(object sender, System.EventArgs e)
+        private async Task Timer_Elapsed(AbpAsyncTimer timer)
+        {
+            await DoWorkAsync();
+        }
+
+        private async Task DoWorkAsync()
         {
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 try
                 {
-                    AsyncHelper.RunSync(
-                        () => DoWorkAsync(new PeriodicBackgroundWorkerContext(scope.ServiceProvider))
-                    );
+                    await DoWorkAsync(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
                 }
                 catch (Exception ex)
                 {
-                    AsyncHelper.RunSync(
-                        () => scope.ServiceProvider
-                            .GetRequiredService<IExceptionNotifier>()
-                            .NotifyAsync(new ExceptionNotificationContext(ex))
-                    );
+                    await scope.ServiceProvider
+                        .GetRequiredService<IExceptionNotifier>()
+                        .NotifyAsync(new ExceptionNotificationContext(ex));
 
                     Logger.LogException(ex);
                 }
