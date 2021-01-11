@@ -8,6 +8,7 @@ using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Wpf;
 using Volo.Abp.DependencyInjection;
@@ -49,6 +50,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     return new AppTemplate();
                 case AppProTemplate.TemplateName:
                     return new AppProTemplate();
+                case MicroserviceProTemplate.TemplateName:
+                    return new MicroserviceProTemplate();
                 case ModuleTemplate.TemplateName:
                     return new ModuleTemplate();
                 case ModuleProTemplate.TemplateName:
