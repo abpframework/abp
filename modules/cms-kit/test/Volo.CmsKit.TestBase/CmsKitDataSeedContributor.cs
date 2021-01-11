@@ -27,7 +27,7 @@ namespace Volo.CmsKit
         private readonly IRatingRepository _ratingRepository;
         private readonly ICurrentTenant _currentTenant;
         private readonly IContentRepository _contentRepository;
-        private readonly IEntityTagRepository _entityTagRepository;
+        private readonly IEntityTagManager _entityTagManager;
         private readonly ITagManager _tagManager;
         private readonly IPageRepository _pageRepository;
         private readonly IOptions<CmsKitOptions> _options;
@@ -39,10 +39,10 @@ namespace Volo.CmsKit
             ICommentRepository commentRepository,
             ReactionManager reactionManager,
             IRatingRepository ratingRepository,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IContentRepository contentRepository,
-            ITagManager tagManager, 
-            IEntityTagRepository entityTagRepository, 
+            ITagManager tagManager,
+            IEntityTagManager entityTagManager,
             IPageRepository pageRepository,
             IOptions<CmsKitOptions> options)
         {
@@ -55,7 +55,7 @@ namespace Volo.CmsKit
             _currentTenant = currentTenant;
             _contentRepository = contentRepository;
             _tagManager = tagManager;
-            _entityTagRepository = entityTagRepository;
+            _entityTagManager = entityTagManager;
             _pageRepository = pageRepository;
             _options = options;
         }
@@ -64,6 +64,8 @@ namespace Volo.CmsKit
         {
             using (_currentTenant.Change(context?.TenantId))
             {
+                await ConfigureCmsKitOptionsAsync();
+
                 await SeedUsersAsync();
 
                 await SeedCommentsAsync();
@@ -77,13 +79,15 @@ namespace Volo.CmsKit
                 await SeedTagsAsync();
 
                 await SeedPagesAsync();
-
-                await ConfigureCmsKitOptionsAsync();
             }
         }
 
         private Task ConfigureCmsKitOptionsAsync()
         {
+            _options.Value.Tags.AddOrReplace(_cmsKitTestData.EntityType1);
+            _options.Value.Tags.AddOrReplace(_cmsKitTestData.EntityType2);
+            _options.Value.Tags.AddOrReplace(_cmsKitTestData.Content_1_EntityType);
+            _options.Value.Tags.AddOrReplace(_cmsKitTestData.Content_2_EntityType);
             _options.Value.Tags.AddOrReplace(_cmsKitTestData.TagDefinition_1_EntityType);
 
             return Task.CompletedTask;
@@ -222,14 +226,14 @@ namespace Volo.CmsKit
                 _cmsKitTestData.Content_1_EntityId,
                 _cmsKitTestData.Content_1
                 );
-            
+
             var content2 = new Content(
                 _cmsKitTestData.Content_2_Id,
                 _cmsKitTestData.Content_2_EntityType,
                 _cmsKitTestData.Content_2_EntityId,
                 _cmsKitTestData.Content_2
             );
-            
+
             var content3 = new Content(
                 Guid.NewGuid(),
                 "deleted_entity_type",
@@ -251,14 +255,14 @@ namespace Volo.CmsKit
             {
                 var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, tag);
 
-                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_1_EntityId));
+                await _entityTagManager.AddTagToEntityAsync(tagEntity.Id, _cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
             }
-            
+
             foreach (var tag in _cmsKitTestData.Content_2_Tags)
             {
                 var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, tag);
-                
-                await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_2_EntityId));
+
+                await _entityTagManager.AddTagToEntityAsync(tagEntity.Id, _cmsKitTestData.Content_2_EntityType, _cmsKitTestData.Content_2_EntityId);
             }
         }
 
@@ -266,10 +270,10 @@ namespace Volo.CmsKit
         {
             var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Url, _cmsKitTestData.Page_1_Description);
             var page1Content = new Content(_guidGenerator.Create(), nameof(Page), page1.Id.ToString(), _cmsKitTestData.Page_1_Content);
-            
+
             await _pageRepository.InsertAsync(page1);
             await _contentRepository.InsertAsync(page1Content);
-            
+
             var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Url, _cmsKitTestData.Page_2_Description);
             var page2Content = new Content(_guidGenerator.Create(), nameof(Page), page2.Id.ToString(), _cmsKitTestData.Page_2_Content);
 

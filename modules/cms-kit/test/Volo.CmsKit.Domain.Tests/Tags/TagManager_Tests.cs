@@ -22,7 +22,7 @@ namespace Volo.CmsKit.Tags
         [Fact]
         public async Task ShouldAddWhenGettingAsync()
         {
-            var newTagEntityType = "testEntity";
+            var newTagEntityType = _cmsKitTestData.EntityType1;
             var newTagName = "test_tag_2123";
             
             var doesExist = await _tagRepository.AnyAsync(newTagEntityType, newTagName);
@@ -53,15 +53,27 @@ namespace Volo.CmsKit.Tags
         }
 
         [Fact]
-        public async Task ShouldInsert()
+        public async Task ShouldInsertAsync()
         {
-            var tag = await _tagManager.InsertAsync(Guid.NewGuid(), "test", "test");
+            var tagName = "Freshly Created New Tag";
+            var tag = await _tagManager.InsertAsync(Guid.NewGuid(), _cmsKitTestData.EntityType1, tagName);
 
             tag.ShouldNotBeNull();
 
-            var doesExist = await _tagRepository.AnyAsync("test", "test");
+            var doesExist = await _tagRepository.AnyAsync(_cmsKitTestData.EntityType1, tagName);
             
             doesExist.ShouldBeTrue();
+        }
+        [Fact]
+        public async Task ShouldntInsertWithUnconfiguredEntityTypeAsync()
+        {
+            var notConfiguredEntityType = "My.Namespace.SomeEntity";
+
+            var exception = await Should.ThrowAsync<EntityNotTaggableException>(async () => 
+                await _tagManager.InsertAsync(Guid.NewGuid(), notConfiguredEntityType, "test"));
+
+            exception.ShouldNotBeNull();
+            exception.Data[nameof(Tag.EntityType)].ShouldBe(notConfiguredEntityType);
         }
         
         [Fact]
