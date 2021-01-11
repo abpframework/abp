@@ -251,6 +251,14 @@ namespace Volo.CmsKit
 
         private async Task SeedTagsAsync()
         {
+            var created1 = await _tagManager.InsertAsync(_cmsKitTestData.TagId_1, _cmsKitTestData.EntityType1, _cmsKitTestData.TagName_1);
+
+            await _entityTagManager.AddTagToEntityAsync(created1.Id, created1.EntityType, _cmsKitTestData.EntityId1);
+
+            var created2 = await _tagManager.InsertAsync(_cmsKitTestData.TagId_2, _cmsKitTestData.EntityType2, _cmsKitTestData.TagName_2);
+
+            await _entityTagManager.AddTagToEntityAsync(created2.Id, created2.EntityType, _cmsKitTestData.EntityId2);
+
             foreach (var tag in _cmsKitTestData.Content_1_Tags)
             {
                 var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, tag);
