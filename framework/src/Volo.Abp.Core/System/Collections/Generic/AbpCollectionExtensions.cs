@@ -107,7 +107,7 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Removes all items from the collection those satisfy the given <paramref name="predicate"/>.
+        /// Removes all items from the collection.
         /// </summary>
         /// <typeparam name="T">Type of the items in the collection</typeparam>
         /// <param name="source">The collection</param>

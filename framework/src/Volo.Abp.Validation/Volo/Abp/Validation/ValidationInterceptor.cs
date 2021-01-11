@@ -13,7 +13,7 @@ namespace Volo.Abp.Validation
             _methodInvocationValidator = methodInvocationValidator;
         }
 
-        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             Validate(invocation);
             await invocation.ProceedAsync();

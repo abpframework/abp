@@ -19,17 +19,23 @@ namespace Volo.Abp.SettingManagement.MongoDB
 
         public virtual async Task<Setting> FindAsync(string name, string providerName, string providerKey)
         {
-            return await GetMongoQueryable().OrderBy(x => x.Id).FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey);
+            return await (await GetMongoQueryableAsync())
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey);
         }
 
         public virtual async Task<List<Setting>> GetListAsync(string providerName, string providerKey)
         {
-            return await GetMongoQueryable().Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey).ToListAsync();
+            return await (await GetMongoQueryableAsync())
+                .Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey)
+                .ToListAsync();
         }
 
         public virtual async Task<List<Setting>> GetListAsync(string[] names, string providerName, string providerKey)
         {
-            return await GetMongoQueryable().Where(s => names.Contains(s.Name) &&  s.ProviderName == providerName && s.ProviderKey == providerKey).ToListAsync();
+            return await (await GetMongoQueryableAsync())
+                .Where(s => names.Contains(s.Name) && s.ProviderName == providerName && s.ProviderKey == providerKey)
+                .ToListAsync();
         }
     }
 }

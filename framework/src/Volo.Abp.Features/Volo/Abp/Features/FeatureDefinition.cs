@@ -69,8 +69,8 @@ namespace Volo.Abp.Features
         /// </summary>
         /// <param name="name">Name of the property</param>
         /// <returns>
-        /// Returns the value in the <see cref="Properties"/> dictionary by given <see cref="name"/>.
-        /// Returns null if given <see cref="name"/> is not present in the <see cref="Properties"/> dictionary.
+        /// Returns the value in the <see cref="Properties"/> dictionary by given <paramref name="name"/>.
+        /// Returns null if given <paramref name="name"/> is not present in the <see cref="Properties"/> dictionary.
         /// </returns>
         [CanBeNull]
         public object this[string name]

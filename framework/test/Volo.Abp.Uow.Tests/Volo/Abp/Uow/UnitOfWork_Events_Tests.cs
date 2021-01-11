@@ -26,7 +26,7 @@ namespace Volo.Abp.Uow
             {
                 uow.OnCompleted(() =>
                 {
-                    completed = true; 
+                    completed = true;
                     return Task.CompletedTask;
                 });
 
@@ -50,7 +50,12 @@ namespace Volo.Abp.Uow
             {
                 using (var childUow = _unitOfWorkManager.Begin())
                 {
-                    childUow.OnCompleted(async () => completed = true);
+                    childUow.OnCompleted(() =>
+                    {
+                        completed = true;
+                        return Task.CompletedTask;
+                    });
+
                     uow.Disposed += (sender, args) => disposed = true;
 
                     await childUow.CompleteAsync();
@@ -80,9 +85,14 @@ namespace Volo.Abp.Uow
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                uow.OnCompleted(async () => completed = true);
-                uow.Failed += (sender, args) => failed = true;
-                uow.Disposed += (sender, args) => disposed = true;
+                uow.OnCompleted(() =>
+                {
+                    completed = true;
+                    return Task.CompletedTask;
+                });
+
+                uow.Failed += (_, _) => failed = true;
+                uow.Disposed += (_, _) => disposed = true;
             }
 
             completed.ShouldBeFalse();
@@ -101,7 +111,12 @@ namespace Volo.Abp.Uow
             {
                 using (var uow = _unitOfWorkManager.Begin())
                 {
-                    uow.OnCompleted(async () => completed = true);
+                    uow.OnCompleted(() =>
+                    {
+                        completed = true;
+                        return Task.CompletedTask;
+                    });
+
                     uow.Failed += (sender, args) => failed = true;
                     uow.Disposed += (sender, args) => disposed = true;
 
@@ -125,7 +140,12 @@ namespace Volo.Abp.Uow
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                uow.OnCompleted(async () => completed = true);
+                uow.OnCompleted(() =>
+                {
+                    completed = true;
+                    return Task.CompletedTask;
+                });
+
                 uow.Failed += (sender, args) => { failed = true; args.IsRolledback.ShouldBeTrue(); };
                 uow.Disposed += (sender, args) => disposed = true;
 

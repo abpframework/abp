@@ -18,7 +18,7 @@
         <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
             <abp-tabs name="create-user-modal-tabs">
-                <abp-tab title="@L["UserInformations"].Value">                   
+                <abp-tab title="@L["UserInformations"].Value">
                     <input asp-for="UserInfo.Id" />
                     <input asp-for="UserInfo.ConcurrencyStamp" />
                     <abp-input asp-for="UserInfo.UserName" />
@@ -60,8 +60,9 @@
                 <abp-tab title="@L["Roles"].Value">
                     @for (var i = 0; i < Model.Roles.Length; i++)
                     {
-                        <abp-input asp-for="@Model.Roles[i].IsAssigned" label="@Model.Roles[i].Name" />
-                        <input asp-for="@Model.Roles[i].Name" />
+                        var role = Model.Roles[i];
+                        <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
+                        <input abp-id-name="@Model.Roles[i].Name" asp-for="@role.Name" />
                     }
                 </abp-tab>
             </abp-tabs>

@@ -17,7 +17,7 @@ namespace Volo.Abp.Features
             CurrentTenant = currentTenant;
         }
 
-        public async override Task<string> GetOrNullAsync(FeatureDefinition feature)
+        public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
         {
             return await FeatureStore.GetOrNullAsync(feature.Name, Name, CurrentTenant.Id?.ToString());
         }
