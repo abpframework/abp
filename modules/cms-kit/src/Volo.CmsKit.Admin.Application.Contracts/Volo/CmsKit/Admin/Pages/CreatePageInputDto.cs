@@ -17,9 +17,5 @@ namespace Volo.CmsKit.Admin.Pages
 
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxDescriptionLength))]
         public string Description { get; set; }
-        
-        [Required]
-        [DynamicMaxLength(typeof(ContentConsts), nameof(ContentConsts.MaxValueLength))]
-        public string Content { get; set; }
     }
 }

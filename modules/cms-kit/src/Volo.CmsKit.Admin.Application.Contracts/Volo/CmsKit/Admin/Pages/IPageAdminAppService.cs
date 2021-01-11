@@ -7,8 +7,5 @@ namespace Volo.CmsKit.Admin.Pages
 {
     public interface IPageAdminAppService : ICrudAppService<PageDto, PageDto, Guid, GetPagesInputDto, CreatePageInputDto, UpdatePageInputDto>
     {
-        Task SetImageAsync(Guid id, RemoteStreamContent content);
-
-        Task<RemoteStreamContent> GetImageAsync(Guid id);
     }
 }

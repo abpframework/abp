@@ -15,14 +15,12 @@ namespace Volo.CmsKit.Pages
         private readonly IPageAdminAppService _pageAdminAppService;
 
         private readonly IPageRepository _pageRepository;
-        private readonly IContentRepository _contentRepository;
 
         public PageAdminAppService_Tests()
         {
             _data = GetRequiredService<CmsKitTestData>();
             _pageAdminAppService = GetRequiredService<IPageAdminAppService>();
             _pageRepository = GetRequiredService<IPageRepository>();
-            _contentRepository = GetRequiredService<IContentRepository>();
         }
 
         [Fact]
@@ -66,8 +64,7 @@ namespace Volo.CmsKit.Pages
             var dto = new CreatePageInputDto
             {
                 Title = "test",
-                Url = "test-url",
-                Content = "test-content"
+                Url = "test-url"
             };
 
             await Should.NotThrowAsync(async () => await _pageAdminAppService.CreateAsync(dto));
@@ -83,42 +80,7 @@ namespace Volo.CmsKit.Pages
             var dto = new CreatePageInputDto
             {
                 Title = "test",
-                Url = _data.Page_1_Url,
-                Content = "test-content"
-            };
-
-            var exception = await Should.ThrowAsync<PageUrlAlreadyExistException>(async () => await _pageAdminAppService.CreateAsync(dto));
-            
-            exception.Code.ShouldBe(CmsKitErrorCodes.Pages.UrlAlreadyExist);
-        }
-        
-        [Fact]
-        public async Task ShouldCreateWithContentAsync()
-        {
-            var dto = new CreatePageInputDto
-            {
-                Title = "test",
-                Url = "test-url",
-                Content = "my-test-content"
-            };
-
-            await Should.NotThrowAsync(async () => await _pageAdminAppService.CreateAsync(dto));
-
-            var page = await _pageRepository.GetByUrlAsync(dto.Url);
-
-            var content = await _contentRepository.GetAsync(nameof(Page), page.Id.ToString());
-            
-            content.Value.ShouldBe(dto.Content);
-        }
-        
-        [Fact]
-        public async Task ShouldNotCreateExistUrlWithContentAsync()
-        {
-            var dto = new CreatePageInputDto
-            {
-                Title = "test",
-                Url = _data.Page_1_Url,
-                Content = "my-test-content"
+                Url = _data.Page_1_Url
             };
 
             var exception = await Should.ThrowAsync<PageUrlAlreadyExistException>(async () => await _pageAdminAppService.CreateAsync(dto));
@@ -133,8 +95,7 @@ namespace Volo.CmsKit.Pages
             {
                 Title = _data.Page_1_Title + "++",
                 Description = "new description",
-                Url = _data.Page_1_Url+ "test",
-                Content = _data.Page_1_Content + "+"
+                Url = _data.Page_1_Url+ "test"
             };
 
             await Should.NotThrowAsync(async () => await _pageAdminAppService.UpdateAsync(_data.Page_1_Id, dto));
@@ -158,8 +119,7 @@ namespace Volo.CmsKit.Pages
             {
                 Title = _data.Page_1_Title + "++",
                 Description = "new description",
-                Url = _data.Page_2_Url,
-                Content = _data.Page_1_Content + "+"
+                Url = _data.Page_2_Url
             };
 
             await Should.ThrowAsync<Exception>(async () => await _pageAdminAppService.UpdateAsync(_data.Page_1_Id, dto));
@@ -171,8 +131,6 @@ namespace Volo.CmsKit.Pages
             await _pageAdminAppService.DeleteAsync(_data.Page_1_Id);
 
             await Should.ThrowAsync<Exception>(async () => await _pageRepository.GetAsync(_data.Page_1_Id));
-            
-            await Should.ThrowAsync<Exception>(async () => await _contentRepository.GetAsync(nameof(Page), _data.Page_1_Id.ToString()));
         }
     }
 }

@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.BlobStoring;
-using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Permissions;
@@ -20,18 +15,10 @@ namespace Volo.CmsKit.Admin.Pages
     public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
     {
         protected readonly IPageRepository PageRepository;
-        protected readonly IContentRepository ContentRepository;
-
-        protected readonly IBlobContainer<PageImageContainer> BlobContainer;
         
-        public PageAdminAppService(
-            IPageRepository pageRepository,
-            IContentRepository contentRepository,
-            IBlobContainer<PageImageContainer> blobContainer)
+        public PageAdminAppService(IPageRepository pageRepository)
         {
             PageRepository = pageRepository;
-            ContentRepository = contentRepository;
-            BlobContainer = blobContainer;
         }
 
         public virtual async Task<PageDto> GetAsync(Guid id)
@@ -67,15 +54,6 @@ namespace Volo.CmsKit.Admin.Pages
 
             await PageRepository.InsertAsync(page);
             
-            var content = new Content(
-                GuidGenerator.Create(),
-                nameof(Page),
-                page.Id.ToString(),
-                input.Content,
-                page.TenantId);
-
-            await ContentRepository.InsertAsync(content);
-            
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
@@ -94,36 +72,14 @@ namespace Volo.CmsKit.Admin.Pages
             page.Description = input.Description;
 
             await PageRepository.UpdateAsync(page);
-
-            var content = await ContentRepository.GetAsync(nameof(Page), page.Id.ToString());
-
-            content.SetValue(input.Content);
-
-            await ContentRepository.UpdateAsync(content);
             
             return ObjectMapper.Map<Page, PageDto>(page);
-        }
-
-        [Authorize(CmsKitAdminPermissions.Pages.Update)]
-        public virtual async Task SetImageAsync(Guid id, RemoteStreamContent content)
-        {
-            var page = await PageRepository.GetAsync(id);
-
-            await BlobContainer.SaveAsync(page.Id.ToString(), content.GetStream());
-        }
-
-        public virtual async Task<RemoteStreamContent> GetImageAsync(Guid id)
-        {
-            var blobStream = await BlobContainer.GetAsync(id.ToString());
-            
-            return new RemoteStreamContent(blobStream);
         }
 
         [Authorize(CmsKitAdminPermissions.Pages.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
-            await ContentRepository.DeleteAsync(nameof(Page), id.ToString(), CurrentTenant?.Id, CancellationToken.None);
-            await PageRepository.DeleteAsync(id, cancellationToken: CancellationToken.None);
+            await PageRepository.DeleteAsync(id);
         }
 
         protected virtual async Task CheckPageUrlAsync(string url)
