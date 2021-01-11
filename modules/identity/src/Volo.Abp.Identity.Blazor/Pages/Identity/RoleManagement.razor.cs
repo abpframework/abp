@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
+using Blazorise.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
@@ -27,7 +28,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected bool HasManagePermissionsPermission { get; set; }
 
         protected PageToolbar Toolbar { get; set; }
-        
+
         private List<TableColumn> RoleManagementTableColumns => TableColumns.Get<RoleManagement>();
 
         public RoleManagement()
@@ -58,7 +59,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                         }
                     },
                     new EntityAction
-                    { 
+                    {
                         Text = L["Permissions"],
                         RequiredPolicy = ManagePermissionsPolicyName,
                         Clicked = async (data) =>
