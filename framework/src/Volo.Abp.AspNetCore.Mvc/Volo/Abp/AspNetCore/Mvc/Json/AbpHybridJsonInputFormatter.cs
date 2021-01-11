@@ -8,8 +8,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 {
     public class AbpHybridJsonInputFormatter : TextInputFormatter, IInputFormatterExceptionPolicy
     {
-        public AbpHybridJsonInputFormatter()
+        private readonly SystemTextJsonInputFormatter _systemTextJsonInputFormatter;
+        private readonly NewtonsoftJsonInputFormatter _newtonsoftJsonInputFormatter;
+
+        public AbpHybridJsonInputFormatter(SystemTextJsonInputFormatter systemTextJsonInputFormatter, NewtonsoftJsonInputFormatter newtonsoftJsonInputFormatter)
         {
+            _systemTextJsonInputFormatter = systemTextJsonInputFormatter;
+            _newtonsoftJsonInputFormatter = newtonsoftJsonInputFormatter;
+
             SupportedEncodings.Add(UTF8EncodingWithoutBOM);
             SupportedEncodings.Add(UTF16EncodingLittleEndian);
 
@@ -18,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationAnyJsonSyntax);
         }
 
-        public async override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+        public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
         {
             return await GetTextInputFormatter(context).ReadRequestBodyAsync(context, encoding);
         }
@@ -26,12 +32,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
         protected virtual TextInputFormatter GetTextInputFormatter(InputFormatterContext context)
         {
             var typesMatcher = context.HttpContext.RequestServices.GetRequiredService<AbpSystemTextJsonUnsupportedTypeMatcher>();
+
             if (!typesMatcher.Match(context.ModelType))
             {
-                return context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonInputFormatter>();
+                return _systemTextJsonInputFormatter;
             }
 
-            return context.HttpContext.RequestServices.GetRequiredService<NewtonsoftJsonInputFormatter>();
+            return _newtonsoftJsonInputFormatter;
         }
 
         public virtual InputFormatterExceptionPolicy ExceptionPolicy => InputFormatterExceptionPolicy.MalformedInputExceptions;

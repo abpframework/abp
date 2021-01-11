@@ -16,7 +16,7 @@ namespace Volo.Abp.BlobStoring.Minio
             MinioBlobNameCalculator = minioBlobNameCalculator;
         }
 
-        public async override Task SaveAsync(BlobProviderSaveArgs args)
+        public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetMinioConfiguration();
@@ -36,7 +36,7 @@ namespace Volo.Abp.BlobStoring.Minio
             await client.PutObjectAsync(containerName, blobName, args.BlobStream, args.BlobStream.Length);
         }
 
-        public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
@@ -51,7 +51,7 @@ namespace Volo.Abp.BlobStoring.Minio
             return false;
         }
 
-        public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
@@ -60,7 +60,7 @@ namespace Volo.Abp.BlobStoring.Minio
             return await BlobExistsAsync(client, containerName, blobName);
         }
 
-        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);

@@ -57,6 +57,9 @@
     "ProfileTab:Password": "Şifre değiştir",
     "ProfileTab:PersonalInfo": "Kişisel bilgiler",
     "ReturnToApplication": "Uygulamaya geri dön",
-    "Volo.Account:InvalidEmailAddress": "Email adresi bulunamadı: {0}"
+    "Volo.Account:InvalidEmailAddress": "Email adresi bulunamadı: {0}",
+    "PasswordReset": "Şifre Sıfırlama",
+    "PasswordResetInfoInEmail": "Şifrenizi sıfırlamanız için bir talep aldık! Eğer bu talebi siz gerçekleştirmişseniz, şifrenizi sıfırlamak için bağlantıya tıklayın.",
+    "ResetMyPassword": "Şifremi sıfırla"
   }
 }

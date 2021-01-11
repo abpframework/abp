@@ -40,6 +40,7 @@ namespace Volo.Abp.Cli
                 options.Commands["translate"] = typeof(TranslateCommand);
                 options.Commands["build"] = typeof(BuildCommand);
                 options.Commands["bundle"] = typeof(BundleCommand);
+                options.Commands["create-migration-and-run-migrator"] = typeof(CreateMigrationAndRunMigrator);
             });
         }
     }

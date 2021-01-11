@@ -18,25 +18,25 @@ namespace Volo.Blogging.Posts
 
         public async Task<List<Post>> GetPostsByBlogId(Guid id)
         {
-            return await GetMongoQueryable().Where(p => p.BlogId == id).OrderByDescending(p => p.CreationTime).ToListAsync();
+            return await (await GetMongoQueryableAsync()).Where(p => p.BlogId == id).OrderByDescending(p => p.CreationTime).ToListAsync();
         }
 
 
-        public Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null)
+        public async Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null)
         {
-            var query = GetMongoQueryable().Where(p => blogId == p.BlogId && p.Url == url);
+            var query = (await GetMongoQueryableAsync()).Where(p => blogId == p.BlogId && p.Url == url);
 
             if (excludingPostId != null)
             {
                 query = query.Where(p => excludingPostId != p.Id);
             }
 
-            return query.AnyAsync();
+            return await query.AnyAsync();
         }
 
         public async Task<Post> GetPostByUrl(Guid blogId, string url)
         {
-            var post = await GetMongoQueryable().FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);
+            var post = await (await GetMongoQueryableAsync()).FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);
 
             if (post == null)
             {
@@ -48,7 +48,7 @@ namespace Volo.Blogging.Posts
 
         public async Task<List<Post>> GetOrderedList(Guid blogId, bool @descending = false)
         {
-            var query = GetMongoQueryable().Where(x => x.BlogId == blogId);
+            var query =  (await GetMongoQueryableAsync()).Where(x => x.BlogId == blogId);
 
             if (!descending)
             {

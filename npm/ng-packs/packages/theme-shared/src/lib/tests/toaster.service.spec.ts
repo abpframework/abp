@@ -11,7 +11,7 @@ import { ToasterService } from '../services/toaster.service';
   exports: [ToastContainerComponent],
   entryComponents: [ToastContainerComponent],
   declarations: [ToastContainerComponent, ToastComponent],
-  imports: [CoreTestingModule.forTest()],
+  imports: [CoreTestingModule.withConfig()],
 })
 export class MockModule {}
 const toastClassPrefix = 'abp-toast';
@@ -21,7 +21,7 @@ describe('ToasterService', () => {
   let service: ToasterService;
   const createService = createServiceFactory({
     service: ToasterService,
-    imports: [NgxsModule.forRoot(), CoreTestingModule.forTest(), MockModule],
+    imports: [NgxsModule.forRoot(), CoreTestingModule.withConfig(), MockModule],
   });
 
   beforeEach(() => {

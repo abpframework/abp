@@ -5,35 +5,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 {
     public class ToolbarConfigurationContext : IToolbarConfigurationContext
     {
         public IServiceProvider ServiceProvider { get; }
-        private readonly object _serviceProviderLock = new object();
 
-        private TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
-        {
-            if (reference == null)
-            {
-                lock (_serviceProviderLock)
-                {
-                    if (reference == null)
-                    {
-                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
-                    }
-                }
-            }
+        private readonly IAbpLazyServiceProvider _lazyServiceProvider;
 
-            return reference;
-        }
+        public IAuthorizationService AuthorizationService => _lazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
 
-        public IAuthorizationService AuthorizationService => LazyGetRequiredService(typeof(IAuthorizationService), ref _authorizationService);
-        private IAuthorizationService _authorizationService;
-
-        private IStringLocalizerFactory _stringLocalizerFactory;
-        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(typeof(IStringLocalizerFactory),ref _stringLocalizerFactory);
+        public IStringLocalizerFactory StringLocalizerFactory => _lazyServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
 
         public ITheme Theme { get; }
 
@@ -44,8 +28,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
             Theme = currentTheme;
             Toolbar = toolbar;
             ServiceProvider = serviceProvider;
+            _lazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
         }
-        
+
         public Task<bool> IsGrantedAsync(string policyName)
         {
             return AuthorizationService.IsGrantedAsync(policyName);
@@ -62,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
         {
             return StringLocalizerFactory.Create<T>();
         }
-        
+
         [NotNull]
         public IStringLocalizer GetLocalizer(Type resourceType)
         {

@@ -17,7 +17,7 @@ namespace Volo.Blogging.Blogs
 
         public async Task<Blog> FindByShortNameAsync(string shortName)
         {
-            return await DbSet.FirstOrDefaultAsync(p => p.ShortName == shortName);
+            return await (await GetDbSetAsync()).FirstOrDefaultAsync(p => p.ShortName == shortName);
         }
     }
 }
