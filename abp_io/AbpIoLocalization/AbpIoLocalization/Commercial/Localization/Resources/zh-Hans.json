@@ -28,8 +28,12 @@
     "MyOrganizations": "我的组织",
     "ApiKey": "API key",
     "UserNameNotFound": "没有用户名为{0}的用户",
-    "SuccessfullyAddedToNewsletter": "感谢你订阅我们的新闻通讯!",
+    "SuccessfullyAddedToNewsletter": "感谢你订阅我们的新闻简讯!",
     "MyProfile": "我的资料",
-    "EmailNotValid": "请输入有效的电子邮件地址"
+    "EmailNotValid": "请输入有效的电子邮件地址",
+    "JoinOurMarketingNewsletter": "加入我们的营销简讯",
+    "WouldLikeToReceiveMarketingMaterials": "我想收到市场营销资料,例如产品交易和特别优惠.",
+    "StartUsingYourLicenseNow": "立即开始使用你的许可证",
+    "WelcomePage": "欢迎页面"
   }
 }
