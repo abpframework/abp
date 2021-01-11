@@ -112,7 +112,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .CountAsync(cancellationToken);
         }
 
-        public async Task<List<IdentityRole>> GetUnaddedRolesAsync(
+        public virtual async Task<List<IdentityRole>> GetUnaddedRolesAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
             int maxResultCount = int.MaxValue,
@@ -132,7 +132,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<int> GetUnaddedRolesCountAsync(
+        public virtual async Task<int> GetUnaddedRolesCountAsync(
             OrganizationUnit organizationUnit,
             string filter = null,
             CancellationToken cancellationToken = default)
@@ -174,7 +174,7 @@ namespace Volo.Abp.Identity.MongoDB
             return await query.CountAsync(cancellationToken);
         }
 
-        public async Task<List<IdentityUser>> GetUnaddedUsersAsync(
+        public virtual async Task<List<IdentityUser>> GetUnaddedUsersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
             int maxResultCount = int.MaxValue,
@@ -199,7 +199,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<int> GetUnaddedUsersCountAsync(OrganizationUnit organizationUnit, string filter = null,
+        public virtual async Task<int> GetUnaddedUsersCountAsync(OrganizationUnit organizationUnit, string filter = null,
             CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync(cancellationToken);
