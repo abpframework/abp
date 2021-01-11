@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity
         public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
         {
             var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
-            var totalCount = await RoleRepository.GetCountAsync();
+            var totalCount = await RoleRepository.GetCountAsync(input.Filter);
 
             return new PagedResultDto<IdentityRoleDto>(
                 totalCount,
