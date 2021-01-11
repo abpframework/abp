@@ -13,7 +13,7 @@ namespace Volo.Abp.DynamicProxy
 		    _cache = new ConcurrentDictionary<MethodInfo, object>();
 	    }
 
-	    public async override Task InterceptAsync(IAbpMethodInvocation invocation)
+	    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
 	    {
 		    if (_cache.ContainsKey(invocation.Method))
 		    {

@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         public override string Name => ContributorName;
 
-        protected async override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+        protected override async Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
         {
             if (!httpContext.Request.HasFormContentType)
             {
