@@ -14,11 +14,19 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             if (context.ExistingConnection != null)
             {
-                return context.DbContextOptions.UseSqlServer(context.ExistingConnection, sqlServerOptionsAction);
+                return context.DbContextOptions.UseSqlServer(context.ExistingConnection, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    sqlServerOptionsAction?.Invoke(optionsBuilder);
+                });
             }
             else
             {
-                return context.DbContextOptions.UseSqlServer(context.ConnectionString, sqlServerOptionsAction);
+                return context.DbContextOptions.UseSqlServer(context.ConnectionString, optionsBuilder =>
+                {
+                    optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    sqlServerOptionsAction?.Invoke(optionsBuilder);
+                });
             }
         }
     }

@@ -1,59 +1,64 @@
 import {
+  ChangeDetectorRef,
   Directive,
   ElementRef,
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Optional,
   Renderer2,
-  SimpleChanges,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { PermissionService } from '../services/permission.service';
 
 @Directive({
   selector: '[abpPermission]',
 })
-export class PermissionDirective implements OnInit, OnDestroy, OnChanges {
+export class PermissionDirective implements OnDestroy, OnChanges {
   @Input('abpPermission') condition: string;
 
   subscription: Subscription;
 
   constructor(
-    private elRef: ElementRef,
+    private elRef: ElementRef<HTMLElement>,
     private renderer: Renderer2,
     @Optional() private templateRef: TemplateRef<any>,
     private vcRef: ViewContainerRef,
     private permissionService: PermissionService,
+    private cdRef: ChangeDetectorRef,
   ) {}
 
   private check() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+
     this.subscription = this.permissionService
       .getGrantedPolicy$(this.condition)
+      .pipe(distinctUntilChanged())
       .subscribe(isGranted => {
-        if (this.templateRef && isGranted) {
-          this.vcRef.clear();
-          this.vcRef.createEmbeddedView(this.templateRef);
-        } else if (this.templateRef && !isGranted) {
-          this.vcRef.clear();
-        } else if (!isGranted && !this.templateRef) {
-          this.renderer.removeChild(
-            (this.elRef.nativeElement as HTMLElement).parentElement,
-            this.elRef.nativeElement,
-          );
-        }
+        if (this.templateRef) this.initStructural(isGranted);
+        else this.initAttribute(isGranted);
+
+        this.cdRef.detectChanges();
       });
   }
 
-  ngOnInit() {
-    if (this.templateRef && !this.condition) {
-      this.vcRef.createEmbeddedView(this.templateRef);
+  private initStructural(isGranted: boolean) {
+    this.vcRef.clear();
+
+    if (isGranted) this.vcRef.createEmbeddedView(this.templateRef);
+  }
+
+  /**
+   * @deprecated Will be deleted in v5.0
+   */
+  private initAttribute(isGranted: boolean) {
+    if (!isGranted) {
+      this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
     }
   }
 
@@ -61,9 +66,7 @@ export class PermissionDirective implements OnInit, OnDestroy, OnChanges {
     if (this.subscription) this.subscription.unsubscribe();
   }
 
-  ngOnChanges({ condition }: SimpleChanges) {
-    if ((condition || { currentValue: null }).currentValue) {
-      this.check();
-    }
+  ngOnChanges() {
+    this.check();
   }
 }

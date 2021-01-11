@@ -423,13 +423,13 @@ Open the `/src/app/book/book.component.html` file and replace the create button 
 
 ````html
 <!-- Add the abpPermission directive -->
-<button abpPermission="BookStore.Books.Create" id="create" class="btn btn-primary" type="button" (click)="createBook()">
+<button *abpPermission="'BookStore.Books.Create'" id="create" class="btn btn-primary" type="button" (click)="createBook()">
   <i class="fa fa-plus mr-1"></i>
   <span>{%{{{ '::NewBook' | abpLocalization }}}%}</span>
 </button>
 ````
 
-* Just added `abpPermission="BookStore.Books.Create"` that hides the button if the current user has no permission.
+* Just added `*abpPermission="'BookStore.Books.Create'"` that hides the button if the current user has no permission.
 
 ### Hide the Edit and Delete Actions
 
@@ -443,18 +443,18 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 
 ````html
 <!-- Add the abpPermission directive -->
-<button abpPermission="BookStore.Books.Edit" ngbDropdownItem (click)="editBook(row.id)">
+<button *abpPermission="'BookStore.Books.Edit'" ngbDropdownItem (click)="editBook(row.id)">
   {%{{{ '::Edit' | abpLocalization }}}%}
 </button>
 
 <!-- Add the abpPermission directive -->
-<button abpPermission="BookStore.Books.Delete" ngbDropdownItem (click)="delete(row.id)">
+<button *abpPermission="'BookStore.Books.Delete'" ngbDropdownItem (click)="delete(row.id)">
   {%{{{ '::Delete' | abpLocalization }}}%}
 </button>
 ````
 
-* Added `abpPermission="BookStore.Books.Edit"` that hides the edit action if the current user has no editing permission.
-* Added `abpPermission="BookStore.Books.Delete"` that hides the delete action if the current user has no delete permission.
+* Added `*abpPermission="'BookStore.Books.Edit'"` that hides the edit action if the current user has no editing permission.
+* Added `*abpPermission="'BookStore.Books.Delete'"` that hides the delete action if the current user has no delete permission.
 
 {{else if UI == "Blazor"}}
 

@@ -46,7 +46,7 @@ Let's explain the code:
 
 Now, you can run the application to see the result:
 
-![bookstore-added-logo](D:/Github/abp/docs/en/images/bookstore-added-logo.png)
+![bookstore-added-logo](../../images/bookstore-added-logo.png)
 
 > Since the component inherits from the component it is replacing, you can use all the non-private fields/properties/methods of the base component in the derived component.
 
@@ -84,5 +84,3 @@ namespace MyProject.Blazor.Components
 ## Theming
 
 The [Theming](Theming.md) system allows you to build your own theme. You can create your theme from scratch or get the [Basic Theme](Basic-Theme.md) and change however you like.
-
-## Manipulating the Bundles

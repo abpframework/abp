@@ -54,8 +54,6 @@ You can use the `PermissionDirective` to manage visibility of a DOM Element acco
 
 As shown above you can remove elements from DOM with `abpPermission` structural directive.
 
-The directive can also be used as an attribute directive but we recommend to you to use it as a structural directive.
-
 ## Permission Guard
 
 You can use `PermissionGuard` if you want to control authenticated user's permission to access to the route during navigation.

@@ -62,7 +62,6 @@ namespace MyCompanyName.MyProjectName.Blazor
         private void ConfigureBlazorise(ServiceConfigurationContext context)
         {
             context.Services
-                .AddBlazorise()
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
         }
@@ -99,13 +98,6 @@ namespace MyCompanyName.MyProjectName.Blazor
             {
                 options.AddMaps<MyProjectNameBlazorModule>();
             });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider
-                .UseBootstrapProviders()
-                .UseFontAwesomeIcons();
         }
     }
 }

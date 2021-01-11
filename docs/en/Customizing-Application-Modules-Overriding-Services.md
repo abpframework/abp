@@ -196,6 +196,15 @@ This example replaces the `AccountController` (An API Controller defined in the 
 
 **`[ExposeServices(typeof(AccountController))]` is essential** here since it registers this controller for the `AccountController` in the dependency injection system. `[Dependency(ReplaceServices = true)]` is also recommended to clear the old registration (even the ASP.NET Core DI system selects the last registered one).
 
+In addition, The `AccountController` will be removed from [`ApplicationModel`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.applicationmodels.applicationmodel.controllers) because it defines `ExposeServicesAttribute`. If you don't want to remove it, you can configure `AbpAspNetCoreMvcOptions`:
+
+```csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.IgnoredControllersOnModelExclusion.AddIfNotContains(typeof(AccountController));
+});
+```
+
 ### Overriding Other Classes
 
 Overriding controllers, framework services, view component classes and any other type of classes registered to dependency injection can be overridden just like the examples above.

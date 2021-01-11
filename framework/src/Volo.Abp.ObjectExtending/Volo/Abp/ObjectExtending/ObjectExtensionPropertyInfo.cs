@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending.Modularity;

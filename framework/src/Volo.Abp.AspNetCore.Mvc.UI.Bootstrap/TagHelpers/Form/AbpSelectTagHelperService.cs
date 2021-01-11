@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -85,6 +86,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 selectTagHelper.Items = GetSelectItems(context, output);
             }
+            else
+            {
+                selectTagHelper.Items = new SelectListItem[]
+                    {
+                        new SelectListItem(TagHelper.AutocompleteSelectedItemName,TagHelper.AutocompleteSelectedItemValue,true)
+                    };
+            }
 
             var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
 
@@ -107,6 +115,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.Attributes.Add("data-autocomplete-display-property", TagHelper.AutocompleteDisplayPropertyName);
                 output.Attributes.Add("data-autocomplete-value-property", TagHelper.AutocompleteValuePropertyName);
                 output.Attributes.Add("data-autocomplete-filter-param-name", TagHelper.AutocompleteFilterParamName);
+                output.Attributes.Add("data-autocomplete-selected-item-name", TagHelper.AutocompleteSelectedItemName);
+                output.Attributes.Add("data-autocomplete-selected-item-value", TagHelper.AutocompleteSelectedItemValue);
             }
         }
 
@@ -158,7 +168,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 var label = new TagBuilder("label");
                 label.Attributes.Add("for", GetIdAttributeValue(selectTag));
-                label.InnerHtml.Append(TagHelper.Label);
+                label.InnerHtml.AppendHtml(TagHelper.Label);
 
                 return label.ToHtmlString() + GetRequiredSymbol(context, output);
             }

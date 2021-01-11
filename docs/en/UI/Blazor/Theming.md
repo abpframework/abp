@@ -44,7 +44,7 @@ All themes must define a layout for the application. The following image shows t
 
 And the same page is shown below with the [Lepton Theme](https://commercial.abp.io/themes) application layout:
 
-![lepton-theme-application-layout](../../images/lepton-theme-application-layout.png)
+![lepton-theme-application-layout](../../images/lepton-theme-blazor-layout.png)
 
 As you can see, the page is the same, but the look is completely different in the themes above.
 
@@ -67,7 +67,7 @@ The easiest way to create a new theme is to copy the [Basic Theme Source Code](h
 
 ### Global Styles / Scripts
 
-A theme generally needs to add a global style to the page. ABP provides a system to manage the [Global Styles and Scripts](Global-Scripts-Styles.md). A theme can implement the `IBundleContributer` to add global style or script files to the page.
+A theme generally needs to add a global style to the page. ABP provides a system to manage the [Global Styles and Scripts](Global-Scripts-Styles.md). A theme can implement the `IBundleContributor` to add global style or script files to the page.
 
 **Example: Adding a style to the page**
 
@@ -76,7 +76,7 @@ using Volo.Abp.Bundling;
 
 namespace MyTheme
 {
-    public class MyThemeBundleContributer : IBundleContributer
+    public class MyThemeBundleContributor : IBundleContributor
     {
         public void AddScripts(BundleContext context)
         {

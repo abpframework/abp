@@ -1,9 +1,7 @@
-import { PermissionDirective } from '../directives/permission.directive';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
+import { PermissionDirective } from '../directives/permission.directive';
 import { PermissionService } from '../services';
-import { mockStore } from './utils/common.utils';
 
 describe('PermissionDirective', () => {
   let spectator: SpectatorDirective<PermissionDirective>;
@@ -12,7 +10,6 @@ describe('PermissionDirective', () => {
   const createDirective = createDirectiveFactory({
     directive: PermissionDirective,
     providers: [
-      { provide: Store, useValue: mockStore },
       { provide: PermissionService, useValue: { getGrantedPolicy$: () => grantedPolicy$ } },
     ],
   });
@@ -37,21 +34,6 @@ describe('PermissionDirective', () => {
     });
   });
 
-  describe('without condition', () => {
-    beforeEach(() => {
-      spectator = createDirective(
-        '<div id="test-element" abpPermission>Testing Permission Directive</div>',
-      );
-      directive = spectator.directive;
-    });
-
-    it('should do nothing when condition is undefined', () => {
-      const spy = jest.spyOn(spectator.inject(Store), 'select');
-      grantedPolicy$.next(false);
-      expect(spy.mock.calls).toHaveLength(0);
-    });
-  });
-
   describe('structural', () => {
     beforeEach(() => {
       spectator = createDirective(
@@ -66,10 +48,8 @@ describe('PermissionDirective', () => {
     });
 
     it('should remove the element from DOM', () => {
-      expect(spectator.query('#test-element')).toBeTruthy();
-      expect(spectator.directive.subscription).toBeUndefined();
+      expect(spectator.query('#test-element')).toBeFalsy();
       spectator.setHostInput({ condition: 'test' });
-      expect(spectator.directive.subscription).toBeTruthy();
       grantedPolicy$.next(true);
       expect(spectator.query('#test-element')).toBeTruthy();
       grantedPolicy$.next(false);

@@ -74,7 +74,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 var label = new TagBuilder("label");
                 label.AddCssClass("custom-control-label");
                 label.Attributes.Add("for", id);
-                label.InnerHtml.Append(selectItem.Text);
+                label.InnerHtml.AppendHtml(selectItem.Text);
 
                 var wrapper = new TagBuilder("div");
                 wrapper.AddCssClass("custom-control custom-radio" + inlineClass);

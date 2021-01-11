@@ -1,19 +1,14 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { AuthGuard } from '../guards/auth.guard';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { RouterModule, UrlTree, Router } from '@angular/router';
-import { RouterOutletComponent } from '../components';
-import { APP_BASE_HREF } from '@angular/common';
+import { AuthGuard } from '../guards/auth.guard';
+import { AuthService } from '../services/auth.service';
 
 describe('AuthGuard', () => {
   let spectator: SpectatorService<AuthGuard>;
   let guard: AuthGuard;
   const createService = createServiceFactory({
     service: AuthGuard,
-    mocks: [OAuthService, Router],
-    imports: [RouterModule.forRoot([{ path: '', component: RouterOutletComponent }], { relativeLinkResolution: 'legacy' })],
-    declarations: [RouterOutletComponent],
-    providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
+    mocks: [OAuthService, AuthService],
   });
 
   beforeEach(() => {
@@ -23,16 +18,15 @@ describe('AuthGuard', () => {
 
   it('should return true when user logged in', () => {
     spectator.inject(OAuthService).hasValidAccessToken.andReturn(true);
-    expect(guard.canActivate(null, null)).toBe(true);
+    expect(guard.canActivate()).toBe(true);
   });
 
-  it('should return navigate to login page with redirectUrl state', () => {
-    const router = spectator.inject(Router);
+  it('should execute the initLogin method of the authService', () => {
+    const authService = spectator.inject(AuthService);
     spectator.inject(OAuthService).hasValidAccessToken.andReturn(false);
+    const initLoginSpy = jest.spyOn(authService, 'initLogin');
 
-    expect(guard.canActivate(null, { url: '/' } as any)).toBe(true);
-    expect(router.navigate).toHaveBeenCalledWith(['/account/login'], {
-      state: { redirectUrl: '/' },
-    });
+    expect(guard.canActivate()).toBe(true);
+    expect(initLoginSpy).toHaveBeenCalled();
   });
 });
