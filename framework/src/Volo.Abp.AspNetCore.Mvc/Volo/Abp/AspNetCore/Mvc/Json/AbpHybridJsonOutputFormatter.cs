@@ -8,8 +8,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
 {
     public class AbpHybridJsonOutputFormatter : TextOutputFormatter
     {
-        public AbpHybridJsonOutputFormatter()
+        private readonly SystemTextJsonOutputFormatter _systemTextJsonOutputFormatter;
+        private readonly NewtonsoftJsonOutputFormatter _newtonsoftJsonOutputFormatter;
+
+        public AbpHybridJsonOutputFormatter(SystemTextJsonOutputFormatter systemTextJsonOutputFormatter, NewtonsoftJsonOutputFormatter newtonsoftJsonOutputFormatter)
         {
+            _systemTextJsonOutputFormatter = systemTextJsonOutputFormatter;
+            _newtonsoftJsonOutputFormatter = newtonsoftJsonOutputFormatter;
+
             SupportedEncodings.Add(Encoding.UTF8);
             SupportedEncodings.Add(Encoding.Unicode);
 
@@ -18,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             SupportedMediaTypes.Add(MediaTypeHeaderValues.ApplicationAnyJsonSyntax);
         }
 
-        public async override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
             await GetTextInputFormatter(context).WriteResponseBodyAsync(context, selectedEncoding);
         }
@@ -28,10 +34,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             var typesMatcher = context.HttpContext.RequestServices.GetRequiredService<AbpSystemTextJsonUnsupportedTypeMatcher>();
             if (!typesMatcher.Match(context.ObjectType))
             {
-                return context.HttpContext.RequestServices.GetRequiredService<SystemTextJsonOutputFormatter>();
+                return _systemTextJsonOutputFormatter;
             }
 
-            return context.HttpContext.RequestServices.GetRequiredService<NewtonsoftJsonOutputFormatter>();
+            return _newtonsoftJsonOutputFormatter;
         }
     }
 }

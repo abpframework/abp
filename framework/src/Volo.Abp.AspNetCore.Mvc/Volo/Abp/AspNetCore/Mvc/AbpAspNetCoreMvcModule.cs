@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.ApiVersioning;
+using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
@@ -49,7 +50,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         typeof(AbpApiVersioningAbstractionsModule),
         typeof(AbpAspNetCoreMvcContractsModule),
         typeof(AbpUiNavigationModule),
-        typeof(AbpGlobalFeaturesModule)
+        typeof(AbpGlobalFeaturesModule),
+        typeof(AbpDddApplicationModule)
         )]
     public class AbpAspNetCoreMvcModule : AbpModule
     {

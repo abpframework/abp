@@ -6,9 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Linq;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 

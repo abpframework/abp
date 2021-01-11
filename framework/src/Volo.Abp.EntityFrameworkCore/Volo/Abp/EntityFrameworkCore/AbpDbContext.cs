@@ -23,7 +23,6 @@ using Volo.Abp.EntityFrameworkCore.EntityHistory;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
-using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
@@ -35,31 +34,33 @@ namespace Volo.Abp.EntityFrameworkCore
     public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency
         where TDbContext : DbContext
     {
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
         protected virtual bool IsMultiTenantFilterEnabled => DataFilter?.IsEnabled<IMultiTenant>() ?? false;
 
         protected virtual bool IsSoftDeleteFilterEnabled => DataFilter?.IsEnabled<ISoftDelete>() ?? false;
 
-        public ICurrentTenant CurrentTenant { get; set; }
+        public ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
 
-        public IGuidGenerator GuidGenerator { get; set; }
+        public IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-        public IDataFilter DataFilter { get; set; }
+        public IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
-        public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
+        public IEntityChangeEventHelper EntityChangeEventHelper => LazyServiceProvider.LazyGetService<IEntityChangeEventHelper>(NullEntityChangeEventHelper.Instance);
 
-        public IAuditPropertySetter AuditPropertySetter { get; set; }
+        public IAuditPropertySetter AuditPropertySetter => LazyServiceProvider.LazyGetRequiredService<IAuditPropertySetter>();
 
-        public IEntityHistoryHelper EntityHistoryHelper { get; set; }
+        public IEntityHistoryHelper EntityHistoryHelper => LazyServiceProvider.LazyGetService<IEntityHistoryHelper>(NullEntityHistoryHelper.Instance);
 
-        public IAuditingManager AuditingManager { get; set; }
+        public IAuditingManager AuditingManager => LazyServiceProvider.LazyGetRequiredService<IAuditingManager>();
 
-        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
+        public IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
-        public IClock Clock { get; set; }
+        public IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
-        public ILogger<AbpDbContext<TDbContext>> Logger { get; set; }
+        public ILogger<AbpDbContext<TDbContext>> Logger => LazyServiceProvider.LazyGetService<ILogger<AbpDbContext<TDbContext>>>(NullLogger<AbpDbContext<TDbContext>>.Instance);
 
         private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
             = typeof(AbpDbContext<TDbContext>)
@@ -85,10 +86,7 @@ namespace Volo.Abp.EntityFrameworkCore
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
-            GuidGenerator = SimpleGuidGenerator.Instance;
-            EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
-            EntityHistoryHelper = NullEntityHistoryHelper.Instance;
-            Logger = NullLogger<AbpDbContext<TDbContext>>.Instance;
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -148,7 +146,7 @@ namespace Volo.Abp.EntityFrameworkCore
             }
         }
 
-        public async override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -564,7 +562,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
                 !mutableEntityType.IsOwned())
             {
-                if (Clock == null || !Clock.SupportsMultipleTimezone)
+                if (LazyServiceProvider == null || Clock == null || !Clock.SupportsMultipleTimezone)
                 {
                     return;
                 }

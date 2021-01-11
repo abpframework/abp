@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
   </ItemGroup>
