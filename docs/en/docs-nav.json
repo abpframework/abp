@@ -756,6 +756,10 @@
                   "path": "UI/Angular/Config-State-Service.md"
                 },
                 {
+                  "text": "Authorization",
+                  "path": "UI/Angular/Authorization.md"
+                },
+                {
                   "text": "HTTP Requests",
                   "path": "UI/Angular/HTTP-Requests.md"
                 },
