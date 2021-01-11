@@ -1,6 +1,7 @@
 ﻿using Shouldly;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Guids;
 using Xunit;
 
 namespace Volo.CmsKit.Tags
@@ -10,18 +11,22 @@ namespace Volo.CmsKit.Tags
         private readonly CmsKitTestData _cmsKitTestData;
         private readonly IEntityTagManager _entityTagManager;
         private readonly ITagRepository _tagRepository;
+        private readonly IGuidGenerator _guidGenerator;
 
         public EntityTagManager_Tests()
         {
             _cmsKitTestData = GetRequiredService<CmsKitTestData>();
             _entityTagManager = GetRequiredService<IEntityTagManager>();
             _tagRepository = GetRequiredService<ITagRepository>();
+            _guidGenerator = GetRequiredService<IGuidGenerator>();
         }
 
         [Fact]
         public async Task AddTagToEntityAsync_ShouldAdd_WhenEverythingCorrect()
         {
-            var entityTag = await _entityTagManager.AddTagToEntityAsync(_cmsKitTestData.TagId_1, _cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
+            var tag = await _tagRepository.InsertAsync(new Tag(_guidGenerator.Create(), _cmsKitTestData.EntityType1, "My Test Tag #1"));
+
+            var entityTag = await _entityTagManager.AddTagToEntityAsync(tag.Id, _cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
 
             entityTag.ShouldNotBeNull();
         }
