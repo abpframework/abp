@@ -200,7 +200,12 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         {
             if (user.TenantId.HasValue)
             {
-                customClaims.Add(new Claim(AbpClaimTypes.TenantId, user.TenantId?.ToString()));
+                customClaims.Add(
+                    new Claim(
+                        AbpClaimTypes.TenantId,
+                        user.TenantId?.ToString()
+                    )
+                );
             }
 
             return Task.CompletedTask;

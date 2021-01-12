@@ -842,7 +842,7 @@ It has a dedicated MongoDB database (MsDemo_Blogging) to store blog and posts. I
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
   "Blogging": "mongodb://localhost/MsDemo_Blogging"
 }
 ````
@@ -968,8 +968,8 @@ There are two connection strings in the `appsettings.json` file:
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
+  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True"
 }
 ````
 

@@ -1,0 +1,13 @@
+﻿@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
+
+@model TagViewComponent.TagViewModel
+
+@if (Model.Tags != null)
+{
+    foreach (var tag in Model.Tags)
+    {
+        <span class="cmskit-tag">
+            @tag.Name
+        </span>
+    }
+}

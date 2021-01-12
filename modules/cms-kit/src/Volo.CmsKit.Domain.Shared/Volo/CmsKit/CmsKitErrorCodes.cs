@@ -2,6 +2,7 @@
 {
     public static class CmsKitErrorCodes
     {
-        //Add your business exception error codes here...
+        public const string TagAlreadyExist = "CmsKit:0001";
+        public const string ContentAlreadyExist = "CmsKit:0002";
     }
 }

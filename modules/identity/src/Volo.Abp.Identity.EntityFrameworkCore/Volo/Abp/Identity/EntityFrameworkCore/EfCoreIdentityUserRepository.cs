@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -24,7 +23,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
@@ -37,20 +36,21 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             Guid id,
             CancellationToken cancellationToken = default)
         {
-            var query = from userRole in DbContext.Set<IdentityUserRole>()
-                        join role in DbContext.Roles on userRole.RoleId equals role.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userRole in dbContext.Set<IdentityUserRole>()
+                        join role in dbContext.Roles on userRole.RoleId equals role.Id
                         where userRole.UserId == id
                         select role.Name;
-            var organizationUnitIds = DbContext.Set<IdentityUserOrganizationUnit>().Where(q => q.UserId == id).Select(q => q.OrganizationUnitId).ToArray();
+            var organizationUnitIds = dbContext.Set<IdentityUserOrganizationUnit>().Where(q => q.UserId == id).Select(q => q.OrganizationUnitId).ToArray();
 
             var organizationRoleIds = await (
-                from ouRole in DbContext.Set<OrganizationUnitRole>()
-                join ou in DbContext.Set<OrganizationUnit>() on ouRole.OrganizationUnitId equals ou.Id
+                from ouRole in dbContext.Set<OrganizationUnitRole>()
+                join ou in dbContext.Set<OrganizationUnit>() on ouRole.OrganizationUnitId equals ou.Id
                 where organizationUnitIds.Contains(ouRole.OrganizationUnitId)
                 select ouRole.RoleId
             ).ToListAsync(GetCancellationToken(cancellationToken));
 
-            var orgUnitRoleNameQuery = DbContext.Roles.Where(r => organizationRoleIds.Contains(r.Id)).Select(n => n.Name);
+            var orgUnitRoleNameQuery = dbContext.Roles.Where(r => organizationRoleIds.Contains(r.Id)).Select(n => n.Name);
             var resultQuery = query.Union(orgUnitRoleNameQuery);
             return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -59,10 +59,11 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             Guid id,
             CancellationToken cancellationToken = default)
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join roleOu in DbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
-                        join ou in DbContext.Set<OrganizationUnit>() on roleOu.OrganizationUnitId equals ou.Id
-                        join userOuRoles in DbContext.Roles on roleOu.RoleId equals userOuRoles.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join roleOu in dbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
+                        join ou in dbContext.Set<OrganizationUnit>() on roleOu.OrganizationUnitId equals ou.Id
+                        join userOuRoles in dbContext.Roles on roleOu.RoleId equals userOuRoles.Id
                         where userOu.UserId == id
                         select userOuRoles.Name;
 
@@ -77,7 +78,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
                 .OrderBy(x=>x.Id)
@@ -89,7 +90,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
@@ -100,7 +101,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .Where(u => u.Claims.Any(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value))
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -111,7 +112,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var role = await DbContext.Roles
+            var dbContext = await GetDbContextAsync();
+
+            var role = await dbContext.Roles
                 .Where(x => x.NormalizedName == normalizedRoleName)
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -121,7 +124,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 return new List<IdentityUser>();
             }
 
-            return await DbSet
+            return await dbContext.Users
                 .IncludeDetails(includeDetails)
                 .Where(u => u.Roles.Any(r => r.RoleId == role.Id))
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -135,7 +138,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
@@ -156,24 +159,26 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from userRole in DbContext.Set<IdentityUserRole>()
-                        join role in DbContext.Roles.IncludeDetails(includeDetails) on userRole.RoleId equals role.Id
+            var dbContext = await GetDbContextAsync();
+
+            var query = from userRole in dbContext.Set<IdentityUserRole>()
+                        join role in dbContext.Roles.IncludeDetails(includeDetails) on userRole.RoleId equals role.Id
                         where userRole.UserId == id
                         select role;
 
             //TODO: Needs improvement
-            var userOrganizationsQuery = from userOrg in DbContext.Set<IdentityUserOrganizationUnit>()
-                                         join ou in DbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOrg.OrganizationUnitId equals ou.Id
+            var userOrganizationsQuery = from userOrg in dbContext.Set<IdentityUserOrganizationUnit>()
+                                         join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOrg.OrganizationUnitId equals ou.Id
                                          where userOrg.UserId == id
                                          select ou;
 
-            var orgUserRoleQuery = DbContext.Set<OrganizationUnitRole>()
+            var orgUserRoleQuery = dbContext.Set<OrganizationUnitRole>()
                 .Where(q => userOrganizationsQuery
                 .Select(t => t.Id)
                 .Contains(q.OrganizationUnitId))
                 .Select(t => t.RoleId);
 
-            var orgRoles = DbContext.Roles.Where(q => orgUserRoleQuery.Contains(q.Id));
+            var orgRoles = dbContext.Roles.Where(q => orgUserRoleQuery.Contains(q.Id));
             var resultQuery = query.Union(orgRoles);
 
             return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
@@ -183,7 +188,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await this.WhereIf(
+            return await (await GetDbSetAsync())
+                .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
@@ -200,9 +206,11 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from userOU in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join ou in DbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOU.OrganizationUnitId equals ou.Id
-                        where userOU.UserId == id
+            var dbContext = await GetDbContextAsync();
+
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOu.OrganizationUnitId equals ou.Id
+                        where userOu.UserId == id
                         select ou;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
@@ -213,22 +221,28 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
             )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
+            var dbContext = await GetDbContextAsync();
+
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in dbContext.Users on userOu.UserId equals user.Id
                         where userOu.OrganizationUnitId == organizationUnitId
                         select user;
+
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
             List<Guid> organizationUnitIds,
             CancellationToken cancellationToken = default
             )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
+            var dbContext = await GetDbContextAsync();
+
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in dbContext.Users on userOu.UserId equals user.Id
                         where organizationUnitIds.Contains(userOu.OrganizationUnitId)
                         select user;
+
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -237,17 +251,26 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
             )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
-                        join ou in DbContext.Set<OrganizationUnit>() on userOu.OrganizationUnitId equals ou.Id
+            var dbContext = await GetDbContextAsync();
+
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in dbContext.Users on userOu.UserId equals user.Id
+                        join ou in dbContext.Set<OrganizationUnit>() on userOu.OrganizationUnitId equals ou.Id
                         where ou.Code.StartsWith(code)
                         select user;
+
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public override IQueryable<IdentityUser> WithDetails()
         {
             return GetQueryable().IncludeDetails();
+        }
+
+        public override async Task<IQueryable<IdentityUser>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }

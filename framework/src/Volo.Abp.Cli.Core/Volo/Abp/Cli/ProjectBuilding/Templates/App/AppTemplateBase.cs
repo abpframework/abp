@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
@@ -24,11 +25,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
+            ConfigurePublicWebSite(context, steps);
             RemoveUnnecessaryPorts(context, steps);
             RandomizeSslPorts(context, steps);
             RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
             CleanupFolderHierarchy(context, steps);
+            RemoveMigrations(context, steps);
 
             return steps;
         }
@@ -91,6 +94,62 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
             {
                 steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName().EnsureStartsWith('/')));
+            }
+
+            if (!context.BuildArgs.PublicWebSite)
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public.Host"));
+            }
+            else
+            {
+                if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) || context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public"));
+                }
+                else
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Public.Host"));
+                }
+            }
+        }
+
+        private void ConfigurePublicWebSite(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (!context.BuildArgs.PublicWebSite)
+            {
+                if (!context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) &&
+                    !context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+                {
+                    steps.Add(new RemovePublicRedisStep());
+                }
+
+                steps.Add(new RemoveCmsKitStep());
+                return;
+            }
+
+            if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) || context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+            {
+                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Public.Host","MyCompanyName.MyProjectName.Web.Public"));
+                steps.Add(new ChangeDbMigratorPublicPortStep());
+            }
+            else if (context.BuildArgs.UiFramework != UiFramework.NotSpecified && context.BuildArgs.UiFramework != UiFramework.Mvc)
+            {
+                steps.Add(new ChangePublicAuthPortStep());
+            }
+
+            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.NotSpecified || context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
+            {
+                steps.Add(new RemoveEfCoreDependencyFromPublicStep());
+            }
+
+            if (context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit"))
+            {
+                steps.Add(new RemoveCmsKitStep());
+            }
+            else
+            {
+                steps.Add(new RemoveGlobalFeaturesPackageStep());
             }
         }
 
@@ -214,6 +273,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         private static void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
+        }
+
+        private static void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
         }
 
         private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

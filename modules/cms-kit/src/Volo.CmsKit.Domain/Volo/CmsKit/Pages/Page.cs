@@ -21,7 +21,7 @@ namespace Volo.CmsKit.Pages
             
         }
 
-        public Page(Guid id, [NotNull] string title, [NotNull] string url, [CanBeNull] string description, Guid? tenantId = null) : base(id)
+        public Page(Guid id, [NotNull] string title, [NotNull] string url, [CanBeNull] string description = null, Guid? tenantId = null) : base(id)
         {
             Title = Check.NotNullOrWhiteSpace(title, nameof(title), PageConsts.MaxTitleLength);
             Url = Check.NotNullOrWhiteSpace(url, nameof(url), PageConsts.MaxUrlLength);

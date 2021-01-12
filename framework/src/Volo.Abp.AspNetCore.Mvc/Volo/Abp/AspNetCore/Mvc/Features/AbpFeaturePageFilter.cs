@@ -9,18 +9,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
 {
     public class AbpFeaturePageFilter : IAsyncPageFilter, ITransientDependency
     {
-        private readonly IMethodInvocationFeatureCheckerService _methodInvocationAuthorizationService;
-
-        public AbpFeaturePageFilter(IMethodInvocationFeatureCheckerService methodInvocationAuthorizationService)
-        {
-            _methodInvocationAuthorizationService = methodInvocationAuthorizationService;
-        }
-        
         public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
             return Task.CompletedTask;
         }
-        
+
         public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
             if (context.HandlerMethod == null || !context.ActionDescriptor.IsPageAction())
@@ -33,9 +26,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
 
             using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.FeatureChecking))
             {
-                await _methodInvocationAuthorizationService.CheckAsync(
-                    new MethodInvocationFeatureCheckerContext(methodInfo)
-                );
+                var methodInvocationFeatureCheckerService = context.GetRequiredService<IMethodInvocationFeatureCheckerService>();
+                await methodInvocationFeatureCheckerService.CheckAsync(new MethodInvocationFeatureCheckerContext(methodInfo));
 
                 await next();
             }

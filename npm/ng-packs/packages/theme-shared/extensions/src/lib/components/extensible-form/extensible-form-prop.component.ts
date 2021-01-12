@@ -27,6 +27,7 @@ import { ePropType } from '../../enums/props.enum';
 import { FormProp } from '../../models/form-props';
 import { PropData } from '../../models/props';
 import { selfFactory } from '../../utils/factory.util';
+import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
 
 @Component({
   selector: 'abp-extensible-form-prop',
@@ -96,10 +97,10 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   private getTypeaheadControls() {
     const { name } = this.prop;
-    const textSuffix = '_Text';
     const extraPropName = `${EXTRA_PROPERTIES_KEY}.${name}`;
     const keyControl =
-      this.form.get(extraPropName + textSuffix) || this.form.get(name + textSuffix);
+      this.form.get(addTypeaheadTextSuffix(extraPropName)) ||
+      this.form.get(addTypeaheadTextSuffix(name));
     const valueControl = this.form.get(extraPropName) || this.form.get(name);
     return [keyControl, valueControl];
   }

@@ -21,7 +21,7 @@
     private IReadOnlyList<LanguageInfo> _otherLanguages;
     private LanguageInfo _currentLanguage;
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         var selectedLanguageName = await JsRuntime.InvokeAsync<string>(
             "localStorage.getItem",

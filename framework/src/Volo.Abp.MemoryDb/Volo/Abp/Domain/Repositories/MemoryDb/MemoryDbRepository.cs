@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,34 +21,48 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
     {
         //TODO: Add dbcontext just like mongodb implementation!
 
+        [Obsolete("Use GetCollectionAsync method.")]
         public virtual IMemoryDatabaseCollection<TEntity> Collection => Database.Collection<TEntity>();
 
+        public async Task<IMemoryDatabaseCollection<TEntity>> GetCollectionAsync()
+        {
+            return (await GetDatabaseAsync()).Collection<TEntity>();
+        }
+
+        [Obsolete("Use GetDatabaseAsync method.")]
         public virtual IMemoryDatabase Database => DatabaseProvider.GetDatabase();
+
+        public Task<IMemoryDatabase> GetDatabaseAsync()
+        {
+            return DatabaseProvider.GetDatabaseAsync();
+        }
 
         protected IMemoryDatabaseProvider<TMemoryDbContext> DatabaseProvider { get; }
 
-        public ILocalEventBus LocalEventBus { get; set; }
+        public ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetService<ILocalEventBus>(NullLocalEventBus.Instance);
 
-        public IDistributedEventBus DistributedEventBus { get; set; }
+        public IDistributedEventBus DistributedEventBus => LazyServiceProvider.LazyGetService<IDistributedEventBus>(NullDistributedEventBus.Instance);
 
-        public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
+        public IEntityChangeEventHelper EntityChangeEventHelper => LazyServiceProvider.LazyGetService<IEntityChangeEventHelper>(NullEntityChangeEventHelper.Instance);
 
-        public IAuditPropertySetter AuditPropertySetter { get; set; }
+        public IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-        public IGuidGenerator GuidGenerator { get; set; }
+        public IAuditPropertySetter AuditPropertySetter => LazyServiceProvider.LazyGetRequiredService<IAuditPropertySetter>();
 
         public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
         {
             DatabaseProvider = databaseProvider;
-
-            LocalEventBus = NullLocalEventBus.Instance;
-            DistributedEventBus = NullDistributedEventBus.Instance;
-            EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
         }
 
+        [Obsolete("This method will be removed in future versions.")]
         protected override IQueryable<TEntity> GetQueryable()
         {
             return ApplyDataFilters(Collection.AsQueryable());
+        }
+
+        public override async Task<IQueryable<TEntity>> GetQueryableAsync()
+        {
+            return ApplyDataFilters((await GetCollectionAsync()).AsQueryable());
         }
 
         protected virtual async Task TriggerDomainEventsAsync(object entity)
@@ -163,39 +176,40 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             await TriggerDomainEventsAsync(entity);
         }
 
-        public override Task<TEntity> FindAsync(
+        public override async Task<TEntity> FindAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable().Where(predicate).SingleOrDefault());
+            return (await GetQueryableAsync()).Where(predicate).SingleOrDefault();
         }
 
-        public async override Task DeleteAsync(
+        public override async Task DeleteAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
-            var entities = GetQueryable().Where(predicate).ToList();
+            var entities = (await GetQueryableAsync()).Where(predicate).ToList();
+
             foreach (var entity in entities)
             {
                 await DeleteAsync(entity, autoSave, cancellationToken);
             }
         }
 
-        public async override Task<TEntity> InsertAsync(
+        public override async Task<TEntity> InsertAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
             await ApplyAbpConceptsForAddedEntityAsync(entity);
 
-            Collection.Add(entity);
+            (await GetCollectionAsync()).Add(entity);
 
             return entity;
         }
 
-        public async override Task<TEntity> UpdateAsync(
+        public override async Task<TEntity> UpdateAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -214,12 +228,12 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
             await TriggerDomainEventsAsync(entity);
 
-            Collection.Update(entity);
+            (await GetCollectionAsync()).Update(entity);
 
             return entity;
         }
 
-        public async override Task DeleteAsync(
+        public override async Task DeleteAsync(
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default)
@@ -229,35 +243,35 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
             {
                 softDeleteEntity.IsDeleted = true;
-                Collection.Update(entity);
+                (await GetCollectionAsync()).Update(entity);
             }
             else
             {
-                Collection.Remove(entity);
+                (await GetCollectionAsync()).Remove(entity);
             }
         }
 
-        public override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable().ToList());
+            return (await GetQueryableAsync()).ToList();
         }
 
-        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable().LongCount());
+            return (await GetQueryableAsync()).LongCount();
         }
 
-        public override Task<List<TEntity>> GetPagedListAsync(
+        public override async Task<List<TEntity>> GetPagedListAsync(
             int skipCount,
             int maxResultCount,
             string sorting,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable()
+            return (await GetQueryableAsync())
                 .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
-                .ToList());
+                .ToList();
         }
     }
 
@@ -270,13 +284,13 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
         }
 
-        public override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            SetIdIfNeeded(entity);
-            return base.InsertAsync(entity, autoSave, cancellationToken);
+            await SetIdIfNeededAsync(entity);
+            return await base.InsertAsync(entity, autoSave, cancellationToken);
         }
 
-        protected virtual void SetIdIfNeeded(TEntity entity)
+        protected virtual async Task SetIdIfNeededAsync(TEntity entity)
         {
             if (typeof(TKey) == typeof(int) ||
                 typeof(TKey) == typeof(long) ||
@@ -284,7 +298,8 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             {
                 if (EntityHelper.HasDefaultId(entity))
                 {
-                    EntityHelper.TrySetId(entity, () => Database.GenerateNextId<TEntity, TKey>());
+                    var nextId = (await GetDatabaseAsync()).GenerateNextId<TEntity, TKey>();
+                    EntityHelper.TrySetId(entity, () => nextId);
                 }
             }
         }
@@ -301,9 +316,9 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return entity;
         }
 
-        public virtual Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetQueryable().FirstOrDefault(e => e.Id.Equals(id)));
+            return (await GetQueryableAsync()).FirstOrDefault(e => e.Id.Equals(id));
         }
 
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -311,10 +326,10 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             await DeleteAsync(x => x.Id.Equals(id), autoSave, cancellationToken);
         }
 
-        public virtual async Task DeleteManyAsync([NotNull] IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteManyAsync(IEnumerable<TKey> ids, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entities = await AsyncExecuter.ToListAsync(GetQueryable().Where(x => ids.Contains(x.Id)));
-            DeleteManyAsync(entities, autoSave, cancellationToken);
+            var entities = await AsyncExecuter.ToListAsync((await GetQueryableAsync()).Where(x => ids.Contains(x.Id)), cancellationToken);
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
     }
 }

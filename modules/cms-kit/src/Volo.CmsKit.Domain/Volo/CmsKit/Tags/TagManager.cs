@@ -41,16 +41,16 @@ namespace Volo.CmsKit.Tags
         {
             if (await _tagRepository.AnyAsync(entityType, name, tenantId, cancellationToken))
             {
-                throw new BusinessException(message: "Tag already exist!"); // Already Exist
+                throw new TagAlreadyExistException(entityType, name);
             }
 
             return await _tagRepository.InsertAsync(
-                            new Tag(
-                                id,
-                                entityType,
-                                name,
-                                tenantId),
-                            cancellationToken: cancellationToken);
+                new Tag(
+                    id,
+                    entityType,
+                    name,
+                    tenantId),
+                cancellationToken: cancellationToken);
         }
 
         public async Task<Tag> UpdateAsync(
@@ -59,15 +59,16 @@ namespace Volo.CmsKit.Tags
             CancellationToken cancellationToken = default)
         {
             var entity = await _tagRepository.GetAsync(id, cancellationToken: cancellationToken);
-            
-            if (name != entity.Name && await _tagRepository.AnyAsync(entity.EntityType, name, entity.TenantId, cancellationToken))
+
+            if (name != entity.Name &&
+                await _tagRepository.AnyAsync(entity.EntityType, name, entity.TenantId, cancellationToken))
             {
-                throw new BusinessException(message: "Tag already exist!"); // Already Exist
+                throw new TagAlreadyExistException(entity.EntityType, name);
             }
 
             entity.SetName(name);
-            
-            return await _tagRepository.UpdateAsync(entity);
+
+            return await _tagRepository.UpdateAsync(entity, cancellationToken: cancellationToken);
         }
     }
 }

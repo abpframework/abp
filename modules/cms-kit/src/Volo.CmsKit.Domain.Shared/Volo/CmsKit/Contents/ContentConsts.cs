@@ -10,6 +10,6 @@ namespace Volo.CmsKit.Contents
         public static int MaxEntityIdLength { get; set; } = CmsEntityConsts.MaxEntityIdLength;
         
         // TODO: consider
-        public static int  MaxValueLength = int.MaxValue;
+        public static int MaxValueLength { get; set; } = int.MaxValue;
     }
 }

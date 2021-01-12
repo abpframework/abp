@@ -14,8 +14,8 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
         protected IClock Clock { get; }
 
         public MongoBackgroundJobRepository(
-            IMongoDbContextProvider<IBackgroundJobsMongoDbContext> dbContextProvider, 
-            IClock clock) 
+            IMongoDbContextProvider<IBackgroundJobsMongoDbContext> dbContextProvider,
+            IClock clock)
             : base(dbContextProvider)
         {
             Clock = clock;
@@ -23,14 +23,13 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
 
         public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(int maxResultCount)
         {
-            return await GetWaitingListQuery(maxResultCount)
-                .ToListAsync();
+            return await (await GetWaitingListQuery(maxResultCount)).ToListAsync();
         }
 
-        protected virtual IMongoQueryable<BackgroundJobRecord> GetWaitingListQuery(int maxResultCount)
+        protected virtual async Task<IMongoQueryable<BackgroundJobRecord>> GetWaitingListQuery(int maxResultCount)
         {
             var now = Clock.Now;
-            return GetMongoQueryable()
+            return (await GetMongoQueryableAsync())
                 .Where(t => !t.IsAbandoned && t.NextTryTime <= now)
                 .OrderByDescending(t => t.Priority)
                 .ThenBy(t => t.TryCount)

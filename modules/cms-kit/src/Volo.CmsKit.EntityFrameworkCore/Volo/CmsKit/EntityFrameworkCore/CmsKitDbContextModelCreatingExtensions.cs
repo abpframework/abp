@@ -41,8 +41,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.ConfigureByConvention();
                     b.ConfigureAbpUser();
 
-                    b.HasIndex(x => new {x.TenantId, x.UserName});
-                    b.HasIndex(x => new {x.TenantId, x.Email});
+                    b.HasIndex(x => new { x.TenantId, x.UserName });
+                    b.HasIndex(x => new { x.TenantId, x.Email });
                 });
             }
 
@@ -58,8 +58,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.EntityId).IsRequired().HasMaxLength(UserReactionConsts.MaxEntityIdLength);
                     b.Property(x => x.ReactionName).IsRequired().HasMaxLength(UserReactionConsts.MaxReactionNameLength);
 
-                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId, x.ReactionName });
-                    b.HasIndex(x => new { x.TenantId, x.CreatorId, x.EntityType, x.EntityId, x.ReactionName });
+                    b.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId, x.ReactionName});
+                    b.HasIndex(x => new {x.TenantId, x.CreatorId, x.EntityType, x.EntityId, x.ReactionName});
                 });
             }
 
@@ -76,8 +76,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength);
                     b.Property(x => x.RepliedCommentId);
 
-                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
-                    b.HasIndex(x => new { x.TenantId, x.RepliedCommentId });
+                    b.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId});
+                    b.HasIndex(x => new {x.TenantId, x.RepliedCommentId});
                 });
             }
 
@@ -93,61 +93,119 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     r.Property(x => x.EntityType).IsRequired().HasMaxLength(RatingConsts.MaxEntityTypeLength);
                     r.Property(x => x.EntityId).IsRequired().HasMaxLength(RatingConsts.MaxEntityIdLength);
 
-                    r.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId, x.CreatorId});
+                    r.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId, x.CreatorId });
                 });
             }
 
-            builder.Entity<Content>(b =>
+            if (GlobalFeatureManager.Instance.IsEnabled<ContentsFeature>())
             {
-                b.ToTable(options.TablePrefix + "Contents", options.Schema);
-                
-                b.ConfigureByConvention();
-                
-                b.Property(x => x.EntityType).IsRequired().HasMaxLength(ContentConsts.MaxEntityTypeLength);
-                b.Property(x => x.EntityId).IsRequired().HasMaxLength(ContentConsts.MaxEntityIdLength);
-                b.Property(x => x.Value).IsRequired().HasMaxLength(ContentConsts.MaxValueLength);
-                
-                b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
-            });
-            
-            builder.Entity<Tag>(b =>
-            {
-                b.ToTable(options.TablePrefix + "Tags", options.Schema);
-                
-                b.ConfigureByConvention();
-                
-                b.Property(x => x.EntityType).IsRequired().HasMaxLength(TagConsts.MaxEntityTypeLength);
-                b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength);
-                
-                b.HasIndex(x => new { x.TenantId, x.Name });
-            });
-            
-            builder.Entity<EntityTag>(b =>
-            {
-                b.ToTable(options.TablePrefix + "EntityTags", options.Schema);
-                
-                b.ConfigureByConvention();
+                builder.Entity<Content>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "Contents", options.Schema);
 
-                b.HasKey(x => new { x.EntityId, x.TagId });
-                
-                b.Property(x => x.EntityId).IsRequired();
-                b.Property(x => x.TagId).IsRequired();
-                
-                b.HasIndex(x => new { x.TenantId, x.EntityId, x.TagId });
-            });
-            
-            builder.Entity<Page>(b =>
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(ContentConsts.MaxEntityTypeLength);
+                    b.Property(x => x.EntityId).IsRequired().HasMaxLength(ContentConsts.MaxEntityIdLength);
+                    b.Property(x => x.Value).IsRequired().HasMaxLength(ContentConsts.MaxValueLength);
+
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
+                });
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
             {
-                b.ToTable(options.TablePrefix + "Pages", options.Schema);
-                
-                b.ConfigureByConvention();
-                
-                b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
-                b.Property(x => x.Url).IsRequired().HasMaxLength(PageConsts.MaxUrlLength);
-                b.Property(x => x.Description).HasMaxLength(PageConsts.MaxDescriptionLength);
-                
-                b.HasIndex(x => new { x.TenantId, x.Url });
-            });
+                builder.Entity<Tag>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "Tags", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(TagConsts.MaxEntityTypeLength);
+                    b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength);
+
+                    b.HasIndex(x => new
+                    {
+                        x.TenantId,
+                        x.Name
+                    });
+                });
+
+                builder.Entity<EntityTag>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "EntityTags", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.HasKey(x => new { x.EntityId, x.TagId });
+
+                    b.Property(x => x.EntityId).IsRequired();
+                    b.Property(x => x.TagId).IsRequired();
+
+                    b.HasIndex(x => new { x.TenantId, x.EntityId, x.TagId });
+                });
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+            {
+                builder.Entity<Page>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "Pages", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
+                    b.Property(x => x.Url).IsRequired().HasMaxLength(PageConsts.MaxUrlLength);
+                    b.Property(x => x.Description).HasMaxLength(PageConsts.MaxDescriptionLength);
+
+                    b.HasIndex(x => new { x.TenantId, x.Url });
+                });
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            {
+                builder.Entity<Tag>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "Tags", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(TagConsts.MaxEntityTypeLength);
+                    b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength);
+
+                    b.HasIndex(x => new {x.TenantId, x.Name});
+                });
+
+                builder.Entity<EntityTag>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "EntityTags", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.HasKey(x => new {x.EntityId, x.TagId});
+
+                    b.Property(x => x.EntityId).IsRequired();
+                    b.Property(x => x.TagId).IsRequired();
+
+                    b.HasIndex(x => new {x.TenantId, x.EntityId, x.TagId});
+                });
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+            {
+                builder.Entity<Page>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "Pages", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
+                    b.Property(x => x.Url).IsRequired().HasMaxLength(PageConsts.MaxUrlLength);
+                    b.Property(x => x.Description).HasMaxLength(PageConsts.MaxDescriptionLength);
+
+                    b.HasIndex(x => new {x.TenantId, x.Url});
+                });
+            }
         }
     }
 }
