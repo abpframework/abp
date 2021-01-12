@@ -4,7 +4,7 @@ A page alert is useful for displaying an important message to the user. The ABP 
 
 ![angular-page-alert-example](./images/page-alert-warning-example.png)
 
-You can simply inject `PageAlertsService` from `@abp/ng.theme.shared` and utilize it as follows:
+You can simply import `PageAlertService` from `@abp/ng.theme.shared` and utilize it as follows:
 
 ```typescript
 import { PageAlertService } from '@abp/ng.theme.shared';
