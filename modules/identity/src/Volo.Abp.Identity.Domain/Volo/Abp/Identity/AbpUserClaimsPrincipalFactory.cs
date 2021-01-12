@@ -70,7 +70,7 @@ namespace Volo.Abp.Identity
             {
                 var tenant = await TenantStore.FindAsync(user.TenantId.Value);
                 var editionId = tenant?.GetProperty<Guid>(AbpClaimTypes.EditionId);
-                if (editionId != default(Guid))
+                if (editionId != null && editionId != default(Guid))
                 {
                     identity.AddIfNotContains(new Claim(AbpClaimTypes.EditionId, editionId.ToString()));
                 }
