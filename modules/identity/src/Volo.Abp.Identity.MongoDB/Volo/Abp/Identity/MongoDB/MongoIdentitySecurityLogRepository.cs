@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
         }
 
-        public async Task<List<IdentitySecurityLog>> GetListAsync(
+        public virtual async Task<List<IdentitySecurityLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
@@ -53,7 +53,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string applicationName = null,
@@ -82,7 +82,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
 
-        public async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false,
+        public virtual async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
