@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
-using Blazorise.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
@@ -95,7 +94,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     {
                         Title = L["RoleName"],
                         Data = nameof(IdentityRoleDto.Name),
-                        Render = (data) =>
+                        Component = typeof(RoleNameComponent)
+                        /*Render = (data) =>
                         {
                             return (builder) =>
                             {
@@ -128,7 +128,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                                     builder.CloseComponent();
                                 }
                             };
-                        }
+                        }*/
                     },
                 });
 

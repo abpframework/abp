@@ -27,14 +27,16 @@
                                                       RequiredPolicy="@action.RequiredPolicy"
                                                       Clicked="async () => await action.Clicked(context)"
                                                       ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
-                                                      Text="@action.Text"></EntityAction>
+                                                      Text="@action.Text">
+                                        </EntityAction>
                                     }
                                     else
                                     {
                                         <EntityAction TItem="TItem"
                                                       RequiredPolicy="@action.RequiredPolicy"
                                                       Clicked="async () => await action.Clicked(context)"
-                                                      Text="@action.Text"></EntityAction>
+                                                      Text="@action.Text">
+                                        </EntityAction>
                                     }
                                 }
                             </EntityActions>
@@ -43,11 +45,11 @@
                 }
                 else
                 {
-                    @if (column.Render != null)
+                    @if (column.Component != null)
                     {
                         <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title">
                             <DisplayTemplate>
-                                @column.Render.Invoke(context)
+                                @RenderCustomTableColumnComponent(column.Component, context);
                             </DisplayTemplate>
                         </DataGridColumn>
                     }

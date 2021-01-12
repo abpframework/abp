@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
         public string Title { get; set; }
         public string Data { get; set; }
         [CanBeNull]
-        public Func<object, RenderFragment> Render { get; set; }
+        public Type Component { get; set; }
         public List<EntityAction> Actions { get; set; }
 
         public TableColumn()
