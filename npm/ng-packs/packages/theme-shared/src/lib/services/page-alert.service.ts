@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { InternalStore } from '@abp/ng.core';
 
-export type PageAlert = {
+export interface PageAlert {
   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
   message: string;
   dismissible?: boolean;
   title?: string;
   messageLocalizationParams?: string[];
   titleLocalizationParams?: string[];
-};
+}
 
 @Injectable({ providedIn: 'root' })
 export class PageAlertService {
