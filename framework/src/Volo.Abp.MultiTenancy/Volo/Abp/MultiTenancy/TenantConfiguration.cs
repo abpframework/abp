@@ -1,11 +1,12 @@
 using System;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.MultiTenancy
 {
     [Serializable]
-    public class TenantConfiguration
+    public class TenantConfiguration : ExtensibleObject
     {
         public Guid Id { get; set; }
 
@@ -15,7 +16,7 @@ namespace Volo.Abp.MultiTenancy
 
         public TenantConfiguration()
         {
-            
+
         }
 
         public TenantConfiguration(Guid id, [NotNull] string name)
