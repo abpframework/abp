@@ -1,5 +1,6 @@
 import { Component, Injector, Optional, SkipSelf, Type } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
 import { ReplaceableComponents } from '../models/replaceable-components';
@@ -23,6 +24,7 @@ import { TreeNode } from '../utils/tree-utils';
 })
 export class DynamicLayoutComponent {
   layout: Type<any>;
+  layoutKey: eLayoutType;
 
   // TODO: Consider a shared enum (eThemeSharedComponents) for known layouts
   readonly layouts = new Map([
@@ -33,6 +35,10 @@ export class DynamicLayoutComponent {
 
   isLayoutVisible = true;
 
+  private router: Router;
+  private route: ActivatedRoute;
+  private routes: RoutesService;
+
   constructor(
     injector: Injector,
     private localizationService: LocalizationService,
@@ -41,36 +47,45 @@ export class DynamicLayoutComponent {
     @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
   ) {
     if (dynamicLayoutComponent) return;
-    const route = injector.get(ActivatedRoute);
-    const router = injector.get(Router);
-    const routes = injector.get(RoutesService);
+    this.route = injector.get(ActivatedRoute);
+    this.router = injector.get(Router);
+    this.routes = injector.get(RoutesService);
 
-    this.subscription.addOne(router.events, event => {
-      if (event instanceof NavigationEnd) {
-        let expectedLayout = (route.snapshot.data || {}).layout;
-
-        if (!expectedLayout) {
-          let node = findRoute(routes, getRoutePath(router));
-          node = { parent: node } as TreeNode<ABP.Route>;
-
-          while (node.parent) {
-            node = node.parent;
-
-            if (node.layout) {
-              expectedLayout = node.layout;
-              break;
-            }
-          }
-        }
-
-        if (!expectedLayout) expectedLayout = eLayoutType.empty;
-
-        const key = this.layouts.get(expectedLayout);
-        this.layout = this.getComponent(key)?.component;
-      }
-    });
+    this.getLayout();
+    this.subscription.addOne(
+      this.router.events.pipe(filter(event => event instanceof NavigationEnd)),
+      () => {
+        this.getLayout();
+      },
+    );
 
     this.listenToLanguageChange();
+  }
+
+  private getLayout() {
+    let expectedLayout = (this.route.snapshot.data || {}).layout;
+
+    if (!expectedLayout) {
+      let node = findRoute(this.routes, getRoutePath(this.router));
+      node = { parent: node } as TreeNode<ABP.Route>;
+
+      while (node.parent) {
+        node = node.parent;
+
+        if (node.layout) {
+          expectedLayout = node.layout;
+          break;
+        }
+      }
+    }
+
+    if (!expectedLayout) expectedLayout = eLayoutType.empty;
+
+    if (this.layoutKey === expectedLayout) return;
+
+    const key = this.layouts.get(expectedLayout);
+    this.layout = this.getComponent(key)?.component;
+    this.layoutKey = expectedLayout;
   }
 
   private listenToLanguageChange() {
