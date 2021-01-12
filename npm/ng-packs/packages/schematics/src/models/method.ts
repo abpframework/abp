@@ -54,7 +54,7 @@ export class Body {
         this.body = value;
         break;
       case eBindingSourceId.Path:
-        const regex = new RegExp('{' + camelName + '}', 'g');
+        const regex = new RegExp('{(' + camelName + '|' + name + ')}', 'g');
         this.url = this.url.replace(regex, '${' + value + '}');
         break;
       default:
