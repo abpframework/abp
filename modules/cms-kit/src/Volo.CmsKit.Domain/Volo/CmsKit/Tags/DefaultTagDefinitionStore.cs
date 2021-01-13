@@ -17,10 +17,13 @@ namespace Volo.CmsKit.Tags
             this.options = options.Value;
         }
 
-        public virtual Task<TagDefiniton> GetTagDefinitionOrNullAsync([NotNull] string entityType)
+        public virtual Task<TagDefiniton> GetTagDefinitionAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
-            return Task.FromResult(options.Tags.GetOrDefault(entityType));
+
+            var result = options.Tags.GetOrDefault(entityType) ?? throw new EntityNotTaggableException(entityType);
+
+            return Task.FromResult(result);
         }
 
         public virtual Task<List<TagDefiniton>> GetTagDefinitionsAsync()
