@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
@@ -16,18 +13,21 @@ namespace Volo.Abp.Identity
     public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
         ITransientDependency
     {
+        protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
         protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
 
         public AbpUserClaimsPrincipalFactory(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<IdentityOptions> options,
+            ICurrentPrincipalAccessor currentPrincipalAccessor,
             IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory)
             : base(
                 userManager,
                 roleManager,
                 options)
         {
+            CurrentPrincipalAccessor = currentPrincipalAccessor;
             AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
         }
 
@@ -67,10 +67,13 @@ namespace Volo.Abp.Identity
 
             identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
 
-            var abpClaimsPrincipal = await AbpClaimsPrincipalFactory.CreateAsync();
-            foreach (var claim in abpClaimsPrincipal.Claims)
+            using (CurrentPrincipalAccessor.Change(identity))
             {
-                identity.AddIfNotContains(claim);
+                var abpClaimsPrincipal = await AbpClaimsPrincipalFactory.CreateAsync();
+                foreach (var claim in abpClaimsPrincipal.Claims)
+                {
+                    identity.AddIfNotContains(claim);
+                }
             }
 
             return principal;
