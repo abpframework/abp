@@ -71,10 +71,10 @@ namespace Volo.Abp.Identity
 
             identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
 
-            var context = new ClaimsIdentityContext(identity);
-
             using (var scope = ServiceScopeFactory.CreateScope())
             {
+                var context = new ClaimsIdentityContext(identity, scope.ServiceProvider);
+
                 foreach (var contributorType in ClaimOptions.ClaimsIdentityContributors)
                 {
                     var contributor = (IClaimsIdentityContributor) scope.ServiceProvider.GetRequiredService(contributorType);

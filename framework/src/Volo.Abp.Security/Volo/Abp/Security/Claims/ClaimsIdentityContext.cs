@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 
 namespace Volo.Abp.Security.Claims
 {
@@ -6,9 +7,14 @@ namespace Volo.Abp.Security.Claims
     {
         public ClaimsIdentity ClaimsIdentity { get; }
 
-        public ClaimsIdentityContext(ClaimsIdentity claimsIdentity)
+        public IServiceProvider ServiceProvider { get; }
+
+        public ClaimsIdentityContext(
+            ClaimsIdentity claimsIdentity,
+            IServiceProvider serviceProvider)
         {
             ClaimsIdentity = claimsIdentity;
+            ServiceProvider = serviceProvider;
         }
     }
 }
