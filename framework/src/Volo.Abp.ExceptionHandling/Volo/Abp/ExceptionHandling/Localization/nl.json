@@ -4,7 +4,7 @@
     "InternalServerErrorMessage": "Er is een interne fout opgetreden tijdens uw verzoek!",
     "ValidationErrorMessage": "Uw verzoek is niet geldig!",
     "ValidationNarrativeErrorMessageTitle": "Tijdens de validatie zijn de volgende fouten gedetecteerd.",
-    "DefaultErrorMessage": "er is een fout opgetreden!",
+    "DefaultErrorMessage": "Er is een fout opgetreden!",
     "DefaultErrorMessageDetail": "Foutdetails niet verzonden door server.",
     "DefaultErrorMessage401": "U bent niet geverifieerd!",
     "DefaultErrorMessage401Detail": "U moet inloggen om deze bewerking uit te voeren.",
@@ -18,6 +18,8 @@
     "401Message": "Ongeautoriseerd",
     "403Message": "Verboden",
     "404Message": "Pagina niet gevonden",
-    "500Message": "Interne Server Fout"
+    "500Message": "Interne Server Fout",
+    "403MessageDetail": "U bent niet bevoegd om deze handeling uit te voeren!",
+    "404MessageDetail": "Sorry, op dit adres is niks gevonden."
   }
 }
