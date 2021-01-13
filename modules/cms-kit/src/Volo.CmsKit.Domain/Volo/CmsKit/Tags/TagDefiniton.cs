@@ -9,6 +9,9 @@ namespace Volo.CmsKit.Tags
     {
         public string EntityType { get; }
 
+        [CanBeNull]
+        public virtual ILocalizableString DisplayName { get; }
+
         public TagDefiniton()
         {
         }
@@ -18,10 +21,11 @@ namespace Volo.CmsKit.Tags
             [CanBeNull] ILocalizableString displayName = null,
             [CanBeNull] string createPolicy = null,
             [CanBeNull] string updatePolicy = null,
-            [CanBeNull] string deletePolicy = null) : base(displayName, createPolicy, updatePolicy, deletePolicy)
+            [CanBeNull] string deletePolicy = null) : base(createPolicy, updatePolicy, deletePolicy)
         {
             EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
+            DisplayName = displayName;
         }
     }
 }

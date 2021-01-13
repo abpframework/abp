@@ -11,19 +11,14 @@ namespace Volo.CmsKit.Domain.Volo.CmsKit
         }
 
         public PolicySpecifiedDefinition(
-            [CanBeNull] ILocalizableString displayName = null,
             [CanBeNull] string createPolicy = null,
             [CanBeNull] string updatePolicy = null,
             [CanBeNull] string deletePolicy = null)
         {
-            DisplayName = displayName;
             CreatePolicy = createPolicy;
             DeletePolicy = deletePolicy;
             UpdatePolicy = updatePolicy;
         }
-
-        [CanBeNull]
-        public virtual ILocalizableString DisplayName { get; }
 
         [CanBeNull]
         public virtual string CreatePolicy { get; set; }
