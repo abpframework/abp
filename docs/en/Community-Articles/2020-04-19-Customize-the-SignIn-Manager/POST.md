@@ -71,7 +71,8 @@ public async override Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetE
         ?? provider;
     return new Microsoft.AspNetCore.Identity.ExternalLoginInfo(auth.Principal, provider, providerKey, providerDisplayName)
     {
-        AuthenticationTokens = auth.Properties.GetTokens()
+        AuthenticationTokens = auth.Properties.GetTokens(),
+        AuthenticationProperties = auth.Properties
     };
 }
 ````

@@ -10,7 +10,7 @@ If you want to write **articles** or **how to guides** related to the ABP Framew
 
 You can always send pull requests to the GitHub repository.
 
-- Clone the [ABP repository](https://github.com/abpframework/abp/) from GitHub.
+- [Fork](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo) the [ABP repository](https://github.com/abpframework/abp/) from GitHub.
 - Build the repository using the `/build/build-all.ps1 -f` for one time.
 - Make the necessary changes, including unit/integration tests.
 - Send a pull request.

@@ -74,7 +74,6 @@ export class ErrorHandler {
     private actions: Actions,
     private router: Router,
     private confirmationService: ConfirmationService,
-    private appRef: ApplicationRef,
     private cfRes: ComponentFactoryResolver,
     private rendererFactory: RendererFactory2,
     private injector: Injector,
@@ -281,14 +280,16 @@ export class ErrorHandler {
     }
 
     this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
+    const appRef = this.injector.get(ApplicationRef);
+
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
-      this.componentRef.instance.appRef = this.appRef;
+      this.componentRef.instance.appRef = appRef;
       this.componentRef.instance.injector = this.injector;
       this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen.component;
     }
 
-    this.appRef.attachView(this.componentRef.hostView);
+    appRef.attachView(this.componentRef.hostView);
     renderer.appendChild(host, (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
 
     const destroy$ = new Subject<void>();

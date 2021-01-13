@@ -13,7 +13,7 @@ namespace Volo.Abp.Authorization
             _permissionChecker = permissionChecker;
         }
 
-        protected async override Task HandleRequirementAsync(
+        protected override async Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
             PermissionRequirement requirement)
         {

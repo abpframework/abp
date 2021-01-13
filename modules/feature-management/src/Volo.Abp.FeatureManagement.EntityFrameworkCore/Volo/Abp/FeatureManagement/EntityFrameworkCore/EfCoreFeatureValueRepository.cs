@@ -17,7 +17,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
         public virtual async Task<FeatureValue> FindAsync(string name, string providerName, string providerKey)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey
@@ -26,7 +26,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
         public async Task<List<FeatureValue>> FindAllAsync(string name, string providerName, string providerKey)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(
                     s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey
                 ).ToListAsync();
@@ -34,7 +34,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
         public virtual async Task<List<FeatureValue>> GetListAsync(string providerName, string providerKey)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(
                     s => s.ProviderName == providerName && s.ProviderKey == providerKey
                 ).ToListAsync();

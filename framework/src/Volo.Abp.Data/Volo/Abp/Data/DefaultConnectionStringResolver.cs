@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -14,7 +15,18 @@ namespace Volo.Abp.Data
             Options = options.Value;
         }
 
+        [Obsolete("Use ResolveAsync method.")]
         public virtual string Resolve(string connectionStringName = null)
+        {
+            return ResolveInternal(connectionStringName);
+        }
+
+        public virtual Task<string> ResolveAsync(string connectionStringName = null)
+        {
+            return Task.FromResult(ResolveInternal(connectionStringName));
+        }
+
+        private string ResolveInternal(string connectionStringName)
         {
             //Get module specific value if provided
             if (!connectionStringName.IsNullOrEmpty())
@@ -25,7 +37,7 @@ namespace Volo.Abp.Data
                     return moduleConnString;
                 }
             }
-            
+
             //Get default value
             return Options.ConnectionStrings.Default;
         }

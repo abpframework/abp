@@ -45,7 +45,7 @@ Assume that we want to make a user passive, if the user has not logged in to the
 public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 {
     public PassiveUserCheckerWorker(
-            AbpTimer timer,
+            AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory
         ) : base(
             timer, 
@@ -80,7 +80,7 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 
 ## Register Background Worker
 
-After creating a background worker class, you should to add it to the `IBackgroundWorkerManager`. The most common place is the `OnApplicationInitialization` method of your module class:
+After creating a background worker class, you should add it to the `IBackgroundWorkerManager`. The most common place is the `OnApplicationInitialization` method of your module class:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundWorkersModule))]

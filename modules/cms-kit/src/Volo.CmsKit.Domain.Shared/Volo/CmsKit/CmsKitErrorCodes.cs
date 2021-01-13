@@ -2,6 +2,13 @@
 {
     public static class CmsKitErrorCodes
     {
-        //Add your business exception error codes here...
+        public const string TagAlreadyExist = "CmsKit:0001";
+        
+        public const string ContentAlreadyExist = "CmsKit:0002";
+        
+        public static class Pages
+        {
+            public const string UrlAlreadyExist = "CmsKit:Page:0001";
+        }
     }
 }

@@ -6,12 +6,11 @@ namespace MyCompanyName.MyProjectName.Blazor
     {
         public void AddScripts(BundleContext context)
         {
-
         }
 
         public void AddStyles(BundleContext context)
         {
-            context.Add("main.css");
+            context.Add("main.css", true);
         }
     }
 }

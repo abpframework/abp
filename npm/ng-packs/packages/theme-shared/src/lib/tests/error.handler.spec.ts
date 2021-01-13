@@ -31,7 +31,7 @@ const CONFIRMATION_BUTTONS = {
 describe('ErrorHandler', () => {
   const createService = createServiceFactory({
     service: ErrorHandler,
-    imports: [NgxsModule.forRoot([]), CoreTestingModule.forTest(), MockModule],
+    imports: [NgxsModule.forRoot([]), CoreTestingModule.withConfig(), MockModule],
     mocks: [OAuthService],
     providers: [
       { provide: APP_BASE_HREF, useValue: '/' },
