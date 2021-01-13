@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Security.Claims
 {
     public static class ClaimsIdentityExtensions
     {

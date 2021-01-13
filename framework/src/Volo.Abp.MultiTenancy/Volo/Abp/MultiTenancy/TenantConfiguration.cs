@@ -6,7 +6,7 @@ using Volo.Abp.ObjectExtending;
 namespace Volo.Abp.MultiTenancy
 {
     [Serializable]
-    public class TenantConfiguration : ExtensibleObject
+    public class TenantConfiguration
     {
         public Guid Id { get; set; }
 

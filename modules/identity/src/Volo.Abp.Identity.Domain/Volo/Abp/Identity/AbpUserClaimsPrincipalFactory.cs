@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -15,19 +17,22 @@ namespace Volo.Abp.Identity
     public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
         ITransientDependency
     {
-        protected ITenantStore TenantStore { get; }
+        protected AbpClaimOptions ClaimOptions { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
         public AbpUserClaimsPrincipalFactory(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<IdentityOptions> options,
-            ITenantStore tenantStore)
+            IOptions<AbpClaimOptions> claimOptions,
+            IServiceScopeFactory serviceScopeFactory)
             : base(
                 userManager,
                 roleManager,
                 options)
         {
-            TenantStore = tenantStore;
+            ServiceScopeFactory = serviceScopeFactory;
+            ClaimOptions = claimOptions.Value;
         }
 
         [UnitOfWork]
@@ -66,13 +71,14 @@ namespace Volo.Abp.Identity
 
             identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
 
-            if (user.TenantId.HasValue)
+            var context = new ClaimsIdentityContext(identity);
+
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                var tenant = await TenantStore.FindAsync(user.TenantId.Value);
-                var editionId = tenant?.GetProperty<Guid>(AbpClaimTypes.EditionId);
-                if (editionId != null && editionId != default(Guid))
+                foreach (var contributorType in ClaimOptions.ClaimsIdentityContributors)
                 {
-                    identity.AddIfNotContains(new Claim(AbpClaimTypes.EditionId, editionId.ToString()));
+                    var contributor = (IClaimsIdentityContributor) scope.ServiceProvider.GetRequiredService(contributorType);
+                    await contributor.AddClaimsAsync(context);
                 }
             }
 
