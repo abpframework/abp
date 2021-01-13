@@ -1,22 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 
 namespace Volo.CmsKit.Admin.Pages
 {
-    public interface IPageAdminAppService
+    public interface IPageAdminAppService : ICrudAppService<PageDto, PageDto, Guid, GetPagesInputDto, CreatePageInputDto, UpdatePageInputDto>
     {
-        Task<PageDto> GetAsync(Guid id);
-        
-        Task<PageDto> CreatePageAsync(CreatePageInputDto input);
-
-        Task<PageDto> CreatePageWithContentAsync(CreatePageWithContentInputDto input);
-
-        Task<PageDto> UpdatePageAsync(Guid id, UpdatePageInputDto input);
-
-        Task<bool> DoesUrlExistAsync(CheckUrlInputDto input);
-        
-        Task UpdatePageContentAsync(Guid id, UpdatePageContentInputDto input);
-
-        Task DeleteAsync(Guid id);
     }
 }
