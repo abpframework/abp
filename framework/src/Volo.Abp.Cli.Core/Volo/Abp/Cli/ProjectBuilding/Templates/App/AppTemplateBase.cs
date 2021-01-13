@@ -144,6 +144,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveEfCoreDependencyFromPublicStep());
             }
 
+            // We disabled cms-kit for v4.2 release.
             if (true || context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit"))
             {
                 steps.Add(new RemoveCmsKitStep());
