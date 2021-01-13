@@ -144,7 +144,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveEfCoreDependencyFromPublicStep());
             }
 
-            if (context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit"))
+            if (true || context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit"))
             {
                 steps.Add(new RemoveCmsKitStep());
             }
