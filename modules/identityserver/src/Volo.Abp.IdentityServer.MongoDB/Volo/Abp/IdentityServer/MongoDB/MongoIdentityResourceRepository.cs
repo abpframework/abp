@@ -32,7 +32,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
 
         public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityResource, IMongoQueryable<IdentityResource>>(!filter.IsNullOrWhiteSpace(),
                     x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||

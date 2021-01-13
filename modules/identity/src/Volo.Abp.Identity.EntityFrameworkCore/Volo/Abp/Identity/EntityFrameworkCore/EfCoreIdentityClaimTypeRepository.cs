@@ -47,7 +47,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return identityClaimTypes;
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             string filter = null,
             CancellationToken cancellationToken = default)
         {

@@ -18,7 +18,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
         }
 
-        public async Task<IdentityRole> FindByNormalizedNameAsync(
+        public virtual async Task<IdentityRole> FindByNormalizedNameAsync(
             string normalizedRoleName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<IdentityRole>> GetListAsync(
+        public virtual async Task<List<IdentityRole>> GetListAsync(
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
@@ -64,7 +64,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             string filter = null,
             CancellationToken cancellationToken = default)
         {
