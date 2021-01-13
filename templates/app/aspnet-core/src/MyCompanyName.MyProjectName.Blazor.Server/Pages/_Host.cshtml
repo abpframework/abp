@@ -1,0 +1,40 @@
+﻿@page "/"
+@namespace MyCompanyName.MyProjectName.Blazor.Server.Pages
+@using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyCompanyName.MyProjectName.Blazor.Server</title>
+    <base href="~/" />
+
+    <!--ABP:Styles-->
+    <link href="_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/fontawesome/css/all.css" rel="stylesheet" />
+    <link href="_content/Blazorise/blazorise.css" rel="stylesheet" />
+    <link href="_content/Blazorise.Bootstrap/blazorise.bootstrap.css" rel="stylesheet" />
+    <link href="_content/Blazorise.Snackbar/blazorise.snackbar.css" rel="stylesheet" />
+    <link href="_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/flag-icon/css/flag-icon.css" rel="stylesheet" />
+    <link href="_content/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme/libs/abp/css/theme.css" rel="stylesheet" />
+    <link href="main.css" rel="stylesheet" />
+    <!--/ABP:Styles-->
+</head>
+<body>
+    <component type="typeof(App)" render-mode="ServerPrerendered" />
+
+    <!--ABP:Scripts-->
+    <script src="_content/Volo.Abp.AspNetCore.Components.WebAssembly/libs/abp/js/abp.js"></script>
+    <script src="_content/Blazorise/blazorise.js"></script>
+    <script src="_content/Blazorise.Bootstrap/blazorise.bootstrap.js"></script>
+    <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
+    <script src="_framework/blazor.server.js"></script>
+    <!--/ABP:Scripts-->
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <Import Project="..\..\..\configureawait.props" />
+  <Import Project="..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <PackageId>Volo.Abp.AspNetCore.Components.UI.BasicTheme</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.UI.Theming\Volo.Abp.AspNetCore.Components.UI.Theming.csproj" />
+  </ItemGroup>
+
+</Project>

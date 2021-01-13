@@ -1,12 +1,12 @@
 ﻿using Blazorise;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.AspNetCore.Components.UI;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlazoriseUI
 {
     [DependsOn(
-        typeof(AbpAspNetCoreComponentsWebAssemblyModule)
+        typeof(AbpAspNetCoreComponentsUIModule)
         )]
     public class AbpBlazoriseUIModule : AbpModule
     {

@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly\Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.UI\Volo.Abp.AspNetCore.Components.UI.csproj" />
     </ItemGroup>
 
     <ItemGroup>
