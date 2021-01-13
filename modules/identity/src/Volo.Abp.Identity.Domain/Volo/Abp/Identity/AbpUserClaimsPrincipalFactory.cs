@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 
@@ -17,19 +16,19 @@ namespace Volo.Abp.Identity
     public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
         ITransientDependency
     {
-        protected IAbpClaimsIdentityService AbpClaimsIdentityService { get; }
+        protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
 
         public AbpUserClaimsPrincipalFactory(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<IdentityOptions> options,
-            IAbpClaimsIdentityService abpClaimsIdentityService)
+            IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory)
             : base(
                 userManager,
                 roleManager,
                 options)
         {
-            AbpClaimsIdentityService = abpClaimsIdentityService;
+            AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
         }
 
         [UnitOfWork]
@@ -68,7 +67,11 @@ namespace Volo.Abp.Identity
 
             identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
 
-            await AbpClaimsIdentityService.AddClaimsAsync(identity);
+            var abpClaimsPrincipal = await AbpClaimsPrincipalFactory.CreateAsync();
+            foreach (var claim in abpClaimsPrincipal.Claims)
+            {
+                identity.AddIfNotContains(claim);
+            }
 
             return principal;
         }

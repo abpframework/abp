@@ -1,7 +1,6 @@
 using System;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
-using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.MultiTenancy
 {

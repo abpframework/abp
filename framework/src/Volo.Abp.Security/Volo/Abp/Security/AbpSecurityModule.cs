@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,15 +55,15 @@ namespace Volo.Abp.Security
 
             services.OnRegistred(context =>
             {
-                if (typeof(IClaimsIdentityContributor).IsAssignableFrom(context.ImplementationType))
+                if (typeof(IAbpClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
                 {
                     contributorTypes.Add(context.ImplementationType);
                 }
             });
 
-            services.Configure<AbpClaimOptions>(options =>
+            services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
             {
-                options.ClaimsIdentityContributors.AddIfNotContains(contributorTypes);
+                options.Contributors.AddIfNotContains(contributorTypes);
             });
         }
     }

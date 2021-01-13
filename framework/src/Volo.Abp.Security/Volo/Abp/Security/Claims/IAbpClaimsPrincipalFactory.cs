@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace Volo.Abp.Security.Claims
 {
-    public interface IAbpClaimsIdentityService
+    public interface IAbpClaimsPrincipalFactory
     {
-        Task AddClaimsAsync(ClaimsIdentity identity);
+        Task<ClaimsPrincipal> CreateAsync();
     }
 }

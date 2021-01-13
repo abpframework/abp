@@ -4,19 +4,19 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Security.Claims
 {
-    public class ClaimsIdentityContext
+    public class AbpClaimsPrincipalContributorContext
     {
         [NotNull]
-        public ClaimsIdentity ClaimsIdentity { get; }
+        public ClaimsPrincipal ClaimsPrincipal { get; }
 
         [NotNull]
         public IServiceProvider ServiceProvider { get; }
 
-        public ClaimsIdentityContext(
-            [NotNull] ClaimsIdentity claimsIdentity,
+        public AbpClaimsPrincipalContributorContext(
+            [NotNull] ClaimsPrincipal claimsIdentity,
             [NotNull] IServiceProvider serviceProvider)
         {
-            ClaimsIdentity = claimsIdentity;
+            ClaimsPrincipal = claimsIdentity;
             ServiceProvider = serviceProvider;
         }
     }
