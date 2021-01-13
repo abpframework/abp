@@ -20,12 +20,14 @@ namespace Volo.CmsKit.MongoDB.Pages
 
         public virtual async Task<int> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync())
+            cancellationToken = GetCancellationToken(cancellationToken);
+            
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<Page, IMongoQueryable<Page>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.Title.Contains(filter)
-                ).CountAsync(GetCancellationToken(cancellationToken));
+                ).CountAsync(cancellationToken);
         }
 
         public virtual async Task<List<Page>> GetListAsync(
@@ -35,7 +37,9 @@ namespace Volo.CmsKit.MongoDB.Pages
             string sorting = null,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync())
+            cancellationToken = GetCancellationToken(cancellationToken);
+            
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<Page, IMongoQueryable<Page>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
@@ -44,7 +48,7 @@ namespace Volo.CmsKit.MongoDB.Pages
                 .OrderBy(sorting ?? nameof(Page.Title))
                 .As<IMongoQueryable<Page>>()
                 .PageBy<Page, IMongoQueryable<Page>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(cancellationToken);
         }
 
         public virtual Task<Page> GetByUrlAsync(string url, CancellationToken cancellationToken = default)
