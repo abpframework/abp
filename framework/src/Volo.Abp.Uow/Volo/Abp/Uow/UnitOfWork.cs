@@ -11,6 +11,11 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
+        [Obsolete("This will be removed in next versions.")]
+        public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
+
+        public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
+
         public Guid Id { get; } = Guid.NewGuid();
 
         public IAbpUnitOfWorkOptions Options { get; private set; }
@@ -302,7 +307,7 @@ namespace Volo.Abp.Uow
                 }
             }
         }
-        
+
         protected virtual async Task CommitTransactionsAsync()
         {
             foreach (var transaction in GetAllActiveTransactionApis())

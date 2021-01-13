@@ -124,7 +124,7 @@ namespace Volo.Abp.EventBus.Rebus
             return Subscribe(typeof(TEvent), handler);
         }
 
-        public async override Task PublishAsync(Type eventType, object eventData)
+        public override async Task PublishAsync(Type eventType, object eventData)
         {
             await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
         }

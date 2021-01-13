@@ -4,9 +4,10 @@
     "Languages": "Talen",
     "AreYouSure": "Bent u zeker?",
     "Cancel": "Annuleren",
+    "Clear": "Wissen",
     "Yes": "Ja",
     "No": "Nee",
-    "Ok": "Ok",
+    "Ok": "Oké",
     "Close": "Sluiten",
     "Save": "Opslaan",
     "SavingWithThreeDot": "Opslaan...",
@@ -34,6 +35,8 @@
     "PagerInfoEmpty": "Toont 0 tot 0 van 0 vermeldingen",
     "PagerInfoFiltered": "(gefilterd uit in totaal _MAX_ vermeldingen)",
     "NoDataAvailableInDatatable": "Geen gegevens beschikbaar",
+    "Total": "totaal",
+    "Selected": "geselecteed",
     "PagerShowMenuEntries": "Toon _MENU_-vermeldingen",
     "DatatableActionDropdownDefaultText": "Acties",
     "ChangePassword": "Verander wachtwoord",
@@ -41,6 +44,9 @@
     "AreYouSureYouWantToCancelEditingWarningMessage": "U heeft nog niet-opgeslagen wijzigingen.",
     "GoHomePage": "Ga naar de homepage",
     "GoBack": "Ga terug",
-    "Search": "Zoeken"
+    "Search": "Zoeken",
+    "ItemWillBeDeletedMessageWithFormat": "{0} wordt verwijderd!",
+    "ItemWillBeDeletedMessage": "Dit item wordt verwijderd!",
+    "ManageYourAccount": "Beheer uw account"
   }
 }

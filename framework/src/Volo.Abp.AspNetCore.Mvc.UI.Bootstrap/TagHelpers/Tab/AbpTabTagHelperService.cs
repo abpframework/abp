@@ -9,7 +9,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 {
     public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
     {
-        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             SetPlaceholderForNameIfNotProvided();
 

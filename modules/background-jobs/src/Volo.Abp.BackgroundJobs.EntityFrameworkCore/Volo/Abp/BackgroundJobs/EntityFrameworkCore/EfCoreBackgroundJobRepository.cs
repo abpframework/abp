@@ -15,7 +15,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 
         public EfCoreBackgroundJobRepository(
             IDbContextProvider<IBackgroundJobsDbContext> dbContextProvider,
-            IClock clock) 
+            IClock clock)
             : base(dbContextProvider)
         {
             Clock = clock;
@@ -23,14 +23,13 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 
         public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(int maxResultCount)
         {
-            return await GetWaitingListQuery(maxResultCount)
-                .ToListAsync();
+            return await (await GetWaitingListQueryAsync(maxResultCount)).ToListAsync();
         }
 
-        protected virtual IQueryable<BackgroundJobRecord> GetWaitingListQuery(int maxResultCount)
+        protected virtual async Task<IQueryable<BackgroundJobRecord>> GetWaitingListQueryAsync(int maxResultCount)
         {
             var now = Clock.Now;
-            return DbSet
+            return (await GetDbSetAsync())
                 .Where(t => !t.IsAbandoned && t.NextTryTime <= now)
                 .OrderByDescending(t => t.Priority)
                 .ThenBy(t => t.TryCount)

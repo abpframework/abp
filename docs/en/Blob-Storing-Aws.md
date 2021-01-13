@@ -60,7 +60,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **Region** (string): The system name of the service.
 * **Policy** (string): An IAM policy in JSON format that you want to use as an inline session policy.
 * **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600. **note**: Using subaccounts operated OSS,if the value is 0.
-* **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlogContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
+* **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
     * Bucket names must be between **3** and **63** characters long.
     * Bucket names can consist only of **lowercase** letters, numbers, dots (.), and hyphens (-).
     * Bucket names must begin and end with a letter or number.

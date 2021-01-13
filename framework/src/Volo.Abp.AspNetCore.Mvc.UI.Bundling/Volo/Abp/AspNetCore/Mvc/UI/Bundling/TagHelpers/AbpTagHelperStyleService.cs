@@ -38,7 +38,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             );
         }
 
-        protected async override Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
+        protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
         {
             return await BundleManager.GetStyleBundleFilesAsync(bundleName);
         }

@@ -1,10 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
-using NUglify.Helpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
 using Volo.Abp.VirtualFileExplorer.Web.Models;
 using Volo.Abp.VirtualFileSystem;
@@ -30,7 +29,6 @@ namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
         public string PathNavigation { get; set; }
 
         protected IVirtualFileProvider VirtualFileProvider { get; }
-
 
         public IndexModel(IVirtualFileProvider virtualFileProvider)
         {
@@ -67,16 +65,26 @@ namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
                     LastUpdateTime = fileInfo.LastModified.LocalDateTime
                 };
 
+                var filePath =  fileInfo.PhysicalPath ?? $"{Path.EnsureEndsWith('/')}{fileInfo.Name}";;
+
                 if (fileInfo.IsDirectory)
                 {
                     fileInfoViewModel.Icon = "fas fa-folder";
                     fileInfoViewModel.FileType = "folder";
                     fileInfoViewModel.Length = "/";
-                    fileInfoViewModel.FileName =$"<a href='{Url.Content("~/")}VirtualFileExplorer?path={fileInfo.PhysicalPath}'>{fileInfo.Name}</a>";
+                    fileInfoViewModel.FileName =$"<a href='{Url.Content("~/")}VirtualFileExplorer?path={filePath}'>{fileInfo.Name}</a>";
                 }
                 else
                 {
-                    fileInfoViewModel.FilePath = ((EmbeddedResourceFileInfo) fileInfo).VirtualPath;
+                    if (fileInfo is EmbeddedResourceFileInfo embeddedResourceFileInfo)
+                    {
+                        fileInfoViewModel.FilePath = embeddedResourceFileInfo.VirtualPath;
+                    }
+                    else
+                    {
+                        fileInfoViewModel.FilePath = filePath;
+                    }
+
                 }
 
                 FileInfoList.Add(fileInfoViewModel);

@@ -143,7 +143,9 @@ namespace Volo.Abp.ObjectExtending
                 var propertyBuilder = typeBuilder.Property(property.Type, property.Name);
 
                 efCoreMapping.EntityTypeAndPropertyBuildAction?.Invoke(typeBuilder, propertyBuilder);
+#pragma warning disable 618
                 efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
+#pragma warning restore 618
             }
         }
     }

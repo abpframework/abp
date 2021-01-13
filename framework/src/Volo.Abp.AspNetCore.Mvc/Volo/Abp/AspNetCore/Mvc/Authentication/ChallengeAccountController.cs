@@ -66,42 +66,5 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
 
             return NoContent();
         }
-
-        protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
-        {
-            return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
-        }
-
-        private string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
-        {
-            returnUrl = NormalizeReturnUrl(returnUrl);
-
-            if (!returnUrlHash.IsNullOrWhiteSpace())
-            {
-                returnUrl = returnUrl + returnUrlHash;
-            }
-
-            return returnUrl;
-        }
-
-        private string NormalizeReturnUrl(string returnUrl)
-        {
-            if (returnUrl.IsNullOrEmpty())
-            {
-                return GetAppHomeUrl();
-            }
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return returnUrl;
-            }
-
-            return GetAppHomeUrl();
-        }
-
-        protected virtual string GetAppHomeUrl()
-        {
-            return "~/";
-        }
     }
 }

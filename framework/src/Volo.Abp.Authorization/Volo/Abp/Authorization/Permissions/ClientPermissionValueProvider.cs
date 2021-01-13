@@ -19,7 +19,7 @@ namespace Volo.Abp.Authorization.Permissions
             CurrentTenant = currentTenant;
         }
 
-        public async override Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
+        public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
             var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
 
@@ -36,7 +36,7 @@ namespace Volo.Abp.Authorization.Permissions
             }
         }
 
-        public async override Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
+        public override async Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context)
         {
             var permissionNames = context.Permissions.Select(x => x.Name).ToArray();
 
