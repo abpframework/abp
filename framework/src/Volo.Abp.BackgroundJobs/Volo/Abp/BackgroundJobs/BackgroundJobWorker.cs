@@ -30,7 +30,7 @@ namespace Volo.Abp.BackgroundJobs
             Timer.Period = WorkerOptions.JobPollPeriod;
         }
 
-        protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+        protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
             var store = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
 

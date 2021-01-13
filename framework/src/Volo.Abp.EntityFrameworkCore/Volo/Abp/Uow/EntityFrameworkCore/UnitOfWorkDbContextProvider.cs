@@ -39,12 +39,15 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         [Obsolete("Use GetDbContextAsync method.")]
         public TDbContext GetDbContext()
         {
-            Logger.LogWarning(
-                "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +
-                "You are probably using LINQ (LINQ extensions) directly on a repository. In this case, use repository.GetQueryableAsync() method " +
-                "to obtain an IQueryable<T> instance and use LINQ (LINQ extensions) on this object. "
-            );
-            Logger.LogWarning(Environment.StackTrace.Truncate(2048));
+            if (!UnitOfWork.DisableObsoleteDbContextCreationWarning.Value)
+            {
+                Logger.LogWarning(
+                    "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +
+                    "You are probably using LINQ (LINQ extensions) directly on a repository. In this case, use repository.GetQueryableAsync() method " +
+                    "to obtain an IQueryable<T> instance and use LINQ (LINQ extensions) on this object. "
+                );
+                Logger.LogWarning(Environment.StackTrace.Truncate(2048));
+            }
 
             var unitOfWork = _unitOfWorkManager.Current;
             if (unitOfWork == null)
@@ -142,8 +145,6 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
         private async Task<TDbContext> CreateDbContextAsync(IUnitOfWork unitOfWork)
         {
-            Logger.LogDebug($"Creating a new DbContext of type {typeof(TDbContext).FullName}");
-
             return unitOfWork.Options.IsTransactional
                 ? await CreateDbContextWithTransactionAsync(unitOfWork)
                 : unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();

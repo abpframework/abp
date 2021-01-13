@@ -53,7 +53,7 @@ namespace Volo.Abp.Identity.MongoDB
             return await dbContext.Roles.AsQueryable().Where(r => allRoleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
+        public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
             Guid id,
             CancellationToken cancellationToken = default)
         {
@@ -178,7 +178,7 @@ namespace Volo.Abp.Identity.MongoDB
             return await dbContext.Roles.AsQueryable().Where(r => allRoleIds.Contains(r.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
             Guid id,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -210,7 +210,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
             Guid organizationUnitId,
             CancellationToken cancellationToken = default)
         {
@@ -221,7 +221,7 @@ namespace Volo.Abp.Identity.MongoDB
             return result;
         }
 
-        public async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
             List<Guid> organizationUnitIds,
             CancellationToken cancellationToken = default)
         {
@@ -232,7 +232,7 @@ namespace Volo.Abp.Identity.MongoDB
             return result;
         }
 
-        public async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
             string code,
             CancellationToken cancellationToken = default)
         {

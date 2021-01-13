@@ -36,7 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             _localizer = localizer;
         }
 
-        public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var list = InitilizeFormGroupContentsContext(context, output);
 
