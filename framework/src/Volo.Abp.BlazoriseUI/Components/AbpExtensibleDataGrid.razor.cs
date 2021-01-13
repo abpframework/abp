@@ -10,6 +10,8 @@ namespace Volo.Abp.BlazoriseUI.Components
 {
     public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
     {
+        protected const string DataFieldAttributeName = "Data";
+
         protected Dictionary<string, DataGridEntityActionsColumn<TItem>> ActionColumns =
             new Dictionary<string, DataGridEntityActionsColumn<TItem>>();
 
@@ -25,12 +27,12 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         [Parameter] public IEnumerable<TableColumn> Columns { get; set; }
 
-        protected RenderFragment RenderCustomTableColumnComponent(Type type, object data)
+        protected virtual RenderFragment RenderCustomTableColumnComponent(Type type, object data)
         {
             return (builder) =>
             {
                 builder.OpenComponent(type);
-                builder.AddAttribute(0, "Data", data);
+                builder.AddAttribute(0, DataFieldAttributeName, data);
                 builder.CloseComponent();
             };
         }
