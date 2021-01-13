@@ -17,22 +17,19 @@ namespace Volo.Abp.Identity
     public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
         ITransientDependency
     {
-        protected AbpClaimOptions ClaimOptions { get; }
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected IAbpClaimsIdentityService AbpClaimsIdentityService { get; }
 
         public AbpUserClaimsPrincipalFactory(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<IdentityOptions> options,
-            IOptions<AbpClaimOptions> claimOptions,
-            IServiceScopeFactory serviceScopeFactory)
+            IAbpClaimsIdentityService abpClaimsIdentityService)
             : base(
                 userManager,
                 roleManager,
                 options)
         {
-            ServiceScopeFactory = serviceScopeFactory;
-            ClaimOptions = claimOptions.Value;
+            AbpClaimsIdentityService = abpClaimsIdentityService;
         }
 
         [UnitOfWork]
@@ -71,16 +68,7 @@ namespace Volo.Abp.Identity
 
             identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
 
-            using (var scope = ServiceScopeFactory.CreateScope())
-            {
-                var context = new ClaimsIdentityContext(identity, scope.ServiceProvider);
-
-                foreach (var contributorType in ClaimOptions.ClaimsIdentityContributors)
-                {
-                    var contributor = (IClaimsIdentityContributor) scope.ServiceProvider.GetRequiredService(contributorType);
-                    await contributor.AddClaimsAsync(context);
-                }
-            }
+            await AbpClaimsIdentityService.AddClaimsAsync(identity);
 
             return principal;
         }
