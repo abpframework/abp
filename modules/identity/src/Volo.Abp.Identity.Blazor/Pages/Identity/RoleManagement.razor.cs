@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Components.Extensibility;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
@@ -95,40 +90,6 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                         Title = L["RoleName"],
                         Data = nameof(IdentityRoleDto.Name),
                         Component = typeof(RoleNameComponent)
-                        /*Render = (data) =>
-                        {
-                            return (builder) =>
-                            {
-                                var role = data.As<IdentityRoleDto>();
-                                builder.AddContent(0, role.Name);
-
-                                if (role.IsDefault)
-                                {
-                                    builder.OpenComponent<Badge>();
-                                    builder.AddAttribute(0, "Color", Color.Primary);
-                                    builder.AddAttribute(1, "Margin", Margin.Is1.FromLeft);
-                                    builder.AddAttribute(2, "ChildContent",
-                                        (RenderFragment) ((builder2) =>
-                                        {
-                                            builder2.AddContent(3, L["DisplayName:IsDefault"]);
-                                        }));
-                                    builder.CloseComponent();
-                                }
-
-                                if (role.IsPublic)
-                                {
-                                    builder.OpenComponent<Badge>();
-                                    builder.AddAttribute(0, "Color", Color.Light);
-                                    builder.AddAttribute(1, "Margin", Margin.Is1.FromLeft);
-                                    builder.AddAttribute(2, "ChildContent",
-                                        (RenderFragment) ((builder2) =>
-                                        {
-                                            builder2.AddContent(3, L["DisplayName:IsPublic"]);
-                                        }));
-                                    builder.CloseComponent();
-                                }
-                            };
-                        }*/
                     },
                 });
 
