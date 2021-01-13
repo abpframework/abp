@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
@@ -277,7 +278,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
+            if (string.IsNullOrWhiteSpace(context.BuildArgs.Version) ||
+                SemanticVersion.Parse(context.BuildArgs.Version) > new SemanticVersion(4,1,99))
+            {
+                steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
+            }
         }
 
         private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
