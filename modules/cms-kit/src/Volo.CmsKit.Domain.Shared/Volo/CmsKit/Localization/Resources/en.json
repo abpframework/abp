@@ -35,6 +35,6 @@
     "Update": "Update",
     "YourComment": "Your comment",
     "YourReply": "Your reply",
-    "CmsKit:Page:0001": "The given url ({0}) is already exist."
+    "CmsKit:Page:0001": "The given url ({0}) already exists."
   }
 }
