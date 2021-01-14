@@ -15,6 +15,7 @@ using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Domain.Volo.CmsKit.Blogs;
 using Volo.CmsKit.Blogs;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -228,7 +229,11 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(p => p.Title).IsRequired().HasMaxLength(BlogPostConsts.MaxTitleLength);
 
+                    b.Property(p => p.UrlSlug).IsRequired().HasMaxLength(BlogPostConsts.MaxUrlSlugLength);
+
                     b.Property(p => p.CoverImageUrl).HasMaxLength(BlogPostConsts.MaxCoverImageUrlLength);
+
+                    b.HasIndex(x => x.UrlSlug);
                 });
             }
         }

@@ -10,5 +10,10 @@
         {
             public const string UrlAlreadyExist = "CmsKit:Page:0001";
         }
+
+        public static class Blogs
+        {
+            public const string UrlSlugAlreadyExist = "CmsKit:BlogPost:0001";
+        }
     }
 }
