@@ -12,8 +12,8 @@ jobs:
           ref: dev
       - name: Reset promotion branch
         run: |
-          git fetch origin rel-4.1:rel-4.1
-          git reset --hard rel-4.1
+          git fetch origin rel-4.2:rel-4.2
+          git reset --hard rel-4.2
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
