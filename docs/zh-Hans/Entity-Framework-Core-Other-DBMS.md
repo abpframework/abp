@@ -76,7 +76,7 @@ var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
 将其替换为：
 
 ````csharp
-var builder = new DbContextOptionsBuilder<TestMigrationsDbContext>()
+var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
     .UseMySql(configuration.GetConnectionString("Default"));
 ````
 
