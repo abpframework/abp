@@ -69,7 +69,7 @@ MySQL连接字符串与SQL Server连接字符串不同. 所以检查你的解决
 在 *YourProjectName*MigrationsDbContextFactory 类中找到以下代码：
 
 ````csharp
-var builder = new DbContextOptionsBuilder<TestMigrationsDbContext>()
+var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
     .UseSqlServer(configuration.GetConnectionString("Default"));
 ````
 
