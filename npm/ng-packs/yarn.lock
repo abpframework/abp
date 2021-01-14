@@ -25,7 +25,7 @@
     "@abp/ng.theme.shared" "~4.1.0"
     tslib "^2.0.0"
 
-"@abp/ng.identity@~4.1.0-rc.2":
+"@abp/ng.identity@~4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@abp/ng.identity/-/ng.identity-4.1.0.tgz#bebf0e4b85f0332313a827cc344c3d9e6af59d33"
   integrity sha512-doBqoPtxPdT8e27s4h97ldV6tsMHeKCXpyNiMAlweTFcsXjZjXnVJbuXYvqdoyRItqTbSxSlBKxk+6KRb9lPQQ==
@@ -53,7 +53,7 @@
     jsonc-parser "^2.3.0"
     typescript "~3.9.2"
 
-"@abp/ng.setting-management@~4.1.0-rc.2":
+"@abp/ng.setting-management@~4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@abp/ng.setting-management/-/ng.setting-management-4.1.0.tgz#8ef31a7f4c75be34f5be78427165f2d2b85ae16e"
   integrity sha512-8zH4jCNVwPIGgYlrHSm/0BKje1bFCQBOwAsdlVP6A6GRyOVY/6G5166ZAnEqbim8K6ln5WXPHTHtYnxB7Qur8Q==
@@ -61,7 +61,7 @@
     "@abp/ng.theme.shared" "~4.1.0"
     tslib "^2.0.0"
 
-"@abp/ng.tenant-management@~4.1.0-rc.2":
+"@abp/ng.tenant-management@~4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@abp/ng.tenant-management/-/ng.tenant-management-4.1.0.tgz#ec59e469e806a5081b52b1c597c333b49381afe7"
   integrity sha512-VZ/qiOz/XbUJT6rb+X9GUhwnBTqTt9UIAlAGiT7qONH/39pqUpe6n5d3lbL5oGGZ+ZxJ6S2/+dSKLC1cFt+Bgg==
@@ -70,7 +70,7 @@
     "@abp/ng.theme.shared" "~4.1.0"
     tslib "^2.0.0"
 
-"@abp/ng.theme.basic@~4.1.0-rc.2":
+"@abp/ng.theme.basic@~4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@abp/ng.theme.basic/-/ng.theme.basic-4.1.0.tgz#0931a33ca6cdb7375d77e75611cd7d3542b16c43"
   integrity sha512-rI80s3meGZzgHa4Ke5fAhwP79D/MRiThI47ixFhxUyPSP3+ogjziAn98SIsadkcjhH86lsSV9s2uCnzeqReBMg==
@@ -92,10 +92,17 @@
     chart.js "^2.9.3"
     tslib "^2.0.0"
 
-"@abp/utils@^4.1.0-rc.2":
+"@abp/utils@^4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-4.1.0.tgz#1f5d8b4dc8a234c15d87869436485fd737f18b50"
   integrity sha512-fksnKF1bsOab5AVe8qBs2HZmcRVjrnsMwXs23xaqSRdpWXpPgsLRuKCJHlD0usREyerDGPkpY5opUnXWggHvCg==
+  dependencies:
+    just-compare "^1.3.0"
+
+"@abp/utils@^4.1.0-rc.2":
+  version "4.1.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-4.1.0-rc.2.tgz#eb6dbf0ee493d0f050b37347d2d6d283098aedae"
+  integrity sha512-V2k5I89lVBoeGIKgg4p2H9GlMAcDWbctwKZPVwBEMVEVm1uTR2xQAWdTdSFd5Q8I8Xsf/aIG8ELM7l5j2h7/zQ==
   dependencies:
     just-compare "^1.3.0"
 
