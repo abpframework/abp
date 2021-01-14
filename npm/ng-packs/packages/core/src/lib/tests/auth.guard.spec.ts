@@ -26,7 +26,7 @@ describe('AuthGuard', () => {
     spectator.inject(OAuthService).hasValidAccessToken.andReturn(false);
     const initLoginSpy = jest.spyOn(authService, 'initLogin');
 
-    expect(guard.canActivate()).toBe(true);
+    expect(guard.canActivate()).toBe(false);
     expect(initLoginSpy).toHaveBeenCalled();
   });
 });

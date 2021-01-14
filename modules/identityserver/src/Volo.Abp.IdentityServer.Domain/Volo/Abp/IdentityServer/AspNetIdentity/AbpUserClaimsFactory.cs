@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Identity;
+using Volo.Abp.Security.Claims;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.IdentityServer.AspNetIdentity

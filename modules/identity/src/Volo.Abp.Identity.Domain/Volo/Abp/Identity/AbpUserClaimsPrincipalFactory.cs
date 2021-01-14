@@ -10,21 +10,29 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity
 {
-    public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>, ITransientDependency
+    public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
+        ITransientDependency
     {
+        protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
+        protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
+
         public AbpUserClaimsPrincipalFactory(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IOptions<IdentityOptions> options)
+            IOptions<IdentityOptions> options,
+            ICurrentPrincipalAccessor currentPrincipalAccessor,
+            IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory)
             : base(
-                  userManager,
-                  roleManager,
-                  options)
+                userManager,
+                roleManager,
+                options)
         {
+            CurrentPrincipalAccessor = currentPrincipalAccessor;
+            AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
         }
 
         [UnitOfWork]
-        public async override Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
+        public override async Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
         {
             var principal = await base.CreateAsync(user);
             var identity = principal.Identities.First();
@@ -49,7 +57,8 @@ namespace Volo.Abp.Identity
                 identity.AddIfNotContains(new Claim(AbpClaimTypes.PhoneNumber, user.PhoneNumber));
             }
 
-            identity.AddIfNotContains(new Claim(AbpClaimTypes.PhoneNumberVerified, user.PhoneNumberConfirmed.ToString()));
+            identity.AddIfNotContains(
+                new Claim(AbpClaimTypes.PhoneNumberVerified, user.PhoneNumberConfirmed.ToString()));
 
             if (!user.Email.IsNullOrWhiteSpace())
             {
@@ -57,6 +66,15 @@ namespace Volo.Abp.Identity
             }
 
             identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
+
+            using (CurrentPrincipalAccessor.Change(identity))
+            {
+                var abpClaimsPrincipal = await AbpClaimsPrincipalFactory.CreateAsync();
+                foreach (var claim in abpClaimsPrincipal.Claims)
+                {
+                    identity.AddIfNotContains(claim);
+                }
+            }
 
             return principal;
         }

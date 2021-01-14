@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
         }
 
-        public async Task<IdentityLinkUser> FindAsync(IdentityLinkUserInfo sourceLinkUserInfo, IdentityLinkUserInfo targetLinkUserInfo, CancellationToken cancellationToken = default)
+        public virtual async Task<IdentityLinkUser> FindAsync(IdentityLinkUserInfo sourceLinkUserInfo, IdentityLinkUserInfo targetLinkUserInfo, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken))
                 .OrderBy(x => x.Id).FirstOrDefaultAsync(x =>
@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity.MongoDB
                 , cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
+        public virtual async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(x =>
                     x.SourceUserId == linkUserInfo.UserId && x.SourceTenantId == linkUserInfo.TenantId ||

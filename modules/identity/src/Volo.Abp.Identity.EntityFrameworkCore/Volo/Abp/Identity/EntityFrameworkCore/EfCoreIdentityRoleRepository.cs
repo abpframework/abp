@@ -64,7 +64,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             string filter = null,
             CancellationToken cancellationToken = default)
         {

@@ -2,10 +2,10 @@
 {
     public class PageConsts
     {
-        public static int MaxTitleLength = 256;
+        public static int MaxTitleLength { get; set; } = 256;
+
+        public static int MaxUrlLength { get; set; } = 256;
         
-        public static int MaxUrlLength = 256;
-        
-        public static int MaxDescriptionLength = 515;
+        public static int MaxDescriptionLength { get; set; } = 512;
     }
 }

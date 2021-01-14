@@ -39,7 +39,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
             catch (Exception e)
             {
-                Logger.LogError("Unable to add angular source code: " + e.Message);
+                Logger.LogError("Unable to add angular source code: " + e.Message + Environment.NewLine + e.StackTrace);
             }
         }
 
@@ -125,6 +125,11 @@ namespace Volo.Abp.Cli.ProjectModification
                     else
                     {
                         subFolderName = $"/{subFolderName}";
+                    }
+
+                    if (compilerOptions["paths"][$"{projectPackageName}{subFolderName}"] != null)
+                    {
+                        continue;
                     }
 
                     ((JObject) compilerOptions["paths"]).Add(

@@ -25,6 +25,15 @@ namespace Volo.Abp.IdentityServer
         {
         }
 
+        protected override IEnumerable<string> FilterRequestedClaimTypes(IEnumerable<string> claimTypes)
+        {
+            return base.FilterRequestedClaimTypes(claimTypes)
+                .Union(new []{
+                    AbpClaimTypes.TenantId, 
+                    AbpClaimTypes.EditionId
+                });
+        }
+        
         protected override IEnumerable<Claim> GetOptionalClaims(ClaimsPrincipal subject)
         {
             return base.GetOptionalClaims(subject)

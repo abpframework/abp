@@ -22,7 +22,7 @@ namespace Volo.Abp.Domain.Repositories
             return repository.ToMongoDbRepository().GetDatabaseAsync();
         }
 
-        [Obsolete("Use GetCollection method.")]
+        [Obsolete("Use GetCollectionAsync method.")]
         public static IMongoCollection<TEntity> GetCollection<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
             where TEntity : class, IEntity<TKey>
         {
