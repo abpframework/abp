@@ -106,6 +106,36 @@ var book1984 = await _bookRepository
 
 See the [repository documentation](https://docs.abp.io/en/abp/4.2/Repositories#iqueryable-async-operations) to understand the relation between `IQueryable` and asynchronous operations.
 
+### Repository Bulk Operations
+
+This version adds the following methods to the repositories:
+
+* `InsertManyAsync`
+* `UpdateManyAsync`
+* `DeleteManyAsync`
+
+The purpose of these methods to insert, update or delete many entities in one call with a better performance.
+
+Currently, **MongoDB** provider implements these methods as a single bulk operation since MongoDB API natively supports. But current **Entity Framework Core** implementation is not a real bulk operation. Instead, it does its best with the native API of the EF Core. If you want to implement in a more performant way, you can [customize the bulk operations](https://docs.abp.io/en/abp/4.2/Entity-Framework-Core#customize-bulk-operations) with your own implementation or by using a library. We could find a good open source library for EF Core 5.0 to implement it.
+
+### Selecting DBMS on Template Creation
+
+And DbMigrator creates the initial migration if no migration exists.
+
+**TODO**
+
+### Angular Unit Testing
+
+We've improved the modules and the startup template to setup and write unit tests easier with the Angular UI. See the [Angular Unit Testing document](https://docs.abp.io/en/abp/4.2/UI/Angular/Testing) for details.
+
+### Other News
+
+* Improved HTTP **request-response performance** by resolving dependencies in a deferred way in the action/page filters, interceptors and some other services.
+* Removed `MultipleActiveResultSets` from connection strings for new templates for SQL Server, since the new EF Core gives a warning when using it. If you want to use it, you need to change the connection string yourself.
+* Added `HardDeleteAsync` extension method that takes a predicate to delete multiple entities. This extension method is available if the entity [Soft Delete](https://docs.abp.io/en/abp/latest/Data-Filtering).
+* Implemented the [Page Alerts](https://docs.abp.io/en/abp/4.2/UI/Angular/Page-Alerts) for Angular UI.
+* Implemented [Page Progressbar](https://github.com/abpframework/abp/blob/dev/docs/en/UI/Blazor/Page-Progress.md). It automatically shows an undetermined progress bar on top of the page while performing an AJAX request. It also proves an API to you if you need to show/hide the progress bar in your code.
+
 ## What's new with the ABP Commercial 4.2
 
 TODO
