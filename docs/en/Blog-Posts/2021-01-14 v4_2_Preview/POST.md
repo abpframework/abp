@@ -124,6 +124,10 @@ And DbMigrator creates the initial migration if no migration exists.
 
 **TODO**
 
+### Swagger Login
+
+TODO
+
 ### Angular Unit Testing
 
 We've improved the modules and the startup template to setup and write unit tests easier with the Angular UI. See the [Angular Unit Testing document](https://docs.abp.io/en/abp/4.2/UI/Angular/Testing) for details.
@@ -138,11 +142,29 @@ We've improved the modules and the startup template to setup and write unit test
 
 ## What's new with the ABP Commercial 4.2
 
-TODO
-
-## ABP Commercial
+### Microservice Startup Template
 
 TODO
+
+### Public Website in the Startup Templates
+
+TODO
+
+### Easy CRM Blazor UI
+
+TODO
+
+### Other News
+
+* Implemented Iyzico as a payment gateway for the payment module in addition to Paypal, Stripe, 2Checkout and Payu.
+* TODO: Suite news
+
+## ABP Community News
+
+TODO:
+
+* Video content support
+* Multi-language support - accepting content in every language!
 
 ## About the Next Release(s)
 
