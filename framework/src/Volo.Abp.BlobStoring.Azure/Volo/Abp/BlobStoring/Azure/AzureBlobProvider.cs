@@ -9,12 +9,14 @@ namespace Volo.Abp.BlobStoring.Azure
     public class AzureBlobProvider : BlobProviderBase, ITransientDependency
     {
         protected IAzureBlobNameCalculator AzureBlobNameCalculator { get; }
-        protected IServiceProvider ServiceProvider { get; }
+        protected IBlobNormalizeNamingFactory BlobNormalizeNamingFactory { get; }
 
-        public AzureBlobProvider(IAzureBlobNameCalculator azureBlobNameCalculator, IServiceProvider serviceProvider)
+        public AzureBlobProvider(
+            IAzureBlobNameCalculator azureBlobNameCalculator,
+            IBlobNormalizeNamingFactory blobNormalizeNamingFactory)
         {
             AzureBlobNameCalculator = azureBlobNameCalculator;
-            ServiceProvider = serviceProvider;
+            BlobNormalizeNamingFactory = blobNormalizeNamingFactory;
         }
 
         public async override Task SaveAsync(BlobProviderSaveArgs args)
@@ -101,7 +103,7 @@ namespace Volo.Abp.BlobStoring.Azure
             var configuration = args.Configuration.GetAzureConfiguration();
             return configuration.ContainerName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : NormalizeContainerName(args, ServiceProvider, configuration.ContainerName);
+                : BlobNormalizeNamingFactory.NormalizeContainerName(args.Configuration, configuration.ContainerName);
         }
 
         protected virtual async Task<bool> ContainerExistsAsync(BlobContainerClient blobContainerClient)

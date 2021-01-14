@@ -10,12 +10,14 @@ namespace Volo.Abp.BlobStoring.Minio
     public class MinioBlobProvider : BlobProviderBase, ITransientDependency
     {
         protected IMinioBlobNameCalculator MinioBlobNameCalculator { get; }
-        protected IServiceProvider ServiceProvider { get; }
+        protected IBlobNormalizeNamingFactory BlobNormalizeNamingFactory { get; }
 
-        public MinioBlobProvider(IMinioBlobNameCalculator minioBlobNameCalculator, IServiceProvider serviceProvider)
+        public MinioBlobProvider(
+            IMinioBlobNameCalculator minioBlobNameCalculator,
+            IBlobNormalizeNamingFactory blobNormalizeNamingFactory)
         {
             MinioBlobNameCalculator = minioBlobNameCalculator;
-            ServiceProvider = serviceProvider;
+            BlobNormalizeNamingFactory = blobNormalizeNamingFactory;
         }
 
         public async override Task SaveAsync(BlobProviderSaveArgs args)
@@ -141,7 +143,7 @@ namespace Volo.Abp.BlobStoring.Minio
 
             return configuration.BucketName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : NormalizeContainerName(args, ServiceProvider, configuration.BucketName);
+                : BlobNormalizeNamingFactory.NormalizeContainerName(args.Configuration, configuration.BucketName);
         }
     }
 }
