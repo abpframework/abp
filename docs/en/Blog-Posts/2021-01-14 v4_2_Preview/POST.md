@@ -170,7 +170,13 @@ Company Name is optional. Solution name could be *MyMicroserviceSystem* for this
 
 ### Public Website in the Startup Templates
 
-TODO
+As mentioned in the previous release post, we've added a *Public Website* application to the startup templates. It is configured to authenticate through the IdentityServer with a single sign-on system.
+
+You can use this application to create a landing page for your actual application or a corporate website for your business.
+
+![public-website](public-website.jpg)
+
+It uses the same *Lepton Theme*, so you can apply [all the styles](https://commercial.abp.io/themes). The Public Website has a different layout and also has a different setting for the styling (that can be configured in the *Settings / Lepton Theme* page of the main web application).
 
 ### Easy CRM Blazor UI
 
