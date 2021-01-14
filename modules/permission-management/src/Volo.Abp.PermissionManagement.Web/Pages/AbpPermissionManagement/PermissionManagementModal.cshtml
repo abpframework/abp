@@ -20,25 +20,28 @@
             <abp-tabs name="PermissionsTabs" tab-style="PillVertical" vertical-header-size="_4" class="custom-scroll-container">
                 @for (var i = 0; i < Model.Groups.Count; i++)
                 {
-                    <abp-tab title="@Model.Groups[i].DisplayName" name="v-pills-tab-@Model.Groups[i].GetNormalizedGroupName()">
-                        <h4>@Model.Groups[i].DisplayName</h4>
+                    var group = Model.Groups[i];
+                    <abp-tab title="@group.DisplayName" name="v-pills-tab-@group.GetNormalizedGroupName()">
+                        <h4>@group.DisplayName</h4>
                         <hr class="mt-2 mb-3"/>
                         <div class="custom-scroll-content">
                             <div class="pl-1 pt-1">
-                                <abp-input asp-for="@Model.Groups[i].IsAllPermissionsGranted" name="SelectAllInThisTab"
-                                           id="SelectAllInThisTab-@Model.Groups[i].GetNormalizedGroupName()"
-                                           data-tab-id="v-pills-tab-@Model.Groups[i].GetNormalizedGroupName()"
+                                <abp-input asp-for="@group.IsAllPermissionsGranted" name="SelectAllInThisTab"
+                                           id="SelectAllInThisTab-@group.GetNormalizedGroupName()"
+                                           data-tab-id="v-pills-tab-@group.GetNormalizedGroupName()"
                                            label="@L["SelectAllInThisTab"].Value"/>
                                 <hr class="mb-3"/>
-                                @for (var j = 0; j < Model.Groups[i].Permissions.Count; j++)
+                                @for (var j = 0; j < group.Permissions.Count; j++)
                                 {
-                                    <abp-input asp-for="@Model.Groups[i].Permissions[j].IsGranted"
-                                               label="@Model.Groups[i].Permissions[j].GetShownName(Model.ProviderName)"
-                                               disabled="@Model.Groups[i].Permissions[j].IsDisabled(Model.ProviderName)"
-                                               group-data-permission-name="@Model.Groups[i].Permissions[j].Name"
-                                               group-data-parent-name="@(Model.Groups[i].Permissions[j].ParentName ?? "")"
-                                               group-style="margin-left: @(Model.Groups[i].Permissions[j].Depth * 20)px"/>
-                                    <input asp-for="@Model.Groups[i].Permissions[j].Name"/>
+                                    var permission = group.Permissions[j];
+                                    <abp-input asp-for="@permission.IsGranted"
+                                               abp-id-name="@Model.Groups[i].Permissions[j].IsGranted"
+                                               label="@permission.GetShownName(Model.ProviderName)"
+                                               disabled="@permission.IsDisabled(Model.ProviderName)"
+                                               group-data-permission-name="@permission.Name"
+                                               group-data-parent-name="@(permission.ParentName ?? "")"
+                                               group-style="margin-left: @(permission.Depth * 20)px"/>
+                                    <input asp-for="@permission.Name" abp-id-name="@Model.Groups[i].Permissions[j].Name"/>
                                 }
                             </div>
                         </div>

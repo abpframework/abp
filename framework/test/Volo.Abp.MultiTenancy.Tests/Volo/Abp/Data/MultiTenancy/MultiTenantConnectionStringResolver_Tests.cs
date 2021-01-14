@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.MultiTenancy;
@@ -49,28 +50,28 @@ namespace Volo.Abp.Data.MultiTenancy
         }
 
         [Fact]
-        public void All_Tests()
+        public async Task All_Tests()
         {
             //No tenant in current context
-            _connectionResolver.Resolve().ShouldBe("default-value");
-            _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");
+            (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
+            (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
 
-            //Overrided connection strings for tenant1
+            //Overriden connection strings for tenant1
             using (_currentTenant.Change(_tenant1Id))
             {
-                _connectionResolver.Resolve().ShouldBe("tenant1-default-value");
-                _connectionResolver.Resolve("db1").ShouldBe("tenant1-db1-value");
+                (await _connectionResolver.ResolveAsync()).ShouldBe("tenant1-default-value");
+                (await _connectionResolver.ResolveAsync("db1")).ShouldBe("tenant1-db1-value");
             }
 
             //No tenant in current context
-            _connectionResolver.Resolve().ShouldBe("default-value");
-            _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");
+            (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
+            (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
 
             //Undefined connection strings for tenant2
             using (_currentTenant.Change(_tenant2Id))
             {
-                _connectionResolver.Resolve().ShouldBe("default-value");
-                _connectionResolver.Resolve("db1").ShouldBe("db1-default-value");
+                (await _connectionResolver.ResolveAsync()).ShouldBe("default-value");
+                (await _connectionResolver.ResolveAsync("db1")).ShouldBe("db1-default-value");
             }
         }
     }

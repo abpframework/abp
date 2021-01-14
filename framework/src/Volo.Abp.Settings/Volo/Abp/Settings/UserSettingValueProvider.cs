@@ -19,7 +19,7 @@ namespace Volo.Abp.Settings
             CurrentUser = currentUser;
         }
 
-        public async override Task<string> GetOrNullAsync(SettingDefinition setting)
+        public override async Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             if (CurrentUser.Id == null)
             {
@@ -29,7 +29,7 @@ namespace Volo.Abp.Settings
             return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentUser.Id.ToString());
         }
 
-        public async override Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+        public override async Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
         {
             if (CurrentUser.Id == null)
             {

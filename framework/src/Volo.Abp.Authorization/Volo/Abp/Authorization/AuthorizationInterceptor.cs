@@ -13,7 +13,7 @@ namespace Volo.Abp.Authorization
             _methodInvocationAuthorizationService = methodInvocationAuthorizationService;
         }
 
-        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             await AuthorizeAsync(invocation);
             await invocation.ProceedAsync();

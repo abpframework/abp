@@ -843,7 +843,7 @@ Swagger UI已配置,是此服务的默认页面. 如果你导航到URL`http://lo
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
   "Blogging": "mongodb://localhost/MsDemo_Blogging"
 }
 ````
@@ -969,8 +969,8 @@ public class ProductServiceMigrationDbContext : AbpDbContext<ProductServiceMigra
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
+  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True"
 }
 ````
 

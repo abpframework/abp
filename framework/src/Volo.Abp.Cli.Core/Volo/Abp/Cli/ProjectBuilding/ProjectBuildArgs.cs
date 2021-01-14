@@ -17,9 +17,13 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public DatabaseProvider DatabaseProvider { get; set; }
 
+        public DatabaseManagementSystem DatabaseManagementSystem { get; set; }
+
         public UiFramework UiFramework { get; set; }
 
         public MobileApp? MobileApp { get; set; }
+
+        public bool PublicWebSite { get; set; }
 
         [CanBeNull]
         public string AbpGitHubLocalRepositoryPath { get; set; }
@@ -41,8 +45,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
             [CanBeNull] string templateName = null,
             [CanBeNull] string version = null,
             DatabaseProvider databaseProvider = DatabaseProvider.NotSpecified,
+            DatabaseManagementSystem databaseManagementSystem = DatabaseManagementSystem.NotSpecified,
             UiFramework uiFramework = UiFramework.NotSpecified,
             MobileApp? mobileApp = null,
+            bool publicWebSite = false,
             [CanBeNull] string abpGitHubLocalRepositoryPath = null,
             [CanBeNull] string voloGitHubLocalRepositoryPath = null,
             [CanBeNull] string templateSource = null,
@@ -53,8 +59,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
             TemplateName = templateName;
             Version = version;
             DatabaseProvider = databaseProvider;
+            DatabaseManagementSystem = databaseManagementSystem;
             UiFramework = uiFramework;
             MobileApp = mobileApp;
+            PublicWebSite = publicWebSite;
             AbpGitHubLocalRepositoryPath = abpGitHubLocalRepositoryPath;
             VoloGitHubLocalRepositoryPath = voloGitHubLocalRepositoryPath;
             TemplateSource = templateSource;

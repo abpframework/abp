@@ -23,7 +23,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             var localizedTemplateContentReaderFactory = new LocalizedTemplateContentReaderFactory(
                 new PhysicalFileVirtualFileProvider(
                     new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
-                        @"Volo\Abp\TextTemplating\"))));
+                        "Volo", "Abp", "TextTemplating"))));
 
             var reader = await localizedTemplateContentReaderFactory.CreateAsync(_templateDefinitionManager.Get(TestTemplates.WelcomeEmail));
 

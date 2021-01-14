@@ -12,22 +12,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 {
     public class AbpAuditPageFilter : IAsyncPageFilter, ITransientDependency
     {
-        protected AbpAuditingOptions Options { get; }
-        private readonly IAuditingHelper _auditingHelper;
-        private readonly IAuditingManager _auditingManager;
-
-        public AbpAuditPageFilter(IOptions<AbpAuditingOptions> options, IAuditingHelper auditingHelper, IAuditingManager auditingManager)
-        {
-            Options = options.Value;
-            _auditingHelper = auditingHelper;
-            _auditingManager = auditingManager;
-        }
-        
         public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
             return Task.CompletedTask;
         }
-        
+
         public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
             if (context.HandlerMethod == null || !ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
@@ -68,7 +57,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             auditLog = null;
             auditLogAction = null;
 
-            if (!Options.IsEnabled)
+            var options = context.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+            if (!options.IsEnabled)
             {
                 return false;
             }
@@ -78,19 +68,20 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
                 return false;
             }
 
-            var auditLogScope = _auditingManager.Current;
+            var auditLogScope = context.GetRequiredService<IAuditingManager>().Current;
             if (auditLogScope == null)
             {
                 return false;
             }
 
-            if (!_auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, true))
+            var auditingHelper = context.GetRequiredService<IAuditingHelper>();
+            if (!auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, true))
             {
                 return false;
             }
 
             auditLog = auditLogScope.Log;
-            auditLogAction = _auditingHelper.CreateAuditLogAction(
+            auditLogAction = auditingHelper.CreateAuditLogAction(
                 auditLog,
                 context.HandlerMethod.GetType(),
                 context.HandlerMethod.MethodInfo,

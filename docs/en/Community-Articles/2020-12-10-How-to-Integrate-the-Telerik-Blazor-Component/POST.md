@@ -52,7 +52,10 @@ abp new TelerikComponents --ui blazor --database-provider ef
 
 ```html
     ...
-        <link rel="stylesheet" href="https:unpkg.com/@progress/kendo-theme-default@latest/dist/all.css" />
+        <link rel="stylesheet" href="_content/Telerik.UI.for.Blazor/css/kendo-theme-default/all.css" />
+    <!-- For Trial licenses use
+        <link rel="stylesheet" href="_content/Telerik.UI.for.Blazor.Trial/css/kendo-theme-default/all.css" />
+    -->        
         <script src="_content/Telerik.UI.for.Blazor/js/telerik-blazor.js" defer></script>
     <!-- For Trial licenses use
         <script src="_content/Telerik.UI.for.Blazor.Trial/js/telerik-blazor.js" defer></script>

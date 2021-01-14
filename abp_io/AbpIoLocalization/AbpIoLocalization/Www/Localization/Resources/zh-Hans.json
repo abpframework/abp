@@ -191,6 +191,8 @@
     "TextTemplatingExplanation": "文本模板是基于模板和模型(数据对象)使用动态渲染内容. 例如你可以使用预构建的模板来创建动态的电子邮件内容.",
     "MultipleUIOptions": "多个UI选项",
     "MultipleDBOptions": "多个数据库提供程序",
-    "MultipleUIOptionsExplanation": "核心框架设计为独立与UI,可以和任何类型的UI系统一起使用. 同时提供了多个开箱即用的预构建集成选项."
+    "MultipleUIOptionsExplanation": "核心框架设计为独立与UI,可以和任何类型的UI系统一起使用. 同时提供了多个开箱即用的预构建集成选项.",
+    "MultipleDBOptionsExplanation": "该框架可以使用任何数据源,并且以下提供程序已得到正式开发和支持；",
+    "SelectLanguage": "选择语言"
   }
 }
