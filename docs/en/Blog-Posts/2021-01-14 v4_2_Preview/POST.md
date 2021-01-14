@@ -172,11 +172,13 @@ Company Name is optional. Solution name could be *MyMicroserviceSystem* for this
 
 As mentioned in the previous release post, we've added a *Public Website* application to the startup templates. It is configured to authenticate through the IdentityServer with a single sign-on system.
 
-You can use this application to create a landing page for your actual application or a corporate website for your business.
+You can use this application to create a landing page for your actual application or a corporate website for your business. An example screenshot:
 
 ![public-website](public-website.jpg)
 
 It uses the same *Lepton Theme*, so you can apply [all the styles](https://commercial.abp.io/themes). The Public Website has a different layout and also has a different setting for the styling (that can be configured in the *Settings / Lepton Theme* page of the main web application).
+
+TODO: How to get started?
 
 ### Easy CRM Blazor UI
 
@@ -194,9 +196,11 @@ TODO:
 * Video content support
 * Multi-language support - accepting content in every language!
 
-## About the Next Release(s)
+## About the Next Release
 
-TODO
+The next feature version will be 4.3.0. It is planned to release the 4.3 RC (Release Candidate) on March 11 and the final version on March 25, 2021.
+
+We decided to slow down the feature development for the [next milestone](https://github.com/abpframework/abp/milestone/49). We will continue to improve the existing features and introduce new ones, sure, but wanted to have more time for the planning, documentation, creating guides and improving the development experience.
 
 ## Feedback
 
