@@ -1,0 +1,7 @@
+{
+  "culture": "nl",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "Tijdzone",
+    "Description:Abp.Timing.Timezone": "Tijdzone van applicatie"
+  }
+}

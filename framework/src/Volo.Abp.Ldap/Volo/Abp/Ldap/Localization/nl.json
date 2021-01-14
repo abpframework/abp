@@ -1,0 +1,15 @@
+{
+  "culture": "nl",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Serverhost",
+    "Description:Abp.Ldap.ServerHost": "Serverhost",
+    "DisplayName:Abp.Ldap.ServerPort": "Server poort",
+    "Description:Abp.Ldap.ServerPort": "Server poort",
+    "DisplayName:Abp.Ldap.BaseDc": "Basisdomein component",
+    "Description:Abp.Ldap.BaseDc": "Basisdomein component",
+    "DisplayName:Abp.Ldap.UserName": "Gebruikersnaam",
+    "Description:Abp.Ldap.UserName": "Gebruikersnaam",
+    "DisplayName:Abp.Ldap.Password": "Wachtwoord",
+    "Description:Abp.Ldap.Password": "Wachtwoord"
+  }
+}
