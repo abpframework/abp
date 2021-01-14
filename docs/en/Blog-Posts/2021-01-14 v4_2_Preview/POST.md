@@ -138,13 +138,35 @@ We've improved the modules and the startup template to setup and write unit test
 * Removed `MultipleActiveResultSets` from connection strings for new templates for SQL Server, since the new EF Core gives a warning when using it. If you want to use it, you need to change the connection string yourself.
 * Added `HardDeleteAsync` extension method that takes a predicate to delete multiple entities. This extension method is available if the entity [Soft Delete](https://docs.abp.io/en/abp/latest/Data-Filtering).
 * Implemented the [Page Alerts](https://docs.abp.io/en/abp/4.2/UI/Angular/Page-Alerts) for the **Angular UI**.
-* Implemented [Page Progressbar](https://github.com/abpframework/abp/blob/dev/docs/en/UI/Blazor/Page-Progress.md) for the **Blazor UI**. It automatically shows an undetermined progress bar on top of the page while performing an AJAX request. It also proves an API to you if you need to show/hide the progress bar in your code.
+* Implemented [Page Progress](https://docs.abp.io/en/abp/4.2/UI/Blazor/Page-Progress) for the **Blazor UI**. It automatically shows an undetermined progress bar on top of the page while performing an AJAX request. It also proves an API to you if you need to show/hide the progress bar in your code.
 
 ## What's new with the ABP Commercial 4.2
 
 ### Microservice Startup Template
 
-TODO
+The new [Microservice Startup Template](https://docs.abp.io/en/commercial/4.2/startup-templates/microservice/index) is a generic solution to start a new microservice solution.
+
+While we accept that every microservice solution will be different and every system has its own design requirements and trade-offs, we believe such a startup solution is a very useful starting point for most of the solutions, and a useful example for others.
+
+![microservice-template-diagram](microservice-template-diagram.png)
+
+*Figure: A simplified overall diagram of the microservice solution.*
+
+You can [follow the documentation](https://docs.abp.io/en/commercial/4.2/startup-templates/microservice/index) to get started with this startup template. **This template should be considered as an early release**. We will improve it and write a lot of guides.
+
+If you want to use the ABP Suite to create your solution, then you need to first upgrade it:
+
+````bash
+abp suite update
+````
+
+If you want, you can directly create a new solution from the command line:
+
+````bash
+abp new Volosoft.MyMicroserviceSystem -t microservice-pro --preview
+````
+
+Company Name is optional. Solution name could be *MyMicroserviceSystem* for this example.
 
 ### Public Website in the Startup Templates
 
