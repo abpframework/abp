@@ -64,7 +64,7 @@ MySQL连接字符串与SQL Server连接字符串不同. 所以检查你的解决
 
 ## 更改迁移DbContext Factory
 
-启动模板包含***YourProjectName*MigrationsDbContextFactory**，这是EF Core控制台命令所必须的类（比如[Add-Migration](https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/#generating--running-migrations)和[Update-Database](https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/#generating--running-migrations)），在切换到MySql数据库时，我们同时也需要修改`DbContextOptionsBuilder`
+启动模板包含***YourProjectName*MigrationsDbContextFactory**类，这是EF Core控制台命令所必须的类（比如[Add-Migration](https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/#generating--running-migrations)和[Update-Database](https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/#generating--running-migrations)），在切换到MySql数据库时，我们同时也需要修改`DbContextOptionsBuilder`
 
 在 *YourProjectName*MigrationsDbContextFactory 类中找到以下代码：
 
