@@ -12,16 +12,16 @@ namespace Volo.Abp.BlobStoring.Aws
     {
         protected IAwsBlobNameCalculator AwsBlobNameCalculator { get; }
         protected IAmazonS3ClientFactory AmazonS3ClientFactory { get; }
-        protected IBlobNormalizeNamingFactory BlobNormalizeNamingFactory { get; }
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
         public AwsBlobProvider(
             IAwsBlobNameCalculator awsBlobNameCalculator,
             IAmazonS3ClientFactory amazonS3ClientFactory,
-            IBlobNormalizeNamingFactory blobNormalizeNamingFactory)
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
             AwsBlobNameCalculator = awsBlobNameCalculator;
             AmazonS3ClientFactory = amazonS3ClientFactory;
-            BlobNormalizeNamingFactory = blobNormalizeNamingFactory;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
         public async override Task SaveAsync(BlobProviderSaveArgs args)
@@ -156,7 +156,7 @@ namespace Volo.Abp.BlobStoring.Aws
             var configuration = args.Configuration.GetAwsConfiguration();
             return configuration.ContainerName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : BlobNormalizeNamingFactory.NormalizeContainerName(args.Configuration, configuration.ContainerName);
+                : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
         }
     }
 }

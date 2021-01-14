@@ -10,16 +10,16 @@ namespace Volo.Abp.BlobStoring.Aliyun
     {
         protected IOssClientFactory OssClientFactory { get; }
         protected IAliyunBlobNameCalculator AliyunBlobNameCalculator { get; }
-        protected IBlobNormalizeNamingFactory BlobNormalizeNamingFactory { get; }
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
         public AliyunBlobProvider(
             IOssClientFactory ossClientFactory,
             IAliyunBlobNameCalculator aliyunBlobNameCalculator,
-            IBlobNormalizeNamingFactory blobNormalizeNamingFactory)
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
             OssClientFactory = ossClientFactory;
             AliyunBlobNameCalculator = aliyunBlobNameCalculator;
-            BlobNormalizeNamingFactory = blobNormalizeNamingFactory;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
         protected virtual IOss GetOssClient(BlobContainerConfiguration blobContainerConfiguration)
@@ -96,7 +96,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             var configuration = args.Configuration.GetAliyunConfiguration();
             return configuration.ContainerName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : BlobNormalizeNamingFactory.NormalizeContainerName(args.Configuration, configuration.ContainerName);
+                : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
         }
 
         protected  virtual bool BlobExists(IOss ossClient,string containerName, string blobName)

@@ -5,16 +5,16 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlobStoring
 {
-    public class BlobNormalizeNamingFactory : IBlobNormalizeNamingFactory, ITransientDependency
+    public class BlobNormalizeNamingService : IBlobNormalizeNamingService, ITransientDependency
     {
         protected IServiceProvider ServiceProvider { get; }
 
-        public BlobNormalizeNamingFactory(IServiceProvider serviceProvider)
+        public BlobNormalizeNamingService(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
         }
 
-        public (string containerName, string blobName) NormalizeNaming(
+        public BlobNormalizeNaming NormalizeNaming(
             BlobContainerConfiguration configuration,
             string containerName,
             string blobName)
@@ -22,7 +22,7 @@ namespace Volo.Abp.BlobStoring
 
             if (!configuration.NamingNormalizers.Any())
             {
-                return (containerName, blobName);
+                return new BlobNormalizeNaming(containerName, blobName);
             }
 
             using (var scope = ServiceProvider.CreateScope())
@@ -37,7 +37,7 @@ namespace Volo.Abp.BlobStoring
                     blobName = blobName.IsNullOrWhiteSpace()? blobName: normalizer.NormalizeBlobName(blobName);
                 }
 
-                return (containerName, blobName);
+                return new BlobNormalizeNaming(containerName, blobName);
             }
         }
 
@@ -48,7 +48,7 @@ namespace Volo.Abp.BlobStoring
                 return containerName;
             }
 
-            return NormalizeNaming(configuration, containerName, null).containerName;
+            return NormalizeNaming(configuration, containerName, null).ContainerName;
         }
 
         public string NormalizeBlobName(BlobContainerConfiguration configuration, string blobName)
@@ -58,7 +58,7 @@ namespace Volo.Abp.BlobStoring
                 return blobName;
             }
 
-            return NormalizeNaming(configuration, null, blobName).blobName;
+            return NormalizeNaming(configuration, null, blobName).BlobName;
         }
     }
 }
