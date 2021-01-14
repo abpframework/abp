@@ -28,7 +28,7 @@ namespace Volo.Abp.MailKit
             SmtpConfiguration = smtpConfiguration;
         }
 
-        protected async override Task SendEmailAsync(MailMessage mail)
+        protected override async Task SendEmailAsync(MailMessage mail)
         {
             using (var client = await BuildClientAsync())
             {

@@ -33,86 +33,41 @@ namespace Volo.Abp.Application.Services
         IAuditingEnabled,
         ITransientDependency
     {
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
         public IServiceProvider ServiceProvider { get; set; }
-        protected readonly object ServiceProviderLock = new object();
-
-        protected TService LazyGetRequiredService<TService>(ref TService reference)
-            => LazyGetRequiredService(typeof(TService), ref reference);
-
-        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
-        {
-            if (reference == null)
-            {
-                lock (ServiceProviderLock)
-                {
-                    if (reference == null)
-                    {
-                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
-                    }
-                }
-            }
-
-            return reference;
-        }
 
         public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
 
         public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 
-        protected IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
-        private IUnitOfWorkManager _unitOfWorkManager;
-        
-        protected IAsyncQueryableExecuter AsyncExecuter => LazyGetRequiredService(ref _asyncExecuter);
-        private IAsyncQueryableExecuter _asyncExecuter;
+        protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
+
+        protected IAsyncQueryableExecuter AsyncExecuter => LazyServiceProvider.LazyGetRequiredService<IAsyncQueryableExecuter>();
 
         protected Type ObjectMapperContext { get; set; }
-        protected IObjectMapper ObjectMapper
-        {
-            get
-            {
-                if (_objectMapper != null)
-                {
-                    return _objectMapper;
-                }
+        protected IObjectMapper ObjectMapper => LazyServiceProvider.LazyGetService<IObjectMapper>(provider =>
+            ObjectMapperContext == null
+                ? provider.GetRequiredService<IObjectMapper>()
+                : (IObjectMapper) provider.GetRequiredService(typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext)));
 
-                if (ObjectMapperContext == null)
-                {
-                    return LazyGetRequiredService(ref _objectMapper);
-                }
+        public IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
-                return LazyGetRequiredService(
-                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
-                    ref _objectMapper
-                );
-            }
-        }
-        private IObjectMapper _objectMapper;
+        protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
-        public IGuidGenerator GuidGenerator { get; set; }
+        protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
 
-        protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
-        private ILoggerFactory _loggerFactory;
+        protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
 
-        protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
-        private ICurrentTenant _currentTenant;
+        protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
 
-        protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
-        private ICurrentUser _currentUser;
+        protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
-        protected ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
-        private ISettingProvider _settingProvider;
+        protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
 
-        protected IClock Clock => LazyGetRequiredService(ref _clock);
-        private IClock _clock;
+        protected IFeatureChecker FeatureChecker => LazyServiceProvider.LazyGetRequiredService<IFeatureChecker>();
 
-        protected IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
-        private IAuthorizationService _authorizationService;
-
-        protected IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
-        private IFeatureChecker _featureChecker;
-
-        protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
-        private IStringLocalizerFactory _stringLocalizerFactory;
+        protected IStringLocalizerFactory StringLocalizerFactory => LazyServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
 
         protected IStringLocalizer L
         {
@@ -141,13 +96,7 @@ namespace Volo.Abp.Application.Services
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
-        protected ILogger Logger => _lazyLogger.Value;
-        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
-
-        protected ApplicationService()
-        {
-            GuidGenerator = SimpleGuidGenerator.Instance;
-        }
+        protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
 
         /// <summary>
         /// Checks for given <paramref name="policyName"/>.

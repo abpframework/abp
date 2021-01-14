@@ -22,7 +22,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
@@ -36,7 +36,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
                         x => x.Name.Contains(filter) ||
@@ -50,7 +50,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             IEnumerable<Guid> ids,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(t => ids.Contains(t.Id))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -58,23 +58,32 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
             bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            return await DbSet.IncludeDetails(includeDetails).Where(r => r.IsDefault).ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .Where(r => r.IsDefault)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
                     x => x.Name.Contains(filter) ||
                          x.NormalizedName.Contains(filter))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
+        [Obsolete("Use WithDetailsAsync")]
         public override IQueryable<IdentityRole> WithDetails()
         {
             return GetQueryable().IncludeDetails();
+        }
+
+        public override async Task<IQueryable<IdentityRole>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }

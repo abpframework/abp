@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -34,6 +35,11 @@ namespace Volo.Abp.UI.Navigation.Urls
                     urlName
                 )
             );
+        }
+
+        public bool IsRedirectAllowedUrl(string url)
+        {
+            return Options.RedirectAllowedUrls.Any(url.StartsWith);
         }
 
         protected virtual Task<string> GetConfiguredUrl(string appName, string urlName)

@@ -30,7 +30,7 @@
     "PagerPrevious": "Anterior",
     "PagerFirst": "Primero",
     "PagerLast": "Último",
-    "PagerInfo": "Mostrando de la _START a la _END_ de _TOTAL_ entradas",
+    "PagerInfo": "Mostrando de la _START_ a la _END_ de _TOTAL_ entradas",
     "PagerInfo{0}{1}{2}": "Mostrando de la {0} a la {1} de {2} entradas",
     "PagerInfoEmpty": "Mostrando de la 0 a la 0 de 0 entradas",
     "PagerInfoFiltered": "(filtrado desde _MAX_ entradas totales)",

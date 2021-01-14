@@ -19,7 +19,7 @@ This sample aims to demonstrate a simple yet complete microservice solution;
 * Has a **console application** to show the simplest way of using a service by authenticating.
 * Uses [Redis](https://redis.io/) for **distributed caching**.
 * Uses [RabbitMQ](https://www.rabbitmq.com/) for service-to-service **messaging**.
-* Uses [Docker](https://www.docker.com/) & [Kubernates](https://kubernetes.io/) to **deploy** & run all services and applications.
+* Uses [Docker](https://www.docker.com/) & [Kubernetes](https://kubernetes.io/) to **deploy** & run all services and applications.
 * Uses [Elasticsearch](https://www.elastic.co/products/elasticsearch) & [Kibana](https://www.elastic.co/products/kibana) to store and visualize the logs (written using [Serilog](https://serilog.net/)).
 
 The diagram below shows the system:
@@ -842,7 +842,7 @@ It has a dedicated MongoDB database (MsDemo_Blogging) to store blog and posts. I
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
   "Blogging": "mongodb://localhost/MsDemo_Blogging"
 }
 ````
@@ -968,8 +968,8 @@ There are two connection strings in the `appsettings.json` file:
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True",
+  "ProductManagement": "Server=localhost;Database=MsDemo_ProductManagement;Trusted_Connection=True"
 }
 ````
 

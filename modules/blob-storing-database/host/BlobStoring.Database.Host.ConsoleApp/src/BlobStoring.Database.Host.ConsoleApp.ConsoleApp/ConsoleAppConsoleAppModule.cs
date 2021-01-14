@@ -39,7 +39,7 @@ namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp
         {
             Configure<AbpDbConnectionOptions>(options =>
             {
-                options.ConnectionStrings.Default = "Server=localhost;Database=BlobStoring_Host;Trusted_Connection=True;MultipleActiveResultSets=true";
+                options.ConnectionStrings.Default = "Server=localhost;Database=BlobStoring_Host;Trusted_Connection=True";
             });
             
             context.Services.AddAbpDbContext<BlobStoringHostDbContext>(options =>
