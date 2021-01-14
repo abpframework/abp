@@ -137,8 +137,8 @@ We've improved the modules and the startup template to setup and write unit test
 * Improved HTTP **request-response performance** by resolving dependencies in a deferred way in the action/page filters, interceptors and some other services.
 * Removed `MultipleActiveResultSets` from connection strings for new templates for SQL Server, since the new EF Core gives a warning when using it. If you want to use it, you need to change the connection string yourself.
 * Added `HardDeleteAsync` extension method that takes a predicate to delete multiple entities. This extension method is available if the entity [Soft Delete](https://docs.abp.io/en/abp/latest/Data-Filtering).
-* Implemented the [Page Alerts](https://docs.abp.io/en/abp/4.2/UI/Angular/Page-Alerts) for Angular UI.
-* Implemented [Page Progressbar](https://github.com/abpframework/abp/blob/dev/docs/en/UI/Blazor/Page-Progress.md). It automatically shows an undetermined progress bar on top of the page while performing an AJAX request. It also proves an API to you if you need to show/hide the progress bar in your code.
+* Implemented the [Page Alerts](https://docs.abp.io/en/abp/4.2/UI/Angular/Page-Alerts) for the **Angular UI**.
+* Implemented [Page Progressbar](https://github.com/abpframework/abp/blob/dev/docs/en/UI/Blazor/Page-Progress.md) for the **Blazor UI**. It automatically shows an undetermined progress bar on top of the page while performing an AJAX request. It also proves an API to you if you need to show/hide the progress bar in your code.
 
 ## What's new with the ABP Commercial 4.2
 
