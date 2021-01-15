@@ -178,23 +178,29 @@ You can use this application to create a landing page for your actual applicatio
 
 It uses the same *Lepton Theme*, so you can apply [all the styles](https://commercial.abp.io/themes). The Public Website has a different layout and also has a different setting for the styling (that can be configured in the *Settings / Lepton Theme* page of the main web application).
 
-TODO: How to get started?
+> *Public Website* is optional and you need to select the "Public Website" option while creating a new solution using the ABP Suite, or use the `--with-public-website` option while using the `abp new` CLI command.
 
 ### Easy CRM Blazor UI
 
-TODO
+Easy CRM is an example application built with the ABP Commercial. MVC (Razor Pages) and Angular UI implementations were already provided. With the version 4.2, we are providing the Blazor UI implementation for this application.
+
+![easy-crm](easy-crm.png)
 
 ### Other News
 
 * Implemented Iyzico as a payment gateway for the payment module in addition to Paypal, Stripe, 2Checkout and Payu.
-* TODO: Suite news
 
 ## ABP Community News
 
-TODO:
+### Sharing Video Contents
 
-* Video content support
-* Multi-language support - accepting content in every language!
+[community.abp.io](https://community.abp.io/) is a place to share ABP related contents. It started with publishing articles. Now, it supports to publish video contents. [See this example](https://community.abp.io/articles/be-a-superhero-on-day-1-with-abp.io-wvifcy9s). All you need to do is to create a video and upload to YouTube. Then you can [submit](https://community.abp.io/articles/submit) the YouTube link to the ABP Community website.
+
+### Multi-language support
+
+We planned ABP Community to publish English-only contents. However, we see that people want to share contents in other languages too. Now, **it is possible to submit a content in any language**. Just select the Language option while submitting your content.
+
+**When you submit a non-English content, it is not visible to all the visitors by default**. Visitors can see a non-English content only if their browser language or the selected language matches to the content language (there is a language selection at the end of the website).
 
 ## About the Next Release
 
