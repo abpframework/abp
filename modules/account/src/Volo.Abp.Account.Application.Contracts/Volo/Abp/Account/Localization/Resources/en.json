@@ -57,6 +57,9 @@
     "ProfileTab:Password": "Change password",
     "ProfileTab:PersonalInfo": "Personal info",
     "ReturnToApplication": "Return to application",
-    "Volo.Account:InvalidEmailAddress": "Can not find the given email address: {0}"
+    "Volo.Account:InvalidEmailAddress": "Can not find the given email address: {0}",
+    "PasswordReset": "Password reset",
+    "PasswordResetInfoInEmail": "We received an account recovery request! If you initiated this request, click the following link to reset your password.",
+    "ResetMyPassword": "Reset my password"
   }
 }

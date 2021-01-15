@@ -48,7 +48,7 @@ namespace Volo.Abp.AspNetCore.SecurityLog
             WebClientInfoProvider = webClientInfoProvider;
         }
 
-        protected async override Task<SecurityLogInfo> CreateAsync()
+        protected override async Task<SecurityLogInfo> CreateAsync()
         {
             var securityLogInfo = await base.CreateAsync();
 

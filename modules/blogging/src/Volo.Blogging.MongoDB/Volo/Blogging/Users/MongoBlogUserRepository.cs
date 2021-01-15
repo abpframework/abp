@@ -17,7 +17,7 @@ namespace Volo.Blogging.Users
 
         public async Task<List<BlogUser>> GetUsersAsync(int maxCount, string filter, CancellationToken cancellationToken)
         {
-            var query = GetMongoQueryable();
+            var query = await GetMongoQueryableAsync(cancellationToken);
 
             if (!string.IsNullOrWhiteSpace(filter))
             {

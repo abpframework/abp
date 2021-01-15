@@ -117,7 +117,7 @@ namespace Volo.Abp.EventBus.Local
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public async override Task PublishAsync(Type eventType, object eventData)
+        public override async Task PublishAsync(Type eventType, object eventData)
         {
             var exceptions = new List<Exception>();
 

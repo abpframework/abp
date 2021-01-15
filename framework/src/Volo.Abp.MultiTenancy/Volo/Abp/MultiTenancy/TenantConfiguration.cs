@@ -15,7 +15,7 @@ namespace Volo.Abp.MultiTenancy
 
         public TenantConfiguration()
         {
-            
+
         }
 
         public TenantConfiguration(Guid id, [NotNull] string name)

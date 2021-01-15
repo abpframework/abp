@@ -10,7 +10,7 @@ namespace Volo.Abp.TenantManagement
         [Theory]
         [InlineData("aaa")]
         [InlineData("bbb")]
-        public async Task SetValue(string value)
+        public void SetValue(string value)
         {
             var tenantConnectionString =
                 new TenantConnectionString(Guid.NewGuid(), "MyConnString", "MyConnString-Value");

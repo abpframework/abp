@@ -23,7 +23,7 @@ namespace Volo.Abp.IdentityServer.Clients
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .OrderBy(x => x.ClientId)
                 .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
@@ -33,7 +33,7 @@ namespace Volo.Abp.IdentityServer.Clients
             string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
                 .OrderBy(sorting ?? nameof(Client.ClientName) + " desc")
@@ -41,9 +41,16 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default)
         {
-            return await DbContext.ClientCorsOrigins
+            return await (await GetDbContextAsync()).ClientCorsOrigins
                 .Select(x => x.Origin)
                 .Distinct()
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -51,62 +58,70 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
+            return await (await GetDbSetAsync()).AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
         }
 
         public async override Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            foreach (var clientGrantType in DbContext.Set<ClientGrantType>().Where(x => x.ClientId == id))
+            var dbContext = await GetDbContextAsync();
+
+            foreach (var clientGrantType in dbContext.Set<ClientGrantType>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientGrantType>().Remove(clientGrantType);
+                dbContext.Set<ClientGrantType>().Remove(clientGrantType);
             }
 
-            foreach (var clientRedirectUri in DbContext.Set<ClientRedirectUri>().Where(x => x.ClientId == id))
+            foreach (var clientRedirectUri in dbContext.Set<ClientRedirectUri>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientRedirectUri>().Remove(clientRedirectUri);
+                dbContext.Set<ClientRedirectUri>().Remove(clientRedirectUri);
             }
 
-            foreach (var clientPostLogoutRedirectUri in DbContext.Set<ClientPostLogoutRedirectUri>().Where(x => x.ClientId == id))
+            foreach (var clientPostLogoutRedirectUri in dbContext.Set<ClientPostLogoutRedirectUri>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientPostLogoutRedirectUri>().Remove(clientPostLogoutRedirectUri);
+                dbContext.Set<ClientPostLogoutRedirectUri>().Remove(clientPostLogoutRedirectUri);
             }
 
-            foreach (var clientScope in DbContext.Set<ClientScope>().Where(x => x.ClientId == id))
+            foreach (var clientScope in dbContext.Set<ClientScope>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientScope>().Remove(clientScope);
+                dbContext.Set<ClientScope>().Remove(clientScope);
             }
 
-            foreach (var clientSecret in DbContext.Set<ClientSecret>().Where(x => x.ClientId == id))
+            foreach (var clientSecret in dbContext.Set<ClientSecret>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientSecret>().Remove(clientSecret);
+                dbContext.Set<ClientSecret>().Remove(clientSecret);
             }
 
-            foreach (var clientClaim in DbContext.Set<ClientClaim>().Where(x => x.ClientId == id))
+            foreach (var clientClaim in dbContext.Set<ClientClaim>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientClaim>().Remove(clientClaim);
+                dbContext.Set<ClientClaim>().Remove(clientClaim);
             }
 
-            foreach (var clientIdPRestriction in DbContext.Set<ClientIdPRestriction>().Where(x => x.ClientId == id))
+            foreach (var clientIdPRestriction in dbContext.Set<ClientIdPRestriction>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientIdPRestriction>().Remove(clientIdPRestriction);
+                dbContext.Set<ClientIdPRestriction>().Remove(clientIdPRestriction);
             }
 
-            foreach (var clientCorsOrigin in DbContext.Set<ClientCorsOrigin>().Where(x => x.ClientId == id))
+            foreach (var clientCorsOrigin in dbContext.Set<ClientCorsOrigin>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientCorsOrigin>().Remove(clientCorsOrigin);
+                dbContext.Set<ClientCorsOrigin>().Remove(clientCorsOrigin);
             }
 
-            foreach (var clientProperty in DbContext.Set<ClientProperty>().Where(x => x.ClientId == id))
+            foreach (var clientProperty in dbContext.Set<ClientProperty>().Where(x => x.ClientId == id))
             {
-                DbContext.Set<ClientProperty>().Remove(clientProperty);
+                dbContext.Set<ClientProperty>().Remove(clientProperty);
             }
 
             await base.DeleteAsync(id, autoSave, cancellationToken);
         }
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public override IQueryable<Client> WithDetails()
         {
             return GetQueryable().IncludeDetails();
+        }
+
+        public override async Task<IQueryable<Client>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }

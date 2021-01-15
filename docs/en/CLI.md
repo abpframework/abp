@@ -105,7 +105,13 @@ abp new Acme.BookStore
 * `--preview`: Use latest preview version.
 * `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D:\local-template` or `https://.../my-template-file.zip`).
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
-* `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
+* `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
+* `--database-management-system` or `-dbms`: Sets the database management system. Default is **SQL Server**. Supported DBMS's:
+  * `SqlServer`
+  * `MySQL`
+  * `SQLite`
+  * `Oracle-Devart`
+  * `PostgreSQL`
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
 * `--no-random-port`: Uses template's default ports.
 
@@ -162,7 +168,7 @@ abp add-package Volo.Abp.MongoDB
 
 Adds a [multi-package application module](Modules/Index) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
-It can also create a new module for your solution and add it to your solution. See `--new-template` option.
+It can also create a new module for your solution and add it to your solution. See `--new` option.
 
 > A business module generally consists of several packages (because of layering, different database provider options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
 
@@ -219,7 +225,7 @@ abp get-source Volo.Blogging --local-framework-ref --abp-path D:\GitHub\abp
 * `--output-folder` or `-o`: Specifies the directory that source code will be downloaded in. If not specified, current directory is used.
 * `--version` or `-v`: Specifies the version of the  source code that will be downloaded. If not specified, latest version is used.
 * `--preview`: If no version option is specified, this option specifies if latest [preview version](Previews.md) will be used instead of latest stable version.
-* `-- local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
+* `--local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
 
 ### generate-proxy
 
@@ -420,3 +426,4 @@ abp bundle [options]
 * ```--force``` or ```-f```: Forces to build project before generating references.
 
 `bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
+

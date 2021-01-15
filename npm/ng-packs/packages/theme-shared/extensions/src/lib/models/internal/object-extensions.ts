@@ -3,10 +3,19 @@ import { EntityPropList } from '../entity-props';
 import { FormPropList } from '../form-props';
 import { PropContributorCallbacks } from '../props';
 
+export type DisplayNameGeneratorFn = (
+  displayName: LocalizableStringDto,
+  fallback: LocalizableStringDto,
+) => string;
+
+export type EntityExtensions = Record<string, EntityExtensionDto>;
+
 export interface EntityExtensionDto {
-  properties: Record<string, ExtensionPropertyDto>;
+  properties: EntityExtensionProperties;
   configuration: Record<string, object>;
 }
+
+export type EntityExtensionProperties = Record<string, ExtensionPropertyDto>;
 
 export interface ExtensionEnumDto {
   fields: ExtensionEnumFieldDto[];
