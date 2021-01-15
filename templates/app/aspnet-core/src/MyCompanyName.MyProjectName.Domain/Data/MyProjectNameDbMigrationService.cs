@@ -41,7 +41,7 @@ namespace MyCompanyName.MyProjectName.Data
         {
             try
             {
-                if (await DbMigrationsProjectExistsAsync() && !await MigrationsFolderExistsAsync())
+                if (DbMigrationsProjectExists() && !MigrationsFolderExists())
                 {
                     await AddInitialMigrationAsync();
                     return;
@@ -108,14 +108,14 @@ namespace MyCompanyName.MyProjectName.Data
             await _dataSeeder.SeedAsync(tenant?.Id);
         }
 
-        private async Task<bool> DbMigrationsProjectExistsAsync()
+        private bool DbMigrationsProjectExists()
         {
             var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
 
             return dbMigrationsProjectFolder != null;
         }
 
-        private async Task<bool> MigrationsFolderExistsAsync()
+        private bool MigrationsFolderExists()
         {
             var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
 
