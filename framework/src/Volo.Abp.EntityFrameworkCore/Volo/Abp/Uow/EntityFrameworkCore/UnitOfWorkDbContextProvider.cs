@@ -39,7 +39,8 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         [Obsolete("Use GetDbContextAsync method.")]
         public TDbContext GetDbContext()
         {
-            if (!UnitOfWork.DisableObsoleteDbContextCreationWarning.Value)
+            if (UnitOfWork.EnableObsoleteDbContextCreationWarning &&
+                !UnitOfWorkManager.DisableObsoleteDbContextCreationWarning.Value)
             {
                 Logger.LogWarning(
                     "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +

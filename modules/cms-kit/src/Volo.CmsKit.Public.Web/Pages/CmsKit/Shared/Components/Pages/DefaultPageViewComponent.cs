@@ -21,8 +21,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
             var model = new PageViewModel
             {
                 Id = pageId,
-                Title = title,
-                Description = description
+                Title = title
             };
             
             return View("~/Pages/CmsKit/Shared/Components/Pages/Default.cshtml", model);
@@ -34,7 +33,5 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
         public Guid Id { get; set; }
         
         public string Title { get; set; }
-
-        public string Description { get; set; }
     }
 }

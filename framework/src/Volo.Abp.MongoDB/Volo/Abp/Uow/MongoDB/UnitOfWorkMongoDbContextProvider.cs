@@ -36,7 +36,8 @@ namespace Volo.Abp.Uow.MongoDB
         [Obsolete("Use CreateDbContextAsync")]
         public TMongoDbContext GetDbContext()
         {
-            if (!UnitOfWork.DisableObsoleteDbContextCreationWarning.Value)
+            if (UnitOfWork.EnableObsoleteDbContextCreationWarning &&
+                !UnitOfWorkManager.DisableObsoleteDbContextCreationWarning.Value)
             {
                 Logger.LogWarning(
                     "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -28,6 +29,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             modelBuilder.ConfigureTenantManagement();
             modelBuilder.ConfigureFeatureManagement();
             modelBuilder.ConfigureCmsKit();
+            modelBuilder.ConfigureBlobStoring();
         }
     }
 }
