@@ -54,10 +54,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     if (_companyName != null)
                     {
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder, _companyName);
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase(), _companyName.ToCamelCase());
                     }
                     else
                     {
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase() + "." + _projectNamePlaceHolder.ToCamelCase(), _projectNamePlaceHolder.ToCamelCase());
                     }
                 }
 
