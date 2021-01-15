@@ -120,9 +120,17 @@ Currently, **MongoDB** provider implements these methods as a single bulk operat
 
 ### Selecting DBMS on Template Creation
 
-And DbMigrator creates the initial migration if no migration exists.
+[ABP CLI](https://docs.abp.io/en/abp/4.2/CLI#new) now has an option to specify the DBMS when you use EF Core as the database provider.
 
-**TODO**
+**Example: Select MySQL as the DBMS**
+
+````bash
+abp new BookStore -dbms mysql --preview
+````
+
+Available options: `SqlServer` (default), `MySQL`, `SQLite`, `Oracle-Devart`, `PostgreSQL`. See the [documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Other-DBMS) to use any other DBMS or switch the DBMS later.
+
+> If you select a DBMS other than the SQL Server, then the database migrations are also created when you first run the `DbMigrator` application.
 
 ### Swagger Login
 
@@ -188,7 +196,7 @@ Easy CRM is an example application built with the ABP Commercial. MVC (Razor Pag
 
 ### Other News
 
-* Implemented Iyzico as a payment gateway for the payment module in addition to Paypal, Stripe, 2Checkout and Payu.
+* Implemented Iyzico as a payment gateway provider for the [payment module](https://commercial.abp.io/modules/Volo.Payment) in addition to Paypal, Stripe, 2Checkout and Payu providers.
 
 ## ABP Community News
 
@@ -201,6 +209,10 @@ Easy CRM is an example application built with the ABP Commercial. MVC (Razor Pag
 We planned ABP Community to publish English-only contents. However, we see that people want to share contents in other languages too. Now, **it is possible to submit a content in any language**. Just select the Language option while submitting your content.
 
 **When you submit a non-English content, it is not visible to all the visitors by default**. Visitors can see a non-English content only if their browser language or the selected language matches to the content language (there is a language selection at the end of the website).
+
+### External Contents
+
+If you want to publish your content anywhere else, but want to post a link of your content, you can select *External Content* option while submitting the post. For example, [this article](https://community.abp.io/articles/aspnet-boilerplate-to-abp-framework-xml-to-json-localization-conversion-0mxyjrzj) is an external article and also written in Chinese language.
 
 ## About the Next Release
 
