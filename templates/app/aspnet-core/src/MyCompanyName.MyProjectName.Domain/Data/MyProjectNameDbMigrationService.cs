@@ -43,7 +43,7 @@ namespace MyCompanyName.MyProjectName.Data
             {
                 if (DbMigrationsProjectExists() && !MigrationsFolderExists())
                 {
-                    await AddInitialMigrationAsync();
+                    AddInitialMigration();
                     return;
                 }
             }
@@ -122,7 +122,7 @@ namespace MyCompanyName.MyProjectName.Data
             return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "migrations"));
         }
 
-        private async Task AddInitialMigrationAsync()
+        private void AddInitialMigration()
         {
             Logger.LogInformation("Creating initial migration...");
 
