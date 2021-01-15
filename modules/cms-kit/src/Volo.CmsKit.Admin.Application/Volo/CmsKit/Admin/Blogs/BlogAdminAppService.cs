@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.CmsKit.Domain.Volo.CmsKit.Blogs;
@@ -6,6 +7,7 @@ using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
+    [Authorize(CmsKitAdminPermissions.Blogs.Default)]
     public class BlogAdminAppService : CrudAppService<Blog, BlogDto, Guid>, IBlogAdminAppService
     {
         public BlogAdminAppService(IRepository<Blog, Guid> repository) : base(repository)

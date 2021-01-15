@@ -10,5 +10,7 @@ namespace Volo.CmsKit.Domain.Volo.CmsKit.Blogs
     public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
     {
         Task<bool> SlugExistsAsync(string slug);
+
+        Task<BlogPost> GetByUrlSlugAsync(string urlSlug);
     }
 }

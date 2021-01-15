@@ -14,6 +14,11 @@ namespace Volo.CmsKit.Blogs
         {
         }
 
+        public Task<BlogPost> GetByUrlSlugAsync(string urlSlug)
+        {
+            return GetAsync(x => x.UrlSlug.ToLower() == urlSlug);
+        }
+
         public async Task<bool> SlugExistsAsync(string slug)
         {
             var dbSet = await GetDbSetAsync();
