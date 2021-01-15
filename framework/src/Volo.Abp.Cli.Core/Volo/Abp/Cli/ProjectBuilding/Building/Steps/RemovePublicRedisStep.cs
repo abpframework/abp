@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using NUglify.Helpers;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
@@ -14,7 +13,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             context.Files.FirstOrDefault(f => f.Name.EndsWith("MyCompanyName.MyProjectName.HttpApi.HostWithIds.csproj"))?.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
             context.Files.FirstOrDefault(f => f.Name.EndsWith("MyCompanyName.MyProjectName.HttpApi.Host.csproj"))?.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
             context.Files.FirstOrDefault(f => f.Name.EndsWith("MyProjectNameHttpApiHostModule.cs"))?.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
-            context.Files.Where(f => f.Name.EndsWith("appSettings.json", StringComparison.InvariantCultureIgnoreCase)).ForEach(x => x.RemoveTemplateCodeIfNot("PUBLIC-REDIS"));
+
+            var appSettingsFiles = context.Files.Where(f => f.Name.EndsWith("appSettings.json", StringComparison.InvariantCultureIgnoreCase)).ToList();
+            foreach (var appSettings in appSettingsFiles)
+            {
+                appSettings.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
+            }
         }
     }
 }
