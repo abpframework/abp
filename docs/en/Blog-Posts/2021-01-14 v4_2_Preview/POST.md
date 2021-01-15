@@ -130,7 +130,7 @@ abp new BookStore -dbms mysql --preview
 
 Available options: `SqlServer` (default), `MySQL`, `SQLite`, `Oracle-Devart`, `PostgreSQL`. See the [documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Other-DBMS) to use any other DBMS or switch the DBMS later.
 
-> If you select a DBMS other than the SQL Server, then the database migrations are also created when you first run the `DbMigrator` application.
+> If you select a DBMS other than the SQL Server, then the database migrations are also created when you first run the `DbMigrator` application. In this case, do not run the application inside Visual Studio (or another IDE), but execute `dotnet run` command in a terminal in the folder of the `DbMigrator` project.
 
 ### Swagger UI Login / Authorization
 
