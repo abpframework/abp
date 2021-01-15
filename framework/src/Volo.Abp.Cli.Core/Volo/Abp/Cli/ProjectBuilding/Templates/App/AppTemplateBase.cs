@@ -26,13 +26,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
+            RemoveMigrations(context, steps);
             ConfigurePublicWebSite(context, steps);
             RemoveUnnecessaryPorts(context, steps);
             RandomizeSslPorts(context, steps);
             RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
             CleanupFolderHierarchy(context, steps);
-            RemoveMigrations(context, steps);
 
             return steps;
         }
