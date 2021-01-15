@@ -139,7 +139,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new ChangePublicAuthPortStep());
             }
 
-            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.NotSpecified || context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
+            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.NotSpecified && context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
             {
                 steps.Add(new RemoveEfCoreDependencyFromPublicStep());
             }
