@@ -29,21 +29,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
             {
                 case UiFramework.None:
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.WebGateway"));
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
                     steps.Add(new RemoveFolderStep("/angular"));
                     break;
 
                 case UiFramework.Angular:
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.WebGateway"));
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
                     break;
 
-
                 case UiFramework.Blazor:
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.WebGateway"));
                     steps.Add(new RemoveFolderStep("/angular"));
                     break;
 
@@ -52,12 +48,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
                     steps.Add(new RemoveFolderStep("/angular"));
                     break;
-            }
-
-            if (!context.BuildArgs.PublicWebSite)
-            {
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.PublicWeb"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.PublicWebGateway"));
             }
         }
 
