@@ -32,6 +32,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             RandomizeSslPorts(context, steps);
             RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
+            ChangeConnectionString(context, steps);
             CleanupFolderHierarchy(context, steps);
 
             return steps;
@@ -283,6 +284,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 SemanticVersion.Parse(context.BuildArgs.Version) > new SemanticVersion(4,1,99))
             {
                 steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
+            }
+        }
+
+        private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.ConnectionString != null)
+            {
+                steps.Add(new ConnectionStringChangeStep());
             }
         }
 
