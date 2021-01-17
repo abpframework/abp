@@ -41,7 +41,7 @@ The solution uses the [Entity Framework Core Code First Migrations](https://docs
 
 `.DbMigrator` application automatically **creates the Initial migration** on first run. 
 
-**If you are using Visual Studio, you can skip the the *Running the DbMigrator* section.** However, other IDEs (e.g. Rider) may have problems for the first run since it adds the initial migration and compiles the project. In this case, open a command line terminal in the folder of the `.DbMigrator` project and run the following command:
+**If you are using Visual Studio, you can skip to the *Running the DbMigrator* section.** However, other IDEs (e.g. Rider) may have problems for the first run since it adds the initial migration and compiles the project. In this case, open a command line terminal in the folder of the `.DbMigrator` project and run the following command:
 
 ````bash
 dotnet run
