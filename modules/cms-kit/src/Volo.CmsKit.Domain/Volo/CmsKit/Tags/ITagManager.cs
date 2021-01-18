@@ -28,6 +28,6 @@ namespace Volo.CmsKit.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default);
 
-        Task<List<TagDefiniton>> GetTagDefinitionsAsync(CancellationToken cancellationToken = default);
+        Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync(CancellationToken cancellationToken = default);
     }
 }

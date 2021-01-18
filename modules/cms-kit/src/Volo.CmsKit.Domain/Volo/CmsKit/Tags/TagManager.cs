@@ -83,7 +83,7 @@ namespace Volo.CmsKit.Tags
             return await _tagRepository.UpdateAsync(entity, cancellationToken: cancellationToken);
         }
 
-        public Task<List<TagDefiniton>> GetTagDefinitionsAsync(CancellationToken cancellationToken = default)
+        public Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync(CancellationToken cancellationToken = default)
         {
             return _tagDefinitionStore.GetTagDefinitionsAsync();
         }

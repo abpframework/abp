@@ -17,7 +17,7 @@ namespace Volo.CmsKit.Tags
             this.options = options.Value;
         }
 
-        public virtual Task<TagDefiniton> GetTagDefinitionAsync([NotNull] string entityType)
+        public virtual Task<TagEntityTypeDefiniton> GetTagDefinitionAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
@@ -26,7 +26,7 @@ namespace Volo.CmsKit.Tags
             return Task.FromResult(result);
         }
 
-        public virtual Task<List<TagDefiniton>> GetTagDefinitionsAsync()
+        public virtual Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync()
         {
             return Task.FromResult(options.Tags.Values.ToList());
         }

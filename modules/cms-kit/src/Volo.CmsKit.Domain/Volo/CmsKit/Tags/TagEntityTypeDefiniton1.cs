@@ -5,18 +5,18 @@ using Volo.CmsKit.Domain.Volo.CmsKit;
 
 namespace Volo.CmsKit.Tags
 {
-    public class TagDefiniton : PolicySpecifiedDefinition
+    public class TagEntityTypeDefiniton : PolicySpecifiedDefinition
     {
         public string EntityType { get; }
 
         [CanBeNull]
         public virtual ILocalizableString DisplayName { get; }
 
-        public TagDefiniton()
+        public TagEntityTypeDefiniton()
         {
         }
 
-        public TagDefiniton(
+        public TagEntityTypeDefiniton(
             [NotNull] string entityType,
             [CanBeNull] ILocalizableString displayName = null,
             [CanBeNull] string createPolicy = null,

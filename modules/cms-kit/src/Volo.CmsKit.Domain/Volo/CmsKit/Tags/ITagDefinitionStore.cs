@@ -6,9 +6,9 @@ namespace Volo.CmsKit.Tags
 {
     public interface ITagDefinitionStore
     {
-        Task<List<TagDefiniton>> GetTagDefinitionsAsync();
+        Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync();
 
-        Task<TagDefiniton> GetTagDefinitionAsync([NotNull] string entityType);
+        Task<TagEntityTypeDefiniton> GetTagDefinitionAsync([NotNull] string entityType);
 
         Task<bool> IsDefinedAsync([NotNull] string entityType);
     }

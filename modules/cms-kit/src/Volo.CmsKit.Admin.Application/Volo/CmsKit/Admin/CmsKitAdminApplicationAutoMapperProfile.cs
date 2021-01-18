@@ -18,7 +18,7 @@ namespace Volo.CmsKit.Admin
             CreateMap<ContentCreateDto, Content>(MemberList.Source);
             CreateMap<ContentUpdateDto, Content>(MemberList.Source);
 
-            CreateMap<TagDefiniton, TagDefinitionDto>(MemberList.Destination);
+            CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
         }
     }
 }
