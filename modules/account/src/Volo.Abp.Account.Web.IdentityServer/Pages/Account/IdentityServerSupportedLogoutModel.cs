@@ -60,12 +60,15 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual async Task SaveSecurityLogAsync(string clientId = null)
         {
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            if (CurrentUser.IsAuthenticated)
             {
-                Identity = IdentitySecurityLogIdentityConsts.Identity,
-                Action = IdentitySecurityLogActionConsts.Logout,
-                ClientId = clientId
-            });
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.Identity,
+                    Action = IdentitySecurityLogActionConsts.Logout,
+                    ClientId = clientId
+                });
+            }
         }
     }
 }
