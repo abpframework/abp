@@ -36,6 +36,7 @@ namespace Volo.CmsKit.Contents
             var result = await _service.GetListAsync(new ContentGetListInput());
 
             result.ShouldNotBeNull();
+            result.ShouldBeOfType<ContentGetListDto>();
             result.Items.ShouldNotBeEmpty();
             result.Items.Count.ShouldBe(4);
         }
@@ -46,6 +47,8 @@ namespace Volo.CmsKit.Contents
             var result = await _service.GetAsync(_data.Content_1_Id);
 
             result.ShouldNotBeNull();
+            result.ShouldBeOfType<ContentDto>();
+            result.ShouldNotBeNull(result.Value);
         }
 
         [Fact]
