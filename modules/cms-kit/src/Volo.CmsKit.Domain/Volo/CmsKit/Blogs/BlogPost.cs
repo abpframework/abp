@@ -3,24 +3,25 @@ using System;
 using System.Text.RegularExpressions;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPost : FullAuditedAggregateRootWithUser<Guid, CmsUser>
+    public class BlogPost : FullAuditedAggregateRootWithUser<Guid, CmsUser> , IMultiTenant
     {
         public Guid BlogId { get; protected set; }
 
         public string Title { get; protected set; }
 
+        public string ShortDescription { get; set; }
+
         public string UrlSlug { get; protected set; }
 
         public string CoverImageUrl { get; set; }
 
-        public bool IsPublished { get; protected set; }
-
-        public DateTime? PublishDate { get; protected set; }
+        public Guid? TenantId { get; }
 
         protected BlogPost()
         {
@@ -30,14 +31,15 @@ namespace Volo.CmsKit.Blogs
             Guid blogId,
             [NotNull] string title,
             [NotNull] string urlSlug,
+            [CanBeNull] string shortDescription = null,
             [CanBeNull] string coverImageUrl = null,
             bool isPublished = true)
         {
             BlogId = blogId;
             SetTitle(title);
             SetUrlSlug(urlSlug);
+            ShortDescription = shortDescription;
             CoverImageUrl = coverImageUrl;
-            IsPublished = isPublished;
         }
 
         public void SetTitle(string title)
@@ -50,16 +52,6 @@ namespace Volo.CmsKit.Blogs
             Check.NotNullOrWhiteSpace(urlSlug, nameof(urlSlug), BlogPostConsts.MaxUrlSlugLength, BlogPostConsts.MinUrlSlugLength);
 
             UrlSlug = NormalizeUrlSlug(urlSlug);
-        }
-
-        public void SetIsPublished(bool isPublished)
-        {
-            if (!IsPublished && isPublished)
-            {
-                this.PublishDate = DateTime.UtcNow;
-            }
-
-            IsPublished = IsPublished;
         }
 
         private string NormalizeUrlSlug(string value)
