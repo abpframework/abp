@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Tags
     {
         Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync();
 
-        Task<TagEntityTypeDefiniton> GetTagDefinitionAsync([NotNull] string entityType);
+        Task<TagEntityTypeDefiniton> GetTagEntityTypeDefinitionsAsync([NotNull] string entityType);
 
         Task<bool> IsDefinedAsync([NotNull] string entityType);
     }

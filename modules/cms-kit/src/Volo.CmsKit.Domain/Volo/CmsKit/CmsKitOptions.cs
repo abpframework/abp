@@ -8,8 +8,5 @@ namespace Volo.CmsKit
     {
         [NotNull]
         public ReactionDefinitionDictionary Reactions { get; } = new ReactionDefinitionDictionary();
-
-        [NotNull]
-        public TagDefinitionDictionary Tags { get; } = new TagDefinitionDictionary();
     }
 }

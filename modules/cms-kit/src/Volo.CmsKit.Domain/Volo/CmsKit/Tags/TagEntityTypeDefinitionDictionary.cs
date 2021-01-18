@@ -4,7 +4,7 @@ using Volo.Abp.Localization;
 
 namespace Volo.CmsKit.Tags
 {
-    public class TagDefinitionDictionary : Dictionary<string, TagEntityTypeDefiniton>
+    public class TagEntityTypeDefinitionDictionary : Dictionary<string, TagEntityTypeDefiniton>
     {
         public void AddOrReplace(
             [NotNull] string entityType,

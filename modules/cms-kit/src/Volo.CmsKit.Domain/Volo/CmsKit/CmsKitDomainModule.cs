@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Domain;
+﻿using Microsoft.Extensions.Options;
+using Volo.Abp.Domain;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -7,6 +8,7 @@ using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit
 {
@@ -34,14 +36,19 @@ namespace Volo.CmsKit
                 options.Reactions.AddOrReplace(StandardReactions.Rocket);
                 options.Reactions.AddOrReplace(StandardReactions.Pray);
 
-                if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            });
+
+
+            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            {
+                Configure<CmsKitTagOptions>(options =>
                 {
                     if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
                     {
-                        options.Tags.AddOrReplace(typeof(Page).Name, L("Page"));
+                        options.EntityTypes.AddOrReplace(typeof(Page).Name, L("Page"));
                     }
-                }
-            });
+                });
+            }
         }
 
         private static LocalizableString L(string name)
