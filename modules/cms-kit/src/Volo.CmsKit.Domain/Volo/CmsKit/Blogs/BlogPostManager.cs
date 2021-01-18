@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Blogs
+namespace Volo.CmsKit.Blogs
 {
     public class BlogPostManager : IBlogPostManager
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Blogs
+namespace Volo.CmsKit.Blogs
 {
     public class Blog : FullAuditedAggregateRoot<Guid>
     {

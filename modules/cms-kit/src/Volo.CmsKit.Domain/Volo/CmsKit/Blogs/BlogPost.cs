@@ -4,10 +4,11 @@ using System.Text.RegularExpressions;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Users;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Blogs
+namespace Volo.CmsKit.Blogs
 {
-    public class BlogPost : FullAuditedEntity<Guid>
+    public class BlogPost : FullAuditedAggregateRootWithUser<Guid, CmsUser>
     {
         public Guid BlogId { get; protected set; }
 

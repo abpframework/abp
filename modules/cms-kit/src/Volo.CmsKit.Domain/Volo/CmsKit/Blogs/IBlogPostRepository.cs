@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Blogs
+namespace Volo.CmsKit.Blogs
 {
     public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
     {

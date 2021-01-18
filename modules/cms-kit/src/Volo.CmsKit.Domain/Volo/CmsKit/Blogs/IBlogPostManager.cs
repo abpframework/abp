@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Blogs
+namespace Volo.CmsKit.Blogs
 {
     public interface IBlogPostManager
     {
