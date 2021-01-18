@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             ConfigurationClient = configurationClient;
         }
 
-        public async override Task<string> GetOrNullAsync(string name)
+        public override async Task<string> GetOrNullAsync(string name)
         {
             var configuration = await ConfigurationClient.GetAsync();
             return configuration.Features.Values.GetOrDefault(name);

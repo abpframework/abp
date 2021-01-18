@@ -14,7 +14,7 @@ ABP BLOB Storage system is also compatible to other ABP Framework features like 
 
 ## BLOB Storage Providers
 
-The ABP Framework has already the following storage provider implementations;
+The ABP Framework has already the following storage provider implementations:
 
 * [File System](Blob-Storing-File-System.md): Stores BLOBs in a folder of the local file system, as standard files.
 * [Database](Blob-Storing-Database.md): Stores BLOBs in a database.

@@ -197,6 +197,7 @@
     "RemoveCache": "Remove Cache",
     "Language": "Language",
     "Optional": "Optional",
-    "CreateArticleLanguageInfo": "The language in which the article is written"
+    "CreateArticleLanguageInfo": "The language in which the post is written",
+    "Enum:ContentSource:2": "Video Post"
   }
 }

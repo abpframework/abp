@@ -36,7 +36,7 @@ namespace Volo.Abp.Authorization
             {
                 return;
             }
-            
+
             await _abpAuthorizationService.CheckAsync(authorizationPolicy);
         }
 

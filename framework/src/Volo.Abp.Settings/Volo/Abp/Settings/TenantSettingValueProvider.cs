@@ -19,12 +19,12 @@ namespace Volo.Abp.Settings
             CurrentTenant = currentTenant;
         }
 
-        public async override Task<string> GetOrNullAsync(SettingDefinition setting)
+        public override async Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString());
         }
 
-        public async override Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+        public override async Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
         {
             return await SettingStore.GetAllAsync(settings.Select(x => x.Name).ToArray(), Name, CurrentTenant.Id?.ToString());
         }

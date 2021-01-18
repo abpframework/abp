@@ -182,6 +182,7 @@ namespace MyCompanyName.MyProjectName
                 app.UseMultiTenancy();
             }
 
+            app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseAuditing();

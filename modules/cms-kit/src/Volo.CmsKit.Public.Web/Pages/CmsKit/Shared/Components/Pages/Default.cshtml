@@ -12,10 +12,11 @@
     </abp-card-header>
     
     <abp-card-body>
-        <p>
-            @Model.Description
-        </p>
-        
-        @await Component.InvokeAsync(typeof(ContentViewComponent), new { entityType = nameof(Page), entityId = Model.Id.ToString() })
+        @await Component.InvokeAsync(typeof(ContentViewComponent), 
+            new
+            {
+                entityType = nameof(Page),
+                entityId = Model.Id.ToString()
+            })
     </abp-card-body>
 </abp-card>
