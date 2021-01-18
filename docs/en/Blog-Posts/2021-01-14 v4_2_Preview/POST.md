@@ -8,16 +8,16 @@ Today, we have released the [ABP Framework](https://abp.io/) and the [ABP Commer
 
 If you want to try the version `4.2.0` today, follow the steps below;
 
-1) **Upgrade** the ABP CLI to the version `4.2.0-rc.1` using a command line terminal:
+1) **Upgrade** the ABP CLI to the version `4.2.0-rc.2` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 4.2.0-rc.1
+dotnet tool update Volo.Abp.Cli -g --version 4.2.0-rc.2
 ````
 
 **or install** if you haven't installed before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 4.2.0-rc.1
+dotnet tool install Volo.Abp.Cli -g --version 4.2.0-rc.2
 ````
 
 2) Create a **new application** with the `--preview` option:
