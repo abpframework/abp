@@ -31,6 +31,7 @@ namespace Volo.CmsKit
         private readonly ITagManager _tagManager;
         private readonly IPageRepository _pageRepository;
         private readonly IOptions<CmsKitOptions> _options;
+        private readonly IOptions<CmsKitTagOptions> _tagOptions;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -44,7 +45,8 @@ namespace Volo.CmsKit
             ITagManager tagManager,
             IEntityTagManager entityTagManager,
             IPageRepository pageRepository,
-            IOptions<CmsKitOptions> options)
+            IOptions<CmsKitOptions> options,
+            IOptions<CmsKitTagOptions> tagOptions)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -58,6 +60,7 @@ namespace Volo.CmsKit
             _entityTagManager = entityTagManager;
             _pageRepository = pageRepository;
             _options = options;
+            _tagOptions = tagOptions;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -83,12 +86,12 @@ namespace Volo.CmsKit
         }
 
         private Task ConfigureCmsKitOptionsAsync()
-        {
-            _options.Value.Tags.AddOrReplace(_cmsKitTestData.EntityType1);
-            _options.Value.Tags.AddOrReplace(_cmsKitTestData.EntityType2);
-            _options.Value.Tags.AddOrReplace(_cmsKitTestData.Content_1_EntityType);
-            _options.Value.Tags.AddOrReplace(_cmsKitTestData.Content_2_EntityType);
-            _options.Value.Tags.AddOrReplace(_cmsKitTestData.TagDefinition_1_EntityType);
+        {            
+            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.EntityType1);
+            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.EntityType2);
+            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.Content_1_EntityType);
+            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.Content_2_EntityType);
+            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.TagDefinition_1_EntityType);
 
             return Task.CompletedTask;
         }
