@@ -365,8 +365,6 @@ namespace Volo.Abp.BlazoriseUI
                 await GetEntitiesAsync();
 
                 await OnCreatedEntityAsync();
-
-                CreateModal.Hide();
             }
         }
 
@@ -377,6 +375,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual Task OnCreatedEntityAsync()
         {
+            CreateModal.Hide();
             return Task.CompletedTask;
         }
 
@@ -392,8 +391,6 @@ namespace Volo.Abp.BlazoriseUI
                 await GetEntitiesAsync();
 
                 await OnUpdatedEntityAsync();
-
-                EditModal.Hide();
             }
         }
 
@@ -404,6 +401,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual Task OnUpdatedEntityAsync()
         {
+            EditModal.Hide();
             return Task.CompletedTask;
         }
 
