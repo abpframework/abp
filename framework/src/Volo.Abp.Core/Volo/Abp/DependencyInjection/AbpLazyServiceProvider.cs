@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.DependencyInjection
 {
-    public class AbpLazyServiceProvider : IAbpLazyServiceProvider, ITransientDependency
+    public class AbpLazyServiceProvider : IAbpLazyServiceProvider, IScopedDependency
     {
         protected IDictionary<Type, object> CachedServices { get; set; }
 
