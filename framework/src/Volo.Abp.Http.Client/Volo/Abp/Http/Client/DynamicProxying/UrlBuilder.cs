@@ -14,7 +14,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     internal static class UrlBuilder
     {
-        public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        public static string GenerateUrlWithParameters(ActionApiDescriptionModel action,
+            IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
             var urlBuilder = new StringBuilder(action.Url);
 
@@ -24,7 +25,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return urlBuilder.ToString();
         }
 
-        private static void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        private static void ReplacePathVariables(StringBuilder urlBuilder,
+            IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments,
+            ApiVersionInfo apiVersion)
         {
             var pathParameters = actionParameters
                 .Where(p => p.BindingSourceId == ParameterBindingSources.Path)
@@ -52,11 +55,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     }
                     else if (pathParameter.DefaultValue != null)
                     {
-                        urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", pathParameter.DefaultValue.ToString());
+                        urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}",
+                            pathParameter.DefaultValue.ToString());
                     }
                     else
                     {
-                        throw new AbpException($"Missing path parameter value for {pathParameter.Name} ({pathParameter.NameOnMethod})");
+                        throw new AbpException(
+                            $"Missing path parameter value for {pathParameter.Name} ({pathParameter.NameOnMethod})");
                     }
                 }
                 else
@@ -66,7 +71,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private static void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        private static void AddQueryStringParameters(StringBuilder urlBuilder,
+            IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments,
+            ApiVersionInfo apiVersion)
         {
             var queryStringParameters = actionParameters
                 .Where(p => p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query))
@@ -77,7 +84,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             foreach (var queryStringParameter in queryStringParameters)
             {
                 var value = HttpActionParameterHelper.FindParameterValue(methodArguments, queryStringParameter);
-                if (value == null)
+                if (value == null || IsGenericAndEmpty(value))
                 {
                     continue;
                 }
@@ -89,7 +96,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             if (apiVersion.ShouldSendInQueryString())
             {
-                AddQueryStringParameter(urlBuilder, isFirstParam, "api-version", apiVersion.Version);  //TODO: Constant!
+                AddQueryStringParameter(urlBuilder, isFirstParam, "api-version", apiVersion.Version); //TODO: Constant!
             }
         }
 
@@ -106,8 +113,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 var index = 0;
                 foreach (var item in (IEnumerable) value)
                 {
-                    urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
+                    urlBuilder.Append(name + $"[{index++}]=" +
+                                      System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
                 }
+
                 //remove & at the end of the urlBuilder.
                 urlBuilder.Remove(urlBuilder.Length - 1, 1);
             }
@@ -128,6 +137,19 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                 return value.ToString();
             }
+        }
+
+        private static bool IsGenericAndEmpty(object value)
+        {
+            if (value.GetType().IsArray || value.GetType().IsGenericType && value is IEnumerable)
+            {
+                foreach (var item in (IEnumerable) value)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

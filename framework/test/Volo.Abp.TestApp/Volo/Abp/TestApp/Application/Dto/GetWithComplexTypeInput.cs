@@ -1,11 +1,16 @@
-﻿namespace Volo.Abp.TestApp.Application.Dto
+﻿using System;
+using System.Collections.Generic;
+
+namespace Volo.Abp.TestApp.Application.Dto
 {
     public class GetWithComplexTypeInput
     {
         public string Value1 { get; set; }
 
+        public IEnumerable<Guid> Generic { get; set; }
+        
         public GetWithComplexTypeInner Inner1 { get; set; }
-
+        
         public class GetWithComplexTypeInner
         {
             public string Value2 { get; set; }

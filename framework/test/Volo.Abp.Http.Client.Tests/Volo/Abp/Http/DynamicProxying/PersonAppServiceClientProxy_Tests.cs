@@ -140,10 +140,7 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetWithAuthorized()
         {
-            await Assert.ThrowsAnyAsync<Exception>(async () =>
-            {
-                await _peopleAppService.GetWithAuthorized();
-            });
+            await Assert.ThrowsAnyAsync<Exception>(async () => { await _peopleAppService.GetWithAuthorized(); });
         }
 
         [Fact]
@@ -167,6 +164,25 @@ namespace Volo.Abp.Http.DynamicProxying
             result.Value1.ShouldBe("value one");
             result.Inner1.Value2.ShouldBe("value two");
             result.Inner1.Inner2.Value3.ShouldBe("value three");
+        }
+
+        [Fact]
+        public async Task GetWithComplexTypeEmpty()
+        {
+            var result = await _peopleAppService.GetWithComplexType(
+                new GetWithComplexTypeInput
+                {
+                    Generic = new List<Guid>(),
+                    Inner1 = new GetWithComplexTypeInput.GetWithComplexTypeInner
+                    {
+                        Inner2 = new GetWithComplexTypeInput.GetWithComplexTypeInnerInner(),
+                    }
+                }
+            );
+
+            result.Value1.ShouldBeNull();
+            result.Generic.ShouldBeNull();
+            result.Inner1.ShouldBeNull();
         }
     }
 }
