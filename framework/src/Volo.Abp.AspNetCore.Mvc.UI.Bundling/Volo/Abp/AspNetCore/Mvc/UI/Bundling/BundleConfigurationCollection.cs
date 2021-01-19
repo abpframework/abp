@@ -92,7 +92,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 }
             }
 
-            _lazyAllBundleConfigurationActions.ForEach(c => c.Invoke(bundle));
+            lock (_lazyAllBundleConfigurationActions)
+            {
+                _lazyAllBundleConfigurationActions.ForEach(c => c.Invoke(bundle));
+            }
+
 
             return bundle;
         }
@@ -142,7 +146,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 configureAction.Invoke(bundle.Value);
             }
 
-            _lazyAllBundleConfigurationActions.Add(configureAction);
+            lock (_lazyAllBundleConfigurationActions)
+            {
+                _lazyAllBundleConfigurationActions.Add(configureAction);
+            }
 
             return this;
         }
