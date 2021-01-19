@@ -13,6 +13,7 @@ namespace Volo.CmsKit.Admin
             CreateMap<Page, PageDto>();
 
             CreateMap<Content, ContentDto>(MemberList.Destination);
+            CreateMap<Content, ContentGetListDto>(MemberList.Destination);
             CreateMap<ContentCreateDto, Content>(MemberList.Source);
             CreateMap<ContentUpdateDto, Content>(MemberList.Source);
         }
