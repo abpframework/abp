@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Services;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPostManager : IBlogPostManager
+    public class BlogPostManager : DomainService, IBlogPostManager
     {
         protected readonly IBlogPostRepository _blogPostRepository;
 

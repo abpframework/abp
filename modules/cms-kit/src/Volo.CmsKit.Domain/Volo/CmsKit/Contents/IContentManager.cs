@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Contents
+namespace Volo.CmsKit.Contents
 {
     public interface IContentManager
     {
