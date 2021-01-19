@@ -198,6 +198,10 @@
     "Language": "Language",
     "Optional": "Optional",
     "CreateArticleLanguageInfo": "The language in which the post is written",
-    "Enum:ContentSource:2": "Video Post"
+    "Enum:ContentSource:2": "Video Post",
+    "DeleteCoverImage": "Delete Cover Image",
+    "DeleteCoverImageConfirmationMessage": "Are you sure you want to delete the cover image for \"{0}\"?",
+    "DeleteCoverImageSuccessMessage": "Cover image successfully deleted"
+      
   }
 }
