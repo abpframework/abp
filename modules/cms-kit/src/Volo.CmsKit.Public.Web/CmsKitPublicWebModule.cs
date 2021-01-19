@@ -56,7 +56,7 @@ namespace Volo.CmsKit.Public.Web
 
             Configure<RazorPagesOptions>(options =>
             {
-                //...
+                options.Conventions.AddPageRoute("/CmsKit/Pages/Index", "/{pageUrl}");
             });
         }
     }

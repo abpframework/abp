@@ -20,7 +20,7 @@ namespace Volo.CmsKit.Public.Pages
         [Route("url/{url}")]
         public Task<PageDto> GetByUrlAsync(string url)
         {
-            return PageAppService.GetByUrlAsync(url);
+            return PageAppService.FindByUrlAsync(url);
         }
     }
 }
