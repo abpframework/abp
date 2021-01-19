@@ -166,7 +166,7 @@
               "node_modules/@swimlane/ngx-datatable/index.css",
               "node_modules/@swimlane/ngx-datatable/assets/icons.css",
               "node_modules/@swimlane/ngx-datatable/themes/material.css",
-              "src/styles.scss"
+              "projects/dev-app/src/styles.scss"
             ],
             "scripts": []
           }
