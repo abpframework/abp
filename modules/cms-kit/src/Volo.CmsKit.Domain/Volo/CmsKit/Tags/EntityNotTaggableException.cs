@@ -12,7 +12,7 @@ namespace Volo.CmsKit.Tags
 
         public EntityNotTaggableException(string entityType) 
         {
-            Code = CmsKitErrorCodes.EntityNotTaggable;
+            Code = CmsKitErrorCodes.Tags.EntityNotTaggable;
             WithData(nameof(Tag.EntityType), entityType);
         }
     }
