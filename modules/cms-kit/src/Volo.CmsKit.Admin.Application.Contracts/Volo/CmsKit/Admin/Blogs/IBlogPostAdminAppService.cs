@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
@@ -13,5 +14,9 @@ namespace Volo.CmsKit.Admin.Blogs
             CreateUpdateBlogPostDto>
     {
         Task<BlogPostDto> GetByUrlSlugAsync(string urlSlug);
+
+        Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent);
+
+        Task<RemoteStreamContent> GetCoverImageAsync(Guid id);
     }
 }

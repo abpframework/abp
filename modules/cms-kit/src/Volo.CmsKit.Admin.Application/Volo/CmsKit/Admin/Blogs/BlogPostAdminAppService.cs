@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Permissions;
@@ -22,16 +24,17 @@ namespace Volo.CmsKit.Admin.Blogs
             CreateUpdateBlogPostDto>
         , IBlogPostAdminAppService
     {
-        protected readonly IBlogPostManager _blogPostManager;
-        protected readonly IBlogPostRepository _blogPostRepository;
+        protected readonly IBlogPostManager BlogPostManager;
+        protected readonly IBlogPostRepository BlogPostRepository;
+        protected readonly IBlobContainer<BlogPostCoverImageContainer> BlobContainer;
 
         protected BlogPostAdminAppService(
             IRepository<BlogPost, Guid> repository,
             IBlogPostManager blogPostManager,
             IBlogPostRepository blogPostRepository) : base(repository)
         {
-            _blogPostManager = blogPostManager;
-            _blogPostRepository = blogPostRepository;
+            BlogPostManager = blogPostManager;
+            BlogPostRepository = blogPostRepository;
 
 
             GetListPolicyName = CmsKitAdminPermissions.BlogPosts.Default;
@@ -41,9 +44,9 @@ namespace Volo.CmsKit.Admin.Blogs
             DeletePolicyName = CmsKitAdminPermissions.BlogPosts.Delete;
         }
 
-        public async Task<BlogPostDto> GetByUrlSlugAsync(string urlSlug)
+        public virtual async Task<BlogPostDto> GetByUrlSlugAsync(string urlSlug)
         {
-            var blogPost = await _blogPostRepository.GetByUrlSlugAsync(urlSlug);
+            var blogPost = await BlogPostRepository.GetByUrlSlugAsync(urlSlug);
 
             return MapToGetOutputDto(blogPost);
         }
@@ -51,7 +54,7 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
         public override async Task<BlogPostDto> CreateAsync(CreateUpdateBlogPostDto input)
         {
-            var entity = await _blogPostManager
+            var entity = await BlogPostManager
                                     .CreateAsync(
                                         new BlogPost(
                                             input.BlogId,
@@ -65,7 +68,7 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
         public override async Task<BlogPostDto> UpdateAsync(Guid id, CreateUpdateBlogPostDto input)
         {
-            var entity = await _blogPostRepository.GetAsync(id);
+            var entity = await BlogPostRepository.GetAsync(id);
 
             entity.SetTitle(input.Title);
             entity.SetUrlSlug(input.UrlSlug);
@@ -73,6 +76,23 @@ namespace Volo.CmsKit.Admin.Blogs
             MapToEntity(input, entity);
 
             return MapToGetOutputDto(entity);
+        }
+
+        public virtual async Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent)
+        {
+            await Repository.GetAsync(id);
+
+            using (var stream = streamContent.GetStream())
+            {
+                await BlobContainer.SaveAsync(id.ToString(), stream, overrideExisting: true);
+            }
+        }
+
+        public virtual async Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
+        {
+            var stream = await BlobContainer.GetAsync(id.ToString());
+
+            return new RemoteStreamContent(stream);
         }
     }
 }

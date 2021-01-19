@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Domain;
+﻿using Volo.Abp.BlobStoring;
+using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
 using Volo.CmsKit.Reactions;
@@ -8,7 +9,8 @@ namespace Volo.CmsKit
     [DependsOn(
         typeof(CmsKitDomainSharedModule),
         typeof(AbpUsersDomainModule),
-        typeof(AbpDddDomainModule)
+        typeof(AbpDddDomainModule),
+        typeof(AbpBlobStoringModule)
     )]
     public class CmsKitDomainModule : AbpModule
     {

@@ -19,8 +19,6 @@ namespace Volo.CmsKit.Blogs
 
         public string UrlSlug { get; protected set; }
 
-        public string CoverImageUrl { get; set; }
-
         public Guid? TenantId { get; }
 
         protected BlogPost()
@@ -31,14 +29,12 @@ namespace Volo.CmsKit.Blogs
             Guid blogId,
             [NotNull] string title,
             [NotNull] string urlSlug,
-            [CanBeNull] string shortDescription = null,
-            [CanBeNull] string coverImageUrl = null)
+            [CanBeNull] string shortDescription = null)
         {
             BlogId = blogId;
             SetTitle(title);
             SetUrlSlug(urlSlug);
             ShortDescription = shortDescription;
-            CoverImageUrl = coverImageUrl;
         }
 
         public void SetTitle(string title)

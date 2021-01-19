@@ -3,7 +3,7 @@ using Volo.Abp.Application.Services;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
-    public interface IBlogAdminAppService : ICrudAppService<BlogDto,Guid>
+    public interface IBlogAdminAppService : ICrudAppService<BlogDto, Guid>
     {
     }
 }
