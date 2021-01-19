@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.CmsKit.Domain.Volo.CmsKit.Blogs;
 using Volo.CmsKit.EntityFrameworkCore;
 
 namespace Volo.CmsKit.Blogs

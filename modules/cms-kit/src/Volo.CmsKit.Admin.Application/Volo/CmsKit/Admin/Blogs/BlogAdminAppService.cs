@@ -2,7 +2,7 @@
 using System;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Volo.CmsKit.Domain.Volo.CmsKit.Blogs;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Blogs

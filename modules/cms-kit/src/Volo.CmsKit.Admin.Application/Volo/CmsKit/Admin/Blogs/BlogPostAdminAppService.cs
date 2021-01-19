@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Volo.CmsKit.Domain.Volo.CmsKit.Blogs;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Blogs
@@ -57,8 +57,7 @@ namespace Volo.CmsKit.Admin.Blogs
                                             input.BlogId,
                                             input.Title,
                                             input.UrlSlug,
-                                            input.CoverImageUrl,
-                                            input.IsPublished));
+                                            input.CoverImageUrl));
 
             return MapToGetOutputDto(entity);
         }
@@ -70,7 +69,6 @@ namespace Volo.CmsKit.Admin.Blogs
 
             entity.SetTitle(input.Title);
             entity.SetUrlSlug(input.UrlSlug);
-            entity.SetIsPublished(input.IsPublished);
 
             MapToEntity(input, entity);
 
