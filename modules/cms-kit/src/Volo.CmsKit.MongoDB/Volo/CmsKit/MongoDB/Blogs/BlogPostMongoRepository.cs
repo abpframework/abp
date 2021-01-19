@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
-using Volo.CmsKit.Domain.Volo.CmsKit.Blogs;
+using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.MongoDB.Blogs
 {

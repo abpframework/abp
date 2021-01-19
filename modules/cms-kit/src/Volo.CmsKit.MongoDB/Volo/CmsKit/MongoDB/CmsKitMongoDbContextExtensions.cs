@@ -3,7 +3,7 @@ using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
-using Volo.CmsKit.Domain.Volo.CmsKit.Blogs;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
