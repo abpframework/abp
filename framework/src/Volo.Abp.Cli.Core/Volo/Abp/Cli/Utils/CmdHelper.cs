@@ -47,7 +47,7 @@ namespace Volo.Abp.Cli.Utils
             {
                 process.StartInfo = new ProcessStartInfo(CmdHelper.GetFileName())
                 {
-                    Arguments = CmdHelper.GetArguments(command),
+                    Arguments = GetArguments(command),
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardOutput = true,
