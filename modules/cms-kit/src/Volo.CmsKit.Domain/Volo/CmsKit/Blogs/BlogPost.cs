@@ -32,8 +32,7 @@ namespace Volo.CmsKit.Blogs
             [NotNull] string title,
             [NotNull] string urlSlug,
             [CanBeNull] string shortDescription = null,
-            [CanBeNull] string coverImageUrl = null,
-            bool isPublished = true)
+            [CanBeNull] string coverImageUrl = null)
         {
             BlogId = blogId;
             SetTitle(title);
