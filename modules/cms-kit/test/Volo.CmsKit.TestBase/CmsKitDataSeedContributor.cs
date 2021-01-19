@@ -6,6 +6,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Pages;
@@ -29,6 +30,9 @@ namespace Volo.CmsKit
         private readonly IEntityTagRepository _entityTagRepository;
         private readonly ITagManager _tagManager;
         private readonly IPageRepository _pageRepository;
+        private readonly IBlogRepository _blogRepository;
+        private readonly IBlogPostRepository _blogPostRepository;
+
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
             ICmsUserRepository cmsUserRepository,
@@ -36,11 +40,13 @@ namespace Volo.CmsKit
             ICommentRepository commentRepository,
             ReactionManager reactionManager,
             IRatingRepository ratingRepository,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IContentRepository contentRepository,
-            ITagManager tagManager, 
-            IEntityTagRepository entityTagRepository, 
-            IPageRepository pageRepository)
+            ITagManager tagManager,
+            IEntityTagRepository entityTagRepository,
+            IPageRepository pageRepository,
+            IBlogRepository blogRepository,
+            IBlogPostRepository blogPostRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -53,6 +59,8 @@ namespace Volo.CmsKit
             _tagManager = tagManager;
             _entityTagRepository = entityTagRepository;
             _pageRepository = pageRepository;
+            _blogRepository = blogRepository;
+            _blogPostRepository = blogPostRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -72,6 +80,8 @@ namespace Volo.CmsKit
                 await SeedTagsAsync();
 
                 await SeedPagesAsync();
+
+                await SeedBlogsAsync();
             }
         }
 
@@ -208,14 +218,14 @@ namespace Volo.CmsKit
                 _cmsKitTestData.Content_1_EntityId,
                 _cmsKitTestData.Content_1
                 );
-            
+
             var content2 = new Content(
                 _cmsKitTestData.Content_2_Id,
                 _cmsKitTestData.Content_2_EntityType,
                 _cmsKitTestData.Content_2_EntityId,
                 _cmsKitTestData.Content_2
             );
-            
+
             var content3 = new Content(
                 Guid.NewGuid(),
                 "deleted_entity_type",
@@ -239,11 +249,11 @@ namespace Volo.CmsKit
 
                 await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_1_EntityId));
             }
-            
+
             foreach (var tag in _cmsKitTestData.Content_2_Tags)
             {
                 var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, tag);
-                
+
                 await _entityTagRepository.InsertAsync(new EntityTag(tagEntity.Id, _cmsKitTestData.Content_2_EntityId));
             }
         }
@@ -252,15 +262,24 @@ namespace Volo.CmsKit
         {
             var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Url, _cmsKitTestData.Page_1_Description);
             var page1Content = new Content(_guidGenerator.Create(), nameof(Page), page1.Id.ToString(), _cmsKitTestData.Page_1_Content);
-            
+
             await _pageRepository.InsertAsync(page1);
             await _contentRepository.InsertAsync(page1Content);
-            
+
             var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Url, _cmsKitTestData.Page_2_Description);
             var page2Content = new Content(_guidGenerator.Create(), nameof(Page), page2.Id.ToString(), _cmsKitTestData.Page_2_Content);
 
             await _pageRepository.InsertAsync(page2);
             await _contentRepository.InsertAsync(page2Content);
+        }
+
+        private async Task SeedBlogsAsync()
+        {
+            var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.BlogName));
+
+            await _blogPostRepository.InsertAsync(new BlogPost(blog.Id, _cmsKitTestData.Blog_1_Title, _cmsKitTestData.Blog_1_UrlSlug, "Short desc 1"));
+
+            await _blogPostRepository.InsertAsync(new BlogPost(blog.Id, _cmsKitTestData.Blog_2_Title, _cmsKitTestData.Blog_2_UrlSlug, "Short desc 2"));
         }
     }
 }
