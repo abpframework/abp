@@ -15,6 +15,6 @@
         <PackageReference Include="Blazorise" Version="0.9.3-preview6" />
         <PackageReference Include="Blazorise.DataGrid" Version="0.9.3-preview6" />
         <PackageReference Include="Blazorise.Snackbar" Version="0.9.3-preview6" />
+        <PackageReference Include="Blazorise.Components" Version="0.9.3-preview6" />
     </ItemGroup>
-
 </Project>

@@ -1,0 +1,62 @@
+﻿@typeparam TEntityType
+@typeparam TResourceType
+@using Volo.Abp.ObjectExtending
+@using Volo.Abp.Localization
+@using Volo.Abp.Data
+
+@foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<TEntityType>())
+{
+    if (!propertyInfo.Name.EndsWith("_Text"))
+    {
+        if (propertyInfo.Type.IsEnum)
+        {
+            <SelectExtensionProperty PropertyInfo="@propertyInfo" Entity="@Entity" TEntity="TEntityType" TResourceType="TResourceType" />
+        }
+        else if (!propertyInfo.Lookup.Url.IsNullOrEmpty())
+        {
+            <LookupExtensionProperty PropertyInfo="@propertyInfo" Entity="@Entity" TEntity="TEntityType" TResourceType="TResourceType" />
+
+        }
+        else
+        {
+            var inputType = propertyInfo.GetInputType();
+            if (inputType == typeof(TextEdit))
+            {
+                <TextExtensionProperty TEntity="TEntityType" TResourceType="TResourceType" PropertyInfo="@propertyInfo" Entity="@Entity">
+
+                </TextExtensionProperty>
+            }
+            else if (inputType == typeof(Check<>))
+            {
+                <Field>
+                    <Check TValue="bool" CheckedChanged="(val) => CheckedChanged(val, propertyInfo.Name)" Checked="@(propertyInfo.GetInputValueOrDefault<bool>(Entity.GetProperty(propertyInfo.Name)))">@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</Check>
+                </Field>
+            }
+            else if (inputType == typeof(TimeEdit<>))
+            {
+                <Field>
+                    <FieldLabel>@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>-->
+                    <TimeEdit TValue="TimeSpan?" Time="@(propertyInfo.GetInputValueOrDefault<TimeSpan?>(Entity.GetProperty(propertyInfo.Name)))" TimeChanged="(val) => TimeChanged(val, propertyInfo.Name)">
+                        <Feedback>
+                            <ValidationError />
+                        </Feedback>
+                    </TimeEdit>
+                </Field>
+            }
+            else if (inputType == typeof(DateEdit<>))
+            {
+                <Field>
+                    <FieldLabel>@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
+                    <DateEdit TValue="DateTime?"
+                              Pattern="@propertyInfo.GetDateEditInputFormatOrNull()"
+                              Date="@(propertyInfo.GetInputValueOrDefault<DateTime?>(Entity.GetProperty(propertyInfo.Name)))"
+                              DateChanged="(val) => DateTimeChanged(val, propertyInfo.Name)">
+                        <Feedback>
+                            <ValidationError />
+                        </Feedback>
+                    </DateEdit>
+                </Field>
+            }
+        }
+    }
+}
