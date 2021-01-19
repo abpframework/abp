@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
@@ -13,19 +18,52 @@ namespace Volo.CmsKit.MongoDB.Pages
         {
         }
 
-        public Task<Page> GetByUrlAsync(string url)
+        public virtual async Task<int> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return GetAsync(x => x.Url == url);
+            var cancellation = GetCancellationToken(cancellationToken);
+            
+            return await (await GetMongoQueryableAsync(cancellation))
+                .WhereIf<Page, IMongoQueryable<Page>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Title.Contains(filter)
+                ).CountAsync(cancellation);
         }
 
-        public Task<Page> FindByUrlAsync(string url)
+        public virtual async Task<List<Page>> GetListAsync(
+            string filter = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0, 
+            string sorting = null,
+            CancellationToken cancellationToken = default)
         {
-            return FindAsync(x => x.Url == url);
+            var cancellation = GetCancellationToken(cancellationToken);
+            
+            return await (await GetMongoQueryableAsync(cancellation))
+                .WhereIf<Page, IMongoQueryable<Page>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Title.Contains(filter)
+                )
+                .OrderBy(sorting ?? nameof(Page.Title))
+                .As<IMongoQueryable<Page>>()
+                .PageBy<Page, IMongoQueryable<Page>>(skipCount, maxResultCount)
+                .ToListAsync(cancellation);
         }
 
-        public async Task<bool> DoesExistAsync(string url)
+        public virtual Task<Page> GetByUrlAsync(string url, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync()).AnyAsync(x => x.Url == url);
+            return GetAsync(x => x.Url == url, cancellationToken: GetCancellationToken(cancellationToken));
+        }
+
+        public virtual Task<Page> FindByUrlAsync(string url, CancellationToken cancellationToken = default)
+        {
+            return FindAsync(x => x.Url == url, cancellationToken: GetCancellationToken(cancellationToken));
+        }
+        
+        public virtual async Task<bool> ExistsAsync(string url, CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).AnyAsync(x => x.Url == url, GetCancellationToken(cancellationToken));
         }
     }
 }

@@ -1,0 +1,10 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Volo.Authorization:010001": "Autorisatie mislukt! De benodigde policy is niet aan u verleend.",
+    "Volo.Authorization:010002": "Autorisatie mislukt! De benodigde policy: '{PolicyName}' is niet aan u verleend.",
+    "Volo.Authorization:010003": "Autorisatie mislukt! De benodigde policy is niet aan de opgegeven resource: '{ResourceName}' verleend.",
+    "Volo.Authorization:010004": "Autorisatie mislukt! De benodigde requirement is niet aan de opgegeven resource: '{ResourceName}' verleend.",
+    "Volo.Authorization:010005": "Autorisatie mislukt! De benodigde requirements zijn niet aan de opgegeven resource: '{ResourceName}' verleend."
+  }
+}

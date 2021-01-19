@@ -755,6 +755,10 @@
                   "path": "UI/Angular/Config-State-Service.md"
                 },
                 {
+                  "text": "Authorization",
+                  "path": "UI/Angular/Authorization.md"
+                },
+                {
                   "text": "HTTP Requests",
                   "path": "UI/Angular/HTTP-Requests.md"
                 },
@@ -818,6 +822,10 @@
                 {
                   "text": "Toast Overlay",
                   "path": "UI/Angular/Toaster-Service.md"
+                },
+                {
+                  "text": "Page Alerts",
+                  "path": "UI/Angular/Page-Alerts.md"
                 }
               ]
             },

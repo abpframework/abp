@@ -43,7 +43,7 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
