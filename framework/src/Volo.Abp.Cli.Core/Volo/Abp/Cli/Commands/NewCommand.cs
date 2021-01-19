@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
@@ -31,14 +32,17 @@ namespace Volo.Abp.Cli.Commands
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
         public ITemplateInfoProvider TemplateInfoProvider { get; }
+        public ConnectionStringProvider ConnectionStringProvider { get; }
 
         public NewCommand(TemplateProjectBuilder templateProjectBuilder
             , ITemplateInfoProvider templateInfoProvider,
-            EfCoreMigrationManager efCoreMigrationManager)
+            EfCoreMigrationManager efCoreMigrationManager,
+            ConnectionStringProvider connectionStringProvider)
         {
             _efCoreMigrationManager = efCoreMigrationManager;
             TemplateProjectBuilder = templateProjectBuilder;
             TemplateInfoProvider = templateInfoProvider;
+            ConnectionStringProvider = connectionStringProvider;
 
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -164,7 +168,7 @@ namespace Volo.Abp.Cli.Commands
                 databaseManagementSystem != DatabaseManagementSystem.NotSpecified &&
                 databaseManagementSystem != DatabaseManagementSystem.SQLServer)
             {
-                connectionString = GetNewConnectionStringByDbms(databaseManagementSystem, outputFolder);
+                connectionString = ConnectionStringProvider.GetByDbms(databaseManagementSystem, outputFolder);
             }
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
@@ -233,24 +237,6 @@ namespace Volo.Abp.Cli.Commands
             {
                 var isCommercial = template == AppProTemplate.TemplateName;
                 OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
-            }
-        }
-
-        private string GetNewConnectionStringByDbms(DatabaseManagementSystem databaseManagementSystem, string outputFolder)
-        {
-            switch (databaseManagementSystem)
-            {
-                case DatabaseManagementSystem.MySQL:
-                    return "Server=localhost;Port=3306;Database=MyProjectName;Uid=root;Pwd=myPassword;";
-                case DatabaseManagementSystem.PostgreSQL:
-                    return "User ID=root;Password=myPassword;Host=localhost;Port=5432;Database=MyProjectName;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;";
-                //case DatabaseManagementSystem.Oracle:
-                case DatabaseManagementSystem.OracleDevart:
-                    return "Data Source=MyProjectName;Integrated Security=yes;";
-                case DatabaseManagementSystem.SQLite:
-                    return $"Data Source={Path.Combine(outputFolder,"database\\MyProjectName.db")};Version=3;";
-                default:
-                    return null;
             }
         }
 
