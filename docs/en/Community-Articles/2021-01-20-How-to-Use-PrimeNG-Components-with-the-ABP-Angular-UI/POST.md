@@ -8,7 +8,7 @@ We will create an organization units page and use PrimeNG's [OrganizationChart](
 
 TODO: Gif
 
-<small>The UI shown above contains many PrimeNG components. You can reach the source code of this rich UI. Take a look the source code section below.</small>
+<small>The UI shown above contains many PrimeNG components. You can reach the source code of this rich UI. Take a look at the source code section below.</small>
 
 > This article does not cover any backend code. I used mock data to provide data source to the components.
 
