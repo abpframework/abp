@@ -15,9 +15,9 @@ namespace Volo.CmsKit.Blogs
 
         public string Title { get; protected set; }
 
-        public string ShortDescription { get; set; }
-
         public string UrlSlug { get; protected set; }
+
+        public string ShortDescription { get; set; }
 
         public Guid? TenantId { get; }
 

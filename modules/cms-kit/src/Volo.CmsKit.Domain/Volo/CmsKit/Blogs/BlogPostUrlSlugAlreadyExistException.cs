@@ -19,9 +19,13 @@ namespace Volo.CmsKit.Blogs
 
         public BlogPostUrlSlugAlreadyExistException(string urlSlug)
         {
+            UrlSlug = urlSlug;
+
             Code = CmsKitErrorCodes.Blogs.UrlSlugAlreadyExist;
 
-            WithData(nameof(BlogPost.UrlSlug), urlSlug);
+            WithData(nameof(UrlSlug), UrlSlug);
         }
+
+        public string UrlSlug { get; }
     }
 }

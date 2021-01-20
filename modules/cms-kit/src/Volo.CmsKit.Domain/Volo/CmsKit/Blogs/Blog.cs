@@ -9,8 +9,9 @@ namespace Volo.CmsKit.Blogs
     public class Blog : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public Blog(
+            Guid id,
             [NotNull] string name,
-            [CanBeNull] Guid? tenantId = null)
+            [CanBeNull] Guid? tenantId = null) : base(id)
         {
             SetName(name);
             TenantId = tenantId;

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Admin.Contents;
 using Volo.CmsKit.Admin.Pages;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Pages;
 
@@ -16,6 +18,12 @@ namespace Volo.CmsKit.Admin
             CreateMap<Content, ContentGetListDto>(MemberList.Destination);
             CreateMap<ContentCreateDto, Content>(MemberList.Source);
             CreateMap<ContentUpdateDto, Content>(MemberList.Source);
+
+            CreateMap<BlogPost, BlogPostDto>(MemberList.Destination);
+            CreateMap<CreateUpdateBlogPostDto, BlogPost>(MemberList.Source);
+
+            CreateMap<Blog, BlogDto>(MemberList.Destination)
+                .ReverseMap();
         }
     }
 }

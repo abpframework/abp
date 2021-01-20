@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -34,10 +31,12 @@ namespace Volo.CmsKit.Admin.Blogs
         public BlogPostAdminAppService(
             IRepository<BlogPost, Guid> repository,
             IBlogPostManager blogPostManager,
-            IBlogPostRepository blogPostRepository) : base(repository)
+            IBlogPostRepository blogPostRepository,
+            IBlobContainer<BlogPostCoverImageContainer> blobContainer) : base(repository)
         {
             BlogPostManager = blogPostManager;
             BlogPostRepository = blogPostRepository;
+            BlobContainer = blobContainer;
 
             GetListPolicyName = CmsKitAdminPermissions.BlogPosts.Default;
             GetPolicyName = CmsKitAdminPermissions.BlogPosts.Default;
@@ -63,7 +62,7 @@ namespace Volo.CmsKit.Admin.Blogs
                                             input.BlogId,
                                             input.Title,
                                             input.UrlSlug,
-                                            input.CoverImageUrl));
+                                            input.ShortDescription));
 
             return MapToGetOutputDto(entity);
         }
@@ -77,6 +76,8 @@ namespace Volo.CmsKit.Admin.Blogs
             entity.SetUrlSlug(input.UrlSlug);
 
             MapToEntity(input, entity);
+
+            await BlogPostManager.UpdateAsync(entity);
 
             return MapToGetOutputDto(entity);
         }

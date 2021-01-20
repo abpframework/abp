@@ -9,33 +9,46 @@ namespace Volo.CmsKit.Blogs
 {
     public class BlogPostManager : DomainService, IBlogPostManager
     {
-        protected readonly IBlogPostRepository _blogPostRepository;
+        protected readonly IBlogPostRepository blogPostRepository;
+        protected readonly IBlogRepository blogRepository;
 
-        public BlogPostManager(IBlogPostRepository blogPostRepository)
+        public BlogPostManager(
+            IBlogPostRepository blogPostRepository,
+            IBlogRepository blogRepository)
         {
-            _blogPostRepository = blogPostRepository;
+            this.blogPostRepository = blogPostRepository;
+            this.blogRepository = blogRepository;
         }
 
         public async Task<BlogPost> CreateAsync(BlogPost blogPost)
         {
+            await CheckBlogExistenceAsync(blogPost.BlogId);
+
             await CheckUrlSlugExistenceAsync(blogPost.UrlSlug);
 
-            return await _blogPostRepository.InsertAsync(blogPost);
+            return await blogPostRepository.InsertAsync(blogPost);
         }
 
         public async Task UpdateAsync(BlogPost blogPost)
         {
+            await CheckBlogExistenceAsync(blogPost.BlogId);
+
             await CheckUrlSlugExistenceAsync(blogPost.UrlSlug);
 
-            await _blogPostRepository.UpdateAsync(blogPost);
+            await blogPostRepository.UpdateAsync(blogPost);
         }
 
         private async Task CheckUrlSlugExistenceAsync(string urlSlug)
         {
-            if (await _blogPostRepository.SlugExistsAsync(urlSlug))
+            if (await blogPostRepository.SlugExistsAsync(urlSlug))
             {
                 throw new BlogPostUrlSlugAlreadyExistException(urlSlug);
             }
+        }
+
+        private async Task CheckBlogExistenceAsync(Guid blogId)
+        {
+            await blogRepository.GetAsync(blogId);
         }
     }
 }

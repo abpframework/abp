@@ -229,6 +229,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(p => p.UrlSlug).IsRequired().HasMaxLength(BlogPostConsts.MaxUrlSlugLength);
 
+                    b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
+
                     b.HasIndex(x => x.UrlSlug);
                 });
             }

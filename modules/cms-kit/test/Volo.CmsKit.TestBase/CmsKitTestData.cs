@@ -7,6 +7,7 @@ namespace Volo.CmsKit
     public class CmsKitTestData : ISingletonDependency
     {
         public Guid User1Id { get; } = Guid.NewGuid();
+
         public string User1UserName => "fake.user";
 
         public Guid User2Id { get; } = Guid.NewGuid();
