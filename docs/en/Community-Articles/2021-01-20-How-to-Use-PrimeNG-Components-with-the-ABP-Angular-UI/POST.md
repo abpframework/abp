@@ -4,7 +4,7 @@
 
 In this article, we will use components of the [PrimeNG](https://www.primefaces.org/primeng/) that is a popular UI component library for Angular with the ABP Framework Angular UI that will be generated via [ABP CLI](https://docs.abp.io/en/abp/latest/CLI).
 
-We will create an organization units page and use PrimeNG's [OrganizationChart](https://primefaces.org/primeng/showcase/#/organizationchart), [Table](https://primefaces.org/primeng/showcase/#/table) components on the page.
+We will create an organization units page and use PrimeNG's [OrganizationChart](https://primefaces.org/primeng/showcase/#/organizationchart) and [Table](https://primefaces.org/primeng/showcase/#/table) components on the page.
 
 TODO: Gif
 
