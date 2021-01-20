@@ -7,6 +7,7 @@ namespace Volo.CmsKit
     public class CmsKitTestData : ISingletonDependency
     {
         public Guid User1Id { get; } = Guid.NewGuid();
+        public string User1UserName => "fake.user";
 
         public Guid User2Id { get; } = Guid.NewGuid();
 
@@ -60,18 +61,20 @@ namespace Volo.CmsKit
 
         public string Page_2_Content => Content_2;
 
+        public Guid Blog_Id { get; } = Guid.NewGuid();
+
         public string BlogName => "Cms Blog";
 
-        public Guid Blog_1_Id { get; } = Guid.NewGuid();
+        public Guid BlogPost_1_Id { get; } = Guid.NewGuid();
 
-        public string Blog_1_Title => "How to install CmsKit?";
+        public string BlogPost_1_Title => "How to install CmsKit?";
 
-        public string Blog_1_UrlSlug => "how-to-install-cms-kit";
+        public string BlogPost_1_UrlSlug => "how-to-install-cms-kit";
 
-        public Guid Blog_2_Id { get; } = Guid.NewGuid();
+        public Guid BlogPost_2_Id { get; } = Guid.NewGuid();
 
-        public string Blog_2_Title => "How to use CmsKit?";
+        public string BlogPost_2_Title => "How to use CmsKit?";
 
-        public string Blog_2_UrlSlug => "how-to-use-cms-kit?";
+        public string BlogPost_2_UrlSlug => "how-to-use-cms-kit?";
     }
 }

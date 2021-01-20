@@ -53,7 +53,7 @@ namespace Volo.CmsKit
             {
                 using (var scope = context.ServiceProvider.CreateScope())
                 {
-                    await scope.ServiceProvider
+                   await scope.ServiceProvider
                         .GetRequiredService<IDataSeeder>()
                         .SeedAsync();
                 }

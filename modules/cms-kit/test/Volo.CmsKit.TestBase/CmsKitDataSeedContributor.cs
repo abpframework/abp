@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
@@ -277,9 +278,9 @@ namespace Volo.CmsKit
         {
             var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.BlogName));
 
-            await _blogPostRepository.InsertAsync(new BlogPost(blog.Id, _cmsKitTestData.Blog_1_Title, _cmsKitTestData.Blog_1_UrlSlug, "Short desc 1"));
+            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_1_Id, blog.Id, _cmsKitTestData.BlogPost_1_Title, _cmsKitTestData.BlogPost_1_UrlSlug, "Short desc 1"));
 
-            await _blogPostRepository.InsertAsync(new BlogPost(blog.Id, _cmsKitTestData.Blog_2_Title, _cmsKitTestData.Blog_2_UrlSlug, "Short desc 2"));
+            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_2_Id, blog.Id, _cmsKitTestData.BlogPost_2_Title, _cmsKitTestData.BlogPost_2_UrlSlug, "Short desc 2"));
         }
     }
 }
