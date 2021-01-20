@@ -374,3 +374,7 @@ Finally, don't forget to run your CI tests with the following command:
 ```sh
 npm test -- --prod
 ```
+
+## See Also
+
+* [ABP Community Video - Unit Testing with the Angular UI](https://community.abp.io/articles/unit-testing-with-the-angular-ui-p4l550q3)
