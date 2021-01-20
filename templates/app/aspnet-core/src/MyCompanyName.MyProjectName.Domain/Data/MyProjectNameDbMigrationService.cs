@@ -141,7 +141,7 @@ namespace MyCompanyName.MyProjectName.Data
             }
 
             var procStartInfo = new ProcessStartInfo( fileName,
-                $"{argumentPrefix} \"abp create-migration-and-run-migrator {GetDbMigrationsProjectFolderPath()}\""
+                $"{argumentPrefix} \"abp create-migration-and-run-migrator \"{GetDbMigrationsProjectFolderPath()}\"\""
             );
 
             try

@@ -1,8 +1,6 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -100,7 +98,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             }
             catch (BusinessException e)
             {
-                Alerts.Danger(e.Message);
+                Alerts.Danger(GetLocalizeExceptionMessage(e));
                 return Page();
             }
         }
