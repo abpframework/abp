@@ -62,9 +62,7 @@ export function createTreeNodeFilterCreator<T extends object>(
     const regex = new RegExp('.*' + search + '.*', 'i');
 
     return function collectNodes(nodes: TreeNode<T>[], matches = []) {
-      for (let i = 0; i < nodes.length; i++) {
-        const node = nodes[i];
-
+      for (const node of nodes) {
         if (regex.test(mapperFn(node[key]))) matches.push(node);
 
         if (node.children.length) collectNodes(node.children, matches);
