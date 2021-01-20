@@ -345,9 +345,35 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual List<string> GetPackageVersionList(JProperty package)
         {
-            var versionListAsJson = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions");
+            var output = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions --json");
+
+            var versionListAsJson = RemoveWarningsFromVersionShowOutput(output);
+
             return JsonConvert.DeserializeObject<string[]>(versionListAsJson)
                 .OrderByDescending(SemanticVersion.Parse, new VersionComparer()).ToList();
+        }
+
+        protected virtual string RemoveWarningsFromVersionShowOutput(string output)
+        {
+            var lines = output.Replace(Environment.NewLine, "\n").Replace("\n", Environment.NewLine).SplitToLines();
+            var resultLines = new List<string>();
+
+            var warningSectionEnded = false;
+
+            foreach (var line in lines)
+            {
+                if (line.TrimEnd() == "[")
+                {
+                    warningSectionEnded = true;
+                }
+
+                if (warningSectionEnded)
+                {
+                    resultLines.Add(line);
+                }
+            }
+
+            return string.Join(Environment.NewLine, resultLines);
         }
 
         protected virtual bool SpecifiedVersionExists(string version, JProperty package)
