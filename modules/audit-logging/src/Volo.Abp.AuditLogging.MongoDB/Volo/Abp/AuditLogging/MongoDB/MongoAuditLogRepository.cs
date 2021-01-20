@@ -124,9 +124,12 @@ namespace Volo.Abp.AuditLogging.MongoDB
         }
 
 
-        public virtual async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(DateTime startDate, DateTime endDate)
+        public virtual async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(
+            DateTime startDate,
+            DateTime endDate,
+            CancellationToken cancellationToken = default)
         {
-            var result = await (await GetMongoQueryableAsync())
+            var result = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
                 .Where(a => a.ExecutionTime < endDate.AddDays(1) && a.ExecutionTime > startDate)
                 .OrderBy(t => t.ExecutionTime)
                 .GroupBy(t => new
@@ -136,17 +139,19 @@ namespace Volo.Abp.AuditLogging.MongoDB
                     t.ExecutionTime.Day
                 })
                 .Select(g => new { Day = g.Min(t => t.ExecutionTime), avgExecutionTime = g.Average(t => t.ExecutionDuration) })
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
 
-        public virtual async Task<EntityChange> GetEntityChange(Guid entityChangeId)
+        public virtual async Task<EntityChange> GetEntityChange(
+            Guid entityChangeId,
+            CancellationToken cancellationToken = default)
         {
-            var entityChange = (await (await GetMongoQueryableAsync())
+            var entityChange = (await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
                 .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
                 .OrderBy(x => x.Id)
-                .FirstAsync()).EntityChanges.FirstOrDefault(x => x.Id == entityChangeId);
+                .FirstAsync(GetCancellationToken(cancellationToken))).EntityChanges.FirstOrDefault(x => x.Id == entityChangeId);
 
             if (entityChange == null)
             {
@@ -194,11 +199,13 @@ namespace Volo.Abp.AuditLogging.MongoDB
             return count;
         }
 
-        public virtual async Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId)
+        public virtual async Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(
+            Guid entityChangeId,
+            CancellationToken cancellationToken = default)
         {
-            var auditLog = (await (await GetMongoQueryableAsync())
+            var auditLog = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
                             .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
-                            .FirstAsync());
+                            .FirstAsync(GetCancellationToken(cancellationToken));
 
             return new EntityChangeWithUsername()
             {
@@ -207,13 +214,16 @@ namespace Volo.Abp.AuditLogging.MongoDB
             };
         }
 
-        public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName)
+        public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(
+            string entityId,
+            string entityTypeFullName,
+            CancellationToken cancellationToken = default)
         {
-            var auditLogs = await (await GetMongoQueryableAsync())
+            var auditLogs = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
                             .Where(x => x.EntityChanges.Any(y => y.EntityId == entityId && y.EntityTypeFullName == entityTypeFullName))
                             .As<IMongoQueryable<AuditLog>>()
                             .OrderByDescending(x => x.ExecutionTime)
-                            .ToListAsync();
+                            .ToListAsync(GetCancellationToken(cancellationToken));
 
             var entityChanges = auditLogs.SelectMany(x => x.EntityChanges).ToList();
 
