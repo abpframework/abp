@@ -9,11 +9,14 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
     public class BlogPostAdminAppService
         : CrudAppService<
