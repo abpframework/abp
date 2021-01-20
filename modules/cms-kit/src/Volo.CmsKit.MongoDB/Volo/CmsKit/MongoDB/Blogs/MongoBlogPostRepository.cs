@@ -6,9 +6,9 @@ using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.MongoDB.Blogs
 {
-    public class BlogPostMongoRepository : MongoDbRepository<CmsKitMongoDbContext, BlogPost, Guid>, IBlogPostRepository
+    public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, BlogPost, Guid>, IBlogPostRepository
     {
-        public BlogPostMongoRepository(IMongoDbContextProvider<CmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        public MongoBlogPostRepository(IMongoDbContextProvider<CmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 

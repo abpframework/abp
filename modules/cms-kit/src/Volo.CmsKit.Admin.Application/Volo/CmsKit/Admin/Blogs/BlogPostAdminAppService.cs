@@ -28,14 +28,13 @@ namespace Volo.CmsKit.Admin.Blogs
         protected readonly IBlogPostRepository BlogPostRepository;
         protected readonly IBlobContainer<BlogPostCoverImageContainer> BlobContainer;
 
-        protected BlogPostAdminAppService(
+        public BlogPostAdminAppService(
             IRepository<BlogPost, Guid> repository,
             IBlogPostManager blogPostManager,
             IBlogPostRepository blogPostRepository) : base(repository)
         {
             BlogPostManager = blogPostManager;
             BlogPostRepository = blogPostRepository;
-
 
             GetListPolicyName = CmsKitAdminPermissions.BlogPosts.Default;
             GetPolicyName = CmsKitAdminPermissions.BlogPosts.Default;
@@ -57,6 +56,7 @@ namespace Volo.CmsKit.Admin.Blogs
             var entity = await BlogPostManager
                                     .CreateAsync(
                                         new BlogPost(
+                                            GuidGenerator.Create(),
                                             input.BlogId,
                                             input.Title,
                                             input.UrlSlug,

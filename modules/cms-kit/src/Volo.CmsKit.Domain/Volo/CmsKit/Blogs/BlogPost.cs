@@ -9,7 +9,7 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPost : FullAuditedAggregateRootWithUser<Guid, CmsUser> , IMultiTenant
+    public class BlogPost : FullAuditedAggregateRootWithUser<Guid, CmsUser>, IMultiTenant
     {
         public Guid BlogId { get; protected set; }
 
@@ -26,10 +26,11 @@ namespace Volo.CmsKit.Blogs
         }
 
         public BlogPost(
+            Guid id,
             Guid blogId,
             [NotNull] string title,
             [NotNull] string urlSlug,
-            [CanBeNull] string shortDescription = null)
+            [CanBeNull] string shortDescription = null) : base(id)
         {
             BlogId = blogId;
             SetTitle(title);

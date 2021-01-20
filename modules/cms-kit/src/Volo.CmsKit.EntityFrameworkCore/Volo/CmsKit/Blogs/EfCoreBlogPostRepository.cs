@@ -7,9 +7,9 @@ using Volo.CmsKit.EntityFrameworkCore;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPostEfCoreRepository : EfCoreRepository<CmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
+    public class EfCoreBlogPostRepository : EfCoreRepository<CmsKitDbContext, BlogPost, Guid>, IBlogPostRepository
     {
-        public BlogPostEfCoreRepository(IDbContextProvider<CmsKitDbContext> dbContextProvider) : base(dbContextProvider)
+        public EfCoreBlogPostRepository(IDbContextProvider<CmsKitDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 
