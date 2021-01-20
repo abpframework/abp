@@ -40,7 +40,7 @@ public class MyDbContext : AbpMongoDbContext
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {
         base.CreateModel(modelBuilder);
-        
+
         //Customize the configuration for your collections.
     }
 }
@@ -62,7 +62,7 @@ So, most of times you don't need to explicitly configure registration for your e
 protected override void CreateModel(IMongoModelBuilder modelBuilder)
 {
     base.CreateModel(modelBuilder);
-    
+
     modelBuilder.Entity<Question>(b =>
     {
         b.CollectionName = "MyQuestions"; //Sets the collection name
@@ -88,7 +88,7 @@ If you have multiple databases in your application, you can configure the connec
 [ConnectionStringName("MySecondConnString")]
 public class MyDbContext : AbpMongoDbContext
 {
-    
+
 }
 ````
 
@@ -202,7 +202,7 @@ You generally want to derive from the `IRepository` to inherit standard reposito
 Example implementation of the `IBookRepository` interface:
 
 ```csharp
-public class BookRepository : 
+public class BookRepository :
     MongoDbRepository<BookStoreMongoDbContext, Book, Guid>,
     IBookRepository
 {
@@ -242,9 +242,9 @@ context.Services.AddMongoDbContext<BookStoreMongoDbContext>(options =>
 This is especially important when you want to **override a base repository method** to customize it. For instance, you may want to override `DeleteAsync` method to delete an entity in a more efficient way:
 
 ```csharp
-public override async Task DeleteAsync(
-    Guid id, 
-    bool autoSave = false, 
+public async override Task DeleteAsync(
+    Guid id,
+    bool autoSave = false,
     CancellationToken cancellationToken = default)
 {
     //TODO: Custom implementation of the delete method
@@ -382,3 +382,44 @@ context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
 ```
 
 In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. This feature allows you to have multiple MongoDbContext (one per module) on development, but single MongoDbContext (implements all interfaces of all MongoDbContexts) on runtime.
+
+### Customize Bulk Operations
+
+If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IMongoDbBulkOperationProvider`.
+
+- You may use example template below:
+
+```csharp
+public class MyCustomMongoDbBulkOperationProvider : IMongoDbBulkOperationProvider, ITransientDependency
+{
+    public async Task DeleteManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
+                                                IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
+                                                bool autoSave,
+                                                CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task InsertManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
+                                                IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
+                                                bool autoSave,
+                                                CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task UpdateManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
+                                                IEnumerable<TEntity> entities,
+                                                IClientSessionHandle sessionHandle,
+                                                bool autoSave,
+                                                CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+}
+```

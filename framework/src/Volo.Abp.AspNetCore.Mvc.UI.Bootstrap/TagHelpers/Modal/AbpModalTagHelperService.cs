@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             var modal = GetModal(context, output, modalDialog);
 
             output.Content.SetHtmlContent(modal);
-        } 
+        }
 
         protected virtual TagBuilder GetModalContentElement(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
         {
@@ -76,6 +76,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             {
                 classNames.Append(" ");
                 classNames.Append("modal-dialog-centered");
+            }
+
+            if (TagHelper.Scrollable ?? false)
+            {
+                classNames.Append(" ");
+                classNames.Append("modal-dialog-scrollable");
             }
 
             if (TagHelper.Size != AbpModalSize.Default)

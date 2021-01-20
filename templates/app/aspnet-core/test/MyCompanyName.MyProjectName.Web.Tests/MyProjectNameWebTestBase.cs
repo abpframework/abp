@@ -1,10 +1,8 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Shouldly;
 using Volo.Abp.AspNetCore.TestBase;
 
@@ -22,10 +20,7 @@ namespace MyCompanyName.MyProjectName
         protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
             var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
-            return JsonConvert.DeserializeObject<T>(strResponse, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
+            return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions(JsonSerializerDefaults.Web));
         }
 
         protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)

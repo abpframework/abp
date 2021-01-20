@@ -1,0 +1,22 @@
+{
+  "culture": "es",
+  "texts": {
+    "PickYourReaction": "Recoge tu reación",
+    "YourComment": "Tu comentario",
+    "YourReply": "Tu respuesta",
+    "Comments": "Comentarios",
+    "Send": "Enviar",
+    "Delete": "Borrar",
+    "Reply": "Responder",
+    "Update": "Actualizar",
+    "Edit": "Editar",
+    "LoginToAddComment": "Inicia sesión para añadir comentarios",
+    "LoginToReply": "Inicia sesión para responder",
+    "MessageDeletionConfirmationMessage": "Este comentario será completamente borrado.",
+    "CommentAuthorizationExceptionMessage": "Esos comentarios no están permitidos mostrarlos al público.",
+    "Undo": "Deshacer",
+    "RatingUndoMessage": "Tu puntuación sera removida.",
+    "LoginToRate": "Inicia sesión para puntuar",
+    "Star": "Valoración"
+  }
+}

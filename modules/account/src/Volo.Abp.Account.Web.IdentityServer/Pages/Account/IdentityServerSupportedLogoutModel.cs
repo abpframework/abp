@@ -18,14 +18,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             Interaction = interaction;
         }
 
-        public override async Task<IActionResult> OnGetAsync()
+        public async override Task<IActionResult> OnGetAsync()
         {
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-            {
-                Identity = IdentitySecurityLogIdentityConsts.Identity,
-                Action = IdentitySecurityLogActionConsts.Logout
-            });
-
             await SignInManager.SignOutAsync();
 
             var logoutId = Request.Query["logoutId"].ToString();
@@ -33,11 +27,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
             if (!string.IsNullOrEmpty(logoutId))
             {
                 var logoutContext = await Interaction.GetLogoutContextAsync(logoutId);
+
+                await SaveSecurityLogAsync(logoutContext?.ClientId);
+
                 await SignInManager.SignOutAsync();
 
                 HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
 
-                LoggedOutModel vm = new LoggedOutModel()
+                var vm = new LoggedOutModel()
                 {
                     PostLogoutRedirectUri = logoutContext?.PostLogoutRedirectUri,
                     ClientName = logoutContext?.ClientName,
@@ -49,6 +46,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return RedirectToPage("./LoggedOut", vm);
             }
 
+            await SaveSecurityLogAsync();
+
             if (ReturnUrl != null)
             {
                 return LocalRedirect(ReturnUrl);
@@ -57,6 +56,19 @@ namespace Volo.Abp.Account.Web.Pages.Account
             Logger.LogInformation(
                 $"IdentityServerSupportedLogoutModel couldn't find postLogoutUri... Redirecting to:/Account/Login..");
             return RedirectToPage("/Account/Login");
+        }
+
+        protected virtual async Task SaveSecurityLogAsync(string clientId = null)
+        {
+            if (CurrentUser.IsAuthenticated)
+            {
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.Identity,
+                    Action = IdentitySecurityLogActionConsts.Logout,
+                    ClientId = clientId
+                });
+            }
         }
     }
 }

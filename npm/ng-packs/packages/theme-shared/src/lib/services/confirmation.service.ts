@@ -1,4 +1,4 @@
-import { Config, ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
+import { ContentProjectionService, LocalizationParam, PROJECTION_STRATEGY } from '@abp/ng.core';
 import { ComponentRef, Injectable } from '@angular/core';
 import { fromEvent, Observable, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
@@ -33,40 +33,40 @@ export class ConfirmationService {
   }
 
   info(
-    message: Config.LocalizationParam,
-    title: Config.LocalizationParam,
+    message: LocalizationParam,
+    title: LocalizationParam,
     options?: Partial<Confirmation.Options>,
   ): Observable<Confirmation.Status> {
     return this.show(message, title, 'info', options);
   }
 
   success(
-    message: Config.LocalizationParam,
-    title: Config.LocalizationParam,
+    message: LocalizationParam,
+    title: LocalizationParam,
     options?: Partial<Confirmation.Options>,
   ): Observable<Confirmation.Status> {
     return this.show(message, title, 'success', options);
   }
 
   warn(
-    message: Config.LocalizationParam,
-    title: Config.LocalizationParam,
+    message: LocalizationParam,
+    title: LocalizationParam,
     options?: Partial<Confirmation.Options>,
   ): Observable<Confirmation.Status> {
     return this.show(message, title, 'warning', options);
   }
 
   error(
-    message: Config.LocalizationParam,
-    title: Config.LocalizationParam,
+    message: LocalizationParam,
+    title: LocalizationParam,
     options?: Partial<Confirmation.Options>,
   ): Observable<Confirmation.Status> {
     return this.show(message, title, 'error', options);
   }
 
   show(
-    message: Config.LocalizationParam,
-    title: Config.LocalizationParam,
+    message: LocalizationParam,
+    title: LocalizationParam,
     severity?: Confirmation.Severity,
     options = {} as Partial<Confirmation.Options>,
   ): Observable<Confirmation.Status> {

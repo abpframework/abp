@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
@@ -25,6 +25,26 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
         {
             /* This provider always works for the current principal. */
             return await IsGrantedAsync(name);
+        }
+
+        public async Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names)
+        {
+            var result = new MultiplePermissionGrantResult();
+            var configuration = await ConfigurationClient.GetAsync();
+            foreach (var name in names)
+            {
+                result.Result.Add(name, configuration.Auth.GrantedPolicies.ContainsKey(name) ?
+                    PermissionGrantResult.Granted :
+                    PermissionGrantResult.Undefined);
+            }
+
+            return result;
+        }
+
+        public async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string[] names)
+        {
+            /* This provider always works for the current principal. */
+            return await IsGrantedAsync(names);
         }
     }
 }

@@ -1,0 +1,15 @@
+﻿@page
+@model Volo.Abp.Account.Web.Pages.Account.AccessDeniedModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@inject IHtmlLocalizer<AccountResource> L
+
+<div class="card mt-3 shadow-sm rounded">
+    <div class="card-body p-5">
+        <h4>@L["AccessDenied"]</h4>
+        <form method="post" class="mt-4">
+            <p>@L["AccessDeniedMessage"]</p>
+            <a abp-button="Primary" asp-page="./Login" asp-all-route-data="@(new Dictionary<string, string> {{"returnUrl", Model.ReturnUrl}, {"returnUrlHash", Model.ReturnUrlHash}})">&larr; @L["BackToLogin"]</a>
+        </form>
+    </div>
+</div>

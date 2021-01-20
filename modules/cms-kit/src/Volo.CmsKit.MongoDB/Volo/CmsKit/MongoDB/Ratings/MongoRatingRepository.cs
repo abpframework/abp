@@ -25,7 +25,7 @@ namespace Volo.CmsKit.MongoDB.Ratings
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var rating = await GetMongoQueryable()
+            var rating = await (await GetMongoQueryableAsync(cancellationToken))
                 .FirstOrDefaultAsync(r => r.EntityType == entityType && r.EntityId == entityId && r.CreatorId == userId,
                     GetCancellationToken(cancellationToken));
 
@@ -39,7 +39,7 @@ namespace Volo.CmsKit.MongoDB.Ratings
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
             var query = (
-                from rating in GetMongoQueryable()
+                from rating in (await GetMongoQueryableAsync(cancellationToken))
                 where rating.EntityType == entityType && rating.EntityId == entityId
                 group rating by rating.StarCount
                 into g

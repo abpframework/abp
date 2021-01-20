@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Settings
@@ -8,5 +9,7 @@ namespace Volo.Abp.Settings
         string Name { get; }
 
         Task<string> GetOrNullAsync([NotNull] SettingDefinition setting);
+
+        Task<List<SettingValue>> GetAllAsync([NotNull] SettingDefinition[] settings);
     }
 }

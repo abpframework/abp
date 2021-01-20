@@ -16,7 +16,9 @@ using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
@@ -61,6 +63,7 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
@@ -68,6 +71,19 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+                options.Languages.Add(new LanguageInfo("es", "es", "Español", "es"));
+            });
+
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options.StyleBundles.Configure(
+                    BasicThemeBundles.Styles.Global,
+                    bundle =>
+                    {
+                        bundle.AddFiles("/global-styles.css");
+                    }
+                );
             });
 
             Configure<AbpAuditingOptions>(options =>
@@ -97,6 +113,7 @@ namespace MyCompanyName.MyProjectName
             Configure<AppUrlOptions>(options =>
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
             });
 
             Configure<AbpBackgroundJobOptions>(options =>
@@ -165,6 +182,7 @@ namespace MyCompanyName.MyProjectName
                 app.UseMultiTenancy();
             }
 
+            app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseAuditing();

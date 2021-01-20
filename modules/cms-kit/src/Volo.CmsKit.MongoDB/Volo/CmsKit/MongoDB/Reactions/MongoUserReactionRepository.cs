@@ -29,7 +29,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
             Check.NotNullOrWhiteSpace(reactionName, nameof(reactionName));
 
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x =>
                     x.CreatorId == userId &&
                     x.EntityType == entityType &&
@@ -47,7 +47,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x =>
                     x.CreatorId == userId &&
                     x.EntityType == entityType &&
@@ -63,7 +63,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x =>
                     x.EntityType == entityType &&
                     x.EntityId == entityId)

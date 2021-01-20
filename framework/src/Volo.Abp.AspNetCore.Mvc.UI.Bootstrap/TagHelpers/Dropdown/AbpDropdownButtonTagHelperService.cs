@@ -60,7 +60,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
         protected virtual async Task<string> GetMainButtonAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent content)
         {
             var abpButtonTagHelper = _serviceProvider.GetRequiredService<AbpButtonTagHelper>();
-            
+
             abpButtonTagHelper.Icon = TagHelper.Icon;
             abpButtonTagHelper.Text = TagHelper.Text;
             abpButtonTagHelper.IconType = TagHelper.IconType;
@@ -121,7 +121,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
                 {"aria-haspopup", "true"},
                 {"aria-expanded", "false"},
             };
-            
+
             attributes.AddClass("dropdown-toggle");
             attributes.AddClass("dropdown-toggle-split");
 

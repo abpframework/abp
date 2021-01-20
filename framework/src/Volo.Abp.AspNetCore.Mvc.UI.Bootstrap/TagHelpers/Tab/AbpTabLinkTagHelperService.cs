@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 anchor.AddCssClass("dropdown-item");
                 anchor.Attributes.Add("id", id);
                 anchor.Attributes.Add("href", href);
-                anchor.InnerHtml.Append(title);
+                anchor.InnerHtml.AppendHtml(title);
 
                 return anchor.ToHtmlString();
             }
@@ -45,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 anchor.AddCssClass("nav-link " + AbpTabItemActivePlaceholder);
                 anchor.Attributes.Add("id", id);
                 anchor.Attributes.Add("href", href);
-                anchor.InnerHtml.Append(title);
+                anchor.InnerHtml.AppendHtml(title);
 
                 var listItem = new TagBuilder("li");
                 listItem.AddCssClass("nav-item");

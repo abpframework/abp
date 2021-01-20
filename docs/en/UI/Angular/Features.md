@@ -31,7 +31,3 @@ const defaultLang = this.config.getFeature("Identity.TwoFactor");
 ```
 
 You can then check the value of the feature to perform your logic. Please note that **feature keys are case-sensitive**.
-
-## What's Next?
-
-- [Permission Management](./Permission-Management.md)

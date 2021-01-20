@@ -13,10 +13,10 @@ ABP Framework also adds some **useful features** to the standard bootstrap compo
 Here, the list of components those are wrapped by the ABP Framework:
 
 * [Alerts](Alerts.md)
-* [Badges](Badges.md))
+* [Badges](Badges.md)
 * [Blockquote](Blockquote.md)
 * [Borders](Borders.md)
-* [Breadcrumb](Breadcrumb.md)
+* [Breadcrumb](Breadcrumbs.md)
 * [Buttons](Buttons.md)
 * [Cards](Cards.md)
 * [Carousel](Carousel.md)

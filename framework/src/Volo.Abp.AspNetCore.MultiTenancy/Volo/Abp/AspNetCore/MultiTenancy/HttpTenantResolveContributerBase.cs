@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public abstract class HttpTenantResolveContributorBase : TenantResolveContributorBase
     {
-        public async override Task ResolveAsync(ITenantResolveContext context)
+        public override async Task ResolveAsync(ITenantResolveContext context)
         {
             var httpContext = context.GetHttpContext();
             if (httpContext == null)

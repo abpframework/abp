@@ -217,7 +217,7 @@
                                         <span class="for-desktop mr-3">
                                             @(L["Contributors"].Value)
                                         </span>
-                                        @foreach (var contributor in Model.Document.Contributors)
+                                        @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c=> c.CommitCount).ToList())
                                         {
                                             <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
                                                 <img src="@contributor.AvatarUrl"

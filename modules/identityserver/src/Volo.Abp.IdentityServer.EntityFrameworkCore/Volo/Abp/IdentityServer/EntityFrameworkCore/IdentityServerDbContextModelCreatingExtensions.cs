@@ -176,6 +176,10 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ClientId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(ClientPropertyConsts.KeyMaxLength).IsRequired();
+                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
+                {
+                    ClientPropertyConsts.ValueMaxLength = 300;
+                }
                 b.Property(x => x.Value).HasMaxLength(ClientPropertyConsts.ValueMaxLength).IsRequired();
             });
 
@@ -192,8 +196,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Name).HasMaxLength(IdentityResourceConsts.NameMaxLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(IdentityResourceConsts.DisplayNameMaxLength);
                 b.Property(x => x.Description).HasMaxLength(IdentityResourceConsts.DescriptionMaxLength);
-
-                b.HasIndex(x => x.Name).IsUnique();
 
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
                 b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
@@ -235,8 +237,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.ToTable(options.TablePrefix + "ApiResources", options.Schema);
 
                 b.ConfigureByConvention();
-
-                b.HasIndex(x => x.Name).IsUnique();
 
                 b.Property(x => x.Name).HasMaxLength(ApiResourceConsts.NameMaxLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
@@ -319,8 +319,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Name).HasMaxLength(ApiScopeConsts.NameMaxLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(ApiScopeConsts.DisplayNameMaxLength);
                 b.Property(x => x.Description).HasMaxLength(ApiScopeConsts.DescriptionMaxLength);
-
-                b.HasIndex(x => x.Name).IsUnique();
 
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
                 b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();

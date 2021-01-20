@@ -10,11 +10,11 @@ namespace Volo.Blogging.Admin
         {
             if (context.Menu.Name == StandardMenus.Main)
             {
-                await ConfigureMainMenu(context);
+                await ConfigureMainMenuAsync(context);
             }
         }
 
-        private async Task ConfigureMainMenu(MenuConfigurationContext context)
+        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var l = context.GetLocalizer<BloggingResource>();
 

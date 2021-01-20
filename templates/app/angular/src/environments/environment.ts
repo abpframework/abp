@@ -1,4 +1,4 @@
-import { Config } from '@abp/ng.core';
+import { Environment } from '@abp/ng.core';
 
 const baseUrl = 'http://localhost:4200';
 
@@ -14,7 +14,7 @@ export const environment = {
     redirectUri: baseUrl,
     clientId: 'MyProjectName_App',
     responseType: 'code',
-    scope: 'offline_access MyProjectName',
+    scope: 'offline_access openid profile role email phone MyProjectName',
   },
   apis: {
     default: {
@@ -22,4 +22,4 @@ export const environment = {
       rootNamespace: 'MyCompanyName.MyProjectName',
     },
   },
-} as Config.Environment;
+} as Environment;

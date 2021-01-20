@@ -317,6 +317,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var small = new TagBuilder("small");
             small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
             small.AddCssClass("form-text text-muted");
+            small.InnerHtml.Append(localizedText);
 
             return small.ToHtmlString();
         }

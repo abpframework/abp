@@ -187,9 +187,9 @@ var result = await _templateRenderer.RenderAsync(
 
 In this case, we haven't created a model class, but created an anonymous object as the model.
 
-### PascalCase vs camelCase
+### PascalCase vs snake_case
 
-PascalCase property names (like `UserName`) is used as camelCase (like `userName`) in the templates.
+PascalCase property names (like `UserName`) is used as snake_case (like `user_name`) in the templates.
 
 ## Localization
 
@@ -423,7 +423,7 @@ This example simply adds a header and footer to the template and renders the con
 **3)** Configure the embedded resources in the `.csproj` file
 
 * Add [Microsoft.Extensions.FileProviders.Embedded](https://www.nuget.org/packages/Microsoft.Extensions.FileProviders.Embedded) NuGet package to the project.
-* Add `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` into the `<PropertyConfig>...</PropertyConfig>` section of your `.csproj` file.
+* Add `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` into the `<PropertyGroup>...</PropertyGroup>` section of your `.csproj` file.
 * Add the following code into your `.csproj` file:
 
 ````xml

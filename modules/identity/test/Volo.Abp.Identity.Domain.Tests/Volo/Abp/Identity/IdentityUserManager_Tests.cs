@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.Uow;
 using Xunit;
@@ -18,6 +19,7 @@ namespace Volo.Abp.Identity
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IdentityTestData _testData;
+        protected IOptions<IdentityOptions> _identityOptions { get; }
 
         public IdentityUserManager_Tests()
         {
@@ -28,6 +30,7 @@ namespace Volo.Abp.Identity
             _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
             _testData = GetRequiredService<IdentityTestData>();
             _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+            _identityOptions = GetRequiredService<IOptions<IdentityOptions>>();
         }
 
         [Fact]
@@ -120,6 +123,8 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task AddDefaultRolesAsync_In_Same_Uow()
         {
+            await _identityOptions.SetAsync();
+
             await CreateRandomDefaultRoleAsync();
 
             using (var uow = _unitOfWorkManager.Begin())
@@ -176,6 +181,8 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task AddDefaultRolesAsync_In_Different_Uow()
         {
+            await _identityOptions.SetAsync();
+
             await CreateRandomDefaultRoleAsync();
 
             Guid userId;

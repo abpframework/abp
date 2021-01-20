@@ -23,22 +23,29 @@ namespace Volo.Abp.Users.MongoDB
 
         public virtual async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
+            cancellationToken = GetCancellationToken(cancellationToken);
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(u => u.UserName == userName, cancellationToken);
         }
 
         public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().Where(u => ids.Contains(u.Id)).ToListAsync(GetCancellationToken(cancellationToken));
+            cancellationToken = GetCancellationToken(cancellationToken);
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Where(u => ids.Contains(u.Id))
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<List<TUser>> SearchAsync(
-            string sorting = null, 
+            string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            cancellationToken = GetCancellationToken(cancellationToken);
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<TUser, IMongoQueryable<TUser>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
@@ -50,12 +57,13 @@ namespace Volo.Abp.Users.MongoDB
                 .OrderBy(sorting ?? nameof(IUserData.UserName))
                 .As<IMongoQueryable<TUser>>()
                 .PageBy<TUser, IMongoQueryable<TUser>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            cancellationToken = GetCancellationToken(cancellationToken);
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<TUser, IMongoQueryable<TUser>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
@@ -64,7 +72,7 @@ namespace Volo.Abp.Users.MongoDB
                         u.Name.Contains(filter) ||
                         u.Surname.Contains(filter)
                 )
-                .LongCountAsync(GetCancellationToken(cancellationToken));
+                .LongCountAsync(cancellationToken);
         }
     }
 }

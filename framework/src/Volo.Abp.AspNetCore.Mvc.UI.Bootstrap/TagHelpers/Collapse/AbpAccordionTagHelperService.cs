@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Attributes.AddClass("accordion");
             output.Attributes.Add("id",TagHelper.Id);
-            
+
             var items = InitilizeFormGroupContentsContext(context, output);
 
             await output.GetChildContentAsync();

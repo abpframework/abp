@@ -15,7 +15,7 @@ namespace Volo.Abp.TenantManagement
         protected ICurrentTenant CurrentTenant { get; }
 
         public TenantStore(
-            ITenantRepository tenantRepository, 
+            ITenantRepository tenantRepository,
             IObjectMapper<AbpTenantManagementDomainModule> objectMapper,
             ICurrentTenant currentTenant)
         {
@@ -52,6 +52,7 @@ namespace Volo.Abp.TenantManagement
             }
         }
 
+        [Obsolete("Use FindAsync method.")]
         public virtual TenantConfiguration Find(string name)
         {
             using (CurrentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
@@ -66,6 +67,7 @@ namespace Volo.Abp.TenantManagement
             }
         }
 
+        [Obsolete("Use FindAsync method.")]
         public virtual TenantConfiguration Find(Guid id)
         {
             using (CurrentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!

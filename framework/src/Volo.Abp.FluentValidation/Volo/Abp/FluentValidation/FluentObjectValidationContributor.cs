@@ -26,7 +26,10 @@ namespace Volo.Abp.FluentValidation
                 return;
             }
 
-            var result = validator.Validate(context.ValidatingObject);
+            var result = validator.Validate((IValidationContext) Activator.CreateInstance(
+                typeof(ValidationContext<>).MakeGenericType(context.ValidatingObject.GetType()),
+                context.ValidatingObject));
+
             if (!result.IsValid)
             {
                 context.Errors.AddRange(

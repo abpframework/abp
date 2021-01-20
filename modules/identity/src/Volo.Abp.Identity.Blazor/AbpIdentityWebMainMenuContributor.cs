@@ -27,12 +27,12 @@ namespace Volo.Abp.Identity.Blazor
 
                 if (hasRolePermission)
                 {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "/identity/roles"));
+                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "identity/roles"));
                 }
 
                 if (hasUserPermission)
                 {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "/identity/users"));
+                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "identity/users"));
                 }
             }
         }

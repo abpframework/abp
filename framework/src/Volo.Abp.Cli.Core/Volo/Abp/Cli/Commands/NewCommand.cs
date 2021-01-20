@@ -1,29 +1,44 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Auth;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
+using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
 {
     public class NewCommand : IConsoleCommand, ITransientDependency
     {
+        private readonly EfCoreMigrationManager _efCoreMigrationManager;
         public ILogger<NewCommand> Logger { get; set; }
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
+        public ITemplateInfoProvider TemplateInfoProvider { get; }
 
-        public NewCommand(TemplateProjectBuilder templateProjectBuilder)
+        public NewCommand(TemplateProjectBuilder templateProjectBuilder
+            , ITemplateInfoProvider templateInfoProvider,
+            EfCoreMigrationManager efCoreMigrationManager)
         {
+            _efCoreMigrationManager = efCoreMigrationManager;
             TemplateProjectBuilder = templateProjectBuilder;
+            TemplateInfoProvider = templateInfoProvider;
 
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -48,6 +63,10 @@ namespace Volo.Abp.Cli.Commands
             if (template != null)
             {
                 Logger.LogInformation("Template: " + template);
+            }
+            else
+            {
+                template = (await TemplateInfoProvider.GetDefaultAsync()).Name;
             }
 
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
@@ -74,16 +93,28 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Database provider: " + databaseProvider);
             }
 
+            var connectionString = GetConnectionString(commandLineArgs);
+            if (connectionString != null)
+            {
+                Logger.LogInformation("Connection string: " + connectionString);
+            }
+
+            var databaseManagementSystem = GetDatabaseManagementSystem(commandLineArgs);
+            if (databaseManagementSystem != DatabaseManagementSystem.NotSpecified)
+            {
+                Logger.LogInformation("DBMS: " + databaseManagementSystem);
+            }
+
             var uiFramework = GetUiFramework(commandLineArgs);
             if (uiFramework != UiFramework.NotSpecified)
             {
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
-            var connectionString = GetConnectionString(commandLineArgs);
-            if (connectionString != null)
+            var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
+            if (publicWebSite)
             {
-                Logger.LogInformation("Connection string: " + connectionString);
+                Logger.LogInformation("Public Web Site: yes");
             }
 
             var mobileApp = GetMobilePreference(commandLineArgs);
@@ -129,6 +160,13 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation("Output folder: " + outputFolder);
 
+            if (connectionString == null &&
+                databaseManagementSystem != DatabaseManagementSystem.NotSpecified &&
+                databaseManagementSystem != DatabaseManagementSystem.SQLServer)
+            {
+                connectionString = GetNewConnectionStringByDbms(databaseManagementSystem, outputFolder);
+            }
+
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
             var result = await TemplateProjectBuilder.BuildAsync(
@@ -137,8 +175,10 @@ namespace Volo.Abp.Cli.Commands
                     template,
                     version,
                     databaseProvider,
+                    databaseManagementSystem,
                     uiFramework,
                     mobileApp,
+                    publicWebSite,
                     gitHubAbpLocalRepositoryPath,
                     gitHubVoloLocalRepositoryPath,
                     templateSource,
@@ -187,6 +227,55 @@ namespace Volo.Abp.Cli.Commands
             }
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
+
+
+            if (AppTemplateBase.IsAppTemplate(template))
+            {
+                var isCommercial = template == AppProTemplate.TemplateName;
+                OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
+            }
+        }
+
+        private string GetNewConnectionStringByDbms(DatabaseManagementSystem databaseManagementSystem, string outputFolder)
+        {
+            switch (databaseManagementSystem)
+            {
+                case DatabaseManagementSystem.MySQL:
+                    return "Server=localhost;Port=3306;Database=MyProjectName;Uid=root;Pwd=myPassword;";
+                case DatabaseManagementSystem.PostgreSQL:
+                    return "User ID=root;Password=myPassword;Host=localhost;Port=5432;Database=MyProjectName;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;";
+                //case DatabaseManagementSystem.Oracle:
+                case DatabaseManagementSystem.OracleDevart:
+                    return "Data Source=MyProjectName;Integrated Security=yes;";
+                case DatabaseManagementSystem.SQLite:
+                    return $"Data Source={Path.Combine(outputFolder,"database\\MyProjectName.db")};Version=3;";
+                default:
+                    return null;
+            }
+        }
+
+        private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
+        {
+            uiFramework = uiFramework == UiFramework.NotSpecified || uiFramework == UiFramework.None ? UiFramework.Mvc : uiFramework;
+            databaseProvider = databaseProvider == DatabaseProvider.NotSpecified ? DatabaseProvider.EntityFrameworkCore : databaseProvider;
+
+            var urlPrefix = commercial ? "commercial" : "www";
+            var tieredYesNo = tiered ? "yes" : "no";
+            var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                url = url.Replace("&", "^&");
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
         }
 
         private bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
@@ -195,7 +284,7 @@ namespace Volo.Abp.Cli.Commands
 
             if (longKey == false)
             {
-                return  commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Short);
+                return commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Short);
             }
 
             return longKey;
@@ -228,8 +317,10 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-ts|--template-source <template-source>     (your local or network abp template source)");
             sb.AppendLine("-csf|--create-solution-folder               (default: true)");
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
+            sb.AppendLine("--dbms <database-management-system>         (your database management system)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
+            sb.AppendLine("--no-random-port                            (Use template's default ports)");
             sb.AppendLine("--separate-identity-server                  (if supported by the template)");
             sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
             sb.AppendLine("");
@@ -249,6 +340,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
             sb.AppendLine("  abp new Acme.BookStore -csf false");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
+            sb.AppendLine("  abp new Acme.BookStore --dbms mysql");
             sb.AppendLine("  abp new Acme.BookStore --connection-string \"Server=myServerName\\myInstanceName;Database=myDatabase;User Id=myUsername;Password=myPassword\"");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
@@ -272,6 +364,34 @@ namespace Volo.Abp.Cli.Commands
                     return DatabaseProvider.MongoDb;
                 default:
                     return DatabaseProvider.NotSpecified;
+            }
+        }
+
+        protected virtual DatabaseManagementSystem GetDatabaseManagementSystem(CommandLineArgs commandLineArgs)
+        {
+            var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseManagementSystem.Short, Options.DatabaseManagementSystem.Long);
+
+            if (optionValue == null)
+            {
+                return DatabaseManagementSystem.NotSpecified;
+            }
+
+            switch (optionValue.ToLowerInvariant())
+            {
+                case "sqlserver":
+                    return DatabaseManagementSystem.SQLServer;
+                case "mysql":
+                    return DatabaseManagementSystem.MySQL;
+                case "postgresql":
+                    return DatabaseManagementSystem.PostgreSQL;
+                case "oracle-devart":
+                    return DatabaseManagementSystem.OracleDevart;
+                case "sqlite":
+                    return DatabaseManagementSystem.SQLite;
+                case "oracle": // Currently disabled. See https://github.com/abpframework/abp/issues/6513
+                    // return DatabaseManagementSystem.Oracle;
+                default:
+                    return DatabaseManagementSystem.NotSpecified;
             }
         }
 
@@ -322,6 +442,12 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "database-provider";
             }
 
+            public static class DatabaseManagementSystem
+            {
+                public const string Short = "dbms";
+                public const string Long = "database-management-system";
+            }
+
             public static class OutputFolder
             {
                 public const string Short = "o";
@@ -354,6 +480,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "m";
                 public const string Long = "mobile";
+            }
+
+            public static class PublicWebSite
+            {
+                public const string Long = "with-public-website";
             }
 
             public static class TemplateSource

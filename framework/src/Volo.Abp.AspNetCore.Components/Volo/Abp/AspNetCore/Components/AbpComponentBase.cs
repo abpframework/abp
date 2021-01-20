@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.AspNetCore.Components.Alerts;
+using Volo.Abp.AspNetCore.Components.Messages;
+using Volo.Abp.AspNetCore.Components.Notifications;
 using Volo.Abp.Localization;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
@@ -53,6 +56,17 @@ namespace Volo.Abp.AspNetCore.Components
         protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
         private ICurrentUser _currentUser;
 
+        protected IUiMessageService Message => LazyGetNonScopedRequiredService(ref _message);
+        private IUiMessageService _message;
+
+        protected IUiNotificationService Notify => LazyGetNonScopedRequiredService(ref _notify);
+        private IUiNotificationService _notify;
+
+        protected IAlertManager AlertManager => LazyGetNonScopedRequiredService(ref _alertManager);
+        private IAlertManager _alertManager;
+
+        protected AlertList Alerts => AlertManager.Alerts;
+
         protected IObjectMapper ObjectMapper
         {
             get
@@ -89,6 +103,21 @@ namespace Volo.Abp.AspNetCore.Components
 
             return reference;
         }
+
+        protected TService LazyGetNonScopedRequiredService<TService>(ref TService reference) => LazyGetNonScopedRequiredService(typeof(TService), ref reference);
+
+        protected TRef LazyGetNonScopedRequiredService<TRef>(Type serviceType, ref TRef reference)
+        {
+            if (reference == null)
+            {
+                reference = (TRef)NonScopedServices.GetRequiredService(serviceType);
+            }
+
+            return reference;
+        }
+
+        [Inject]
+        protected IServiceProvider NonScopedServices { get; set; }
 
         protected virtual IStringLocalizer CreateLocalizer()
         {

@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Threading;
@@ -16,11 +15,6 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         public ICancellationTokenProvider CancellationTokenProvider { get; set; }
 
         protected IApiDescriptionCache Cache { get; }
-
-        private static readonly JsonSerializerSettings SharedJsonSerializerSettings = new JsonSerializerSettings
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
 
         public ApiDescriptionFinder(IApiDescriptionCache cache)
         {
@@ -91,9 +85,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             var content = await response.Content.ReadAsStringAsync();
 
-            var result = JsonConvert.DeserializeObject(
-                content,
-                typeof(ApplicationApiDescriptionModel), SharedJsonSerializerSettings);
+            var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
 
             return (ApplicationApiDescriptionModel)result;
         }

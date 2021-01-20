@@ -1,17 +1,13 @@
 ﻿# ABP Framework Road Map
 
-You can always check the milestone planning and the prioritized backlog issues on [the GitHub repository](https://github.com/abpframework/abp/milestones) for a detailed road map.
+You can always check the milestone planning and the prioritized backlog issues on [the GitHub repository](https://github.com/abpframework/abp/milestones) for a detailed road map. Here, a list of some major items in the backlog;
 
-While we will **continue to add other exciting features**, we will work on the following major items in the **middle term**:
-
-* **Blazor UI** for the framework and all the pre-built modules (in progress).
-* **.NET 5.0**! As Microsoft has announced that the .NET 5.0 will be released in November 2020, we will prepare for this change before and move to the .NET 5.0 just after Microsoft releases it. We hope a smooth transition.
-
-Beside this middle term goals, there are many features in the [backlog](https://github.com/abpframework/abp/milestone/2). Here, a list of some major items in the backlog;
-
+* CMS Kit: A set of reusable, extensible and composable Content Management System features.
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](https://docs.abp.io/en/abp/latest/Modules/Index))
 * [#236](https://github.com/abpframework/abp/issues/236) Resource based authorization system
+* [#6132](https://github.com/abpframework/abp/issues/6132) A New Theme alternative to the Basic Theme
 * [#1754](https://github.com/abpframework/abp/issues/1754) / Multi-lingual entities
+* [#497](https://github.com/abpframework/abp/issues/497) API Versioning system finalize & document
 * [#633](https://github.com/abpframework/abp/issues/633) / Realtime notification system
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
 * [#336](https://github.com/abpframework/abp/issues/336) / Health Check abstraction

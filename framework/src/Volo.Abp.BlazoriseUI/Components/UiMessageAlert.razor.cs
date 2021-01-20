@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.BlazoriseUI.Components
@@ -135,6 +136,12 @@ namespace Volo.Abp.BlazoriseUI.Components
             }
 
             return Canceled.InvokeAsync(null);
+        }
+
+        protected virtual void OnModalClosing(ModalClosingEventArgs eventArgs)
+        {
+            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.EscapeClosing
+                || eventArgs.CloseReason == CloseReason.FocusLostClosing;
         }
     }
 }

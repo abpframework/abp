@@ -62,12 +62,6 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                 return CreateEntityNotFoundError(exception as EntityNotFoundException);
             }
 
-            if (exception is AbpAuthorizationException)
-            {
-                var authorizationException = exception as AbpAuthorizationException;
-                return new RemoteServiceErrorInfo(authorizationException.Message);
-            }
-
             var errorInfo = new RemoteServiceErrorInfo();
 
             if (exception is IUserFriendlyException)
@@ -147,7 +141,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             {
                 foreach (var key in exception.Data.Keys)
                 {
-                    localizedValue = localizedValue.Replace("{" + key + "}", exception.Data[key].ToString());
+                    localizedValue = localizedValue.Replace("{" + key + "}", exception.Data[key]?.ToString());
                 }
             }
 

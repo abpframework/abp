@@ -23,23 +23,26 @@ namespace Volo.Abp.IdentityServer.Devices
             string userCode,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
-                .FirstOrDefaultAsync(d => d.UserCode == userCode, GetCancellationToken(cancellationToken))
-                ;
+            return await (await GetDbSetAsync())
+                .Where(d => d.UserCode == userCode)
+                .OrderBy(d => d.Id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<DeviceFlowCodes> FindByDeviceCodeAsync(
-            string deviceCode, 
+            string deviceCode,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
-                .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .Where(d => d.DeviceCode == deviceCode)
+                .OrderBy(d => d.Id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<DeviceFlowCodes>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)

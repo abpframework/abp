@@ -86,7 +86,7 @@ namespace Volo.Abp.Kafka
                 }
                 catch (CreateTopicsException e)
                 {
-                    if (!e.Error.Reason.Contains($"Topic '{TopicName}' already exists"))
+                    if(e.Results.First().Error.Code != ErrorCode.TopicAlreadyExists)
                     {
                         throw;
                     }
@@ -118,10 +118,10 @@ namespace Volo.Abp.Kafka
                     catch (ConsumeException ex)
                     {
                         Logger.LogException(ex, LogLevel.Warning);
-                        AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
+                        await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
                     }
                 }
-            });
+            }, TaskCreationOptions.LongRunning);
         }
 
         protected virtual async Task HandleIncomingMessage(ConsumeResult<string, byte[]> consumeResult)

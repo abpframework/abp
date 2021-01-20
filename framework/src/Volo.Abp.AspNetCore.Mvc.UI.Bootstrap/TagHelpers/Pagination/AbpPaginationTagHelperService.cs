@@ -21,9 +21,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
         public AbpPaginationTagHelperService(
-            IHtmlGenerator generator, 
-            HtmlEncoder encoder, 
-            IAbpTagHelperLocalizer tagHelperLocalizer, 
+            IHtmlGenerator generator,
+            HtmlEncoder encoder,
+            IAbpTagHelperLocalizer tagHelperLocalizer,
             IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;

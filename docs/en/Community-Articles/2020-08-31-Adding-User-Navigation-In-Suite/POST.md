@@ -22,6 +22,8 @@ Then add a string property called `Title`, as an example property.
 
 ### Create AppUserDto
 
+_Note that, creating `AppUserDto` is not necessary after ABP v4.X_
+
 ABP Suite needs a DTO for the target entity (user, in this case) in order to define a navigation property.
 
 To do this, create a new folder called "Users" in `*.Application.Contracts` then add a new class called `AppUserDto` inherited from `IdentityUserDto`.

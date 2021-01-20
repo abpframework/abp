@@ -3,12 +3,11 @@ using Volo.Abp.Domain.Services;
 
 namespace Volo.Abp.Identity
 {
-    //TODO: Rename to IdentityClaimTypeManager in v2.0!
-    public class IdenityClaimTypeManager : DomainService
+    public class IdentityClaimTypeManager : DomainService
     {
         protected IIdentityClaimTypeRepository IdentityClaimTypeRepository { get; }
 
-        public IdenityClaimTypeManager(IIdentityClaimTypeRepository identityClaimTypeRepository)
+        public IdentityClaimTypeManager(IIdentityClaimTypeRepository identityClaimTypeRepository)
         {
             IdentityClaimTypeRepository = identityClaimTypeRepository;
         }

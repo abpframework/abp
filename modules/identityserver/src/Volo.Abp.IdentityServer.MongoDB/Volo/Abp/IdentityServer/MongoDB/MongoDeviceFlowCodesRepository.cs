@@ -23,23 +23,26 @@ namespace Volo.Abp.IdentityServer.MongoDB
             string userCode,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
-                .FirstOrDefaultAsync(d => d.UserCode == userCode, GetCancellationToken(cancellationToken))
-                ;
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Where(d => d.UserCode == userCode)
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<DeviceFlowCodes> FindByDeviceCodeAsync(string deviceCode, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
-                .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken));
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Where(d => d.DeviceCode == deviceCode)
+                .OrderBy(x => x.Id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<DeviceFlowCodes>> GetListByExpirationAsync(
-            DateTime maxExpirationDate, 
+            DateTime maxExpirationDate,
             int maxResultCount,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)

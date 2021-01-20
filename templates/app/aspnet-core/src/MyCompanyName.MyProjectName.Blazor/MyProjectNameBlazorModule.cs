@@ -17,6 +17,7 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.Identity.Blazor;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.TenantManagement.Blazor;
+using MyCompanyName.MyProjectName.Blazor.Menus;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
@@ -55,14 +56,13 @@ namespace MyCompanyName.MyProjectName.Blazor
         {
             Configure<AbpNavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+                options.MenuContributors.Add(new MyProjectNameMenuContributor(context.Services.GetConfiguration()));
             });
         }
 
         private void ConfigureBlazorise(ServiceConfigurationContext context)
         {
             context.Services
-                .AddBlazorise()
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
         }
@@ -99,13 +99,6 @@ namespace MyCompanyName.MyProjectName.Blazor
             {
                 options.AddMaps<MyProjectNameBlazorModule>();
             });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider
-                .UseBootstrapProviders()
-                .UseFontAwesomeIcons();
         }
     }
 }

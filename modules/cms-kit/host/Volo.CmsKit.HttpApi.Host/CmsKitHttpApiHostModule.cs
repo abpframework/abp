@@ -22,6 +22,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore;
@@ -47,7 +48,8 @@ namespace Volo.CmsKit
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
         )]
     public class CmsKitHttpApiHostModule : AbpModule
     {
@@ -103,12 +105,6 @@ namespace Volo.CmsKit
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
             });
-
-            //Updates AbpClaimTypes to be compatible with identity server claims.
-            AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-            AbpClaimTypes.UserName = JwtClaimTypes.Name;
-            AbpClaimTypes.Role = JwtClaimTypes.Role;
-            AbpClaimTypes.Email = JwtClaimTypes.Email;
 
             context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -172,7 +168,6 @@ namespace Volo.CmsKit
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
-            app.UseAbpClaimsMap();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Authorization.Permissions
@@ -15,5 +16,7 @@ namespace Volo.Abp.Authorization.Permissions
         }
 
         public abstract Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
+
+        public abstract Task<MultiplePermissionGrantResult> CheckAsync(PermissionValuesCheckContext context);
     }
 }

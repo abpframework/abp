@@ -17,8 +17,10 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
@@ -73,6 +75,7 @@ namespace MyCompanyName.MyProjectName.Web
             var configuration = context.Services.GetConfiguration();
 
             ConfigureUrls(configuration);
+            ConfigureBundles();
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
@@ -87,6 +90,20 @@ namespace MyCompanyName.MyProjectName.Web
             Configure<AppUrlOptions>(options =>
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+            });
+        }
+
+        private void ConfigureBundles()
+        {
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options.StyleBundles.Configure(
+                    BasicThemeBundles.Styles.Global,
+                    bundle =>
+                    {
+                        bundle.AddFiles("/global-styles.css");
+                    }
+                );
             });
         }
 
@@ -144,6 +161,7 @@ namespace MyCompanyName.MyProjectName.Web
                 options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
@@ -151,6 +169,8 @@ namespace MyCompanyName.MyProjectName.Web
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+                options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             });
         }
 
@@ -210,6 +230,7 @@ namespace MyCompanyName.MyProjectName.Web
                 app.UseMultiTenancy();
             }
 
+            app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseSwagger();

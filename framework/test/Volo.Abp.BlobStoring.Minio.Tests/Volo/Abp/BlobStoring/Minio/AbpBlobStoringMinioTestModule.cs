@@ -74,7 +74,7 @@ namespace Volo.Abp.BlobStoring.Minio
 
                 await minioClient.RemoveBucketAsync(_randomContainerName);
             }
-           
+
         }
     }
 

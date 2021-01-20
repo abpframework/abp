@@ -1,4 +1,5 @@
 ﻿using Blazorise;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Modularity;
 
@@ -16,8 +17,12 @@ namespace Volo.Abp.BlazoriseUI
 
         private void ConfigureBlazorise(ServiceConfigurationContext context)
         {
-            context.Services
-                .AddBlazorise();
+            context.Services.AddBlazorise(options =>
+            {
+                options.DelayTextOnKeyPress = true;
+            });
+
+            context.Services.AddSingleton(typeof(AbpBlazorMessageLocalizerHelper<>));
         }
     }
 }

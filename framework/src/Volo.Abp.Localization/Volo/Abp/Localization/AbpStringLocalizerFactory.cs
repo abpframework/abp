@@ -58,14 +58,11 @@ namespace Volo.Abp.Localization
                 resource.Contributors.Add((ILocalizationResourceContributor) Activator.CreateInstance(globalContributor));
             }
 
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                var context = new LocalizationResourceInitializationContext(resource, scope.ServiceProvider);
+            var context = new LocalizationResourceInitializationContext(resource, ServiceProvider);
 
-                foreach (var contributor in resource.Contributors)
-                {
-                    contributor.Initialize(context);
-                }
+            foreach (var contributor in resource.Contributors)
+            {
+                contributor.Initialize(context);
             }
 
             return new StringLocalizerCacheItem(

@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 

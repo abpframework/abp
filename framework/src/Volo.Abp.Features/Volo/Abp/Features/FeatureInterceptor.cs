@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -7,12 +9,11 @@ namespace Volo.Abp.Features
 {
     public class FeatureInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly IMethodInvocationFeatureCheckerService _methodInvocationFeatureCheckerService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public FeatureInterceptor(
-            IMethodInvocationFeatureCheckerService methodInvocationFeatureCheckerService)
+        public FeatureInterceptor(IServiceScopeFactory serviceScopeFactory)
         {
-            _methodInvocationFeatureCheckerService = methodInvocationFeatureCheckerService;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
@@ -29,11 +30,14 @@ namespace Volo.Abp.Features
 
         protected virtual async Task CheckFeaturesAsync(IAbpMethodInvocation invocation)
         {
-            await _methodInvocationFeatureCheckerService.CheckAsync(
-                new MethodInvocationFeatureCheckerContext(
-                    invocation.Method
-                )
-            );
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                await scope.ServiceProvider.GetRequiredService<IMethodInvocationFeatureCheckerService>().CheckAsync(
+                    new MethodInvocationFeatureCheckerContext(
+                        invocation.Method
+                    )
+                );
+            }
         }
     }
 }

@@ -49,7 +49,7 @@ export class AppComponent {
 yarn ng generate component my-application-layout
 ```
 
-在你的布局模板(`my-layout.component.html`)中添加以下代码:
+在你的布局模板(`my-application-layout.component.html`)中添加以下代码:
 
 ```html
 <router-outlet></router-outlet>
