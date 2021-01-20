@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -21,9 +22,11 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
             Clock = clock;
         }
 
-        public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(int maxResultCount)
+        public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(
+            int maxResultCount,
+            CancellationToken cancellationToken)
         {
-            return await (await GetWaitingListQuery(maxResultCount)).ToListAsync();
+            return await (await GetWaitingListQuery(maxResultCount)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         protected virtual async Task<IMongoQueryable<BackgroundJobRecord>> GetWaitingListQuery(int maxResultCount)
