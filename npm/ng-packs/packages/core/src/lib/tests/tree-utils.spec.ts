@@ -1,4 +1,9 @@
-import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
+import {
+  BaseTreeNode,
+  createTreeFromList,
+  createTreeNodeFilterCreator,
+  TreeNode,
+} from '../utils/tree-utils';
 
 const LIST_1 = [
   { id: 1, pid: null },
@@ -38,6 +43,42 @@ const TREE_3 = [
     ],
   },
 ];
+const SOURCE_TREE: TreeNode<SearchModel>[] = [
+  {
+    id: 1,
+    pid: null,
+    isLeaf: false,
+    name: 'foo',
+    children: [
+      {
+        id: 2,
+        pid: 1,
+        name: 'bar',
+        isLeaf: false,
+        children: [{ id: 3, pid: 2, name: 'qux', isLeaf: true, children: [] }],
+      },
+      { id: 4, pid: 1, name: 'baz', isLeaf: true, children: [] },
+      { id: 5, pid: 1, name: 'quux', isLeaf: true, children: [] },
+    ],
+  },
+];
+const RESULT_TREE_1 = [
+  { id: 3, pid: 2, name: 'qux', isLeaf: true, children: [] },
+  { id: 5, pid: 1, name: 'quux', isLeaf: true, children: [] },
+];
+const RESULT_TREE_2 = [{ id: 5, pid: 1, name: 'quux', isLeaf: true, children: [] }];
+const RESULT_TREE_3 = [
+  {
+    id: 2,
+    pid: 1,
+    name: 'bar',
+    isLeaf: false,
+    children: [{ id: 3, pid: 2, name: 'qux', isLeaf: true, children: [] }],
+  },
+  { id: 4, pid: 1, name: 'baz', isLeaf: true, children: [] },
+];
+const RESULT_TREE_4 = [{ id: 4, pid: 1, name: 'baz', isLeaf: true, children: [] }];
+
 describe('Tree Utils', () => {
   describe('createTreeFromList', () => {
     test.each`
@@ -56,6 +97,23 @@ describe('Tree Utils', () => {
       expect(removeParents(tree)).toEqual(expected);
     });
   });
+
+  describe('createTreeNodeFilterCreator', () => {
+    test.each`
+      search   | expected
+      ${'qu'}  | ${RESULT_TREE_1}
+      ${'quu'} | ${RESULT_TREE_2}
+      ${'ba'}  | ${RESULT_TREE_3}
+      ${'baz'} | ${RESULT_TREE_4}
+    `(
+      'should return $expected when $search is searched',
+      ({ search, expected }: TestCreateTreeNodeFilter) => {
+        const filter = createTreeNodeFilterCreator('name', String)(search);
+
+        expect(filter(SOURCE_TREE)).toEqual(expected);
+      },
+    );
+  });
 });
 
 function removeParents(tree: TreeNode<Model>[]) {
@@ -72,6 +130,17 @@ interface TestCreateTreeFromList {
 }
 
 interface Model {
-  id: 1;
-  pid: null;
+  id: number;
+  pid?: number;
+}
+
+interface TestCreateTreeNodeFilter {
+  search: string;
+  expected: TreeNode<SearchModel>[];
+}
+
+interface SearchModel {
+  id: number;
+  pid?: number;
+  name: string;
 }
