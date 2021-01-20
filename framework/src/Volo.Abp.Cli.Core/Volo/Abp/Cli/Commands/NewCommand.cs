@@ -248,7 +248,7 @@ namespace Volo.Abp.Cli.Commands
                 case DatabaseManagementSystem.OracleDevart:
                     return "Data Source=MyProjectName;Integrated Security=yes;";
                 case DatabaseManagementSystem.SQLite:
-                    return $"Data Source={Path.Combine(outputFolder,"database\\MyProjectName.db")};Version=3;";
+                    return $"Data Source={Path.Combine(outputFolder , "MyProjectName.db")};".Replace("\\", "\\\\");
                 default:
                     return null;
             }
