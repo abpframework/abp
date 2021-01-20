@@ -19,13 +19,13 @@ namespace Volo.Blogging.Posts
 
         public async Task<List<Post>> GetPostsByBlogId(Guid id, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).Where(p => p.BlogId == id).OrderByDescending(p => p.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetMongoQueryableAsync(cancellationToken)).Where(p => p.BlogId == id).OrderByDescending(p => p.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
 
         public async Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null, CancellationToken cancellationToken = default)
         {
-            var query = (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).Where(p => blogId == p.BlogId && p.Url == url);
+            var query = (await GetMongoQueryableAsync(cancellationToken)).Where(p => blogId == p.BlogId && p.Url == url);
 
             if (excludingPostId != null)
             {
@@ -37,7 +37,7 @@ namespace Volo.Blogging.Posts
 
         public async Task<Post> GetPostByUrl(Guid blogId, string url, CancellationToken cancellationToken = default)
         {
-            var post = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url, GetCancellationToken(cancellationToken));
+            var post = await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url, GetCancellationToken(cancellationToken));
 
             if (post == null)
             {
@@ -49,7 +49,7 @@ namespace Volo.Blogging.Posts
 
         public async Task<List<Post>> GetOrderedList(Guid blogId, bool @descending = false, CancellationToken cancellationToken = default)
         {
-            var query =  (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).Where(x => x.BlogId == blogId);
+            var query =  (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.BlogId == blogId);
 
             if (!descending)
             {

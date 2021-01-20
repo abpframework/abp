@@ -24,7 +24,7 @@ namespace Volo.Abp.SettingManagement.MongoDB
             string providerKey,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(
                     s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey,
@@ -36,7 +36,7 @@ namespace Volo.Abp.SettingManagement.MongoDB
             string providerKey,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -47,7 +47,7 @@ namespace Volo.Abp.SettingManagement.MongoDB
             string providerKey,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .Where(s => names.Contains(s.Name) && s.ProviderName == providerName && s.ProviderKey == providerKey)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

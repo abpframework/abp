@@ -24,7 +24,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 
         public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(
             int maxResultCount,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             return await (await GetWaitingListQueryAsync(maxResultCount)).ToListAsync(GetCancellationToken(cancellationToken));
         }
