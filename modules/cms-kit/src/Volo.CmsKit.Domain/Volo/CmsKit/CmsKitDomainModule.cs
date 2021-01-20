@@ -38,16 +38,9 @@ namespace Volo.CmsKit
 
             });
 
-
             if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
             {
-                Configure<CmsKitTagOptions>(options =>
-                {
-                    if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
-                    {
-                        options.EntityTypes.AddOrReplace(typeof(Page).Name, L("Page"));
-                    }
-                });
+                // TODO: Configure TagEntityTypes here...
             }
         }
 
