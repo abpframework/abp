@@ -115,7 +115,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
                 }
 
-                await AddAngularSourceCode(modulesFolderInSolution, solutionFile);
+                await AddAngularSourceCode(modulesFolderInSolution, solutionFile, module.Name, newTemplate || newProTemplate);
             }
             else
             {
@@ -277,7 +277,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private async Task AddAngularSourceCode(string modulesFolderInSolution, string solutionFilePath)
+        private async Task AddAngularSourceCode(string modulesFolderInSolution, string solutionFilePath, string moduleName, bool newTemplate)
         {
             var angularPath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(solutionFilePath)), "angular");
 
@@ -285,6 +285,11 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 DeleteAngularDirectoriesInModulesFolder(modulesFolderInSolution);
                 return;
+            }
+
+            if (newTemplate)
+            {
+                MoveAngularFolderInNewTemplate(modulesFolderInSolution, moduleName);
             }
 
             await AngularModuleSourceCodeAdder.AddAsync(solutionFilePath, angularPath);
@@ -301,6 +306,30 @@ namespace Volo.Abp.Cli.ProjectModification
                 {
                     Directory.Delete(angDir, true);
                 }
+            }
+        }
+
+        private static void MoveAngularFolderInNewTemplate(string modulesFolderInSolution, string moduleName)
+        {
+            var moduleAngularFolder = Path.Combine(modulesFolderInSolution, moduleName, "angular");
+
+            if (!Directory.Exists(moduleAngularFolder))
+            {
+                return;
+            }
+
+            var files = Directory.GetFiles(moduleAngularFolder);
+            var folders = Directory.GetDirectories(moduleAngularFolder);
+
+            Directory.CreateDirectory(Path.Combine(moduleAngularFolder, moduleName));
+
+            foreach (var file in files)
+            {
+                File.Move(file, Path.Combine(moduleAngularFolder, moduleName, Path.GetFileName(file)));
+            }
+            foreach (var folder in folders)
+            {
+                Directory.Move(folder, Path.Combine(moduleAngularFolder, moduleName, Path.GetFileName(folder)));
             }
         }
 

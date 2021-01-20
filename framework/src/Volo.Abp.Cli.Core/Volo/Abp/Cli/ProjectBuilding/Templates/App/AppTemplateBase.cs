@@ -26,13 +26,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
+            RemoveMigrations(context, steps);
             ConfigurePublicWebSite(context, steps);
             RemoveUnnecessaryPorts(context, steps);
             RandomizeSslPorts(context, steps);
             RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
+            ChangeConnectionString(context, steps);
             CleanupFolderHierarchy(context, steps);
-            RemoveMigrations(context, steps);
 
             return steps;
         }
@@ -139,7 +140,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new ChangePublicAuthPortStep());
             }
 
-            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.NotSpecified || context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
+            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.NotSpecified && context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
             {
                 steps.Add(new RemoveEfCoreDependencyFromPublicStep());
             }
@@ -283,6 +284,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 SemanticVersion.Parse(context.BuildArgs.Version) > new SemanticVersion(4,1,99))
             {
                 steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
+            }
+        }
+
+        private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.ConnectionString != null)
+            {
+                steps.Add(new ConnectionStringChangeStep());
             }
         }
 

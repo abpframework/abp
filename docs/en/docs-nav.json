@@ -681,6 +681,10 @@
                 {
                   "text": "Page Alerts",
                   "path": "UI/Blazor/Page-Alerts.md"
+                },
+                {
+                  "text": "Page Progress",
+                  "path": "UI/Blazor/Page-Progress.md"
                 }
               ]
             },

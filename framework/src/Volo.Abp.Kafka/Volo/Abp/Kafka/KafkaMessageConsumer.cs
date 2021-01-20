@@ -86,7 +86,7 @@ namespace Volo.Abp.Kafka
                 }
                 catch (CreateTopicsException e)
                 {
-                    if (!e.Error.Reason.Contains($"Topic '{TopicName}' already exists"))
+                    if(e.Results.First().Error.Code != ErrorCode.TopicAlreadyExists)
                     {
                         throw;
                     }

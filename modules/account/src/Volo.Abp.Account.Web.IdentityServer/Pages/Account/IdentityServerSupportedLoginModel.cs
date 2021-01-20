@@ -103,9 +103,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public override async Task<IActionResult> OnPostAsync(string action)
         {
+            var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
             if (action == "Cancel")
             {
-                var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
                 if (context == null)
                 {
                     return Redirect("~/");
@@ -142,7 +142,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = result.ToIdentitySecurityLogAction(),
-                UserName = LoginInput.UserNameOrEmailAddress
+                UserName = LoginInput.UserNameOrEmailAddress,
+                ClientId = context?.Client?.ClientId
             });
 
             if (result.RequiresTwoFactor)

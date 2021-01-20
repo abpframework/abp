@@ -11,8 +11,10 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
-        [Obsolete("This will be removed in next versions.")]
-        public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
+        /// <summary>
+        /// Default: false.
+        /// </summary>
+        public static bool EnableObsoleteDbContextCreationWarning { get; } = false;
 
         public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
 
