@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Resources;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Identity;
-using Volo.Abp.Localization;
 using Volo.Abp.Text.Formatting;
 
 namespace Microsoft.AspNetCore.Identity
 {
     public static class AbpIdentityResultExtensions
     {
+        //TODO: cache?
+        private static readonly ResourceManager IdentityResourceManager = new ResourceManager("Microsoft.Extensions.Identity.Core.Resources", typeof(UserManager<>).Assembly);
+
         public static void CheckErrors(this IdentityResult identityResult)
         {
             if (identityResult.Succeeded)
@@ -41,25 +42,19 @@ namespace Microsoft.AspNetCore.Identity
             }
 
             var error = identityResult.Errors.First();
-            var key = $"Volo.Abp.Identity:{error.Code}";
+            var englishString = IdentityResourceManager.GetString(error.Code);
 
-            using (CultureHelper.Use(CultureInfo.GetCultureInfo("en")))
+            if (englishString == null)
             {
-                var englishLocalizedString = localizer[key];
-
-                if (englishLocalizedString.ResourceNotFound)
-                {
-                    return Array.Empty<string>();
-                }
-
-                if (FormattedStringValueExtracter.IsMatch(error.Description, englishLocalizedString.Value,
-                    out var values))
-                {
-                    return values;
-                }
-
                 return Array.Empty<string>();
             }
+
+            if (FormattedStringValueExtracter.IsMatch(error.Description, englishString, out var values))
+            {
+                return values;
+            }
+
+            return Array.Empty<string>();
         }
 
         public static string LocalizeErrors(this IdentityResult identityResult, IStringLocalizer localizer)
@@ -85,16 +80,12 @@ namespace Microsoft.AspNetCore.Identity
 
             if (!localizedString.ResourceNotFound)
             {
-                using (CultureHelper.Use(CultureInfo.GetCultureInfo("en")))
+                var englishString = IdentityResourceManager.GetString(error.Code);
+                if (englishString != null)
                 {
-                    var englishLocalizedString = localizer[key];
-                    if (!englishLocalizedString.ResourceNotFound)
+                    if (FormattedStringValueExtracter.IsMatch(error.Description, englishString, out var values))
                     {
-                        if (FormattedStringValueExtracter.IsMatch(error.Description, englishLocalizedString.Value,
-                            out var values))
-                        {
-                            return string.Format(localizedString.Value, values.Cast<object>().ToArray());
-                        }
+                        return string.Format(localizedString.Value, values.Cast<object>().ToArray());
                     }
                 }
             }
