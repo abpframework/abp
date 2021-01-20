@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
@@ -26,5 +27,7 @@ namespace Volo.CmsKit.Tags
             [NotNull] string name,
             Guid? tenantId = null,
             CancellationToken cancellationToken = default);
+
+        Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync(CancellationToken cancellationToken = default);
     }
 }

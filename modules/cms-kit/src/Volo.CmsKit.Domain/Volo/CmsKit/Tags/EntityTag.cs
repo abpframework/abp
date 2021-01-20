@@ -16,7 +16,7 @@ namespace Volo.CmsKit.Tags
         {
         }
 
-        public EntityTag(Guid tagId, string entityId, Guid? tenantId = null)
+        internal EntityTag(Guid tagId, string entityId, Guid? tenantId = null)
         {
             TagId = tagId;
             EntityId = entityId;
@@ -27,6 +27,5 @@ namespace Volo.CmsKit.Tags
         {
             return new object[] { TagId, EntityId };
         }
-
     }
 }
