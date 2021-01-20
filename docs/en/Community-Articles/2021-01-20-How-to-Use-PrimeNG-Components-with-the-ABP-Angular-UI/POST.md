@@ -6,7 +6,7 @@ In this article, we will use components of the [PrimeNG](https://www.primefaces.
 
 We will create an organization units page and use PrimeNG's [OrganizationChart](https://primefaces.org/primeng/showcase/#/organizationchart) and [Table](https://primefaces.org/primeng/showcase/#/table) components on the page.
 
-TODO: Gif
+![Introduction](intro.gif)
 
 <small>The UI shown above contains many PrimeNG components. You can reach the source code of this rich UI. Take a look at the source code section below.</small>
 
