@@ -236,7 +236,8 @@ public class BookRepository
 
     public async Task DeleteBooksByType(BookType type)
     {
-        await DbContext.Database.ExecuteSqlRawAsync(
+        var dbContext = await GetDbContextAsync();
+        await dbContext.Database.ExecuteSqlRawAsync(
             $"DELETE FROM Books WHERE Type = {(int)type}"
         );
     }
