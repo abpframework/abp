@@ -22,7 +22,7 @@ The following tools should be installed on your development machine:
 
 ## Source Code
 
-TODO: Source code link
+I have prepared a sample project that contains more PrimeNG components than described in this article. You can download the source code [on GitHub](https://github.com/abpframework/abp-samples/tree/master/PrimengSample).
 
 ## Creating a New Solution
 
@@ -340,4 +340,4 @@ After adding the table, the final UI looks like this:
 
 ## Conclusion
 
-TODO
+We have implemented the PrimeNG component library on the ABP Angular UI project and used two components on a page in a short time. You can use any PrimeNG components by following the documentation. The ABP Angular UI will not block you in any case.
