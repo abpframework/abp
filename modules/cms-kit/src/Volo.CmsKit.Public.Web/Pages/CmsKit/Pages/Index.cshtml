@@ -1,4 +1,4 @@
-﻿@page "{pageUrl}"
+﻿@page "{*pageUrl}"
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.CmsKit.Localization
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
@@ -9,6 +9,5 @@
     new
     {
         pageId = Model.Page.Id,
-        title = Model.Page.Title,
-        description = Model.Page.Description
+        title = Model.Page.Title
     })

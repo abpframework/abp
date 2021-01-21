@@ -2,6 +2,7 @@
   "culture": "tr",
   "texts": {
     "CmsKit:0002": "İçerik zaten mevcut!",
+    "CmsKit:0003": "{0} ögesi etiketlenebilir değil.",
     "CommentAuthorizationExceptionMessage": "Bu yorumları görebilmek için yetki gerekir.",
     "Comments": "Yorumlar",
     "Delete": "Sil",
@@ -30,6 +31,7 @@
     "Undo": "Geri al",
     "Update": "Güncelle",
     "YourComment": "Yorumunuz",
-    "YourReply": "Cevabınız"
+    "YourReply": "Cevabınız",
+    "CmsKit:Page:0001": "Girilen url ({0}) kullanımdadır."
   }
 }

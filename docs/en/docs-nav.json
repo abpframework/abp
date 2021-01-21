@@ -681,6 +681,10 @@
                 {
                   "text": "Page Alerts",
                   "path": "UI/Blazor/Page-Alerts.md"
+                },
+                {
+                  "text": "Page Progress",
+                  "path": "UI/Blazor/Page-Progress.md"
                 }
               ]
             },
@@ -822,6 +826,10 @@
                 {
                   "text": "Toast Overlay",
                   "path": "UI/Angular/Toaster-Service.md"
+                },
+                {
+                  "text": "Page Alerts",
+                  "path": "UI/Angular/Page-Alerts.md"
                 }
               ]
             },

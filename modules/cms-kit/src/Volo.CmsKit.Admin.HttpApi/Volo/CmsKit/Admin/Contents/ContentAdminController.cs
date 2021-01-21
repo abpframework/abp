@@ -48,7 +48,7 @@ namespace Volo.CmsKit.Admin.Contents
 
         [HttpGet]
         [Authorize(CmsKitAdminPermissions.Contents.Default)]
-        public Task<PagedResultDto<ContentDto>> GetListAsync(ContentGetListInput input)
+        public Task<PagedResultDto<ContentGetListDto>> GetListAsync(ContentGetListInput input)
         {
             return ContentAdminAppService.GetListAsync(input);
         }

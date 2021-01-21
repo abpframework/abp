@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
@@ -56,7 +57,7 @@ namespace Volo.CmsKit.Public.Web
 
             Configure<RazorPagesOptions>(options =>
             {
-                //...
+                options.Conventions.AddPageRoute("/CmsKit/Pages/Index", "/{*pageUrl}");
             });
         }
     }

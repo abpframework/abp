@@ -226,8 +226,6 @@ namespace Volo.Abp.Cli.Commands
                 }
             }
 
-            DeleteMigrationsIfNeeded(databaseProvider, databaseManagementSystem, outputFolder);
-
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
 
@@ -250,27 +248,10 @@ namespace Volo.Abp.Cli.Commands
                 case DatabaseManagementSystem.OracleDevart:
                     return "Data Source=MyProjectName;Integrated Security=yes;";
                 case DatabaseManagementSystem.SQLite:
-                    return $"Data Source={Path.Combine(outputFolder,"database\\MyProjectName.db")};Version=3;";
+                    return $"Data Source={Path.Combine(outputFolder , "MyProjectName.db")};".Replace("\\", "\\\\");
                 default:
                     return null;
             }
-        }
-
-        private void DeleteMigrationsIfNeeded(DatabaseProvider databaseProvider, DatabaseManagementSystem databaseManagementSystem, string outputFolder)
-        {
-            if (databaseManagementSystem == DatabaseManagementSystem.NotSpecified || databaseManagementSystem == DatabaseManagementSystem.SQLServer)
-            {
-                return;
-            }
-
-            if (databaseProvider != DatabaseProvider.NotSpecified && databaseProvider != DatabaseProvider.EntityFrameworkCore)
-            {
-                return;
-            }
-
-            Logger.LogInformation($"Deleting migrations...");
-
-            _efCoreMigrationManager.RemoveAllMigrations(outputFolder);
         }
 
         private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
