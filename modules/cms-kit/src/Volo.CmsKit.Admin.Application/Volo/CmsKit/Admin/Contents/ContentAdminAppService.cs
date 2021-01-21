@@ -14,6 +14,7 @@ namespace Volo.CmsKit.Admin.Contents
         CrudAppService<
             Content,
             ContentDto,
+            ContentGetListDto,
             Guid,
             ContentGetListInput,
             ContentCreateDto,
@@ -51,7 +52,7 @@ namespace Volo.CmsKit.Admin.Contents
 
             await ContentManager.InsertAsync(entity);
 
-            return MapToGetListOutputDto(entity);
+            return MapToGetOutputDto(entity);
         }
     }
 }

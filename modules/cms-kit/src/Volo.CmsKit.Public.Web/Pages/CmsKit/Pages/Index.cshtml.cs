@@ -19,9 +19,16 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Pages
             PageAppService = pageAppService;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Page = await PageAppService.GetByUrlAsync(PageUrl);
+            Page = await PageAppService.FindByUrlAsync(PageUrl);
+
+            if (Page == null)
+            {
+                return NotFound();
+            }
+
+            return Page();
         }
     }
 }

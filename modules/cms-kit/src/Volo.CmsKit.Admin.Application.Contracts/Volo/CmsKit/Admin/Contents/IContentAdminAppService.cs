@@ -7,6 +7,7 @@ namespace Volo.CmsKit.Admin.Contents
     public interface IContentAdminAppService 
         : ICrudAppService<
             ContentDto,
+            ContentGetListDto,
             Guid,
             ContentGetListInput,
             ContentCreateDto,
