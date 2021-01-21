@@ -43,12 +43,14 @@ public class Book : AggregateRoot<Guid>
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            throw new ArgumentException($"name can not be empty or white space!");
+            throw new ArgumentException(
+                $"name can not be empty or white space!");
         }
 
         if (name.Length > MaxNameLength)
         {
-            throw new ArgumentException($"name can not be longer than {MaxNameLength} chars!");
+            throw new ArgumentException(
+                $"name can not be longer than {MaxNameLength} chars!");
         }
 
         return name;
@@ -349,8 +351,9 @@ public class DistrictAppService
 
     protected async override Task<District> GetEntityByIdAsync(DistrictKey id)
     {
+        var queryable = await Repository.GetQueryableAsync();
         return await AsyncQueryableExecuter.FirstOrDefaultAsync(
-            Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
+            queryable.Where(d => d.CityId == id.CityId && d.Name == id.Name)
         );
     }
 }
