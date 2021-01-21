@@ -76,7 +76,7 @@ The packages we have installed;
 
 As the last step of the setup, we should add the required style files for the library to `angular.json`:
 
-```json
+```js
 //angular.json
 
 "projects": {
