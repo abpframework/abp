@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Resources;
 using Microsoft.Extensions.Localization;
+using Volo.Abp;
 using Volo.Abp.Identity;
 using Volo.Abp.Text.Formatting;
 
@@ -10,8 +12,38 @@ namespace Microsoft.AspNetCore.Identity
 {
     public static class AbpIdentityResultExtensions
     {
-        //TODO: cache?
-        private static readonly ResourceManager IdentityResourceManager = new ResourceManager("Microsoft.Extensions.Identity.Core.Resources", typeof(UserManager<>).Assembly);
+        private static readonly Dictionary<string, string> IdentityStrings = new Dictionary<string, string>();
+
+        static AbpIdentityResultExtensions()
+        {
+            var identityResourceManager = new ResourceManager("Microsoft.Extensions.Identity.Core.Resources", typeof(UserManager<>).Assembly);
+            var resourceSet = identityResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, false);
+            if (resourceSet == null)
+            {
+                throw new AbpException("Can't get the ResourceSet of Identity.");
+            }
+
+            var iterator = resourceSet.GetEnumerator();
+            while (true)
+            {
+                if (!iterator.MoveNext())
+                {
+                    break;
+                }
+
+                var key = iterator.Key?.ToString();
+                var value = iterator.Value?.ToString();
+                if (key != null && value != null)
+                {
+                    IdentityStrings.Add(key, value);
+                }
+            }
+
+            if (!IdentityStrings.Any())
+            {
+                throw new AbpException("ResourceSet values of Identity is empty.");
+            }
+        }
 
         public static void CheckErrors(this IdentityResult identityResult)
         {
@@ -42,7 +74,7 @@ namespace Microsoft.AspNetCore.Identity
             }
 
             var error = identityResult.Errors.First();
-            var englishString = IdentityResourceManager.GetString(error.Code);
+            var englishString = IdentityStrings.GetOrDefault(error.Code);
 
             if (englishString == null)
             {
@@ -80,7 +112,7 @@ namespace Microsoft.AspNetCore.Identity
 
             if (!localizedString.ResourceNotFound)
             {
-                var englishString = IdentityResourceManager.GetString(error.Code);
+                var englishString = IdentityStrings.GetOrDefault(error.Code);
                 if (englishString != null)
                 {
                     if (FormattedStringValueExtracter.IsMatch(error.Description, englishString, out var values))
