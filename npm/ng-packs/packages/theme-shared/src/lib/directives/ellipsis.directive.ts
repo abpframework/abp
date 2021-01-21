@@ -44,3 +44,9 @@ export class EllipsisDirective implements AfterViewInit {
     this.cdRef.detectChanges();
   }
 }
+
+@NgModule({
+  exports: [EllipsisDirective],
+  declarations: [EllipsisDirective],
+})
+export class EllipsisModule {}
