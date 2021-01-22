@@ -1,12 +1,11 @@
 ﻿using JetBrains.Annotations;
-using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
 
 namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
 {
-    public class TableColumn : IEquatable<TableColumn>
+    public class TableColumn
     {
         public string Title { get; set; }
         public string Data { get; set; }
@@ -17,12 +16,6 @@ namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
         public TableColumn()
         {
             Actions = new List<EntityAction>();
-        }
-
-        public bool Equals(TableColumn other)
-        {
-            return string.Equals(Title, other?.Title, StringComparison.OrdinalIgnoreCase) &&
-                   string.Equals(Data, other?.Data, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
