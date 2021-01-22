@@ -68,32 +68,5 @@ namespace Volo.CmsKit.Admin.Contents
 
             return ObjectMapper.Map<Content, ContentDto>(content);
         }
-
-        public async Task SetByEntityAsync(
-            [NotNull] string entityType,
-            [NotNull] string entityId,
-            ContentSetByEntityInput input)
-        {
-            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
-            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
-
-            var updated = await ContentRepository.FindAsync(entityType, entityId);
-
-            if (updated == null)
-            {
-                await ContentRepository.InsertAsync(
-                    new Content(
-                        GuidGenerator.Create(),
-                        entityType,
-                        entityId,
-                        input.Value,
-                        CurrentTenant?.Id));
-            }
-            else
-            {
-                updated.SetValue(input.Value);
-                await ContentRepository.UpdateAsync(updated);
-            }
-        }
     }
 }
