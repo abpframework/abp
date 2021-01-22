@@ -8,8 +8,6 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.TenantManagement
 {
-    //TODO: This class should use caching instead of querying everytime!
-
     public class TenantStore : ITenantStore, ITransientDependency
     {
         protected ITenantRepository TenantRepository { get; }
