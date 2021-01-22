@@ -830,6 +830,10 @@
                 {
                   "text": "Page Alerts",
                   "path": "UI/Angular/Page-Alerts.md"
+                },
+                {
+                  "text": "Ellipsis",
+                  "path": "UI/Angular/Ellipsis-Directive.md"
                 }
               ]
             },
