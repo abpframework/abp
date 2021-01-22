@@ -14,6 +14,6 @@ namespace Volo.CmsKit.Admin.Contents
             ContentCreateDto,
             ContentUpdateDto>
     {
-        Task<ContentDto> GetByEntityAsync(string entityType, string entityId);
+        Task<ContentDto> GetAsync(string entityType, string entityId);
     }
 }

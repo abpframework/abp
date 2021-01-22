@@ -132,7 +132,7 @@ namespace Volo.CmsKit.Contents
         [Fact]
         public async Task ShouldGetByEntityAsync()
         {
-            var entity = await _service.GetByEntityAsync(_data.Content_1_EntityType, _data.Content_1_EntityId);
+            var entity = await _service.GetAsync(_data.Content_1_EntityType, _data.Content_1_EntityId);
 
             entity.ShouldNotBeNull();
             entity.EntityId.ShouldBe(_data.Content_1_EntityId);
