@@ -12,6 +12,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
         {
         }
 
+        public static bool IsMicroserviceTemplate(string templateName)
+        {
+            return templateName == MicroserviceProTemplate.TemplateName;
+        }
+
         public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
         {
             var steps = new List<ProjectBuildPipelineStep>();
