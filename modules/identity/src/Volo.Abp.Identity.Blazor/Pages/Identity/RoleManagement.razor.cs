@@ -8,6 +8,8 @@ using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.PermissionManagement.Blazor.Components;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
@@ -23,7 +25,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected PageToolbar Toolbar { get; set; }
 
-        private List<TableColumn> RoleManagementTableColumns => TableColumns.Get<RoleManagement>();
+        protected List<TableColumn> RoleManagementTableColumns => TableColumns.Get<RoleManagement>();
 
         public RoleManagement()
         {
@@ -76,8 +78,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override ValueTask SetTableColumnsAsync()
         {
-            TableColumns
-                .Get<RoleManagement>()
+            RoleManagementTableColumns
                 .AddRange(new TableColumn[]
                 {
                     new TableColumn
@@ -93,6 +94,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     },
                 });
 
+            RoleManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName, IdentityModuleExtensionConsts.EntityNames.Role));
             return base.SetTableColumnsAsync();
         }
 
