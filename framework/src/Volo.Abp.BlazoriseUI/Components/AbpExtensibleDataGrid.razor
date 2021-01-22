@@ -1,7 +1,7 @@
 ﻿@typeparam TItem
 @using Blazorise.DataGrid;
-@using Volo.Abp.AspNetCore.Components.Extensibility
-
+@using Volo.Abp.Data
+@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
 
 <DataGrid TItem="TItem"
           Data="@Data"
@@ -47,7 +47,7 @@
                 {
                     @if (column.Component != null)
                     {
-                        <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title">
+                        <DataGridColumn TItem="TItem" Field="@typeof(TItem).GetProperties().First().Name" Caption="@column.Title">
                             <DisplayTemplate>
                                 @RenderCustomTableColumnComponent(column.Component, context)
                             </DisplayTemplate>
@@ -55,7 +55,24 @@
                     }
                     else
                     {
-                        <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title"/>
+                        if (!ExtensionPropertiesRegex.IsMatch(column.Data))
+                        {
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" />
+                        }
+                        else
+                        {
+                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" Caption="@column.Title">
+                                <DisplayTemplate>
+                                    @{
+                                        var entity = context as IHasExtraProperties;
+                                        var propertyName = ExtensionPropertiesRegex.Match(column.Data).Groups[1].Value;
+                                        var propertyValue = entity.GetProperty(propertyName);
+                                        @(propertyValue)
+                                    }
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        }
+
                     }
                 }
             }

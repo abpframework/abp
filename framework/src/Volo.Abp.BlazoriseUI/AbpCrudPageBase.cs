@@ -15,9 +15,10 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.Localization;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
+using Volo.Abp.ObjectExtending.Modularity;
 
 namespace Volo.Abp.BlazoriseUI
 {
@@ -478,10 +479,39 @@ namespace Volo.Abp.BlazoriseUI
         {
             return ValueTask.CompletedTask;
         }
-        
+
         protected virtual ValueTask SetToolbarItemsAsync()
         {
             return ValueTask.CompletedTask;
+        }
+
+        protected virtual IEnumerable<TableColumn> GetExtensionTableColumns(string moduleName, string entityType)
+        {
+            var properties = ModuleExtensionConfigurationHelper.GetPropertyConfigurations(moduleName, entityType);
+            foreach (var propertyInfo in properties)
+            {
+                if (propertyInfo.IsAvailableToClients && propertyInfo.UI.OnTable.IsVisible)
+                {
+                    if (propertyInfo.Name.EndsWith("_Text"))
+                    {
+                        var lookupPropertyName = propertyInfo.Name.RemovePostFix("_Text");
+                        var lookupPropertyDefinition = properties.SingleOrDefault(t => t.Name == lookupPropertyName);
+                        yield return new TableColumn
+                        {
+                            Title = lookupPropertyDefinition.GetLocalizedDisplayName(StringLocalizerFactory),
+                            Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        };
+                    }
+                    else
+                    {
+                        yield return new TableColumn
+                        {
+                            Title = propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory),
+                            Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        };
+                    }
+                }
+            }
         }
     }
 }

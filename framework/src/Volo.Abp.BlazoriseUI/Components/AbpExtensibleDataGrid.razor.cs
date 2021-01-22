@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
@@ -14,6 +16,8 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         protected Dictionary<string, DataGridEntityActionsColumn<TItem>> ActionColumns =
             new Dictionary<string, DataGridEntityActionsColumn<TItem>>();
+
+        protected Regex ExtensionPropertiesRegex = new Regex(@"ExtraProperties\[(.*?)\]");
 
         [Parameter] public IEnumerable<TItem> Data { get; set; }
 
