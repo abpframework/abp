@@ -387,6 +387,12 @@ namespace Acme.BookStore.Books
 
         public override async Task<PagedResultDto<BookDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
+            //Set a default sorting, if not provided
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(Book.Name);
+            }
+            
             //Get the IQueryable<Book> from the repository
             var queryable = await Repository.GetQueryableAsync();
 
@@ -489,8 +495,6 @@ namespace Acme.BookStore.Books
 
         public async override Task<BookDto> GetAsync(Guid id)
         {
-            await CheckGetPolicyAsync();
-
             var book = await Repository.GetAsync(id);
             var bookDto = ObjectMapper.Map<Book, BookDto>(book);
 
@@ -503,8 +507,6 @@ namespace Acme.BookStore.Books
         public async override Task<PagedResultDto<BookDto>>
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            await CheckGetListPolicyAsync();
-
             //Set a default sorting, if not provided
             if (input.Sorting.IsNullOrWhiteSpace())
             {
