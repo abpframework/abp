@@ -57,6 +57,15 @@ ABP may start a database transaction when you get an `IQueryable` (If current [U
 
 > **The new way has a significant performance and scalability gain. The old usage (directly using LINQ over the repositories) will be removed in the next major version (5.0).** You have a lot of time for the change, but we recommend to immediately take the action since the old usage has a big **scalability problem**.
 
+### Actions to Take
+
+* Use the repository's queryable feature as explained before.
+* If you've overridden `CreateFilteredQuery` in a class derived from `CrudAppService`, you should override the `CreateFilteredQueryAsync` instead and remove the `CreateFilteredQuery` in your class.
+* If you've overridden `WithDetails` in your custom repositories, remove it and override `WithDetailsAsync` instead.
+* If you've used `DbContext` or `DbSet` properties in your custom repositories, use `GetDbContextAsync()` and `GetDbSetAsync()` methods instead of them.
+
+You can re-build your solution and check the `Obsolete` warnings to find some of the usages need to change.
+
 #### About IRepository Async Extension Methods
 
 Using IRepository Async Extension Methods has no such a problem. The examples below are pretty fine:
