@@ -144,7 +144,7 @@ public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
     bool includeDetails = true,
     CancellationToken cancellationToken = default)
 {
-    return await DbSet
+    return await (await GetDbSetAsync())
         .IncludeDetails(includeDetails)
         .FirstOrDefaultAsync(
             u => u.NormalizedUserName == normalizedUserName,
@@ -175,14 +175,15 @@ public static IQueryable<IdentityUser> IncludeDetails(
 }
 ````
 
-* **Do** use the `IncludeDetails` extension method in the repository methods just like used in the example code above (see FindByNormalizedUserNameAsync).
+* **Do** use the `IncludeDetails` extension method in the repository methods just like used in the example code above (see `FindByNormalizedUserNameAsync`).
 
 - **Do** override `WithDetails` method of the repository for aggregates root which have **sub collections**. Example:
 
 ````C#
-public override IQueryable<IdentityUser> WithDetails()
+public override async Task<IQueryable<IdentityUser>> WithDetailsAsync()
 {
-    return GetQueryable().IncludeDetails(); // Uses the extension method defined above
+    // Uses the extension method defined above
+    return (await GetQueryableAsync()).IncludeDetails();
 }
 ````
 
