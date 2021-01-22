@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.CmsKit.Contents;
@@ -31,13 +33,13 @@ namespace Volo.CmsKit.Admin.Contents
             IContentRepository contentRepository) : base(repository)
         {
             ContentManager = contentManager;
+            ContentRepository = contentRepository;
 
             GetListPolicyName = CmsKitAdminPermissions.Contents.Default;
             GetPolicyName = CmsKitAdminPermissions.Contents.Default;
             CreatePolicyName = CmsKitAdminPermissions.Contents.Create;
             UpdatePolicyName = CmsKitAdminPermissions.Contents.Update;
             DeletePolicyName = CmsKitAdminPermissions.Contents.Delete;
-            ContentRepository = contentRepository;
         }
 
         [Authorize(CmsKitAdminPermissions.Contents.Create)]
@@ -53,6 +55,18 @@ namespace Volo.CmsKit.Admin.Contents
             await ContentManager.InsertAsync(entity);
 
             return MapToGetOutputDto(entity);
+        }
+
+        public async Task<ContentDto> GetAsync(
+            [NotNull] string entityType,
+            [NotNull] string entityId)
+        {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
+
+            var content = await ContentRepository.GetAsync(entityType, entityId, CurrentTenant?.Id);
+
+            return ObjectMapper.Map<Content, ContentDto>(content);
         }
     }
 }

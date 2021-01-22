@@ -128,5 +128,15 @@ namespace Volo.CmsKit.Contents
             await Should.NotThrowAsync(async () =>
                 await _service.DeleteAsync(_data.Content_2_Id));
         }
+
+        [Fact]
+        public async Task ShouldGetByEntityAsync()
+        {
+            var entity = await _service.GetAsync(_data.Content_1_EntityType, _data.Content_1_EntityId);
+
+            entity.ShouldNotBeNull();
+            entity.EntityId.ShouldBe(_data.Content_1_EntityId);
+            entity.EntityType.ShouldBe(_data.Content_1_EntityType);
+        }
     }
 }
