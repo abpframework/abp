@@ -3,7 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Pages
 {
-    public class PageDto : EntityDto<Guid>
+    public class PageDto : AuditedEntityDto<Guid>
     {
         public string Title { get; set; }
 
