@@ -106,7 +106,7 @@ Run the following command to create a new module named `OrganizationUnits`:
 npm run ng -- generate module organization-units --route organization-units --module app.module
 ```
 
-Then open the `src/route.provider.ts` and add a new route as an array element to add the organization units navigation link to the menu:
+Then open the `src/route.provider.ts` and add a new route as an array element to add a navigation link labeled "Organization Units" to the menu:
 
 ```js
 //route.provider.ts
