@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Public.Web.Menus;
 using Volo.CmsKit.Web;
@@ -57,7 +59,11 @@ namespace Volo.CmsKit.Public.Web
 
             Configure<RazorPagesOptions>(options =>
             {
-                options.Conventions.AddPageRoute("/CmsKit/Pages/Index", "/{*pageUrl}");
+                if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+                {
+                    // TODO: Work on this route logic. Blocks some routes with this logic.
+                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", "/{*pageUrl}");
+                }
             });
         }
     }
