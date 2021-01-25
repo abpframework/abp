@@ -24,17 +24,14 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task<T> GetAsync(string key)
         {
-            var newKey = GetKey(key);
-            return await Cache.GetAsync(newKey);
+            return await Cache.GetAsync(key);
         }
 
         public virtual async Task SetAsync(string key, T item, TimeSpan expiration)
         {
-            var newKey = GetKey(key);
+            AllKeys.Add(key);
 
-            AllKeys.Add(newKey);
-
-            await Cache.SetAsync(newKey, item, new DistributedCacheEntryOptions()
+            await Cache.SetAsync(key, item, new DistributedCacheEntryOptions()
             {
                 AbsoluteExpirationRelativeToNow = expiration
             });
@@ -42,22 +39,17 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task RemoveAsync(string key)
         {
-            var newKey = GetKey(key);
-            await Cache.RemoveAsync(newKey);
+            await Cache.RemoveAsync(key);
         }
 
         public virtual async Task RemoveAllAsync()
         {
-            foreach (var key in AllKeys.Distinct())
+            var keys = AllKeys.ToArray();
+            AllKeys.Clear();
+            foreach (var key in keys.Distinct())
             {
-                var newKey = GetKey(key);
-                await Cache.RemoveAsync(newKey);
+                await Cache.RemoveAsync(key);
             }
-        }
-
-        protected virtual string GetKey(string key)
-        {
-            return key;
         }
     }
 }
