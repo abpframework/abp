@@ -12,7 +12,7 @@ namespace Volo.CmsKit.Tags
         [CanBeNull]
         public virtual ILocalizableString DisplayName { get; }
 
-        public TagEntityTypeDefiniton()
+        protected TagEntityTypeDefiniton()
         {
         }
 
