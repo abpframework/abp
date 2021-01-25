@@ -27,5 +27,10 @@ namespace Volo.Abp.IdentityServer
         /// Set false to suppress AddDeveloperSigningCredential() call on the IIdentityServerBuilder.
         /// </summary>
         public bool AddDeveloperSigningCredential { get; set; } = true;
+
+        /// <summary>
+        /// https://identityserver4.readthedocs.io/en/latest/reference/options.html#caching
+        /// </summary>
+        public bool EnableMemoryCaching { get; set; } = true;
     }
 }

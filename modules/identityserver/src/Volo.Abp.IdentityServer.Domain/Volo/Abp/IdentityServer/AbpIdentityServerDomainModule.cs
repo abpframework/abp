@@ -100,6 +100,16 @@ namespace Volo.Abp.IdentityServer
                 identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
             }
 
+            if (builderOptions.EnableMemoryCaching)
+            {
+                // https://identityserver4.readthedocs.io/en/latest/reference/options.html#caching
+                identityServerBuilder.AddInMemoryCaching();
+                identityServerBuilder.AddClientStoreCache<ClientStore>();
+                identityServerBuilder.AddResourceStoreCache<ResourceStore>();
+                // Already has cache feature in AbpCorsPolicyService
+                //identityServerBuilder.AddCorsPolicyCache<AbpCorsPolicyService>();
+            }
+
             identityServerBuilder.AddExtensionGrantValidator<LinkLoginExtensionGrantValidator>();
         }
 
