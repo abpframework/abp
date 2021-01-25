@@ -31,6 +31,6 @@ namespace Volo.Abp.IdentityServer
         /// <summary>
         /// https://identityserver4.readthedocs.io/en/latest/reference/options.html#caching
         /// </summary>
-        public bool EnableMemoryCaching { get; set; } = true;
+        public bool EnableCaching { get; set; } = true;
     }
 }
