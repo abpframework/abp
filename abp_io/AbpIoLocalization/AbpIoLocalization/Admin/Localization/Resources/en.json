@@ -203,7 +203,16 @@
     "VideoPreviewErrorMessage": "Given video url couldn't retrieve from Youtube. This can be caused by either video is private or the given URL is not available.",
     "DeleteCoverImage": "Delete Cover Image",
     "DeleteCoverImageConfirmationMessage": "Are you sure you want to delete the cover image for \"{0}\"?",
-    "DeleteCoverImageSuccessMessage": "Cover image successfully deleted"
+    "DeleteCoverImageSuccessMessage": "Cover image successfully deleted",
+    "PaymentsOf": "Payments of",
+    "ShowPaymentsOfOrganization": "Show payments",
+    "Date": "Date",
+    "Products": "Products",
+    "TotalAmount": "Total amount",
+    "Currency": "Currency",
+    "Gateway": "Gateway",
+    "State": "State",
+    "FailReason": "Fail reason"
       
   }
 }
