@@ -84,36 +84,6 @@ namespace Volo.Abp.BlazoriseUI
             return (T)value;
         }
 
-        public static bool GetBooleanInputValueOrDefault(this IBasicObjectExtensionPropertyInfo property, object value)
-        {
-            if (value == null)
-            {
-                return false;
-            }
-
-            return (bool)value;
-        }
-
-        public static DateTime? GetDateInputValueOrDefault(this IBasicObjectExtensionPropertyInfo property, object value)
-        {
-            if (value == null)
-            {
-                return default;
-            }
-
-            return (DateTime?)value;
-        }
-
-        public static TimeSpan? GetTimeInputValueOrDefault(this IBasicObjectExtensionPropertyInfo property, object value)
-        {
-            if (value == null)
-            {
-                return default;
-            }
-
-            return (TimeSpan?)value;
-        }
-
         public static TextInputMode GetTextInputMode(this ObjectExtensionPropertyInfo propertyInfo)
         {
             foreach (var attribute in propertyInfo.Attributes)
@@ -211,11 +181,6 @@ namespace Volo.Abp.BlazoriseUI
             //if (attribute is HiddenInputAttribute)
             //{
             //    return "hidden";
-            //}
-
-            //if (attribute is PhoneAttribute)
-            //{
-            //    return TextRole.Tel;
             //}
 
             if (attribute is DataTypeAttribute dataTypeAttribute)
