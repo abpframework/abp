@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using IdentityServer4.Services;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -24,14 +25,14 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task<T> GetAsync(string key)
         {
-            return (await Cache.GetAsync(key))?.Value;
+            return (await Cache.GetAsync(GetCacheKey(key)))?.Value;
         }
 
         public virtual async Task SetAsync(string key, T item, TimeSpan expiration)
         {
-            AllKeys.Add(key);
+            AllKeys.Add(GetCacheKey(key));
 
-            await Cache.SetAsync(key, new IdentityServerDistributedCacheItem<T>(item), new DistributedCacheEntryOptions()
+            await Cache.SetAsync(GetCacheKey(key), new IdentityServerDistributedCacheItem<T>(item), new DistributedCacheEntryOptions()
             {
                 AbsoluteExpirationRelativeToNow = expiration
             });
@@ -39,7 +40,7 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task RemoveAsync(string key)
         {
-            await Cache.RemoveAsync(key);
+            await Cache.RemoveAsync(GetCacheKey(key));
         }
 
         public virtual async Task RemoveAllAsync()
@@ -50,6 +51,11 @@ namespace Volo.Abp.IdentityServer
             {
                 await Cache.RemoveAsync(key);
             }
+        }
+
+        protected virtual string GetCacheKey(string key)
+        {
+            return TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(T)) + ":" + key;
         }
     }
 }

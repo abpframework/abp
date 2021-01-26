@@ -1,4 +1,6 @@
-﻿using IdentityServer4.Services;
+﻿using System.Collections;
+using System.Collections.Generic;
+using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -102,14 +104,35 @@ namespace Volo.Abp.IdentityServer
 
             if (builderOptions.EnableCaching)
             {
-                identityServerBuilder.Services.AddTransient(typeof(IdentityServerCacheItemInvalidator));
-                identityServerBuilder.Services.AddSingleton(typeof(ICache<>), typeof(IdentityServerDistributedCache<>));
+                identityServerBuilder.Services.AddSingleton(typeof(IdentityServerDistributedCache<>));
+                identityServerBuilder.Services
+                    .AddSingleton<ICache<IdentityServer4.Models.Client>>(provider =>
+                    provider.GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Client>>());
+
+                identityServerBuilder.Services
+                    .AddSingleton<ICache<IdentityServer4.Models.Resources>>(provider =>
+                        provider.GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Resources>>());
+
+                identityServerBuilder.Services
+                    .AddSingleton<ICache<IEnumerable<IdentityServer4.Models.IdentityResource>>>(provider =>
+                        provider.GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.IdentityResource>>>());
+
+                identityServerBuilder.Services
+                    .AddSingleton<ICache<IEnumerable<IdentityServer4.Models.ApiResource>>>(
+                    provider => provider.GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>>>());
+
+                identityServerBuilder.Services
+                    .AddSingleton<ICache<IEnumerable<IdentityServer4.Models.ApiScope>>>(
+                    provider => provider.GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiScope>>>());
+
+                identityServerBuilder.Services
+                    .AddSingleton<ICache<CachingCorsPolicyService<AbpCorsPolicyService>.CorsCacheEntry>>(
+                        provider => provider.GetRequiredService<IdentityServerDistributedCache<CachingCorsPolicyService<AbpCorsPolicyService>.CorsCacheEntry>>());
 
                 identityServerBuilder.AddClientStoreCache<ClientStore>();
                 identityServerBuilder.AddResourceStoreCache<ResourceStore>();
-
-                // Already has cache feature in AbpCorsPolicyService
-                //identityServerBuilder.AddCorsPolicyCache<AbpCorsPolicyService>();
+                identityServerBuilder.AddCorsPolicyCache<AbpCorsPolicyService>();
+                identityServerBuilder.Services.AddTransient(typeof(IdentityServerCacheItemInvalidator));
             }
 
             identityServerBuilder.AddExtensionGrantValidator<LinkLoginExtensionGrantValidator>();

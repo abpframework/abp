@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using IdentityServer4.Services;
+using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 using Volo.Abp.IdentityServer.Clients;
@@ -17,7 +16,8 @@ namespace Volo.Abp.IdentityServer
         ILocalEventHandler<EntityChangedEventData<Client>>,
         ILocalEventHandler<EntityChangedEventData<IdentityResource>>,
         ILocalEventHandler<EntityChangedEventData<ApiResource>>,
-        ILocalEventHandler<EntityChangedEventData<ApiScope>>
+        ILocalEventHandler<EntityChangedEventData<ApiScope>>,
+        ILocalEventHandler<EntityChangedEventData<ClientCorsOrigin>>
     {
         protected IServiceProvider ServiceProvider { get; }
 
@@ -28,68 +28,51 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
         {
-            var cache = ServiceProvider.GetRequiredService<ICache<IdentityServer4.Models.Client>>();
+            var cache = ServiceProvider.GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Client>>();
+            await cache.RemoveAsync(eventData.Entity.ClientId);
 
-            if (cache is IdentityServerDistributedCache<IdentityServer4.Models.Client> identityServerDistributedCache)
-            {
-                await identityServerDistributedCache.RemoveAsync(eventData.Entity.ClientId);
-            }
-            else
-            {
-                LogUnCompatibleError<Client>();
-            }
+            var corsCache = ServiceProvider
+                .GetRequiredService<IdentityServerDistributedCache<CachingCorsPolicyService<AbpCorsPolicyService>.CorsCacheEntry>>();
+            await corsCache.RemoveAllAsync();
         }
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<IdentityResource> eventData)
         {
-            var cache = ServiceProvider
-                .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.IdentityResource>>>();
+            var cache = ServiceProvider.GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.IdentityResource>>>();
+            await cache.RemoveAllAsync();
 
-            if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.IdentityResource>> identityServerDistributedCache)
-            {
-                await identityServerDistributedCache.RemoveAllAsync();
-            }
-            else
-            {
-                LogUnCompatibleError<IEnumerable<IdentityServer4.Models.IdentityResource>>();
-            }
+            var resourcesCache = ServiceProvider
+                .GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Resources>>();
+            await resourcesCache.RemoveAllAsync();
         }
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<ApiResource> eventData)
         {
             var cache = ServiceProvider
-                .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.ApiResource>>>();
+                .GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>>>();
+            await cache.RemoveAllAsync();
 
-            if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>> identityServerDistributedCache)
-            {
-                await identityServerDistributedCache.RemoveAllAsync();
-            }
-            else
-            {
-                LogUnCompatibleError<IEnumerable<IdentityServer4.Models.ApiResource>>();
-            }
+            var resourcesCache = ServiceProvider
+                .GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Resources>>();
+            await resourcesCache.RemoveAllAsync();
         }
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<ApiScope> eventData)
         {
             var cache = ServiceProvider
-                .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.ApiScope>>>();
+                .GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiScope>>>();
+            await cache.RemoveAllAsync();
 
-            if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiScope>> identityServerDistributedCache)
-            {
-                await identityServerDistributedCache.RemoveAllAsync();
-            }
-            else
-            {
-                LogUnCompatibleError<IEnumerable<IdentityServer4.Models.ApiScope>>();
-            }
+            var resourcesCache = ServiceProvider
+                .GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Resources>>();
+            await resourcesCache.RemoveAllAsync();
         }
 
-        protected void LogUnCompatibleError<T>()
-            where T : class
+        public async Task HandleEventAsync(EntityChangedEventData<ClientCorsOrigin> eventData)
         {
-            ServiceProvider.GetRequiredService<ILogger<IdentityServerCacheItemInvalidator>>()
-                .LogError($"The implementation of {nameof(ICache<T>)} is not compatible with {nameof(IdentityServerCacheItemInvalidator)}");
+            var cache = ServiceProvider
+                .GetRequiredService<IdentityServerDistributedCache<CachingCorsPolicyService<AbpCorsPolicyService>.CorsCacheEntry>>();
+            await cache.RemoveAllAsync();
         }
     }
 }
