@@ -83,7 +83,7 @@ namespace Volo.Abp.TestApp.Application
         {
             using (var reader = new StreamReader(streamContent.GetStream()))
             {
-                return await reader.ReadToEndAsync();
+                return await reader.ReadToEndAsync() + ":" + streamContent.ContentType;
             }
         }
     }

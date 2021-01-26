@@ -194,7 +194,7 @@ namespace Volo.Abp.Http.DynamicProxying
             {
                 ContentType = "application/rtf"
             });
-            result.ShouldBe("UploadAsync");
+            result.ShouldBe("UploadAsync:application/rtf");
         }
     }
 }
