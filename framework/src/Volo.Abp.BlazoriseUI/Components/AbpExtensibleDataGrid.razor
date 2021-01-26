@@ -67,7 +67,21 @@
                                         var entity = context as IHasExtraProperties;
                                         var propertyName = ExtensionPropertiesRegex.Match(column.Data).Groups[1].Value;
                                         var propertyValue = entity.GetProperty(propertyName);
-                                        @(propertyValue)
+                                        if (propertyValue.GetType() == typeof(bool))
+                                        {
+                                            if ((bool)propertyValue)
+                                            {
+                                                <Icon class="text-success" Name="IconName.Check" />
+                                            }
+                                            else
+                                            {
+                                                <Icon class="text-danger" Name="IconName.Times" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @(propertyValue)
+                                        }
                                     }
                                 </DisplayTemplate>
                             </DataGridColumn>
