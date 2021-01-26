@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Volo.Abp.Data;
+using Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
@@ -210,7 +210,7 @@ namespace Volo.Abp.BlazoriseUI
                 }
             }
             return GetInputTypeFromTypeOrNull(propertyInfo.Type)
-                   ?? typeof(TextEdit); //default
+                   ?? typeof(TextExtensionProperty<,>); //default
         }
 
         private static Type GetInputTypeFromAttributeOrNull(Attribute attribute)
@@ -219,7 +219,7 @@ namespace Volo.Abp.BlazoriseUI
 
             if (hasTextEditSupport)
             {
-                return typeof(TextEdit);
+                return typeof(TextExtensionProperty<,>);
             }
 
             //if (attribute is EmailAddressAttribute)
@@ -247,19 +247,19 @@ namespace Volo.Abp.BlazoriseUI
                 switch (dataTypeAttribute.DataType)
                 {
                     case DataType.Password:
-                        return typeof(TextEdit);
+                        return typeof(TextExtensionProperty<,>);
                     case DataType.Date:
-                        return typeof(DateEdit<>);
+                        return typeof(DateTimeExtensionProperty<,>);
                     case DataType.Time:
-                        return typeof(TimeEdit<>);
+                        return typeof(TimeExtensionProperty<,>);
                     case DataType.EmailAddress:
-                        return typeof(TextEdit);
+                        return typeof(TextExtensionProperty<,>);
                     case DataType.Url:
-                        return typeof(TextEdit);
+                        return typeof(TextExtensionProperty<,>);
                     case DataType.PhoneNumber:
-                        return typeof(TextEdit);
+                        return typeof(TextExtensionProperty<,>);
                     case DataType.DateTime:
-                        return typeof(DateEdit<>);
+                        return typeof(DateTimeExtensionProperty<,>);
                 }
             }
 
@@ -270,17 +270,17 @@ namespace Volo.Abp.BlazoriseUI
         {
             if (type == typeof(bool))
             {
-                return typeof(Check<>);
+                return typeof(CheckExtensionProperty<,>);
             }
 
             if (type == typeof(DateTime))
             {
-                return typeof(DateEdit<>);
+                return typeof(DateTimeExtensionProperty<,>);
             }
 
             if (NumberTypes.Contains(type))
             {
-                return typeof(TextEdit);
+                return typeof(TextExtensionProperty<,>);
             }
 
             return null;

@@ -17,25 +17,5 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
 
         [Parameter]
         public TEntityType Entity { get; set; }
-
-        protected void TextChanged(string value, string propertyName)
-        {
-            Entity.SetProperty(propertyName, value);
-        }
-
-        protected void CheckedChanged(bool value, string propertyName)
-        {
-            Entity.SetProperty(propertyName, value);
-        }
-
-        protected void TimeChanged(TimeSpan? value, string propertyName)
-        {
-            Entity.SetProperty(propertyName, value);
-        }
-
-        protected void DateTimeChanged(DateTime? value, string propertyName)
-        {
-            Entity.SetProperty(propertyName, value);
-        }
     }
 }
