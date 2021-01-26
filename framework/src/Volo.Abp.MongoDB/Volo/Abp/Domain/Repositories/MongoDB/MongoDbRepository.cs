@@ -345,15 +345,15 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                     updateResult = await collection.UpdateManyAsync(
                         dbContext.SessionHandle,
                         CreateEntitiesFilter(entityArray),
-                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
-                        );
+                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true),
+                        cancellationToken: cancellationToken);
                 }
                 else
                 {
                     updateResult = await collection.UpdateManyAsync(
                         CreateEntitiesFilter(entityArray),
-                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
-                        );
+                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true),
+                        cancellationToken: cancellationToken);
                 }
 
                 if (updateResult.MatchedCount < entitiesCount)
@@ -368,14 +368,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 {
                     deleteResult = await collection.DeleteManyAsync(
                         dbContext.SessionHandle,
-                        CreateEntitiesFilter(entityArray)
-                        );
+                        CreateEntitiesFilter(entityArray),
+                        cancellationToken: cancellationToken);
                 }
                 else
                 {
                     deleteResult = await collection.DeleteManyAsync(
-                        CreateEntitiesFilter(entityArray)
-                        );
+                        CreateEntitiesFilter(entityArray),
+                        cancellationToken);
                 }
 
                 if (deleteResult.DeletedCount < entitiesCount)
