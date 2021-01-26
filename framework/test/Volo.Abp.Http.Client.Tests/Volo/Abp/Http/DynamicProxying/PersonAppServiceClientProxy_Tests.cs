@@ -190,6 +190,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var memoryStream = new MemoryStream();
             await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
+            memoryStream.Position = 0;
             var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream)
             {
                 ContentType = "application/rtf"
