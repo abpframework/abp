@@ -71,11 +71,11 @@ namespace Volo.Abp.TestApp.Application
         public async Task<IRemoteStreamContent> DownloadAsync()
         {
             var memoryStream = new MemoryStream();
-            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("stream"));
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
 
             return new RemoteStreamContent(memoryStream)
             {
-                ContentType = "audio/mpeg"
+                ContentType = "application/rtf"
             };
         }
 

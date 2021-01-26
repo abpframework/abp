@@ -13,8 +13,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
         public async Task DownloadAsync()
         {
             var result = await GetResponseAsync("/api/remote-stream-content-test/download");
-            result.Content.Headers.ContentType?.ToString().ShouldBe("audio/mpeg");
-            (await result.Content.ReadAsStringAsync()).ShouldBe("stream");
+            result.Content.Headers.ContentType?.ToString().ShouldBe("application/rtf");
+            (await result.Content.ReadAsStringAsync()).ShouldBe("DownloadAsync");
         }
 
         [Fact]
@@ -23,15 +23,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/remote-stream-content-test/upload"))
             {
                 var memoryStream = new MemoryStream();
-                await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("upload"));
-
+                await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
                 memoryStream.Position = 0;
                 requestMessage.Content = new StreamContent(memoryStream);
-                requestMessage.Content.Headers.Add("Content-Type", "*/*");
+                requestMessage.Content.Headers.Add("Content-Type", "application/rtf");
 
                 var response = await Client.SendAsync(requestMessage);
 
-                (await response.Content.ReadAsStringAsync()).ShouldBe("upload");
+                (await response.Content.ReadAsStringAsync()).ShouldBe("UploadAsync:application/rtf");
             }
         }
     }

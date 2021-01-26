@@ -20,7 +20,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 
         public override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
-            return InputFormatterResult.SuccessAsync(new RemoteStreamContent(context.HttpContext.Request.Body));
+            return InputFormatterResult.SuccessAsync(new RemoteStreamContent(context.HttpContext.Request.Body)
+            {
+                ContentType = context.HttpContext.Request.ContentType
+            });
         }
     }
 }

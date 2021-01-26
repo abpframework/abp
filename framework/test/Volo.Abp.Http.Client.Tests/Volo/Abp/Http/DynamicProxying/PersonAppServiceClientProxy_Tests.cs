@@ -177,11 +177,11 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var result = await _peopleAppService.DownloadAsync();
 
-            result.ContentType.ShouldBe("audio/mpeg");
+            result.ContentType.ShouldBe("application/rtf");
             using (var reader = new StreamReader(result.GetStream()))
             {
                 var str = await reader.ReadToEndAsync();
-                str.ShouldBe("stream");
+                str.ShouldBe("DownloadAsync");
             }
         }
 
@@ -189,12 +189,12 @@ namespace Volo.Abp.Http.DynamicProxying
         public async Task UploadAsync()
         {
             var memoryStream = new MemoryStream();
-            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("upload"));
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
             var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream)
             {
                 ContentType = "application/rtf"
             });
-            result.ShouldBe("upload");
+            result.ShouldBe("UploadAsync");
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Shouldly;
 using Volo.Abp.Content;
 
 namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
@@ -14,11 +15,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
         public async Task<IRemoteStreamContent> DownloadAsync()
         {
             var memoryStream = new MemoryStream();
-            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("stream"));
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
 
             return new RemoteStreamContent(memoryStream)
             {
-                ContentType = "audio/mpeg"
+                ContentType = "application/rtf"
             };
         }
 
@@ -28,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
         {
             using (var reader = new StreamReader(streamContent.GetStream()))
             {
-                return await reader.ReadToEndAsync();
+                return await reader.ReadToEndAsync() + ":" + streamContent.ContentType;
             }
         }
     }
