@@ -19,88 +19,76 @@ namespace Volo.Abp.IdentityServer
         ILocalEventHandler<EntityChangedEventData<ApiResource>>,
         ILocalEventHandler<EntityChangedEventData<ApiScope>>
     {
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected IServiceProvider ServiceProvider { get; }
 
-        public IdentityServerCacheItemInvalidator(IServiceScopeFactory serviceScopeFactory)
+        public IdentityServerCacheItemInvalidator(IServiceProvider serviceProvider)
         {
-            ServiceScopeFactory = serviceScopeFactory;
+            ServiceProvider = serviceProvider;
         }
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
         {
-            using (var scope = ServiceScopeFactory.CreateScope())
-            {
-                var cache = scope.ServiceProvider.GetRequiredService<ICache<IdentityServer4.Models.Client>>();
+            var cache = ServiceProvider.GetRequiredService<ICache<IdentityServer4.Models.Client>>();
 
-                if (cache is IdentityServerDistributedCache<IdentityServer4.Models.Client> identityServerDistributedCache)
-                {
-                    await identityServerDistributedCache.RemoveAsync(eventData.Entity.ClientId);
-                }
-                else
-                {
-                    LogUnCompatibleError<Client>(scope.ServiceProvider);
-                }
+            if (cache is IdentityServerDistributedCache<IdentityServer4.Models.Client> identityServerDistributedCache)
+            {
+                await identityServerDistributedCache.RemoveAsync(eventData.Entity.ClientId);
+            }
+            else
+            {
+                LogUnCompatibleError<Client>();
             }
         }
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<IdentityResource> eventData)
         {
-            using (var scope = ServiceScopeFactory.CreateScope())
-            {
-                var cache = scope.ServiceProvider
-                    .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.IdentityResource>>>();
+            var cache = ServiceProvider
+                .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.IdentityResource>>>();
 
-                if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.IdentityResource>> identityServerDistributedCache)
-                {
-                    await identityServerDistributedCache.RemoveAllAsync();
-                }
-                else
-                {
-                    LogUnCompatibleError<IEnumerable<IdentityServer4.Models.IdentityResource>>(scope.ServiceProvider);
-                }
+            if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.IdentityResource>> identityServerDistributedCache)
+            {
+                await identityServerDistributedCache.RemoveAllAsync();
+            }
+            else
+            {
+                LogUnCompatibleError<IEnumerable<IdentityServer4.Models.IdentityResource>>();
             }
         }
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<ApiResource> eventData)
         {
-            using (var scope = ServiceScopeFactory.CreateScope())
-            {
-                var cache = scope.ServiceProvider
-                    .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.ApiResource>>>();
+            var cache = ServiceProvider
+                .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.ApiResource>>>();
 
-                if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>> identityServerDistributedCache)
-                {
-                    await identityServerDistributedCache.RemoveAllAsync();
-                }
-                else
-                {
-                    LogUnCompatibleError<IEnumerable<IdentityServer4.Models.ApiResource>>(scope.ServiceProvider);
-                }
+            if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>> identityServerDistributedCache)
+            {
+                await identityServerDistributedCache.RemoveAllAsync();
+            }
+            else
+            {
+                LogUnCompatibleError<IEnumerable<IdentityServer4.Models.ApiResource>>();
             }
         }
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<ApiScope> eventData)
         {
-            using (var scope = ServiceScopeFactory.CreateScope())
-            {
-                var cache = scope.ServiceProvider
-                    .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.ApiScope>>>();
+            var cache = ServiceProvider
+                .GetRequiredService<ICache<IEnumerable<IdentityServer4.Models.ApiScope>>>();
 
-                if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiScope>> identityServerDistributedCache)
-                {
-                    await identityServerDistributedCache.RemoveAllAsync();
-                }
-                else
-                {
-                    LogUnCompatibleError<IEnumerable<IdentityServer4.Models.ApiScope>>(scope.ServiceProvider);
-                }
+            if (cache is IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiScope>> identityServerDistributedCache)
+            {
+                await identityServerDistributedCache.RemoveAllAsync();
+            }
+            else
+            {
+                LogUnCompatibleError<IEnumerable<IdentityServer4.Models.ApiScope>>();
             }
         }
 
-        protected void LogUnCompatibleError<T>(IServiceProvider serviceProvider)
+        protected void LogUnCompatibleError<T>()
             where T : class
         {
-            serviceProvider.GetRequiredService<ILogger<IdentityServerCacheItemInvalidator>>()
+            ServiceProvider.GetRequiredService<ILogger<IdentityServerCacheItemInvalidator>>()
                 .LogError($"The implementation of {nameof(ICache<T>)} is not compatible with {nameof(IdentityServerCacheItemInvalidator)}");
         }
     }

@@ -13,9 +13,9 @@ namespace Volo.Abp.IdentityServer
     {
         protected ConcurrentBag<string> AllKeys { get; }
 
-        protected IDistributedCache<T> Cache { get; }
+        protected IDistributedCache<IdentityServerDistributedCacheItem<T>> Cache { get; }
 
-        public IdentityServerDistributedCache(IDistributedCache<T> cache)
+        public IdentityServerDistributedCache(IDistributedCache<IdentityServerDistributedCacheItem<T>> cache)
         {
             Cache = cache;
 
@@ -24,14 +24,14 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task<T> GetAsync(string key)
         {
-            return await Cache.GetAsync(key);
+            return (await Cache.GetAsync(key))?.Value;
         }
 
         public virtual async Task SetAsync(string key, T item, TimeSpan expiration)
         {
             AllKeys.Add(key);
 
-            await Cache.SetAsync(key, item, new DistributedCacheEntryOptions()
+            await Cache.SetAsync(key, new IdentityServerDistributedCacheItem<T>(item), new DistributedCacheEntryOptions()
             {
                 AbsoluteExpirationRelativeToNow = expiration
             });

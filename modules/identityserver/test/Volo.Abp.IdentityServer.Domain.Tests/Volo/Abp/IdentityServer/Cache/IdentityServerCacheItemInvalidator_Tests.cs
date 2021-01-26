@@ -26,10 +26,10 @@ namespace Volo.Abp.IdentityServer.Cache
         private readonly IApiResourceRepository _apiResourceRepository;
         private readonly IApiScopeRepository _apiScopeRepository;
 
-        private readonly IDistributedCache<IdentityServer4.Models.Client> _clientCache;
-        private readonly IDistributedCache<IEnumerable<IdentityServer4.Models.IdentityResource>> _identityResourceCache;
-        private readonly IDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>> _apiResourceCache;
-        private readonly IDistributedCache<IEnumerable<IdentityServer4.Models.ApiScope>> _apiScopeCache;
+        private readonly IDistributedCache<IdentityServerDistributedCacheItem<Client>> _clientCache;
+        private readonly IDistributedCache<IdentityServerDistributedCacheItem<IEnumerable<IdentityResource>>> _identityResourceCache;
+        private readonly IDistributedCache<IdentityServerDistributedCacheItem<IEnumerable<ApiResource>>> _apiResourceCache;
+        private readonly IDistributedCache<IdentityServerDistributedCacheItem<IEnumerable<ApiScope>>> _apiScopeCache;
 
         private readonly AbpIdentityServerTestData _testData;
 
@@ -43,10 +43,10 @@ namespace Volo.Abp.IdentityServer.Cache
             _apiResourceRepository = GetRequiredService<IApiResourceRepository>();
             _apiScopeRepository = GetRequiredService<IApiScopeRepository>();
 
-            _clientCache = GetRequiredService<IDistributedCache<Client>>();
-            _identityResourceCache = GetRequiredService<IDistributedCache<IEnumerable<IdentityResource>>>();
-            _apiResourceCache = GetRequiredService<IDistributedCache<IEnumerable<ApiResource>>>();
-            _apiScopeCache = GetRequiredService<IDistributedCache<IEnumerable<ApiScope>>>();
+            _clientCache = GetRequiredService<IDistributedCache<IdentityServerDistributedCacheItem<Client>>>();
+            _identityResourceCache = GetRequiredService<IDistributedCache<IdentityServerDistributedCacheItem<IEnumerable<IdentityResource>>>>();
+            _apiResourceCache = GetRequiredService<IDistributedCache<IdentityServerDistributedCacheItem<IEnumerable<ApiResource>>>>();
+            _apiScopeCache = GetRequiredService<IDistributedCache<IdentityServerDistributedCacheItem<IEnumerable<ApiScope>>>>();
 
             _testData = GetRequiredService<AbpIdentityServerTestData>();
         }
@@ -64,7 +64,6 @@ namespace Volo.Abp.IdentityServer.Cache
 
             var clientCacheItem = await _clientCache.GetAsync(clientId);
             clientCacheItem.ShouldNotBeNull();
-            clientCacheItem.ClientId.ShouldBe(clientId);
 
             await _clientRepository.DeleteAsync(_testData.Client1Id);
 
