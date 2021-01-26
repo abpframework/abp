@@ -18,6 +18,18 @@ namespace Volo.Abp.Caching
 
         public static string GetCacheName(Type cacheItemType)
         {
+            if (typeof(ICacheNameProvider).IsAssignableFrom(cacheItemType))
+            {
+                try
+                {
+                    return ((ICacheNameProvider)Activator.CreateInstance(cacheItemType)).GetCacheName();
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpException($"Cannot create an instance of type {cacheItemType.FullName}.", ex);
+                }
+            }
+
             var cacheNameAttribute = cacheItemType
                 .GetCustomAttributes(true)
                 .OfType<CacheNameAttribute>()
