@@ -24,6 +24,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         IMongoQueryable<TEntity> GetMongoQueryable();
 
         Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default);
+
+        Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default);
     }
 
     public interface IMongoDbRepository<TEntity, TKey> : IMongoDbRepository<TEntity>, IRepository<TEntity, TKey>

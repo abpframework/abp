@@ -16,6 +16,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {
@@ -473,6 +474,17 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             );
         }
 
+        public async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default)
+        {
+            var dbContext = await GetDbContextAsync(cancellationToken);
+            var collection = await GetCollectionAsync(cancellationToken);
+
+            return ApplyDataFilters(
+                dbContext.SessionHandle != null
+                    ? collection.Aggregate(dbContext.SessionHandle)
+                    : collection.Aggregate());
+        }
+
         protected virtual bool IsHardDeleted(TEntity entity)
         {
             var hardDeletedEntities = UnitOfWorkManager?.Current?.Items.GetOrDefault(UnitOfWorkItemNames.HardDeletedEntities) as HashSet<IEntity>;
@@ -619,6 +631,22 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         protected virtual void ThrowOptimisticConcurrencyException()
         {
             throw new AbpDbConcurrencyException("Database operation expected to affect 1 row but actually affected 0 row. Data may have been modified or deleted since entities were loaded. This exception has been thrown on optimistic concurrency check.");
+        }
+
+        protected virtual IAggregateFluent<TEntity> ApplyDataFilters(IAggregateFluent<TEntity> aggregate)
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
+            {
+                aggregate = aggregate.Match(e => ((ISoftDelete)e).IsDeleted == false);
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<IMultiTenant>())
+            {
+                var tenantId = CurrentTenant.Id;
+                aggregate = aggregate.Match(e => ((IMultiTenant)e).TenantId == tenantId);
+            }
+
+            return aggregate;
         }
 
         [Obsolete("This method will be removed in future versions.")]
