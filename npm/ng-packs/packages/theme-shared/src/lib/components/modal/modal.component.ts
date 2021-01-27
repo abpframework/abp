@@ -85,9 +85,9 @@ export class ModalComponent implements OnDestroy {
 
   @Output() readonly init = new EventEmitter<void>();
 
-  @Output() readonly appear = new EventEmitter();
+  @Output() readonly appear = new EventEmitter<void>();
 
-  @Output() readonly disappear = new EventEmitter();
+  @Output() readonly disappear = new EventEmitter<void>();
 
   _visible = false;
 
@@ -135,7 +135,7 @@ export class ModalComponent implements OnDestroy {
 
     setTimeout(() => this.listen(), 0);
     this.modalRef = this.modal.open(this.modalContent, {
-      //TODO: set size to 'lg' when removed the size variable
+      // TODO: set size to 'lg' when removed the size variable
       size: this.size,
       windowClass: this.modalClass,
       centered: this.centered,
