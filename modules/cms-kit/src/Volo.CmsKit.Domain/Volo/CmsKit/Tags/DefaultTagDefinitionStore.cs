@@ -21,20 +21,20 @@ namespace Volo.CmsKit.Tags
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-            var result = options.EntityTypes.GetOrDefault(entityType) ?? throw new EntityNotTaggableException(entityType);
+            var result = options.EntityTypes.FirstOrDefault(x => x.EntityType == entityType) ?? throw new EntityNotTaggableException(entityType);
 
             return Task.FromResult(result);
         }
 
         public virtual Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync()
         {
-            return Task.FromResult(options.EntityTypes.Values.ToList());
+            return Task.FromResult(options.EntityTypes.ToList());
         }
 
         public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
-            return Task.FromResult(options.EntityTypes.ContainsKey(entityType));
+            return Task.FromResult(options.EntityTypes.Any(a => a.EntityType == entityType));
         }
     }
 }
