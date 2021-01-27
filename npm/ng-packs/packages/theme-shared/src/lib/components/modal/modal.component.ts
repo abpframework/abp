@@ -29,6 +29,19 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   providers: [SubscriptionService],
 })
 export class ModalComponent implements OnDestroy {
+  /**
+   * @deprecated Use centered property of options input instead. To be deleted in v5.0.
+   */
+  @Input() centered = false;
+  /**
+   * @deprecated Use windowClass property of options input instead. To be deleted in v5.0.
+   */
+  @Input() modalClass = '';
+  /**
+   * @deprecated Use size property of options input instead. To be deleted in v5.0.
+   */
+  @Input() size: ModalSize = 'lg';
+
   @Input()
   get visible(): boolean {
     return this._visible;
@@ -50,11 +63,6 @@ export class ModalComponent implements OnDestroy {
     this._busy = value;
   }
 
-  @Input() centered = false;
-
-  @Input() modalClass = '';
-
-  @Input() size: ModalSize = 'lg';
   @Input() options: NgbModalOptions = {};
 
   @Input() suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
