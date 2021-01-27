@@ -8,9 +8,7 @@
     <Field>
         <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
         <TextEdit @bind-Text="@Value" Role="@PropertyInfo.GetTextRole()" InputMode="@PropertyInfo.GetTextInputMode()">
-            <Feedback>
-                <ValidationError />
-            </Feedback>
+          
         </TextEdit>
     </Field>
 }
