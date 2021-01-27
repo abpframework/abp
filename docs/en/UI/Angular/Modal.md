@@ -5,10 +5,10 @@
 The `abp-modal` provides some additional benefits:
  
  - It is **flexible**. You can pass header, body, footer templates easily by adding the templates to the `abp-modal` content. It can also be implemented quickly.
- - Provides several inputs be able to customize the modal and several outputs be able to listen some events.
- - Automatically detects the close button which have a `#abpClose` variable declaration and close the modal when pressed this button.
- - Automatically detects the `abp-button` and trigger its loading spinner when the `busy` input value of the modal component is true.
- - Automatically checks if the form inside the modal **has changed, but not saved**. It warns the user in this case when user tries to close the modal or refresh/close the tab of the browser.
+ - Provides several inputs be able to customize the modal and several outputs be able to listen to some events.
+ - Automatically detects the close button which has a `#abpClose` template variable and closes the modal when pressed this button.
+ - Automatically detects the `abp-button` and triggers its loading spinner when the `busy` input value of the modal component is true.
+ - Automatically checks if the form inside the modal **has changed, but not saved**. It warns the user by displaying a [confirmation popup](Confirmation-Service) in this case when a user tries to close the modal or refresh/close the tab of the browser.
 
 
 > Note: A modal can also be rendered by using the `ng-bootstrap` modal. For further information, see [Modal doc](https://ng-bootstrap.github.io/#/components/modal) on the `ng-bootstrap` documentation.
@@ -176,7 +176,7 @@ The modal with form looks like this:
 @Input() visible: boolean
 ```
 
-**`visible`** is a boolean input that determines whether the modal is open. It is also can be used two way binding.
+**`visible`** is a boolean input that determines whether the modal is open. It is also can be used two-way binding.
 
 #### busy
 
@@ -184,7 +184,7 @@ The modal with form looks like this:
 @Input() busy: boolean
 ```
 
-**`busy`** is a boolean input that determines whether the modal busy status is true. When `busy` is true, the modal cannot be closed and the `abp-button` loading spinner is triggered.
+**`busy`** is a boolean input that determines whether the busy status of the modal is true. When `busy` is true, the modal cannot be closed and the `abp-button` loading spinner is triggered.
 
 
 #### options
