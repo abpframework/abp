@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.MultiLingualObject
 {
@@ -20,7 +21,19 @@ namespace Volo.Abp.MultiLingualObject
             SettingProvider = settingProvider;
         }
 
-        public virtual async Task<TTranslation> GetTranslationAsync<TMultiLingual, TTranslation>(TMultiLingual multiLingual,
+        public TTranslation GetTranslation<TMultiLingual, TTranslation>(
+            TMultiLingual multiLingual,
+            bool fallbackToParentCultures = true,
+            string culture = null)
+            where TMultiLingual : IHasMultiLingual<TTranslation>
+            where TTranslation : class, IMultiLingualTranslation
+        {
+            return AsyncHelper.RunSync(() =>
+                GetTranslationAsync<TMultiLingual, TTranslation>(multiLingual, fallbackToParentCultures, culture));
+        }
+
+        public virtual async Task<TTranslation> GetTranslationAsync<TMultiLingual, TTranslation>(
+            TMultiLingual multiLingual,
             bool fallbackToParentCultures = true,
             string culture = null)
             where TMultiLingual : IHasMultiLingual<TTranslation>
@@ -33,8 +46,7 @@ namespace Volo.Abp.MultiLingualObject
                 return null;
             }
 
-            var translation =
-                multiLingual.Translations.FirstOrDefault(pt => pt.Language == culture);
+            var translation = multiLingual.Translations.FirstOrDefault(pt => pt.Language == culture);
             if (translation != null)
             {
                 return translation;

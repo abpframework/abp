@@ -17,9 +17,5 @@ namespace Volo.Abp.MultiLingualObject
     )]
     public class AbpMultiLingualObjectTestModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            base.ConfigureServices(context);
-        }
     }
 }
