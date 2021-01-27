@@ -314,16 +314,26 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public override async Task DeleteManyAsync(
-            IEnumerable<TEntity> entities,
-            bool autoSave = false,
-            CancellationToken cancellationToken = default)
+           IEnumerable<TEntity> entities,
+           bool autoSave = false,
+           CancellationToken cancellationToken = default)
         {
-            var entityArray = entities.ToArray();
+            var softDeletedEntities = new List<TEntity>();
+            var hardDeletedEntities = new List<TEntity>();
 
-            foreach (var entity in entityArray)
+            foreach (var entity in entities)
             {
                 await ApplyAbpConceptsForDeletedEntityAsync(entity);
                 SetNewConcurrencyStamp(entity);
+
+                if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
+                {
+                    softDeletedEntities.Add(entity);
+                }
+                else
+                {
+                    hardDeletedEntities.Add(entity);
+                }
             }
 
             var dbContext = await GetDbContextAsync(GetCancellationToken(cancellationToken));
@@ -331,54 +341,57 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
             if (BulkOperationProvider != null)
             {
-                await BulkOperationProvider.DeleteManyAsync(this, entityArray, dbContext.SessionHandle, autoSave, cancellationToken);
+                await BulkOperationProvider.DeleteManyAsync(this, entities.ToArray(), dbContext.SessionHandle, autoSave, cancellationToken);
                 return;
             }
 
-            var entitiesCount = entityArray.Count();
-
-            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
+            if (softDeletedEntities.Count > 0)
             {
                 UpdateResult updateResult;
+                var softDeleteEntitiesCount = softDeletedEntities.Count;
+
                 if (dbContext.SessionHandle != null)
                 {
                     updateResult = await collection.UpdateManyAsync(
                         dbContext.SessionHandle,
-                        CreateEntitiesFilter(entityArray),
-                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true),
-                        cancellationToken: cancellationToken);
+                        CreateEntitiesFilter(softDeletedEntities),
+                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
+                        );
                 }
                 else
                 {
                     updateResult = await collection.UpdateManyAsync(
-                        CreateEntitiesFilter(entityArray),
-                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true),
-                        cancellationToken: cancellationToken);
+                        CreateEntitiesFilter(softDeletedEntities),
+                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
+                        );
                 }
 
-                if (updateResult.MatchedCount < entitiesCount)
+                if (updateResult.MatchedCount < softDeleteEntitiesCount)
                 {
                     ThrowOptimisticConcurrencyException();
                 }
             }
-            else
+
+            if (hardDeletedEntities.Count > 0)
             {
                 DeleteResult deleteResult;
+                var hardDeletedEntitiesCount = hardDeletedEntities.Count;
+
                 if (dbContext.SessionHandle != null)
                 {
                     deleteResult = await collection.DeleteManyAsync(
                         dbContext.SessionHandle,
-                        CreateEntitiesFilter(entityArray),
-                        cancellationToken: cancellationToken);
+                        CreateEntitiesFilter(hardDeletedEntities)
+                        );
                 }
                 else
                 {
                     deleteResult = await collection.DeleteManyAsync(
-                        CreateEntitiesFilter(entityArray),
-                        cancellationToken);
+                        CreateEntitiesFilter(hardDeletedEntities)
+                        );
                 }
 
-                if (deleteResult.DeletedCount < entitiesCount)
+                if (deleteResult.DeletedCount < hardDeletedEntitiesCount)
                 {
                     ThrowOptimisticConcurrencyException();
                 }
