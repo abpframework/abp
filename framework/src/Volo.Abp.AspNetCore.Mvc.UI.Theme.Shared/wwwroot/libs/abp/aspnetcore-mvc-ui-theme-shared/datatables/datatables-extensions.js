@@ -30,7 +30,7 @@
         var htmlEncode = function (html) {
             return $('<div/>').text(html).html();
         }
-        
+
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
             var $li = $('<li/>');
             var $a = $('<a/>');
@@ -90,15 +90,15 @@
                     }
                     $button.append(htmlEncode(firstItem.text));
                 }
-                
+
                 if (firstItem.enabled && !firstItem.enabled({ record: record, table: tableInstance })) {
                     $button.addClass('disabled');
                 }
-                
+
                 if (firstItem.action) {
                     $button.click(function (e) {
                         e.preventDefault();
-    
+
                         if (!$(this).hasClass('disabled')) {
                             if (firstItem.confirmMessage) {
                                 abp.message.confirm(firstItem.confirmMessage({ record: record, table: tableInstance }))
@@ -217,7 +217,7 @@
 
         var renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             var columns;
-			
+
             if (tableInstance.aoColumns) {
                 columns = tableInstance.aoColumns;
             } else {
@@ -463,7 +463,7 @@
 
     datatables.defaultConfigurations.scrollX = true;
 
-    datatables.defaultConfigurations.responsive = true; 
+    datatables.defaultConfigurations.responsive = true;
 
     datatables.defaultConfigurations.language = function () {
         return {
@@ -484,6 +484,6 @@
         };
     };
 
-    datatables.defaultConfigurations.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto"i><"col"p>>';
+    datatables.defaultConfigurations.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto mr-auto"i><"col-auto"p>>';
 
 })(jQuery);
