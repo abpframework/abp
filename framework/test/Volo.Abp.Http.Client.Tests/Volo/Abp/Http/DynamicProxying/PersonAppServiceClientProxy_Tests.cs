@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute.Extensions;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Http.Client;
 using Volo.Abp.TestApp.Application;
@@ -167,6 +170,32 @@ namespace Volo.Abp.Http.DynamicProxying
             result.Value1.ShouldBe("value one");
             result.Inner1.Value2.ShouldBe("value two");
             result.Inner1.Inner2.Value3.ShouldBe("value three");
+        }
+
+        [Fact]
+        public async Task DownloadAsync()
+        {
+            var result = await _peopleAppService.DownloadAsync();
+
+            result.ContentType.ShouldBe("application/rtf");
+            using (var reader = new StreamReader(result.GetStream()))
+            {
+                var str = await reader.ReadToEndAsync();
+                str.ShouldBe("DownloadAsync");
+            }
+        }
+
+        [Fact]
+        public async Task UploadAsync()
+        {
+            var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
+            memoryStream.Position = 0;
+            var result = await _peopleAppService.UploadAsync(new RemoteStreamContent(memoryStream)
+            {
+                ContentType = "application/rtf"
+            });
+            result.ShouldBe("UploadAsync:application/rtf");
         }
     }
 }
