@@ -820,6 +820,10 @@
                   "path": "UI/Angular/Content-Projection-Service.md"
                 },
                 {
+                  "text": "Modal",
+                  "path": "UI/Angular/Modal.md"
+                },
+                {
                   "text": "Confirmation Popup",
                   "path": "UI/Angular/Confirmation-Service.md"
                 },
