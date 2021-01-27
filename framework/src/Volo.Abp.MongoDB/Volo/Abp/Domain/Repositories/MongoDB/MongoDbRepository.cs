@@ -396,49 +396,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                     ThrowOptimisticConcurrencyException();
                 }
             }
-
-
-
-
-
-
-            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
-            {
-                if (softDeletedEntities.Length > 0)
-                {
-                    
-                }
-
-                var hardEntityArray = entities.Except(softDeletedEntities).ToArray();
-                var hardEntitiesCount = hardEntityArray.Length;
-
-                if (hardEntitiesCount > 0)
-                {
-                    DeleteResult deleteResult;
-                    if (dbContext.SessionHandle != null)
-                    {
-                        deleteResult = await collection.DeleteManyAsync(
-                            dbContext.SessionHandle,
-                            CreateEntitiesFilter(hardEntityArray)
-                            );
-                    }
-                    else
-                    {
-                        deleteResult = await collection.DeleteManyAsync(
-                            CreateEntitiesFilter(hardEntityArray)
-                            );
-                    }
-
-                    if (deleteResult.DeletedCount < hardEntitiesCount)
-                    {
-                        ThrowOptimisticConcurrencyException();
-                    }
-                }
-            }
-            else
-            {
-               
-            }
         }
 
         public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
