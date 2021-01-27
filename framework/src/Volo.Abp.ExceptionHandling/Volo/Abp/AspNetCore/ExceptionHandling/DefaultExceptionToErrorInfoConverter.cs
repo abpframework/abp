@@ -141,7 +141,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             {
                 foreach (var key in exception.Data.Keys)
                 {
-                    localizedValue = localizedValue.Replace("{" + key + "}", exception.Data[key].ToString());
+                    localizedValue = localizedValue.Replace("{" + key + "}", exception.Data[key]?.ToString());
                 }
             }
 

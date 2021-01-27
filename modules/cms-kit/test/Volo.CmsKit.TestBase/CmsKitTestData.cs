@@ -12,6 +12,7 @@ namespace Volo.CmsKit
 
         public Guid CommentWithChildId { get; } = Guid.NewGuid();
 
+
         public string EntityType1 { get; } = "EntityName1";
 
         public string EntityType2 { get; } = "EntityName2";
@@ -59,5 +60,15 @@ namespace Volo.CmsKit
         public Guid Page_2_Id { get; } = Guid.NewGuid();
 
         public string Page_2_Content => Content_2;
+
+        public string TagDefinition_1_EntityType => "My.Namespace.CustomType";
+
+        public Guid TagId_1 { get; } = Guid.NewGuid();
+
+        public string TagName_1 => "Awesome";
+
+        public Guid TagId_2 { get; } = Guid.NewGuid();
+
+        public string TagName_2 => "News";
     }
 }
