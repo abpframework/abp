@@ -1,10 +1,8 @@
 ﻿using JetBrains.Annotations;
-using Volo.CmsKit.Reactions;
-using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit
+namespace Volo.CmsKit.Reactions
 {
-    public class CmsKitOptions
+    public class CmsKitReactionOptions
     {
         [NotNull]
         public ReactionDefinitionDictionary Reactions { get; } = new ReactionDefinitionDictionary();

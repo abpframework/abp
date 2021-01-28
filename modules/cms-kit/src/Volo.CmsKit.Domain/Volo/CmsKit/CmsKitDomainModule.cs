@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using Volo.Abp;
 using Volo.Abp.Domain;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
@@ -21,20 +23,20 @@ namespace Volo.CmsKit
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<CmsKitOptions>(options =>
+            Configure<CmsKitReactionOptions>(options =>
             {
-                options.Reactions.AddOrReplace(StandardReactions.ThumbsUp);
-                options.Reactions.AddOrReplace(StandardReactions.ThumbsDown);
-                options.Reactions.AddOrReplace(StandardReactions.Smile);
-                options.Reactions.AddOrReplace(StandardReactions.Wink);
-                options.Reactions.AddOrReplace(StandardReactions.Confused);
-                options.Reactions.AddOrReplace(StandardReactions.Victory);
-                options.Reactions.AddOrReplace(StandardReactions.Rock);
-                options.Reactions.AddOrReplace(StandardReactions.Eyes);
-                options.Reactions.AddOrReplace(StandardReactions.Heart);
-                options.Reactions.AddOrReplace(StandardReactions.HeartBroken);
-                options.Reactions.AddOrReplace(StandardReactions.Rocket);
-                options.Reactions.AddOrReplace(StandardReactions.Pray);
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.ThumbsUp));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.ThumbsDown));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Smile));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Wink));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Confused));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Victory));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Rock));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Eyes));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Heart));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.HeartBroken));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Rocket));
+                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Pray));
 
             });
 

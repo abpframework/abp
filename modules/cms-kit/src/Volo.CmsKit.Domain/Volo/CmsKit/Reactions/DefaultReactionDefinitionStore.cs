@@ -8,21 +8,21 @@ namespace Volo.CmsKit.Reactions
 {
     public class DefaultReactionDefinitionStore : IReactionDefinitionStore, ITransientDependency
     {
-        protected CmsKitOptions Options { get; }
+        protected CmsKitReactionOptions Options { get; }
 
-        public DefaultReactionDefinitionStore(IOptions<CmsKitOptions> options)
+        public DefaultReactionDefinitionStore(IOptions<CmsKitReactionOptions> options)
         {
             Options = options.Value;
         }
 
         public virtual Task<List<ReactionDefinition>> GetReactionsAsync(string entityType = null)
         {
-            return Task.FromResult(Options.Reactions.Values.ToList());
+            return Task.FromResult(Options.Reactions.ToList());
         }
 
         public virtual Task<ReactionDefinition> GetReactionOrNullAsync(string reactionName, string entityType = null)
         {
-            return Task.FromResult(Options.Reactions.GetOrDefault(reactionName));
+            return Task.FromResult(Options.Reactions.SingleOrDefault(x => x.Name == reactionName));
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Volo.CmsKit
         private readonly IEntityTagManager _entityTagManager;
         private readonly ITagManager _tagManager;
         private readonly IPageRepository _pageRepository;
-        private readonly IOptions<CmsKitOptions> _options;
+        private readonly IOptions<CmsKitReactionOptions> _reactionOptions;
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
 
         public CmsKitDataSeedContributor(
@@ -45,7 +45,7 @@ namespace Volo.CmsKit
             ITagManager tagManager,
             IEntityTagManager entityTagManager,
             IPageRepository pageRepository,
-            IOptions<CmsKitOptions> options,
+            IOptions<CmsKitReactionOptions> reactiOnptions,
             IOptions<CmsKitTagOptions> tagOptions)
         {
             _guidGenerator = guidGenerator;
@@ -59,7 +59,7 @@ namespace Volo.CmsKit
             _tagManager = tagManager;
             _entityTagManager = entityTagManager;
             _pageRepository = pageRepository;
-            _options = options;
+            _reactionOptions = reactiOnptions;
             _tagOptions = tagOptions;
         }
 

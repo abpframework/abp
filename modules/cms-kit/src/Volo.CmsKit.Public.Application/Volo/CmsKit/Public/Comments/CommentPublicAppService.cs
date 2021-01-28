@@ -17,7 +17,6 @@ namespace Volo.CmsKit.Public.Comments
 {
     public class CommentPublicAppService : ApplicationService, ICommentPublicAppService
     {
-        protected CmsKitOptions CmsKitOptions { get; }
         protected ICommentRepository CommentRepository { get; }
         protected ICmsUserLookupService CmsUserLookupService { get; }
         public IDistributedEventBus DistributedEventBus { get; }
@@ -27,10 +26,8 @@ namespace Volo.CmsKit.Public.Comments
             ICommentRepository commentRepository,
             ICmsUserLookupService cmsUserLookupService,
             IDistributedEventBus distributedEventBus,
-            IUnitOfWorkManager unitOfWorkManager,
-            IOptions<CmsKitOptions> cmsKitOptions)
+            IUnitOfWorkManager unitOfWorkManager)
         {
-            CmsKitOptions = cmsKitOptions.Value;
             CommentRepository = commentRepository;
             CmsUserLookupService = cmsUserLookupService;
             DistributedEventBus = distributedEventBus;
