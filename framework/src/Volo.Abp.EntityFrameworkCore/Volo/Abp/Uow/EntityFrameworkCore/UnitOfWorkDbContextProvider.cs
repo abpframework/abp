@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
@@ -23,15 +24,18 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        private readonly ICurrentTenant _currentTenant;
 
         public UnitOfWorkDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            ICurrentTenant currentTenant)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
             _cancellationTokenProvider = cancellationTokenProvider;
+            _currentTenant = currentTenant;
 
             Logger = NullLogger<UnitOfWorkDbContextProvider<TDbContext>>.Instance;
         }
@@ -57,7 +61,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             }
 
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-            var connectionString = _connectionStringResolver.Resolve(connectionStringName);
+            var connectionString = ResolveConnectionString(connectionStringName);
 
             var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
 
@@ -79,7 +83,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             }
 
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-            var connectionString = await _connectionStringResolver.ResolveAsync(connectionStringName);
+            var connectionString = await ResolveConnectionStringAsync(connectionStringName);
 
             var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
 
@@ -239,6 +243,35 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
                 return dbContext;
             }
+        }
+
+        private async Task<string> ResolveConnectionStringAsync(string connectionStringName)
+        {
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (_currentTenant.Change(null))
+                {
+                    return await _connectionStringResolver.ResolveAsync(connectionStringName);
+                }
+            }
+
+            return await _connectionStringResolver.ResolveAsync(connectionStringName);
+        }
+
+        [Obsolete("Use ResolveConnectionStringAsync method.")]
+        private string ResolveConnectionString(string connectionStringName)
+        {
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (_currentTenant.Change(null))
+                {
+                    return _connectionStringResolver.Resolve(connectionStringName);
+                }
+            }
+
+            return _connectionStringResolver.Resolve(connectionStringName);
         }
 
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
