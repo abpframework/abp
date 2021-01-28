@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
@@ -47,12 +48,14 @@ namespace Volo.Abp.AutoMapper
                 {
                     foreach (var profileType in options.ValidatingProfiles)
                     {
-                        config.AssertConfigurationIsValid(((Profile) Activator.CreateInstance(profileType)).ProfileName);
+                        config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
                     }
                 }
 
                 var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression =>
                 {
+                    mapperConfigurationExpression.AddCollectionMappers();
+
                     ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
                 });
 
