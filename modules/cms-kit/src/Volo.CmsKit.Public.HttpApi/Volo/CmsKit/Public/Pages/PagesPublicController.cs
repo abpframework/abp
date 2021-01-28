@@ -7,7 +7,7 @@ namespace Volo.CmsKit.Public.Pages
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-public/comments")]
-    public class PagesPublicController
+    public class PagesPublicController : IPageAppService
     {
         protected readonly IPageAppService PageAppService;
 
@@ -18,9 +18,9 @@ namespace Volo.CmsKit.Public.Pages
 
         [HttpGet]
         [Route("url/{url}")]
-        public Task<PageDto> GetByUrlAsync(string url)
+        public Task<PageDto> FindByUrlAsync(string url)
         {
-            return PageAppService.GetByUrlAsync(url);
+            return PageAppService.FindByUrlAsync(url);
         }
     }
 }

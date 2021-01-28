@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -16,10 +17,10 @@ namespace Volo.Abp.Domain.Repositories
             return repository.ToMongoDbRepository().Database;
         }
 
-        public static Task<IMongoDatabase> GetDatabaseAsync<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
+        public static Task<IMongoDatabase> GetDatabaseAsync<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository, CancellationToken cancellationToken = default)
             where TEntity : class, IEntity<TKey>
         {
-            return repository.ToMongoDbRepository().GetDatabaseAsync();
+            return repository.ToMongoDbRepository().GetDatabaseAsync(cancellationToken);
         }
 
         [Obsolete("Use GetCollectionAsync method.")]
@@ -29,10 +30,10 @@ namespace Volo.Abp.Domain.Repositories
             return repository.ToMongoDbRepository().Collection;
         }
 
-        public static Task<IMongoCollection<TEntity>> GetCollectionAsync<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
+        public static Task<IMongoCollection<TEntity>> GetCollectionAsync<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository, CancellationToken cancellationToken = default)
             where TEntity : class, IEntity<TKey>
         {
-            return repository.ToMongoDbRepository().GetCollectionAsync();
+            return repository.ToMongoDbRepository().GetCollectionAsync(cancellationToken);
         }
 
         [Obsolete("Use GetMongoQueryableAsync method.")]
@@ -42,10 +43,16 @@ namespace Volo.Abp.Domain.Repositories
             return repository.ToMongoDbRepository().GetMongoQueryable();
         }
 
-        public static Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
+        public static Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository, CancellationToken cancellationToken = default)
             where TEntity : class, IEntity<TKey>
         {
-            return repository.ToMongoDbRepository().GetMongoQueryableAsync();
+            return repository.ToMongoDbRepository().GetMongoQueryableAsync(cancellationToken);
+        }
+
+        public static Task<IAggregateFluent<TEntity>> GetAggregateAsync<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository, CancellationToken cancellationToken = default)
+            where TEntity : class, IEntity<TKey>
+        {
+            return repository.ToMongoDbRepository().GetAggregateAsync(cancellationToken);
         }
 
         public static IMongoDbRepository<TEntity, TKey> ToMongoDbRepository<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)

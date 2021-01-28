@@ -38,6 +38,7 @@ namespace Volo.CmsKit.Contents
             result.ShouldNotBeNull();
             result.Items.ShouldNotBeEmpty();
             result.Items.Count.ShouldBe(4);
+            result.Items.All(x => x.ShouldBeOfType<ContentGetListDto>() != null);
         }
 
         [Fact]
@@ -46,6 +47,8 @@ namespace Volo.CmsKit.Contents
             var result = await _service.GetAsync(_data.Content_1_Id);
 
             result.ShouldNotBeNull();
+            result.ShouldBeOfType<Admin.Contents.ContentDto>();
+            result.ShouldNotBeNull(result.Value);
         }
 
         [Fact]
@@ -124,6 +127,16 @@ namespace Volo.CmsKit.Contents
 
             await Should.NotThrowAsync(async () =>
                 await _service.DeleteAsync(_data.Content_2_Id));
+        }
+
+        [Fact]
+        public async Task ShouldGetByEntityAsync()
+        {
+            var entity = await _service.GetAsync(_data.Content_1_EntityType, _data.Content_1_EntityId);
+
+            entity.ShouldNotBeNull();
+            entity.EntityId.ShouldBe(_data.Content_1_EntityId);
+            entity.EntityType.ShouldBe(_data.Content_1_EntityType);
         }
     }
 }

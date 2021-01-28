@@ -159,6 +159,10 @@
     "UnlimitedQuestionCount": "Sınırsız soru sayısı",
     "Language": "Dil",
     "Optional": "Opsiyonel",
-    "CreateArticleLanguageInfo": "Makalenin yazıldığı dil"
+    "CreateArticleLanguageInfo": "Makalenin yazıldığı dil",
+    "Enum:ContentSource:2": "Video İçerik",
+    "DeleteCoverImage": "Kapak Fotoğrafını Sil",
+    "DeleteCoverImageConfirmationMessage": "Kapak fotoğrafını \"{0}\" isimli makale için silmek istediğinize emin misiniz?",
+    "DeleteCoverImageSuccessMessage": "Kapak fotoğrafı başarılı bir şekilde silinmiştir"
   }
 }

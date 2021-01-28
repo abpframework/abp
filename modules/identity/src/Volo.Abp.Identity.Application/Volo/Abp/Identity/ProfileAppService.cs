@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -37,17 +38,26 @@ namespace Volo.Abp.Identity
 
             var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
-            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
+            if (!string.Equals(user.UserName, input.UserName, StringComparison.InvariantCultureIgnoreCase))
             {
-                (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+                if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
+                {
+                    (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+                }
             }
 
-            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled))
+            if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
             {
-                (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
+                if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled))
+                {
+                    (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
+                }
             }
 
-            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
+            {
+                (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            }
 
             user.Name = input.Name;
             user.Surname = input.Surname;
