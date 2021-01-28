@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,16 +55,7 @@ namespace Volo.Abp.Domain.Repositories
         )
             where TEntity : class, IEntity, ISoftDelete
         {
-            if (!(ProxyHelper.UnProxy(repository) is IUnitOfWorkManagerAccessor unitOfWorkManagerAccessor))
-            {
-                throw new AbpException($"The given repository (of type {repository.GetType().AssemblyQualifiedName}) should implement the {typeof(IUnitOfWorkManagerAccessor).AssemblyQualifiedName} interface in order to invoke the {nameof(HardDeleteAsync)} method!");
-            }
-
-            var uowManager = unitOfWorkManagerAccessor.UnitOfWorkManager;
-            if (uowManager == null)
-            {
-                throw new AbpException($"{nameof(unitOfWorkManagerAccessor.UnitOfWorkManager)} property of the given {nameof(repository)} object is null!");
-            }
+            var uowManager = repository.GetUnitOfWorkManager();
 
             if (uowManager.Current == null)
             {
@@ -87,16 +79,7 @@ namespace Volo.Abp.Domain.Repositories
         )
             where TEntity : class, IEntity, ISoftDelete
         {
-            if (!(ProxyHelper.UnProxy(repository) is IUnitOfWorkManagerAccessor unitOfWorkManagerAccessor))
-            {
-                throw new AbpException($"The given repository (of type {repository.GetType().AssemblyQualifiedName}) should implement the {typeof(IUnitOfWorkManagerAccessor).AssemblyQualifiedName} interface in order to invoke the {nameof(HardDeleteAsync)} method!");
-            }
-
-            var uowManager = unitOfWorkManagerAccessor.UnitOfWorkManager;
-            if (uowManager == null)
-            {
-                throw new AbpException($"{nameof(unitOfWorkManagerAccessor.UnitOfWorkManager)} property of the given {nameof(repository)} object is null!");
-            }
+            var uowManager = repository.GetUnitOfWorkManager();
 
             if (uowManager.Current == null)
             {
@@ -120,16 +103,7 @@ namespace Volo.Abp.Domain.Repositories
         )
             where TEntity : class, IEntity, ISoftDelete
         {
-            if (!(ProxyHelper.UnProxy(repository) is IUnitOfWorkManagerAccessor unitOfWorkManagerAccessor))
-            {
-                throw new AbpException($"The given repository (of type {repository.GetType().AssemblyQualifiedName}) should implement the {typeof(IUnitOfWorkManagerAccessor).AssemblyQualifiedName} interface in order to invoke the {nameof(HardDeleteAsync)} method!");
-            }
-
-            var uowManager = unitOfWorkManagerAccessor.UnitOfWorkManager;
-            if (uowManager == null)
-            {
-                throw new AbpException($"{nameof(unitOfWorkManagerAccessor.UnitOfWorkManager)} property of the given {nameof(repository)} object is null!");
-            }
+            var uowManager = repository.GetUnitOfWorkManager();
 
             if (uowManager.Current == null)
             {
@@ -143,6 +117,26 @@ namespace Volo.Abp.Domain.Repositories
             {
                 await HardDeleteWithUnitOfWorkAsync(repository, entity, autoSave, cancellationToken, uowManager.Current);
             }
+        }
+
+        private static IUnitOfWorkManager GetUnitOfWorkManager<TEntity>(
+            this IBasicRepository<TEntity> repository, 
+            [CallerMemberName] string callingMethodName = nameof(GetUnitOfWorkManager)
+        )
+            where TEntity : class, IEntity
+        {
+            if (ProxyHelper.UnProxy(repository) is not IUnitOfWorkManagerAccessor unitOfWorkManagerAccessor)
+            {
+                throw new AbpException($"The given repository (of type {repository.GetType().AssemblyQualifiedName}) should implement the " +
+                    $"{typeof(IUnitOfWorkManagerAccessor).AssemblyQualifiedName} interface in order to invoke the {callingMethodName} method!");
+            }
+
+            if (unitOfWorkManagerAccessor.UnitOfWorkManager == null)
+            {
+                throw new AbpException($"{nameof(unitOfWorkManagerAccessor.UnitOfWorkManager)} property of the given {nameof(repository)} object is null!");
+            }
+
+            return unitOfWorkManagerAccessor.UnitOfWorkManager;
         }
 
         private static async Task HardDeleteWithUnitOfWorkAsync<TEntity>(
