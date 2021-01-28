@@ -168,7 +168,8 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                     transactionApiKey,
                     new EfCoreTransactionApi(
                         dbtransaction,
-                        dbContext
+                        dbContext,
+                        _cancellationTokenProvider
                     )
                 );
 
@@ -212,7 +213,8 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                     transactionApiKey,
                     new EfCoreTransactionApi(
                         dbTransaction,
-                        dbContext
+                        dbContext,
+                        _cancellationTokenProvider
                     )
                 );
 
