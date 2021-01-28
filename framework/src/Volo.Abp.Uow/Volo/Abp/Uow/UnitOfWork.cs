@@ -262,27 +262,6 @@ namespace Volo.Abp.Uow
             }
         }
 
-        protected virtual void RollbackAll()
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                try
-                {
-                    (databaseApi as ISupportsRollback)?.Rollback();
-                }
-                catch { }
-            }
-
-            foreach (var transactionApi in GetAllActiveTransactionApis())
-            {
-                try
-                {
-                    (transactionApi as ISupportsRollback)?.Rollback();
-                }
-                catch { }
-            }
-        }
-
         protected virtual async Task RollbackAllAsync(CancellationToken cancellationToken)
         {
             foreach (var databaseApi in GetAllActiveDatabaseApis())

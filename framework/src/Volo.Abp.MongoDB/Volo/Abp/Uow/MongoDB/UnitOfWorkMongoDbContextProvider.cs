@@ -178,7 +178,10 @@ namespace Volo.Abp.Uow.MongoDB
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
-                    new MongoDbTransactionApi(session)
+                    new MongoDbTransactionApi(
+                        session,
+                        _cancellationTokenProvider
+                    )
                 );
 
                 dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
@@ -215,7 +218,10 @@ namespace Volo.Abp.Uow.MongoDB
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
-                    new MongoDbTransactionApi(session)
+                    new MongoDbTransactionApi(
+                        session,
+                        _cancellationTokenProvider
+                    )
                 );
 
                 dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
