@@ -165,7 +165,27 @@ public class MyWebExtensionModule : AbpModule
 }
 ````
 
-> It's not possible to configure unnamed bundle tag helpers by code, because their name are not known at the development time. It's suggested to always use a name for a bundle tag helper.
+You can also use the `ConfigureAll` method to configure all existing bundles:
+
+````C#
+[DependsOn(typeof(MyWebModule))]
+public class MyWebExtensionModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options
+                .ScriptBundles
+                .ConfigureAll(bundle => {
+                    bundle.AddFiles(
+                        "/scripts/my-extension-script.js"
+                    );
+                });
+        });
+    }
+}
+````
 
 ## Bundle Contributors
 
