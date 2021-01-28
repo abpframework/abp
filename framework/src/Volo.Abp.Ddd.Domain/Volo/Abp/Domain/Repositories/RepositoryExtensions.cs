@@ -81,6 +81,39 @@ namespace Volo.Abp.Domain.Repositories
 
         public static async Task HardDeleteAsync<TEntity>(
             this IBasicRepository<TEntity> repository,
+            IEnumerable<TEntity> entities,
+            bool autoSave = false,
+            CancellationToken cancellationToken = default
+        )
+            where TEntity : class, IEntity, ISoftDelete
+        {
+            if (!(ProxyHelper.UnProxy(repository) is IUnitOfWorkManagerAccessor unitOfWorkManagerAccessor))
+            {
+                throw new AbpException($"The given repository (of type {repository.GetType().AssemblyQualifiedName}) should implement the {typeof(IUnitOfWorkManagerAccessor).AssemblyQualifiedName} interface in order to invoke the {nameof(HardDeleteAsync)} method!");
+            }
+
+            var uowManager = unitOfWorkManagerAccessor.UnitOfWorkManager;
+            if (uowManager == null)
+            {
+                throw new AbpException($"{nameof(unitOfWorkManagerAccessor.UnitOfWorkManager)} property of the given {nameof(repository)} object is null!");
+            }
+
+            if (uowManager.Current == null)
+            {
+                using (var uow = uowManager.Begin())
+                {
+                    await HardDeleteWithUnitOfWorkAsync(repository, entities, autoSave, cancellationToken, uowManager.Current);
+                    await uow.CompleteAsync(cancellationToken);
+                }
+            }
+            else
+            {
+                await HardDeleteWithUnitOfWorkAsync(repository, entities, autoSave, cancellationToken, uowManager.Current);
+            }
+        }
+
+        public static async Task HardDeleteAsync<TEntity>(
+            this IBasicRepository<TEntity> repository,
             TEntity entity,
             bool autoSave = false,
             CancellationToken cancellationToken = default
