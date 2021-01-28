@@ -55,10 +55,8 @@ namespace Volo.CmsKit.Tags
         {
             var expectedCount = cmsKitTagOptions.EntityTypes.Count + 1;
 
-            var entityTypeDefinition = new TagEntityTypeDefiniton("My.Entity.Type");
-
-            cmsKitTagOptions.EntityTypes.Add(entityTypeDefinition);
-            cmsKitTagOptions.EntityTypes.Add(entityTypeDefinition);
+            cmsKitTagOptions.EntityTypes.Add(new TagEntityTypeDefiniton("My.Entity.Type"));
+            cmsKitTagOptions.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton("My.Entity.Type"));
 
             cmsKitTagOptions.EntityTypes.Count.ShouldBe(expectedCount);
         }
