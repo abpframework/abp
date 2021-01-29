@@ -48,11 +48,19 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             DbContextTransaction.Dispose();
         }
 
-        public Task RollbackAsync(CancellationToken cancellationToken)
+        public async Task RollbackAsync(CancellationToken cancellationToken)
         {
-            return DbContextTransaction.RollbackAsync(
-                CancellationTokenProvider.FallbackToProvider(cancellationToken)
-            );
+            await DbContextTransaction.RollbackAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
+
+            foreach (var dbContext in AttendedDbContexts)
+            {
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
+                {
+                    continue; //Relational databases use the shared transaction
+                }
+
+                await dbContext.Database.RollbackTransactionAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            }
         }
     }
 }
