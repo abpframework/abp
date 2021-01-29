@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -29,19 +28,26 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             var tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
-            using (_currentTenant.Change(tenant?.Id, tenant?.Name))
+            if (tenant?.Id != _currentTenant.Id)
             {
-                var requestCulture = await TryGetRequestCultureAsync(context);
-                if (requestCulture != null)
+                using (_currentTenant.Change(tenant?.Id, tenant?.Name))
                 {
-                    CultureInfo.CurrentCulture = requestCulture.Culture;
-                    CultureInfo.CurrentUICulture = requestCulture.UICulture;
-                    AbpRequestCultureCookieHelper.SetCultureCookie(
-                        context,
-                        requestCulture
-                    );
-                }
+                    var requestCulture = await TryGetRequestCultureAsync(context);
+                    if (requestCulture != null)
+                    {
+                        CultureInfo.CurrentCulture = requestCulture.Culture;
+                        CultureInfo.CurrentUICulture = requestCulture.UICulture;
+                        AbpRequestCultureCookieHelper.SetCultureCookie(
+                            context,
+                            requestCulture
+                        );
+                    }
 
+                    await next(context);
+                }
+            }
+            else
+            {
                 await next(context);
             }
         }
@@ -86,7 +92,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 uiCulture = defaultLanguage;
             }
 
-            return new RequestCulture(CultureInfo.GetCultureInfo(culture), CultureInfo.GetCultureInfo(uiCulture));
+            return new RequestCulture(culture, uiCulture);
         }
     }
 }
