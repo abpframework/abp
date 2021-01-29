@@ -59,7 +59,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                     continue; //Relational databases use the shared transaction
                 }
 
-                await dbContext.Database.RollbackTransactionAsync(CancellationTokenProvider.Token);
+                await dbContext.Database.RollbackTransactionAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
             }
         }
     }
