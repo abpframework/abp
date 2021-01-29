@@ -1,7 +1,7 @@
 import {
   ABP,
   getRoutePath,
-  NavigationEvents,
+  RouterEvents,
   RoutesService,
   SubscriptionService,
   TreeNode,
@@ -25,12 +25,12 @@ export class BreadcrumbComponent implements OnInit {
     private router: Router,
     private routes: RoutesService,
     private subscription: SubscriptionService,
-    private navigationEvents: NavigationEvents,
+    private routerEvents: RouterEvents,
   ) {}
 
   ngOnInit(): void {
     this.subscription.addOne(
-      this.navigationEvents.getOneOf('End').pipe(
+      this.routerEvents.getNavigationEvents('End').pipe(
         // tslint:disable-next-line:deprecation
         startWith(null),
         map(() => this.routes.search({ path: getRoutePath(this.router) })),
