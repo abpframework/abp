@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -25,6 +26,15 @@ namespace Volo.Abp.Caching
             IEnumerable<KeyValuePair<string, byte[]>> items,
             DistributedCacheEntryOptions options,
             CancellationToken token = default
-        ); 
+        );
+
+        void RefreshMany(
+            IEnumerable<string> keys
+        );
+
+        Task RefreshManyAsync(
+            IEnumerable<string> keys,
+            CancellationToken token = default
+        );
     }
 }
