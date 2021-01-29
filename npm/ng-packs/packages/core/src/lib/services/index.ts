@@ -9,6 +9,7 @@ export * from './lazy-load.service';
 export * from './list.service';
 export * from './localization.service';
 export * from './multi-tenancy.service';
+export * from './navigation-events.service';
 export * from './permission.service';
 export * from './profile-state.service';
 export * from './profile.service';
