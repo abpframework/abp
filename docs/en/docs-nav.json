@@ -1064,10 +1064,6 @@
         {
           "text": "CLI",
           "path": "CLI.md"
-        },
-        {
-          "text": "API Documentation",
-          "path": "{ApiDocumentationUrl}"
         }
       ]
     },
