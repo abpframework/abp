@@ -67,7 +67,7 @@ describe('RouterEvents', () => {
 
   describe('getAnyNavigationEvent', () => {
     it('should return a stream of any navigation event', () => {
-      const stream = service.getAnyNavigationEvent();
+      const stream = service.getAllNavigationEvents();
       const collected: number[] = [];
 
       stream.pipe(take(4)).subscribe(event => collected.push(event.id));
@@ -93,7 +93,7 @@ describe('RouterEvents', () => {
 
   describe('getAnyEvent', () => {
     it('should return a stream of any router event', () => {
-      const stream = service.getAnyEvent();
+      const stream = service.getAllEvents();
       const collected: number[] = [];
 
       stream.pipe(take(8)).subscribe((event: RouterEvent) => collected.push(event.id));

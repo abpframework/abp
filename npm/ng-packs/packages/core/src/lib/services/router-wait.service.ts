@@ -24,7 +24,7 @@ export class RouterWaitService {
 
   private updateLoadingStatusOnNavigationEvents() {
     this.routerEvents
-      .getAnyNavigationEvent()
+      .getAllNavigationEvents()
       .pipe(
         map(event => event instanceof NavigationStart),
         switchMap(condition =>

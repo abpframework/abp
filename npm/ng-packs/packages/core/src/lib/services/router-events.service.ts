@@ -42,11 +42,11 @@ export class RouterEvents {
     return this.router.events.pipe(filter(filterNavigationEvents));
   }
 
-  getAnyEvent() {
+  getAllEvents() {
     return this.router.events;
   }
 
-  getAnyNavigationEvent() {
+  getAllNavigationEvents() {
     const keys = Object.keys(NavigationEvent) as NavigationEventKeys;
     return this.getNavigationEvents(...keys);
   }
@@ -56,5 +56,6 @@ type RouterEventConstructors = [Type<RouterEvent>, ...Type<RouterEvent>[]];
 
 type NavigationEventKeys = [NavigationEventKey, ...NavigationEventKey[]];
 
-export type NavigationEventType = typeof NavigationEvent;
+type NavigationEventType = typeof NavigationEvent;
+
 export type NavigationEventKey = keyof NavigationEventType;
