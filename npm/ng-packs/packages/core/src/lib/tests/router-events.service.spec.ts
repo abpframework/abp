@@ -105,7 +105,7 @@ describe('RouterEvents', () => {
   });
 });
 
-type NavigationEventTest = {
+interface NavigationEventTest {
   filtered: [NavigationEventKey, ...NavigationEventKey[]];
   expected: number[];
-};
+}
