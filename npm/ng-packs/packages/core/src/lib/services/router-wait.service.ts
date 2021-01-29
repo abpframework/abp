@@ -4,7 +4,7 @@ import { of, Subject, timer } from 'rxjs';
 import { map, mapTo, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { LOADER_DELAY } from '../tokens/lodaer-delay.token';
 import { InternalStore } from '../utils/internal-store-utils';
-import { NavigationEvents } from './navigation-events.service';
+import { RouterEvents } from './router-events.service';
 
 export interface RouterWaitState {
   loading: boolean;
@@ -17,14 +17,14 @@ export class RouterWaitService {
   private store = new InternalStore<RouterWaitState>({ loading: false });
   private destroy$ = new Subject();
   private delay: number;
-  constructor(private navigationEvents: NavigationEvents, injector: Injector) {
+  constructor(private routerEvents: RouterEvents, injector: Injector) {
     this.delay = injector.get(LOADER_DELAY, 500);
     this.updateLoadingStatusOnNavigationEvents();
   }
 
   private updateLoadingStatusOnNavigationEvents() {
-    this.navigationEvents
-      .getAny()
+    this.routerEvents
+      .getAnyNavigationEvent()
       .pipe(
         map(event => event instanceof NavigationStart),
         switchMap(condition =>
