@@ -10,7 +10,9 @@
                   TValue="object"
                   TextField="item=>item.Text"
                   ValueField="item=>item.Value"
-                  @bind-SelectedValue="@SelectedValue"
+                  SelectedValue="@SelectedValue"
+                  SelectedValueChanged="@SelectedValueChanged"
                   SearchChanged="@SearchFilterChangedAsync">
     </Autocomplete>
 </Field>
+ 
