@@ -191,7 +191,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 }
                 else
                 {
-                    dbContext.Database.BeginTransaction(); //TODO: Why not using the new created transaction?
+                    /* No need to store the returning IDbContextTransaction for non-relational databases
+                     * since EfCoreTransactionApi will handle the commit/rollback over the DbContext instance.
+                     */
+                    dbContext.Database.BeginTransaction();
                 }
 
                 activeTransaction.AttendedDbContexts.Add(dbContext);
@@ -236,7 +239,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 }
                 else
                 {
-                    await dbContext.Database.BeginTransactionAsync(GetCancellationToken()); //TODO: Why not using the new created transaction?
+                    /* No need to store the returning IDbContextTransaction for non-relational databases
+                     * since EfCoreTransactionApi will handle the commit/rollback over the DbContext instance.
+                     */
+                    await dbContext.Database.BeginTransactionAsync(GetCancellationToken());
                 }
 
                 activeTransaction.AttendedDbContexts.Add(dbContext);
