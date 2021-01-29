@@ -13,6 +13,11 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new AbpTenantManagementModelBuilderConfigurationOptions(
                 AbpTenantManagementDbProperties.DbTablePrefix,
                 AbpTenantManagementDbProperties.DbSchema
