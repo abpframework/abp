@@ -1,7 +1,14 @@
-import { ABP, getRoutePath, RoutesService, TreeNode, SubscriptionService } from '@abp/ng.core';
+import {
+  ABP,
+  getRoutePath,
+  NavigationEvents,
+  RoutesService,
+  SubscriptionService,
+  TreeNode,
+} from '@abp/ng.core';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter, map, startWith } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { map, startWith } from 'rxjs/operators';
 import { eThemeSharedRouteNames } from '../../enums';
 
 @Component({
@@ -18,12 +25,12 @@ export class BreadcrumbComponent implements OnInit {
     private router: Router,
     private routes: RoutesService,
     private subscription: SubscriptionService,
+    private navigationEvents: NavigationEvents,
   ) {}
 
   ngOnInit(): void {
     this.subscription.addOne(
-      this.router.events.pipe(
-        filter<NavigationEnd>(event => event instanceof NavigationEnd),
+      this.navigationEvents.getOneOf('End').pipe(
         // tslint:disable-next-line:deprecation
         startWith(null),
         map(() => this.routes.search({ path: getRoutePath(this.router) })),
