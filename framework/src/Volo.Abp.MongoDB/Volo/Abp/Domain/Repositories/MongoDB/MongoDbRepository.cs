@@ -52,10 +52,34 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         [Obsolete("Use GetDbContextAsync method.")]
-        protected virtual TMongoDbContext DbContext => DbContextProvider.GetDbContext();
+        protected virtual TMongoDbContext DbContext => GetDbContext();
+
+        [Obsolete("Use GetDbContextAsync method.")]
+        private TMongoDbContext GetDbContext()
+        {
+            // Multi-tenancy unaware entities should always use the host connection string
+            if (!EntityHelper.IsMultiTenant<TEntity>())
+            {
+                using (CurrentTenant.Change(null))
+                {
+                    return DbContextProvider.GetDbContext();
+                }
+            }
+
+            return DbContextProvider.GetDbContext();
+        }
 
         protected Task<TMongoDbContext> GetDbContextAsync(CancellationToken cancellationToken = default)
         {
+            // Multi-tenancy unaware entities should always use the host connection string
+            if (!EntityHelper.IsMultiTenant<TEntity>())
+            {
+                using (CurrentTenant.Change(null))
+                {
+                    return DbContextProvider.GetDbContextAsync(GetCancellationToken(cancellationToken));
+                }
+            }
+
             return DbContextProvider.GetDbContextAsync(GetCancellationToken(cancellationToken));
         }
 
