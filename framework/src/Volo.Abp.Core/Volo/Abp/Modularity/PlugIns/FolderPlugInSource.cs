@@ -30,8 +30,8 @@ namespace Volo.Abp.Modularity.PlugIns
         public Type[] GetModules()
         {
             var modules = new List<Type>();
-
-            foreach (var assembly in GetAssemblies())
+            var assemblies = GetAssemblies().ToList();
+            foreach (var assembly in assemblies)
             {
                 try
                 {
