@@ -85,10 +85,7 @@ namespace Volo.Abp.Domain.Repositories
 
         public abstract Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
 
-        public virtual Task DeleteManyAsync(
-            Expression<Func<TEntity, bool>> predicate,
-            bool autoSave = false,
-            CancellationToken cancellationToken = default)
+        public virtual Task DeleteManyAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
             => DeleteAsync(predicate, autoSave, cancellationToken);
 
         protected virtual TQueryable ApplyDataFilters<TQueryable>(TQueryable query)
