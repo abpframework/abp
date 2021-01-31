@@ -808,6 +808,10 @@
                   "path": "UI/Angular/Track-By-Service.md"
                 },
                 {
+                  "text": "Router Events",
+                  "path": "UI/Angular/Router-Events.md"
+                },
+                {
                   "text": "Inserting Scripts & Styles to DOM",
                   "path": "UI/Angular/Dom-Insertion-Service.md"
                 },
