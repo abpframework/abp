@@ -277,15 +277,16 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
-            await ApplyAbpConceptsForDeletedEntityAsync(entity);
-            var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
-
             var dbContext = await GetDbContextAsync(GetCancellationToken(cancellationToken));
             var collection = dbContext.Collection<TEntity>();
 
-            if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
+            var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
+
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
             {
-                softDeleteEntity.IsDeleted = true;
+                ((ISoftDelete)entity).IsDeleted = true;
+                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+
                 ReplaceOneResult result;
 
                 if (dbContext.SessionHandle != null)
@@ -313,6 +314,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
             else
             {
+                await ApplyAbpConceptsForDeletedEntityAsync(entity);
+
                 DeleteResult result;
 
                 if (dbContext.SessionHandle != null)
@@ -343,22 +346,23 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
            bool autoSave = false,
            CancellationToken cancellationToken = default)
         {
-            var softDeletedEntities = new List<TEntity>();
+            var softDeletedEntities = new List<(TEntity Entity, string ConcurrencyStamp)>();
             var hardDeletedEntities = new List<TEntity>();
 
             foreach (var entity in entities)
             {
-                await ApplyAbpConceptsForDeletedEntityAsync(entity);
-                SetNewConcurrencyStamp(entity);
-
                 if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !IsHardDeleted(entity))
                 {
-                    softDeletedEntities.Add(entity);
+                    ((ISoftDelete)entity).IsDeleted = true;
+
+                    softDeletedEntities.Add((entity, SetNewConcurrencyStamp(entity)));
                 }
                 else
                 {
                     hardDeletedEntities.Add(entity);
                 }
+
+                await ApplyAbpConceptsForDeletedEntityAsync(entity);
             }
 
             var dbContext = await GetDbContextAsync(GetCancellationToken(cancellationToken));
@@ -372,26 +376,23 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
             if (softDeletedEntities.Count > 0)
             {
-                UpdateResult updateResult;
-                var softDeleteEntitiesCount = softDeletedEntities.Count;
+                BulkWriteResult updateResult;
+
+                List<WriteModel<TEntity>> replaceRequests = new List<WriteModel<TEntity>>(
+                    softDeletedEntities.Select(entity => new ReplaceOneModel<TEntity>(
+                        CreateEntityFilter(entity.Entity, true, entity.ConcurrencyStamp), entity.Entity))
+                );
 
                 if (dbContext.SessionHandle != null)
                 {
-                    updateResult = await collection.UpdateManyAsync(
-                        dbContext.SessionHandle,
-                        CreateEntitiesFilter(softDeletedEntities),
-                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
-                        );
+                    updateResult = await collection.BulkWriteAsync(dbContext.SessionHandle, replaceRequests, cancellationToken: cancellationToken);
                 }
                 else
                 {
-                    updateResult = await collection.UpdateManyAsync(
-                        CreateEntitiesFilter(softDeletedEntities),
-                        Builders<TEntity>.Update.Set(x => ((ISoftDelete)x).IsDeleted, true)
-                        );
+                    updateResult = await collection.BulkWriteAsync(replaceRequests, cancellationToken: cancellationToken);
                 }
 
-                if (updateResult.MatchedCount < softDeleteEntitiesCount)
+                if (updateResult.MatchedCount < softDeletedEntities.Count)
                 {
                     ThrowOptimisticConcurrencyException();
                 }
@@ -407,13 +408,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                     deleteResult = await collection.DeleteManyAsync(
                         dbContext.SessionHandle,
                         CreateEntitiesFilter(hardDeletedEntities)
-                        );
+                    );
                 }
                 else
                 {
                     deleteResult = await collection.DeleteManyAsync(
                         CreateEntitiesFilter(hardDeletedEntities)
-                        );
+                    );
                 }
 
                 if (deleteResult.DeletedCount < hardDeletedEntitiesCount)
@@ -780,9 +781,10 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return RepositoryFilterer.CreateEntityFilter(entity, withConcurrencyStamp, concurrencyStamp);
         }
 
+        // todo: This method should consider concurrencyStamp
         protected override FilterDefinition<TEntity> CreateEntitiesFilter(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
         {
-            return RepositoryFilterer.CreateEntitiesFilter(entities, withConcurrencyStamp);
+            return RepositoryFilterer.CreateEntitiesFilter(entities);
         }
     }
 }
