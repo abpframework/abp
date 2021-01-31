@@ -463,10 +463,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 .Where(predicate)
                 .ToListAsync(cancellationToken);
 
-            foreach (var entity in entities)
-            {
-                await DeleteAsync(entity, autoSave, cancellationToken);
-            }
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
 
         [Obsolete("Use GetQueryableAsync method.")]
