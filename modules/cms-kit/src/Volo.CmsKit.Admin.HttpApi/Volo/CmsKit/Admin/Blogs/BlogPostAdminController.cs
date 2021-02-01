@@ -29,26 +29,35 @@ namespace Volo.CmsKit.Admin.Blogs
             BlogPostAdminAppService = blogPostAdminAppService;
         }
 
+        [HttpGet]
         public virtual Task<BlogPostDto> CreateAsync(CreateUpdateBlogPostDto input)
         {
             return BlogPostAdminAppService.CreateAsync(input);
         }
 
+        [HttpDelete]
+        [Route("{id}")]
         public virtual Task DeleteAsync(Guid id)
         {
             return BlogPostAdminAppService.DeleteAsync(id);
         }
 
+        [HttpGet]
+        [Route("{id:Guid}")]
         public virtual Task<BlogPostDto> GetAsync(Guid id)
         {
             return BlogPostAdminAppService.GetAsync(id);
         }
 
+        [HttpGet]
+        [Route("{urlSlug}")]
         public virtual Task<BlogPostDto> GetByUrlSlugAsync(string urlSlug)
         {
             return BlogPostAdminAppService.GetByUrlSlugAsync(urlSlug);
         }
 
+        [HttpGet]
+        [Route("{id}/cover-image")]
         public virtual Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
         {
             Response.Headers.Add("Content-Disposition", $"inline;filename=\"{id}\"");
@@ -59,16 +68,20 @@ namespace Volo.CmsKit.Admin.Blogs
             return BlogPostAdminAppService.GetCoverImageAsync(id);
         }
 
+        [HttpGet]
         public virtual Task<PagedResultDto<BlogPostDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
             return BlogPostAdminAppService.GetListAsync(input);
         }
 
+        [NonAction]
         public virtual Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent)
         {
             return BlogPostAdminAppService.SetCoverImageAsync(id, streamContent);
         }
 
+        [HttpPost]
+        [Route("{id}/cover-image")]
         public virtual async Task<IActionResult> UploadCoverImageAsync(Guid id, IFormFile file)
         {
             if (file == null)
@@ -84,6 +97,8 @@ namespace Volo.CmsKit.Admin.Blogs
             return StatusCode(201);
         }
 
+        [HttpPut]
+        [Route("{id}")]
         public virtual Task<BlogPostDto> UpdateAsync(Guid id, CreateUpdateBlogPostDto input)
         {
             return BlogPostAdminAppService.UpdateAsync(id, input);
