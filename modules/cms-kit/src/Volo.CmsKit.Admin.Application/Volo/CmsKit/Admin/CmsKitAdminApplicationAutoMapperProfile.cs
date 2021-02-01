@@ -3,8 +3,10 @@ using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Admin.Contents;
 using Volo.CmsKit.Admin.Pages;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Pages;
+using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Admin
 {
@@ -24,6 +26,8 @@ namespace Volo.CmsKit.Admin
 
             CreateMap<Blog, BlogDto>(MemberList.Destination)
                 .ReverseMap();
+
+            CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
         }
     }
 }

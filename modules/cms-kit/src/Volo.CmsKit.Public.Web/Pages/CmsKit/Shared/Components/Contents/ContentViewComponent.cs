@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Domain.Entities;
 using Volo.CmsKit.Public.Contents;
 using Volo.CmsKit.Web.Contents;
 
@@ -25,18 +26,26 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
             string entityType,
             string entityId)
         {
-            var content = await contentAppService.GetAsync(new GetContentInput
+            var content = string.Empty;
+            
+            try
             {
-                EntityId = entityId,
-                EntityType = entityType
-            });
+                var contentDto = await contentAppService.GetAsync(new GetContentInput
+                {
+                    EntityId = entityId,
+                    EntityType = entityType
+                });
+
+                content = contentDto.Value;
+            }
+            catch (EntityNotFoundException e)
+            {
+                // ContentDto can be null, we will render empty content.
+            }
 
             var viewModel = new ContentViewModel
             {
-                EntityId = entityId,
-                EntityType = entityType,
-                ContentId = content.Id,
-                Rendered = await contentRenderer.RenderAsync(content.Value)
+                Value = await contentRenderer.RenderAsync(content)
             };
 
             return View("~/Pages/CmsKit/Shared/Components/Contents/Default.cshtml", viewModel);
@@ -44,12 +53,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
 
         public class ContentViewModel
         {
-            public Guid ContentId { get; set; }
-            public string EntityType { get; set; }
-
-            public string EntityId { get; set; }
-
-            public string Rendered { get; set; }
+            public string Value { get; set; }
         }
     }
 }

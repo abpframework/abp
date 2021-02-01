@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Auditing;
-using Volo.Abp.AspNetCore.Mvc.Content;
+using Volo.Abp.AspNetCore.Mvc.ContentFormatters;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Features;

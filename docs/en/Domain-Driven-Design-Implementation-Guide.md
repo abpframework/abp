@@ -754,7 +754,8 @@ namespace IssueTracking.Issues
         {
             var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
 
-            return await DbSet.Where(i =>
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.Where(i =>
 
                 //Open
                 !i.IsClosed &&
@@ -906,7 +907,8 @@ public class EfCoreIssueRepository :
 
     public async Task<List<Issue>> GetIssuesAsync(ISpecification<Issue> spec)
     {
-        return await DbSet
+        var dbSet = await GetDbSetAsync();
+        return await dbSet
             .Where(spec.ToExpression())
             .ToListAsync();
     }
@@ -952,8 +954,9 @@ public class IssueAppService : ApplicationService, IIssueAppService
 
     public async Task DoItAsync()
     {
+        var queryable = await _issueRepository.GetQueryableAsync();
         var issues = AsyncExecuter.ToListAsync(
-            _issueRepository.Where(new InActiveIssueSpecification())
+            queryable.Where(new InActiveIssueSpecification())
         );
     }
 }
@@ -996,8 +999,9 @@ public class IssueAppService : ApplicationService, IIssueAppService
 
     public async Task DoItAsync(Guid milestoneId)
     {
+        var queryable = await _issueRepository.GetQueryableAsync();
         var issues = AsyncExecuter.ToListAsync(
-            _issueRepository
+            queryable
                 .Where(
                     new InActiveIssueSpecification()
                         .And(new MilestoneSpecification(milestoneId))

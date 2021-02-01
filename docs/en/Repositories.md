@@ -222,7 +222,8 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 
     public async Task<Person> FindByNameAsync(string name)
     {
-        return await DbContext.Set<Person>()
+        var dbSet = await GetDbSetAsync();
+        return await dbSet.Set<Person>()
             .Where(p => p.Name == name)
             .FirstOrDefaultAsync();
     }
@@ -235,12 +236,13 @@ You can directly access the data access provider (`DbContext` in this case) to p
 
 ## IQueryable & Async Operations
 
-`IRepository` inherits from `IQueryable`, that means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Generic Repositories*" section above.
+`IRepository` provides `GetQueryableAsync()` to obtain an `IQueryable`, that means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Querying / LINQ over the Repositories*" section above.
 
 **Example: Using the `Where(...)` and the `ToList()` extension methods**
 
 ````csharp
-var people = _personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = queryable
     .Where(p => p.Name.Contains(nameFilter))
     .ToList();
 ````
@@ -269,7 +271,8 @@ When you add the NuGet package to your project, you can take full power of the E
 **Example: Directly using the `ToListAsync()` after adding the EF Core package**
 
 ````csharp
-var people = _personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = queryable
     .Where(p => p.Name.Contains(nameFilter))
     .ToListAsync();
 ````
@@ -285,7 +288,8 @@ If you are using [MongoDB](MongoDB.md), you need to add the [Volo.Abp.MongoDB](h
 **Example: Cast `IQueryable<T>` to `IMongoQueryable<T>` and use `ToListAsync()`**
 
 ````csharp
-var people = ((IMongoQueryable<Person>)_personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = ((IMongoQueryable<Person>) queryable
     .Where(p => p.Name.Contains(nameFilter)))
     .ToListAsync();
 ````
@@ -312,10 +316,11 @@ The standard LINQ extension methods are supported: *AllAsync, AnyAsync, AverageA
 This approach still **has a limitation**. You need to call the extension method directly on the repository object. For example, the below usage is **not supported**:
 
 ```csharp
-var count = await _bookRepository.Where(x => x.Name.Contains("A")).CountAsync();
+var queryable = await _bookRepository.GetQueryableAsync();
+var count = await queryable.Where(x => x.Name.Contains("A")).CountAsync();
 ```
 
-This is because the object returned from the `Where` method is not a repository object, it is a standard `IQueryable` interface. See the other options for such cases.
+This is because the `CountAsync()` method in this example is called on a `IQueryable` interface, not on the repository object. See the other options for such cases.
 
 This method is suggested **wherever possible**.
 
@@ -352,8 +357,11 @@ namespace AbpDemo
 
         public async Task<ListResultDto<ProductDto>> GetListAsync(string name)
         {
+            //Obtain the IQueryable<T>
+            var queryable = await _productRepository.GetQueryableAsync();
+            
             //Create the query
-            var query = _productRepository
+            var query = queryable
                 .Where(p => p.Name.Contains(name))
                 .OrderBy(p => p.Name);
 

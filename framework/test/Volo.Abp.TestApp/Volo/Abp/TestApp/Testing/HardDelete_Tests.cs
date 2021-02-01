@@ -1,7 +1,9 @@
 ﻿using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
@@ -118,6 +120,41 @@ namespace Volo.Abp.TestApp.Testing
                 var john = await PersonRepository.FindAsync(TestDataBuilder.UserJohnDeletedId);
                 john.ShouldBeNull();
             }
+        }
+
+        [Fact]
+        public async Task Should_HardDelete_WithDeleteMany()
+        {
+            var persons = await PersonRepository.GetListAsync();
+
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var hardDeleteEntities = (HashSet<IEntity>)UnitOfWorkManager.Current.Items.GetOrAdd(
+                      UnitOfWorkItemNames.HardDeletedEntities,
+                      () => new HashSet<IEntity>()
+                      );
+                hardDeleteEntities.UnionWith(persons);
+                await PersonRepository.DeleteManyAsync(persons);
+            });
+
+            var personsCount = await PersonRepository.GetCountAsync();
+
+            personsCount.ShouldBe(0);
+        }
+
+        [Fact]
+        public async Task Should_HardDelete_WithDeleteMany_WithPredicate()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                await PersonRepository.HardDeleteAsync(x => x.Id == TestDataBuilder.UserDouglasId);
+
+                await PersonRepository.DeleteManyAsync(new[] { TestDataBuilder.UserDouglasId });
+            });
+
+            var douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+            
+            douglas.ShouldBeNull();
         }
     }
 }

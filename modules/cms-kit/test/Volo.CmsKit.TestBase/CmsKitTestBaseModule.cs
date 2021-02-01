@@ -22,13 +22,16 @@ namespace Volo.CmsKit
     {
         private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             OneTimeRunner.Run(() =>
             {
                 GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
             });
+        }
 
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
             context.Services.AddSingleton<IBlobProvider>(Substitute.For<FakeBlobProvider>());
             
             Configure<AbpBlobStoringOptions>(options =>

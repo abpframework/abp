@@ -122,7 +122,8 @@ namespace MyProject
 
         public async Task<List<Customer>> GetCustomersCanBuyAlcohol()
         {
-            var query = _customerRepository.Where(
+            var queryable = await _customerRepository.GetQueryableAsync();
+            var query = queryable.Where(
                 new Age18PlusCustomerSpecification().ToExpression()
             );
             
@@ -137,7 +138,8 @@ namespace MyProject
 Actually, using the `ToExpression()` method is not necessary since the specifications are automatically casted to Expressions. This would also work:
 
 ````csharp
-var query = _customerRepository.Where(
+var queryable = await _customerRepository.GetQueryableAsync();
+var query = queryable.Where(
     new Age18PlusCustomerSpecification()
 );
 ````

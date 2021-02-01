@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -16,6 +17,7 @@ namespace Volo.Abp.TenantManagement
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpDddDomainModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(AbpCachingModule))]
     public class AbpTenantManagementDomainModule : AbpModule
     {
         private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();

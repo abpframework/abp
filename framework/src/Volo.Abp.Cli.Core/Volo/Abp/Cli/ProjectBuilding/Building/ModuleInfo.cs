@@ -21,5 +21,7 @@
         public bool AngularUi { get; set; }
 
         public bool MvcUi { get; set; }
+
+        public bool BlazorUi { get; set; }
     }
 }

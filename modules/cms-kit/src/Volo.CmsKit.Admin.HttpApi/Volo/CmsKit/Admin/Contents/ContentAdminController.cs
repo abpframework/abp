@@ -59,5 +59,13 @@ namespace Volo.CmsKit.Admin.Contents
         {
             return ContentAdminAppService.UpdateAsync(id, input);
         }
+
+        [HttpGet]
+        [Route("{entityType}/{entityId}")]
+        [Authorize(CmsKitAdminPermissions.Contents.Default)]
+        public Task<ContentDto> GetAsync(string entityType, string entityId)
+        {
+            return ContentAdminAppService.GetAsync(entityType, entityId);
+        }
     }
 }

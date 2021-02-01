@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Tags;
 
@@ -25,11 +24,15 @@ namespace Volo.CmsKit.Admin.Tags
     {
         protected ITagManager TagManager { get; }
 
+        protected IStringLocalizerFactory StringLocalizerFactory { get; }
+
         public TagAdminAppService(
             IRepository<Tag, Guid> repository,
-            ITagManager tagManager) : base(repository)
+            ITagManager tagManager,
+            IStringLocalizerFactory stringLocalizerFactory) : base(repository)
         {
             TagManager = tagManager;
+           StringLocalizerFactory = stringLocalizerFactory;
 
             GetListPolicyName = CmsKitAdminPermissions.Tags.Default;
             GetPolicyName = CmsKitAdminPermissions.Tags.Default;
@@ -67,6 +70,18 @@ namespace Volo.CmsKit.Admin.Tags
                         x =>
                             x.Name.ToLower().Contains(input.Filter) ||
                             x.EntityType.ToLower().Contains(input.Filter));
+        }
+
+        public async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
+        {
+            var definitions = await TagManager.GetTagDefinitionsAsync();
+
+            return definitions
+                        .Select(s => 
+                            new TagDefinitionDto(
+                                s.EntityType, 
+                                s.DisplayName?.Localize(StringLocalizerFactory) ?? s.EntityType))
+                        .ToList();
         }
     }
 }

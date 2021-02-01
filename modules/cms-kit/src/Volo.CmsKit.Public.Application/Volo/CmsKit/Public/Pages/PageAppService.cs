@@ -12,9 +12,14 @@ namespace Volo.CmsKit.Public.Pages
             PageRepository = pageRepository;
         }
 
-        public virtual async Task<PageDto> GetByUrlAsync(string url)
+        public virtual async Task<PageDto> FindByUrlAsync(string url)
         {
-            var page = await PageRepository.GetByUrlAsync(url);
+            var page = await PageRepository.FindByUrlAsync(url);
+
+            if (page == null)
+            {
+                return null;
+            }
             
             return ObjectMapper.Map<Page, PageDto>(page);
         }
