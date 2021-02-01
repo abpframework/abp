@@ -30,6 +30,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [HttpGet]
+        [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
         public virtual Task<BlogPostDto> CreateAsync(CreateUpdateBlogPostDto input)
         {
             return BlogPostAdminAppService.CreateAsync(input);
@@ -37,6 +38,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(CmsKitAdminPermissions.BlogPosts.Delete)]
         public virtual Task DeleteAsync(Guid id)
         {
             return BlogPostAdminAppService.DeleteAsync(id);
@@ -44,6 +46,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
         public virtual Task<BlogPostDto> GetAsync(Guid id)
         {
             return BlogPostAdminAppService.GetAsync(id);
@@ -51,6 +54,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpGet]
         [Route("{urlSlug}")]
+        [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
         public virtual Task<BlogPostDto> GetByUrlSlugAsync(string urlSlug)
         {
             return BlogPostAdminAppService.GetByUrlSlugAsync(urlSlug);
@@ -58,6 +62,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpGet]
         [Route("{id}/cover-image")]
+        [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
         public virtual Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
         {
             Response.Headers.Add("Content-Disposition", $"inline;filename=\"{id}\"");
@@ -69,6 +74,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [HttpGet]
+        [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
         public virtual Task<PagedResultDto<BlogPostDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
             return BlogPostAdminAppService.GetListAsync(input);
@@ -82,6 +88,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpPost]
         [Route("{id}/cover-image")]
+        [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
         public virtual async Task<IActionResult> UploadCoverImageAsync(Guid id, IFormFile file)
         {
             if (file == null)
@@ -99,6 +106,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpPut]
         [Route("{id}")]
+        [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
         public virtual Task<BlogPostDto> UpdateAsync(Guid id, CreateUpdateBlogPostDto input)
         {
             return BlogPostAdminAppService.UpdateAsync(id, input);
