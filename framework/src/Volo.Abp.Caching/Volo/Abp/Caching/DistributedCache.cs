@@ -529,7 +529,7 @@ namespace Volo.Abp.Caching
 
         public KeyValuePair<TCacheKey, TCacheItem>[] GetOrAddMany(
             IEnumerable<TCacheKey> keys,
-            Func<IEnumerable<TCacheKey>, IEnumerable<KeyValuePair<TCacheKey, TCacheItem>>> factory,
+            Func<IEnumerable<TCacheKey>, List<KeyValuePair<TCacheKey, TCacheItem>>> factory,
             Func<DistributedCacheEntryOptions> optionsFactory = null,
             bool? hideErrors = null,
             bool considerUow = false)
@@ -626,7 +626,7 @@ namespace Volo.Abp.Caching
 
         public async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetOrAddManyAsync(
             IEnumerable<TCacheKey> keys,
-            Func<IEnumerable<TCacheKey>, Task<IEnumerable<KeyValuePair<TCacheKey, TCacheItem>>>> factory,
+            Func<IEnumerable<TCacheKey>, Task<List<KeyValuePair<TCacheKey, TCacheItem>>>> factory,
             Func<DistributedCacheEntryOptions> optionsFactory = null,
             bool? hideErrors = null,
             bool considerUow = false,
