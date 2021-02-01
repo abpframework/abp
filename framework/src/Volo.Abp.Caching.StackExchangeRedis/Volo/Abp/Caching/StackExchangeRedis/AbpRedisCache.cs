@@ -148,6 +148,25 @@ namespace Volo.Abp.Caching.StackExchangeRedis
             await GetAndRefreshManyAsync(keys, false, token);
         }
 
+        public void RemoveMany(IEnumerable<string> keys)
+        {
+            keys = Check.NotNull(keys, nameof(keys));
+
+            Connect();
+
+            RedisDatabase.KeyDelete(keys.Select(key => (RedisKey)(Instance + key)).ToArray());
+        }
+
+        public async Task RemoveManyAsync(IEnumerable<string> keys, CancellationToken token = default)
+        {
+            keys = Check.NotNull(keys, nameof(keys));
+
+            token.ThrowIfCancellationRequested();
+            await ConnectAsync(token);
+
+            await RedisDatabase.KeyDeleteAsync(keys.Select(key => (RedisKey)(Instance + key)).ToArray());
+        }
+
         protected virtual byte[][] GetAndRefreshMany(
             IEnumerable<string> keys,
             bool getData)

@@ -306,5 +306,32 @@ namespace Volo.Abp.Caching
             bool considerUow = false,
             CancellationToken token = default
         );
+
+        /// <summary>
+        /// Removes the cache items for given keys from cache.
+        /// </summary>
+        /// <param name="keys">The keys of cached items to be retrieved from the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
+        void RemoveMany(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null,
+            bool considerUow = false
+        );
+
+        /// <summary>
+        /// Removes the cache items for given keys from cache.
+        /// </summary>
+        /// <param name="keys">The keys of cached items to be retrieved from the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
+        /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
+        /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
+        Task RemoveManyAsync(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null,
+            bool considerUow = false,
+            CancellationToken token = default
+        );
     }
 }

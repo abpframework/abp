@@ -73,5 +73,21 @@ namespace Volo.Abp.Caching
                 await RefreshAsync(key, token);
             }
         }
+
+        public void RemoveMany(IEnumerable<string> keys)
+        {
+            foreach (var key in keys)
+            {
+                 Remove(key);
+            }
+        }
+
+        public async Task RemoveManyAsync(IEnumerable<string> keys, CancellationToken token = default)
+        {
+            foreach (var key in keys)
+            {
+                await RemoveAsync(key, token);
+            }
+        }
     }
 }

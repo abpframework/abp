@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -33,6 +32,15 @@ namespace Volo.Abp.Caching
         );
 
         Task RefreshManyAsync(
+            IEnumerable<string> keys,
+            CancellationToken token = default
+        );
+
+        void RemoveMany(
+            IEnumerable<string> keys
+        );
+
+        Task RemoveManyAsync(
             IEnumerable<string> keys,
             CancellationToken token = default
         );

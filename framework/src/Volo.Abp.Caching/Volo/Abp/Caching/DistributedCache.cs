@@ -1284,28 +1284,128 @@ namespace Volo.Abp.Caching
             }
         }
 
-        protected virtual KeyValuePair<TCacheKey, TCacheItem>[] GetOrAddMany(
-            TCacheKey[] keys,
-            KeyValuePair<TCacheKey, TCacheItem>[] values,
-            KeyValuePair<TCacheKey, TCacheItem>[] missingValues)
+        public void RemoveMany(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
-            var missingValuesIndex = new List<int>();
-            for (var i = 0; i < keys.Length; i++)
+            var keyArray = keys.ToArray();
+
+            if (Cache is ICacheSupportsMultipleItems cacheSupportsMultipleItems)
             {
-                if (values[i].Value == null)
+                void RemoveRealCache()
                 {
-                    missingValuesIndex.Add(i);
+                    hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+                    try
+                    {
+                        cacheSupportsMultipleItems.RemoveMany(
+                            keyArray.Select(NormalizeKey)
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        if (hideErrors == true)
+                        {
+                            HandleException(ex);
+                            return;
+                        }
+
+                        throw;
+                    }
+                }
+
+                if (ShouldConsiderUow(considerUow))
+                {
+                    var uowCache = GetUnitOfWorkCache();
+
+                    foreach (var key in keyArray)
+                    {
+                        if (uowCache.TryGetValue(key, out _))
+                        {
+                            uowCache[key].RemoveValue();
+                        }
+                    }
+
+                    // ReSharper disable once PossibleNullReferenceException
+                    UnitOfWorkManager.Current.OnCompleted(() =>
+                    {
+                        RemoveRealCache();
+                        return Task.CompletedTask;
+                    });
+                }
+                else
+                {
+                    RemoveRealCache();
                 }
             }
-
-            var valueQueue = new Queue<KeyValuePair<TCacheKey, TCacheItem>>(missingValues);
-
-            foreach (var index in missingValuesIndex)
+            else
             {
-                values[index] = valueQueue.Dequeue();
+                foreach (var key in keyArray)
+                {
+                    Remove(key, hideErrors, considerUow);
+                }
             }
+        }
 
-            return values;
+        public async Task RemoveManyAsync(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null,
+            bool considerUow = false,
+            CancellationToken token = default)
+        {
+            var keyArray = keys.ToArray();
+
+            if (Cache is ICacheSupportsMultipleItems cacheSupportsMultipleItems)
+            {
+                async Task RemoveRealCache()
+                {
+                    hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+                    try
+                    {
+                        await cacheSupportsMultipleItems.RemoveManyAsync(
+                            keyArray.Select(NormalizeKey), token);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (hideErrors == true)
+                        {
+                            await HandleExceptionAsync(ex);
+                            return;
+                        }
+
+                        throw;
+                    }
+                }
+
+                if (ShouldConsiderUow(considerUow))
+                {
+                    var uowCache = GetUnitOfWorkCache();
+
+                    foreach (var key in keyArray)
+                    {
+                        if (uowCache.TryGetValue(key, out _))
+                        {
+                            uowCache[key].RemoveValue();
+                        }
+                    }
+
+                    // ReSharper disable once PossibleNullReferenceException
+                    UnitOfWorkManager.Current.OnCompleted(RemoveRealCache);
+                }
+                else
+                {
+                    await RemoveRealCache();
+                }
+            }
+            else
+            {
+                foreach (var key in keyArray)
+                {
+                    await RemoveAsync(key, hideErrors, considerUow, token);
+                }
+            }
         }
 
         protected virtual void HandleException(Exception ex)
