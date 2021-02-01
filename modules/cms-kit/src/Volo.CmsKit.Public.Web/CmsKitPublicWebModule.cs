@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
@@ -61,8 +60,7 @@ namespace Volo.CmsKit.Public.Web
             {
                 if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
                 {
-                    // TODO: Work on this route logic. Blocks some routes with this logic.
-                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", "/{*pageUrl}");
+                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", @"/{pageUrl}");
                 }
             });
         }
