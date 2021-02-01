@@ -197,6 +197,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.ConfigureByConvention();
 
                     b.Property(p => p.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength);
+
+                    b.Property(p => p.UrlSlug).IsRequired().HasMaxLength(BlogConsts.MaxUrlSlugLength);
                 });
 
                 builder.Entity<BlogPost>(b =>
