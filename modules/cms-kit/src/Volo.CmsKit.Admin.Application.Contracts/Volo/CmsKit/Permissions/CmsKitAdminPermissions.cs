@@ -37,6 +37,7 @@ namespace Volo.CmsKit.Permissions
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
         }
+
         public static class BlogPosts
         {
             public const string Default = GroupName + ".BlogPosts";
