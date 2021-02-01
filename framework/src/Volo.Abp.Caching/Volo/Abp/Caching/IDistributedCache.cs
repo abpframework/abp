@@ -258,7 +258,7 @@ namespace Volo.Abp.Caching
         );
 
         /// <summary>
-        /// Refreshes multiple cache items.
+        /// Refreshes the cache value of the given keys, and resets their sliding expiration timeout.
         /// Based on the implementation, this can be more efficient than setting multiple items individually.
         /// </summary>
         /// <param name="keys">The keys of cached items to be retrieved from the cache.</param>
@@ -268,7 +268,7 @@ namespace Volo.Abp.Caching
             bool? hideErrors = null);
 
         /// <summary>
-        /// Refreshes multiple cache items.
+        /// Refreshes the cache value of the given keys, and resets their sliding expiration timeout.
         /// Based on the implementation, this can be more efficient than setting multiple items individually.
         /// </summary>
         /// <param name="keys">The keys of cached items to be retrieved from the cache.</param>
