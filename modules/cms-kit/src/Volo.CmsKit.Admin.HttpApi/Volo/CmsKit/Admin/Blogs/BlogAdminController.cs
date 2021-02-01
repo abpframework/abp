@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Admin.Application.Contracts.Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
@@ -63,6 +64,14 @@ namespace Volo.CmsKit.Admin.Blogs
         public Task<BlogDto> UpdateAsync(Guid id, BlogDto input)
         {
             return BlogAdminAppService.UpdateAsync(id, input);
+        }
+
+        [HttpGet]
+        [Route("lookup")]
+        [Authorize(CmsKitAdminPermissions.Blogs.Default)]
+        public Task<List<BlogLookupDto>> GetLookupAsync()
+        {
+            return BlogAdminAppService.GetLookupAsync();
         }
     }
 }
