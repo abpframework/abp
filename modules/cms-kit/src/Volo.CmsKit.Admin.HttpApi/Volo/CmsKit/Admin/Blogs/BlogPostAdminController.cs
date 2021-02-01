@@ -29,7 +29,7 @@ namespace Volo.CmsKit.Admin.Blogs
             BlogPostAdminAppService = blogPostAdminAppService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
         public virtual Task<BlogPostDto> CreateAsync(CreateUpdateBlogPostDto input)
         {
