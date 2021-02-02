@@ -55,12 +55,15 @@ namespace Volo.CmsKit.Public.Web
             {
                 options.AddMaps<CmsKitPublicWebModule>(validate: true);
             });
+        }
 
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
             Configure<RazorPagesOptions>(options =>
             {
                 if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
                 {
-                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", @"/{pageUrl}");
+                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", @"{*pageUrl:minlength(1)}");
                 }
             });
         }
