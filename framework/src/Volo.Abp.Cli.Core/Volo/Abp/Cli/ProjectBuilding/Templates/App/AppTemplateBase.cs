@@ -26,13 +26,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
+            RemoveMigrations(context, steps);
             ConfigurePublicWebSite(context, steps);
             RemoveUnnecessaryPorts(context, steps);
             RandomizeSslPorts(context, steps);
             RandomizeStringEncryption(context, steps);
             UpdateNuGetConfig(context, steps);
+            ChangeConnectionString(context, steps);
             CleanupFolderHierarchy(context, steps);
-            RemoveMigrations(context, steps);
 
             return steps;
         }
@@ -286,9 +287,18 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             }
         }
 
+        private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.ConnectionString != null)
+            {
+                steps.Add(new ConnectionStringChangeStep());
+            }
+        }
+
         private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            if (context.BuildArgs.UiFramework == UiFramework.Mvc && context.BuildArgs.MobileApp == MobileApp.None)
+            if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor) &&
+                context.BuildArgs.MobileApp == MobileApp.None)
             {
                 steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
             }

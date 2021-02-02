@@ -48,7 +48,7 @@ namespace Volo.CmsKit.Admin.Contents
 
         [HttpGet]
         [Authorize(CmsKitAdminPermissions.Contents.Default)]
-        public Task<PagedResultDto<ContentDto>> GetListAsync(ContentGetListInput input)
+        public Task<PagedResultDto<ContentGetListDto>> GetListAsync(ContentGetListInput input)
         {
             return ContentAdminAppService.GetListAsync(input);
         }
@@ -58,6 +58,14 @@ namespace Volo.CmsKit.Admin.Contents
         public Task<ContentDto> UpdateAsync(Guid id, ContentUpdateDto input)
         {
             return ContentAdminAppService.UpdateAsync(id, input);
+        }
+
+        [HttpGet]
+        [Route("{entityType}/{entityId}")]
+        [Authorize(CmsKitAdminPermissions.Contents.Default)]
+        public Task<ContentDto> GetAsync(string entityType, string entityId)
+        {
+            return ContentAdminAppService.GetAsync(entityType, entityId);
         }
     }
 }

@@ -70,7 +70,8 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   logout() {
-    this.oAuthService.logOut();
+    this.oAuthService.revokeTokenAndLogout();
+    // TODO: no need to return of(null). It may be removed in v5.0.
     return of(null);
   }
 

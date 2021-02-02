@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using Volo.Abp.Content;
 
-namespace Volo.Abp.AspNetCore.Mvc.Content
+namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 {
     public class RemoteStreamContentOutputFormatter : OutputFormatter
     {
@@ -21,9 +21,16 @@ namespace Volo.Abp.AspNetCore.Mvc.Content
         public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
         {
             var remoteStream = (IRemoteStreamContent)context.Object;
-            using (var stream = remoteStream.GetStream())
+
+            if (remoteStream != null)
             {
-                await stream.CopyToAsync(context.HttpContext.Response.Body);
+                context.HttpContext.Response.ContentType = remoteStream.ContentType;
+
+                using (var stream = remoteStream.GetStream())
+                {
+                    stream.Position = 0;
+                    await stream.CopyToAsync(context.HttpContext.Response.Body);
+                }
             }
         }
     }

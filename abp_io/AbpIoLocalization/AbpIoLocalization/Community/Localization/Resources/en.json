@@ -132,6 +132,10 @@
     "ChooseYourContentType": "Please choose the way you want to add your content.",
     "PostContentViaGithub": "I want to add my article with <span class=\"font-weight-bold\"><i class=\"fa fa-github\"></i> GitHub</span> in accordance with the markdown rules.",
     "PostContentViaYoutube": "I want to share my videos available on <span class=\"font-weight-bold\"><i class=\"fa fa-youtube\"></i> Youtube</span> here.",
-    "PostContentViaExternalSource": "I want to add the content I published on <span class=\"font-weight-bold\">another platform</span> here."
+    "PostContentViaExternalSource": "I want to add the content I published on <span class=\"font-weight-bold\">another platform</span> here.",
+    "GitHubUserNameValidationMessage": "Your Github username can not include whitespace, please be sure your Github username is correct.",
+    "PersonalSiteUrlValidationMessage": "Your personal site URL can not include whitespace, please be sure your personal site URL is correct.",
+    "TwitterUserNameValidationMessage": "Your Twitter username can not include whitespace, please be sure your Twitter username is correct.",
+    "LinkedinUrlValidationMessage": "Your Linkedin URL can not include whitespace, please be sure your Linkedin URL is correct."
   }
 }

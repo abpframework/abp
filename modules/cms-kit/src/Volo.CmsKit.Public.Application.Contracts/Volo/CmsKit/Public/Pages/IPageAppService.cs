@@ -5,6 +5,6 @@ namespace Volo.CmsKit.Public.Pages
 {
     public interface IPageAppService
     {
-        Task<PageDto> GetByUrlAsync([NotNull] string url);
+        Task<PageDto> FindByUrlAsync([NotNull] string url);
     }
 }

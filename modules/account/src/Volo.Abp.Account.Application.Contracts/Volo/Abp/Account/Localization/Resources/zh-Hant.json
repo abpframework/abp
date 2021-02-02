@@ -58,6 +58,8 @@
     "ReturnToApplication": "返回到應用程序",
     "PasswordReset": "重設密碼",
     "PasswordResetInfoInEmail": "我們收到了帳戶恢復請求!如果你發起了此請求,請單擊以下鏈接以重置密碼.",
-    "ResetMyPassword": "重置我的密碼"
+    "ResetMyPassword": "重置我的密碼",
+    "AccessDenied": "拒絕訪問!",
+    "AccessDeniedMessage": "您無權訪問此資源."
   }
 }

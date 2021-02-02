@@ -8,16 +8,16 @@ Today, we have released the [ABP Framework](https://abp.io/) and the [ABP Commer
 
 If you want to try the version `4.2.0` today, follow the steps below;
 
-1) **Upgrade** the ABP CLI to the version `4.2.0-rc.1` using a command line terminal:
+1) **Upgrade** the ABP CLI to the version `4.2.0-rc.2` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 4.2.0-rc.1
+dotnet tool update Volo.Abp.Cli -g --version 4.2.0-rc.2
 ````
 
 **or install** if you haven't installed before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 4.2.0-rc.1
+dotnet tool install Volo.Abp.Cli -g --version 4.2.0-rc.2
 ````
 
 2) Create a **new application** with the `--preview` option:
@@ -130,11 +130,25 @@ abp new BookStore -dbms mysql --preview
 
 Available options: `SqlServer` (default), `MySQL`, `SQLite`, `Oracle-Devart`, `PostgreSQL`. See the [documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Other-DBMS) to use any other DBMS or switch the DBMS later.
 
-> If you select a DBMS other than the SQL Server, then the database migrations are also created when you first run the `DbMigrator` application.
+One change related to this feature is that: Now, the startup template doesn't come with an **initial migration** file. This is because the database migrations are different based on your DBMS preference and should be re-created. However, when you first run the `.DbMigrator` application, it will create the initial migration and create the database just like before.
 
-### Swagger Login
+> See The Initial Migration section in the [Getting Started](https://docs.abp.io/en/abp/4.2/Getting-Started-Running-Solution?DB=EF#database-migrations) document if you have problems on running the `.DbMigrator` application first time.
 
-TODO
+### Swagger UI Login / Authorization
+
+Testing the swagger UI was requiring some additional work, especially your authentication server is separated from the application that hosts the Swagger UI.
+
+With the version 4.2, the startup templates come with the authorization pre-configured for you. An Authorize button is available when you open the Swagger UI:
+
+![swagger-authorize](swagger-authorize.png)
+
+When you click, it opens a modal to authorize:
+
+![swagger-authorize](swagger-authorize-modal.png)
+
+When you click to the Authorize button here, you are redirected to the login page to login with your username and password (default username is `admin` and password is `1q2w3E*`).
+
+> Remember to select the Scopes (typically **select all**) you want to use before clicking to the Authorize button.
 
 ### Angular Unit Testing
 
@@ -190,13 +204,15 @@ It uses the same *Lepton Theme*, so you can apply [all the styles](https://comme
 
 ### Easy CRM Blazor UI
 
-Easy CRM is an example application built with the ABP Commercial. MVC (Razor Pages) and Angular UI implementations were already provided. With the version 4.2, we are providing the Blazor UI implementation for this application.
+[Easy CRM](https://docs.abp.io/en/commercial/latest/samples/easy-crm) is an example application built with the ABP Commercial. MVC (Razor Pages) and Angular UI implementations were already provided. With the version 4.2, we are providing the Blazor UI implementation for this application.
 
 ![easy-crm](easy-crm.png)
 
 ### Other News
 
 * Implemented Iyzico as a payment gateway provider for the [payment module](https://commercial.abp.io/modules/Volo.Payment) in addition to Paypal, Stripe, 2Checkout and Payu providers.
+* ABP Suite supports the new microservice template creation, public website and DBMS selection options.
+* Swagger authorization and other features mentioned in the ABP Framework section are already implemented for the ABP Commercial too.
 
 ## ABP Community News
 

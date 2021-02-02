@@ -54,7 +54,7 @@ namespace Volo.CmsKit.MongoDB.Contents
 
         public async Task<bool> ExistsAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync()).AnyAsync(x =>
+            return await (await GetMongoQueryableAsync(cancellationToken)).AnyAsync(x =>
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,

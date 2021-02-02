@@ -25,17 +25,31 @@ Check the **connection string** in the `appsettings.json` file under the {{if Ti
 }
 ````
 
-The solution is configured to use **Entity Framework Core** with **MS SQL Server** by default. EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers, so you can use any supported DBMS. See [the Entity Framework integration document](Entity-Framework-Core.md) to learn how to [switch to another DBMS](Entity-Framework-Core-Other-DBMS.md).
+> **About the Connection Strings and Database Management Systems**
+>
+> The solution is configured to use **Entity Framework Core** with **MS SQL Server** by default. However, if you've selected another DBMS using the `-dbms` parameter on the ABP CLI `new` command (like `-dbms MySQL`), the connection string might be different for you.
+>
+> EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers and you can use any supported DBMS. See [the Entity Framework integration document](Entity-Framework-Core.md) to learn how to [switch to another DBMS](Entity-Framework-Core-Other-DBMS.md) if you need later.
 
-### Apply the Migrations
+### Database Migrations
 
-The solution uses the [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli). So, you need to apply migrations to create the database. There are two ways of applying the database migrations.
-
-#### Apply Migrations Using the DbMigrator
-
-The solution comes with a `.DbMigrator` console application which applies migrations and also **seeds the initial data**. It is useful on **development** as well as on **production** environment.
+The solution uses the [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli). It comes with a `.DbMigrator` console application which **applies the migrations** and also **seeds the initial data**. It is useful on **development** as well as on **production** environment.
 
 > `.DbMigrator` project has its own `appsettings.json`. So, if you have changed the connection string above, you should also change this one. 
+
+### The Initial Migration
+
+`.DbMigrator` application automatically **creates the Initial migration** on first run. 
+
+**If you are using Visual Studio, you can skip to the *Running the DbMigrator* section.** However, other IDEs (e.g. Rider) may have problems for the first run since it adds the initial migration and compiles the project. In this case, open a command line terminal in the folder of the `.DbMigrator` project and run the following command:
+
+````bash
+dotnet run
+````
+
+For the next time, you can just run it in your IDE as you normally do.
+
+### Running the DbMigrator
 
 Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
@@ -46,32 +60,6 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
  ![db-migrator-output](images/db-migrator-output.png)
 
 > Initial [seed data](Data-Seeding.md) creates the `admin` user in the database (with the password is `1q2w3E*`) which is then used to login to the application. So, you need to use `.DbMigrator` at least once for a new database.
-
-#### Using EF Core Update-Database Command
-
-Ef Core has `Update-Database` command which creates database if necessary and applies pending migrations.
-
-{{ if UI == "MVC" }}
-
-Right click to the {{if Tiered == "Yes"}}`.IdentityServer`{{else}}`.Web`{{end}} project and select **Set as StartUp project**: 
-
-{{ else if UI != "MVC" }}
-
-Right click to the `.HttpApi.Host` project and select **Set as StartUp Project**: 
-
-{{ end }}
-
-![set-as-startup-project](images/set-as-startup-project.png)
-
-Open the **Package Manager Console**, select `.EntityFrameworkCore.DbMigrations` project as the **Default Project** and run the `Update-Database` command:
-
-![package-manager-console-update-database](images/package-manager-console-update-database.png)
-
-This will create a new database based on the configured connection string.
-
-> **Using the `.DbMigrator` tool is the suggested way**, because it also seeds the initial data to be able to properly run the web application.
->
-> If you just use the `Update-Database` command, you will have an empty database, so you can not login to the application since there is no initial admin user in the database. You can use the `Update-Database` command in development time when you don't need to seed the database. However, using the `.DbMigrator` application is easier and you can always use it to migrate the schema and seed the database.
 
 {{ else if DB == "Mongo" }}
 

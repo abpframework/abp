@@ -27,28 +27,6 @@ namespace Volo.Abp.Cli.ProjectModification
                              GetStartupProjectOption(startupProject));
         }
 
-        public void RemoveAllMigrations(string solutionFolder)
-        {
-            if (Directory.Exists(Path.Combine(solutionFolder, "aspnet-core")))
-            {
-                solutionFolder = Path.Combine(solutionFolder, "aspnet-core");
-            }
-
-            var srcFolder = Path.Combine(solutionFolder, "src");
-
-            var migrationsFolder = Directory.GetDirectories(srcFolder)
-                .FirstOrDefault(d => d.EndsWith(".EntityFrameworkCore.DbMigrations"));
-
-            if (migrationsFolder != null)
-            {
-                Directory.Delete(Path.Combine(migrationsFolder, "Migrations"), true);
-            }
-            else
-            {
-                Logger.LogWarning("No migration found to delete.");
-            }
-        }
-
         protected virtual string ParseModuleName(string fullModuleName)
         {
             var words = fullModuleName?.Split('.');

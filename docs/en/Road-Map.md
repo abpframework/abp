@@ -18,4 +18,4 @@ You can always check the milestone planning and the prioritized backlog issues o
 
 The backlog items are subject to change. We are adding new items and changing priorities based on the community feedbacks and goals of the project.
 
-Vote for your favorite feature on the related GitHub issues (and write your thoughts). You can create an issue on [the GitHub repository](https://github.com/abpframework/abp) for your feature requests, but first search in in the existing issues.
+Vote for your favorite feature on the related GitHub issues (and write your thoughts). You can create an issue on [the GitHub repository](https://github.com/abpframework/abp) for your feature requests, but first search in the existing issues.

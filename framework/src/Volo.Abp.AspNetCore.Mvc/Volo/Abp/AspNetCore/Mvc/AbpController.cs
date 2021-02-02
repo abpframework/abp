@@ -25,6 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
+        [Obsolete("Use LazyServiceProvider instead.")]
         public IServiceProvider ServiceProvider { get; set; }
 
         protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
