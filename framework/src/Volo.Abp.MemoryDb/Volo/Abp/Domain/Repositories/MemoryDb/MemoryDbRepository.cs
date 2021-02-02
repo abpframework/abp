@@ -184,6 +184,16 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return (await GetQueryableAsync()).Where(predicate).SingleOrDefault();
         }
 
+        public override async Task DeleteAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            bool autoSave = false,
+            CancellationToken cancellationToken = default)
+        {
+            var entities = (await GetQueryableAsync()).Where(predicate).ToList();
+
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
+        }
+
         public override async Task<TEntity> InsertAsync(
             TEntity entity,
             bool autoSave = false,
@@ -236,16 +246,6 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             {
                 (await GetCollectionAsync()).Remove(entity);
             }
-        }
-
-        public override async Task DeleteAsync(
-            Expression<Func<TEntity, bool>> predicate,
-            bool autoSave = false,
-            CancellationToken cancellationToken = default)
-        {
-            var entities = (await GetQueryableAsync()).Where(predicate).ToList();
-
-            await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
 
         public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
