@@ -18,7 +18,7 @@ namespace Volo.CmsKit.Blogs
 
         public string UrlSlug { get; protected set; }
 
-        public string ShortDescription { get; set; }
+        public string ShortDescription { get; protected set; }
 
         public Guid? TenantId { get; }
 
@@ -49,6 +49,11 @@ namespace Volo.CmsKit.Blogs
             Check.NotNullOrWhiteSpace(urlSlug, nameof(urlSlug), BlogPostConsts.MaxUrlSlugLength, BlogPostConsts.MinUrlSlugLength);
 
             UrlSlug = urlSlug.NormalizeAsUrlSlug();
+        }
+
+        public void SetShortDescription(string shortDescription)
+        {
+            ShortDescription = Check.Length(shortDescription, nameof(shortDescription), BlogPostConsts.MaxShortDescriptionLength);
         }
     }
 }

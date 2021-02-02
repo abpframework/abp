@@ -10,5 +10,6 @@ namespace Volo.CmsKit.Admin.Blogs
         public string Title { get; set; }
 
         public string UrlSlug { get; set; }
+        public string ShortDescription { get; protected set; }
     }
 }
