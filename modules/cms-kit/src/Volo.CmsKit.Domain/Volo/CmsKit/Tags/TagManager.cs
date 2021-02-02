@@ -1,5 +1,8 @@
 ﻿using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -10,10 +13,14 @@ namespace Volo.CmsKit.Tags
     public class TagManager : DomainService, ITagManager
     {
         private readonly ITagRepository _tagRepository;
+        private readonly ITagDefinitionStore _tagDefinitionStore;
 
-        public TagManager(ITagRepository tagRepository)
+        public TagManager(
+            ITagRepository tagRepository,
+            ITagDefinitionStore tagDefinitionStore)
         {
             _tagRepository = tagRepository;
+            _tagDefinitionStore = tagDefinitionStore;
         }
 
         public async Task<Tag> GetOrAddAsync(
@@ -44,6 +51,11 @@ namespace Volo.CmsKit.Tags
                 throw new TagAlreadyExistException(entityType, name);
             }
 
+            if (!await _tagDefinitionStore.IsDefinedAsync(entityType))
+            {
+                throw new EntityNotTaggableException(entityType); 
+            }
+
             return await _tagRepository.InsertAsync(
                 new Tag(
                     id,
@@ -69,6 +81,11 @@ namespace Volo.CmsKit.Tags
             entity.SetName(name);
 
             return await _tagRepository.UpdateAsync(entity, cancellationToken: cancellationToken);
+        }
+
+        public Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync(CancellationToken cancellationToken = default)
+        {
+            return _tagDefinitionStore.GetTagEntityTypeDefinitionListAsync();
         }
     }
 }

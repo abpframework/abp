@@ -48,6 +48,14 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .WhereIf<Client, IMongoQueryable<Client>>(!filter.IsNullOrWhiteSpace(),
+                    x => x.ClientId.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(
             CancellationToken cancellationToken = default)
         {

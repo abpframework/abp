@@ -30,6 +30,16 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .WhereIf<IdentityResource, IMongoQueryable<IdentityResource>>(!filter.IsNullOrWhiteSpace(),
+                    x => x.Name.Contains(filter) ||
+                         x.Description.Contains(filter) ||
+                         x.DisplayName.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<IdentityResource> FindByNameAsync(
             string name,
             bool includeDetails = true,

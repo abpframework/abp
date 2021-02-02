@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
@@ -16,15 +17,10 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
             pipeline.Steps.Add(new ProjectReferenceReplaceStep());
             pipeline.Steps.Add(new TemplateCodeDeleteStep());
-
-            if (context.BuildArgs.ConnectionString != null)
-            {
-                pipeline.Steps.Add(new ConnectionStringChangeStep());
-            }
-
             pipeline.Steps.Add(new SolutionRenameStep());
 
             if (context.Template.Name == AppProTemplate.TemplateName ||
+                context.Template.Name == MicroserviceProTemplate.TemplateName ||
                 context.Template.Name == ModuleProTemplate.TemplateName)
             {
                 pipeline.Steps.Add(new LicenseCodeReplaceStep()); // todo: move to custom steps?
@@ -37,7 +33,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             }
 
             if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor)
-                && context.BuildArgs.MobileApp == MobileApp.None)
+                && context.BuildArgs.MobileApp == MobileApp.None && context.Template.Name != MicroserviceProTemplate.TemplateName)
             {
                 pipeline.Steps.Add(new RemoveRootFolderStep());
             }

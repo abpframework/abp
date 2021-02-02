@@ -231,7 +231,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
             List<Guid> organizationUnitIds,
             CancellationToken cancellationToken = default
             )

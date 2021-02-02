@@ -184,7 +184,7 @@ public class PersonAppService : ApplicationService, IPersonAppService
 }
 ````
 
-ABP Framework's repository doesn't have this method. Instead, it implements the `IQueryable` itself. So, you can directly use LINQ on the repository:
+ABP Framework's repository have `GetQueryableAsync` instead:
 
 ````csharp
 public class PersonAppService : ApplicationService, IPersonAppService
@@ -198,14 +198,15 @@ public class PersonAppService : ApplicationService, IPersonAppService
 
     public async Task DoIt()
     {
-        var people = await _personRepository
+        var queryable = await _personRepository.GetQueryableAsync();
+        var people = await queryable
             .Where(p => p.BirthYear > 2000) //Use LINQ extension methods
             .ToListAsync();
     }
 }
 ````
 
-> Note that in order to use the async LINQ extension methods (like `ToListAsync` here), you may need to depend on the database provider (like EF Core) since these methods are defined in the database provider package, they are not standard LINQ methods.
+> Note that in order to use the async LINQ extension methods (like `ToListAsync` here), you may need to depend on the database provider (like EF Core) since these methods are defined in the database provider package, they are not standard LINQ methods. See the [repository document](Repositories.md) for alternative approaches for async query execution.
 
 #### FirstOrDefault(predicate), Single()... Methods
 

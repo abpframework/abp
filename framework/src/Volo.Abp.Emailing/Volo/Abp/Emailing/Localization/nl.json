@@ -1,23 +1,25 @@
 {
   "culture": "nl",
   "texts": {
-    "DisplayName:Abp.Mailing.DefaultFromAddress": "Standard vanaf adres",
-    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Standaard vanaf weergave naam",
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Standaard vanaf adres",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Standaard vanaf weergavenaam",
     "DisplayName:Abp.Mailing.Smtp.Host": "Host",
     "DisplayName:Abp.Mailing.Smtp.Port": "Poort",
-    "DisplayName:Abp.Mailing.Smtp.UserName": "Gebruiker naam",
-    "DisplayName:Abp.Mailing.Smtp.Password": "wachtwoord",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Gebruikersnaam",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Wachtwoord",
     "DisplayName:Abp.Mailing.Smtp.Domain": "Domein",
     "DisplayName:Abp.Mailing.Smtp.EnableSsl": "SSL toestaan",
     "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Gebruik standaard inloggegevens",
-    "Description:Abp.Mailing.DefaultFromAddress": "Standard vanaf adres",
-    "Description:Abp.Mailing.DefaultFromDisplayName": "Standaard vanaf weergave naam",
+    "Description:Abp.Mailing.DefaultFromAddress": "Standaard vanaf adres",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Standaard vanaf weergavenaam",
     "Description:Abp.Mailing.Smtp.Host": "De naam of het IP-adres van de host die wordt gebruikt voor SMTP-transacties.",
     "Description:Abp.Mailing.Smtp.Port": "De poort die wordt gebruikt voor SMTP-transacties.",
     "Description:Abp.Mailing.Smtp.UserName": "Gebruikersnaam gekoppeld aan de inloggegevens.",
     "Description:Abp.Mailing.Smtp.Password": "Het wachtwoord voor de gebruikersnaam die bij de inloggegevens hoort.",
     "Description:Abp.Mailing.Smtp.Domain": "Het domein of de computernaam die de inloggegevens verifieert.",
     "Description:Abp.Mailing.Smtp.EnableSsl": "Of de SmtpClient Secure Sockets Layer (SSL) gebruikt om de verbinding te versleutelen.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Of de standaard inloggegevens worden verzonden met verzoeken."
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Of de standaard inloggegevens worden verzonden met verzoeken.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Standaard sjabloon voor e-mail lay-out",
+    "TextTemplate:StandardEmailTemplates.Message": "Eenvoudig berichtsjabloon voor e-mails"
   }
 }

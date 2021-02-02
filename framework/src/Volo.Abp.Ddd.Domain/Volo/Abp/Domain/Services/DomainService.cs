@@ -13,11 +13,12 @@ namespace Volo.Abp.Domain.Services
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
+        [Obsolete("Use LazyServiceProvider instead.")]
         public IServiceProvider ServiceProvider { get; set; }
 
         protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
-        public IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
+        protected IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
         protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 

@@ -9,11 +9,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
     {
         private readonly ConcurrentDictionary<string, BundleConfiguration> _bundles;
         private readonly ConcurrentDictionary<string, List<Action<BundleConfiguration>>> _lazyBundleConfigurationActions;
+        private readonly List<Action<BundleConfiguration>> _lazyAllBundleConfigurationActions;
 
         public BundleConfigurationCollection()
         {
             _bundles = new ConcurrentDictionary<string, BundleConfiguration>();
             _lazyBundleConfigurationActions = new ConcurrentDictionary<string, List<Action<BundleConfiguration>>>();
+            _lazyAllBundleConfigurationActions = new List<Action<BundleConfiguration>>();
         }
 
         /// <summary>
@@ -90,6 +92,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 }
             }
 
+            lock (_lazyAllBundleConfigurationActions)
+            {
+                _lazyAllBundleConfigurationActions.ForEach(c => c.Invoke(bundle));
+            }
+
+
             return bundle;
         }
 
@@ -118,6 +126,29 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                 {
                     configurationActions.Add(configureAction);
                 }
+            }
+
+            return this;
+        }
+
+         /// <summary>
+        /// Configures all bundles.
+        /// This method also works for lazy bundles (those are created using razor tag helpers).
+        /// </summary>
+        /// <param name="configureAction">Configure action</param>
+        /// <returns>Returns this object for chained calls.</returns>
+        public BundleConfigurationCollection ConfigureAll([NotNull] Action<BundleConfiguration> configureAction)
+        {
+            Check.NotNull(configureAction, nameof(configureAction));
+
+            foreach (var bundle in _bundles)
+            {
+                configureAction.Invoke(bundle.Value);
+            }
+
+            lock (_lazyAllBundleConfigurationActions)
+            {
+                _lazyAllBundleConfigurationActions.Add(configureAction);
             }
 
             return this;

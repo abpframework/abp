@@ -121,22 +121,13 @@
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "inject": true,
-                "bundleName": "bootstrap.min"
-              },
-              "src/styles.scss",
-              {
-                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-                "inject": false,
-                "bundleName": "fontawesome-all.min"
-              },
-              {
-                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
-                "inject": false,
-                "bundleName": "fontawesome-v4-shims.min"
-              }
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+              "node_modules/@swimlane/ngx-datatable/index.css",
+              "node_modules/@swimlane/ngx-datatable/assets/icons.css",
+              "node_modules/@swimlane/ngx-datatable/themes/material.css",
+              "src/styles.scss"
             ],
             "scripts": []
           }
