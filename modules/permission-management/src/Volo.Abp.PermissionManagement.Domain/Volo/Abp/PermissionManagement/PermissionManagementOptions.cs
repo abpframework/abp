@@ -5,10 +5,14 @@ namespace Volo.Abp.PermissionManagement
 {
     public class PermissionManagementOptions
     {
-        //TODO: rename to Providers
         public ITypeList<IPermissionManagementProvider> ManagementProviders { get; }
 
         public Dictionary<string, string> ProviderPolicies { get; }
+
+        /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsDistributedEventHandlingEnabled { get; } = true;
 
         public PermissionManagementOptions()
         {

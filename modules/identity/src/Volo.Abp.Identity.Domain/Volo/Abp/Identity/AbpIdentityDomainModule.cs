@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -57,6 +59,20 @@ namespace Volo.Abp.Identity
             });
 
             context.Services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();
+
+            Configure<AbpDistributedEventBusOptions>(options =>
+            {
+                var serviceProvider = context.Services.GetServiceProviderOrNull();
+                if (serviceProvider != null)
+                {
+                    var abpIdentityOptions = serviceProvider.GetRequiredService<IOptions<AbpIdentityOptions>>().Value;
+                    if (!abpIdentityOptions.IsDistributedEventHandlingEnabled)
+                    {
+                        var identityDomainAssembly = typeof(AbpIdentityDomainModule).Assembly;
+                        options.Handlers.RemoveAll(x => x.Assembly == identityDomainAssembly);
+                    }
+                }
+            });
         }
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
