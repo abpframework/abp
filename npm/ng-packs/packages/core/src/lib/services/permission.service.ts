@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import snq from 'snq';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from './config-state.service';
-import { ABP } from '../models';
+import { ABP } from '../models/common';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
