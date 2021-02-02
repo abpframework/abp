@@ -53,7 +53,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <summary>
         /// Deletes many entities by the given <paramref name="predicate"/>.
         /// <para>
-        /// Please note: This may cause major performance problems if there are too many entities returned for a 
+        /// Please note: This may cause major performance problems if there are too many entities returned for a
         /// given predicate and the database provider doesn't have a way to efficiently delete many entities.
         /// </para>
         /// </summary>
@@ -64,14 +64,6 @@ namespace Volo.Abp.Domain.Repositories
         /// </param>
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         Task DeleteAsync(
-            [NotNull] Expression<Func<TEntity, bool>> predicate,
-            bool autoSave = false,
-            CancellationToken cancellationToken = default
-        );
-
-        /// <inheritdoc cref="DeleteAsync"/>
-        /// <remarks>This is an alias for <see cref="DeleteAsync"/> </remarks>
-        Task DeleteManyAsync(
             [NotNull] Expression<Func<TEntity, bool>> predicate,
             bool autoSave = false,
             CancellationToken cancellationToken = default
