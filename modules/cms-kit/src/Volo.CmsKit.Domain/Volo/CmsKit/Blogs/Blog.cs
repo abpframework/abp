@@ -24,7 +24,7 @@ namespace Volo.CmsKit.Blogs
 
         public string UrlSlug { get; protected set; }
 
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; protected set; }
 
         public void SetName(string name)
         {

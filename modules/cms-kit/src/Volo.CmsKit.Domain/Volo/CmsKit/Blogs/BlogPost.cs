@@ -20,7 +20,7 @@ namespace Volo.CmsKit.Blogs
 
         public string ShortDescription { get; protected set; }
 
-        public Guid? TenantId { get; }
+        public Guid? TenantId { get; protected set; }
 
         protected BlogPost()
         {

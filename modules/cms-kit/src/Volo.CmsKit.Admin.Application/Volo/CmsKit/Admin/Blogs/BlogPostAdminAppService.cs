@@ -28,6 +28,7 @@ namespace Volo.CmsKit.Admin.Blogs
     {
         protected readonly IBlogPostManager BlogPostManager;
         protected readonly IBlogPostRepository BlogPostRepository;
+        protected readonly IBlogRepository BlogRepository;
         protected readonly IBlobContainer<BlogPostCoverImageContainer> BlobContainer;
         protected readonly ICmsUserLookupService UserLookupService;
 
@@ -35,11 +36,13 @@ namespace Volo.CmsKit.Admin.Blogs
             IRepository<BlogPost, Guid> repository,
             IBlogPostManager blogPostManager,
             IBlogPostRepository blogPostRepository,
+            IBlogRepository blogRepository,
             IBlobContainer<BlogPostCoverImageContainer> blobContainer,
             ICmsUserLookupService userLookupService) : base(repository)
         {
             BlogPostManager = blogPostManager;
             BlogPostRepository = blogPostRepository;
+            BlogRepository = blogRepository;
             BlobContainer = blobContainer;
             UserLookupService = userLookupService;
 
@@ -50,9 +53,11 @@ namespace Volo.CmsKit.Admin.Blogs
             DeletePolicyName = CmsKitAdminPermissions.BlogPosts.Delete;
         }
 
-        public virtual async Task<BlogPostDto> GetByUrlSlugAsync(string urlSlug)
+        public virtual async Task<BlogPostDto> GetByUrlSlugAsync(string blogUrlSlug, string urlSlug)
         {
-            var blogPost = await BlogPostRepository.GetByUrlSlugAsync(urlSlug);
+            var blog = await BlogRepository.GetByUrlSlugAsync(blogUrlSlug);
+
+            var blogPost = await BlogPostRepository.GetByUrlSlugAsync(blog.Id, urlSlug);
 
             return MapToGetOutputDto(blogPost);
         }

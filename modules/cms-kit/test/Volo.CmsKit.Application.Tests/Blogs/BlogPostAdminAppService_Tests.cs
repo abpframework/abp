@@ -93,20 +93,30 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetByUrlSlugAsync_ShouldWorkProperly_WithExistingUrlSlug()
         {
-            var blogPost = await blogPostAdminAppService.GetByUrlSlugAsync(cmsKitTestData.BlogPost_1_UrlSlug);
+            var blogPost = await blogPostAdminAppService.GetByUrlSlugAsync(cmsKitTestData.BlogUrlSlug, cmsKitTestData.BlogPost_1_UrlSlug);
 
             blogPost.Id.ShouldBe(cmsKitTestData.BlogPost_1_Id);
             blogPost.Title.ShouldBe(cmsKitTestData.BlogPost_1_Title);
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldThrowException_WithNonExistingUrlSlug()
+        public async Task GetByUrlSlugAsync_ShouldThrowException_WithNonExistingBlogPostUrlSlug()
         {
             var nonExistingUrlSlug = "any-other-url";
             var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
-                                await blogPostAdminAppService.GetByUrlSlugAsync(cmsKitTestData.Page_1_Url));
+                                await blogPostAdminAppService.GetByUrlSlugAsync(cmsKitTestData.BlogUrlSlug, nonExistingUrlSlug));
 
             exception.EntityType.ShouldBe(typeof(BlogPost));
+        }
+
+        [Fact]
+        public async Task GetByUrlSlugAsync_ShouldThrowException_WithNonExistingBlogUrlSlug()
+        {
+            var nonExistingUrlSlug = "any-other-url";
+            var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
+                                await blogPostAdminAppService.GetByUrlSlugAsync(nonExistingUrlSlug, cmsKitTestData.Page_1_Url));
+
+            exception.EntityType.ShouldBe(typeof(Blog));
         }
 
         [Fact]
