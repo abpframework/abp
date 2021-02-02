@@ -7,9 +7,11 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
@@ -27,16 +29,19 @@ namespace Volo.CmsKit.Admin.Blogs
         protected readonly IBlogPostManager BlogPostManager;
         protected readonly IBlogPostRepository BlogPostRepository;
         protected readonly IBlobContainer<BlogPostCoverImageContainer> BlobContainer;
+        protected readonly ICmsUserLookupService UserLookupService;
 
         public BlogPostAdminAppService(
             IRepository<BlogPost, Guid> repository,
             IBlogPostManager blogPostManager,
             IBlogPostRepository blogPostRepository,
-            IBlobContainer<BlogPostCoverImageContainer> blobContainer) : base(repository)
+            IBlobContainer<BlogPostCoverImageContainer> blobContainer,
+            ICmsUserLookupService userLookupService) : base(repository)
         {
             BlogPostManager = blogPostManager;
             BlogPostRepository = blogPostRepository;
             BlobContainer = blobContainer;
+            UserLookupService = userLookupService;
 
             GetListPolicyName = CmsKitAdminPermissions.BlogPosts.Default;
             GetPolicyName = CmsKitAdminPermissions.BlogPosts.Default;
@@ -55,6 +60,8 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
         public override async Task<BlogPostDto> CreateAsync(CreateUpdateBlogPostDto input)
         {
+            _ = await UserLookupService.GetByIdAsync(CurrentUser.GetId());
+
             var entity = await BlogPostManager
                                     .CreateAsync(
                                         new BlogPost(
