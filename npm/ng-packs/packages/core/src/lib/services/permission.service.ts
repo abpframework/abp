@@ -19,6 +19,17 @@ export class PermissionService {
     return this.isPolicyGranted(key, policies);
   }
 
+  filterGrantedPolicies(policyKeys: Array<string>) {
+    const policies = this.getSnapshot();
+    return policyKeys.filter(key => this.isPolicyGranted(key, policies));
+  }
+
+  filterGrantedPolicies$(policyKeys: Array<string>) {
+    return this.getStream().pipe(
+      map(policies => policyKeys.filter(key => this.isPolicyGranted(key, policies))),
+    );
+  }
+
   protected isPolicyGranted(key: string, grantedPolicies: Record<string, boolean>) {
     if (!key) return true;
 
