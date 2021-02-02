@@ -62,6 +62,8 @@ namespace Volo.CmsKit.Admin.Tags
             return TagAdminAppService.UpdateAsync(id, input);
         }
 
+        [HttpGet]
+        [Route("tag-definitions")]
         public Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
         {
             return TagAdminAppService.GetTagDefinitionsAsync();
