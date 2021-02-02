@@ -1,19 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <Import Project="..\..\..\configureawait.props" />
-    <Import Project="..\..\..\common.props" />
+  <Import Project="..\..\..\configureawait.props" />
+  <Import Project="..\..\..\common.props" />
 
-    <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly\Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly\Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Blazorise" Version="0.9.3-preview8" />
-        <PackageReference Include="Blazorise.DataGrid" Version="0.9.3-preview8" />
-        <PackageReference Include="Blazorise.Snackbar" Version="0.9.3-preview8" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Blazorise" Version="0.9.3-preview8" />
+    <PackageReference Include="Blazorise.DataGrid" Version="0.9.3-preview8" />
+    <PackageReference Include="Blazorise.Snackbar" Version="0.9.3-preview8" />
+    <PackageReference Include="Blazorise.Components" Version="0.9.3-preview8" />
+  </ItemGroup>
 </Project>
