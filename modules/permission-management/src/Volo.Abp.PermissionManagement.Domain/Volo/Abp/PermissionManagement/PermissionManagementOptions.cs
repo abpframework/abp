@@ -9,11 +9,6 @@ namespace Volo.Abp.PermissionManagement
 
         public Dictionary<string, string> ProviderPolicies { get; }
 
-        /// <summary>
-        /// Default: true.
-        /// </summary>
-        public bool IsDistributedEventHandlingEnabled { get; } = true;
-
         public PermissionManagementOptions()
         {
             ManagementProviders = new TypeList<IPermissionManagementProvider>();
