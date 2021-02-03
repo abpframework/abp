@@ -359,6 +359,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Json.Tests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Http.Tests", "test\Volo.Abp.Http.Tests\Volo.Abp.Http.Tests.csproj", "{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Abstractions", "src\Volo.Abp.EventBus.Abstractions\Volo.Abp.EventBus.Abstractions.csproj", "{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1069,6 +1071,10 @@ Global
 		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1250,6 +1256,7 @@ Global
 		{DD9519E0-5A68-48DC-A051-7BF2AC922F3E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{00D07595-993C-40FC-BD90-0DD6331414D3} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

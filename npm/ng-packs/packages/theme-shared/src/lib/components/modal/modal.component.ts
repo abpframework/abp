@@ -154,6 +154,7 @@ export class ModalComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.toggle(false);
     this.destroy$.next();
   }
 
