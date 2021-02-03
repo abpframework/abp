@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
 
 namespace Volo.CmsKit.Blogs
@@ -48,7 +49,8 @@ namespace Volo.CmsKit.Blogs
 
         private async Task CheckBlogExistenceAsync(Guid blogId)
         {
-            await blogRepository.GetAsync(blogId);
+            if (!await blogRepository.ExistsAsync(blogId))
+                throw new EntityNotFoundException(typeof(Blog), blogId);
         }
     }
 }
