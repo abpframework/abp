@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Admin.Application.Contracts.Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -31,9 +30,7 @@ namespace Volo.CmsKit.Admin.Blogs
         {
             var blogs = await Repository.GetListAsync();
 
-            return blogs
-                    .Select(s => new BlogLookupDto(s.Id, s.Name))
-                    .ToList();
+            return ObjectMapper.Map<List<Blog>, List<BlogLookupDto>>(blogs);
         }
     }
 }

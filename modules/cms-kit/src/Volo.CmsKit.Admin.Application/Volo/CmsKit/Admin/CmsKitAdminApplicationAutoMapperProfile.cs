@@ -27,6 +27,8 @@ namespace Volo.CmsKit.Admin
             CreateMap<Blog, BlogDto>(MemberList.Destination)
                 .ReverseMap();
 
+            CreateMap<Blog, BlogLookupDto>(MemberList.Destination);
+
             CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
         }
     }
