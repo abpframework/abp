@@ -35,6 +35,8 @@ namespace Volo.Abp.AutoMapper
             {
                 var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
 
+                options.Configurators.Insert(0, ctx => ctx.MapperConfiguration.ConstructServicesUsing(serviceProvider.GetService));
+
                 void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
                 {
                     foreach (var configurator in options.Configurators)
@@ -60,7 +62,7 @@ namespace Volo.Abp.AutoMapper
 
                 return new MapperAccessor
                 {
-                    Mapper = new Mapper(mapperConfiguration, serviceProvider.GetService)
+                    Mapper = new Mapper(mapperConfiguration)
                 };
             }
         }
