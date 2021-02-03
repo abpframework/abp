@@ -44,6 +44,8 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
         [Inject]
         public IOptions<AbpRemoteServiceOptions> RemoteServiceOptions { get; set; }
 
+        public string TextPropertyName => PropertyInfo.Name + "_Text";
+
         public object SelectedValue
         {
             get
@@ -57,39 +59,39 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
             }
         }
 
-
         public LookupExtensionProperty()
         {
             lookupItems = new List<SelectItem<object>>();
         }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            lookupItems = await GetLookupItemsAsync(string.Empty);
+            var value = Entity.GetProperty(PropertyInfo.Name);
+            if (value != null)
+            {
+                lookupItems.Add(new SelectItem<object>
+                {
+                    Text = Entity.GetProperty(TextPropertyName).ToString(),
+                    Value = value
+                });
+            }
         }
 
         protected virtual void UpdateLookupTextProperty(object value)
         {
-            var lookupPropertyName = $"{PropertyInfo.Name}_Text";
             var selectedItemText = lookupItems.SingleOrDefault(t => t.Value.Equals(value)).Text;
-            Entity.SetProperty(lookupPropertyName, selectedItemText);
+            Entity.SetProperty(TextPropertyName, selectedItemText);
         }
 
         protected virtual async Task<List<SelectItem<object>>> GetLookupItemsAsync(string filter)
         {
             var selectItems = new List<SelectItem<object>>();
+
             var url = PropertyInfo.Lookup.Url;
             var uri = new Uri(url, UriKind.RelativeOrAbsolute);
             if (!filter.IsNullOrEmpty())
             {
-                if (uri.Query.IsNullOrEmpty())
-                {
-                    url += $"?{PropertyInfo.Lookup.FilterParamName}={filter.Trim()}";
-                }
-                else
-                {
-                    url += $"&{PropertyInfo.Lookup.FilterParamName}={filter.Trim()}";
-                }
+                url += $"?{PropertyInfo.Lookup.FilterParamName}={filter.Trim()}";
             }
 
             var client = HttpClientFactory.CreateClient();
@@ -104,7 +106,6 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
             }
 
             var response = await client.SendAsync(requestMessage);
-
             var document = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
             var itemsArrayProp = document.RootElement.GetProperty(PropertyInfo.Lookup.ResultListPropertyName);
             foreach (var item in itemsArrayProp.EnumerateArray())
@@ -124,7 +125,7 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
             SelectedValue = selectedItem;
         }
 
-        protected virtual async Task SearchFilterChangedAsync(string filter)
+        protected async Task SearchFilterChangedAsync(string filter)
         {
             lookupItems = await GetLookupItemsAsync(filter);
         }
