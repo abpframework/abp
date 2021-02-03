@@ -43,5 +43,23 @@ namespace Volo.CmsKit.Blogs
             exception.ShouldNotBeNull();
             exception.EntityType.ShouldBe(typeof(Blog));
         }
+
+        [Fact]
+        public async Task ExistsAsync_ShouldReturnTrue_WithExistingId()
+        {
+            var result = await blogRepository.ExistsAsync(testData.Blog_Id);
+
+            result.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task ExistsAsync_ShouldReturnFalse_WithExistingId()
+        {
+            var nonExistingId = Guid.NewGuid();
+
+            var result = await blogRepository.ExistsAsync(nonExistingId);
+
+            result.ShouldBeFalse();
+        }
     }
 }
