@@ -3,10 +3,13 @@
   "texts": {
     "CmsKit:0002": "İçerik zaten mevcut!",
     "CmsKit:0003": "{0} ögesi etiketlenebilir değil.",
+    "CmsKit:Page:0001": "Girilen url ({0}) kullanımdadır.",
     "CommentAuthorizationExceptionMessage": "Bu yorumları görebilmek için yetki gerekir.",
     "Comments": "Yorumlar",
     "Delete": "Sil",
     "Edit": "Düzenle",
+    "Read": "Oku",
+    "LastModification": "Son Güncellenme",
     "LoginToAddComment": "Yorum yapmak için giriş yap",
     "LoginToRate": "Oylamak için giriş yapın",
     "LoginToReply": "Cevap vermek için giriş yap",
@@ -31,7 +34,6 @@
     "Undo": "Geri al",
     "Update": "Güncelle",
     "YourComment": "Yorumunuz",
-    "YourReply": "Cevabınız",
-    "CmsKit:Page:0001": "Girilen url ({0}) kullanımdadır."
+    "YourReply": "Cevabınız"
   }
 }

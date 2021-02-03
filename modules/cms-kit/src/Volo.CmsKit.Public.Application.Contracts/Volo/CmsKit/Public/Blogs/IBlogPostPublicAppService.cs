@@ -6,7 +6,7 @@ namespace Volo.CmsKit.Public.Blogs
 {
     public interface IBlogPostPublicAppService
     {
-        Task<List<BlogPostPublicDto>> GetListAsync(string blogUrlSlug, PagedAndSortedResultRequestDto input);
+        Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogUrlSlug, PagedAndSortedResultRequestDto input);
 
         Task<BlogPostPublicDto> GetAsync(string blogUrlSlug, string blogPostUrlSlug);
     }

@@ -29,13 +29,15 @@ namespace Volo.CmsKit.Public.Blogs
             return ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
         }
 
-        public async Task<List<BlogPostPublicDto>> GetListAsync(string blogUrlSlug, PagedAndSortedResultRequestDto input)
+        public async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogUrlSlug, PagedAndSortedResultRequestDto input)
         {
             var blog = await BlogRepository.GetByUrlSlugAsync(blogUrlSlug);
 
             var blogPosts = await BlogPostRepository.GetPagedListAsync(blog.Id, input.SkipCount, input.MaxResultCount, input.Sorting);
 
-            return ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts);
+            return new PagedResultDto<BlogPostPublicDto>(
+                await BlogPostRepository.GetCountAsync(blog.Id),
+                ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
         }
     }
 }

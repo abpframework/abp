@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using Nito.AsyncEx;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.MongoDB.Blogs
 {
@@ -18,18 +21,28 @@ namespace Volo.CmsKit.MongoDB.Blogs
 
         public Task<BlogPost> GetByUrlSlugAsync(Guid blogId, string urlSlug, CancellationToken cancellationToken = default)
         {
-            return GetAsync(x => x.BlogId == blogId && x.UrlSlug.ToLower() == urlSlug, cancellationToken: cancellationToken);
+            return GetAsync(x => 
+                            x.BlogId == blogId && 
+                            x.UrlSlug.ToLower() == urlSlug,
+                        includeDetails: true,
+                        cancellationToken: cancellationToken);
+        }
+
+        public async Task<int> GetCountAsync(Guid blogId, CancellationToken cancellationToken = default)
+        {
+            return await AsyncExecuter.CountAsync(
+                            await WithDetailsAsync(),
+                            x => x.BlogId == blogId,
+                            cancellationToken);
         }
 
         public async Task<List<BlogPost>> GetPagedListAsync(Guid blogId, int skipCount, int maxResultCount, string sorting, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync(cancellationToken);
-            var blogPostQueryable = await GetQueryableAsync();
+            var blogPostQueryable = await WithDetailsAsync();
 
             var queryable = blogPostQueryable
-                          .Where(x => x.BlogId == blogId)
-                          //.Join(dbContext.CmsUsers, outerKeySelector: x => x.CreatorId, innerKeySelector: x => x.Id, resultSelector: s => s)
-                          ;
+                          .Where(x => x.BlogId == blogId);
 
             if (!sorting.IsNullOrWhiteSpace())
             {
