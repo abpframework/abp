@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
-using Volo.CmsKit.Admin.Application.Contracts.Volo.CmsKit.Admin.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
