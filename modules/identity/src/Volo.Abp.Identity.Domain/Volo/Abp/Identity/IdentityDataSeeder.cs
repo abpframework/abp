@@ -49,58 +49,61 @@ namespace Volo.Abp.Identity
             Check.NotNullOrWhiteSpace(adminEmail, nameof(adminEmail));
             Check.NotNullOrWhiteSpace(adminPassword, nameof(adminPassword));
 
-            await IdentityOptions.SetAsync();
-
-            var result = new IdentityDataSeedResult();
-
             using (CurrentTenant.Change(tenantId))
             {
-                //"admin" user
-                const string adminUserName = "admin";
-                var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
-                    LookupNormalizer.NormalizeName(adminUserName)
-                );
+                await IdentityOptions.SetAsync();
 
-                if (adminUser != null)
+                using (IdentityOptions.Value.Password.ClearRequirements())
                 {
-                    return result;
-                }
+                    var result = new IdentityDataSeedResult();
+                    //"admin" user
+                    const string adminUserName = "admin";
+                    var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
+                        LookupNormalizer.NormalizeName(adminUserName)
+                    );
 
-                adminUser = new IdentityUser(
-                    GuidGenerator.Create(),
-                    adminUserName,
-                    adminEmail,
-                    tenantId
-                )
-                {
-                    Name = adminUserName
-                };
+                    if (adminUser != null)
+                    {
+                        return result;
+                    }
 
-                (await UserManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
-                result.CreatedAdminUser = true;
-
-                //"admin" role
-                const string adminRoleName = "admin";
-                var adminRole = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
-                if (adminRole == null)
-                {
-                    adminRole = new IdentityRole(
+                    adminUser = new IdentityUser(
                         GuidGenerator.Create(),
-                        adminRoleName,
+                        adminUserName,
+                        adminEmail,
                         tenantId
                     )
                     {
-                        IsStatic = true,
-                        IsPublic = true
+                        Name = adminUserName
                     };
 
-                    (await RoleManager.CreateAsync(adminRole)).CheckErrors();
-                    result.CreatedAdminRole = true;
+                    (await UserManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
+                    result.CreatedAdminUser = true;
+
+                    //"admin" role
+                    const string adminRoleName = "admin";
+                    var adminRole =
+                        await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
+                    if (adminRole == null)
+                    {
+                        adminRole = new IdentityRole(
+                            GuidGenerator.Create(),
+                            adminRoleName,
+                            tenantId
+                        )
+                        {
+                            IsStatic = true,
+                            IsPublic = true
+                        };
+
+                        (await RoleManager.CreateAsync(adminRole)).CheckErrors();
+                        result.CreatedAdminRole = true;
+                    }
+
+                    (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
+
+                    return result;
                 }
-
-                (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
-
-                return result;
             }
         }
     }
