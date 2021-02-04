@@ -199,11 +199,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             var url = $"{CliUrls.WwwAbpIo}api/download/{input.Type}/";
 
+            HttpResponseMessage responseMessage = null;
+
             try
             {
                 using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
                 {
-                    HttpResponseMessage responseMessage;
 
                     if (input.TemplateSource.IsNullOrWhiteSpace())
                     {
@@ -225,7 +226,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error occured while downloading source-code from {0} : {1}", url, ex.Message);
+                Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}",
+                    url, responseMessage?.ToString(), Environment.NewLine, ex.Message);
                 throw;
             }
         }
