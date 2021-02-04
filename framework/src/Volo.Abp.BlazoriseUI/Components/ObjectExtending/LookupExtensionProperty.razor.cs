@@ -64,7 +64,7 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
             lookupItems = new List<SelectItem<object>>();
         }
 
-        protected override void OnInitialized()
+        protected override void OnParametersSet()
         {
             var value = Entity.GetProperty(PropertyInfo.Name);
             if (value != null)
