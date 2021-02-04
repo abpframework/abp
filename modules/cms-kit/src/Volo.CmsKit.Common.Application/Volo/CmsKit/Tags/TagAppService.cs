@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Public.Tags
+namespace Volo.CmsKit.Tags
 {
     public class TagAppService : CmsKitAppServiceBase, ITagAppService
     {
