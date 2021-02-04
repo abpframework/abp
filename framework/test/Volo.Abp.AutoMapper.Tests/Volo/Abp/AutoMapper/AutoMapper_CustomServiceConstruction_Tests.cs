@@ -2,7 +2,6 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.AutoMapper.SampleClasses;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 using Xunit;
@@ -22,11 +21,11 @@ namespace Volo.Abp.AutoMapper
         [Fact]
         public void Should_Custom_Service_Construction()
         {
-            var myEntity = new MyEntity
+            var source = new SourceModel
             {
-                Number = 2
+                Name = nameof(SourceModel)
             };
-            _objectMapper.Map<MyEntity, MyEntityDto>(myEntity).Number.ShouldBe(1);
+            _objectMapper.Map<SourceModel, DestModel>(source).Name.ShouldBe(nameof(CustomMappingAction));
         }
 
         [DependsOn(typeof(AbpAutoMapperModule))]
@@ -41,33 +40,43 @@ namespace Volo.Abp.AutoMapper
                     {
                         configurationContext.MapperConfiguration.ConstructServicesUsing(type =>
                             type.Name.Contains(nameof(CustomMappingAction))
-                                ? new CustomMappingAction(1)
+                                ? new CustomMappingAction(nameof(CustomMappingAction))
                                 : Activator.CreateInstance(type));
                     });
                 });
             }
         }
 
+        public class SourceModel
+        {
+            public string Name { get; set; }
+        }
+
+        public class DestModel
+        {
+            public string Name { get; set; }
+        }
+
         public class MapperActionProfile : Profile
         {
             public MapperActionProfile()
             {
-                CreateMap<MyEntity, MyEntityDto>().AfterMap<CustomMappingAction>();
+                CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingAction>();
             }
         }
 
-        public class CustomMappingAction : IMappingAction<MyEntity, MyEntityDto>
+        public class CustomMappingAction : IMappingAction<SourceModel, DestModel>
         {
-            private readonly int _number;
+            private readonly string _name;
 
-            public CustomMappingAction(int number)
+            public CustomMappingAction(string name)
             {
-                _number = number;
+                _name = name;
             }
 
-            public void Process(MyEntity source, MyEntityDto destination, ResolutionContext context)
+            public void Process(SourceModel source, DestModel destination, ResolutionContext context)
             {
-                destination.Number = _number;
+                destination.Name = _name;
             }
         }
     }
