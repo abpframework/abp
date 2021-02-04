@@ -1,7 +1,6 @@
 ﻿@typeparam TItem
 @using Blazorise.DataGrid;
 @using Volo.Abp.Data
-@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
 
 <DataGrid TItem="TItem"
           Data="@Data"
@@ -67,7 +66,7 @@
                                         var entity = context as IHasExtraProperties;
                                         var propertyName = ExtensionPropertiesRegex.Match(column.Data).Groups[1].Value;
                                         var propertyValue = entity.GetProperty(propertyName);
-                                        if (propertyValue!=null && propertyValue.GetType() == typeof(bool))
+                                        if (propertyValue != null && propertyValue.GetType() == typeof(bool))
                                         {
                                             if ((bool)propertyValue)
                                             {
@@ -80,7 +79,14 @@
                                         }
                                         else
                                         {
-                                            @(propertyValue)
+                                            if (column.DisplayFormat == null)
+                                            {
+                                                @(propertyValue)
+                                            }
+                                            else
+                                            {
+                                                @(string.Format(column.DisplayFormat, propertyValue))
+                                            }
                                         }
                                     }
                                 </DisplayTemplate>

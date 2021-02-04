@@ -10,6 +10,8 @@ namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
         public string Title { get; set; }
         public string Data { get; set; }
         [CanBeNull]
+        public string DisplayFormat { get; set; }
+        [CanBeNull]
         public Type Component { get; set; }
         public List<EntityAction> Actions { get; set; }
 
