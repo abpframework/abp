@@ -19,7 +19,7 @@ namespace Volo.CmsKit.Public.Web.Controllers
         }
 
         [HttpGet("/{*url}", Order = int.MaxValue)]
-        public async Task<IActionResult> Index(string url)
+        public async Task<IActionResult> IndexAsync(string url)
         {
             var page = await PageAppService.FindByUrlAsync(url);
 
