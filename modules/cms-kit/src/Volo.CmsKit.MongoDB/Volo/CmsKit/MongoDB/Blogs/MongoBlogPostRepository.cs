@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
@@ -58,9 +59,9 @@ namespace Volo.CmsKit.MongoDB.Blogs
 
         public async Task<bool> SlugExistsAsync(Guid blogId, string slug, CancellationToken cancellationToken = default)
         {
-            var queryable = await GetQueryableAsync();
+            var queryable = await GetMongoQueryableAsync();
 
-            return await AsyncExecuter.AnyAsync(queryable, x => x.BlogId == blogId && x.UrlSlug.ToLower() == slug, cancellationToken);
+            return await queryable.AnyAsync(x => x.BlogId == blogId && x.UrlSlug.ToLower() == slug, cancellationToken);
         }
     }
 }
