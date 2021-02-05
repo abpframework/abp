@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Public.Blogs;
 
-namespace Volo.CmsKit.Public.HttpApi.Volo.CmsKit.Public.Blogs
+namespace Volo.CmsKit.Public.Blogs
 {
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-public/blog-posts")]
@@ -37,6 +40,7 @@ namespace Volo.CmsKit.Public.HttpApi.Volo.CmsKit.Public.Blogs
             Response.Headers.Add("Accept-Ranges", "bytes");
             Response.Headers.Add("Cache-Control", "max-age=120");
             Response.ContentType = "image";
+
             return BlogPostPublicAppService.GetCoverImageAsync(id);
         }
 
