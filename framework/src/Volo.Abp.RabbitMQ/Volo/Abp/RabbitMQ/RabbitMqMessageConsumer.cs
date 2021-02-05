@@ -191,6 +191,7 @@ namespace Volo.Abp.RabbitMQ
             }
             catch (Exception ex)
             {
+                Channel.BasicNack(basicDeliverEventArgs.DeliveryTag, multiple: false, requeue: true);
                 Logger.LogException(ex);
                 await ExceptionNotifier.NotifyAsync(ex);
             }
