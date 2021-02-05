@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
 using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Public.Blogs
@@ -9,6 +11,8 @@ namespace Volo.CmsKit.Public.Blogs
     public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPublicAppService
     {
         protected IBlogRepository BlogRepository { get; }
+
+        protected IBlobContainer<BlogPostCoverImageContainer> BlobContainer { get; }
 
         protected IBlogPostRepository BlogPostRepository { get; }
 
@@ -38,6 +42,13 @@ namespace Volo.CmsKit.Public.Blogs
             return new PagedResultDto<BlogPostPublicDto>(
                 await BlogPostRepository.GetCountAsync(blog.Id),
                 ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
+        }
+
+        public async Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
+        {
+            var stream = await BlobContainer.GetAsync(id.ToString());
+
+            return new RemoteStreamContent(stream);
         }
     }
 }
