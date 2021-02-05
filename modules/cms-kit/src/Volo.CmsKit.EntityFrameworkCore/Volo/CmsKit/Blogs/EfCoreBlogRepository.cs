@@ -23,10 +23,5 @@ namespace Volo.CmsKit.Blogs
         {
             return GetAsync(x => x.UrlSlug == urlSlug);
         }
-
-        public async Task<bool> ExistsAsync(Guid blogId)
-        {
-            return await (await GetQueryableAsync()).AnyAsync(x => x.Id == blogId);
-        }
     }
 }
