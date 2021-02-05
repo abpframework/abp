@@ -36,7 +36,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
-       
+
         private readonly CliHttpClientFactory _cliHttpClientFactory;
 
 
@@ -54,7 +54,7 @@ namespace Volo.Abp.Cli.ProjectModification
             NugetPackageToLocalReferenceConverter nugetPackageToLocalReferenceConverter,
             AngularModuleSourceCodeAdder angularModuleSourceCodeAdder,
             NewCommand newCommand,
-            BundleCommand bundleCommand, 
+            BundleCommand bundleCommand,
             CliHttpClientFactory cliHttpClientFactory)
         {
             JsonSerializer = jsonSerializer;
@@ -175,7 +175,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.EntityFrameworkCore, isProjectTiered);
                 await RemoveProjectByPostFix(module, moduleSolutionFile, "test", ".EntityFrameworkCore.Tests");
-                await ChangeDomainTestReferenceToMongoDB(module, moduleSolutionFile);
+                ChangeDomainTestReferenceToMongoDB(module, moduleSolutionFile);
             }
         }
 
@@ -230,7 +230,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private async Task ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)
+        private void ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)
         {
             var testPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "test");
 
@@ -505,7 +505,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        protected virtual async Task RunMigrator(string[] projectFiles)
+        protected virtual void RunMigrator(string[] projectFiles)
         {
             var dbMigratorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrator.csproj"));
 
@@ -520,13 +520,13 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             if (newTemplate || newProTemplate)
             {
-                return await GetEmptyModuleProjectInfoAsync(moduleName, newProTemplate);
+                return GetEmptyModuleProjectInfo(moduleName, newProTemplate);
             }
 
             var url = $"{CliUrls.WwwAbpIo}api/app/module/byNameWithDetails/?name=" + moduleName;
             var client = _cliHttpClientFactory.CreateClient();
 
-            using (var response = await client.GetAsync(url))
+            using (var response = await client.GetAsync(url, _cliHttpClientFactory.GetCancellationToken()))
             {
                 if (!response.IsSuccessStatusCode)
                 {
@@ -543,7 +543,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private async Task<ModuleWithMastersInfo> GetEmptyModuleProjectInfoAsync(string moduleName,
+        private ModuleWithMastersInfo GetEmptyModuleProjectInfo(string moduleName,
             bool newProTemplate = false)
         {
             var module = new ModuleWithMastersInfo
