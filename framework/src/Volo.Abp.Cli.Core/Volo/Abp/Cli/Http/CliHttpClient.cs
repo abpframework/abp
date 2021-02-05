@@ -67,7 +67,12 @@ namespace Volo.Abp.Cli.Http
                 };
             }
 
-            cancellationToken ??= CancellationToken.None;
+            if (cancellationToken == null)
+            {
+                var cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(DefaultTimeout);
+                cancellationToken = cancellationTokenSource.Token;
+            }
 
             return await HttpPolicyExtensions
                 .HandleTransientHttpError()
@@ -94,6 +99,7 @@ namespace Volo.Abp.Cli.Http
                     })
                 .ExecuteAsync(async () => await this.GetAsync(url, cancellationToken.Value));
         }
+
 
     }
 }
