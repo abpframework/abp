@@ -26,7 +26,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
         protected DbContextFileBuilderConfigureAdder DbContextFileBuilderConfigureAdder { get; }
-        protected EfCoreMigrationAdder EfCoreMigrationAdder { get; }
+        protected EfCoreMigrationManager EfCoreMigrationManager { get; }
         protected DerivedClassFinder DerivedClassFinder { get; }
         protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
@@ -42,7 +42,7 @@ namespace Volo.Abp.Cli.ProjectModification
             IJsonSerializer jsonSerializer,
             ProjectNugetPackageAdder projectNugetPackageAdder,
             DbContextFileBuilderConfigureAdder dbContextFileBuilderConfigureAdder,
-            EfCoreMigrationAdder efCoreMigrationAdder,
+            EfCoreMigrationManager efCoreMigrationManager,
             DerivedClassFinder derivedClassFinder,
             ProjectNpmPackageAdder projectNpmPackageAdder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker,
@@ -57,7 +57,7 @@ namespace Volo.Abp.Cli.ProjectModification
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
             DbContextFileBuilderConfigureAdder = dbContextFileBuilderConfigureAdder;
-            EfCoreMigrationAdder = efCoreMigrationAdder;
+            EfCoreMigrationManager = efCoreMigrationManager;
             DerivedClassFinder = derivedClassFinder;
             ProjectNpmPackageAdder = projectNpmPackageAdder;
             NpmGlobalPackagesChecker = npmGlobalPackagesChecker;
@@ -115,7 +115,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
                 }
 
-                await AddAngularSourceCode(modulesFolderInSolution, solutionFile);
+                await AddAngularSourceCode(modulesFolderInSolution, solutionFile, module.Name, newTemplate || newProTemplate);
             }
             else
             {
@@ -205,14 +205,25 @@ namespace Volo.Abp.Cli.ProjectModification
             string postFix)
         {
             var srcPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), targetFolder);
+
+            if (!Directory.Exists(srcPath))
+            {
+                return;
+            }
+
             var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith(postFix));
+
+            if (projectFolderPath == null)
+            {
+                return;
+            }
+
             await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, new DirectoryInfo(projectFolderPath).Name);
 
             if (Directory.Exists(projectFolderPath))
             {
                 Directory.Delete(projectFolderPath, true);
             }
-
         }
 
         private async Task ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)
@@ -266,7 +277,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private async Task AddAngularSourceCode(string modulesFolderInSolution, string solutionFilePath)
+        private async Task AddAngularSourceCode(string modulesFolderInSolution, string solutionFilePath, string moduleName, bool newTemplate)
         {
             var angularPath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(solutionFilePath)), "angular");
 
@@ -274,6 +285,11 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 DeleteAngularDirectoriesInModulesFolder(modulesFolderInSolution);
                 return;
+            }
+
+            if (newTemplate)
+            {
+                MoveAngularFolderInNewTemplate(modulesFolderInSolution, moduleName);
             }
 
             await AngularModuleSourceCodeAdder.AddAsync(solutionFilePath, angularPath);
@@ -290,6 +306,30 @@ namespace Volo.Abp.Cli.ProjectModification
                 {
                     Directory.Delete(angDir, true);
                 }
+            }
+        }
+
+        private static void MoveAngularFolderInNewTemplate(string modulesFolderInSolution, string moduleName)
+        {
+            var moduleAngularFolder = Path.Combine(modulesFolderInSolution, moduleName, "angular");
+
+            if (!Directory.Exists(moduleAngularFolder))
+            {
+                return;
+            }
+
+            var files = Directory.GetFiles(moduleAngularFolder);
+            var folders = Directory.GetDirectories(moduleAngularFolder);
+
+            Directory.CreateDirectory(Path.Combine(moduleAngularFolder, moduleName));
+
+            foreach (var file in files)
+            {
+                File.Move(file, Path.Combine(moduleAngularFolder, moduleName, Path.GetFileName(file)));
+            }
+            foreach (var folder in folders)
+            {
+                Directory.Move(folder, Path.Combine(moduleAngularFolder, moduleName, Path.GetFileName(folder)));
             }
         }
 
@@ -454,7 +494,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 if (addedNewBuilder)
                 {
-                    EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject);
+                    EfCoreMigrationManager.AddMigration(dbMigrationsProject, module.Name, startupProject);
                 }
 
                 RunMigrator(projectFiles);

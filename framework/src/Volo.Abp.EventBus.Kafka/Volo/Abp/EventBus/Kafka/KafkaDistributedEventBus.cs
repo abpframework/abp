@@ -146,7 +146,7 @@ namespace Volo.Abp.EventBus.Kafka
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public async override Task PublishAsync(Type eventType, object eventData)
+        public override async Task PublishAsync(Type eventType, object eventData)
         {
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);

@@ -13,7 +13,7 @@ import { ConfirmationService } from '../services';
   exports: [ConfirmationComponent],
   entryComponents: [ConfirmationComponent],
   declarations: [ConfirmationComponent],
-  imports: [CoreTestingModule.forTest()],
+  imports: [CoreTestingModule.withConfig()],
 })
 export class MockModule {}
 
@@ -22,7 +22,7 @@ describe('ConfirmationService', () => {
   let service: ConfirmationService;
   const createService = createServiceFactory({
     service: ConfirmationService,
-    imports: [NgxsModule.forRoot(), CoreTestingModule.forTest(), MockModule],
+    imports: [NgxsModule.forRoot(), CoreTestingModule.withConfig(), MockModule],
   });
 
   beforeEach(() => {

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Client.Common\Volo.Abp.AspNetCore.Mvc.Client.Common.csproj" />
+    <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
   </ItemGroup>
 
 </Project>

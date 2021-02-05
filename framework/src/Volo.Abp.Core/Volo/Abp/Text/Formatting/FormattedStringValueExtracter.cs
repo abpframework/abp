@@ -11,7 +11,7 @@ namespace Volo.Abp.Text.Formatting
     /// </summary>
     /// <example>
     /// Say that str is "My name is Neo." and format is "My name is {name}.".
-    /// Then Extract method gets "Neo" as "name".  
+    /// Then Extract method gets "Neo" as "name".
     /// </example>
     public class FormattedStringValueExtracter
     {
@@ -84,7 +84,7 @@ namespace Volo.Abp.Text.Formatting
         }
 
         /// <summary>
-        /// Checks if given <see cref="str"/> fits to given <see cref="format"/>.
+        /// Checks if given <paramref name="str"/> fits to given <paramref name="format"/>.
         /// Also gets extracted values.
         /// </summary>
         /// <param name="str">String including dynamic values</param>

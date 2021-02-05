@@ -137,7 +137,7 @@ var myService = context.ServiceProvider.GetRequiredService<IMyService>();
 
 ### The Administration Menu
 
-There is a special menu item in the menu menu that is added by the ABP Framework: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../Modules/Index.md):
+There is a special menu item in the menu that is added by the ABP Framework: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../Modules/Index.md):
 
 ![nav-main-menu-administration](../../images/nav-main-menu-administration.png)
 

@@ -20,7 +20,7 @@ namespace Volo.Abp.BlobStoring.Aws
             AmazonS3ClientFactory = amazonS3ClientFactory;
         }
 
-        public async override Task SaveAsync(BlobProviderSaveArgs args)
+        public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var blobName = AwsBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetAwsConfiguration();
@@ -48,7 +48,7 @@ namespace Volo.Abp.BlobStoring.Aws
             }
         }
 
-        public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = AwsBlobNameCalculator.Calculate(args);
             var containerName = GetContainerName(args);
@@ -70,7 +70,7 @@ namespace Volo.Abp.BlobStoring.Aws
             }
         }
 
-        public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = AwsBlobNameCalculator.Calculate(args);
             var containerName = GetContainerName(args);
@@ -81,7 +81,7 @@ namespace Volo.Abp.BlobStoring.Aws
             }
         }
 
-        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = AwsBlobNameCalculator.Calculate(args);
             var containerName = GetContainerName(args);

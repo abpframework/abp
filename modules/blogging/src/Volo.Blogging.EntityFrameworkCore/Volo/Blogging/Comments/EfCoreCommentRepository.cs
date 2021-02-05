@@ -11,14 +11,14 @@ namespace Volo.Blogging.Comments
 {
     public class EfCoreCommentRepository : EfCoreRepository<IBloggingDbContext, Comment, Guid>, ICommentRepository
     {
-        public EfCoreCommentRepository(IDbContextProvider<IBloggingDbContext> dbContextProvider) 
+        public EfCoreCommentRepository(IDbContextProvider<IBloggingDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
 
         public async Task<List<Comment>> GetListOfPostAsync(Guid postId)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(a => a.PostId == postId)
                 .OrderBy(a => a.CreationTime)
                 .ToListAsync();
@@ -26,20 +26,20 @@ namespace Volo.Blogging.Comments
 
         public async Task<int> GetCommentCountOfPostAsync(Guid postId)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .CountAsync(a => a.PostId == postId);
         }
 
         public async Task<List<Comment>> GetRepliesOfComment(Guid id)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(a => a.RepliedCommentId == id).ToListAsync();
         }
 
         public async Task DeleteOfPost(Guid id)
         {
-            var recordsToDelete = DbSet.Where(pt => pt.PostId == id);
-            DbSet.RemoveRange(recordsToDelete);
+            var recordsToDelete = (await GetDbSetAsync()).Where(pt => pt.PostId == id);
+            (await GetDbSetAsync()).RemoveRange(recordsToDelete);
         }
     }
 }

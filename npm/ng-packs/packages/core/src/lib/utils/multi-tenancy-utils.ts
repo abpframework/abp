@@ -58,6 +58,13 @@ function setEnvironment(injector: Injector, tenancyName: string) {
     );
   }
 
+  if (environment.oAuthConfig.redirectUri) {
+    environment.oAuthConfig.redirectUri = environment.oAuthConfig.redirectUri.replace(
+      tenancyPlaceholder,
+      tenancyName,
+    );
+  }
+
   environment.oAuthConfig.issuer = environment.oAuthConfig.issuer.replace(
     tenancyPlaceholder,
     tenancyName,

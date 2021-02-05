@@ -11,7 +11,7 @@ using Volo.Abp.Linq;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public class EfCoreAsyncQueryableProvider : IAsyncQueryableProvider, ITransientDependency
+    public class EfCoreAsyncQueryableProvider : IAsyncQueryableProvider, ISingletonDependency
     {
         public bool CanExecute<T>(IQueryable<T> queryable)
         {

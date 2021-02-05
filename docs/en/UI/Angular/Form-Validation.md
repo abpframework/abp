@@ -6,23 +6,52 @@ Reactive forms in ABP Angular UI are validated by [ngx-validate](https://www.npm
 
 ## How to Add New Error Messages
 
-You can add a new error message by providing the `VALIDATION_BLUEPRINTS` injection token from your root module.
+You can add a new error message by passing validation options to the `ThemeSharedModule` in your root module.
 
 ```js
 import { VALIDATION_BLUEPRINTS } from "@ngx-validate/core";
+import { DEFAULT_VALIDATION_BLUEPRINTS } from "@abp/ng.theme.shared";
 
 @NgModule({
-  // rest of the module metadata
+  imports: [
+    ThemeSharedModule.forRoot({
+      validation: {
+        blueprints: {
+          uniqueUsername: "::AlreadyExists[{%{{{ username }}}%}]",
+        },
+      },
 
+      // rest of theme shared config
+    }),
+
+    // other imports
+  ],
+
+  // rest of the module metadata
+})
+export class AppModule {}
+```
+
+Alternatively, you may provide the `VALIDATION_BLUEPRINTS` token directly in your root module. Please do not forget to spread `DEFAULT_VALIDATION_BLUEPRINTS`. Otherwise, built-in ABP validation messages will not work.
+
+```js
+import { VALIDATION_BLUEPRINTS } from "@ngx-validate/core";
+import { DEFAULT_VALIDATION_BLUEPRINTS } from "@abp/ng.theme.shared";
+
+@NgModule({
   providers: [
-    // other providers
     {
       provide: VALIDATION_BLUEPRINTS,
       useValue: {
+        ...DEFAULT_VALIDATION_BLUEPRINTS,
         uniqueUsername: "::AlreadyExists[{%{{{ username }}}%}]",
       },
     },
+
+    // other providers
   ],
+
+  // rest of the module metadata
 })
 export class AppModule {}
 ```
@@ -40,7 +69,7 @@ In this example;
 
 ## How to Change Existing Error Messages
 
-You can overwrite an existing error message by providing `VALIDATION_BLUEPRINTS` injection token from your root module. Let's imagine you have a custom localization resource for required inputs.
+You can overwrite an existing error message by passing validation options to the `ThemeSharedModule` in your root module. Let's imagine you have a custom localization resource for required inputs.
 
 ```json
 "RequiredInput": "Oops! We need this input."
@@ -50,19 +79,48 @@ To use this instead of the built-in required input message, all you need to do i
 
 ```js
 import { VALIDATION_BLUEPRINTS } from "@ngx-validate/core";
+import { DEFAULT_VALIDATION_BLUEPRINTS } from "@abp/ng.theme.shared";
 
 @NgModule({
-  // rest of the module metadata
+  imports: [
+    ThemeSharedModule.forRoot({
+      validation: {
+        blueprints: {
+          required: "::RequiredInput",
+        },
+      },
 
+      // rest of theme shared config
+    }),
+
+    // other imports
+  ],
+
+  // rest of the module metadata
+})
+export class AppModule {}
+```
+
+Alternatively, you may provide the `VALIDATION_BLUEPRINTS` token directly in your root module. Please do not forget to spread `DEFAULT_VALIDATION_BLUEPRINTS`. Otherwise, built-in ABP validation messages will not work.
+
+```js
+import { VALIDATION_BLUEPRINTS } from "@ngx-validate/core";
+import { DEFAULT_VALIDATION_BLUEPRINTS } from "@abp/ng.theme.shared";
+
+@NgModule({
   providers: [
-    // other providers
     {
       provide: VALIDATION_BLUEPRINTS,
       useValue: {
+        ...DEFAULT_VALIDATION_BLUEPRINTS,
         required: "::RequiredInput",
       },
     },
+
+    // other providers
   ],
+
+  // rest of the module metadata
 })
 export class AppModule {}
 ```

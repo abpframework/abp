@@ -16,7 +16,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
             FilePathCalculator = filePathCalculator;
         }
 
-        public async override Task SaveAsync(BlobProviderSaveArgs args)
+        public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var filePath = FilePathCalculator.Calculate(args);
 
@@ -59,7 +59,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
             return ExistsAsync(filePath);
         }
 
-        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var filePath = FilePathCalculator.Calculate(args);
 
