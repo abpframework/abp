@@ -24,12 +24,5 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
             return GetAsync(x => x.UrlSlug == urlSlug);
         }
-
-        public async Task<bool> ExistsAsync(Guid blogId)
-        {
-            return await AsyncExecuter.AnyAsync(
-                            await GetQueryableAsync(),
-                            x => x.Id == blogId);
-        }
     }
 }
