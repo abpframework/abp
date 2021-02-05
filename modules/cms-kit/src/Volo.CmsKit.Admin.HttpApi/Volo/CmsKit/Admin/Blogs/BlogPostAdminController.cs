@@ -68,7 +68,7 @@ namespace Volo.CmsKit.Admin.Blogs
             Response.Headers.Add("Content-Disposition", $"inline;filename=\"{id}\"");
             Response.Headers.Add("Accept-Ranges", "bytes");
             Response.Headers.Add("Cache-Control", "max-age=120");
-            Response.ContentType = "image/*";
+            Response.ContentType = "image";
 
             return BlogPostAdminAppService.GetCoverImageAsync(id);
         }
