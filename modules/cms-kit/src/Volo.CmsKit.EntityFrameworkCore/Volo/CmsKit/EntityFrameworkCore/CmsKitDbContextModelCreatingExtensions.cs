@@ -213,7 +213,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
 
-                    b.HasIndex(x => x.UrlSlug);
+                    b.HasIndex(x => new { x.UrlSlug, x.BlogId });
                 });
             }
             else

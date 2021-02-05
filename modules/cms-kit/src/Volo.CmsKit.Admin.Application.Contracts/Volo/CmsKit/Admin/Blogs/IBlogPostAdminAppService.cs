@@ -6,14 +6,14 @@ using Volo.Abp.Content;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
-    public interface IBlogPostAdminAppService 
+    public interface IBlogPostAdminAppService
         : ICrudAppService<
-            BlogPostDto, 
-            Guid, 
+            BlogPostDto,
+            Guid,
             PagedAndSortedResultRequestDto,
             CreateUpdateBlogPostDto>
     {
-        Task<BlogPostDto> GetByUrlSlugAsync(string urlSlug);
+        Task<BlogPostDto> GetByUrlSlugAsync(string blogUrlSlug, string urlSlug);
 
         Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent);
 

@@ -9,5 +9,7 @@
         public static int MinUrlSlugLength { get; set; } = 2;
 
         public static int MaxShortDescriptionLength { get; set; } = 256;
+
+        public const string EntityType = "BlogPost";
     }
 }

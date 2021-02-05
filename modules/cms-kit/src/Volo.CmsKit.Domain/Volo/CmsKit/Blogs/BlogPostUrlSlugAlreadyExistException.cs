@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp;
 
 namespace Volo.CmsKit.Blogs
@@ -17,15 +13,19 @@ namespace Volo.CmsKit.Blogs
         {
         }
 
-        public BlogPostUrlSlugAlreadyExistException(string urlSlug)
+        public BlogPostUrlSlugAlreadyExistException(Guid blogId, string urlSlug)
         {
             UrlSlug = urlSlug;
+            BlogId = blogId;
 
             Code = CmsKitErrorCodes.Blogs.UrlSlugAlreadyExist;
 
             WithData(nameof(UrlSlug), UrlSlug);
+            WithData(nameof(BlogId), BlogId);
         }
 
         public string UrlSlug { get; }
+
+        public Guid BlogId { get; }
     }
 }

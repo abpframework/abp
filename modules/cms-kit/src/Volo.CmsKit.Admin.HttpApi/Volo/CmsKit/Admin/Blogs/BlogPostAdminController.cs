@@ -53,11 +53,11 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [HttpGet]
-        [Route("{urlSlug}")]
+        [Route("{blogUrlSlug}/{urlSlug}")]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual Task<BlogPostDto> GetByUrlSlugAsync(string urlSlug)
+        public virtual Task<BlogPostDto> GetByUrlSlugAsync(string blogUrlSlug, string urlSlug)
         {
-            return BlogPostAdminAppService.GetByUrlSlugAsync(urlSlug);
+            return BlogPostAdminAppService.GetByUrlSlugAsync(blogUrlSlug, urlSlug);
         }
 
         [HttpGet]
@@ -68,7 +68,7 @@ namespace Volo.CmsKit.Admin.Blogs
             Response.Headers.Add("Content-Disposition", $"inline;filename=\"{id}\"");
             Response.Headers.Add("Accept-Ranges", "bytes");
             Response.Headers.Add("Cache-Control", "max-age=120");
-            Response.ContentType = "image/*";
+            Response.ContentType = "image";
 
             return BlogPostAdminAppService.GetCoverImageAsync(id);
         }

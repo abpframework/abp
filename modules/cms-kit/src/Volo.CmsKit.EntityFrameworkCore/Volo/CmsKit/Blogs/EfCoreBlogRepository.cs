@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -11,6 +12,16 @@ namespace Volo.CmsKit.Blogs
     {
         public EfCoreBlogRepository(IDbContextProvider<ICmsKitDbContext> dbContextProvider) : base(dbContextProvider)
         {
+        }
+
+        public async Task<bool> ExistsAsync(Guid blogId)
+        {
+            return await (await GetQueryableAsync()).AnyAsync(x => x.Id == blogId);
+        }
+
+        public Task<Blog> GetByUrlSlugAsync(string urlSlug)
+        {
+            return GetAsync(x => x.UrlSlug == urlSlug);
         }
 
         public async Task<bool> ExistsAsync(Guid blogId)

@@ -1,5 +1,8 @@
 ﻿using JetBrains.Annotations;
+using Nito.Disposables;
 using System;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -12,6 +15,13 @@ namespace Volo.CmsKit.Tags
     {
         public EfCoreEntityTagRepository(IDbContextProvider<ICmsKitDbContext> dbContextProvider) : base(dbContextProvider)
         {
+        }
+
+        public async Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default)
+        {
+            var dbSet = await GetDbSetAsync();
+
+            dbSet.RemoveRange(dbSet.Where(x => tagIds.Contains(x.TagId)));
         }
 
         public Task<EntityTag> FindAsync(

@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\BlogPostSample.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Data\**\*" />
   </ItemGroup>
 
