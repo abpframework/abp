@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Blogs
             Title = Check.NotNullOrWhiteSpace(title, nameof(title), BlogPostConsts.MaxTitleLength);
         }
 
-        public void SetUrlSlug(string urlSlug)
+        internal void SetUrlSlug(string urlSlug)
         {
             Check.NotNullOrWhiteSpace(urlSlug, nameof(urlSlug), BlogPostConsts.MaxUrlSlugLength, BlogPostConsts.MinUrlSlugLength);
 

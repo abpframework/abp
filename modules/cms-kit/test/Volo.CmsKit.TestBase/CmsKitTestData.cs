@@ -87,8 +87,8 @@ namespace Volo.CmsKit
 
         public Guid BlogPost_2_Id { get; } = Guid.NewGuid();
 
-        public string BlogPost_2_Title => "How to use CmsKit?";
+        public string BlogPost_2_Title => "How to use CmsKit";
 
-        public string BlogPost_2_UrlSlug => "how-to-use-cms-kit?";
+        public string BlogPost_2_UrlSlug => "how-to-use-cms-kit";
     }
 }

@@ -82,16 +82,20 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
         public override async Task<BlogPostDto> UpdateAsync(Guid id, CreateUpdateBlogPostDto input)
         {
-            var entity = await BlogPostRepository.GetAsync(id);
+            var blogPost = await BlogPostRepository.GetAsync(id);
 
-            entity.SetTitle(input.Title);
-            entity.SetUrlSlug(input.UrlSlug);
+            blogPost.SetTitle(input.Title);
 
-            MapToEntity(input, entity);
+            if (blogPost.UrlSlug != input.UrlSlug)
+            {
+                await BlogPostManager.SetSlugUrlAsync(blogPost, input.UrlSlug);
+            }
 
-            await BlogPostManager.UpdateAsync(entity);
+            MapToEntity(input, blogPost);
 
-            return MapToGetOutputDto(entity);
+            await BlogPostManager.UpdateAsync(blogPost);
+
+            return MapToGetOutputDto(blogPost);
         }
 
         public virtual async Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent)

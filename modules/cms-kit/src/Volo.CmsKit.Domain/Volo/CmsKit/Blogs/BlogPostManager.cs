@@ -34,9 +34,14 @@ namespace Volo.CmsKit.Blogs
         {
             await CheckBlogExistenceAsync(blogPost.BlogId);
 
-            await CheckUrlSlugExistenceAsync(blogPost.BlogId, blogPost.UrlSlug);
-
             await blogPostRepository.UpdateAsync(blogPost);
+        }
+
+        public async Task SetSlugUrlAsync(BlogPost blogPost, string newSlug)
+        {
+            await CheckUrlSlugExistenceAsync(blogPost.BlogId, newSlug);
+
+            blogPost.SetUrlSlug(newSlug);
         }
 
         private async Task CheckUrlSlugExistenceAsync(Guid blogId, string urlSlug)

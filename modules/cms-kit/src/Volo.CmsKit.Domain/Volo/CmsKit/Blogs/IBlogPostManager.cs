@@ -8,5 +8,7 @@ namespace Volo.CmsKit.Blogs
         Task<BlogPost> CreateAsync(BlogPost blogPost);
 
         Task UpdateAsync(BlogPost blogPost);
+
+        Task SetSlugUrlAsync(BlogPost blogPost, string newSlug);
     }
 }
