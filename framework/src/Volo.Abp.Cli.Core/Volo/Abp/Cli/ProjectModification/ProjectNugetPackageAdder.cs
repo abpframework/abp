@@ -180,7 +180,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/byName/?name=" + packageName;
             var client = _cliHttpClientFactory.CreateClient();
 
-            using (var response = await client.GetAsync(url))
+            using (var response = await client.GetAsync(url, _cliHttpClientFactory.GetCancellationToken()))
             {
                 if (!response.IsSuccessStatusCode)
                 {
