@@ -12,16 +12,18 @@ namespace Volo.CmsKit.Public.Blogs
     {
         protected IBlogRepository BlogRepository { get; }
 
-        protected IBlobContainer<BlogPostCoverImageContainer> BlobContainer { get; }
-
         protected IBlogPostRepository BlogPostRepository { get; }
+
+        protected IBlobContainer<BlogPostCoverImageContainer> BlobContainer { get; }
 
         public BlogPostPublicAppService(
             IBlogRepository blogRepository,
-            IBlogPostRepository blogPostRepository)
+            IBlogPostRepository blogPostRepository,
+            IBlobContainer<BlogPostCoverImageContainer> blobContainer)
         {
             BlogRepository = blogRepository;
             BlogPostRepository = blogPostRepository;
+            BlobContainer = blobContainer;
         }
 
         public async Task<BlogPostPublicDto> GetAsync(string blogUrlSlug, string blogPostUrlSlug)
