@@ -7,7 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.Bundling;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
@@ -22,6 +21,12 @@ namespace Volo.Abp.Cli.ProjectModification
     public class SolutionModuleAdder : ITransientDependency
     {
         public ILogger<SolutionModuleAdder> Logger { get; set; }
+        public SourceCodeDownloadService SourceCodeDownloadService { get; }
+        public SolutionFileModifier SolutionFileModifier { get; }
+        public NugetPackageToLocalReferenceConverter NugetPackageToLocalReferenceConverter { get; }
+        public AngularModuleSourceCodeAdder AngularModuleSourceCodeAdder { get; }
+        public NewCommand NewCommand { get; }
+        public BundleCommand BundleCommand { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
@@ -31,12 +36,9 @@ namespace Volo.Abp.Cli.ProjectModification
         protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
-        public SourceCodeDownloadService SourceCodeDownloadService { get; }
-        public SolutionFileModifier SolutionFileModifier { get; }
-        public NugetPackageToLocalReferenceConverter NugetPackageToLocalReferenceConverter { get; }
-        public AngularModuleSourceCodeAdder AngularModuleSourceCodeAdder { get; }
-        public NewCommand NewCommand { get; }
-        public BundleCommand BundleCommand { get; }
+       
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
+
 
         public SolutionModuleAdder(
             IJsonSerializer jsonSerializer,
@@ -52,7 +54,8 @@ namespace Volo.Abp.Cli.ProjectModification
             NugetPackageToLocalReferenceConverter nugetPackageToLocalReferenceConverter,
             AngularModuleSourceCodeAdder angularModuleSourceCodeAdder,
             NewCommand newCommand,
-            BundleCommand bundleCommand)
+            BundleCommand bundleCommand, 
+            CliHttpClientFactory cliHttpClientFactory)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -68,6 +71,7 @@ namespace Volo.Abp.Cli.ProjectModification
             AngularModuleSourceCodeAdder = angularModuleSourceCodeAdder;
             NewCommand = newCommand;
             BundleCommand = bundleCommand;
+            _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
@@ -131,7 +135,7 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
 
-            if (blazorProject == null || !module.NugetPackages.Any(np=> np.Target == NuGetPackageTarget.Blazor))
+            if (blazorProject == null || !module.NugetPackages.Any(np => np.Target == NuGetPackageTarget.Blazor))
             {
                 return;
             }
@@ -211,7 +215,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d=> d.EndsWith(postFix));
+            var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d => d.EndsWith(postFix));
 
             if (projectFolderPath == null)
             {
@@ -235,7 +239,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            var projectFolderPath = Directory.GetDirectories(testPath).FirstOrDefault(d=> d.EndsWith("Domain.Tests"));
+            var projectFolderPath = Directory.GetDirectories(testPath).FirstOrDefault(d => d.EndsWith("Domain.Tests"));
 
             if (projectFolderPath == null)
             {
@@ -250,10 +254,10 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            File.WriteAllText(csprojFile, File.ReadAllText(csprojFile).Replace("EntityFrameworkCore","MongoDB"));
+            File.WriteAllText(csprojFile, File.ReadAllText(csprojFile).Replace("EntityFrameworkCore", "MongoDB"));
             File.WriteAllText(moduleFile, File.ReadAllText(moduleFile)
-                .Replace(".EntityFrameworkCore;",".MongoDB;")
-                .Replace("EntityFrameworkCoreTestModule","MongoDbTestModule"));
+                .Replace(".EntityFrameworkCore;", ".MongoDB;")
+                .Replace("EntityFrameworkCoreTestModule", "MongoDbTestModule"));
         }
 
         private async Task AddAngularPackages(string solutionFilePath, ModuleWithMastersInfo module)
@@ -355,9 +359,9 @@ namespace Volo.Abp.Cli.ProjectModification
                 );
             }
 
-            await DeleteRedundantHostProjects(targetModuleFolder,"app");
-            await DeleteRedundantHostProjects(targetModuleFolder,"demo");
-            await DeleteRedundantHostProjects(targetModuleFolder,"host");
+            await DeleteRedundantHostProjects(targetModuleFolder, "app");
+            await DeleteRedundantHostProjects(targetModuleFolder, "demo");
+            await DeleteRedundantHostProjects(targetModuleFolder, "host");
 
             if (module.MasterModuleInfos == null)
             {
@@ -519,12 +523,11 @@ namespace Volo.Abp.Cli.ProjectModification
                 return await GetEmptyModuleProjectInfoAsync(moduleName, newProTemplate);
             }
 
-            using (var client = new CliHttpClient())
+            var url = $"{CliUrls.WwwAbpIo}api/app/module/byNameWithDetails/?name=" + moduleName;
+            var client = _cliHttpClientFactory.CreateClient();
+
+            using (var response = await client.GetAsync(url))
             {
-                var url = $"{CliUrls.WwwAbpIo}api/app/module/byNameWithDetails/?name=" + moduleName;
-
-                var response = await client.GetAsync(url);
-
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
@@ -625,7 +628,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual async Task<bool> IsProjectTiered(string[] projectFiles)
         {
             return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
-                .Any(p =>p.EndsWith(".HttpApi.Host"))
+                .Any(p => p.EndsWith(".HttpApi.Host"))
                 && projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
                 .Any(p => p.EndsWith(".IdentityServer"));
         }
