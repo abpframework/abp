@@ -20,9 +20,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 
         protected FeatureManagementModal FeatureManagementModal;
 
-        protected Modal ManageConnectionStringModal;
-        protected Validations ManageConnectionStringValidations;
-
         protected TenantInfoModel TenantInfo;
 
         public TenantManagement()
@@ -33,8 +30,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
             CreatePolicyName = TenantManagementPermissions.Tenants.Create;
             UpdatePolicyName = TenantManagementPermissions.Tenants.Update;
             DeletePolicyName = TenantManagementPermissions.Tenants.Delete;
-            ManageConnectionStringsPolicyName = TenantManagementPermissions.Tenants.ManageConnectionStrings;
-            ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
 
             TenantInfo = new TenantInfoModel();
         }
@@ -45,47 +40,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 
             HasManageConnectionStringsPermission = await AuthorizationService.IsGrantedAsync(ManageConnectionStringsPolicyName);
             HasManageFeaturesPermission = await AuthorizationService.IsGrantedAsync(ManageFeaturesPolicyName);
-        }
-
-        protected virtual async Task OpenEditConnectionStringModalAsync(TenantDto entity)
-        {
-            ManageConnectionStringValidations.ClearAll();
-
-            var tenantConnectionString = await AppService.GetDefaultConnectionStringAsync(entity.Id);
-
-            TenantInfo = new TenantInfoModel
-            {
-                Id = entity.Id,
-                DefaultConnectionString = tenantConnectionString,
-                UseSharedDatabase = tenantConnectionString.IsNullOrWhiteSpace()
-            };
-
-            ManageConnectionStringModal.Show();
-        }
-
-        protected virtual Task CloseEditConnectionStringModal()
-        {
-            ManageConnectionStringModal.Hide();
-            return Task.CompletedTask;
-        }
-
-        protected virtual async Task UpdateConnectionStringAsync()
-        {
-            if (ManageConnectionStringValidations.ValidateAll())
-            {
-                await CheckPolicyAsync(ManageConnectionStringsPolicyName);
-
-                if (TenantInfo.UseSharedDatabase || TenantInfo.DefaultConnectionString.IsNullOrWhiteSpace())
-                {
-                    await AppService.DeleteDefaultConnectionStringAsync(TenantInfo.Id);
-                }
-                else
-                {
-                    await AppService.UpdateDefaultConnectionStringAsync(TenantInfo.Id, TenantInfo.DefaultConnectionString);
-                }
-
-                ManageConnectionStringModal.Hide();
-            }
         }
 
         protected override string GetDeleteConfirmationMessage(TenantDto entity)
