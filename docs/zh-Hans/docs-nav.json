@@ -313,7 +313,8 @@
               "path": "Module-Development-Basics.md"
             },
             {
-              "text": "模块插件"
+              "text": "模块插件",
+              "path": "PlugIn-Modules.md"
             },
             {
               "text": "自定义应用模块",
