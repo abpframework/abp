@@ -101,7 +101,7 @@ namespace Volo.CmsKit.Admin.Blogs
                 await BlogPostAdminAppService.SetCoverImageAsync(id, new RemoteStreamContent(stream));
             }
 
-            return StatusCode(201);
+            return CreatedAtAction(nameof(GetCoverImageAsync), new { id });
         }
 
         [HttpPut]
