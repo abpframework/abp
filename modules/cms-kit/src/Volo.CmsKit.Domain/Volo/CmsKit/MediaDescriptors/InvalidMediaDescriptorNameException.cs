@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using Volo.Abp;
 
-namespace Volo.CmsKit.Medias
+namespace Volo.CmsKit.MediaDescriptors
 {
     [Serializable]
     public class InvalidMediaDescriptorNameException : BusinessException

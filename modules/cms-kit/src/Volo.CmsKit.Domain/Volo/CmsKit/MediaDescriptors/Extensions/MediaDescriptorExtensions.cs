@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Volo.CmsKit.Medias.Extensions
+namespace Volo.CmsKit.MediaDescriptors.Extensions
 {
     public static class MediaDescriptorExtensions
     {

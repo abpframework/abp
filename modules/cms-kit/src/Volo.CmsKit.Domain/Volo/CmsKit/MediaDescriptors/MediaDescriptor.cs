@@ -1,9 +1,10 @@
 ﻿using System;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
-using Volo.CmsKit.Medias.Extensions;
+using Volo.CmsKit.MediaDescriptors.Extensions;
 
-namespace Volo.CmsKit.Medias
+namespace Volo.CmsKit.MediaDescriptors
 {
     public class MediaDescriptor : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
@@ -23,7 +24,8 @@ namespace Volo.CmsKit.Medias
         public MediaDescriptor(Guid id, Guid? tenantId, string name, string mimeType, int size) : base(id)
         {
             TenantId = tenantId;
-            MimeType = mimeType;
+            
+            MimeType = Check.NotNullOrWhiteSpace(mimeType, nameof(name), MediaDescriptorConsts.MaxMimeTypeLength);
             Size = size;
             
             SetName(name);
