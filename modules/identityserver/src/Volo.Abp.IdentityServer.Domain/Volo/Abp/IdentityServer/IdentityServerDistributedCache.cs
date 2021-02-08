@@ -12,7 +12,7 @@ namespace Volo.Abp.IdentityServer
     public class IdentityServerDistributedCache<T> : ICache<T>
         where T : class
     {
-        protected ConcurrentBag<string> AllKeys { get; }
+        protected ConcurrentDictionary<string, string> AllKeys { get; }
 
         protected IDistributedCache<IdentityServerDistributedCacheItem<T>> Cache { get; }
 
@@ -20,7 +20,7 @@ namespace Volo.Abp.IdentityServer
         {
             Cache = cache;
 
-            AllKeys = new ConcurrentBag<string>();
+            AllKeys = new ConcurrentDictionary<string, string>();
         }
 
         public virtual async Task<T> GetAsync(string key)
@@ -30,9 +30,9 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task SetAsync(string key, T item, TimeSpan expiration)
         {
-            AllKeys.Add(GetCacheKey(key));
-
-            await Cache.SetAsync(GetCacheKey(key), new IdentityServerDistributedCacheItem<T>(item), new DistributedCacheEntryOptions()
+            var newKey = GetCacheKey(key);
+            AllKeys.TryAdd(newKey, newKey);
+            await Cache.SetAsync(newKey, new IdentityServerDistributedCacheItem<T>(item), new DistributedCacheEntryOptions()
             {
                 AbsoluteExpirationRelativeToNow = expiration
             });
@@ -40,12 +40,14 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task RemoveAsync(string key)
         {
-            await Cache.RemoveAsync(GetCacheKey(key));
+            var newKey = GetCacheKey(key);
+            AllKeys.TryRemove(newKey, out _);
+            await Cache.RemoveAsync(newKey);
         }
 
         public virtual async Task RemoveAllAsync()
         {
-            var keys = AllKeys.ToArray();
+            var keys = AllKeys.Keys.ToArray();
             AllKeys.Clear();
             foreach (var key in keys.Distinct())
             {
