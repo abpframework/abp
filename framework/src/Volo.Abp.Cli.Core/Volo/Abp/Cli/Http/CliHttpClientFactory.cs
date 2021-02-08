@@ -1,29 +1,35 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Http
 {
-    public class CliHttpClientFactory : ISingletonDependency, IDisposable
+    public class CliHttpClientFactory : ISingletonDependency
     {
-        private static CliHttpClient _authenticatedHttpClient;
-        private static CliHttpClient _unauthenticatedHttpClient;
+        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(1);
+
+        private readonly IHttpClientFactory _clientFactory;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
-        public CliHttpClientFactory(ICancellationTokenProvider cancellationTokenProvider)
+        public CliHttpClientFactory(IHttpClientFactory clientFactory, ICancellationTokenProvider cancellationTokenProvider)
         {
+            _clientFactory = clientFactory;
             _cancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public CliHttpClient CreateClient(bool needsAuthentication = true, TimeSpan? timeout = null)
+        public HttpClient CreateClient(bool needsAuthentication = true, TimeSpan? timeout = null)
         {
+            var httpClient = _clientFactory.CreateClient(CliConsts.HttpClientName);
+            httpClient.Timeout = timeout ?? DefaultTimeout;
+
             if (needsAuthentication)
             {
-                return CreateAuthenticatedHttpClient(timeout);
+                httpClient.AddAbpAuthenticationToken();
             }
 
-            return CreateUnAuthenticatedHttpClient(timeout);
+            return httpClient;
         }
 
         public CancellationToken GetCancellationToken(TimeSpan? timeout = null)
@@ -33,7 +39,7 @@ namespace Volo.Abp.Cli.Http
                 if (_cancellationTokenProvider == null)
                 {
                     var cancellationTokenSource = new CancellationTokenSource();
-                    cancellationTokenSource.CancelAfter(CliHttpClient.DefaultTimeout);
+                    cancellationTokenSource.CancelAfter(DefaultTimeout);
                     return cancellationTokenSource.Token;
                 }
                 else
@@ -47,38 +53,6 @@ namespace Volo.Abp.Cli.Http
                 cancellationTokenSource.CancelAfter(Convert.ToInt32(timeout.Value.TotalMilliseconds));
                 return cancellationTokenSource.Token;
             }
-        }
-
-        private static CliHttpClient CreateAuthenticatedHttpClient(TimeSpan? timeout = null)
-        {
-            if (_authenticatedHttpClient == null)
-            {
-                _authenticatedHttpClient = new CliHttpClient(setBearerToken: true)
-                {
-                    Timeout = System.Threading.Timeout.InfiniteTimeSpan
-                };
-            }
-
-            return _authenticatedHttpClient;
-        }
-
-        private static CliHttpClient CreateUnAuthenticatedHttpClient(TimeSpan? timeout = null)
-        {
-            if (_unauthenticatedHttpClient == null)
-            {
-                _unauthenticatedHttpClient = new CliHttpClient(setBearerToken: false)
-                {
-                    Timeout = System.Threading.Timeout.InfiniteTimeSpan
-                };
-            }
-
-            return _unauthenticatedHttpClient;
-        }
-
-        public void Dispose()
-        {
-            _authenticatedHttpClient?.Dispose();
-            _unauthenticatedHttpClient?.Dispose();
         }
     }
 }
