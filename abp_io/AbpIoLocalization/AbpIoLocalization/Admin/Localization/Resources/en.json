@@ -35,6 +35,7 @@
     "NameFilter": "Name",
     "CreationTime": "Creation time",
     "IsPro": "Is pro",
+    "IsFreeToActiveLicenseOwners": "Free to license owners",
     "ShowOnModuleList": "Show on module list",
     "EfCoreConfigureMethodName": "Configure method name",
     "IsProFilter": "Is pro",
