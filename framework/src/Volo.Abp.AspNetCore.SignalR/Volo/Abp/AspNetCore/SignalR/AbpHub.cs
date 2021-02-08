@@ -17,6 +17,7 @@ namespace Volo.Abp.AspNetCore.SignalR
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
+        [Obsolete("Use LazyServiceProvider instead.")]
         public IServiceProvider ServiceProvider { get; set; }
 
         protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();

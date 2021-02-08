@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -86,12 +87,12 @@ namespace Volo.CmsKit
         }
 
         private Task ConfigureCmsKitOptionsAsync()
-        {            
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.EntityType1);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.EntityType2);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.Content_1_EntityType);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.Content_2_EntityType);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.TagDefinition_1_EntityType);
+        {
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.EntityType1));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.EntityType2));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_1_EntityType));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_2_EntityType));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.TagDefinition_1_EntityType));
 
             return Task.CompletedTask;
         }

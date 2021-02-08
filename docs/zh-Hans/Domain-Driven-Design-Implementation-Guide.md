@@ -1315,7 +1315,7 @@ namespace IssueTracking.Users
 
 #### 输出DTO最佳实践
 
-* 保持**数量较少**的输出DTO,尽可能**重用输入DTO**(例外:不要将输入DTO作为输出DTO).
+* 保持**数量较少**的输出DTO,尽可能**重用输出DTO**(例外:不要将输入DTO作为输出DTO).
 * 输出DTO可以包含比用例需要的属性**更多**的属性.
 * 针对 **Create** 和 **Update** 方法,返回实体的DTO.
 
