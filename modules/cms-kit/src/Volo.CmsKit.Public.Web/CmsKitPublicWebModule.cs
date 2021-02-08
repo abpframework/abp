@@ -61,10 +61,6 @@ namespace Volo.CmsKit.Public.Web
         {
             Configure<RazorPagesOptions>(options =>
             {
-                if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
-                {
-                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", @"{*pageUrl:minlength(1)}");
-                }
             });
         }
     }
