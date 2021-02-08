@@ -40,6 +40,7 @@
     "Undo": "Undo",
     "Update": "Update",
     "YourComment": "Your comment",
-    "YourReply": "Your reply"
+    "YourReply": "Your reply",
+    "CmsKit:Medias:0001": "'{Name}' is not a valid media name."
   }
 }

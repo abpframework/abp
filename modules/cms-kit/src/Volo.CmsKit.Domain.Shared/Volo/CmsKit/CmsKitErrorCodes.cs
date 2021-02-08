@@ -19,5 +19,10 @@
         {
             public const string UrlSlugAlreadyExist = "CmsKit:BlogPost:0001";
         }
+        
+        public static class MediaDescriptors
+        {
+            public const string InvalidName = "CmsKit:Medias:0001";
+        }
     }
 }
