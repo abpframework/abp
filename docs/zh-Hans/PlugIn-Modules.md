@@ -6,7 +6,7 @@
 
 `IServiceCollection.AddApplication<T>()` 扩展方法可以获取配置插件源的选项.
 
-**例如: 从文件夹加载插件**
+**示例: 从文件夹加载插件**
 
 ````csharp
 using Microsoft.AspNetCore.Builder;
@@ -55,7 +55,7 @@ options.PlugInSources.Add(new FolderPlugInSource(@"D:\Temp\MyPlugIns"));
 
 如果需要,你可以创建自己的`IPlugInSource`的接口实现,并像其它方法一样添加到`options.PlugInSources`中.
 
-## 例如：创建一个简单的插件
+## 示例：创建一个简单的插件
 
 在一个解决方案中创建一个简单的**类库项目**
 
@@ -122,7 +122,7 @@ namespace MyPlugIn
 
 如果你已经按照上述方式配置了主应用程序(参见“基础用法”部分),那么在应用程序启动时,你可以看到“MyService has been initialized(MyService已经初始化)的日志.
 
-## 例如：创建一个Razor Pages插件
+## 示例：创建一个Razor Pages插件
 
 创建内部带视图的插件需要更多的注意.
 
