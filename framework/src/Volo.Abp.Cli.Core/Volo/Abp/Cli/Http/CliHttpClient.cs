@@ -22,7 +22,7 @@ namespace Volo.Abp.Cli.Http
         {
             Timeout = timeout ?? DefaultTimeout;
 
-            AddAuthentication(this);
+            AddAuthentication();
         }
 
         public CliHttpClient(bool setBearerToken) : base(new CliHttpClientHandler())
@@ -31,11 +31,11 @@ namespace Volo.Abp.Cli.Http
 
             if (setBearerToken)
             {
-                AddAuthentication(this);
+                AddAuthentication();
             }
         }
 
-        private static void AddAuthentication(HttpClient client)
+        public void AddAuthentication()
         {
             if (!AuthService.IsLoggedIn())
             {
@@ -45,7 +45,7 @@ namespace Volo.Abp.Cli.Http
             var accessToken = File.ReadAllText(CliPaths.AccessToken, Encoding.UTF8);
             if (!accessToken.IsNullOrEmpty())
             {
-                client.SetBearerToken(accessToken);
+                this.SetBearerToken(accessToken);
             }
         }
 
@@ -67,7 +67,12 @@ namespace Volo.Abp.Cli.Http
                 };
             }
 
-            cancellationToken ??= CancellationToken.None;
+            if (cancellationToken == null)
+            {
+                var cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(DefaultTimeout);
+                cancellationToken = cancellationTokenSource.Token;
+            }
 
             return await HttpPolicyExtensions
                 .HandleTransientHttpError()
@@ -94,6 +99,7 @@ namespace Volo.Abp.Cli.Http
                     })
                 .ExecuteAsync(async () => await this.GetAsync(url, cancellationToken.Value));
         }
+
 
     }
 }
