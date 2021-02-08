@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Admin.Blogs
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
     [Authorize(CmsKitAdminPermissions.Blogs.Default)]
-    public class BlogAdminAppService : CrudAppService<Blog, BlogDto, Guid>, IBlogAdminAppService
+    public class BlogAdminAppService : CrudAppService<Blog, BlogDto, Guid, BlogGetListInput>, IBlogAdminAppService
     {
         public BlogAdminAppService(IRepository<Blog, Guid> repository) : base(repository)
         {
@@ -25,12 +25,13 @@ namespace Volo.CmsKit.Admin.Blogs
             DeletePolicyName = CmsKitAdminPermissions.Blogs.Delete;
         }
 
-        [Authorize(CmsKitAdminPermissions.Blogs.Default)]
-        public async Task<List<BlogLookupDto>> GetLookupAsync()
+        protected override async Task<IQueryable<Blog>> CreateFilteredQueryAsync(BlogGetListInput input)
         {
-            var blogs = await Repository.GetListAsync();
-
-            return ObjectMapper.Map<List<Blog>, List<BlogLookupDto>>(blogs);
+            var queryable = await base.CreateFilteredQueryAsync(input);
+            return queryable
+                    .WhereIf(
+                        !input.Filter.IsNullOrWhiteSpace(),
+                        x => x.Name.ToLower().Contains(input.Filter));
         }
     }
 }
