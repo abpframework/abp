@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.basic": "^4.2.0",
-	"@abp/prismjs": "^4.2.0"
+    "@abp/prismjs": "^4.2.0"
   },
   "devDependencies": {}
 }
