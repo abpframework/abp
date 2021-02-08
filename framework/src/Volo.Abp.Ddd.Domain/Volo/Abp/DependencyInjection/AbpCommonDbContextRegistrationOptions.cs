@@ -117,25 +117,5 @@ namespace Volo.Abp.DependencyInjection
 
             CustomRepositories[entityType] = repositoryType;
         }
-
-        public bool ShouldRegisterDefaultRepositoryFor(Type entityType)
-        {
-            if (!RegisterDefaultRepositories)
-            {
-                return false;
-            }
-
-            if (CustomRepositories.ContainsKey(entityType))
-            {
-                return false;
-            }
-
-            if (!IncludeAllEntitiesForDefaultRepositories && !typeof(IAggregateRoot).IsAssignableFrom(entityType))
-            {
-                return false;
-            }
-
-            return true;
-        }
     }
 }
