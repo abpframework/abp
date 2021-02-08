@@ -6,17 +6,23 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
     public class MyGetPackageListFinder : ISingletonDependency
     {
-        private MyGetApiResponse _response;
-
         public ILogger<MyGetPackageListFinder> Logger { get; set; }
 
-        public MyGetPackageListFinder()
+        private MyGetApiResponse _response;
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
+        public MyGetPackageListFinder(CliHttpClientFactory cliHttpClientFactory,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
+            _cliHttpClientFactory = cliHttpClientFactory;
+            CancellationTokenProvider = cancellationTokenProvider;
             Logger = NullLogger<MyGetPackageListFinder>.Instance;
         }
 
@@ -29,18 +35,20 @@ namespace Volo.Abp.Cli.ProjectModification
 
             try
             {
-                using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
-                {
-                    var responseMessage = await client.GetAsync(
-                        $"{CliUrls.WwwAbpIo}api/myget/packages/"
-                    );
+                var client = _cliHttpClientFactory.CreateClient();
 
-                    _response = JsonConvert.DeserializeObject<MyGetApiResponse>(Encoding.Default.GetString(await responseMessage.Content.ReadAsByteArrayAsync()));
+                using (var responseMessage = await client.GetAsync(
+                    $"{CliUrls.WwwAbpIo}api/myget/packages/",
+                    _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
+                {
+                    _response = JsonConvert.DeserializeObject<MyGetApiResponse>(
+                        Encoding.Default.GetString(await responseMessage.Content.ReadAsByteArrayAsync())
+                    );
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Logger.LogError("Unable to get latest preview version.");
+                Logger.LogError("Unable to get latest preview version. Error: " + ex.Message);
                 throw;
             }
 

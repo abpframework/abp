@@ -21,13 +21,15 @@ namespace Volo.Abp.Cli.ProjectModification
     public class ProjectNugetPackageAdder : ITransientDependency
     {
         public ILogger<ProjectNugetPackageAdder> Logger { get; set; }
+        public BundleCommand BundleCommand { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNpmPackageAdder NpmPackageAdder { get; }
         protected DerivedClassFinder ModuleClassFinder { get; }
         protected ModuleClassDependcyAdder ModuleClassDependcyAdder { get; }
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
-        public BundleCommand BundleCommand { get; }
+
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
 
         public ProjectNugetPackageAdder(
             IJsonSerializer jsonSerializer,
@@ -35,7 +37,8 @@ namespace Volo.Abp.Cli.ProjectModification
             DerivedClassFinder moduleClassFinder,
             ModuleClassDependcyAdder moduleClassDependcyAdder,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            BundleCommand bundleCommand)
+            BundleCommand bundleCommand, 
+            CliHttpClientFactory cliHttpClientFactory)
         {
             JsonSerializer = jsonSerializer;
             NpmPackageAdder = npmPackageAdder;
@@ -43,6 +46,7 @@ namespace Volo.Abp.Cli.ProjectModification
             ModuleClassDependcyAdder = moduleClassDependcyAdder;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             BundleCommand = bundleCommand;
+            _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<ProjectNugetPackageAdder>.Instance;
         }
 
@@ -121,7 +125,7 @@ namespace Volo.Abp.Cli.ProjectModification
         private Task AddToCsprojManuallyAsync(string projectFile, NugetPackageInfo package, string version = null)
         {
             var projectFileContent = File.ReadAllText(projectFile);
-            var doc = new XmlDocument() {PreserveWhitespace = true};
+            var doc = new XmlDocument() { PreserveWhitespace = true };
             doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
 
             var itemGroupNodes = doc.SelectNodes("/Project/ItemGroup");
@@ -162,7 +166,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private string GetAbpVersionOrNull(string projectFileContent)
         {
-            var doc = new XmlDocument() {PreserveWhitespace = true};
+            var doc = new XmlDocument() { PreserveWhitespace = true };
 
             doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
 
@@ -173,12 +177,11 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string packageName)
         {
-            using (var client = new CliHttpClient())
+            var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/byName/?name=" + packageName;
+            var client = _cliHttpClientFactory.CreateClient();
+
+            using (var response = await client.GetAsync(url, _cliHttpClientFactory.GetCancellationToken()))
             {
-                var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/byName/?name=" + packageName;
-
-                var response = await client.GetAsync(url);
-
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)

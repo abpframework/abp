@@ -16,14 +16,18 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public ICancellationTokenProvider CancellationTokenProvider { get; }
         public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
 
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
+
         public ModuleInfoProvider(
             IJsonSerializer jsonSerializer,
             ICancellationTokenProvider cancellationTokenProvider,
-            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler, 
+            CliHttpClientFactory cliHttpClientFactory)
         {
             JsonSerializer = jsonSerializer;
             CancellationTokenProvider = cancellationTokenProvider;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            _cliHttpClientFactory = cliHttpClientFactory;
         }
 
         public async Task<ModuleInfo> GetAsync(string name)
@@ -47,17 +51,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         private async Task<List<ModuleInfo>> GetModuleListInternalAsync()
         {
-            using (var client = new CliHttpClient())
+            var client = _cliHttpClientFactory.CreateClient();
+
+            using (var responseMessage = await client.GetAsync(
+                $"{CliUrls.WwwAbpIo}api/download/modules/",
+                CancellationTokenProvider.Token
+            ))
             {
-                using (var responseMessage = await client.GetAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/modules/",
-                    CancellationTokenProvider.Token
-                ))
-                {
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-                    var result = await responseMessage.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<List<ModuleInfo>>(result);
-                }
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                var result = await responseMessage.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<ModuleInfo>>(result);
             }
         }
     }
