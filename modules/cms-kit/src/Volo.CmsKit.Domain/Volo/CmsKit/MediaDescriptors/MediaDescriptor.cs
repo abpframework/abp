@@ -14,14 +14,14 @@ namespace Volo.CmsKit.MediaDescriptors
 
         public string MimeType { get; set; }
 
-        public int Size { get; protected set; }
+        public long Size { get; protected set; }
 
         protected MediaDescriptor()
         {
             
         }
 
-        public MediaDescriptor(Guid id, Guid? tenantId, string name, string mimeType, int size) : base(id)
+        public MediaDescriptor(Guid id, Guid? tenantId, string name, string mimeType, long size) : base(id)
         {
             TenantId = tenantId;
             
