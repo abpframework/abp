@@ -14,6 +14,7 @@ using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.MediaDescriptors;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -220,6 +221,24 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Ignore<Blog>();
                 builder.Ignore<BlogPost>();
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<MediasFeature>())
+            {
+                builder.Entity<MediaDescriptor>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "MediaDescriptors", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.Name).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxNameLength);
+                    b.Property(x => x.MimeType).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxMimeTypeLength);
+                    b.Property(x => x.Size).HasMaxLength(MediaDescriptorConsts.MaxSizeLength);
+                });
+            }
+            else
+            {
+                builder.Ignore<MediaDescriptor>();
             }
         }
     }
