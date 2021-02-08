@@ -14,7 +14,7 @@ namespace Volo.Abp.Emailing
             EmailSender = emailSender;
         }
 
-        public async override Task ExecuteAsync(BackgroundEmailSendingJobArgs args)
+        public override async Task ExecuteAsync(BackgroundEmailSendingJobArgs args)
         {
             if (args.From.IsNullOrWhiteSpace())
             {

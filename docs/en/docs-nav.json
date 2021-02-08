@@ -681,6 +681,10 @@
                 {
                   "text": "Page Alerts",
                   "path": "UI/Blazor/Page-Alerts.md"
+                },
+                {
+                  "text": "Page Progress",
+                  "path": "UI/Blazor/Page-Progress.md"
                 }
               ]
             },
@@ -740,6 +744,10 @@
                 {
                   "text": "PWA Configuration",
                   "path": "UI/Angular/PWA-Configuration.md"
+                },
+                {
+                  "text": "Unit Testing",
+                  "path": "UI/Angular/Testing.md"
                 }
               ]
             },
@@ -818,6 +826,10 @@
                 {
                   "text": "Toast Overlay",
                   "path": "UI/Angular/Toaster-Service.md"
+                },
+                {
+                  "text": "Page Alerts",
+                  "path": "UI/Angular/Page-Alerts.md"
                 }
               ]
             },
@@ -1044,10 +1056,6 @@
         {
           "text": "CLI",
           "path": "CLI.md"
-        },
-        {
-          "text": "API Documentation",
-          "path": "{ApiDocumentationUrl}"
         }
       ]
     },

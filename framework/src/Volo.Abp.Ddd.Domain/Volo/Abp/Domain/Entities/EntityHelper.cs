@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
@@ -15,6 +13,17 @@ namespace Volo.Abp.Domain.Entities
     /// </summary>
     public static class EntityHelper
     {
+        public static bool IsMultiTenant<TEntity>()
+            where TEntity : IEntity
+        {
+            return IsMultiTenant(typeof(TEntity));
+        }
+
+        public static bool IsMultiTenant(Type type)
+        {
+            return typeof(IMultiTenant).IsAssignableFrom(type);
+        }
+
         public static bool EntityEquals(IEntity entity1, IEntity entity2)
         {
             if (entity1 == null || entity2 == null)

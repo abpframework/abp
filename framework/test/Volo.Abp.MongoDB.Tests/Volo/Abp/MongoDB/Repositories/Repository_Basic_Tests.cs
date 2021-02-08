@@ -51,7 +51,7 @@ namespace Volo.Abp.MongoDB.Repositories
         }
 
         [Fact]
-        public async override Task InsertAsync()
+        public override async Task InsertAsync()
         {
             var person = new Person(Guid.NewGuid(), "New Person", 35);
             person.Phones.Add(new Phone(person.Id, "1234567890"));

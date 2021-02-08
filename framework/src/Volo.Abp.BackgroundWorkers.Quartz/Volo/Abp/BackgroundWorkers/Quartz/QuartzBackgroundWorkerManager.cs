@@ -19,14 +19,17 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
 
         public virtual async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            await _scheduler.ResumeAll(cancellationToken);
+            if (_scheduler.IsStarted && _scheduler.InStandbyMode)
+            {
+                await _scheduler.Start(cancellationToken);
+            }
         }
 
         public virtual async Task StopAsync(CancellationToken cancellationToken = default)
         {
-            if (!_scheduler.IsShutdown)
+            if (_scheduler.IsStarted && !_scheduler.InStandbyMode)
             {
-                await _scheduler.PauseAll(cancellationToken);
+                await _scheduler.Standby(cancellationToken);
             }
         }
 

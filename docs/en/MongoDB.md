@@ -149,7 +149,7 @@ public class Book : AggregateRoot<Guid>
 }
 ```
 
-(`BookType` is a simple enum here) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
+(`BookType` is a simple `enum` here) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
 
 ```csharp
 public class BookManager : DomainService
@@ -215,7 +215,8 @@ public class BookRepository :
         BookType type,
         CancellationToken cancellationToken = default(CancellationToken))
     {
-        await Collection.DeleteManyAsync(
+        var collection = await GetCollectionAsync(cancellationToken);
+        await collection.DeleteManyAsync(
             Builders<Book>.Filter.Eq(b => b.Type, type),
             cancellationToken
         );
@@ -253,7 +254,7 @@ public async override Task DeleteAsync(
 
 ### Access to the MongoDB API
 
-In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabase()` or `GetCollection()` extension methods. Example:
+In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabaseAsync()` or `GetCollectionAsync()` extension methods. Example:
 
 ```csharp
 public class BookService
@@ -265,10 +266,10 @@ public class BookService
         _bookRepository = bookRepository;
     }
 
-    public void Foo()
+    public async Task FooAsync()
     {
-        IMongoDatabase database = _bookRepository.GetDatabase();
-        IMongoCollection<Book> books = _bookRepository.GetCollection();
+        IMongoDatabase database = await _bookRepository.GetDatabaseAsync();
+        IMongoCollection<Book> books = await _bookRepository.GetCollectionAsync();
     }
 }
 ```
@@ -382,3 +383,53 @@ context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
 ```
 
 In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. This feature allows you to have multiple MongoDbContext (one per module) on development, but single MongoDbContext (implements all interfaces of all MongoDbContexts) on runtime.
+
+### Customize Bulk Operations
+
+If you have better logic or using an external library for bulk operations, you can override the logic via implementing `IMongoDbBulkOperationProvider`.
+
+- You may use example template below:
+
+```csharp
+public class MyCustomMongoDbBulkOperationProvider
+    : IMongoDbBulkOperationProvider, ITransientDependency
+{
+    public async Task DeleteManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task InsertManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+
+    public async Task UpdateManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
+        where TEntity : class, IEntity
+    {
+        // Your logic here.
+    }
+}
+```
+
+## See Also
+
+* [Entities](Entities.md)
+* [Repositories](Repositories.md)

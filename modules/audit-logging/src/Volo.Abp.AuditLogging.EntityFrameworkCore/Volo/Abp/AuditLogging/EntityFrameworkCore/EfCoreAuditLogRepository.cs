@@ -39,7 +39,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(
+            var query = await GetListQueryAsync(
                 startTime,
                 endTime,
                 httpMethod,
@@ -75,7 +75,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             HttpStatusCode? httpStatusCode = null,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(
+            var query = await GetListQueryAsync(
                 startTime,
                 endTime,
                 httpMethod,
@@ -94,7 +94,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return totalCount;
         }
 
-        protected virtual IQueryable<AuditLog> GetListQuery(
+        protected virtual async Task<IQueryable<AuditLog>> GetListQueryAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string httpMethod = null,
@@ -109,7 +109,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             bool includeDetails = false)
         {
             var nHttpStatusCode = (int?) httpStatusCode;
-            return DbSet.AsNoTracking()
+            return (await GetDbSetAsync()).AsNoTracking()
                 .IncludeDetails(includeDetails)
                 .WhereIf(startTime.HasValue, auditLog => auditLog.ExecutionTime >= startTime)
                 .WhereIf(endTime.HasValue, auditLog => auditLog.ExecutionTime <= endTime)
@@ -127,7 +127,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
         public virtual async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(DateTime startDate, DateTime endDate)
         {
-            var result = await DbSet.AsNoTracking()
+            var result = await (await GetDbSetAsync()).AsNoTracking()
                 .Where(a => a.ExecutionTime < endDate.AddDays(1) && a.ExecutionTime > startDate)
                 .OrderBy(t => t.ExecutionTime)
                 .GroupBy(t => new { t.ExecutionTime.Date })
@@ -137,14 +137,20 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public override IQueryable<AuditLog> WithDetails()
         {
             return GetQueryable().IncludeDetails();
         }
 
+        public override async Task<IQueryable<AuditLog>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
+        }
+
         public virtual async Task<EntityChange> GetEntityChange(Guid entityChangeId)
         {
-            var entityChange = await DbContext.Set<EntityChange>()
+            var entityChange = await (await GetDbContextAsync()).Set<EntityChange>()
                                     .AsNoTracking()
                                     .IncludeDetails()
                                     .Where(x => x.Id == entityChangeId)
@@ -172,7 +178,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, includeDetails);
+            var query = await GetEntityChangeListQueryAsync(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, includeDetails);
 
             return await query.OrderBy(sorting ?? "changeTime desc")
                 .PageBy(skipCount, maxResultCount)
@@ -188,7 +194,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string entityTypeFullName = null,
             CancellationToken cancellationToken = default)
         {
-            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
+            var query = await GetEntityChangeListQueryAsync(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
 
             var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
@@ -197,7 +203,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
         public virtual async Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId)
         {
-            var auditLog = await DbSet.AsNoTracking().IncludeDetails()
+            var auditLog = await (await GetDbSetAsync()).AsNoTracking().IncludeDetails()
                 .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId)).FirstAsync();
 
             return new EntityChangeWithUsername()
@@ -209,18 +215,20 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
         public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName)
         {
-            var query = DbContext.Set<EntityChange>()
+            var dbContext = await GetDbContextAsync();
+
+            var query = dbContext.Set<EntityChange>()
                                 .AsNoTracking()
                                 .IncludeDetails()
                                 .Where(x => x.EntityId == entityId && x.EntityTypeFullName == entityTypeFullName);
 
             return await (from e in query
-                        join auditLog in DbSet on e.AuditLogId equals auditLog.Id
-                        select new EntityChangeWithUsername() {EntityChange = e, UserName = auditLog.UserName})
+                        join auditLog in dbContext.AuditLogs on e.AuditLogId equals auditLog.Id
+                        select new EntityChangeWithUsername {EntityChange = e, UserName = auditLog.UserName})
                         .OrderByDescending(x => x.EntityChange.ChangeTime).ToListAsync();
         }
 
-        protected virtual IQueryable<EntityChange> GetEntityChangeListQuery(
+        protected virtual async Task<IQueryable<EntityChange>> GetEntityChangeListQueryAsync(
             Guid? auditLogId = null,
             DateTime? startTime = null,
             DateTime? endTime = null,
@@ -229,14 +237,16 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string entityTypeFullName = null,
             bool includeDetails = false)
         {
-            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails(includeDetails)
-                        .WhereIf(auditLogId.HasValue, e => e.AuditLogId == auditLogId)
-                        .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)
-                        .WhereIf(endTime.HasValue, e => e.ChangeTime <= endTime)
-                        .WhereIf(changeType.HasValue, e => e.ChangeType == changeType)
-                        .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
-                        .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
-                            e => e.EntityTypeFullName.Contains(entityTypeFullName));
+            return (await GetDbContextAsync())
+                .Set<EntityChange>()
+                .AsNoTracking()
+                .IncludeDetails(includeDetails)
+                .WhereIf(auditLogId.HasValue, e => e.AuditLogId == auditLogId)
+                .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)
+                .WhereIf(endTime.HasValue, e => e.ChangeTime <= endTime)
+                .WhereIf(changeType.HasValue, e => e.ChangeType == changeType)
+                .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
+                .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName), e => e.EntityTypeFullName.Contains(entityTypeFullName));
         }
     }
 }

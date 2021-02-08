@@ -16,6 +16,11 @@ namespace Volo.Docs.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new DocsModelBuilderConfigurationOptions(
                 DocsDbProperties.DbTablePrefix,
                 DocsDbProperties.DbSchema
