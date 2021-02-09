@@ -12,7 +12,7 @@ namespace Volo.CmsKit.Blogs
     {
         Task<bool> SlugExistsAsync(Guid blogId, string slug, CancellationToken cancellationToken = default);
 
-        Task<BlogPost> GetBySlugAsync(Guid blogId, string Slug, CancellationToken cancellationToken = default);
+        Task<BlogPost> GetBySlugAsync(Guid blogId, string slug, CancellationToken cancellationToken = default);
 
         Task<List<BlogPost>> GetPagedListAsync(Guid blogId, int skipCount, int maxResultCount, string sorting, bool includeDetails = false, CancellationToken cancellationToken = default);
 
