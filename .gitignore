@@ -269,6 +269,7 @@ modules/blog/app/Volo.BlogTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*.*
 modules/docs/app/VoloDocs.Web/Logs/*.*
+modules/setting-management/app/Volo.Abp.SettingManagement.DemoApp/Logs/*.*
 templates/module/app/MyCompanyName.MyProjectName.DemoApp/Logs/*.*
 templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/*.*
 
