@@ -21,6 +21,8 @@ namespace Volo.Abp.IdentityServer
     public class ResourceStore : IResourceStore
     {
         public const string AllResourcesKey = "AllResources";
+        public const string ApiResourceNameCacheKeyPrefix = "ApiResourceName_";
+        public const string ApiResourceScopeNameCacheKeyPrefix = "ApiResourceScopeName_";
 
         protected IIdentityResourceRepository IdentityResourceRepository { get; }
         protected IApiResourceRepository ApiResourceRepository { get; }
@@ -63,9 +65,9 @@ namespace Volo.Abp.IdentityServer
                 IdentityResourceCache,
                 scopeNames,
                 async keys => await IdentityResourceRepository.GetListByScopeNameAsync(keys, includeDetails: true),
-                models => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.IdentityResource>>>
+                (models, cacheKeyPrefix)=> new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.IdentityResource>>>
                 {
-                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.IdentityResource>(x.Name, x))
+                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.IdentityResource>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
                 });
         }
 
@@ -78,9 +80,9 @@ namespace Volo.Abp.IdentityServer
                 ApiScopeCache,
                 scopeNames,
                 async keys => await ApiScopeRepository.GetListByNameAsync(keys, includeDetails: true),
-                models => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiScope>>>
+                (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiScope>>>
                 {
-                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.ApiScope>(x.Name, x))
+                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.ApiScope>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
                 });
         }
 
@@ -93,12 +95,12 @@ namespace Volo.Abp.IdentityServer
                 ApiResourceCache,
                 scopeNames,
                 async keys => await ApiResourceRepository.GetListByScopesAsync(keys, includeDetails: true),
-                models =>
+                (models, cacheKeyPrefix) =>
                 {
                     return models
-                        .Select(model => model.Scopes.Select(scope => new KeyValuePair<string, IdentityServer4.Models.ApiResource>(scope, model)).ToList())
+                        .Select(model => model.Scopes.Select(scope => new KeyValuePair<string, IdentityServer4.Models.ApiResource>(AddCachePrefix(scope, cacheKeyPrefix), model)).ToList())
                         .Where(scopes => scopes.Any()).Cast<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiResource>>>().ToList();
-                });
+                }, ApiResourceScopeNameCacheKeyPrefix);
         }
 
         /// <summary>
@@ -110,10 +112,10 @@ namespace Volo.Abp.IdentityServer
                 ApiResourceCache,
                 apiResourceNames,
                 async keys => await ApiResourceRepository.FindByNameAsync(keys, includeDetails: true),
-                models => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiResource>>>
+                (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiResource>>>
                 {
-                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.ApiResource>(x.Name, x))
-                });
+                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.ApiResource>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
+                }, ApiResourceNameCacheKeyPrefix);
         }
 
         /// <summary>
@@ -141,17 +143,19 @@ namespace Volo.Abp.IdentityServer
             IDistributedCache<TModel> cache,
             IEnumerable<string> keys,
             Func<string[], Task<List<TEntity>>> entityFactory,
-            Func<List<TModel>, List<IEnumerable<KeyValuePair<string, TModel>>>> cacheItemsFactory)
+            Func<List<TModel>, string, List<IEnumerable<KeyValuePair<string, TModel>>>> cacheItemsFactory,
+            string cacheKeyPrefix = null)
             where TModel : class
         {
-            var cacheItems = await cache.GetManyAsync(keys);
+            var cacheItems = await cache.GetManyAsync(AddCachePrefix(keys, cacheKeyPrefix));
             if (cacheItems.All(x => x.Value != null))
             {
                 return cacheItems.Select(x => x.Value);
             }
 
-            var otherKeys = cacheItems.Where(x => x.Value == null).Select(x => x.Key).ToArray();
-            var otherCacheItems = cacheItemsFactory(ObjectMapper.Map<List<TEntity>, List<TModel>>(await entityFactory(otherKeys))).ToList();
+            var otherKeys = RemoveCachePrefix(cacheItems.Where(x => x.Value == null).Select(x => x.Key), cacheKeyPrefix).ToArray();
+            var otherModels = ObjectMapper.Map<List<TEntity>, List<TModel>>(await entityFactory(otherKeys));
+            var otherCacheItems = cacheItemsFactory(otherModels, cacheKeyPrefix).ToList();
             foreach (var item in otherCacheItems)
             {
                 await cache.SetManyAsync(item, new DistributedCacheEntryOptions
@@ -160,7 +164,27 @@ namespace Volo.Abp.IdentityServer
                 });
             }
 
-            return cacheItems.Where(x => x.Value != null).Concat(otherCacheItems.SelectMany(x => x)).Select(x => x.Value);
+            return cacheItems.Where(x => x.Value != null).Select(x => x.Value).Concat(otherModels);
+        }
+
+        protected virtual IEnumerable<string> AddCachePrefix(IEnumerable<string> keys, string prefix)
+        {
+            return prefix == null ? keys : keys.Select(x => AddCachePrefix(x, prefix));
+        }
+
+        protected virtual string AddCachePrefix(string key, string prefix)
+        {
+            return prefix == null ? key : prefix + key;
+        }
+
+        protected virtual IEnumerable<string> RemoveCachePrefix(IEnumerable<string> keys, string prefix)
+        {
+            return prefix == null ? keys : keys.Select(x => RemoveCachePrefix(x, prefix));
+        }
+
+        protected virtual string RemoveCachePrefix(string key, string prefix)
+        {
+            return prefix == null ? key : key.RemovePreFix(prefix);
         }
     }
 }

@@ -81,8 +81,8 @@ namespace Volo.Abp.IdentityServer.Cache
             (await _apiResourceCache.GetAsync(newApiResource1)).ShouldBeNull();
             (await _apiResourceCache.GetAsync(newApiResource2)).ShouldBeNull();
             await _resourceStore.FindApiResourcesByNameAsync(newApiResources);
-            (await _apiResourceCache.GetAsync(newApiResource1)).ShouldNotBeNull();
-            (await _apiResourceCache.GetAsync(newApiResource2)).ShouldNotBeNull();
+            (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceNameCacheKeyPrefix + newApiResource1)).ShouldNotBeNull();
+            (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceNameCacheKeyPrefix + newApiResource2)).ShouldNotBeNull();
 
             var apiResource1 = await _apiResourceRepository.FindByNameAsync(newApiResource1);
             await _apiResourceRepository.DeleteAsync(apiResource1);
@@ -93,13 +93,13 @@ namespace Volo.Abp.IdentityServer.Cache
             (await _apiResourceCache.GetAsync(newApiResource2)).ShouldBeNull();
 
             //FindApiResourcesByScopeNameAsync
-            (await _apiResourceCache.GetAsync(testApiResourceApiScopeName1)).ShouldBeNull();
+            (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceApiScopeName1)).ShouldBeNull();
             await _resourceStore.FindApiResourcesByScopeNameAsync(new []{ testApiResourceApiScopeName1 });
-            (await _apiResourceCache.GetAsync(testApiResourceApiScopeName1)).ShouldNotBeNull();
+            (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceApiScopeName1)).ShouldNotBeNull();
 
             var testApiResource1 = await _apiResourceRepository.FindByNameAsync(testApiResourceName1);
             await _apiResourceRepository.DeleteAsync(testApiResource1);
-            (await _apiResourceCache.GetAsync(testApiResourceName1)).ShouldBeNull();
+            (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceName1)).ShouldBeNull();
 
 
             //Identity Resource

@@ -56,6 +56,12 @@ namespace Volo.Abp.IdentityServer
             var cache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.ApiResource>>();
             await cache.RemoveAsync(eventData.Entity.Name);
 
+            //TODO: remove many
+            foreach (var scope in eventData.Entity.Scopes)
+            {
+                await cache.RemoveAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + scope.Scope);
+            }
+
             var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Resources>>();
             await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
         }
