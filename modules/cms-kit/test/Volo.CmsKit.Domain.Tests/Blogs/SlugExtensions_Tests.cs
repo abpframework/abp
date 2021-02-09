@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Volo.CmsKit.Blogs.Extensions;
 using Shouldly;
+using Unidecode.NET;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -29,7 +30,7 @@ namespace Volo.CmsKit.Blogs
         {
             // Arrange
             var name = "My Perfect Title v.2";
-            var expected = "my-perfect-title-v2";
+            var expected = "my-perfect-title-v.2";
 
             // Act
             var actual = name.NormalizeSlug();
@@ -112,8 +113,8 @@ namespace Volo.CmsKit.Blogs
         public void NormalizeSlug_ShouldWorkProperly_WithChineseChars()
         {
             // Arrange
-            var name = "我的挑战";
-            var expected = "o-e-iao-han";
+            var name = "我的真棒头衔";
+            var expected = "wo-de-zhen-bang-tou-xian";
 
             // Act
             var actual = name.NormalizeSlug();

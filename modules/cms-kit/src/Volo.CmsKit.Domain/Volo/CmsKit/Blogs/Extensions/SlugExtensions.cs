@@ -1,4 +1,5 @@
 ﻿using Slugify;
+using Unidecode.NET;
 
 namespace Volo.CmsKit.Blogs.Extensions
 {
@@ -8,7 +9,7 @@ namespace Volo.CmsKit.Blogs.Extensions
         {
             var slugHelper = new SlugHelper();
 
-            return slugHelper.GenerateSlug(value);
+            return slugHelper.GenerateSlug(value?.Unidecode());
         }
     }
 }
