@@ -28,14 +28,14 @@ namespace Volo.CmsKit.Blogs
         public async Task CreateAsync_ShouldWorkProperly_WithCorrectData()
         {
             var title = "My awesome new Post";
-            var urlSlug = "my-awesome-new-post";
+            var slug = "my-awesome-new-post";
             var shortDescription = "This blog is all about awesomeness 🤗!";
 
             var created = await blogPostAdminAppService.CreateAsync(new CreateUpdateBlogPostDto
             {
                 BlogId = cmsKitTestData.Blog_Id,
                 Title = title,
-                UrlSlug = urlSlug,
+                Slug = slug,
                 ShortDescription = shortDescription
             });
 
@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Blogs
             var blogPost = await blogPostRepository.GetAsync(created.Id);
 
             blogPost.Title.ShouldBe(title);
-            blogPost.UrlSlug.ShouldBe(urlSlug);
+            blogPost.Slug.ShouldBe(slug);
             blogPost.ShortDescription.ShouldBe(shortDescription);
         }
 
@@ -52,7 +52,7 @@ namespace Volo.CmsKit.Blogs
         public async Task CreateAsync_ShouldThrowException_WithNonExistingBlogId()
         {
             var title = "Another My Awesome New Post";
-            var urlSlug = "another-my-awesome-new-post";
+            var slug = "another-my-awesome-new-post";
             var shortDescription = "This blog is all about awesomeness 🤗!";
 
             var dto = new CreateUpdateBlogPostDto
@@ -60,7 +60,7 @@ namespace Volo.CmsKit.Blogs
                 // Non-existing Id
                 BlogId = Guid.NewGuid(),
                 Title = title,
-                UrlSlug = urlSlug,
+                Slug = slug,
                 ShortDescription = shortDescription
             };
 
@@ -76,7 +76,7 @@ namespace Volo.CmsKit.Blogs
             var blogPost = await blogPostAdminAppService.GetAsync(cmsKitTestData.BlogPost_1_Id);
 
             blogPost.Title.ShouldBe(cmsKitTestData.BlogPost_1_Title);
-            blogPost.UrlSlug.ShouldBe(cmsKitTestData.BlogPost_1_UrlSlug);
+            blogPost.Slug.ShouldBe(cmsKitTestData.BlogPost_1_Slug);
         }
 
         [Fact]
@@ -91,30 +91,30 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldWorkProperly_WithExistingUrlSlug()
+        public async Task GetBySlugAsync_ShouldWorkProperly_WithExistingSlug()
         {
-            var blogPost = await blogPostAdminAppService.GetByUrlSlugAsync(cmsKitTestData.BlogUrlSlug, cmsKitTestData.BlogPost_1_UrlSlug);
+            var blogPost = await blogPostAdminAppService.GetBySlugAsync(cmsKitTestData.BlogSlug, cmsKitTestData.BlogPost_1_Slug);
 
             blogPost.Id.ShouldBe(cmsKitTestData.BlogPost_1_Id);
             blogPost.Title.ShouldBe(cmsKitTestData.BlogPost_1_Title);
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldThrowException_WithNonExistingBlogPostUrlSlug()
+        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogPostSlug()
         {
-            var nonExistingUrlSlug = "any-other-url";
+            var nonExistingSlug = "any-other-url";
             var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
-                                await blogPostAdminAppService.GetByUrlSlugAsync(cmsKitTestData.BlogUrlSlug, nonExistingUrlSlug));
+                                await blogPostAdminAppService.GetBySlugAsync(cmsKitTestData.BlogSlug, nonExistingSlug));
 
             exception.EntityType.ShouldBe(typeof(BlogPost));
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldThrowException_WithNonExistingBlogUrlSlug()
+        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogSlug()
         {
-            var nonExistingUrlSlug = "any-other-url";
+            var nonExistingSlug = "any-other-url";
             var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
-                                await blogPostAdminAppService.GetByUrlSlugAsync(nonExistingUrlSlug, cmsKitTestData.Page_1_Url));
+                                await blogPostAdminAppService.GetBySlugAsync(nonExistingSlug, cmsKitTestData.Page_1_Url));
 
             exception.EntityType.ShouldBe(typeof(Blog));
         }
@@ -135,21 +135,21 @@ namespace Volo.CmsKit.Blogs
         {
             var shortDescription = "Another short description";
             var title = "[Solved] Another Blog Post";
-            var urlSlug = "another-short-blog-post";
+            var slug = "another-short-blog-post";
 
             await blogPostAdminAppService.UpdateAsync(cmsKitTestData.BlogPost_2_Id, new CreateUpdateBlogPostDto
             {
                 BlogId = cmsKitTestData.Blog_Id,
                 ShortDescription = shortDescription,
                 Title = title,
-                UrlSlug = urlSlug,
+                Slug = slug,
             });
 
             var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_2_Id);
 
             blogPost.Title.ShouldBe(title);
             blogPost.ShortDescription.ShouldBe(shortDescription);
-            blogPost.UrlSlug.ShouldBe(urlSlug);
+            blogPost.Slug.ShouldBe(slug);
         }
 
         [Fact]
@@ -161,7 +161,7 @@ namespace Volo.CmsKit.Blogs
             {
                 BlogId = nonExistingId,
                 Title = cmsKitTestData.Page_2_Title,
-                UrlSlug = cmsKitTestData.BlogPost_2_UrlSlug
+                Slug = cmsKitTestData.BlogPost_2_Slug
             };
 
             var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
@@ -178,13 +178,13 @@ namespace Volo.CmsKit.Blogs
             {
                 BlogId = cmsKitTestData.Blog_Id,
                 Title = "Some new title",
-                UrlSlug = cmsKitTestData.BlogPost_1_UrlSlug
+                Slug = cmsKitTestData.BlogPost_1_Slug
             };
 
-            var exception = await Should.ThrowAsync<BlogPostUrlSlugAlreadyExistException>(async () =>
+            var exception = await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
                                 await blogPostAdminAppService.UpdateAsync(cmsKitTestData.BlogPost_2_Id, dto));
 
-            exception.UrlSlug.ShouldBe(cmsKitTestData.BlogPost_1_UrlSlug);
+            exception.Slug.ShouldBe(cmsKitTestData.BlogPost_1_Slug);
         }
 
         [Fact]

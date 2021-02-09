@@ -27,9 +27,9 @@ namespace Volo.CmsKit.Public.Blogs
         }
 
         [HttpGet]
-        public Task<BlogPostPublicDto> GetAsync(string blogUrlSlug, string blogPostUrlSlug)
+        public Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
         {
-            return BlogPostPublicAppService.GetAsync(blogUrlSlug, blogPostUrlSlug);
+            return BlogPostPublicAppService.GetAsync(blogSlug, blogPostSlug);
         }
 
         [HttpGet]
@@ -45,9 +45,9 @@ namespace Volo.CmsKit.Public.Blogs
         }
 
         [HttpGet]
-        public Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogUrlSlug, PagedAndSortedResultRequestDto input)
+        public Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
         {
-            return BlogPostPublicAppService.GetListAsync(blogUrlSlug, input);
+            return BlogPostPublicAppService.GetListAsync(blogSlug, input);
         }
     }
 }

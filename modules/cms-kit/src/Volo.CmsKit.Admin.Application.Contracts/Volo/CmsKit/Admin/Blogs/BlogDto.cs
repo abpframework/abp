@@ -13,7 +13,7 @@ namespace Volo.CmsKit.Admin.Blogs
         public string Name { get; set; }
 
         [Required]
-        [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxUrlSlugLength))]
-        public string UrlSlug { get; set; }
+        [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxSlugLength))]
+        public string Slug { get; set; }
     }
 }

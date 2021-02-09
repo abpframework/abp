@@ -11,10 +11,10 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
     public class BlogPostModel : CmsKitPublicPageModelBase
     {
         [BindProperty(SupportsGet = true)]
-        public string BlogUrlSlug { get; set; }
+        public string BlogSlug { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string BlogPostUrlSlug { get; set; }
+        public string BlogPostSlug { get; set; }
 
         public BlogPostPublicDto BlogPost { get; private set; }
 
@@ -27,7 +27,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
 
         public async Task OnGetAsync()
         {
-            BlogPost = await BlogPostPublicAppService.GetAsync(BlogUrlSlug, BlogPostUrlSlug);
+            BlogPost = await BlogPostPublicAppService.GetAsync(BlogSlug, BlogPostSlug);
         }
     }
 }

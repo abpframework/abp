@@ -17,9 +17,9 @@ namespace Volo.CmsKit.Admin.Blogs
         [Required]
         [DynamicStringLength(
             typeof(BlogPostConsts),
-            nameof(BlogPostConsts.MaxUrlSlugLength),
-            nameof(BlogPostConsts.MinUrlSlugLength))]
-        public string UrlSlug { get; set; }
+            nameof(BlogPostConsts.MaxSlugLength),
+            nameof(BlogPostConsts.MinSlugLength))]
+        public string Slug { get; set; }
 
         [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxShortDescriptionLength))]
         public string ShortDescription { get; set; }

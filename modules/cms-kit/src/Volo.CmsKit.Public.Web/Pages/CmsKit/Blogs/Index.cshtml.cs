@@ -15,7 +15,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
         public const int PageSize = 12;
 
         [BindProperty(SupportsGet = true)]
-        public string BlogUrlSlug { get; set; }
+        public string BlogSlug { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; } = 1;
@@ -34,7 +34,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
         public async Task OnGetAsync()
         {
             Blogs = await BlogPostPublicAppService.GetListAsync(
-                BlogUrlSlug, 
+                BlogSlug, 
                 new PagedAndSortedResultRequestDto
                 {
                     SkipCount = PageSize * (CurrentPage - 1),

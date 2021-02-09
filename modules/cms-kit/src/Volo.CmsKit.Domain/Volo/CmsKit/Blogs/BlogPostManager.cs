@@ -25,7 +25,7 @@ namespace Volo.CmsKit.Blogs
         {
             await CheckBlogExistenceAsync(blogPost.BlogId);
 
-            await CheckUrlSlugExistenceAsync(blogPost.BlogId, blogPost.UrlSlug);
+            await CheckSlugExistenceAsync(blogPost.BlogId, blogPost.Slug);
 
             return await blogPostRepository.InsertAsync(blogPost);
         }
@@ -39,16 +39,16 @@ namespace Volo.CmsKit.Blogs
 
         public async Task SetSlugUrlAsync(BlogPost blogPost, string newSlug)
         {
-            await CheckUrlSlugExistenceAsync(blogPost.BlogId, newSlug);
+            await CheckSlugExistenceAsync(blogPost.BlogId, newSlug);
 
-            blogPost.SetUrlSlug(newSlug);
+            blogPost.SetSlug(newSlug);
         }
 
-        private async Task CheckUrlSlugExistenceAsync(Guid blogId, string urlSlug)
+        private async Task CheckSlugExistenceAsync(Guid blogId, string slug)
         {
-            if (await blogPostRepository.SlugExistsAsync(blogId, urlSlug))
+            if (await blogPostRepository.SlugExistsAsync(blogId, slug))
             {
-                throw new BlogPostUrlSlugAlreadyExistException(blogId, urlSlug);
+                throw new BlogPostSlugAlreadyExistException(blogId, slug);
             }
         }
 

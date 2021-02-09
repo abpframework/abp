@@ -29,24 +29,24 @@ namespace Volo.CmsKit.Blogs
         public async Task CreateAsync_ShouldWorkProperly_WithCorrectData()
         {
             var title = "New blog post";
-            var urlSlug = "new-blog-post";
+            var slug = "new-blog-post";
 
             var created = await blogPostManager.CreateAsync(
-                new BlogPost(guidGenerator.Create(), cmsKitTestData.Blog_Id, title, urlSlug));
+                new BlogPost(guidGenerator.Create(), cmsKitTestData.Blog_Id, title, slug));
 
             created.Id.ShouldNotBe(Guid.Empty);
 
             var blogPost = await blogPostRepository.GetAsync(created.Id);
             blogPost.Title.ShouldBe(title);
-            blogPost.UrlSlug.ShouldBe(urlSlug);
+            blogPost.Slug.ShouldBe(slug);
         }
 
         [Fact]
-        public async Task CreateAsync_ShouldThrowException_WhenUrlSlugAlreadyExists()
+        public async Task CreateAsync_ShouldThrowException_WhenSlugAlreadyExists()
         {
-            var blogPost = new BlogPost(guidGenerator.Create(), cmsKitTestData.Blog_Id, "Any New Title", cmsKitTestData.BlogPost_1_UrlSlug);
+            var blogPost = new BlogPost(guidGenerator.Create(), cmsKitTestData.Blog_Id, "Any New Title", cmsKitTestData.BlogPost_1_Slug);
 
-            await Should.ThrowAsync<BlogPostUrlSlugAlreadyExistException>(async () =>
+            await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
                 await blogPostManager.CreateAsync(blogPost));
         }
 
@@ -66,27 +66,27 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
-        public async Task SetUrlSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
+        public async Task SetSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
         {
-            var newUrlSlug = "yet-another-post";
+            var newSlug = "yet-another-post";
 
             var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_1_Id);
 
-            await blogPostManager.SetSlugUrlAsync(blogPost, newUrlSlug);
+            await blogPostManager.SetSlugUrlAsync(blogPost, newSlug);
 
-            blogPost.UrlSlug.ShouldBe(newUrlSlug);
+            blogPost.Slug.ShouldBe(newSlug);
         }
 
         [Fact]
-        public async Task SetUrlSlugAsync_ShouldThrowException_WithExistingSlug()
+        public async Task SetSlugAsync_ShouldThrowException_WithExistingSlug()
         {
             var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_1_Id);
 
-            var exception = await Should.ThrowAsync<BlogPostUrlSlugAlreadyExistException>(async () =>
-                await blogPostManager.SetSlugUrlAsync(blogPost, cmsKitTestData.BlogPost_2_UrlSlug));
+            var exception = await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
+                await blogPostManager.SetSlugUrlAsync(blogPost, cmsKitTestData.BlogPost_2_Slug));
 
             exception.BlogId.ShouldBe(blogPost.BlogId);
-            exception.UrlSlug.ShouldBe(cmsKitTestData.BlogPost_2_UrlSlug);
+            exception.Slug.ShouldBe(cmsKitTestData.BlogPost_2_Slug);
         }
     }
 }

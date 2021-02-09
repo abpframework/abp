@@ -1,4 +1,4 @@
-﻿@page "/blogs/{blogUrlSlug}"
+﻿@page "/blogs/{blogSlug}"
 
 @using Volo.CmsKit.Public.Web.Pages
 
@@ -20,12 +20,12 @@
                     </abp-card-subtitle>
                 </abp-card-header>
                 <abp-card-body>
-                    <img src="/api/cms-kit-public/blog-posts/@blog.Id/cover-image" class="card-img-top" onerror="this.src='https://dummyimage.com/300x200/a3a3a3/fff.png'"/>
+                    <img src="/api/cms-kit-public/blog-posts/@blog.Id/cover-image" class="card-img-top" style="max-width:200px;max-height:200px;" onerror="this.src='https://dummyimage.com/300x200/a3a3a3/fff.png'" />
                     <abp-card-text>
                         @blog.ShortDescription
                     </abp-card-text>
                     <abp-card-text>
-                        <a href="/blogs/@Model.BlogUrlSlug/@blog.UrlSlug">
+                        <a href="/blogs/@Model.BlogSlug/@blog.Slug">
                             <abp-button text="@L["Read"]"
                                         button-type="Outline_Primary" />
                         </a>

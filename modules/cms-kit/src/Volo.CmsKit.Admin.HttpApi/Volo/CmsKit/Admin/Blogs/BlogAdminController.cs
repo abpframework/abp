@@ -52,7 +52,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpGet]
         [Authorize(CmsKitAdminPermissions.Blogs.Default)]
-        public Task<PagedResultDto<BlogDto>> GetListAsync([FromQuery] PagedAndSortedResultRequestDto input)
+        public Task<PagedResultDto<BlogDto>> GetListAsync([FromQuery] BlogGetListInput input)
         {
             return BlogAdminAppService.GetListAsync(input);
         }
@@ -63,14 +63,6 @@ namespace Volo.CmsKit.Admin.Blogs
         public Task<BlogDto> UpdateAsync(Guid id, BlogDto input)
         {
             return BlogAdminAppService.UpdateAsync(id, input);
-        }
-
-        [HttpGet]
-        [Route("lookup")]
-        [Authorize(CmsKitAdminPermissions.Blogs.Default)]
-        public Task<List<BlogLookupDto>> GetLookupAsync()
-        {
-            return BlogAdminAppService.GetLookupAsync();
         }
     }
 }

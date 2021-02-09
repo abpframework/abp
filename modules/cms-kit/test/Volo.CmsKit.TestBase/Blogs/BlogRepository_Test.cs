@@ -23,22 +23,22 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldWorkProperly_WithExistingSlug()
+        public async Task GetBySlugAsync_ShouldWorkProperly_WithExistingSlug()
         {
-            var blog = await blogRepository.GetByUrlSlugAsync(testData.BlogUrlSlug);
+            var blog = await blogRepository.GetBySlugAsync(testData.BlogSlug);
 
             blog.ShouldNotBeNull();
-            blog.UrlSlug.ShouldBe(testData.BlogUrlSlug);
+            blog.Slug.ShouldBe(testData.BlogSlug);
             blog.Id.ShouldBe(testData.Blog_Id);
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldThrowException_WithNonExistingSlug()
+        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingSlug()
         {
             var nonExistingSlug = "some-blog-slug-that-doesnt-exist";
 
             var exception = await Should.ThrowAsync<EntityNotFoundException>(
-                    async () => await blogRepository.GetByUrlSlugAsync(nonExistingSlug));
+                    async () => await blogRepository.GetBySlugAsync(nonExistingSlug));
 
             exception.ShouldNotBeNull();
             exception.EntityType.ShouldBe(typeof(Blog));
