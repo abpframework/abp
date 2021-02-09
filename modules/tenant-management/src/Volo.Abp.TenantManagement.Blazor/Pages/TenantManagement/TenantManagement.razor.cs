@@ -14,7 +14,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
         protected const string FeatureProviderName = "T";
 
         protected bool HasManageFeaturesPermission;
-        protected string ManageConnectionStringsPolicyName;
         protected string ManageFeaturesPolicyName;
 
         protected FeatureManagementModal FeatureManagementModal;
