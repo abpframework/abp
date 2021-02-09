@@ -110,7 +110,7 @@ The `createAjax` also supports you to customize request parameters and handle th
 **Example:**
 
 ````csharp
-var inputAction = function () {
+var inputAction = function (requestData, dataTableSettings) {
     return {
         id: $('#Id').val(),
         name: $('#Name').val(),
@@ -129,6 +129,14 @@ var responseCallback = function(result) {
 };
 
 ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList, inputAction, responseCallback)
+````
+
+If you don't need access or modify the `requestData` or the `dataTableSettings`, you can specify a **simple object** as the second parameter. 
+
+**Note:** This option should not be used if you need to customise any of the following options: `maxResultCount`, `skipCount`, `sorting`, `filter` - these options will be overwritten by the `createAjax` function so you should specify an `inputAction` **function** instead.
+
+````javascript
+ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList, { id: $('#Id').val(), name: $('#Name').val() })
 ````
 
 ### Row Actions
