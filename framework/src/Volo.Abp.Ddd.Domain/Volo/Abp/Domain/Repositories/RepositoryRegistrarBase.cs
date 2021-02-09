@@ -19,25 +19,28 @@ namespace Volo.Abp.Domain.Repositories
 
         public virtual void AddRepositories()
         {
+            RegisterCustomRepositories();
+
+            RegisterDefaultRepositories();
+
+            RegisterSpecifiedDefaultRepositories();
+        }
+
+        protected virtual void RegisterCustomRepositories()
+        {
             foreach (var customRepository in Options.CustomRepositories)
             {
                 Options.Services.AddDefaultRepository(customRepository.Key, customRepository.Value);
-            }
-
-            if (Options.RegisterDefaultRepositories)
-            {
-                RegisterDefaultRepositories();
-            }
-
-            foreach (var entityType in Options.DefaultRepositories)
-            {
-                ShouldRegisterDefaultRepositoryFor(entityType);
-                RegisterDefaultRepository(entityType);
             }
         }
 
         protected virtual void RegisterDefaultRepositories()
         {
+            if (!Options.RegisterDefaultRepositories)
+            {
+                return;
+            }
+
             foreach (var entityType in GetEntityTypes(Options.OriginalDbContextType))
             {
                 if (!ShouldRegisterDefaultRepositoryFor(entityType))
@@ -46,6 +49,17 @@ namespace Volo.Abp.Domain.Repositories
                 }
 
                 RegisterDefaultRepository(entityType);
+            }
+        }
+
+        protected virtual void RegisterSpecifiedDefaultRepositories()
+        {
+            foreach (var entityType in Options.DefaultRepositories)
+            {
+                if (!Options.CustomRepositories.ContainsKey(entityType))
+                {
+                    RegisterDefaultRepository(entityType);
+                }
             }
         }
 
@@ -75,7 +89,7 @@ namespace Volo.Abp.Domain.Repositories
 
         protected virtual bool ShouldRegisterDefaultRepositoryFor(Type entityType)
         {
-            if (!Options.RegisterDefaultRepositories && !Options.DefaultRepositories.Any())
+            if (!Options.RegisterDefaultRepositories)
             {
                 return false;
             }
@@ -83,11 +97,6 @@ namespace Volo.Abp.Domain.Repositories
             if (Options.CustomRepositories.ContainsKey(entityType))
             {
                 return false;
-            }
-
-            if (Options.DefaultRepositories.Contains(entityType))
-            {
-                return true;
             }
 
             if (!Options.IncludeAllEntitiesForDefaultRepositories && !typeof(IAggregateRoot).IsAssignableFrom(entityType))
