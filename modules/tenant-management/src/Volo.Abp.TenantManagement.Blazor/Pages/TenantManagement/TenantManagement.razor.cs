@@ -30,6 +30,8 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
             CreatePolicyName = TenantManagementPermissions.Tenants.Create;
             UpdatePolicyName = TenantManagementPermissions.Tenants.Update;
             DeletePolicyName = TenantManagementPermissions.Tenants.Delete;
+            
+            ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
 
             TenantInfo = new TenantInfoModel();
         }
