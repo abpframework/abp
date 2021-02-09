@@ -1767,7 +1767,7 @@ public async Task ChangeTitleAsync(Issue issue, string title)
 
 如前所述,领域驱动设计中的*业务逻辑*分为两部分(各层):领域逻辑和应用逻辑
 
-![domain-driven-design-domain-vs-application-logic](../../../abpframework.abp/docs/en/images/domain-driven-design-domain-vs-application-logic.png)
+![domain-driven-design-domain-vs-application-logic](images/domain-driven-design-domain-vs-application-logic.png)
 
 领域逻辑是系统的*核心领域规则*组成,而应用逻辑则满足特定的*用例*.
 
@@ -1783,7 +1783,7 @@ public async Task ChangeTitleAsync(Issue issue, string title)
 * 一个**后台管理系统**,UI使用Angular,通过REST API请求数据.内部员工使用这个系统来维护数据(例如,编辑商品说明).
 * 一个**移动端应用程序**,它比公开的网站UI上更加简洁.它通过REST API或其它技术(例如,TCP sockets)请求数据.
 
-![domain-driven-design-multiple-applications](../../../abpframework.abp/docs/en/images/domain-driven-design-multiple-applications.png)
+![domain-driven-design-multiple-applications](images/domain-driven-design-multiple-applications.png)
 
 每个应用程序都有不同的**需求**,不同的**用例**(应用服务方法),不同的DTO,不同的**验证**和**授权**规则等.
 

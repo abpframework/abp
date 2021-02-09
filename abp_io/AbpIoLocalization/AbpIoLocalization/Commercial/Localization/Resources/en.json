@@ -34,6 +34,13 @@
     "JoinOurMarketingNewsletter": "Join our marketing newsletter",
     "WouldLikeToReceiveMarketingMaterials": "I would like to receive marketing materials like product deals & special offers.",
     "StartUsingYourLicenseNow": "Start using your license now!",
-    "WelcomePage": "Welcome Page"
+    "WelcomePage": "Welcome Page",
+    "UnsubscriptionExpireEmail": "Unsubscribe from license expire date reminder emails",
+    "UnsubscribeLicenseExpireEmailReminderMessage": "This email subscription only contains reminding your license expiration date.",
+    "UnsubscribeFromLicenseExpireEmails": "If you don't want to receive the emails about your license expiration date, you can unsubscribe at any time you want.",
+    "Unsubscribe": "Unsubscribe",
+    "NotOrganizationMember": "You are not member of any organization.",
+    "UnsubscribeLicenseExpirationEmailSuccessTitle": "Successfully unsubscribed",
+    "UnsubscribeLicenseExpirationEmailSuccessMessage": "You will not receive license expiration date reminder emails anymore."
    }
 }

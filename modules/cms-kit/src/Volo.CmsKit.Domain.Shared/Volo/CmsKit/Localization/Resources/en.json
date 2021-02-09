@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "CmsKit:0002": "Content already exists!",
+    "CmsKit:0003": "The entity {0} is not taggable.",
     "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display.",
     "Comments": "Comments",
     "Delete": "Delete",

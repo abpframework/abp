@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -59,6 +60,13 @@ namespace Volo.CmsKit.Admin.Tags
         public Task<TagDto> UpdateAsync(Guid id, [FromBody] TagUpdateDto input)
         {
             return TagAdminAppService.UpdateAsync(id, input);
+        }
+
+        [HttpGet]
+        [Route("tag-definitions")]
+        public Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
+        {
+            return TagAdminAppService.GetTagDefinitionsAsync();
         }
     }
 }

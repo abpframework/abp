@@ -18,15 +18,18 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
         private readonly IJsonSerializer _jsonSerializer;
         private readonly ILogger<CliAnalyticsCollect> _logger;
         private readonly IRemoteServiceExceptionHandler _remoteServiceExceptionHandler;
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
 
         public CliAnalyticsCollect(
             ICancellationTokenProvider cancellationTokenProvider,
             IJsonSerializer jsonSerializer,
-            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            CliHttpClientFactory cliHttpClientFactory)
         {
             _cancellationTokenProvider = cancellationTokenProvider;
             _jsonSerializer = jsonSerializer;
             _remoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            _cliHttpClientFactory = cliHttpClientFactory;
             _logger = NullLogger<CliAnalyticsCollect>.Instance;
         }
 
@@ -34,32 +37,31 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
         {
             var postData = _jsonSerializer.Serialize(input);
             var url = $"{CliUrls.WwwAbpIo}api/clianalytics/collect";
-            
+
             try
             {
-                using (var client = new CliHttpClient())
+                var client = _cliHttpClientFactory.CreateClient();
+
+                var responseMessage = await client.PostAsync(
+                    url,
+                    new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
+                    _cancellationTokenProvider.Token
+                );
+
+                if (!responseMessage.IsSuccessStatusCode)
                 {
-                    var responseMessage = await client.PostAsync(
-                        url,
-                        new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
-                        _cancellationTokenProvider.Token
-                    );
+                    var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
+                    var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
 
-                    if (!responseMessage.IsSuccessStatusCode)
+                    if (remoteServiceErrorMessage != null)
                     {
-                        var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
-                        var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
-
-                        if (remoteServiceErrorMessage != null)
-                        {
-                            exceptionMessage += remoteServiceErrorMessage;
-                        }
-
-                        _logger.LogInformation(exceptionMessage);
+                        exceptionMessage += remoteServiceErrorMessage;
                     }
+
+                    _logger.LogInformation(exceptionMessage);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ignored
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using Confluent.Kafka.Admin;
@@ -89,7 +90,7 @@ namespace Volo.Abp.Kafka
                 }
                 catch (CreateTopicsException e)
                 {
-                    if (!e.Error.Reason.Contains($"Topic '{TopicName}' already exists"))
+                    if(e.Results.First().Error.Code != ErrorCode.TopicAlreadyExists)
                     {
                         throw;
                     }
