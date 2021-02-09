@@ -39,5 +39,30 @@ namespace AutoMapper
             personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
             personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
         }
+
+        [Fact]
+        public void MapExtraProperties_Also_Should_Map_To_RegularProperties()
+        {
+            var person = new ExtensibleTestPerson()
+                .SetProperty("Name", "John")
+                .SetProperty("Age", 42);
+
+            var personDto = new ExtensibleTestPersonWithRegularPropertiesDto()
+                .SetProperty("IsActive", true);
+
+            _objectMapper.Map(person, personDto);
+
+            //Defined in both classes
+            personDto.GetProperty<string>("Name").ShouldBe("John");
+            personDto.Name.ShouldBe("John");
+
+            //Defined in both classes
+            personDto.GetProperty<int>("Age").ShouldBe(42);
+            personDto.Age.ShouldBe(42);
+
+            //Should not clear existing values
+            personDto.GetProperty<bool>("IsActive").ShouldBe(true);
+            personDto.IsActive.ShouldBe(true);
+        }
     }
 }
