@@ -20,14 +20,14 @@ namespace Volo.CmsKit.Blogs
         {
         }
 
-        public async Task<BlogPost> GetByUrlSlugAsync(Guid blogId, string urlSlug, CancellationToken cancellationToken = default)
+        public async Task<BlogPost> GetBySlugAsync(Guid blogId, string slug, CancellationToken cancellationToken = default)
         {
             var dbSet = await GetDbSetAsync();
 
             return await dbSet
                             .Include(i=> i.Creator)
                             .Where(x => 
-                                x.BlogId == blogId && x.UrlSlug.ToLower() == urlSlug)
+                                x.BlogId == blogId && x.Slug.ToLower() == slug)
                             .FirstOrDefaultAsync(cancellationToken: cancellationToken) 
                         ?? throw new EntityNotFoundException(typeof(BlogPost));
         }
@@ -60,7 +60,7 @@ namespace Volo.CmsKit.Blogs
         {
             var dbSet = await GetDbSetAsync();
 
-            return await dbSet.AnyAsync(x => x.BlogId == blogId && x.UrlSlug.ToLower() == slug, cancellationToken);
+            return await dbSet.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
         }
     }
 }

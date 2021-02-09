@@ -20,11 +20,11 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
         }
 
-        public Task<BlogPost> GetByUrlSlugAsync(Guid blogId, string urlSlug, CancellationToken cancellationToken = default)
+        public Task<BlogPost> GetBySlugAsync(Guid blogId, string slug, CancellationToken cancellationToken = default)
         {
             return GetAsync(x => 
                             x.BlogId == blogId && 
-                            x.UrlSlug.ToLower() == urlSlug,
+                            x.Slug.ToLower() == slug,
                         includeDetails: true,
                         cancellationToken: cancellationToken);
         }
@@ -61,7 +61,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
             var queryable = await GetMongoQueryableAsync();
 
-            return await queryable.AnyAsync(x => x.BlogId == blogId && x.UrlSlug.ToLower() == slug, cancellationToken);
+            return await queryable.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
         }
     }
 }

@@ -53,11 +53,11 @@ namespace Volo.CmsKit.Admin.Blogs
             DeletePolicyName = CmsKitAdminPermissions.BlogPosts.Delete;
         }
 
-        public virtual async Task<BlogPostDto> GetByUrlSlugAsync(string blogUrlSlug, string urlSlug)
+        public virtual async Task<BlogPostDto> GetBySlugAsync(string blogSlug, string blogPostSlug)
         {
-            var blog = await BlogRepository.GetByUrlSlugAsync(blogUrlSlug);
+            var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-            var blogPost = await BlogPostRepository.GetByUrlSlugAsync(blog.Id, urlSlug);
+            var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
 
             return MapToGetOutputDto(blogPost);
         }
@@ -73,7 +73,7 @@ namespace Volo.CmsKit.Admin.Blogs
                                             GuidGenerator.Create(),
                                             input.BlogId,
                                             input.Title,
-                                            input.UrlSlug,
+                                            input.Slug,
                                             input.ShortDescription));
 
             return MapToGetOutputDto(entity);
@@ -86,9 +86,9 @@ namespace Volo.CmsKit.Admin.Blogs
 
             blogPost.SetTitle(input.Title);
 
-            if (blogPost.UrlSlug != input.UrlSlug)
+            if (blogPost.Slug != input.Slug)
             {
-                await BlogPostManager.SetSlugUrlAsync(blogPost, input.UrlSlug);
+                await BlogPostManager.SetSlugUrlAsync(blogPost, input.Slug);
             }
 
             MapToEntity(input, blogPost);

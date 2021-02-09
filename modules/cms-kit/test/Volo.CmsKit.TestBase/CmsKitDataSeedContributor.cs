@@ -308,11 +308,11 @@ namespace Volo.CmsKit
 
         private async Task SeedBlogsAsync()
         {
-            var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.Blog_Id, _cmsKitTestData.BlogName, _cmsKitTestData.BlogUrlSlug));
+            var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.Blog_Id, _cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug));
 
-            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_1_Id, blog.Id, _cmsKitTestData.BlogPost_1_Title, _cmsKitTestData.BlogPost_1_UrlSlug, "Short desc 1"));
+            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_1_Id, blog.Id, _cmsKitTestData.BlogPost_1_Title, _cmsKitTestData.BlogPost_1_Slug, "Short desc 1"));
 
-            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_2_Id, blog.Id, _cmsKitTestData.BlogPost_2_Title, _cmsKitTestData.BlogPost_2_UrlSlug, "Short desc 2"));
+            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_2_Id, blog.Id, _cmsKitTestData.BlogPost_2_Title, _cmsKitTestData.BlogPost_2_Slug, "Short desc 2"));
         }
     }
 }

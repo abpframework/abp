@@ -1,4 +1,4 @@
-﻿@page "/blogs/{blogUrlSlug}/{blogPostUrlSlug}"
+﻿@page "/blogs/{blogSlug}/{blogPostSlug}"
 
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPost
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
@@ -20,8 +20,8 @@
 
 @await Component.InvokeAsync(typeof(DefaultBlogPostViewComponent), new
 {
-    Model.BlogUrlSlug,
-    Model.BlogPostUrlSlug
+    Model.BlogSlug,
+    Model.BlogPostSlug
 })
 
 @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())

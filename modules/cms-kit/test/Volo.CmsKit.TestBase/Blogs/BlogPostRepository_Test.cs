@@ -23,15 +23,15 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
-        public async Task SlugExistsAsync_ShouldReturnTrue_WithExistingUrlSlug()
+        public async Task SlugExistsAsync_ShouldReturnTrue_WithExistingSlug()
         {
-            var result = await blogPostRepository.SlugExistsAsync(testData.Blog_Id, testData.BlogPost_1_UrlSlug);
+            var result = await blogPostRepository.SlugExistsAsync(testData.Blog_Id, testData.BlogPost_1_Slug);
 
             result.ShouldBeTrue();
         }
 
         [Fact]
-        public async Task SlugExistsAsync_ShouldReturnFalse_WithNonExistingUrlSlug()
+        public async Task SlugExistsAsync_ShouldReturnFalse_WithNonExistingSlug()
         {
             var nonExistingSlug = "any-other-url-slug";
 
@@ -45,38 +45,38 @@ namespace Volo.CmsKit.Blogs
         {
             var nonExistingBlogId = Guid.NewGuid();
 
-            var result = await blogPostRepository.SlugExistsAsync(nonExistingBlogId, testData.BlogPost_1_UrlSlug);
+            var result = await blogPostRepository.SlugExistsAsync(nonExistingBlogId, testData.BlogPost_1_Slug);
 
             result.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldWorkProperly_WithCorrectParameters()
+        public async Task GetBySlugAsync_ShouldWorkProperly_WithCorrectParameters()
         {
-            var blogPost = await blogPostRepository.GetByUrlSlugAsync(testData.Blog_Id, testData.BlogPost_1_UrlSlug);
+            var blogPost = await blogPostRepository.GetBySlugAsync(testData.Blog_Id, testData.BlogPost_1_Slug);
 
             blogPost.ShouldNotBeNull();
             blogPost.Id.ShouldBe(testData.BlogPost_1_Id);
-            blogPost.UrlSlug.ShouldBe(testData.BlogPost_1_UrlSlug);
+            blogPost.Slug.ShouldBe(testData.BlogPost_1_Slug);
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldThrowException_WithNonExistingBlogPostUrlSlug()
+        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogPostSlug()
         {
             var nonExistingSlugUrl = "absolutely-non-existing-url";
             var exception = await Should.ThrowAsync<EntityNotFoundException>(
-                async () => await blogPostRepository.GetByUrlSlugAsync(testData.Blog_Id, nonExistingSlugUrl));
+                async () => await blogPostRepository.GetBySlugAsync(testData.Blog_Id, nonExistingSlugUrl));
 
             exception.ShouldNotBeNull();
             exception.EntityType.ShouldBe(typeof(BlogPost));
         }
 
         [Fact]
-        public async Task GetByUrlSlugAsync_ShouldThrowException_WithNonExistingBlogId()
+        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogId()
         {
             var nonExistingBlogId = Guid.NewGuid();
             var exception = await Should.ThrowAsync<EntityNotFoundException>(
-                async () => await blogPostRepository.GetByUrlSlugAsync(nonExistingBlogId, testData.BlogPost_1_UrlSlug));
+                async () => await blogPostRepository.GetBySlugAsync(nonExistingBlogId, testData.BlogPost_1_Slug));
 
             exception.ShouldNotBeNull();
             exception.EntityType.ShouldBe(typeof(BlogPost));

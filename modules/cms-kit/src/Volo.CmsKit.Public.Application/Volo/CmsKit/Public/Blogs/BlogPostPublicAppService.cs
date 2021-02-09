@@ -26,18 +26,18 @@ namespace Volo.CmsKit.Public.Blogs
             BlobContainer = blobContainer;
         }
 
-        public async Task<BlogPostPublicDto> GetAsync(string blogUrlSlug, string blogPostUrlSlug)
+        public async Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
         {
-            var blog = await BlogRepository.GetByUrlSlugAsync(blogUrlSlug);
+            var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-            var blogPost = await BlogPostRepository.GetByUrlSlugAsync(blog.Id, blogPostUrlSlug);
+            var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
 
             return ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
         }
 
-        public async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogUrlSlug, PagedAndSortedResultRequestDto input)
+        public async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
         {
-            var blog = await BlogRepository.GetByUrlSlugAsync(blogUrlSlug);
+            var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
             var blogPosts = await BlogPostRepository.GetPagedListAsync(blog.Id, input.SkipCount, input.MaxResultCount, input.Sorting);
 

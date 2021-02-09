@@ -13,7 +13,7 @@ namespace Volo.CmsKit.Admin.Blogs
             PagedAndSortedResultRequestDto,
             CreateUpdateBlogPostDto>
     {
-        Task<BlogPostDto> GetByUrlSlugAsync(string blogUrlSlug, string urlSlug);
+        Task<BlogPostDto> GetBySlugAsync(string blogSlug, string slug);
 
         Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent);
 

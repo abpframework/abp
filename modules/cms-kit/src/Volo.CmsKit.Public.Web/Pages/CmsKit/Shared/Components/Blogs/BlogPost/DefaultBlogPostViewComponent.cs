@@ -19,9 +19,9 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPost
             BlogPostPublicAppService = blogPostPublicAppService;
         }
 
-        public virtual async Task<IViewComponentResult> InvokeAsync(string blogUrlSlug, string blogPostUrlSlug)
+        public virtual async Task<IViewComponentResult> InvokeAsync(string blogSlug, string blogPostSlug)
         {
-            var blogPost = await BlogPostPublicAppService.GetAsync(blogUrlSlug, blogPostUrlSlug);
+            var blogPost = await BlogPostPublicAppService.GetAsync(blogSlug, blogPostSlug);
 
             return View("~/Pages/CmsKit/Shared/Components/Blogs/BlogPost/Default.cshtml", blogPost);
         }

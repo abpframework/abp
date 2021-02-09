@@ -19,9 +19,9 @@ namespace Volo.CmsKit.Blogs
             return await (await GetQueryableAsync()).AnyAsync(x => x.Id == blogId);
         }
 
-        public Task<Blog> GetByUrlSlugAsync(string urlSlug)
+        public Task<Blog> GetBySlugAsync(string slug)
         {
-            return GetAsync(x => x.UrlSlug == urlSlug);
+            return GetAsync(x => x.Slug == slug);
         }
     }
 }

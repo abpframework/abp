@@ -1,4 +1,4 @@
-﻿@page "/blogs/{blogUrlSlug}"
+﻿@page "/blogs/{blogSlug}"
 
 @using Volo.CmsKit.Public.Web.Pages
 
@@ -25,7 +25,7 @@
                         @blog.ShortDescription
                     </abp-card-text>
                     <abp-card-text>
-                        <a href="/blogs/@Model.BlogUrlSlug/@blog.UrlSlug">
+                        <a href="/blogs/@Model.BlogSlug/@blog.Slug">
                             <abp-button text="@L["Read"]"
                                         button-type="Outline_Primary" />
                         </a>

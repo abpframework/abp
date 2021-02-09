@@ -53,11 +53,11 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [HttpGet]
-        [Route("{blogUrlSlug}/{urlSlug}")]
+        [Route("{blogSlug}/{blogPostSlug}")]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual Task<BlogPostDto> GetByUrlSlugAsync(string blogUrlSlug, string urlSlug)
+        public virtual Task<BlogPostDto> GetBySlugAsync(string blogSlug, string blogPostSlug)
         {
-            return BlogPostAdminAppService.GetByUrlSlugAsync(blogUrlSlug, urlSlug);
+            return BlogPostAdminAppService.GetBySlugAsync(blogSlug, blogPostSlug);
         }
 
         [HttpGet]

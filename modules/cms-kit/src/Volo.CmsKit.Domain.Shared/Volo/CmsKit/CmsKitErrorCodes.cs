@@ -17,7 +17,7 @@
 
         public static class Blogs
         {
-            public const string UrlSlugAlreadyExist = "CmsKit:BlogPost:0001";
+            public const string SlugAlreadyExist = "CmsKit:BlogPost:0001";
         }
     }
 }

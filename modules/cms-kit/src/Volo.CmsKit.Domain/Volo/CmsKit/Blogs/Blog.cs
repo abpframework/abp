@@ -12,17 +12,17 @@ namespace Volo.CmsKit.Blogs
         public Blog(
             Guid id,
             [NotNull] string name,
-            [NotNull] string urlSlug,
+            [NotNull] string slug,
             [CanBeNull] Guid? tenantId = null) : base(id)
         {
             SetName(name);
-            SetUrlSlug(urlSlug);
+            SetSlug(slug);
             TenantId = tenantId;
         }
 
         public string Name { get; protected set; }
 
-        public string UrlSlug { get; protected set; }
+        public string Slug { get; protected set; }
 
         public Guid? TenantId { get; protected set; }
 
@@ -31,11 +31,11 @@ namespace Volo.CmsKit.Blogs
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), maxLength: BlogConsts.MaxNameLength);
         }
 
-        public void SetUrlSlug(string urlSlug)
+        public void SetSlug(string slug)
         {
-            Check.NotNullOrWhiteSpace(urlSlug, nameof(urlSlug), maxLength: BlogConsts.MaxNameLength);
+            Check.NotNullOrWhiteSpace(slug, nameof(slug), maxLength: BlogConsts.MaxNameLength);
 
-            UrlSlug = urlSlug.NormalizeAsUrlSlug();
+            Slug = slug.NormalizeSlug();
         }
     }
 }

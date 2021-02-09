@@ -16,7 +16,7 @@ namespace Volo.CmsKit.Blogs
 
         public string Title { get; protected set; }
 
-        public string UrlSlug { get; protected set; }
+        public string Slug { get; protected set; }
 
         public string ShortDescription { get; protected set; }
 
@@ -30,12 +30,12 @@ namespace Volo.CmsKit.Blogs
             Guid id,
             Guid blogId,
             [NotNull] string title,
-            [NotNull] string urlSlug,
+            [NotNull] string slug,
             [CanBeNull] string shortDescription = null) : base(id)
         {
             BlogId = blogId;
             SetTitle(title);
-            SetUrlSlug(urlSlug);
+            SetSlug(slug);
             ShortDescription = shortDescription;
         }
 
@@ -44,11 +44,11 @@ namespace Volo.CmsKit.Blogs
             Title = Check.NotNullOrWhiteSpace(title, nameof(title), BlogPostConsts.MaxTitleLength);
         }
 
-        internal void SetUrlSlug(string urlSlug)
+        internal void SetSlug(string slug)
         {
-            Check.NotNullOrWhiteSpace(urlSlug, nameof(urlSlug), BlogPostConsts.MaxUrlSlugLength, BlogPostConsts.MinUrlSlugLength);
+            Check.NotNullOrWhiteSpace(slug, nameof(slug), BlogPostConsts.MaxSlugLength, BlogPostConsts.MinSlugLength);
 
-            UrlSlug = urlSlug.NormalizeAsUrlSlug();
+            Slug = slug.NormalizeSlug();
         }
 
         public void SetShortDescription(string shortDescription)

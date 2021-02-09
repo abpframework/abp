@@ -198,7 +198,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(p => p.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength);
 
-                    b.Property(p => p.UrlSlug).IsRequired().HasMaxLength(BlogConsts.MaxUrlSlugLength);
+                    b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogConsts.MaxSlugLength);
                 });
 
                 builder.Entity<BlogPost>(b =>
@@ -209,11 +209,11 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(p => p.Title).IsRequired().HasMaxLength(BlogPostConsts.MaxTitleLength);
 
-                    b.Property(p => p.UrlSlug).IsRequired().HasMaxLength(BlogPostConsts.MaxUrlSlugLength);
+                    b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogPostConsts.MaxSlugLength);
 
                     b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
 
-                    b.HasIndex(x => new { x.UrlSlug, x.BlogId });
+                    b.HasIndex(x => new { x.Slug, x.BlogId });
                 });
             }
             else
