@@ -105,13 +105,13 @@ namespace Volo.Abp.Data
                 throw new ArgumentException($"Given {nameof(source)} object does not implement the {nameof(IHasExtraProperties)} interface!", nameof(source));
             }
 
-            ((IHasExtraProperties) source).SetDefaultsForExtraProperties(objectType);
+            ((IHasExtraProperties)source).SetDefaultsForExtraProperties(objectType);
         }
 
         public static void SetExtraPropertiesToRegularProperties(this IHasExtraProperties source)
         {
             var properties = source.GetType().GetProperties()
-                .Where(x => source.ExtraProperties.Keys.Contains(x.Name)
+                .Where(x => source.ExtraProperties.ContainsKey(x.Name)
                             && x.GetSetMethod(true) != null)
                 .ToList();
 
