@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Caching;
@@ -54,13 +55,8 @@ namespace Volo.Abp.IdentityServer
         public virtual async Task HandleEventAsync(EntityChangedEventData<ApiResource> eventData)
         {
             var cache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.ApiResource>>();
-            await cache.RemoveAsync(eventData.Entity.Name);
-
-            //TODO: remove many
-            foreach (var scope in eventData.Entity.Scopes)
-            {
-                await cache.RemoveAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + scope.Scope);
-            }
+            await cache.RemoveAsync(ResourceStore.ApiResourceNameCacheKeyPrefix + eventData.Entity.Name);
+            await cache.RemoveManyAsync(eventData.Entity.Scopes.Select(x => ResourceStore.ApiResourceScopeNameCacheKeyPrefix + x.Scope));
 
             var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Resources>>();
             await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);

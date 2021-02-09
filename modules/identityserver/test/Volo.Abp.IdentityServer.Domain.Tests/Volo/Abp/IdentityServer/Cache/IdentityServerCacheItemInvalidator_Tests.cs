@@ -99,7 +99,7 @@ namespace Volo.Abp.IdentityServer.Cache
 
             var testApiResource1 = await _apiResourceRepository.FindByNameAsync(testApiResourceName1);
             await _apiResourceRepository.DeleteAsync(testApiResource1);
-            (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceName1)).ShouldBeNull();
+            (await _apiResourceCache.GetAsync(ResourceStore.ApiResourceScopeNameCacheKeyPrefix + testApiResourceApiScopeName1)).ShouldBeNull();
 
 
             //Identity Resource
