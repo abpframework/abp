@@ -28,9 +28,5 @@ namespace Volo.Abp.IdentityServer
         /// </summary>
         public bool AddDeveloperSigningCredential { get; set; } = true;
 
-        /// <summary>
-        /// https://identityserver4.readthedocs.io/en/latest/reference/options.html#caching
-        /// </summary>
-        public bool EnableCaching { get; set; } = true;
     }
 }

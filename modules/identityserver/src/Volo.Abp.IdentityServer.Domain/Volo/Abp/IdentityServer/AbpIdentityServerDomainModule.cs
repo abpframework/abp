@@ -102,18 +102,6 @@ namespace Volo.Abp.IdentityServer
                 identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
             }
 
-            if (builderOptions.EnableCaching)
-            {
-                identityServerBuilder.Services.AddSingleton(typeof(ICache<>), typeof(IdentityServerDistributedCacheWrapper<>));
-                identityServerBuilder.Services.AddSingleton(typeof(IdentityServerDistributedCache<>));
-
-                identityServerBuilder.AddClientStoreCache<ClientStore>();
-                identityServerBuilder.AddResourceStoreCache<ResourceStore>();
-                identityServerBuilder.AddCorsPolicyCache<AbpCorsPolicyService>();
-
-                identityServerBuilder.Services.AddTransient(typeof(IdentityServerCacheItemInvalidator));
-            }
-
             identityServerBuilder.AddExtensionGrantValidator<LinkLoginExtensionGrantValidator>();
         }
 

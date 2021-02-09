@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Caching;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 using Volo.Abp.IdentityServer.Clients;
@@ -14,10 +14,11 @@ namespace Volo.Abp.IdentityServer
 {
     public class IdentityServerCacheItemInvalidator :
         ILocalEventHandler<EntityChangedEventData<Client>>,
+        ILocalEventHandler<EntityChangedEventData<ClientCorsOrigin>>,
         ILocalEventHandler<EntityChangedEventData<IdentityResource>>,
         ILocalEventHandler<EntityChangedEventData<ApiResource>>,
         ILocalEventHandler<EntityChangedEventData<ApiScope>>,
-        ILocalEventHandler<EntityChangedEventData<ClientCorsOrigin>>
+        ITransientDependency
     {
         protected IServiceProvider ServiceProvider { get; }
 
@@ -28,51 +29,44 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
         {
-            var cache = ServiceProvider.GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Client>>();
-            await cache.RemoveAsync(eventData.Entity.ClientId);
+            var clientCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Client>>();
+            await clientCache.RemoveAsync(eventData.Entity.ClientId);
 
-            var corsCache = ServiceProvider
-                .GetRequiredService<IdentityServerDistributedCache<CachingCorsPolicyService<AbpCorsPolicyService>.CorsCacheEntry>>();
-            await corsCache.RemoveAllAsync();
-        }
-
-        public virtual async Task HandleEventAsync(EntityChangedEventData<IdentityResource> eventData)
-        {
-            var cache = ServiceProvider.GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.IdentityResource>>>();
-            await cache.RemoveAllAsync();
-
-            var resourcesCache = ServiceProvider
-                .GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Resources>>();
-            await resourcesCache.RemoveAllAsync();
-        }
-
-        public virtual async Task HandleEventAsync(EntityChangedEventData<ApiResource> eventData)
-        {
-            var cache = ServiceProvider
-                .GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>>>();
-            await cache.RemoveAllAsync();
-
-            var resourcesCache = ServiceProvider
-                .GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Resources>>();
-            await resourcesCache.RemoveAllAsync();
-        }
-
-        public virtual async Task HandleEventAsync(EntityChangedEventData<ApiScope> eventData)
-        {
-            var cache = ServiceProvider
-                .GetRequiredService<IdentityServerDistributedCache<IEnumerable<IdentityServer4.Models.ApiScope>>>();
-            await cache.RemoveAllAsync();
-
-            var resourcesCache = ServiceProvider
-                .GetRequiredService<IdentityServerDistributedCache<IdentityServer4.Models.Resources>>();
-            await resourcesCache.RemoveAllAsync();
+            var corsCache =  ServiceProvider.GetRequiredService<IDistributedCache<AllowedCorsOriginsCacheItem>>();
+            await corsCache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
         }
 
         public async Task HandleEventAsync(EntityChangedEventData<ClientCorsOrigin> eventData)
         {
-            var cache = ServiceProvider
-                .GetRequiredService<IdentityServerDistributedCache<CachingCorsPolicyService<AbpCorsPolicyService>.CorsCacheEntry>>();
-            await cache.RemoveAllAsync();
+            var corsCache =  ServiceProvider.GetRequiredService<IDistributedCache<AllowedCorsOriginsCacheItem>>();
+            await corsCache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
+        }
+
+        public virtual async Task HandleEventAsync(EntityChangedEventData<IdentityResource> eventData)
+        {
+            var cache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.IdentityResource>>();
+            await cache.RemoveAsync(eventData.Entity.Name);
+
+            var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Resources>>();
+            await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
+        }
+
+        public virtual async Task HandleEventAsync(EntityChangedEventData<ApiResource> eventData)
+        {
+            var cache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.ApiResource>>();
+            await cache.RemoveAsync(eventData.Entity.Name);
+
+            var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Resources>>();
+            await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
+        }
+
+        public virtual async Task HandleEventAsync(EntityChangedEventData<ApiScope> eventData)
+        {
+            var cache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.ApiScope>>();
+            await cache.RemoveAsync(eventData.Entity.Name);
+
+            var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Resources>>();
+            await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
         }
     }
 }
