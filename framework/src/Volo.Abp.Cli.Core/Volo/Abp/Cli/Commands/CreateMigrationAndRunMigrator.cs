@@ -26,11 +26,15 @@ namespace Volo.Abp.Cli.Commands
                 throw new Exception("DbMigrator is not found!");
             }
 
-            var output = CmdHelper.RunCmdAndGetOutput("cd \"" + commandLineArgs.Target + "\" && dotnet ef migrations add Initial -s " + dbMigratorProjectPath);
+            var output = CmdHelper.RunCmdAndGetOutput($"cd \"{commandLineArgs.Target}\" && dotnet ef migrations add Initial -s \"{dbMigratorProjectPath}\"");
 
             if (output.Contains("Done.") && output.Contains("To undo this action") && output.Contains("ef migrations remove")) // Migration added successfully
             {
                 CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProjectPath) + "\" && dotnet run");
+            }
+            else
+            {
+                throw new Exception("Migrations failed: " + output);
             }
         }
 

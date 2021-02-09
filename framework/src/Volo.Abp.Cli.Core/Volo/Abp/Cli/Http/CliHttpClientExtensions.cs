@@ -13,29 +13,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Cli.Http
 {
-    public class CliHttpClient : HttpClient
+    public static class CliHttpClientExtensions
     {
-        public static TimeSpan DefaultTimeout { get; set; } = TimeSpan.FromMinutes(1);
-
-        public CliHttpClient(TimeSpan? timeout = null)
-            : base(new CliHttpClientHandler())
-        {
-            Timeout = timeout ?? DefaultTimeout;
-
-            AddAuthentication(this);
-        }
-
-        public CliHttpClient(bool setBearerToken) : base(new CliHttpClientHandler())
-        {
-            Timeout = DefaultTimeout;
-
-            if (setBearerToken)
-            {
-                AddAuthentication(this);
-            }
-        }
-
-        private static void AddAuthentication(HttpClient client)
+        public static void AddAbpAuthenticationToken(this HttpClient httpClient)
         {
             if (!AuthService.IsLoggedIn())
             {
@@ -45,12 +25,13 @@ namespace Volo.Abp.Cli.Http
             var accessToken = File.ReadAllText(CliPaths.AccessToken, Encoding.UTF8);
             if (!accessToken.IsNullOrEmpty())
             {
-                client.SetBearerToken(accessToken);
+                httpClient.SetBearerToken(accessToken);
             }
         }
 
-        public async Task<HttpResponseMessage> GetHttpResponseMessageWithRetryAsync<T>
+        public static async Task<HttpResponseMessage> GetHttpResponseMessageWithRetryAsync<T>
         (
+            this HttpClient httpClient,
             string url,
             CancellationToken? cancellationToken = null,
             ILogger<T> logger = null,
@@ -67,7 +48,12 @@ namespace Volo.Abp.Cli.Http
                 };
             }
 
-            cancellationToken ??= CancellationToken.None;
+            if (cancellationToken == null)
+            {
+                var cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(httpClient.Timeout);
+                cancellationToken = cancellationTokenSource.Token;
+            }
 
             return await HttpPolicyExtensions
                 .HandleTransientHttpError()
@@ -92,8 +78,7 @@ namespace Volo.Abp.Cli.Http
                                 $"Waiting {timeSpan.TotalSeconds} secs for the next try...");
                         }
                     })
-                .ExecuteAsync(async () => await this.GetAsync(url, cancellationToken.Value));
+                .ExecuteAsync(async () => await httpClient.GetAsync(url, cancellationToken.Value));
         }
-
     }
 }

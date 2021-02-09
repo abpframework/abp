@@ -24,7 +24,6 @@ namespace Volo.CmsKit.Admin.Pages
         public virtual async Task<PageDto> GetAsync(Guid id)
         {
             var page = await PageRepository.GetAsync(id);
-
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 

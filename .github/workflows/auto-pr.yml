@@ -4,7 +4,7 @@ on:
     branches:
       - rel-4.2
 jobs:
-  merge-dev-with-rel:
+  merge-dev-with-rel-4-2:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,8 +12,8 @@ jobs:
           ref: dev
       - name: Reset promotion branch
         run: |
-          git fetch origin $GITHUB_REF:$GITHUB_REF
-          git reset --hard $GITHUB_REF
+          git fetch origin rel-4.2:rel-4.2
+          git reset --hard rel-4.2
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:

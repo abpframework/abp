@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.MongoDB
 {
@@ -9,19 +9,19 @@ namespace Volo.Abp.Uow.MongoDB
     {
         public IClientSessionHandle SessionHandle { get; }
 
-        public MongoDbTransactionApi(IClientSessionHandle sessionHandle)
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
+        public MongoDbTransactionApi(
+            IClientSessionHandle sessionHandle,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
             SessionHandle = sessionHandle;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
         public async Task CommitAsync()
         {
-            await SessionHandle.CommitTransactionAsync();
-        }
-
-        protected void Commit()
-        {
-            SessionHandle.CommitTransaction();
+            await SessionHandle.CommitTransactionAsync(CancellationTokenProvider.Token);
         }
 
         public void Dispose()
@@ -29,14 +29,11 @@ namespace Volo.Abp.Uow.MongoDB
             SessionHandle.Dispose();
         }
 
-        public void Rollback()
-        {
-            SessionHandle.AbortTransaction();
-        }
-
         public async Task RollbackAsync(CancellationToken cancellationToken)
         {
-            await SessionHandle.AbortTransactionAsync(cancellationToken);
+            await SessionHandle.AbortTransactionAsync(
+                CancellationTokenProvider.FallbackToProvider(cancellationToken)
+            );
         }
     }
 }

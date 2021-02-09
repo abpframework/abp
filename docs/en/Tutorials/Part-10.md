@@ -364,10 +364,11 @@ namespace Acme.BookStore.Books
 
         public override async Task<BookDto> GetAsync(Guid id)
         {
-            await CheckGetPolicyAsync();
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
-            var query = from book in Repository
+            var query = from book in queryable
                 join author in _authorRepository on book.AuthorId equals author.Id
                 where book.Id == id
                 select new { book, author };
@@ -384,17 +385,24 @@ namespace Acme.BookStore.Books
             return bookDto;
         }
 
-        public override async Task<PagedResultDto<BookDto>> GetListAsync(
-            PagedAndSortedResultRequestDto input)
+        public override async Task<PagedResultDto<BookDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            await CheckGetListPolicyAsync();
+            //Set a default sorting, if not provided
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(Book.Name);
+            }
+            
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
-            var query = from book in Repository
+            var query = from book in queryable
                 join author in _authorRepository on book.AuthorId equals author.Id
-                orderby input.Sorting
+                orderby input.Sorting //TODO: Can not sort like that!
                 select new {book, author};
 
+            //Paging
             query = query
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount);
@@ -437,7 +445,7 @@ Let's see the changes we've done:
 * Injected `IAuthorRepository` to query from the authors.
 * Overrode the `GetAsync` method of the base `CrudAppService`, which returns a single `BookDto` object with the given `id`.
   * Used a simple LINQ expression to join books and authors and query them together for the given book id.
-  * Used `AsyncExecuter.FirstOrDefaultAsync(...)` to execute the query and get a result. `AsyncExecuter` was previously used in the `AuthorAppService`. Check the [repository documentation](../Repositories.md) to understand why we've used it.
+  * Used `AsyncExecuter.FirstOrDefaultAsync(...)` to execute the query and get a result. It is a way to use asynchronous LINQ extensions without depending on the database provider API. Check the [repository documentation](../Repositories.md) to understand why we've used it.
   * Throws an `EntityNotFoundException` which results an `HTTP 404` (not found) result if requested book was not present in the database.
   * Finally, created a `BookDto` object using the `ObjectMapper`, then assigning the `AuthorName` manually.
 * Overrode the `GetListAsync` method of the base `CrudAppService`, which returns a list of books. The logic is similar to the previous method, so you can easily understand the code.
@@ -487,8 +495,6 @@ namespace Acme.BookStore.Books
 
         public async override Task<BookDto> GetAsync(Guid id)
         {
-            await CheckGetPolicyAsync();
-
             var book = await Repository.GetAsync(id);
             var bookDto = ObjectMapper.Map<Book, BookDto>(book);
 
@@ -501,17 +507,18 @@ namespace Acme.BookStore.Books
         public async override Task<PagedResultDto<BookDto>>
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            await CheckGetListPolicyAsync();
-
             //Set a default sorting, if not provided
             if (input.Sorting.IsNullOrWhiteSpace())
             {
                 input.Sorting = nameof(Book.Name);
             }
+            
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Get the books
             var books = await AsyncExecuter.ToListAsync(
-                Repository
+                queryable
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount)
@@ -553,8 +560,10 @@ namespace Acme.BookStore.Books
                 .Distinct()
                 .ToArray();
 
+            var queryable = await _authorRepository.GetQueryableAsync();
+            
             var authors = await AsyncExecuter.ToListAsync(
-                _authorRepository.Where(a => authorIds.Contains(a.Id))
+                queryable.Where(a => authorIds.Contains(a.Id))
             );
 
             return authors.ToDictionary(x => x.Id, x => x);

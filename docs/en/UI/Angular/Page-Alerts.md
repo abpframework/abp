@@ -6,7 +6,7 @@ A page alert is useful for displaying an important message to the user. The ABP 
 
 You can simply import `PageAlertService` from `@abp/ng.theme.shared` and utilize it as follows:
 
-```typescript
+```js
 import { PageAlertService } from '@abp/ng.theme.shared';
 
 @Component({
@@ -30,7 +30,7 @@ export class MyComponent {
 
 The method `show` accepts a single object that is type of `PageAlert`
 
-```typescript
+```js
 export interface PageAlert {
   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
   message: string;
@@ -47,7 +47,7 @@ export interface PageAlert {
 * `dismissible` (Optional): Default is `true`. If enabled, a button on the top right corner will be shown to the users so that they can dismiss the message.
 * `messageLocalizationParams` and `titleLocalizationParams` (Optional): If the message and/or the title is a key for localization service and contains some parameters, these fields could be used to pass those parameters. 
 
-### An example with Localization
+### An example with Localization
 
 ```typescript
 this.service.show({

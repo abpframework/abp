@@ -1,4 +1,4 @@
-import { AuthService, LocalizationParam, RestOccurError } from '@abp/ng.core';
+import { AuthService, LocalizationParam, RestOccurError, RouterEvents } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   ApplicationRef,
@@ -10,7 +10,7 @@ import {
   Injector,
   RendererFactory2,
 } from '@angular/core';
-import { NavigationError, ResolveEnd, Router } from '@angular/router';
+import { NavigationError, ResolveEnd } from '@angular/router';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -72,7 +72,7 @@ export class ErrorHandler {
 
   constructor(
     private actions: Actions,
-    private router: Router,
+    private routerEvents: RouterEvents,
     private confirmationService: ConfirmationService,
     private cfRes: ComponentFactoryResolver,
     private rendererFactory: RendererFactory2,
@@ -85,20 +85,16 @@ export class ErrorHandler {
   }
 
   private listenToRouterError() {
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationError),
-        filter(this.filterRouteErrors),
-      )
+    this.routerEvents
+      .getNavigationEvents('Error')
+      .pipe(filter(this.filterRouteErrors))
       .subscribe(() => this.show404Page());
   }
 
   private listenToRouterDataResolved() {
-    this.router.events
-      .pipe(
-        filter(event => event instanceof ResolveEnd),
-        filter(() => !!this.componentRef),
-      )
+    this.routerEvents
+      .getEvents(ResolveEnd)
+      .pipe(filter(() => !!this.componentRef))
       .subscribe(() => {
         this.componentRef.destroy();
         this.componentRef = null;

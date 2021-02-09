@@ -41,9 +41,9 @@ namespace MyCompanyName.MyProjectName.Data
         {
             try
             {
-                if (!await MigrationsFolderExists())
+                if (DbMigrationsProjectExists() && !MigrationsFolderExists())
                 {
-                    await AddInitialMigration();
+                    AddInitialMigration();
                     return;
                 }
             }
@@ -108,14 +108,21 @@ namespace MyCompanyName.MyProjectName.Data
             await _dataSeeder.SeedAsync(tenant?.Id);
         }
 
-        private async Task<bool> MigrationsFolderExists()
+        private bool DbMigrationsProjectExists()
+        {
+            var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
+
+            return dbMigrationsProjectFolder != null;
+        }
+
+        private bool MigrationsFolderExists()
         {
             var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
 
             return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "migrations"));
         }
 
-        private async Task AddInitialMigration()
+        private void AddInitialMigration()
         {
             Logger.LogInformation("Creating initial migration...");
 
@@ -134,7 +141,7 @@ namespace MyCompanyName.MyProjectName.Data
             }
 
             var procStartInfo = new ProcessStartInfo( fileName,
-                $"{argumentPrefix} \"abp create-migration-and-run-migrator {GetDbMigrationsProjectFolderPath()}\""
+                $"{argumentPrefix} \"abp create-migration-and-run-migrator \"{GetDbMigrationsProjectFolderPath()}\"\""
             );
 
             try
@@ -147,7 +154,7 @@ namespace MyCompanyName.MyProjectName.Data
             }
         }
 
-        private static string GetDbMigrationsProjectFolderPath()
+        private string GetDbMigrationsProjectFolderPath()
         {
             var slnDirectoryPath = GetSolutionDirectoryPath();
 
@@ -162,7 +169,7 @@ namespace MyCompanyName.MyProjectName.Data
                 .FirstOrDefault(d => d.EndsWith(".DbMigrations"));
         }
 
-        private static string GetSolutionDirectoryPath()
+        private string GetSolutionDirectoryPath()
         {
             var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 

@@ -12,6 +12,5 @@ namespace Volo.CmsKit
         )]
     public class CmsKitDomainTestModule : AbpModule
     {
-        
     }
 }

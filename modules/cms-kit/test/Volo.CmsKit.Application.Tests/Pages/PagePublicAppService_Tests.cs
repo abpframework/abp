@@ -18,15 +18,20 @@ namespace Volo.CmsKit.Pages
         }
 
         [Fact]
-        public async Task ShouldGetByUrlAsync()
+        public async Task ShouldFindByUrlAsync()
         {
-            await Should.NotThrowAsync(async () => await _pageAppService.GetByUrlAsync(_data.Page_1_Url));
+            var page = await _pageAppService.FindByUrlAsync(_data.Page_1_Url);
+
+            page.ShouldNotBeNull();
+            page.Title.ShouldBe(_data.Page_1_Title);
         }
         
         [Fact]
         public async Task ShouldNotGetByUrlAsync()
         {
-            await Should.ThrowAsync<Exception>(async () => await _pageAppService.GetByUrlAsync("not-exist-url"));
+            var page = await _pageAppService.FindByUrlAsync("not-exist-url");
+            
+            page.ShouldBeNull();
         }
     }
 }
