@@ -1,6 +1,7 @@
 ﻿@typeparam TItem
 @using Blazorise.DataGrid;
 @using Volo.Abp.Data
+@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
 
 <DataGrid TItem="TItem"
           Data="@Data"
@@ -56,7 +57,7 @@
                     {
                         if (!ExtensionPropertiesRegex.IsMatch(column.Data))
                         {
-                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" />
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title"/>
                         }
                         else
                         {
@@ -68,31 +69,45 @@
                                         var propertyValue = entity.GetProperty(propertyName);
                                         if (propertyValue != null && propertyValue.GetType() == typeof(bool))
                                         {
-                                            if ((bool)propertyValue)
+                                            if ((bool) propertyValue)
                                             {
-                                                <Icon class="text-success" Name="IconName.Check" />
+                                                <Icon class="text-success" Name="IconName.Check"/>
                                             }
                                             else
                                             {
-                                                <Icon class="text-danger" Name="IconName.Times" />
+                                                <Icon class="text-danger" Name="IconName.Times"/>
                                             }
                                         }
                                         else
                                         {
-                                            if (column.DisplayFormat == null)
+                                            if (column.ValueConverter != null)
                                             {
-                                                @(propertyValue)
+                                                if (column.DisplayFormat == null)
+                                                {
+                                                    @(column.ValueConverter(propertyValue))
+                                                }
+                                                else
+                                                {
+                                                    @(string.Format(column.DisplayFormat, column.ValueConverter(propertyValue)))
+                                                }
                                             }
                                             else
                                             {
-                                                @(string.Format(column.DisplayFormat, propertyValue))
+                                                if (column.DisplayFormat == null)
+                                                {
+                                                    @(propertyValue)
+                                                }
+                                                else
+                                                {
+                                                    @(string.Format(column.DisplayFormat, propertyValue))
+                                                }
                                             }
+                                            
                                         }
                                     }
                                 </DisplayTemplate>
                             </DataGridColumn>
                         }
-
                     }
                 }
             }

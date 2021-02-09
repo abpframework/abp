@@ -18,6 +18,7 @@ using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 using Volo.Abp.Localization;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
+using Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.ObjectExtending;
 
@@ -503,18 +504,24 @@ namespace Volo.Abp.BlazoriseUI
                     }
                     else
                     {
-                        string displayFormat = null;
-                        if (propertyInfo.IsDate() || propertyInfo.IsDateTime())
-                        {
-                            displayFormat = propertyInfo.GetDateEditInputFormatOrNull();
-                        }
-
-                        yield return new TableColumn
+                        var column = new TableColumn
                         {
                             Title = propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory),
-                            Data = $"ExtraProperties[{propertyInfo.Name}]",
-                            DisplayFormat = displayFormat
+                            Data = $"ExtraProperties[{propertyInfo.Name}]"
                         };
+                        
+                        if (propertyInfo.IsDate() || propertyInfo.IsDateTime())
+                        {
+                            column.DisplayFormat = propertyInfo.GetDateEditInputFormatOrNull();
+                        }
+
+                        if (propertyInfo.Type.IsEnum)
+                        {
+                            column.ValueConverter = (val) =>
+                                EnumHelper.GetLocalizedMemberName(propertyInfo.Type, val, StringLocalizerFactory);
+                        }
+
+                        yield return column;
                     }
                 }
             }

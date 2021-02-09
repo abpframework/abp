@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
@@ -30,6 +31,9 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter] public int PageSize { get; set; }
 
         [Parameter] public IEnumerable<TableColumn> Columns { get; set; }
+
+        [Inject]
+        public IStringLocalizerFactory StringLocalizerFactory { get; set; }
 
         protected virtual RenderFragment RenderCustomTableColumnComponent(Type type, object data)
         {
