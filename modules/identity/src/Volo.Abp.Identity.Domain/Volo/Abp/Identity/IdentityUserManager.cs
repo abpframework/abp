@@ -14,6 +14,7 @@ using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Volo.Abp.Settings;
 using Volo.Abp.Identity.Settings;
+using Microsoft.AspNetCore.Identity;
 
 namespace Volo.Abp.Identity
 {
@@ -241,6 +242,13 @@ namespace Volo.Abp.Identity
             }
 
             return await UpdateUserAsync(user);
+        }
+
+        public virtual async Task ValidatePasswordAsync(Guid id, [NotNull] string username, [NotNull] string email,
+            string password, Guid? tenantId = null)
+        {
+            var user = new IdentityUser(id, username, email, tenantId);
+            (await base.ValidatePasswordAsync(user, password)).CheckErrors();
         }
     }
 }
