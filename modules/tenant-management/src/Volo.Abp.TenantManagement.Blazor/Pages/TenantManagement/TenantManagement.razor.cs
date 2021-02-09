@@ -13,7 +13,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
     {
         protected const string FeatureProviderName = "T";
 
-        protected bool HasManageConnectionStringsPermission;
         protected bool HasManageFeaturesPermission;
         protected string ManageConnectionStringsPolicyName;
         protected string ManageFeaturesPolicyName;
@@ -30,7 +29,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
             CreatePolicyName = TenantManagementPermissions.Tenants.Create;
             UpdatePolicyName = TenantManagementPermissions.Tenants.Update;
             DeletePolicyName = TenantManagementPermissions.Tenants.Delete;
-            
+
             ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
 
             TenantInfo = new TenantInfoModel();
@@ -40,7 +39,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
         {
             await base.SetPermissionsAsync();
 
-            HasManageConnectionStringsPermission = await AuthorizationService.IsGrantedAsync(ManageConnectionStringsPolicyName);
             HasManageFeaturesPermission = await AuthorizationService.IsGrantedAsync(ManageFeaturesPolicyName);
         }
 
@@ -53,10 +51,5 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
     public class TenantInfoModel
     {
         public Guid Id { get; set; }
-
-        public bool UseSharedDatabase { get; set; }
-
-        [Required]
-        public string DefaultConnectionString { get; set; }
     }
 }
