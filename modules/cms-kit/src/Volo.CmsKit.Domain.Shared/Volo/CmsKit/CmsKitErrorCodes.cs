@@ -22,7 +22,7 @@
         
         public static class MediaDescriptors
         {
-            public const string InvalidName = "CmsKit:Medias:0001";
+            public const string InvalidName = "CmsKit:Media:0001";
         }
     }
 }
