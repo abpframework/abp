@@ -21,7 +21,7 @@ namespace Volo.CmsKit.MediaDescriptors
             
         }
 
-        public MediaDescriptor(Guid id, Guid? tenantId, string name, string mimeType, long size) : base(id)
+        public MediaDescriptor(Guid id, string name, string mimeType, long size, Guid? tenantId = null) : base(id)
         {
             TenantId = tenantId;
             
