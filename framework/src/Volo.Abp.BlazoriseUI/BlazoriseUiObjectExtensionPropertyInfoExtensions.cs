@@ -125,11 +125,7 @@ namespace Volo.Abp.BlazoriseUI
             {
                 return TextInputMode.Url;
             }
-
-            //if (attribute is HiddenInputAttribute)
-            //{
-            //    return "hidden";
-            //}
+            
 
             if (attribute is PhoneAttribute)
             {
@@ -178,11 +174,6 @@ namespace Volo.Abp.BlazoriseUI
                 return TextRole.Url;
             }
 
-            //if (attribute is HiddenInputAttribute)
-            //{
-            //    return "hidden";
-            //}
-
             if (attribute is DataTypeAttribute dataTypeAttribute)
             {
                 switch (dataTypeAttribute.DataType)
@@ -221,26 +212,7 @@ namespace Volo.Abp.BlazoriseUI
             {
                 return typeof(TextExtensionProperty<,>);
             }
-
-            //if (attribute is EmailAddressAttribute)
-            //{
-            //    return TextInputMode.Email;
-            //}
-
-            //if (attribute is UrlAttribute)
-            //{
-            //    return TextInputMode.Url;
-            //}
-
-            //if (attribute is HiddenInputAttribute)
-            //{
-            //    return "hidden";
-            //}
-
-            //if (attribute is PhoneAttribute)
-            //{
-            //    return TextInputMode.Tel;
-            //}
+            
 
             if (attribute is DataTypeAttribute dataTypeAttribute)
             {
