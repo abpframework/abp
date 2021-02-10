@@ -11,6 +11,8 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
     public partial class SelectExtensionProperty<TEntity, TResourceType> : ComponentBase
         where TEntity : IHasExtraProperties
     {
+        protected List<SelectItem<int>> SelectItems = new ();
+        
         [Inject] public IStringLocalizerFactory StringLocalizerFactory { get; set; }
 
         [Parameter] public TEntity Entity { get; set; }
@@ -20,36 +22,36 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
         public int SelectedValue
         {
             get { return Entity.GetProperty<int>(PropertyInfo.Name); }
-            set { Entity.SetProperty(PropertyInfo.Name, value); }
+            set { Entity.SetProperty(PropertyInfo.Name, value, false); }
         }
         
-        protected virtual IEnumerable<SelectItem<int>> GetSelectItemsFromEnum()
+        protected virtual List<SelectItem<int>> GetSelectItemsFromEnum()
         {
-            var isNullableType = Nullable.GetUnderlyingType(PropertyInfo.Type) != null;
-            var enumType = PropertyInfo.Type;
-
-            if (isNullableType)
+            var selectItems = new List<SelectItem<int>>();
+            
+            foreach (var enumValue in PropertyInfo.Type.GetEnumValues())
             {
-                enumType = Nullable.GetUnderlyingType(PropertyInfo.Type);
-                yield return new SelectItem<int>();
-            }
-
-            foreach (var enumValue in enumType.GetEnumValues())
-            {
-                yield return new SelectItem<int>
+                selectItems.Add( new SelectItem<int>
                 {
                     Value = (int) enumValue,
-                    Text = EnumHelper.GetLocalizedMemberName(enumType, enumValue, StringLocalizerFactory)
-                };
+                    Text = EnumHelper.GetLocalizedMemberName(PropertyInfo.Type, enumValue, StringLocalizerFactory)
+                });
+            }
+
+            return selectItems;
+        }
+
+        protected override void OnParametersSet()
+        {
+            SelectItems = GetSelectItemsFromEnum();
+            StateHasChanged();
+
+            if (!Entity.HasProperty(PropertyInfo.Name))
+            {
+                SelectedValue = (int)PropertyInfo.Type.GetEnumValues().GetValue(0);
             }
         }
-
-        protected override void OnInitialized()
-        {
-            SelectedValue = 0;
-        }
     }
-
 
     public class SelectItem<TValue>
     {
