@@ -2,7 +2,7 @@
 
 namespace Volo.CmsKit.MediaDescriptors
 {
-    [BlobContainerName("cms-kit-medias")]
+    [BlobContainerName("cms-kit-media")]
     public class MediaContainer
     {
         
