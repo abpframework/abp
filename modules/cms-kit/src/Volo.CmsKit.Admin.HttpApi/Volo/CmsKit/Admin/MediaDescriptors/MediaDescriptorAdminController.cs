@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -12,7 +13,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
     [RequiresGlobalFeature(typeof(MediasFeature))]
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
-    [Route("api/cms-kit-admin/medias")]
+    [Route("api/cms-kit-admin/media")]
     public class MediaDescriptorAdminController : CmsKitAdminController, IMediaDescriptorAdminAppService
     {
         protected readonly IMediaDescriptorAdminAppService MediaDescriptorAdminAppService;
@@ -22,43 +23,44 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             MediaDescriptorAdminAppService = mediaDescriptorAdminAppService;
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public virtual Task<MediaDescriptorDto> GetAsync(Guid id)
-        {
-            return MediaDescriptorAdminAppService.GetAsync(id);
-        }
-
-        [HttpGet]
-        public virtual Task<PagedResultDto<MediaDescriptorGetListDto>> GetListAsync(MediaDescriptorGetListInput input)
-        {
-            return MediaDescriptorAdminAppService.GetListAsync(input);
-        }
-
         [HttpPost]
-        public virtual Task<MediaDescriptorDto> CreateAsync(UploadMediaStreamContent input)
+        [NonAction]
+        public virtual Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
         {
-            return MediaDescriptorAdminAppService.CreateAsync(input);
-        }
-
-        [HttpPut]
-        [Route("{id}")]
-        public virtual Task<MediaDescriptorDto> UpdateAsync(Guid id, UpdateMediaDescriptorDto input)
-        {
-            return MediaDescriptorAdminAppService.UpdateAsync(id, input);
+            return MediaDescriptorAdminAppService.CreateAsync(inputStream);
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public virtual Task DeleteAsync(Guid id)
         {
             return MediaDescriptorAdminAppService.DeleteAsync(id);
         }
 
         [HttpGet]
-        [Route("download/{id}")]
+        [Route("{id}")]
         public virtual Task<RemoteStreamContent> DownloadAsync(Guid id, GetMediaRequestDto request)
         {
             return MediaDescriptorAdminAppService.DownloadAsync(id, request);
+        }
+
+        [HttpPost]
+        public virtual async Task<IActionResult> UploadAsync(IFormFile file)
+        {
+            if (file == null)
+            {
+                return BadRequest();
+            }
+
+            var inputStream = new CreateMediaInputStream(file.OpenReadStream())
+                              {
+                                  ContentType = file.ContentType,
+                                  Name = file.FileName
+                              };
+            
+            var mediaDescriptorDto = await MediaDescriptorAdminAppService.CreateAsync(inputStream);
+            
+            return StatusCode(201, mediaDescriptorDto);
         }
     }
 }

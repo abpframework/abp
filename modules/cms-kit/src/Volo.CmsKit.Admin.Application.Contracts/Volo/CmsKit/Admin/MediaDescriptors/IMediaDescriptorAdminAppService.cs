@@ -5,15 +5,12 @@ using Volo.Abp.Content;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
-    public interface IMediaDescriptorAdminAppService 
-        : ICrudAppService<
-            MediaDescriptorDto,
-            MediaDescriptorGetListDto,
-            Guid, 
-            MediaDescriptorGetListInput, 
-            UploadMediaStreamContent, 
-            UpdateMediaDescriptorDto>
+    public interface IMediaDescriptorAdminAppService : IApplicationService
     {
+        Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream);
+        
         Task<RemoteStreamContent> DownloadAsync(Guid id, GetMediaRequestDto request);
+
+        Task DeleteAsync(Guid id);
     }
 }

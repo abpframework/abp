@@ -6,17 +6,13 @@ using Volo.CmsKit.MediaDescriptors;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
-    public class UploadMediaStreamContent : RemoteStreamContent
+    public class CreateMediaInputStream : RemoteStreamContent
     {
         [Required]
         [DynamicStringLength(typeof(MediaDescriptorConsts), nameof(MediaDescriptorConsts.MaxNameLength))]
         public string Name { get; set; }
 
-        [Required]
-        [DynamicStringLength(typeof(MediaDescriptorConsts), nameof(MediaDescriptorConsts.MaxMimeTypeLength))]
-        public string MimeType { get; set; }
-
-        public UploadMediaStreamContent(Stream stream) : base(stream)
+        public CreateMediaInputStream(Stream stream) : base(stream)
         {
         }
     }

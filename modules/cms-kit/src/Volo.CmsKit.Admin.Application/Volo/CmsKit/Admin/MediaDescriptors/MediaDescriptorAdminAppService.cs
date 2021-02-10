@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
 using Volo.CmsKit.MediaDescriptors;
@@ -21,43 +19,16 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             MediaDescriptorRepository = mediaDescriptorRepository;
         }
 
-        public virtual async Task<MediaDescriptorDto> GetAsync(Guid id)
-        {
-            var entity = await MediaDescriptorRepository.GetAsync(id);
-
-            return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(entity);
-        }
-
-        public virtual async Task<PagedResultDto<MediaDescriptorGetListDto>> GetListAsync(MediaDescriptorGetListInput input)
-        {
-            var totalCount = await MediaDescriptorRepository.GetCountAsync();
-            var entites = await MediaDescriptorRepository.GetListAsync();
-
-            var dtos = ObjectMapper.Map<List<MediaDescriptor>, List<MediaDescriptorGetListDto>>(entites);
-            
-            return new PagedResultDto<MediaDescriptorGetListDto>(totalCount, dtos);
-        }
-
-        public virtual async Task<MediaDescriptorDto> CreateAsync(UploadMediaStreamContent input)
+        public virtual async Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
         {
             var newId = GuidGenerator.Create();
-            var newEntity = new MediaDescriptor(newId, CurrentTenant.Id, input.Name, input.MimeType, input.ContentLength ?? 0);
+            var stream = inputStream.GetStream();
+            var newEntity = new MediaDescriptor(newId, CurrentTenant.Id, inputStream.Name, inputStream.ContentType, stream.Length);
 
             await MediaDescriptorRepository.InsertAsync(newEntity);
-            await MediaContainer.SaveAsync(newId.ToString(), input.GetStream());
+            await MediaContainer.SaveAsync(newId.ToString(), stream);
 
             return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
-        }
-
-        public virtual async Task<MediaDescriptorDto> UpdateAsync(Guid id, UpdateMediaDescriptorDto input)
-        {
-            var entity = await MediaDescriptorRepository.GetAsync(id);
-            
-            entity.SetName(input.Name);
-
-            await MediaDescriptorRepository.UpdateAsync(entity);
-            
-            return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(entity);
         }
 
         public virtual async Task DeleteAsync(Guid id)
