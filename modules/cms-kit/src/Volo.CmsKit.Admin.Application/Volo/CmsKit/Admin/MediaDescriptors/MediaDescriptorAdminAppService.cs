@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlobStoring;
-using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MediaDescriptors;
