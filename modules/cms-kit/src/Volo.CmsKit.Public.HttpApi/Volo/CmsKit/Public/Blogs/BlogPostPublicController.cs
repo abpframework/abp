@@ -27,6 +27,7 @@ namespace Volo.CmsKit.Public.Blogs
         }
 
         [HttpGet]
+        [Route("{blogSlug}/{blogPostSlug}")]
         public Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
         {
             return BlogPostPublicAppService.GetAsync(blogSlug, blogPostSlug);
@@ -45,6 +46,7 @@ namespace Volo.CmsKit.Public.Blogs
         }
 
         [HttpGet]
+        [Route("{blogSlug}")]
         public Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
         {
             return BlogPostPublicAppService.GetListAsync(blogSlug, input);
