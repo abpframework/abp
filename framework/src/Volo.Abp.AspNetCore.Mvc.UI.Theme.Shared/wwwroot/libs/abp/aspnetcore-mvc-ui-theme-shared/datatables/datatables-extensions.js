@@ -334,7 +334,10 @@
                 };
             }
             return function (requestData, callback, settings) {
-                var input = inputAction ? inputAction(requestData, settings) : {};
+                var input = typeof inputAction === 'function'
+                    ? inputAction(requestData, settings)
+                    : typeof inputAction === 'object'
+                        ? inputAction : {};
 
                 //Paging
                 if (settings.oInit.paging) {
