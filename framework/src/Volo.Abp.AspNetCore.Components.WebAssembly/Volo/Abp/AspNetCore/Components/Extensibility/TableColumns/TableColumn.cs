@@ -14,6 +14,7 @@ namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
         [CanBeNull]
         public Type Component { get; set; }
         public List<EntityAction> Actions { get; set; }
+        [CanBeNull]
         public Func<object,string> ValueConverter { get; set; }
 
         public TableColumn()
