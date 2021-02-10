@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
-using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -38,14 +37,6 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         public virtual Task DeleteAsync(Guid id)
         {
             return MediaDescriptorAdminAppService.DeleteAsync(id);
-        }
-
-        [HttpGet]
-        [Route("{id}")]
-        [AllowAnonymous]
-        public virtual Task<RemoteStreamContent> DownloadAsync(Guid id, GetMediaRequestDto request)
-        {
-            return MediaDescriptorAdminAppService.DownloadAsync(id, request);
         }
 
         [HttpPost]

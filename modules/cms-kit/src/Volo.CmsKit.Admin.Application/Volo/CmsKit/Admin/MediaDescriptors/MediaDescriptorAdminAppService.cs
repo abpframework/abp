@@ -42,17 +42,5 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             await MediaContainer.DeleteAsync(id.ToString());
             await MediaDescriptorRepository.DeleteAsync(id);
         }
-
-        [AllowAnonymous]
-        public virtual async Task<RemoteStreamContent> DownloadAsync(Guid id, GetMediaRequestDto request)
-        {
-            var entity = await MediaDescriptorRepository.GetAsync(id);
-            var stream = await MediaContainer.GetAsync(id.ToString());
-
-            return new RemoteStreamContent(stream)
-            {
-                ContentType = entity.MimeType
-            };
-        }
     }
 }

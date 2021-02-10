@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Content;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
@@ -9,8 +8,6 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
     {
         Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream);
         
-        Task<RemoteStreamContent> DownloadAsync(Guid id, GetMediaRequestDto request);
-
         Task DeleteAsync(Guid id);
     }
 }
