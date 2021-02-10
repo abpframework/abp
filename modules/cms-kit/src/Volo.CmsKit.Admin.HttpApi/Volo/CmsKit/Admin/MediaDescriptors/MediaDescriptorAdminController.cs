@@ -25,6 +25,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         }
 
         [HttpPost]
+        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Create)]
         [NonAction]
         public virtual Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
         {
