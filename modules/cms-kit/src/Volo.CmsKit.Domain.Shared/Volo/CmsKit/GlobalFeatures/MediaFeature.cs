@@ -4,11 +4,11 @@ using Volo.Abp.GlobalFeatures;
 namespace Volo.CmsKit.GlobalFeatures
 {
     [GlobalFeatureName(Name)]
-    public class MediasFeature : GlobalFeature
+    public class MediaFeature : GlobalFeature
     {
         public const string Name = "CmsKit.Medias";
         
-        internal MediasFeature(
+        internal MediaFeature(
             [NotNull] GlobalCmsKitFeatures cmsKit
         ) : base(cmsKit)
         {

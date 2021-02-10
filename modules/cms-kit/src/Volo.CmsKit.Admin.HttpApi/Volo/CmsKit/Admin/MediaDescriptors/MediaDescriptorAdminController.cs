@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
-    [RequiresGlobalFeature(typeof(MediasFeature))]
+    [RequiresGlobalFeature(typeof(MediaFeature))]
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [Authorize(CmsKitAdminPermissions.MediaDescriptors.Default)]
     [Area("cms-kit")]
     [Route("api/cms-kit-admin/media")]
     public class MediaDescriptorAdminController : CmsKitAdminController, IMediaDescriptorAdminAppService
@@ -32,6 +34,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Delete)]
         public virtual Task DeleteAsync(Guid id)
         {
             return MediaDescriptorAdminAppService.DeleteAsync(id);
@@ -39,12 +42,14 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 
         [HttpGet]
         [Route("{id}")]
+        [AllowAnonymous]
         public virtual Task<RemoteStreamContent> DownloadAsync(Guid id, GetMediaRequestDto request)
         {
             return MediaDescriptorAdminAppService.DownloadAsync(id, request);
         }
 
         [HttpPost]
+        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Create)]
         public virtual async Task<IActionResult> UploadAsync(IFormFile file)
         {
             if (file == null)

@@ -223,7 +223,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 builder.Ignore<BlogPost>();
             }
 
-            if (GlobalFeatureManager.Instance.IsEnabled<MediasFeature>())
+            if (GlobalFeatureManager.Instance.IsEnabled<MediaFeature>())
             {
                 builder.Entity<MediaDescriptor>(b =>
                 {

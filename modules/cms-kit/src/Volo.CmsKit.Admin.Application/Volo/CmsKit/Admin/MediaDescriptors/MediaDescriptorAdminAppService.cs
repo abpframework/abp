@@ -3,11 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
-    [Authorize]
+    [RequiresGlobalFeature(typeof(MediaFeature))]
+    [Authorize(CmsKitAdminPermissions.MediaDescriptors.Default)]
     public class MediaDescriptorAdminAppService : CmsKitAdminAppServiceBase, IMediaDescriptorAdminAppService
     {
         protected readonly IBlobContainer<MediaContainer> MediaContainer;
@@ -19,6 +23,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             MediaDescriptorRepository = mediaDescriptorRepository;
         }
 
+        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Create)]
         public virtual async Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
         {
             var newId = GuidGenerator.Create();
@@ -31,12 +36,14 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
         }
 
+        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
             await MediaContainer.DeleteAsync(id.ToString());
             await MediaDescriptorRepository.DeleteAsync(id);
         }
 
+        [AllowAnonymous]
         public virtual async Task<RemoteStreamContent> DownloadAsync(Guid id, GetMediaRequestDto request)
         {
             var entity = await MediaDescriptorRepository.GetAsync(id);
