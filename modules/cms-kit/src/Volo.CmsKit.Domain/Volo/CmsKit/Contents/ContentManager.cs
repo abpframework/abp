@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Contents
+namespace Volo.CmsKit.Contents
 {
     public class ContentManager : DomainService, IContentManager
     {

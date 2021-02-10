@@ -1,0 +1,9 @@
+﻿@model Volo.CmsKit.Public.Pages.PageDto
+
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
+
+@await Component.InvokeAsync(typeof(DefaultPageViewComponent), new
+{
+    pageId = Model.Id,
+    title = Model.Title
+})

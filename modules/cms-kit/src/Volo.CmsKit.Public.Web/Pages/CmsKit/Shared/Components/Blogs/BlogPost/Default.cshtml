@@ -1,0 +1,33 @@
+﻿@model Volo.CmsKit.Public.Blogs.BlogPostPublicDto
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.CmsKit.Localization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<CmsKitResource> L
+
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>@Model.Title</abp-card-title>
+        <abp-card-subtitle>@Model.Creator?.UserName</abp-card-subtitle>
+    </abp-card-header>
+
+    <abp-card-body>
+    @*<img src="/api/cms-kit-public/blog-posts/@Model.Id/cover-image" class="card-img-top" style="max-width:200px;max-height:200px;" onerror="this.src='https://dummyimage.com/300x200/a3a3a3/fff.png'" />*@
+        @await Component.InvokeAsync(typeof(ContentViewComponent), new
+            {
+                entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                entityId = Model.Id.ToString()
+            })
+    </abp-card-body>
+    <abp-card-footer>
+        <abp-card-subtitle>@Model.CreationTime</abp-card-subtitle>
+        @if (Model.LastModificationTime != null)
+        {
+            <abp-card-text><i>@L["LastModification"].Value : @Model.LastModificationTime</i></abp-card-text>
+        }
+    </abp-card-footer>
+</abp-card>
+
+
