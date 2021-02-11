@@ -6,8 +6,7 @@ namespace Volo.Abp.SettingManagement
 {
     [RemoteService(Name = SettingManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("settingManagement")]
-    [ControllerName("emailSettings")]
-    [Route("api/settingManagement/emailSettings")]
+    [Route("api/setting-management/emailing")]
     public class EmailSettingsController : AbpController, IEmailSettingsAppService
     {
         private readonly IEmailSettingsAppService _emailSettingsAppService;
