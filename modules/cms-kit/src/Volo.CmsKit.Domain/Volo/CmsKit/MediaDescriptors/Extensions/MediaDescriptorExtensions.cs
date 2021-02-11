@@ -12,7 +12,7 @@ namespace Volo.CmsKit.MediaDescriptors.Extensions
                 return false;
             }
             
-            return !(Path.GetInvalidFileNameChars().Any(name.Contains));
+            return !Path.GetInvalidFileNameChars().Any(name.Contains);
         }
     }
 }
