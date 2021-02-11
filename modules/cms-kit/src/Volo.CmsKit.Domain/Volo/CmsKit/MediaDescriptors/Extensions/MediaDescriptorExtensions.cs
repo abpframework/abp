@@ -12,8 +12,7 @@ namespace Volo.CmsKit.MediaDescriptors.Extensions
                 return false;
             }
             
-            // "con" is not valid folder/file name for Windows OS
-            return !(Path.GetInvalidFileNameChars().Any(name.Contains) || name == "con");
+            return !(Path.GetInvalidFileNameChars().Any(name.Contains));
         }
     }
 }
