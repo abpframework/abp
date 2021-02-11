@@ -12,7 +12,7 @@ namespace Volo.CmsKit.MediaDescriptors
         
         public string Name { get; protected set; }
 
-        public string MimeType { get; set; }
+        public string MimeType { get; protected set; }
 
         public long Size { get; protected set; }
 
