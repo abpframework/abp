@@ -29,8 +29,8 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             var stream = inputStream.GetStream();
             var newEntity = new MediaDescriptor(newId, inputStream.Name, inputStream.ContentType, stream.Length, CurrentTenant.Id);
 
-            await MediaDescriptorRepository.InsertAsync(newEntity);
             await MediaContainer.SaveAsync(newId.ToString(), stream);
+            await MediaDescriptorRepository.InsertAsync(newEntity);
 
             return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
         }
