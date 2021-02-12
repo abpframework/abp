@@ -56,7 +56,7 @@ namespace Volo.Abp.EventBus.Distributed
             {
                 Properties =
                 {
-                    {"TenantId", tenantId}
+                    {"TenantId", tenantId.ToString()}
                 }
             });
             
