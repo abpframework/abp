@@ -36,7 +36,7 @@ namespace Volo.Abp.Application.Dtos
         public DetailedPagedResultDto(long totalCount, IReadOnlyList<T> items)
             : base(totalCount, items)
         {
-            TotalCount = totalCount;
+
         }
 
         public DetailedPagedResultDto(int currentPage, int pageCount, int pageSize, long totalCount, IReadOnlyList<T> items)
