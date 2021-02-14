@@ -28,6 +28,7 @@ namespace Volo.CmsKit.GlobalFeatures
             AddFeature(new TagsFeature(this));
             AddFeature(new ContentsFeature(this));
             AddFeature(new PagesFeature(this));
+            AddFeature(new BlogsFeature(this));
         }
     }
 }

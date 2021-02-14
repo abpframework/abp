@@ -8,6 +8,8 @@ namespace Volo.CmsKit
     {
         public Guid User1Id { get; } = Guid.NewGuid();
 
+        public string User1UserName => "fake.user";
+
         public Guid User2Id { get; } = Guid.NewGuid();
 
         public Guid CommentWithChildId { get; } = Guid.NewGuid();
@@ -70,5 +72,23 @@ namespace Volo.CmsKit
         public Guid TagId_2 { get; } = Guid.NewGuid();
 
         public string TagName_2 => "News";
+
+        public Guid Blog_Id { get; } = Guid.NewGuid();
+
+        public string BlogName => "Cms Blog";
+
+        public string BlogSlug => "cms-blog";
+
+        public Guid BlogPost_1_Id { get; } = Guid.NewGuid();
+
+        public string BlogPost_1_Title => "How to install CmsKit?";
+
+        public string BlogPost_1_Slug => "how-to-install-cms-kit";
+
+        public Guid BlogPost_2_Id { get; } = Guid.NewGuid();
+
+        public string BlogPost_2_Title => "How to use CmsKit";
+
+        public string BlogPost_2_Slug => "how-to-use-cms-kit";
     }
 }

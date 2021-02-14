@@ -54,9 +54,6 @@ export class RolesComponent implements OnInit {
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
-  @ViewChild('formRef', { static: false, read: ElementRef })
-  formRef: ElementRef<HTMLFormElement>;
-
   onVisiblePermissionChange = event => {
     this.visiblePermissions = event;
   };
@@ -128,12 +125,6 @@ export class RolesComponent implements OnInit {
 
   private hookToQuery() {
     this.list.hookToQuery(query => this.store.dispatch(new GetRoles(query))).subscribe();
-  }
-
-  onClickSaveButton() {
-    this.formRef.nativeElement.dispatchEvent(
-      new Event('submit', { bubbles: true, cancelable: true }),
-    );
   }
 
   openPermissionsModal(providerKey: string) {

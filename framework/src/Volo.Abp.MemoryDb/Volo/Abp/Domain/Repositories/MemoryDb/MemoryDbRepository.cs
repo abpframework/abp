@@ -191,10 +191,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
             var entities = (await GetQueryableAsync()).Where(predicate).ToList();
 
-            foreach (var entity in entities)
-            {
-                await DeleteAsync(entity, autoSave, cancellationToken);
-            }
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
 
         public override async Task<TEntity> InsertAsync(

@@ -138,7 +138,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
 
-            var action = await ApiDescriptionFinder.FindActionAsync(client, remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
+            var action = await ApiDescriptionFinder.FindActionAsync(
+                client,
+                remoteServiceConfig.BaseUrl,
+                typeof(TService),
+                invocation.Method
+            );
+
             var apiVersion = GetApiVersionInfo(action);
             var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
 
@@ -158,9 +164,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 )
             );
 
-            var response = await client.SendAsync(requestMessage,
+            var response = await client.SendAsync(
+                requestMessage,
                 HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
-                GetCancellationToken());
+                GetCancellationToken()
+            );
 
             if (!response.IsSuccessStatusCode)
             {
@@ -198,7 +206,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return action.SupportedVersions.Last(); //TODO: Ensure to get the latest version!
         }
 
-        protected virtual void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage, ApiVersionInfo apiVersion)
+        protected virtual void AddHeaders(
+            IAbpMethodInvocation invocation,
+            ActionApiDescriptionModel action,
+            HttpRequestMessage requestMessage,
+            ApiVersionInfo apiVersion)
         {
             //API Version
             if (!apiVersion.Version.IsNullOrEmpty())

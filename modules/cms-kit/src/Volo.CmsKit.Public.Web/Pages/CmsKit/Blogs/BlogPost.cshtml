@@ -1,0 +1,63 @@
+﻿@page "/blogs/{blogSlug}/{blogPostSlug}"
+
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPost
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
+@using Volo.CmsKit.Public.Web.Pages
+@using Volo.Abp.GlobalFeatures
+@using Volo.CmsKit.GlobalFeatures
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
+
+@inherits CmsKitPublicPageBase
+
+@model BlogPostModel
+
+@{
+    PageLayout.Content.Title = Model.BlogPost.Title;
+}
+
+@await Component.InvokeAsync(typeof(DefaultBlogPostViewComponent), new
+{
+    Model.BlogSlug,
+    Model.BlogPostSlug
+})
+
+@if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+{
+    @await Component.InvokeAsync(typeof(TagViewComponent), new
+    {
+        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+        entityId = Model.BlogPost.Id.ToString()
+    })
+}
+
+@if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+{
+    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
+    {
+        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+        entityId = Model.BlogPost.Id.ToString()
+    })
+}
+
+@if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+{
+    @await Component.InvokeAsync(typeof(RatingViewComponent), new
+    {
+        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+        entityId = Model.BlogPost.Id.ToString()
+    })
+}
+
+<hr />
+
+@if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+{
+    @await Component.InvokeAsync(typeof(DefaultBlogPostCommentViewComponent), new
+    {
+        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+        entityId = Model.BlogPost.Id.ToString()
+    })
+}

@@ -6,7 +6,7 @@ namespace Volo.Abp.SettingManagement.Blazor
     {
         public SettingManagementBlazorAutoMapperProfile()
         {
-            
+            CreateMap<EmailSettingsDto, UpdateEmailSettingsDto>();
         }
     }
 }

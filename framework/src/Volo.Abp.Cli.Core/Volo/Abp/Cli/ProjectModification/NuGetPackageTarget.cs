@@ -13,6 +13,7 @@
         EntityFrameworkCore = 8,
         MongoDB = 9,
         SignalR = 10,
-        Blazor = 11
+        Blazor = 11,
+        IdentityServer = 12
     }
 }

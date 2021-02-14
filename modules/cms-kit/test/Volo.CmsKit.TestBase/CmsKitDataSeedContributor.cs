@@ -1,12 +1,15 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Pages;
@@ -29,7 +32,10 @@ namespace Volo.CmsKit
         private readonly IContentRepository _contentRepository;
         private readonly IEntityTagManager _entityTagManager;
         private readonly ITagManager _tagManager;
+        private readonly IEntityTagRepository _entityTagRepository;
         private readonly IPageRepository _pageRepository;
+        private readonly IBlogRepository _blogRepository;
+        private readonly IBlogPostRepository _blogPostRepository;
         private readonly IOptions<CmsKitOptions> _options;
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
 
@@ -43,8 +49,11 @@ namespace Volo.CmsKit
             ICurrentTenant currentTenant,
             IContentRepository contentRepository,
             ITagManager tagManager,
-            IEntityTagManager entityTagManager,
+            IEntityTagRepository entityTagRepository,
             IPageRepository pageRepository,
+            IBlogRepository blogRepository,
+            IBlogPostRepository blogPostRepository,
+            IEntityTagManager entityTagManager,
             IOptions<CmsKitOptions> options,
             IOptions<CmsKitTagOptions> tagOptions)
         {
@@ -58,7 +67,10 @@ namespace Volo.CmsKit
             _contentRepository = contentRepository;
             _tagManager = tagManager;
             _entityTagManager = entityTagManager;
+            _entityTagRepository = entityTagRepository;
             _pageRepository = pageRepository;
+            _blogRepository = blogRepository;
+            _blogPostRepository = blogPostRepository;
             _options = options;
             _tagOptions = tagOptions;
         }
@@ -82,16 +94,18 @@ namespace Volo.CmsKit
                 await SeedTagsAsync();
 
                 await SeedPagesAsync();
+
+                await SeedBlogsAsync();
             }
         }
 
         private Task ConfigureCmsKitOptionsAsync()
-        {            
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.EntityType1);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.EntityType2);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.Content_1_EntityType);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.Content_2_EntityType);
-            _tagOptions.Value.EntityTypes.AddOrReplace(_cmsKitTestData.TagDefinition_1_EntityType);
+        {
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.EntityType1));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.EntityType2));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_1_EntityType));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_2_EntityType));
+            _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.TagDefinition_1_EntityType));
 
             return Task.CompletedTask;
         }
@@ -290,6 +304,15 @@ namespace Volo.CmsKit
 
             await _pageRepository.InsertAsync(page2);
             await _contentRepository.InsertAsync(page2Content);
+        }
+
+        private async Task SeedBlogsAsync()
+        {
+            var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.Blog_Id, _cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug));
+
+            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_1_Id, blog.Id, _cmsKitTestData.BlogPost_1_Title, _cmsKitTestData.BlogPost_1_Slug, "Short desc 1"));
+
+            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_2_Id, blog.Id, _cmsKitTestData.BlogPost_2_Title, _cmsKitTestData.BlogPost_2_Slug, "Short desc 2"));
         }
     }
 }

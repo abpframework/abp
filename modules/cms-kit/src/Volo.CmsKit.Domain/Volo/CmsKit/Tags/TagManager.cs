@@ -85,7 +85,7 @@ namespace Volo.CmsKit.Tags
 
         public Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync(CancellationToken cancellationToken = default)
         {
-            return _tagDefinitionStore.GetTagDefinitionsAsync();
+            return _tagDefinitionStore.GetTagEntityTypeDefinitionListAsync();
         }
     }
 }

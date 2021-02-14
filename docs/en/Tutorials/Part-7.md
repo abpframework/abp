@@ -70,7 +70,7 @@ This is just like done for the `Book` entity before, so no need to explain again
 
 ## Create a new Database Migration
 
-Open the **Package Manager Console** on Visual Studio and ensure that the **Default project** is `Acme.BookStore.EntityFrameworkCore.DbMigrations` in the Package Manager Console, as shown on the picture below. Also, set the `Acme.BookStore.Web` (or `Acme.BookStore.HttpApi.Host`, depending on your solution) as the **startup project** (right click it on the solution explorer and click to "Set as Startup Project").
+Open the **Package Manager Console** on Visual Studio and ensure that the **Default project** is `Acme.BookStore.EntityFrameworkCore.DbMigrations` in the Package Manager Console, as shown on the picture below. Also, set this project as the **startup project** (right click it on the solution explorer and click to "Set as Startup Project").
 
 Run the following command to create a new database migration:
 
