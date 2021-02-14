@@ -8,6 +8,7 @@
     "ProjectName": "Project name",
     "ProjectType": "Project type",
     "DatabaseProvider": "Database provider",
+    "DatabaseManagementSystem": "Database management system",
     "NTier": "N-Tier",
     "IncludeUserInterface": "Include user interface",
     "CreateNow": "Create now",
