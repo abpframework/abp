@@ -17,9 +17,9 @@ namespace Volo.Abp.Application.Dtos
         public int PageCount { get; set; }
 
         /// <summary>
-        /// Number of items on the page
+        /// Number of items requested
         /// </summary>
-        public int PageSize => Items.Count;
+        public int PageSize { get; set; }
 
         /// <summary>
         /// First element count in current page
@@ -39,12 +39,12 @@ namespace Volo.Abp.Application.Dtos
             TotalCount = totalCount;
         }
 
-        public DetailedPagedResultDto(int currentPage, int pageCount, long totalCount, IReadOnlyList<T> items)
+        public DetailedPagedResultDto(int currentPage, int pageCount, int pageSize, long totalCount, IReadOnlyList<T> items)
          : base(totalCount, items)
         {
             CurrentPage = currentPage;
             PageCount = pageCount;
-            TotalCount = totalCount;
+            PageSize = PageSize;
         }
     }
 }
