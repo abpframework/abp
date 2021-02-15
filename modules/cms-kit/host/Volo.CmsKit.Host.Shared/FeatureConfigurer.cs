@@ -13,7 +13,6 @@ namespace Volo.CmsKit
             OneTimeRunner.Run(() =>
             {
                 GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
-                GlobalFeatureManager.Instance.Modules.CmsKit().Disable<PagesFeature>();
             });
         }
     }
