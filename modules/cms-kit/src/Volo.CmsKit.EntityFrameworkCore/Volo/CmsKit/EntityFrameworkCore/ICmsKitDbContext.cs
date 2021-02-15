@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Pages;
@@ -22,5 +23,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
         DbSet<Tag> Tags { get; set; }
         DbSet<EntityTag> EntityTags { get; set; }
         DbSet<Page> Pages { get; set; }
+        DbSet<Blog> Blogs { get; set; }
+        DbSet<BlogPost> BlogPosts { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Volo.Abp.BlobStoring;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Domain;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
@@ -15,7 +16,8 @@ namespace Volo.CmsKit
     [DependsOn(
         typeof(CmsKitDomainSharedModule),
         typeof(AbpUsersDomainModule),
-        typeof(AbpDddDomainModule)
+        typeof(AbpDddDomainModule),
+        typeof(AbpBlobStoringModule)
     )]
     public class CmsKitDomainModule : AbpModule
     {

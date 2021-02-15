@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Threading;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit
 {
@@ -12,6 +13,7 @@ namespace Volo.CmsKit
             OneTimeRunner.Run(() =>
             {
                 GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
+                GlobalFeatureManager.Instance.Modules.CmsKit().Disable<PagesFeature>();
             });
         }
     }

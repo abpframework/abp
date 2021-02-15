@@ -41,7 +41,6 @@ namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement
             SettingItemRenders.Clear();
 
             SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
-            BreadcrumbItems.Add(new BreadcrumbItem(L["Settings"]));
         }
 
         protected virtual string GetNormalizedString(string value)

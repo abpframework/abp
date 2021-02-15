@@ -3,10 +3,14 @@
   "texts": {
     "CmsKit:0002": "İçerik zaten mevcut!",
     "CmsKit:0003": "{0} ögesi etiketlenebilir değil.",
+    "CmsKit:BlogPost:0001": "Aynı url etiketi zaten mevcut.",
+    "CmsKit:Page:0001": "Girilen url ({0}) kullanımdadır.",
+    "CmsKit:Tag:0002": "Bu öge etiketlenebilir değil.",
     "CommentAuthorizationExceptionMessage": "Bu yorumları görebilmek için yetki gerekir.",
     "Comments": "Yorumlar",
     "Delete": "Sil",
     "Edit": "Düzenle",
+    "LastModification": "Son Güncellenme",
     "LoginToAddComment": "Yorum yapmak için giriş yap",
     "LoginToRate": "Oylamak için giriş yapın",
     "LoginToReply": "Cevap vermek için giriş yap",
@@ -23,6 +27,7 @@
     "Permission:TagManagement.Update": "Etiket Güncelleme",
     "PickYourReaction": "Tepkinizi seçin",
     "RatingUndoMessage": "Oylamanız geri alınacak.",
+    "Read": "Oku",
     "Reply": "Cevapla",
     "Send": "Gönder",
     "Star": "Yıldız",
@@ -31,7 +36,6 @@
     "Undo": "Geri al",
     "Update": "Güncelle",
     "YourComment": "Yorumunuz",
-    "YourReply": "Cevabınız",
-    "CmsKit:Page:0001": "Girilen url ({0}) kullanımdadır."
+    "YourReply": "Cevabınız"
   }
 }
