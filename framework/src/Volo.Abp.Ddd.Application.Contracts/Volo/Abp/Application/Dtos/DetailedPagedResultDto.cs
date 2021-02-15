@@ -44,7 +44,7 @@ namespace Volo.Abp.Application.Dtos
         {
             CurrentPage = currentPage;
             PageCount = pageCount;
-            PageSize = PageSize;
+            PageSize = pageSize;
         }
     }
 }

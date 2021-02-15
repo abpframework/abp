@@ -10,7 +10,7 @@ namespace Volo.Abp.Application.Dtos
     public class PagedResultRequestByPageDto : PagedResultRequestDto
     {
         [Range(1, int.MaxValue)]
-        public virtual int Page { get; set; }
+        public virtual int Page { get; set; } = 1;
 
         public override int SkipCount => (Page - 1) * MaxResultCount;
     }
