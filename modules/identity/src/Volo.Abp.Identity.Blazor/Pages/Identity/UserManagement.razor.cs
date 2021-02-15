@@ -11,6 +11,7 @@ using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars;
 using Volo.Abp.Identity.Localization;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
@@ -153,8 +154,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override ValueTask SetTableColumnsAsync()
         {
-            TableColumns
-                .Get<UserManagement>()
+            UserManagementTableColumns
                 .AddRange(new TableColumn[]
                 {
                     new TableColumn
@@ -179,6 +179,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     }
                 });
 
+            UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName, IdentityModuleExtensionConsts.EntityNames.User));
             return base.SetEntityActionsAsync();
         }
 
