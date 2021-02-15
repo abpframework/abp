@@ -26,7 +26,7 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
             }
             set
             {
-                Entity.SetProperty(PropertyInfo.Name, value);
+                Entity.SetProperty(PropertyInfo.Name, value, validate: false);
             }
         }
     }
