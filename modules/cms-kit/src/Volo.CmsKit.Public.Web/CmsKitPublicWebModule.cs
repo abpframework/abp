@@ -63,7 +63,7 @@ namespace Volo.CmsKit.Public.Web
             {
                 if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
                 {
-                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", @"{*pageUrl:minlength(1)}");
+                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", @"/pages/{pageUrl:minlength(1)}");
                 }
             });
         }
