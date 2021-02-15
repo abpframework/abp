@@ -22,7 +22,7 @@ exit
 $commands = (
   "cd ng-packs\scripts",
   "npm install",
-  "npm run publish-packages -- --nextVersion $Version --preview",
+  "npm run publish-packages -- --nextVersion $Version --preview --registry $Registry",
   "cd ../../",
   "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
   "npm run replace-with-tilde",
