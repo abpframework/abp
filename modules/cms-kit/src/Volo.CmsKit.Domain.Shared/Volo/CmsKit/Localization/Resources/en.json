@@ -40,6 +40,10 @@
     "Undo": "Undo",
     "Update": "Update",
     "YourComment": "Your comment",
-    "YourReply": "Your reply"
+    "YourReply": "Your reply",
+    "CmsKit:Media:0001": "'{Name}' is not a valid media name.",
+    "Permission:MediaDescriptorManagement": "Media Management",
+    "Permission:MediaDescriptorManagement:Create": "Create",
+    "Permission:MediaDescriptorManagement:Delete": "Delete"
   }
 }

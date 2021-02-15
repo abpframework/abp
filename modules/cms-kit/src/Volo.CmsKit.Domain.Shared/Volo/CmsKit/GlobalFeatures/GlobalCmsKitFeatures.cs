@@ -10,6 +10,8 @@ namespace Volo.CmsKit.GlobalFeatures
         public ReactionsFeature Reactions => GetFeature<ReactionsFeature>();
 
         public CommentsFeature Comments => GetFeature<CommentsFeature>();
+        
+        public MediaFeature Media => GetFeature<MediaFeature>();
 
         public RatingsFeature Ratings => GetFeature<RatingsFeature>();
 
@@ -23,6 +25,7 @@ namespace Volo.CmsKit.GlobalFeatures
             : base(featureManager)
         {
             AddFeature(new ReactionsFeature(this));
+            AddFeature(new MediaFeature(this));
             AddFeature(new CommentsFeature(this));
             AddFeature(new RatingsFeature(this));
             AddFeature(new TagsFeature(this));
