@@ -1,0 +1,17 @@
+﻿@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.BlazoriseUI
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <Field>
+        <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
+        <DateEdit TValue="DateTime?"
+                  InputMode="@(PropertyInfo.IsDate() ? DateInputMode.Date : DateInputMode.DateTime)"
+                  Pattern="@PropertyInfo.GetDateEditInputFormatOrNull()"
+                  @bind-Date="@Value">
+        </DateEdit>
+    </Field>
+}
