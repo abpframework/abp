@@ -62,13 +62,13 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<IdentityResult> CreateAsync(IdentityUser user, string password, bool validatePassword)
         {
-            var result = await CreateAsync(user);
+            var result = await UpdatePasswordHash(user, password, validatePassword);
             if (!result.Succeeded)
             {
                 return result;
             }
 
-            return await UpdatePasswordHash(user, password, validatePassword);
+            return await CreateAsync(user);
         }
 
         public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
