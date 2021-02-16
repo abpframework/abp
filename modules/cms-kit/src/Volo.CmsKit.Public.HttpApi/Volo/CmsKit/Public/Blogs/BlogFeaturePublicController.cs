@@ -23,12 +23,5 @@ namespace Volo.CmsKit.Public.HttpApi.Volo.CmsKit.Public.Blogs
         {
             return BlogFeaturePublicAppService.GetAsync(blogId, featureName);
         }
-
-        [HttpGet]
-        [Route("{blogId}")]
-        public Task<List<BlogFeatureDto>> GetManyAsync(Guid blogId, GetBlogFeatureInput input)
-        {
-            return BlogFeaturePublicAppService.GetManyAsync(blogId, input);
-        }
     }
 }

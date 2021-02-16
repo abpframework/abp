@@ -43,19 +43,5 @@ namespace Volo.CmsKit.Public.Blogs
 
             return ObjectMapper.Map<BlogFeature, BlogFeatureDto>(feature);
         }
-
-        public async Task<List<BlogFeatureDto>> GetManyAsync(Guid blogId, GetBlogFeatureInput input)
-        {
-            var features = await BlogFeatureRepository.GetListAsync(blogId);
-
-            var nonExistingFeatures = input.FeatureNames.Where(x => !features.Any(a => a.FeatureName == x));
-
-            foreach (var featureName in nonExistingFeatures)
-            {
-                features.Add(new BlogFeature(blogId, featureName));
-            }
-
-            return ObjectMapper.Map<List<BlogFeature>, List<BlogFeatureDto>>(features);
-        }
     }
 }
