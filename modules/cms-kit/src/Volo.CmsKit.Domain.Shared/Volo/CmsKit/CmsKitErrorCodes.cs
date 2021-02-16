@@ -18,6 +18,7 @@
         public static class Blogs
         {
             public const string SlugAlreadyExist = "CmsKit:BlogPost:0001";
+            public const string HasPostCannotBeDeleted = "CmsKit:BlogPost:0002";
         }
         
         public static class MediaDescriptors

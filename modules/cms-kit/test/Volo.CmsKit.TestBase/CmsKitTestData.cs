@@ -78,6 +78,12 @@ namespace Volo.CmsKit
         public string BlogName => "Cms Blog";
 
         public string BlogSlug => "cms-blog";
+        
+        public Guid Blog_2_Id { get; } = Guid.NewGuid();
+
+        public string Blog_2_Name => "Cms Blog 2";
+
+        public string Blog_2_Slug => "cms-blog-2";
 
         public Guid BlogPost_1_Id { get; } = Guid.NewGuid();
 

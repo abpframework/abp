@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.GlobalFeatures;
@@ -16,8 +17,14 @@ namespace Volo.CmsKit.Admin.Blogs
     [Authorize(CmsKitAdminPermissions.Blogs.Default)]
     public class BlogAdminAppService : CrudAppService<Blog, BlogDto, Guid, BlogGetListInput>, IBlogAdminAppService
     {
-        public BlogAdminAppService(IRepository<Blog, Guid> repository) : base(repository)
+        protected readonly IBlogPostRepository BlogPostRepository;
+        
+        public BlogAdminAppService(
+            IRepository<Blog, Guid> repository,
+            IBlogPostRepository blogPostRepository
+            ) : base(repository)
         {
+            BlogPostRepository = blogPostRepository;
             GetListPolicyName = CmsKitAdminPermissions.Blogs.Default;
             GetPolicyName = CmsKitAdminPermissions.Blogs.Default;
             CreatePolicyName = CmsKitAdminPermissions.Blogs.Create;
@@ -32,6 +39,18 @@ namespace Volo.CmsKit.Admin.Blogs
                     .WhereIf(
                         !input.Filter.IsNullOrWhiteSpace(),
                         x => x.Name.ToLower().Contains(input.Filter));
+        }
+
+        public override async Task DeleteAsync(Guid id)
+        {
+            var hasPosts = await BlogPostRepository.PostExistsAsync(id);
+
+            if (hasPosts)
+            {
+                throw new BlogHasPostsCannotBeDeletedException(id);
+            }
+            
+            await base.DeleteAsync(id);
         }
     }
 }

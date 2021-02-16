@@ -4,6 +4,7 @@
     "CmsKit:0002": "Content already exists!",
     "CmsKit:0003": "The entity {0} is not taggable.",
     "CmsKit:BlogPost:0001": "Same url slug already exists!",
+    "CmsKit:BlogPost:0002": "Blog ({Id}) has some post, it cannot be deleted.",
     "CmsKit:Page:0001": "The given url ({0}) already exists.",
     "CmsKit:Tag:0002": "The entity is not taggable!",
     "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display.",
