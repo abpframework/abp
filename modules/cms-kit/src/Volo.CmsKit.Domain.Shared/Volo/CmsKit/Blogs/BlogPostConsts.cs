@@ -1,4 +1,6 @@
-﻿namespace Volo.CmsKit.Blogs
+﻿using Volo.CmsKit.GlobalFeatures;
+
+namespace Volo.CmsKit.Blogs
 {
     public static class BlogPostConsts
     {
@@ -12,10 +14,12 @@
 
         public const string EntityType = "BlogPost";
 
-        public const string CommentsFeatureName = "Comments";
+        public const string CommentsFeatureName = CommentsFeature.Name;
 
-        public const string ReactionsFeatureName = "Reactions";
+        public const string ReactionsFeatureName = ReactionsFeature.Name;
 
-        public const string RatingsFeatureName = "Ratings";
+        public const string RatingsFeatureName = RatingsFeature.Name;
+
+        public const string TagsFeatureName = TagsFeature.Name;
     }
 }

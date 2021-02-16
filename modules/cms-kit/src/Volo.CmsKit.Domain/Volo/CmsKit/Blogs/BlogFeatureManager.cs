@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -12,19 +9,23 @@ namespace Volo.CmsKit.Blogs
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
 
-        public BlogFeatureManager(IBlogFeatureRepository blogFeatureRepository)
+        protected IDefaultBlogFeatureProvider DefaultBlogFeatureProvider { get; }
+
+        public BlogFeatureManager(
+            IBlogFeatureRepository blogFeatureRepository,
+            IDefaultBlogFeatureProvider defaultBlogFeatureProvider)
         {
             BlogFeatureRepository = blogFeatureRepository;
+            DefaultBlogFeatureProvider = defaultBlogFeatureProvider;
         }
 
         public async Task<List<BlogFeature>> GetListAsync(Guid blogId)
         {
             var blogFeatures = await BlogFeatureRepository.GetListAsync(blogId);
 
-            // TODO: Move them IDefaultBlogFeatureProvider
-            blogFeatures.AddIfNotContains(new BlogFeature(blogId, BlogPostConsts.CommentsFeatureName));
-            blogFeatures.AddIfNotContains(new BlogFeature(blogId, BlogPostConsts.ReactionsFeatureName));
-            blogFeatures.AddIfNotContains(new BlogFeature(blogId, BlogPostConsts.RatingsFeatureName));
+            var defaultFeatures = await DefaultBlogFeatureProvider.GetDefaultFeaturesAsync(blogId);
+
+            defaultFeatures.ForEach(x => blogFeatures.AddIfNotContains(x));
 
             return blogFeatures;
         }
