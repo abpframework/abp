@@ -15,9 +15,12 @@ namespace Volo.CmsKit.Admin.Blogs
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
         protected IBlogFeatureManager BlogFeatureManager { get; }
 
-        public BlogFeatureAdminAppService(IBlogFeatureRepository blogFeatureRepository)
+        public BlogFeatureAdminAppService(
+            IBlogFeatureRepository blogFeatureRepository,
+            IBlogFeatureManager blogFeatureManager)
         {
             BlogFeatureRepository = blogFeatureRepository;
+            BlogFeatureManager = blogFeatureManager;
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
