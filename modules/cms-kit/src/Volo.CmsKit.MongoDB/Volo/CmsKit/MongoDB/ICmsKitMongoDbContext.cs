@@ -36,6 +36,8 @@ namespace Volo.CmsKit.MongoDB
         IMongoCollection<Blog> Blogs { get; }
 
         IMongoCollection<BlogPost> BlogPosts { get; }
+
+        IMongoCollection<BlogFeature> BlogFeatures { get; }
         
         IMongoCollection<MediaDescriptor> MediaDescriptors { get; }
     }

@@ -31,6 +31,8 @@ namespace Volo.CmsKit.Admin
 
             CreateMap<Blog, BlogLookupDto>(MemberList.Destination);
 
+            CreateMap<BlogFeature, BlogFeatureDto>();
+
             CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
 
             CreateMap<MediaDescriptor, MediaDescriptorDto>();

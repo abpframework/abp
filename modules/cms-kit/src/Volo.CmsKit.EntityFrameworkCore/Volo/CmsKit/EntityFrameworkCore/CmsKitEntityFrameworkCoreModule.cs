@@ -35,6 +35,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 options.AddRepository<Page, EfCorePageRepository>();
                 options.AddRepository<Blog, EfCoreBlogRepository>();
                 options.AddRepository<BlogPost, EfCoreBlogPostRepository>();
+                options.AddRepository<BlogFeature, EfCoreBlogFeatureRepository>();
                 options.AddRepository<MediaDescriptor, EfCoreMediaDescriptorRepository>();
             });
         }
