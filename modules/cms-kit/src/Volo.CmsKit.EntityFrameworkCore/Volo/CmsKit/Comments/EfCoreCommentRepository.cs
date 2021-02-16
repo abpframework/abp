@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,57 @@ namespace Volo.CmsKit.Comments
             return commentWithAuthor;
         }
 
+        public async Task<List<Comment>> GetListAsync(
+            string filter = null, 
+            string entityType = null, 
+            string entityId = null, 
+            Guid? repliedCommentId = null,
+            Guid? creatorId = null, 
+            DateTime? creationStartDate = null, 
+            DateTime? creationEndDate = null, 
+            string sorting = null,
+            int maxResultCount = int.MaxValue, 
+            int skipCount = 0, 
+            CancellationToken cancellationToken = default
+            )
+        {
+            var query = await GetListQueryAsync(
+                filter, 
+                entityType, 
+                entityId, 
+                repliedCommentId, 
+                creatorId, 
+                creationStartDate, 
+                creationEndDate);
+
+            return await query.OrderBy(sorting ?? "creationTime desc")
+                              .PageBy(skipCount, maxResultCount)
+                              .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            string entityType = null, 
+            string entityId = null,
+            Guid? repliedCommentId = null, 
+            Guid? creatorId = null, 
+            DateTime? creationStartDate = null,
+            DateTime? creationEndDate = null, 
+            CancellationToken cancellationToken = default
+            )
+        {
+            var query = await GetListQueryAsync(
+                filter, 
+                entityType, 
+                entityId, 
+                repliedCommentId, 
+                creatorId, 
+                creationStartDate, 
+                creationEndDate);
+
+            return await query.LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
             string entityType,
             string entityId,
@@ -80,6 +132,26 @@ namespace Volo.CmsKit.Comments
             }
 
             await DeleteAsync(comment, cancellationToken: GetCancellationToken(cancellationToken));
+        }
+
+        protected virtual async Task<IQueryable<Comment>> GetListQueryAsync(
+            string filter = null, 
+            string entityType = null, 
+            string entityId = null,
+            Guid? repliedCommentId = null, 
+            Guid? creatorId = null, 
+            DateTime? creationStartDate = null,
+            DateTime? creationEndDate = null
+            )
+        {
+            return (await GetDbSetAsync())
+                .WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
+                .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
+                .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.EntityId == entityId)
+                .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
+                .WhereIf(creatorId.HasValue, c => c.CreatorId == creatorId)
+                .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
+                .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
         }
     }
 }

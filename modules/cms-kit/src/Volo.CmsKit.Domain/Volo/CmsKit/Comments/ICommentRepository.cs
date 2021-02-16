@@ -10,6 +10,31 @@ namespace Volo.CmsKit.Comments
     public interface ICommentRepository : IBasicRepository<Comment, Guid>
     {
         Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default);
+
+        Task<List<Comment>> GetListAsync(
+            string filter = null,
+            string entityType = null,
+            string entityId = null,
+            Guid? repliedCommentId = null,
+            Guid? creatorId = null,
+            DateTime? creationStartDate = null,
+            DateTime? creationEndDate = null,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<long> GetCountAsync(
+            string filter = null,
+            string entityType = null,
+            string entityId = null,
+            Guid? repliedCommentId = null,
+            Guid? creatorId = null,
+            DateTime? creationStartDate = null,
+            DateTime? creationEndDate = null,
+            CancellationToken cancellationToken = default
+        );
         
         Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
             [NotNull] string entityType,

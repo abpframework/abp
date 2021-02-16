@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Users;
 
@@ -15,9 +17,33 @@ namespace Volo.CmsKit.Admin.Comments
             CommentRepository = commentRepository;
         }
 
-        public virtual Task<PagedResult<CommentDto>> GetListAsync(CommentGetListInput input)
+        public virtual async Task<PagedResultDto<CommentDto>> GetListAsync(CommentGetListInput input)
         {
-            throw new System.NotImplementedException();
+            var totalCount = await CommentRepository.GetCountAsync(
+                input.Filter,
+                input.EntityType,
+                input.EntityId,
+                input.RepliedCommentId,
+                input.CreatorId,
+                input.CreationStartDate,
+                input.CreationEndDate);
+
+            var comments = await CommentRepository.GetListAsync(
+                input.Filter,
+                input.EntityType,
+                input.EntityId,
+                input.RepliedCommentId,
+                input.CreatorId,
+                input.CreationStartDate,
+                input.CreationEndDate,
+                input.Sorting,
+                input.MaxResultCount,
+                input.SkipCount
+            );
+
+            var dtos = ObjectMapper.Map<List<Comment>, List<CommentDto>>(comments);
+
+            return new PagedResultDto<CommentDto>(totalCount, dtos);
         }
 
         public virtual async Task<CommentWithAuthorDto> GetAsync(Guid id)
