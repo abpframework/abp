@@ -28,6 +28,16 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
+        public async Task GetListAsync_ShouldWorkProperly_WithBlogIdWithFeatureNames()
+        {
+            var result = await blogFeatureRepository.GetListAsync(testData.Blog_Id, new[] { testData.BlogFeature_1_FeatureName });
+
+            result.ShouldNotBeNull();
+            result.ShouldNotBeEmpty();
+            result.Count.ShouldBe(1);
+        }
+
+        [Fact]
         public async Task FindAsync_ShouldWorkProperly_WithExistingFeatureName()
         {
             var result = await blogFeatureRepository.FindAsync(testData.Blog_Id, testData.BlogFeature_1_FeatureName);

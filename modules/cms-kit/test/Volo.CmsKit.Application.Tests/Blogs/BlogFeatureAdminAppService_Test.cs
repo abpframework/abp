@@ -5,13 +5,13 @@ using Xunit;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogFeatureAdminAppService : CmsKitApplicationTestBase
+    public class BlogFeatureAdminAppService_Test : CmsKitApplicationTestBase
     {
         private readonly CmsKitTestData testData;
         private readonly IBlogFeatureAdminAppService blogFeatureAdminAppService;
         private readonly IBlogFeatureRepository blogFeatureRepository;
 
-        public BlogFeatureAdminAppService()
+        public BlogFeatureAdminAppService_Test()
         {
             testData = GetRequiredService<CmsKitTestData>();
             blogFeatureAdminAppService = GetRequiredService<IBlogFeatureAdminAppService>();
