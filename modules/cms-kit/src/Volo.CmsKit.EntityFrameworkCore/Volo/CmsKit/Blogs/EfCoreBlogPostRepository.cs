@@ -63,7 +63,7 @@ namespace Volo.CmsKit.Blogs
             return await dbSet.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
         }
         
-        public async Task<bool> PostExistsAsync(Guid blogId, CancellationToken cancellationToken = default)
+        public async Task<bool> ExistsAsync(Guid blogId, CancellationToken cancellationToken = default)
         {
             var dbSet = await GetDbSetAsync();
 

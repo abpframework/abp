@@ -64,7 +64,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
             return await queryable.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
         }
         
-        public async Task<bool> PostExistsAsync(Guid blogId, CancellationToken cancellationToken = default)
+        public async Task<bool> ExistsAsync(Guid blogId, CancellationToken cancellationToken = default)
         {
             var queryable = await GetMongoQueryableAsync(cancellationToken);
 

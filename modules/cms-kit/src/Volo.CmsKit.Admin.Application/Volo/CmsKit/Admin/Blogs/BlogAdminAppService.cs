@@ -43,7 +43,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         public override async Task DeleteAsync(Guid id)
         {
-            var hasPosts = await BlogPostRepository.PostExistsAsync(id);
+            var hasPosts = await BlogPostRepository.ExistsAsync(id);
 
             if (hasPosts)
             {

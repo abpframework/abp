@@ -16,6 +16,6 @@ namespace Volo.CmsKit.Blogs
 
         Task<int> GetCountAsync(Guid blogId, CancellationToken cancellationToken = default);
         
-        Task<bool> PostExistsAsync(Guid blogId, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(Guid blogId, CancellationToken cancellationToken = default);
     }
 }
