@@ -7,10 +7,6 @@ namespace Volo.CmsKit.Blogs
 {
     public class BlogFeature : FullAuditedAggregateRoot<Guid>, IEquatable<BlogFeature>
     {
-        protected BlogFeature() // Keep for ORM
-        {
-        }
-
         public BlogFeature(Guid blogId, [NotNull] string featureName, bool enabled = true)
         {
             BlogId = blogId;

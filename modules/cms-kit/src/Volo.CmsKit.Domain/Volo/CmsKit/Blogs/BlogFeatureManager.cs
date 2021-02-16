@@ -21,6 +21,7 @@ namespace Volo.CmsKit.Blogs
         {
             var blogFeatures = await BlogFeatureRepository.GetListAsync(blogId);
 
+            // TODO: Move them IDefaultBlogFeatureProvider
             blogFeatures.AddIfNotContains(new BlogFeature(blogId, BlogPostConsts.CommentsFeatureName));
             blogFeatures.AddIfNotContains(new BlogFeature(blogId, BlogPostConsts.ReactionsFeatureName));
             blogFeatures.AddIfNotContains(new BlogFeature(blogId, BlogPostConsts.RatingsFeatureName));
