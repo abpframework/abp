@@ -20,13 +20,17 @@ export class AuthService {
   }
 
   private setStrategy = () => {
-    const flow = this.environment.getEnvironment().oAuthConfig.responseType || 'password';
+    const flow =
+      this.environment.getEnvironment().oAuthConfig.responseType === 'code' ? 'code' : 'password';
     if (this.flow === flow) return;
 
     if (this.strategy) this.strategy.destroy();
 
     this.flow = flow;
-    this.strategy = AUTH_FLOW_STRATEGY.Code(this.injector);
+    this.strategy =
+      flow === 'code'
+        ? AUTH_FLOW_STRATEGY.Code(this.injector)
+        : AUTH_FLOW_STRATEGY.Password(this.injector);
   };
 
   private listenToSetEnvironment() {

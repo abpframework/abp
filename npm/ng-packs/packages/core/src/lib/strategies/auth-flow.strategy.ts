@@ -1,10 +1,14 @@
 import { Injector } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { AuthConfig, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
+import { RestService } from '../services/rest.service';
 
 export const oAuthStorage = localStorage;
 
@@ -70,9 +74,43 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   logout() {
-    this.oAuthService.revokeTokenAndLogout();
-    // TODO: no need to return of(null). It may be removed in v5.0.
-    return of(null);
+    return from(this.oAuthService.revokeTokenAndLogout());
+  }
+
+  destroy() {}
+}
+
+export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
+  readonly isInternalAuth = true;
+  private appConfigService = this.injector.get(AbpApplicationConfigurationService);
+
+  login() {
+    const router = this.injector.get(Router);
+    router.navigateByUrl('/account/login');
+  }
+
+  checkIfInternalAuth() {
+    return true;
+  }
+
+  logout() {
+    const rest = this.injector.get(RestService);
+
+    const issuer = this.configState.getDeep('environment.oAuthConfig.issuer');
+    return rest
+      .request(
+        {
+          method: 'GET',
+          url: '/api/account/logout',
+        },
+        null,
+        issuer,
+      )
+      .pipe(
+        switchMap(() => from(this.oAuthService.revokeTokenAndLogout())),
+        switchMap(() => this.appConfigService.get()),
+        tap(res => this.configState.setState(res)),
+      );
   }
 
   destroy() {}
@@ -81,6 +119,9 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 export const AUTH_FLOW_STRATEGY = {
   Code(injector: Injector) {
     return new AuthCodeFlowStrategy(injector);
+  },
+  Password(injector: Injector) {
+    return new AuthPasswordFlowStrategy(injector);
   },
 };
 
