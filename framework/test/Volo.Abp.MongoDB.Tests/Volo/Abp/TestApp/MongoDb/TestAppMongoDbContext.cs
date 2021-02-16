@@ -15,7 +15,7 @@ namespace Volo.Abp.TestApp.MongoDB
 
         public IMongoCollection<City> Cities => Collection<City>();
 
-        protected override void CreateModel(IMongoModelBuilder modelBuilder)
+        protected internal override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             base.CreateModel(modelBuilder);
 
