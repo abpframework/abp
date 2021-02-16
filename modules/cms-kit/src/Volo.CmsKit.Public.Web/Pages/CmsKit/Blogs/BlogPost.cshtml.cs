@@ -46,17 +46,17 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
 
             if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
             {
-                CommentsFeature = await BlogFeaturePublicAppService.GetAsync(BlogPost.Id, BlogPostConsts.CommentsFeatureName);
+                CommentsFeature = await BlogFeaturePublicAppService.GetAsync(BlogPost.BlogId, BlogPostConsts.CommentsFeatureName);
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
             {
-                ReactionsFeature = await BlogFeaturePublicAppService.GetAsync(BlogPost.Id, BlogPostConsts.ReactionsFeatureName);
+                ReactionsFeature = await BlogFeaturePublicAppService.GetAsync(BlogPost.BlogId, BlogPostConsts.ReactionsFeatureName);
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
             {
-                RatingsFeature = await BlogFeaturePublicAppService.GetAsync(BlogPost.Id, BlogPostConsts.RatingsFeatureName);
+                RatingsFeature = await BlogFeaturePublicAppService.GetAsync(BlogPost.BlogId, BlogPostConsts.RatingsFeatureName);
             }
         }
     }
