@@ -26,5 +26,12 @@ namespace Volo.CmsKit.Blogs
                             .Where(x => x.BlogId == blogId)
                             .ToListAsync();
         }
+
+        public async Task<List<BlogFeature>> GetListAsync(Guid blogId, string[] featureNames)
+        {
+            return await (await GetQueryableAsync())
+                        .Where(x => x.BlogId == blogId && featureNames.Contains(x.FeatureName))
+                        .ToListAsync();
+        }
     }
 }

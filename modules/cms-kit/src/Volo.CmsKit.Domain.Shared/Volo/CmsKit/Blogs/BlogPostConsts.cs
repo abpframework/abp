@@ -11,5 +11,11 @@
         public static int MaxShortDescriptionLength { get; set; } = 256;
 
         public const string EntityType = "BlogPost";
+
+        public const string CommentsFeatureName = "Comments";
+
+        public const string ReactionsFeatureName = "Reactions";
+
+        public const string RatingsFeatureName = "Ratings";
     }
 }

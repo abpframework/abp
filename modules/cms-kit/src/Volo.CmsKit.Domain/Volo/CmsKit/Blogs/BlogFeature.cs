@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.CmsKit.Blogs
@@ -9,10 +11,10 @@ namespace Volo.CmsKit.Blogs
         {
         }
 
-        public BlogFeature(Guid blogId, string featureName, bool enabled = true)
+        public BlogFeature(Guid blogId, [NotNull] string featureName, bool enabled = true)
         {
             BlogId = blogId;
-            FeatureName = featureName;
+            FeatureName = Check.NotNullOrWhiteSpace(featureName, nameof(featureName));
             Enabled = enabled;
         }
 

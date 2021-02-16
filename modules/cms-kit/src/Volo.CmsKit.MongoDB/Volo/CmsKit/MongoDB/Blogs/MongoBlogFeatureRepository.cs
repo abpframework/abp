@@ -28,5 +28,12 @@ namespace Volo.CmsKit.MongoDB.Blogs
                             .Where(x => x.BlogId == blogId)
                             .ToListAsync();
         }
+
+        public async Task<List<BlogFeature>> GetListAsync(Guid blogId, string[] featureNames)
+        {
+            return await (await GetMongoQueryableAsync())
+                        .Where(x => x.BlogId == blogId && featureNames.Contains(x.FeatureName))
+                        .ToListAsync();
+        }
     }
 }
