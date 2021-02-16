@@ -13,6 +13,7 @@ namespace Volo.CmsKit.Admin.Blogs
     public class BlogFeatureAdminAppService : CmsKitAdminAppServiceBase, IBlogFeatureAdminAppService
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
+        protected IBlogFeatureManager BlogFeatureManager { get; }
 
         public BlogFeatureAdminAppService(IBlogFeatureRepository blogFeatureRepository)
         {
@@ -22,9 +23,9 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
         public async Task<List<BlogFeatureDto>> GetListAsync(Guid blogId)
         {
-            var list = await BlogFeatureRepository.GetListAsync(blogId);
+            var blogFeatures = await BlogFeatureManager.GetListAsync(blogId);
 
-            return ObjectMapper.Map<List<BlogFeature>, List<BlogFeatureDto>>(list);
+            return ObjectMapper.Map<List<BlogFeature>, List<BlogFeatureDto>>(blogFeatures);
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
