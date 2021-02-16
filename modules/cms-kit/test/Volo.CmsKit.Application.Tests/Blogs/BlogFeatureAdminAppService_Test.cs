@@ -61,7 +61,7 @@ namespace Volo.CmsKit.Blogs
 
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();
-            result.Count.ShouldBe(2);
+            result.Count.ShouldBeGreaterThan(2); // 2 are seeded and there are built-in Features.
         }
     }
 }

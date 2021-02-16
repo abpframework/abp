@@ -93,13 +93,13 @@ namespace Volo.CmsKit
 
         public Guid BlogFeature_1_Id { get; internal set; } = Guid.NewGuid();
 
-        public string BlogFeature_1_FeatureName => "Tagging";
+        public string BlogFeature_1_FeatureName => "Analytics";
 
         public bool BlogFeature_1_Enabled => true;
 
         public Guid BlogFeature_2_Id { get; internal set; } = Guid.NewGuid();
 
-        public string BlogFeature_2_FeatureName => "Rating";
+        public string BlogFeature_2_FeatureName => "Hotjar";
 
         public bool BlogFeature_2_Enabled => false;
 
