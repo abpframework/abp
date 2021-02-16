@@ -34,6 +34,8 @@ namespace Volo.CmsKit.Admin
             CreateMap<ContentUpdateDto, Content>(MemberList.Source);
 
             CreateMap<BlogPost, BlogPostDto>(MemberList.Destination);
+            CreateMap<CreateBlogPostDto, BlogPost>(MemberList.Source);
+            CreateMap<UpdateBlogPostDto, BlogPost>(MemberList.Source);
 
             CreateMap<Blog, BlogDto>(MemberList.Destination)
                 .ReverseMap();
