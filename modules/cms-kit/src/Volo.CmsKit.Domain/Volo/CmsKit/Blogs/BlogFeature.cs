@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogFeature : FullAuditedAggregateRoot<Guid>
+    public class BlogFeature : FullAuditedAggregateRoot<Guid>, IEquatable<BlogFeature>
     {
         protected BlogFeature() // Keep for ORM
         {
@@ -23,5 +23,10 @@ namespace Volo.CmsKit.Blogs
         public string FeatureName { get; protected set; }
 
         public bool Enabled { get; set; } = true;
+
+        public bool Equals(BlogFeature other)
+        {
+            return BlogId == other?.BlogId && FeatureName == other?.FeatureName;
+        }
     }
 }
