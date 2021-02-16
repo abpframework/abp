@@ -1,4 +1,5 @@
-﻿using System.Linq.Dynamic.Core;
+﻿using System;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
@@ -8,8 +9,8 @@ namespace Volo.CmsKit.Admin.Comments
     {
         Task<PagedResult<CommentDto>> GetListAsync(CommentGetListInput input);
 
-        Task<CommentWithDetailsDto> GetAsync(string entityType, string entityId);
+        Task<CommentWithAuthorDto> GetAsync(Guid id);
 
-        Task DeleteAsync(string entityType, string entityId);
+        Task DeleteAsync(Guid id);
     }
 }

@@ -4,7 +4,7 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Admin.Comments
 {
-    public class CommentWithDetailsDto
+    public class CommentWithAuthorDto
     {
         public Guid Id { get; set; }
 
@@ -20,8 +20,6 @@ namespace Volo.CmsKit.Admin.Comments
 
         public DateTime CreationTime { get; set; }
         
-        public List<CommentDto> Replies { get; set; }
-
         public CmsUserDto Author { get; set; }
     }
 }

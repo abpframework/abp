@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
@@ -16,6 +17,27 @@ namespace Volo.CmsKit.MongoDB.Comments
     {
         public MongoCommentRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
+        }
+
+        public async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var query = from comment in (await GetMongoQueryableAsync(cancellationToken))
+                join user in (await GetDbContextAsync(cancellationToken)).CmsUsers on comment.CreatorId equals user.Id
+                where id == comment.Id
+                select new CommentWithAuthorQueryResultItem
+                {
+                    Comment = comment,
+                    Author = user
+                };
+
+            var commentWithAuthor = await query.FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+
+            if (commentWithAuthor == null)
+            {
+                throw new EntityNotFoundException(typeof(Comment), id);
+            }
+
+            return commentWithAuthor;
         }
 
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(

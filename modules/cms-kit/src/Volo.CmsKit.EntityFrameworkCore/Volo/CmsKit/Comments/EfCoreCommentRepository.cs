@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
@@ -18,6 +19,27 @@ namespace Volo.CmsKit.Comments
         public EfCoreCommentRepository(IDbContextProvider<ICmsKitDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
+        }
+
+        public async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var query = from comment in (await GetDbSetAsync())
+                join user in (await GetDbContextAsync()).Set<CmsUser>() on comment.CreatorId equals user.Id
+                where id == comment.Id
+                select new CommentWithAuthorQueryResultItem
+                {
+                    Comment = comment,
+                    Author = user
+                };
+
+            var commentWithAuthor = await query.FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+
+            if (commentWithAuthor == null)
+            {
+                throw new EntityNotFoundException(typeof(Comment), id);
+            }
+
+            return commentWithAuthor;
         }
 
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
