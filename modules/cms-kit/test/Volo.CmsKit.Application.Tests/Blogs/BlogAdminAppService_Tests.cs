@@ -38,6 +38,5 @@ namespace Volo.CmsKit.Blogs
             
             blog.ShouldBeNull();
         }
-
     }
 }
