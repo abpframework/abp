@@ -1,7 +1,10 @@
 ﻿@page
 @using Localization.Resources.AbpUi
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
 @using Volo.Abp.GlobalFeatures
+@using Volo.Abp.Users
 @using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Pages
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
@@ -11,6 +14,18 @@
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
 @model IndexModel
 @inject IStringLocalizer<AbpUiResource> Localizer
+@inject ICurrentUser CurrentUser
+
+@section styles{
+    <abp-style type="typeof(TuiEditorStyleContributor)"/>
+}
+
+@section scripts{
+    <abp-script type="typeof(UppyScriptContributor)"/>
+    <abp-script type="typeof(TuiEditorScriptContributor)"/>
+    <abp-script src="/Pages/index.js"/>
+}
+
 <h1 class="text-center">CMS Kit DEMO</h1>
 
 <abp-card>
@@ -30,6 +45,26 @@
                 })
             }
         </abp-blockquote>
+    </abp-card-body>
+</abp-card>
+
+<hr />
+<h3>Media added content editor</h3>
+<abp-card>
+    <abp-card-body>
+        @if (CurrentUser.Id != null)
+        {
+            @if (GlobalFeatureManager.Instance.IsEnabled<MediaFeature>())
+            {
+                
+                <div id="content-editor"></div>
+
+            }
+        }
+        else
+        {
+            <span>Please Login</span>
+        }
     </abp-card-body>
 </abp-card>
 
