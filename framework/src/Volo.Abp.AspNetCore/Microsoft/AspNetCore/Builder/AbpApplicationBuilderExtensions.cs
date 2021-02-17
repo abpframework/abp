@@ -84,9 +84,9 @@ namespace Microsoft.AspNetCore.Builder
             return app.UseMiddleware<AbpClaimsMapMiddleware>();
         }
 
-        public static void UseAbpSecurityHeaders(this IApplicationBuilder app)
+        public static IApplicationBuilder UseAbpSecurityHeaders(this IApplicationBuilder app)
         {
-            app.UseMiddleware<AbpSecurityHeadersMiddleware>();
+            return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
         }
     }
 }
