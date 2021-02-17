@@ -16,8 +16,8 @@ namespace Volo.CmsKit.Blogs
             IBlogPostRepository blogPostRepository,
             IBlogRepository blogRepository)
         {
-            this.BlogPostRepository = blogPostRepository;
-            this.BlogRepository = blogRepository;
+            BlogPostRepository = blogPostRepository;
+            BlogRepository = blogRepository;
         }
 
         public virtual async Task<BlogPost> CreateAsync(BlogPost blogPost)
