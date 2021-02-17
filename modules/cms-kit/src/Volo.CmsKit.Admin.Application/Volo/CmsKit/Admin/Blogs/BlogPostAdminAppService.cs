@@ -23,7 +23,8 @@ namespace Volo.CmsKit.Admin.Blogs
             BlogPostDto,
             Guid,
             PagedAndSortedResultRequestDto,
-            CreateUpdateBlogPostDto>
+            CreateBlogPostDto,
+            UpdateBlogPostDto>
         , IBlogPostAdminAppService
     {
         protected readonly IBlogPostManager BlogPostManager;
@@ -63,7 +64,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
-        public override async Task<BlogPostDto> CreateAsync(CreateUpdateBlogPostDto input)
+        public override async Task<BlogPostDto> CreateAsync(CreateBlogPostDto input)
         {
             _ = await UserLookupService.GetByIdAsync(CurrentUser.GetId());
 
@@ -80,7 +81,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
-        public override async Task<BlogPostDto> UpdateAsync(Guid id, CreateUpdateBlogPostDto input)
+        public override async Task<BlogPostDto> UpdateAsync(Guid id, UpdateBlogPostDto input)
         {
             var blogPost = await BlogPostRepository.GetAsync(id);
 
