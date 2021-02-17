@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Threading.Tasks;
 
 namespace Volo.CmsKit.Blogs
@@ -9,6 +10,6 @@ namespace Volo.CmsKit.Blogs
 
         Task UpdateAsync(BlogPost blogPost);
 
-        Task SetSlugUrlAsync(BlogPost blogPost, string newSlug);
+        Task SetSlugUrlAsync(BlogPost blogPost, [NotNull] string newSlug);
     }
 }
