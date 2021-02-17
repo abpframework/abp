@@ -155,7 +155,7 @@ namespace VoloDocs.Web
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseAbpRequestLocalization();
-			app.UseAbpSecurityHeaders();
+            app.UseAbpSecurityHeaders();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
