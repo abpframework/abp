@@ -6,7 +6,7 @@ namespace Volo.Abp.Application.Dtos
     /// Simply implements <see cref="IPagedAndSortedResultRequest"/>.
     /// </summary>
     [Serializable]
-    public class PagedAndSortedResultRequestByPageDto : PagedResultRequestByPageDto, IPagedAndSortedResultRequest
+    public class PagedAndSortedResultRequestByPageDto : PagedResultRequestByPageDto, IPagedAndSortedResultRequestByPage
     {
         public virtual string Sorting { get; set; }
     }

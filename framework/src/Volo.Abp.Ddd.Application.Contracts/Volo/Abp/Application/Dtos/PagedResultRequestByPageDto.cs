@@ -4,14 +4,12 @@ using System.ComponentModel.DataAnnotations;
 namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
-    /// Simply inherit <see cref="PagedResultRequestDto"/>.
+    /// Simply inherit <see cref="IPagedResultRequestByPage"/>.
     /// </summary>
     [Serializable]
-    public class PagedResultRequestByPageDto : PagedResultRequestDto
+    public class PagedResultRequestByPageDto : LimitedResultRequestDto, IPagedResultRequestByPage
     {
         [Range(1, int.MaxValue)]
         public virtual int Page { get; set; } = 1;
-
-        public override int SkipCount => (Page - 1) * MaxResultCount;
     }
 }
