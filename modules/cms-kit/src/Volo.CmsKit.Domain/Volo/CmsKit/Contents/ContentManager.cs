@@ -18,7 +18,7 @@ namespace Volo.CmsKit.Contents
             ContentRepository = contentRepository;
         }
 
-        public async Task<Content> InsertAsync(Content content, CancellationToken cancellationToken = default)
+        public virtual async Task<Content> InsertAsync(Content content, CancellationToken cancellationToken = default)
         {
             if (await ContentRepository.ExistsAsync(content.EntityType, content.EntityId, content.TenantId,
                 cancellationToken))
