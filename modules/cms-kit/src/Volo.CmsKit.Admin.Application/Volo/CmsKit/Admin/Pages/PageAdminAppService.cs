@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Admin.Pages
     [Authorize(CmsKitAdminPermissions.Pages.Default)]
     public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
     {
-        protected readonly IPageRepository PageRepository;
+        protected IPageRepository PageRepository { get; }
         
         public PageAdminAppService(IPageRepository pageRepository)
         {
