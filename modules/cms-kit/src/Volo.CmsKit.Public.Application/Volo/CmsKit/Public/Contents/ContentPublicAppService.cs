@@ -5,7 +5,7 @@ namespace Volo.CmsKit.Public.Contents
 {
     public class ContentPublicAppService : CmsKitAppServiceBase, IContentAppService
     {
-        protected readonly IContentRepository ContentRepository;
+        protected IContentRepository ContentRepository { get; }
 
         public ContentPublicAppService(IContentRepository contentRepository)
         {
