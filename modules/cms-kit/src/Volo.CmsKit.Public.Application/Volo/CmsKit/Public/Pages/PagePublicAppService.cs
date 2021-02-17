@@ -3,11 +3,11 @@ using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Public.Pages
 {
-    public class PageAppService : CmsKitPublicAppServiceBase, IPageAppService
+    public class PagePublicAppService : CmsKitPublicAppServiceBase, IPageAppService
     {
-        protected readonly IPageRepository PageRepository;
+        protected IPageRepository PageRepository { get; }
 
-        public PageAppService(IPageRepository pageRepository)
+        public PagePublicAppService(IPageRepository pageRepository)
         {
             PageRepository = pageRepository;
         }
