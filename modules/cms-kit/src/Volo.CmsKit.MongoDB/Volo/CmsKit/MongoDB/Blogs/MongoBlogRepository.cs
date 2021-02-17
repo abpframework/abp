@@ -24,7 +24,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
 
         public virtual Task<Blog> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return GetAsync(x => x.Slug == slug, cancellationToken);
+            return GetAsync(x => x.Slug == slug, cancellationToken: cancellationToken);
         }
     }
 }
