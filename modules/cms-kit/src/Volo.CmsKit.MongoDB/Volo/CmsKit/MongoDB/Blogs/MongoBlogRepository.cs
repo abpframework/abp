@@ -18,12 +18,13 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
             return await AsyncExecuter.AnyAsync(
                             await GetQueryableAsync(),
-                            x => x.Id == blogId);
+                                x => x.Id == blogId, 
+                                cancellationToken);
         }
 
         public virtual Task<Blog> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return GetAsync(x => x.Slug == slug);
+            return GetAsync(x => x.Slug == slug, cancellationToken);
         }
     }
 }
