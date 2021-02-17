@@ -25,13 +25,12 @@ namespace Volo.CmsKit.Tags
             [CanBeNull] string deletePolicy = null) : base(createPolicy, updatePolicy, deletePolicy)
         {
             EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
-
             DisplayName = displayName;
         }
 
         public bool Equals(TagEntityTypeDefiniton other)
         {
-            return EntityType == other.EntityType;
+            return EntityType == other?.EntityType;
         }
     }
 }
