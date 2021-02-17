@@ -3,11 +3,11 @@ using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Public.Contents
 {
-    public class ContentAppService : CmsKitAppServiceBase, IContentAppService
+    public class ContentPublicAppService : CmsKitAppServiceBase, IContentAppService
     {
         protected readonly IContentRepository ContentRepository;
 
-        public ContentAppService(IContentRepository contentRepository)
+        public ContentPublicAppService(IContentRepository contentRepository)
         {
             ContentRepository = contentRepository;
         }
