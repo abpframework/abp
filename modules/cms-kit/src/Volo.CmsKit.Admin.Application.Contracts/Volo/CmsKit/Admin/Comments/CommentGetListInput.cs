@@ -5,8 +5,6 @@ namespace Volo.CmsKit.Admin.Comments
 {
     public class CommentGetListInput : PagedAndSortedResultRequestDto
     {
-        public string Filter { get; set; }
-        
         public string EntityType { get; set; }
 
         public string EntityId { get; set; }

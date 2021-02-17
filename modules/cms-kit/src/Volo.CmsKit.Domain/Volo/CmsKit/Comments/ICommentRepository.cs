@@ -26,7 +26,7 @@ namespace Volo.CmsKit.Comments
         );
 
         Task<long> GetCountAsync(
-            string filter = null,
+            string text = null,
             string entityType = null,
             string entityId = null,
             Guid? repliedCommentId = null,

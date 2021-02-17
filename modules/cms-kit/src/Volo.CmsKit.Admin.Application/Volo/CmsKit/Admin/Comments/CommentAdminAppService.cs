@@ -25,7 +25,7 @@ namespace Volo.CmsKit.Admin.Comments
         public virtual async Task<PagedResultDto<CommentDto>> GetListAsync(CommentGetListInput input)
         {
             var totalCount = await CommentRepository.GetCountAsync(
-                input.Filter,
+                input.Text,
                 input.EntityType,
                 input.EntityId,
                 input.RepliedCommentId,
@@ -34,7 +34,7 @@ namespace Volo.CmsKit.Admin.Comments
                 input.CreationEndDate);
 
             var comments = await CommentRepository.GetListAsync(
-                input.Filter,
+                input.Text,
                 input.EntityType,
                 input.EntityId,
                 input.RepliedCommentId,

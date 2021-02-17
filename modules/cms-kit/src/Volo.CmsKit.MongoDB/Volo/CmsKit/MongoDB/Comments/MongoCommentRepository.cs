@@ -72,7 +72,7 @@ namespace Volo.CmsKit.MongoDB.Comments
         }
 
         public async Task<long> GetCountAsync(
-            string filter = null, 
+            string text = null, 
             string entityType = null, 
             string entityId = null,
             Guid? repliedCommentId = null, 
@@ -83,7 +83,7 @@ namespace Volo.CmsKit.MongoDB.Comments
         )
         {
             var query = await GetListQueryAsync(
-                filter, 
+                text, 
                 entityType, 
                 entityId, 
                 repliedCommentId, 

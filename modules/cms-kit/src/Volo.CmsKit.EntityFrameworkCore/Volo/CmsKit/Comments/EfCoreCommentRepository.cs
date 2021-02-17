@@ -72,7 +72,7 @@ namespace Volo.CmsKit.Comments
         }
 
         public async Task<long> GetCountAsync(
-            string filter = null, 
+            string text = null, 
             string entityType = null, 
             string entityId = null,
             Guid? repliedCommentId = null, 
@@ -83,7 +83,7 @@ namespace Volo.CmsKit.Comments
             )
         {
             var query = await GetListQueryAsync(
-                filter, 
+                text, 
                 entityType, 
                 entityId, 
                 repliedCommentId, 
@@ -146,8 +146,8 @@ namespace Volo.CmsKit.Comments
         {
             return (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
-                .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
-                .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.EntityId == entityId)
+                .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType.Contains(entityType))
+                .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.EntityId.Contains(entityId))
                 .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
                 .WhereIf(creatorId.HasValue, c => c.CreatorId == creatorId)
                 .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
