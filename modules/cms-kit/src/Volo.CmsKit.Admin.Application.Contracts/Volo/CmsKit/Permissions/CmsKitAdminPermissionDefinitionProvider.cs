@@ -13,6 +13,12 @@ namespace Volo.CmsKit.Permissions
         {
             var cmsGroup = context.GetGroupOrNull(CmsKitAdminPermissions.GroupName) ?? context.AddGroup(CmsKitAdminPermissions.GroupName, L("Permission:CmsKit"));
 
+            if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+            {
+                var contentGroup = cmsGroup.AddPermission(CmsKitAdminPermissions.Comments.Default, L("Permission:Comments"));
+                contentGroup.AddChild(CmsKitAdminPermissions.Comments.Delete, L("Permission:Comments.Delete"));
+            }
+            
             if (GlobalFeatureManager.Instance.IsEnabled<ContentsFeature>())
             {
                 var contentGroup = cmsGroup.AddPermission(CmsKitAdminPermissions.Contents.Default, L("Permission:Contents"));
@@ -20,6 +26,7 @@ namespace Volo.CmsKit.Permissions
                 contentGroup.AddChild(CmsKitAdminPermissions.Contents.Update, L("Permission:Contents.Update"));
                 contentGroup.AddChild(CmsKitAdminPermissions.Contents.Delete, L("Permission:Contents.Delete"));
             }
+            
             if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
             {
                 var tagGroup = cmsGroup.AddPermission(CmsKitAdminPermissions.Tags.Default, L("Permission:TagManagement"));
