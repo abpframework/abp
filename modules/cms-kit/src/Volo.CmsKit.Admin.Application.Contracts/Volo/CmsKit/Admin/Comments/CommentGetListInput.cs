@@ -15,10 +15,10 @@ namespace Volo.CmsKit.Admin.Comments
 
         public Guid? RepliedCommentId { get; set; }
 
-        public Guid CreatorId { get; set; }
+        public Guid? CreatorId { get; set; }
 
-        public DateTime CreationStartDate { get; set; }
+        public DateTime? CreationStartDate { get; set; }
         
-        public DateTime CreationEndDate { get; set; }
+        public DateTime? CreationEndDate { get; set; }
     }
 }
