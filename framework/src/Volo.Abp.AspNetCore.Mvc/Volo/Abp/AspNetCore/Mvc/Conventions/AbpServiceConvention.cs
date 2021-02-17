@@ -104,11 +104,22 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                     .Where(t => !t.IsAbstract)
                     .ToArray();
 
-                if (baseControllerTypes.Length > 0)
+                if (baseControllerTypes.Length == 0)
                 {
-                    controllerModelsToRemove.Add(controllerModel);
-                    Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")}");
+                    continue;
                 }
+
+                var baseControllerModels = application.Controllers
+                    .Where(cm => baseControllerTypes.Contains(cm.ControllerType))
+                    .ToArray();
+
+                if (baseControllerModels.Length == 0)
+                {
+                    continue;
+                }
+
+                controllerModelsToRemove.Add(controllerModel);
+                Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")}");
             }
 
             application.Controllers.RemoveAll(controllerModelsToRemove);
