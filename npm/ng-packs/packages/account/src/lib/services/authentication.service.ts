@@ -1,6 +1,8 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import {
   AbpApplicationConfigurationService,
+  AuthPasswordFlowStrategy,
+  AuthService,
   ConfigStateService,
   RestService,
   SessionStateService,
@@ -13,19 +15,18 @@ import { ACCOUNT_OPTIONS } from '../tokens/options.token';
 import { Options } from '../models/options';
 import snq from 'snq';
 import { Router } from '@angular/router';
-import { SessionHandler } from '@abp/ng.account/config';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     protected rest: RestService,
     protected sessionState: SessionStateService,
+    protected authService: AuthService,
     protected oAuthService: OAuthService,
     protected appConfigService: AbpApplicationConfigurationService,
     protected configState: ConfigStateService,
     @Inject(ACCOUNT_OPTIONS) protected options: Options,
     protected router: Router,
-    @Optional() protected sessionHandler: SessionHandler,
   ) {}
 
   login(username: string, password: string, remember = false): Observable<any> {
@@ -47,7 +48,8 @@ export class AuthenticationService {
 
         this.router.navigate([redirectUrl]);
 
-        if (this.sessionHandler) this.sessionHandler.setRememberInfo(remember);
+        const strategy = this.authService.activeAuthFlowStrategy;
+        if (strategy instanceof AuthPasswordFlowStrategy) strategy.setRememberMe(remember);
       }),
       take(1),
     );

@@ -1,6 +1,11 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthFlowStrategy, AUTH_FLOW_STRATEGY } from '../strategies/auth-flow.strategy';
+import {
+  AuthCodeFlowStrategy,
+  AuthFlowStrategy,
+  AuthPasswordFlowStrategy,
+  AUTH_FLOW_STRATEGY,
+} from '../strategies/auth-flow.strategy';
 import { EnvironmentService } from './environment.service';
 
 @Injectable({
@@ -12,6 +17,10 @@ export class AuthService {
 
   get isInternalAuth() {
     return this.strategy.isInternalAuth;
+  }
+
+  get activeAuthFlowStrategy() {
+    return this.strategy as AuthCodeFlowStrategy | AuthPasswordFlowStrategy;
   }
 
   constructor(private environment: EnvironmentService, private injector: Injector) {
