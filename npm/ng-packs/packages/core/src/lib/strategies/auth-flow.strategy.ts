@@ -82,7 +82,23 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
 export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = true;
+  private cookieKey = 'rememberMe';
+  private storageKey = 'passwordFlow';
   private appConfigService = this.injector.get(AbpApplicationConfigurationService);
+
+  async init() {
+    this.oAuthService.events.subscribe(event => {
+      if (event.type === 'logout') {
+        this.removeRememberMe();
+      }
+    });
+
+    if (!getCookieValueByName('rememberMe') && localStorage.getItem(this.storageKey)) {
+      this.oAuthService.logOut();
+    }
+
+    return super.init();
+  }
 
   login() {
     const router = this.injector.get(Router);
@@ -114,6 +130,19 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   destroy() {}
+
+  setRememberMe(remember: boolean) {
+    this.removeRememberMe();
+    localStorage.setItem(this.storageKey, 'true');
+    document.cookie = `${this.cookieKey}=true${
+      remember ? `;expires=Fri, 31 Dec 9999 23:59:59 GMT` : ''
+    }`;
+  }
+
+  removeRememberMe() {
+    localStorage.removeItem(this.storageKey);
+    document.cookie = this.cookieKey + '= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+  }
 }
 
 export const AUTH_FLOW_STRATEGY = {
@@ -154,4 +183,9 @@ function shouldStorageClear(clientId: string, storage: OAuthStorage): boolean {
   const shouldClear = storage.getItem(key) !== clientId;
   if (shouldClear) storage.setItem(key, clientId);
   return shouldClear;
+}
+
+function getCookieValueByName(name: string) {
+  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : '';
 }
