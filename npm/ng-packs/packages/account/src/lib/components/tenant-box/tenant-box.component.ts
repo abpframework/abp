@@ -51,13 +51,13 @@ export class TenantBoxComponent
     this.tenantService
       .findTenantByName(this.name, {})
       .pipe(finalize(() => (this.modalBusy = false)))
-      .subscribe(({ success, ...tenant }) => {
+      .subscribe(({ success, tenantId: id, ...tenant }) => {
         if (!success) {
           this.showError();
           return;
         }
 
-        this.setTenant({ ...tenant, isAvailable: true });
+        this.setTenant({ ...tenant, id, isAvailable: true });
         this.isModalVisible = false;
       });
   }
