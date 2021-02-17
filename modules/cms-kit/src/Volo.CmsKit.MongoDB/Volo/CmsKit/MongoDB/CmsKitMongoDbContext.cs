@@ -4,6 +4,7 @@ using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -35,6 +36,8 @@ namespace Volo.CmsKit.MongoDB
         public IMongoCollection<Blog> Blogs => Collection<Blog>();
 
         public IMongoCollection<BlogPost> BlogPosts => Collection<BlogPost>();
+        
+        public IMongoCollection<MediaDescriptor> MediaDescriptors => Collection<MediaDescriptor>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {

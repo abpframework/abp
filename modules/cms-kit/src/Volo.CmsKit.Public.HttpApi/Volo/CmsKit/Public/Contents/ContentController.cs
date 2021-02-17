@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.CmsKit.Contents;
-using Volo.CmsKit.Controllers;
 
 namespace Volo.CmsKit.Public.Contents
 {

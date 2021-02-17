@@ -5,6 +5,7 @@ using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -34,6 +35,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 options.AddRepository<Page, EfCorePageRepository>();
                 options.AddRepository<Blog, EfCoreBlogRepository>();
                 options.AddRepository<BlogPost, EfCoreBlogPostRepository>();
+                options.AddRepository<MediaDescriptor, EfCoreMediaDescriptorRepository>();
             });
         }
     }

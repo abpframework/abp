@@ -11,7 +11,8 @@ namespace Volo.CmsKit.Admin.Blogs
             BlogPostDto,
             Guid,
             PagedAndSortedResultRequestDto,
-            CreateUpdateBlogPostDto>
+            CreateBlogPostDto,
+            UpdateBlogPostDto>
     {
         Task<BlogPostDto> GetBySlugAsync(string blogSlug, string slug);
 

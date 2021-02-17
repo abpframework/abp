@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
@@ -14,8 +15,6 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
-    //TODO: Implement logic in DefaultDbContextResolver.Resolve in old ABP.
-
     public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         where TDbContext : IEfCoreDbContext
     {
@@ -25,17 +24,20 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         private readonly IConnectionStringResolver _connectionStringResolver;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
         private readonly ICurrentTenant _currentTenant;
+        private readonly AbpDbContextOptions _options;
 
         public UnitOfWorkDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant, 
+            IOptions<AbpDbContextOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
             _cancellationTokenProvider = cancellationTokenProvider;
             _currentTenant = currentTenant;
+            _options = options.Value;
 
             Logger = NullLogger<UnitOfWorkDbContextProvider<TDbContext>>.Instance;
         }
@@ -63,15 +65,16 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
             var connectionString = ResolveConnectionString(connectionStringName);
 
-            var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
-                () => new EfCoreDatabaseApi<TDbContext>(
+                () => new EfCoreDatabaseApi(
                     CreateDbContext(unitOfWork, connectionStringName, connectionString)
                 ));
 
-            return ((EfCoreDatabaseApi<TDbContext>)databaseApi).DbContext;
+            return (TDbContext)((EfCoreDatabaseApi)databaseApi).DbContext;
         }
 
         public async Task<TDbContext> GetDbContextAsync()
@@ -85,20 +88,21 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
             var connectionString = await ResolveConnectionStringAsync(connectionStringName);
 
-            var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
 
             if (databaseApi == null)
             {
-                databaseApi = new EfCoreDatabaseApi<TDbContext>(
+                databaseApi = new EfCoreDatabaseApi(
                     await CreateDbContextAsync(unitOfWork, connectionStringName, connectionString)
                 );
 
                 unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
             }
 
-            return ((EfCoreDatabaseApi<TDbContext>)databaseApi).DbContext;
+            return (TDbContext)((EfCoreDatabaseApi)databaseApi).DbContext;
         }
 
         private TDbContext CreateDbContext(IUnitOfWork unitOfWork, string connectionStringName, string connectionString)
