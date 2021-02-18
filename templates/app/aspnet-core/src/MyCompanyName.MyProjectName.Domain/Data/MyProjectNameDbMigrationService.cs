@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TenantManagement;
 
@@ -105,7 +106,10 @@ namespace MyCompanyName.MyProjectName.Data
         {
             Logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
 
-            await _dataSeeder.SeedAsync(tenant?.Id);
+            await _dataSeeder.SeedAsync(new DataSeedContext(tenant?.Id)
+                .WithProperty(IdentityDataSeedContributor.AdminEmailPropertyName, IdentityDataSeedContributor.AdminEmailDefaultValue)
+                .WithProperty(IdentityDataSeedContributor.AdminPasswordPropertyName, IdentityDataSeedContributor.AdminPasswordDefaultValue)
+            );
         }
 
         private bool DbMigrationsProjectExists()
