@@ -17,7 +17,7 @@ namespace Volo.CmsKit.Admin.Comments
     [Route("api/cms-kit-admin/comments")]
     public class CommentAdminController : CmsKitAdminController, ICommentAdminAppService
     {
-        protected readonly ICommentAdminAppService CommentAdminAppService;
+        protected ICommentAdminAppService CommentAdminAppService { get; }
 
         public CommentAdminController(ICommentAdminAppService commentAdminAppService)
         {

@@ -15,7 +15,7 @@ namespace Volo.CmsKit.Admin.Comments
     [Authorize(CmsKitAdminPermissions.Comments.Default)]
     public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAppService
     {
-        protected readonly ICommentRepository CommentRepository;
+        protected ICommentRepository CommentRepository { get; }
 
         public CommentAdminAppService(ICommentRepository commentRepository)
         {
@@ -65,7 +65,6 @@ namespace Volo.CmsKit.Admin.Comments
         public virtual async Task DeleteAsync(Guid id)
         {
             var comment = await CommentRepository.GetAsync(id);
-
             await CommentRepository.DeleteWithRepliesAsync(comment);
         }
     }
