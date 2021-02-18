@@ -1,5 +1,6 @@
 ﻿using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Modularity;
 using Xunit;
@@ -30,7 +31,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetListAsync_ShouldWorkProperly_WithBlogIdWithFeatureNames()
         {
-            var result = await blogFeatureRepository.GetListAsync(testData.Blog_Id, new[] { testData.BlogFeature_1_FeatureName });
+            var result = await blogFeatureRepository.GetListAsync(testData.Blog_Id, new List<string> { testData.BlogFeature_1_FeatureName });
 
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();
