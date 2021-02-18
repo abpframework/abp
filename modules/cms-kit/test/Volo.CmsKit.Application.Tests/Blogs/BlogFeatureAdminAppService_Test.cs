@@ -21,7 +21,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task SetAsync_ShouldWorkProperly_WithNonExistingFeature()
         {
-            var dto = new BlogFeatureDto
+            var dto = new BlogFeatureInputDto
             {
                 FeatureName = "My.Awesome.Feature",
                 Enabled = true
@@ -39,7 +39,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task SetAsync_ShouldWorkProperly_WithExistingFeature()
         {
-            var dto = new BlogFeatureDto
+            var dto = new BlogFeatureInputDto
             {
                 FeatureName = testData.BlogFeature_2_FeatureName,
                 Enabled = !testData.BlogFeature_2_Enabled
