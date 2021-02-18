@@ -22,7 +22,7 @@ namespace Volo.CmsKit.Public.Blogs
             Cache = cache;
         }
 
-        public async Task<BlogFeatureDto> GetAsync(Guid blogId, string featureName)
+        public async Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
         {
             return await Cache.GetOrAddAsync(
                 $"{blogId}_{featureName}",

@@ -6,6 +6,6 @@ namespace Volo.CmsKit.Public.Blogs
 {
     public interface IBlogFeaturePublicAppService
     {
-        Task<BlogFeatureDto> GetAsync(Guid blogId, string featureName);
+        Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName);
     }
 }

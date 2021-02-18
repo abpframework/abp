@@ -23,7 +23,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetAsync_ShouldWorkProperly_WithExistingFeatureName()
         {
-            var result = await blogFeaturePublicAppService.GetAsync(testData.Blog_Id, testData.BlogFeature_1_FeatureName);
+            var result = await blogFeaturePublicAppService.GetOrDefaultAsync(testData.Blog_Id, testData.BlogFeature_1_FeatureName);
 
             result.ShouldNotBeNull();
             result.FeatureName.ShouldBe(testData.BlogFeature_1_FeatureName);
@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Blogs
         public async Task GetAsync_ShouldReturnDefault_WithNonExistingFeatureName()
         {
             var nonExistingFeatureName = "AnyOtherFeature";
-            var result = await blogFeaturePublicAppService.GetAsync(testData.Blog_Id, nonExistingFeatureName);
+            var result = await blogFeaturePublicAppService.GetOrDefaultAsync(testData.Blog_Id, nonExistingFeatureName);
 
             var defaultFeature = new BlogFeature(Guid.Empty, nonExistingFeatureName);
             result.ShouldNotBeNull();
