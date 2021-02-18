@@ -38,7 +38,7 @@ namespace Volo.CmsKit.Admin.Blogs
             if (blogFeature == null)
             {
                 var newBlogFeature = new BlogFeature(blogId, dto.FeatureName, dto.Enabled);
-                await BlogFeatureRepository.InsertAsync(blogFeature);
+                await BlogFeatureRepository.InsertAsync(newBlogFeature);
             }
             else
             {
