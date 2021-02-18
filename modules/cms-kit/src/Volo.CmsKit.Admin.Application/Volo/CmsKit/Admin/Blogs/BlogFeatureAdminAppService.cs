@@ -34,16 +34,16 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
         public async Task SetAsync(Guid blogId, BlogFeatureDto dto)
         {
-            var existing = await BlogFeatureRepository.FindAsync(blogId, dto.FeatureName);
-            if (existing == null)
+            var blogFeature = await BlogFeatureRepository.FindAsync(blogId, dto.FeatureName);
+            if (blogFeature == null)
             {
                 var blogFeature = new BlogFeature(blogId, dto.FeatureName, dto.Enabled);
                 await BlogFeatureRepository.InsertAsync(blogFeature);
             }
             else
             {
-                existing.Enabled = dto.Enabled;
-                await BlogFeatureRepository.UpdateAsync(existing);
+                blogFeature.Enabled = dto.Enabled;
+                await BlogFeatureRepository.UpdateAsync(blogFeature);
             }
         }
     }
