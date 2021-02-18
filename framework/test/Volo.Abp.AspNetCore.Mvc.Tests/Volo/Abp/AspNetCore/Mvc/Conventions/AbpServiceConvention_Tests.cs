@@ -49,6 +49,53 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         }
 
         [Fact]
+        public void Should_Remove_Exposed_Controller_If_Expose_Self()
+        {
+            // Arrange
+            var applicationModel = new ApplicationModel();
+            var baseControllerModel = new ControllerModel(typeof(BaseController).GetTypeInfo(), Array.Empty<object>())
+            {
+                Application = applicationModel
+            };
+            applicationModel.Controllers.Add(baseControllerModel);
+
+            var derivedControllerModel = new ControllerModel(typeof(ExposeServiceIncludeSelfDerivedController).GetTypeInfo(), Array.Empty<object>())
+            {
+                Application = applicationModel
+            };
+            applicationModel.Controllers.Add(derivedControllerModel);
+
+            var abpServiceConvention = new AbpServiceConvention(_options, _conventionalRouteBuilder);
+
+            // Act
+            abpServiceConvention.Apply(applicationModel);
+
+            // Assert
+            applicationModel.Controllers.ShouldNotContain(baseControllerModel);
+            applicationModel.Controllers.ShouldContain(derivedControllerModel);
+        }
+
+        [Fact]
+        public void Should_Not_Remove_Derived_Controller_If_No_Base_Controller_Model()
+        {
+            // Arrange
+            var applicationModel = new ApplicationModel();
+            var derivedControllerModel = new ControllerModel(typeof(ExposeServiceDerivedController).GetTypeInfo(), Array.Empty<object>())
+            {
+                Application = applicationModel
+            };
+            applicationModel.Controllers.Add(derivedControllerModel);
+
+            var abpServiceConvention = new AbpServiceConvention(_options, _conventionalRouteBuilder);
+
+            // Act
+            abpServiceConvention.Apply(applicationModel);
+
+            // Assert
+            applicationModel.Controllers.ShouldContain(derivedControllerModel);
+        }
+
+        [Fact]
         public void Should_Remove_Derived_Controller_If_Expose_Service()
         {
             // Arrange
@@ -86,6 +133,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
     [ExposeServices(typeof(BaseController))]
     public class ExposeServiceDerivedController : BaseController
+    {
+    }
+
+    [ExposeServices(typeof(BaseController), IncludeSelf = true)]
+    public class ExposeServiceIncludeSelfDerivedController : BaseController
     {
     }
 }
