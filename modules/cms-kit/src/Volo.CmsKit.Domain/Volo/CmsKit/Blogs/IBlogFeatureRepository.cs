@@ -11,7 +11,7 @@ namespace Volo.CmsKit.Blogs
     {
         Task<List<BlogFeature>> GetListAsync(Guid blogId);
 
-        Task<List<BlogFeature>> GetListAsync(Guid blogId, string[] featureNames);
+        Task<List<BlogFeature>> GetListAsync(Guid blogId, List<string> featureNames);
 
         Task<BlogFeature> FindAsync(Guid blogId, string featureName);
     }
