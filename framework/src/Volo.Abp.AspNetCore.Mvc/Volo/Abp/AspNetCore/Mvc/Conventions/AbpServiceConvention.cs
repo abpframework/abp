@@ -90,12 +90,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                 var exposeServicesAttr = ReflectionHelper.GetSingleAttributeOrDefault<ExposeServicesAttribute>(controllerModel.ControllerType);
                 if (exposeServicesAttr.IncludeSelf)
                 {
-                    var existingControllerModels = application.Controllers
+                    var exposedControllerModels = application.Controllers
                         .Where(cm => exposeServicesAttr.ServiceTypes.Contains(cm.ControllerType))
                         .ToArray();
 
-                    controllerModelsToRemove.AddRange(existingControllerModels);
-                    Logger.LogInformation($"Removing the controller{(existingControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(existingControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
+                    controllerModelsToRemove.AddRange(exposedControllerModels);
+                    Logger.LogInformation($"Removing the controller{(exposedControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(exposedControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
                     continue;
                 }
 
