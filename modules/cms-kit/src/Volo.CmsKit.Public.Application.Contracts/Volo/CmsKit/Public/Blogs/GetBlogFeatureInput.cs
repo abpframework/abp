@@ -8,6 +8,6 @@ namespace Volo.CmsKit.Public.Blogs
 {
     public class GetBlogFeatureInput
     {
-        public string[] FeatureNames { get; set; }
+        public List<string> FeatureNames { get; set; }
     }
 }
