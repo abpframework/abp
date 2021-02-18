@@ -29,7 +29,7 @@ namespace Volo.CmsKit.Public.Blogs
                 () => GetFromDatabaseAsync(blogId, featureName),
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1)
+                    SlidingExpiration = TimeSpan.FromMinutes(1)
                 });
         }
 
