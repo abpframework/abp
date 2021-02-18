@@ -9,9 +9,9 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
     [ViewComponent(Name = "CmsDefaultPage")]
     public class DefaultPageViewComponent : AbpViewComponent
     {
-        protected readonly IPageAppService PageAppService;
+        protected readonly IPagePublicAppService PageAppService;
 
-        public DefaultPageViewComponent(IPageAppService pageAppService)
+        public DefaultPageViewComponent(IPagePublicAppService pageAppService)
         {
             PageAppService = pageAppService;
         }

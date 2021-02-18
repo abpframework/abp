@@ -3,7 +3,7 @@ using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Public.Pages
 {
-    public class PagePublicAppService : CmsKitPublicAppServiceBase, IPageAppService
+    public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
     {
         protected readonly IPageRepository PageRepository;
 
