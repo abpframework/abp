@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using JetBrains.Annotations;
+using System;
+using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
-    public class BlogFeatureDto
+    public class BlogFeatureDto : EntityDto<Guid>
     {
-        [Required]
+        [NotNull]
         public string FeatureName { get; set; }
         public bool Enabled { get; set; }
     }

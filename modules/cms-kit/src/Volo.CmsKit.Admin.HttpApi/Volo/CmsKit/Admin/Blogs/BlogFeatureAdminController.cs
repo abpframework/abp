@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [HttpPut]
-        public Task SetAsync(Guid blogId, BlogFeatureDto dto)
+        public Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
         {
             return BlogFeatureAdminAppService.SetAsync(blogId, dto);
         }

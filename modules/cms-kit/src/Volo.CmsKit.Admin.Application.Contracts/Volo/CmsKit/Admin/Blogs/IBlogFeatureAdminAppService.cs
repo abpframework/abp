@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Admin.Blogs
 {
     public interface IBlogFeatureAdminAppService
     {
-        Task SetAsync(Guid blogId, BlogFeatureDto dto);
+        Task SetAsync(Guid blogId, BlogFeatureInputDto dto);
 
         Task<List<BlogFeatureDto>> GetListAsync(Guid blogId);
     }

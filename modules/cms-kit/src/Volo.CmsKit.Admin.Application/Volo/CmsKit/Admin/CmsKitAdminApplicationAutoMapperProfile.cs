@@ -32,6 +32,7 @@ namespace Volo.CmsKit.Admin
             CreateMap<Blog, BlogLookupDto>(MemberList.Destination);
 
             CreateMap<BlogFeature, BlogFeatureDto>();
+            CreateMap<BlogFeatureInputDto, BlogFeature>();
 
             CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
 

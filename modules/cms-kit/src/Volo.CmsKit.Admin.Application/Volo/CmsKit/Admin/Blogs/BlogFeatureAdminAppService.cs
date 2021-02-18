@@ -32,7 +32,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
-        public async Task SetAsync(Guid blogId, BlogFeatureDto dto)
+        public async Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
         {
             var blogFeature = await BlogFeatureRepository.FindAsync(blogId, dto.FeatureName);
             if (blogFeature == null)
