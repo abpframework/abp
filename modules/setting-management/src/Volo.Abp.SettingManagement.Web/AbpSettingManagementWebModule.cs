@@ -34,7 +34,7 @@ namespace Volo.Abp.SettingManagement.Web
 
             Configure<SettingManagementPageOptions>(options =>
             {
-                options.Contributors.Add(new EmailSettingManagementPageContributor());
+                options.Contributors.Add(new EmailSettingPageContributor());
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>
