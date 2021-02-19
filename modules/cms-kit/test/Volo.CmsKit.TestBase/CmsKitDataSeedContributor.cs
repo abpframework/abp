@@ -54,9 +54,13 @@ namespace Volo.CmsKit
             IRatingRepository ratingRepository,
             ICurrentTenant currentTenant,
             IContentRepository contentRepository,
+            IEntityTagManager entityTagManager,
             ITagManager tagManager,
             IEntityTagRepository entityTagRepository,
             IPageRepository pageRepository,
+            IBlogRepository blogRepository,
+            IBlogPostRepository blogPostRepository,
+            IOptions<CmsKitReactionOptions> reactionOptions,
             IOptions<CmsKitTagOptions> tagOptions, 
             IMediaDescriptorRepository mediaDescriptorRepository, 
             IBlobContainer<MediaContainer> mediaBlobContainer)
@@ -75,8 +79,7 @@ namespace Volo.CmsKit
             _pageRepository = pageRepository;
             _blogRepository = blogRepository;
             _blogPostRepository = blogPostRepository;
-            _options = options;
-            _reactionOptions = reactiOnptions;
+            _reactionOptions = reactionOptions;
             _tagOptions = tagOptions;
             _mediaDescriptorRepository = mediaDescriptorRepository;
             _mediaBlobContainer = mediaBlobContainer;
