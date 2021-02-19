@@ -20,10 +20,10 @@ namespace Volo.CmsKit.Public.Pages
         }
 
         [HttpGet]
-        [Route("url/{url}")]
-        public virtual Task<PageDto> FindByUrlAsync(string url)
+        [Route("{slug}")]
+        public virtual Task<PageDto> FindBySlugAsync(string slug)
         {
-            return PageAppService.FindByUrlAsync(url);
+            return PageAppService.FindBySlugAsync(slug);
         }
     }
 }

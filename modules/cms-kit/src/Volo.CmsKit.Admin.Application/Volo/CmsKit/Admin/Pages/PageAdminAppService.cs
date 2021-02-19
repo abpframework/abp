@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
@@ -47,9 +48,9 @@ namespace Volo.CmsKit.Admin.Pages
         [Authorize(CmsKitAdminPermissions.Pages.Create)]
         public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
         {
-            await CheckPageUrlAsync(input.Url);
+            await CheckPageSlugAsync(input.Slug);
 
-            var page = new Page(GuidGenerator.Create(), input.Title, input.Url, input.Description, CurrentTenant?.Id);
+            var page = new Page(GuidGenerator.Create(), input.Title, input.Slug, input.Description, CurrentTenant?.Id);
 
             await PageRepository.InsertAsync(page);
             
@@ -61,13 +62,13 @@ namespace Volo.CmsKit.Admin.Pages
         {
             var page = await PageRepository.GetAsync(id);
 
-            if (page.Url != input.Url)
+            if (page.Slug != input.Slug)
             {
-                await CheckPageUrlAsync(input.Url);
+                await CheckPageSlugAsync(input.Slug);
             }
 
             page.SetTitle(input.Title);
-            page.SetUrl(input.Url);
+            page.SetSlug(input.Slug);
             page.Description = input.Description;
 
             await PageRepository.UpdateAsync(page);
@@ -81,11 +82,11 @@ namespace Volo.CmsKit.Admin.Pages
             await PageRepository.DeleteAsync(id);
         }
 
-        protected virtual async Task CheckPageUrlAsync(string url)
+        protected virtual async Task CheckPageSlugAsync(string slug)
         {
-            if (await PageRepository.ExistsAsync(url))
+            if (await PageRepository.ExistsAsync(slug))
             {
-                throw new PageUrlAlreadyExistException(url);
+                throw new PageSlugAlreadyExistsException(slug);
             }
         }
     }

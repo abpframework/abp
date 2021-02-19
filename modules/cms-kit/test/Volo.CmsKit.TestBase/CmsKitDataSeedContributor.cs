@@ -305,13 +305,13 @@ namespace Volo.CmsKit
 
         private async Task SeedPagesAsync()
         {
-            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Url, _cmsKitTestData.Page_1_Description);
+            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug, _cmsKitTestData.Page_1_Description);
             var page1Content = new Content(_guidGenerator.Create(), nameof(Page), page1.Id.ToString(), _cmsKitTestData.Page_1_Content);
 
             await _pageRepository.InsertAsync(page1);
             await _contentRepository.InsertAsync(page1Content);
 
-            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Url, _cmsKitTestData.Page_2_Description);
+            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Slug, _cmsKitTestData.Page_2_Description);
             var page2Content = new Content(_guidGenerator.Create(), nameof(Page), page2.Id.ToString(), _cmsKitTestData.Page_2_Content);
 
             await _pageRepository.InsertAsync(page2);
