@@ -3,7 +3,7 @@ using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Public.Contents
 {
-    public class ContentPublicAppService : CmsKitAppServiceBase, IContentAppService
+    public class ContentPublicAppService : CmsKitPublicAppServiceBase, IContentPublicAppService
     {
         protected IContentRepository ContentRepository { get; }
 

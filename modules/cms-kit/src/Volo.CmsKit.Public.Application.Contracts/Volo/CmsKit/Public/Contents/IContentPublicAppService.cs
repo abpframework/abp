@@ -3,7 +3,7 @@ using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Public.Contents
 {
-    public interface IContentAppService
+    public interface IContentPublicAppService
     {
         Task<ContentDto> GetAsync(GetContentInput input);
     }
