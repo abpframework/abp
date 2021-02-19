@@ -9,12 +9,12 @@ namespace Volo.CmsKit.Pages
     public class PagePublicAppService_Tests : CmsKitApplicationTestBase
     {
         private readonly CmsKitTestData _data;
-        private readonly IPageAppService _pageAppService;
+        private readonly IPagePublicAppService _pageAppService;
         
         public PagePublicAppService_Tests()
         {
             _data = GetRequiredService<CmsKitTestData>();
-            _pageAppService = GetRequiredService<IPageAppService>();
+            _pageAppService = GetRequiredService<IPagePublicAppService>();
         }
 
         [Fact]
