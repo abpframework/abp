@@ -33,7 +33,7 @@ namespace Volo.Abp.IdentityServer
 
         protected override void AfterAddApplication(IServiceCollection services)
         {
-            services.AddAbpStrictRedirectUriValidator("{0}.api.abp.io:8080/signin-oidc", "{0}.ng.abp.io/index.html");
+            services.AddAbpStrictRedirectUriValidator();
         }
 
         [Fact]

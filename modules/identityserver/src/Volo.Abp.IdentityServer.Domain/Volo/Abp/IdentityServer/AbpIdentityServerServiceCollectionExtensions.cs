@@ -6,13 +6,8 @@ namespace Volo.Abp.IdentityServer
 {
     public static class AbpIdentityServerServiceCollectionExtensions
     {
-        public static void AddAbpStrictRedirectUriValidator(this IServiceCollection services, params string[] domainFormats)
+        public static void AddAbpStrictRedirectUriValidator(this IServiceCollection services)
         {
-            services.Configure<AbpRedirectUriValidatorOptions>(options =>
-            {
-                options.DomainFormats.AddRange(domainFormats);
-            });
-
             services.Replace(ServiceDescriptor.Transient<IRedirectUriValidator, AbpStrictRedirectUriValidator>());
         }
     }
