@@ -1,7 +1,14 @@
-﻿namespace Volo.Abp.IdentityServer
+﻿using System.Collections.Generic;
+
+namespace Volo.Abp.IdentityServer
 {
     public class AbpRedirectUriValidatorOptions
     {
-        public string DomainFormat { get; set; }
+        public List<string> DomainFormats { get; }
+
+        public AbpRedirectUriValidatorOptions()
+        {
+            DomainFormats = new List<string>();
+        }
     }
 }
