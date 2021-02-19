@@ -8,6 +8,6 @@ namespace Volo.CmsKit.Admin.Blogs
     {
         [NotNull]
         public string FeatureName { get; set; }
-        public bool Enabled { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace Volo.CmsKit.Blogs
             var dto = new BlogFeatureInputDto
             {
                 FeatureName = "My.Awesome.Feature",
-                Enabled = true
+                IsEnabled = true
             };
 
             await blogFeatureAdminAppService.SetAsync(testData.Blog_Id, dto);
@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Blogs
 
             feature.ShouldNotBeNull();
             feature.BlogId.ShouldBe(testData.Blog_Id);
-            feature.Enabled.ShouldBe(dto.Enabled);
+            feature.IsEnabled.ShouldBe(dto.IsEnabled);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Volo.CmsKit.Blogs
             var dto = new BlogFeatureInputDto
             {
                 FeatureName = testData.BlogFeature_2_FeatureName,
-                Enabled = !testData.BlogFeature_2_Enabled
+                IsEnabled = !testData.BlogFeature_2_Enabled
             };
 
             await blogFeatureAdminAppService.SetAsync(testData.Blog_Id, dto);
@@ -51,7 +51,7 @@ namespace Volo.CmsKit.Blogs
 
             feature.ShouldNotBeNull();
             feature.BlogId.ShouldBe(testData.Blog_Id);
-            feature.Enabled.ShouldBe(dto.Enabled);
+            feature.IsEnabled.ShouldBe(dto.IsEnabled);
         }
 
         [Fact]
