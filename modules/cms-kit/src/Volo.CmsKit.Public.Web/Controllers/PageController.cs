@@ -14,9 +14,9 @@ namespace Volo.CmsKit.Public.Web.Controllers
     [RequiresGlobalFeature(typeof(PagesFeature))]
     public class PageController : CmsKitPublicControllerBase
     {
-        protected IPageAppService PageAppService { get; }
+        protected IPagePublicAppService PageAppService { get; }
 
-        public PageController(IPageAppService pageAppService)
+        public PageController(IPagePublicAppService pageAppService)
         {
             PageAppService = pageAppService;
         }
