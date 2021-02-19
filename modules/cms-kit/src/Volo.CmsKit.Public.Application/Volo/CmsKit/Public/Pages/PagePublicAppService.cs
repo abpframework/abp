@@ -12,10 +12,10 @@ namespace Volo.CmsKit.Public.Pages
             PageRepository = pageRepository;
         }
 
-        public virtual async Task<PageDto> FindByUrlAsync(string url)
+        public virtual async Task<PageDto> FindBySlugAsync(string slug)
         {
             PageDto pageDto = null;
-            var page = await PageRepository.FindByUrlAsync(url);
+            var page = await PageRepository.FindBySlugAsync(slug);
 
             if (page !=null)
             {

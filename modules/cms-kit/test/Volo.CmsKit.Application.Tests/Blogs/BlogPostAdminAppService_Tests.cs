@@ -114,7 +114,7 @@ namespace Volo.CmsKit.Blogs
         {
             var nonExistingSlug = "any-other-url";
             var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
-                                await blogPostAdminAppService.GetBySlugAsync(nonExistingSlug, cmsKitTestData.Page_1_Url));
+                                await blogPostAdminAppService.GetBySlugAsync(nonExistingSlug, cmsKitTestData.Page_1_Slug));
 
             exception.EntityType.ShouldBe(typeof(Blog));
         }

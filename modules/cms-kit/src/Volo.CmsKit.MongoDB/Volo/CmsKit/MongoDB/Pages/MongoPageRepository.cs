@@ -51,19 +51,19 @@ namespace Volo.CmsKit.MongoDB.Pages
                 .ToListAsync(cancellation);
         }
 
-        public virtual Task<Page> GetByUrlAsync(string url, CancellationToken cancellationToken = default)
+        public virtual Task<Page> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return GetAsync(x => x.Url == url, cancellationToken: GetCancellationToken(cancellationToken));
+            return GetAsync(x => x.Slug == slug, cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public virtual Task<Page> FindByUrlAsync(string url, CancellationToken cancellationToken = default)
+        public virtual Task<Page> FindBySlugAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return FindAsync(x => x.Url == url, cancellationToken: GetCancellationToken(cancellationToken));
+            return FindAsync(x => x.Slug == slug, cancellationToken: GetCancellationToken(cancellationToken));
         }
         
-        public virtual async Task<bool> ExistsAsync(string url, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ExistsAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).AnyAsync(x => x.Url == url, GetCancellationToken(cancellationToken));
+            return await (await GetMongoQueryableAsync(cancellationToken)).AnyAsync(x => x.Slug == slug, GetCancellationToken(cancellationToken));
         }
     }
 }
