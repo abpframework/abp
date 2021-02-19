@@ -1,15 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
-    public class CreateUpdateBlogPostDto
+    public class UpdateBlogPostDto
     {
-        [Required]
-        public Guid BlogId { get; set; }
-
         [Required]
         [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxTitleLength))]
         public string Title { get; set; }
@@ -23,5 +19,6 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxShortDescriptionLength))]
         public string ShortDescription { get; set; }
+
     }
 }

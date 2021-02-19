@@ -6,7 +6,7 @@ namespace Volo.Abp.SettingManagement
     {
         public const string GroupName = "SettingManagement";
 
-        public const string EmailSettingManagement = GroupName + ".EmailSettingManagement";
+        public const string EmailSetting = GroupName + ".EmailSetting";
 
         public static string[] GetAll()
         {
