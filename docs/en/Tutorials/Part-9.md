@@ -843,8 +843,10 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 ````xml
 @page "/authors"
 @using Acme.BookStore.Authors
+@using Acme.BookStore.Localization
 @inherits BookStoreComponentBase
 @inject IAuthorAppService AuthorAppService
+@inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
 <Card>
     <CardHeader>
         <Row>
@@ -917,68 +919,104 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 <Modal @ref="CreateAuthorModal">
     <ModalBackdrop />
     <ModalContent IsCentered="true">
-        <ModalHeader>
-            <ModalTitle>@L["NewAuthor"]</ModalTitle>
-            <CloseButton Clicked="CloseCreateAuthorModal" />
-        </ModalHeader>
-        <ModalBody>
-            <Field>
-                <FieldLabel>@L["Name"]</FieldLabel>
-                <TextEdit @bind-text="@NewAuthor.Name" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["BirthDate"]</FieldLabel>
-                <DateEdit TValue="DateTime" @bind-Date="@NewAuthor.BirthDate" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["ShortBio"]</FieldLabel>
-                <MemoEdit Rows="5" @bind-text="@NewAuthor.ShortBio" />
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary"
-                    Clicked="CloseCreateAuthorModal">
-                @L["Cancel"]
-            </Button>
-            <Button Color="Color.Primary"
-                    Clicked="CreateAuthorAsync">
-                @L["Save"]
-            </Button>
-        </ModalFooter>
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["NewAuthor"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateAuthorModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@NewAuthor" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@NewAuthor.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["BirthDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="@NewAuthor.BirthDate"/>
+                    </Field>
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["ShortBio"]</FieldLabel>
+                            <MemoEdit Rows="5" @bind-Text="@NewAuthor.ShortBio">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseCreateAuthorModal">
+                    @L["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="CreateAuthorAsync">
+                    @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
     </ModalContent>
 </Modal>
 
 <Modal @ref="EditAuthorModal">
     <ModalBackdrop />
     <ModalContent IsCentered="true">
-        <ModalHeader>
-            <ModalTitle>@EditingAuthor.Name</ModalTitle>
-            <CloseButton Clicked="CloseEditAuthorModal" />
-        </ModalHeader>
-        <ModalBody>
-            <Field>
-                <FieldLabel>@L["Name"]</FieldLabel>
-                <TextEdit @bind-text="@EditingAuthor.Name" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["BirthDate"]</FieldLabel>
-                <DateEdit TValue="DateTime" @bind-Date="@EditingAuthor.BirthDate" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["ShortBio"]</FieldLabel>
-                <MemoEdit Rows="5" @bind-text="@EditingAuthor.ShortBio" />
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary"
-                    Clicked="CloseEditAuthorModal">
-                @L["Cancel"]
-            </Button>
-            <Button Color="Color.Primary"
-                    Clicked="UpdateAuthorAsync">
-                @L["Save"]
-            </Button>
-        </ModalFooter>
+        <Form>
+            <ModalHeader>
+                        <ModalTitle>@EditingAuthor.Name</ModalTitle>
+                        <CloseButton Clicked="CloseEditAuthorModal" />
+                    </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@EditingAuthor" ValidateOnLoad="false">
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Name"]</FieldLabel>
+                            <TextEdit @bind-Text="@EditingAuthor.Name">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>@L["BirthDate"]</FieldLabel>
+                        <DateEdit TValue="DateTime" @bind-Date="@EditingAuthor.BirthDate"/>
+                    </Field>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>@L["ShortBio"]</FieldLabel>
+                            <MemoEdit Rows="5" @bind-Text="@EditingAuthor.ShortBio">
+                                <Feedback>
+                                    <ValidationError/>
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary"
+                        Clicked="CloseEditAuthorModal">
+                    @L["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Type="@ButtonType.Submit"
+                        PreventDefaultOnSubmit="true"
+                        Clicked="UpdateAuthorAsync">
+                    @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
     </ModalContent>
 </Modal>
 ````
@@ -1025,6 +1063,10 @@ namespace Acme.BookStore.Blazor.Pages
         private Modal CreateAuthorModal { get; set; }
         private Modal EditAuthorModal { get; set; }
 
+        private Validations CreateValidationsRef;
+        
+        private Validations EditValidationsRef;
+        
         public Authors()
         {
             NewAuthor = new CreateAuthorDto();
@@ -1079,6 +1121,8 @@ namespace Acme.BookStore.Blazor.Pages
 
         private void OpenCreateAuthorModal()
         {
+            CreateValidationsRef.ClearAll();
+            
             NewAuthor = new CreateAuthorDto();
             CreateAuthorModal.Show();
         }
@@ -1090,6 +1134,8 @@ namespace Acme.BookStore.Blazor.Pages
 
         private void OpenEditAuthorModal(AuthorDto author)
         {
+            EditValidationsRef.ClearAll();
+            
             EditingAuthorId = author.Id;
             EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
             EditAuthorModal.Show();
@@ -1114,16 +1160,22 @@ namespace Acme.BookStore.Blazor.Pages
 
         private async Task CreateAuthorAsync()
         {
-            await AuthorAppService.CreateAsync(NewAuthor);
-            await GetAuthorsAsync();
-            CreateAuthorModal.Hide();
+            if (CreateValidationsRef.ValidateAll())
+            {
+                await AuthorAppService.CreateAsync(NewAuthor);
+                await GetAuthorsAsync();
+                CreateAuthorModal.Hide();
+            }
         }
 
         private async Task UpdateAuthorAsync()
         {
-            await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
-            await GetAuthorsAsync();
-            EditAuthorModal.Hide();
+            if (EditValidationsRef.ValidateAll())
+            {
+                await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
+                await GetAuthorsAsync();
+                EditAuthorModal.Hide();
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Volo.CmsKit.Contents
         {
         }
 
-        public Task<Content> GetAsync(
+        public virtual Task<Content> GetAsync(
             string entityType,
             string entityId,
             Guid? tenantId = null,
@@ -29,7 +29,7 @@ namespace Volo.CmsKit.Contents
             );
         }
         
-        public Task<Content> FindAsync(
+        public virtual Task<Content> FindAsync(
             string entityType,
             string entityId,
             Guid? tenantId = null,
@@ -43,7 +43,7 @@ namespace Volo.CmsKit.Contents
                 );
         }
 
-        public Task DeleteAsync(
+        public virtual Task DeleteAsync(
             string entityType,
             string entityId,
             Guid? tenantId = null,
@@ -56,7 +56,7 @@ namespace Volo.CmsKit.Contents
                         cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> ExistsAsync(
+        public virtual async Task<bool> ExistsAsync(
             [NotNull] string entityType,
             [NotNull] string entityId,
             Guid? tenantId = null,

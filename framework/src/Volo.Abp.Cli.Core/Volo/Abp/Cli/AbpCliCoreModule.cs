@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Domain;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Json;
@@ -18,6 +20,9 @@ namespace Volo.Abp.Cli
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddHttpClient(CliConsts.HttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(() => new CliHttpClientHandler());
+
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             Configure<AbpCliOptions>(options =>

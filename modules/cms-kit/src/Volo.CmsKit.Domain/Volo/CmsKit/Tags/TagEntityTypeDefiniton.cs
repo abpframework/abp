@@ -1,11 +1,12 @@
 ﻿using JetBrains.Annotations;
+using System;
 using Volo.Abp;
 using Volo.Abp.Localization;
 using Volo.CmsKit.Domain.Volo.CmsKit;
 
 namespace Volo.CmsKit.Tags
 {
-    public class TagEntityTypeDefiniton : PolicySpecifiedDefinition
+    public class TagEntityTypeDefiniton : PolicySpecifiedDefinition, IEquatable<TagEntityTypeDefiniton>
     {
         public string EntityType { get; }
 
@@ -24,8 +25,12 @@ namespace Volo.CmsKit.Tags
             [CanBeNull] string deletePolicy = null) : base(createPolicy, updatePolicy, deletePolicy)
         {
             EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
-
             DisplayName = displayName;
+        }
+
+        public bool Equals(TagEntityTypeDefiniton other)
+        {
+            return EntityType == other?.EntityType;
         }
     }
 }

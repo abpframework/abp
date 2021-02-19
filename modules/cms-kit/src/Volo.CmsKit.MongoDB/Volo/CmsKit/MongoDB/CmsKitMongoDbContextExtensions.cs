@@ -3,6 +3,8 @@ using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.Blogs;
+using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
@@ -63,6 +65,21 @@ namespace Volo.CmsKit.MongoDB
             builder.Entity<Page>(x =>
             {
                 x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Pages";
+            });
+
+            builder.Entity<Blog>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Blogs";
+            });
+
+            builder.Entity<BlogPost>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogPosts";
+            });
+            
+            builder.Entity<MediaDescriptor>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "MediaDescriptors";
             });
         }
     }

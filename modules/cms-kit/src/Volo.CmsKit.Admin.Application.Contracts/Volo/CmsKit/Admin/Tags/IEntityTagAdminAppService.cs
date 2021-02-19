@@ -7,5 +7,7 @@ namespace Volo.CmsKit.Admin.Tags
         Task AddTagToEntityAsync(EntityTagCreateDto input);
 
         Task RemoveTagFromEntityAsync(EntityTagRemoveDto input);
+
+        Task SetEntityTagsAsync(EntityTagSetDto input);
     }
 }

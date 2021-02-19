@@ -70,9 +70,7 @@ export class CurrentUserComponent {
     this.authService.initLogin();
   }
 
-  logout() {
-    this.authService.logout().subscribe(() => {
-      this.router.navigate(['/'], { state: { redirectUrl: this.router.url } });
-    });
+ logout() {
+    this.authService.logout().subscribe();
   }
 }

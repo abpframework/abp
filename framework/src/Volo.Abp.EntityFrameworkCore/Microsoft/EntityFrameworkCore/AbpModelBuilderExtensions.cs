@@ -1,10 +1,72 @@
 ﻿using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.MultiTenancy;
 
 namespace Microsoft.EntityFrameworkCore
 {
     public static class AbpModelBuilderExtensions
     {
         private const string ModelDatabaseProviderAnnotationKey = "_Abp_DatabaseProvider";
+        private const string ModelMultiTenancySideAnnotationKey = "_Abp_MultiTenancySide";
+
+        #region MultiTenancySide
+
+        public static void SetMultiTenancySide(
+            this ModelBuilder modelBuilder,
+            MultiTenancySides side)
+        {
+            modelBuilder.Model.SetAnnotation(ModelMultiTenancySideAnnotationKey, side);
+        }
+
+        public static MultiTenancySides GetMultiTenancySide(this ModelBuilder modelBuilder)
+        {
+            var value = modelBuilder.Model[ModelMultiTenancySideAnnotationKey];
+            if (value == null)
+            {
+                return MultiTenancySides.Both;
+            }
+
+            return (MultiTenancySides) value;
+        }
+
+        /// <summary>
+        /// Returns true if this is a database schema that is used by the host
+        /// but can also be shared with the tenants.
+        /// </summary>
+        public static bool IsHostDatabase(this ModelBuilder modelBuilder)
+        {
+            return modelBuilder.GetMultiTenancySide().HasFlag(MultiTenancySides.Host);
+        }
+
+        /// <summary>
+        /// Returns true if this is a database schema that is used by the tenants
+        /// but can also be shared with the host.
+        /// </summary>
+        public static bool IsTenantDatabase(this ModelBuilder modelBuilder)
+        {
+            return modelBuilder.GetMultiTenancySide().HasFlag(MultiTenancySides.Tenant);
+        }
+
+        /// <summary>
+        /// Returns true if this is a database schema that is only used by the host
+        /// and should not contain tenant-only tables.
+        /// </summary>
+        public static bool IsHostOnlyDatabase(this ModelBuilder modelBuilder)
+        {
+            return modelBuilder.GetMultiTenancySide() == MultiTenancySides.Host;
+        }
+
+        /// <summary>
+        /// Returns true if this is a database schema that is only used by tenants.
+        /// and should not contain host-only tables.
+        /// </summary>
+        public static bool IsTenantOnlyDatabase(this ModelBuilder modelBuilder)
+        {
+            return modelBuilder.GetMultiTenancySide() == MultiTenancySides.Tenant;
+        }
+
+        #endregion
+
+        #region DatabaseProvider
 
         public static void SetDatabaseProvider(
             this ModelBuilder modelBuilder,
@@ -61,7 +123,7 @@ namespace Microsoft.EntityFrameworkCore
         {
             modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.InMemory);
         }
-        
+
         public static bool IsUsingInMemory(
             this ModelBuilder modelBuilder)
         {
@@ -73,7 +135,7 @@ namespace Microsoft.EntityFrameworkCore
         {
             modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.Cosmos);
         }
-        
+
         public static bool IsUsingCosmos(
             this ModelBuilder modelBuilder)
         {
@@ -85,11 +147,13 @@ namespace Microsoft.EntityFrameworkCore
         {
             modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.Firebird);
         }
-        
+
         public static bool IsUsingFirebird(
             this ModelBuilder modelBuilder)
         {
             return modelBuilder.GetDatabaseProvider() == EfCoreDatabaseProvider.Firebird;
         }
+
+        #endregion
     }
 }

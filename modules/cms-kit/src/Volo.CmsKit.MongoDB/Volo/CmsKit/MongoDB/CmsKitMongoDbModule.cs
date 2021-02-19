@@ -2,10 +2,14 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 using Volo.Abp.Users.MongoDB;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Contents;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.MongoDB.Blogs;
 using Volo.CmsKit.MongoDB.Comments;
 using Volo.CmsKit.MongoDB.Contents;
+using Volo.CmsKit.MongoDB.MediaDescriptors;
 using Volo.CmsKit.MongoDB.Pages;
 using Volo.CmsKit.MongoDB.Ratings;
 using Volo.CmsKit.MongoDB.Reactions;
@@ -38,6 +42,9 @@ namespace Volo.CmsKit.MongoDB
                 options.AddRepository<Tag, MongoTagRepository>();
                 options.AddRepository<EntityTag, MongoEntityTagRepository>();
                 options.AddRepository<Page, MongoPageRepository>();
+                options.AddRepository<Blog, MongoBlogRepository>();
+                options.AddRepository<BlogPost, MongoBlogPostRepository>();
+                options.AddRepository<MediaDescriptor, MongoMediaDescriptorRepository>();
             });
         }
     }

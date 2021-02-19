@@ -1,52 +1,80 @@
-﻿using System;
+﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
-using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Tags;
 
-namespace Volo.CmsKit.Admin.Application.Volo.CmsKit.Admin.Tags
+namespace Volo.CmsKit.Admin.Tags
 {
     public class EntityTagAdminAppService : CmsKitAdminAppServiceBase, IEntityTagAdminAppService
     {
-        protected ITagDefinitionStore _tagDefinitionStore;
-        protected IEntityTagManager _entityTagManager;
-        protected ITagManager _tagManager;
+        protected ITagDefinitionStore TagDefinitionStore { get; }
+        protected IEntityTagManager EntityTagManager { get; }
+        protected ITagManager TagManager { get; }
+        protected ITagRepository TagRepository { get; }
+        protected IEntityTagRepository EntityTagRepository { get; }
 
         public EntityTagAdminAppService(
             ITagDefinitionStore tagDefinitionStore,
             IEntityTagManager entityTagManager,
-            ITagManager tagManager)
+            ITagManager tagManager,
+            ITagRepository tagRepository,
+            IEntityTagRepository entityTagRepository)
         {
-            _tagDefinitionStore = tagDefinitionStore;
-            _entityTagManager = entityTagManager;
-            _tagManager = tagManager;
+            TagDefinitionStore = tagDefinitionStore;
+            EntityTagManager = entityTagManager;
+            TagManager = tagManager;
+            TagRepository = tagRepository;
+            EntityTagRepository = entityTagRepository;
         }
 
-        public async Task AddTagToEntityAsync(EntityTagCreateDto input)
+        public virtual async Task AddTagToEntityAsync(EntityTagCreateDto input)
         {
-            var definition = await _tagDefinitionStore.GetTagEntityTypeDefinitionsAsync(input.EntityType);
+            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionsAsync(input.EntityType);
 
             await CheckPolicyAsync(definition.CreatePolicy);
 
-            var tag = await _tagManager.GetOrAddAsync(input.EntityType, input.TagName, CurrentTenant?.Id);
+            var tag = await TagManager.GetOrAddAsync(input.EntityType, input.TagName, CurrentTenant?.Id);
 
-            await _entityTagManager.AddTagToEntityAsync(
+            await EntityTagManager.AddTagToEntityAsync(
                 tag.Id,
                 input.EntityType,
                 input.EntityId,
                 CurrentTenant?.Id);
         }
 
-        public async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
+        public virtual async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
         {
-            var definition = await _tagDefinitionStore.GetTagEntityTypeDefinitionsAsync(input.EntityType);
+            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionsAsync(input.EntityType);
 
             await CheckPolicyAsync(definition.DeletePolicy);
 
-            await _entityTagManager.RemoveTagFromEntityAsync(
+            await EntityTagManager.RemoveTagFromEntityAsync(
                 input.TagId,
                 input.EntityType,
                 input.EntityId,
                 CurrentTenant?.Id);
+        }
+
+        public virtual async Task SetEntityTagsAsync(EntityTagSetDto input)
+        {
+            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionsAsync(input.EntityType);
+
+            await CheckPolicyAsync(definition.UpdatePolicy);
+
+            var existingTags =
+                await TagRepository.GetAllRelatedTagsAsync(input.EntityType, input.EntityId, CurrentTenant?.Id);
+
+            var deletedTags = existingTags.Where(x => !input.Tags.Contains(x.Name)).ToList();
+            var addedTags = input.Tags.Where(x => !existingTags.Any(a => a.Name == x));
+
+            await EntityTagRepository.DeleteManyAsync(deletedTags.Select(s => s.Id).ToArray());
+
+            foreach (var addedTag in addedTags)
+            {
+                var tag = await TagManager.GetOrAddAsync(input.EntityType, addedTag, CurrentTenant?.Id);
+
+                await EntityTagManager.AddTagToEntityAsync(tag.Id, input.EntityType, input.EntityId, CurrentTenant?.Id);
+            }
         }
     }
 }

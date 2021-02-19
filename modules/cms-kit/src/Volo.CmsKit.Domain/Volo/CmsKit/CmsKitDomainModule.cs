@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Volo.Abp.BlobStoring;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Domain;
@@ -17,7 +18,8 @@ namespace Volo.CmsKit
     [DependsOn(
         typeof(CmsKitDomainSharedModule),
         typeof(AbpUsersDomainModule),
-        typeof(AbpDddDomainModule)
+        typeof(AbpDddDomainModule),
+        typeof(AbpBlobStoringModule)
     )]
     public class CmsKitDomainModule : AbpModule
     {

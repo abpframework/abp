@@ -1,5 +1,7 @@
 ﻿using JetBrains.Annotations;
+using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
@@ -12,6 +14,13 @@ namespace Volo.CmsKit.MongoDB.Tags
     {
         public MongoEntityTagRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
+        }
+
+        public async Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default)
+        {
+            var collection = await GetCollectionAsync();
+
+            await collection.DeleteManyAsync(Builders<EntityTag>.Filter.In(x => x.TagId, tagIds));
         }
 
         public Task<EntityTag> FindAsync(

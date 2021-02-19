@@ -17,13 +17,14 @@ namespace Volo.CmsKit.Pages
         {
         }
 
-        public virtual async Task<int> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        public virtual async Task<int> GetCountAsync(string filter = null,
+            CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).WhereIf(
-                    !filter.IsNullOrWhiteSpace(), 
-                    x =>
-                            x.Title.Contains(filter)
-                        ).CountAsync(GetCancellationToken(cancellationToken));
+                !filter.IsNullOrWhiteSpace(),
+                x =>
+                    x.Title.Contains(filter)
+            ).CountAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Page>> GetListAsync(
@@ -34,27 +35,27 @@ namespace Volo.CmsKit.Pages
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).WhereIf(
-                            !filter.IsNullOrWhiteSpace(), 
-                            x =>
-                                x.Title.Contains(filter))
-                        .OrderBy(sorting ?? nameof(Page.Title))
-                        .PageBy(skipCount, maxResultCount)
-                        .ToListAsync(GetCancellationToken(cancellationToken));
+                    !filter.IsNullOrWhiteSpace(),
+                    x =>
+                        x.Title.Contains(filter))
+                .OrderBy(sorting ?? nameof(Page.Title))
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual Task<Page> GetByUrlAsync(string url, CancellationToken cancellationToken = default)
+        public virtual Task<Page> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return GetAsync(x => x.Url == url, cancellationToken: GetCancellationToken(cancellationToken));
+            return GetAsync(x => x.Slug == slug, cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public virtual Task<Page> FindByUrlAsync(string url, CancellationToken cancellationToken = default)
+        public virtual Task<Page> FindBySlugAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return FindAsync(x => x.Url == url, cancellationToken: GetCancellationToken(cancellationToken));
+            return FindAsync(x => x.Slug == slug, cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> ExistsAsync(string url, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ExistsAsync(string slug, CancellationToken cancellationToken = default)
         {
-            return await (await GetDbSetAsync()).AnyAsync(x => x.Url == url, GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync()).AnyAsync(x => x.Slug == slug, GetCancellationToken(cancellationToken));
         }
     }
 }
