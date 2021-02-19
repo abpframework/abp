@@ -12,7 +12,7 @@ namespace Volo.CmsKit.Pages
 
         [NotNull] public virtual string Title { get; protected set; }
 
-        [NotNull] public virtual string Url { get; protected set; }
+        [NotNull] public virtual string Slug { get; protected set; }
 
         [CanBeNull] public virtual string Description { get; set; }
 
@@ -20,11 +20,11 @@ namespace Volo.CmsKit.Pages
         {
         }
 
-        public Page(Guid id, [NotNull] string title, [NotNull] string url, [CanBeNull] string description = null,
+        public Page(Guid id, [NotNull] string title, [NotNull] string slug, [CanBeNull] string description = null,
             Guid? tenantId = null) : base(id)
         {
             Title = Check.NotNullOrEmpty(title, nameof(title), PageConsts.MaxTitleLength);
-            Url = Check.NotNullOrEmpty(url, nameof(url), PageConsts.MaxUrlLength);
+            Slug = Check.NotNullOrEmpty(slug, nameof(slug), PageConsts.MaxSlugLength);
             Description = Check.Length(description, nameof(description), PageConsts.MaxDescriptionLength);
 
             TenantId = tenantId;
@@ -35,9 +35,9 @@ namespace Volo.CmsKit.Pages
             Title = Check.NotNullOrEmpty(title, nameof(title), PageConsts.MaxTitleLength);
         }
 
-        public virtual void SetUrl(string url)
+        public virtual void SetSlug(string slug)
         {
-            Url = Check.NotNullOrEmpty(url, nameof(url), PageConsts.MaxUrlLength);
+            Slug = Check.NotNullOrEmpty(slug, nameof(slug), PageConsts.MaxSlugLength);
         }
     }
 }

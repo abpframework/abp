@@ -9,11 +9,11 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
     [ViewComponent(Name = "CmsDefaultPage")]
     public class DefaultPageViewComponent : AbpViewComponent
     {
-        protected readonly IPagePublicAppService PageAppService;
+        protected IPagePublicAppService PagePublicAppService { get; }
 
-        public DefaultPageViewComponent(IPagePublicAppService pageAppService)
+        public DefaultPageViewComponent(IPagePublicAppService pagePublicAppService)
         {
-            PageAppService = pageAppService;
+            PagePublicAppService = pagePublicAppService;
         }
         
         public virtual async Task<IViewComponentResult> InvokeAsync(Guid pageId, string title, string description)
