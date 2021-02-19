@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Admin.Pages
     [Authorize(CmsKitAdminPermissions.Pages.Default)]
     public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
     {
-        protected readonly IPageRepository PageRepository;
+        protected IPageRepository PageRepository { get; }
         
         public PageAdminAppService(IPageRepository pageRepository)
         {
@@ -66,8 +66,8 @@ namespace Volo.CmsKit.Admin.Pages
                 await CheckPageUrlAsync(input.Url);
             }
 
-            page.Title = input.Title;
-            page.Url = input.Url;
+            page.SetTitle(input.Title);
+            page.SetUrl(input.Url);
             page.Description = input.Description;
 
             await PageRepository.UpdateAsync(page);

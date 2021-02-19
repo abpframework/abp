@@ -5,7 +5,7 @@ namespace Volo.CmsKit.Public.Pages
 {
     public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppService
     {
-        protected readonly IPageRepository PageRepository;
+        protected IPageRepository PageRepository { get; }
 
         public PagePublicAppService(IPageRepository pageRepository)
         {
@@ -14,14 +14,15 @@ namespace Volo.CmsKit.Public.Pages
 
         public virtual async Task<PageDto> FindByUrlAsync(string url)
         {
+            PageDto pageDto = null;
             var page = await PageRepository.FindByUrlAsync(url);
 
-            if (page == null)
+            if (page !=null)
             {
-                return null;
+                pageDto = ObjectMapper.Map<Page, PageDto>(page);
             }
             
-            return ObjectMapper.Map<Page, PageDto>(page);
+            return pageDto;
         }
     }
 }
