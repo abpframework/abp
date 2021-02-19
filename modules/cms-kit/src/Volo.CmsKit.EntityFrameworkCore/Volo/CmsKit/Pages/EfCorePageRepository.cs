@@ -17,13 +17,14 @@ namespace Volo.CmsKit.Pages
         {
         }
 
-        public virtual async Task<int> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        public virtual async Task<int> GetCountAsync(string filter = null,
+            CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).WhereIf(
-                    !filter.IsNullOrWhiteSpace(), 
-                    x =>
-                            x.Title.Contains(filter)
-                        ).CountAsync(GetCancellationToken(cancellationToken));
+                !filter.IsNullOrWhiteSpace(),
+                x =>
+                    x.Title.Contains(filter)
+            ).CountAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Page>> GetListAsync(
@@ -34,12 +35,12 @@ namespace Volo.CmsKit.Pages
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).WhereIf(
-                            !filter.IsNullOrWhiteSpace(), 
-                            x =>
-                                x.Title.Contains(filter))
-                        .OrderBy(sorting ?? nameof(Page.Title))
-                        .PageBy(skipCount, maxResultCount)
-                        .ToListAsync(GetCancellationToken(cancellationToken));
+                    !filter.IsNullOrWhiteSpace(),
+                    x =>
+                        x.Title.Contains(filter))
+                .OrderBy(sorting ?? nameof(Page.Title))
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual Task<Page> GetByUrlAsync(string url, CancellationToken cancellationToken = default)

@@ -56,7 +56,7 @@ namespace Volo.CmsKit.Admin.Contents
             return MapToGetOutputDto(entity);
         }
 
-        public async Task<ContentDto> GetAsync(
+        public virtual async Task<ContentDto> GetAsync(
             [NotNull] string entityType,
             [NotNull] string entityId)
         {

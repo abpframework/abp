@@ -90,5 +90,13 @@ namespace Volo.CmsKit
         public string BlogPost_2_Title => "How to use CmsKit";
 
         public string BlogPost_2_Slug => "how-to-use-cms-kit";
+
+        public Guid Media_1_Id { get; } = Guid.NewGuid();
+        
+        public string Media_1_Content = "Hi, this is text file";
+
+        public string Media_1_Name = "hello.txt";
+
+        public string Media_1_ContentType = "text/plain";
     }
 }
