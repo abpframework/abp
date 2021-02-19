@@ -72,7 +72,7 @@ namespace Volo.CmsKit.Admin.Tags
                             x.EntityType.ToLower().Contains(input.Filter));
         }
 
-        public async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
+        public virtual async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
         {
             var definitions = await TagManager.GetTagDefinitionsAsync();
 
