@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
@@ -21,6 +22,9 @@ namespace Volo.CmsKit.Contents
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(entityId, nameof(entityId));
+            
             return GetAsync(x =>
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
@@ -35,6 +39,9 @@ namespace Volo.CmsKit.Contents
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(entityId, nameof(entityId));
+            
             return FindAsync(x =>
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
@@ -49,6 +56,9 @@ namespace Volo.CmsKit.Contents
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(entityId, nameof(entityId));
+            
             return DeleteAsync(x =>
                         x.EntityType == entityType &&
                         x.EntityId == entityId &&
@@ -62,6 +72,9 @@ namespace Volo.CmsKit.Contents
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(entityId, nameof(entityId));
+            
             var dbSet = await GetDbSetAsync();
             return await dbSet.AnyAsync(x =>
                         x.EntityType == entityType &&
