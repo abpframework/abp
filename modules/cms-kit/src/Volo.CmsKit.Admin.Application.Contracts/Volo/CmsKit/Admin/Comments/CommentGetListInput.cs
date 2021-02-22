@@ -13,7 +13,7 @@ namespace Volo.CmsKit.Admin.Comments
 
         public Guid? RepliedCommentId { get; set; }
 
-        public Guid? CreatorId { get; set; }
+        public string AuthorUserName { get; set; }
 
         public DateTime? CreationStartDate { get; set; }
         

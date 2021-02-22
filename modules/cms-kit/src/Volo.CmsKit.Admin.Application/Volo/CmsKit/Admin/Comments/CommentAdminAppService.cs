@@ -30,7 +30,7 @@ namespace Volo.CmsKit.Admin.Comments
                 input.EntityType,
                 input.EntityId,
                 input.RepliedCommentId,
-                input.CreatorId,
+                input.AuthorUserName,
                 input.CreationStartDate,
                 input.CreationEndDate);
 
@@ -39,7 +39,7 @@ namespace Volo.CmsKit.Admin.Comments
                 input.EntityType,
                 input.EntityId,
                 input.RepliedCommentId,
-                input.CreatorId,
+                input.AuthorUserName,
                 input.CreationStartDate,
                 input.CreationEndDate,
                 input.Sorting,

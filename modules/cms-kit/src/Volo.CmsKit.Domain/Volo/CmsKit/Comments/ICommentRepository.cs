@@ -16,7 +16,7 @@ namespace Volo.CmsKit.Comments
             string entityType = null,
             string entityId = null,
             Guid? repliedCommentId = null,
-            Guid? creatorId = null,
+            string authorUsername = null,
             DateTime? creationStartDate = null,
             DateTime? creationEndDate = null,
             string sorting = null,
@@ -30,7 +30,7 @@ namespace Volo.CmsKit.Comments
             string entityType = null,
             string entityId = null,
             Guid? repliedCommentId = null,
-            Guid? creatorId = null,
+            string authorUsername = null,
             DateTime? creationStartDate = null,
             DateTime? creationEndDate = null,
             CancellationToken cancellationToken = default

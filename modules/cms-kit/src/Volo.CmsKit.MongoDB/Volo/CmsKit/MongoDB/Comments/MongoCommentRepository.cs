@@ -47,7 +47,7 @@ namespace Volo.CmsKit.MongoDB.Comments
             string entityType = null, 
             string entityId = null, 
             Guid? repliedCommentId = null,
-            Guid? creatorId = null, 
+            string authorUsername = null,
             DateTime? creationStartDate = null, 
             DateTime? creationEndDate = null, 
             string sorting = null,
@@ -61,7 +61,7 @@ namespace Volo.CmsKit.MongoDB.Comments
                 entityType, 
                 entityId, 
                 repliedCommentId, 
-                creatorId, 
+                authorUsername, 
                 creationStartDate, 
                 creationEndDate, 
                 cancellationToken);
@@ -96,7 +96,7 @@ namespace Volo.CmsKit.MongoDB.Comments
             string entityType = null, 
             string entityId = null,
             Guid? repliedCommentId = null, 
-            Guid? creatorId = null, 
+            string authorUsername = null,
             DateTime? creationStartDate = null,
             DateTime? creationEndDate = null, 
             CancellationToken cancellationToken = default
@@ -107,7 +107,7 @@ namespace Volo.CmsKit.MongoDB.Comments
                 entityType, 
                 entityId, 
                 repliedCommentId, 
-                creatorId, 
+                authorUsername, 
                 creationStartDate, 
                 creationEndDate, 
                 cancellationToken);
@@ -174,18 +174,29 @@ namespace Volo.CmsKit.MongoDB.Comments
             string entityType = null, 
             string entityId = null,
             Guid? repliedCommentId = null, 
-            Guid? creatorId = null, 
+            string authorUsername = null,
             DateTime? creationStartDate = null,
             DateTime? creationEndDate = null,
             CancellationToken cancellationToken = default
         )
         {
-            return (await GetMongoQueryableAsync(cancellationToken))
-                .WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
+            var queryable = await GetMongoQueryableAsync(cancellationToken);
+            
+            if (string.IsNullOrEmpty(authorUsername))
+            {
+                var authorQuerable = (await GetDbContextAsync(cancellationToken)).Collection<CmsUser>().AsQueryable();
+                
+                var author = await authorQuerable.FirstOrDefaultAsync(x => x.UserName == authorUsername, cancellationToken: cancellationToken);
+
+                var authorId = author?.Id ?? Guid.Empty;
+
+                queryable.Where(x => x.CreatorId == authorId);
+            }
+            
+            return queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
                 .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
                 .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.EntityId == entityId)
                 .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
-                .WhereIf(creatorId.HasValue, c => c.CreatorId == creatorId)
                 .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
                 .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
         }

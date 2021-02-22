@@ -48,7 +48,7 @@ namespace Volo.CmsKit.Comments
             string entityType = null, 
             string entityId = null, 
             Guid? repliedCommentId = null,
-            Guid? creatorId = null, 
+            string authorUsername = null,
             DateTime? creationStartDate = null, 
             DateTime? creationEndDate = null, 
             string sorting = null,
@@ -61,8 +61,8 @@ namespace Volo.CmsKit.Comments
                 filter, 
                 entityType, 
                 entityId, 
-                repliedCommentId, 
-                creatorId, 
+                repliedCommentId,
+                authorUsername,
                 creationStartDate, 
                 creationEndDate);
 
@@ -86,7 +86,7 @@ namespace Volo.CmsKit.Comments
             string entityType = null, 
             string entityId = null,
             Guid? repliedCommentId = null, 
-            Guid? creatorId = null, 
+            string authorUsername = null,
             DateTime? creationStartDate = null,
             DateTime? creationEndDate = null, 
             CancellationToken cancellationToken = default
@@ -97,7 +97,7 @@ namespace Volo.CmsKit.Comments
                 entityType, 
                 entityId, 
                 repliedCommentId, 
-                creatorId, 
+                authorUsername,
                 creationStartDate, 
                 creationEndDate);
 
@@ -149,17 +149,28 @@ namespace Volo.CmsKit.Comments
             string entityType = null, 
             string entityId = null,
             Guid? repliedCommentId = null, 
-            Guid? creatorId = null, 
+            string authorUsername = null,
             DateTime? creationStartDate = null,
             DateTime? creationEndDate = null
             )
         {
-            return (await GetDbSetAsync())
+            var dbSet = await GetDbSetAsync();
+            var queryable = dbSet.AsQueryable();
+            
+            if (string.IsNullOrEmpty(authorUsername))
+            {
+                var author = await (await GetDbContextAsync()).User.FirstOrDefaultAsync(x => x.UserName == authorUsername);
+
+                var authorId = author?.Id ?? Guid.Empty;
+
+                queryable.Where(x => x.CreatorId == authorId);
+            }
+            
+            return (dbSet)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
                 .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType.Contains(entityType))
                 .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.EntityId.Contains(entityId))
                 .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
-                .WhereIf(creatorId.HasValue, c => c.CreatorId == creatorId)
                 .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
                 .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
         }
