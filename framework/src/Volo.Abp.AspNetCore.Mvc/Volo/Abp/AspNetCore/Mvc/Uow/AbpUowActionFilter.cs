@@ -51,7 +51,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             }
 
             //Begin a new, independent unit of work
-            using (var uow = unitOfWorkManager.Begin(options))
+            using (var uow = unitOfWorkManager.Begin(options, requiresNew: true))
             {
                 var result = await next();
                 if (Succeed(result))
