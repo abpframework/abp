@@ -11,5 +11,7 @@ namespace Volo.CmsKit.Blogs
     public interface IBlogFeatureManager : IDomainService
     {
         Task<List<BlogFeature>> GetListAsync(Guid blogId);
+
+        Task SetAsync(Guid blogId, string featureName, bool isEnabled);
     }
 }

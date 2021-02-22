@@ -41,26 +41,9 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
-        public async Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
+        public Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
         {
-            var blogFeature = await BlogFeatureRepository.FindAsync(blogId, dto.FeatureName);
-            if (blogFeature == null)
-            {
-                var newBlogFeature = new BlogFeature(blogId, dto.FeatureName, dto.IsEnabled);
-                await BlogFeatureRepository.InsertAsync(newBlogFeature);
-            }
-            else
-            {
-                blogFeature.IsEnabled = dto.IsEnabled;
-                await BlogFeatureRepository.UpdateAsync(blogFeature);
-            }
-
-            await EventBus.PublishAsync(new BlogFeatureChangedEto
-            {
-                BlogId = blogId,
-                FeatureName = dto.FeatureName,
-                IsEnabled = dto.IsEnabled
-            });
+            return BlogFeatureManager.SetAsync(blogId, dto.FeatureName, dto.IsEnabled);
         }
     }
 }
