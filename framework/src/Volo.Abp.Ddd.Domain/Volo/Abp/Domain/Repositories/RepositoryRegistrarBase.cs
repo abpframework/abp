@@ -20,7 +20,7 @@ namespace Volo.Abp.Domain.Repositories
         {
             foreach (var customRepository in Options.CustomRepositories)
             {
-                Options.Services.AddDefaultRepository(customRepository.Key, customRepository.Value);
+                Options.Services.AddDefaultRepository(customRepository.Key, customRepository.Value, replaceExisting: true);
             }
 
             if (Options.RegisterDefaultRepositories)

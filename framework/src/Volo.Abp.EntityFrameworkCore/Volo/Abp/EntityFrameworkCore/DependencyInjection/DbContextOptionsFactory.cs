@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
@@ -86,16 +87,34 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             }
 
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-
-            //Use DefaultConnectionStringResolver.Resolve when we remove IConnectionStringResolver.Resolve
-#pragma warning disable 618
-            var connectionString = serviceProvider.GetRequiredService<IConnectionStringResolver>().Resolve(connectionStringName);
-#pragma warning restore 618
+            var connectionString = ResolveConnectionString<TDbContext>(serviceProvider, connectionStringName);
 
             return new DbContextCreationContext(
                 connectionStringName,
                 connectionString
             );
+        }
+
+        private static string ResolveConnectionString<TDbContext>(
+            IServiceProvider serviceProvider,
+            string connectionStringName)
+        {
+            // Use DefaultConnectionStringResolver.Resolve when we remove IConnectionStringResolver.Resolve
+#pragma warning disable 618
+            var connectionStringResolver = serviceProvider.GetRequiredService<IConnectionStringResolver>();
+            var currentTenant = serviceProvider.GetRequiredService<ICurrentTenant>();
+
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (currentTenant.Change(null))
+                {
+                    return connectionStringResolver.Resolve(connectionStringName);
+                }
+            }
+
+            return connectionStringResolver.Resolve(connectionStringName);
+#pragma warning restore 618
         }
     }
 }

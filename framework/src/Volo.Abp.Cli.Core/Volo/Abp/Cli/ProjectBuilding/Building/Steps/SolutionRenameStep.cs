@@ -55,11 +55,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     {
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder, _companyName);
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase(), _companyName.ToCamelCase());
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToKebabCase(), _companyName.ToKebabCase());
                     }
                     else
                     {
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
                         RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase() + "." + _projectNamePlaceHolder.ToCamelCase(), _projectNamePlaceHolder.ToCamelCase());
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToKebabCase() + "/" + _projectNamePlaceHolder.ToKebabCase(), _projectNamePlaceHolder.ToKebabCase());
                     }
                 }
 

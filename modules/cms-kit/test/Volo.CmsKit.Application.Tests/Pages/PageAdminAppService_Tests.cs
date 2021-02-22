@@ -64,12 +64,12 @@ namespace Volo.CmsKit.Pages
             var dto = new CreatePageInputDto
             {
                 Title = "test",
-                Url = "test-url"
+                Slug = "test-url"
             };
 
             await Should.NotThrowAsync(async () => await _pageAdminAppService.CreateAsync(dto));
 
-            var page = await _pageRepository.GetByUrlAsync(dto.Url);
+            var page = await _pageRepository.GetBySlugAsync(dto.Slug);
             
             page.Title.ShouldBe(dto.Title);
         }
@@ -80,12 +80,12 @@ namespace Volo.CmsKit.Pages
             var dto = new CreatePageInputDto
             {
                 Title = "test",
-                Url = _data.Page_1_Url
+                Slug = _data.Page_1_Slug
             };
 
-            var exception = await Should.ThrowAsync<PageUrlAlreadyExistException>(async () => await _pageAdminAppService.CreateAsync(dto));
+            var exception = await Should.ThrowAsync<PageSlugAlreadyExistsException>(async () => await _pageAdminAppService.CreateAsync(dto));
             
-            exception.Code.ShouldBe(CmsKitErrorCodes.Pages.UrlAlreadyExist);
+            exception.Code.ShouldBe(CmsKitErrorCodes.Pages.SlugAlreadyExist);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace Volo.CmsKit.Pages
             {
                 Title = _data.Page_1_Title + "++",
                 Description = "new description",
-                Url = _data.Page_1_Url+ "test"
+                Slug = _data.Page_1_Slug+ "test"
             };
 
             await Should.NotThrowAsync(async () => await _pageAdminAppService.UpdateAsync(_data.Page_1_Id, dto));
@@ -105,8 +105,8 @@ namespace Volo.CmsKit.Pages
             updatedPage.Title.ShouldNotBe(_data.Page_1_Title);
             updatedPage.Title.ShouldBe(dto.Title);
             
-            updatedPage.Url.ShouldNotBe(_data.Page_1_Url);
-            updatedPage.Url.ShouldBe(dto.Url);
+            updatedPage.Slug.ShouldNotBe(_data.Page_1_Slug);
+            updatedPage.Slug.ShouldBe(dto.Slug);
             
             updatedPage.Description.ShouldNotBe(_data.Page_1_Description);
             updatedPage.Description.ShouldBe(dto.Description);
@@ -119,7 +119,7 @@ namespace Volo.CmsKit.Pages
             {
                 Title = _data.Page_1_Title + "++",
                 Description = "new description",
-                Url = _data.Page_2_Url
+                Slug = _data.Page_2_Slug
             };
 
             await Should.ThrowAsync<Exception>(async () => await _pageAdminAppService.UpdateAsync(_data.Page_1_Id, dto));

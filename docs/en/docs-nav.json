@@ -808,6 +808,10 @@
                   "path": "UI/Angular/Track-By-Service.md"
                 },
                 {
+                  "text": "Router Events",
+                  "path": "UI/Angular/Router-Events.md"
+                },
+                {
                   "text": "Inserting Scripts & Styles to DOM",
                   "path": "UI/Angular/Dom-Insertion-Service.md"
                 },
@@ -818,6 +822,10 @@
                 {
                   "text": "Projecting Angular Content",
                   "path": "UI/Angular/Content-Projection-Service.md"
+                },
+                {
+                  "text": "Modal",
+                  "path": "UI/Angular/Modal.md"
                 },
                 {
                   "text": "Confirmation Popup",
@@ -1060,10 +1068,6 @@
         {
           "text": "CLI",
           "path": "CLI.md"
-        },
-        {
-          "text": "API Documentation",
-          "path": "{ApiDocumentationUrl}"
         }
       ]
     },

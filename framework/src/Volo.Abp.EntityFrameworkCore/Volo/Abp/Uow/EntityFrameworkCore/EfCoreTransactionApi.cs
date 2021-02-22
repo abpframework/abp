@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
@@ -14,22 +15,22 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         public IEfCoreDbContext StarterDbContext { get; }
         public List<IEfCoreDbContext> AttendedDbContexts { get; }
 
-        public EfCoreTransactionApi(IDbContextTransaction dbContextTransaction, IEfCoreDbContext starterDbContext)
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
+        public EfCoreTransactionApi(
+            IDbContextTransaction dbContextTransaction,
+            IEfCoreDbContext starterDbContext,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
             DbContextTransaction = dbContextTransaction;
             StarterDbContext = starterDbContext;
+            CancellationTokenProvider = cancellationTokenProvider;
             AttendedDbContexts = new List<IEfCoreDbContext>();
         }
 
-        public Task CommitAsync()
+        public async Task CommitAsync()
         {
-            Commit();
-            return Task.CompletedTask;
-        }
-        
-        protected void Commit()
-        {
-            DbContextTransaction.Commit();
+            await DbContextTransaction.CommitAsync(CancellationTokenProvider.Token);
 
             foreach (var dbContext in AttendedDbContexts)
             {
@@ -38,7 +39,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                     continue; //Relational databases use the shared transaction
                 }
 
-                dbContext.Database.CommitTransaction();
+                await dbContext.Database.CommitTransactionAsync(CancellationTokenProvider.Token);
             }
         }
 
@@ -47,15 +48,19 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             DbContextTransaction.Dispose();
         }
 
-        public void Rollback()
+        public async Task RollbackAsync(CancellationToken cancellationToken)
         {
-            DbContextTransaction.Rollback();
-        }
+            await DbContextTransaction.RollbackAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
 
-        public Task RollbackAsync(CancellationToken cancellationToken)
-        {
-            DbContextTransaction.Rollback();
-            return Task.CompletedTask;
+            foreach (var dbContext in AttendedDbContexts)
+            {
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
+                {
+                    continue; //Relational databases use the shared transaction
+                }
+
+                await dbContext.Database.RollbackTransactionAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            }
         }
     }
 }

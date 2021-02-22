@@ -13,6 +13,8 @@ using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Tags;
+using Volo.CmsKit.Blogs;
+using Volo.CmsKit.MediaDescriptors;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -58,8 +60,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.EntityId).IsRequired().HasMaxLength(UserReactionConsts.MaxEntityIdLength);
                     b.Property(x => x.ReactionName).IsRequired().HasMaxLength(UserReactionConsts.MaxReactionNameLength);
 
-                    b.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId, x.ReactionName});
-                    b.HasIndex(x => new {x.TenantId, x.CreatorId, x.EntityType, x.EntityId, x.ReactionName});
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId, x.ReactionName });
+                    b.HasIndex(x => new { x.TenantId, x.CreatorId, x.EntityType, x.EntityId, x.ReactionName });
                 });
             }
             else
@@ -80,8 +82,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength);
                     b.Property(x => x.RepliedCommentId);
 
-                    b.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId});
-                    b.HasIndex(x => new {x.TenantId, x.RepliedCommentId});
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
+                    b.HasIndex(x => new { x.TenantId, x.RepliedCommentId });
                 });
             }
             else
@@ -176,15 +178,67 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.ConfigureByConvention();
 
                     b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
-                    b.Property(x => x.Url).IsRequired().HasMaxLength(PageConsts.MaxUrlLength);
+                    b.Property(x => x.Slug).IsRequired().HasMaxLength(PageConsts.MaxSlugLength);
                     b.Property(x => x.Description).HasMaxLength(PageConsts.MaxDescriptionLength);
 
-                    b.HasIndex(x => new {x.TenantId, x.Url});
+                    b.HasIndex(x => new { x.TenantId, Url = x.Slug });
                 });
             }
             else
             {
                 builder.Ignore<Page>();
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
+            {
+                builder.Entity<Blog>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "Blogs", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(p => p.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength);
+
+                    b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogConsts.MaxSlugLength);
+                });
+
+                builder.Entity<BlogPost>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "BlogPosts", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(p => p.Title).IsRequired().HasMaxLength(BlogPostConsts.MaxTitleLength);
+
+                    b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogPostConsts.MaxSlugLength);
+
+                    b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
+
+                    b.HasIndex(x => new { x.Slug, x.BlogId });
+                });
+            }
+            else
+            {
+                builder.Ignore<Blog>();
+                builder.Ignore<BlogPost>();
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<MediaFeature>())
+            {
+                builder.Entity<MediaDescriptor>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "MediaDescriptors", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.Name).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxNameLength);
+                    b.Property(x => x.MimeType).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxMimeTypeLength);
+                    b.Property(x => x.Size).HasMaxLength(MediaDescriptorConsts.MaxSizeLength);
+                });
+            }
+            else
+            {
+                builder.Ignore<MediaDescriptor>();
             }
         }
     }

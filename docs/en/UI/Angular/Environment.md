@@ -138,10 +138,10 @@ You can use the `getEnvironment` or `getEnvironment$` method of `EnvironmentServ
 ```js
 // this.environment is instance of EnvironmentService
 
-const environment = this.environment.getAll();
+const environment = this.environment.getEnvironment();
 
 // or
-this.environment.getAll$().subscribe(environment => {
+this.environment.getEnvironment$().subscribe(environment => {
    // use environment here
 })
 ```
@@ -166,7 +166,7 @@ This method returns the `url` of a specific API based on the key given as its on
 
 #### How to Set the Environment
 
-`EnvironmentService` has a method named `setState` which allow you to set the state value.
+`EnvironmentService` has a method named `setState` which allows you to set the state value.
 
 ```js
 // this.environment is instance of EnvironmentService

@@ -13,5 +13,7 @@ namespace Volo.CmsKit.Tags
             [NotNull] string entityId,
             [CanBeNull] Guid? tenantId,
             CancellationToken cancellationToken = default);
+
+        Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default);
     }
 }

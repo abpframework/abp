@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.CmsKit.Contents;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit.Contents
+namespace Volo.CmsKit.Contents
 {
     public class ContentManager : DomainService, IContentManager
     {
@@ -18,14 +18,15 @@ namespace Volo.CmsKit.Domain.Volo.CmsKit.Contents
             ContentRepository = contentRepository;
         }
 
-        public async Task<Content> InsertAsync(Content content, CancellationToken cancellationToken = default)
+        public virtual async Task<Content> InsertAsync(Content content, CancellationToken cancellationToken = default)
         {
-            if (await ContentRepository.ExistsAsync(content.EntityType, content.EntityId, content.TenantId, cancellationToken))
+            if (await ContentRepository.ExistsAsync(content.EntityType, content.EntityId, content.TenantId,
+                cancellationToken))
             {
                 throw new ContentAlreadyExistException(content.EntityType, content.EntityId);
             }
 
-            return await ContentRepository.InsertAsync(content);
+            return await ContentRepository.InsertAsync(content, cancellationToken: cancellationToken);
         }
     }
 }

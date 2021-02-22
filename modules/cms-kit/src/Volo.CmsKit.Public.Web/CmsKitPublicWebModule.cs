@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
@@ -56,15 +55,17 @@ namespace Volo.CmsKit.Public.Web
             {
                 options.AddMaps<CmsKitPublicWebModule>(validate: true);
             });
+        }
 
-            Configure<RazorPagesOptions>(options =>
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
             {
-                if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+                Configure<RazorPagesOptions>(options =>
                 {
-                    // TODO: Work on this route logic. Blocks some routes with this logic.
-                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", "/{*pageUrl}");
-                }
-            });
+                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", @"/pages/{slug:minlength(1)}");
+                });
+            }
         }
     }
 }

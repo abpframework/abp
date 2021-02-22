@@ -41,10 +41,6 @@
                                           Clicked="() => OpenEditModalAsync(context)"
                                           Text="@L["Edit"]"></EntityAction>
                             <EntityAction TItem="TenantDto"
-                                          RequiredPolicy="@ManageConnectionStringsPolicyName"
-                                          Clicked="() => OpenEditConnectionStringModalAsync(context)"
-                                          Text="@L["ConnectionStrings"]"></EntityAction>
-                            <EntityAction TItem="TenantDto"
                                           RequiredPolicy="@ManageFeaturesPolicyName"
                                           Clicked="() => FeatureManagementModal.OpenAsync(FeatureProviderName, context.Id.ToString())"
                                           Text="@L["Features"]"></EntityAction>
@@ -148,45 +144,6 @@
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
                     <SubmitButton Clicked="@UpdateEntityAsync" />
-                </ModalFooter>
-            </Form>
-        </ModalContent>
-    </Modal>
-}
-
-@* ************************* EDIT CONNECTION STRING MODAL ************************* *@
-@if (HasManageConnectionStringsPermission)
-{
-    <Modal @ref="@ManageConnectionStringModal">
-        <ModalBackdrop />
-        <ModalContent Centered="true">
-            <Form>
-                <ModalHeader>
-                    <ModalTitle>@L["ConnectionStrings"]</ModalTitle>
-                    <CloseButton Clicked="CloseEditConnectionStringModal" />
-                </ModalHeader>
-                <ModalBody>
-                    <Validations @ref="@ManageConnectionStringValidations" Model="@TenantInfo" ValidateOnLoad="false">
-                        <Validation MessageLocalizer="@LH.Localize">
-                            <Field>
-                                <FieldLabel>@L["DisplayName:UseSharedDatabase"]</FieldLabel>
-                                <Check TValue="bool" @bind-Checked="@TenantInfo.UseSharedDatabase" Cursor="@Cursor.Pointer" />
-                            </Field>
-                        </Validation>
-                        @if (!TenantInfo.UseSharedDatabase)
-                        {
-                            <Validation MessageLocalizer="@LH.Localize">
-                                <Field>
-                                    <FieldLabel>@L["DisplayName:DefaultConnectionString"]</FieldLabel>
-                                    <TextEdit @bind-Text="@TenantInfo.DefaultConnectionString" />
-                                </Field>
-                            </Validation>
-                        }
-                    </Validations>
-                </ModalBody>
-                <ModalFooter>
-                    <Button Color="Color.Secondary" Clicked="CloseEditConnectionStringModal">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@UpdateConnectionStringAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>
