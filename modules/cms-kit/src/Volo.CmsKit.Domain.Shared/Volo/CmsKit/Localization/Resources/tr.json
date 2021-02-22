@@ -1,6 +1,7 @@
 {
   "culture": "tr",
   "texts": {
+    "CmsKit:0002": "İçerik zaten mevcut!",
     "CommentAuthorizationExceptionMessage": "Bu yorumları görebilmek için yetki gerekir.",
     "Comments": "Yorumlar",
     "Delete": "Sil",
@@ -11,6 +12,10 @@
     "Menu:CMS": "CMS",
     "MessageDeletionConfirmationMessage": "Bu yorum tamamen silinecektir",
     "Permission:CmsKit": "CmsKit",
+    "Permission:Contents": "İçerik Yönetimi",
+    "Permission:Contents.Create": "İçerik Oluşturma",
+    "Permission:Contents.Delete": "İçerik Silme",
+    "Permission:Contents.Update": "İçerik Güncelleme",
     "Permission:TagManagement": "Etiket Yönetimi",
     "Permission:TagManagement.Create": "Etiket Oluşturma",
     "Permission:TagManagement.Delete": "Etiket Silme",
@@ -25,6 +30,7 @@
     "Undo": "Geri al",
     "Update": "Güncelle",
     "YourComment": "Yorumunuz",
-    "YourReply": "Cevabınız"
+    "YourReply": "Cevabınız",
+    "CmsKit:Page:0001": "Girilen url ({0}) kullanımdadır."
   }
 }

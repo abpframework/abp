@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories.MongoDB;
 
-namespace Volo.Abp.MongoDB.Volo.Abp.Domain.Repositories.MongoDB
+namespace Volo.Abp.Domain.Repositories.MongoDB
 {
     public interface IMongoDbBulkOperationProvider
     {

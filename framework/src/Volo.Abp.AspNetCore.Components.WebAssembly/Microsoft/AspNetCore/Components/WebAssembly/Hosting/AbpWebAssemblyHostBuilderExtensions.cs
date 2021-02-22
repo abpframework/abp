@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -8,7 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.AspNetCore.Components.WebAssembly.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Client;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
@@ -39,12 +40,16 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             return application;
         }
 
-        public async static Task InitializeAsync(
+        public static async Task InitializeAsync(
             [NotNull] this IAbpApplicationWithExternalServiceProvider application,
             [NotNull] IServiceProvider serviceProvider)
         {
             Check.NotNull(application, nameof(application));
             Check.NotNull(serviceProvider, nameof(serviceProvider));
+
+            var serviceProviderAccessor = (WebAssemblyClientScopeServiceProviderAccessor)
+                serviceProvider.GetRequiredService<IClientScopeServiceProviderAccessor>();
+            serviceProviderAccessor.ServiceProvider = serviceProvider;
 
             application.Initialize(serviceProvider);
 
@@ -55,7 +60,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             }
         }
 
-        private async static Task InitializeModulesAsync(IServiceProvider serviceProvider)
+        private static async Task InitializeModulesAsync(IServiceProvider serviceProvider)
         {
             foreach (var service in serviceProvider.GetServices<IAsyncInitialize>())
             {
@@ -63,7 +68,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             }
         }
 
-        private async static Task SetCurrentLanguageAsync(IServiceScope scope)
+        private static async Task SetCurrentLanguageAsync(IServiceScope scope)
         {
             var configurationClient = scope.ServiceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
             var utilsService = scope.ServiceProvider.GetRequiredService<IAbpUtilsService>();

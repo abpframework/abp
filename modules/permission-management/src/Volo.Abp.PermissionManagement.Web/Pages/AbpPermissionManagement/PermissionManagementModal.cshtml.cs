@@ -3,7 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.PermissionManagement.Web.Utils;
 
 namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
@@ -31,11 +33,16 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 
         protected IPermissionAppService PermissionAppService { get; }
 
-        public PermissionManagementModal(IPermissionAppService permissionAppService)
+        protected ILocalEventBus LocalEventBus { get; }
+
+        public PermissionManagementModal(
+        IPermissionAppService permissionAppService,
+        ILocalEventBus localEventBus)
         {
             ObjectMapperContext = typeof(AbpPermissionManagementWebModule);
 
             PermissionAppService = permissionAppService;
+            LocalEventBus = localEventBus;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
@@ -86,6 +93,10 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
                 {
                     Permissions = updatePermissionDtos
                 }
+            );
+
+            await LocalEventBus.PublishAsync(
+                new CurrentApplicationConfigurationCacheResetEventData()
             );
 
             return NoContent();

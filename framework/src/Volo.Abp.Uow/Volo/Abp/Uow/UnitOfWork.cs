@@ -11,6 +11,11 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
+        /// <summary>
+        /// Default: false.
+        /// </summary>
+        public static bool EnableObsoleteDbContextCreationWarning { get; } = false;
+
         public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
 
         public Guid Id { get; } = Guid.NewGuid();

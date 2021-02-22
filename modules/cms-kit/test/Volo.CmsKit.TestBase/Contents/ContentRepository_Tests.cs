@@ -47,7 +47,7 @@ namespace Volo.CmsKit.Contents
         public async Task ShouldFindAsync()
         {
             var content =
-                await _contentRepository.FindAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_Id);
+                await _contentRepository.FindAsync(_cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
 
             content.ShouldNotBeNull();
         }

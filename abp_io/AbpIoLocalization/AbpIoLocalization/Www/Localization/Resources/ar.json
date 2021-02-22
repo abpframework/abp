@@ -156,6 +156,7 @@
     "UiFramework": "إطار عمل واجهة المستخدم",
     "EmailAddress": "البريد الإلكترونى",
     "Mobile": "المحمول",
-    "ReactNative": "React Native"
+    "ReactNative": "React Native",
+    "SelectLanguage": "اختار اللغة"
   }
 }

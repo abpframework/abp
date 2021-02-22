@@ -2,9 +2,7 @@
 using NSubstitute;
 using Shouldly;
 using System.Threading.Tasks;
-using Volo.Abp.Clients;
 using Volo.Abp.Users;
-using Volo.Abp.Validation;
 using Volo.CmsKit.Public.Tags;
 using Xunit;
 
@@ -31,11 +29,8 @@ namespace Volo.CmsKit.Tags
         [Fact]
         public async Task GetAllRelatedTagsAsync()
         {
-            var list = await _tagAppService.GetAllRelatedTagsAsync(new GetRelatedTagsInput
-            {
-                EntityType = _cmsKitTestData.Content_1_EntityType,
-                EntityId = _cmsKitTestData.EntityId1
-            });
+            var list = await _tagAppService.GetAllRelatedTagsAsync(_cmsKitTestData.Content_1_EntityType,
+                _cmsKitTestData.EntityId1);
 
             list.ShouldNotBeEmpty();
             list.Count.ShouldBe(2);
@@ -44,35 +39,9 @@ namespace Volo.CmsKit.Tags
         [Fact]
         public async Task ShouldntGet_GetAllRelatedTagsAsync()
         {
-            var list = await _tagAppService.GetAllRelatedTagsAsync(new GetRelatedTagsInput
-            {
-                EntityType = "any_other_type",
-                EntityId = "1"
-            });
+            var list = await _tagAppService.GetAllRelatedTagsAsync("any_other_type", "1");
 
             list.ShouldBeEmpty();
-        }
-
-        [Fact]
-        public async Task GetRelatedTagsAsync_ShouldThrowValidationException_WithoutEntityType()
-        {
-            await Assert.ThrowsAsync<AbpValidationException>(async () => 
-                await _tagAppService.GetAllRelatedTagsAsync(new GetRelatedTagsInput
-                {
-                    EntityType = null,
-                    EntityId = _cmsKitTestData.EntityId1
-                }));
-        }
-
-        [Fact]
-        public async Task GetRelatedTagsAsync_ShouldThrowValidationException_WithoutEntityId()
-        {
-            await Assert.ThrowsAsync<AbpValidationException>(async () => 
-                await _tagAppService.GetAllRelatedTagsAsync(new GetRelatedTagsInput
-                {
-                    EntityType = null,
-                    EntityId = _cmsKitTestData.EntityId1
-                }));
         }
     }
 }

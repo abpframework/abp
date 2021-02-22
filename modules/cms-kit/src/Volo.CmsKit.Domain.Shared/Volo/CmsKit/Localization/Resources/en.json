@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
+    "CmsKit:0002": "Content already exists!",
     "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display.",
     "Comments": "Comments",
     "Delete": "Delete",
@@ -11,10 +12,18 @@
     "Menu:CMS": "CMS",
     "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
     "Permission:CmsKit": "CmsKit",
+    "Permission:Contents": "Content Management",
+    "Permission:Contents.Create": "Create Content",
+    "Permission:Contents.Delete": "Delete Content",
+    "Permission:Contents.Update": "Update Content",
     "Permission:TagManagement": "Tag Management",
-    "Permission:TagManagement.Create": "Create Tag",
-    "Permission:TagManagement.Delete": "Delete Tag",
-    "Permission:TagManagement.Update": "Update Tag",
+    "Permission:TagManagement.Create": "Create",
+    "Permission:TagManagement.Delete": "Delete",
+    "Permission:TagManagement.Update": "Update",
+    "Permission:PageManagement": "Page Management",
+    "Permission:PageManagement:Create": "Create",
+    "Permission:PageManagement:Delete": "Delete",
+    "Permission:PageManagement:Update": "Update",
     "PickYourReaction": "Pick your reaction",
     "RatingUndoMessage": "Your rating will be undo.",
     "Reply": "Reply",
@@ -25,6 +34,7 @@
     "Undo": "Undo",
     "Update": "Update",
     "YourComment": "Your comment",
-    "YourReply": "Your reply"
+    "YourReply": "Your reply",
+    "CmsKit:Page:0001": "The given url ({0}) already exists."
   }
 }
