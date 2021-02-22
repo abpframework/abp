@@ -72,7 +72,7 @@ namespace Volo.Abp.UI.Navigation
         public ApplicationMenuItemList Items { get; }
 
         [CanBeNull]
-        public string RequiredPermissionName { get; }
+        public string RequiredPermissionName { get; set; }
 
         /// <summary>
         /// Can be used to store a custom object related to this menu item. Optional.

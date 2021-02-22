@@ -45,37 +45,37 @@ namespace Volo.Abp.UI.Navigation
 
         protected virtual async Task CheckPermissionsAsync(IServiceProvider serviceProvider, IHasMenuItems menuWithItems)
         {
-            var requiredPermissionMenus = new List<ApplicationMenuItem>();
-            GetRequiredPermissionNameMenus(menuWithItems, requiredPermissionMenus);
+            var requiredPermissionItems = new List<ApplicationMenuItem>();
+            GetRequiredPermissionNameMenus(menuWithItems, requiredPermissionItems);
 
-            if (requiredPermissionMenus.Any())
+            if (requiredPermissionItems.Any())
             {
                 var permissionChecker = serviceProvider.GetRequiredService<IPermissionChecker>();
-                var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionMenus.Select(x => x.RequiredPermissionName).ToArray());
+                var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).ToArray());
 
-                var toBeDeletedMenus = new List<ApplicationMenuItem>();
-                foreach (var menu in requiredPermissionMenus)
+                var toBeDeleted = new List<ApplicationMenuItem>();
+                foreach (var menu in requiredPermissionItems)
                 {
                     if (grantResult.Result[menu.RequiredPermissionName!] != PermissionGrantResult.Granted)
                     {
-                        toBeDeletedMenus.Add(menu);
+                        toBeDeleted.Add(menu);
                     }
                 }
 
-                RemoveMenus(menuWithItems, toBeDeletedMenus);
+                RemoveMenus(menuWithItems, toBeDeleted);
             }
         }
 
         protected virtual void GetRequiredPermissionNameMenus(IHasMenuItems menuWithItems, List<ApplicationMenuItem> output)
         {
-            foreach (var menuItem in menuWithItems.Items)
+            foreach (var item in menuWithItems.Items)
             {
-                if (!menuItem.RequiredPermissionName.IsNullOrWhiteSpace())
+                if (!item.RequiredPermissionName.IsNullOrWhiteSpace())
                 {
-                    output.Add(menuItem);
+                    output.Add(item);
                 }
 
-                GetRequiredPermissionNameMenus(menuItem, output);
+                GetRequiredPermissionNameMenus(item, output);
             }
         }
 
@@ -83,17 +83,17 @@ namespace Volo.Abp.UI.Navigation
         {
             menuWithItems.Items.RemoveAll(toBeDeleted.Contains);
 
-            foreach (var menuItem in menuWithItems.Items)
+            foreach (var item in menuWithItems.Items)
             {
-                RemoveMenus(menuItem, toBeDeleted);
+                RemoveMenus(item, toBeDeleted);
             }
         }
 
         protected virtual void NormalizeMenu(IHasMenuItems menuWithItems)
         {
-            foreach (var menuItem in menuWithItems.Items)
+            foreach (var item in menuWithItems.Items)
             {
-                NormalizeMenu(menuItem);
+                NormalizeMenu(item);
             }
 
             menuWithItems.Items.Normalize();
