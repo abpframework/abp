@@ -10,8 +10,8 @@ namespace Volo.CmsKit.MediaDescriptors
     [RequiresGlobalFeature(typeof(MediaFeature))]
     public class MediaDescriptorAppService : CmsKitAppServiceBase, IMediaDescriptorAppService
     {
-        protected readonly IMediaDescriptorRepository MediaDescriptorRepository;
-        protected readonly IBlobContainer<MediaContainer> MediaContainer;
+        protected IMediaDescriptorRepository MediaDescriptorRepository { get; }
+        protected IBlobContainer<MediaContainer> MediaContainer { get; }
 
         public MediaDescriptorAppService(IMediaDescriptorRepository mediaDescriptorRepository, IBlobContainer<MediaContainer> mediaContainer)
         {
