@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Tags
 {
     public class Tag : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
-        public virtual Guid? TenantId { get; set; }
+        public virtual Guid? TenantId { get; protected set; }
 
         [NotNull]
         public virtual string EntityType { get; protected set; }
@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Tags
 
         public virtual void SetName(string name)
         {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name), TagConsts.MaxNameLength);
+            Name = Check.NotNullOrEmpty(name, nameof(name), TagConsts.MaxNameLength);
         }
 
         public virtual void SetEntityType(string entityType)
