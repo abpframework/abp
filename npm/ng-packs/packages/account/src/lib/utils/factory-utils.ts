@@ -1,6 +1,6 @@
-import { Options } from '../models/options';
+import { AccountConfigOptions } from '../models/config-options';
 
-export function accountOptionsFactory(options: Options) {
+export function accountConfigOptionsFactory(options: AccountConfigOptions) {
   return {
     redirectUrl: '/',
     ...options,

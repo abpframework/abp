@@ -110,23 +110,13 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   logout() {
-    const rest = this.injector.get(RestService);
+    const router = this.injector.get(Router);
 
-    const issuer = this.configState.getDeep('environment.oAuthConfig.issuer');
-    return rest
-      .request(
-        {
-          method: 'GET',
-          url: '/api/account/logout',
-        },
-        null,
-        issuer,
-      )
-      .pipe(
-        switchMap(() => from(this.oAuthService.revokeTokenAndLogout())),
-        switchMap(() => this.appConfigService.get()),
-        tap(res => this.configState.setState(res)),
-      );
+    return from(this.oAuthService.revokeTokenAndLogout()).pipe(
+      switchMap(() => this.appConfigService.get()),
+      tap(res => this.configState.setState(res)),
+      tap(() => router.navigateByUrl('/')),
+    );
   }
 
   destroy() {}

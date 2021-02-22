@@ -11,8 +11,8 @@ import { from, Observable } from 'rxjs';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { HttpHeaders } from '@angular/common/http';
 import { switchMap, take, tap } from 'rxjs/operators';
-import { ACCOUNT_OPTIONS } from '../tokens/options.token';
-import { Options } from '../models/options';
+import { ACCOUNT_CONFIG_OPTIONS } from '../tokens/config-options.token';
+import { AccountConfigOptions } from '../models/config-options';
 import snq from 'snq';
 import { Router } from '@angular/router';
 
@@ -25,7 +25,7 @@ export class AuthenticationService {
     protected oAuthService: OAuthService,
     protected appConfigService: AbpApplicationConfigurationService,
     protected configState: ConfigStateService,
-    @Inject(ACCOUNT_OPTIONS) protected options: Options,
+    @Inject(ACCOUNT_CONFIG_OPTIONS) protected options: AccountConfigOptions,
     protected router: Router,
   ) {}
 
