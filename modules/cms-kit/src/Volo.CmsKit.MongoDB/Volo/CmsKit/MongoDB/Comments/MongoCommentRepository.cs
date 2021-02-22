@@ -56,6 +56,7 @@ namespace Volo.CmsKit.MongoDB.Comments
             CancellationToken cancellationToken = default
         )
         {
+            var token = GetCancellationToken(cancellationToken);
             var query = await GetListQueryAsync(
                 filter, 
                 entityType, 
@@ -64,22 +65,22 @@ namespace Volo.CmsKit.MongoDB.Comments
                 authorUsername, 
                 creationStartDate, 
                 creationEndDate, 
-                cancellationToken);
+                token);
 
             var comments = await query.OrderBy(sorting ?? "creationTime desc")
                 .As<IMongoQueryable<Comment>>()
                 .PageBy<Comment, IMongoQueryable<Comment>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(token);
 
             var commentIds = comments.Select(x => x.Id).ToList();
             
-            var authorsQuery = from comment in (await GetMongoQueryableAsync(cancellationToken))
-                join user in (await GetDbContextAsync(cancellationToken)).CmsUsers on comment.CreatorId equals user.Id
+            var authorsQuery = from comment in (await GetMongoQueryableAsync(token))
+                join user in (await GetDbContextAsync(token)).CmsUsers on comment.CreatorId equals user.Id
                 where commentIds.Contains(comment.Id)
                 orderby comment.CreationTime
                 select user;
 
-            var authors = await authorsQuery.ToListAsync(cancellationToken);
+            var authors = await authorsQuery.ToListAsync(token);
             
             return comments
                 .Select(

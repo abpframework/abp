@@ -22,7 +22,8 @@ namespace Volo.CmsKit.Comments
         {
         }
 
-        public async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id,
+            CancellationToken cancellationToken = default)
         {
             var query = from comment in (await GetDbSetAsync())
                 join user in (await GetDbContextAsync()).Set<CmsUser>() on comment.CreatorId equals user.Id
@@ -44,60 +45,64 @@ namespace Volo.CmsKit.Comments
         }
 
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
-            string filter = null, 
-            string entityType = null, 
-            string entityId = null, 
+            string filter = null,
+            string entityType = null,
+            string entityId = null,
             Guid? repliedCommentId = null,
             string authorUsername = null,
-            DateTime? creationStartDate = null, 
-            DateTime? creationEndDate = null, 
+            DateTime? creationStartDate = null,
+            DateTime? creationEndDate = null,
             string sorting = null,
-            int maxResultCount = int.MaxValue, 
-            int skipCount = 0, 
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
             CancellationToken cancellationToken = default
-            )
+        )
         {
+            var token = GetCancellationToken(cancellationToken);
             var query = await GetListQueryAsync(
-                filter, 
-                entityType, 
-                entityId, 
+                filter,
+                entityType,
+                entityId,
                 repliedCommentId,
                 authorUsername,
-                creationStartDate, 
-                creationEndDate);
+                creationStartDate,
+                creationEndDate,
+                token);
 
             if (sorting != null)
             {
                 sorting = "comment." + sorting;
             }
-            
+
             query = query.OrderBy(sorting ?? "comment.creationTime desc")
-                         .PageBy(skipCount, maxResultCount);
-            
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+                .PageBy(skipCount, maxResultCount);
+
+            return await query.ToListAsync(token);
         }
 
         public async Task<long> GetCountAsync(
-            string text = null, 
-            string entityType = null, 
+            string text = null,
+            string entityType = null,
             string entityId = null,
-            Guid? repliedCommentId = null, 
+            Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
-            DateTime? creationEndDate = null, 
+            DateTime? creationEndDate = null,
             CancellationToken cancellationToken = default
-            )
+        )
         {
+            var token = GetCancellationToken(cancellationToken);
             var query = await GetListQueryAsync(
-                text, 
-                entityType, 
-                entityId, 
-                repliedCommentId, 
+                text,
+                entityType,
+                entityId,
+                repliedCommentId,
                 authorUsername,
-                creationStartDate, 
-                creationEndDate);
+                creationStartDate,
+                creationEndDate,
+                token);
 
-            return await query.LongCountAsync(GetCancellationToken(cancellationToken));
+            return await query.LongCountAsync(token);
         }
 
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
@@ -141,37 +146,33 @@ namespace Volo.CmsKit.Comments
         }
 
         protected virtual async Task<IQueryable<CommentWithAuthorQueryResultItem>> GetListQueryAsync(
-            string filter = null, 
-            string entityType = null, 
+            string filter = null,
+            string entityType = null,
             string entityId = null,
-            Guid? repliedCommentId = null, 
+            Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
-            DateTime? creationEndDate = null
-            )
+            DateTime? creationEndDate = null,
+            CancellationToken cancellationToken = default
+        )
         {
-            var query = from comment in (await GetDbSetAsync())
-                join user in (await GetDbContextAsync()).Set<CmsUser>() 
+            var commentDbSet = await GetDbSetAsync();
+            var cmsUserSet = (await GetDbContextAsync()).Set<CmsUser>();
+
+            var query = from comment in commentDbSet
+                join user in cmsUserSet
                     on comment.CreatorId equals user.Id
                 select new CommentWithAuthorQueryResultItem
                 {
                     Comment = comment,
                     Author = user
                 };
-            
-            if (!string.IsNullOrWhiteSpace(authorUsername))
-            {
-                var author = await (await GetDbContextAsync()).Set<CmsUser>().FirstOrDefaultAsync(x => x.UserName == authorUsername);
 
-                var authorId = author?.Id ?? Guid.Empty;
-
-                query = query.Where(x => x.Comment.CreatorId == authorId);
-            }
-            
             return query.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Comment.Text.Contains(filter))
                 .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.Comment.EntityType.Contains(entityType))
                 .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.Comment.EntityId.Contains(entityId))
                 .WhereIf(repliedCommentId.HasValue, c => c.Comment.RepliedCommentId == repliedCommentId)
+                .WhereIf(!authorUsername.IsNullOrWhiteSpace(),c=>c.Author.UserName.Contains(authorUsername))
                 .WhereIf(creationStartDate.HasValue, c => c.Comment.CreationTime >= creationStartDate)
                 .WhereIf(creationEndDate.HasValue, c => c.Comment.CreationTime <= creationEndDate);
         }
