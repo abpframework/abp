@@ -10,13 +10,13 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public class CreateMigrationAndRunMigrator : IConsoleCommand, ITransientDependency
+    public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientDependency
     {
-        public ILogger<CreateMigrationAndRunMigrator> Logger { get; set; }
+        public ILogger<CreateMigrationAndRunMigratorCommand> Logger { get; set; }
 
-        public CreateMigrationAndRunMigrator()
+        public CreateMigrationAndRunMigratorCommand()
         {
-            Logger = NullLogger<CreateMigrationAndRunMigrator>.Instance;
+            Logger = NullLogger<CreateMigrationAndRunMigratorCommand>.Instance;
         }
 
         public virtual async Task ExecuteAsync(CommandLineArgs commandLineArgs)
