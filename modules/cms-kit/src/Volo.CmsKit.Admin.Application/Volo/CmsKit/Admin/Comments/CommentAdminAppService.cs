@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -22,7 +23,7 @@ namespace Volo.CmsKit.Admin.Comments
             CommentRepository = commentRepository;
         }
 
-        public virtual async Task<PagedResultDto<CommentDto>> GetListAsync(CommentGetListInput input)
+        public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
         {
             var totalCount = await CommentRepository.GetCountAsync(
                 input.Text,
@@ -46,9 +47,15 @@ namespace Volo.CmsKit.Admin.Comments
                 input.SkipCount
             );
 
-            var dtos = ObjectMapper.Map<List<Comment>, List<CommentDto>>(comments);
+            var dtos = comments.Select(queryResultItem =>
+            {
+                var dto = ObjectMapper.Map<Comment, CommentWithAuthorDto>(queryResultItem.Comment);
+                dto.Author = ObjectMapper.Map<CmsUser, CmsUserDto>(queryResultItem.Author);
 
-            return new PagedResultDto<CommentDto>(totalCount, dtos);
+                return dto;
+            }).ToList();
+
+            return new PagedResultDto<CommentWithAuthorDto>(totalCount, dtos);
         }
 
         public virtual async Task<CommentWithAuthorDto> GetAsync(Guid id)

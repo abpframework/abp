@@ -11,7 +11,7 @@ namespace Volo.CmsKit.Comments
     {
         Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<List<Comment>> GetListAsync(
+        Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
             string filter = null,
             string entityType = null,
             string entityId = null,

@@ -43,7 +43,7 @@ namespace Volo.CmsKit.Comments
             return commentWithAuthor;
         }
 
-        public async Task<List<Comment>> GetListAsync(
+        public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
             string filter = null, 
             string entityType = null, 
             string entityId = null, 
@@ -66,9 +66,19 @@ namespace Volo.CmsKit.Comments
                 creationStartDate, 
                 creationEndDate);
 
-            return await query.OrderBy(sorting ?? "creationTime desc")
-                              .PageBy(skipCount, maxResultCount)
-                              .ToListAsync(GetCancellationToken(cancellationToken));
+            query = query.OrderBy(sorting ?? "creationTime desc")
+                         .PageBy(skipCount, maxResultCount);
+            
+            var query2 = from comment in query
+                join user in (await GetDbContextAsync()).Set<CmsUser>() on comment.CreatorId equals user.Id
+                orderby comment.CreationTime
+                select new CommentWithAuthorQueryResultItem
+                {
+                    Comment = comment,
+                    Author = user
+                };
+            
+            return await query2.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<long> GetCountAsync(

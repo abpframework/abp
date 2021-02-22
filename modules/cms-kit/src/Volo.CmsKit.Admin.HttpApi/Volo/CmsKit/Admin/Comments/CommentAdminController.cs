@@ -25,7 +25,7 @@ namespace Volo.CmsKit.Admin.Comments
         }
 
         [HttpGet]
-        public virtual Task<PagedResultDto<CommentDto>> GetListAsync(CommentGetListInput input)
+        public virtual Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
         {
             return CommentAdminAppService.GetListAsync(input);
         }

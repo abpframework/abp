@@ -11,6 +11,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.MongoDB.Comments
 {
@@ -41,7 +42,7 @@ namespace Volo.CmsKit.MongoDB.Comments
             return commentWithAuthor;
         }
 
-        public async Task<List<Comment>> GetListAsync(
+        public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
             string filter = null, 
             string entityType = null, 
             string entityId = null, 
@@ -65,10 +66,29 @@ namespace Volo.CmsKit.MongoDB.Comments
                 creationEndDate, 
                 cancellationToken);
 
-            return await query.OrderBy(sorting ?? "creationTime desc")
+            var comments = await query.OrderBy(sorting ?? "creationTime desc")
                 .As<IMongoQueryable<Comment>>()
                 .PageBy<Comment, IMongoQueryable<Comment>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+
+            var commentIds = comments.Select(x => x.Id).ToList();
+            
+            var authorsQuery = from comment in (await GetMongoQueryableAsync(cancellationToken))
+                join user in (await GetDbContextAsync(cancellationToken)).CmsUsers on comment.CreatorId equals user.Id
+                where commentIds.Contains(comment.Id)
+                orderby comment.CreationTime
+                select user;
+
+            var authors = await authorsQuery.ToListAsync(cancellationToken);
+            
+            return comments
+                .Select(
+                    comment =>
+                        new CommentWithAuthorQueryResultItem
+                        {
+                            Comment = comment,
+                            Author = authors.FirstOrDefault(a => a.Id == comment.CreatorId)
+                        }).ToList();
         }
 
         public async Task<long> GetCountAsync(

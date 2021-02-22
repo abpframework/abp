@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Entities;
 using Volo.CmsKit.Admin.Comments;
@@ -27,6 +28,7 @@ namespace Volo.CmsKit.Comments
             
             comments.TotalCount.ShouldBe(6);
             comments.Items.Count.ShouldBe(3);
+            comments.Items.Any(x => x.Author != null).ShouldBeTrue();
         }
         
         [Fact]

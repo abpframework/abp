@@ -26,7 +26,7 @@ namespace Volo.CmsKit.Comments
             comments.ShouldNotBeNull();
             comments.Count.ShouldBe(6);
             
-            var headCommentId = comments.First(x => x.RepliedCommentId != null).RepliedCommentId;
+            var headCommentId = comments.First(x => x.Comment.RepliedCommentId != null).Comment.RepliedCommentId;
             
             var replies = await _commentRepository.GetListAsync(repliedCommentId: headCommentId);
 
@@ -63,7 +63,7 @@ namespace Volo.CmsKit.Comments
             var list = await _commentRepository.GetListAsync();
 
             list.Any(x=>
-                    x.Id == _cmsKitTestData.CommentWithChildId || x.RepliedCommentId == _cmsKitTestData.CommentWithChildId)
+                    x.Comment.Id == _cmsKitTestData.CommentWithChildId || x.Comment.RepliedCommentId == _cmsKitTestData.CommentWithChildId)
                 .ShouldBeFalse();
         }
     }

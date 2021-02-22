@@ -7,7 +7,7 @@ namespace Volo.CmsKit.Admin.Comments
 {
     public interface ICommentAdminAppService : IApplicationService
     {
-        Task<PagedResultDto<CommentDto>> GetListAsync(CommentGetListInput input);
+        Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input);
 
         Task<CommentWithAuthorDto> GetAsync(Guid id);
 
