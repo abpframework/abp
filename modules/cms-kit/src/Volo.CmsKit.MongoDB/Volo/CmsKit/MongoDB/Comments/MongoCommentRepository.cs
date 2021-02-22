@@ -182,15 +182,15 @@ namespace Volo.CmsKit.MongoDB.Comments
         {
             var queryable = await GetMongoQueryableAsync(cancellationToken);
             
-            if (string.IsNullOrEmpty(authorUsername))
+            if (!string.IsNullOrEmpty(authorUsername))
             {
-                var authorQuerable = (await GetDbContextAsync(cancellationToken)).Collection<CmsUser>().AsQueryable();
+                var authorQueryable = (await GetDbContextAsync(cancellationToken)).Collection<CmsUser>().AsQueryable();
                 
-                var author = await authorQuerable.FirstOrDefaultAsync(x => x.UserName == authorUsername, cancellationToken: cancellationToken);
+                var author = await authorQueryable.FirstOrDefaultAsync(x => x.UserName == authorUsername, cancellationToken: cancellationToken);
 
                 var authorId = author?.Id ?? Guid.Empty;
 
-                queryable.Where(x => x.CreatorId == authorId);
+                queryable = queryable.Where(x => x.CreatorId == authorId);
             }
             
             return queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))

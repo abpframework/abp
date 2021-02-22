@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +29,7 @@ namespace Volo.CmsKit.Admin.Comments
                 input.EntityType,
                 input.EntityId,
                 input.RepliedCommentId,
-                input.AuthorUserName,
+                input.Author,
                 input.CreationStartDate,
                 input.CreationEndDate);
 
@@ -39,7 +38,7 @@ namespace Volo.CmsKit.Admin.Comments
                 input.EntityType,
                 input.EntityId,
                 input.RepliedCommentId,
-                input.AuthorUserName,
+                input.Author,
                 input.CreationStartDate,
                 input.CreationEndDate,
                 input.Sorting,

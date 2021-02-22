@@ -66,19 +66,15 @@ namespace Volo.CmsKit.Comments
                 creationStartDate, 
                 creationEndDate);
 
-            query = query.OrderBy(sorting ?? "creationTime desc")
+            if (sorting != null)
+            {
+                sorting = "comment." + sorting;
+            }
+            
+            query = query.OrderBy(sorting ?? "comment.creationTime desc")
                          .PageBy(skipCount, maxResultCount);
             
-            var query2 = from comment in query
-                join user in (await GetDbContextAsync()).Set<CmsUser>() on comment.CreatorId equals user.Id
-                orderby comment.CreationTime
-                select new CommentWithAuthorQueryResultItem
-                {
-                    Comment = comment,
-                    Author = user
-                };
-            
-            return await query2.ToListAsync(GetCancellationToken(cancellationToken));
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<long> GetCountAsync(
@@ -144,7 +140,7 @@ namespace Volo.CmsKit.Comments
             await DeleteAsync(comment, cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        protected virtual async Task<IQueryable<Comment>> GetListQueryAsync(
+        protected virtual async Task<IQueryable<CommentWithAuthorQueryResultItem>> GetListQueryAsync(
             string filter = null, 
             string entityType = null, 
             string entityId = null,
@@ -154,25 +150,30 @@ namespace Volo.CmsKit.Comments
             DateTime? creationEndDate = null
             )
         {
-            var dbSet = await GetDbSetAsync();
-            var queryable = dbSet.AsQueryable();
+            var query = from comment in (await GetDbSetAsync())
+                join user in (await GetDbContextAsync()).Set<CmsUser>() 
+                    on comment.CreatorId equals user.Id
+                select new CommentWithAuthorQueryResultItem
+                {
+                    Comment = comment,
+                    Author = user
+                };
             
-            if (string.IsNullOrEmpty(authorUsername))
+            if (!string.IsNullOrWhiteSpace(authorUsername))
             {
-                var author = await (await GetDbContextAsync()).User.FirstOrDefaultAsync(x => x.UserName == authorUsername);
+                var author = await (await GetDbContextAsync()).Set<CmsUser>().FirstOrDefaultAsync(x => x.UserName == authorUsername);
 
                 var authorId = author?.Id ?? Guid.Empty;
 
-                queryable.Where(x => x.CreatorId == authorId);
+                query = query.Where(x => x.Comment.CreatorId == authorId);
             }
             
-            return (dbSet)
-                .WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
-                .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType.Contains(entityType))
-                .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.EntityId.Contains(entityId))
-                .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
-                .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
-                .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
+            return query.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Comment.Text.Contains(filter))
+                .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.Comment.EntityType.Contains(entityType))
+                .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.Comment.EntityId.Contains(entityId))
+                .WhereIf(repliedCommentId.HasValue, c => c.Comment.RepliedCommentId == repliedCommentId)
+                .WhereIf(creationStartDate.HasValue, c => c.Comment.CreationTime >= creationStartDate)
+                .WhereIf(creationEndDate.HasValue, c => c.Comment.CreationTime <= creationEndDate);
         }
     }
 }
