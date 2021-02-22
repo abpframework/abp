@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace Volo.Abp.DynamicProxy
     {
 	    private readonly ConcurrentDictionary<MethodInfo, object> _cache;
 
-	    public SimpleResultCacheTestInterceptor()
+	    public SimpleResultCacheTestInterceptor(ILogger<AbpInterceptor> logger):base(logger)
 	    {
 		    _cache = new ConcurrentDictionary<MethodInfo, object>();
 	    }

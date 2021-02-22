@@ -6,8 +6,8 @@ namespace Volo.Abp.DynamicProxy
 {
     public static class ProxyHelper
     {
-        private const string ProxyNamespace = "Castle.Proxies";
-        
+        private static string ProxyNamespace => "Castle.Proxies";
+
         /// <summary>
         /// Returns dynamic proxy target object if this is a proxied object, otherwise returns the given object. 
         /// It supports Castle Dynamic Proxies.

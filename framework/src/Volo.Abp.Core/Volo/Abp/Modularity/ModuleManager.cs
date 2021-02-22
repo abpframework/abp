@@ -44,17 +44,17 @@ namespace Volo.Abp.Modularity
                     }
                     catch (Exception ex)
                     {
-                        throw new AbpInitializationException($"An error occurred during the initialize {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
+                        throw new AbpInitializationException($"初始化模块 {contributor.GetType().FullName} 发送错误 {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
                     }
                 }
             }
 
-            _logger.LogInformation("Initialized all ABP modules.");
+            _logger.LogInformation($"初始化ABP Modules 共 { _moduleContainer.Modules.Count}个 module.");
         }
 
         private void LogListOfModules()
         {
-            _logger.LogInformation("Loaded ABP modules:");
+            _logger.LogInformation("加载 ABP Modules:");
 
             foreach (var module in _moduleContainer.Modules)
             {

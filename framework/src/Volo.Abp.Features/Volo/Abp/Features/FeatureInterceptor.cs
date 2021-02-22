@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -11,7 +11,7 @@ namespace Volo.Abp.Features
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public FeatureInterceptor(IServiceScopeFactory serviceScopeFactory)
+        public FeatureInterceptor(IServiceScopeFactory serviceScopeFactory, ILogger<AbpInterceptor> logger) : base(logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
         }

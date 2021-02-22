@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -12,7 +13,7 @@ namespace Volo.Abp.Uow
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public UnitOfWorkInterceptor(IServiceScopeFactory serviceScopeFactory)
+        public UnitOfWorkInterceptor(IServiceScopeFactory serviceScopeFactory,ILogger<AbpInterceptor> logger) : base(logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
         }

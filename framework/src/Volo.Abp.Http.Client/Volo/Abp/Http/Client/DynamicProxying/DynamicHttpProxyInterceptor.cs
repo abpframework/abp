@@ -58,7 +58,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            ILogger<AbpInterceptor> logger) : base(logger)
         {
             CancellationTokenProvider = cancellationTokenProvider;
             CorrelationIdProvider = correlationIdProvider;

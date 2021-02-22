@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
@@ -8,7 +9,7 @@ namespace Volo.Abp.Validation
     {
         private readonly IMethodInvocationValidator _methodInvocationValidator;
 
-        public ValidationInterceptor(IMethodInvocationValidator methodInvocationValidator)
+        public ValidationInterceptor(IMethodInvocationValidator methodInvocationValidator, ILogger<AbpInterceptor> logger) : base(logger)
         {
             _methodInvocationValidator = methodInvocationValidator;
         }

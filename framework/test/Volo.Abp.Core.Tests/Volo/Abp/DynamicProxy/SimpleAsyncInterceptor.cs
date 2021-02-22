@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Volo.Abp.TestBase.Logging;
 
@@ -5,6 +6,10 @@ namespace Volo.Abp.DynamicProxy
 {
     public class SimpleAsyncInterceptor : AbpInterceptor
     {
+        public SimpleAsyncInterceptor(ILogger<AbpInterceptor> logger) : base(logger)
+        {
+
+        }
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             await Task.Delay(5);

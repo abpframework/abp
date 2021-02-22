@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
@@ -8,7 +9,7 @@ namespace Volo.Abp.Authorization
     {
         private readonly IMethodInvocationAuthorizationService _methodInvocationAuthorizationService;
 
-        public AuthorizationInterceptor(IMethodInvocationAuthorizationService methodInvocationAuthorizationService)
+        public AuthorizationInterceptor(IMethodInvocationAuthorizationService methodInvocationAuthorizationService, ILogger<AbpInterceptor> logger) : base(logger)
         {
             _methodInvocationAuthorizationService = methodInvocationAuthorizationService;
         }

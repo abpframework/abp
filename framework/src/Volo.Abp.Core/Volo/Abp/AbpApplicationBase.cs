@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
 using Volo.Abp.Modularity;
@@ -17,6 +18,8 @@ namespace Volo.Abp
         public IServiceProvider ServiceProvider { get; private set; }
 
         public IServiceCollection Services { get; }
+
+        public NullLogger<AbpApplicationBase> Logger { get; }
 
         public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
 
@@ -44,6 +47,8 @@ namespace Volo.Abp
 
             Modules = LoadModules(services, options);
             ConfigureServices();
+
+            Logger = NullLogger<AbpApplicationBase>.Instance;
         }
 
         public virtual void Shutdown()
@@ -60,7 +65,7 @@ namespace Volo.Abp
         {
             //TODO: Shutdown if not done before?
         }
-        
+
         protected virtual void SetServiceProvider(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
@@ -87,7 +92,7 @@ namespace Volo.Abp
                     options.PlugInSources
                 );
         }
-        
+
         //TODO: We can extract a new class for this
         protected virtual void ConfigureServices()
         {

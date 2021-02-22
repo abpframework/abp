@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -12,7 +13,7 @@ namespace Volo.Abp.Auditing
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public AuditingInterceptor(IServiceScopeFactory serviceScopeFactory)
+        public AuditingInterceptor(IServiceScopeFactory serviceScopeFactory, ILogger<AbpInterceptor> logger) : base(logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
         }
