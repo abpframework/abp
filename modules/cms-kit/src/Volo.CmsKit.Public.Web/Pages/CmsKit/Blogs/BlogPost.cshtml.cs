@@ -28,6 +28,8 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
 
         public BlogFeatureDto RatingsFeature { get; private set; }
 
+        public BlogFeatureDto TagsFeature { get; private set; }
+
         protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
 
         protected IBlogFeatureAppService BlogFeatureAppService { get; }
@@ -57,6 +59,11 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
             if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
             {
                 RatingsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, BlogPostConsts.RatingsFeatureName);
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            {
+                TagsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, BlogPostConsts.TagsFeatureName);
             }
         }
     }

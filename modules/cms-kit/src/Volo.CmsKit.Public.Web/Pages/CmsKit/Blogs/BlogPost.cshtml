@@ -26,11 +26,14 @@
 
 @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
 {
-    @await Component.InvokeAsync(typeof(TagViewComponent), new
+    if (Model.TagsFeature?.IsEnabled == true)
     {
-        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-        entityId = Model.BlogPost.Id.ToString()
-    })
+        @await Component.InvokeAsync(typeof(TagViewComponent), new
+        {
+            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+            entityId = Model.BlogPost.Id.ToString()
+        })
+    }
 }
 
 @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
