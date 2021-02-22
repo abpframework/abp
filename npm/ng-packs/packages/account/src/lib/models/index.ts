@@ -1,2 +1,2 @@
 export * from './account';
-export * from './options';
+export * from './config-options';
