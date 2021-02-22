@@ -9,28 +9,27 @@ namespace Volo.CmsKit.Blogs
     public class BlogFeatureAppService : CmsKitAppServiceBase, IBlogFeatureAppService
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
-        protected IDistributedCache<BlogFeatureDto> Cache { get; }
+        protected IBlogFeatureCacheManager BlogFeatureCacheManager { get; }
 
         public BlogFeatureAppService(
             IBlogFeatureRepository blogFeatureRepository,
-            IDistributedCache<BlogFeatureDto> cache)
+            IBlogFeatureCacheManager blogFeatureCacheManager)
         {
             BlogFeatureRepository = blogFeatureRepository;
-            Cache = cache;
+            BlogFeatureCacheManager = blogFeatureCacheManager;
         }
 
-        public async Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
+        public Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
         {
-            return await Cache.GetOrAddAsync(
-                $"{blogId}_{featureName}",
-                () => GetFromDatabaseAsync(blogId, featureName),
-                () => new DistributedCacheEntryOptions
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(1)
-                });
+            return BlogFeatureCacheManager
+                    .AddOrGetAsync(
+                        blogId,
+                        featureName,
+                        ()=> GetOrDefaultFromDatabaseAsync(blogId, featureName)
+                        );
         }
 
-        private async Task<BlogFeatureDto> GetFromDatabaseAsync(Guid blogId, string featureName)
+        private async Task<BlogFeatureDto> GetOrDefaultFromDatabaseAsync(Guid blogId, string featureName)
         {
             var feature = await BlogFeatureRepository.FindAsync(blogId, featureName);
             var blogFeature = feature ?? new BlogFeature(blogId, featureName);
