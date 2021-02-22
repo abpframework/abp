@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -10,6 +12,13 @@ namespace Volo.Abp.Cli.Commands
 {
     public class CreateMigrationAndRunMigrator : IConsoleCommand, ITransientDependency
     {
+        public ILogger<CreateMigrationAndRunMigrator> Logger { get; set; }
+
+        public CreateMigrationAndRunMigrator()
+        {
+            Logger = NullLogger<CreateMigrationAndRunMigrator>.Instance;
+        }
+
         public virtual async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             if (commandLineArgs.Target.IsNullOrEmpty())
@@ -26,6 +35,8 @@ namespace Volo.Abp.Cli.Commands
                 throw new Exception("DbMigrator is not found!");
             }
 
+            await CheckAndInstallDotnetEfIfNeededAsync();
+
             var output = CmdHelper.RunCmdAndGetOutput($"cd \"{commandLineArgs.Target}\" && dotnet ef migrations add Initial -s \"{dbMigratorProjectPath}\"");
 
             if (output.Contains("Done.") && output.Contains("To undo this action") && output.Contains("ef migrations remove")) // Migration added successfully
@@ -36,6 +47,22 @@ namespace Volo.Abp.Cli.Commands
             {
                 throw new Exception("Migrations failed: " + output);
             }
+        }
+
+        private async Task CheckAndInstallDotnetEfIfNeededAsync()
+        {
+            var output = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g");
+
+            if (output.Contains("dotnet-ef"))
+            {
+                return;
+            }
+
+            Logger.LogInformation("Installing dotnet-ef tool...");
+
+            CmdHelper.RunCmd("dotnet tool install --global dotnet-ef");
+
+            Logger.LogInformation("dotnet-ef tool is installed.");
         }
 
         private string GetDbMigratorProjectPath(string dbMigrationsFolderPath)
