@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Blogging;
 
@@ -15,8 +16,7 @@ namespace Volo.BloggingTestApp.Controllers
         }
         public ActionResult Index()
         {
-            var urlPrefix = _blogOptions.RoutePrefix;
-            return Redirect(urlPrefix);
+            return Json(new {Now=DateTime.Now });
         }
     }
 }
