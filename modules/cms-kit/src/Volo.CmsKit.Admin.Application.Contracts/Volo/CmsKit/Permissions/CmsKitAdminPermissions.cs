@@ -6,6 +6,12 @@ namespace Volo.CmsKit.Permissions
     {
         public const string GroupName = "CmsKit";
         
+        public static class Comments
+        {
+            public const string Default = GroupName + ".Comments";
+            public const string Delete = Default + ".Delete";
+        }
+        
         public static class Tags
         {
             public const string Default = GroupName + ".Tags";

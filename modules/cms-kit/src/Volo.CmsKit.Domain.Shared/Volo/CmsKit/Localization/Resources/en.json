@@ -19,6 +19,8 @@
     "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
     "Permission:BlogManagement.Features": "Features",
     "Permission:CmsKit": "CmsKit",
+    "Permission:Comments": "Comment Management",
+    "Permission:Comments.Delete": "Delete",
     "Permission:Contents": "Content Management",
     "Permission:Contents.Create": "Create Content",
     "Permission:Contents.Delete": "Delete Content",
