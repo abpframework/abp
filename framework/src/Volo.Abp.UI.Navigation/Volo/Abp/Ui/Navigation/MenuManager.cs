@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.UI.Navigation
@@ -13,7 +15,7 @@ namespace Volo.Abp.UI.Navigation
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
         public MenuManager(
-            IOptions<AbpNavigationOptions> options, 
+            IOptions<AbpNavigationOptions> options,
             IHybridServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
@@ -27,6 +29,26 @@ namespace Volo.Abp.UI.Navigation
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
+
+                var menuContributorBases = Options.MenuContributors.OfType<MenuContributorBase>().ToList();
+                var preCheckPermissions = menuContributorBases.SelectMany(x => x.PreCheckPermissions).ToArray();
+
+                if (preCheckPermissions.Any())
+                {
+                    var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
+                    var grantResult = await permissionChecker.IsGrantedAsync(preCheckPermissions);
+
+                    foreach (var menuContributorBase in menuContributorBases)
+                    {
+                        foreach (var result in grantResult.Result.Where(x => menuContributorBase.PreCheckPermissions.Contains(x.Key)))
+                        {
+                            if (result.Value == PermissionGrantResult.Granted)
+                            {
+                                menuContributorBase.AddGrantedPermission(result.Key);
+                            }
+                        }
+                    }
+                }
 
                 foreach (var contributor in Options.MenuContributors)
                 {
