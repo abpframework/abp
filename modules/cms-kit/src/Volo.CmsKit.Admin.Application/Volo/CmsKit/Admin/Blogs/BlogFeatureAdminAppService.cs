@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
@@ -16,14 +17,19 @@ namespace Volo.CmsKit.Admin.Blogs
     public class BlogFeatureAdminAppService : CmsKitAdminAppServiceBase, IBlogFeatureAdminAppService
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
+
         protected IBlogFeatureManager BlogFeatureManager { get; }
+
+        protected IDistributedEventBus EventBus { get; }
 
         public BlogFeatureAdminAppService(
             IBlogFeatureRepository blogFeatureRepository,
-            IBlogFeatureManager blogFeatureManager)
+            IBlogFeatureManager blogFeatureManager,
+            IDistributedEventBus eventBus)
         {
             BlogFeatureRepository = blogFeatureRepository;
             BlogFeatureManager = blogFeatureManager;
+            EventBus = eventBus;
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
@@ -48,6 +54,13 @@ namespace Volo.CmsKit.Admin.Blogs
                 blogFeature.IsEnabled = dto.IsEnabled;
                 await BlogFeatureRepository.UpdateAsync(blogFeature);
             }
+
+            await EventBus.PublishAsync(new BlogFeatureChangedEto
+            {
+                BlogId = blogId,
+                FeatureName = dto.FeatureName,
+                IsEnabled = dto.IsEnabled
+            });
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
+using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.CmsKit.Blogs
 {
