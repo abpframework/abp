@@ -37,7 +37,7 @@ namespace Volo.CmsKit.Blogs
 
             var defaultFeature = new BlogFeature(Guid.Empty, nonExistingFeatureName);
             result.ShouldNotBeNull();
-            result.Enabled.ShouldBe(defaultFeature.Enabled);
+            result.IsEnabled.ShouldBe(defaultFeature.IsEnabled);
         }
     }
 }

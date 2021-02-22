@@ -32,12 +32,9 @@ namespace Volo.CmsKit.Blogs
         private async Task<BlogFeatureDto> GetFromDatabaseAsync(Guid blogId, string featureName)
         {
             var feature = await BlogFeatureRepository.FindAsync(blogId, featureName);
-            if (feature == null)
-            {
-                feature = new BlogFeature(blogId, featureName);
-            }
+            var blogFeature = feature ?? new BlogFeature(blogId, featureName);
 
-            return ObjectMapper.Map<BlogFeature, BlogFeatureDto>(feature);
+            return ObjectMapper.Map<BlogFeature, BlogFeatureDto>(blogFeature);
         }
     }
 }

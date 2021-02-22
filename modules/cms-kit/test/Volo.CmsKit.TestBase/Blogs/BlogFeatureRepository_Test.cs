@@ -45,7 +45,7 @@ namespace Volo.CmsKit.Blogs
 
             result.ShouldNotBeNull();
             result.FeatureName.ShouldBe(testData.BlogFeature_1_FeatureName);
-            result.Enabled.ShouldBe(testData.BlogFeature_1_Enabled);
+            result.IsEnabled.ShouldBe(testData.BlogFeature_1_Enabled);
         }
 
         [Fact]

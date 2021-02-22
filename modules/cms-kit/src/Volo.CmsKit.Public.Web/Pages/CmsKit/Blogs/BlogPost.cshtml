@@ -35,7 +35,7 @@
 
 @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
 {
-    if (Model.ReactionsFeature?.Enabled == true)
+    if (Model.ReactionsFeature?.IsEnabled == true)
     {
         @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
         {
@@ -48,7 +48,7 @@
 
 @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
 {
-    if (Model.RatingsFeature?.Enabled == true)
+    if (Model.RatingsFeature?.IsEnabled == true)
     {
         @await Component.InvokeAsync(typeof(RatingViewComponent), new
         {
@@ -62,7 +62,7 @@
 
 @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
 {
-    if (Model.CommentsFeature?.Enabled == true)
+    if (Model.CommentsFeature?.IsEnabled == true)
     {
         @await Component.InvokeAsync(typeof(DefaultBlogPostCommentViewComponent), new
         {

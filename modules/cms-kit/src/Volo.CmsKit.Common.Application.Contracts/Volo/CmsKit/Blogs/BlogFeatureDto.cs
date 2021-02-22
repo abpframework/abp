@@ -6,6 +6,6 @@ namespace Volo.CmsKit.Blogs
     public class BlogFeatureDto : EntityDto<Guid>
     {
         public string FeatureName { get; set; }
-        public bool Enabled { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }
