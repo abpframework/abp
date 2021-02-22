@@ -9,7 +9,7 @@ import snq from 'snq';
 import { eAccountComponents } from '../../enums/components';
 import { AuthenticationService } from '../../services/authentication.service';
 
-const { maxLength, minLength, required } = Validators;
+const { maxLength, required } = Validators;
 
 @Component({
   selector: 'abp-login',
@@ -73,8 +73,6 @@ export class LoginComponent implements OnInit {
         }),
         finalize(() => (this.inProgress = false)),
       )
-      .subscribe(() => {
-        // TODO: this.store.dispatch(new SetRemember(this.form.get('remember').value));
-      });
+      .subscribe();
   }
 }
