@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Public.Blogs
+namespace Volo.CmsKit.Blogs
 {
-    public interface IBlogFeaturePublicAppService
+    public interface IBlogFeatureAppService
     {
         Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName);
     }

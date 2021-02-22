@@ -1,20 +1,16 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
-using Volo.CmsKit.Blogs;
 
-namespace Volo.CmsKit.Public.Blogs
+namespace Volo.CmsKit.Blogs
 {
-    public class BlogFeaturePublicAppService : CmsKitPublicAppServiceBase, IBlogFeaturePublicAppService
+    public class BlogFeatureAppService : CmsKitAppServiceBase, IBlogFeatureAppService
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
         protected IDistributedCache<BlogFeatureDto> Cache { get; }
 
-        public BlogFeaturePublicAppService(
+        public BlogFeatureAppService(
             IBlogFeatureRepository blogFeatureRepository,
             IDistributedCache<BlogFeatureDto> cache)
         {
