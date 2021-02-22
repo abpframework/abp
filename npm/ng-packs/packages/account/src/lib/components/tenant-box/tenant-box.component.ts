@@ -7,7 +7,6 @@ import {
 } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { finalize } from 'rxjs/operators';
 import { Account } from '../../models/account';
 
@@ -26,7 +25,6 @@ export class TenantBoxComponent
   modalBusy: boolean;
 
   constructor(
-    private store: Store,
     private toasterService: ToasterService,
     private tenantService: AbpTenantService,
     private sessionState: SessionStateService,

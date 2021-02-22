@@ -1,8 +1,7 @@
-import { Profile, ProfileService } from '@abp/ng.core';
+import { ProfileService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
 import { finalize } from 'rxjs/operators';
 import { Account } from '../../models/account';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
@@ -25,7 +24,6 @@ export class PersonalSettingsComponent
 
   constructor(
     private fb: FormBuilder,
-    private store: Store,
     private toasterService: ToasterService,
     private profileService: ProfileService,
     private manageProfileState: ManageProfileStateService,
