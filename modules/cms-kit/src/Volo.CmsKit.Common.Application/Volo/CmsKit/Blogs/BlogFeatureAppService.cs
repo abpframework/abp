@@ -9,6 +9,7 @@ namespace Volo.CmsKit.Blogs
     public class BlogFeatureAppService : CmsKitAppServiceBase, IBlogFeatureAppService
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
+
         protected IBlogFeatureCacheManager BlogFeatureCacheManager { get; }
 
         public BlogFeatureAppService(
