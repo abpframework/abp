@@ -91,10 +91,10 @@ export const environment = {
 
 > **Important Note:** The `application.baseUrl` and the `{0}` placeholder in the value of the `baseUrl` property are required to be able to get tenant from running URL. Other placeholders in API URLs are optional.
 
-After the configuration above, if your app runs on the `mytenant1.mydomain.com`, the app will get tenant name as **mytenant1** and replace the environment object in `ConfigState` on app initialization as follows:
+After the configuration above, if your app runs on the `mytenant1.mydomain.com`, the app will get tenant name as **mytenant1** and replace the environment object in `EnvironmentService` on app initialization as follows:
 
 ```js
-// environment object in ConfigState
+// environment object in EnvironmentService
 
 {
   //...

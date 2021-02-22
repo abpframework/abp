@@ -9,11 +9,11 @@ namespace Volo.CmsKit.Public.Contents
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-public/contents")]
-    public class ContentController : CmsKitControllerBase, IContentAppService
+    public class ContentController : CmsKitControllerBase, IContentPublicAppService
     {
-        protected readonly IContentAppService _contentAppService;
+        protected readonly IContentPublicAppService _contentAppService;
 
-        public ContentController(IContentAppService contentAppService)
+        public ContentController(IContentPublicAppService contentAppService)
         {
             _contentAppService = contentAppService;
         }
