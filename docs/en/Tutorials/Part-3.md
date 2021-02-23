@@ -732,8 +732,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-// import bookTypeOptions from @proxy/books
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books'; // add bookTypeOptions
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
 @Component({
