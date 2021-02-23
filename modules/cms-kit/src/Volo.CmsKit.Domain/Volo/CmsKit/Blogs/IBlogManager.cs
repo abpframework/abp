@@ -5,6 +5,6 @@ namespace Volo.CmsKit.Blogs
 {
     public interface IBlogManager
     {
-        Task CheckDeleteAsync(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }

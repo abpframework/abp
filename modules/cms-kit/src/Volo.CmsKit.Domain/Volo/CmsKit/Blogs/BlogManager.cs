@@ -6,14 +6,16 @@ namespace Volo.CmsKit.Blogs
 {
     public class BlogManager : DomainService, IBlogManager
     {
+        protected readonly IBlogRepository BlogRepository;
         protected readonly IBlogPostRepository BlogPostRepository;
-
-        public BlogManager(IBlogPostRepository blogPostRepository)
+        
+        public BlogManager(IBlogRepository blogRepository, IBlogPostRepository blogPostRepository)
         {
+            BlogRepository = blogRepository;
             BlogPostRepository = blogPostRepository;
         }
 
-        public virtual async Task CheckDeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             var hasPosts = await BlogPostRepository.ExistsAsync(id);
 
@@ -21,6 +23,8 @@ namespace Volo.CmsKit.Blogs
             {
                 throw new BlogHasPostsCannotBeDeletedException(id);
             }
+
+            await BlogRepository.DeleteAsync(id);
         }
     }
 }

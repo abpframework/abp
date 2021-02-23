@@ -40,9 +40,9 @@ namespace Volo.CmsKit.Admin.Blogs
 
         public override async Task DeleteAsync(Guid id)
         {
-            await BlogManager.CheckDeleteAsync(id);
+            await base.CheckPolicyAsync(DeletePolicyName);
             
-            await base.DeleteAsync(id);
+            await BlogManager.DeleteAsync(id);
         }
     }
 }
