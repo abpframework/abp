@@ -40,6 +40,21 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpBlobContainers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBlobContainers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpClaimTypes",
                 columns: table => new
                 {
@@ -252,6 +267,52 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CmsBlogFeatures",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BlogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FeatureName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsBlogFeatures", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsBlogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsBlogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CmsComments",
                 columns: table => new
                 {
@@ -307,6 +368,54 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CmsMediaDescriptors",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    MimeType = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Size = table.Column<long>(type: "bigint", maxLength: 2147483647, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsMediaDescriptors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsPages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsPages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CmsRatings",
                 columns: table => new
                 {
@@ -328,10 +437,9 @@ namespace Volo.CmsKit.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     EntityType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
-                    HexColor = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: true),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -431,6 +539,29 @@ namespace Volo.CmsKit.Migrations
                         name: "FK_AbpEntityChanges_AbpAuditLogs_AuditLogId",
                         column: x => x.AuditLogId,
                         principalTable: "AbpAuditLogs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpBlobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContainerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Content = table.Column<byte[]>(type: "varbinary(max)", maxLength: 2147483647, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBlobs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpBlobs_AbpBlobContainers_ContainerId",
+                        column: x => x.ContainerId,
+                        principalTable: "AbpBlobContainers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -618,6 +749,49 @@ namespace Volo.CmsKit.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CmsBlogPosts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BlogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ShortDescription = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsBlogPosts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CmsBlogPosts_CmsUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "CmsUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CmsBlogPosts_CmsUsers_DeleterId",
+                        column: x => x.DeleterId,
+                        principalTable: "CmsUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CmsBlogPosts_CmsUsers_LastModifierId",
+                        column: x => x.LastModifierId,
+                        principalTable: "CmsUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpEntityPropertyChanges",
                 columns: table => new
                 {
@@ -659,6 +833,21 @@ namespace Volo.CmsKit.Migrations
                 name: "IX_AbpAuditLogs_TenantId_UserId_ExecutionTime",
                 table: "AbpAuditLogs",
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobContainers_TenantId_Name",
+                table: "AbpBlobContainers",
+                columns: new[] { "TenantId", "Name" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_ContainerId",
+                table: "AbpBlobs",
+                column: "ContainerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_TenantId_ContainerId_Name",
+                table: "AbpBlobs",
+                columns: new[] { "TenantId", "ContainerId", "Name" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
@@ -788,6 +977,26 @@ namespace Volo.CmsKit.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CmsBlogPosts_CreatorId",
+                table: "CmsBlogPosts",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsBlogPosts_DeleterId",
+                table: "CmsBlogPosts",
+                column: "DeleterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsBlogPosts_LastModifierId",
+                table: "CmsBlogPosts",
+                column: "LastModifierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsBlogPosts_Slug_BlogId",
+                table: "CmsBlogPosts",
+                columns: new[] { "Slug", "BlogId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CmsComments_TenantId_EntityType_EntityId",
                 table: "CmsComments",
                 columns: new[] { "TenantId", "EntityType", "EntityId" });
@@ -806,6 +1015,11 @@ namespace Volo.CmsKit.Migrations
                 name: "IX_CmsEntityTags_TenantId_EntityId_TagId",
                 table: "CmsEntityTags",
                 columns: new[] { "TenantId", "EntityId", "TagId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsPages_TenantId_Slug",
+                table: "CmsPages",
+                columns: new[] { "TenantId", "Slug" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CmsRatings_TenantId_EntityType_EntityId_CreatorId",
@@ -842,6 +1056,9 @@ namespace Volo.CmsKit.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AbpAuditLogActions");
+
+            migrationBuilder.DropTable(
+                name: "AbpBlobs");
 
             migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
@@ -889,6 +1106,15 @@ namespace Volo.CmsKit.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CmsBlogFeatures");
+
+            migrationBuilder.DropTable(
+                name: "CmsBlogPosts");
+
+            migrationBuilder.DropTable(
+                name: "CmsBlogs");
+
+            migrationBuilder.DropTable(
                 name: "CmsComments");
 
             migrationBuilder.DropTable(
@@ -896,6 +1122,12 @@ namespace Volo.CmsKit.Migrations
 
             migrationBuilder.DropTable(
                 name: "CmsEntityTags");
+
+            migrationBuilder.DropTable(
+                name: "CmsMediaDescriptors");
+
+            migrationBuilder.DropTable(
+                name: "CmsPages");
 
             migrationBuilder.DropTable(
                 name: "CmsRatings");
@@ -907,7 +1139,7 @@ namespace Volo.CmsKit.Migrations
                 name: "CmsUserReactions");
 
             migrationBuilder.DropTable(
-                name: "CmsUsers");
+                name: "AbpBlobContainers");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChanges");
@@ -923,6 +1155,9 @@ namespace Volo.CmsKit.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUsers");
+
+            migrationBuilder.DropTable(
+                name: "CmsUsers");
 
             migrationBuilder.DropTable(
                 name: "AbpAuditLogs");

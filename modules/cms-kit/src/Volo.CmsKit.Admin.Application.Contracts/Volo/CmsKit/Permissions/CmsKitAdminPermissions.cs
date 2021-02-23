@@ -42,6 +42,7 @@ namespace Volo.CmsKit.Permissions
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
+            public const string Features = Default + ".Features";
         }
 
         public static class BlogPosts

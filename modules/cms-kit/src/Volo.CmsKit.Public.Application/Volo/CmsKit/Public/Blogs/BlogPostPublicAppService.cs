@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -26,7 +27,7 @@ namespace Volo.CmsKit.Public.Blogs
             BlobContainer = blobContainer;
         }
 
-        public async Task<BlogPostPublicDto> GetAsync(string blogSlug, string blogPostSlug)
+        public virtual async Task<BlogPostPublicDto> GetAsync([NotNull] string blogSlug, [NotNull] string blogPostSlug)
         {
             var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
@@ -35,7 +36,7 @@ namespace Volo.CmsKit.Public.Blogs
             return ObjectMapper.Map<BlogPost, BlogPostPublicDto>(blogPost);
         }
 
-        public async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
+        public virtual async Task<PagedResultDto<BlogPostPublicDto>> GetListAsync([NotNull] string blogSlug, PagedAndSortedResultRequestDto input)
         {
             var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
@@ -46,7 +47,7 @@ namespace Volo.CmsKit.Public.Blogs
                 ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
         }
 
-        public async Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
+        public virtual async Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
         {
             var stream = await BlobContainer.GetAsync(id.ToString());
 
