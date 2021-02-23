@@ -311,3 +311,8 @@ abp-build-config.json
 
 # Identity Server temp signature file
 tempkey.jwk
+/modules/docs/src/Volo.Docs.Admin.Web/Properties/launchSettings.json
+/modules/docs/src/Volo.Docs.Web/Properties/launchSettings.json
+/modules/setting-management/src/Volo.Abp.SettingManagement.Web/Properties/launchSettings.json
+/modules/feature-management/src/Volo.Abp.FeatureManagement.Web/Properties/launchSettings.json
+/modules/tenant-management/src/Volo.Abp.TenantManagement.Web/Properties/launchSettings.json
