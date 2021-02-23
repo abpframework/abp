@@ -16,6 +16,7 @@
     "LoginToReply": "Cevap vermek için giriş yap",
     "Menu:CMS": "CMS",
     "MessageDeletionConfirmationMessage": "Bu yorum tamamen silinecektir",
+    "Permission:BlogManagement.Features": "Özellikler",
     "Permission:CmsKit": "CmsKit",
     "Permission:Contents": "İçerik Yönetimi",
     "Permission:Contents.Create": "İçerik Oluşturma",

@@ -4,7 +4,8 @@
     "CmsKit:0002": "Content already exists!",
     "CmsKit:0003": "The entity {0} is not taggable.",
     "CmsKit:BlogPost:0001": "The given slug already exists!",
-    "CmsKit:Page:0001": "The given slug ({0}) already exists.",
+    "CmsKit:Media:0001": "'{Name}' is not a valid media name.",
+    "CmsKit:Page:0001": "The given url ({0}) already exists.",
     "CmsKit:Tag:0002": "The entity is not taggable!",
     "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display.",
     "Comments": "Comments",
@@ -16,6 +17,7 @@
     "LoginToReply": "Login to reply",
     "Menu:CMS": "CMS",
     "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
+    "Permission:BlogManagement.Features": "Features",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Comment Management",
     "Permission:Comments.Delete": "Delete",
@@ -23,6 +25,9 @@
     "Permission:Contents.Create": "Create Content",
     "Permission:Contents.Delete": "Delete Content",
     "Permission:Contents.Update": "Update Content",
+    "Permission:MediaDescriptorManagement": "Media Management",
+    "Permission:MediaDescriptorManagement:Create": "Create",
+    "Permission:MediaDescriptorManagement:Delete": "Delete",
     "Permission:PageManagement": "Page Management",
     "Permission:PageManagement:Create": "Create",
     "Permission:PageManagement:Delete": "Delete",
@@ -42,10 +47,6 @@
     "Undo": "Undo",
     "Update": "Update",
     "YourComment": "Your comment",
-    "YourReply": "Your reply",
-    "CmsKit:Media:0001": "'{Name}' is not a valid media name.",
-    "Permission:MediaDescriptorManagement": "Media Management",
-    "Permission:MediaDescriptorManagement:Create": "Create",
-    "Permission:MediaDescriptorManagement:Delete": "Delete"
+    "YourReply": "Your reply"
   }
 }

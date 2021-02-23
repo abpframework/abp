@@ -91,6 +91,18 @@ namespace Volo.CmsKit
 
         public string BlogPost_2_Slug => "how-to-use-cms-kit";
 
+        public Guid BlogFeature_1_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_1_FeatureName => "Analytics";
+
+        public bool BlogFeature_1_Enabled => true;
+
+        public Guid BlogFeature_2_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_2_FeatureName => "Hotjar";
+
+        public bool BlogFeature_2_Enabled => false;
+
         public Guid Media_1_Id { get; } = Guid.NewGuid();
         
         public string Media_1_Content = "Hi, this is text file";

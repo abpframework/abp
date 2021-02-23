@@ -26,6 +26,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
         public DbSet<Page> Pages { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<BlogPost> BlogPosts { get; set; }
+        public DbSet<BlogFeature> BlogFeatures { get; set; }
         public DbSet<MediaDescriptor> MediaDescriptors { get; set; }
         
         public CmsKitDbContext(DbContextOptions<CmsKitDbContext> options)

@@ -49,6 +49,7 @@ namespace Volo.CmsKit.Permissions
                 blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Create, L("Permission:BlogManagement.Create"));
                 blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Update, L("Permission:BlogManagement.Update"));
                 blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Delete, L("Permission:BlogManagement.Delete"));
+                blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Features, L("Permission:BlogManagement.Features"));
 
                 var blogPostManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.BlogPosts.Default, L("Permission:BlogPostManagement"));
                 blogManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Create, L("Permission:BlogPostManagement.Create"));
