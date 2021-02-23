@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 
@@ -13,16 +14,16 @@ namespace Volo.CmsKit.Blogs
             BlogRepository = blogRepository;
         }
 
-        public virtual async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var hasPosts = await BlogRepository.HasPostsAsync(id);
+            var hasPosts = await BlogRepository.HasPostsAsync(id, cancellationToken);
 
             if (hasPosts)
             {
-                throw new BlogHasPostsCannotBeDeletedException(id);
+                throw new BlogCannotBeDeletedException(id);
             }
 
-            await BlogRepository.DeleteAsync(id);
+            await BlogRepository.DeleteAsync(id, cancellationToken: cancellationToken);
         }
     }
 }

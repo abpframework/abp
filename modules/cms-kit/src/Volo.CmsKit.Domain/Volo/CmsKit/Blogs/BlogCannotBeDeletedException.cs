@@ -5,15 +5,15 @@ using Volo.Abp;
 namespace Volo.CmsKit.Blogs
 {
     [Serializable]
-    public class BlogHasPostsCannotBeDeletedException : BusinessException
+    public class BlogCannotBeDeletedException : BusinessException
     {
-        public BlogHasPostsCannotBeDeletedException(Guid id)
+        public BlogCannotBeDeletedException(Guid id)
         {
             Code = CmsKitErrorCodes.Blogs.SlugAlreadyExist;
             WithData("Id", id);
         }
         
-        public BlogHasPostsCannotBeDeletedException(SerializationInfo serializationInfo, StreamingContext context)
+        public BlogCannotBeDeletedException(SerializationInfo serializationInfo, StreamingContext context)
             : base(serializationInfo, context)
         {
 

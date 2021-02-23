@@ -26,7 +26,6 @@ namespace Volo.CmsKit.Admin.Blogs
             GetPolicyName = CmsKitAdminPermissions.Blogs.Default;
             CreatePolicyName = CmsKitAdminPermissions.Blogs.Create;
             UpdatePolicyName = CmsKitAdminPermissions.Blogs.Update;
-            DeletePolicyName = CmsKitAdminPermissions.Blogs.Delete;
         }
 
         protected override async Task<IQueryable<Blog>> CreateFilteredQueryAsync(BlogGetListInput input)
@@ -38,10 +37,9 @@ namespace Volo.CmsKit.Admin.Blogs
                         x => x.Name.ToLower().Contains(input.Filter));
         }
 
+        [Authorize(CmsKitAdminPermissions.Blogs.Delete)]
         public override async Task DeleteAsync(Guid id)
-        {
-            await base.CheckPolicyAsync(DeletePolicyName);
-            
+        {            
             await BlogManager.DeleteAsync(id);
         }
     }

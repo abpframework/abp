@@ -21,7 +21,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task DeleteAsync_ShouldThrowError_WhileItHasPosts()
         {
-            await Should.ThrowAsync<BlogHasPostsCannotBeDeletedException>(async () =>
+            await Should.ThrowAsync<BlogCannotBeDeletedException>(async () =>
                 await blogAdminAppService.DeleteAsync(cmsKitTestData.Blog_Id));
         }
 
