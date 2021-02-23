@@ -82,7 +82,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 if (!string.IsNullOrWhiteSpace(e.Message))
                 {
-                    Alerts.Warning(e.Message);
+                    Alerts.Warning(GetLocalizeExceptionMessage(e));
                     return Page();
                 }
 

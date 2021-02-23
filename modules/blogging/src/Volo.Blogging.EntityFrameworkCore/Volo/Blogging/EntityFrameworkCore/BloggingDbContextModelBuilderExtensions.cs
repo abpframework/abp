@@ -20,6 +20,11 @@ namespace Volo.Blogging.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new BloggingModelBuilderConfigurationOptions(
                 BloggingDbProperties.DbTablePrefix,
                 BloggingDbProperties.DbSchema

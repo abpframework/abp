@@ -1,0 +1,47 @@
+﻿@page "/blogs/{blogSlug}"
+
+@using Volo.CmsKit.Public.Web.Pages
+
+@inherits CmsKitPublicPageBase
+
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs.IndexModel
+
+<abp-row id="blogs-container">
+    @foreach (var blog in Model.Blogs.Items)
+    {
+        <abp-column size="_12" class="m-3">
+            <abp-card>
+                <abp-card-header>
+                    <abp-card-title>
+                        @blog.Title
+                    </abp-card-title>
+                    <abp-card-subtitle>
+                        @@@blog.Creator?.UserName
+                    </abp-card-subtitle>
+                </abp-card-header>
+                <abp-card-body>
+                    <img src="/api/cms-kit-public/blog-posts/@blog.Id/cover-image" class="card-img-top" style="max-width:200px;max-height:200px;" onerror="this.src='https://dummyimage.com/300x200/a3a3a3/fff.png'" />
+                    <abp-card-text>
+                        @blog.ShortDescription
+                    </abp-card-text>
+                    <abp-card-text>
+                        <a href="/blogs/@Model.BlogSlug/@blog.Slug">
+                            <abp-button text="@L["Read"]"
+                                        button-type="Outline_Primary" />
+                        </a>
+                    </abp-card-text>
+                </abp-card-body>
+                <abp-card-footer>
+                    <abp-card-text>
+                        @blog.CreationTime
+                    </abp-card-text>
+                </abp-card-footer>
+            </abp-card>
+        </abp-column>
+
+    }
+</abp-row>
+<abp-row>
+    <abp-paginator model="Model.PagerModel" />
+</abp-row>
+

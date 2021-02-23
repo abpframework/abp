@@ -8,6 +8,7 @@
     "ProjectName": "Project name",
     "ProjectType": "Project type",
     "DatabaseProvider": "Database provider",
+    "DatabaseManagementSystem": "Database management system",
     "NTier": "N-Tier",
     "IncludeUserInterface": "Include user interface",
     "CreateNow": "Create now",
@@ -193,6 +194,8 @@
     "MultipleDBOptions": "Multiple Database Providers",
     "MultipleUIOptionsExplanation": "The core framework is designed as UI independent and can work with any type of UI system, while there are multiple pre-built and integrated options are provided out of the box.",
     "MultipleDBOptionsExplanation": "The framework can work with any data source, while the following providers are officially developed and supported;",
-    "SelectLanguage": "Select language"
+    "SelectLanguage": "Select language",
+	"LatestArticleOnCommunity": "Latest Article on ABP Community",
+	"Register": "Register"
   }
 }

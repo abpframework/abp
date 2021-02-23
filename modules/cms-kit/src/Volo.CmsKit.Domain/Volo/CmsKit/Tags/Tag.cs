@@ -8,11 +8,13 @@ namespace Volo.CmsKit.Tags
 {
     public class Tag : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
-        public string EntityType { get; set; }
+        public virtual Guid? TenantId { get; protected set; }
 
-        public string Name { get; protected set; }
-
-        public Guid? TenantId { get; set; }
+        [NotNull]
+        public virtual string EntityType { get; protected set; }
+        
+        [NotNull]
+        public virtual string Name { get; protected set; }
 
         protected Tag()
         {
@@ -24,14 +26,19 @@ namespace Volo.CmsKit.Tags
             [NotNull] string name,
             Guid? tenantId = null) : base(id)
         {
-            EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), TagConsts.MaxEntityTypeLength);
-            SetName(name);
+            EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType), TagConsts.MaxEntityTypeLength);
+            Name = Check.NotNullOrEmpty(name, nameof(name), TagConsts.MaxNameLength);
             TenantId = tenantId;
         }
 
-        public void SetName(string name)
+        public virtual void SetName([NotNull] string name)
         {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name), TagConsts.MaxNameLength);
+            Name = Check.NotNullOrEmpty(name, nameof(name), TagConsts.MaxNameLength);
+        }
+
+        public virtual void SetEntityType(string entityType)
+        {
+            EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType), TagConsts.MaxEntityTypeLength);
         }
     }
 }

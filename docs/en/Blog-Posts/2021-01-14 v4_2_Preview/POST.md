@@ -8,16 +8,16 @@ Today, we have released the [ABP Framework](https://abp.io/) and the [ABP Commer
 
 If you want to try the version `4.2.0` today, follow the steps below;
 
-1) **Upgrade** the ABP CLI to the version `4.2.0-rc.1` using a command line terminal:
+1) **Upgrade** the ABP CLI to the version `4.2.0-rc.2` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 4.2.0-rc.1
+dotnet tool update Volo.Abp.Cli -g --version 4.2.0-rc.2
 ````
 
 **or install** if you haven't installed before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 4.2.0-rc.1
+dotnet tool install Volo.Abp.Cli -g --version 4.2.0-rc.2
 ````
 
 2) Create a **new application** with the `--preview` option:
@@ -120,13 +120,35 @@ Currently, **MongoDB** provider implements these methods as a single bulk operat
 
 ### Selecting DBMS on Template Creation
 
-And DbMigrator creates the initial migration if no migration exists.
+[ABP CLI](https://docs.abp.io/en/abp/4.2/CLI#new) now has an option to specify the DBMS when you use EF Core as the database provider.
 
-**TODO**
+**Example: Select MySQL as the DBMS**
 
-### Swagger Login
+````bash
+abp new BookStore -dbms mysql --preview
+````
 
-TODO
+Available options: `SqlServer` (default), `MySQL`, `SQLite`, `Oracle-Devart`, `PostgreSQL`. See the [documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Other-DBMS) to use any other DBMS or switch the DBMS later.
+
+One change related to this feature is that: Now, the startup template doesn't come with an **initial migration** file. This is because the database migrations are different based on your DBMS preference and should be re-created. However, when you first run the `.DbMigrator` application, it will create the initial migration and create the database just like before.
+
+> See The Initial Migration section in the [Getting Started](https://docs.abp.io/en/abp/4.2/Getting-Started-Running-Solution?DB=EF#database-migrations) document if you have problems on running the `.DbMigrator` application first time.
+
+### Swagger UI Login / Authorization
+
+Testing the swagger UI was requiring some additional work, especially your authentication server is separated from the application that hosts the Swagger UI.
+
+With the version 4.2, the startup templates come with the authorization pre-configured for you. An Authorize button is available when you open the Swagger UI:
+
+![swagger-authorize](swagger-authorize.png)
+
+When you click, it opens a modal to authorize:
+
+![swagger-authorize](swagger-authorize-modal.png)
+
+When you click to the Authorize button here, you are redirected to the login page to login with your username and password (default username is `admin` and password is `1q2w3E*`).
+
+> Remember to select the Scopes (typically **select all**) you want to use before clicking to the Authorize button.
 
 ### Angular Unit Testing
 
@@ -178,23 +200,35 @@ You can use this application to create a landing page for your actual applicatio
 
 It uses the same *Lepton Theme*, so you can apply [all the styles](https://commercial.abp.io/themes). The Public Website has a different layout and also has a different setting for the styling (that can be configured in the *Settings / Lepton Theme* page of the main web application).
 
-TODO: How to get started?
+> *Public Website* is optional and you need to select the "Public Website" option while creating a new solution using the ABP Suite, or use the `--with-public-website` option while using the `abp new` CLI command.
 
 ### Easy CRM Blazor UI
 
-TODO
+[Easy CRM](https://docs.abp.io/en/commercial/latest/samples/easy-crm) is an example application built with the ABP Commercial. MVC (Razor Pages) and Angular UI implementations were already provided. With the version 4.2, we are providing the Blazor UI implementation for this application.
+
+![easy-crm](easy-crm.png)
 
 ### Other News
 
-* Implemented Iyzico as a payment gateway for the payment module in addition to Paypal, Stripe, 2Checkout and Payu.
-* TODO: Suite news
+* Implemented Iyzico as a payment gateway provider for the [payment module](https://commercial.abp.io/modules/Volo.Payment) in addition to Paypal, Stripe, 2Checkout and Payu providers.
+* ABP Suite supports the new microservice template creation, public website and DBMS selection options.
+* Swagger authorization and other features mentioned in the ABP Framework section are already implemented for the ABP Commercial too.
 
 ## ABP Community News
 
-TODO:
+### Sharing Video Contents
 
-* Video content support
-* Multi-language support - accepting content in every language!
+[community.abp.io](https://community.abp.io/) is a place to share ABP related contents. It started with publishing articles. Now, it supports to publish video contents. [See this example](https://community.abp.io/articles/be-a-superhero-on-day-1-with-abp.io-wvifcy9s). All you need to do is to create a video and upload to YouTube. Then you can [submit](https://community.abp.io/articles/submit) the YouTube link to the ABP Community website.
+
+### Multi-language support
+
+We planned ABP Community to publish English-only contents. However, we see that people want to share contents in other languages too. Now, **it is possible to submit a content in any language**. Just select the Language option while submitting your content.
+
+**When you submit a non-English content, it is not visible to all the visitors by default**. Visitors can see a non-English content only if their browser language or the selected language matches to the content language (there is a language selection at the end of the website).
+
+### External Contents
+
+If you want to publish your content anywhere else, but want to post a link of your content, you can select *External Content* option while submitting the post. For example, [this article](https://community.abp.io/articles/aspnet-boilerplate-to-abp-framework-xml-to-json-localization-conversion-0mxyjrzj) is an external article and also written in Chinese language.
 
 ## About the Next Release
 

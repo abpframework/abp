@@ -2,6 +2,18 @@
   "culture": "de-DE",
   "texts": {
     "Settings": "Einstellungen",
-    "SuccessfullySaved": "Erfolgreich gespeichert"
+    "SuccessfullySaved": "Erfolgreich gespeichert",
+    "Permission:SettingManagement": "Einstellungen-Verwaltung",
+    "Permission:EmailSetting": "E-Mail-Einstellungen",
+    "Menu:EmailSetting": "E-Mail-Einstellung",
+    "SmtpHost": "Host",
+    "SmtpPort": "Port",
+    "SmtpUserName": "Benutzername",
+    "SmtpPassword": "Passwort",
+    "SmtpDomain": "Domain",
+    "SmtpEnableSsl": "SSL aktivieren",
+    "SmtpUseDefaultCredentials": "Standardanmeldeinformationen verwenden",
+    "DefaultFromAddress": "Standard-Absenderadresse",
+    "DefaultFromDisplayName": "Standard-Anzeigename des Absenders"
   }
 }

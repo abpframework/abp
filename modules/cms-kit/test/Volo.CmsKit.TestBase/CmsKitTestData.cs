@@ -8,9 +8,12 @@ namespace Volo.CmsKit
     {
         public Guid User1Id { get; } = Guid.NewGuid();
 
+        public string User1UserName => "fake.user";
+
         public Guid User2Id { get; } = Guid.NewGuid();
 
         public Guid CommentWithChildId { get; } = Guid.NewGuid();
+
 
         public string EntityType1 { get; } = "EntityName1";
 
@@ -42,7 +45,7 @@ namespace Volo.CmsKit
 
         public string Page_1_Title { get; } = "Imagine Dragons - Believer Lyrics";
 
-        public string Page_1_Url { get; } = "imagine-dragons-believer-lyrics";
+        public string Page_1_Slug { get; } = "imagine-dragons-believer-lyrics";
 
         public string Page_1_Description { get; } = "You can get the lyrics of the music.";
 
@@ -52,12 +55,60 @@ namespace Volo.CmsKit
 
         public string Page_2_Title { get; } = "Imagine Dragons - Believer Lyrics (Page 2)";
 
-        public string Page_2_Url { get; } = "imagine-dragons-believer-lyrics-2";
+        public string Page_2_Slug { get; } = "imagine-dragons-believer-lyrics-2";
 
         public string Page_2_Description { get; } = "You can get the lyrics of the music.";
 
         public Guid Page_2_Id { get; } = Guid.NewGuid();
 
         public string Page_2_Content => Content_2;
+
+        public string TagDefinition_1_EntityType => "My.Namespace.CustomType";
+
+        public Guid TagId_1 { get; } = Guid.NewGuid();
+
+        public string TagName_1 => "Awesome";
+
+        public Guid TagId_2 { get; } = Guid.NewGuid();
+
+        public string TagName_2 => "News";
+
+        public Guid Blog_Id { get; } = Guid.NewGuid();
+
+        public string BlogName => "Cms Blog";
+
+        public string BlogSlug => "cms-blog";
+
+        public Guid BlogPost_1_Id { get; } = Guid.NewGuid();
+
+        public string BlogPost_1_Title => "How to install CmsKit?";
+
+        public string BlogPost_1_Slug => "how-to-install-cms-kit";
+
+        public Guid BlogPost_2_Id { get; } = Guid.NewGuid();
+
+        public string BlogPost_2_Title => "How to use CmsKit";
+
+        public string BlogPost_2_Slug => "how-to-use-cms-kit";
+
+        public Guid BlogFeature_1_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_1_FeatureName => "Analytics";
+
+        public bool BlogFeature_1_Enabled => true;
+
+        public Guid BlogFeature_2_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_2_FeatureName => "Hotjar";
+
+        public bool BlogFeature_2_Enabled => false;
+
+        public Guid Media_1_Id { get; } = Guid.NewGuid();
+        
+        public string Media_1_Content = "Hi, this is text file";
+
+        public string Media_1_Name = "hello.txt";
+
+        public string Media_1_ContentType = "text/plain";
     }
 }

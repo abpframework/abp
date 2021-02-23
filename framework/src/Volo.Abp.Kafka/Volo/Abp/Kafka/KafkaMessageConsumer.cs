@@ -20,6 +20,8 @@ namespace Volo.Abp.Kafka
 
         protected IConsumerPool ConsumerPool { get; }
 
+        protected IProducerPool ProducerPool { get; }
+
         protected IExceptionNotifier ExceptionNotifier { get; }
 
         protected AbpKafkaOptions Options { get; }
@@ -37,10 +39,12 @@ namespace Volo.Abp.Kafka
         public KafkaMessageConsumer(
             IConsumerPool consumerPool,
             IExceptionNotifier exceptionNotifier,
-            IOptions<AbpKafkaOptions> options)
+            IOptions<AbpKafkaOptions> options,
+            IProducerPool producerPool)
         {
             ConsumerPool = consumerPool;
             ExceptionNotifier = exceptionNotifier;
+            ProducerPool = producerPool;
             Options = options.Value;
             Logger = NullLogger<KafkaMessageConsumer>.Instance;
 
@@ -86,7 +90,7 @@ namespace Volo.Abp.Kafka
                 }
                 catch (CreateTopicsException e)
                 {
-                    if (!e.Error.Reason.Contains($"Topic '{TopicName}' already exists"))
+                    if(e.Results.First().Error.Code != ErrorCode.TopicAlreadyExists)
                     {
                         throw;
                     }
@@ -132,14 +136,29 @@ namespace Volo.Abp.Kafka
                 {
                     await callback(consumeResult.Message);
                 }
-
-                Consumer.Commit(consumeResult);
             }
             catch (Exception ex)
             {
+                await RequeueAsync(consumeResult);
+
                 Logger.LogException(ex);
                 await ExceptionNotifier.NotifyAsync(ex);
             }
+            finally
+            {
+                Consumer.Commit(consumeResult);
+            }
+        }
+
+        protected virtual async Task RequeueAsync(ConsumeResult<string, byte[]> consumeResult)
+        {
+            if (!Options.ReQueue)
+            {
+                return;
+            }
+
+            var producer = ProducerPool.Get(ConnectionName);
+            await producer.ProduceAsync(consumeResult.Topic, consumeResult.Message);
         }
 
         public virtual void Dispose()

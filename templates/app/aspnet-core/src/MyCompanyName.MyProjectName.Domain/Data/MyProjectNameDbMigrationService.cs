@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TenantManagement;
 
@@ -41,9 +42,9 @@ namespace MyCompanyName.MyProjectName.Data
         {
             try
             {
-                if (!await MigrationsFolderExists())
+                if (DbMigrationsProjectExists() && !MigrationsFolderExists())
                 {
-                    await AddInitialMigration();
+                    AddInitialMigration();
                     return;
                 }
             }
@@ -105,17 +106,27 @@ namespace MyCompanyName.MyProjectName.Data
         {
             Logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
 
-            await _dataSeeder.SeedAsync(tenant?.Id);
+            await _dataSeeder.SeedAsync(new DataSeedContext(tenant?.Id)
+                .WithProperty(IdentityDataSeedContributor.AdminEmailPropertyName, IdentityDataSeedContributor.AdminEmailDefaultValue)
+                .WithProperty(IdentityDataSeedContributor.AdminPasswordPropertyName, IdentityDataSeedContributor.AdminPasswordDefaultValue)
+            );
         }
 
-        private async Task<bool> MigrationsFolderExists()
+        private bool DbMigrationsProjectExists()
+        {
+            var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
+
+            return dbMigrationsProjectFolder != null;
+        }
+
+        private bool MigrationsFolderExists()
         {
             var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
 
             return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "migrations"));
         }
 
-        private async Task AddInitialMigration()
+        private void AddInitialMigration()
         {
             Logger.LogInformation("Creating initial migration...");
 
@@ -134,7 +145,7 @@ namespace MyCompanyName.MyProjectName.Data
             }
 
             var procStartInfo = new ProcessStartInfo( fileName,
-                $"{argumentPrefix} \"abp create-migration-and-run-migrator {GetDbMigrationsProjectFolderPath()}\""
+                $"{argumentPrefix} \"abp create-migration-and-run-migrator \"{GetDbMigrationsProjectFolderPath()}\"\""
             );
 
             try
@@ -147,7 +158,7 @@ namespace MyCompanyName.MyProjectName.Data
             }
         }
 
-        private static string GetDbMigrationsProjectFolderPath()
+        private string GetDbMigrationsProjectFolderPath()
         {
             var slnDirectoryPath = GetSolutionDirectoryPath();
 
@@ -162,7 +173,7 @@ namespace MyCompanyName.MyProjectName.Data
                 .FirstOrDefault(d => d.EndsWith(".DbMigrations"));
         }
 
-        private static string GetSolutionDirectoryPath()
+        private string GetSolutionDirectoryPath()
         {
             var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 

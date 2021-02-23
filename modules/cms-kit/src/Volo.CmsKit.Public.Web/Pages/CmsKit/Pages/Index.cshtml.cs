@@ -8,20 +8,27 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Pages
     public class IndexModel : CommonPageModel
     {
         [BindProperty(SupportsGet = true)] 
-        public string PageUrl { get; set; }
+        public string Slug { get; set; }
         
-        protected readonly IPageAppService PageAppService;
+        protected IPagePublicAppService PagePublicAppService { get; }
 
         public PageDto Page;
         
-        public IndexModel(IPageAppService pageAppService)
+        public IndexModel(IPagePublicAppService pagePublicAppService)
         {
-            PageAppService = pageAppService;
+            PagePublicAppService = pagePublicAppService;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Page = await PageAppService.GetByUrlAsync(PageUrl);
+            Page = await PagePublicAppService.FindBySlugAsync(Slug);
+
+            if (Page == null)
+            {
+                return NotFound();
+            }
+
+            return Page();
         }
     }
 }

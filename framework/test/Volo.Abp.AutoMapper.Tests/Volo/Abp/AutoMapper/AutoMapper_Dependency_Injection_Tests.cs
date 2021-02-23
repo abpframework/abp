@@ -19,7 +19,7 @@ namespace Volo.Abp.AutoMapper
         [Fact]
         public void Should_Registered_AutoMapper_Service()
         {
-            GetService<CustomMappingActionService>().ShouldNotBeNull();
+            GetService<CustomMappingAction>().ShouldNotBeNull();
         }
 
         [Fact]
@@ -47,15 +47,30 @@ namespace Volo.Abp.AutoMapper
         {
             public MapperActionProfile()
             {
-                CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingActionService>();
+                CreateMap<SourceModel, DestModel>().AfterMap<CustomMappingAction>();
             }
         }
 
-        public class CustomMappingActionService : IMappingAction<SourceModel, DestModel>
+        public class CustomMappingAction : IMappingAction<SourceModel, DestModel>
         {
+            private readonly CustomMappingActionService _customMappingActionService;
+
+            public CustomMappingAction(CustomMappingActionService customMappingActionService)
+            {
+                _customMappingActionService = customMappingActionService;
+            }
+
             public void Process(SourceModel source, DestModel destination, ResolutionContext context)
             {
-                destination.Name = nameof(CustomMappingActionService);
+                destination.Name = _customMappingActionService.GetName();
+            }
+        }
+
+        public class CustomMappingActionService : ITransientDependency
+        {
+            public string GetName()
+            {
+                return nameof(CustomMappingActionService);
             }
         }
     }
