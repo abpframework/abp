@@ -27,9 +27,7 @@ namespace Volo.CmsKit.Blogs
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
 
-            var dbSet = await WithDetailsAsync();
-
-            return await dbSet
+            return await (await WithDetailsAsync())
                        .Where(x =>
                            x.BlogId == blogId && x.Slug.ToLower() == slug)
                        .FirstOrDefaultAsync(cancellationToken: GetCancellationToken(cancellationToken))
@@ -65,15 +63,13 @@ namespace Volo.CmsKit.Blogs
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
 
-            var dbSet = await WithDetailsAsync();
-            return await dbSet.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug,
+            return await (await WithDetailsAsync()).AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug,
                 GetCancellationToken(cancellationToken));
         }
 
         public override async Task<IQueryable<BlogPost>> WithDetailsAsync()
         {
-            var dbSet = await GetDbSetAsync();
-            return dbSet.Include(i => i.Creator);
+            return (await GetDbSetAsync()).Include(i => i.Creator);
         }
     }
 }
