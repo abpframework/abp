@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
@@ -7,9 +6,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding;
-using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
-using Volo.Abp.Cli.ProjectModification;
-using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
