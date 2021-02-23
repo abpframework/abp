@@ -8,7 +8,7 @@ namespace Volo.Abp.Http.ProxyScripting.Configuration
     {
         public IDictionary<string, Type> Generators { get; }
 
-        public Func<PropertyInfo, string> PropertyNameGenerator { get; set; }
+        public static Func<PropertyInfo, string> PropertyNameGenerator { get; set; }
 
         public AbpApiProxyScriptingOptions()
         {
