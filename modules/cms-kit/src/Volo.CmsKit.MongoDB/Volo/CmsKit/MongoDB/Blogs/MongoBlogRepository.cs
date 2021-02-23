@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
@@ -32,8 +34,9 @@ namespace Volo.CmsKit.MongoDB.Blogs
             return await queryable.AnyAsync(x => x.BlogId == blogId, token);
         }
 
-        public virtual Task<Blog> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
+        public virtual Task<Blog> GetBySlugAsync([NotNull]string slug, CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(slug, nameof(slug));
             return GetAsync(x => x.Slug == slug, cancellationToken: cancellationToken);
         }
     }

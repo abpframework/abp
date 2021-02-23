@@ -9,7 +9,7 @@ namespace Volo.CmsKit.Tags
 {
     public class TagAppService : CmsKitAppServiceBase, ITagAppService
     {
-        protected readonly ITagRepository TagRepository;
+        protected ITagRepository TagRepository { get; }
 
         public TagAppService(ITagRepository tagRepository)
         {
