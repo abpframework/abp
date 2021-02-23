@@ -31,7 +31,7 @@ namespace Volo.CmsKit.Tags
             TenantId = tenantId;
         }
 
-        public virtual void SetName(string name)
+        public virtual void SetName([NotNull] string name)
         {
             Name = Check.NotNullOrEmpty(name, nameof(name), TagConsts.MaxNameLength);
         }
