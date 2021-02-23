@@ -488,7 +488,7 @@ export class BookComponent implements OnInit {
 ```
 
 * We imported and injected the generated `BookService`.
-* We are using the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
+* We are using the [ListService](../UI/Angular/List-Service.md), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
 
 Open the `/src/app/book/book.component.html` and replace the content as below:
 
