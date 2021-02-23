@@ -27,10 +27,9 @@ namespace Volo.CmsKit.Blogs
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
 
-            var dbSet = await GetDbSetAsync();
+            var dbSet = await WithDetailsAsync();
 
             return await dbSet
-                       .Include(i => i.Creator)
                        .Where(x =>
                            x.BlogId == blogId && x.Slug.ToLower() == slug)
                        .FirstOrDefaultAsync(cancellationToken: GetCancellationToken(cancellationToken))
@@ -47,8 +46,7 @@ namespace Volo.CmsKit.Blogs
         public async Task<List<BlogPost>> GetPagedListAsync(Guid blogId, int skipCount, int maxResultCount,
             string sorting, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            var queryable = (await GetQueryableAsync())
-                .Include(i => i.Creator)
+            var queryable = (await WithDetailsAsync())
                 .Where(x => x.BlogId == blogId);
 
             if (!sorting.IsNullOrWhiteSpace())
@@ -67,9 +65,15 @@ namespace Volo.CmsKit.Blogs
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
 
-            var dbSet = await GetDbSetAsync();
+            var dbSet = await WithDetailsAsync();
             return await dbSet.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug,
                 GetCancellationToken(cancellationToken));
+        }
+
+        public override async Task<IQueryable<BlogPost>> WithDetailsAsync()
+        {
+            var dbSet = await GetDbSetAsync();
+            return dbSet.Include(i => i.Creator);
         }
     }
 }
