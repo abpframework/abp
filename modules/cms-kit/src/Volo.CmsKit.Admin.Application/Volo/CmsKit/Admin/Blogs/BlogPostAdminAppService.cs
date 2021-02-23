@@ -27,11 +27,11 @@ namespace Volo.CmsKit.Admin.Blogs
             UpdateBlogPostDto>
         , IBlogPostAdminAppService
     {
-        protected readonly IBlogPostManager BlogPostManager;
-        protected readonly IBlogPostRepository BlogPostRepository;
-        protected readonly IBlogRepository BlogRepository;
-        protected readonly IBlobContainer<BlogPostCoverImageContainer> BlobContainer;
-        protected readonly ICmsUserLookupService UserLookupService;
+        protected IBlogPostManager BlogPostManager { get; }
+        protected IBlogPostRepository BlogPostRepository { get; }
+        protected IBlogRepository BlogRepository { get; }
+        protected IBlobContainer<BlogPostCoverImageContainer> BlobContainer { get; }
+        protected ICmsUserLookupService UserLookupService { get; }
 
         public BlogPostAdminAppService(
             IRepository<BlogPost, Guid> repository,
@@ -60,7 +60,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
             var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
 
-            return MapToGetOutputDto(blogPost);
+            return await MapToGetOutputDtoAsync(blogPost);
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
@@ -77,7 +77,7 @@ namespace Volo.CmsKit.Admin.Blogs
                                             input.Slug,
                                             input.ShortDescription));
 
-            return MapToGetOutputDto(entity);
+            return await MapToGetOutputDtoAsync(entity);
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
@@ -96,7 +96,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
             await BlogPostManager.UpdateAsync(blogPost);
 
-            return MapToGetOutputDto(blogPost);
+            return await MapToGetOutputDtoAsync(blogPost);
         }
 
         public virtual async Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent)

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
@@ -23,6 +24,9 @@ namespace Volo.CmsKit.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(name, nameof(name));
+            
             return await (await GetDbSetAsync()).AnyAsync(x =>
                     x.EntityType == entityType &&
                     x.Name == name &&
@@ -36,6 +40,9 @@ namespace Volo.CmsKit.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(name, nameof(name));
+            
             return GetAsync(x =>
                     x.EntityType == entityType &&
                     x.Name == name &&
@@ -49,6 +56,9 @@ namespace Volo.CmsKit.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(name, nameof(name));
+            
             return FindAsync(x =>
                     x.EntityType == entityType &&
                     x.Name == name &&
@@ -62,6 +72,9 @@ namespace Volo.CmsKit.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(entityId, nameof(entityId));
+            
             var entityTagIds = await (await GetDbContextAsync()).Set<EntityTag>()
                 .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
                 .Select(q => q.TagId)

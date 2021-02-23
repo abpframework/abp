@@ -50,7 +50,7 @@ namespace Volo.CmsKit.Admin.Tags
                 input.Name,
                 CurrentTenant?.Id);
             
-            return MapToGetOutputDto(tag);
+            return await MapToGetOutputDtoAsync(tag);
         }
 
         [Authorize(CmsKitAdminPermissions.Tags.Update)]
@@ -60,7 +60,7 @@ namespace Volo.CmsKit.Admin.Tags
                 id,
                 input.Name);
 
-            return MapToGetOutputDto(tag);
+            return await MapToGetOutputDtoAsync(tag);
         }
         protected override IQueryable<Tag> CreateFilteredQuery(TagGetListInput input)
         {
