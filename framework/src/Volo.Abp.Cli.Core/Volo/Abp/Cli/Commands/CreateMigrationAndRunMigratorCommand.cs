@@ -23,60 +23,66 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target.IsNullOrEmpty())
             {
-                throw new CliUsageException(
-                    "DbMigrations folder path is missing!"
-                );
+                throw new CliUsageException("DbMigrations folder path is missing!");
             }
 
             var dbMigratorProjectPath = GetDbMigratorProjectPath(commandLineArgs.Target);
-
             if (dbMigratorProjectPath == null)
             {
                 throw new Exception("DbMigrator is not found!");
             }
 
-            await CheckAndInstallDotnetEfIfNeededAsync();
-
-            var output = CmdHelper.RunCmdAndGetOutput($"cd \"{commandLineArgs.Target}\" && dotnet ef migrations add Initial -s \"{dbMigratorProjectPath}\"");
-
-            if (output.Contains("Done.") && output.Contains("To undo this action") && output.Contains("ef migrations remove")) // Migration added successfully
+            if (!IsDotNetEfToolInstalled())
             {
+                InstallDotnetEfTool();
+            }
+
+            var addMigrationCmd = $"cd \"{commandLineArgs.Target}\" && " +
+                                  $"dotnet ef migrations add Initial -s \"{dbMigratorProjectPath}\"";
+
+            var output = CmdHelper.RunCmdAndGetOutput(addMigrationCmd);
+            if (output.Contains("Done.") &&
+                output.Contains("To undo this action") &&
+                output.Contains("ef migrations remove"))
+            {
+                // Migration added successfully
                 CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProjectPath) + "\" && dotnet run");
+                await Task.CompletedTask;
             }
             else
             {
-                throw new Exception("Migrations failed: " + output);
+                var exceptionMsg = "Migrations failed! The following command didn't run successfully:" +
+                                   Environment.NewLine +
+                                   addMigrationCmd +
+                                   Environment.NewLine + output;
+
+                Logger.LogError(exceptionMsg);
+                throw new Exception(exceptionMsg);
             }
         }
 
-        private async Task CheckAndInstallDotnetEfIfNeededAsync()
+        private static bool IsDotNetEfToolInstalled()
         {
             var output = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g");
+            return output.Contains("dotnet-ef");
+        }
 
-            if (output.Contains("dotnet-ef"))
-            {
-                return;
-            }
-
+        private void InstallDotnetEfTool()
+        {
             Logger.LogInformation("Installing dotnet-ef tool...");
-
             CmdHelper.RunCmd("dotnet tool install --global dotnet-ef");
-
             Logger.LogInformation("dotnet-ef tool is installed.");
         }
 
-        private string GetDbMigratorProjectPath(string dbMigrationsFolderPath)
+        private static string GetDbMigratorProjectPath(string dbMigrationsFolderPath)
         {
             var srcFolder = Directory.GetParent(dbMigrationsFolderPath);
+            var dbMigratorDirectory = Directory.GetDirectories(srcFolder.FullName)
+                .FirstOrDefault(d => d.EndsWith(".DbMigrator"));
 
-            var dbMigratorFolderPath = Directory.GetDirectories(srcFolder.FullName).FirstOrDefault(d => d.EndsWith(".DbMigrator"));
-
-            if (dbMigratorFolderPath == null)
-            {
-                return null;
-            }
-
-            return Directory.GetFiles(dbMigratorFolderPath).FirstOrDefault(f => f.EndsWith(".csproj"));
+            return dbMigratorDirectory == null
+                ? null
+                : Directory.GetFiles(dbMigratorDirectory).FirstOrDefault(f => f.EndsWith(".csproj"));
         }
 
         public string GetUsageInfo()
