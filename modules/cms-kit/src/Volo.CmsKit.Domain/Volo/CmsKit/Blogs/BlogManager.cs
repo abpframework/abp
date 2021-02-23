@@ -7,7 +7,7 @@ namespace Volo.CmsKit.Blogs
 {
     public class BlogManager : DomainService, IBlogManager
     {
-        protected readonly IBlogRepository BlogRepository;
+        protected IBlogRepository BlogRepository { get; }
         
         public BlogManager(IBlogRepository blogRepository)
         {
