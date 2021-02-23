@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.GlobalFeatures;
@@ -17,14 +15,13 @@ namespace Volo.CmsKit.Admin.Blogs
     [Authorize(CmsKitAdminPermissions.Blogs.Default)]
     public class BlogAdminAppService : CrudAppService<Blog, BlogDto, Guid, BlogGetListInput>, IBlogAdminAppService
     {
-        protected readonly IBlogPostRepository BlogPostRepository;
+        protected readonly IBlogManager BlogManager;
         
         public BlogAdminAppService(
             IRepository<Blog, Guid> repository,
-            IBlogPostRepository blogPostRepository
-            ) : base(repository)
+            IBlogManager blogManager) : base(repository)
         {
-            BlogPostRepository = blogPostRepository;
+            BlogManager = blogManager;
             GetListPolicyName = CmsKitAdminPermissions.Blogs.Default;
             GetPolicyName = CmsKitAdminPermissions.Blogs.Default;
             CreatePolicyName = CmsKitAdminPermissions.Blogs.Create;
@@ -43,12 +40,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         public override async Task DeleteAsync(Guid id)
         {
-            var hasPosts = await BlogPostRepository.ExistsAsync(id);
-
-            if (hasPosts)
-            {
-                throw new BlogHasPostsCannotBeDeletedException(id);
-            }
+            await BlogManager.CheckDeleteAsync(id);
             
             await base.DeleteAsync(id);
         }
