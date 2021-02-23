@@ -1,7 +1,8 @@
-﻿using MongoDB.Driver.Core.Operations;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
@@ -20,6 +21,15 @@ namespace Volo.CmsKit.MongoDB.Blogs
                             await GetQueryableAsync(),
                                 x => x.Id == blogId, 
                                 cancellationToken);
+        }
+
+        public virtual async Task<bool> HasPostsAsync(Guid blogId, CancellationToken cancellationToken = default)
+        {
+            var token = GetCancellationToken(cancellationToken);
+
+            var queryable = (await GetDbContextAsync(token)).Collection<BlogPost>().AsQueryable();
+
+            return await queryable.AnyAsync(x => x.BlogId == blogId, token);
         }
 
         public virtual Task<Blog> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)

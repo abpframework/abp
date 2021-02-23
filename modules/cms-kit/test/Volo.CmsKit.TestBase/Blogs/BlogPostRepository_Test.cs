@@ -121,15 +121,5 @@ namespace Volo.CmsKit.Blogs
             result.ShouldNotBeEmpty();
             result.Count.ShouldBe(2);
         }
-
-        [Fact]
-        public async Task PostExistAsync_ShouldWorkProperly()
-        {
-            var result_1 = await blogPostRepository.ExistsAsync(testData.Blog_Id);
-            var result_2 = await blogPostRepository.ExistsAsync(testData.Blog_2_Id);
-            
-            result_1.ShouldBe(true);
-            result_2.ShouldBe(false);
-        }
     }
 }

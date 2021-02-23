@@ -15,7 +15,5 @@ namespace Volo.CmsKit.Blogs
         Task<List<BlogPost>> GetPagedListAsync(Guid blogId, int skipCount, int maxResultCount, string sorting, bool includeDetails = false, CancellationToken cancellationToken = default);
 
         Task<int> GetCountAsync(Guid blogId, CancellationToken cancellationToken = default);
-        
-        Task<bool> ExistsAsync(Guid blogId, CancellationToken cancellationToken = default);
     }
 }

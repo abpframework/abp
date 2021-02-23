@@ -61,5 +61,16 @@ namespace Volo.CmsKit.Blogs
 
             result.ShouldBeFalse();
         }
+        
+        
+        [Fact]
+        public async Task HasPostsAsync_ShouldWorkProperly()
+        {
+            var result_1 = await blogRepository.HasPostsAsync(testData.Blog_Id);
+            var result_2 = await blogRepository.HasPostsAsync(testData.Blog_2_Id);
+            
+            result_1.ShouldBe(true);
+            result_2.ShouldBe(false);
+        }
     }
 }
