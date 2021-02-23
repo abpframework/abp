@@ -36,7 +36,7 @@ namespace Volo.Abp.SettingManagement.Blazor
 
             Configure<SettingManagementComponentOptions>(options =>
             {
-                options.Contributors.Add(new EmailSettingManagementPageContributor());
+                options.Contributors.Add(new EmailSettingPageContributor());
             });
         }
     }

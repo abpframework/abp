@@ -45,7 +45,7 @@ namespace Volo.CmsKit
 
         public string Page_1_Title { get; } = "Imagine Dragons - Believer Lyrics";
 
-        public string Page_1_Url { get; } = "imagine-dragons-believer-lyrics";
+        public string Page_1_Slug { get; } = "imagine-dragons-believer-lyrics";
 
         public string Page_1_Description { get; } = "You can get the lyrics of the music.";
 
@@ -55,7 +55,7 @@ namespace Volo.CmsKit
 
         public string Page_2_Title { get; } = "Imagine Dragons - Believer Lyrics (Page 2)";
 
-        public string Page_2_Url { get; } = "imagine-dragons-believer-lyrics-2";
+        public string Page_2_Slug { get; } = "imagine-dragons-believer-lyrics-2";
 
         public string Page_2_Description { get; } = "You can get the lyrics of the music.";
 
@@ -96,6 +96,18 @@ namespace Volo.CmsKit
         public string BlogPost_2_Title => "How to use CmsKit";
 
         public string BlogPost_2_Slug => "how-to-use-cms-kit";
+
+        public Guid BlogFeature_1_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_1_FeatureName => "Analytics";
+
+        public bool BlogFeature_1_Enabled => true;
+
+        public Guid BlogFeature_2_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_2_FeatureName => "Hotjar";
+
+        public bool BlogFeature_2_Enabled => false;
 
         public Guid Media_1_Id { get; } = Guid.NewGuid();
         

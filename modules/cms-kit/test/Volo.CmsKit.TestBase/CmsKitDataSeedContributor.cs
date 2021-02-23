@@ -39,6 +39,7 @@ namespace Volo.CmsKit
         private readonly IEntityTagRepository _entityTagRepository;
         private readonly IPageRepository _pageRepository;
         private readonly IBlogRepository _blogRepository;
+        private readonly IBlogFeatureRepository _blogFeatureRepository;
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly IOptions<CmsKitOptions> _options;
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
@@ -59,6 +60,7 @@ namespace Volo.CmsKit
             IPageRepository pageRepository,
             IBlogRepository blogRepository,
             IBlogPostRepository blogPostRepository,
+            IBlogFeatureRepository blogFeatureRepository,
             IEntityTagManager entityTagManager,
             IOptions<CmsKitOptions> options,
             IOptions<CmsKitTagOptions> tagOptions, 
@@ -79,6 +81,7 @@ namespace Volo.CmsKit
             _pageRepository = pageRepository;
             _blogRepository = blogRepository;
             _blogPostRepository = blogPostRepository;
+            _blogFeatureRepository = blogFeatureRepository;
             _options = options;
             _tagOptions = tagOptions;
             _mediaDescriptorRepository = mediaDescriptorRepository;
@@ -106,6 +109,8 @@ namespace Volo.CmsKit
                 await SeedPagesAsync();
 
                 await SeedBlogsAsync();
+
+                await SeedBlogFeaturesAsync();
 
                 await SeedMediaAsync();
             }
@@ -305,13 +310,13 @@ namespace Volo.CmsKit
 
         private async Task SeedPagesAsync()
         {
-            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Url, _cmsKitTestData.Page_1_Description);
+            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug, _cmsKitTestData.Page_1_Description);
             var page1Content = new Content(_guidGenerator.Create(), nameof(Page), page1.Id.ToString(), _cmsKitTestData.Page_1_Content);
 
             await _pageRepository.InsertAsync(page1);
             await _contentRepository.InsertAsync(page1Content);
 
-            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Url, _cmsKitTestData.Page_2_Description);
+            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Slug, _cmsKitTestData.Page_2_Description);
             var page2Content = new Content(_guidGenerator.Create(), nameof(Page), page2.Id.ToString(), _cmsKitTestData.Page_2_Content);
 
             await _pageRepository.InsertAsync(page2);
@@ -326,6 +331,25 @@ namespace Volo.CmsKit
             await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_1_Id, blog.Id, _cmsKitTestData.BlogPost_1_Title, _cmsKitTestData.BlogPost_1_Slug, "Short desc 1"));
 
             await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_2_Id, blog.Id, _cmsKitTestData.BlogPost_2_Title, _cmsKitTestData.BlogPost_2_Slug, "Short desc 2"));
+        }
+
+        private async Task SeedBlogFeaturesAsync()
+        {
+            var blogFeature1 = await _blogFeatureRepository.InsertAsync(
+                    new BlogFeature(
+                        _cmsKitTestData.Blog_Id,
+                        _cmsKitTestData.BlogFeature_1_FeatureName,
+                        _cmsKitTestData.BlogFeature_1_Enabled));
+
+            _cmsKitTestData.BlogFeature_1_Id = blogFeature1.Id;
+
+            var blogFeature2 = await _blogFeatureRepository.InsertAsync(
+                    new BlogFeature(
+                        _cmsKitTestData.Blog_Id,
+                        _cmsKitTestData.BlogFeature_2_FeatureName,
+                        _cmsKitTestData.BlogFeature_2_Enabled));
+
+            _cmsKitTestData.BlogFeature_2_Id = blogFeature2.Id;
         }
 
         private async Task SeedMediaAsync()

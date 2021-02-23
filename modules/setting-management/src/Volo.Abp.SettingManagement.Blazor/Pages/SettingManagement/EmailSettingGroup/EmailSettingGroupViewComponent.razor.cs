@@ -35,7 +35,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Pages.SettingManagement.EmailSetting
         {
             await EmailSettingsAppService.UpdateAsync(ObjectMapper.Map<EmailSettingsDto, UpdateEmailSettingsDto>(EmailSettings));
 
-            await UiMessageService.Success(L["SavedSuccessfully"]);
+            await UiMessageService.Success(L["SuccessfullySaved"]);
         }
     }
 }

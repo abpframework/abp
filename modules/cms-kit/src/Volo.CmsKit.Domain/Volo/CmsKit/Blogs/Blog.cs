@@ -20,18 +20,20 @@ namespace Volo.CmsKit.Blogs
             TenantId = tenantId;
         }
 
-        public string Name { get; protected set; }
+        [NotNull] 
+        public virtual string Name { get; protected set; }
 
-        public string Slug { get; protected set; }
+        [NotNull] 
+        public virtual string Slug { get; protected set; }
 
-        public Guid? TenantId { get; protected set; }
+        public virtual Guid? TenantId { get; protected set; }
 
-        public void SetName(string name)
+        public virtual void SetName(string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), maxLength: BlogConsts.MaxNameLength);
         }
 
-        public void SetSlug(string slug)
+        public virtual void SetSlug(string slug)
         {
             Check.NotNullOrWhiteSpace(slug, nameof(slug), maxLength: BlogConsts.MaxNameLength);
 

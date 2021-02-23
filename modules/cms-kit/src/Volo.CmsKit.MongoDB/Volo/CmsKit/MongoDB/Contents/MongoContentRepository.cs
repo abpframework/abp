@@ -15,7 +15,7 @@ namespace Volo.CmsKit.MongoDB.Contents
         {
         }
 
-        public Task<Content> GetAsync(
+        public virtual Task<Content> GetAsync(
             string entityType,
             string entityId,
             Guid? tenantId = null,
@@ -29,7 +29,7 @@ namespace Volo.CmsKit.MongoDB.Contents
             );
         }
         
-        public Task<Content> FindAsync(
+        public virtual Task<Content> FindAsync(
             string entityType,
             string entityId,
             Guid? tenantId = null,
@@ -43,7 +43,7 @@ namespace Volo.CmsKit.MongoDB.Contents
                 );
         }
 
-        public Task DeleteAsync(string entityType, string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public virtual Task DeleteAsync(string entityType, string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
         {
             return DeleteAsync(x =>
                     x.EntityType == entityType &&
@@ -52,7 +52,7 @@ namespace Volo.CmsKit.MongoDB.Contents
                 cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> ExistsAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ExistsAsync([NotNull] string entityType, [NotNull] string entityId, Guid? tenantId = null, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).AnyAsync(x =>
                     x.EntityType == entityType &&

@@ -12,7 +12,7 @@
 
         public static class Pages
         {
-            public const string UrlAlreadyExist = "CmsKit:Page:0001";
+            public const string SlugAlreadyExist = "CmsKit:Page:0001";
         }
 
         public static class Blogs
