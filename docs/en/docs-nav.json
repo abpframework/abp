@@ -847,6 +847,27 @@
                 {
                   "text": "Custom Setting Page",
                   "path": "UI/Angular/Custom-Setting-Page.md"
+                },
+                {
+                  "text": "Extensions",
+                  "items": [
+                    {
+                      "text": "Entity Action Extensions",
+                      "path": "UI/Angular/Entity-Action-Extensions.md"
+                    },
+                    {
+                      "text": "Data Table Column Extensions",
+                      "path": "UI/Angular/Data-Table-Column-Extensions.md"
+                    },
+                    {
+                      "text": "Page Toolbar Extensions",
+                      "path": "UI/Angular/Page-Toolbar-Extensions.md"
+                    },
+                    {
+                      "text": "Dynamic Form Extensions",
+                      "path": "UI/Angular/Dynamic-Form-Extensions.md"
+                    }
+                  ]
                 }
               ]
             }
