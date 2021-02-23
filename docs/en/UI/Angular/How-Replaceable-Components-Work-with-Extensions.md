@@ -248,7 +248,7 @@ We have added the `abp-page-toolbar`, `abp-extensible-table`, and `abp-extensibl
 
 You should import the required modules for the `MyRolesComponent` to `MyRolesModule`. Open the `src/my-roles/my-roles.module.ts` file and replace the content with the following:
 
-```ts
+```js
 import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
