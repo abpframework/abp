@@ -344,8 +344,6 @@ It's time to create something visible and usable! There are some tools that we w
 - [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
 - [Ngx-Datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
 
-### BookModule
-
 Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
 
 ```bash
