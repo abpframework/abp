@@ -91,5 +91,73 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
             (await _personRepository.FindAsync(personId)).ShouldBeNull();
             (await _bookRepository.FindAsync(bookId)).ShouldBeNull();
         }
+
+
+        [Fact]
+        public async Task Should_Rollback()
+        {
+            var options = new AbpUnitOfWorkOptions {IsTransactional = true};
+            var personId = Guid.NewGuid();
+
+            //AbpUnitOfWorkMiddleware
+            //https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore/Volo/Abp/AspNetCore/Uow/AbpUnitOfWorkMiddleware.cs#L19-L23
+            using (var middlewareUow = _unitOfWorkManager.Reserve("Reservation1"))
+            {
+                //If UnitOfWorkInterceptor is executed between AbpUnitOfWorkMiddleware and AbpUowActionFilter, uow will be used in advance.
+                //UnitOfWorkInterceptor
+                //https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Uow/Volo/Abp/Uow/UnitOfWorkInterceptor.cs#L34-L45
+                {
+                    //Cancel this call unit test will success.
+                    if (_unitOfWorkManager.TryBeginReserved("Reservation1", options))
+                    {
+
+                    }
+                }
+
+                //_unitOfWorkManager.Current is middlewareUow
+
+                //AbpUowActionFilter
+                //https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc/Volo/Abp/AspNetCore/Mvc/Uow/AbpUowActionFilter.cs#L42-L61
+                {
+                    if (_unitOfWorkManager.TryBeginReserved("Reservation1", options))
+                    {
+                        try
+                        {
+                            await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
+                            throw new NotImplementedException();
+                        }
+                        catch (Exception e)
+                        {
+                            await _unitOfWorkManager.Current.RollbackAsync();
+                        }
+                    }
+
+                    using (var filterUow = _unitOfWorkManager.Begin(options))
+                    {
+                        var success = false;
+                        try
+                        {
+                            await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
+                            throw new NotImplementedException();
+                            success = true;
+                        }
+                        catch (Exception e)
+                        {
+                            success = false;
+                            //Exception will be handled by AbpExceptionFilter
+                        }
+
+                        if (success)
+                        {
+                            await filterUow.CompleteAsync();
+                        }
+                    }
+                }
+
+                await middlewareUow.CompleteAsync();
+
+                (await _personRepository.FindAsync(personId)).ShouldBeNull();
+            }
+        }
     }
 }
