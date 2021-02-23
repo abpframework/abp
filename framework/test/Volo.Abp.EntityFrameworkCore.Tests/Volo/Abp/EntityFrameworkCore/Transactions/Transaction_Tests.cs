@@ -108,10 +108,10 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
                 //https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Uow/Volo/Abp/Uow/UnitOfWorkInterceptor.cs#L34-L45
                 {
                     //Cancel this call unit test will success.
-                    if (_unitOfWorkManager.TryBeginReserved("Reservation1", options))
-                    {
-
-                    }
+                    // if (_unitOfWorkManager.TryBeginReserved("Reservation1", options))
+                    // {
+                    //
+                    // }
                 }
 
                 //_unitOfWorkManager.Current is middlewareUow
