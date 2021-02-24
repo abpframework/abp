@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
@@ -10,6 +10,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.UI\Volo.Abp.AspNetCore.Components.UI.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.UI.Theming\Volo.Abp.AspNetCore.Components.UI.Theming.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly\Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly\Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
   </ItemGroup>
 

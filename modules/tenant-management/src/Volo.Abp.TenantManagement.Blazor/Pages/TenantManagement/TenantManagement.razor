@@ -4,6 +4,7 @@
 @using Volo.Abp.FeatureManagement.Blazor.Components
 @using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.TenantManagement.Localization
+@using Volo.Abp.AspNetCore.Components.UI
 @inject AbpBlazorMessageLocalizerHelper<AbpTenantManagementResource> LH
 @inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
 
@@ -15,7 +16,7 @@
                 <Heading Size="HeadingSize.Is1">@L["Tenants"]</Heading>
             </Column>
             <Column ColumnSize="ColumnSize.IsAuto">
-                @if (HasCreatePermission)
+                @if ( HasCreatePermission )
                 {
                     <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">
                         <Icon Margin="Margin.Is1.FromRight" Name="IconName.Add"></Icon>@L["NewTenant"]
@@ -67,7 +68,7 @@
 </Card>
 
 @* ************************* CREATE MODAL ************************* *@
-@if (HasCreatePermission)
+@if ( HasCreatePermission )
 {
     <Modal @ref="CreateModal">
         <ModalBackdrop />
@@ -121,7 +122,7 @@
 }
 
 @* ************************* EDIT MODAL ************************* *@
-@if (HasUpdatePermission)
+@if ( HasUpdatePermission )
 {
     <Modal @ref="EditModal">
         <ModalBackdrop />
@@ -155,7 +156,7 @@
 }
 
 @* ************************* EDIT CONNECTION STRING MODAL ************************* *@
-@if (HasManageConnectionStringsPermission)
+@if ( HasManageConnectionStringsPermission )
 {
     <Modal @ref="@ManageConnectionStringModal">
         <ModalBackdrop />
@@ -173,7 +174,7 @@
                                 <Check TValue="bool" @bind-Checked="@TenantInfo.UseSharedDatabase" Cursor="@Cursor.Pointer" />
                             </Field>
                         </Validation>
-                        @if (!TenantInfo.UseSharedDatabase)
+                        @if ( !TenantInfo.UseSharedDatabase )
                         {
                             <Validation MessageLocalizer="@LH.Localize">
                                 <Field>
@@ -193,7 +194,7 @@
     </Modal>
 }
 
-@if (HasManageFeaturesPermission)
+@if ( HasManageFeaturesPermission )
 {
     <FeatureManagementModal @ref="FeatureManagementModal" />
 }

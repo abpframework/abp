@@ -2,10 +2,9 @@
 @attribute [Authorize( IdentityPermissions.Roles.Default )]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.PermissionManagement.Blazor.Components
-@using Microsoft.Extensions.Localization
 @using Volo.Abp.Identity.Localization
+@using Volo.Abp.AspNetCore.Components.UI
 @inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
 
 @inherits AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>

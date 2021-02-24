@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Bundling;
 
-namespace Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly
+namespace Volo.Abp.AspNetCore.Components.UI.BasicTheme
 {
     public class BasicThemeBundleContributor : IBundleContributor
     {
@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly
 
         public void AddStyles(BundleContext context)
         {
-            context.Add("_content/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme/libs/abp/css/theme.css");
+            context.Add("_content/Volo.Abp.AspNetCore.Components.UI.BasicTheme/libs/abp/css/theme.css");
         }
     }
 }

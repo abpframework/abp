@@ -5,15 +5,14 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>Volo.Abp.AspNetCore.Components.UI</AssemblyName>
-    <PackageId>Volo.Abp.AspNetCore.Components.UI</PackageId>
+    <AssemblyName>Volo.Abp.AspNetCore.Components.Server</AssemblyName>
+    <PackageId>Volo.Abp.AspNetCore.Components.Server</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace />
   </PropertyGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.Client.Common\Volo.Abp.AspNetCore.Mvc.Client.Common.csproj" />
@@ -25,10 +24,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Microsoft\Extensions\DependencyInjection\" />
   </ItemGroup>
 
 </Project>

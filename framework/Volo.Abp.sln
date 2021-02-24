@@ -365,11 +365,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Compone
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.UI.Theming", "src\Volo.Abp.AspNetCore.Components.UI.Theming\Volo.Abp.AspNetCore.Components.UI.Theming.csproj", "{B9133C38-AC24-4E2F-B581-D124CF410CDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly", "src\Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly\Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly.csproj", "{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly", "src\Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly\Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly.csproj", "{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly", "src\Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly\Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly.csproj", "{616282F9-6901-4098-B515-EBDF41C57C4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly", "src\Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly\Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly.csproj", "{616282F9-6901-4098-B515-EBDF41C57C4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EventBus.Abstractions", "src\Volo.Abp.EventBus.Abstractions\Volo.Abp.EventBus.Abstractions.csproj", "{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Abstractions", "src\Volo.Abp.EventBus.Abstractions\Volo.Abp.EventBus.Abstractions.csproj", "{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Server", "src\Volo.Abp.AspNetCore.Components.Server\Volo.Abp.AspNetCore.Components.Server.csproj", "{41743609-6CDC-46F7-8C83-BCFBA5555AC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1105,6 +1107,10 @@ Global
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41743609-6CDC-46F7-8C83-BCFBA5555AC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41743609-6CDC-46F7-8C83-BCFBA5555AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41743609-6CDC-46F7-8C83-BCFBA5555AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41743609-6CDC-46F7-8C83-BCFBA5555AC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1292,6 +1298,7 @@ Global
 		{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{616282F9-6901-4098-B515-EBDF41C57C4F} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{41743609-6CDC-46F7-8C83-BCFBA5555AC0} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

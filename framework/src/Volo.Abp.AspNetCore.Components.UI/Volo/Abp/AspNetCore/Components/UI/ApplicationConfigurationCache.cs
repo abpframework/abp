@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Components.UI
             return Configuration;
         }
 
-        internal void Set(ApplicationConfigurationDto configuration)
+        public void Set(ApplicationConfigurationDto configuration)
         {
             Configuration = configuration;
         }
