@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Create)]
-        public virtual async Task<BlogDto> CreateAsync(BlogDto input)
+        public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
         {
             var blog = await BlogManager.CreateAsync(input.Name, input.Slug);
 
@@ -54,7 +54,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Update)]
-        public virtual async Task<BlogDto> UpdateAsync(Guid id, BlogDto input)
+        public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
         {
             var blog = await BlogRepository.GetAsync(id);
 
