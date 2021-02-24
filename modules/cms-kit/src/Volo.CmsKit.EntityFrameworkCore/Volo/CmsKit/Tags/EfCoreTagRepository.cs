@@ -21,7 +21,6 @@ namespace Volo.CmsKit.Tags
         public virtual async Task<bool> AnyAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
@@ -29,15 +28,13 @@ namespace Volo.CmsKit.Tags
             
             return await (await GetDbSetAsync()).AnyAsync(x =>
                     x.EntityType == entityType &&
-                    x.Name == name &&
-                    x.TenantId == tenantId,
+                    x.Name == name,
                 GetCancellationToken(cancellationToken));
         }
 
         public virtual Task<Tag> GetAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
@@ -45,15 +42,13 @@ namespace Volo.CmsKit.Tags
             
             return GetAsync(x =>
                     x.EntityType == entityType &&
-                    x.Name == name &&
-                    x.TenantId == tenantId,
+                    x.Name == name,
                 cancellationToken: GetCancellationToken(cancellationToken));
         }
 
         public virtual Task<Tag> FindAsync(
             [NotNull] string entityType,
             [NotNull] string name,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
@@ -61,8 +56,7 @@ namespace Volo.CmsKit.Tags
             
             return FindAsync(x =>
                     x.EntityType == entityType &&
-                    x.Name == name &&
-                    x.TenantId == tenantId,
+                    x.Name == name,
                 cancellationToken: GetCancellationToken(cancellationToken));
         }
 

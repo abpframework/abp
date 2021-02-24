@@ -21,14 +21,8 @@ namespace Volo.CmsKit.Tags
 
         public virtual async Task<Tag> GetOrAddAsync([NotNull] string entityType, [NotNull] string name)
         {
-            var entity = await TagRepository.FindAsync(entityType, name, CurrentTenant.Id);
-
-            if (entity == null)
-            {
-                entity = await InsertAsync(GuidGenerator.Create(), entityType, name);
-            }
-
-            return entity;
+            return await TagRepository.FindAsync(entityType, name)
+                    ?? await InsertAsync(GuidGenerator.Create(), entityType, name);
         }
 
         public virtual async Task<Tag> InsertAsync(Guid id,
@@ -40,7 +34,7 @@ namespace Volo.CmsKit.Tags
                 throw new EntityNotTaggableException(entityType);
             }
 
-            if (await TagRepository.AnyAsync(entityType, name, CurrentTenant.Id))
+            if (await TagRepository.AnyAsync(entityType, name))
             {
                 throw new TagAlreadyExistException(entityType, name);
             }
@@ -57,7 +51,7 @@ namespace Volo.CmsKit.Tags
             var entity = await TagRepository.GetAsync(id);
 
             if (name != entity.Name &&
-                await TagRepository.AnyAsync(entity.EntityType, name, entity.TenantId))
+                await TagRepository.AnyAsync(entity.EntityType, name))
             {
                 throw new TagAlreadyExistException(entity.EntityType, name);
             }
