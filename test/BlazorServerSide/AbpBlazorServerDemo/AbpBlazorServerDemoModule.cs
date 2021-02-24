@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
@@ -11,7 +12,8 @@ namespace AbpBlazorServerDemo
 {
     [DependsOn(
         typeof(AbpAutofacModule),
-        typeof(AbpAspNetCoreMvcModule)
+        typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
     public class AbpBlazorServerDemoModule : AbpModule
     {
