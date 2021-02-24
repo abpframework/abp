@@ -21,7 +21,7 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(AbpSettingManagementDbProperties.DbNamingConvention);
+            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 
@@ -31,7 +31,7 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 
             builder.ConfigureSettingManagement();
 
-            builder.NamingConventionsRewriteName(AbpSettingManagementDbProperties.DbNamingConvention);
+            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 

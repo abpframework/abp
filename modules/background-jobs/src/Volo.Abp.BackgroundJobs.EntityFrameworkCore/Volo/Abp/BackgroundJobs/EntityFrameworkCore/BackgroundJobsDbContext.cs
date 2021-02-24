@@ -21,7 +21,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(BackgroundJobsDbProperties.DbNamingConvention);
+            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 
@@ -31,7 +31,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 
             builder.ConfigureBackgroundJobs();
 
-            builder.NamingConventionsRewriteName(BackgroundJobsDbProperties.DbNamingConvention);
+            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 

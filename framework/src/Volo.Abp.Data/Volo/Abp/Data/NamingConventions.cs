@@ -1,10 +1,11 @@
-namespace Volo.Abp.EntityFrameworkCore
+namespace Volo.Abp.Data
 {
-    public enum DbNamingConvention
+    public enum NamingConventions
     {
         Default,
         SnakeCase,
         LowerCase,
+        CamelCase,
         UpperCase,
         UpperSnakeCase
     }

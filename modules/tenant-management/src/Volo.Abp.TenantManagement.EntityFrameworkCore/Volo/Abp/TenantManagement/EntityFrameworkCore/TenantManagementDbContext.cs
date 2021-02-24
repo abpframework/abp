@@ -22,7 +22,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(AbpTenantManagementDbProperties.DbNamingConvention);
+            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 
@@ -32,7 +32,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 
             builder.ConfigureTenantManagement();
 
-            builder.NamingConventionsRewriteName(AbpTenantManagementDbProperties.DbNamingConvention);
+            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 

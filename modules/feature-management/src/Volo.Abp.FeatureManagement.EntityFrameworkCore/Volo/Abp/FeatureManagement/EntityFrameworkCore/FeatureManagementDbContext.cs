@@ -21,7 +21,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(FeatureManagementDbProperties.DbNamingConvention);
+            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 
@@ -31,7 +31,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
             builder.ConfigureFeatureManagement();
 
-            builder.NamingConventionsRewriteName(FeatureManagementDbProperties.DbNamingConvention);
+            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 

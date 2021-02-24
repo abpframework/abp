@@ -8,7 +8,5 @@
 
         public const string ConnectionStringName = "AbpIdentityServer";
 
-        public static string DbNamingConvention = "Default";
-
     }
 }

@@ -19,7 +19,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(AbpPermissionManagementDbProperties.DbNamingConvention);
+            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 
@@ -29,7 +29,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 
             builder.ConfigurePermissionManagement();
 
-            builder.NamingConventionsRewriteName(AbpPermissionManagementDbProperties.DbNamingConvention);
+            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
         }
 
     }

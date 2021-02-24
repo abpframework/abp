@@ -10,7 +10,5 @@ namespace Volo.Abp.BackgroundJobs
 
         public const string ConnectionStringName = "AbpBackgroundJobs";
 
-        public static string DbNamingConvention = AbpCommonDbProperties.DbNamingConvention;
-
     }
 }
