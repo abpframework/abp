@@ -272,6 +272,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
                 actionModel.AddParameter(ParameterApiDescriptionModel.Create(
                         parameterDescription.Name,
+                        _options.ApiParameterNameGenerator?.Invoke(parameterDescription),
                         matchedMethodParamName,
                         parameterDescription.Type,
                         parameterDescription.RouteInfo?.IsOptional ?? false,
