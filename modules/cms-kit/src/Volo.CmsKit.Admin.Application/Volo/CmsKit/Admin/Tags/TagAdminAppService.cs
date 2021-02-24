@@ -22,13 +22,13 @@ namespace Volo.CmsKit.Admin.Tags
             TagUpdateDto>,
         ITagAdminAppService
     {
-        protected ITagManager TagManager { get; }
+        protected TagManager TagManager { get; }
 
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
         public TagAdminAppService(
             IRepository<Tag, Guid> repository,
-            ITagManager tagManager,
+            TagManager tagManager,
             IStringLocalizerFactory stringLocalizerFactory) : base(repository)
         {
             TagManager = tagManager;

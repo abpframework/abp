@@ -35,7 +35,7 @@ namespace Volo.CmsKit
         private readonly ICurrentTenant _currentTenant;
         private readonly IContentRepository _contentRepository;
         private readonly IEntityTagManager _entityTagManager;
-        private readonly ITagManager _tagManager;
+        private readonly TagManager _tagManager;
         private readonly IEntityTagRepository _entityTagRepository;
         private readonly IPageRepository _pageRepository;
         private readonly IBlogRepository _blogRepository;
@@ -55,7 +55,7 @@ namespace Volo.CmsKit
             IRatingRepository ratingRepository,
             ICurrentTenant currentTenant,
             IContentRepository contentRepository,
-            ITagManager tagManager,
+            TagManager tagManager,
             IEntityTagRepository entityTagRepository,
             IPageRepository pageRepository,
             IBlogRepository blogRepository,

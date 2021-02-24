@@ -9,14 +9,14 @@ namespace Volo.CmsKit.Admin.Tags
     {
         protected ITagDefinitionStore TagDefinitionStore { get; }
         protected IEntityTagManager EntityTagManager { get; }
-        protected ITagManager TagManager { get; }
+        protected TagManager TagManager { get; }
         protected ITagRepository TagRepository { get; }
         protected IEntityTagRepository EntityTagRepository { get; }
 
         public EntityTagAdminAppService(
             ITagDefinitionStore tagDefinitionStore,
             IEntityTagManager entityTagManager,
-            ITagManager tagManager,
+            TagManager tagManager,
             ITagRepository tagRepository,
             IEntityTagRepository entityTagRepository)
         {

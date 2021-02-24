@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Services;
 
 namespace Volo.CmsKit.Tags
 {
-    public class TagManager : DomainService, ITagManager
+    public class TagManager : DomainService
     {
         protected ITagRepository TagRepository { get; }
         protected ITagDefinitionStore TagDefinitionStore { get; }
