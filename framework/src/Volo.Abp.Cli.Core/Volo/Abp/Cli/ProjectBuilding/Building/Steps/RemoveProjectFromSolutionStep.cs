@@ -85,11 +85,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         private void SetSolutionAndProjectPathsIfNull(ProjectBuildContext context)
         {
-
             if (_solutionFilePath == null)
             {
                 _solutionFilePath = context.FindFile("/aspnet-core/MyCompanyName.MyProjectName.sln")?.Name ??
-                                    context.FindFile("/MyCompanyName.MyProjectName.sln")?.Name;
+                                    context.FindFile("/MyCompanyName.MyProjectName.sln")?.Name ??
+                                    context.FindFile("/MyCompanyName.MyProjectName.MicroserviceName.sln")?.Name;
             }
             if (_projectFolderPath == null)
             {

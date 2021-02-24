@@ -147,19 +147,34 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var createSolutionFolder = GetCreateSolutionFolderPreference(commandLineArgs);
-            if (!createSolutionFolder)
-            {
-                Logger.LogInformation("Create Solution Folder: no");
-            }
 
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
 
             var outputFolderRoot =
                 outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory();
 
-            outputFolder = createSolutionFolder ?
-                Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
-                outputFolderRoot;
+            SolutionName solutionName;
+            if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
+            {
+                var microserviceSolutionName = FindMicroserviceSolutionName(outputFolderRoot);
+
+                if (microserviceSolutionName == null)
+                {
+                    throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
+                }
+
+                solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
+                outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, projectName);
+                uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;
+            }
+            else
+            {
+                solutionName = SolutionName.Parse(projectName);
+
+                outputFolder = createSolutionFolder ?
+                    Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
+                    outputFolderRoot;
+            }
 
             Volo.Abp.IO.DirectoryHelper.CreateIfNotExists(outputFolder);
 
@@ -176,7 +191,7 @@ namespace Volo.Abp.Cli.Commands
 
             var result = await TemplateProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
-                    SolutionName.Parse(projectName),
+                    solutionName,
                     template,
                     version,
                     databaseProvider,
@@ -243,6 +258,32 @@ namespace Volo.Abp.Cli.Commands
             {
                 OpenMicroserviceDocumentPage();
             }
+        }
+
+        private string FindMicroserviceSolutionName(string outputFolderRoot)
+        {
+            var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+
+            if (slnFile == null)
+            {
+                return null;
+            }
+
+            return Path.GetFileName(slnFile).RemovePostFix(".sln");
+        }
+
+        private UiFramework FindMicroserviceSolutionUiFramework(string outputFolderRoot)
+        {
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "applications", "blazor")))
+            {
+                return UiFramework.Blazor;
+            }
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "applications", "web")))
+            {
+                return UiFramework.Mvc;
+            }
+
+            return UiFramework.None;
         }
 
         private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
