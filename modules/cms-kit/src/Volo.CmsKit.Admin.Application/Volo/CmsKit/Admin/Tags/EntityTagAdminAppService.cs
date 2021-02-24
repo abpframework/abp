@@ -29,7 +29,7 @@ namespace Volo.CmsKit.Admin.Tags
 
         public virtual async Task AddTagToEntityAsync(EntityTagCreateDto input)
         {
-            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionsAsync(input.EntityType);
+            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionAsync(input.EntityType);
 
             await CheckPolicyAsync(definition.CreatePolicy);
 
@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Admin.Tags
 
         public virtual async Task RemoveTagFromEntityAsync(EntityTagRemoveDto input)
         {
-            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionsAsync(input.EntityType);
+            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionAsync(input.EntityType);
 
             await CheckPolicyAsync(definition.DeletePolicy);
 
@@ -57,7 +57,7 @@ namespace Volo.CmsKit.Admin.Tags
 
         public virtual async Task SetEntityTagsAsync(EntityTagSetDto input)
         {
-            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionsAsync(input.EntityType);
+            var definition = await TagDefinitionStore.GetTagEntityTypeDefinitionAsync(input.EntityType);
 
             await CheckPolicyAsync(definition.UpdatePolicy);
 
