@@ -9,14 +9,14 @@ namespace Volo.CmsKit.Tags
     public class EntityTagManager_Tests : CmsKitDomainTestBase
     {
         private readonly CmsKitTestData _cmsKitTestData;
-        private readonly IEntityTagManager _entityTagManager;
+        private readonly EntityTagManager _entityTagManager;
         private readonly ITagRepository _tagRepository;
         private readonly IGuidGenerator _guidGenerator;
 
         public EntityTagManager_Tests()
         {
             _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-            _entityTagManager = GetRequiredService<IEntityTagManager>();
+            _entityTagManager = GetRequiredService<EntityTagManager>();
             _tagRepository = GetRequiredService<ITagRepository>();
             _guidGenerator = GetRequiredService<IGuidGenerator>();
         }
