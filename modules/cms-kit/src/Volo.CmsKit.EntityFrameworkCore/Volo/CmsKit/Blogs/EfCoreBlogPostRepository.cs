@@ -23,16 +23,22 @@ namespace Volo.CmsKit.Blogs
         {
         }
 
-        public async Task<BlogPost> GetBySlugAsync(Guid blogId, [NotNull] string slug,
+        public async Task<BlogPost> GetBySlugAsync(
+            Guid blogId, 
+            [NotNull] string slug,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
 
-            return await (await WithDetailsAsync())
-                       .Where(x =>
-                           x.BlogId == blogId && x.Slug.ToLower() == slug)
-                       .FirstOrDefaultAsync(cancellationToken: GetCancellationToken(cancellationToken))
-                   ?? throw new EntityNotFoundException(typeof(BlogPost));
+            var blogPost = await GetAsync(
+                                    x => x.BlogId == blogId && x.Slug.ToLower() == slug, 
+                                    cancellationToken: GetCancellationToken(cancellationToken));
+
+            blogPost.Author = await (await GetDbContextAsync())
+                                .Set<CmsUser>()
+                                .FirstOrDefaultAsync(x =>x.Id == blogPost.AuthorId);
+
+            return blogPost;
         }
 
         public async Task<int> GetCountAsync(Guid blogId, CancellationToken cancellationToken = default)
