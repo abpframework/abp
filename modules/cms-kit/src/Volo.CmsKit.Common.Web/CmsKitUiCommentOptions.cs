@@ -1,4 +1,4 @@
-﻿namespace Volo.CmsKit
+﻿namespace Volo.CmsKit.Web
 {
     public class CmsKitUiCommentOptions
     {

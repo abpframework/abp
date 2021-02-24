@@ -78,9 +78,11 @@ namespace Volo.CmsKit.Admin.Tags
 
             return definitions
                         .Select(s => 
-                            new TagDefinitionDto(
-                                s.EntityType, 
-                                s.DisplayName?.Localize(StringLocalizerFactory) ?? s.EntityType))
+                            new TagDefinitionDto
+                            {
+                                EntityType = s.EntityType, 
+                                DisplayName = s.DisplayName?.Localize(StringLocalizerFactory) ?? s.EntityType
+                            })
                         .ToList();
         }
     }

@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Admin.Pages
 {
+    [Serializable]
     public class UpdatePageInputDto
     {
         [Required]

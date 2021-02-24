@@ -3,7 +3,8 @@ using Volo.Abp.Application.Dtos;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs
-{
+{    
+    [Serializable]
     public class BlogPostPublicDto : AuditedEntityWithUserDto<Guid, CmsUserDto>
     {
         public Guid BlogId { get; set; }

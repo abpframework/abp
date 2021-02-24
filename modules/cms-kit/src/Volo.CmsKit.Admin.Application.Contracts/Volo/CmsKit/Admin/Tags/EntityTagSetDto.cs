@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Volo.CmsKit.Admin.Tags
 {
+    [Serializable]
     public class EntityTagSetDto
     {
         public string EntityId { get; set; }
