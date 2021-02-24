@@ -65,7 +65,7 @@ namespace Volo.CmsKit.Blogs
                                             (blogPost,user) => new { blogPost, user })
                                         .Skip(skipCount)
                                         .Take(maxResultCount)
-                                        .ToListAsync();
+                                        .ToListAsync(GetCancellationToken(cancellationToken));
 
             return combinedResult.Select(s =>
                                         {
