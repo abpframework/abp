@@ -57,18 +57,21 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
         public override async Task<BlogPostDto> CreateAsync(CreateBlogPostDto input)
         {
-            _ = await UserLookupService.GetByIdAsync(CurrentUser.GetId());
+            var author = await UserLookupService.GetByIdAsync(CurrentUser.GetId());
 
-            var entity = await BlogPostManager
-                                    .CreateAsync(
-                                        new BlogPost(
-                                            GuidGenerator.Create(),
-                                            input.BlogId,
-                                            input.Title,
-                                            input.Slug,
-                                            input.ShortDescription));
+            var blog = await BlogRepository.GetAsync(input.BlogId);
 
-            return await MapToGetOutputDtoAsync(entity);
+            var blogPost = await BlogPostManager.CreateAsync(
+                                                        author,
+                                                        blog,
+                                                        input.Title,
+                                                        input.Slug,
+                                                        input.ShortDescription,
+                                                        CurrentTenant.Id);
+
+            await Repository.InsertAsync(blogPost);
+
+            return await MapToGetOutputDtoAsync(blogPost);
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
@@ -77,13 +80,12 @@ namespace Volo.CmsKit.Admin.Blogs
             var blogPost = await BlogPostRepository.GetAsync(id);
 
             blogPost.SetTitle(input.Title);
+            blogPost.SetShortDescription(input.ShortDescription);
 
             if (blogPost.Slug != input.Slug)
             {
                 await BlogPostManager.SetSlugUrlAsync(blogPost, input.Slug);
             }
-
-            MapToEntity(input, blogPost);
 
             await BlogPostManager.UpdateAsync(blogPost);
 

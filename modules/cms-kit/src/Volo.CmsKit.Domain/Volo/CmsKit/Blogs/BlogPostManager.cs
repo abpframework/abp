@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -20,13 +21,31 @@ namespace Volo.CmsKit.Blogs
             BlogRepository = blogRepository;
         }
 
-        public virtual async Task<BlogPost> CreateAsync(BlogPost blogPost)
+        public virtual async Task<BlogPost> CreateAsync(
+            [NotNull] CmsUser author, 
+            [NotNull] Blog blog,
+            [NotNull] string title,
+            [NotNull] string slug,
+            [CanBeNull] string shortDescription = null,
+            [CanBeNull] Guid? tenantId = null)
         {
-            await CheckBlogExistenceAsync(blogPost.BlogId);
+            Check.NotNull(author, nameof(author));
+            Check.NotNull(blog, nameof(blog));
 
-            await CheckSlugExistenceAsync(blogPost.BlogId, blogPost.Slug);
+            await CheckBlogExistenceAsync(blog.Id);
 
-            return await BlogPostRepository.InsertAsync(blogPost);
+            var blogPost = new BlogPost(
+                        GuidGenerator.Create(),
+                        blog.Id,
+                        author.Id,
+                        Check.NotNullOrEmpty(title, nameof(title)),
+                        Check.NotNullOrEmpty(slug, nameof(slug)),
+                        shortDescription
+                        );
+
+            await CheckSlugExistenceAsync(blog.Id, blogPost.Slug);
+
+            return blogPost;
         }
 
         public virtual async Task UpdateAsync(BlogPost blogPost)

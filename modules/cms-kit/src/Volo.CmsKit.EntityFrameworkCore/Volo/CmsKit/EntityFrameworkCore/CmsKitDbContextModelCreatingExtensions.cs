@@ -214,6 +214,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
 
+                    b.Property(p => p.AuthorId).IsRequired();
+
                     b.HasIndex(x => new { x.Slug, x.BlogId });
                 });
 

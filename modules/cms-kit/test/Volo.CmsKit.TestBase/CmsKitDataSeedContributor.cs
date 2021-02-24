@@ -41,6 +41,7 @@ namespace Volo.CmsKit
         private readonly IBlogRepository _blogRepository;
         private readonly IBlogFeatureRepository _blogFeatureRepository;
         private readonly IBlogPostRepository _blogPostRepository;
+        private readonly IBlogPostManager _blogPostManager;
         private readonly IOptions<CmsKitOptions> _options;
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
         private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
@@ -60,6 +61,7 @@ namespace Volo.CmsKit
             IPageRepository pageRepository,
             IBlogRepository blogRepository,
             IBlogPostRepository blogPostRepository,
+            IBlogPostManager blogPostmanager,
             IBlogFeatureRepository blogFeatureRepository,
             IEntityTagManager entityTagManager,
             IOptions<CmsKitOptions> options,
@@ -81,6 +83,7 @@ namespace Volo.CmsKit
             _pageRepository = pageRepository;
             _blogRepository = blogRepository;
             _blogPostRepository = blogPostRepository;
+            _blogPostManager = blogPostmanager;
             _blogFeatureRepository = blogFeatureRepository;
             _options = options;
             _tagOptions = tagOptions;
@@ -131,10 +134,13 @@ namespace Volo.CmsKit
         {
             await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User1Id, "user1",
                 "user1@volo.com",
-                "user", "1")));
+                "user", "1")), 
+                autoSave: true);
+
             await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User2Id, "user2",
                 "user2@volo.com",
-                "user", "2")));
+                "user", "2")),
+                autoSave: true);
         }
 
         private async Task SeedCommentsAsync()
@@ -325,11 +331,27 @@ namespace Volo.CmsKit
 
         private async Task SeedBlogsAsync()
         {
-            var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.Blog_Id, _cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug));
+            var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.Blog_Id, _cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug), autoSave: true);
 
-            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_1_Id, blog.Id, _cmsKitTestData.BlogPost_1_Title, _cmsKitTestData.BlogPost_1_Slug, "Short desc 1"));
+            var author = await _cmsUserRepository.GetAsync(_cmsKitTestData.User1Id);
 
-            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_2_Id, blog.Id, _cmsKitTestData.BlogPost_2_Title, _cmsKitTestData.BlogPost_2_Slug, "Short desc 2"));
+            _cmsKitTestData.BlogPost_1_Id = 
+                (await _blogPostRepository.InsertAsync(
+                    await _blogPostManager.CreateAsync(
+                        author, 
+                        blog, 
+                        _cmsKitTestData.BlogPost_1_Title, 
+                        _cmsKitTestData.BlogPost_1_Slug, 
+                        "Short desc 1"))).Id;
+
+            _cmsKitTestData.BlogPost_2_Id =
+                (await _blogPostRepository.InsertAsync( 
+                    await _blogPostManager.CreateAsync(
+                        author,
+                        blog,
+                        _cmsKitTestData.BlogPost_2_Title, 
+                        _cmsKitTestData.BlogPost_2_Slug, 
+                        "Short desc 2"))).Id;
         }
 
         private async Task SeedBlogFeaturesAsync()

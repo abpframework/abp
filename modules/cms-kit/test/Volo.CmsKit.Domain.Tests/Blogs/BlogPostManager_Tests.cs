@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Guids;
+using Volo.Abp.Users;
 using Volo.CmsKit.Tags;
+using Volo.CmsKit.Users;
 using Xunit;
 
 namespace Volo.CmsKit.Blogs
@@ -15,28 +17,33 @@ namespace Volo.CmsKit.Blogs
         private readonly IBlogPostManager blogPostManager;
         private readonly IGuidGenerator guidGenerator;
         private readonly IBlogPostRepository blogPostRepository;
+        private readonly IBlogRepository blogRepository;
+        private readonly ICmsUserRepository userRepository;
         private readonly CmsKitTestData cmsKitTestData;
 
         public BlogPostManager_Tests()
         {
-            this.blogPostManager = GetRequiredService<IBlogPostManager>();
-            this.guidGenerator = GetRequiredService<IGuidGenerator>();
-            this.blogPostRepository = GetRequiredService<IBlogPostRepository>();
-            this.cmsKitTestData = GetRequiredService<CmsKitTestData>();
+            blogPostManager = GetRequiredService<IBlogPostManager>();
+            guidGenerator = GetRequiredService<IGuidGenerator>();
+            blogPostRepository = GetRequiredService<IBlogPostRepository>();
+            blogRepository = GetRequiredService<IBlogRepository>();
+            cmsKitTestData = GetRequiredService<CmsKitTestData>();
+            userRepository = GetRequiredService<ICmsUserRepository>();
         }
 
         [Fact]
-        public async Task CreateAsync_ShouldWorkProperly_WithCorrectData()
+        public async Task CreateAsync_ShouldWorkProperly_WithExistingUserAndBlog()
         {
             var title = "New blog post";
             var slug = "new-blog-post";
 
-            var created = await blogPostManager.CreateAsync(
-                new BlogPost(guidGenerator.Create(), cmsKitTestData.Blog_Id, title, slug));
+            var author = await userRepository.GetAsync(cmsKitTestData.User1Id);
 
-            created.Id.ShouldNotBe(Guid.Empty);
+            var blog = await blogRepository.GetAsync(cmsKitTestData.Blog_Id);
 
-            var blogPost = await blogPostRepository.GetAsync(created.Id);
+            var blogPost = await blogPostManager.CreateAsync(author, blog, title, slug);
+
+            blogPost.Id.ShouldNotBe(Guid.Empty);
             blogPost.Title.ShouldBe(title);
             blogPost.Slug.ShouldBe(slug);
         }
@@ -44,10 +51,13 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task CreateAsync_ShouldThrowException_WhenSlugAlreadyExists()
         {
-            var blogPost = new BlogPost(guidGenerator.Create(), cmsKitTestData.Blog_Id, "Any New Title", cmsKitTestData.BlogPost_1_Slug);
+
+            var author = await userRepository.GetAsync(cmsKitTestData.User1Id);
+
+            var blog = await blogRepository.GetAsync(cmsKitTestData.Blog_Id);
 
             await Should.ThrowAsync<BlogPostSlugAlreadyExistException>(async () =>
-                await blogPostManager.CreateAsync(blogPost));
+                await blogPostManager.CreateAsync(author, blog, "Any New Title", cmsKitTestData.BlogPost_1_Slug));
         }
 
         [Fact]

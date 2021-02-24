@@ -13,6 +13,7 @@ using System.Data.Common;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -69,7 +70,16 @@ namespace Volo.CmsKit.Blogs
 
         public override async Task<IQueryable<BlogPost>> WithDetailsAsync()
         {
-            return (await GetDbSetAsync()).Include(i => i.Creator);
+            var dbContext = await GetDbContextAsync();
+            var blogPosts = await GetDbSetAsync();
+            var users = dbContext.Set<CmsUser>();
+
+            //var query = blogPosts.Join(users, o => o.AuthorId, i => i.Id, (blogPost, user) => new 
+            //BlogPost 
+            //{
+                
+            //});
+            return (await GetDbSetAsync());
         }
     }
 }
