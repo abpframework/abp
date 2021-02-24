@@ -12,23 +12,23 @@ namespace Volo.Abp.EntityFrameworkCore
     public static class DbNamingConventionRewriterExtensions
     {
         public static void NamingConventionsRewriteName(this DbContextOptionsBuilder optionsBuilder,
-            NamingConventions namingConvention = NamingConventions.Default,
+            DbNamingConvention namingConvention = DbNamingConvention.Default,
             CultureInfo culture = null)
         {
             switch (namingConvention)
             {
-                case NamingConventions.Default:
+                case DbNamingConvention.Default:
                     break;
-                case NamingConventions.SnakeCase:
+                case DbNamingConvention.SnakeCase:
                     optionsBuilder.UseSnakeCaseNamingConvention(culture);
                     break;
-                case NamingConventions.LowerCase:
+                case DbNamingConvention.LowerCase:
                     optionsBuilder.UseLowerCaseNamingConvention(culture);
                     break;
-                case NamingConventions.UpperCase:
+                case DbNamingConvention.UpperCase:
                     optionsBuilder.UseUpperCaseNamingConvention(culture);
                     break;
-                case NamingConventions.UpperSnakeCase:
+                case DbNamingConvention.UpperSnakeCase:
                     optionsBuilder.UseUpperSnakeCaseNamingConvention(culture);
                     break;
                 default:
@@ -38,10 +38,10 @@ namespace Volo.Abp.EntityFrameworkCore
 
 
         public static void NamingConventionsRewriteName(this ModelBuilder modelBuilder,
-            NamingConventions namingConvention = NamingConventions.Default,
+            DbNamingConvention namingConvention = DbNamingConvention.Default,
             CultureInfo culture = null)
         {
-            if (namingConvention == NamingConventions.Default)
+            if (namingConvention == DbNamingConvention.Default)
             {
                 return;
             }
@@ -50,18 +50,18 @@ namespace Volo.Abp.EntityFrameworkCore
             culture = culture ?? CultureInfo.InvariantCulture;
             switch (namingConvention)
             {
-                case NamingConventions.Default:
+                case DbNamingConvention.Default:
                     break;
-                case NamingConventions.SnakeCase:
+                case DbNamingConvention.SnakeCase:
                     nameRewriter = new SnakeCaseNameRewriter(culture);
                     break;
-                case NamingConventions.LowerCase:
+                case DbNamingConvention.LowerCase:
                     nameRewriter = new LowerCaseNameRewriter(culture);
                     break;
-                case NamingConventions.UpperCase:
+                case DbNamingConvention.UpperCase:
                     nameRewriter = new UpperCaseNameRewriter(culture);
                     break;
-                case NamingConventions.UpperSnakeCase:
+                case DbNamingConvention.UpperSnakeCase:
                     nameRewriter = new UpperSnakeCaseNameRewriter(culture);
                     break;
                 default:

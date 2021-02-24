@@ -1,6 +1,6 @@
 namespace Volo.Abp.Data
 {
-    public enum NamingConventions
+    public enum DbNamingConvention
     {
         Default,
         SnakeCase,

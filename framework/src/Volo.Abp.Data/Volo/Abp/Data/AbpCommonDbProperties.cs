@@ -21,6 +21,6 @@
         /// 
         /// Default value: "Default".
         /// </summary>
-        public static NamingConventions DbNamingConvention = NamingConventions.Default;
+        public static DbNamingConvention DbNamingConvention = DbNamingConvention.Default;
     }
 }
