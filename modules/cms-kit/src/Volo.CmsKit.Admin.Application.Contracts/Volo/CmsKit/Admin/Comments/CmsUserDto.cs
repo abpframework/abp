@@ -2,6 +2,7 @@
 
 namespace Volo.CmsKit.Admin.Comments
 {
+    [Serializable]
     public class CmsUserDto
     {
         public Guid Id { get; set; }
