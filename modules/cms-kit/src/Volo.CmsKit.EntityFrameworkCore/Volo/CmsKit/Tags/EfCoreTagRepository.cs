@@ -63,20 +63,18 @@ namespace Volo.CmsKit.Tags
         public virtual async Task<List<Tag>> GetAllRelatedTagsAsync(
             [NotNull] string entityType,
             [NotNull] string entityId,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
             Check.NotNullOrEmpty(entityId, nameof(entityId));
             
             var entityTagIds = await (await GetDbContextAsync()).Set<EntityTag>()
-                .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
+                .Where(q => q.EntityId == entityId)
                 .Select(q => q.TagId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
             var query = (await GetDbSetAsync())
                 .Where(x => x.EntityType == entityType &&
-                            x.TenantId == tenantId &&
                             entityTagIds.Contains(x.Id));
 
             return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));

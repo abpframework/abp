@@ -60,10 +60,5 @@ namespace Volo.CmsKit.Tags
 
             return await TagRepository.UpdateAsync(entity);
         }
-
-        public virtual Task<List<TagEntityTypeDefiniton>> GetTagDefinitionsAsync()
-        {
-            return TagDefinitionStore.GetTagEntityTypeDefinitionListAsync();
-        }
     }
 }

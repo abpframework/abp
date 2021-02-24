@@ -23,16 +23,18 @@ namespace Volo.CmsKit.Admin.Tags
         ITagAdminAppService
     {
         protected TagManager TagManager { get; }
-
+        protected ITagDefinitionStore TagDefinitionStore { get; }
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
         public TagAdminAppService(
             IRepository<Tag, Guid> repository,
             TagManager tagManager,
+            ITagDefinitionStore tagDefinitionStore,
             IStringLocalizerFactory stringLocalizerFactory) : base(repository)
         {
             TagManager = tagManager;
-           StringLocalizerFactory = stringLocalizerFactory;
+            TagDefinitionStore = tagDefinitionStore;
+            StringLocalizerFactory = stringLocalizerFactory;
 
             GetListPolicyName = CmsKitAdminPermissions.Tags.Default;
             GetPolicyName = CmsKitAdminPermissions.Tags.Default;
@@ -73,7 +75,7 @@ namespace Volo.CmsKit.Admin.Tags
 
         public virtual async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
         {
-            var definitions = await TagManager.GetTagDefinitionsAsync();
+            var definitions = await TagDefinitionStore.GetTagEntityTypeDefinitionListAsync();
 
             return definitions
                         .Select(s => 
