@@ -8,7 +8,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogFeatureManager : DomainService, IBlogFeatureManager
+    public class BlogFeatureManager : DomainService
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
 

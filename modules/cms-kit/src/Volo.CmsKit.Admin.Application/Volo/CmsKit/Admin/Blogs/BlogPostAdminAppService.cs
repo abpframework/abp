@@ -21,7 +21,7 @@ namespace Volo.CmsKit.Admin.Blogs
     public class BlogPostAdminAppService: CmsKitAppServiceBase, IBlogPostAdminAppService
     {
         protected IRepository<BlogPost, Guid> Repository { get; }
-        protected IBlogPostManager BlogPostManager { get; }
+        protected BlogPostManager BlogPostManager { get; }
         protected IBlogPostRepository BlogPostRepository { get; }
         protected IBlogRepository BlogRepository { get; }
         protected IBlobContainer<BlogPostCoverImageContainer> BlobContainer { get; }
@@ -29,7 +29,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         public BlogPostAdminAppService(
             IRepository<BlogPost, Guid> repository,
-            IBlogPostManager blogPostManager,
+            BlogPostManager blogPostManager,
             IBlogPostRepository blogPostRepository,
             IBlogRepository blogRepository,
             IBlobContainer<BlogPostCoverImageContainer> blobContainer,

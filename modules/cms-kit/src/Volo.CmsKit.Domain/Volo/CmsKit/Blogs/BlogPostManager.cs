@@ -8,7 +8,7 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPostManager : DomainService, IBlogPostManager
+    public class BlogPostManager : DomainService
     {
         protected IBlogPostRepository BlogPostRepository { get; }
         protected IBlogRepository BlogRepository { get; }
@@ -64,7 +64,7 @@ namespace Volo.CmsKit.Blogs
             blogPost.SetSlug(newSlug);
         }
 
-        private async Task CheckSlugExistenceAsync(Guid blogId, string slug)
+        protected virtual async Task CheckSlugExistenceAsync(Guid blogId, string slug)
         {
             if (await BlogPostRepository.SlugExistsAsync(blogId, slug))
             {
@@ -72,7 +72,7 @@ namespace Volo.CmsKit.Blogs
             }
         }
 
-        private async Task CheckBlogExistenceAsync(Guid blogId)
+        protected virtual async Task CheckBlogExistenceAsync(Guid blogId)
         {
             if (!await BlogRepository.ExistsAsync(blogId))
                 throw new EntityNotFoundException(typeof(Blog), blogId);

@@ -41,7 +41,7 @@ namespace Volo.CmsKit
         private readonly IBlogRepository _blogRepository;
         private readonly IBlogFeatureRepository _blogFeatureRepository;
         private readonly IBlogPostRepository _blogPostRepository;
-        private readonly IBlogPostManager _blogPostManager;
+        private readonly BlogPostManager _blogPostManager;
         private readonly IOptions<CmsKitOptions> _options;
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
         private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
@@ -61,7 +61,7 @@ namespace Volo.CmsKit
             IPageRepository pageRepository,
             IBlogRepository blogRepository,
             IBlogPostRepository blogPostRepository,
-            IBlogPostManager blogPostmanager,
+            BlogPostManager blogPostmanager,
             IBlogFeatureRepository blogFeatureRepository,
             IEntityTagManager entityTagManager,
             IOptions<CmsKitOptions> options,

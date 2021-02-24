@@ -18,13 +18,13 @@ namespace Volo.CmsKit.Admin.Blogs
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
 
-        protected IBlogFeatureManager BlogFeatureManager { get; }
+        protected BlogFeatureManager BlogFeatureManager { get; }
 
         protected IDistributedEventBus EventBus { get; }
 
         public BlogFeatureAdminAppService(
             IBlogFeatureRepository blogFeatureRepository,
-            IBlogFeatureManager blogFeatureManager,
+            BlogFeatureManager blogFeatureManager,
             IDistributedEventBus eventBus)
         {
             BlogFeatureRepository = blogFeatureRepository;

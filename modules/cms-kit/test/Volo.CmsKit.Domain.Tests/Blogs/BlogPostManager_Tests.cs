@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Blogs
 {
     public class BlogPostManager_Tests : CmsKitDomainTestBase
     {
-        private readonly IBlogPostManager blogPostManager;
+        private readonly BlogPostManager blogPostManager;
         private readonly IGuidGenerator guidGenerator;
         private readonly IBlogPostRepository blogPostRepository;
         private readonly IBlogRepository blogRepository;
@@ -23,7 +23,7 @@ namespace Volo.CmsKit.Blogs
 
         public BlogPostManager_Tests()
         {
-            blogPostManager = GetRequiredService<IBlogPostManager>();
+            blogPostManager = GetRequiredService<BlogPostManager>();
             guidGenerator = GetRequiredService<IGuidGenerator>();
             blogPostRepository = GetRequiredService<IBlogPostRepository>();
             blogRepository = GetRequiredService<IBlogRepository>();
