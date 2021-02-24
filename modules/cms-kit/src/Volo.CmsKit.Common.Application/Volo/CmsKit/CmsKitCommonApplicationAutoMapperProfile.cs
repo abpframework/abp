@@ -16,7 +16,7 @@ namespace Volo.CmsKit
             CreateMap<CmsUser, CmsUserDto>();
 
             CreateMap<BlogFeature, BlogFeatureCacheItem>();
-
+            CreateMap<BlogFeature, BlogFeatureDto>();
             CreateMap<BlogFeatureCacheItem, BlogFeatureDto>().ReverseMap();
         }
     }
