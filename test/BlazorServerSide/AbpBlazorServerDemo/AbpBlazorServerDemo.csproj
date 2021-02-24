@@ -5,9 +5,15 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.3-preview8" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.3-preview8" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.BlazoriseUI\Volo.Abp.BlazoriseUI.csproj" />
 
   </ItemGroup>
 

@@ -1,4 +1,6 @@
 ﻿using AbpBlazorServerDemo.Data;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -6,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Modularity;
 
 namespace AbpBlazorServerDemo
@@ -13,14 +16,23 @@ namespace AbpBlazorServerDemo
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpBlazoriseUIModule)
     )]
     public class AbpBlazorServerDemoModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            ConfigureBlazorise(context);
             context.Services.AddServerSideBlazor();
             context.Services.AddSingleton<WeatherForecastService>();
+        }
+        
+        private void ConfigureBlazorise(ServiceConfigurationContext context)
+        {
+            context.Services
+                .AddBootstrapProviders()
+                .AddFontAwesomeIcons();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
