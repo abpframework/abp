@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.CmsKit.Contents
+namespace Volo.CmsKit.Public.Contents
 {
     public class ContentDto : EntityDto<Guid>
     {
