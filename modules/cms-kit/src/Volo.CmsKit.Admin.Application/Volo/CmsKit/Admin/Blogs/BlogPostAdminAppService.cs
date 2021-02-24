@@ -54,15 +54,6 @@ namespace Volo.CmsKit.Admin.Blogs
             DeletePolicyName = CmsKitAdminPermissions.BlogPosts.Delete;
         }
 
-        public virtual async Task<BlogPostDto> GetBySlugAsync(string blogSlug, string blogPostSlug)
-        {
-            var blog = await BlogRepository.GetBySlugAsync(blogSlug);
-
-            var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
-
-            return await MapToGetOutputDtoAsync(blogPost);
-        }
-
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
         public override async Task<BlogPostDto> CreateAsync(CreateBlogPostDto input)
         {

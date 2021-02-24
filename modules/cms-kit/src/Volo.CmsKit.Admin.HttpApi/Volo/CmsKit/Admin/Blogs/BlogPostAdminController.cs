@@ -53,14 +53,6 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [HttpGet]
-        [Route("{blogSlug}/{blogPostSlug}")]
-        [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual Task<BlogPostDto> GetBySlugAsync(string blogSlug, string blogPostSlug)
-        {
-            return BlogPostAdminAppService.GetBySlugAsync(blogSlug, blogPostSlug);
-        }
-
-        [HttpGet]
         [Route("{id}/cover-image")]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
         public virtual Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
