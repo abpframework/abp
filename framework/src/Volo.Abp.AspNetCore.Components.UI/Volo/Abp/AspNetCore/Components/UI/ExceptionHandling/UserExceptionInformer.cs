@@ -5,7 +5,6 @@ using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
-using Volo.Abp.Http.Client;
 
 namespace Volo.Abp.AspNetCore.Components.UI.ExceptionHandling
 {
@@ -41,10 +40,10 @@ namespace Volo.Abp.AspNetCore.Components.UI.ExceptionHandling
 
         protected virtual RemoteServiceErrorInfo GetErrorInfo(UserExceptionInformerContext context)
         {
-            if (context.Exception is AbpRemoteCallException remoteCallException)
-            {
-                return remoteCallException.Error;
-            }
+            // if (context.Exception is AbpRemoteCallException remoteCallException)
+            // {
+            //     return remoteCallException.Error;
+            // }
 
             return ExceptionToErrorInfoConverter.Convert(context.Exception, false);
         }

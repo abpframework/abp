@@ -9,6 +9,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.UI\Volo.Abp.AspNetCore.Components.UI.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

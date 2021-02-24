@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.UI
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
     public class ApplicationConfigurationCache : ISingletonDependency
     {
