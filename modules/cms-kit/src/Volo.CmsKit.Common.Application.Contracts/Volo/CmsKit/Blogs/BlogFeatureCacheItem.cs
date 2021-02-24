@@ -2,6 +2,7 @@
 
 namespace Volo.CmsKit.Blogs
 {
+    [Serializable]
     public class BlogFeatureCacheItem
     {
         public Guid Id { get; set; }
