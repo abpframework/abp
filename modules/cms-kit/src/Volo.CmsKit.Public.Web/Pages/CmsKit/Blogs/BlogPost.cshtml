@@ -26,38 +26,50 @@
 
 @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
 {
-    @await Component.InvokeAsync(typeof(TagViewComponent), new
+    if (Model.TagsFeature?.IsEnabled == true)
     {
-        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-        entityId = Model.BlogPost.Id.ToString()
-    })
+        @await Component.InvokeAsync(typeof(TagViewComponent), new
+        {
+            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+            entityId = Model.BlogPost.Id.ToString()
+        })
+    }
 }
 
 @if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
 {
-    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
+    if (Model.ReactionsFeature?.IsEnabled == true)
     {
-        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-        entityId = Model.BlogPost.Id.ToString()
-    })
+        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
+        {
+            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+            entityId = Model.BlogPost.Id.ToString()
+        })
+    }
 }
 
 @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
 {
-    @await Component.InvokeAsync(typeof(RatingViewComponent), new
+    if (Model.RatingsFeature?.IsEnabled == true)
     {
-        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-        entityId = Model.BlogPost.Id.ToString()
-    })
+        @await Component.InvokeAsync(typeof(RatingViewComponent), new
+        {
+            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+            entityId = Model.BlogPost.Id.ToString()
+        })
+    }
 }
 
 <hr />
 
 @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
 {
-    @await Component.InvokeAsync(typeof(DefaultBlogPostCommentViewComponent), new
+    if (Model.CommentsFeature?.IsEnabled == true)
     {
-        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-        entityId = Model.BlogPost.Id.ToString()
-    })
+        @await Component.InvokeAsync(typeof(DefaultBlogPostCommentViewComponent), new
+        {
+            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+            entityId = Model.BlogPost.Id.ToString()
+        })
+    }
 }

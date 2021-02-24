@@ -23,14 +23,15 @@ namespace Volo.CmsKit.Admin.Blogs
             BlogPostDto,
             Guid,
             PagedAndSortedResultRequestDto,
-            CreateUpdateBlogPostDto>
+            CreateBlogPostDto,
+            UpdateBlogPostDto>
         , IBlogPostAdminAppService
     {
-        protected readonly IBlogPostManager BlogPostManager;
-        protected readonly IBlogPostRepository BlogPostRepository;
-        protected readonly IBlogRepository BlogRepository;
-        protected readonly IBlobContainer<BlogPostCoverImageContainer> BlobContainer;
-        protected readonly ICmsUserLookupService UserLookupService;
+        protected IBlogPostManager BlogPostManager { get; }
+        protected IBlogPostRepository BlogPostRepository { get; }
+        protected IBlogRepository BlogRepository { get; }
+        protected IBlobContainer<BlogPostCoverImageContainer> BlobContainer { get; }
+        protected ICmsUserLookupService UserLookupService { get; }
 
         public BlogPostAdminAppService(
             IRepository<BlogPost, Guid> repository,
@@ -59,11 +60,11 @@ namespace Volo.CmsKit.Admin.Blogs
 
             var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
 
-            return MapToGetOutputDto(blogPost);
+            return await MapToGetOutputDtoAsync(blogPost);
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
-        public override async Task<BlogPostDto> CreateAsync(CreateUpdateBlogPostDto input)
+        public override async Task<BlogPostDto> CreateAsync(CreateBlogPostDto input)
         {
             _ = await UserLookupService.GetByIdAsync(CurrentUser.GetId());
 
@@ -76,11 +77,11 @@ namespace Volo.CmsKit.Admin.Blogs
                                             input.Slug,
                                             input.ShortDescription));
 
-            return MapToGetOutputDto(entity);
+            return await MapToGetOutputDtoAsync(entity);
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
-        public override async Task<BlogPostDto> UpdateAsync(Guid id, CreateUpdateBlogPostDto input)
+        public override async Task<BlogPostDto> UpdateAsync(Guid id, UpdateBlogPostDto input)
         {
             var blogPost = await BlogPostRepository.GetAsync(id);
 
@@ -95,7 +96,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
             await BlogPostManager.UpdateAsync(blogPost);
 
-            return MapToGetOutputDto(blogPost);
+            return await MapToGetOutputDtoAsync(blogPost);
         }
 
         public virtual async Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent)

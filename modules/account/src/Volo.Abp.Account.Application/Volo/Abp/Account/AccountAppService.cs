@@ -6,6 +6,7 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Account
@@ -41,6 +42,8 @@ namespace Volo.Abp.Account
             await IdentityOptions.SetAsync();
 
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.EmailAddress, CurrentTenant.Id);
+
+            input.MapExtraPropertiesTo(user);
 
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 

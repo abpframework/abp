@@ -48,13 +48,13 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like in the image below:
 
-![bookstore-create-dialog](./images/bookstore-create-dialog-2.png)
+![bookstore-create-dialog](images/bookstore-create-dialog-2.png)
 
 ### Create the Modal Form
 
 Create a new razor page, named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project.
 
-![bookstore-add-create-dialog](./images/bookstore-add-create-dialog-v2.png)
+![bookstore-add-create-dialog](images/bookstore-add-create-dialog-v2.png)
 
 #### CreateModal.cshtml.cs
 
@@ -186,7 +186,7 @@ The final content of the `Index.cshtml` is shown below:
 
 This adds a new button called **New book** to the **top-right** of the table:
 
-![bookstore-new-book-button](./images/bookstore-new-book-button-2.png)
+![bookstore-new-book-button](images/bookstore-new-book-button-2.png)
 
 Open the `Pages/Books/Index.js` and add the following code just after the `Datatable` configuration:
 
@@ -281,7 +281,7 @@ Now, you can **run the application** and add some new books using the new modal 
 
 Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
 
-![bookstore-add-edit-dialog](./images/bookstore-add-edit-dialog.png)
+![bookstore-add-edit-dialog](images/bookstore-add-edit-dialog.png)
 
 ### EditModal.cshtml.cs
 
@@ -484,7 +484,7 @@ You can run the application and edit any book by selecting the edit action on a 
 
 The final UI looks as below:
 
-![bookstore-books-table-actions](./images/bookstore-edit-button-2.png)
+![bookstore-books-table-actions](images/bookstore-edit-button-2.png)
 
 ## Deleting a Book
 
@@ -721,7 +721,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
 
 You can open your browser and click **New book** button to see the new modal.
 
-![Empty modal for new book](./images/bookstore-empty-new-book-modal.png)
+![Empty modal for new book](images/bookstore-empty-new-book-modal.png)
 
 ### Create a Reactive Form
 
@@ -732,8 +732,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-// import bookTypeOptions from @proxy/books
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
+import { BookService, BookDto, bookTypeOptions } from '@proxy/books'; // add bookTypeOptions
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
 @Component({
@@ -959,7 +958,7 @@ export class BookComponent implements OnInit {
 
 Now, you can open your browser to see the changes:
 
-![Save button to the modal](./images/bookstore-new-book-form-v2.png)
+![Save button to the modal](images/bookstore-new-book-form-v2.png)
 
 ## Updating a Book
 
@@ -1087,7 +1086,7 @@ Open the `/src/app/book/book.component.html`  and add the following `ngx-datata
 
 Added an "Actions" dropdown as the first column of the table that is shown below:
 
-![Action buttons](./images/bookstore-actions-buttons.png)
+![Action buttons](images/bookstore-actions-buttons.png)
 
 Also, change the `ng-template #abpHeader` section as shown below:
 
@@ -1151,11 +1150,11 @@ Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add
 
 The final actions dropdown UI looks like below:
 
-![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
+![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown.png)
 
 Clicking the "Delete" action calls the `delete` method which then shows a confirmation popup as shown below:
 
-![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
+![bookstore-confirmation-popup](images/bookstore-confirmation-popup.png)
 
 {{end}}
 
