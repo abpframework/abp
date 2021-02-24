@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -19,7 +17,7 @@ namespace Volo.CmsKit.Blogs
         {
             await CheckSlugAsync(slug);
 
-            return new Blog(GuidGenerator.Create(), name, slug, CurrentTenant.GetId());
+            return new Blog(GuidGenerator.Create(), name, slug, CurrentTenant.Id);
         }
 
         public virtual async Task<Blog> UpdateAsync([NotNull] Blog blog, [NotNull] string name, [NotNull] string slug)

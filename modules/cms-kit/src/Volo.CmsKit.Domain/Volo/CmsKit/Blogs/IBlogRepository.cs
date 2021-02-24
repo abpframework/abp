@@ -23,7 +23,7 @@ namespace Volo.CmsKit.Blogs
         
         Task<Blog> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
         
-        Task<bool> ExistsAsync(Guid blogId, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
 
         Task<bool> SlugExistsAsync(string slug, CancellationToken cancellationToken = default);
     }
