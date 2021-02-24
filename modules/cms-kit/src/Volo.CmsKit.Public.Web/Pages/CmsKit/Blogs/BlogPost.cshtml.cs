@@ -48,22 +48,22 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
 
             if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
             {
-                CommentsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, BlogPostConsts.CommentsFeatureName);
+                CommentsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.CommentsFeature.Name);
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
             {
-                ReactionsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, BlogPostConsts.ReactionsFeatureName);
+                ReactionsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.ReactionsFeature.Name);
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
             {
-                RatingsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, BlogPostConsts.RatingsFeatureName);
+                RatingsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.RatingsFeature.Name);
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
             {
-                TagsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, BlogPostConsts.TagsFeatureName);
+                TagsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.TagsFeature.Name);
             }
         }
     }
