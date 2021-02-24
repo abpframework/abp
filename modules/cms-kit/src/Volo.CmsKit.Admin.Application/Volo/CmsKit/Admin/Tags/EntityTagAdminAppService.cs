@@ -61,20 +61,7 @@ namespace Volo.CmsKit.Admin.Tags
 
             await CheckPolicyAsync(definition.UpdatePolicy);
 
-            var existingTags =
-                await TagRepository.GetAllRelatedTagsAsync(input.EntityType, input.EntityId);
-
-            var deletedTags = existingTags.Where(x => !input.Tags.Contains(x.Name)).ToList();
-            var addedTags = input.Tags.Where(x => !existingTags.Any(a => a.Name == x));
-
-            await EntityTagRepository.DeleteManyAsync(deletedTags.Select(s => s.Id).ToArray());
-
-            foreach (var addedTag in addedTags)
-            {
-                var tag = await TagManager.GetOrAddAsync(input.EntityType, addedTag);
-
-                await EntityTagManager.AddTagToEntityAsync(tag.Id, input.EntityType, input.EntityId, CurrentTenant?.Id);
-            }
+            await this.EntityTagManager.SetEntityTagsAsync(input.EntityType, input.EntityId, input.Tags);
         }
     }
 }
