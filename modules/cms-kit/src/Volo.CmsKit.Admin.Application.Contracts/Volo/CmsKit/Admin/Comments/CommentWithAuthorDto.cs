@@ -4,6 +4,7 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Admin.Comments
 {
+    [Serializable]
     public class CommentWithAuthorDto
     {
         public Guid Id { get; set; }

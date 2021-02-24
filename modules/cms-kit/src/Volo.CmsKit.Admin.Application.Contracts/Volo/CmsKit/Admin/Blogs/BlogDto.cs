@@ -6,6 +6,7 @@ using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
+    [Serializable]
     public class BlogDto : EntityDto<Guid>
     {
         [Required]
