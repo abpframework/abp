@@ -84,7 +84,6 @@ namespace Volo.Abp.AspNetCore.Mvc
             );
 
             var controllerModel = moduleModel.GetOrAddController(
-                controllerType.FullName,
                 _options.ControllerNameGenerator(controllerType, setting),
                 controllerType,
                 _modelOptions.IgnoredInterfaces
