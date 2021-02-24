@@ -23,16 +23,21 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
         }
 
-        public Task<BlogPost> GetBySlugAsync(Guid blogId, [NotNull] string slug,
+        public async Task<BlogPost> GetBySlugAsync(Guid blogId, [NotNull] string slug,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
 
-            return GetAsync(x =>
+            var blogPost = await GetAsync(x =>
                     x.BlogId == blogId &&
                     x.Slug.ToLower() == slug,
-                includeDetails: true,
                 cancellationToken: GetCancellationToken(cancellationToken));
+
+            var dbContext = await GetDbContextAsync();
+
+            blogPost.Author = await dbContext.Collection<CmsUser>().AsQueryable().FirstOrDefaultAsync(x => x.Id == blogPost.AuthorId);
+
+            return blogPost;
         }
 
         public async Task<int> GetCountAsync(Guid blogId, CancellationToken cancellationToken = default)
@@ -48,9 +53,10 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
             var token = GetCancellationToken(cancellationToken);
             var dbContext = await GetDbContextAsync(token);
-            var blogPostQueryable = await WithDetailsAsync();
+            var blogPostQueryable = dbContext.Collection<BlogPost>().AsQueryable();
+            var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
 
-            var queryable = blogPostQueryable
+            IQueryable<BlogPost> queryable = blogPostQueryable
                 .Where(x => x.BlogId == blogId);
 
             if (!sorting.IsNullOrWhiteSpace())
@@ -58,11 +64,22 @@ namespace Volo.CmsKit.MongoDB.Blogs
                 queryable = queryable.OrderBy(sorting);
             }
 
-            queryable = queryable
-                .Skip(skipCount)
-                .Take(maxResultCount);
+            var combinedQueryable = queryable
+                                    .Join(
+                                        usersQueryable,
+                                        o => o.AuthorId,
+                                        i => i.Id,
+                                        (blogPost, user) => new { blogPost, user })
+                                    .Skip(skipCount)
+                                    .Take(maxResultCount);
 
-            return await AsyncExecuter.ToListAsync(queryable, token);
+            var combinedResult = await AsyncExecuter.ToListAsync(combinedQueryable, GetCancellationToken(cancellationToken));
+
+            return combinedResult.Select(s =>
+                                        {
+                                            s.blogPost.Author = s.user;
+                                            return s.blogPost;
+                                        }).ToList();
         }
 
         public async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
