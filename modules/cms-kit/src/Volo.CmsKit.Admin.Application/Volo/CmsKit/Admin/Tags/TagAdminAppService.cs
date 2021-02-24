@@ -47,8 +47,7 @@ namespace Volo.CmsKit.Admin.Tags
             var tag = await TagManager.InsertAsync(
                 GuidGenerator.Create(),
                 input.EntityType,
-                input.Name,
-                CurrentTenant?.Id);
+                input.Name);
             
             return await MapToGetOutputDtoAsync(tag);
         }

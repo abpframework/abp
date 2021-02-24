@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Admin.Tags
 
             await CheckPolicyAsync(definition.CreatePolicy);
 
-            var tag = await TagManager.GetOrAddAsync(input.EntityType, input.TagName, CurrentTenant?.Id);
+            var tag = await TagManager.GetOrAddAsync(input.EntityType, input.TagName);
 
             await EntityTagManager.AddTagToEntityAsync(
                 tag.Id,
@@ -71,7 +71,7 @@ namespace Volo.CmsKit.Admin.Tags
 
             foreach (var addedTag in addedTags)
             {
-                var tag = await TagManager.GetOrAddAsync(input.EntityType, addedTag, CurrentTenant?.Id);
+                var tag = await TagManager.GetOrAddAsync(input.EntityType, addedTag);
 
                 await EntityTagManager.AddTagToEntityAsync(tag.Id, input.EntityType, input.EntityId, CurrentTenant?.Id);
             }
