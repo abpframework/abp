@@ -1,22 +1,22 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogFeatureChangedHandler : IDistributedEventHandler<BlogFeatureChangedEto>, ITransientDependency
+    public class BlogFeatureChangedHandler : ILocalEventHandler<BlogFeatureChangedEto>, ITransientDependency
     {
-        protected IDistributedCache<BlogFeatureDto> Cache { get; }
+        protected IBlogFeatureCacheManager CacheManager { get; }
 
-        public BlogFeatureChangedHandler(IDistributedCache<BlogFeatureDto> cache)
+        public BlogFeatureChangedHandler(IBlogFeatureCacheManager cacheManager)
         {
-            Cache = cache;
+            CacheManager = cacheManager;
         }
 
         public async Task HandleEventAsync(BlogFeatureChangedEto eventData)
         {
-            await Cache.RemoveAsync($"{eventData.BlogId}_{eventData.FeatureName}");
+            await CacheManager.ClearAsync(eventData.BlogId, eventData.FeatureName);
         }
     }
 }

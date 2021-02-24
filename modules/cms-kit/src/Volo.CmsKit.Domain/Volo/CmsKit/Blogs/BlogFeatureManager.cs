@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Uow;
 
 namespace Volo.CmsKit.Blogs
@@ -15,13 +16,13 @@ namespace Volo.CmsKit.Blogs
 
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-        protected IDistributedEventBus EventBus { get; }
+        protected ILocalEventBus EventBus { get; }
 
         public BlogFeatureManager(
             IBlogFeatureRepository blogFeatureRepository,
             IDefaultBlogFeatureProvider defaultBlogFeatureProvider,
             IUnitOfWorkManager unitOfWorkManager,
-            IDistributedEventBus eventBus)
+            ILocalEventBus eventBus)
         {
             BlogFeatureRepository = blogFeatureRepository;
             DefaultBlogFeatureProvider = defaultBlogFeatureProvider;
