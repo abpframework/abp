@@ -15,9 +15,9 @@ const PASSWORD_FIELDS = ['password', 'confirmPassword'];
 export class ResetPasswordComponent implements OnInit {
   form: FormGroup;
 
-  inProgress: boolean = false;
+  inProgress = false;
 
-  isPasswordReset: boolean = false;
+  isPasswordReset = false;
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;

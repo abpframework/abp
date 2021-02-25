@@ -147,7 +147,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     this.removeRememberMe();
     localStorage.setItem(this.storageKey, 'true');
     document.cookie = `${this.cookieKey}=true${
-      remember ? `;expires=Fri, 31 Dec 9999 23:59:59 GMT` : ''
+      remember ? ';expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
     }`;
   }
 
@@ -198,6 +198,6 @@ function shouldStorageClear(clientId: string, storage: OAuthStorage): boolean {
 }
 
 function getCookieValueByName(name: string) {
-  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
   return match ? match[2] : '';
 }

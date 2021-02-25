@@ -12,7 +12,7 @@ export class ForgotPasswordComponent {
 
   inProgress: boolean;
 
-  isEmailSent: boolean = false;
+  isEmailSent = false;
 
   constructor(private fb: FormBuilder, private accountService: AccountService) {
     this.form = this.fb.group({
