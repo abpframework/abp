@@ -77,8 +77,6 @@ namespace Volo.CmsKit.Admin.Blogs
                 await BlogPostManager.SetSlugUrlAsync(blogPost, input.Slug);
             }
 
-            await BlogPostManager.UpdateAsync(blogPost);
-
             return ObjectMapper.Map<BlogPost,BlogPostDto>(blogPost);
         }
 

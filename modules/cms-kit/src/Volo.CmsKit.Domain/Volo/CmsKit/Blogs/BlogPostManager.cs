@@ -31,6 +31,8 @@ namespace Volo.CmsKit.Blogs
         {
             Check.NotNull(author, nameof(author));
             Check.NotNull(blog, nameof(blog));
+            Check.NotNullOrEmpty(title, nameof(title));
+            Check.NotNullOrEmpty(slug, nameof(slug))
 
             await CheckBlogExistenceAsync(blog.Id);
 
@@ -38,21 +40,14 @@ namespace Volo.CmsKit.Blogs
                         GuidGenerator.Create(),
                         blog.Id,
                         author.Id,
-                        Check.NotNullOrEmpty(title, nameof(title)),
-                        Check.NotNullOrEmpty(slug, nameof(slug)),
+                        title,
+                        slug,
                         shortDescription
                         );
 
             await CheckSlugExistenceAsync(blog.Id, blogPost.Slug);
 
             return blogPost;
-        }
-
-        public virtual async Task UpdateAsync(BlogPost blogPost)
-        {
-            await CheckBlogExistenceAsync(blogPost.BlogId);
-
-            await BlogPostRepository.UpdateAsync(blogPost);
         }
 
         public virtual async Task SetSlugUrlAsync(BlogPost blogPost, [NotNull] string newSlug)
