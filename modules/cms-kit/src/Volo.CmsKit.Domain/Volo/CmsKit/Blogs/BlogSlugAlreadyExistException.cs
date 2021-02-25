@@ -9,7 +9,7 @@ namespace Volo.CmsKit.Blogs
     {
         public BlogSlugAlreadyExistException(string slug)
         {
-            Code = CmsKitErrorCodes.Blogs.SlugAlreadyExist;
+            Code = CmsKitErrorCodes.Blogs.SlugAlreadyExists;
 
             WithData(nameof(Blog.Slug), slug);
         }

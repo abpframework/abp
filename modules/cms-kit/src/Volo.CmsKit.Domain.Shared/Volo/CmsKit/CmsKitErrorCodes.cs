@@ -17,7 +17,7 @@
 
         public static class Blogs
         {
-            public const string SlugAlreadyExist = "CmsKit:Blog:0001";
+            public const string SlugAlreadyExists = "CmsKit:Blog:0001";
         }
         
         public static class BlogPosts
