@@ -16,8 +16,5 @@ namespace Volo.CmsKit.Admin.Pages
         [Required]
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
         public string Slug { get; set; }
-
-        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxDescriptionLength))]
-        public string Description { get; set; }
     }
 }
