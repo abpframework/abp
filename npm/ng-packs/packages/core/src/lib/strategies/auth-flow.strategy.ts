@@ -111,10 +111,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   async init() {
-    this.oAuthService.events.subscribe(event => {
-      if (event.type === 'logout') {
-        this.removeRememberMe();
-      }
+    this.oAuthService.events.pipe(filter(event => event.type === 'logout')).subscribe(() => {
+      this.removeRememberMe();
     });
 
     if (!getCookieValueByName('rememberMe') && localStorage.getItem(this.storageKey)) {
