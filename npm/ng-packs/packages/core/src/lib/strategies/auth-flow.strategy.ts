@@ -1,9 +1,9 @@
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AuthConfig, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthInfoEvent, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { from, Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { filter, switchMap, tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ConfigStateService } from '../services/config-state.service';
@@ -43,7 +43,16 @@ export abstract class AuthFlowStrategy {
     if (shouldClear) clearOAuthStorage(oAuthStorage);
 
     this.oAuthService.configure(this.oAuthConfig);
-    return this.oAuthService.loadDiscoveryDocument().catch(this.catchError);
+    return this.oAuthService
+      .loadDiscoveryDocument()
+      .then(() => {
+        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
+          return Promise.resolve();
+        }
+
+        return this.oAuthService.refreshToken() as Promise<any>;
+      })
+      .catch(this.catchError);
   }
 }
 
@@ -54,13 +63,6 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     return super
       .init()
       .then(() => this.oAuthService.tryLogin())
-      .then(() => {
-        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
-          return Promise.resolve();
-        }
-
-        return this.oAuthService.refreshToken() as Promise<any>;
-      })
       .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
 
@@ -86,6 +88,28 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   private storageKey = 'passwordFlow';
   private appConfigService = this.injector.get(AbpApplicationConfigurationService);
 
+  private listenToTokenExpiration() {
+    this.oAuthService.events
+      .pipe(
+        filter(
+          event =>
+            event instanceof OAuthInfoEvent &&
+            event.type === 'token_expires' &&
+            event.info === 'access_token',
+        ),
+      )
+      .subscribe(() => {
+        if (this.oAuthService.getRefreshToken()) {
+          this.oAuthService.refreshToken();
+        } else {
+          this.oAuthService.logOut();
+          this.appConfigService.get().subscribe(res => {
+            this.configState.setState(res);
+          });
+        }
+      });
+  }
+
   async init() {
     this.oAuthService.events.subscribe(event => {
       if (event.type === 'logout') {
@@ -97,7 +121,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       this.oAuthService.logOut();
     }
 
-    return super.init();
+    return super.init().then(() => this.listenToTokenExpiration());
   }
 
   login() {
