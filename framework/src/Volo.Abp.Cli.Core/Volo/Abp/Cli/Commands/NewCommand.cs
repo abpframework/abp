@@ -424,6 +424,11 @@ namespace Volo.Abp.Cli.Commands
 
         protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
         {
+            if (commandLineArgs.Options.ContainsKey("no-ui"))
+            {
+                return UiFramework.None;
+            }
+
             var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
             switch (optionValue)
             {
