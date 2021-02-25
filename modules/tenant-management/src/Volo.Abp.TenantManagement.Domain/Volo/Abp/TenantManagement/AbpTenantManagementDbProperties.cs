@@ -10,7 +10,5 @@ namespace Volo.Abp.TenantManagement
 
         public const string ConnectionStringName = "AbpTenantManagement";
 
-        public static string DbNamingConvention = AbpCommonDbProperties.DbNamingConvention;
-
     }
 }

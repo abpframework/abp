@@ -182,6 +182,7 @@ namespace MyCompanyName.MyProjectName
                 var configuration = context.GetConfiguration();
                 options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
                 options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
+                options.OAuthScopes("MyProjectName");
             });
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();

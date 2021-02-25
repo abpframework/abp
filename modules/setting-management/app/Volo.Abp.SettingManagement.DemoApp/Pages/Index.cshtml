@@ -1,0 +1,10 @@
+﻿@page
+@using Volo.Abp.Users
+@model Volo.Abp.SettingManagement.DemoApp.Pages.IndexModel
+@inject ICurrentUser CurrentUser
+
+<h3>Welcome to the SettingManagement demo application.</h3>
+@if (!CurrentUser.IsAuthenticated)
+{
+    <a abp-button="Primary" href="/Account/Login" class="px-4"><i class="fa fa-sign-in"></i> Login </a>
+}

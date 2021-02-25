@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Tags;
@@ -24,6 +25,9 @@ namespace Volo.CmsKit.MongoDB.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(name, nameof(name));
+            
             return await (await GetMongoQueryableAsync(cancellationToken))
                     .AnyAsync(x =>
                             x.EntityType == entityType &&
@@ -51,6 +55,9 @@ namespace Volo.CmsKit.MongoDB.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(name, nameof(name));
+            
             return FindAsync(x =>
                 x.EntityType == entityType &&
                 x.Name == name &&
@@ -64,6 +71,9 @@ namespace Volo.CmsKit.MongoDB.Tags
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+            Check.NotNullOrEmpty(entityId, nameof(entityId));
+            
             var entityTagIds = await (await GetDbContextAsync(cancellationToken)).EntityTags.AsQueryable()
                 .Where(q => q.EntityId == entityId && q.TenantId == tenantId)
                 .Select(q => q.TagId)

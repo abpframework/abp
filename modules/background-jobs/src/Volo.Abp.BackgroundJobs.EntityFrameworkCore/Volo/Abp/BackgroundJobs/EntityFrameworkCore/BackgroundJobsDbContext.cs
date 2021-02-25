@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
+    [IgnoreMultiTenancy]
     [ConnectionStringName(BackgroundJobsDbProperties.ConnectionStringName)]
     public class BackgroundJobsDbContext : AbpDbContext<BackgroundJobsDbContext>, IBackgroundJobsDbContext
     {
@@ -19,7 +21,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(BackgroundJobsDbProperties.DbNamingConvention);
+            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 
@@ -29,7 +31,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 
             builder.ConfigureBackgroundJobs();
 
-            builder.NamingConventionsRewriteName(BackgroundJobsDbProperties.DbNamingConvention);
+            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 

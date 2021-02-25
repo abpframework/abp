@@ -27,6 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
+        [Obsolete("Use LazyServiceProvider instead.")]
         public IServiceProvider ServiceProvider { get; set; }
 
         protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();

@@ -11,7 +11,6 @@ import { ReplaceableRouteContainerComponent } from './components/replaceable-rou
 import { RouterOutletComponent } from './components/router-outlet.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { InputEventDebounceDirective } from './directives/debounce.directive';
-import { EllipsisDirective } from './directives/ellipsis.directive';
 import { ForDirective } from './directives/for.directive';
 import { FormSubmitDirective } from './directives/form-submit.directive';
 import { InitDirective } from './directives/init.directive';
@@ -53,11 +52,9 @@ export function storageFactory(): OAuthStorage {
     ReactiveFormsModule,
     RouterModule,
     LocalizationModule,
-
     AbstractNgModelComponent,
     AutofocusDirective,
     DynamicLayoutComponent,
-    EllipsisDirective,
     ForDirective,
     FormSubmitDirective,
     InitDirective,
@@ -83,7 +80,6 @@ export function storageFactory(): OAuthStorage {
     AbstractNgModelComponent,
     AutofocusDirective,
     DynamicLayoutComponent,
-    EllipsisDirective,
     ForDirective,
     FormSubmitDirective,
     InitDirective,

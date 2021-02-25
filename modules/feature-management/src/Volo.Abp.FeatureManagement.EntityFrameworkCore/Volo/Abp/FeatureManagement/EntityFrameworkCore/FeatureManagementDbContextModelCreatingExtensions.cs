@@ -12,6 +12,11 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new FeatureManagementModelBuilderConfigurationOptions(
                 FeatureManagementDbProperties.DbTablePrefix,
                 FeatureManagementDbProperties.DbSchema

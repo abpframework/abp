@@ -19,6 +19,11 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new IdentityServerModelBuilderConfigurationOptions(
                 AbpIdentityServerDbProperties.DbTablePrefix,
                 AbpIdentityServerDbProperties.DbSchema

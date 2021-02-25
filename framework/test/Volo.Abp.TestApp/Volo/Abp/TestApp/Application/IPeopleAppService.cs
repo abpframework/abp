@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.TestApp.Application
@@ -20,5 +21,9 @@ namespace Volo.Abp.TestApp.Application
         Task GetWithAuthorized();
 
         Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input);
+
+        Task<IRemoteStreamContent> DownloadAsync();
+
+        Task<string> UploadAsync(IRemoteStreamContent streamContent);
     }
 }

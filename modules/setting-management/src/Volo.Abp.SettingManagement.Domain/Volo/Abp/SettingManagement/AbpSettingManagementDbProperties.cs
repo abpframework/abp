@@ -10,7 +10,5 @@ namespace Volo.Abp.SettingManagement
 
         public const string ConnectionStringName = "AbpSettingManagement";
 
-        public static string DbNamingConvention = AbpCommonDbProperties.DbNamingConvention;
-
     }
 }

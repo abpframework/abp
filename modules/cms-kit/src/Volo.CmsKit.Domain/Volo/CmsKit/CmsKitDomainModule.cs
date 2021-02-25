@@ -1,14 +1,23 @@
-﻿using Volo.Abp.Domain;
+﻿using Volo.Abp.BlobStoring;
+using Microsoft.Extensions.Options;
+using Volo.Abp.Domain;
+using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
+using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Localization;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit
 {
     [DependsOn(
         typeof(CmsKitDomainSharedModule),
         typeof(AbpUsersDomainModule),
-        typeof(AbpDddDomainModule)
+        typeof(AbpDddDomainModule),
+        typeof(AbpBlobStoringModule)
     )]
     public class CmsKitDomainModule : AbpModule
     {
@@ -28,7 +37,18 @@ namespace Volo.CmsKit
                 options.Reactions.AddOrReplace(StandardReactions.HeartBroken);
                 options.Reactions.AddOrReplace(StandardReactions.Rocket);
                 options.Reactions.AddOrReplace(StandardReactions.Pray);
+
             });
+
+            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            {
+                // TODO: Configure TagEntityTypes here...
+            }
+        }
+
+        private static LocalizableString L(string name)
+        {
+            return LocalizableString.Create<CmsKitResource>(name);
         }
     }
 }

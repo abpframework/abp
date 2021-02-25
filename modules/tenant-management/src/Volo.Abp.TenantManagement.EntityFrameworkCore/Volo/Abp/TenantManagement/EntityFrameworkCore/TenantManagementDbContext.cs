@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
+    [IgnoreMultiTenancy]
     [ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
     public class TenantManagementDbContext : AbpDbContext<TenantManagementDbContext>, ITenantManagementDbContext
     {
@@ -20,7 +22,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(AbpTenantManagementDbProperties.DbNamingConvention);
+            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 
@@ -30,7 +32,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 
             builder.ConfigureTenantManagement();
 
-            builder.NamingConventionsRewriteName(AbpTenantManagementDbProperties.DbNamingConvention);
+            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
 
         }
 

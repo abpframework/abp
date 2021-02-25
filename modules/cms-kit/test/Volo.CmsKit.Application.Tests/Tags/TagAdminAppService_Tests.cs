@@ -32,8 +32,8 @@ namespace Volo.CmsKit.Tags
         {
             var list = await _tagAdminAppService.CreateAsync(new TagCreateDto
             {
-                EntityType = "any_new_type",
-                Name = "1",
+                EntityType = _cmsKitTestData.EntityType1,
+                Name = "My First Tag",
             });
 
             list.Id.ShouldNotBe(Guid.Empty);
