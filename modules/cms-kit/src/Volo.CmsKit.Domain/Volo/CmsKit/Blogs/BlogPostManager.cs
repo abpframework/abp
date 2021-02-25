@@ -32,7 +32,7 @@ namespace Volo.CmsKit.Blogs
             Check.NotNull(author, nameof(author));
             Check.NotNull(blog, nameof(blog));
             Check.NotNullOrEmpty(title, nameof(title));
-            Check.NotNullOrEmpty(slug, nameof(slug))
+            Check.NotNullOrEmpty(slug, nameof(slug));
 
             await CheckBlogExistenceAsync(blog.Id);
 

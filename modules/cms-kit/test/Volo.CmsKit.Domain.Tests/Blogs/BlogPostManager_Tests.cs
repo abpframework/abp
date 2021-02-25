@@ -61,21 +61,6 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
-        public async Task UpdateAsync_ShoudlWorkProperly_WithCorrectData()
-        {
-            var newTitle = "Yet Another Post";
-
-            var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_1_Id);
-
-            blogPost.SetTitle(newTitle);
-
-            await blogPostManager.UpdateAsync(blogPost);
-
-            var updated = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_1_Id);
-            updated.Title.ShouldBe(newTitle);
-        }
-
-        [Fact]
         public async Task SetSlugAsync_ShouldWorkProperly_WithNonExistingSlug()
         {
             var newSlug = "yet-another-post";
