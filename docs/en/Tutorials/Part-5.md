@@ -117,7 +117,7 @@ Finally, edit the localization file (`en.json` under the `Localization/BookStore
 "Permission:Books.Delete": "Deleting the books"
 ````
 
-> Localization key names are arbitrary and no forcing rule. But we prefer the convention used above.
+> Localization key names are arbitrary and there is no forcing rule. But we prefer the convention used above.
 
 ### Permission Management UI
 

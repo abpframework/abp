@@ -6,6 +6,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Domain.Repositories
 {
+    /* Repositories are not injected by class by default.
+     * This class specializes repository registration to apply this rule.
+     */
     public class AbpRepositoryConventionalRegistrar : DefaultConventionalRegistrar
     {
         public static bool ExposeRepositoryClasses { get; set; }

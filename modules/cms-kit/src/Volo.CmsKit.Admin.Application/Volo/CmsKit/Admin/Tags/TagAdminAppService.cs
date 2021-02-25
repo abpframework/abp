@@ -50,7 +50,7 @@ namespace Volo.CmsKit.Admin.Tags
                 input.Name,
                 CurrentTenant?.Id);
             
-            return MapToGetOutputDto(tag);
+            return await MapToGetOutputDtoAsync(tag);
         }
 
         [Authorize(CmsKitAdminPermissions.Tags.Update)]
@@ -60,7 +60,7 @@ namespace Volo.CmsKit.Admin.Tags
                 id,
                 input.Name);
 
-            return MapToGetOutputDto(tag);
+            return await MapToGetOutputDtoAsync(tag);
         }
         protected override IQueryable<Tag> CreateFilteredQuery(TagGetListInput input)
         {
@@ -72,15 +72,17 @@ namespace Volo.CmsKit.Admin.Tags
                             x.EntityType.ToLower().Contains(input.Filter));
         }
 
-        public async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
+        public virtual async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
         {
             var definitions = await TagManager.GetTagDefinitionsAsync();
 
             return definitions
                         .Select(s => 
-                            new TagDefinitionDto(
-                                s.EntityType, 
-                                s.DisplayName?.Localize(StringLocalizerFactory) ?? s.EntityType))
+                            new TagDefinitionDto
+                            {
+                                EntityType = s.EntityType, 
+                                DisplayName = s.DisplayName?.Localize(StringLocalizerFactory) ?? s.EntityType
+                            })
                         .ToList();
         }
     }

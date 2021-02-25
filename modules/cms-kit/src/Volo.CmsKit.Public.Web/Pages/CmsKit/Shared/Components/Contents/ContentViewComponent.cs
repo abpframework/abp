@@ -12,11 +12,11 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
     public class ContentViewComponent : AbpViewComponent
     {
         private readonly IContentRenderer contentRenderer;
-        private readonly IContentAppService contentAppService;
+        private readonly IContentPublicAppService contentAppService;
 
         public ContentViewComponent(
             IContentRenderer contentRenderer,
-            IContentAppService contentAppService)
+            IContentPublicAppService contentAppService)
         {
             this.contentRenderer = contentRenderer;
             this.contentAppService = contentAppService;
