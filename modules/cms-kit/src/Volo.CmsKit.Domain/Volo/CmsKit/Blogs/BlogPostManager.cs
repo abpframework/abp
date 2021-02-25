@@ -70,7 +70,9 @@ namespace Volo.CmsKit.Blogs
         protected virtual async Task CheckBlogExistenceAsync(Guid blogId)
         {
             if (!await BlogRepository.ExistsAsync(blogId))
+            {
                 throw new EntityNotFoundException(typeof(Blog), blogId);
+            }
         }
     }
 }
