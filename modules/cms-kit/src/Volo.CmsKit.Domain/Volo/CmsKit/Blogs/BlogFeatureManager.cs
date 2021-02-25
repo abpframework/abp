@@ -14,20 +14,12 @@ namespace Volo.CmsKit.Blogs
 
         protected IDefaultBlogFeatureProvider DefaultBlogFeatureProvider { get; }
 
-        protected IUnitOfWorkManager UnitOfWorkManager { get; }
-
-        protected ILocalEventBus EventBus { get; }
-
         public BlogFeatureManager(
             IBlogFeatureRepository blogFeatureRepository,
-            IDefaultBlogFeatureProvider defaultBlogFeatureProvider,
-            IUnitOfWorkManager unitOfWorkManager,
-            ILocalEventBus eventBus)
+            IDefaultBlogFeatureProvider defaultBlogFeatureProvider)
         {
             BlogFeatureRepository = blogFeatureRepository;
             DefaultBlogFeatureProvider = defaultBlogFeatureProvider;
-            UnitOfWorkManager = unitOfWorkManager;
-            EventBus = eventBus;
         }
 
         public async Task<List<BlogFeature>> GetListAsync(Guid blogId)
@@ -54,15 +46,6 @@ namespace Volo.CmsKit.Blogs
                 blogFeature.IsEnabled = isEnabled;
                 await BlogFeatureRepository.UpdateAsync(blogFeature);
             }
-
-            await UnitOfWorkManager.Current.SaveChangesAsync();
-
-            await EventBus.PublishAsync(new BlogFeatureChangedEto
-            {
-                BlogId = blogId,
-                FeatureName = featureName,
-                IsEnabled = isEnabled
-            });
         }
     }
 }
