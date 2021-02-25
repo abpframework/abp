@@ -20,7 +20,6 @@ namespace Volo.CmsKit.Admin.Blogs
     [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
     public class BlogPostAdminAppService: CmsKitAppServiceBase, IBlogPostAdminAppService
     {
-        protected IRepository<BlogPost, Guid> Repository { get; }
         protected BlogPostManager BlogPostManager { get; }
         protected IBlogPostRepository BlogPostRepository { get; }
         protected IBlogRepository BlogRepository { get; }
@@ -28,14 +27,12 @@ namespace Volo.CmsKit.Admin.Blogs
         protected ICmsUserLookupService UserLookupService { get; }
 
         public BlogPostAdminAppService(
-            IRepository<BlogPost, Guid> repository,
             BlogPostManager blogPostManager,
             IBlogPostRepository blogPostRepository,
             IBlogRepository blogRepository,
             IBlobContainer<BlogPostCoverImageContainer> blobContainer,
             ICmsUserLookupService userLookupService)
         {
-            Repository = repository;
             BlogPostManager = blogPostManager;
             BlogPostRepository = blogPostRepository;
             BlogRepository = blogRepository;
@@ -59,7 +56,7 @@ namespace Volo.CmsKit.Admin.Blogs
                                                         input.ShortDescription,
                                                         CurrentTenant.Id);
 
-            await Repository.InsertAsync(blogPost);
+            await BlogPostRepository.InsertAsync(blogPost);
 
             return ObjectMapper.Map<BlogPost, BlogPostDto>(blogPost);
         }
@@ -85,7 +82,7 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
         public virtual async Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent)
         {
-            await Repository.GetAsync(id);
+            await BlogPostRepository.GetAsync(id);
 
             using (var stream = streamContent.GetStream())
             {
@@ -104,7 +101,7 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
         public virtual async Task<BlogPostDto> GetAsync(Guid id)
         {
-            var blogPost = await Repository.GetAsync(id);
+            var blogPost = await BlogPostRepository.GetAsync(id);
 
             return ObjectMapper.Map<BlogPost, BlogPostDto>(blogPost);
         }
@@ -117,9 +114,9 @@ namespace Volo.CmsKit.Admin.Blogs
                 input.Sorting = nameof(BlogPost.CreationTime) + " desc";
             }
 
-            var blogPosts = await Repository.GetPagedListAsync(input.SkipCount, input.MaxResultCount, input.Sorting, includeDetails: true);
+            var blogPosts = await BlogPostRepository.GetPagedListAsync(input.SkipCount, input.MaxResultCount, input.Sorting, includeDetails: true);
 
-            var count = await Repository.GetCountAsync();
+            var count = await BlogPostRepository.GetCountAsync();
 
             return new PagedResultDto<BlogPostDto>(
                 count,
@@ -129,7 +126,7 @@ namespace Volo.CmsKit.Admin.Blogs
         [Authorize(CmsKitAdminPermissions.BlogPosts.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
-            await Repository.DeleteAsync(id);
+            await BlogPostRepository.DeleteAsync(id);
         }
     }
 }
