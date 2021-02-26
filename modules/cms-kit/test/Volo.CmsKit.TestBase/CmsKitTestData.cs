@@ -73,7 +73,7 @@ namespace Volo.CmsKit
 
         public string TagName_2 => "News";
 
-        public Guid Blog_Id { get; } = Guid.NewGuid();
+        public Guid Blog_Id { get; set; } = Guid.NewGuid();
 
         public string BlogName => "Cms Blog";
 

@@ -1,4 +1,5 @@
 ﻿using Shouldly;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Guids;
@@ -9,14 +10,14 @@ namespace Volo.CmsKit.Tags
     public class EntityTagManager_Tests : CmsKitDomainTestBase
     {
         private readonly CmsKitTestData _cmsKitTestData;
-        private readonly IEntityTagManager _entityTagManager;
+        private readonly EntityTagManager _entityTagManager;
         private readonly ITagRepository _tagRepository;
         private readonly IGuidGenerator _guidGenerator;
 
         public EntityTagManager_Tests()
         {
             _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-            _entityTagManager = GetRequiredService<IEntityTagManager>();
+            _entityTagManager = GetRequiredService<EntityTagManager>();
             _tagRepository = GetRequiredService<ITagRepository>();
             _guidGenerator = GetRequiredService<IGuidGenerator>();
         }
@@ -55,6 +56,55 @@ namespace Volo.CmsKit.Tags
             var tags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
 
             tags.ShouldNotContain(x => x.Id == tagToDelete.Id);
+        }
+
+        [Fact]
+        public async Task SetEntityTagsAsync_ShouldWorkProperly_WithNonExistingTags()
+        {
+            var newTags = new List<string> { "non-existing-awesome-tag-a", "non-existing-awesome-tag-b" };
+
+            await _entityTagManager.SetEntityTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1, newTags);
+
+            var tags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
+
+            tags.ShouldNotBeNull();
+            tags.ShouldNotBeEmpty();
+            tags.ForEach(tag => newTags.Contains(tag.Name));
+        }
+
+        [Fact]
+        public async Task SetEntityTagsAsync_ShouldWorkProperly_WithExistingTag()
+        {
+            var entityTags = new List<string>
+            {
+                _cmsKitTestData.TagName_1
+            };
+
+            await _entityTagManager.SetEntityTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1, entityTags);
+
+            var tags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
+
+            tags.ShouldNotBeNull();
+            tags.ShouldNotBeEmpty();
+            tags.ForEach(tag => entityTags.Contains(tag.Name));
+        }
+
+        [Fact]
+        public async Task SetEntityTagsAsync_ShouldWorkProperly_WithExistingAndNonExistingTag()
+        {
+            var entityTags = new List<string>
+            {
+                "New Awesome Tag",
+                _cmsKitTestData.TagName_1
+            };
+
+            await _entityTagManager.SetEntityTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1, entityTags);
+
+            var tags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
+
+            tags.ShouldNotBeNull();
+            tags.ShouldNotBeEmpty();
+            tags.ForEach(tag => entityTags.Contains(tag.Name));
         }
     }
 }

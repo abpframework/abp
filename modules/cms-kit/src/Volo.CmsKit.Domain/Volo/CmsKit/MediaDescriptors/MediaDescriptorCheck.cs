@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Volo.CmsKit.MediaDescriptors.Extensions
 {
-    public static class MediaDescriptorExtensions
+    public static class MediaDescriptorCheck
     {
-        public static bool IsValidMediaFileName(this string name)
+        public static bool IsValidMediaFileName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {

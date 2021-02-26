@@ -19,7 +19,7 @@ namespace Volo.CmsKit.Blogs
             Slug = slug;
             BlogId = blogId;
 
-            Code = CmsKitErrorCodes.Blogs.SlugAlreadyExist;
+            Code = CmsKitErrorCodes.BlogPosts.SlugAlreadyExist;
 
             WithData(nameof(Slug), Slug);
             WithData(nameof(BlogId), BlogId);

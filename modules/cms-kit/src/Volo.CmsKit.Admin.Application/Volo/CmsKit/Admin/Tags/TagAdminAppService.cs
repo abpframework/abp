@@ -22,17 +22,19 @@ namespace Volo.CmsKit.Admin.Tags
             TagUpdateDto>,
         ITagAdminAppService
     {
-        protected ITagManager TagManager { get; }
-
+        protected TagManager TagManager { get; }
+        protected ITagDefinitionStore TagDefinitionStore { get; }
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
         public TagAdminAppService(
             IRepository<Tag, Guid> repository,
-            ITagManager tagManager,
+            TagManager tagManager,
+            ITagDefinitionStore tagDefinitionStore,
             IStringLocalizerFactory stringLocalizerFactory) : base(repository)
         {
             TagManager = tagManager;
-           StringLocalizerFactory = stringLocalizerFactory;
+            TagDefinitionStore = tagDefinitionStore;
+            StringLocalizerFactory = stringLocalizerFactory;
 
             GetListPolicyName = CmsKitAdminPermissions.Tags.Default;
             GetPolicyName = CmsKitAdminPermissions.Tags.Default;
@@ -44,12 +46,13 @@ namespace Volo.CmsKit.Admin.Tags
         [Authorize(CmsKitAdminPermissions.Tags.Create)]
         public override async Task<TagDto> CreateAsync(TagCreateDto input)
         {
-            var tag = await TagManager.InsertAsync(
+            var tag = await TagManager.CreateAsync(
                 GuidGenerator.Create(),
                 input.EntityType,
-                input.Name,
-                CurrentTenant?.Id);
-            
+                input.Name);
+
+            await Repository.InsertAsync(tag);
+
             return await MapToGetOutputDtoAsync(tag);
         }
 
@@ -60,11 +63,14 @@ namespace Volo.CmsKit.Admin.Tags
                 id,
                 input.Name);
 
+            await Repository.UpdateAsync(tag);
+
             return await MapToGetOutputDtoAsync(tag);
         }
-        protected override IQueryable<Tag> CreateFilteredQuery(TagGetListInput input)
+
+        protected override async Task<IQueryable<Tag>> CreateFilteredQueryAsync(TagGetListInput input)
         {
-            return base.CreateFilteredQuery(input)
+            return (await base.CreateFilteredQueryAsync(input))
                     .WhereIf(
                         !input.Filter.IsNullOrEmpty(),
                         x =>
@@ -74,7 +80,7 @@ namespace Volo.CmsKit.Admin.Tags
 
         public virtual async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
         {
-            var definitions = await TagManager.GetTagDefinitionsAsync();
+            var definitions = await TagDefinitionStore.GetTagEntityTypeDefinitionListAsync();
 
             return definitions
                         .Select(s => 

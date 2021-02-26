@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -27,42 +24,40 @@ namespace Volo.CmsKit.Admin.Blogs
             BlogAdminAppService = blogAdminAppService;
         }
 
-        [HttpPost]
-        [Authorize(CmsKitAdminPermissions.Blogs.Create)]
-        public Task<BlogDto> CreateAsync(BlogDto input)
-        {
-            return BlogAdminAppService.CreateAsync(input);
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-        [Authorize(CmsKitAdminPermissions.Blogs.Delete)]
-        public Task DeleteAsync(Guid id)
-        {
-            return BlogAdminAppService.DeleteAsync(id);
-        }
-
         [HttpGet]
         [Route("{id}")]
-        [Authorize(CmsKitAdminPermissions.Blogs.Default)]
         public Task<BlogDto> GetAsync(Guid id)
         {
             return BlogAdminAppService.GetAsync(id);
         }
 
         [HttpGet]
-        [Authorize(CmsKitAdminPermissions.Blogs.Default)]
-        public Task<PagedResultDto<BlogDto>> GetListAsync([FromQuery] BlogGetListInput input)
+        public Task<PagedResultDto<BlogDto>> GetListAsync(BlogGetListInput input)
         {
             return BlogAdminAppService.GetListAsync(input);
+        }
+        
+        [HttpPost]
+        [Authorize(CmsKitAdminPermissions.Blogs.Create)]
+        public Task<BlogDto> CreateAsync(CreateBlogDto input)
+        {
+            return BlogAdminAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
         [Authorize(CmsKitAdminPermissions.Blogs.Update)]
-        public Task<BlogDto> UpdateAsync(Guid id, BlogDto input)
+        public Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
         {
             return BlogAdminAppService.UpdateAsync(id, input);
+        }
+        
+        [HttpDelete]
+        [Route("{id}")]
+        [Authorize(CmsKitAdminPermissions.Blogs.Delete)]
+        public Task DeleteAsync(Guid id)
+        {
+            return BlogAdminAppService.DeleteAsync(id);
         }
     }
 }

@@ -20,8 +20,7 @@ namespace Volo.CmsKit.Tags
         {
             var entities = await TagRepository.GetAllRelatedTagsAsync(
                 entityType,
-                entityId,
-                CurrentTenant.Id);
+                entityId);
 
             return ObjectMapper.Map<List<Tag>, List<TagDto>>(entities);
         }

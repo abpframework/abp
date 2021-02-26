@@ -33,7 +33,7 @@ namespace Volo.CmsKit.MediaDescriptors
 
         public void SetName(string name)
         {
-            if (!name.IsValidMediaFileName())
+            if (!MediaDescriptorCheck.IsValidMediaFileName(name))
             {
                 throw new InvalidMediaDescriptorNameException(name);
             }
