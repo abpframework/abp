@@ -45,6 +45,7 @@ namespace Volo.CmsKit
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
         private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
         private readonly IBlobContainer<MediaContainer> _mediaBlobContainer;
+        private readonly BlogManager _blogManager;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -65,7 +66,8 @@ namespace Volo.CmsKit
             IOptions<CmsKitOptions> options,
             IOptions<CmsKitTagOptions> tagOptions, 
             IMediaDescriptorRepository mediaDescriptorRepository, 
-            IBlobContainer<MediaContainer> mediaBlobContainer)
+            IBlobContainer<MediaContainer> mediaBlobContainer, 
+            BlogManager blogManager)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -86,6 +88,7 @@ namespace Volo.CmsKit
             _tagOptions = tagOptions;
             _mediaDescriptorRepository = mediaDescriptorRepository;
             _mediaBlobContainer = mediaBlobContainer;
+            _blogManager = blogManager;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -325,8 +328,12 @@ namespace Volo.CmsKit
 
         private async Task SeedBlogsAsync()
         {
-            var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.Blog_Id, _cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug));
+            var blog = await _blogManager.CreateAsync(_cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug);
+            
+            await _blogRepository.InsertAsync(blog);
 
+            _cmsKitTestData.Blog_Id = blog.Id;
+            
             await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_1_Id, blog.Id, _cmsKitTestData.BlogPost_1_Title, _cmsKitTestData.BlogPost_1_Slug, "Short desc 1"));
 
             await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_2_Id, blog.Id, _cmsKitTestData.BlogPost_2_Title, _cmsKitTestData.BlogPost_2_Slug, "Short desc 2"));
