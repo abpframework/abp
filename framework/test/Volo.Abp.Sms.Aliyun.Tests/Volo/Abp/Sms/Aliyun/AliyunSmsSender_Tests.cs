@@ -19,6 +19,12 @@ namespace Volo.Abp.Sms.Aliyun
         public async Task SendSms_Test()
         {
             var config = _configuration.GetSection("AbpAliyunSms");
+
+            // Please fill in the real parameters in the appsettings.json file.
+            if (config["AccessKeyId"] == "<Enter your AccessKeyId from Aliyun>")
+            {
+                return;
+            }
             
             var msg = new SmsMessage(config["TargetPhoneNumber"],
                 config["TemplateParam"]);
