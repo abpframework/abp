@@ -17,7 +17,7 @@ namespace Volo.CmsKit.Blogs
 
         public virtual Guid? TenantId { get; protected set; }
         
-        internal Blog(Guid id, [NotNull] string name, [NotNull] string slug, [CanBeNull] Guid? tenantId = null) : base(id)
+        protected internal Blog(Guid id, [NotNull] string name, [NotNull] string slug, [CanBeNull] Guid? tenantId = null) : base(id)
         {
             SetName(name);
             SetSlug(slug);
