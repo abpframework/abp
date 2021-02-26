@@ -9,6 +9,6 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
     [ConnectionStringName(AbpSettingManagementDbProperties.ConnectionStringName)]
     public interface ISettingManagementDbContext : IEfCoreDbContext
     {
-        DbSet<Setting> Settings { get; set; }
+        DbSet<Setting> Settings { get; }
     }
 }
