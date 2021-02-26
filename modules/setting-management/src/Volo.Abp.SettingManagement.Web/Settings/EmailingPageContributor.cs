@@ -8,7 +8,7 @@ using Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSet
 
 namespace Volo.Abp.SettingManagement.Web.Settings
 {
-    public class EmailSettingPageContributor: ISettingPageContributor
+    public class EmailingPageContributor: ISettingPageContributor
     {
         public async Task ConfigureAsync(SettingPageCreationContext context)
         {
@@ -21,7 +21,7 @@ namespace Volo.Abp.SettingManagement.Web.Settings
             context.Groups.Add(
                 new SettingPageGroup(
                     "Volo.Abp.EmailSetting",
-                    l["Menu:EmailSetting"],
+                    l["Menu:Emailing"],
                     typeof(EmailSettingGroupViewComponent)
                 )
             );
@@ -36,7 +36,7 @@ namespace Volo.Abp.SettingManagement.Web.Settings
         {
             var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
 
-            return await authorizationService.IsGrantedAsync(SettingManagementPermissions.EmailSetting);
+            return await authorizationService.IsGrantedAsync(SettingManagementPermissions.Emailing);
         }
     }
 }
