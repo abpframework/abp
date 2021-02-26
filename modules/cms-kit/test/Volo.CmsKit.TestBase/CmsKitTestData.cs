@@ -79,13 +79,13 @@ namespace Volo.CmsKit
 
         public string BlogSlug => "cms-blog";
 
-        public Guid BlogPost_1_Id { get; } = Guid.NewGuid();
+        public Guid BlogPost_1_Id { get; internal set; }
 
         public string BlogPost_1_Title => "How to install CmsKit?";
 
         public string BlogPost_1_Slug => "how-to-install-cms-kit";
 
-        public Guid BlogPost_2_Id { get; } = Guid.NewGuid();
+        public Guid BlogPost_2_Id { get; internal set; }
 
         public string BlogPost_2_Title => "How to use CmsKit";
 

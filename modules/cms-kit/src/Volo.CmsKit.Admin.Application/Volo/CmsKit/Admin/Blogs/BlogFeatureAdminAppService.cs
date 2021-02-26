@@ -18,13 +18,13 @@ namespace Volo.CmsKit.Admin.Blogs
     {
         protected IBlogFeatureRepository BlogFeatureRepository { get; }
 
-        protected IBlogFeatureManager BlogFeatureManager { get; }
+        protected BlogFeatureManager BlogFeatureManager { get; }
 
         protected IDistributedEventBus EventBus { get; }
 
         public BlogFeatureAdminAppService(
             IBlogFeatureRepository blogFeatureRepository,
-            IBlogFeatureManager blogFeatureManager,
+            BlogFeatureManager blogFeatureManager,
             IDistributedEventBus eventBus)
         {
             BlogFeatureRepository = blogFeatureRepository;
@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
-        public async Task<List<BlogFeatureDto>> GetListAsync(Guid blogId)
+        public virtual async Task<List<BlogFeatureDto>> GetListAsync(Guid blogId)
         {
             var blogFeatures = await BlogFeatureManager.GetListAsync(blogId);
 
@@ -41,7 +41,7 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.Blogs.Features)]
-        public Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
+        public virtual Task SetAsync(Guid blogId, BlogFeatureInputDto dto)
         {
             return BlogFeatureManager.SetAsync(blogId, dto.FeatureName, dto.IsEnabled);
         }
