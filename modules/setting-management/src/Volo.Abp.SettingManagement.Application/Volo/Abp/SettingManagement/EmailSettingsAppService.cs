@@ -5,7 +5,7 @@ using Volo.Abp.Emailing;
 
 namespace Volo.Abp.SettingManagement
 {
-    [Authorize(SettingManagementPermissions.EmailSetting)]
+    [Authorize(SettingManagementPermissions.Emailing)]
     public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSettingsAppService
     {
         protected ISettingManager SettingManager { get; }

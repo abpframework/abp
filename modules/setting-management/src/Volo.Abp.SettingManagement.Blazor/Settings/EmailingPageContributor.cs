@@ -7,7 +7,7 @@ using Volo.Abp.SettingManagement.Localization;
 
 namespace Volo.Abp.SettingManagement.Blazor.Settings
 {
-    public class EmailSettingPageContributor: ISettingComponentContributor
+    public class EmailingPageContributor: ISettingComponentContributor
     {
         public async Task ConfigureAsync(SettingComponentCreationContext context)
         {
@@ -20,7 +20,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Settings
             context.Groups.Add(
                 new SettingComponentGroup(
                     "Volo.Abp.SettingManagement",
-                    l["Menu:EmailSetting"],
+                    l["Menu:Emailing"],
                     typeof(EmailSettingGroupViewComponent)
                 )
             );
@@ -35,7 +35,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Settings
         {
             var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
 
-            return await authorizationService.IsGrantedAsync(SettingManagementPermissions.EmailSetting);
+            return await authorizationService.IsGrantedAsync(SettingManagementPermissions.Emailing);
         }
     }
 }
