@@ -21,11 +21,18 @@ namespace Volo.CmsKit.Tags
 
         public virtual async Task<Tag> GetOrAddAsync([NotNull] string entityType, [NotNull] string name)
         {
-            return await TagRepository.FindAsync(entityType, name)
-                    ?? await InsertAsync(GuidGenerator.Create(), entityType, name);
+            var tag = await TagRepository.FindAsync(entityType, name);
+
+            if (tag == null)
+            {
+                tag = await CreateAsync(GuidGenerator.Create(), entityType, name);
+                await TagRepository.InsertAsync(tag);
+            }
+
+            return tag;
         }
 
-        public virtual async Task<Tag> InsertAsync(Guid id,
+        public virtual async Task<Tag> CreateAsync(Guid id,
                                                    [NotNull] string entityType,
                                                    [NotNull] string name)
         {
@@ -39,8 +46,8 @@ namespace Volo.CmsKit.Tags
                 throw new TagAlreadyExistException(entityType, name);
             }
 
-            return await TagRepository.InsertAsync(
-                new Tag(id, entityType, name, CurrentTenant.Id));
+            return
+                new Tag(id, entityType, name, CurrentTenant.Id);
         }
 
         public virtual async Task<Tag> UpdateAsync(Guid id,
@@ -48,17 +55,17 @@ namespace Volo.CmsKit.Tags
         {
             Check.NotNullOrEmpty(name, nameof(name));
 
-            var entity = await TagRepository.GetAsync(id);
+            var tag = await TagRepository.GetAsync(id);
 
-            if (name != entity.Name &&
-                await TagRepository.AnyAsync(entity.EntityType, name))
+            if (name != tag.Name &&
+                await TagRepository.AnyAsync(tag.EntityType, name))
             {
-                throw new TagAlreadyExistException(entity.EntityType, name);
+                throw new TagAlreadyExistException(tag.EntityType, name);
             }
 
-            entity.SetName(name);
+            tag.SetName(name);
 
-            return await TagRepository.UpdateAsync(entity);
+            return tag;
         }
     }
 }

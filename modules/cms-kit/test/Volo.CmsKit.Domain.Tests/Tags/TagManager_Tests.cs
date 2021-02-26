@@ -53,24 +53,23 @@ namespace Volo.CmsKit.Tags
         }
 
         [Fact]
-        public async Task ShouldInsertAsync()
+        public async Task ShouldCreateAsync()
         {
             var tagName = "Freshly Created New Tag";
-            var tag = await _tagManager.InsertAsync(Guid.NewGuid(), _cmsKitTestData.EntityType1, tagName);
+            var tag = await _tagManager.CreateAsync(Guid.NewGuid(), _cmsKitTestData.EntityType1, tagName);
 
             tag.ShouldNotBeNull();
 
-            var doesExist = await _tagRepository.AnyAsync(_cmsKitTestData.EntityType1, tagName);
-            
-            doesExist.ShouldBeTrue();
+            tag.Id.ShouldNotBe(Guid.Empty);
         }
+
         [Fact]
         public async Task ShouldntInsertWithUnconfiguredEntityTypeAsync()
         {
             var notConfiguredEntityType = "My.Namespace.SomeEntity";
 
             var exception = await Should.ThrowAsync<EntityNotTaggableException>(async () => 
-                await _tagManager.InsertAsync(Guid.NewGuid(), notConfiguredEntityType, "test"));
+                await _tagManager.CreateAsync(Guid.NewGuid(), notConfiguredEntityType, "test"));
 
             exception.ShouldNotBeNull();
             exception.Data[nameof(Tag.EntityType)].ShouldBe(notConfiguredEntityType);
@@ -82,7 +81,7 @@ namespace Volo.CmsKit.Tags
             var type = _cmsKitTestData.Content_1_EntityType;
             var name = _cmsKitTestData.Content_1_Tags[0];
 
-            Should.Throw<Exception>(async () => await _tagManager.InsertAsync(Guid.NewGuid(), type, name));
+            Should.Throw<Exception>(async () => await _tagManager.CreateAsync(Guid.NewGuid(), type, name));
         }
         
         [Fact]
@@ -94,11 +93,10 @@ namespace Volo.CmsKit.Tags
             
             var tag = await _tagRepository.GetAsync(type, name);
 
-            await _tagManager.UpdateAsync(tag.Id, newName);
-
-            var updatedTag = await _tagRepository.GetAsync(type, newName);
+            var updatedTag = await _tagManager.UpdateAsync(tag.Id, newName);
             
             updatedTag.Id.ShouldBe(tag.Id);
+            updatedTag.Name.ShouldBe(newName);
         }
         
         [Fact]

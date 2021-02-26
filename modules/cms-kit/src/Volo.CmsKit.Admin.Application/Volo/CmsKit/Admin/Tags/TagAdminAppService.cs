@@ -46,11 +46,13 @@ namespace Volo.CmsKit.Admin.Tags
         [Authorize(CmsKitAdminPermissions.Tags.Create)]
         public override async Task<TagDto> CreateAsync(TagCreateDto input)
         {
-            var tag = await TagManager.InsertAsync(
+            var tag = await TagManager.CreateAsync(
                 GuidGenerator.Create(),
                 input.EntityType,
                 input.Name);
-            
+
+            await Repository.InsertAsync(tag);
+
             return await MapToGetOutputDtoAsync(tag);
         }
 
@@ -61,11 +63,14 @@ namespace Volo.CmsKit.Admin.Tags
                 id,
                 input.Name);
 
+            await Repository.UpdateAsync(tag);
+
             return await MapToGetOutputDtoAsync(tag);
         }
-        protected override IQueryable<Tag> CreateFilteredQuery(TagGetListInput input)
+
+        protected override async Task<IQueryable<Tag>> CreateFilteredQueryAsync(TagGetListInput input)
         {
-            return base.CreateFilteredQuery(input)
+            return (await base.CreateFilteredQueryAsync(input))
                     .WhereIf(
                         !input.Filter.IsNullOrEmpty(),
                         x =>
