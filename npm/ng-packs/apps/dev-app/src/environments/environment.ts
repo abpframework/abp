@@ -38,5 +38,9 @@ export const environment = {
       url: 'https://localhost:44305',
       rootNamespace: 'Volo.Abp',
     },
+    AbpSettingManagement: {
+      url: 'https://localhost:44305',
+      rootNamespace: 'Volo.Abp.SettingManagement',
+    },
   },
 } as Environment;
