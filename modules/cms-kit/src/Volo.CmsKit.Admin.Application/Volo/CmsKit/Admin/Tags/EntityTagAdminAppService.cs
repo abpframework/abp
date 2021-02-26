@@ -61,7 +61,7 @@ namespace Volo.CmsKit.Admin.Tags
 
             await CheckPolicyAsync(definition.UpdatePolicy);
 
-            await this.EntityTagManager.SetEntityTagsAsync(input.EntityType, input.EntityId, input.Tags);
+            await EntityTagManager.SetEntityTagsAsync(input.EntityType, input.EntityId, input.Tags);
         }
     }
 }
