@@ -45,7 +45,8 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs
             return NoContent();
         }
 
-        [AutoMap(typeof(BlogDto), ReverseMap = true)]
+        [AutoMap(typeof(BlogDto))]
+        [AutoMap(typeof(UpdateBlogDto), ReverseMap = true)]
         public class UpdateBlogViewModel
         {
             [Required]

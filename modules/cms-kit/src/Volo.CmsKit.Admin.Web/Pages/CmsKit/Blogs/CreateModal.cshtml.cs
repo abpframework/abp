@@ -29,7 +29,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs
             return NoContent();
         }
 
-        [AutoMap(typeof(BlogDto), ReverseMap = true)]
+        [AutoMap(typeof(CreateBlogDto), ReverseMap = true)]
         public class CreateBlogViewModel
         {
             [Required]

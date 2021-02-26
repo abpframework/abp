@@ -136,7 +136,7 @@
     function finishSaving() {
         abp.notify.success(l('SuccessfullySaved'));
         abp.ui.clearBusy();
-        location.href = "/Admin/BlogPosts/";
+        location.href = "../BlogPosts";
     }
 
     var urlEdited = false;

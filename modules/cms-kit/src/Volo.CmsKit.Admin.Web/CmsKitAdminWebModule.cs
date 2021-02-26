@@ -10,6 +10,7 @@ using Volo.CmsKit.Web;
 using Volo.CmsKit.Permissions;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.Localization;
+using Volo.Abp.AutoMapper;
 
 namespace Volo.CmsKit.Admin.Web
 {
@@ -48,6 +49,9 @@ namespace Volo.CmsKit.Admin.Web
             {
                 options.FileSets.AddEmbedded<CmsKitAdminWebModule>("Volo.CmsKit.Admin.Web");
             });
+
+            context.Services.AddAutoMapperObjectMapper<CmsKitAdminWebModule>();
+            Configure<AbpAutoMapperOptions>(options => { options.AddMaps<CmsKitAdminWebModule>(validate: true); });
 
             Configure<RazorPagesOptions>(options =>
             {
