@@ -354,7 +354,7 @@ namespace Volo.CmsKit
         private async Task SeedBlogsAsync()
         {
             var blog = await _blogRepository.InsertAsync(
-                await _blogManager.CreateAsync(_cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug));
+                await _blogManager.CreateAsync(_cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug), autoSave: true);
 
             _cmsKitTestData.Blog_Id = blog.Id;
 
