@@ -29,7 +29,7 @@ namespace Volo.Abp.DependencyInjection
 
         public Dictionary<Type, Type> CustomRepositories { get; }
 
-        public List<Type> DefaultRepositories { get; }
+        public List<Type> SpecifiedDefaultRepositories { get; }
 
         public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithoutKey != null;
 
@@ -40,7 +40,7 @@ namespace Volo.Abp.DependencyInjection
             DefaultRepositoryDbContextType = originalDbContextType;
             CustomRepositories = new Dictionary<Type, Type>();
             ReplacedDbContextTypes = new List<Type>();
-            DefaultRepositories = new List<Type>();
+            SpecifiedDefaultRepositories = new List<Type>();
         }
 
         public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>()
@@ -92,13 +92,10 @@ namespace Volo.Abp.DependencyInjection
 
         public IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository(Type entityType)
         {
-            if (!typeof(IEntity).IsAssignableFrom(entityType))
-            {
-                throw new AbpException($"Given entityType is not an entity: {entityType.AssemblyQualifiedName}. It must implement {typeof(IEntity<>).AssemblyQualifiedName}.");
-            }
-
-            DefaultRepositories.AddIfNotContains(entityType);
-
+            EntityHelper.CheckEntity(entityType);
+            
+            SpecifiedDefaultRepositories.AddIfNotContains(entityType);
+            
             return this;
         }
 

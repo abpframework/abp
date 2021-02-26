@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
@@ -20,9 +19,7 @@ namespace Volo.Abp.Domain.Repositories
         public virtual void AddRepositories()
         {
             RegisterCustomRepositories();
-
             RegisterDefaultRepositories();
-
             RegisterSpecifiedDefaultRepositories();
         }
 
@@ -54,7 +51,7 @@ namespace Volo.Abp.Domain.Repositories
 
         protected virtual void RegisterSpecifiedDefaultRepositories()
         {
-            foreach (var entityType in Options.DefaultRepositories)
+            foreach (var entityType in Options.SpecifiedDefaultRepositories)
             {
                 if (!Options.CustomRepositories.ContainsKey(entityType))
                 {
