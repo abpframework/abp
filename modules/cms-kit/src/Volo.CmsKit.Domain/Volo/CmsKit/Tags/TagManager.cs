@@ -50,8 +50,7 @@ namespace Volo.CmsKit.Tags
                 new Tag(id, entityType, name, CurrentTenant.Id);
         }
 
-        public virtual async Task<Tag> UpdateAsync(Guid id,
-                                                   [NotNull] string name)
+        public virtual async Task<Tag> UpdateAsync(Guid id, [NotNull] string name)
         {
             Check.NotNullOrEmpty(name, nameof(name));
 
