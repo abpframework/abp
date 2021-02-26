@@ -55,7 +55,7 @@ namespace Volo.CmsKit.Pages
         {
             var page = await _pageAdminAppService.GetAsync(_data.Page_1_Id);
             
-            page.Description.ShouldBe(_data.Page_1_Description);
+            page.Title.ShouldBe(_data.Page_1_Title);
         }
         
         [Fact]
@@ -94,7 +94,6 @@ namespace Volo.CmsKit.Pages
             var dto = new UpdatePageInputDto
             {
                 Title = _data.Page_1_Title + "++",
-                Description = "new description",
                 Slug = _data.Page_1_Slug+ "test"
             };
 
@@ -107,9 +106,6 @@ namespace Volo.CmsKit.Pages
             
             updatedPage.Slug.ShouldNotBe(_data.Page_1_Slug);
             updatedPage.Slug.ShouldBe(dto.Slug);
-            
-            updatedPage.Description.ShouldNotBe(_data.Page_1_Description);
-            updatedPage.Description.ShouldBe(dto.Description);
         }
         
         [Fact]
@@ -118,7 +114,6 @@ namespace Volo.CmsKit.Pages
             var dto = new UpdatePageInputDto
             {
                 Title = _data.Page_1_Title + "++",
-                Description = "new description",
                 Slug = _data.Page_2_Slug
             };
 

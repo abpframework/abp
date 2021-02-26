@@ -47,8 +47,6 @@ namespace Volo.CmsKit
 
         public string Page_1_Slug { get; } = "imagine-dragons-believer-lyrics";
 
-        public string Page_1_Description { get; } = "You can get the lyrics of the music.";
-
         public Guid Page_1_Id { get; } = Guid.NewGuid();
 
         public string Page_1_Content => Content_1;
@@ -56,8 +54,6 @@ namespace Volo.CmsKit
         public string Page_2_Title { get; } = "Imagine Dragons - Believer Lyrics (Page 2)";
 
         public string Page_2_Slug { get; } = "imagine-dragons-believer-lyrics-2";
-
-        public string Page_2_Description { get; } = "You can get the lyrics of the music.";
 
         public Guid Page_2_Id { get; } = Guid.NewGuid();
 
