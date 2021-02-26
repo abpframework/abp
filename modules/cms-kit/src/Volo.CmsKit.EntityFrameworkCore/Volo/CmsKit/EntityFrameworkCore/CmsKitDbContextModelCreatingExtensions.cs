@@ -214,13 +214,25 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
 
+                    b.Property(p => p.AuthorId).IsRequired();
+
                     b.HasIndex(x => new { x.Slug, x.BlogId });
+                });
+
+                builder.Entity<BlogFeature>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "BlogFeatures", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(p => p.FeatureName).IsRequired().HasMaxLength(BlogFeatureConsts.MaxFeatureNameLenth);
                 });
             }
             else
             {
                 builder.Ignore<Blog>();
                 builder.Ignore<BlogPost>();
+                builder.Ignore<BlogFeature>();
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<MediaFeature>())

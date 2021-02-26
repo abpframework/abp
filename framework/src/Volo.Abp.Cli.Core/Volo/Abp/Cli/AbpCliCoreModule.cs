@@ -34,6 +34,7 @@ namespace Volo.Abp.Cli
                 options.Commands["update"] = typeof(UpdateCommand);
                 options.Commands["add-package"] = typeof(AddPackageCommand);
                 options.Commands["add-module"] = typeof(AddModuleCommand);
+                options.Commands["list-modules"] = typeof(ListModulesCommand);
                 options.Commands["login"] = typeof(LoginCommand);
                 options.Commands["logout"] = typeof(LogoutCommand);
                 options.Commands[GenerateProxyCommand.Name] = typeof(GenerateProxyCommand);
@@ -45,7 +46,7 @@ namespace Volo.Abp.Cli
                 options.Commands["translate"] = typeof(TranslateCommand);
                 options.Commands["build"] = typeof(BuildCommand);
                 options.Commands["bundle"] = typeof(BundleCommand);
-                options.Commands["create-migration-and-run-migrator"] = typeof(CreateMigrationAndRunMigrator);
+                options.Commands["create-migration-and-run-migrator"] = typeof(CreateMigrationAndRunMigratorCommand);
             });
         }
     }

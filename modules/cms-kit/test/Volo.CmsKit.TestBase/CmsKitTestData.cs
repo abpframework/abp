@@ -73,23 +73,35 @@ namespace Volo.CmsKit
 
         public string TagName_2 => "News";
 
-        public Guid Blog_Id { get; } = Guid.NewGuid();
+        public Guid Blog_Id { get; set; } = Guid.NewGuid();
 
         public string BlogName => "Cms Blog";
 
         public string BlogSlug => "cms-blog";
 
-        public Guid BlogPost_1_Id { get; } = Guid.NewGuid();
+        public Guid BlogPost_1_Id { get; internal set; }
 
         public string BlogPost_1_Title => "How to install CmsKit?";
 
         public string BlogPost_1_Slug => "how-to-install-cms-kit";
 
-        public Guid BlogPost_2_Id { get; } = Guid.NewGuid();
+        public Guid BlogPost_2_Id { get; internal set; }
 
         public string BlogPost_2_Title => "How to use CmsKit";
 
         public string BlogPost_2_Slug => "how-to-use-cms-kit";
+
+        public Guid BlogFeature_1_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_1_FeatureName => "Analytics";
+
+        public bool BlogFeature_1_Enabled => true;
+
+        public Guid BlogFeature_2_Id { get; internal set; } = Guid.NewGuid();
+
+        public string BlogFeature_2_FeatureName => "Hotjar";
+
+        public bool BlogFeature_2_Enabled => false;
 
         public Guid Media_1_Id { get; } = Guid.NewGuid();
         

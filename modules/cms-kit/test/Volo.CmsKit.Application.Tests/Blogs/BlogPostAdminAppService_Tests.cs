@@ -91,35 +91,6 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
-        public async Task GetBySlugAsync_ShouldWorkProperly_WithExistingSlug()
-        {
-            var blogPost = await blogPostAdminAppService.GetBySlugAsync(cmsKitTestData.BlogSlug, cmsKitTestData.BlogPost_1_Slug);
-
-            blogPost.Id.ShouldBe(cmsKitTestData.BlogPost_1_Id);
-            blogPost.Title.ShouldBe(cmsKitTestData.BlogPost_1_Title);
-        }
-
-        [Fact]
-        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogPostSlug()
-        {
-            var nonExistingSlug = "any-other-url";
-            var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
-                                await blogPostAdminAppService.GetBySlugAsync(cmsKitTestData.BlogSlug, nonExistingSlug));
-
-            exception.EntityType.ShouldBe(typeof(BlogPost));
-        }
-
-        [Fact]
-        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogSlug()
-        {
-            var nonExistingSlug = "any-other-url";
-            var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
-                                await blogPostAdminAppService.GetBySlugAsync(nonExistingSlug, cmsKitTestData.Page_1_Slug));
-
-            exception.EntityType.ShouldBe(typeof(Blog));
-        }
-
-        [Fact]
         public async Task GetListAsync_ShouldWorkProperly_WithDefaultParameters()
         {
             var list = await blogPostAdminAppService.GetListAsync(new PagedAndSortedResultRequestDto());

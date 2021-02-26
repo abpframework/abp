@@ -53,7 +53,7 @@ namespace Volo.CmsKit.Admin.Contents
 
             await ContentManager.InsertAsync(entity);
 
-            return MapToGetOutputDto(entity);
+            return await MapToGetOutputDtoAsync(entity);
         }
 
         public virtual async Task<ContentDto> GetAsync(

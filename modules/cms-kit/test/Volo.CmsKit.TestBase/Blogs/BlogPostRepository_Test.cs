@@ -61,6 +61,18 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
+        public async Task GetBySlugAsync_ShouldHaveAuthor_WithCorrectParameters()
+        {
+            var blogPost = await blogPostRepository.GetBySlugAsync(testData.Blog_Id, testData.BlogPost_1_Slug);
+
+            blogPost.ShouldNotBeNull();
+            blogPost.Id.ShouldBe(testData.BlogPost_1_Id);
+            blogPost.Slug.ShouldBe(testData.BlogPost_1_Slug);
+            blogPost.Author.ShouldNotBeNull();
+            blogPost.Author.Id.ShouldBe(testData.User1Id);
+        }
+
+        [Fact]
         public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogPostSlug()
         {
             var nonExistingSlugUrl = "absolutely-non-existing-url";
@@ -90,6 +102,18 @@ namespace Volo.CmsKit.Blogs
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();
             result.Count.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task GetPagedListAsync_ShouldHaveAuthor_WithBlogId_WhileGetting10_WithoutSorting()
+        {
+            var result = await blogPostRepository.GetPagedListAsync(testData.Blog_Id, 0, 10, default);
+
+            result.ShouldNotBeNull();
+            result.ShouldNotBeEmpty();
+            result.Count.ShouldBe(2);
+
+            result.ForEach(blogPost => blogPost.Author.ShouldNotBeNull());
         }
 
         [Fact]

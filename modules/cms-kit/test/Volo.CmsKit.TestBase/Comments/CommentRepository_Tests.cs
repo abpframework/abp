@@ -19,6 +19,31 @@ namespace Volo.CmsKit.Comments
         }
 
         [Fact]
+        public async Task GetList_ShouldWork()
+        {
+            var comments = await _commentRepository.GetListAsync();
+
+            comments.ShouldNotBeNull();
+            comments.Count.ShouldBe(6);
+            
+            var headCommentId = comments.First(x => x.Comment.RepliedCommentId != null).Comment.RepliedCommentId;
+            
+            var replies = await _commentRepository.GetListAsync(repliedCommentId: headCommentId);
+
+            replies.ShouldNotBeNull();
+            replies.Count.ShouldBeLessThan(6);
+            replies.Count.ShouldBeGreaterThanOrEqualTo(1);
+        }
+        
+        [Fact]
+        public async Task GetCount_ShouldWork()
+        {
+            var commentsCount = await _commentRepository.GetCountAsync();
+
+            commentsCount.ShouldBe(6);
+        }
+
+        [Fact]
         public async Task GetListWithAuthorsAsync()
         {
             var list = await _commentRepository.GetListWithAuthorsAsync(_cmsKitTestData.EntityType1,
@@ -38,7 +63,7 @@ namespace Volo.CmsKit.Comments
             var list = await _commentRepository.GetListAsync();
 
             list.Any(x=>
-                    x.Id == _cmsKitTestData.CommentWithChildId || x.RepliedCommentId == _cmsKitTestData.CommentWithChildId)
+                    x.Comment.Id == _cmsKitTestData.CommentWithChildId || x.Comment.RepliedCommentId == _cmsKitTestData.CommentWithChildId)
                 .ShouldBeFalse();
         }
     }

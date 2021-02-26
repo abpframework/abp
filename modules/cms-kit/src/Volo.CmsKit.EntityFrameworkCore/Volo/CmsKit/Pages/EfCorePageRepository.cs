@@ -4,7 +4,9 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
@@ -43,18 +45,22 @@ namespace Volo.CmsKit.Pages
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual Task<Page> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
+        public virtual Task<Page> GetBySlugAsync([NotNull] string slug, CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(slug, nameof(slug));
             return GetAsync(x => x.Slug == slug, cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public virtual Task<Page> FindBySlugAsync(string slug, CancellationToken cancellationToken = default)
+        public virtual Task<Page> FindBySlugAsync([NotNull] string slug, CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(slug, nameof(slug));
             return FindAsync(x => x.Slug == slug, cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> ExistsAsync(string slug, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ExistsAsync([NotNull] string slug,
+            CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(slug, nameof(slug));
             return await (await GetDbSetAsync()).AnyAsync(x => x.Slug == slug, GetCancellationToken(cancellationToken));
         }
     }

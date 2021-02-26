@@ -9,7 +9,7 @@ namespace Volo.CmsKit.Tags
 {
     public class TagAppService : CmsKitAppServiceBase, ITagAppService
     {
-        protected readonly ITagRepository TagRepository;
+        protected ITagRepository TagRepository { get; }
 
         public TagAppService(ITagRepository tagRepository)
         {
@@ -20,8 +20,7 @@ namespace Volo.CmsKit.Tags
         {
             var entities = await TagRepository.GetAllRelatedTagsAsync(
                 entityType,
-                entityId,
-                CurrentTenant.Id);
+                entityId);
 
             return ObjectMapper.Map<List<Tag>, List<TagDto>>(entities);
         }

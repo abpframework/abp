@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
@@ -14,24 +12,63 @@ namespace Volo.CmsKit.Admin.Blogs
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
     [Authorize(CmsKitAdminPermissions.Blogs.Default)]
-    public class BlogAdminAppService : CrudAppService<Blog, BlogDto, Guid, BlogGetListInput>, IBlogAdminAppService
+    public class BlogAdminAppService : CmsKitAdminAppServiceBase, IBlogAdminAppService
     {
-        public BlogAdminAppService(IRepository<Blog, Guid> repository) : base(repository)
+        protected IBlogRepository BlogRepository { get; }
+        protected BlogManager BlogManager { get; }
+        
+        public BlogAdminAppService(IBlogRepository blogRepository, BlogManager blogManager)
         {
-            GetListPolicyName = CmsKitAdminPermissions.Blogs.Default;
-            GetPolicyName = CmsKitAdminPermissions.Blogs.Default;
-            CreatePolicyName = CmsKitAdminPermissions.Blogs.Create;
-            UpdatePolicyName = CmsKitAdminPermissions.Blogs.Update;
-            DeletePolicyName = CmsKitAdminPermissions.Blogs.Delete;
+            BlogRepository = blogRepository;
+            BlogManager = blogManager;
+        }
+        
+        public virtual async Task<BlogDto> GetAsync(Guid id)
+        {
+            var blog = await BlogRepository.GetAsync(id);
+
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
 
-        protected override async Task<IQueryable<Blog>> CreateFilteredQueryAsync(BlogGetListInput input)
+        public virtual async Task<PagedResultDto<BlogDto>> GetListAsync(BlogGetListInput input)
         {
-            var queryable = await base.CreateFilteredQueryAsync(input);
-            return queryable
-                    .WhereIf(
-                        !input.Filter.IsNullOrWhiteSpace(),
-                        x => x.Name.ToLower().Contains(input.Filter));
+            var totalCount = await BlogRepository.GetCountAsync(input.Filter);
+
+            var blogs = await BlogRepository.GetListAsync(
+                input.Filter,
+                input.Sorting,
+                input.MaxResultCount,
+                input.SkipCount);
+
+            return new PagedResultDto<BlogDto>(totalCount, ObjectMapper.Map<List<Blog>, List<BlogDto>>(blogs));
+        }
+
+        [Authorize(CmsKitAdminPermissions.Blogs.Create)]
+        public virtual async Task<BlogDto> CreateAsync(CreateBlogDto input)
+        {
+            var blog = await BlogManager.CreateAsync(input.Name, input.Slug);
+
+            await BlogRepository.InsertAsync(blog);
+
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
+        }
+
+        [Authorize(CmsKitAdminPermissions.Blogs.Update)]
+        public virtual async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
+        {
+            var blog = await BlogRepository.GetAsync(id);
+
+            blog = await BlogManager.UpdateAsync(blog, input.Name, input.Slug);
+
+            await BlogRepository.UpdateAsync(blog);
+
+            return ObjectMapper.Map<Blog, BlogDto>(blog);
+        }
+
+        [Authorize(CmsKitAdminPermissions.Blogs.Delete)]
+        public virtual Task DeleteAsync(Guid id)
+        {
+            return BlogRepository.DeleteAsync(id);
         }
     }
 }

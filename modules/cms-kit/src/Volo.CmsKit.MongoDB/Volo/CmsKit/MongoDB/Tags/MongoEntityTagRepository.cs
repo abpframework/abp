@@ -4,23 +4,26 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.MongoDB.Tags
 {
-    public class MongoEntityTagRepository: MongoDbRepository<ICmsKitMongoDbContext, EntityTag>, IEntityTagRepository
+    public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext, EntityTag>, IEntityTagRepository
     {
-        public MongoEntityTagRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        public MongoEntityTagRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(
+            dbContextProvider)
         {
         }
 
         public async Task DeleteManyAsync(Guid[] tagIds, CancellationToken cancellationToken = default)
         {
-            var collection = await GetCollectionAsync();
-
-            await collection.DeleteManyAsync(Builders<EntityTag>.Filter.In(x => x.TagId, tagIds));
+            var token = GetCancellationToken(cancellationToken);
+            
+            var collection = await GetCollectionAsync(token);
+            await collection.DeleteManyAsync(Builders<EntityTag>.Filter.In(x => x.TagId, tagIds), token);
         }
 
         public Task<EntityTag> FindAsync(
@@ -29,11 +32,12 @@ namespace Volo.CmsKit.MongoDB.Tags
             [CanBeNull] Guid? tenantId,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityId, nameof(entityId));
             return base.FindAsync(x =>
-                        x.TagId == tagId &&
-                        x.EntityId == entityId &&
-                        x.TenantId == tenantId,
-                    cancellationToken: cancellationToken);
+                    x.TagId == tagId &&
+                    x.EntityId == entityId &&
+                    x.TenantId == tenantId,
+                cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }
