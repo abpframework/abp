@@ -29,6 +29,8 @@ namespace Volo.Abp.DependencyInjection
 
         public Dictionary<Type, Type> CustomRepositories { get; }
 
+        public List<Type> DefaultRepositories { get; }
+
         public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithoutKey != null;
 
         protected AbpCommonDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
@@ -38,6 +40,7 @@ namespace Volo.Abp.DependencyInjection
             DefaultRepositoryDbContextType = originalDbContextType;
             CustomRepositories = new Dictionary<Type, Type>();
             ReplacedDbContextTypes = new List<Type>();
+            DefaultRepositories = new List<Type>();
         }
 
         public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>()
@@ -80,6 +83,23 @@ namespace Volo.Abp.DependencyInjection
         public IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false)
         {
             return AddDefaultRepositories(typeof(TDefaultRepositoryDbContext), includeAllEntities);
+        }
+
+        public IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository<TEntity>()
+        {
+            return AddDefaultRepository(typeof(TEntity));
+        }
+
+        public IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository(Type entityType)
+        {
+            if (!typeof(IEntity).IsAssignableFrom(entityType))
+            {
+                throw new AbpException($"Given entityType is not an entity: {entityType.AssemblyQualifiedName}. It must implement {typeof(IEntity<>).AssemblyQualifiedName}.");
+            }
+
+            DefaultRepositories.AddIfNotContains(entityType);
+
+            return this;
         }
 
         public IAbpCommonDbContextRegistrationOptionsBuilder AddRepository<TEntity, TRepository>()

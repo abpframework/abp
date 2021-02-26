@@ -9,6 +9,6 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
     [ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
     public interface IFeatureManagementDbContext : IEfCoreDbContext
     {
-        DbSet<FeatureValue> FeatureValues { get; set; }
+        DbSet<FeatureValue> FeatureValues { get; }
     }
 }

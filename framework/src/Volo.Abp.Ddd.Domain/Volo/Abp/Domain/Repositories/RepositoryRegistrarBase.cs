@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
@@ -18,19 +19,28 @@ namespace Volo.Abp.Domain.Repositories
 
         public virtual void AddRepositories()
         {
+            RegisterCustomRepositories();
+
+            RegisterDefaultRepositories();
+
+            RegisterSpecifiedDefaultRepositories();
+        }
+
+        protected virtual void RegisterCustomRepositories()
+        {
             foreach (var customRepository in Options.CustomRepositories)
             {
                 Options.Services.AddDefaultRepository(customRepository.Key, customRepository.Value, replaceExisting: true);
-            }
-
-            if (Options.RegisterDefaultRepositories)
-            {
-                RegisterDefaultRepositories();
             }
         }
 
         protected virtual void RegisterDefaultRepositories()
         {
+            if (!Options.RegisterDefaultRepositories)
+            {
+                return;
+            }
+
             foreach (var entityType in GetEntityTypes(Options.OriginalDbContextType))
             {
                 if (!ShouldRegisterDefaultRepositoryFor(entityType))
@@ -39,6 +49,17 @@ namespace Volo.Abp.Domain.Repositories
                 }
 
                 RegisterDefaultRepository(entityType);
+            }
+        }
+
+        protected virtual void RegisterSpecifiedDefaultRepositories()
+        {
+            foreach (var entityType in Options.DefaultRepositories)
+            {
+                if (!Options.CustomRepositories.ContainsKey(entityType))
+                {
+                    RegisterDefaultRepository(entityType);
+                }
             }
         }
 
