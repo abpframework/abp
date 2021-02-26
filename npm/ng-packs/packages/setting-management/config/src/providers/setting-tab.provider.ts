@@ -12,9 +12,9 @@ export const SETTING_MANAGEMENT_SETTING_TAB_PROVIDERS = [
   },
 ];
 
-export function configureSettingTabs(settingtabs: SettingTabsService) {
+export function configureSettingTabs(settingTabs: SettingTabsService) {
   return () => {
-    settingtabs.add([
+    settingTabs.add([
       {
         name: eSettingManamagementSettingTabNames.EmailSettingGroup,
         order: 1,
