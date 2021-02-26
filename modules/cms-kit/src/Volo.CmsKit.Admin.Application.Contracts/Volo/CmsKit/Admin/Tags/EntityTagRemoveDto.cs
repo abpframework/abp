@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Volo.CmsKit.Admin.Tags
 {
+    [Serializable]
     public class EntityTagRemoveDto
     {
         [Required]

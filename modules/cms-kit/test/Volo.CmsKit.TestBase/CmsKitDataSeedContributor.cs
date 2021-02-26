@@ -34,17 +34,20 @@ namespace Volo.CmsKit
         private readonly IRatingRepository _ratingRepository;
         private readonly ICurrentTenant _currentTenant;
         private readonly IContentRepository _contentRepository;
-        private readonly IEntityTagManager _entityTagManager;
-        private readonly ITagManager _tagManager;
+        private readonly EntityTagManager _entityTagManager;
+        private readonly TagManager _tagManager;
+        private readonly ITagRepository _tagRepository;
         private readonly IEntityTagRepository _entityTagRepository;
         private readonly IPageRepository _pageRepository;
         private readonly IBlogRepository _blogRepository;
         private readonly IBlogFeatureRepository _blogFeatureRepository;
         private readonly IBlogPostRepository _blogPostRepository;
+        private readonly BlogPostManager _blogPostManager;
         private readonly IOptions<CmsKitOptions> _options;
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
         private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
         private readonly IBlobContainer<MediaContainer> _mediaBlobContainer;
+        private readonly BlogManager _blogManager;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -55,17 +58,20 @@ namespace Volo.CmsKit
             IRatingRepository ratingRepository,
             ICurrentTenant currentTenant,
             IContentRepository contentRepository,
-            ITagManager tagManager,
+            TagManager tagManager,
+            ITagRepository tagRepository,
             IEntityTagRepository entityTagRepository,
             IPageRepository pageRepository,
             IBlogRepository blogRepository,
             IBlogPostRepository blogPostRepository,
+            BlogPostManager blogPostmanager,
             IBlogFeatureRepository blogFeatureRepository,
-            IEntityTagManager entityTagManager,
+            EntityTagManager entityTagManager,
             IOptions<CmsKitOptions> options,
             IOptions<CmsKitTagOptions> tagOptions, 
             IMediaDescriptorRepository mediaDescriptorRepository, 
-            IBlobContainer<MediaContainer> mediaBlobContainer)
+            IBlobContainer<MediaContainer> mediaBlobContainer, 
+            BlogManager blogManager)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -76,16 +82,19 @@ namespace Volo.CmsKit
             _currentTenant = currentTenant;
             _contentRepository = contentRepository;
             _tagManager = tagManager;
+            _tagRepository = tagRepository;
             _entityTagManager = entityTagManager;
             _entityTagRepository = entityTagRepository;
             _pageRepository = pageRepository;
             _blogRepository = blogRepository;
             _blogPostRepository = blogPostRepository;
+            _blogPostManager = blogPostmanager;
             _blogFeatureRepository = blogFeatureRepository;
             _options = options;
             _tagOptions = tagOptions;
             _mediaDescriptorRepository = mediaDescriptorRepository;
             _mediaBlobContainer = mediaBlobContainer;
+            _blogManager = blogManager;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -131,10 +140,13 @@ namespace Volo.CmsKit
         {
             await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User1Id, "user1",
                 "user1@volo.com",
-                "user", "1")));
+                "user", "1")), 
+                autoSave: true);
+
             await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User2Id, "user2",
                 "user2@volo.com",
-                "user", "2")));
+                "user", "2")),
+                autoSave: true);
         }
 
         private async Task SeedCommentsAsync()
@@ -285,24 +297,40 @@ namespace Volo.CmsKit
 
         private async Task SeedTagsAsync()
         {
-            var created1 = await _tagManager.InsertAsync(_cmsKitTestData.TagId_1, _cmsKitTestData.EntityType1, _cmsKitTestData.TagName_1);
+            var created1 = await _tagRepository.InsertAsync(
+                await _tagManager.CreateAsync(
+                    _cmsKitTestData.TagId_1,
+                    _cmsKitTestData.EntityType1,
+                    _cmsKitTestData.TagName_1));
 
             await _entityTagManager.AddTagToEntityAsync(created1.Id, created1.EntityType, _cmsKitTestData.EntityId1);
 
-            var created2 = await _tagManager.InsertAsync(_cmsKitTestData.TagId_2, _cmsKitTestData.EntityType2, _cmsKitTestData.TagName_2);
+            var created2 = await _tagRepository.InsertAsync(
+                await _tagManager.CreateAsync(
+                    _cmsKitTestData.TagId_2,
+                    _cmsKitTestData.EntityType2,
+                    _cmsKitTestData.TagName_2));
 
             await _entityTagManager.AddTagToEntityAsync(created2.Id, created2.EntityType, _cmsKitTestData.EntityId2);
 
             foreach (var tag in _cmsKitTestData.Content_1_Tags)
             {
-                var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_1_EntityType, tag);
+                var tagEntity = await _tagRepository.InsertAsync(
+                    await _tagManager.CreateAsync(
+                        _guidGenerator.Create(), 
+                        _cmsKitTestData.Content_1_EntityType, 
+                        tag));
 
                 await _entityTagManager.AddTagToEntityAsync(tagEntity.Id, _cmsKitTestData.Content_1_EntityType, _cmsKitTestData.Content_1_EntityId);
             }
 
             foreach (var tag in _cmsKitTestData.Content_2_Tags)
             {
-                var tagEntity = await _tagManager.InsertAsync(_guidGenerator.Create(), _cmsKitTestData.Content_2_EntityType, tag);
+                var tagEntity = await _tagRepository.InsertAsync(
+                    await _tagManager.CreateAsync(
+                        _guidGenerator.Create(),
+                        _cmsKitTestData.Content_2_EntityType, 
+                        tag));
 
                 await _entityTagManager.AddTagToEntityAsync(tagEntity.Id, _cmsKitTestData.Content_2_EntityType, _cmsKitTestData.Content_2_EntityId);
             }
@@ -310,13 +338,13 @@ namespace Volo.CmsKit
 
         private async Task SeedPagesAsync()
         {
-            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug, _cmsKitTestData.Page_1_Description);
+            var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug);
             var page1Content = new Content(_guidGenerator.Create(), nameof(Page), page1.Id.ToString(), _cmsKitTestData.Page_1_Content);
 
             await _pageRepository.InsertAsync(page1);
             await _contentRepository.InsertAsync(page1Content);
 
-            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Slug, _cmsKitTestData.Page_2_Description);
+            var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Slug);
             var page2Content = new Content(_guidGenerator.Create(), nameof(Page), page2.Id.ToString(), _cmsKitTestData.Page_2_Content);
 
             await _pageRepository.InsertAsync(page2);
@@ -325,11 +353,30 @@ namespace Volo.CmsKit
 
         private async Task SeedBlogsAsync()
         {
-            var blog = await _blogRepository.InsertAsync(new Blog(_cmsKitTestData.Blog_Id, _cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug));
+            var blog = await _blogRepository.InsertAsync(
+                await _blogManager.CreateAsync(_cmsKitTestData.BlogName, _cmsKitTestData.BlogSlug), autoSave: true);
 
-            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_1_Id, blog.Id, _cmsKitTestData.BlogPost_1_Title, _cmsKitTestData.BlogPost_1_Slug, "Short desc 1"));
+            _cmsKitTestData.Blog_Id = blog.Id;
 
-            await _blogPostRepository.InsertAsync(new BlogPost(_cmsKitTestData.BlogPost_2_Id, blog.Id, _cmsKitTestData.BlogPost_2_Title, _cmsKitTestData.BlogPost_2_Slug, "Short desc 2"));
+            var author = await _cmsUserRepository.GetAsync(_cmsKitTestData.User1Id);
+
+            _cmsKitTestData.BlogPost_1_Id = 
+                (await _blogPostRepository.InsertAsync(
+                    await _blogPostManager.CreateAsync(
+                        author, 
+                        blog, 
+                        _cmsKitTestData.BlogPost_1_Title, 
+                        _cmsKitTestData.BlogPost_1_Slug, 
+                        "Short desc 1"))).Id;
+
+            _cmsKitTestData.BlogPost_2_Id =
+                (await _blogPostRepository.InsertAsync( 
+                    await _blogPostManager.CreateAsync(
+                        author,
+                        blog,
+                        _cmsKitTestData.BlogPost_2_Title, 
+                        _cmsKitTestData.BlogPost_2_Slug, 
+                        "Short desc 2"))).Id;
         }
 
         private async Task SeedBlogFeaturesAsync()

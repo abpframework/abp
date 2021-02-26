@@ -3,6 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
+    [Serializable]
     public class BlogPostDto : EntityDto<Guid>
     {
         public Guid BlogId { get; set; }

@@ -16,10 +16,12 @@
 [ConnectionStringName("AbpIdentity")]
 public interface IIdentityDbContext : IEfCoreDbContext
 {
-    DbSet<IdentityUser> Users { get; set; }
-    DbSet<IdentityRole> Roles { get; set; }
+    DbSet<IdentityUser> Users { get; }
+    DbSet<IdentityRole> Roles { get; }
 }
 ````
+
+* **Do not** define `set;` for the properties in this interface.
 
 ### DbContext class
 

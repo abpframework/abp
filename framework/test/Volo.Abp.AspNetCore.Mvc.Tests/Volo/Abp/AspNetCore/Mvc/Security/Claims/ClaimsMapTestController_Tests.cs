@@ -2,20 +2,10 @@
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
-using Volo.Abp.AspNetCore.TestBase;
-using Volo.Abp.Autofac;
-using Volo.Abp.MemoryDb;
-using Volo.Abp.Modularity;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Security.Claims
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreTestBaseModule),
-        typeof(AbpMemoryDbTestModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAutofacModule)
-    )]
     public class ClaimsMapTestController_Tests : AspNetCoreMvcTestBase
     {
         private readonly FakeUserClaims _fakeRequiredService;

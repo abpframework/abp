@@ -8,7 +8,6 @@ using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
-using Volo.FileManagement;
 
 namespace Volo.CmsKit
 {

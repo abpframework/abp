@@ -8,7 +8,7 @@ using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPost : FullAuditedAggregateRootWithUser<Guid, CmsUser>, IMultiTenant
+    public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public virtual Guid BlogId { get; protected set; }
 
@@ -23,18 +23,25 @@ namespace Volo.CmsKit.Blogs
 
         public virtual Guid? TenantId { get; protected set; }
 
+        [NotNull]
+        public Guid AuthorId { get; set; }
+
+        public virtual CmsUser Author { get; set; }
+
         protected BlogPost()
         {
         }
 
-        public BlogPost(
+        internal BlogPost(
             Guid id,
             Guid blogId,
+            Guid authorId,
             [NotNull] string title,
             [NotNull] string slug,
             [CanBeNull] string shortDescription = null) : base(id)
         {
             BlogId = blogId;
+            AuthorId = authorId;
             SetTitle(title);
             SetSlug(slug);
             ShortDescription = shortDescription;

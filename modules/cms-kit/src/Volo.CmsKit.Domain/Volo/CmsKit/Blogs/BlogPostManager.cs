@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPostManager : DomainService, IBlogPostManager
+    public class BlogPostManager : DomainService
     {
         protected IBlogPostRepository BlogPostRepository { get; }
         protected IBlogRepository BlogRepository { get; }
@@ -20,20 +21,33 @@ namespace Volo.CmsKit.Blogs
             BlogRepository = blogRepository;
         }
 
-        public virtual async Task<BlogPost> CreateAsync(BlogPost blogPost)
+        public virtual async Task<BlogPost> CreateAsync(
+            [NotNull] CmsUser author, 
+            [NotNull] Blog blog,
+            [NotNull] string title,
+            [NotNull] string slug,
+            [CanBeNull] string shortDescription = null,
+            [CanBeNull] Guid? tenantId = null)
         {
-            await CheckBlogExistenceAsync(blogPost.BlogId);
+            Check.NotNull(author, nameof(author));
+            Check.NotNull(blog, nameof(blog));
+            Check.NotNullOrEmpty(title, nameof(title));
+            Check.NotNullOrEmpty(slug, nameof(slug));
 
-            await CheckSlugExistenceAsync(blogPost.BlogId, blogPost.Slug);
+            await CheckBlogExistenceAsync(blog.Id);
 
-            return await BlogPostRepository.InsertAsync(blogPost);
-        }
+            var blogPost = new BlogPost(
+                        GuidGenerator.Create(),
+                        blog.Id,
+                        author.Id,
+                        title,
+                        slug,
+                        shortDescription
+                        );
 
-        public virtual async Task UpdateAsync(BlogPost blogPost)
-        {
-            await CheckBlogExistenceAsync(blogPost.BlogId);
+            await CheckSlugExistenceAsync(blog.Id, blogPost.Slug);
 
-            await BlogPostRepository.UpdateAsync(blogPost);
+            return blogPost;
         }
 
         public virtual async Task SetSlugUrlAsync(BlogPost blogPost, [NotNull] string newSlug)
@@ -45,7 +59,7 @@ namespace Volo.CmsKit.Blogs
             blogPost.SetSlug(newSlug);
         }
 
-        private async Task CheckSlugExistenceAsync(Guid blogId, string slug)
+        protected virtual async Task CheckSlugExistenceAsync(Guid blogId, string slug)
         {
             if (await BlogPostRepository.SlugExistsAsync(blogId, slug))
             {
@@ -53,10 +67,12 @@ namespace Volo.CmsKit.Blogs
             }
         }
 
-        private async Task CheckBlogExistenceAsync(Guid blogId)
+        protected virtual async Task CheckBlogExistenceAsync(Guid blogId)
         {
             if (!await BlogRepository.ExistsAsync(blogId))
+            {
                 throw new EntityNotFoundException(typeof(Blog), blogId);
+            }
         }
     }
 }

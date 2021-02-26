@@ -47,8 +47,6 @@ namespace Volo.CmsKit
 
         public string Page_1_Slug { get; } = "imagine-dragons-believer-lyrics";
 
-        public string Page_1_Description { get; } = "You can get the lyrics of the music.";
-
         public Guid Page_1_Id { get; } = Guid.NewGuid();
 
         public string Page_1_Content => Content_1;
@@ -56,8 +54,6 @@ namespace Volo.CmsKit
         public string Page_2_Title { get; } = "Imagine Dragons - Believer Lyrics (Page 2)";
 
         public string Page_2_Slug { get; } = "imagine-dragons-believer-lyrics-2";
-
-        public string Page_2_Description { get; } = "You can get the lyrics of the music.";
 
         public Guid Page_2_Id { get; } = Guid.NewGuid();
 
@@ -73,19 +69,19 @@ namespace Volo.CmsKit
 
         public string TagName_2 => "News";
 
-        public Guid Blog_Id { get; } = Guid.NewGuid();
+        public Guid Blog_Id { get; set; } = Guid.NewGuid();
 
         public string BlogName => "Cms Blog";
 
         public string BlogSlug => "cms-blog";
 
-        public Guid BlogPost_1_Id { get; } = Guid.NewGuid();
+        public Guid BlogPost_1_Id { get; internal set; }
 
         public string BlogPost_1_Title => "How to install CmsKit?";
 
         public string BlogPost_1_Slug => "how-to-install-cms-kit";
 
-        public Guid BlogPost_2_Id { get; } = Guid.NewGuid();
+        public Guid BlogPost_2_Id { get; internal set; }
 
         public string BlogPost_2_Title => "How to use CmsKit";
 

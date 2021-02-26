@@ -16,16 +16,16 @@ namespace Volo.CmsKit.EntityFrameworkCore
     [ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
     public interface ICmsKitDbContext : IEfCoreDbContext
     {
-        DbSet<Content> Contents { get; set; }
-        DbSet<Comment> Comments { get; set; }
-        DbSet<CmsUser> User { get; set; }
-        DbSet<UserReaction> Reactions { get; set; }
-        DbSet<Rating> Ratings { get; set; }
-        DbSet<Tag> Tags { get; set; }
-        DbSet<EntityTag> EntityTags { get; set; }
-        DbSet<Page> Pages { get; set; }
-        DbSet<Blog> Blogs { get; set; }
-        DbSet<BlogPost> BlogPosts { get; set; }
-        DbSet<MediaDescriptor> MediaDescriptors { get; set; }
+        DbSet<Content> Contents { get; }
+        DbSet<Comment> Comments { get; }
+        DbSet<CmsUser> User { get; }
+        DbSet<UserReaction> Reactions { get; }
+        DbSet<Rating> Ratings { get; }
+        DbSet<Tag> Tags { get; }
+        DbSet<EntityTag> EntityTags { get; }
+        DbSet<Page> Pages { get; }
+        DbSet<Blog> Blogs { get; }
+        DbSet<BlogPost> BlogPosts { get; }
+        DbSet<MediaDescriptor> MediaDescriptors { get; }
     }
 }

@@ -34,8 +34,6 @@ namespace Volo.CmsKit.Public
             CreateMap<Page, PageDto>();
 
             CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
-
-            CreateMap<BlogFeature, BlogFeatureDto>();
         }
     }
 }

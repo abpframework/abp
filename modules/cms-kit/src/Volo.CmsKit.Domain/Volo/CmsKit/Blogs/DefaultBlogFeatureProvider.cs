@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -11,10 +12,10 @@ namespace Volo.CmsKit.Blogs
         {
             return Task.FromResult(new List<BlogFeature>
             {
-                new BlogFeature(blogId, BlogPostConsts.CommentsFeatureName),
-                new BlogFeature(blogId, BlogPostConsts.ReactionsFeatureName),
-                new BlogFeature(blogId, BlogPostConsts.RatingsFeatureName),
-                new BlogFeature(blogId, BlogPostConsts.TagsFeatureName),
+                new BlogFeature(blogId, CommentsFeature.Name),
+                new BlogFeature(blogId, ReactionsFeature.Name),
+                new BlogFeature(blogId, RatingsFeature.Name),
+                new BlogFeature(blogId, TagsFeature.Name),
             });
         }
     }

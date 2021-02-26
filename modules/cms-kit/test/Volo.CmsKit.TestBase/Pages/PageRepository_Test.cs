@@ -56,7 +56,7 @@ namespace Volo.CmsKit.Pages
             var page = await _pageRepository.GetBySlugAsync(_cmsKitTestData.Page_1_Slug);
 
             page.ShouldNotBeNull();
-            page.Description.ShouldBe(_cmsKitTestData.Page_1_Description);
+            page.Title.ShouldBe(_cmsKitTestData.Page_1_Title);
         }
         
         [Fact]
@@ -65,7 +65,7 @@ namespace Volo.CmsKit.Pages
             var page = await _pageRepository.FindBySlugAsync(_cmsKitTestData.Page_1_Slug);
 
             page.ShouldNotBeNull();
-            page.Description.ShouldBe(_cmsKitTestData.Page_1_Description);
+            page.Title.ShouldBe(_cmsKitTestData.Page_1_Title);
         }
         
         [Fact]

@@ -28,7 +28,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public TemplateInfoProvider(ICancellationTokenProvider cancellationTokenProvider,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            AuthService authService, 
+            AuthService authService,
             CliHttpClientFactory cliHttpClientFactory)
         {
             CancellationTokenProvider = cancellationTokenProvider;
@@ -56,6 +56,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     return new AppProTemplate();
                 case MicroserviceProTemplate.TemplateName:
                     return new MicroserviceProTemplate();
+                case MicroserviceServiceProTemplate.TemplateName:
+                    return new MicroserviceServiceProTemplate();
                 case ModuleTemplate.TemplateName:
                     return new ModuleTemplate();
                 case ModuleProTemplate.TemplateName:

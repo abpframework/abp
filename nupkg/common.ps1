@@ -126,6 +126,7 @@ $projects = (
     "framework/src/Volo.Abp.Serialization",
     "framework/src/Volo.Abp.Settings",
     "framework/src/Volo.Abp.Sms",
+    "framework/src/Volo.Abp.Sms.Aliyun",
     "framework/src/Volo.Abp.Specifications",
     "framework/src/Volo.Abp.TestBase",
     "framework/src/Volo.Abp.TextTemplating",

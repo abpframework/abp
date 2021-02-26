@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 
@@ -12,6 +15,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         public Func<Type, ConventionalControllerSetting, string> ControllerNameGenerator { get; set; }
 
         public Func<MethodInfo, string> ActionNameGenerator { get; set; }
+
+        public Func<ApiParameterDescription, string> ApiParameterNameGenerator { get; set; }
 
         public AspNetCoreApiDescriptionModelProviderOptions()
         {
@@ -51,6 +56,28 @@ namespace Volo.Abp.AspNetCore.Mvc
                 }
 
                 return methodNameBuilder.ToString();
+            };
+
+            ApiParameterNameGenerator = (apiParameterDescription) =>
+            {
+                if (apiParameterDescription.ModelMetadata is DefaultModelMetadata defaultModelMetadata)
+                {
+                    var jsonPropertyNameAttribute = (System.Text.Json.Serialization.JsonPropertyNameAttribute)
+                        defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is System.Text.Json.Serialization.JsonPropertyNameAttribute);
+                    if (jsonPropertyNameAttribute != null)
+                    {
+                        return jsonPropertyNameAttribute.Name;
+                    }
+
+                    var jsonPropertyAttribute = (Newtonsoft.Json.JsonPropertyAttribute)
+                        defaultModelMetadata?.Attributes?.PropertyAttributes?.FirstOrDefault(x => x is Newtonsoft.Json.JsonPropertyAttribute);
+                    if (jsonPropertyAttribute != null)
+                    {
+                        return jsonPropertyAttribute.PropertyName;
+                    }
+                }
+
+                return null;
             };
         }
     }

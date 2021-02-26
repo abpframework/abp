@@ -1545,10 +1545,6 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
-
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");

@@ -138,4 +138,8 @@ background-color: rgba(0, 0, 0, 0.6);
     border-top: 1px solid #eee;
     margin-top: -1px;
 }
+.breadcrumb {
+    background-color: transparent;
+    padding: 0.27rem;
+}
 `;

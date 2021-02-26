@@ -3,6 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Public.Pages
 {
+    [Serializable]
     public class PageDto : EntityDto<Guid>
     {
         public string Title { get; set; }
