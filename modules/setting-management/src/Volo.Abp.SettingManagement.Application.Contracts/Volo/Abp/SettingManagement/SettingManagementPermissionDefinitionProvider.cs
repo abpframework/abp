@@ -10,7 +10,7 @@ namespace Volo.Abp.SettingManagement
         public override void Define(IPermissionDefinitionContext context)
         {
             var moduleGroup = context.AddGroup(SettingManagementPermissions.GroupName, L("Permission:SettingManagement"));
-            moduleGroup.AddPermission(SettingManagementPermissions.EmailSetting, L("Permission:EmailSetting"), multiTenancySide: MultiTenancySides.Host);
+            moduleGroup.AddPermission(SettingManagementPermissions.Emailing, L("Permission:Emailing"), multiTenancySide: MultiTenancySides.Host);
         }
 
         private static LocalizableString L(string name)
