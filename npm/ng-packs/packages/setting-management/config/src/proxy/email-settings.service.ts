@@ -11,14 +11,14 @@ export class EmailSettingsService {
   get = () =>
     this.restService.request<any, EmailSettingsDto>({
       method: 'GET',
-      url: `/api/setting-management/emailing`,
+      url: '/api/setting-management/emailing',
     },
     { apiName: this.apiName });
 
   update = (input: UpdateEmailSettingsDto) =>
     this.restService.request<any, void>({
       method: 'POST',
-      url: `/api/setting-management/emailing`,
+      url: '/api/setting-management/emailing',
       body: input,
     },
     { apiName: this.apiName });
