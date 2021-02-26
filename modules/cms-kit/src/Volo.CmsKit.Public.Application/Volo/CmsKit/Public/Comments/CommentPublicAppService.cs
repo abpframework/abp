@@ -52,6 +52,11 @@ namespace Volo.CmsKit.Public.Comments
         {
             var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
+            if(input.RepliedCommentId.HasValue)
+            {
+                await CommentRepository.GetAsync(input.RepliedCommentId.Value);
+            }
+
             var comment = await CommentRepository.InsertAsync(
                 new Comment(
                     GuidGenerator.Create(),

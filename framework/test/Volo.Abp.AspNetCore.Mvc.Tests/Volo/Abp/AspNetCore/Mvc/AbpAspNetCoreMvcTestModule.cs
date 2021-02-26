@@ -110,6 +110,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAbpRequestLocalization();
+            app.UseAbpSecurityHeaders();
             app.UseRouting();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseAbpClaimsMap();

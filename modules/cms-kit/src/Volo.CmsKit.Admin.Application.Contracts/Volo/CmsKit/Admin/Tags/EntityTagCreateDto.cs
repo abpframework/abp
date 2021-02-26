@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Volo.CmsKit.Admin.Tags
 {
+    [Serializable]
     public class EntityTagCreateDto
     {
         [Required]

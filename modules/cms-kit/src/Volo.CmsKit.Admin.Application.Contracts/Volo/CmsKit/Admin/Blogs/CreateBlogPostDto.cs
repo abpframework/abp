@@ -5,6 +5,7 @@ using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs
 {
+    [Serializable]
     public class CreateBlogPostDto
     {
         [Required]
@@ -15,10 +16,7 @@ namespace Volo.CmsKit.Admin.Blogs
         public string Title { get; set; }
 
         [Required]
-        [DynamicStringLength(
-            typeof(BlogPostConsts),
-            nameof(BlogPostConsts.MaxSlugLength),
-            nameof(BlogPostConsts.MinSlugLength))]
+        [DynamicStringLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxSlugLength), nameof(BlogPostConsts.MinSlugLength))]
         public string Slug { get; set; }
 
         [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxShortDescriptionLength))]

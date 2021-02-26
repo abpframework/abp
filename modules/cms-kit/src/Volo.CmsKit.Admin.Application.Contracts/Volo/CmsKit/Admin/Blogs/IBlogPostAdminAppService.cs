@@ -14,8 +14,6 @@ namespace Volo.CmsKit.Admin.Blogs
             CreateBlogPostDto,
             UpdateBlogPostDto>
     {
-        Task<BlogPostDto> GetBySlugAsync(string blogSlug, string slug);
-
         Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent);
 
         Task<RemoteStreamContent> GetCoverImageAsync(Guid id);

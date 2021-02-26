@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Volo.Abp;
 
 namespace Volo.CmsKit.Blogs
@@ -9,7 +10,7 @@ namespace Volo.CmsKit.Blogs
         {
         }
 
-        internal BlogPostSlugAlreadyExistException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) : base(serializationInfo, context)
+        internal BlogPostSlugAlreadyExistException(SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) : base(serializationInfo, context)
         {
         }
 
@@ -18,14 +19,14 @@ namespace Volo.CmsKit.Blogs
             Slug = slug;
             BlogId = blogId;
 
-            Code = CmsKitErrorCodes.Blogs.SlugAlreadyExist;
+            Code = CmsKitErrorCodes.BlogPosts.SlugAlreadyExist;
 
             WithData(nameof(Slug), Slug);
             WithData(nameof(BlogId), BlogId);
         }
 
-        public string Slug { get; }
+        public virtual string Slug { get; }
 
-        public Guid BlogId { get; }
+        public virtual Guid BlogId { get; }
     }
 }

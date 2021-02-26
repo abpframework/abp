@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Contents;
 
 namespace Volo.CmsKit.Admin.Contents
 {
+    [Serializable]
     public class ContentCreateDto
     {
         [Required]

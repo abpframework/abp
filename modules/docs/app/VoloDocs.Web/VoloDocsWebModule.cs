@@ -152,12 +152,10 @@ namespace VoloDocs.Web
 
             app.UseVirtualFiles();
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseAbpRequestLocalization();
-
+            app.UseAbpSecurityHeaders();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

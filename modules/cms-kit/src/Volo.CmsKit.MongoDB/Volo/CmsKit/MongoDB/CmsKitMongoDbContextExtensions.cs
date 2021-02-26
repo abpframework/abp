@@ -76,6 +76,11 @@ namespace Volo.CmsKit.MongoDB
             {
                 x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogPosts";
             });
+
+            builder.Entity<BlogFeature>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "BlogFeatures";
+            });
             
             builder.Entity<MediaDescriptor>(x =>
             {

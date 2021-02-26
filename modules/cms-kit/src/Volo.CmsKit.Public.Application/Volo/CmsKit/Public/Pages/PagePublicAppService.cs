@@ -14,15 +14,14 @@ namespace Volo.CmsKit.Public.Pages
 
         public virtual async Task<PageDto> FindBySlugAsync(string slug)
         {
-            PageDto pageDto = null;
             var page = await PageRepository.FindBySlugAsync(slug);
 
-            if (page !=null)
+            if (page == null)
             {
-                pageDto = ObjectMapper.Map<Page, PageDto>(page);
+                return null;
             }
-            
-            return pageDto;
+
+            return ObjectMapper.Map<Page, PageDto>(page);
         }
     }
 }

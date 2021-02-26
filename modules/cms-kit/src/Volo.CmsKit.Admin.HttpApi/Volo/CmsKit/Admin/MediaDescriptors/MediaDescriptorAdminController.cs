@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -57,7 +58,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             
             var mediaDescriptorDto = await MediaDescriptorAdminAppService.CreateAsync(inputStream);
             
-            return StatusCode(201, mediaDescriptorDto);
+            return StatusCode((int)HttpStatusCode.Created, mediaDescriptorDto);
         }
     }
 }
