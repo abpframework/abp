@@ -1,0 +1,45 @@
+﻿@page "{Id}"
+
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents.Components.EntityContentEditor
+@using Volo.CmsKit.Admin.Web.Menus
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
+@using Volo.CmsKit.Admin.Web.Pages
+
+@inherits CmsKitAdminPageBase
+
+@model UpdateModel
+
+@{
+    PageLayout.Content.Title = L["Pages"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
+    PageLayout.Content.MenuItemName = CmsKitAdminMenus.Pages.PagesMenu;
+}
+
+
+@section scripts {
+    <abp-script src="/Pages/CmsKit/Pages/update.js" />
+}
+
+<abp-card>
+    <abp-card-header title="@L["Update"].Value"></abp-card-header>
+    <abp-card-body>
+        <abp-dynamic-form abp-model="ViewModel" asp-page="/CmsKit/Pages/Update" id="form-page-update">
+            <abp-input asp-for="Id" />
+
+            <abp-form-content />
+
+            <abp-input asp-for="ViewModel.Slug" title="@L["PageSlugInformation"]" data-toggle="tooltip" />
+        </abp-dynamic-form>
+
+        @await Component.InvokeAsync(typeof(EntityContentEditorViewComponent), new
+        {
+            entityType = "Page",
+            entityId = Model.Id.ToString(),
+            displaySubmitButton = false
+        })
+
+    </abp-card-body>
+    <abp-card-footer>
+        <abp-button button-type="Primary" type="submit" text="@L["Submit"].Value" id="button-page-update" />
+    </abp-card-footer>
+</abp-card>

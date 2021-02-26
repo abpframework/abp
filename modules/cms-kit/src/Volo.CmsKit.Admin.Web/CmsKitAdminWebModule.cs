@@ -7,6 +7,9 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Web;
+using Volo.CmsKit.Permissions;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
+using Volo.Abp.Localization;
 
 namespace Volo.CmsKit.Admin.Web
 {
@@ -48,7 +51,76 @@ namespace Volo.CmsKit.Admin.Web
 
             Configure<RazorPagesOptions>(options =>
             {
+                options.Conventions.AuthorizeFolder("/CmsKit/Tags/", CmsKitAdminPermissions.Tags.Default);
+                options.Conventions.AuthorizeFolder("/CmsKit/Tags/CreateModal", CmsKitAdminPermissions.Tags.Create);
+                options.Conventions.AuthorizeFolder("/CmsKit/Tags/UpdateModal", CmsKitAdminPermissions.Tags.Update);
+                options.Conventions.AuthorizeFolder("/CmsKit/Pages", CmsKitAdminPermissions.Pages.Default);
+                options.Conventions.AuthorizeFolder("/CmsKit/Pages/Create", CmsKitAdminPermissions.Pages.Create);
+                options.Conventions.AuthorizeFolder("/CmsKit/Pages/Update", CmsKitAdminPermissions.Pages.Update);
+                options.Conventions.AuthorizeFolder("/CmsKit/Blogs", CmsKitAdminPermissions.Blogs.Default);
+                options.Conventions.AuthorizeFolder("/CmsKit/Blogs/Create", CmsKitAdminPermissions.Blogs.Create);
+                options.Conventions.AuthorizeFolder("/CmsKit/Blogs/Update", CmsKitAdminPermissions.Blogs.Update);
+                options.Conventions.AuthorizeFolder("/CmsKit/BlogPosts", CmsKitAdminPermissions.BlogPosts.Default);
+                options.Conventions.AuthorizeFolder("/CmsKit/BlogPosts/Create", CmsKitAdminPermissions.BlogPosts.Create);
+                options.Conventions.AuthorizeFolder("/CmsKit/BlogPosts/Update", CmsKitAdminPermissions.BlogPosts.Update);
+                options.Conventions.AuthorizeFolder("/CmsKit/Comments/", CmsKitAdminPermissions.Comments.Default);
+                options.Conventions.AuthorizeFolder("/CmsKit/Comments/Details", CmsKitAdminPermissions.Comments.Default);
+            });
+
+            Configure<RazorPagesOptions>(options =>
+            {
                 //Configure authorization.
+            });
+
+            Configure<AbpPageToolbarOptions>(options =>
+            {
+
+                options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<CmsKitResource>("New"),
+                            icon: "plus",
+                            name: "NewButton",
+                            requiredPolicyName: CmsKitAdminPermissions.Tags.Create
+                        );
+                    }
+                );
+
+                options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<CmsKitResource>("New"),
+                            icon: "plus",
+                            name: "CreatePage",
+                            requiredPolicyName: CmsKitAdminPermissions.Pages.Create
+                        );
+                    });
+
+                options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<CmsKitResource>("New"),
+                            icon: "plus",
+                            name: "CreateBlog",
+                            id: "CreateBlog",
+                            requiredPolicyName: CmsKitAdminPermissions.Blogs.Create
+                            );
+                    });
+
+                options.Configure<Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts.IndexModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<CmsKitResource>("New"),
+                            icon: "plus",
+                            name: "CreateBlogPost",
+                            id: "CreateBlogPost",
+                            requiredPolicyName: CmsKitAdminPermissions.BlogPosts.Create
+                            );
+                    });
             });
         }
     }

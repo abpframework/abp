@@ -1,0 +1,27 @@
+﻿@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents.Components.EntityContentEditor
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents.Components.ContentEditor
+@using Volo.CmsKit.Localization
+@using Microsoft.Extensions.Localization
+
+@model EntityContentEditorViewComponent.EntityContentEditorViewModel
+
+@inject IStringLocalizer<CmsKitResource> L
+
+@if (Model.DisplaySubmitButton)
+{
+    <abp-dynamic-form abp-model="ViewModel" class="form-entity-content-editor">
+
+        <abp-form-content />
+
+        <abp-button button-type="Primary" type="submit" text="@L["Submit"]" />
+    </abp-dynamic-form>
+}
+else
+{
+    <abp-input asp-for="ViewModel.Id" />
+    <abp-input asp-for="ViewModel.EntityId" />
+    <abp-input asp-for="ViewModel.EntityType" />
+    <abp-input asp-for="ViewModel.Value" />
+}
+
+@await Component.InvokeAsync(typeof(ContentEditorViewComponent), new { inputId = Html.IdFor(m => m.ViewModel.Value) })

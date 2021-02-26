@@ -1,5 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.UI.Navigation;
+using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Localization;
+using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Web.Menus
 {
@@ -13,11 +17,82 @@ namespace Volo.CmsKit.Admin.Web.Menus
             }
         }
 
-        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
-            //Add main menu items.
+            await AddCmsMenuAsync(context);
+        }
 
-            return Task.CompletedTask;
+        private async Task AddCmsMenuAsync(MenuConfigurationContext context)
+        {
+            var l = context.GetLocalizer<CmsKitResource>();
+
+            var cmsMenu = context.Menu.FindMenuItem(CmsKitAdminMenus.GroupName);
+
+            cmsMenu ??= new ApplicationMenuItem(
+                CmsKitAdminMenus.GroupName,
+                l["Cms"],
+                icon: "far fa-newspaper");
+
+            if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+            {
+                if (await context.IsGrantedAsync(CmsKitAdminPermissions.Comments.Default))
+                {
+                    cmsMenu.AddItem(new ApplicationMenuItem(
+                            CmsKitAdminMenus.Comments.CommentsMenu,
+                            l["Comments"].Value,
+                            "/CmsKit/Comments"
+                        )
+                    );
+                }
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            {
+                if (await context.IsGrantedAsync(CmsKitAdminPermissions.Tags.Default))
+                {
+                    cmsMenu.AddItem(new ApplicationMenuItem(
+                            CmsKitAdminMenus.Tags.TagsMenu,
+                            l["Tags"].Value,
+                            "/CmsKit/Tags"));
+                }
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+            {
+                if (await context.IsGrantedAsync(CmsKitAdminPermissions.Pages.Default))
+                {
+                    cmsMenu.AddItem(new ApplicationMenuItem(
+                        CmsKitAdminMenus.Pages.PagesMenu,
+                        l["Pages"].Value,
+                        "/CmsKit/Pages"));
+                }
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
+            {
+                if (await context.IsGrantedAsync(CmsKitAdminPermissions.Blogs.Default))
+                {
+                    cmsMenu.AddItem(new ApplicationMenuItem(
+                        CmsKitAdminMenus.Blogs.BlogsMenu,
+                        l["Blogs"],
+                        "/CmsKit/Blogs"
+                        ));
+                }
+
+                if (await context.IsGrantedAsync(CmsKitAdminPermissions.BlogPosts.Default))
+                {
+                    cmsMenu.AddItem(new ApplicationMenuItem(
+                        CmsKitAdminMenus.BlogPosts.BlogPostsMenu,
+                        l["BlogPosts"],
+                        "/CmsKit/BlogPosts"
+                        ));
+                }
+            }
+
+            if (cmsMenu.Items.Count > 0)
+            {
+                context.Menu.AddItem(cmsMenu);
+            }
         }
     }
 }
