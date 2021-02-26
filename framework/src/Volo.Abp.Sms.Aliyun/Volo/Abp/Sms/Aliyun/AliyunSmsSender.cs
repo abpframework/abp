@@ -30,7 +30,7 @@ namespace Volo.Abp.Sms.Aliyun
             });
         }
 
-        private AliyunClient CreateClient()
+        protected virtual AliyunClient CreateClient()
         {
             return new(new AliyunConfig
             {
