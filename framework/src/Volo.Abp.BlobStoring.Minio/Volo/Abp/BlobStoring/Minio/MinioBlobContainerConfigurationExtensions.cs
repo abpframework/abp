@@ -15,6 +15,7 @@ namespace Volo.Abp.BlobStoring.Minio
             Action<MinioBlobProviderConfiguration> minioConfigureAction)
         {
             containerConfiguration.ProviderType = typeof(MinioBlobProvider);
+            containerConfiguration.NamingNormalizers.TryAdd<MinioBlobNamingNormalizer>();
 
             minioConfigureAction(new MinioBlobProviderConfiguration(containerConfiguration));
 
