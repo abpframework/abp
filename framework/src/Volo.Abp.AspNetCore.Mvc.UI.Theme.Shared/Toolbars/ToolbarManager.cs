@@ -54,7 +54,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
                 var permissionChecker = serviceProvider.GetRequiredService<IPermissionChecker>();
                 var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).ToArray());
 
-                var toBeDeleted = new List<ToolbarItem>();
+                var toBeDeleted = new HashSet<ToolbarItem>();
                 foreach (var item in requiredPermissionItems)
                 {
                     if (grantResult.Result[item.RequiredPermissionName!] != PermissionGrantResult.Granted)

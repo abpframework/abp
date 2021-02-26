@@ -53,7 +53,7 @@ namespace Volo.Abp.UI.Navigation
                 var permissionChecker = serviceProvider.GetRequiredService<IPermissionChecker>();
                 var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).ToArray());
 
-                var toBeDeleted = new List<ApplicationMenuItem>();
+                var toBeDeleted = new HashSet<ApplicationMenuItem>();
                 foreach (var menu in requiredPermissionItems)
                 {
                     if (grantResult.Result[menu.RequiredPermissionName!] != PermissionGrantResult.Granted)
@@ -79,7 +79,7 @@ namespace Volo.Abp.UI.Navigation
             }
         }
 
-        protected virtual void RemoveMenus(IHasMenuItems menuWithItems, List<ApplicationMenuItem> toBeDeleted)
+        protected virtual void RemoveMenus(IHasMenuItems menuWithItems, HashSet<ApplicationMenuItem> toBeDeleted)
         {
             menuWithItems.Items.RemoveAll(toBeDeleted.Contains);
 
