@@ -140,6 +140,6 @@ background-color: rgba(0, 0, 0, 0.6);
 }
 .breadcrumb {
     background-color: transparent;
-    padding: 0.3rem;
+    padding: 0.27rem;
 }
 `;
