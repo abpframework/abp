@@ -1,8 +1,6 @@
 ﻿using JetBrains.Annotations;
-using Volo.Abp;
-using Volo.Abp.Localization;
 
-namespace Volo.CmsKit.Domain.Volo.CmsKit
+namespace Volo.CmsKit
 {
     public abstract class PolicySpecifiedDefinition
     {

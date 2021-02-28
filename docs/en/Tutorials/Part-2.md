@@ -103,7 +103,7 @@ Before starting to the UI development, we first want to prepare the localization
 
 Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
 
-![bookstore-localization-files](./images/bookstore-localization-files-v2.png)
+![bookstore-localization-files](images/bookstore-localization-files-v2.png)
 
 Open the `en.json` (*the English translations*) file and change the content as below:
 
@@ -157,7 +157,7 @@ It's time to create something visible and usable! Instead of classic MVC, we wil
 
 Create `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project. Add a new Razor Page by right clicking the Books folder then selecting **Add > Razor Page** menu item. Name it as `Index`:
 
-![bookstore-add-index-page](./images/bookstore-add-index-page-v2.png)
+![bookstore-add-index-page](images/bookstore-add-index-page-v2.png)
 
 Open the `Index.cshtml` and change the whole content as shown below:
 
@@ -208,7 +208,7 @@ context.Menu.AddItem(
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
 
-![bookstore-menu-items](./images/bookstore-new-menu-item.png)
+![bookstore-menu-items](images/bookstore-new-menu-item.png)
 
 When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
 
@@ -250,7 +250,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 
 Create an `Index.js` file under the `Pages/Books` folder:
 
-![bookstore-index-js-file](./images/bookstore-index-js-file-v3.png)
+![bookstore-index-js-file](images/bookstore-index-js-file-v3.png)
 
 The content of the file is shown below:
 
@@ -343,8 +343,6 @@ It's time to create something visible and usable! There are some tools that we w
 
 - [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
 - [Ngx-Datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
-
-### BookModule
 
 Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
 
@@ -457,7 +455,7 @@ abp generate-proxy
 
 This command will create the following files under the `/src/app/proxy/books` folder:
 
-![Generated files](./images/generated-proxies-3.png)
+![Generated files](images/generated-proxies-3.png)
 
 ### BookComponent
 
@@ -490,7 +488,7 @@ export class BookComponent implements OnInit {
 ```
 
 * We imported and injected the generated `BookService`.
-* We are using the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
+* We are using the [ListService](../UI/Angular/List-Service.md), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
 
 Open the `/src/app/book/book.component.html` and replace the content as below:
 
@@ -531,7 +529,7 @@ Open the `/src/app/book/book.component.html` and replace the content as below:
 
 Now you can see the final result on your browser:
 
-![Book list final result](./images/bookstore-book-list.png)
+![Book list final result](images/bookstore-book-list.png)
 
 {{else if UI == "Blazor"}}
 

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -10,7 +9,8 @@ namespace Volo.Abp.Data
     {
         protected AbpDbConnectionOptions Options { get; }
 
-        public DefaultConnectionStringResolver(IOptionsSnapshot<AbpDbConnectionOptions> options)
+        public DefaultConnectionStringResolver(
+            IOptionsSnapshot<AbpDbConnectionOptions> options)
         {
             Options = options.Value;
         }
@@ -28,18 +28,19 @@ namespace Volo.Abp.Data
 
         private string ResolveInternal(string connectionStringName)
         {
-            //Get module specific value if provided
-            if (!connectionStringName.IsNullOrEmpty())
+            if (connectionStringName == null)
             {
-                var moduleConnString = Options.ConnectionStrings.GetOrDefault(connectionStringName);
-                if (!moduleConnString.IsNullOrEmpty())
-                {
-                    return moduleConnString;
-                }
+                return Options.ConnectionStrings.Default;
+            }
+            
+            var connectionString = Options.GetConnectionStringOrNull(connectionStringName);
+            
+            if (!connectionString.IsNullOrEmpty())
+            {
+                return connectionString;
             }
 
-            //Get default value
-            return Options.ConnectionStrings.Default;
+            return null;
         }
     }
 }

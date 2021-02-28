@@ -4,8 +4,6 @@
     {
         public static int MaxTitleLength { get; set; } = 256;
 
-        public static int MaxUrlLength { get; set; } = 256;
-        
-        public static int MaxDescriptionLength { get; set; } = 512;
+        public static int MaxSlugLength { get; set; } = 256;
     }
 }

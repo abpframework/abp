@@ -63,6 +63,23 @@ namespace Volo.Abp.Json
 
             json.ShouldContain("SystemTextJson");
         }
+        
+        [Fact]
+        public void SystemTextJsonSerialize_With_Dictionary_Test()
+        {
+            var json = _jsonSerializer.Serialize(new MyClassWithDictionary
+            {
+                Properties =
+                {
+                    {"A", "AV"},
+                    {"B", "BV"}
+                }
+            });
+
+            var deserialized = _jsonSerializer.Deserialize<MyClassWithDictionary>(json);
+            deserialized.Properties.ShouldContain(p => p.Key == "A" && p.Value == "AV");
+            deserialized.Properties.ShouldContain(p => p.Key == "B" && p.Value == "BV");
+        }
 
         public class MyClass1
         {
@@ -81,6 +98,16 @@ namespace Volo.Abp.Json
         public class MyClass3
         {
             public string Provider { get; set; }
+        }
+
+        public class MyClassWithDictionary
+        {
+            public Dictionary<string, string> Properties { get; set; }
+
+            public MyClassWithDictionary()
+            {
+                Properties = new Dictionary<string, string>();
+            }
         }
 
         class NewtonsoftJsonConverter : JsonConverter<MyClass1>, ITransientDependency

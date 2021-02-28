@@ -22,6 +22,8 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 case NuGetPackageTarget.Web:
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".Web");
+                case NuGetPackageTarget.IdentityServer:
+                    return FindProjectEndsWith(projectFiles, assemblyNames, ".IdentityServer");
                 case NuGetPackageTarget.EntityFrameworkCore:
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".EntityFrameworkCore");
                 case NuGetPackageTarget.MongoDB:
