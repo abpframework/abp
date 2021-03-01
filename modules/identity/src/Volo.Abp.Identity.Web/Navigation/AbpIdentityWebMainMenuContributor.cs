@@ -16,28 +16,13 @@ namespace Volo.Abp.Identity.Web.Navigation
                 return;
             }
 
-            var hasRolePermission = await context.IsGrantedAsync(IdentityPermissions.Roles.Default);
-            var hasUserPermission = await context.IsGrantedAsync(IdentityPermissions.Users.Default);
+            var l = context.GetLocalizer<IdentityResource>();
 
-            if (hasRolePermission || hasUserPermission)
-            {
-                var administrationMenu = context.Menu.GetAdministration();
+            var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"], icon: "fa fa-id-card-o");
+            identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "~/Identity/Roles", requiredPermissionName: IdentityPermissions.Roles.Default));
+            identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "~/Identity/Users", requiredPermissionName: IdentityPermissions.Users.Default));
 
-                var l = context.GetLocalizer<IdentityResource>();
-
-                var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"], icon: "fa fa-id-card-o");
-                administrationMenu.AddItem(identityMenuItem);
-
-                if (hasRolePermission)
-                {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "~/Identity/Roles"));
-                }
-
-                if (hasUserPermission)
-                {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "~/Identity/Users"));
-                }
-            }
+            context.Menu.GetAdministration().AddItem(identityMenuItem);
         }
     }
 }
