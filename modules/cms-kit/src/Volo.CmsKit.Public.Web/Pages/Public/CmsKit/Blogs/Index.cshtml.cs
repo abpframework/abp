@@ -8,7 +8,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
 using Volo.CmsKit.Public.Blogs;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
+namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs
 {
     public class IndexModel : CmsKitPublicPageModelBase
     {

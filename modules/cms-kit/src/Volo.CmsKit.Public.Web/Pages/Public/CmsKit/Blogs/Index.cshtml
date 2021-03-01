@@ -1,10 +1,11 @@
-﻿@page "/blogs/{blogSlug}"
+﻿@page
 
 @using Volo.CmsKit.Public.Web.Pages
+@using Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs 
 
 @inherits CmsKitPublicPageBase
 
-@model Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs.IndexModel
+@model IndexModel
 
 <abp-row id="blogs-container">
     @foreach (var blog in Model.Blogs.Items)
