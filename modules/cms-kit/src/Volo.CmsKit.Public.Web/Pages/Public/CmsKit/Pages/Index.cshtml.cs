@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.CmsKit.Public.Pages;
 using Volo.CmsKit.Web.Pages;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Pages
+namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages
 {
     public class IndexModel : CommonPageModel
     {
