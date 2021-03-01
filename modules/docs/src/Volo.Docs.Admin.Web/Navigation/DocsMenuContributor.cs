@@ -27,15 +27,8 @@ namespace Volo.Docs.Admin.Navigation
 
             administrationMenu.AddItem(rootMenuItem);
 
-            if (await context.IsGrantedAsync(DocsAdminPermissions.Projects.Default))
-            {
-                rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects"));
-            }
-
-            if (await context.IsGrantedAsync(DocsAdminPermissions.Documents.Default))
-            {
-                rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Documents, l["Menu:DocumentManagement"], "~/Docs/Admin/Documents"));
-            }
+            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects", requiredPermissionName: DocsAdminPermissions.Projects.Default));
+            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Documents, l["Menu:DocumentManagement"], "~/Docs/Admin/Documents", requiredPermissionName: DocsAdminPermissions.Documents.Default));
         }
     }
 }
