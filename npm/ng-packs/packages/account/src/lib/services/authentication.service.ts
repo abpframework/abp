@@ -1,4 +1,3 @@
-import { Inject, Injectable, Optional } from '@angular/core';
 import {
   AbpApplicationConfigurationService,
   AuthPasswordFlowStrategy,
@@ -7,14 +6,14 @@ import {
   RestService,
   SessionStateService,
 } from '@abp/ng.core';
-import { from, Observable } from 'rxjs';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { HttpHeaders } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { from, Observable } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
-import { ACCOUNT_CONFIG_OPTIONS } from '../tokens/config-options.token';
 import { AccountConfigOptions } from '../models/config-options';
-import snq from 'snq';
-import { Router } from '@angular/router';
+import { ACCOUNT_CONFIG_OPTIONS } from '../tokens/config-options.token';
 
 @Injectable()
 export class AuthenticationService {
@@ -27,6 +26,7 @@ export class AuthenticationService {
     protected configState: ConfigStateService,
     @Inject(ACCOUNT_CONFIG_OPTIONS) protected options: AccountConfigOptions,
     protected router: Router,
+    protected route: ActivatedRoute,
   ) {}
 
   login(username: string, password: string, remember = false): Observable<any> {
@@ -44,7 +44,7 @@ export class AuthenticationService {
         this.configState.setState(res);
 
         const redirectUrl =
-          snq(() => window.history.state.redirectUrl) || (this.options || {}).redirectUrl || '/';
+          this.route.snapshot.queryParams.returnUrl || this.options.redirectUrl || '/';
 
         this.router.navigate([redirectUrl]);
 
