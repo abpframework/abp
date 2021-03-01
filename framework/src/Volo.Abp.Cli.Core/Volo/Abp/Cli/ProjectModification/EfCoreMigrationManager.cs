@@ -17,7 +17,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<EfCoreMigrationManager>.Instance;
         }
 
-        public void AddMigration(string dbMigrationsCsprojFile, string module, string startupProject)
+        public void AddMigration(string dbMigrationsCsprojFile, string module)
         {
             var dbMigrationsProjectFolder = Path.GetDirectoryName(dbMigrationsCsprojFile);
             var moduleName = ParseModuleName(module);
@@ -30,24 +30,22 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (!string.IsNullOrEmpty(tenantDbContextName))
             {
-                RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, startupProject, tenantDbContextName);
+                RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, tenantDbContextName);
             }
 
-            RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, startupProject, dbContextName);
+            RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, dbContextName);
         }
 
         protected virtual void RunAddMigrationCommand(
             string dbMigrationsProjectFolder,
             string migrationName,
-            string startupProject,
             string dbContext)
         {
             var dbContextOption = string.IsNullOrWhiteSpace(dbContext)
                 ? string.Empty
                 : $"--context {dbContext}";
 
-            CmdHelper.RunCmd($"cd \"{dbMigrationsProjectFolder}\" && dotnet ef migrations add {migrationName}" +
-                             $" {GetStartupProjectOption(startupProject)} {dbContextOption}");
+            CmdHelper.RunCmd($"cd \"{dbMigrationsProjectFolder}\" && dotnet ef migrations add {migrationName} {dbContextOption}");
         }
 
         protected virtual string ParseModuleName(string fullModuleName)
@@ -64,11 +62,6 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual string GetUniquePostFix()
         {
             return "_" + new Random().Next(1, 99999);
-        }
-
-        protected virtual string GetStartupProjectOption(string startupProject)
-        {
-            return startupProject.IsNullOrWhiteSpace() ? "" : $" -s {startupProject}";
         }
 
         protected virtual string FindDbContextName(string dbMigrationsFolder)
