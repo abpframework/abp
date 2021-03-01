@@ -49,11 +49,10 @@ namespace Volo.Abp.Domain.Repositories
             return repository.ToMongoDbRepository().GetMongoQueryableAsync(cancellationToken);
         }
 
-        public static async Task<IAggregateFluent<TEntity>> GetAggregateAsync<TEntity>(this IBasicRepository<TEntity> repository, CancellationToken cancellationToken = default)
+        public static Task<IAggregateFluent<TEntity>> GetAggregateAsync<TEntity>(this IBasicRepository<TEntity> repository, CancellationToken cancellationToken = default)
             where TEntity : class, IEntity
         {
-            var collection = await repository.ToMongoDbRepository().GetCollectionAsync(cancellationToken);
-            return collection.Aggregate();
+            return repository.ToMongoDbRepository().GetAggregateAsync(cancellationToken);
         }
 
         public static IMongoDbRepository<TEntity> ToMongoDbRepository<TEntity>(this IBasicRepository<TEntity> repository)
