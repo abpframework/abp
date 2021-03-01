@@ -104,14 +104,34 @@ There are more options of a menu item (the constructor of the `ApplicationMenuIt
 * `target` (`string`): Target of the menu item. Can be `null` (default), "\_*blank*", "\_*self*", "\_*parent*", "\_*top*" or a frame name for web applications.
 * `elementId` (`string`): Can be used to render the element with a specific HTML `id` attribute.
 * `cssClass` (`string`): Additional string classes for the menu item.
+* `RequiredPermissionName` (`string`): The required permission name, this menu item will be removed if this permission is not granted.
 
 ### Authorization
 
 As seen above, a menu contributor contributes to the menu dynamically. So, you can perform any custom logic or get menu items from any source.
 
-One use case is the [authorization](../../Authorization.md). You typically want to add menu items by checking a permission.
+One use case is the [authorization](../../Authorization.md).
 
-**Example: Check if the current user has a permission**
+You can set the `RequiredPermissionName` property of the menu item.
+
+````csharp
+context.Menu.AddItem(
+    new ApplicationMenuItem("MyProject.Crm", l["Menu:CRM"])
+        .AddItem(new ApplicationMenuItem(
+            name: "MyProject.Crm.Customers", 
+            displayName: l["Menu:Customers"], 
+            url: "/crm/customers",
+            requiredPermissionName: "MyProject.Crm.Customers")
+        ).AddItem(new ApplicationMenuItem(
+            name: "MyProject.Crm.Orders", 
+            displayName: l["Menu:Orders"],
+            url: "/crm/orders",
+            requiredPermissionName: "MyProject.Crm.Orders")
+        )
+);
+````
+
+You can also manually check permissions.
 
 ````csharp
 if (await context.IsGrantedAsync("MyPermissionName"))
