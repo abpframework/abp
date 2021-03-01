@@ -1,8 +1,7 @@
-﻿@page "/blogs/{blogSlug}/{blogPostSlug}"
+﻿@page
 
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPost
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
-@using Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
 @using Volo.CmsKit.Public.Web.Pages
 @using Volo.Abp.GlobalFeatures
 @using Volo.CmsKit.GlobalFeatures
@@ -12,7 +11,7 @@
 
 @inherits CmsKitPublicPageBase
 
-@model BlogPostModel
+@model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs.BlogPostModel
 
 @{
     PageLayout.Content.Title = Model.BlogPost.Title;

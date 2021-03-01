@@ -10,7 +10,7 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Public.Blogs;
 
-namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Blogs
+namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs
 {
     public class BlogPostModel : CmsKitPublicPageModelBase
     {
