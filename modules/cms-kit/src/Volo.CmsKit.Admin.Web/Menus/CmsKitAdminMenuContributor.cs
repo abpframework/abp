@@ -40,7 +40,7 @@ namespace Volo.CmsKit.Admin.Web.Menus
                     cmsMenu.AddItem(new ApplicationMenuItem(
                             CmsKitAdminMenus.Comments.CommentsMenu,
                             l["Comments"].Value,
-                            "/CmsKit/Comments"
+                            "/Cms/Comments"
                         )
                     );
                 }
@@ -53,7 +53,7 @@ namespace Volo.CmsKit.Admin.Web.Menus
                     cmsMenu.AddItem(new ApplicationMenuItem(
                             CmsKitAdminMenus.Tags.TagsMenu,
                             l["Tags"].Value,
-                            "/CmsKit/Tags"));
+                            "/Cms/Tags"));
                 }
             }
 
@@ -64,7 +64,7 @@ namespace Volo.CmsKit.Admin.Web.Menus
                     cmsMenu.AddItem(new ApplicationMenuItem(
                         CmsKitAdminMenus.Pages.PagesMenu,
                         l["Pages"].Value,
-                        "/CmsKit/Pages"));
+                        "/Cms/Pages"));
                 }
             }
 
@@ -75,7 +75,7 @@ namespace Volo.CmsKit.Admin.Web.Menus
                     cmsMenu.AddItem(new ApplicationMenuItem(
                         CmsKitAdminMenus.Blogs.BlogsMenu,
                         l["Blogs"],
-                        "/CmsKit/Blogs"
+                        "/Cms/Blogs"
                         ));
                 }
 
@@ -84,7 +84,7 @@ namespace Volo.CmsKit.Admin.Web.Menus
                     cmsMenu.AddItem(new ApplicationMenuItem(
                         CmsKitAdminMenus.BlogPosts.BlogPostsMenu,
                         l["BlogPosts"],
-                        "/CmsKit/BlogPosts"
+                        "/Cms/BlogPosts"
                         ));
                 }
             }
