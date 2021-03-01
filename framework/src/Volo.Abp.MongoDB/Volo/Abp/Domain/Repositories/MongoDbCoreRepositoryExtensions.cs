@@ -59,7 +59,10 @@ namespace Volo.Abp.Domain.Repositories
         public static IMongoDbRepository<TEntity> ToMongoDbRepository<TEntity>(this IBasicRepository<TEntity> repository)
             where TEntity : class, IEntity
         {
-            if (repository is IMongoDbRepository<TEntity> mongoDbRepository) return mongoDbRepository;
+            if (repository is IMongoDbRepository<TEntity> mongoDbRepository)
+            {
+                return mongoDbRepository;
+            } 
             throw new ArgumentException("Given repository does not implement " + typeof(IMongoDbRepository<TEntity>).AssemblyQualifiedName, nameof(repository));
         }
     }
