@@ -402,7 +402,7 @@ namespace Volo.CmsKit
         {
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(_cmsKitTestData.Media_1_Content)))
             {
-                var media = new MediaDescriptor(_cmsKitTestData.Media_1_Id, _cmsKitTestData.Media_1_Name, _cmsKitTestData.Media_1_ContentType, stream.Length);
+                var media = new MediaDescriptor(_cmsKitTestData.Media_1_Id, _cmsKitTestData.Media_1_EntityType, _cmsKitTestData.Media_1_Name, _cmsKitTestData.Media_1_ContentType, stream.Length);
 
                 await _mediaDescriptorRepository.InsertAsync(media);
 

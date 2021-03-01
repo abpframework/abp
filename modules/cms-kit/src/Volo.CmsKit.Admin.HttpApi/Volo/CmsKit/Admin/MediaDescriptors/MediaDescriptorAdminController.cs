@@ -42,8 +42,9 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         }
 
         [HttpPost]
+        [Route("{entityType}")]
         [Authorize(CmsKitAdminPermissions.MediaDescriptors.Create)]
-        public virtual async Task<IActionResult> UploadAsync(IFormFile file)
+        public virtual async Task<IActionResult> UploadAsync(string entityType, IFormFile file)
         {
             if (file == null)
             {
@@ -52,6 +53,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 
             var inputStream = new CreateMediaInputStream(file.OpenReadStream())
                               {
+                                  EntityType = entityType,
                                   ContentType = file.ContentType,
                                   Name = file.FileName
                               };

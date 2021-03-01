@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Volo.CmsKit.MediaDescriptors.Extensions
+namespace Volo.CmsKit.MediaDescriptors
 {
-    public static class MediaDescriptorCheck
+    public static class MediaDescriptorChecks
     {
         public static bool IsValidMediaFileName(string name)
         {

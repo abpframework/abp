@@ -1,6 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
+using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit
 {
@@ -100,6 +101,8 @@ namespace Volo.CmsKit
         public bool BlogFeature_2_Enabled => false;
 
         public Guid Media_1_Id { get; } = Guid.NewGuid();
+        
+        public string Media_1_EntityType = nameof(Blog);
         
         public string Media_1_Content = "Hi, this is text file";
 
