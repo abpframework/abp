@@ -44,10 +44,15 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         }
 
-        protected FullAuditedEntityWithUser(TKey id)
+        protected FullAuditedEntityWithUser(TKey id,
+            TUser deleter = default,
+            TUser creator = default,
+            TUser lastModifier = default)
             : base(id)
         {
-
+            Deleter = deleter;
+            Creator = creator;
+            LastModifier = lastModifier;
         }
     }
 }

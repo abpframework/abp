@@ -34,10 +34,13 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         }
 
-        protected AuditedAggregateRoot(TKey id)
+        protected AuditedAggregateRoot(TKey id,
+            DateTime? lastModificationTime = null,
+            Guid? lastModifierId = null)
             : base(id)
         {
-
+            LastModificationTime = lastModificationTime;
+            LastModifierId = lastModifierId;
         }
     }
 }

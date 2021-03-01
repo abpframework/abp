@@ -38,10 +38,13 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         }
 
-        protected AuditedEntityWithUser(TKey id)
+        protected AuditedEntityWithUser(TKey id,
+            TUser creator = default,
+            TUser lastModifier = default)
             : base(id)
         {
-
+            Creator = creator;
+            LastModifier = lastModifier;
         }
     }
 }

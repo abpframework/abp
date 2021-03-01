@@ -34,10 +34,13 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         }
 
-        protected CreationAuditedEntity(TKey id)
+        protected CreationAuditedEntity(TKey id,
+            DateTime creationTime = default,
+            Guid? creatorId = null)
             : base(id)
         {
-
+            CreationTime = creationTime;
+            CreatorId = creatorId;
         }
     }
 }

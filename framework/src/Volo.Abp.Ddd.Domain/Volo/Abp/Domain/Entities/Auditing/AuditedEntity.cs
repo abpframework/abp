@@ -34,10 +34,13 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         }
 
-        protected AuditedEntity(TKey id)
+        protected AuditedEntity(TKey id,
+            DateTime? lastModificationTime = null,
+            Guid? lastModifierId = null)
             : base(id)
         {
-
+            LastModificationTime = lastModificationTime;
+            LastModifierId = lastModifierId;
         }
     }
 }

@@ -40,10 +40,15 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         }
 
-        protected FullAuditedEntity(TKey id)
+        protected FullAuditedEntity(TKey id,
+            bool isDeleted = default,
+            Guid? deleterId = null,
+            DateTime? deletionTime = null)
             : base(id)
         {
-
+            IsDeleted = isDeleted;
+            DeleterId = deleterId;
+            DeletionTime = deletionTime;
         }
     }
 }
