@@ -30,22 +30,25 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (!string.IsNullOrEmpty(tenantDbContextName))
             {
-                RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, tenantDbContextName);
+                RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, tenantDbContextName, "TenantMigrations");
             }
 
-            RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, dbContextName);
+            RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, dbContextName, "Migrations");
         }
 
         protected virtual void RunAddMigrationCommand(
             string dbMigrationsProjectFolder,
             string migrationName,
-            string dbContext)
+            string dbContext,
+            string outputDirectory)
         {
             var dbContextOption = string.IsNullOrWhiteSpace(dbContext)
                 ? string.Empty
                 : $"--context {dbContext}";
 
-            CmdHelper.RunCmd($"cd \"{dbMigrationsProjectFolder}\" && dotnet ef migrations add {migrationName} {dbContextOption}");
+            CmdHelper.RunCmd($"cd \"{dbMigrationsProjectFolder}\" && dotnet ef migrations add {migrationName}" +
+                             $" --output-dir {outputDirectory}" +
+                             $" {dbContextOption}");
         }
 
         protected virtual string ParseModuleName(string fullModuleName)

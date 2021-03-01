@@ -44,9 +44,9 @@ namespace Volo.Abp.Cli.Commands
                 FindDbContextName(dbMigrationsFolder)
                 : null;
 
-            var migrationOutput = AddMigrationAndGetOutput(dbMigrationsFolder, dbContextName);
+            var migrationOutput = AddMigrationAndGetOutput(dbMigrationsFolder, dbContextName, "Migrations");
             var tenantMigrationOutput = tenantDbContextName != null ?
-                AddMigrationAndGetOutput(dbMigrationsFolder, tenantDbContextName)
+                AddMigrationAndGetOutput(dbMigrationsFolder, tenantDbContextName, "TenantMigrations")
                 : null;
 
             if (CheckMigrationOutput(migrationOutput) && CheckMigrationOutput(tenantMigrationOutput))
@@ -96,14 +96,14 @@ namespace Volo.Abp.Cli.Commands
             return Path.GetFileName(dbContext).RemovePostFix(".cs");
         }
 
-        private static string AddMigrationAndGetOutput(string dbMigrationsFolder, string dbContext)
+        private static string AddMigrationAndGetOutput(string dbMigrationsFolder, string dbContext, string outputDirectory)
         {
             var dbContextOption = string.IsNullOrWhiteSpace(dbContext)
                 ? string.Empty
                 : $"--context {dbContext}";
 
             var addMigrationCmd = $"cd \"{dbMigrationsFolder}\" && " +
-                                  $"dotnet ef migrations add Initial {dbContextOption}";
+                                  $"dotnet ef migrations add Initial --output-dir {outputDirectory} {dbContextOption}";
 
             return CmdHelper.RunCmdAndGetOutput(addMigrationCmd);
         }
