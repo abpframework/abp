@@ -10,7 +10,6 @@ using Volo.CmsKit.Permissions;
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
     [RequiresGlobalFeature(typeof(MediaFeature))]
-    [Authorize(CmsKitAdminPermissions.MediaDescriptors.Default)]
     public class MediaDescriptorAdminAppService : CmsKitAdminAppServiceBase, IMediaDescriptorAdminAppService
     {
         protected IBlobContainer<MediaContainer> MediaContainer { get; }
@@ -30,7 +29,6 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             MediaDescriptorDefinitionStore = mediaDescriptorDefinitionStore;
         }
 
-        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Create)]
         public virtual async Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
         {
             var definition = await MediaDescriptorDefinitionStore.GetDefinitionAsync(inputStream.EntityType);
@@ -49,7 +47,6 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             }
         }
 
-        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
             var mediaDescriptor = await MediaDescriptorRepository.GetAsync(id);

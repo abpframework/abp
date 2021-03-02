@@ -56,13 +56,6 @@ namespace Volo.CmsKit.Permissions
                 blogManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Update, L("Permission:BlogPostManagement.Update"));
                 blogManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Delete, L("Permission:BlogPostManagement.Delete"));
             }
-            
-            if (GlobalFeatureManager.Instance.IsEnabled<MediaFeature>())
-            {
-                var mediaDescriptorManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.MediaDescriptors.Default, L("Permission:MediaDescriptorManagement"));
-                mediaDescriptorManagement.AddChild(CmsKitAdminPermissions.MediaDescriptors.Create, L("Permission:MediaDescriptorManagement:Create"));
-                mediaDescriptorManagement.AddChild(CmsKitAdminPermissions.MediaDescriptors.Delete, L("Permission:MediaDescriptorManagement:Delete"));
-            }
         }
 
         private static LocalizableString L(string name)

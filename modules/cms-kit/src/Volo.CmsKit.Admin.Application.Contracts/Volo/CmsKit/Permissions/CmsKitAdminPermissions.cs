@@ -52,12 +52,5 @@ namespace Volo.CmsKit.Permissions
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
         }
-
-        public static class MediaDescriptors
-        {
-            public const string Default = GroupName + ".MediaDescriptors";
-            public const string Create = Default + ".Create";
-            public const string Delete = Default + ".Delete";
-        }
     }
 }
