@@ -3,11 +3,11 @@ using System.Reflection;
 
 namespace Volo.Abp.Http.ProxyScripting.Configuration
 {
-    public static class AbpApiPropertyNameConfiguration
+    public static class AbpApiProxyScriptingConfiguration
     {
         public static Func<PropertyInfo, string> PropertyNameGenerator { get; set; }
         
-        static AbpApiPropertyNameConfiguration()
+        static AbpApiProxyScriptingConfiguration()
         {
             PropertyNameGenerator = propertyInfo =>
             {
