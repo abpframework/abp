@@ -2,19 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
-using Volo.CmsKit.Contents;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
@@ -33,7 +30,6 @@ namespace Volo.CmsKit
         private readonly ReactionManager _reactionManager;
         private readonly IRatingRepository _ratingRepository;
         private readonly ICurrentTenant _currentTenant;
-        private readonly IContentRepository _contentRepository;
         private readonly EntityTagManager _entityTagManager;
         private readonly TagManager _tagManager;
         private readonly ITagRepository _tagRepository;
@@ -57,7 +53,6 @@ namespace Volo.CmsKit
             ReactionManager reactionManager,
             IRatingRepository ratingRepository,
             ICurrentTenant currentTenant,
-            IContentRepository contentRepository,
             TagManager tagManager,
             ITagRepository tagRepository,
             IEntityTagRepository entityTagRepository,
@@ -80,7 +75,6 @@ namespace Volo.CmsKit
             _reactionManager = reactionManager;
             _ratingRepository = ratingRepository;
             _currentTenant = currentTenant;
-            _contentRepository = contentRepository;
             _tagManager = tagManager;
             _tagRepository = tagRepository;
             _entityTagManager = entityTagManager;
@@ -110,8 +104,6 @@ namespace Volo.CmsKit
                 await SeedReactionsAsync();
 
                 await SeedRatingsAsync();
-
-                await SeedContentsAsync();
 
                 await SeedTagsAsync();
 
@@ -262,37 +254,6 @@ namespace Volo.CmsKit
                 1,
                 _cmsKitTestData.User2Id
             ));
-        }
-
-        private async Task SeedContentsAsync()
-        {
-            var content1 = new Content(
-                _cmsKitTestData.Content_1_Id,
-                _cmsKitTestData.Content_1_EntityType,
-                _cmsKitTestData.Content_1_EntityId,
-                _cmsKitTestData.Content_1
-                );
-
-            var content2 = new Content(
-                _cmsKitTestData.Content_2_Id,
-                _cmsKitTestData.Content_2_EntityType,
-                _cmsKitTestData.Content_2_EntityId,
-                _cmsKitTestData.Content_2
-            );
-
-            var content3 = new Content(
-                Guid.NewGuid(),
-                "deleted_entity_type",
-                "deleted_entity_id",
-                "Content"
-            )
-            {
-                IsDeleted = true,
-            };
-
-            await _contentRepository.InsertAsync(content1);
-            await _contentRepository.InsertAsync(content2);
-            await _contentRepository.InsertAsync(content3);
         }
 
         private async Task SeedTagsAsync()

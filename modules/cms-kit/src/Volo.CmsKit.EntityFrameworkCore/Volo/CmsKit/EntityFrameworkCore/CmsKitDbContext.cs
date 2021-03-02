@@ -3,7 +3,6 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
-using Volo.CmsKit.Contents;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
@@ -16,7 +15,6 @@ namespace Volo.CmsKit.EntityFrameworkCore
     [ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
     public class CmsKitDbContext : AbpDbContext<CmsKitDbContext>, ICmsKitDbContext
     {
-        public DbSet<Content> Contents { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CmsUser> User { get; set; }
         public DbSet<UserReaction> Reactions { get; set; }
