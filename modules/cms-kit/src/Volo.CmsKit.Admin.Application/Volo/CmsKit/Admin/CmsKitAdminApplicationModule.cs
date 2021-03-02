@@ -46,9 +46,9 @@ namespace Volo.CmsKit.Admin
                         new TagEntityTypeDefiniton(
                             BlogPostConsts.EntityType,
                             LocalizableString.Create<CmsKitResource>("BlogPost"),
-                            CmsKitAdminPermissions.BlogPosts.Update,
-                            CmsKitAdminPermissions.BlogPosts.Update,
-                            CmsKitAdminPermissions.BlogPosts.Update));
+                            new[] { CmsKitAdminPermissions.BlogPosts.Create, CmsKitAdminPermissions.BlogPosts.Update },
+                            new[] { CmsKitAdminPermissions.BlogPosts.Create, CmsKitAdminPermissions.BlogPosts.Update },
+                            new[] { CmsKitAdminPermissions.BlogPosts.Create, CmsKitAdminPermissions.BlogPosts.Update }));
                 }
             });
 
@@ -60,9 +60,9 @@ namespace Volo.CmsKit.Admin
                     {
                         options.EntityTypes.AddIfNotContains(
                             new MediaDescriptorDefinition(
-                                BlogPostConsts.EntityType, 
-                                createPolicy: CmsKitAdminPermissions.BlogPosts.Update,
-                                deletePolicy: CmsKitAdminPermissions.BlogPosts.Delete));
+                                BlogPostConsts.EntityType,
+                                createPolicies: new[] { CmsKitAdminPermissions.BlogPosts.Create, CmsKitAdminPermissions.BlogPosts.Update },
+                                deletePolicies: new[] { CmsKitAdminPermissions.BlogPosts.Delete }));
                     }
 
                     if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
@@ -70,8 +70,8 @@ namespace Volo.CmsKit.Admin
                         options.EntityTypes.AddIfNotContains(
                             new MediaDescriptorDefinition(
                                 PageConsts.EntityType,
-                                createPolicy: CmsKitAdminPermissions.Pages.Update,
-                                deletePolicy: CmsKitAdminPermissions.Pages.Delete));
+                                createPolicies: new[] { CmsKitAdminPermissions.Pages.Create, CmsKitAdminPermissions.Pages.Update },
+                                deletePolicies: new[] { CmsKitAdminPermissions.Pages.Delete }));
                     }
                 });
             }

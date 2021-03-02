@@ -35,7 +35,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         {
             var definition = await MediaDescriptorDefinitionStore.GetDefinitionAsync(inputStream.EntityType);
 
-            await CheckPolicyAsync(definition.CreatePolicy);
+            await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
 
             var newId = GuidGenerator.Create();
             using (var stream = inputStream.GetStream())
@@ -56,7 +56,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 
             var definition = await MediaDescriptorDefinitionStore.GetDefinitionAsync(mediaDescriptor.EntityType);
 
-            await CheckPolicyAsync(definition.DeletePolicy);
+            await CheckAnyOfPoliciesAsync(definition.DeletePolicies);
 
             await MediaContainer.DeleteAsync(id.ToString());
             await MediaDescriptorRepository.DeleteAsync(id);
