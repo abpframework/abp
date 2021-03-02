@@ -52,7 +52,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
             if (requiredPermissionItems.Any())
             {
                 var permissionChecker = serviceProvider.GetRequiredService<IPermissionChecker>();
-                var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).ToArray());
+                var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).Distinct().ToArray());
 
                 var toBeDeleted = new HashSet<ToolbarItem>();
                 foreach (var item in requiredPermissionItems)
