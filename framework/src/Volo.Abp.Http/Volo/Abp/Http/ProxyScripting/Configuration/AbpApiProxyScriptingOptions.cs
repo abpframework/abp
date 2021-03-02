@@ -10,10 +10,8 @@ namespace Volo.Abp.Http.ProxyScripting.Configuration
 
         public static Func<PropertyInfo, string> PropertyNameGenerator { get; set; }
 
-        public AbpApiProxyScriptingOptions()
+        static AbpApiProxyScriptingOptions()
         {
-            Generators = new Dictionary<string, Type>();
-            
             PropertyNameGenerator = propertyInfo =>
             {
                 var jsonPropertyNameAttribute = propertyInfo.GetSingleAttributeOrNull<System.Text.Json.Serialization.JsonPropertyNameAttribute>(true);
@@ -32,6 +30,11 @@ namespace Volo.Abp.Http.ProxyScripting.Configuration
 
                 return null;
             };
+        }
+
+        public AbpApiProxyScriptingOptions()
+        {
+            Generators = new Dictionary<string, Type>();
         }
     }
 }
