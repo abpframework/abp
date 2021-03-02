@@ -21,12 +21,11 @@ export interface ApplicationInfo {
 export type ApiConfig = {
   [key: string]: string;
   url: string;
-} & Partial<{
   rootNamespace: string;
-}>;
+};
 
 export interface Apis {
-  [key: string]: ApiConfig;
+  [key: string]: Partial<ApiConfig>;
   default: ApiConfig;
 }
 
