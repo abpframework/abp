@@ -21,7 +21,7 @@ export interface ApplicationInfo {
 export interface ApiConfig {
   [key: string]: string;
   url: string;
-  rootNamespace: string;
+  rootNamespace?: string;
 }
 
 export interface Apis {
