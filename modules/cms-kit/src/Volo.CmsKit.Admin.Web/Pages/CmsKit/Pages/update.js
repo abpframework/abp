@@ -5,6 +5,8 @@
     var $formUpdate = $('#form-page-update');
     var $buttonSubmit = $('#button-page-update');
 
+    $formUpdate.data('validator').settings.ignore = ":hidden, [contenteditable='true']:not([name]), .tui-popup-wrapper";
+
     $formUpdate.on('submit', function (e) {
         e.preventDefault();
 
