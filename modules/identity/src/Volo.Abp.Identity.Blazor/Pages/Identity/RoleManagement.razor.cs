@@ -23,7 +23,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected bool HasManagePermissionsPermission { get; set; }
 
-        protected PageToolbar Toolbar { get; set; }
+        protected PageToolbar Toolbar { get; } = new();
 
         protected List<TableColumn> RoleManagementTableColumns => TableColumns.Get<RoleManagement>();
 
@@ -36,7 +36,6 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             UpdatePolicyName = IdentityPermissions.Roles.Update;
             DeletePolicyName = IdentityPermissions.Roles.Delete;
             ManagePermissionsPolicyName = IdentityPermissions.Roles.ManagePermissions;
-            Toolbar = new PageToolbar();
         }
 
         protected override ValueTask SetEntityActionsAsync()
@@ -49,10 +48,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     {
                         Text = L["Edit"],
                         RequiredPolicy = UpdatePolicyName,
-                        Clicked = async (data) =>
-                        {
-                            await OpenEditModalAsync(data.As<IdentityRoleDto>());
-                        }
+                        Clicked = async (data) => { await OpenEditModalAsync(data.As<IdentityRoleDto>()); }
                     },
                     new EntityAction
                     {
@@ -94,7 +90,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     },
                 });
 
-            RoleManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName, IdentityModuleExtensionConsts.EntityNames.Role));
+            RoleManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.Role));
+            
             return base.SetTableColumnsAsync();
         }
 
@@ -102,7 +100,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         {
             await base.SetPermissionsAsync();
 
-            HasManagePermissionsPermission = await AuthorizationService.IsGrantedAsync(IdentityPermissions.Roles.ManagePermissions);
+            HasManagePermissionsPermission =
+                await AuthorizationService.IsGrantedAsync(IdentityPermissions.Roles.ManagePermissions);
         }
 
         protected override string GetDeleteConfirmationMessage(IdentityRoleDto entity)
@@ -110,15 +109,11 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             return string.Format(L["RoleDeletionConfirmationMessage"], entity.Name);
         }
 
-        protected override ValueTask SetBreadcrumbItemsAsync()
-        {
-            //BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Roles"]));
-            return base.SetBreadcrumbItemsAsync();
-        }
-
         protected override ValueTask SetToolbarItemsAsync()
         {
-            Toolbar.AddButton(L["NewRole"], OpenCreateModalAsync, IconName.Add,
+            Toolbar.AddButton(L["NewRole"],
+                OpenCreateModalAsync,
+                IconName.Add,
                 requiredPolicyName: CreatePolicyName);
 
             return base.SetToolbarItemsAsync();

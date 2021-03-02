@@ -31,14 +31,14 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected AssignedRoleViewModel[] EditUserRoles;
 
         protected string ManagePermissionsPolicyName;
-        
+
         protected bool HasManagePermissionsPermission { get; set; }
 
         protected string CreateModalSelectedTab = DefaultSelectedTab;
 
         protected string EditModalSelectedTab = DefaultSelectedTab;
 
-        protected PageToolbar Toolbar { get; set; }
+        protected PageToolbar Toolbar { get; } = new();
 
         private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
 
@@ -51,7 +51,6 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             UpdatePolicyName = IdentityPermissions.Users.Update;
             DeletePolicyName = IdentityPermissions.Users.Delete;
             ManagePermissionsPolicyName = IdentityPermissions.Users.ManagePermissions;
-            Toolbar = new PageToolbar();
         }
 
         protected override async Task OnInitializedAsync()
@@ -179,21 +178,17 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     }
                 });
 
-            UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName, IdentityModuleExtensionConsts.EntityNames.User));
+            UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.User));
             return base.SetEntityActionsAsync();
-        }
-
-        protected override ValueTask SetBreadcrumbItemsAsync()
-        {
-            //BreadcrumbItems.Add(new(L["Users"]));
-            return base.SetBreadcrumbItemsAsync();
         }
 
         protected override ValueTask SetToolbarItemsAsync()
         {
-            Toolbar.AddButton(L["NewUser"], OpenCreateModalAsync, IconName.Add,
-                    requiredPolicyName: CreatePolicyName);
-            
+            Toolbar.AddButton(L["NewUser"], OpenCreateModalAsync,
+                IconName.Add,
+                requiredPolicyName: CreatePolicyName);
+
             return base.SetToolbarItemsAsync();
         }
     }
