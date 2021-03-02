@@ -179,6 +179,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
                     b.Property(x => x.Slug).IsRequired().HasMaxLength(PageConsts.MaxSlugLength);
+                    b.Property(x => x.Content).HasMaxLength(PageConsts.MaxContentLength);
 
                     b.HasIndex(x => new { x.TenantId, Url = x.Slug });
                 });

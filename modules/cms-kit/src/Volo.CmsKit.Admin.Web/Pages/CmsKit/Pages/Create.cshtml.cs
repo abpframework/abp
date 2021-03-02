@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Pages;
-using Volo.CmsKit.Admin.Web.Pages;
 using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
@@ -34,14 +32,17 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
         [AutoMap(typeof(CreatePageInputDto), ReverseMap = true)]
         public class CreatePageViewModel
         {
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
             [Required]
+            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
             public string Title { get; set; }
 
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
             [Required]
-            [DynamicFormIgnore]
+            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
             public string Slug { get; set; }
+            
+            [HiddenInput]
+            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+            public string Content { get; set; }
         }
     }
 }
