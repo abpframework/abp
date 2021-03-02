@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
+using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
+using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.FeatureManagement.Blazor.Components;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.TenantManagement.Localization;
 
 namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
@@ -19,6 +24,10 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
         protected FeatureManagementModal FeatureManagementModal;
 
         protected TenantInfoModel TenantInfo;
+
+        protected PageToolbar Toolbar { get; } = new();
+
+        protected List<TableColumn> TenantManagementTableColumns => TableColumns.Get<TenantManagement>();
 
         public TenantManagement()
         {
@@ -44,6 +53,74 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
         protected override string GetDeleteConfirmationMessage(TenantDto entity)
         {
             return string.Format(L["TenantDeletionConfirmationMessage"], entity.Name);
+        }
+
+        protected override ValueTask SetToolbarItemsAsync()
+        {
+            Toolbar.AddButton(L["NewTenant"],
+                OpenCreateModalAsync,
+                IconName.Add,
+                requiredPolicyName: CreatePolicyName);
+
+            return base.SetToolbarItemsAsync();
+        }
+
+        protected override ValueTask SetEntityActionsAsync()
+        {
+            EntityActions
+                .Get<TenantManagement>()
+                .AddRange(new EntityAction[]
+                {
+                    new EntityAction
+                    {
+                        Text = L["Edit"],
+                        RequiredPolicy = UpdatePolicyName,
+                        Clicked = async (data) => { await OpenEditModalAsync(data.As<TenantDto>()); }
+                    },
+                    new EntityAction
+                    {
+                        Text = L["Features"],
+                        RequiredPolicy = ManageFeaturesPolicyName,
+                        Clicked = async (data) =>
+                        {
+                            var tenant = data.As<TenantDto>();
+                            await FeatureManagementModal.OpenAsync(FeatureProviderName, tenant.Id.ToString());
+                        }
+                    },
+                    new EntityAction
+                    {
+                        Text = L["Delete"],
+                        RequiredPolicy = DeletePolicyName,
+                        Clicked = async (data) => await DeleteEntityAsync(data.As<TenantDto>()),
+                        ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<TenantDto>())
+                    }
+                });
+
+            return base.SetEntityActionsAsync();
+        }
+
+        protected override ValueTask SetTableColumnsAsync()
+        {
+            TenantManagementTableColumns
+                .AddRange(new TableColumn[]
+                {
+                    new TableColumn
+                    {
+                        Title = L["Actions"],
+                        Actions = EntityActions.Get<TenantManagement>()
+                    },
+                    new TableColumn
+                    {
+                        Title = L["TenantName"],
+                        Data = nameof(TenantDto.Name),
+                    },
+                });
+
+            TenantManagementTableColumns.AddRange(GetExtensionTableColumns(
+                TenantManagementModuleExtensionConsts.ModuleName,
+                TenantManagementModuleExtensionConsts.EntityNames.Tenant));
+
+            return base.SetTableColumnsAsync();
         }
     }
 
