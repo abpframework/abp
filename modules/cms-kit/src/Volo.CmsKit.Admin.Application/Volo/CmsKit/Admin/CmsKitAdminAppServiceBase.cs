@@ -33,11 +33,7 @@ namespace Volo.CmsKit.Admin
                 }
             }
 
-            var exception = new AbpAuthorizationException();
-
-            exception.Data[nameof(policies)] = policies;
-
-            throw exception;
+            throw new AbpAuthorizationException();
         }
     }
 }
