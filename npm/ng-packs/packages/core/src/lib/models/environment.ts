@@ -18,11 +18,11 @@ export interface ApplicationInfo {
   logoUrl?: string;
 }
 
-export type ApiConfig = {
+export interface ApiConfig {
   [key: string]: string;
   url: string;
   rootNamespace: string;
-};
+}
 
 export interface Apis {
   [key: string]: Partial<ApiConfig>;
