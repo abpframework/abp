@@ -1,8 +1,9 @@
 ﻿using JetBrains.Annotations;
+using System;
 
 namespace Volo.CmsKit.MediaDescriptors
 {
-    public class MediaDescriptorDefinition : PolicySpecifiedDefinition
+    public class MediaDescriptorDefinition : PolicySpecifiedDefinition, IEquatable<MediaDescriptorDefinition>
     {
         public MediaDescriptorDefinition(
             [NotNull] string entityType,
@@ -13,6 +14,11 @@ namespace Volo.CmsKit.MediaDescriptors
                                                            updatePolicy,
                                                            deletePolicy)
         {
+        }
+
+        public bool Equals(MediaDescriptorDefinition other)
+        {
+            return base.Equals(other);
         }
     }
 }

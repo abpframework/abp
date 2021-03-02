@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.CmsKit.MediaDescriptors;
 
 namespace Volo.CmsKit.MediaDescriptors
 {
@@ -17,7 +12,7 @@ namespace Volo.CmsKit.MediaDescriptors
             MediaDescriptorDefinitionStore = mediaDescriptorDefinitionStore;
         }
 
-        public virtual async Task<MediaDescriptor> Create(string entityType, string name, string mimeType, long size)
+        public virtual async Task<MediaDescriptor> CreateAsync(string entityType, string name, string mimeType, long size)
         {
             if(!await MediaDescriptorDefinitionStore.IsDefinedAsync(entityType))
             {

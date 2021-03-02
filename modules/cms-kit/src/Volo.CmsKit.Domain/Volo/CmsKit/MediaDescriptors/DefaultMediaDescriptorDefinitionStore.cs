@@ -37,7 +37,11 @@ namespace Volo.CmsKit.MediaDescriptors
 
         public Task<bool> IsDefinedAsync([NotNull] string entityType)
         {
-            return Task.Run(() => Options.EntityTypes.Any(a => a.EntityType == entityType));
+            Check.NotNullOrEmpty(entityType, nameof(entityType));
+
+            var isDefined = Options.EntityTypes.Any(a => a.EntityType == entityType);
+
+            return Task.FromResult(isDefined);
         }
     }
 }
