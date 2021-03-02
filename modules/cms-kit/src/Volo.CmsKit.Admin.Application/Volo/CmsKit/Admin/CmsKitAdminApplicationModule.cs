@@ -7,6 +7,8 @@ using Volo.Abp.Modularity;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Tags;
 
@@ -49,6 +51,30 @@ namespace Volo.CmsKit.Admin
                             CmsKitAdminPermissions.BlogPosts.Update));
                 }
             });
+
+            if (GlobalFeatureManager.Instance.IsEnabled<MediaFeature>())
+            {
+                Configure<CmsKitMediaOptions>(options =>
+                {
+                    if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
+                    {
+                        options.EntityTypes.AddIfNotContains(
+                            new MediaDescriptorDefinition(
+                                BlogPostConsts.EntityType, 
+                                createPolicy: CmsKitAdminPermissions.BlogPosts.Update,
+                                deletePolicy: CmsKitAdminPermissions.BlogPosts.Delete));
+                    }
+
+                    if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+                    {
+                        options.EntityTypes.AddIfNotContains(
+                            new MediaDescriptorDefinition(
+                                PageConsts.EntityType,
+                                createPolicy: CmsKitAdminPermissions.Pages.Update,
+                                deletePolicy: CmsKitAdminPermissions.Pages.Delete));
+                    }
+                });
+            }
         }
     }
 }
