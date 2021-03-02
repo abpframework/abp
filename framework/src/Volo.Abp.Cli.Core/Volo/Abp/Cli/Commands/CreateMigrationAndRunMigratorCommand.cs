@@ -26,7 +26,9 @@ namespace Volo.Abp.Cli.Commands
                 throw new CliUsageException("DbMigrations folder path is missing!");
             }
 
-            var dbMigratorProjectPath = GetDbMigratorProjectPath(commandLineArgs.Target);
+            var dbMigrationsFolder = commandLineArgs.Target;
+
+            var dbMigratorProjectPath = GetDbMigratorProjectPath(dbMigrationsFolder);
             if (dbMigratorProjectPath == null)
             {
                 throw new Exception("DbMigrator is not found!");
@@ -37,13 +39,17 @@ namespace Volo.Abp.Cli.Commands
                 InstallDotnetEfTool();
             }
 
-            var addMigrationCmd = $"cd \"{commandLineArgs.Target}\" && " +
-                                  $"dotnet ef migrations add Initial -s \"{dbMigratorProjectPath}\"";
+            var tenantDbContextName = FindTenantDbContextName(dbMigrationsFolder);
+            var dbContextName = tenantDbContextName != null ?
+                FindDbContextName(dbMigrationsFolder)
+                : null;
 
-            var output = CmdHelper.RunCmdAndGetOutput(addMigrationCmd);
-            if (output.Contains("Done.") &&
-                output.Contains("To undo this action") &&
-                output.Contains("ef migrations remove"))
+            var migrationOutput = AddMigrationAndGetOutput(dbMigrationsFolder, dbContextName, "Migrations");
+            var tenantMigrationOutput = tenantDbContextName != null ?
+                AddMigrationAndGetOutput(dbMigrationsFolder, tenantDbContextName, "TenantMigrations")
+                : null;
+
+            if (CheckMigrationOutput(migrationOutput) && CheckMigrationOutput(tenantMigrationOutput))
             {
                 // Migration added successfully
                 CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProjectPath) + "\" && dotnet run");
@@ -51,20 +57,68 @@ namespace Volo.Abp.Cli.Commands
             }
             else
             {
-                var exceptionMsg = "Migrations failed! The following command didn't run successfully:" +
+                var exceptionMsg = "Migrations failed! A migration command didn't run successfully:" +
                                    Environment.NewLine +
-                                   addMigrationCmd +
-                                   Environment.NewLine + output;
+                                   Environment.NewLine + migrationOutput +
+                                   Environment.NewLine +
+                                   Environment.NewLine + tenantMigrationOutput;
 
                 Logger.LogError(exceptionMsg);
                 throw new Exception(exceptionMsg);
             }
         }
 
+        private string FindTenantDbContextName(string dbMigrationsFolder)
+        {
+            var tenantDbContext = Directory
+                .GetFiles(dbMigrationsFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
+                .FirstOrDefault();
+
+            if (tenantDbContext == null)
+            {
+                return null;
+            }
+
+            return Path.GetFileName(tenantDbContext).RemovePostFix(".cs");
+        }
+
+        private string FindDbContextName(string dbMigrationsFolder)
+        {
+            var dbContext = Directory
+                .GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
+                .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs"));
+
+            if (dbContext == null)
+            {
+                return null;
+            }
+
+            return Path.GetFileName(dbContext).RemovePostFix(".cs");
+        }
+
+        private static string AddMigrationAndGetOutput(string dbMigrationsFolder, string dbContext, string outputDirectory)
+        {
+            var dbContextOption = string.IsNullOrWhiteSpace(dbContext)
+                ? string.Empty
+                : $"--context {dbContext}";
+
+            var addMigrationCmd = $"cd \"{dbMigrationsFolder}\" && " +
+                                  $"dotnet ef migrations add Initial --output-dir {outputDirectory} {dbContextOption}";
+
+            return CmdHelper.RunCmdAndGetOutput(addMigrationCmd);
+        }
+
         private static bool IsDotNetEfToolInstalled()
         {
             var output = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g");
             return output.Contains("dotnet-ef");
+        }
+
+        private static bool CheckMigrationOutput(string output)
+        {
+            return output == null || (output.Contains("Done.") &&
+                           output.Contains("To undo this action") &&
+                           output.Contains("ef migrations remove"));
         }
 
         private void InstallDotnetEfTool()
