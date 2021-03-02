@@ -24,7 +24,7 @@ namespace Volo.Abp.Http.Modeling
             return new PropertyApiDescriptionModel
             {
                 Name = propertyInfo.Name,
-                JsonName = AbpApiProxyScriptingOptions.PropertyNameGenerator.Invoke(propertyInfo),
+                JsonName = AbpApiProxyScriptingConfiguration.PropertyNameGenerator.Invoke(propertyInfo),
                 Type = ApiTypeNameHelper.GetTypeName(propertyInfo.PropertyType),
                 TypeSimple = ApiTypeNameHelper.GetSimpleTypeName(propertyInfo.PropertyType),
                 IsRequired = propertyInfo.IsDefined(typeof(RequiredAttribute), true)
