@@ -136,7 +136,11 @@ namespace Volo.CmsKit
             _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_2_EntityType));
             _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.TagDefinition_1_EntityType));
 
-            _mediaOptions.Value.EntityTypes.AddIfNotContains(new MediaDescriptorDefinition(_cmsKitTestData.Media_1_EntityType));
+            _mediaOptions.Value.EntityTypes.AddIfNotContains(
+                new MediaDescriptorDefinition(
+                    _cmsKitTestData.Media_1_EntityType, 
+                    createPolicies: new[] { "SomeCreatePolicy" },
+                    deletePolicies: new[] { "SomeDeletePolicy" }));
 
             return Task.CompletedTask;
         }
