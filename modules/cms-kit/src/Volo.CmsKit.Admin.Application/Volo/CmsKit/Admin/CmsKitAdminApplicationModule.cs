@@ -46,9 +46,21 @@ namespace Volo.CmsKit.Admin
                         new TagEntityTypeDefiniton(
                             BlogPostConsts.EntityType,
                             LocalizableString.Create<CmsKitResource>("BlogPost"),
-                            new[] { CmsKitAdminPermissions.BlogPosts.Create, CmsKitAdminPermissions.BlogPosts.Update },
-                            new[] { CmsKitAdminPermissions.BlogPosts.Create, CmsKitAdminPermissions.BlogPosts.Update },
-                            new[] { CmsKitAdminPermissions.BlogPosts.Create, CmsKitAdminPermissions.BlogPosts.Update }));
+                            createPolicies: new[] 
+                            {
+                                CmsKitAdminPermissions.BlogPosts.Create, 
+                                CmsKitAdminPermissions.BlogPosts.Update 
+                            },
+                            updatePolicies: new[] 
+                            { 
+                                CmsKitAdminPermissions.BlogPosts.Create, 
+                                CmsKitAdminPermissions.BlogPosts.Update 
+                            },
+                            deletePolicies: new[] 
+                            { 
+                                CmsKitAdminPermissions.BlogPosts.Create, 
+                                CmsKitAdminPermissions.BlogPosts.Update 
+                            }));
                 }
             });
 
@@ -61,8 +73,17 @@ namespace Volo.CmsKit.Admin
                         options.EntityTypes.AddIfNotContains(
                             new MediaDescriptorDefinition(
                                 BlogPostConsts.EntityType,
-                                createPolicies: new[] { CmsKitAdminPermissions.BlogPosts.Create, CmsKitAdminPermissions.BlogPosts.Update },
-                                deletePolicies: new[] { CmsKitAdminPermissions.BlogPosts.Delete }));
+                                createPolicies: new[] 
+                                { 
+                                    CmsKitAdminPermissions.BlogPosts.Create, 
+                                    CmsKitAdminPermissions.BlogPosts.Update
+                                },
+                                deletePolicies: new[]
+                                {
+                                    CmsKitAdminPermissions.BlogPosts.Create,
+                                    CmsKitAdminPermissions.BlogPosts.Update,
+                                    CmsKitAdminPermissions.BlogPosts.Delete
+                                }));
                     }
 
                     if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
@@ -70,8 +91,17 @@ namespace Volo.CmsKit.Admin
                         options.EntityTypes.AddIfNotContains(
                             new MediaDescriptorDefinition(
                                 PageConsts.EntityType,
-                                createPolicies: new[] { CmsKitAdminPermissions.Pages.Create, CmsKitAdminPermissions.Pages.Update },
-                                deletePolicies: new[] { CmsKitAdminPermissions.Pages.Delete }));
+                                createPolicies: new[] 
+                                {
+                                    CmsKitAdminPermissions.Pages.Create,
+                                    CmsKitAdminPermissions.Pages.Update 
+                                },
+                                deletePolicies: new[]
+                                {
+                                    CmsKitAdminPermissions.Pages.Create,
+                                    CmsKitAdminPermissions.Pages.Update,
+                                    CmsKitAdminPermissions.Pages.Delete 
+                                }));
                     }
                 });
             }
