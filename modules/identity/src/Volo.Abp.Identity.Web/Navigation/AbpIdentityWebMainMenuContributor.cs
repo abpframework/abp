@@ -9,11 +9,11 @@ namespace Volo.Abp.Identity.Web.Navigation
 {
     public class AbpIdentityWebMainMenuContributor : IMenuContributor
     {
-        public virtual async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        public virtual Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
             if (context.Menu.Name != StandardMenus.Main)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var l = context.GetLocalizer<IdentityResource>();
@@ -23,6 +23,8 @@ namespace Volo.Abp.Identity.Web.Navigation
             identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "~/Identity/Users", requiredPermissionName: IdentityPermissions.Users.Default));
 
             context.Menu.GetAdministration().AddItem(identityMenuItem);
+
+            return Task.CompletedTask;
         }
     }
 }

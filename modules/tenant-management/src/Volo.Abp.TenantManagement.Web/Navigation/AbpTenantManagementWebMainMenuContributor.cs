@@ -9,11 +9,11 @@ namespace Volo.Abp.TenantManagement.Web.Navigation
 {
     public class AbpTenantManagementWebMainMenuContributor : IMenuContributor
     {
-        public virtual async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        public virtual Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
             if (context.Menu.Name != StandardMenus.Main)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var administrationMenu = context.Menu.GetAdministration();
@@ -24,6 +24,8 @@ namespace Volo.Abp.TenantManagement.Web.Navigation
             administrationMenu.AddItem(tenantManagementMenuItem);
 
             tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "~/TenantManagement/Tenants", requiredPermissionName: TenantManagementPermissions.Tenants.Default));
+
+            return Task.CompletedTask;
         }
     }
 }

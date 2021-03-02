@@ -14,7 +14,7 @@ namespace Volo.Blogging.Admin
             }
         }
 
-        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var l = context.GetLocalizer<BloggingResource>();
 
@@ -23,6 +23,8 @@ namespace Volo.Blogging.Admin
             managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Blogging/Admin/Blogs", requiredPermissionName: BloggingPermissions.Blogs.Management));
 
             context.Menu.GetAdministration().AddItem(managementRootMenuItem);
+
+            return Task.CompletedTask;
         }
     }
 }
