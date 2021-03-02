@@ -46,14 +46,17 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
         [AutoMap(typeof(UpdatePageInputDto), ReverseMap = true)]
         public class UpdatePageViewModel
         {
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
             [Required]
+            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
             public string Title { get; set; }
 
-            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
             [Required]
-            [DynamicFormIgnore]
+            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
             public string Slug { get; set; }
+            
+            [HiddenInput]
+            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
+            public string Content { get; set; }
         }
     }
 }
