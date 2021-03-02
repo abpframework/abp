@@ -27,7 +27,7 @@ namespace Volo.CmsKit.Blogs
             [NotNull] string title,
             [NotNull] string slug,
             [CanBeNull] string shortDescription = null,
-            [CanBeNull] Guid? tenantId = null)
+            [CanBeNull] string content = null)
         {
             Check.NotNull(author, nameof(author));
             Check.NotNull(blog, nameof(blog));
@@ -42,7 +42,9 @@ namespace Volo.CmsKit.Blogs
                         author.Id,
                         title,
                         slug,
-                        shortDescription
+                        shortDescription,
+                        content,
+                        CurrentTenant.Id
                         );
 
             await CheckSlugExistenceAsync(blog.Id, blogPost.Slug);

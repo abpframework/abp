@@ -14,11 +14,7 @@
     </abp-card-header>
 
     <abp-card-body>
-        @await Component.InvokeAsync(typeof(ContentViewComponent), new
-            {
-                entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                entityId = Model.Id.ToString()
-            })
+        @Html.Raw(Model.Content)
     </abp-card-body>
     <abp-card-footer>
         <abp-card-subtitle>@Model.CreationTime</abp-card-subtitle>

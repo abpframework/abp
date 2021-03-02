@@ -367,7 +367,8 @@ namespace Volo.CmsKit
                         blog, 
                         _cmsKitTestData.BlogPost_1_Title, 
                         _cmsKitTestData.BlogPost_1_Slug, 
-                        "Short desc 1"))).Id;
+                        "Short desc 1",
+                        "Blog Post 1 Content"))).Id;
 
             _cmsKitTestData.BlogPost_2_Id =
                 (await _blogPostRepository.InsertAsync( 
@@ -376,7 +377,8 @@ namespace Volo.CmsKit
                         blog,
                         _cmsKitTestData.BlogPost_2_Title, 
                         _cmsKitTestData.BlogPost_2_Slug, 
-                        "Short desc 2"))).Id;
+                        "Short desc 2",
+                        "Blog Post 2 Content"))).Id;
         }
 
         private async Task SeedBlogFeaturesAsync()
