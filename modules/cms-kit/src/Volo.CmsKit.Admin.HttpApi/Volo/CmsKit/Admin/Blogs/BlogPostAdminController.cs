@@ -31,7 +31,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpPost]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
-        public virtual Task<BlogPostDto> CreateAsync(CreateUpdateBlogPostDto input)
+        public virtual Task<BlogPostDto> CreateAsync(CreateBlogPostDto input)
         {
             return BlogPostAdminAppService.CreateAsync(input);
         }
@@ -50,14 +50,6 @@ namespace Volo.CmsKit.Admin.Blogs
         public virtual Task<BlogPostDto> GetAsync(Guid id)
         {
             return BlogPostAdminAppService.GetAsync(id);
-        }
-
-        [HttpGet]
-        [Route("{blogSlug}/{blogPostSlug}")]
-        [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual Task<BlogPostDto> GetBySlugAsync(string blogSlug, string blogPostSlug)
-        {
-            return BlogPostAdminAppService.GetBySlugAsync(blogSlug, blogPostSlug);
         }
 
         [HttpGet]
@@ -107,7 +99,7 @@ namespace Volo.CmsKit.Admin.Blogs
         [HttpPut]
         [Route("{id}")]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
-        public virtual Task<BlogPostDto> UpdateAsync(Guid id, CreateUpdateBlogPostDto input)
+        public virtual Task<BlogPostDto> UpdateAsync(Guid id, UpdateBlogPostDto input)
         {
             return BlogPostAdminAppService.UpdateAsync(id, input);
         }

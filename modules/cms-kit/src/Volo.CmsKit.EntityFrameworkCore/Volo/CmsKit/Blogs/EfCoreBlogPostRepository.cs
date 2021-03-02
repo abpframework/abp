@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
-using System.Linq;
-using System.Data.Common;
-using Volo.Abp.Domain.Entities;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -20,47 +20,70 @@ namespace Volo.CmsKit.Blogs
         {
         }
 
-        public async Task<BlogPost> GetBySlugAsync(Guid blogId, string slug, CancellationToken cancellationToken = default)
+        public async Task<BlogPost> GetBySlugAsync(
+            Guid blogId, 
+            [NotNull] string slug,
+            CancellationToken cancellationToken = default)
         {
-            var dbSet = await GetDbSetAsync();
+            Check.NotNullOrEmpty(slug, nameof(slug));
 
-            return await dbSet
-                            .Include(i=> i.Creator)
-                            .Where(x => 
-                                x.BlogId == blogId && x.Slug.ToLower() == slug)
-                            .FirstOrDefaultAsync(cancellationToken: cancellationToken) 
-                        ?? throw new EntityNotFoundException(typeof(BlogPost));
+            var blogPost = await GetAsync(
+                                    x => x.BlogId == blogId && x.Slug.ToLower() == slug, 
+                                    cancellationToken: GetCancellationToken(cancellationToken));
+
+            blogPost.Author = await (await GetDbContextAsync())
+                                .Set<CmsUser>()
+                                .FirstOrDefaultAsync(x =>x.Id == blogPost.AuthorId);
+
+            return blogPost;
         }
 
         public async Task<int> GetCountAsync(Guid blogId, CancellationToken cancellationToken = default)
         {
             return await (await GetQueryableAsync()).CountAsync(
-                            x => x.BlogId == blogId,
-                            cancellationToken);
+                x => x.BlogId == blogId,
+                GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<BlogPost>> GetPagedListAsync(Guid blogId, int skipCount, int maxResultCount, string sorting, bool includeDetails = false, CancellationToken cancellationToken = default)
+        public async Task<List<BlogPost>> GetPagedListAsync(Guid blogId, int skipCount, int maxResultCount,
+            string sorting, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            var queryable = (await GetQueryableAsync())
-                    .Include(i => i.Creator)
-                    .Where(x => x.BlogId == blogId);
+            var dbContext = await GetDbContextAsync();
+            var blogPostsDbSet = dbContext.Set<BlogPost>();
+            var usersDbSet = dbContext.Set<CmsUser>();
+
+            var queryable = blogPostsDbSet
+                .Where(x => x.BlogId == blogId);
 
             if (!sorting.IsNullOrWhiteSpace())
             {
                 queryable = queryable.OrderBy(sorting);
             }
 
-            return await queryable
-                    .Skip(skipCount)
-                    .Take(maxResultCount)
-                    .ToListAsync(cancellationToken);
+            var combinedResult = await queryable
+                                        .Join(
+                                            usersDbSet,
+                                            o => o.AuthorId,  
+                                            i => i.Id, 
+                                            (blogPost,user) => new { blogPost, user })
+                                        .Skip(skipCount)
+                                        .Take(maxResultCount)
+                                        .ToListAsync(GetCancellationToken(cancellationToken));
+
+            return combinedResult.Select(s =>
+                                        {
+                                            s.blogPost.Author = s.user;
+                                            return s.blogPost;
+                                        }).ToList();
         }
 
-        public async Task<bool> SlugExistsAsync(Guid blogId, string slug, CancellationToken cancellationToken = default)
+        public async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
+            CancellationToken cancellationToken = default)
         {
-            var dbSet = await GetDbSetAsync();
+            Check.NotNullOrEmpty(slug, nameof(slug));
 
-            return await dbSet.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
+            return await (await GetDbSetAsync()).AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug,
+                GetCancellationToken(cancellationToken));
         }
     }
 }

@@ -5,6 +5,7 @@ using Volo.CmsKit.Comments;
 
 namespace Volo.CmsKit.Public.Comments
 {
+    [Serializable]
     public class CreateCommentInput
     {
         [Required]

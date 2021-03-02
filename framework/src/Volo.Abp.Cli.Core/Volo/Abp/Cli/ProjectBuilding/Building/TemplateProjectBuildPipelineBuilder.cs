@@ -33,7 +33,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             }
 
             if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor)
-                && context.BuildArgs.MobileApp == MobileApp.None && context.Template.Name != MicroserviceProTemplate.TemplateName)
+                && context.BuildArgs.MobileApp == MobileApp.None && context.Template.Name != MicroserviceProTemplate.TemplateName
+                && context.Template.Name != MicroserviceServiceProTemplate.TemplateName)
             {
                 pipeline.Steps.Add(new RemoveRootFolderStep());
             }

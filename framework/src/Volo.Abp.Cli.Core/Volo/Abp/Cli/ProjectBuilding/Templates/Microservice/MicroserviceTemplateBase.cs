@@ -33,27 +33,41 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
             switch (context.BuildArgs.UiFramework)
             {
                 case UiFramework.None:
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
+                        "/applications/web/src/MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveFolderStep("/applications/web"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
+                        "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveFolderStep("/applications/blazor"));
                     steps.Add(new RemoveFolderStep("/angular"));
                     break;
 
                 case UiFramework.Angular:
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
+                        "/applications/web/src/MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveFolderStep("/applications/web"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
+                        "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveFolderStep("/applications/blazor"));
                     break;
 
                 case UiFramework.Blazor:
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
+                        "/applications/web/src/MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveFolderStep("/applications/web"));
                     steps.Add(new RemoveFolderStep("/angular"));
                     break;
 
                 case UiFramework.Mvc:
                 case UiFramework.NotSpecified:
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
+                        "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveFolderStep("/applications/blazor"));
                     steps.Add(new RemoveFolderStep("/angular"));
                     break;
             }
+
+            steps.Add(new RemoveFolderStep("/microservices/template"));
         }
 
         private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

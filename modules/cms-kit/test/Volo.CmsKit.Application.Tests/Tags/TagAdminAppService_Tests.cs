@@ -48,5 +48,15 @@ namespace Volo.CmsKit.Tags
                 Name = _cmsKitTestData.Content_1_Tags[0],
             }));
         }
+
+        public async Task GetTagDefinitionsAsync_ShouldWorkProperly_WithoutParameters()
+        {
+            var definitions = await _tagAdminAppService.GetTagDefinitionsAsync();
+
+            definitions.ShouldNotBeNull();
+            definitions.ShouldNotBeEmpty();
+            definitions.Count.ShouldBeGreaterThan(1);
+            definitions.ShouldContain(x => x.EntityType == _cmsKitTestData.TagDefinition_1_EntityType);
+        }
     }
 }

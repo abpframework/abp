@@ -7,19 +7,22 @@ namespace Volo.Abp.EntityFrameworkCore
 {
     public class AbpDbContextOptions
     {
-        internal List<Action<AbpDbContextConfigurationContext>> DefaultPreConfigureActions { get; set; }
+        internal List<Action<AbpDbContextConfigurationContext>> DefaultPreConfigureActions { get; }
 
         internal Action<AbpDbContextConfigurationContext> DefaultConfigureAction { get; set; }
 
-        internal Dictionary<Type, List<object>> PreConfigureActions { get; set; }
+        internal Dictionary<Type, List<object>> PreConfigureActions { get; }
 
-        internal Dictionary<Type, object> ConfigureActions { get; set; }
+        internal Dictionary<Type, object> ConfigureActions { get; }
+        
+        internal Dictionary<Type, Type> DbContextReplacements { get; }
 
         public AbpDbContextOptions()
         {
             DefaultPreConfigureActions = new List<Action<AbpDbContextConfigurationContext>>();
             PreConfigureActions = new Dictionary<Type, List<object>>();
             ConfigureActions = new Dictionary<Type, object>();
+            DbContextReplacements = new Dictionary<Type, Type>();
         }
 
         public void PreConfigure([NotNull] Action<AbpDbContextConfigurationContext> action)
@@ -56,6 +59,30 @@ namespace Volo.Abp.EntityFrameworkCore
             Check.NotNull(action, nameof(action));
 
             ConfigureActions[typeof(TDbContext)] = action;
+        }
+
+        internal Type GetReplacedTypeOrSelf(Type dbContextType)
+        {
+            var replacementType = dbContextType;
+            while (true)
+            {
+                if (DbContextReplacements.TryGetValue(replacementType, out var foundType))
+                {
+                    if (foundType == dbContextType)
+                    {
+                        throw new AbpException(
+                            "Circular DbContext replacement found for " +
+                            dbContextType.AssemblyQualifiedName
+                        );
+                    }
+                    
+                    replacementType = foundType;
+                }
+                else
+                {
+                    return replacementType;
+                }
+            }
         }
     }
 }

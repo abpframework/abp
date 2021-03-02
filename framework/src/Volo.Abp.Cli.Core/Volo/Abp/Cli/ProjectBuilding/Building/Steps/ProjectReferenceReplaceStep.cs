@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.Utils;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
@@ -25,7 +26,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 var localVoloRepoPath = context.BuildArgs.VoloGitHubLocalRepositoryPath;
 
                 new ProjectReferenceReplacer.LocalProjectPathReferenceReplacer(
-                    context.Files,
+                    context,
                     context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
                     localAbpRepoPath,
                     localVoloRepoPath
@@ -41,7 +42,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 }
 
                 new ProjectReferenceReplacer.NugetReferenceReplacer(
-                    context.Files,
+                    context,
                     context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
                     nugetPackageVersion
                 ).Run();
@@ -70,13 +71,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         private abstract class ProjectReferenceReplacer
         {
             private readonly List<FileEntry> _entries;
+            private readonly bool _isMicroserviceServiceTemplate;
             private readonly string _projectName;
 
             protected ProjectReferenceReplacer(
-                List<FileEntry> entries,
+                ProjectBuildContext context,
                 string projectName)
             {
-                _entries = entries;
+                _entries = context.Files;
+                _isMicroserviceServiceTemplate = MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(context.Template?.Name);
                 _projectName = projectName;
             }
 
@@ -113,14 +116,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (oldNodeIncludeValue.Contains(_projectName) && _entries.Any(e=>e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
+                    if (oldNodeIncludeValue.Contains(_projectName))
                     {
-                        continue;
+                        if (_isMicroserviceServiceTemplate || _entries.Any(e=>e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
+                        {
+                            continue;
+                        }
                     }
 
-                    XmlNode newNode = null;
-
-                    newNode = GetNewReferenceNode(doc, oldNodeIncludeValue);
+                    XmlNode newNode = GetNewReferenceNode(doc, oldNodeIncludeValue);
 
                     oldNode.ParentNode.ReplaceChild(newNode, oldNode);
                 }
@@ -145,8 +149,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             {
                 private readonly string _nugetPackageVersion;
 
-                public NugetReferenceReplacer(List<FileEntry> entries, string projectName, string nugetPackageVersion)
-                    : base(entries, projectName)
+                public NugetReferenceReplacer(ProjectBuildContext context, string projectName, string nugetPackageVersion)
+                    : base(context, projectName)
                 {
                     _nugetPackageVersion = nugetPackageVersion;
                 }
@@ -183,8 +187,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 private readonly string _gitHubAbpLocalRepositoryPath;
                 private readonly string _gitHubVoloLocalRepositoryPath;
 
-                public LocalProjectPathReferenceReplacer(List<FileEntry> entries, string projectName, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath)
-                    : base(entries, projectName)
+                public LocalProjectPathReferenceReplacer(ProjectBuildContext context, string projectName, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath)
+                    : base(context, projectName)
                 {
                     _gitHubAbpLocalRepositoryPath = gitHubAbpLocalRepositoryPath;
                     _gitHubVoloLocalRepositoryPath = gitHubVoloLocalRepositoryPath;

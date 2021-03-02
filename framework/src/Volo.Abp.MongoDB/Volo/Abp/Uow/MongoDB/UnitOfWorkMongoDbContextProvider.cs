@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Volo.Abp.Data;
@@ -22,17 +23,20 @@ namespace Volo.Abp.Uow.MongoDB
         private readonly IConnectionStringResolver _connectionStringResolver;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
         private readonly ICurrentTenant _currentTenant;
+        private readonly AbpMongoDbContextOptions _options;
 
         public UnitOfWorkMongoDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant, 
+            IOptions<AbpMongoDbContextOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
             _cancellationTokenProvider = cancellationTokenProvider;
             _currentTenant = currentTenant;
+            _options = options.Value;
 
             Logger = NullLogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>>.Instance;
         }
@@ -59,7 +63,8 @@ namespace Volo.Abp.Uow.MongoDB
             }
 
             var connectionString = ResolveConnectionString();
-            var dbContextKey = $"{typeof(TMongoDbContext).FullName}_{connectionString}";
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var mongoUrl = new MongoUrl(connectionString);
             var databaseName = mongoUrl.DatabaseName;
@@ -71,9 +76,9 @@ namespace Volo.Abp.Uow.MongoDB
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
-                () => new MongoDbDatabaseApi<TMongoDbContext>(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
+                () => new MongoDbDatabaseApi(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
 
-            return ((MongoDbDatabaseApi<TMongoDbContext>) databaseApi).DbContext;
+            return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
         }
 
         public async Task<TMongoDbContext> GetDbContextAsync(CancellationToken cancellationToken = default)
@@ -86,7 +91,8 @@ namespace Volo.Abp.Uow.MongoDB
             }
 
             var connectionString = await ResolveConnectionStringAsync();
-            var dbContextKey = $"{typeof(TMongoDbContext).FullName}_{connectionString}";
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var mongoUrl = new MongoUrl(connectionString);
             var databaseName = mongoUrl.DatabaseName;
@@ -99,7 +105,7 @@ namespace Volo.Abp.Uow.MongoDB
             var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
             if (databaseApi == null)
             {
-                databaseApi = new MongoDbDatabaseApi<TMongoDbContext>(
+                databaseApi = new MongoDbDatabaseApi(
                     await CreateDbContextAsync(
                         unitOfWork,
                         mongoUrl,
@@ -111,7 +117,7 @@ namespace Volo.Abp.Uow.MongoDB
                 unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
             }
 
-            return ((MongoDbDatabaseApi<TMongoDbContext>) databaseApi).DbContext;
+            return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
         }
 
         [Obsolete("Use CreateDbContextAsync")]

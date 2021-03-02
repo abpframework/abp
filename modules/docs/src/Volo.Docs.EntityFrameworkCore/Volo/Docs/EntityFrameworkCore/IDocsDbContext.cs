@@ -11,10 +11,10 @@ namespace Volo.Docs.EntityFrameworkCore
     [ConnectionStringName(DocsDbProperties.ConnectionStringName)]
     public interface IDocsDbContext : IEfCoreDbContext
     {
-        DbSet<Project> Projects { get; set; }
+        DbSet<Project> Projects { get; }
 
-        DbSet<Document> Documents { get; set; }
+        DbSet<Document> Documents { get; }
 
-        DbSet<DocumentContributor> DocumentContributors { get; set; }
+        DbSet<DocumentContributor> DocumentContributors { get; }
     }
 }
