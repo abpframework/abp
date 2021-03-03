@@ -148,6 +148,6 @@ Configure<AbpRabbitMqBackgroundJobOptions>(options =>
 
 如果你想要更多地了解 `durable`,`exclusive`,`autoDelete` 的用法,请阅读 RabbitMQ 提供的文档.
 
-## 参考
+## 另请参阅
 
 - [后台作业](Background-Jobs.md)
