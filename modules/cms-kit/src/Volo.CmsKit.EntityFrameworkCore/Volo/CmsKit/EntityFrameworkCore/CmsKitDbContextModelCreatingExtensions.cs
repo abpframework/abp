@@ -242,6 +242,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.ConfigureByConvention();
 
+                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxEntityTypeLength);
                     b.Property(x => x.Name).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxNameLength);
                     b.Property(x => x.MimeType).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxMimeTypeLength);
                     b.Property(x => x.Size).HasMaxLength(MediaDescriptorConsts.MaxSizeLength);
