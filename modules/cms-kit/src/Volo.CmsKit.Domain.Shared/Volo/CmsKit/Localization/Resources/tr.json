@@ -13,6 +13,7 @@
     "CmsKit.Ratings": "Puanlama",
     "CmsKit.Reactions": "Tepkiler",
     "CmsKit.Tags": "Etiketler",
+    "CmsKit:Comments:0001": "{0} ögesi yorumlanabilir değil.",
     "CmsKit:0002": "İçerik zaten mevcut!",
     "CmsKit:0003": "{0} ögesi etiketlenebilir değil.",
     "CmsKit:BlogPost:0001": "Aynı url etiketi zaten mevcut.",
