@@ -21,14 +21,11 @@ namespace Volo.CmsKit.Admin
         )]
     public class CmsKitAdminApplicationModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            ConfigureTagOptions();
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<CmsKitAdminApplicationModule>();
+
+            ConfigureTagOptions();
 
             Configure<AbpAutoMapperOptions>(options =>
             {

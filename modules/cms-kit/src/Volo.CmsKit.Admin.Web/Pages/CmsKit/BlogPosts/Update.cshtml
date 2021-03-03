@@ -1,9 +1,10 @@
 ﻿@page "{Id}"
 
+@using System.Globalization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.CmsKit.Blogs
 @using Volo.CmsKit.Admin.Web.Pages
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
-@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents.Components.EntityContentEditor
 @using Volo.CmsKit.Admin.Web.Menus
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.Components.TagEditor
@@ -22,10 +23,17 @@
 
 @section scripts {
     <abp-script-bundle>
-        <abp-script type="typeof(UppyScriptContributor)" />
-        <abp-script src="/Pages/CmsKit/BlogPosts/update.js" />
-        <abp-script type="typeof(SlugifyScriptContributor)" />
+        <abp-script type="typeof(TuiEditorScriptContributor)"/>
+        <abp-script type="typeof(UppyScriptContributor)"/>
+        <abp-script type="typeof(SlugifyScriptContributor)"/>
+        <abp-script src="/Pages/CmsKit/BlogPosts/update.js"/>
     </abp-script-bundle>
+}
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style type="typeof(TuiEditorStyleContributor)"/>
+    </abp-style-bundle>
 }
 
 @section content_toolbar {
@@ -49,14 +57,14 @@
 
             <abp-input asp-for="ViewModel.Slug" />
 
-            @await Component.InvokeAsync(typeof(EntityContentEditorViewComponent), new
-               {
-                   entityType = BlogPostConsts.EntityType,
-                   entityId = Model.Id.ToString(),
-                   displaySubmitButton = false
-               })
-
             <abp-form-content />
+        
+            <div class="content-editor" 
+                 id="ContentEditor" 
+                 data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
+                 data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
+            </div>
+            
         </abp-dynamic-form>
 
         @if (Model.TagsFeature?.IsEnabled == true)

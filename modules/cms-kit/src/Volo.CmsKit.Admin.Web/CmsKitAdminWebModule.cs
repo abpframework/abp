@@ -76,11 +76,11 @@ namespace Volo.CmsKit.Admin.Web
                 options.Conventions.AddPageRoute("/CmsKit/Tags/Index", "/Cms/Tags");
                 options.Conventions.AddPageRoute("/CmsKit/Pages/Index", "/Cms/Pages");
                 options.Conventions.AddPageRoute("/CmsKit/Pages/Create", "/Cms/Pages/Create");
-                options.Conventions.AddPageRoute("/CmsKit/Pages/Update", "/Cms/Pages/Update");
+                options.Conventions.AddPageRoute("/CmsKit/Pages/Update", "/Cms/Pages/Update/{Id}");
                 options.Conventions.AddPageRoute("/CmsKit/Blogs/Index", "/Cms/Blogs");
                 options.Conventions.AddPageRoute("/CmsKit/BlogPosts/Index", "/Cms/BlogPosts");
                 options.Conventions.AddPageRoute("/CmsKit/BlogPosts/Create", "/Cms/BlogPosts/Create");
-                options.Conventions.AddPageRoute("/CmsKit/BlogPosts/Update", "/Cms/BlogPosts/Update");
+                options.Conventions.AddPageRoute("/CmsKit/BlogPosts/Update", "/Cms/BlogPosts/Update/{Id}");
                 options.Conventions.AddPageRoute("/CmsKit/Comments/Index", "/Cms/Comments");
                 options.Conventions.AddPageRoute("/CmsKit/Comments/Details", "/Cms/Details");
             });
