@@ -28,6 +28,7 @@
         public static class MediaDescriptors
         {
             public const string InvalidName = "CmsKit:Media:0001";
+            public const string EntityTypeDoesntExist = "CmsKit:Media:0002";
         }
     }
 }

@@ -34,7 +34,8 @@ namespace Volo.CmsKit.MediaDescriptors
             var inputStream = new CreateMediaInputStream(stream)
             {
                 ContentType = mediaType,
-                Name = mediaName
+                Name = mediaName,
+                EntityType = _cmsKitTestData.Media_1_EntityType
             };
 
             var media = await _mediaDescriptorAdminAppService.CreateAsync(inputStream);

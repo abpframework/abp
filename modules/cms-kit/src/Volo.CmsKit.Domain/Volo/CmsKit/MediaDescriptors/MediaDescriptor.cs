@@ -9,7 +9,7 @@ namespace Volo.CmsKit.MediaDescriptors
     {
         public Guid? TenantId { get; protected set; }
 
-        public string EntityType { get; set; }
+        public string EntityType { get; protected set; }
         
         public string Name { get; protected set; }
 
@@ -22,7 +22,7 @@ namespace Volo.CmsKit.MediaDescriptors
             
         }
 
-        public MediaDescriptor(Guid id, string entityType, string name, string mimeType, long size, Guid? tenantId = null) : base(id)
+        internal MediaDescriptor(Guid id, string entityType, string name, string mimeType, long size, Guid? tenantId = null) : base(id)
         {
             TenantId = tenantId;
             

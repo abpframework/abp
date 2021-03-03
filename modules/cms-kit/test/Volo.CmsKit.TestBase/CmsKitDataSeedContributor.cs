@@ -44,6 +44,7 @@ namespace Volo.CmsKit
         private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
         private readonly IBlobContainer<MediaContainer> _mediaBlobContainer;
         private readonly BlogManager _blogManager;
+        private readonly IOptions<CmsKitMediaOptions> _mediaOptions;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -66,7 +67,8 @@ namespace Volo.CmsKit
             IOptions<CmsKitTagOptions> tagOptions, 
             IMediaDescriptorRepository mediaDescriptorRepository, 
             IBlobContainer<MediaContainer> mediaBlobContainer, 
-            BlogManager blogManager)
+            BlogManager blogManager,
+            IOptions<CmsKitMediaOptions> cmsMediaOptions)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -89,6 +91,7 @@ namespace Volo.CmsKit
             _mediaDescriptorRepository = mediaDescriptorRepository;
             _mediaBlobContainer = mediaBlobContainer;
             _blogManager = blogManager;
+            _mediaOptions = cmsMediaOptions;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -124,6 +127,12 @@ namespace Volo.CmsKit
             _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_1_EntityType));
             _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.Content_2_EntityType));
             _tagOptions.Value.EntityTypes.AddIfNotContains(new TagEntityTypeDefiniton(_cmsKitTestData.TagDefinition_1_EntityType));
+
+            _mediaOptions.Value.EntityTypes.AddIfNotContains(
+                new MediaDescriptorDefinition(
+                    _cmsKitTestData.Media_1_EntityType, 
+                    createPolicies: new[] { "SomeCreatePolicy" },
+                    deletePolicies: new[] { "SomeDeletePolicy" }));
 
             return Task.CompletedTask;
         }

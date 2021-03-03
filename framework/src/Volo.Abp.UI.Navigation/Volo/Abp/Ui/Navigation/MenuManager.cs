@@ -51,7 +51,7 @@ namespace Volo.Abp.UI.Navigation
             if (requiredPermissionItems.Any())
             {
                 var permissionChecker = serviceProvider.GetRequiredService<IPermissionChecker>();
-                var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).ToArray());
+                var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).Distinct().ToArray());
 
                 var toBeDeleted = new HashSet<ApplicationMenuItem>();
                 foreach (var menu in requiredPermissionItems)
