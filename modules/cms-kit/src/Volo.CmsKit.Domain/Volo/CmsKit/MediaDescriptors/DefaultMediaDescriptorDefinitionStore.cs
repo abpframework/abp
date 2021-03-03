@@ -29,7 +29,7 @@ namespace Volo.CmsKit.MediaDescriptors
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-            var result = Options.EntityTypes.SingleOrDefault(x => x.EntityType == entityType) ??
+            var result = Options.EntityTypes.SingleOrDefault(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)) ??
                          throw new EntityCantHaveMediaException(entityType);
 
             return Task.FromResult(result);
@@ -39,7 +39,7 @@ namespace Volo.CmsKit.MediaDescriptors
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
 
-            var isDefined = Options.EntityTypes.Any(a => a.EntityType == entityType);
+            var isDefined = Options.EntityTypes.Any(a => a.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase));
 
             return Task.FromResult(isDefined);
         }
