@@ -126,7 +126,7 @@
     function finishSaving(result) {
         abp.notify.success(l('SuccessfullySaved'));
         abp.ui.clearBusy();
-        location.href = "/CmsKit/BlogPosts/";
+        location.href = "..";
     }
 
     $titleClone.on('change paste keyup', function () {
