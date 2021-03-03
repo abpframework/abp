@@ -110,9 +110,18 @@ There are more options of a menu item (the constructor of the `ApplicationMenuIt
 
 As seen above, a menu contributor contributes to the menu dynamically. So, you can perform any custom logic or get menu items from any source.
 
-One use case is the [authorization](../../Authorization.md).
+One use case is the [authorization](../../Authorization.md). You typically want to add menu items by checking a permission.
 
-You can set the `RequiredPermissionName` property of the menu item.
+**Example: Check if the current user has a permission**
+
+````csharp
+if (await context.IsGrantedAsync("MyPermissionName"))
+{
+    //...add menu items
+}
+````
+
+For the authorization, you can use `RequiredPermissionName` as a shortcut. It is also more performant, ABP optimizes the permission check for all the items.
 
 ````csharp
 context.Menu.AddItem(
@@ -129,15 +138,6 @@ context.Menu.AddItem(
             requiredPermissionName: "MyProject.Crm.Orders")
         )
 );
-````
-
-You can also manually check permissions.
-
-````csharp
-if (await context.IsGrantedAsync("MyPermissionName"))
-{
-    //...add menu items
-}
 ````
 
 > You can use `context.AuthorizationService` to directly access to the `IAuthorizationService`.
