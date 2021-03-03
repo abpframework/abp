@@ -12,8 +12,8 @@ namespace Volo.Abp.Data
         public HashSet<string> MappedConnections { get; }
         
         /// <summary>
-        /// Is this database used by tenants. Set this to true if this database
-        /// can't owned by tenants.
+        /// Is this database used by tenants. Set this to false if this database
+        /// can not owned by tenants.
         /// 
         /// Default: true.
         /// </summary>
