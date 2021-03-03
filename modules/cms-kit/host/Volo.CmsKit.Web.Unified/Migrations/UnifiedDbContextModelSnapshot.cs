@@ -1257,6 +1257,9 @@ namespace Volo.CmsKit.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("BlogId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1320,11 +1323,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
-
-                    b.HasIndex("DeleterId");
-
-                    b.HasIndex("LastModifierId");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("Slug", "BlogId");
 
@@ -1952,23 +1951,13 @@ namespace Volo.CmsKit.Migrations
 
             modelBuilder.Entity("Volo.CmsKit.Blogs.BlogPost", b =>
                 {
-                    b.HasOne("Volo.CmsKit.Users.CmsUser", "Creator")
+                    b.HasOne("Volo.CmsKit.Users.CmsUser", "Author")
                         .WithMany()
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Volo.CmsKit.Users.CmsUser", "Deleter")
-                        .WithMany()
-                        .HasForeignKey("DeleterId");
-
-                    b.HasOne("Volo.CmsKit.Users.CmsUser", "LastModifier")
-                        .WithMany()
-                        .HasForeignKey("LastModifierId");
-
-                    b.Navigation("Creator");
-
-                    b.Navigation("Deleter");
-
-                    b.Navigation("LastModifier");
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
