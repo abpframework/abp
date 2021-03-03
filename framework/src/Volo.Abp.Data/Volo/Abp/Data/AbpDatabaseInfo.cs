@@ -4,7 +4,7 @@ namespace Volo.Abp.Data
 {
     public class AbpDatabaseInfo
     {
-        public string DatabaseName { get; set; }
+        public string DatabaseName { get; }
         
         /// <summary>
         /// List of connection names mapped to this database.
