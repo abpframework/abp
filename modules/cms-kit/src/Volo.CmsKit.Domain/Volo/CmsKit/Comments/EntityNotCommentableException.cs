@@ -8,6 +8,7 @@ using Volo.Abp;
 
 namespace Volo.CmsKit.Comments
 {
+    [Serializable]
     public class EntityNotCommentableException : BusinessException
     {
         public EntityNotCommentableException(SerializationInfo serializationInfo, StreamingContext context) : base(serializationInfo, context)
