@@ -30,7 +30,7 @@
                             text: l('Edit'),
                             visible: abp.auth.isGranted('CmsKit.Pages.Update'),
                             action: function (data) {
-                                location.href = '/CmsKit/Pages/Update/' + data.record.id;
+                                location.href = 'Pages/Update/' + data.record.id;
                             }
                         },
                         {
@@ -76,6 +76,6 @@
 
     $('#AbpContentToolbar button[name=CreatePage]').on('click', function (e) {
         e.preventDefault();
-        window.location.href = "/CmsKit/Pages/Create"
+        window.location.href = "Pages/Create"
     });
 });

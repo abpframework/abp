@@ -82,7 +82,7 @@ namespace Volo.CmsKit.Admin.Web
                 options.Conventions.AddPageRoute("/CmsKit/BlogPosts/Create", "/Cms/BlogPosts/Create");
                 options.Conventions.AddPageRoute("/CmsKit/BlogPosts/Update", "/Cms/BlogPosts/Update/{Id}");
                 options.Conventions.AddPageRoute("/CmsKit/Comments/Index", "/Cms/Comments");
-                options.Conventions.AddPageRoute("/CmsKit/Comments/Details", "/Cms/Details");
+                options.Conventions.AddPageRoute("/CmsKit/Comments/Details", "/Cms/Comments/{Id}");
             });
 
             Configure<AbpPageToolbarOptions>(options =>
