@@ -7,7 +7,7 @@ namespace Volo.Abp.FeatureManagement.Blazor
     [DependsOn(
         typeof(AbpAspNetCoreComponentsUiThemingModule),
         typeof(AbpAutoMapperModule),
-        typeof(AbpFeatureManagementHttpApiClientModule)
+        typeof(AbpFeatureManagementApplicationContractsModule)
     )]
     public class AbpFeatureManagementBlazorModule : AbpModule
     {

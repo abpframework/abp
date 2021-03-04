@@ -10,7 +10,7 @@ namespace Volo.Abp.TenantManagement.Blazor
 {
     [DependsOn(
         typeof(AbpAutoMapperModule),
-        typeof(AbpTenantManagementHttpApiClientModule),
+        typeof(AbpTenantManagementApplicationContractsModule),
         typeof(AbpFeatureManagementBlazorModule)
     )]
     public class AbpTenantManagementBlazorModule : AbpModule

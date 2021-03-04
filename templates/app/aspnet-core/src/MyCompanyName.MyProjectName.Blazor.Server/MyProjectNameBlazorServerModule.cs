@@ -3,7 +3,6 @@ using System.IO;
 using System.Net.Http;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-using IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -120,18 +119,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
-            // context.Services.AddOidcAuthentication(options =>
-            // {
-            //     configuration.Bind("AuthServer", options.ProviderOptions);
-            //     options.UserOptions.RoleClaim = JwtClaimTypes.Role;
-            //     options.ProviderOptions.DefaultScopes.Add("MyProjectName");
-            //     options.ProviderOptions.DefaultScopes.Add("role");
-            //     options.ProviderOptions.DefaultScopes.Add("email");
-            //     options.ProviderOptions.DefaultScopes.Add("phone");
-            // });
-
-            
-            
             context.Services.AddAuthentication()
                 .AddJwtBearer(options =>
                 {

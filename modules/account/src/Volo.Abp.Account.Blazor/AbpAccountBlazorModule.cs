@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.UI.Theming;
+using Volo.Abp.AspNetCore.Components.UI.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -8,9 +8,9 @@ using Volo.Abp.UI.Navigation;
 namespace Volo.Abp.Account.Blazor
 {
     [DependsOn(
-        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule),
+        typeof(AbpAspNetCoreComponentsUiThemingModule),
         typeof(AbpAutoMapperModule),
-        typeof(AbpAccountHttpApiClientModule)
+        typeof(AbpAccountApplicationContractsModule)
         )]
     public class AbpAccountBlazorModule : AbpModule
     {

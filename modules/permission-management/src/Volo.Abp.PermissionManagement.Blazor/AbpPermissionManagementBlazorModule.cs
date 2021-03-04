@@ -7,7 +7,7 @@ namespace Volo.Abp.PermissionManagement.Blazor
     [DependsOn(
         typeof(AbpAspNetCoreComponentsUiThemingModule),
         typeof(AbpAutoMapperModule),
-        typeof(AbpPermissionManagementHttpApiClientModule)
+        typeof(AbpPermissionManagementApplicationContractsModule)
         )]
     public class AbpPermissionManagementBlazorModule : AbpModule
     {
