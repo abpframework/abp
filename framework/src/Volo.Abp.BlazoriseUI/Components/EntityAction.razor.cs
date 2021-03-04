@@ -32,6 +32,9 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter]
         public Func<string> ConfirmationMessage { get; set; }
 
+        [Parameter]
+        public string Icon { get; set; }
+
         [CascadingParameter]
         public EntityActions<TItem> ParentActions { get; set; }
 

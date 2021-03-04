@@ -15,6 +15,10 @@ else
         <Blazorise.Button Block="true"
                           Color="@Color"
                           Clicked="@ActionClickedAsync">
+            @if(!string.IsNullOrEmpty(Icon))
+            {
+                <Icon Name="@Icon"/>
+            }
             @Text
         </Blazorise.Button>
     }

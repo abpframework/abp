@@ -25,6 +25,8 @@
                                     {
                                         <EntityAction TItem="TItem"
                                                       RequiredPolicy="@action.RequiredPolicy"
+                                                      Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.None)"
+                                                      Icon="@action.Icon"
                                                       Clicked="async () => await action.Clicked(context)"
                                                       ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
                                                       Text="@action.Text">
@@ -35,6 +37,8 @@
                                         <EntityAction TItem="TItem"
                                                       RequiredPolicy="@action.RequiredPolicy"
                                                       Clicked="async () => await action.Clicked(context)"
+                                                      Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.None)"
+                                                      Icon="@action.Icon"
                                                       Text="@action.Text">
                                         </EntityAction>
                                     }
