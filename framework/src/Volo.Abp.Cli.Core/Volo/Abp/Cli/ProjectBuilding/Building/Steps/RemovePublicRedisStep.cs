@@ -8,16 +8,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
     {
         public override void Execute(ProjectBuildContext context)
         {
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyCompanyName.MyProjectName.Web.csproj"))?.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyProjectNameWebModule.cs"))?.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyCompanyName.MyProjectName.HttpApi.HostWithIds.csproj"))?.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyCompanyName.MyProjectName.HttpApi.Host.csproj"))?.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyProjectNameHttpApiHostModule.cs"))?.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
-
-            var appSettingsFiles = context.Files.Where(f => f.Name.EndsWith("appSettings.json", StringComparison.InvariantCultureIgnoreCase)).ToList();
-            foreach (var appSettings in appSettingsFiles)
+            foreach (var file in context.Files)
             {
-                appSettings.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
+                if (file.Name.EndsWith(".cs") || file.Name.EndsWith(".csproj") || file.Name.EndsWith(".json"))
+                {
+                    file.RemoveTemplateCodeIfNot("PUBLIC-REDIS");
+                }
             }
         }
     }
