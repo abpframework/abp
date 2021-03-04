@@ -5,6 +5,7 @@ using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.MediaDescriptors;
@@ -27,6 +28,8 @@ namespace Volo.CmsKit.Admin
 
             ConfigureTagOptions();
 
+            ConfigureCommentOptions();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<CmsKitAdminApplicationModule>(validate: true);
@@ -43,20 +46,20 @@ namespace Volo.CmsKit.Admin
                         new TagEntityTypeDefiniton(
                             BlogPostConsts.EntityType,
                             LocalizableString.Create<CmsKitResource>("BlogPost"),
-                            createPolicies: new[] 
+                            createPolicies: new[]
                             {
-                                CmsKitAdminPermissions.BlogPosts.Create, 
-                                CmsKitAdminPermissions.BlogPosts.Update 
+                                CmsKitAdminPermissions.BlogPosts.Create,
+                                CmsKitAdminPermissions.BlogPosts.Update
                             },
-                            updatePolicies: new[] 
-                            { 
-                                CmsKitAdminPermissions.BlogPosts.Create, 
-                                CmsKitAdminPermissions.BlogPosts.Update 
+                            updatePolicies: new[]
+                            {
+                                CmsKitAdminPermissions.BlogPosts.Create,
+                                CmsKitAdminPermissions.BlogPosts.Update
                             },
-                            deletePolicies: new[] 
-                            { 
-                                CmsKitAdminPermissions.BlogPosts.Create, 
-                                CmsKitAdminPermissions.BlogPosts.Update 
+                            deletePolicies: new[]
+                            {
+                                CmsKitAdminPermissions.BlogPosts.Create,
+                                CmsKitAdminPermissions.BlogPosts.Update
                             }));
                 }
             });
@@ -70,9 +73,9 @@ namespace Volo.CmsKit.Admin
                         options.EntityTypes.AddIfNotContains(
                             new MediaDescriptorDefinition(
                                 BlogPostConsts.EntityType,
-                                createPolicies: new[] 
-                                { 
-                                    CmsKitAdminPermissions.BlogPosts.Create, 
+                                createPolicies: new[]
+                                {
+                                    CmsKitAdminPermissions.BlogPosts.Create,
                                     CmsKitAdminPermissions.BlogPosts.Update
                                 },
                                 deletePolicies: new[]
@@ -88,17 +91,33 @@ namespace Volo.CmsKit.Admin
                         options.EntityTypes.AddIfNotContains(
                             new MediaDescriptorDefinition(
                                 PageConsts.EntityType,
-                                createPolicies: new[] 
+                                createPolicies: new[]
                                 {
                                     CmsKitAdminPermissions.Pages.Create,
-                                    CmsKitAdminPermissions.Pages.Update 
+                                    CmsKitAdminPermissions.Pages.Update
                                 },
                                 deletePolicies: new[]
                                 {
                                     CmsKitAdminPermissions.Pages.Create,
                                     CmsKitAdminPermissions.Pages.Update,
-                                    CmsKitAdminPermissions.Pages.Delete 
+                                    CmsKitAdminPermissions.Pages.Delete
                                 }));
+                    }
+                });
+            }
+        }
+
+        private void ConfigureCommentOptions()
+        {
+            if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+            {
+                Configure<CmsKitCommentOptions>(options =>
+                {
+                    if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
+                    {
+                        options.EntityTypes.AddIfNotContains(
+                            new CommentEntityTypeDefinition(BlogPostConsts.EntityType));
+
                     }
                 });
             }
