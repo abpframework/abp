@@ -8,7 +8,8 @@ namespace Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly
     [DependsOn(
         typeof(AbpBlazoriseUIModule),
         typeof(AbpHttpClientIdentityModelWebAssemblyModule),
-        typeof(AbpUiNavigationModule)
+        typeof(AbpUiNavigationModule),
+        typeof(AbpAspNetCoreComponentsUiThemingModule)
     )]
     public class AbpAspNetCoreComponentsWebAssemblyThemingModule : AbpModule
     {

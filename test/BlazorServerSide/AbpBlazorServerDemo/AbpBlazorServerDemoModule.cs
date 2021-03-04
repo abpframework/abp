@@ -12,53 +12,76 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Modularity;
 using Volo.Abp.AspNetCore.Components.UI.Theming.Routing;
+using Volo.Abp.UI.Navigation;
+using MyCompanyName.MyProjectName.Blazor.Menus;
+using Volo.Abp.Identity.Blazor;
+using Volo.Abp.TenantManagement.Blazor;
+using Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server;
+using Volo.Abp.AspNetCore.Components.UI.Theming.Toolbars;
 
 namespace AbpBlazorServerDemo
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpBlazoriseUIModule),
-        typeof(AbpAspNetCoreComponentsUiBasicThemeModule)
+        typeof( AbpAutofacModule ),
+        typeof( AbpAspNetCoreMvcModule ),
+        typeof( AbpAspNetCoreMvcUiBasicThemeModule ),
+        typeof( AbpBlazoriseUIModule ),
+        typeof( AbpAspNetCoreComponentsUiBasicThemeModule ),
+        typeof( AbpIdentityBlazorModule ),
+        typeof( AbpTenantManagementBlazorModule )
     )]
     public class AbpBlazorServerDemoModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public override void ConfigureServices( ServiceConfigurationContext context )
         {
-            ConfigureBlazorise(context);
-            ConfigureRouter(context);
+            ConfigureBlazorise( context );
+            ConfigureRouter( context );
+            ConfigureMenu( context );
+
             context.Services.AddServerSideBlazor();
             context.Services.AddSingleton<WeatherForecastService>();
         }
-        
-        private void ConfigureBlazorise(ServiceConfigurationContext context)
+
+        private void ConfigureBlazorise( ServiceConfigurationContext context )
         {
             context.Services
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
         }
-        
-        private void ConfigureRouter(ServiceConfigurationContext context)
+
+        private void ConfigureMenu( ServiceConfigurationContext context )
         {
-            Configure<AbpRouterOptions>(options =>
+            Configure<AbpNavigationOptions>( options =>
             {
-                options.AppAssembly = typeof(AbpBlazorServerDemoModule).Assembly;
-            });
+                options.MenuContributors.Add( new MyProjectNameMenuContributor( context.Services.GetConfiguration() ) );
+            } );
+
+            Configure<AbpToolbarOptions>( options =>
+            {
+                options.Contributors.Add( new BasicThemeToolbarContributor() );
+            } );
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        private void ConfigureRouter( ServiceConfigurationContext context )
+        {
+            Configure<AbpRouterOptions>( options =>
+             {
+                 options.AppAssembly = typeof( AbpBlazorServerDemoModule ).Assembly;
+             } );
+        }
+
+        public override void OnApplicationInitialization( ApplicationInitializationContext context )
         {
             var env = context.GetEnvironment();
             var app = context.GetApplicationBuilder();
-            
-            if (env.IsDevelopment())
+
+            if ( env.IsDevelopment() )
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler( "/Error" );
                 app.UseHsts();
             }
 
@@ -67,11 +90,11 @@ namespace AbpBlazorServerDemo
 
             app.UseRouting();
 
-            app.UseConfiguredEndpoints(endpoints =>
-            {
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-            });
+            app.UseConfiguredEndpoints( endpoints =>
+             {
+                 endpoints.MapBlazorHub();
+                 endpoints.MapFallbackToPage( "/_Host" );
+             } );
         }
     }
 }
