@@ -22,7 +22,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 return;
             }
 
-            var lines = tyeFile.Content.SplitToLines();
+            var lines = tyeFile.GetLines();
             var newLines = new List<string>();
 
             var nameLine = $"- name:";
