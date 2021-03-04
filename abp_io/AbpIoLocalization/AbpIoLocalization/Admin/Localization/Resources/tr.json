@@ -166,6 +166,19 @@
     "DeleteCoverImageSuccessMessage": "Kapak fotoğrafı başarılı bir şekilde silinmiştir",
     "ReIndexAllPosts": "Yeniden indeksle",
     "ReIndexAllPostsConfirmationMessage": "Tüm gönderileri yeniden indeksleyeceğinizden emin misiniz?",
-    "SuccessfullyReIndexAllPosts": "Tüm gönderiler başarıyla yeniden indekslendi"
+    "SuccessfullyReIndexAllPosts": "Tüm gönderiler başarıyla yeniden indekslendi",
+    "Menu:CliAnalytics": "Cli Analitik",
+    "TemplateName": "Şablon ismi",
+    "TemplateVersion": "Şablon versiyon",
+    "DatabaseProvider": "Veritabanı sağlayıcı",
+    "IsTiered": "Katmanlı mı",
+    "ProjectName": "Proje ismi",
+    "Username": "Kullanıcı adı",
+    "Command": "Komut",
+    "UiFramework": "Ui çerçevesi",
+    "Options": "Seçenekler",
+    "CliAnalytics": "Cli Analitik",
+    "Permission:CliAnalyticses": "Cli Analitikleri",
+    "Permission:CliAnalytics": "Cli Analitik"
   }
 }
