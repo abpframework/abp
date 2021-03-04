@@ -28,6 +28,8 @@ namespace Volo.CmsKit.Admin
 
             ConfigureTagOptions();
 
+            ConfigureCommentOptions();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<CmsKitAdminApplicationModule>(validate: true);
