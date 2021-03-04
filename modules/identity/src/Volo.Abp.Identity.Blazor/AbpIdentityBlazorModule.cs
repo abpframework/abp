@@ -9,7 +9,7 @@ using Volo.Abp.UI.Navigation;
 namespace Volo.Abp.Identity.Blazor
 {
     [DependsOn(
-        typeof(AbpIdentityHttpApiClientModule),
+        typeof(AbpIdentityApplicationContractsModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpPermissionManagementBlazorModule),
         typeof(AbpBlazoriseUIModule)

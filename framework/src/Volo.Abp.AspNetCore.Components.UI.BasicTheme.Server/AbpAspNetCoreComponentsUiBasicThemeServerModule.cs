@@ -4,13 +4,16 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server
 {
-    public class AbpAspNetCoreComponentsServerBasicTheme : AbpModule
+    [DependsOn(
+        typeof(AbpAspNetCoreComponentsUiBasicThemeModule)
+        )]
+    public class AbpAspNetCoreComponentsUiBasicThemeServerModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpRouterOptions>(options =>
             {
-                options.AdditionalAssemblies.Add(typeof(AbpAspNetCoreComponentsServerBasicTheme).Assembly);
+                options.AdditionalAssemblies.Add(typeof(AbpAspNetCoreComponentsUiBasicThemeServerModule).Assembly);
             });
 
             Configure<AbpToolbarOptions>(options =>

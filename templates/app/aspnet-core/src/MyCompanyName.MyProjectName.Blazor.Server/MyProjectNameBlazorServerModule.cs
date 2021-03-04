@@ -16,7 +16,6 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.AspNetCore.Components.UI.BasicTheme;
 using Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server;
 using Volo.Abp.AspNetCore.Components.UI.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.UI.Theming.Toolbars;
@@ -29,12 +28,13 @@ using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Blazor;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
@@ -45,18 +45,17 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
 {
     [DependsOn(
         typeof(MyProjectNameApplicationModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpBlazoriseUIModule),
-        typeof(AbpAspNetCoreComponentsUiBasicThemeModule),
-        typeof(AbpIdentityBlazorModule),
-        typeof(AbpTenantManagementBlazorModule),
-        typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
         typeof(MyProjectNameHttpApiModule),
-        typeof(MyProjectNameHttpApiClientModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpSwashbuckleModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpAspNetCoreSerilogModule), 
+        typeof(AbpAccountWebIdentityServerModule),
+        typeof(AbpAspNetCoreComponentsUiBasicThemeServerModule),
+        typeof(AbpIdentityBlazorModule),
+        typeof(AbpTenantManagementBlazorModule)
        )]
     public class MyProjectNameBlazorServerModule : AbpModule
     {
@@ -121,16 +120,18 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
-            context.Services.AddOidcAuthentication(options =>
-            {
-                configuration.Bind("AuthServer", options.ProviderOptions);
-                options.UserOptions.RoleClaim = JwtClaimTypes.Role;
-                options.ProviderOptions.DefaultScopes.Add("MyProjectName");
-                options.ProviderOptions.DefaultScopes.Add("role");
-                options.ProviderOptions.DefaultScopes.Add("email");
-                options.ProviderOptions.DefaultScopes.Add("phone");
-            });
+            // context.Services.AddOidcAuthentication(options =>
+            // {
+            //     configuration.Bind("AuthServer", options.ProviderOptions);
+            //     options.UserOptions.RoleClaim = JwtClaimTypes.Role;
+            //     options.ProviderOptions.DefaultScopes.Add("MyProjectName");
+            //     options.ProviderOptions.DefaultScopes.Add("role");
+            //     options.ProviderOptions.DefaultScopes.Add("email");
+            //     options.ProviderOptions.DefaultScopes.Add("phone");
+            // });
 
+            
+            
             context.Services.AddAuthentication()
                 .AddJwtBearer(options =>
                 {

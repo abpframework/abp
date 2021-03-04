@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.UI.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement.Blazor;
 using Volo.Abp.Modularity;
