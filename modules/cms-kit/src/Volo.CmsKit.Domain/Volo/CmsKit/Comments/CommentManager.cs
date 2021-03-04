@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿
+using JetBrains.Annotations;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -23,6 +24,9 @@ namespace Volo.CmsKit.Comments
                                                        [CanBeNull] Guid? repliedCommentId = null)
         {
             Check.NotNull(creator, nameof(creator));
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.MaxEntityTypeLength);
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.MaxEntityIdLength);
+            Check.NotNullOrWhiteSpace(text, nameof(text), CommentConsts.MaxTextLength);
 
             if (!await DefinitionStore.IsDefinedAsync(entityType))
             {
