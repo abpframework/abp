@@ -286,6 +286,8 @@ export function handleHttpErrors(injector: Injector, httpError: HttpErrorRespons
   - `httpError` is the second parameter of the error handler function which is registered to the `HTTP_ERROR_HANDLER` provider. Type of the `httpError` is `HttpErrorResponse`.
 
 ```js
+import { throwError } from 'rxjs';
+
 export function handleHttpErrors(injector: Injector, httpError: HttpErrorResponse) {
   if (httpError.status === 500) {
     // handle 500 errors here
