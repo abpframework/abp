@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Security.Claims;
 using System.Threading;
 
@@ -6,10 +7,15 @@ namespace Volo.Abp.Security.Claims
 {
     public abstract class CurrentPrincipalAccessorBase : ICurrentPrincipalAccessor
     {
+        public ILogger<ICurrentPrincipalAccessor> Logger { get; }
+        public CurrentPrincipalAccessorBase(ILogger<ICurrentPrincipalAccessor> logger )
+        {
+            Logger = logger;
+        }
         public ClaimsPrincipal Principal => _currentPrincipal.Value ?? GetClaimsPrincipal();
         
         private readonly AsyncLocal<ClaimsPrincipal> _currentPrincipal = new AsyncLocal<ClaimsPrincipal>();
-        
+
         protected abstract ClaimsPrincipal GetClaimsPrincipal();
 
         public virtual IDisposable Change(ClaimsPrincipal principal)

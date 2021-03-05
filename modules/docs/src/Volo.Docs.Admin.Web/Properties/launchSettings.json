@@ -1,28 +1,27 @@
-﻿{
+{
   "iisSettings": {
+    "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:63774",
-      "sslPort": 44396
-    },
-    "windowsAuthentication": false
+      "applicationUrl": "http://localhost:60295/",
+      "sslPort": 44387
+    }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
+      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "launchBrowser": true
+      }
     },
-    "Volo.Abp.SettingManagement.DemoApp": {
-      "applicationUrl": "https://localhost:501;http://localhost:500",
+    "Volo.Docs.Admin.Web": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
+      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "launchBrowser": true
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }
