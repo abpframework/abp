@@ -31,6 +31,7 @@ Here, the list of all available commands before explaining their details:
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
+* **`list-modules`**: Lists names of open-source application modules.
 * **`get-source`**: Downloads the source code of a module.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.
@@ -201,6 +202,26 @@ abp add-module ProductManagement --new --add-to-solution-file
 * `--new`: Creates a fresh new module (customized for your solution) and adds it to your solution.
 * `--with-source-code`: Downloads the source code of the module to your solution folder and uses local project references instead of NuGet/NPM packages. This options is always `True` if `--new` is used.
 * `--add-to-solution-file`: Adds the downloaded/created module to your solution file, so you will also see the projects of the module when you open the solution on a IDE. (only available when `--with-source-code` is `True`.)
+
+### list-modules
+
+Lists names of open-source application modules.
+
+Usage
+
+````bash
+abp list-modules [options]
+````
+
+Example:
+
+```bash
+abp list-modules
+```
+
+#### Options
+
+* `--include-pro-modules`: Includes commercial (pro) modules in the output.
 
 ### get-source
 

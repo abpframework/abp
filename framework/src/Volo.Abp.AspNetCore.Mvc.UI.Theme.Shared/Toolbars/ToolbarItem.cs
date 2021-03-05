@@ -14,10 +14,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 
         public int Order { get; set; }
 
-        public ToolbarItem([NotNull] Type componentType, int order = 0)
+        [CanBeNull]
+        public string RequiredPermissionName { get; set; }
+
+        public ToolbarItem([NotNull] Type componentType, int order = 0, string requiredPermissionName = null)
         {
             Order = order;
             ComponentType = Check.NotNull(componentType, nameof(componentType));
+            RequiredPermissionName = requiredPermissionName;
         }
     }
 }

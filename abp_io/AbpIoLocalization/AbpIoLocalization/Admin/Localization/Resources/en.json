@@ -35,6 +35,7 @@
     "NameFilter": "Name",
     "CreationTime": "Creation time",
     "IsPro": "Is pro",
+    "IsFreeToActiveLicenseOwners": "Free to license owners",
     "ShowOnModuleList": "Show on module list",
     "EfCoreConfigureMethodName": "Configure method name",
     "IsProFilter": "Is pro",
@@ -90,6 +91,7 @@
     "UserNotFound": "User not found",
     "{0}WillBeRemovedFromDevelopers": "{0} Will be removed from developers, do you confirm?",
     "{0}WillBeRemovedFromOwners": "{0} Will be removed from owners, do you confirm?",
+    "{0}WillBeRemovedFromMembers": "{0} Will be removed from members, do you confirm?",
     "Computers": "Computers",
     "UniqueComputerId": "Unique computer id",
     "LastSeenDate": "Last seen date",
@@ -199,9 +201,22 @@
     "Optional": "Optional",
     "CreateArticleLanguageInfo": "The language in which the post is written",
     "Enum:ContentSource:2": "Video Post",
+    "VideoPreview": "Video Preview",
+    "VideoPreviewErrorMessage": "Given video url couldn't retrieve from Youtube. This can be caused by either video is private or the given URL is not available.",
     "DeleteCoverImage": "Delete Cover Image",
     "DeleteCoverImageConfirmationMessage": "Are you sure you want to delete the cover image for \"{0}\"?",
-    "DeleteCoverImageSuccessMessage": "Cover image successfully deleted"
-      
+    "DeleteCoverImageSuccessMessage": "Cover image successfully deleted",
+    "PaymentsOf": "Payments of",
+    "ShowPaymentsOfOrganization": "Show payments",
+    "Date": "Date",
+    "Products": "Products",
+    "TotalAmount": "Total amount",
+    "Currency": "Currency",
+    "Gateway": "Gateway",
+    "State": "State",
+    "FailReason": "Fail reason",
+    "ReIndexAllPosts": "ReIndex All Posts",
+    "ReIndexAllPostsConfirmationMessage": "Are you sure to reindex all posts?",
+    "SuccessfullyReIndexAllPosts": "Successfully reindex for all posts"
   }
 }

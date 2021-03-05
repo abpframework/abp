@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Ratings;
 
 namespace Volo.CmsKit.Public.Ratings
 {
+    [Serializable]
     public class CreateUpdateRatingInput
     {
         [Required]

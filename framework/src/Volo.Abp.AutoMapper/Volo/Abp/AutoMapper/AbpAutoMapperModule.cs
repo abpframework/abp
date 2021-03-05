@@ -45,6 +45,8 @@ namespace Volo.Abp.AutoMapper
                     }
                 }
 
+                options.Configurators.Insert(0, ctx => ctx.MapperConfiguration.ConstructServicesUsing(serviceProvider.GetService));
+
                 void ValidateAll(IConfigurationProvider config)
                 {
                     foreach (var profileType in options.ValidatingProfiles)
@@ -62,7 +64,7 @@ namespace Volo.Abp.AutoMapper
 
                 return new MapperAccessor
                 {
-                    Mapper = new Mapper(mapperConfiguration, serviceProvider.GetService)
+                    Mapper = new Mapper(mapperConfiguration)
                 };
             }
         }

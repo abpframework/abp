@@ -22,13 +22,17 @@ namespace Volo.Abp.Cli.Commands
         public ICancellationTokenProvider CancellationTokenProvider { get; }
         public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
 
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
+
         public LoginCommand(AuthService authService,
             ICancellationTokenProvider cancellationTokenProvider,
-            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            CliHttpClientFactory cliHttpClientFactory)
         {
             AuthService = authService;
             CancellationTokenProvider = cancellationTokenProvider;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<LoginCommand>.Instance;
         }
 
@@ -79,20 +83,19 @@ namespace Volo.Abp.Cli.Commands
         {
             var url = $"{CliUrls.WwwAbpIo}api/license/check-multiple-organizations?username={username}";
 
-            using (var client = new CliHttpClient())
+            var client = _cliHttpClientFactory.CreateClient();
+
+            using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
             {
-                using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
+                if (!response.IsSuccessStatusCode)
                 {
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
-                    }
-
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<bool>(responseContent);
+                    throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
                 }
+
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<bool>(responseContent);
             }
         }
 

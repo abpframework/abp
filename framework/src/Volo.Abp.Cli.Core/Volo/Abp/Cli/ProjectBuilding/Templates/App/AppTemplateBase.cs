@@ -24,6 +24,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         {
             var steps = new List<ProjectBuildPipelineStep>();
 
+            ConfigureTenantSchema(context, steps);
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
             RemoveMigrations(context, steps);
@@ -36,6 +37,19 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             CleanupFolderHierarchy(context, steps);
 
             return steps;
+        }
+
+        private static void ConfigureTenantSchema(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.ExtraProperties.ContainsKey("separate-tenant-schema"))
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations", "MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+            }
+            else
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations"));
+            }
         }
 
         private static void SwitchDatabaseProvider(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -284,6 +298,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 SemanticVersion.Parse(context.BuildArgs.Version) > new SemanticVersion(4,1,99))
             {
                 steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
+                steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/TenantMigrations"));
             }
         }
 
@@ -297,7 +312,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            if (context.BuildArgs.UiFramework == UiFramework.Mvc && context.BuildArgs.MobileApp == MobileApp.None)
+            if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor) &&
+                context.BuildArgs.MobileApp == MobileApp.None)
             {
                 steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
             }

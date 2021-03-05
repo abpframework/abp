@@ -24,13 +24,17 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
         public AuthService AuthService { get; }
 
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
+
         public TemplateInfoProvider(ICancellationTokenProvider cancellationTokenProvider,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            AuthService authService)
+            AuthService authService,
+            CliHttpClientFactory cliHttpClientFactory)
         {
             CancellationTokenProvider = cancellationTokenProvider;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             AuthService = authService;
+            _cliHttpClientFactory = cliHttpClientFactory;
 
             Logger = NullLogger<TemplateInfoProvider>.Instance;
         }
@@ -52,6 +56,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     return new AppProTemplate();
                 case MicroserviceProTemplate.TemplateName:
                     return new MicroserviceProTemplate();
+                case MicroserviceServiceProTemplate.TemplateName:
+                    return new MicroserviceServiceProTemplate();
                 case ModuleTemplate.TemplateName:
                     return new ModuleTemplate();
                 case ModuleProTemplate.TemplateName:
@@ -76,21 +82,19 @@ namespace Volo.Abp.Cli.ProjectBuilding
             try
             {
                 var url = $"{CliUrls.WwwAbpIo}api/license/check-user";
+                var client = _cliHttpClientFactory.CreateClient();
 
-                using (var client = new CliHttpClient())
+                using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
                 {
-                    using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
+                    if (!response.IsSuccessStatusCode)
                     {
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
-                        }
-
-                        await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        return JsonSerializer.Deserialize<bool>(responseContent);
+                        throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
                     }
+
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<bool>(responseContent);
                 }
             }
             catch (Exception)

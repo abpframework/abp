@@ -70,7 +70,7 @@ This is just like done for the `Book` entity before, so no need to explain again
 
 ## Create a new Database Migration
 
-Open the **Package Manager Console** on Visual Studio and ensure that the **Default project** is `Acme.BookStore.EntityFrameworkCore.DbMigrations` in the Package Manager Console, as shown on the picture below. Also, set the `Acme.BookStore.Web` (or `Acme.BookStore.HttpApi.Host`, depending on your solution) as the **startup project** (right click it on the solution explorer and click to "Set as Startup Project").
+Open the **Package Manager Console** on Visual Studio and ensure that the **Default project** is `Acme.BookStore.EntityFrameworkCore.DbMigrations` in the Package Manager Console, as shown on the picture below. Also, set this project as the **startup project** (right click it on the solution explorer and click to "Set as Startup Project").
 
 Run the following command to create a new database migration:
 
@@ -127,7 +127,8 @@ namespace Acme.BookStore.Authors
 
         public async Task<Author> FindByNameAsync(string name)
         {
-            return await DbSet.FirstOrDefaultAsync(author => author.Name == name);
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.FirstOrDefaultAsync(author => author.Name == name);
         }
 
         public async Task<List<Author>> GetListAsync(
@@ -136,7 +137,8 @@ namespace Acme.BookStore.Authors
             string sorting,
             string filter = null)
         {
-            return await DbSet
+            var dbSet = await GetDbSetAsync();
+            return await dbSet
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     author => author.Name.Contains(filter)
@@ -186,8 +188,8 @@ namespace Acme.BookStore.Authors
 
         public async Task<Author> FindByNameAsync(string name)
         {
-            return await GetMongoQueryable()
-                .FirstOrDefaultAsync(author => author.Name == name);
+            var queryable = await GetMongoQueryableAsync();
+            return await queryable.FirstOrDefaultAsync(author => author.Name == name);
         }
 
         public async Task<List<Author>> GetListAsync(
@@ -196,7 +198,8 @@ namespace Acme.BookStore.Authors
             string sorting,
             string filter = null)
         {
-            return await GetMongoQueryable()
+            var queryable = await GetMongoQueryableAsync();
+            return await queryable
                 .WhereIf<Author, IMongoQueryable<Author>>(
                     !filter.IsNullOrWhiteSpace(),
                     author => author.Name.Contains(filter)

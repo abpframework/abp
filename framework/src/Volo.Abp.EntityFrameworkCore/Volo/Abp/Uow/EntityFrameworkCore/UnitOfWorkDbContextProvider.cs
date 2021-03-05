@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
-    //TODO: Implement logic in DefaultDbContextResolver.Resolve in old ABP.
-
     public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
         where TDbContext : IEfCoreDbContext
     {
@@ -23,15 +23,21 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        private readonly ICurrentTenant _currentTenant;
+        private readonly AbpDbContextOptions _options;
 
         public UnitOfWorkDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            ICurrentTenant currentTenant, 
+            IOptions<AbpDbContextOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
             _cancellationTokenProvider = cancellationTokenProvider;
+            _currentTenant = currentTenant;
+            _options = options.Value;
 
             Logger = NullLogger<UnitOfWorkDbContextProvider<TDbContext>>.Instance;
         }
@@ -57,17 +63,18 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             }
 
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-            var connectionString = _connectionStringResolver.Resolve(connectionStringName);
+            var connectionString = ResolveConnectionString(connectionStringName);
 
-            var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
-                () => new EfCoreDatabaseApi<TDbContext>(
+                () => new EfCoreDatabaseApi(
                     CreateDbContext(unitOfWork, connectionStringName, connectionString)
                 ));
 
-            return ((EfCoreDatabaseApi<TDbContext>)databaseApi).DbContext;
+            return (TDbContext)((EfCoreDatabaseApi)databaseApi).DbContext;
         }
 
         public async Task<TDbContext> GetDbContextAsync()
@@ -79,22 +86,23 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             }
 
             var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
-            var connectionString = await _connectionStringResolver.ResolveAsync(connectionStringName);
+            var connectionString = await ResolveConnectionStringAsync(connectionStringName);
 
-            var dbContextKey = $"{typeof(TDbContext).FullName}_{connectionString}";
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
 
             if (databaseApi == null)
             {
-                databaseApi = new EfCoreDatabaseApi<TDbContext>(
+                databaseApi = new EfCoreDatabaseApi(
                     await CreateDbContextAsync(unitOfWork, connectionStringName, connectionString)
                 );
 
                 unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
             }
 
-            return ((EfCoreDatabaseApi<TDbContext>)databaseApi).DbContext;
+            return (TDbContext)((EfCoreDatabaseApi)databaseApi).DbContext;
         }
 
         private TDbContext CreateDbContext(IUnitOfWork unitOfWork, string connectionStringName, string connectionString)
@@ -168,7 +176,8 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                     transactionApiKey,
                     new EfCoreTransactionApi(
                         dbtransaction,
-                        dbContext
+                        dbContext,
+                        _cancellationTokenProvider
                     )
                 );
 
@@ -186,7 +195,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 }
                 else
                 {
-                    dbContext.Database.BeginTransaction(); //TODO: Why not using the new created transaction?
+                    /* No need to store the returning IDbContextTransaction for non-relational databases
+                     * since EfCoreTransactionApi will handle the commit/rollback over the DbContext instance.
+                     */
+                    dbContext.Database.BeginTransaction();
                 }
 
                 activeTransaction.AttendedDbContexts.Add(dbContext);
@@ -212,7 +224,8 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                     transactionApiKey,
                     new EfCoreTransactionApi(
                         dbTransaction,
-                        dbContext
+                        dbContext,
+                        _cancellationTokenProvider
                     )
                 );
 
@@ -230,13 +243,45 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                 }
                 else
                 {
-                    await dbContext.Database.BeginTransactionAsync(GetCancellationToken()); //TODO: Why not using the new created transaction?
+                    /* No need to store the returning IDbContextTransaction for non-relational databases
+                     * since EfCoreTransactionApi will handle the commit/rollback over the DbContext instance.
+                     */
+                    await dbContext.Database.BeginTransactionAsync(GetCancellationToken());
                 }
 
                 activeTransaction.AttendedDbContexts.Add(dbContext);
 
                 return dbContext;
             }
+        }
+
+        private async Task<string> ResolveConnectionStringAsync(string connectionStringName)
+        {
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (_currentTenant.Change(null))
+                {
+                    return await _connectionStringResolver.ResolveAsync(connectionStringName);
+                }
+            }
+
+            return await _connectionStringResolver.ResolveAsync(connectionStringName);
+        }
+
+        [Obsolete("Use ResolveConnectionStringAsync method.")]
+        private string ResolveConnectionString(string connectionStringName)
+        {
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (_currentTenant.Change(null))
+                {
+                    return _connectionStringResolver.Resolve(connectionStringName);
+                }
+            }
+
+            return _connectionStringResolver.Resolve(connectionStringName);
         }
 
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)

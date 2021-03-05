@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Repositories.MemoryDb;
-using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow.MemoryDb;
 

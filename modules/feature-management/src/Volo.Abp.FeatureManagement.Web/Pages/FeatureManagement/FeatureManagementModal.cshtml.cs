@@ -75,13 +75,6 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
             return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
         }
 
-        public class ProviderInfoViewModel
-        {
-            public string ProviderName { get; set; }
-
-            public string ProviderKey { get; set; }
-        }
-
         public class FeatureGroupViewModel
         {
             public List<FeatureViewModel> Features { get; set; }

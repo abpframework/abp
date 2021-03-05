@@ -163,6 +163,9 @@
     "Enum:ContentSource:2": "Video İçerik",
     "DeleteCoverImage": "Kapak Fotoğrafını Sil",
     "DeleteCoverImageConfirmationMessage": "Kapak fotoğrafını \"{0}\" isimli makale için silmek istediğinize emin misiniz?",
-    "DeleteCoverImageSuccessMessage": "Kapak fotoğrafı başarılı bir şekilde silinmiştir"
+    "DeleteCoverImageSuccessMessage": "Kapak fotoğrafı başarılı bir şekilde silinmiştir",
+    "ReIndexAllPosts": "Yeniden indeksle",
+    "ReIndexAllPostsConfirmationMessage": "Tüm gönderileri yeniden indeksleyeceğinizden emin misiniz?",
+    "SuccessfullyReIndexAllPosts": "Tüm gönderiler başarıyla yeniden indekslendi"
   }
 }

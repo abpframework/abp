@@ -1,0 +1,26 @@
+﻿@model Volo.CmsKit.Public.Blogs.BlogPostPublicDto
+@using Volo.CmsKit.Localization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<CmsKitResource> L
+
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>@Model.Title</abp-card-title>
+        <abp-card-subtitle>@Model.Author?.UserName</abp-card-subtitle>
+    </abp-card-header>
+
+    <abp-card-body>
+        @Html.Raw(Model.Content)
+    </abp-card-body>
+    <abp-card-footer>
+        <abp-card-subtitle>@Model.CreationTime</abp-card-subtitle>
+        @if (Model.LastModificationTime != null)
+        {
+            <abp-card-text><i>@L["LastModification"].Value : @Model.LastModificationTime</i></abp-card-text>
+        }
+    </abp-card-footer>
+</abp-card>
+
+
