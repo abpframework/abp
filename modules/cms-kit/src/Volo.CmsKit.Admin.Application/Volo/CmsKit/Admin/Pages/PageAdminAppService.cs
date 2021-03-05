@@ -48,8 +48,10 @@ namespace Volo.CmsKit.Admin.Pages
         [Authorize(CmsKitAdminPermissions.Pages.Create)]
         public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
         {
+            /* TODO: This should be in a domain service, like PageManager.CreateAsync(...)
+                     Otherwise, we can't ensure the slug check is applied.
+                     The same pattern is already done for BlogManager */
             await CheckPageSlugAsync(input.Slug);
-
             var page = new Page(GuidGenerator.Create(), input.Title, input.Slug, input.Content, CurrentTenant.Id);
 
             await PageRepository.InsertAsync(page);
@@ -64,11 +66,12 @@ namespace Volo.CmsKit.Admin.Pages
 
             if (page.Slug != input.Slug)
             {
+                /* TODO: This should be in a domain service, like PageManager.SetSlugAsync(page, input.Slug) */
                 await CheckPageSlugAsync(input.Slug);
+                page.SetSlug(input.Slug);
             }
 
             page.SetTitle(input.Title);
-            page.SetSlug(input.Slug);
             page.SetContent(input.Content);
 
             await PageRepository.UpdateAsync(page);

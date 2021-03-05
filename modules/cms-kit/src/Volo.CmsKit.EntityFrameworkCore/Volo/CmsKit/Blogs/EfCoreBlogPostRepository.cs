@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Blogs
 
             blogPost.Author = await (await GetDbContextAsync())
                                 .Set<CmsUser>()
-                                .FirstOrDefaultAsync(x =>x.Id == blogPost.AuthorId);
+                                .FirstOrDefaultAsync(x =>x.Id == blogPost.AuthorId, GetCancellationToken(cancellationToken));
 
             return blogPost;
         }

@@ -34,6 +34,12 @@ namespace Volo.CmsKit.Blogs
             Check.NotNullOrEmpty(title, nameof(title));
             Check.NotNullOrEmpty(slug, nameof(slug));
 
+            /* TODO: BlogRepository.GetAsync already throws the same exception.
+                     So, if you get Blog you don't have to check its existence.
+                     Actually, you SHOULD not check. What if I've created the Blog, but
+                     not saved to database, and I am creating a post inside it in same UOW.
+                     In this case, you throw an unnecessary exception.
+            */
             await CheckBlogExistenceAsync(blog.Id);
 
             var blogPost = new BlogPost(

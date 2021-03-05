@@ -33,6 +33,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         {
             var definition = await MediaDescriptorDefinitionStore.GetDefinitionAsync(inputStream.EntityType);
 
+            /* TODO: Shouldn't CreatePolicies be a dictionary and we check for inputStream.EntityType? */
             await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
 
             var newId = GuidGenerator.Create();
@@ -53,6 +54,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 
             var definition = await MediaDescriptorDefinitionStore.GetDefinitionAsync(mediaDescriptor.EntityType);
 
+            /* TODO: Shouldn't DeletePolicies be a dictionary and we check for inputStream.EntityType? */
             await CheckAnyOfPoliciesAsync(definition.DeletePolicies);
 
             await MediaContainer.DeleteAsync(id.ToString());

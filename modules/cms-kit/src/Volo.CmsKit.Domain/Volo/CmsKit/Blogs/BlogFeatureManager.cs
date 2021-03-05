@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.EventBus.Local;
-using Volo.Abp.Uow;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -26,6 +23,11 @@ namespace Volo.CmsKit.Blogs
         {
             var blogFeatures = await BlogFeatureRepository.GetListAsync(blogId);
 
+            /* TODO: Creating transient entities in DefaultBlogFeatureProvider.GetDefaultFeaturesAsync
+                     is not a good idea. Returned list will contain mixed (some in db some in-memory).
+                     For example, if I delete/update one of the BlogFeature comes from in-memory,
+                     I will have an strange behaviour. You should find another way.
+             */
             var defaultFeatures = await DefaultBlogFeatureProvider.GetDefaultFeaturesAsync(blogId);
 
             defaultFeatures.ForEach(x => blogFeatures.AddIfNotContains(x));

@@ -32,7 +32,7 @@ namespace Volo.CmsKit.Admin.Blogs
             EventBus = eventBus;
         }
 
-        [Authorize(CmsKitAdminPermissions.Blogs.Features)]
+        [Authorize(CmsKitAdminPermissions.Blogs.Features)] //TODO: Move to the class level (all methods check the same permission)?
         public virtual async Task<List<BlogFeatureDto>> GetListAsync(Guid blogId)
         {
             var blogFeatures = await BlogFeatureManager.GetListAsync(blogId);
