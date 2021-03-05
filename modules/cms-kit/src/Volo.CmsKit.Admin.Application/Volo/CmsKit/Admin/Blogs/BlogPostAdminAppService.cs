@@ -35,7 +35,6 @@ namespace Volo.CmsKit.Admin.Blogs
             BlogPostRepository = blogPostRepository;
             BlogRepository = blogRepository;
             UserLookupService = userLookupService;
-
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
@@ -67,6 +66,7 @@ namespace Volo.CmsKit.Admin.Blogs
             blogPost.SetTitle(input.Title);
             blogPost.SetShortDescription(input.ShortDescription);
             blogPost.SetContent(input.Content);
+            blogPost.CoverImage = input.CoverImage;
 
             if (blogPost.Slug != input.Slug)
             {
@@ -77,7 +77,6 @@ namespace Volo.CmsKit.Admin.Blogs
 
             return ObjectMapper.Map<BlogPost, BlogPostDto>(blogPost);
         }
-
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
         public virtual async Task<BlogPostDto> GetAsync(Guid id)

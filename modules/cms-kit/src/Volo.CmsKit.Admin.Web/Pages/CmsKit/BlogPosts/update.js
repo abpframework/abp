@@ -4,21 +4,19 @@
 
     var $selectBlog = $('#BlogSelectionSelect');
     var $formUpdate = $('#form-blog-post-update');
-    var $title = $('#ViewModel_Title');
-    var $titleClone = $('#title-clone');
+    var $coverImage = $('#ViewModel_CoverImage');
     var $slug = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-blog-post-update');
     var $blogPostIdInput = $('#Id');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
 
-    var UPPY_UPLOAD_ENDPOINT = "/api/cms-kit-admin/blogs/blog-posts/{0}/cover-image";
     var UPPY_FILE_ID = "uppy-upload-file";
 
     var isTagsEnabled = true;
-    
+
     $formUpdate.data('validator').settings.ignore = ":hidden, [contenteditable='true']:not([name]), .tui-popup-wrapper";
-    
+
     function initSelectBlog() {
         $selectBlog.data('autocompleteApiUrl', '/api/cms-kit-admin/blogs/blogs');
         $selectBlog.data('autocompleteDisplayProperty', 'name');
@@ -44,30 +42,33 @@
                         submitEntityTags($blogPostIdInput.val());
                     }
                     else {
-                        submitCoverImage($blogPostIdInput.val());
+                        finishSaving(result);
                     }
                 },
                 error: function (result) {
-                    abp.ui.clearBusy(); abp.notify.error(result.responseJSON.error.message);
+                    abp.ui.clearBusy();
+                    abp.notify.error(result.responseJSON.error.message);
                 }
             });
+        }
+        else {
+            abp.ui.clearBusy();
         }
     });
 
     $buttonSubmit.click(function (e) {
         e.preventDefault();
-        $formUpdate.submit();
+        submitCoverImage();
     });
-    
-    function submitEntityTags(blogPostId) {      
+
+    function submitEntityTags(blogPostId) {
 
         var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
 
-        if(tags.length === 0){
-            submitCoverImage(blogPostId);
+        if (tags.length === 0) {
             return;
         }
-        
+
         volo.cmsKit.admin.tags.entityTagAdmin
             .setEntityTags({
                 entityType: 'BlogPost',
@@ -75,7 +76,7 @@
                 tags: tags
             })
             .then(function (result) {
-                submitCoverImage(blogPostId);
+                finishSaving();
             });
     }
 
@@ -86,9 +87,11 @@
         return headers;
     }
 
-    function submitCoverImage(blogPostId) {
+    function submitCoverImage() {
+        abp.ui.setBusy();
+
         var UPPY_OPTIONS = {
-            endpoint: UPPY_UPLOAD_ENDPOINT.replace("{0}", blogPostId),
+            endpoint: fileUploadUri,
             formData: true,
             fieldName: "file",
             method: "post",
@@ -114,12 +117,14 @@
                 if (result.failed.length > 0) {
                     abp.message.error(l("UploadFailedMessage"));
                 } else {
-                    finishSaving();
+                    $coverImage.val(result.successful[0].response.body.id);
+
+                    $formUpdate.submit();
                 }
             });
         }
         else {
-            finishSaving();
+            $formUpdate.submit();
         }
     }
 
@@ -128,10 +133,6 @@
         abp.ui.clearBusy();
         location.href = "../../BlogPosts";
     }
-
-    $titleClone.on('change paste keyup', function () {
-        $title.val($titleClone.val());
-    });
 
     $slug.on('change', function () {
         reflectUrlChanges();
