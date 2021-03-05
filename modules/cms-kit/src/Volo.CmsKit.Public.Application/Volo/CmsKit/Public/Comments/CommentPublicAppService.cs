@@ -26,7 +26,6 @@ namespace Volo.CmsKit.Public.Comments
             ICommentRepository commentRepository,
             ICmsUserLookupService cmsUserLookupService,
             IDistributedEventBus distributedEventBus,
-            IOptions<CmsKitOptions> cmsKitOptions,
             CommentManager commentManager)
         {
             CommentRepository = commentRepository;
