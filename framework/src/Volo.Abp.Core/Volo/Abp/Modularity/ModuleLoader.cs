@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Logging;
 using Volo.Abp.Modularity.PlugIns;
 
 namespace Volo.Abp.Modularity
@@ -43,14 +44,16 @@ namespace Volo.Abp.Modularity
             Type startupModuleType,
             PlugInSourceList plugInSources)
         {
+            var initLogger = services.GetInitLogger();
+            
             //All modules starting from the startup module
-            foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType))
+            foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType, initLogger))
             {
                 modules.Add(CreateModuleDescriptor(services, moduleType));
             }
 
             //Plugin modules
-            foreach (var moduleType in plugInSources.GetAllModules())
+            foreach (var moduleType in plugInSources.GetAllModules(initLogger))
             {
                 if (modules.Any(m => m.Type == moduleType))
                 {
