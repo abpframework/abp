@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Components.UI.BasicTheme.Themes.Basic
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
         {
             IsSubMenuOpen = false;
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
     }
 }

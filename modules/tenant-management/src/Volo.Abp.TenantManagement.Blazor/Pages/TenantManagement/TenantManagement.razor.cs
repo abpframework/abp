@@ -60,13 +60,12 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
                 UseSharedDatabase = tenantConnectionString.IsNullOrWhiteSpace()
             };
 
-            ManageConnectionStringModal.Show();
+            await InvokeAsync(ManageConnectionStringModal.Show);
         }
 
         protected virtual Task CloseEditConnectionStringModal()
         {
-            ManageConnectionStringModal.Hide();
-            return Task.CompletedTask;
+            return InvokeAsync(ManageConnectionStringModal.Hide);
         }
 
         protected virtual async Task UpdateConnectionStringAsync()
@@ -84,7 +83,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
                     await AppService.UpdateDefaultConnectionStringAsync(TenantInfo.Id, TenantInfo.DefaultConnectionString);
                 }
 
-                ManageConnectionStringModal.Hide();
+                await InvokeAsync(ManageConnectionStringModal.Hide);
             }
         }
 

@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
         {
             IsCollapseShown = false;
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
     }
 }

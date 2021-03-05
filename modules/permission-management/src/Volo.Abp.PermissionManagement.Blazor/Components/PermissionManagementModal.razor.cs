@@ -96,13 +96,13 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             }
             
             _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
-            
-            _modal.Show();
+
+            await InvokeAsync(_modal.Show);
         }
 
-        private void CloseModal()
+        private Task CloseModal()
         {
-            _modal.Hide();
+            return InvokeAsync(_modal.Hide);
         }
 
         private async Task SaveAsync()
@@ -117,7 +117,7 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
 
             await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
 
-            _modal.Hide();
+            await  InvokeAsync(_modal.Hide);
         }
 
         private string GetNormalizedGroupName(string name)

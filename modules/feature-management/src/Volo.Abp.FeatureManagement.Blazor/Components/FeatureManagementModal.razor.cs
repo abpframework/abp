@@ -64,13 +64,12 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
                 }
             }
 
-            Modal.Show();
+            await InvokeAsync(Modal.Show);
         }
 
         public virtual Task CloseModal()
         {
-            Modal.Hide();
-            return Task.CompletedTask;
+            return InvokeAsync(Modal.Hide);
         }
 
         protected virtual async Task SaveAsync()
@@ -87,7 +86,7 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
 
             await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
 
-            Modal.Hide();
+            await InvokeAsync(Modal.Hide);
         }
 
         protected virtual string GetNormalizedGroupName(string name)

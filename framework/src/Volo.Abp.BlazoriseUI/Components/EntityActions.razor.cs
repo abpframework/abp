@@ -36,7 +36,7 @@ namespace Volo.Abp.BlazoriseUI.Components
             {
                 EntityActionsColumn.Displayable = Actions.Any(t => t.IsVisible);
             }
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
 
         protected override void OnInitialized()

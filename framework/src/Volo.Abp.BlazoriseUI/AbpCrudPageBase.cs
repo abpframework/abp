@@ -295,15 +295,17 @@ namespace Volo.Abp.BlazoriseUI
 
             // Mapper will not notify Blazor that binded values are changed
             // so we need to notify it manually by calling StateHasChanged
-            await InvokeAsync(StateHasChanged);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
 
-            CreateModal.Show();
+                CreateModal?.Show();
+            });
         }
 
         protected virtual Task CloseCreateModalAsync()
         {
-            CreateModal.Hide();
-            return Task.CompletedTask;
+            return InvokeAsync(CreateModal.Hide);
         }
 
         protected virtual async Task OpenEditModalAsync(TListViewModel entity)
@@ -317,9 +319,12 @@ namespace Volo.Abp.BlazoriseUI
             EditingEntityId = entity.Id;
             EditingEntity = MapToEditingEntity(entityDto);
 
-            await InvokeAsync(StateHasChanged);
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
 
-            EditModal.Show();
+                EditModal?.Show();
+            });
         }
 
         protected virtual TUpdateViewModel MapToEditingEntity(TGetOutputDto entityDto)
@@ -349,7 +354,7 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual Task CloseEditModalAsync()
         {
-            EditModal.Hide();
+            InvokeAsync(EditModal.Hide);
             return Task.CompletedTask;
         }
 
@@ -376,7 +381,7 @@ namespace Volo.Abp.BlazoriseUI
         {
             await GetEntitiesAsync();
 
-            CreateModal.Hide();
+            await InvokeAsync(CreateModal.Hide);
         }
 
         protected virtual async Task UpdateEntityAsync()
@@ -402,7 +407,7 @@ namespace Volo.Abp.BlazoriseUI
         {
             await GetEntitiesAsync();
 
-            EditModal.Hide();
+            await InvokeAsync(EditModal.Hide);
         }
 
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
