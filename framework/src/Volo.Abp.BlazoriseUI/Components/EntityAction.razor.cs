@@ -53,10 +53,13 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             if (ConfirmationMessage != null)
             {
-                if (await UiMessageService.Confirm(ConfirmationMessage()))
+                await InvokeAsync(async () =>
                 {
-                    await Clicked.InvokeAsync();
-                }
+                    if (await UiMessageService.Confirm(ConfirmationMessage()))
+                    {
+                        await Clicked.InvokeAsync();
+                    }
+                });
             }
             else
             {
