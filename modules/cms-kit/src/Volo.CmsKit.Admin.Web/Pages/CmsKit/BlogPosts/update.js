@@ -4,7 +4,7 @@
 
     var $selectBlog = $('#BlogSelectionSelect');
     var $formUpdate = $('#form-blog-post-update');
-    var $coverImage = $('#ViewModel_CoverImage');
+    var $coverImage = $('#ViewModel_CoverImageMediaId');
     var $slug = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-blog-post-update');
     var $blogPostIdInput = $('#Id');

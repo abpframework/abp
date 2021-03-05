@@ -11,7 +11,7 @@ using Volo.CmsKit.EntityFrameworkCore;
 namespace Volo.CmsKit.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20210305104055_BlogPost_CoverImage")]
+    [Migration("20210305122554_BlogPost_CoverImage")]
     partial class BlogPost_CoverImage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1275,7 +1275,7 @@ namespace Volo.CmsKit.Migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CoverImage")
+                    b.Property<Guid?>("CoverImageMediaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")

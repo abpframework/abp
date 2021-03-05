@@ -17,7 +17,7 @@ namespace Volo.CmsKit.Public.Blogs
 
         public string Content { get; set; }
 
-        public Guid? CoverImage { get; set; }
+        public Guid? CoverImageMediaId { get; set; }
 
         public CmsUserDto Author { get; set; }
     }

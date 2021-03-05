@@ -1273,7 +1273,7 @@ namespace Volo.CmsKit.Migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CoverImage")
+                    b.Property<Guid?>("CoverImageMediaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")

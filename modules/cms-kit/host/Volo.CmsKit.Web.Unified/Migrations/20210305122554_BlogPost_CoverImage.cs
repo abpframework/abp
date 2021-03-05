@@ -11,7 +11,7 @@ namespace Volo.CmsKit.Migrations
                 name: "CmsContents");
 
             migrationBuilder.AddColumn<Guid>(
-                name: "CoverImage",
+                name: "CoverImageMediaId",
                 table: "CmsBlogPosts",
                 type: "uniqueidentifier",
                 nullable: true);
@@ -20,7 +20,7 @@ namespace Volo.CmsKit.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CoverImage",
+                name: "CoverImageMediaId",
                 table: "CmsBlogPosts");
 
             migrationBuilder.CreateTable(

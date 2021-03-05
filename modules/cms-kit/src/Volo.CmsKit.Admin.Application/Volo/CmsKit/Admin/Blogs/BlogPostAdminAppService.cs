@@ -51,7 +51,7 @@ namespace Volo.CmsKit.Admin.Blogs
                                                         input.Slug,
                                                         input.ShortDescription,
                                                         input.Content,
-                                                        input.CoverImage);
+                                                        input.CoverImageMediaId);
 
             await BlogPostRepository.InsertAsync(blogPost);
 
@@ -66,7 +66,7 @@ namespace Volo.CmsKit.Admin.Blogs
             blogPost.SetTitle(input.Title);
             blogPost.SetShortDescription(input.ShortDescription);
             blogPost.SetContent(input.Content);
-            blogPost.CoverImage = input.CoverImage;
+            blogPost.CoverImageMediaId = input.CoverImageMediaId;
 
             if (blogPost.Slug != input.Slug)
             {

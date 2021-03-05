@@ -78,7 +78,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
             public string Content { get; set; }
 
             [HiddenInput]
-            public Guid? CoverImage { get; set; }
+            public Guid? CoverImageMediaId { get; set; }
         }
     }
 }

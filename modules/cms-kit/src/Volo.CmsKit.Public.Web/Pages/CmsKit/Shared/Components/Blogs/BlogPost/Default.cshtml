@@ -9,7 +9,7 @@
 }
 
 <abp-card>
-    <img src="/api/cms-kit/media/@Model.CoverImage" class="card-img-top" onerror="this.src='@dummyImageSource'" />
+    <img src="/api/cms-kit/media/@Model.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
     <abp-card-body>
         <abp-card-title>@Model.Title</abp-card-title>
         <abp-card-subtitle>@Model.Author?.UserName</abp-card-subtitle>

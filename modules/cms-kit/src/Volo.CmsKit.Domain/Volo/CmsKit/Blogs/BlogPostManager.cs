@@ -28,7 +28,7 @@ namespace Volo.CmsKit.Blogs
             [NotNull] string slug,
             [CanBeNull] string shortDescription = null,
             [CanBeNull] string content = null,
-            [CanBeNull] Guid? coverImage = null)
+            [CanBeNull] Guid? coverImageMediaId = null)
         {
             Check.NotNull(author, nameof(author));
             Check.NotNull(blog, nameof(blog));
@@ -45,7 +45,7 @@ namespace Volo.CmsKit.Blogs
                         slug,
                         shortDescription,
                         content,
-                        coverImage,
+                        coverImageMediaId,
                         CurrentTenant.Id
                         );
 

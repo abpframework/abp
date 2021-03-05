@@ -6,7 +6,7 @@
     var $formCreate = $('#form-blog-post-create');
     var $title = $('#ViewModel_Title');
     var $shortDescription = $('#ViewModel_ShortDescription');
-    var $coverImage = $('#ViewModel_CoverImage');
+    var $coverImage = $('#ViewModel_CoverImageMediaId');
     var $url = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-blog-post-create');
     var $pageContentInput = $('#ViewModel_Content');
