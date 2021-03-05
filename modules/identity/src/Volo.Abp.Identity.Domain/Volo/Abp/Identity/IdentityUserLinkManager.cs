@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,63 +24,66 @@ namespace Volo.Abp.Identity
 
         public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, bool includeIndirect = false, CancellationToken cancellationToken = default)
         {
-            var users = await IdentityLinkUserRepository.GetListAsync(linkUserInfo, cancellationToken: cancellationToken);
-            if (includeIndirect == false)
+            using (CurrentTenant.Change(null))
             {
-                return users;
-            }
-
-            var userInfos = new List<IdentityLinkUserInfo>()
-            {
-                linkUserInfo
-            };
-
-            var allUsers = new List<IdentityLinkUser>();
-            allUsers.AddRange(users);
-
-            do
-            {
-                var nextUsers = new List<IdentityLinkUserInfo>();
-                foreach (var user in users)
+                var users = await IdentityLinkUserRepository.GetListAsync(linkUserInfo, cancellationToken: cancellationToken);
+                if (includeIndirect == false)
                 {
-                    if (userInfos.Any(x => x.TenantId != user.SourceTenantId || x.UserId != user.SourceUserId))
-                    {
-                        nextUsers.Add(new IdentityLinkUserInfo(user.SourceUserId, user.SourceTenantId));
-                    }
-
-                    if (userInfos.Any(x => x.TenantId != user.TargetTenantId || x.UserId != user.TargetUserId))
-                    {
-                        nextUsers.Add(new IdentityLinkUserInfo(user.TargetUserId, user.TargetTenantId));
-                    }
+                    return users;
                 }
 
-                users = new List<IdentityLinkUser>();
-                foreach (var next in nextUsers)
+                var userInfos = new List<IdentityLinkUserInfo>()
                 {
-                    users.AddRange(await IdentityLinkUserRepository.GetListAsync(next, userInfos, cancellationToken));
-                }
+                    linkUserInfo
+                };
 
-                userInfos.AddRange(nextUsers);
+                var allUsers = new List<IdentityLinkUser>();
                 allUsers.AddRange(users);
-            } while (users.Any());
 
-            return allUsers;
+                do
+                {
+                    var nextUsers = new List<IdentityLinkUserInfo>();
+                    foreach (var user in users)
+                    {
+                        if (userInfos.Any(x => x.TenantId != user.SourceTenantId || x.UserId != user.SourceUserId))
+                        {
+                            nextUsers.Add(new IdentityLinkUserInfo(user.SourceUserId, user.SourceTenantId));
+                        }
+
+                        if (userInfos.Any(x => x.TenantId != user.TargetTenantId || x.UserId != user.TargetUserId))
+                        {
+                            nextUsers.Add(new IdentityLinkUserInfo(user.TargetUserId, user.TargetTenantId));
+                        }
+                    }
+
+                    users = new List<IdentityLinkUser>();
+                    foreach (var next in nextUsers)
+                    {
+                        users.AddRange(await IdentityLinkUserRepository.GetListAsync(next, userInfos, cancellationToken));
+                    }
+
+                    userInfos.AddRange(nextUsers);
+                    allUsers.AddRange(users);
+                } while (users.Any());
+
+                return allUsers;
+            }
         }
 
         public virtual async Task LinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)
         {
-            if (sourceLinkUser.UserId == targetLinkUser.UserId && sourceLinkUser.TenantId == targetLinkUser.TenantId)
-            {
-                return;
-            }
-
-            if (await IsLinkedAsync(sourceLinkUser, targetLinkUser, cancellationToken: cancellationToken))
-            {
-                return;
-            }
-
             using (CurrentTenant.Change(null))
             {
+                if (sourceLinkUser.UserId == targetLinkUser.UserId && sourceLinkUser.TenantId == targetLinkUser.TenantId)
+                {
+                    return;
+                }
+
+                if (await IsLinkedAsync(sourceLinkUser, targetLinkUser, cancellationToken: cancellationToken))
+                {
+                    return;
+                }
+
                 var userLink = new IdentityLinkUser(
                     GuidGenerator.Create(),
                     sourceLinkUser,
@@ -96,7 +98,7 @@ namespace Volo.Abp.Identity
             {
                 if (includeIndirect)
                 {
-                    return (await IdentityLinkUserRepository.GetListAsync(sourceLinkUser, cancellationToken: cancellationToken))
+                    return (await GetListAsync(sourceLinkUser, true, cancellationToken: cancellationToken))
                         .Any(x => x.SourceTenantId == targetLinkUser.TenantId && x.SourceUserId == targetLinkUser.UserId ||
                                   x.TargetTenantId == targetLinkUser.TenantId && x.TargetUserId == targetLinkUser.UserId);
                 }
@@ -106,13 +108,13 @@ namespace Volo.Abp.Identity
 
         public virtual async Task UnlinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)
         {
-            if (!await IsLinkedAsync(sourceLinkUser, targetLinkUser, cancellationToken: cancellationToken))
-            {
-                return;
-            }
-
             using (CurrentTenant.Change(null))
             {
+                if (!await IsLinkedAsync(sourceLinkUser, targetLinkUser, cancellationToken: cancellationToken))
+                {
+                    return;
+                }
+
                 var linkedUser = await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser, cancellationToken);
                 if (linkedUser != null)
                 {
