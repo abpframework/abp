@@ -23,8 +23,7 @@ namespace Volo.Abp.Identity
             CurrentTenant = currentTenant;
         }
 
-        public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo,
-            bool includeIndirect = false, CancellationToken cancellationToken = default)
+        public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, bool includeIndirect = false, CancellationToken cancellationToken = default)
         {
             var users = await IdentityLinkUserRepository.GetListAsync(linkUserInfo, cancellationToken: cancellationToken);
             if (includeIndirect == false)
@@ -59,7 +58,7 @@ namespace Volo.Abp.Identity
                 users = new List<IdentityLinkUser>();
                 foreach (var next in nextUsers)
                 {
-                    users.AddRange(await IdentityLinkUserRepository.GetListAsync(next, userInfos, cancellationToken: cancellationToken));
+                    users.AddRange(await IdentityLinkUserRepository.GetListAsync(next, userInfos, cancellationToken));
                 }
 
                 userInfos.AddRange(nextUsers);
@@ -69,14 +68,14 @@ namespace Volo.Abp.Identity
             return allUsers;
         }
 
-        public virtual async Task LinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser)
+        public virtual async Task LinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)
         {
             if (sourceLinkUser.UserId == targetLinkUser.UserId && sourceLinkUser.TenantId == targetLinkUser.TenantId)
             {
                 return;
             }
 
-            if (await IsLinkedAsync(sourceLinkUser, targetLinkUser))
+            if (await IsLinkedAsync(sourceLinkUser, targetLinkUser, cancellationToken: cancellationToken))
             {
                 return;
             }
@@ -87,36 +86,42 @@ namespace Volo.Abp.Identity
                     GuidGenerator.Create(),
                     sourceLinkUser,
                     targetLinkUser);
-                await IdentityLinkUserRepository.InsertAsync(userLink, true);
+                await IdentityLinkUserRepository.InsertAsync(userLink, true, cancellationToken);
             }
         }
 
-        public virtual async Task<bool> IsLinkedAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser)
+        public virtual async Task<bool> IsLinkedAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, bool includeIndirect = false, CancellationToken cancellationToken = default)
         {
             using (CurrentTenant.Change(null))
             {
-                return await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser) != null;
+                if (includeIndirect)
+                {
+                    return (await IdentityLinkUserRepository.GetListAsync(sourceLinkUser, cancellationToken: cancellationToken))
+                        .Any(x => x.SourceTenantId == targetLinkUser.TenantId && x.SourceUserId == targetLinkUser.UserId ||
+                                  x.TargetTenantId == targetLinkUser.TenantId && x.TargetUserId == targetLinkUser.UserId);
+                }
+                return await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser, cancellationToken) != null;
             }
         }
 
-        public virtual async Task UnlinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser)
+        public virtual async Task UnlinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)
         {
-            if (!await IsLinkedAsync(sourceLinkUser, targetLinkUser))
+            if (!await IsLinkedAsync(sourceLinkUser, targetLinkUser, cancellationToken: cancellationToken))
             {
                 return;
             }
 
             using (CurrentTenant.Change(null))
             {
-                var linkedUser = await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser);
+                var linkedUser = await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser, cancellationToken);
                 if (linkedUser != null)
                 {
-                    await IdentityLinkUserRepository.DeleteAsync(linkedUser);
+                    await IdentityLinkUserRepository.DeleteAsync(linkedUser, cancellationToken: cancellationToken);
                 }
             }
         }
 
-        public virtual async Task<string> GenerateLinkTokenAsync(IdentityLinkUserInfo targetLinkUser)
+        public virtual async Task<string> GenerateLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)
         {
             using (CurrentTenant.Change(targetLinkUser.TenantId))
             {
@@ -128,7 +133,7 @@ namespace Volo.Abp.Identity
             }
         }
 
-        public virtual async Task<bool> VerifyLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string token)
+        public virtual async Task<bool> VerifyLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string token, CancellationToken cancellationToken = default)
         {
             using (CurrentTenant.Change(targetLinkUser.TenantId))
             {
