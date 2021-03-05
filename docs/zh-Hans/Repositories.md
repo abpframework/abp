@@ -150,7 +150,7 @@ var people = _personRepository
 * 这里异步方法**不是标准LINQ方法**,它们定义在[Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore)Nuget包中.
 * 标准模板应用层与领域层**不引用**EF Core 包以实现数据库提供程序独立.
 
-根据你的需求和开发模式,你可以根据以下选项使用异步方法.s
+根据你的需求和开发模式,你可以根据以下选项使用异步方法.
 
 > 强烈建议使用异步方法! 在执行数据库查询时不要使用同步LINQ方法,以便能够开发可伸缩的应用程序.
 

@@ -45,6 +45,7 @@ namespace Volo.CmsKit
         private readonly IBlobContainer<MediaContainer> _mediaBlobContainer;
         private readonly BlogManager _blogManager;
         private readonly IOptions<CmsKitMediaOptions> _mediaOptions;
+        private readonly IOptions<CmsKitCommentOptions> _commentsOptions;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -64,11 +65,12 @@ namespace Volo.CmsKit
             IBlogFeatureRepository blogFeatureRepository,
             EntityTagManager entityTagManager,
             IOptions<CmsKitOptions> options,
-            IOptions<CmsKitTagOptions> tagOptions, 
-            IMediaDescriptorRepository mediaDescriptorRepository, 
-            IBlobContainer<MediaContainer> mediaBlobContainer, 
+            IOptions<CmsKitTagOptions> tagOptions,
+            IMediaDescriptorRepository mediaDescriptorRepository,
+            IBlobContainer<MediaContainer> mediaBlobContainer,
             BlogManager blogManager,
-            IOptions<CmsKitMediaOptions> cmsMediaOptions)
+            IOptions<CmsKitMediaOptions> cmsMediaOptions,
+            IOptions<CmsKitCommentOptions> commentsOptions)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -92,6 +94,7 @@ namespace Volo.CmsKit
             _mediaBlobContainer = mediaBlobContainer;
             _blogManager = blogManager;
             _mediaOptions = cmsMediaOptions;
+            _commentsOptions = commentsOptions;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -133,6 +136,9 @@ namespace Volo.CmsKit
                     _cmsKitTestData.Media_1_EntityType, 
                     createPolicies: new[] { "SomeCreatePolicy" },
                     deletePolicies: new[] { "SomeDeletePolicy" }));
+
+            _commentsOptions.Value.EntityTypes.Add(
+                new CommentEntityTypeDefinition(_cmsKitTestData.EntityType1));
 
             return Task.CompletedTask;
         }

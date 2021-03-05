@@ -8,7 +8,7 @@
     var $shortDescription = $('#ViewModel_ShortDescription');
     var $url = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-blog-post-create');
-    var $pageContentInput = $('#ViewModel_Value');
+    var $pageContentInput = $('#ViewModel_Content');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
     var $tagsWrapper = $('#blog-post-tags-wrapper');

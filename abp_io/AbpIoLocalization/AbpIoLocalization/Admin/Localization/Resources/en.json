@@ -91,6 +91,7 @@
     "UserNotFound": "User not found",
     "{0}WillBeRemovedFromDevelopers": "{0} Will be removed from developers, do you confirm?",
     "{0}WillBeRemovedFromOwners": "{0} Will be removed from owners, do you confirm?",
+    "{0}WillBeRemovedFromMembers": "{0} Will be removed from members, do you confirm?",
     "Computers": "Computers",
     "UniqueComputerId": "Unique computer id",
     "LastSeenDate": "Last seen date",
