@@ -29,12 +29,12 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 options.AddRepository<UserReaction, EfCoreUserReactionRepository>();
                 options.AddRepository<Comment, EfCoreCommentRepository>();
                 options.AddRepository<Rating, EfCoreRatingRepository>();
-                options.AddRepository<Content, EfCoreContentRepository>();
                 options.AddRepository<Tag, EfCoreTagRepository>();
                 options.AddRepository<EntityTag, EfCoreEntityTagRepository>();
                 options.AddRepository<Page, EfCorePageRepository>();
                 options.AddRepository<Blog, EfCoreBlogRepository>();
                 options.AddRepository<BlogPost, EfCoreBlogPostRepository>();
+                options.AddRepository<BlogFeature, EfCoreBlogFeatureRepository>();
                 options.AddRepository<MediaDescriptor, EfCoreMediaDescriptorRepository>();
             });
         }

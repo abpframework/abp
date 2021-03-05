@@ -24,8 +24,6 @@ namespace Volo.CmsKit.MongoDB
         public IMongoCollection<CmsUser> CmsUsers => Collection<CmsUser>();
 
         public IMongoCollection<Rating> Ratings => Collection<Rating>();
-
-        public IMongoCollection<Content> Contents => Collection<Content>();
         
         public IMongoCollection<Tag> Tags => Collection<Tag>();
         
@@ -36,7 +34,9 @@ namespace Volo.CmsKit.MongoDB
         public IMongoCollection<Blog> Blogs => Collection<Blog>();
 
         public IMongoCollection<BlogPost> BlogPosts => Collection<BlogPost>();
-        
+
+        public IMongoCollection<BlogFeature> BlogFeatures => Collection<BlogFeature>();
+
         public IMongoCollection<MediaDescriptor> MediaDescriptors => Collection<MediaDescriptor>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)

@@ -8,7 +8,6 @@
 @using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Pages
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
-@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
@@ -31,11 +30,6 @@
 <abp-card>
     <abp-card-body class="p-5">
         <abp-blockquote class="text-center">
-            @if (GlobalFeatureManager.Instance.IsEnabled<ContentsFeature>())
-            {
-                @await Component.InvokeAsync(typeof(ContentViewComponent), new {entityType = "quote", entityId = "1"})
-            }
-            
             @if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
             {
                 @await Component.InvokeAsync(typeof(TagViewComponent), new

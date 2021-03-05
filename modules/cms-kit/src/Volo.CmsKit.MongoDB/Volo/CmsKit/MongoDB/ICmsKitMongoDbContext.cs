@@ -25,8 +25,6 @@ namespace Volo.CmsKit.MongoDB
 
         IMongoCollection<Rating> Ratings { get; }
 
-        IMongoCollection<Content> Contents { get; }
-
         IMongoCollection<Tag> Tags { get; }
 
         IMongoCollection<EntityTag> EntityTags { get; }
@@ -36,6 +34,8 @@ namespace Volo.CmsKit.MongoDB
         IMongoCollection<Blog> Blogs { get; }
 
         IMongoCollection<BlogPost> BlogPosts { get; }
+
+        IMongoCollection<BlogFeature> BlogFeatures { get; }
         
         IMongoCollection<MediaDescriptor> MediaDescriptors { get; }
     }

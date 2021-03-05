@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
@@ -30,11 +31,13 @@ namespace Volo.CmsKit.Tags
             [CanBeNull] Guid? tenantId,
             CancellationToken cancellationToken = default)
         {
+            Check.NotNullOrEmpty(entityId, nameof(entityId));
+            
             return base.FindAsync(x =>
                     x.TagId == tagId &&
                     x.EntityId == entityId &&
                     x.TenantId == tenantId,
-                cancellationToken: cancellationToken);
+                cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }

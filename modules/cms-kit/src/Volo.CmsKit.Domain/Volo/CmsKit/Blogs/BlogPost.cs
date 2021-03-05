@@ -1,45 +1,58 @@
 ﻿using JetBrains.Annotations;
 using System;
-using System.Text.RegularExpressions;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
-using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Blogs.Extensions;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPost : FullAuditedAggregateRootWithUser<Guid, CmsUser>, IMultiTenant
+    public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
-        public Guid BlogId { get; protected set; }
+        public virtual Guid BlogId { get; protected set; }
 
-        public string Title { get; protected set; }
+        [NotNull] 
+        public virtual string Title { get; protected set; }
 
-        public string Slug { get; protected set; }
+        [NotNull] 
+        public virtual string Slug { get; protected set; }
 
-        public string ShortDescription { get; protected set; }
+        [NotNull] 
+        public virtual string ShortDescription { get; protected set; }
 
-        public Guid? TenantId { get; protected set; }
+        public virtual string Content { get; protected set; }
+        
+        public virtual Guid? TenantId { get; protected set; }
+
+        public Guid AuthorId { get; set; }
+
+        public virtual CmsUser Author { get; set; }
 
         protected BlogPost()
         {
         }
 
-        public BlogPost(
+        internal BlogPost(
             Guid id,
             Guid blogId,
+            Guid authorId,
             [NotNull] string title,
             [NotNull] string slug,
-            [CanBeNull] string shortDescription = null) : base(id)
+            [CanBeNull] string shortDescription = null,
+            [CanBeNull] string content = null,
+            [CanBeNull] Guid? tenantId = null) : base(id)
         {
+            TenantId = tenantId;
             BlogId = blogId;
+            AuthorId = authorId;
             SetTitle(title);
             SetSlug(slug);
-            ShortDescription = shortDescription;
+            SetShortDescription(shortDescription);
+            SetContent(content);
         }
 
-        public void SetTitle(string title)
+        public virtual void SetTitle(string title)
         {
             Title = Check.NotNullOrWhiteSpace(title, nameof(title), BlogPostConsts.MaxTitleLength);
         }
@@ -51,9 +64,14 @@ namespace Volo.CmsKit.Blogs
             Slug = slug.NormalizeSlug();
         }
 
-        public void SetShortDescription(string shortDescription)
+        public virtual void SetShortDescription(string shortDescription)
         {
             ShortDescription = Check.Length(shortDescription, nameof(shortDescription), BlogPostConsts.MaxShortDescriptionLength);
+        }
+
+        public virtual void SetContent(string content)
+        {
+            Content = Check.Length(content, nameof(content), BlogPostConsts.MaxContentLength);
         }
     }
 }

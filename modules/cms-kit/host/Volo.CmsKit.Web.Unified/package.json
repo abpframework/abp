@@ -7,6 +7,7 @@
     "@abp/cms-kit": "4.2.1",
     "@abp/tui-editor": "^4.2.1",
     "tui-code-snippet": "1.5.2",
-    "@abp/uppy": "^4.2.1"
+    "@abp/uppy": "^4.2.1",
+    "slugify": "1.4.6"
   }
 }

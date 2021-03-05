@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.EventBus.Abstractions;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Uow;
@@ -10,7 +11,8 @@ namespace Volo.Abp.Data
 {
     [DependsOn(
         typeof(AbpObjectExtendingModule),
-        typeof(AbpUnitOfWorkModule)
+        typeof(AbpUnitOfWorkModule),
+        typeof(AbpEventBusAbstractionsModule)
     )]
     public class AbpDataModule : AbpModule
     {

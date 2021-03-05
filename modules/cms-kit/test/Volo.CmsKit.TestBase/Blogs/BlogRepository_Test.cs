@@ -61,5 +61,32 @@ namespace Volo.CmsKit.Blogs
 
             result.ShouldBeFalse();
         }
+
+        [Fact]
+        public async Task GetList_ShouldWorkProperly()
+        {
+            var list = await blogRepository.GetListAsync();
+
+            list.ShouldNotBeNull();
+            list.Count.ShouldBeGreaterThan(0);
+        }
+                
+        [Fact]
+        public async Task GetCount_ShouldWorkProperly()
+        {
+            var count = await blogRepository.GetCountAsync();
+
+            count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task SlugExistAsync_ShouldWorkProperly()
+        {
+            var exists = await blogRepository.SlugExistsAsync(testData.BlogSlug);
+            var notExists = await blogRepository.SlugExistsAsync("not-existing-blog-slug");
+            
+            exists.ShouldBeTrue();
+            notExists.ShouldBeFalse();
+        }
     }
 }

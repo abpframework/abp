@@ -5,11 +5,10 @@ namespace Volo.CmsKit.Blogs.Extensions
 {
     public static class SlugExtensions
     {
+        static readonly SlugHelper SlugHelper = new ();
         public static string NormalizeSlug(this string value)
         {
-            var slugHelper = new SlugHelper();
-
-            return slugHelper.GenerateSlug(value?.Unidecode());
+            return SlugHelper.GenerateSlug(value?.Unidecode());
         }
     }
 }

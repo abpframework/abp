@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Public.Tags
     [Route("api/cms-kit-public/tags")]
     public class TagPublicController : CmsKitPublicControllerBase, ITagAppService
     {
-        protected readonly ITagAppService TagAppService;
+        protected ITagAppService TagAppService { get; }
 
         public TagPublicController(ITagAppService tagAppService)
         {

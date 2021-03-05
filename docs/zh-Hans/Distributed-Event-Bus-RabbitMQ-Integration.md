@@ -103,6 +103,26 @@
 }
 ````
 
+如果需要连接到 RabbitMQ 集群，你可以指定多个 HostName。
+
+**示例: 连接到 RabbitMQ 集群**
+
+```json
+{
+  "RabbitMQ": {
+    "Connections": {
+      "Default": {
+        "HostName": "123.123.123.123;234.234.234.234"
+      }
+    },
+    "EventBus": {
+      "ClientName": "MyClientName",
+      "ExchangeName": "MyExchangeName"
+    }
+  }
+}
+```
+
 ### 选项类
 
 `AbpRabbitMqOptions` 和 `AbpRabbitMqEventBusOptions` 类用于配置RabbitMQ的连接字符串和事件总线选项.

@@ -1,61 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using JetBrains.Annotations;
+using System;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogPostManager : DomainService, IBlogPostManager
+    public class BlogPostManager : DomainService
     {
-        protected readonly IBlogPostRepository blogPostRepository;
-        protected readonly IBlogRepository blogRepository;
+        protected IBlogPostRepository BlogPostRepository { get; }
+        protected IBlogRepository BlogRepository { get; }
 
         public BlogPostManager(
             IBlogPostRepository blogPostRepository,
             IBlogRepository blogRepository)
         {
-            this.blogPostRepository = blogPostRepository;
-            this.blogRepository = blogRepository;
+            BlogPostRepository = blogPostRepository;
+            BlogRepository = blogRepository;
         }
 
-        public async Task<BlogPost> CreateAsync(BlogPost blogPost)
+        public virtual async Task<BlogPost> CreateAsync(
+            [NotNull] CmsUser author, 
+            [NotNull] Blog blog,
+            [NotNull] string title,
+            [NotNull] string slug,
+            [CanBeNull] string shortDescription = null,
+            [CanBeNull] string content = null)
         {
-            await CheckBlogExistenceAsync(blogPost.BlogId);
+            Check.NotNull(author, nameof(author));
+            Check.NotNull(blog, nameof(blog));
+            Check.NotNullOrEmpty(title, nameof(title));
+            Check.NotNullOrEmpty(slug, nameof(slug));
 
-            await CheckSlugExistenceAsync(blogPost.BlogId, blogPost.Slug);
+            await CheckBlogExistenceAsync(blog.Id);
 
-            return await blogPostRepository.InsertAsync(blogPost);
+            var blogPost = new BlogPost(
+                        GuidGenerator.Create(),
+                        blog.Id,
+                        author.Id,
+                        title,
+                        slug,
+                        shortDescription,
+                        content,
+                        CurrentTenant.Id
+                        );
+
+            await CheckSlugExistenceAsync(blog.Id, blogPost.Slug);
+
+            return blogPost;
         }
 
-        public async Task UpdateAsync(BlogPost blogPost)
+        public virtual async Task SetSlugUrlAsync(BlogPost blogPost, [NotNull] string newSlug)
         {
-            await CheckBlogExistenceAsync(blogPost.BlogId);
+            Check.NotNullOrWhiteSpace(newSlug, nameof(newSlug));
 
-            await blogPostRepository.UpdateAsync(blogPost);
-        }
-
-        public async Task SetSlugUrlAsync(BlogPost blogPost, string newSlug)
-        {
             await CheckSlugExistenceAsync(blogPost.BlogId, newSlug);
 
             blogPost.SetSlug(newSlug);
         }
 
-        private async Task CheckSlugExistenceAsync(Guid blogId, string slug)
+        protected virtual async Task CheckSlugExistenceAsync(Guid blogId, string slug)
         {
-            if (await blogPostRepository.SlugExistsAsync(blogId, slug))
+            if (await BlogPostRepository.SlugExistsAsync(blogId, slug))
             {
                 throw new BlogPostSlugAlreadyExistException(blogId, slug);
             }
         }
 
-        private async Task CheckBlogExistenceAsync(Guid blogId)
+        protected virtual async Task CheckBlogExistenceAsync(Guid blogId)
         {
-            if (!await blogRepository.ExistsAsync(blogId))
+            if (!await BlogRepository.ExistsAsync(blogId))
+            {
                 throw new EntityNotFoundException(typeof(Blog), blogId);
+            }
         }
     }
 }

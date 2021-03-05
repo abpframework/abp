@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,6 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 {
     [RequiresGlobalFeature(typeof(MediaFeature))]
     [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
-    [Authorize(CmsKitAdminPermissions.MediaDescriptors.Default)]
     [Area("cms-kit")]
     [Route("api/cms-kit-admin/media")]
     public class MediaDescriptorAdminController : CmsKitAdminController, IMediaDescriptorAdminAppService
@@ -25,7 +25,6 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         }
 
         [HttpPost]
-        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Create)]
         [NonAction]
         public virtual Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
         {
@@ -34,15 +33,14 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 
         [HttpDelete]
         [Route("{id}")]
-        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Delete)]
         public virtual Task DeleteAsync(Guid id)
         {
             return MediaDescriptorAdminAppService.DeleteAsync(id);
         }
 
         [HttpPost]
-        [Authorize(CmsKitAdminPermissions.MediaDescriptors.Create)]
-        public virtual async Task<IActionResult> UploadAsync(IFormFile file)
+        [Route("{entityType}")]
+        public virtual async Task<IActionResult> UploadAsync(string entityType, IFormFile file)
         {
             if (file == null)
             {
@@ -51,13 +49,14 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 
             var inputStream = new CreateMediaInputStream(file.OpenReadStream())
                               {
+                                  EntityType = entityType,
                                   ContentType = file.ContentType,
                                   Name = file.FileName
                               };
             
             var mediaDescriptorDto = await MediaDescriptorAdminAppService.CreateAsync(inputStream);
             
-            return StatusCode(201, mediaDescriptorDto);
+            return StatusCode((int)HttpStatusCode.Created, mediaDescriptorDto);
         }
     }
 }

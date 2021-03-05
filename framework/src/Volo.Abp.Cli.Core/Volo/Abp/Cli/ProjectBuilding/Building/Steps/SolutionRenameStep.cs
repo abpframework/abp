@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
@@ -8,13 +9,34 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
     {
         public override void Execute(ProjectBuildContext context)
         {
-            new SolutionRenamer(
-                context.Files,
-                "MyCompanyName",
-                "MyProjectName",
-                context.BuildArgs.SolutionName.CompanyName,
-                context.BuildArgs.SolutionName.ProjectName
-            ).Run();
+            if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(context.BuildArgs.TemplateName))
+            {
+                new SolutionRenamer(
+                    context.Files,
+                    "MyCompanyName.MyProjectName",
+                    "MicroserviceName",
+                    context.BuildArgs.SolutionName.CompanyName,
+                    context.BuildArgs.SolutionName.ProjectName
+                ).Run();
+
+                new SolutionRenamer(
+                    context.Files,
+                    null,
+                    "MyProjectName",
+                    null,
+                    SolutionName.Parse(context.BuildArgs.SolutionName.CompanyName).ProjectName
+                ).Run();
+            }
+            else
+            {
+                new SolutionRenamer(
+                    context.Files,
+                    "MyCompanyName",
+                    "MyProjectName",
+                    context.BuildArgs.SolutionName.CompanyName,
+                    context.BuildArgs.SolutionName.ProjectName
+                ).Run();
+            }
         }
 
         private class SolutionRenamer

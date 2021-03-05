@@ -36,7 +36,7 @@ Configure<AbpBlobStoringOptions>(options =>
             aliyun.Policy = "policy";
             aliyun.DurationSeconds = "expiration date";
             aliyun.ContainerName = "your aliyun container name";
-            aliyun.CreateContainerIfNotExists = false;
+            aliyun.CreateContainerIfNotExists = true;
         });
     });
 });

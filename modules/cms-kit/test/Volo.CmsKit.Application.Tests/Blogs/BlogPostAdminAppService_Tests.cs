@@ -30,13 +30,15 @@ namespace Volo.CmsKit.Blogs
             var title = "My awesome new Post";
             var slug = "my-awesome-new-post";
             var shortDescription = "This blog is all about awesomeness 🤗!";
-
+            var content = "Another blog post shared on internet";
+            
             var created = await blogPostAdminAppService.CreateAsync(new CreateBlogPostDto
             {
                 BlogId = cmsKitTestData.Blog_Id,
                 Title = title,
                 Slug = slug,
-                ShortDescription = shortDescription
+                ShortDescription = shortDescription,
+                Content = content
             });
 
             created.Id.ShouldNotBe(Guid.Empty);
@@ -46,6 +48,7 @@ namespace Volo.CmsKit.Blogs
             blogPost.Title.ShouldBe(title);
             blogPost.Slug.ShouldBe(slug);
             blogPost.ShortDescription.ShouldBe(shortDescription);
+            blogPost.Content.ShouldBe(content);
         }
 
         [Fact]
@@ -54,6 +57,7 @@ namespace Volo.CmsKit.Blogs
             var title = "Another My Awesome New Post";
             var slug = "another-my-awesome-new-post";
             var shortDescription = "This blog is all about awesomeness 🤗!";
+            var content = "Another blog post shared on internet";
 
             var dto = new CreateBlogPostDto
             {
@@ -61,7 +65,8 @@ namespace Volo.CmsKit.Blogs
                 BlogId = Guid.NewGuid(),
                 Title = title,
                 Slug = slug,
-                ShortDescription = shortDescription
+                ShortDescription = shortDescription,
+                Content = content
             };
 
             var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
@@ -91,35 +96,6 @@ namespace Volo.CmsKit.Blogs
         }
 
         [Fact]
-        public async Task GetBySlugAsync_ShouldWorkProperly_WithExistingSlug()
-        {
-            var blogPost = await blogPostAdminAppService.GetBySlugAsync(cmsKitTestData.BlogSlug, cmsKitTestData.BlogPost_1_Slug);
-
-            blogPost.Id.ShouldBe(cmsKitTestData.BlogPost_1_Id);
-            blogPost.Title.ShouldBe(cmsKitTestData.BlogPost_1_Title);
-        }
-
-        [Fact]
-        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogPostSlug()
-        {
-            var nonExistingSlug = "any-other-url";
-            var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
-                                await blogPostAdminAppService.GetBySlugAsync(cmsKitTestData.BlogSlug, nonExistingSlug));
-
-            exception.EntityType.ShouldBe(typeof(BlogPost));
-        }
-
-        [Fact]
-        public async Task GetBySlugAsync_ShouldThrowException_WithNonExistingBlogSlug()
-        {
-            var nonExistingSlug = "any-other-url";
-            var exception = await Should.ThrowAsync<EntityNotFoundException>(async () =>
-                                await blogPostAdminAppService.GetBySlugAsync(nonExistingSlug, cmsKitTestData.Page_1_Slug));
-
-            exception.EntityType.ShouldBe(typeof(Blog));
-        }
-
-        [Fact]
         public async Task GetListAsync_ShouldWorkProperly_WithDefaultParameters()
         {
             var list = await blogPostAdminAppService.GetListAsync(new PagedAndSortedResultRequestDto());
@@ -136,12 +112,14 @@ namespace Volo.CmsKit.Blogs
             var shortDescription = "Another short description";
             var title = "[Solved] Another Blog Post";
             var slug = "another-short-blog-post";
+            var content = "Another blog post shared on internet";
 
             await blogPostAdminAppService.UpdateAsync(cmsKitTestData.BlogPost_2_Id, new UpdateBlogPostDto
             {
                 ShortDescription = shortDescription,
                 Title = title,
                 Slug = slug,
+                Content = content
             });
 
             var blogPost = await blogPostRepository.GetAsync(cmsKitTestData.BlogPost_2_Id);
@@ -149,6 +127,7 @@ namespace Volo.CmsKit.Blogs
             blogPost.Title.ShouldBe(title);
             blogPost.ShortDescription.ShouldBe(shortDescription);
             blogPost.Slug.ShouldBe(slug);
+            blogPost.Content.ShouldBe(content);
         }
 
         [Fact]

@@ -41,6 +41,20 @@ namespace Volo.Abp.DependencyInjection
 
         /// <summary>
         /// Registers custom repository for a specific entity.
+        /// </summary>
+        /// <typeparam name="TEntity">Entity type</typeparam>
+        IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository<TEntity>();
+
+
+        /// <summary>
+        /// Registers default repository for a specific entity.
+        /// </summary>
+        /// <param name="entityType"></param>
+        /// <returns></returns>
+        IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository(Type entityType);
+
+        /// <summary>
+        /// Registers custom repository for a specific entity.
         /// Custom repositories overrides default repositories.
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
