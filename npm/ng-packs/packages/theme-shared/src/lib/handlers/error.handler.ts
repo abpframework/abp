@@ -117,8 +117,8 @@ export class ErrorHandler {
       .subscribe();
   }
 
-  private executeErrorHandler = err => {
-    const returnValue = this.httpErrorHandler(this.injector, err);
+  private executeErrorHandler = error => {
+    const returnValue = this.httpErrorHandler(this.injector, error);
 
     return (returnValue instanceof Observable ? returnValue : of(null)).pipe(
       catchError(err => {
