@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -28,12 +27,34 @@ namespace Volo.Abp.Identity.MongoDB
                 , cancellationToken: GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
+        public virtual async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, List<IdentityLinkUserInfo> excludes = null,
+            CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).Where(x =>
+            var query = (await GetMongoQueryableAsync(cancellationToken)).Where(x =>
+                x.SourceUserId == linkUserInfo.UserId && x.SourceTenantId == linkUserInfo.TenantId ||
+                x.TargetUserId == linkUserInfo.UserId && x.TargetTenantId == linkUserInfo.TenantId);
+
+            if (!excludes.IsNullOrEmpty())
+            {
+                foreach (var userInfo in excludes)
+                {
+                    query = query.Where(x =>
+                        (x.SourceTenantId != userInfo.TenantId || x.SourceUserId != userInfo.UserId) &&
+                        (x.TargetTenantId != userInfo.TenantId || x.TargetUserId != userInfo.UserId));
+                }
+            }
+
+            return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task DeleteAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
+        {
+            var linkUsers = await (await GetMongoQueryableAsync(cancellationToken)).Where(x =>
                     x.SourceUserId == linkUserInfo.UserId && x.SourceTenantId == linkUserInfo.TenantId ||
                     x.TargetUserId == linkUserInfo.UserId && x.TargetTenantId == linkUserInfo.TenantId)
                 .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+
+            await DeleteManyAsync(linkUsers, cancellationToken: cancellationToken);
         }
     }
 }

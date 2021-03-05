@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.MultiTenancy;
@@ -18,6 +21,52 @@ namespace Volo.Abp.Identity
             IdentityLinkUserRepository = identityLinkUserRepository;
             UserManager = userManager;
             CurrentTenant = currentTenant;
+        }
+
+        public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo,
+            bool includeIndirect = false, CancellationToken cancellationToken = default)
+        {
+            var users = await IdentityLinkUserRepository.GetListAsync(linkUserInfo, cancellationToken: cancellationToken);
+            if (includeIndirect == false)
+            {
+                return users;
+            }
+
+            var userInfos = new List<IdentityLinkUserInfo>()
+            {
+                linkUserInfo
+            };
+
+            var allUsers = new List<IdentityLinkUser>();
+            allUsers.AddRange(users);
+
+            do
+            {
+                var nextUsers = new List<IdentityLinkUserInfo>();
+                foreach (var user in users)
+                {
+                    if (userInfos.Any(x => x.TenantId != user.SourceTenantId || x.UserId != user.SourceUserId))
+                    {
+                        nextUsers.Add(new IdentityLinkUserInfo(user.SourceUserId, user.SourceTenantId));
+                    }
+
+                    if (userInfos.Any(x => x.TenantId != user.TargetTenantId || x.UserId != user.TargetUserId))
+                    {
+                        nextUsers.Add(new IdentityLinkUserInfo(user.TargetUserId, user.TargetTenantId));
+                    }
+                }
+
+                users = new List<IdentityLinkUser>();
+                foreach (var next in nextUsers)
+                {
+                    users.AddRange(await IdentityLinkUserRepository.GetListAsync(next, userInfos, cancellationToken: cancellationToken));
+                }
+
+                userInfos.AddRange(nextUsers);
+                allUsers.AddRange(users);
+            } while (users.Any());
+
+            return allUsers;
         }
 
         public virtual async Task LinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser)
