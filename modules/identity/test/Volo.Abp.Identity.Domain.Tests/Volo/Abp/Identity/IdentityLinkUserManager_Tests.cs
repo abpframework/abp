@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
@@ -17,6 +18,122 @@ namespace Volo.Abp.Identity
             IdentityLinkUserRepository = GetRequiredService<IIdentityLinkUserRepository>();
             IdentityLinkUserManager = GetRequiredService<IdentityLinkUserManager>();
             TestData = GetRequiredService<IdentityTestData>();
+        }
+
+        [Fact]
+        public async Task GetListAsync_Test()
+        {
+            var a = Guid.NewGuid();
+            var b = Guid.NewGuid();
+            var c = Guid.NewGuid();
+            var d = Guid.NewGuid();
+            var e = Guid.NewGuid();
+            var f = Guid.NewGuid();
+            var g = Guid.NewGuid();
+            var h = Guid.NewGuid();
+            var i = Guid.NewGuid();
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(a, null),
+                new IdentityLinkUserInfo(b, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(c, null),
+                new IdentityLinkUserInfo(a, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(d, null),
+                new IdentityLinkUserInfo(c, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(e, null),
+                new IdentityLinkUserInfo(c, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(f, null),
+                new IdentityLinkUserInfo(e, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(g, null),
+                new IdentityLinkUserInfo(h, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(i, null),
+                new IdentityLinkUserInfo(h, null)), true);
+
+            var linkUsers = await IdentityLinkUserManager.GetListAsync(new IdentityLinkUserInfo(a, null));
+            linkUsers.Count.ShouldBe(2);
+
+            linkUsers = await IdentityLinkUserManager.GetListAsync(new IdentityLinkUserInfo(f, null));
+            linkUsers.Count.ShouldBe(1);
+
+            linkUsers = await IdentityLinkUserManager.GetListAsync(new IdentityLinkUserInfo(g, null));
+            linkUsers.Count.ShouldBe(1);
+        }
+
+        [Fact]
+        public async Task GetListAsync_Indirect_Test()
+        {
+            var a = Guid.NewGuid();
+            var b = Guid.NewGuid();
+            var c = Guid.NewGuid();
+            var d = Guid.NewGuid();
+            var e = Guid.NewGuid();
+            var f = Guid.NewGuid();
+            var g = Guid.NewGuid();
+            var h = Guid.NewGuid();
+            var i = Guid.NewGuid();
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(a, null),
+                new IdentityLinkUserInfo(b, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(c, null),
+                new IdentityLinkUserInfo(a, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(d, null),
+                new IdentityLinkUserInfo(c, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(e, null),
+                new IdentityLinkUserInfo(c, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(f, null),
+                new IdentityLinkUserInfo(e, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(g, null),
+                new IdentityLinkUserInfo(h, null)), true);
+
+            await IdentityLinkUserRepository.InsertAsync(new IdentityLinkUser(
+                Guid.NewGuid(),
+                new IdentityLinkUserInfo(i, null),
+                new IdentityLinkUserInfo(h, null)), true);
+
+            var linkUsers = await IdentityLinkUserManager.GetListAsync(new IdentityLinkUserInfo(a, null), includeIndirect: true);
+            linkUsers.Count.ShouldBe(5);
+
+            linkUsers = await IdentityLinkUserManager.GetListAsync(new IdentityLinkUserInfo(f, null), includeIndirect: true);
+            linkUsers.Count.ShouldBe(5);
+
+            linkUsers = await IdentityLinkUserManager.GetListAsync(new IdentityLinkUserInfo(g, null), includeIndirect: true);
+            linkUsers.Count.ShouldBe(2);
         }
 
         [Fact]
