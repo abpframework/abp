@@ -8,9 +8,6 @@
             public const string EntityNotTaggable = "CmsKit:Tag:0002";
         }
 
-        // TODO: Unused? Remove, if so.
-        public const string ContentAlreadyExist = "CmsKit:0002";
-
         public static class Pages
         {
             public const string SlugAlreadyExist = "CmsKit:Page:0001";
