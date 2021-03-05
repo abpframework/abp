@@ -6,11 +6,6 @@ namespace Volo.CmsKit.Blogs
 {
     public class BlogPostSlugAlreadyExistException : BusinessException
     {
-        //TODO: Delete this constructor, not used
-        internal BlogPostSlugAlreadyExistException(string code = null, string message = null, string details = null, Exception innerException = null, Microsoft.Extensions.Logging.LogLevel logLevel = Microsoft.Extensions.Logging.LogLevel.Warning) : base(code, message, details, innerException, logLevel)
-        {
-        }
-
         public BlogPostSlugAlreadyExistException(SerializationInfo serializationInfo, StreamingContext context)
             : base(serializationInfo, context)
         {
