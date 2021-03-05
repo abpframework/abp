@@ -34,6 +34,11 @@ namespace Volo.Abp.TenantManagement
 
         public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
         {
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(Tenant.Name);
+            }
+
             var count = await TenantRepository.GetCountAsync(input.Filter);
             var list = await TenantRepository.GetListAsync(
                 input.Sorting,
