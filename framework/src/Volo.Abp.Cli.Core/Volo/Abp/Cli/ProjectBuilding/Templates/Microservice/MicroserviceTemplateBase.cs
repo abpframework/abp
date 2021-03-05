@@ -36,9 +36,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
                         "/applications/web/src/MyCompanyName.MyProjectName.Web"));
                     steps.Add(new RemoveFolderStep("/applications/web"));
+                    steps.Add(new RemoveProjectFromTyeStep("web"));
+
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
                     steps.Add(new RemoveFolderStep("/applications/blazor"));
+                    steps.Add(new RemoveProjectFromTyeStep("blazor"));
+
                     steps.Add(new RemoveFolderStep("/angular"));
                     break;
 
@@ -46,9 +50,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
                         "/applications/web/src/MyCompanyName.MyProjectName.Web"));
                     steps.Add(new RemoveFolderStep("/applications/web"));
+                    steps.Add(new RemoveProjectFromTyeStep("web"));
+
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
                     steps.Add(new RemoveFolderStep("/applications/blazor"));
+                    steps.Add(new RemoveProjectFromTyeStep("blazor"));
                     break;
 
                 case UiFramework.Blazor:
@@ -56,6 +63,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                         "/applications/web/src/MyCompanyName.MyProjectName.Web"));
                     steps.Add(new RemoveFolderStep("/applications/web"));
                     steps.Add(new RemoveFolderStep("/angular"));
+                    steps.Add(new RemoveProjectFromTyeStep("web"));
                     break;
 
                 case UiFramework.Mvc:
@@ -63,6 +71,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
                     steps.Add(new RemoveFolderStep("/applications/blazor"));
+                    steps.Add(new RemoveProjectFromTyeStep("blazor"));
+
                     steps.Add(new RemoveFolderStep("/angular"));
                     break;
             }
