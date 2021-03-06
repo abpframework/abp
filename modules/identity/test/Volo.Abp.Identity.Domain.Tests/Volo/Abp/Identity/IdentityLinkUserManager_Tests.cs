@@ -188,16 +188,5 @@ namespace Volo.Abp.Identity
             (await IdentityLinkUserManager.IsLinkedAsync(new IdentityLinkUserInfo(john.Id, john.TenantId),
                 new IdentityLinkUserInfo(neo.Id, neo.TenantId))).ShouldBeFalse();
         }
-
-        [Fact]
-        public virtual async Task GenerateAndVerifyLinkTokenAsync()
-        {
-            var john = await UserRepository.GetAsync(TestData.UserJohnId);
-            var token = await IdentityLinkUserManager.GenerateLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId));
-            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), token)).ShouldBeTrue();
-
-            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), "123123")).ShouldBeFalse();
-        }
-
     }
 }
