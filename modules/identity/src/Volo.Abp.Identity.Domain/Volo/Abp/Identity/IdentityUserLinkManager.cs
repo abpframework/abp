@@ -129,12 +129,10 @@ namespace Volo.Abp.Identity
             using (CurrentTenant.Change(targetLinkUser.TenantId))
             {
                 var user = await UserManager.GetByIdAsync(targetLinkUser.UserId);
-                var token = await UserManager.GenerateUserTokenAsync(
+                return await UserManager.GenerateUserTokenAsync(
                     user,
                     LinkUserTokenProviderConsts.LinkUserTokenProviderName,
                     LinkUserTokenProviderConsts.LinkUserTokenPurpose);
-
-                return UrlEncoder.Default.Encode(token);
             }
         }
 
