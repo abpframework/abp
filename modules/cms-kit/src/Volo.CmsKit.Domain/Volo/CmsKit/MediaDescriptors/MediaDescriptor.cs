@@ -2,13 +2,14 @@
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
-using Volo.CmsKit.MediaDescriptors.Extensions;
 
 namespace Volo.CmsKit.MediaDescriptors
 {
     public class MediaDescriptor : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public Guid? TenantId { get; protected set; }
+
+        public string EntityType { get; protected set; }
         
         public string Name { get; protected set; }
 
@@ -21,10 +22,11 @@ namespace Volo.CmsKit.MediaDescriptors
             
         }
 
-        public MediaDescriptor(Guid id, string name, string mimeType, long size, Guid? tenantId = null) : base(id)
+        internal MediaDescriptor(Guid id, string entityType, string name, string mimeType, long size, Guid? tenantId = null) : base(id)
         {
             TenantId = tenantId;
             
+            EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType), MediaDescriptorConsts.MaxEntityTypeLength);
             MimeType = Check.NotNullOrWhiteSpace(mimeType, nameof(name), MediaDescriptorConsts.MaxMimeTypeLength);
             Size = size;
             
@@ -33,7 +35,7 @@ namespace Volo.CmsKit.MediaDescriptors
 
         public void SetName(string name)
         {
-            if (!MediaDescriptorCheck.IsValidMediaFileName(name))
+            if (!MediaDescriptorChecks.IsValidMediaFileName(name))
             {
                 throw new InvalidMediaDescriptorNameException(name);
             }

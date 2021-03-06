@@ -59,7 +59,6 @@ namespace Volo.Abp.Cli.Commands
             await SolutionModuleAdder.AddAsync(
                 solutionFile,
                 commandLineArgs.Target,
-                commandLineArgs.Options.GetOrNull(Options.StartupProject.Short, Options.StartupProject.Long),
                 version,
                 skipDbMigrations,
                 withSourceCode,
@@ -165,12 +164,6 @@ namespace Volo.Abp.Cli.Commands
             public static class DbMigrations
             {
                 public const string Skip = "skip-db-migrations";
-            }
-
-            public static class StartupProject
-            {
-                public const string Short = "sp";
-                public const string Long = "startup-project";
             }
 
             public static class SourceCode

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Logging;
 using Volo.Abp.Modularity.PlugIns;
 using Xunit;
 
@@ -11,7 +12,12 @@ namespace Volo.Abp.Modularity
         public void Should_Load_Modules_By_Dependency_Order()
         {
             var moduleLoader = new ModuleLoader();
-            var modules = moduleLoader.LoadModules(new ServiceCollection(), typeof(MyStartupModule), new PlugInSourceList());
+            var modules = moduleLoader.LoadModules(
+                new ServiceCollection()
+                    .AddSingleton<IInitLogger>(new DefaultInitLogger()),
+                typeof(MyStartupModule),
+                new PlugInSourceList()
+            );
             modules.Length.ShouldBe(2);
             modules[0].Type.ShouldBe(typeof(IndependentEmptyModule));
             modules[1].Type.ShouldBe(typeof(MyStartupModule));

@@ -7,8 +7,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
     {
         public override void Execute(ProjectBuildContext context)
         {
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyCompanyName.MyProjectName.Web.Public.csproj"))?.RemoveTemplateCodeIfNot("EFCORE");
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyProjectNameWebPublicModule.cs"))?.RemoveTemplateCodeIfNot("EFCORE");
+            foreach (var file in context.Files)
+            {
+                if (file.Name.EndsWith(".cs") || file.Name.EndsWith(".csproj") || file.Name.EndsWith(".json"))
+                {
+                    file.RemoveTemplateCodeIfNot("EFCORE");
+                }
+            }
         }
     }
 }

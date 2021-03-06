@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 
@@ -35,6 +36,7 @@ namespace Volo.Abp.Internal
             services.TryAddSingleton<IModuleLoader>(moduleLoader);
             services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
             services.TryAddSingleton<ITypeFinder>(typeFinder);
+            services.TryAddSingleton<IInitLogger>(new DefaultInitLogger());
 
             services.AddAssemblyOf<IAbpApplication>();
 

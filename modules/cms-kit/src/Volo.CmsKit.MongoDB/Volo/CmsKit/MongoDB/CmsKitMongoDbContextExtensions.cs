@@ -47,11 +47,6 @@ namespace Volo.CmsKit.MongoDB
                 x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Ratings";
             });
             
-            builder.Entity<Content>(x =>
-            {
-                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Contents";
-            });
-            
             builder.Entity<Tag>(x =>
             {
                 x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Tags";

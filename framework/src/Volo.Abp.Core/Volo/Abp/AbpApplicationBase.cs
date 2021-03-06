@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
+using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp
@@ -71,10 +73,29 @@ namespace Volo.Abp
         {
             using (var scope = ServiceProvider.CreateScope())
             {
+                WriteInitLogs(scope.ServiceProvider);
                 scope.ServiceProvider
                     .GetRequiredService<IModuleManager>()
                     .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
             }
+        }
+        
+        protected virtual void WriteInitLogs(IServiceProvider serviceProvider)
+        {
+            var logger = serviceProvider.GetService<ILogger<AbpApplicationBase>>();
+            if (logger == null)
+            {
+                return;
+            }
+            
+            var initLogger = serviceProvider.GetRequiredService<IInitLogger>();
+            
+            foreach (var entry in initLogger.Entries)
+            {
+                logger.LogWithLevel(entry.Level, entry.Message, entry.Exception);
+            }
+            
+            initLogger.Entries.Clear();
         }
 
         protected virtual IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
