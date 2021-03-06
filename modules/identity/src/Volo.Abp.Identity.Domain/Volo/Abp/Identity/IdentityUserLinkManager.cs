@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
@@ -128,10 +129,12 @@ namespace Volo.Abp.Identity
             using (CurrentTenant.Change(targetLinkUser.TenantId))
             {
                 var user = await UserManager.GetByIdAsync(targetLinkUser.UserId);
-                return await UserManager.GenerateUserTokenAsync(
+                var token = await UserManager.GenerateUserTokenAsync(
                     user,
-                    LinkUserTokenProvider.LinkUserTokenProviderName,
-                    LinkUserTokenProvider.LinkUserTokenPurpose);
+                    LinkUserTokenProviderConsts.LinkUserTokenProviderName,
+                    LinkUserTokenProviderConsts.LinkUserTokenPurpose);
+
+                return UrlEncoder.Default.Encode(token);
             }
         }
 
@@ -142,8 +145,8 @@ namespace Volo.Abp.Identity
                 var user = await UserManager.GetByIdAsync(targetLinkUser.UserId);
                 return await UserManager.VerifyUserTokenAsync(
                     user,
-                    LinkUserTokenProvider.LinkUserTokenProviderName,
-                    LinkUserTokenProvider.LinkUserTokenPurpose,
+                    LinkUserTokenProviderConsts.LinkUserTokenProviderName,
+                    LinkUserTokenProviderConsts.LinkUserTokenPurpose,
                     token);
             }
         }

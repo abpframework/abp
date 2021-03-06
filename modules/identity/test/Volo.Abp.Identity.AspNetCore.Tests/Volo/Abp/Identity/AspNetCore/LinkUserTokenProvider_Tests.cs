@@ -13,7 +13,7 @@ namespace Volo.Abp.Identity.AspNetCore
             var identityOptions = GetRequiredService<IOptions<IdentityOptions>>().Value;
 
             identityOptions.Tokens.ProviderMap.ShouldContain(x =>
-                x.Key == LinkUserTokenProvider.LinkUserTokenProviderName &&
+                x.Key == LinkUserTokenProviderConsts.LinkUserTokenProviderName &&
                 x.Value.ProviderType == typeof(LinkUserTokenProvider));
         }
     }
