@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.Logging
 {
-    public class InitLoggerFactory : IInitLoggerFactory
+    public class DefaultInitLoggerFactory : IInitLoggerFactory
     {
         private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();
 

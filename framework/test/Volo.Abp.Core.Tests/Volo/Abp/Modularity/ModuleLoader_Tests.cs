@@ -14,7 +14,7 @@ namespace Volo.Abp.Modularity
             var moduleLoader = new ModuleLoader();
             var modules = moduleLoader.LoadModules(
                 new ServiceCollection()
-                    .AddSingleton<IInitLoggerFactory>(new InitLoggerFactory()),
+                    .AddSingleton<IInitLoggerFactory>(new DefaultInitLoggerFactory()),
                 typeof(MyStartupModule),
                 new PlugInSourceList()
             );

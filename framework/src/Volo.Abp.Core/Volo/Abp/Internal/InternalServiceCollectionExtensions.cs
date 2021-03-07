@@ -36,7 +36,7 @@ namespace Volo.Abp.Internal
             services.TryAddSingleton<IModuleLoader>(moduleLoader);
             services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
             services.TryAddSingleton<ITypeFinder>(typeFinder);
-            services.TryAddSingleton<IInitLoggerFactory>(new InitLoggerFactory());
+            services.TryAddSingleton<IInitLoggerFactory>(new DefaultInitLoggerFactory());
 
             services.AddAssemblyOf<IAbpApplication>();
 
