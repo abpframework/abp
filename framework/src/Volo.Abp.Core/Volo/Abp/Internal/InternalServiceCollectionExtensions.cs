@@ -17,7 +17,7 @@ namespace Volo.Abp.Internal
         }
 
         internal static void AddCoreAbpServices(this IServiceCollection services,
-            IAbpApplication abpApplication, 
+            IAbpApplication abpApplication,
             AbpApplicationCreationOptions applicationCreationOptions)
         {
             var moduleLoader = new ModuleLoader();
@@ -36,7 +36,7 @@ namespace Volo.Abp.Internal
             services.TryAddSingleton<IModuleLoader>(moduleLoader);
             services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
             services.TryAddSingleton<ITypeFinder>(typeFinder);
-            services.TryAddSingleton<IInitLogger>(new DefaultInitLogger());
+            services.TryAddSingleton<IInitLoggerFactory>(new InitLoggerFactory());
 
             services.AddAssemblyOf<IAbpApplication>();
 
