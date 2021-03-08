@@ -215,8 +215,9 @@
     "Gateway": "Gateway",
     "State": "State",
     "FailReason": "Fail reason",
-    "ReIndexAllPosts": "ReIndex All Posts",
-    "ReIndexAllPostsConfirmationMessage": "Are you sure to reindex all posts?",
-    "SuccessfullyReIndexAllPosts": "Successfully reindex for all posts"
+    "ReIndexAllPosts": "Reindex All Posts",
+    "ReIndexAllPostsConfirmationMessage": "Are you sure you want to reindex all posts?",
+    "SuccessfullyReIndexAllPosts": "All posts have been successfully reindexed.",
+    "Permission:FullSearch": "Full text search"
   }
 }
