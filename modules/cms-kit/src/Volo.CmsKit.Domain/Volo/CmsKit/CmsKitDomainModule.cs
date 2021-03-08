@@ -39,11 +39,6 @@ namespace Volo.CmsKit
                 options.Reactions.AddOrReplace(StandardReactions.Pray);
 
             });
-
-            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
-            {
-                // TODO: Configure TagEntityTypes here...
-            }
         }
 
         private static LocalizableString L(string name)
