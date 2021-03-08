@@ -3,7 +3,7 @@
 namespace Volo.CmsKit.Public.Comments
 {
     [Serializable]
-    public class CommentDto
+    public class CommentDetailedDto
     {
         public Guid Id { get; set; }
 
@@ -19,6 +19,6 @@ namespace Volo.CmsKit.Public.Comments
 
         public DateTime CreationTime { get; set; }
 
-        public CmsUserDto Author { get; set; } //TODO: Should only have AuthorId for the basic dto. see https://docs.abp.io/en/abp/latest/Best-Practices/Application-Services
+        public CmsUserDto Author { get; set; }
     }
 }

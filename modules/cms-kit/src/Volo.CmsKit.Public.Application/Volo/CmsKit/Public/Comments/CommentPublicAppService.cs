@@ -48,7 +48,7 @@ namespace Volo.CmsKit.Public.Comments
         }
 
         [Authorize]
-        public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
+        public virtual async Task<CommentDetailedDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
         {
             var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
@@ -75,11 +75,11 @@ namespace Volo.CmsKit.Public.Comments
                 Id = comment.Id
             });
 
-            return ObjectMapper.Map<Comment, CommentDto>(comment);
+            return ObjectMapper.Map<Comment, CommentDetailedDto>(comment);
         }
 
         [Authorize]
-        public virtual async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
+        public virtual async Task<CommentDetailedDto> UpdateAsync(Guid id, UpdateCommentInput input)
         {
             var comment = await CommentRepository.GetAsync(id);
 
@@ -92,7 +92,7 @@ namespace Volo.CmsKit.Public.Comments
 
             var updatedComment = await CommentRepository.UpdateAsync(comment);
 
-            return ObjectMapper.Map<Comment, CommentDto>(updatedComment);
+            return ObjectMapper.Map<Comment, CommentDetailedDto>(updatedComment);
         }
 
         [Authorize]
@@ -123,7 +123,7 @@ namespace Volo.CmsKit.Public.Comments
 
                 parentComment.Replies = comments
                     .Where(c => c.Comment.RepliedCommentId == parentComment.Id)
-                    .Select(c => ObjectMapper.Map<Comment, CommentDto>(c.Comment))
+                    .Select(c => ObjectMapper.Map<Comment, CommentDetailedDto>(c.Comment))
                     .ToList();
 
                 foreach (var reply in parentComment.Replies)
