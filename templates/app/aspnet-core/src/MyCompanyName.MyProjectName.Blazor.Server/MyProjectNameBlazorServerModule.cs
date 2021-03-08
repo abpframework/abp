@@ -197,11 +197,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor(context.Services.GetConfiguration()));
             });
-
-            Configure<AbpToolbarOptions>(options =>
-            {
-                options.Contributors.Add(new BasicThemeToolbarContributor());
-            });
         }
 
         private void ConfigureRouter(ServiceConfigurationContext context)
