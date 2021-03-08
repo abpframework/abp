@@ -17,7 +17,6 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server;
 using Volo.Abp.AspNetCore.Components.UI.Theming.Routing;
-using Volo.Abp.AspNetCore.Components.UI.Theming.Toolbars;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
@@ -195,7 +194,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
         {
             Configure<AbpNavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor(context.Services.GetConfiguration()));
+                options.MenuContributors.Add(new MyProjectNameMenuContributor());
             });
         }
 

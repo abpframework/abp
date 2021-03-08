@@ -27,18 +27,20 @@
                     }
                 }
                 <DropdownDivider />
-                <DropdownItem Clicked="BeginSignOut">Logout</DropdownItem>
+                <DropdownItem Clicked="Logout">Logout</DropdownItem>
             </DropdownMenu>
         </Dropdown>
     </Authorized>
     <NotAuthorized>
-        <a class="nav-link" href="authentication/login">Log in</a>
+        <a class="nav-link" href="/Account/Login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
 @code{
 
     private async Task NavigateToAsync(string uri, string target = null)
     {
+        uri = uri.TrimStart('~');
+        
         if (target == "_blank")
         {
             await JsRuntime.InvokeVoidAsync("open", uri, target);
@@ -49,10 +51,8 @@
         }
     }
 
-    private async Task BeginSignOut()
+    private void Logout()
     {
-        // TODO
-        //await SignOutManager.SetSignOutState();
-        await NavigateToAsync("authentication/logout");
+        Navigation.NavigateTo("/Account/Logout", forceLoad: true);
     }
 }

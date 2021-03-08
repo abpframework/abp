@@ -11,22 +11,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Menus
 {
     public class MyProjectNameMenuContributor : IMenuContributor
     {
-        private readonly IConfiguration _configuration;
-
-        public MyProjectNameMenuContributor(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
         public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
             if (context.Menu.Name == StandardMenus.Main)
             {
                 await ConfigureMainMenuAsync(context);
-            }
-            else if (context.Menu.Name == StandardMenus.User)
-            {
-                await ConfigureUserMenuAsync(context);
             }
         }
 
@@ -43,27 +32,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Menus
                     icon: "fas fa-home"
                 )
             );
-
-            return Task.CompletedTask;
-        }
-
-        private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
-        {
-            var accountStringLocalizer = context.GetLocalizer<AccountResource>();
-            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
-
-            var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";
-
-            if (currentUser.IsAuthenticated)
-            {
-                context.Menu.AddItem(new ApplicationMenuItem(
-                    "Account.Manage",
-                    accountStringLocalizer["ManageYourProfile"],
-                    $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}",
-                    icon: "fa fa-cog",
-                    order: 1000,
-                    null));
-            }
 
             return Task.CompletedTask;
         }
