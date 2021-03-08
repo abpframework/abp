@@ -9,9 +9,9 @@ namespace Volo.CmsKit.Public.Comments
     {
         Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId);
 
-        Task<CommentDetailedDto> CreateAsync(string entityType, string entityId, CreateCommentInput input);
+        Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input);
 
-        Task<CommentDetailedDto> UpdateAsync(Guid id, UpdateCommentInput input);
+        Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input);
 
         Task DeleteAsync(Guid id);
     }

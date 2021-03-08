@@ -30,14 +30,14 @@ namespace Volo.CmsKit.Public.Comments
 
         [HttpPost]
         [Route("{entityType}/{entityId}")]
-        public Task<CommentDetailedDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
+        public Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
         {
             return CommentPublicAppService.CreateAsync(entityType, entityId, input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public Task<CommentDetailedDto> UpdateAsync(Guid id, UpdateCommentInput input)
+        public Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
         {
             return CommentPublicAppService.UpdateAsync(id, input);
         }

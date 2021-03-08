@@ -18,7 +18,7 @@ namespace Volo.CmsKit.Public
         {
             CreateMap<CmsUser, Comments.CmsUserDto>();
 
-            CreateMap<Comment, CommentDetailedDto>()
+            CreateMap<Comment, CommentDto>()
                 .Ignore(x=> x.Author);
 
             CreateMap<Comment, CommentWithDetailsDto>()

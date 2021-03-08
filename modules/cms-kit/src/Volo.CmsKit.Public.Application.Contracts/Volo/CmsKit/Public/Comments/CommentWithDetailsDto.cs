@@ -18,7 +18,7 @@ namespace Volo.CmsKit.Public.Comments
 
         public DateTime CreationTime { get; set; }
 
-        public List<CommentDetailedDto> Replies { get; set; }
+        public List<CommentDto> Replies { get; set; }
 
         public CmsUserDto Author { get; set; }
     }
