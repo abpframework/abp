@@ -18,27 +18,23 @@ namespace Volo.CmsKit.Admin.Blogs
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-    public class BlogPostAdminAppService: CmsKitAppServiceBase, IBlogPostAdminAppService
+    public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppService
     {
         protected BlogPostManager BlogPostManager { get; }
         protected IBlogPostRepository BlogPostRepository { get; }
         protected IBlogRepository BlogRepository { get; }
-        protected IBlobContainer<BlogPostCoverImageContainer> BlobContainer { get; }
         protected ICmsUserLookupService UserLookupService { get; }
 
         public BlogPostAdminAppService(
             BlogPostManager blogPostManager,
             IBlogPostRepository blogPostRepository,
             IBlogRepository blogRepository,
-            IBlobContainer<BlogPostCoverImageContainer> blobContainer,
             ICmsUserLookupService userLookupService)
         {
             BlogPostManager = blogPostManager;
             BlogPostRepository = blogPostRepository;
             BlogRepository = blogRepository;
-            BlobContainer = blobContainer;
             UserLookupService = userLookupService;
-
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
@@ -54,7 +50,8 @@ namespace Volo.CmsKit.Admin.Blogs
                                                         input.Title,
                                                         input.Slug,
                                                         input.ShortDescription,
-                                                        input.Content);
+                                                        input.Content,
+                                                        input.CoverImageMediaId);
 
             await BlogPostRepository.InsertAsync(blogPost);
 
@@ -69,7 +66,8 @@ namespace Volo.CmsKit.Admin.Blogs
             blogPost.SetTitle(input.Title);
             blogPost.SetShortDescription(input.ShortDescription);
             blogPost.SetContent(input.Content);
-            
+            blogPost.CoverImageMediaId = input.CoverImageMediaId;
+
             if (blogPost.Slug != input.Slug)
             {
                 await BlogPostManager.SetSlugUrlAsync(blogPost, input.Slug);
@@ -77,26 +75,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
             await BlogPostRepository.UpdateAsync(blogPost);
 
-            return ObjectMapper.Map<BlogPost,BlogPostDto>(blogPost);
-        }
-
-        [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
-        public virtual async Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent)
-        {
-            await BlogPostRepository.GetAsync(id);
-
-            using (var stream = streamContent.GetStream())
-            {
-                await BlobContainer.SaveAsync(id.ToString(), stream, overrideExisting: true);
-            }
-        }
-
-        [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual async Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
-        {
-            var stream = await BlobContainer.GetAsync(id.ToString());
-
-            return new RemoteStreamContent(stream);
+            return ObjectMapper.Map<BlogPost, BlogPostDto>(blogPost);
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
