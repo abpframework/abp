@@ -3,7 +3,6 @@ using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
-using Volo.CmsKit.Blogs.Extensions;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -38,7 +37,7 @@ namespace Volo.CmsKit.Blogs
         {
             Check.NotNullOrWhiteSpace(slug, nameof(slug), BlogConsts.MaxNameLength);
 
-            Slug = slug.NormalizeSlug();
+            Slug = SlugNormalizer.Normalize(slug);
         }
     }
 }

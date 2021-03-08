@@ -12,13 +12,17 @@ namespace Volo.CmsKit.Blogs
     {
         protected IBlogPostRepository BlogPostRepository { get; }
         protected IBlogRepository BlogRepository { get; }
+        protected IDefaultBlogFeatureProvider BlogFeatureProvider { get; }
+
 
         public BlogPostManager(
             IBlogPostRepository blogPostRepository,
-            IBlogRepository blogRepository)
+            IBlogRepository blogRepository,
+            IDefaultBlogFeatureProvider blogFeatureProvider)
         {
             BlogPostRepository = blogPostRepository;
             BlogRepository = blogRepository;
+            BlogFeatureProvider = blogFeatureProvider;
         }
 
         public virtual async Task<BlogPost> CreateAsync(
