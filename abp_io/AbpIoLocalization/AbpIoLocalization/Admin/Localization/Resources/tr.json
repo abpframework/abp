@@ -174,11 +174,14 @@
     "IsTiered": "Katmanlı mı",
     "ProjectName": "Proje ismi",
     "Username": "Kullanıcı adı",
+    "Tool": "Araç",
     "Command": "Komut",
     "UiFramework": "Ui çerçevesi",
     "Options": "Seçenekler",
     "CliAnalytics": "Cli Analitik",
     "Permission:CliAnalyticses": "Cli Analitikleri",
-    "Permission:CliAnalytics": "Cli Analitik"
+    "Permission:CliAnalytics": "Cli Analitik",
+    "Search": "Ara",
+    "ClearFilter": "Filtreyi temizle"
   }
 }
