@@ -51,7 +51,6 @@ export class AuthenticationService {
         const strategy = this.authService.activeAuthFlowStrategy;
         if (strategy instanceof AuthPasswordFlowStrategy) strategy.setRememberMe(remember);
       }),
-      take(1),
     );
   }
 }
