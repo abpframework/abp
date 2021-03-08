@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Logging
 {
-    public class DefaultInitLogger : IInitLogger
+    public class DefaultInitLogger<T> : IInitLogger<T>
     {
         public List<AbpInitLogEntry> Entries { get; }
 
@@ -12,13 +12,27 @@ namespace Volo.Abp.Logging
         {
             Entries = new List<AbpInitLogEntry>();
         }
-        
-        public void Log(
-            LogLevel logLevel,
-            string message,
-            Exception exception = null)
+
+        public virtual void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            Entries.Add(new AbpInitLogEntry(logLevel, message, exception));
+            Entries.Add(new AbpInitLogEntry
+            {
+                LogLevel = logLevel,
+                EventId = eventId,
+                State = state,
+                Exception = exception,
+                Formatter = (s, e) => formatter((TState)s, e),
+            });
+        }
+
+        public virtual bool IsEnabled(LogLevel logLevel)
+        {
+            return logLevel != LogLevel.None;
+        }
+
+        public virtual IDisposable BeginScope<TState>(TState state)
+        {
+            return NullDisposable.Instance;
         }
     }
 }
