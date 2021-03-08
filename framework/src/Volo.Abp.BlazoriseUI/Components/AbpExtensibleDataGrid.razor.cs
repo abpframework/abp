@@ -32,6 +32,8 @@ namespace Volo.Abp.BlazoriseUI.Components
 
         [Parameter] public IEnumerable<TableColumn> Columns { get; set; }
 
+        [Parameter] public int CurrentPage { get; set; }
+
         [Inject]
         public IStringLocalizerFactory StringLocalizerFactory { get; set; }
 
