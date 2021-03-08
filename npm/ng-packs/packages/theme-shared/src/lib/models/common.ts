@@ -1,5 +1,7 @@
-import { Type } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injector, Type } from '@angular/core';
 import { Validation } from '@ngx-validate/core';
+import { Observable } from 'rxjs';
 
 export interface RootParams {
   httpErrorConfig: HttpErrorConfig;
@@ -16,5 +18,10 @@ export interface HttpErrorConfig {
     hideCloseIcon?: boolean;
   };
 }
+
+export type HttpErrorHandler = (
+  injector: Injector,
+  httpError: HttpErrorResponse,
+) => Observable<any>;
 
 export type LocaleDirection = 'ltr' | 'rtl';
