@@ -139,6 +139,6 @@
     "LinkedinUrlValidationMessage": "Your Linkedin URL can not include whitespace, please be sure your Linkedin URL is correct.",
     "NoPostsFound": "No posts found!",
     "SearchInPosts": "Search in posts...",
-    "MinimumSearchContent": "Minimum search content must be 3 letters!"
+    "MinimumSearchContent": "You must enter at least 3 characters!"
   }
 }
