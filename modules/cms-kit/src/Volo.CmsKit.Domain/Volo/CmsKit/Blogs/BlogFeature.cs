@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogFeature : FullAuditedAggregateRoot<Guid>, IEquatable<BlogFeature>
+    public class BlogFeature : FullAuditedAggregateRoot<Guid>
     {
         public Guid BlogId { get; protected set; }
 
@@ -18,17 +18,6 @@ namespace Volo.CmsKit.Blogs
             BlogId = blogId;
             FeatureName = Check.NotNullOrWhiteSpace(featureName, nameof(featureName));
             IsEnabled = isEnabled;
-        }
-        
-        /*
-         TODO: Overriding Equals is not a good practice for entities (see https://github.com/abpframework/abp/issues/1728)
-               Also, the implementation is not a true equal implementation. It just special comparison for a specific case
-               (used in BlogFeatureManager.GetListAsync). Remove Equals and just do the logic in-place, or create a static
-               method like BlogFeature.IsSameBlogFeature(BlogFeature other).
-        */
-        public bool Equals(BlogFeature other)
-        {
-            return BlogId == other?.BlogId && FeatureName == other?.FeatureName;
         }
     }
 }

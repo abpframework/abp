@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 
@@ -30,9 +31,9 @@ namespace Volo.CmsKit.Blogs
              */
             var defaultFeatures = await DefaultBlogFeatureProvider.GetDefaultFeaturesAsync(blogId);
 
-            defaultFeatures.ForEach(x => blogFeatures.AddIfNotContains(x));
+            defaultFeatures.ForEach(x => blogFeatures.Add(x));
 
-            return blogFeatures;
+            return blogFeatures.Distinct(new BlogFeatureEqualityComparer()).ToList();
         }
 
         public async Task SetAsync(Guid blogId, string featureName, bool isEnabled)
