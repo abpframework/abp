@@ -16,8 +16,8 @@ namespace MyCompanyName.MyProjectName
                 {
                     cmsKit.EnableAll();
                 });
-                //</TEMPLATE-REMOVE>
 
+                //</TEMPLATE-REMOVE>
                 /* You can configure (enable/disable) global features of the used modules here.
                  *
                  * YOU CAN SAFELY DELETE THIS CLASS AND REMOVE ITS USAGES IF YOU DON'T NEED TO IT!
