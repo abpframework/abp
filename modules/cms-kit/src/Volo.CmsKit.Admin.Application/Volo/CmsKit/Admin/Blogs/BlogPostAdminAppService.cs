@@ -54,7 +54,7 @@ namespace Volo.CmsKit.Admin.Blogs
                                                         input.Title,
                                                         input.Slug,
                                                         input.ShortDescription,
-                                                        CurrentTenant.Id);
+                                                        input.Content);
 
             await BlogPostRepository.InsertAsync(blogPost);
 
@@ -68,7 +68,8 @@ namespace Volo.CmsKit.Admin.Blogs
 
             blogPost.SetTitle(input.Title);
             blogPost.SetShortDescription(input.ShortDescription);
-
+            blogPost.SetContent(input.Content);
+            
             if (blogPost.Slug != input.Slug)
             {
                 await BlogPostManager.SetSlugUrlAsync(blogPost, input.Slug);

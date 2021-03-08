@@ -27,7 +27,7 @@ $(function () {
                             text: l('Edit'),
                             visible: abp.auth.isGranted('CmsKit.Blogs.Update'),
                             action: function (data) {
-                                location.href = "/CmsKit/BlogPosts/Update/" + data.record.id
+                                location.href = "BlogPosts/Update/" + data.record.id
                             }
                         },
                         {
@@ -63,6 +63,6 @@ $(function () {
 
     $('#AbpContentToolbar button[name=CreateBlogPost]').on('click', function (e) {
         e.preventDefault();
-        window.location.href = "/CmsKit/BlogPosts/Create"
+        window.location.href = "BlogPosts/Create"
     });
 });

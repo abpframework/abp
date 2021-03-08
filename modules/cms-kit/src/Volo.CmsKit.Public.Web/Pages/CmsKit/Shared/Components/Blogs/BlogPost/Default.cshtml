@@ -1,24 +1,18 @@
 ﻿@model Volo.CmsKit.Public.Blogs.BlogPostPublicDto
-@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
-@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.CmsKit.Localization
 @using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<CmsKitResource> L
 
+<h1>@Model.Title</h1>
 
 <abp-card>
     <abp-card-header>
-        <abp-card-title>@Model.Title</abp-card-title>
         <abp-card-subtitle>@Model.Author?.UserName</abp-card-subtitle>
     </abp-card-header>
 
     <abp-card-body>
-        @await Component.InvokeAsync(typeof(ContentViewComponent), new
-            {
-                entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                entityId = Model.Id.ToString()
-            })
+        @Html.Raw(Model.Content)
     </abp-card-body>
     <abp-card-footer>
         <abp-card-subtitle>@Model.CreationTime</abp-card-subtitle>

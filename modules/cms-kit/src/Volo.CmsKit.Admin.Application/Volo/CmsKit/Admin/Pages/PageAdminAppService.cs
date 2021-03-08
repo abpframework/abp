@@ -50,7 +50,7 @@ namespace Volo.CmsKit.Admin.Pages
         {
             await CheckPageSlugAsync(input.Slug);
 
-            var page = new Page(GuidGenerator.Create(), input.Title, input.Slug, CurrentTenant.Id);
+            var page = new Page(GuidGenerator.Create(), input.Title, input.Slug, input.Content, CurrentTenant.Id);
 
             await PageRepository.InsertAsync(page);
             
@@ -69,6 +69,7 @@ namespace Volo.CmsKit.Admin.Pages
 
             page.SetTitle(input.Title);
             page.SetSlug(input.Slug);
+            page.SetContent(input.Content);
 
             await PageRepository.UpdateAsync(page);
             

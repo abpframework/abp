@@ -58,6 +58,10 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
 
             [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxShortDescriptionLength))]
             public string ShortDescription { get; set; }
+            
+            [HiddenInput]
+            [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxContentLength))]
+            public string Content { get; set; }
         }
     }
 }
