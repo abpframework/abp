@@ -5,7 +5,7 @@
         public string BucketName
         {
             get => _containerConfiguration.GetConfigurationOrDefault<string>(MinioBlobProviderConfigurationNames.BucketName);
-            set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.BucketName, Check.NotNullOrWhiteSpace(value, nameof(value)));
+            set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.BucketName, value);
         }
 
         /// <summary>

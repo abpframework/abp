@@ -42,11 +42,11 @@ namespace Volo.CmsKit.Tags
         {
             cmsKitTagOptions.EntityTypes.Add(
                 new TagEntityTypeDefiniton(
-                    "My.Entity.Type", 
+                    "My.Entity.Type",
                     LocalizableString.Create<CmsKitResource>("MyEntity"),
-                    "SomeCreatePolicy",
-                    "SomeUpdatePolicy",
-                    "SomeDeletePolicy"
+                    new[] { "SomeCreatePolicy" },
+                    new[] { "SomeUpdatePolicy" },
+                    new[] { "SomeDeletePolicy" }
                     ));
         }
 

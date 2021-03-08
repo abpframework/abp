@@ -3,6 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Comments
 {
+    [Serializable]
     public class CommentGetListInput : PagedAndSortedResultRequestDto
     {
         public string EntityType { get; set; }

@@ -1,22 +1,38 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.EventBus;
 
 namespace Volo.CmsKit.Blogs
 {
-    public class BlogFeatureChangedHandler : IDistributedEventHandler<BlogFeatureChangedEto>, ITransientDependency
+    public class BlogFeatureChangedHandler :
+        ILocalEventHandler<EntityCreatedEventData<BlogFeature>>,
+        ILocalEventHandler<EntityUpdatedEventData<BlogFeature>>,
+        ITransientDependency
     {
-        protected IDistributedCache<BlogFeatureDto> Cache { get; }
+        protected IDistributedCache<BlogFeatureCacheItem, BlogFeatureCacheKey> Cache { get; }
 
-        public BlogFeatureChangedHandler(IDistributedCache<BlogFeatureDto> cache)
+        public BlogFeatureChangedHandler(
+            IDistributedCache<BlogFeatureCacheItem, BlogFeatureCacheKey> cache)
         {
             Cache = cache;
         }
 
-        public async Task HandleEventAsync(BlogFeatureChangedEto eventData)
+        public Task RemoveFromCacheAsync(Guid blogId, string featureName)
         {
-            await Cache.RemoveAsync($"{eventData.BlogId}_{eventData.FeatureName}");
+            return Cache.RemoveAsync(new BlogFeatureCacheKey(blogId, featureName));
+        }
+
+        public Task HandleEventAsync(EntityCreatedEventData<BlogFeature> eventData)
+        {
+            return RemoveFromCacheAsync(eventData.Entity.BlogId, eventData.Entity.FeatureName);
+        }
+
+        public Task HandleEventAsync(EntityUpdatedEventData<BlogFeature> eventData)
+        {
+            return RemoveFromCacheAsync(eventData.Entity.BlogId, eventData.Entity.FeatureName);
         }
     }
 }

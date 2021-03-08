@@ -11,15 +11,9 @@ namespace Volo.CmsKit.Blogs
         public static int MinSlugLength { get; set; } = 2;
 
         public static int MaxShortDescriptionLength { get; set; } = 256;
+        
+        public static int MaxContentLength { get; set; } = int.MaxValue;
 
         public const string EntityType = "BlogPost";
-
-        public const string CommentsFeatureName = CommentsFeature.Name;
-
-        public const string ReactionsFeatureName = ReactionsFeature.Name;
-
-        public const string RatingsFeatureName = RatingsFeature.Name;
-
-        public const string TagsFeatureName = TagsFeature.Name;
     }
 }

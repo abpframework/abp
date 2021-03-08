@@ -24,8 +24,6 @@ namespace Volo.CmsKit.MongoDB
         public IMongoCollection<CmsUser> CmsUsers => Collection<CmsUser>();
 
         public IMongoCollection<Rating> Ratings => Collection<Rating>();
-
-        public IMongoCollection<Content> Contents => Collection<Content>();
         
         public IMongoCollection<Tag> Tags => Collection<Tag>();
         
