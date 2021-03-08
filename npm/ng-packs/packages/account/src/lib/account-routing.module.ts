@@ -23,7 +23,13 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: AuthWrapperComponent,
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          replaceableComponent: {
+            key: eAccountComponents.AuthWrapper,
+            defaultComponent: AuthWrapperComponent,
+          } as ReplaceableComponents.RouteData<AuthWrapperComponent>,
+        },
         children: [
           {
             path: 'login',
