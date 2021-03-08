@@ -8,26 +8,40 @@ namespace Volo.CmsKit.Pages
 {
     public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
-        public Guid? TenantId { get; set; }
+        public virtual Guid? TenantId { get; protected set; }
 
-        public virtual string Title { get; set; }
+        public virtual string Title { get; protected set; }
 
-        public virtual string Url { get; set; }
-        
-        public virtual string Description { get; set; }
+        public virtual string Slug { get; protected set; }
+
+        public virtual string Content { get; protected set; }
         
         protected Page()
         {
-            
         }
 
-        public Page(Guid id, [NotNull] string title, [NotNull] string url, [CanBeNull] string description = null, Guid? tenantId = null) : base(id)
+        public Page(Guid id, [NotNull] string title, [NotNull] string slug, string content = null, Guid? tenantId = null) : base(id)
         {
-            Title = Check.NotNullOrWhiteSpace(title, nameof(title), PageConsts.MaxTitleLength);
-            Url = Check.NotNullOrWhiteSpace(url, nameof(url), PageConsts.MaxUrlLength);
-            Description = Check.Length(description, nameof(description), PageConsts.MaxDescriptionLength);
-            
             TenantId = tenantId;
+            
+            SetTitle(title);
+            SetSlug(slug);
+            SetContent(content);
+        }
+
+        public virtual void SetTitle(string title)
+        {
+            Title = Check.NotNullOrEmpty(title, nameof(title), PageConsts.MaxTitleLength);
+        }
+
+        public virtual void SetSlug(string slug)
+        {
+            Slug = Check.NotNullOrEmpty(slug, nameof(slug), PageConsts.MaxSlugLength);
+        }
+
+        public virtual void SetContent(string content)
+        {
+            Content = Check.Length(content, nameof(content), PageConsts.MaxContentLength);
         }
     }
 }

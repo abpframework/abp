@@ -35,6 +35,7 @@
     "NameFilter": "Name",
     "CreationTime": "Creation time",
     "IsPro": "Is pro",
+    "IsFreeToActiveLicenseOwners": "Free to license owners",
     "ShowOnModuleList": "Show on module list",
     "EfCoreConfigureMethodName": "Configure method name",
     "IsProFilter": "Is pro",
@@ -90,6 +91,7 @@
     "UserNotFound": "User not found",
     "{0}WillBeRemovedFromDevelopers": "{0} Will be removed from developers, do you confirm?",
     "{0}WillBeRemovedFromOwners": "{0} Will be removed from owners, do you confirm?",
+    "{0}WillBeRemovedFromMembers": "{0} Will be removed from members, do you confirm?",
     "Computers": "Computers",
     "UniqueComputerId": "Unique computer id",
     "LastSeenDate": "Last seen date",
@@ -212,7 +214,10 @@
     "Currency": "Currency",
     "Gateway": "Gateway",
     "State": "State",
-    "FailReason": "Fail reason"
-      
+    "FailReason": "Fail reason",
+    "ReIndexAllPosts": "Reindex All Posts",
+    "ReIndexAllPostsConfirmationMessage": "Are you sure you want to reindex all posts?",
+    "SuccessfullyReIndexAllPosts": "All posts have been successfully reindexed.",
+    "Permission:FullSearch": "Full text search"
   }
 }

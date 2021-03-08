@@ -59,13 +59,15 @@ namespace Volo.CmsKit.Public.Web
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<RazorPagesOptions>(options =>
+            if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
             {
-                if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+                Configure<RazorPagesOptions>(options =>
                 {
-                    options.Conventions.AddPageRoute("/CmsKit/Pages/Index", @"{*pageUrl:minlength(1)}");
-                }
-            });
+                    options.Conventions.AddPageRoute("/Public/CmsKit/Pages/Index", @"/pages/{slug:minlength(1)}");
+                    options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/Index", @"/blogs/{blogSlug:minlength(1)}");
+                    options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
+                });
+            }
         }
     }
 }

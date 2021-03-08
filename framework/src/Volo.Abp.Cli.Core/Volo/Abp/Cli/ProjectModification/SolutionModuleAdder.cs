@@ -78,7 +78,6 @@ namespace Volo.Abp.Cli.ProjectModification
         public virtual async Task AddAsync(
             [NotNull] string solutionFile,
             [NotNull] string moduleName,
-            string startupProject,
             string version,
             bool skipDbMigrations = false,
             bool withSourceCode = false,
@@ -128,7 +127,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             await RunBundleForBlazorAsync(projectFiles, module);
 
-            ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
+            ModifyDbContext(projectFiles, module, skipDbMigrations);
         }
 
         private async Task RunBundleForBlazorAsync(string[] projectFiles, ModuleWithMastersInfo module)
@@ -450,8 +449,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        protected void ModifyDbContext(string[] projectFiles, ModuleInfo module, string startupProject,
-            bool skipDbMigrations = false)
+        protected void ModifyDbContext(string[] projectFiles, ModuleInfo module, bool skipDbMigrations = false)
         {
             if (string.IsNullOrWhiteSpace(module.EfCoreConfigureMethodName))
             {
@@ -461,11 +459,6 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
 
                 return;
-            }
-
-            if (string.IsNullOrWhiteSpace(startupProject))
-            {
-                startupProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrator.csproj"));
             }
 
             var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"));
@@ -498,7 +491,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 if (addedNewBuilder)
                 {
-                    EfCoreMigrationManager.AddMigration(dbMigrationsProject, module.Name, startupProject);
+                    EfCoreMigrationManager.AddMigration(dbMigrationsProject, module.Name);
                 }
 
                 RunMigrator(projectFiles);

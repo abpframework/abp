@@ -17,6 +17,21 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 services.Replace(ServiceDescriptor.Transient(dbContextType, typeof(TMongoDbContext)));
             }
+            
+            foreach (var dbContextType in options.ReplacedDbContextTypes)
+            {
+                services.Replace(
+                    ServiceDescriptor.Transient(
+                        dbContextType,
+                        sp => sp.GetRequiredService(typeof(TMongoDbContext))
+                    )
+                );
+
+                services.Configure<AbpMongoDbContextOptions>(opts =>
+                {
+                    opts.DbContextReplacements[dbContextType] = typeof(TMongoDbContext);
+                });
+            }
 
             new MongoDbRepositoryRegistrar(options).AddRepositories();
 

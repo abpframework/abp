@@ -11,11 +11,11 @@ namespace Volo.CmsKit.Tags
 {
     public class DefaultTagDefinitionStore : ITagDefinitionStore, ITransientDependency
     {
-        private readonly CmsKitTagOptions options;
+        protected CmsKitTagOptions CmsKitTagOptions { get; }
 
         public DefaultTagDefinitionStore(IOptions<CmsKitTagOptions> options)
         {
-            this.options = options.Value;
+            CmsKitTagOptions = options.Value;
         }
 
         /// <summary>
@@ -24,11 +24,12 @@ namespace Volo.CmsKit.Tags
         /// <param name="entityType">EntityType to get definition.</param>
         /// <exception cref="EntityNotTaggableException">Thrown when EntityType is not configured as taggable.</exception>
         /// <exception cref="InvalidOperationException">More than one element satisfies the condition in predicate.</exception>
-        public virtual Task<TagEntityTypeDefiniton> GetTagEntityTypeDefinitionsAsync([NotNull] string entityType)
+        public virtual Task<TagEntityTypeDefiniton> GetTagEntityTypeDefinitionAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-            var result = options.EntityTypes.SingleOrDefault(x => x.EntityType == entityType) ?? throw new EntityNotTaggableException(entityType);
+            var result = CmsKitTagOptions.EntityTypes.SingleOrDefault(x => x.EntityType == entityType) ??
+                         throw new EntityNotTaggableException(entityType);
 
             return Task.FromResult(result);
         }
@@ -38,7 +39,7 @@ namespace Volo.CmsKit.Tags
         /// </summary>
         public virtual Task<List<TagEntityTypeDefiniton>> GetTagEntityTypeDefinitionListAsync()
         {
-            return Task.FromResult(options.EntityTypes.ToList());
+            return Task.FromResult(CmsKitTagOptions.EntityTypes.ToList());
         }
 
         /// <summary>
@@ -50,9 +51,9 @@ namespace Volo.CmsKit.Tags
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-            var definition = options.EntityTypes.SingleOrDefault(x => x.EntityType == entityType);
+            var isDefined = CmsKitTagOptions.EntityTypes.Any(x => x.EntityType == entityType);
 
-            return Task.FromResult(definition != null);
+            return Task.FromResult(isDefined);
         }
     }
 }

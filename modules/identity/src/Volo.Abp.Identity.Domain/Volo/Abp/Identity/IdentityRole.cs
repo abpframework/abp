@@ -108,10 +108,22 @@ namespace Volo.Abp.Identity
             Name = name;
 
             AddLocalEvent(
+#pragma warning disable 618
                 new IdentityRoleNameChangedEvent
+#pragma warning restore 618
                 {
                     IdentityRole = this,
                     OldName = oldName
+                }
+            );
+
+            AddDistributedEvent(
+                new IdentityRoleNameChangedEto
+                {
+                    Id = Id,
+                    Name = Name,
+                    OldName = oldName,
+                    TenantId = TenantId
                 }
             );
         }

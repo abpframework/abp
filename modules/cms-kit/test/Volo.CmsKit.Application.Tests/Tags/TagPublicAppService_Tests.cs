@@ -3,7 +3,7 @@ using NSubstitute;
 using Shouldly;
 using System.Threading.Tasks;
 using Volo.Abp.Users;
-using Volo.CmsKit.Public.Tags;
+using Volo.CmsKit.Tags;
 using Xunit;
 
 namespace Volo.CmsKit.Tags

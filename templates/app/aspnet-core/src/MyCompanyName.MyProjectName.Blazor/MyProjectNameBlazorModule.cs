@@ -16,6 +16,8 @@ using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Blazor;
 using Volo.Abp.UI.Navigation;
+using MyCompanyName.MyProjectName.Blazor.Menus;
+using Volo.Abp.SettingManagement.Blazor;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
@@ -24,7 +26,8 @@ namespace MyCompanyName.MyProjectName.Blazor
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
         typeof(AbpIdentityBlazorModule),
-        typeof(AbpTenantManagementBlazorModule)
+        typeof(AbpTenantManagementBlazorModule),
+        typeof(AbpSettingManagementBlazorModule)
     )]
     public class MyProjectNameBlazorModule : AbpModule
     {

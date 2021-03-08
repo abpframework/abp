@@ -1,7 +1,9 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.CmsKit.Public.Reactions
 {
+    [Serializable]
     public class ReactionDto
     {
         [NotNull]

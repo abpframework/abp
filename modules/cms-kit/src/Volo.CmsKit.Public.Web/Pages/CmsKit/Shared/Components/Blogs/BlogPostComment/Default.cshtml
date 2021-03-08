@@ -1,0 +1,22 @@
+﻿@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
+@using Volo.CmsKit.Localization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<CmsKitResource> L
+
+@model DefaultBlogPostCommentViewComponent.DefaultBlogPostCommentViewModel
+
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>@L["Comments"]</abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync(typeof(CommentingViewComponent), new
+           {
+               entityType = Model.EntityType,
+               entityId = Model.EntityId
+           })
+    </abp-card-body>
+</abp-card>

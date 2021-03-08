@@ -165,6 +165,7 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseAbpRequestLocalization();
+            app.UseAbpSecurityHeaders();
 
             if (!env.IsDevelopment())
             {

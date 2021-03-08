@@ -2,6 +2,18 @@
   "culture": "tr",
   "texts": {
     "Settings": "Ayarlar",
-    "SuccessfullySaved": "Başarıyla Kaydedildi"
+    "SuccessfullySaved": "Başarıyla Kaydedildi",
+    "Permission:SettingManagement": "Ayarlar yönetimi",
+    "Permission:Emailing": "Email",
+    "Menu:Emailing": "Email",
+    "SmtpHost": "Sunucu",
+    "SmtpPort": "Port",
+    "SmtpUserName": "Kullanıcı adı",
+    "SmtpPassword": "şifre",
+    "SmtpDomain": "Domain",
+    "SmtpEnableSsl": "Ssl'i aktif et",
+    "SmtpUseDefaultCredentials": "Varsayılan yetkilendirmeleri kullan",
+    "DefaultFromAddress": "Varsayılan gönderici görünen isim",
+    "DefaultFromDisplayName": "Varsayılan gönderici email adresi"
   }
 }

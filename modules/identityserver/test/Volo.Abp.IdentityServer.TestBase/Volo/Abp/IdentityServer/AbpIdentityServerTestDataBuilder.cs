@@ -75,6 +75,9 @@ namespace Volo.Abp.IdentityServer
 
             apiScope.AddUserClaim("Test-ApiScope-Claim-Type-1");
             await _apiScopeRepository.InsertAsync(apiScope);
+
+            var apiScope2 = new ApiScope(_guidGenerator.Create(), "Test-ApiScope-Name-2");
+            await _apiScopeRepository.InsertAsync(apiScope2);
         }
 
         private async Task AddApiResources()

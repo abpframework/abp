@@ -13,15 +13,10 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
     {
         protected const string FeatureProviderName = "T";
 
-        protected bool HasManageConnectionStringsPermission;
         protected bool HasManageFeaturesPermission;
-        protected string ManageConnectionStringsPolicyName;
         protected string ManageFeaturesPolicyName;
 
         protected FeatureManagementModal FeatureManagementModal;
-
-        protected Modal ManageConnectionStringModal;
-        protected Validations ManageConnectionStringValidations;
 
         protected TenantInfoModel TenantInfo;
 
@@ -33,7 +28,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
             CreatePolicyName = TenantManagementPermissions.Tenants.Create;
             UpdatePolicyName = TenantManagementPermissions.Tenants.Update;
             DeletePolicyName = TenantManagementPermissions.Tenants.Delete;
-            ManageConnectionStringsPolicyName = TenantManagementPermissions.Tenants.ManageConnectionStrings;
+
             ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
 
             TenantInfo = new TenantInfoModel();
@@ -43,48 +38,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
         {
             await base.SetPermissionsAsync();
 
-            HasManageConnectionStringsPermission = await AuthorizationService.IsGrantedAsync(ManageConnectionStringsPolicyName);
             HasManageFeaturesPermission = await AuthorizationService.IsGrantedAsync(ManageFeaturesPolicyName);
-        }
-
-        protected virtual async Task OpenEditConnectionStringModalAsync(TenantDto entity)
-        {
-            ManageConnectionStringValidations.ClearAll();
-
-            var tenantConnectionString = await AppService.GetDefaultConnectionStringAsync(entity.Id);
-
-            TenantInfo = new TenantInfoModel
-            {
-                Id = entity.Id,
-                DefaultConnectionString = tenantConnectionString,
-                UseSharedDatabase = tenantConnectionString.IsNullOrWhiteSpace()
-            };
-
-            await InvokeAsync(ManageConnectionStringModal.Show);
-        }
-
-        protected virtual Task CloseEditConnectionStringModal()
-        {
-            return InvokeAsync(ManageConnectionStringModal.Hide);
-        }
-
-        protected virtual async Task UpdateConnectionStringAsync()
-        {
-            if (ManageConnectionStringValidations.ValidateAll())
-            {
-                await CheckPolicyAsync(ManageConnectionStringsPolicyName);
-
-                if (TenantInfo.UseSharedDatabase || TenantInfo.DefaultConnectionString.IsNullOrWhiteSpace())
-                {
-                    await AppService.DeleteDefaultConnectionStringAsync(TenantInfo.Id);
-                }
-                else
-                {
-                    await AppService.UpdateDefaultConnectionStringAsync(TenantInfo.Id, TenantInfo.DefaultConnectionString);
-                }
-
-                await InvokeAsync(ManageConnectionStringModal.Hide);
-            }
         }
 
         protected override string GetDeleteConfirmationMessage(TenantDto entity)
@@ -96,10 +50,5 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
     public class TenantInfoModel
     {
         public Guid Id { get; set; }
-
-        public bool UseSharedDatabase { get; set; }
-
-        [Required]
-        public string DefaultConnectionString { get; set; }
     }
 }

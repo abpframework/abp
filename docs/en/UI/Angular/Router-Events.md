@@ -1,6 +1,6 @@
 # Router Events Simplified
 
-`RouterEvents` is a utility service to provide an easy implementation for one of the most frequent needs in Angular templates: `TrackByFunction`. Please see [this page in Angular docs](https://angular.io/guide/template-syntax#ngfor-with-trackby) for its purpose.
+`RouterEvents` is a utility service for filtering specific router events and reacting to them. Please see [this page in Angular docs](https://angular.io/api/router/Event) for available router events.
 
 
 
