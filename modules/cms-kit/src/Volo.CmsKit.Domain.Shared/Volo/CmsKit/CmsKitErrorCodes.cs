@@ -24,6 +24,11 @@
         {
             public const string SlugAlreadyExist = "CmsKit:BlogPost:0001";
         }
+
+        public static class Comments
+        {
+            public const string EntityNotCommentable = "CmsKit:Comments:0001";
+        }
         
         public static class MediaDescriptors
         {

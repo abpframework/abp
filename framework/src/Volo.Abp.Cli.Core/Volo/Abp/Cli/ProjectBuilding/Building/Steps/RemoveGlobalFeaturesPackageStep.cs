@@ -7,8 +7,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
     {
         public override void Execute(ProjectBuildContext context)
         {
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyCompanyName.MyProjectName.Domain.Shared.csproj"))?.RemoveTemplateCodeIf("CMS-KIT");
-            context.Files.FirstOrDefault(f => f.Name.EndsWith("MyProjectNameDomainSharedModule.cs"))?.RemoveTemplateCodeIf("CMS-KIT");
+            var commonFiles = context.Files.Where(f =>
+                f.Name.EndsWith(".csproj") ||
+                f.Name.EndsWith(".cs") ||
+                f.Name.EndsWith(".cshtml"));
+
+            foreach (var file in commonFiles)
+            {
+                file.RemoveTemplateCodeIf("CMS-KIT");
+            }
         }
     }
 }

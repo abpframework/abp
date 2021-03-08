@@ -3,9 +3,7 @@
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages.PageViewModel
 @inject IPageLayout PageLayout
 
-@{
-    PageLayout.Content.Title = Model.Title;
-}
+<h1>@Model.Title</h1>
 
 <abp-card>
     <abp-card-body>

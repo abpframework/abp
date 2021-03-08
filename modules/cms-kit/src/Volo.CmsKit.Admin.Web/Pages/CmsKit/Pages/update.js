@@ -18,7 +18,7 @@
                 success: function (result) {
                     abp.notify.success(l('SuccessfullySaved'));
                     abp.ui.clearBusy();
-                    location.href = "/CmsKit/Pages/";
+                    location.href = "../../Pages";
                 }
             });
         }
