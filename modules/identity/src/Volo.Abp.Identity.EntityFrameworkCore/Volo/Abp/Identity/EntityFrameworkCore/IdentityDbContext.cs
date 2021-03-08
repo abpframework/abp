@@ -32,7 +32,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
+            AbpDbContextEvent.OnConfiguring(nameof(IdentityDbContext), optionsBuilder);
 
         }
 
@@ -42,7 +42,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             builder.ConfigureIdentity();
 
-            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
+            AbpDbContextEvent.OnModelCreating(nameof(IdentityDbContext), builder);
 
         }
 

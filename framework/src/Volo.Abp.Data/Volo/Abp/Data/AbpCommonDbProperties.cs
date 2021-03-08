@@ -16,10 +16,7 @@
         public static string DbSchema { get; set; } = null;
 
         /// <summary>
-        /// This DbNamingConvention is shared by most of the ABP modules.
-        /// Values: Default, SnakeCase, LowerCase, UpperCase, UpperSnakeCase
-        /// 
-        /// Default value: "Default".
+        /// DbNamingConvention
         /// </summary>
         public static DbNamingConvention DbNamingConvention = DbNamingConvention.Default;
     }

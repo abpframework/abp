@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using EFCore.NamingConventions.Internal;
+﻿using EFCore.NamingConventions.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Globalization;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.EntityFrameworkCore

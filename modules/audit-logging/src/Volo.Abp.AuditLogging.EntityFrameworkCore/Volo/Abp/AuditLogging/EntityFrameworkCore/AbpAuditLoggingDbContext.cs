@@ -19,8 +19,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
-
+            AbpDbContextEvent.OnConfiguring(nameof(AbpAuditLoggingDbContext), optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -29,7 +28,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             builder.ConfigureAuditLogging();
 
-            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
+            AbpDbContextEvent.OnModelCreating(nameof(AbpAuditLoggingDbContext), builder);
 
         }
 

@@ -87,7 +87,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
+            AbpDbContextEvent.OnConfiguring(nameof(IdentityServerDbContext), optionsBuilder);
 
         }
 
@@ -97,7 +97,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.ConfigureIdentityServer();
 
-            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
+            AbpDbContextEvent.OnModelCreating(nameof(IdentityServerDbContext), builder);
 
         }
 

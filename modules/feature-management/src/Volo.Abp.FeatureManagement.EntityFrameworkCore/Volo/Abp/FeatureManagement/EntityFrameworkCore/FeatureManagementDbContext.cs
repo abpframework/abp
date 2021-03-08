@@ -21,8 +21,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
-
+            AbpDbContextEvent.OnConfiguring(nameof(FeatureManagementDbContext), optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -31,8 +30,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
             builder.ConfigureFeatureManagement();
 
-            builder.NamingConventionsRewriteName(AbpCommonDbProperties.DbNamingConvention);
-
+            AbpDbContextEvent.OnModelCreating(nameof(FeatureManagementDbContext), builder);
         }
 
 
