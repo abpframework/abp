@@ -66,6 +66,7 @@
         var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
 
         if (tags.length === 0) {
+            finishSaving();
             return;
         }
 
@@ -76,7 +77,7 @@
                 tags: tags
             })
             .then(function (result) {
-                finishSaving();
+                finishSaving(result);
             });
     }
 
