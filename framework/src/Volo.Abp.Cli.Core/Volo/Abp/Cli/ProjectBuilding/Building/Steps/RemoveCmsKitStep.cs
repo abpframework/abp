@@ -9,12 +9,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         {
             var commonFiles = context.Files.Where(f =>
                 f.Name.EndsWith(".csproj") ||
-                f.Name.EndsWith("Module.cs") ||
-                f.Name.EndsWith("MyProjectNameMigrationsDbContext.cs") ||
-                f.Name.EndsWith("MyProjectNameMigrationsDbContextBase.cs") ||
-                f.Name.EndsWith("MyProjectNameGlobalFeatureConfigurator.cs") ||
-                (f.Name.EndsWith(".cshtml") && f.Name.Contains("MyCompanyName.MyProjectName.Web.Public"))
-                );
+                f.Name.EndsWith(".cs") ||
+                f.Name.EndsWith(".json") ||
+                f.Name.EndsWith(".cshtml"));
 
             foreach (var file in commonFiles)
             {

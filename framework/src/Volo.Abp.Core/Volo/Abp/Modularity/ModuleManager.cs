@@ -32,8 +32,6 @@ namespace Volo.Abp.Modularity
 
         public void InitializeModules(ApplicationInitializationContext context)
         {
-            LogListOfModules();
-
             foreach (var contributor in _lifecycleContributors)
             {
                 foreach (var module in _moduleContainer.Modules)
@@ -50,16 +48,6 @@ namespace Volo.Abp.Modularity
             }
 
             _logger.LogInformation("Initialized all ABP modules.");
-        }
-
-        private void LogListOfModules()
-        {
-            _logger.LogInformation("Loaded ABP modules:");
-
-            foreach (var module in _moduleContainer.Modules)
-            {
-                _logger.LogInformation("- " + module.Type.FullName);
-            }
         }
 
         public void ShutdownModules(ApplicationShutdownContext context)
