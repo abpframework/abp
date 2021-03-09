@@ -127,7 +127,7 @@ var luxon = (function (exports) {
     if (typeof o === "string") return _arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Map" || n === "Set") return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
   }
 
@@ -281,12 +281,6 @@ var luxon = (function (exports) {
     year: n,
     month: s,
     day: n
-  };
-  var DATE_MED_WITH_WEEKDAY = {
-    year: n,
-    month: s,
-    day: n,
-    weekday: s
   };
   var DATE_FULL = {
     year: n,
@@ -526,17 +520,11 @@ var luxon = (function (exports) {
       n = 2;
     }
 
-    var minus = input < 0 ? "-" : "";
-    var target = minus ? input * -1 : input;
-    var result;
-
-    if (target.toString().length < n) {
-      result = ("0".repeat(n) + target).slice(-n);
+    if (input.toString().length < n) {
+      return ("0".repeat(n) + input).slice(-n);
     } else {
-      result = target.toString();
+      return input.toString();
     }
-
-    return "" + minus + result;
   }
   function parseInteger(string) {
     if (isUndefined(string) || string === null || string === "") {
@@ -676,19 +664,20 @@ var luxon = (function (exports) {
     return normalized;
   }
   function formatOffset(offset, format) {
-    var hours = Math.trunc(Math.abs(offset / 60)),
-        minutes = Math.trunc(Math.abs(offset % 60)),
-        sign = offset >= 0 ? "+" : "-";
+    var hours = Math.trunc(offset / 60),
+        minutes = Math.abs(offset % 60),
+        sign = hours >= 0 && !Object.is(hours, -0) ? "+" : "-",
+        base = "" + sign + Math.abs(hours);
 
     switch (format) {
       case "short":
-        return "" + sign + padStart(hours, 2) + ":" + padStart(minutes, 2);
+        return "" + sign + padStart(Math.abs(hours), 2) + ":" + padStart(minutes, 2);
 
       case "narrow":
-        return "" + sign + hours + (minutes > 0 ? ":" + minutes : "");
+        return minutes > 0 ? base + ":" + minutes : base;
 
       case "techie":
-        return "" + sign + padStart(hours, 2) + padStart(minutes, 2);
+        return "" + sign + padStart(Math.abs(hours), 2) + padStart(minutes, 2);
 
       default:
         throw new RangeError("Value format " + format + " is out of range for property format");
@@ -840,9 +829,6 @@ var luxon = (function (exports) {
 
       case stringify(DATE_MED):
         return "LLL d, yyyy";
-
-      case stringify(DATE_MED_WITH_WEEKDAY):
-        return "EEE, LLL d, yyyy";
 
       case stringify(DATE_FULL):
         return "LLLL d, yyyy";
@@ -1124,7 +1110,7 @@ var luxon = (function (exports) {
         }, "era");
       },
           tokenToString = function tokenToString(token) {
-        // Where possible: http://cldr.unicode.org/translation/date-time-1/date-time#TOC-Standalone-vs.-Format-Styles
+        // Where possible: http://cldr.unicode.org/translation/date-time#TOC-Stand-Alone-vs.-Format-Styles
         switch (token) {
           // ms
           case "S":
@@ -1565,7 +1551,7 @@ var luxon = (function (exports) {
 
   var singleton = null;
   /**
-   * Represents the local zone for this JavaScript environment.
+   * Represents the local zone for this Javascript environment.
    * @implements {Zone}
    */
 
@@ -2481,30 +2467,21 @@ var luxon = (function (exports) {
       var z;
 
       if (dt.zone.universal && this.hasIntl) {
-        // UTC-8 or Etc/UTC-8 are not part of tzdata, only Etc/GMT+8 and the like.
-        // That is why fixed-offset TZ is set to that unless it is:
-        // 1. Outside of the supported range Etc/GMT-14 to Etc/GMT+12.
-        // 2. Not a whole hour, e.g. UTC+4:30.
-        var gmtOffset = -1 * (dt.offset / 60);
+        // Chromium doesn't support fixed-offset zones like Etc/GMT+8 in its formatter,
+        // See https://bugs.chromium.org/p/chromium/issues/detail?id=364374.
+        // So we have to make do. Two cases:
+        // 1. The format options tell us to show the zone. We can't do that, so the best
+        // we can do is format the date in UTC.
+        // 2. The format options don't tell us to show the zone. Then we can adjust them
+        // the time and tell the formatter to show it to us in UTC, so that the time is right
+        // and the bad zone doesn't show up.
+        // We can clean all this up when Chrome fixes this.
+        z = "UTC";
 
-        if (gmtOffset >= -14 && gmtOffset <= 12 && gmtOffset % 1 === 0) {
-          z = gmtOffset >= 0 ? "Etc/GMT+" + gmtOffset : "Etc/GMT" + gmtOffset;
+        if (opts.timeZoneName) {
           this.dt = dt;
         } else {
-          // Not all fixed-offset zones like Etc/+4:30 are present in tzdata.
-          // So we have to make do. Two cases:
-          // 1. The format options tell us to show the zone. We can't do that, so the best
-          // we can do is format the date in UTC.
-          // 2. The format options don't tell us to show the zone. Then we can adjust them
-          // the time and tell the formatter to show it to us in UTC, so that the time is right
-          // and the bad zone doesn't show up.
-          z = "UTC";
-
-          if (opts.timeZoneName) {
-            this.dt = dt;
-          } else {
-            this.dt = dt.offset === 0 ? dt : DateTime.fromMillis(dt.ts + dt.offset * 60 * 1000);
-          }
+          this.dt = dt.offset === 0 ? dt : DateTime.fromMillis(dt.ts + dt.offset * 60 * 1000);
         }
       } else if (dt.zone.type === "local") {
         this.dt = dt;
@@ -2806,7 +2783,7 @@ var luxon = (function (exports) {
       return listStuff(this, length, defaultOK, eras, function () {
         var intl = {
           era: length
-        }; // This is problematic. Different calendars are going to define eras totally differently. What I need is the minimum set of dates
+        }; // This is utter bullshit. Different calendars are going to define eras totally differently. What I need is the minimum set of dates
         // to definitely enumerate them.
 
         if (!_this4.eraCache[length]) {
@@ -2960,7 +2937,7 @@ var luxon = (function (exports) {
 
 
   var offsetRegex = /(?:(Z)|([+-]\d\d)(?::?(\d\d))?)/,
-      isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,30}))?)?)?/,
+      isoTimeBaseRegex = /(\d\d)(?::?(\d\d)(?::?(\d\d)(?:[.,](\d{1,9}))?)?)?/,
       isoTimeRegex = RegExp("" + isoTimeBaseRegex.source + offsetRegex.source + "?"),
       isoTimeExtensionRegex = RegExp("(?:T" + isoTimeRegex.source + ")?"),
       isoYmdRegex = /([+-]\d{6}|\d{4})(?:-?(\d\d)(?:-?(\d\d))?)?/,
@@ -2989,10 +2966,10 @@ var luxon = (function (exports) {
 
   function extractISOTime(match, cursor) {
     var item = {
-      hours: int(match, cursor, 0),
-      minutes: int(match, cursor + 1, 0),
-      seconds: int(match, cursor + 2, 0),
-      milliseconds: parseMillis(match[cursor + 3])
+      hour: int(match, cursor, 0),
+      minute: int(match, cursor + 1, 0),
+      second: int(match, cursor + 2, 0),
+      millisecond: parseMillis(match[cursor + 3])
     };
     return [item, null, cursor + 4];
   }
@@ -3007,12 +2984,10 @@ var luxon = (function (exports) {
   function extractIANAZone(match, cursor) {
     var zone = match[cursor] ? IANAZone.create(match[cursor]) : null;
     return [{}, zone, cursor + 1];
-  } // ISO time parsing
+  } // ISO duration parsing
 
 
-  var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$"); // ISO duration parsing
-
-  var isoDuration = /^-?P(?:(?:(-?\d{1,9})Y)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})W)?(?:(-?\d{1,9})D)?(?:T(?:(-?\d{1,9})H)?(?:(-?\d{1,9})M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
+  var isoDuration = /^-?P(?:(?:(-?\d{1,9})Y)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})W)?(?:(-?\d{1,9})D)?(?:T(?:(-?\d{1,9})H)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})(?:[.,](-?\d{1,9}))?S)?)?)$/;
 
   function extractISODuration(match) {
     var s = match[0],
@@ -3161,10 +3136,6 @@ var luxon = (function (exports) {
   function parseISODuration(s) {
     return parse(s, [isoDuration, extractISODuration]);
   }
-  var extractISOTimeOnly = combineExtractors(extractISOTime);
-  function parseISOTimeOnly(s) {
-    return parse(s, [isoTimeOnly, extractISOTimeOnly]);
-  }
   var sqlYmdWithTimeExtensionRegex = combineRegexes(sqlYmdRegex, sqlTimeExtensionRegex);
   var sqlTimeCombinedRegex = combineRegexes(sqlTimeRegex);
   var extractISOYmdTimeOffsetAndIANAZone = combineExtractors(extractISOYmd, extractISOTime, extractISOOffset, extractIANAZone);
@@ -3204,7 +3175,6 @@ var luxon = (function (exports) {
   },
       casualMatrix = Object.assign({
     years: {
-      quarters: 4,
       months: 12,
       weeks: 52,
       days: 365,
@@ -3219,7 +3189,6 @@ var luxon = (function (exports) {
       days: 91,
       hours: 91 * 24,
       minutes: 91 * 24 * 60,
-      seconds: 91 * 24 * 60 * 60,
       milliseconds: 91 * 24 * 60 * 60 * 1000
     },
     months: {
@@ -3235,7 +3204,6 @@ var luxon = (function (exports) {
       daysInMonthAccurate = 146097.0 / 4800,
       accurateMatrix = Object.assign({
     years: {
-      quarters: 4,
       months: 12,
       weeks: daysInYearAccurate / 7,
       days: daysInYearAccurate,
@@ -3378,7 +3346,7 @@ var luxon = (function (exports) {
       }, opts));
     }
     /**
-     * Create a Duration from a JavaScript object with keys like 'years' and 'hours.
+     * Create a Duration from a Javascript object with keys like 'years' and 'hours.
      * If this object is empty then a zero milliseconds duration is returned.
      * @param {Object} obj - the object to create the DateTime from
      * @param {number} obj.years
@@ -3427,34 +3395,6 @@ var luxon = (function (exports) {
     Duration.fromISO = function fromISO(text, opts) {
       var _parseISODuration = parseISODuration(text),
           parsed = _parseISODuration[0];
-
-      if (parsed) {
-        var obj = Object.assign(parsed, opts);
-        return Duration.fromObject(obj);
-      } else {
-        return Duration.invalid("unparsable", "the input \"" + text + "\" can't be parsed as ISO 8601");
-      }
-    }
-    /**
-     * Create a Duration from an ISO 8601 time string.
-     * @param {string} text - text to parse
-     * @param {Object} opts - options for parsing
-     * @param {string} [opts.locale='en-US'] - the locale to use
-     * @param {string} opts.numberingSystem - the numbering system to use
-     * @param {string} [opts.conversionAccuracy='casual'] - the conversion system to use
-     * @see https://en.wikipedia.org/wiki/ISO_8601#Times
-     * @example Duration.fromISOTime('11:22:33.444').toObject() //=> { hours: 11, minutes: 22, seconds: 33, milliseconds: 444 }
-     * @example Duration.fromISOTime('11:00').toObject() //=> { hours: 11, minutes: 0, seconds: 0 }
-     * @example Duration.fromISOTime('T11:00').toObject() //=> { hours: 11, minutes: 0, seconds: 0 }
-     * @example Duration.fromISOTime('1100').toObject() //=> { hours: 11, minutes: 0, seconds: 0 }
-     * @example Duration.fromISOTime('T1100').toObject() //=> { hours: 11, minutes: 0, seconds: 0 }
-     * @return {Duration}
-     */
-    ;
-
-    Duration.fromISOTime = function fromISOTime(text, opts) {
-      var _parseISOTimeOnly = parseISOTimeOnly(text),
-          parsed = _parseISOTimeOnly[0];
 
       if (parsed) {
         var obj = Object.assign(parsed, opts);
@@ -3569,7 +3509,7 @@ var luxon = (function (exports) {
       return this.isValid ? Formatter.create(this.loc, fmtOpts).formatDurationFromString(this, fmt) : INVALID;
     }
     /**
-     * Returns a JavaScript object with this Duration's values.
+     * Returns a Javascript object with this Duration's values.
      * @param opts - options for generating the object
      * @param {boolean} [opts.includeConfig=false] - include configuration attributes in the output
      * @example Duration.fromObject({ years: 1, days: 6, seconds: 2 }).toObject() //=> { years: 1, days: 6, seconds: 2 }
@@ -3623,57 +3563,6 @@ var luxon = (function (exports) {
       return s;
     }
     /**
-     * Returns an ISO 8601-compliant string representation of this Duration, formatted as a time of day.
-     * Note that this will return null if the duration is invalid, negative, or equal to or greater than 24 hours.
-     * @see https://en.wikipedia.org/wiki/ISO_8601#Times
-     * @param {Object} opts - options
-     * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
-     * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
-     * @param {boolean} [opts.includePrefix=false] - include the `T` prefix
-     * @param {string} [opts.format='extended'] - choose between the basic and extended format
-     * @example Duration.fromObject({ hours: 11 }).toISOTime() //=> '11:00:00.000'
-     * @example Duration.fromObject({ hours: 11 }).toISOTime({ suppressMilliseconds: true }) //=> '11:00:00'
-     * @example Duration.fromObject({ hours: 11 }).toISOTime({ suppressSeconds: true }) //=> '11:00'
-     * @example Duration.fromObject({ hours: 11 }).toISOTime({ includePrefix: true }) //=> 'T11:00:00.000'
-     * @example Duration.fromObject({ hours: 11 }).toISOTime({ format: 'basic' }) //=> '110000.000'
-     * @return {string}
-     */
-    ;
-
-    _proto.toISOTime = function toISOTime(opts) {
-      if (opts === void 0) {
-        opts = {};
-      }
-
-      if (!this.isValid) return null;
-      var millis = this.toMillis();
-      if (millis < 0 || millis >= 86400000) return null;
-      opts = Object.assign({
-        suppressMilliseconds: false,
-        suppressSeconds: false,
-        includePrefix: false,
-        format: "extended"
-      }, opts);
-      var value = this.shiftTo("hours", "minutes", "seconds", "milliseconds");
-      var fmt = opts.format === "basic" ? "hhmm" : "hh:mm";
-
-      if (!opts.suppressSeconds || value.seconds !== 0 || value.milliseconds !== 0) {
-        fmt += opts.format === "basic" ? "ss" : ":ss";
-
-        if (!opts.suppressMilliseconds || value.milliseconds !== 0) {
-          fmt += ".SSS";
-        }
-      }
-
-      var str = value.toFormat(fmt);
-
-      if (opts.includePrefix) {
-        str = "T" + str;
-      }
-
-      return str;
-    }
-    /**
      * Returns an ISO 8601 representation of this Duration appropriate for use in JSON.
      * @return {string}
      */
@@ -3697,17 +3586,8 @@ var luxon = (function (exports) {
      */
     ;
 
-    _proto.toMillis = function toMillis() {
-      return this.as("milliseconds");
-    }
-    /**
-     * Returns an milliseconds value of this Duration. Alias of {@link toMillis}
-     * @return {number}
-     */
-    ;
-
     _proto.valueOf = function valueOf() {
-      return this.toMillis();
+      return this.as("milliseconds");
     }
     /**
      * Make this Duration longer by the specified amount. Return a newly-constructed Duration.
@@ -3877,6 +3757,7 @@ var luxon = (function (exports) {
           accumulated = {},
           vals = this.toObject();
       var lastUnit;
+      normalizeValues(this.matrix, vals);
 
       for (var _iterator2 = _createForOfIteratorHelperLoose(orderedUnits), _step2; !(_step2 = _iterator2()).done;) {
         var k = _step2.value;
@@ -3964,16 +3845,10 @@ var luxon = (function (exports) {
         return false;
       }
 
-      function eq(v1, v2) {
-        // Consider 0 and undefined as equal
-        if (v1 === undefined || v1 === 0) return v2 === undefined || v2 === 0;
-        return v1 === v2;
-      }
-
       for (var _iterator3 = _createForOfIteratorHelperLoose(orderedUnits), _step3; !(_step3 = _iterator3()).done;) {
         var u = _step3.value;
 
-        if (!eq(this.values[u], other.values[u])) {
+        if (this.values[u] !== other.values[u]) {
           return false;
         }
       }
@@ -4151,7 +4026,7 @@ var luxon = (function (exports) {
    * * **Accessors** Use {@link start} and {@link end} to get the start and end.
    * * **Interrogation** To analyze the Interval, use {@link count}, {@link length}, {@link hasSame}, {@link contains}, {@link isAfter}, or {@link isBefore}.
    * * **Transformation** To create other Intervals out of this one, use {@link set}, {@link splitAt}, {@link splitBy}, {@link divideEqually}, {@link merge}, {@link xor}, {@link union}, {@link intersection}, or {@link difference}.
-   * * **Comparison** To compare this Interval to another one, use {@link equals}, {@link overlaps}, {@link abutsStart}, {@link abutsEnd}, {@link engulfs}.
+   * * **Comparison** To compare this Interval to another one, use {@link equals}, {@link overlaps}, {@link abutsStart}, {@link abutsEnd}, {@link engulfs}
    * * **Output** To convert the Interval into other representations, see {@link toString}, {@link toISO}, {@link toISODate}, {@link toISOTime}, {@link toFormat}, and {@link toDuration}.
    */
 
@@ -4272,35 +4147,20 @@ var luxon = (function (exports) {
           e = _split[1];
 
       if (s && e) {
-        var start, startIsValid;
+        var start = DateTime.fromISO(s, opts),
+            end = DateTime.fromISO(e, opts);
 
-        try {
-          start = DateTime.fromISO(s, opts);
-          startIsValid = start.isValid;
-        } catch (e) {
-          startIsValid = false;
-        }
-
-        var end, endIsValid;
-
-        try {
-          end = DateTime.fromISO(e, opts);
-          endIsValid = end.isValid;
-        } catch (e) {
-          endIsValid = false;
-        }
-
-        if (startIsValid && endIsValid) {
+        if (start.isValid && end.isValid) {
           return Interval.fromDateTimes(start, end);
         }
 
-        if (startIsValid) {
+        if (start.isValid) {
           var dur = Duration.fromISO(e, opts);
 
           if (dur.isValid) {
             return Interval.after(start, dur);
           }
-        } else if (endIsValid) {
+        } else if (end.isValid) {
           var _dur = Duration.fromISO(s, opts);
 
           if (_dur.isValid) {
@@ -4368,7 +4228,7 @@ var luxon = (function (exports) {
     ;
 
     _proto.hasSame = function hasSame(unit) {
-      return this.isValid ? this.isEmpty() || this.e.minus(1).hasSame(this.s, unit) : false;
+      return this.isValid ? this.e.minus(1).hasSame(this.s, unit) : false;
     }
     /**
      * Return whether this Interval has the same start and end DateTimes.
@@ -4855,7 +4715,7 @@ var luxon = (function (exports) {
         zone = Settings.defaultZone;
       }
 
-      var proto = DateTime.now().setZone(zone).set({
+      var proto = DateTime.local().setZone(zone).set({
         month: 12
       });
       return !zone.universal && proto.offset !== proto.set({
@@ -4956,7 +4816,7 @@ var luxon = (function (exports) {
     /**
      * Return an array of standalone week names.
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
-     * @param {string} [length='long'] - the length of the weekday representation, such as "narrow", "short", "long".
+     * @param {string} [length='long'] - the length of the month representation, such as "narrow", "short", "long".
      * @param {Object} opts - options
      * @param {string} [opts.locale] - the locale code
      * @param {string} [opts.numberingSystem=null] - the numbering system
@@ -4986,7 +4846,7 @@ var luxon = (function (exports) {
      * Format weekdays differ from standalone weekdays in that they're meant to appear next to more date information. In some languages, that
      * changes the string.
      * See {@link weekdays}
-     * @param {string} [length='long'] - the length of the weekday representation, such as "narrow", "short", "long".
+     * @param {string} [length='long'] - the length of the month representation, such as "narrow", "short", "long".
      * @param {Object} opts - options
      * @param {string} [opts.locale=null] - the locale code
      * @param {string} [opts.numberingSystem=null] - the numbering system
@@ -5105,8 +4965,6 @@ var luxon = (function (exports) {
   function highOrderDiffs(cursor, later, units) {
     var differs = [["years", function (a, b) {
       return b.year - a.year;
-    }], ["quarters", function (a, b) {
-      return b.quarter - a.quarter;
     }], ["months", function (a, b) {
       return b.month - a.month + (b.year - a.year) * 12;
     }], ["weeks", function (a, b) {
@@ -5282,20 +5140,13 @@ var luxon = (function (exports) {
     };
   }
 
-  var NBSP = String.fromCharCode(160);
-  var spaceOrNBSP = "( |" + NBSP + ")";
-  var spaceOrNBSPRegExp = new RegExp(spaceOrNBSP, "g");
-
   function fixListRegex(s) {
     // make dots optional and also make them literal
-    // make space and non breakable space characters interchangeable
-    return s.replace(/\./g, "\\.?").replace(spaceOrNBSPRegExp, spaceOrNBSP);
+    return s.replace(/\./, "\\.?");
   }
 
   function stripInsensitivities(s) {
-    return s.replace(/\./g, "") // ignore dots that were made optional
-    .replace(spaceOrNBSPRegExp, " ") // interchange space and nbsp
-    .toLowerCase();
+    return s.replace(/\./, "").toLowerCase();
   }
 
   function oneOf(strings, startIndex) {
@@ -6060,20 +5911,24 @@ var luxon = (function (exports) {
 
 
   function adjustTime(inst, dur) {
+    var _dur;
+
+    var keys = Object.keys(dur.values);
+
+    if (keys.indexOf("milliseconds") === -1) {
+      keys.push("milliseconds");
+    }
+
+    dur = (_dur = dur).shiftTo.apply(_dur, keys);
     var oPre = inst.o,
-        year = inst.c.year + Math.trunc(dur.years),
-        month = inst.c.month + Math.trunc(dur.months) + Math.trunc(dur.quarters) * 3,
+        year = inst.c.year + dur.years,
+        month = inst.c.month + dur.months + dur.quarters * 3,
         c = Object.assign({}, inst.c, {
       year: year,
       month: month,
-      day: Math.min(inst.c.day, daysInMonth(year, month)) + Math.trunc(dur.days) + Math.trunc(dur.weeks) * 7
+      day: Math.min(inst.c.day, daysInMonth(year, month)) + dur.days + dur.weeks * 7
     }),
         millisToAdd = Duration.fromObject({
-      years: dur.years - Math.trunc(dur.years),
-      quarters: dur.quarters - Math.trunc(dur.quarters),
-      months: dur.months - Math.trunc(dur.months),
-      weeks: dur.weeks - Math.trunc(dur.weeks),
-      days: dur.days - Math.trunc(dur.days),
       hours: dur.hours,
       minutes: dur.minutes,
       seconds: dur.seconds,
@@ -6137,8 +5992,6 @@ var luxon = (function (exports) {
         _ref$suppressMillisec = _ref.suppressMilliseconds,
         suppressMilliseconds = _ref$suppressMillisec === void 0 ? false : _ref$suppressMillisec,
         includeOffset = _ref.includeOffset,
-        _ref$includePrefix = _ref.includePrefix,
-        includePrefix = _ref$includePrefix === void 0 ? false : _ref$includePrefix,
         _ref$includeZone = _ref.includeZone,
         includeZone = _ref$includeZone === void 0 ? false : _ref$includeZone,
         _ref$spaceZone = _ref.spaceZone,
@@ -6165,13 +6018,7 @@ var luxon = (function (exports) {
       fmt += format === "basic" ? "ZZZ" : "ZZ";
     }
 
-    var str = toTechFormat(dt, fmt);
-
-    if (includePrefix) {
-      str = "T" + str;
-    }
-
-    return str;
+    return toTechFormat(dt, fmt);
   } // defaults for unspecified units in the supported calendars
 
 
@@ -6389,22 +6236,10 @@ var luxon = (function (exports) {
     } // CONSTRUCT
 
     /**
-     * Create a DateTime for the current instant, in the system's time zone.
-     *
-     * Use Settings to override these default values if needed.
-     * @example DateTime.now().toISO() //~> now in the ISO format
-     * @return {DateTime}
-     */
-
-
-    DateTime.now = function now() {
-      return new DateTime({});
-    }
-    /**
      * Create a local DateTime
      * @param {number} [year] - The calendar year. If omitted (as in, call `local()` with no arguments), the current time will be used
      * @param {number} [month=1] - The month, 1-indexed
-     * @param {number} [day=1] - The day of the month, 1-indexed
+     * @param {number} [day=1] - The day of the month
      * @param {number} [hour=0] - The hour of the day, in 24-hour time
      * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
      * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
@@ -6419,11 +6254,13 @@ var luxon = (function (exports) {
      * @example DateTime.local(2017, 3, 12, 5, 45, 10, 765) //~> 2017-03-12T05:45:10.765
      * @return {DateTime}
      */
-    ;
+
 
     DateTime.local = function local(year, month, day, hour, minute, second, millisecond) {
       if (isUndefined(year)) {
-        return new DateTime({});
+        return new DateTime({
+          ts: Settings.now()
+        });
       } else {
         return quickDT({
           year: year,
@@ -6476,8 +6313,8 @@ var luxon = (function (exports) {
       }
     }
     /**
-     * Create a DateTime from a JavaScript Date object. Uses the default zone.
-     * @param {Date} date - a JavaScript Date object
+     * Create a DateTime from a Javascript Date object. Uses the default zone.
+     * @param {Date} date - a Javascript Date object
      * @param {Object} options - configuration options for the DateTime
      * @param {string|Zone} [options.zone='local'] - the zone to place the DateTime into
      * @return {DateTime}
@@ -6565,7 +6402,7 @@ var luxon = (function (exports) {
       }
     }
     /**
-     * Create a DateTime from a JavaScript object with keys like 'year' and 'hour' with reasonable defaults.
+     * Create a DateTime from a Javascript object with keys like 'year' and 'hour' with reasonable defaults.
      * @param {Object} obj - the object to create the DateTime from
      * @param {number} obj.year - a year, such as 1987
      * @param {number} obj.month - a month, 1-12
@@ -7097,12 +6934,12 @@ var luxon = (function (exports) {
      *
      * Adding hours, minutes, seconds, or milliseconds increases the timestamp by the right number of milliseconds. Adding days, months, or years shifts the calendar, accounting for DSTs and leap years along the way. Thus, `dt.plus({ hours: 24 })` may result in a different time than `dt.plus({ days: 1 })` if there's a DST shift in between.
      * @param {Duration|Object|number} duration - The amount to add. Either a Luxon Duration, a number of milliseconds, the object argument to Duration.fromObject()
-     * @example DateTime.now().plus(123) //~> in 123 milliseconds
-     * @example DateTime.now().plus({ minutes: 15 }) //~> in 15 minutes
-     * @example DateTime.now().plus({ days: 1 }) //~> this time tomorrow
-     * @example DateTime.now().plus({ days: -1 }) //~> this time yesterday
-     * @example DateTime.now().plus({ hours: 3, minutes: 13 }) //~> in 3 hr, 13 min
-     * @example DateTime.now().plus(Duration.fromObject({ hours: 3, minutes: 13 })) //~> in 3 hr, 13 min
+     * @example DateTime.local().plus(123) //~> in 123 milliseconds
+     * @example DateTime.local().plus({ minutes: 15 }) //~> in 15 minutes
+     * @example DateTime.local().plus({ days: 1 }) //~> this time tomorrow
+     * @example DateTime.local().plus({ days: -1 }) //~> this time yesterday
+     * @example DateTime.local().plus({ hours: 3, minutes: 13 }) //~> in 3 hr, 13 min
+     * @example DateTime.local().plus(Duration.fromObject({ hours: 3, minutes: 13 })) //~> in 3 hr, 13 min
      * @return {DateTime}
      */
     ;
@@ -7130,7 +6967,6 @@ var luxon = (function (exports) {
      * @param {string} unit - The unit to go to the beginning of. Can be 'year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second', or 'millisecond'.
      * @example DateTime.local(2014, 3, 3).startOf('month').toISODate(); //=> '2014-03-01'
      * @example DateTime.local(2014, 3, 3).startOf('year').toISODate(); //=> '2014-01-01'
-     * @example DateTime.local(2014, 3, 3).startOf('week').toISODate(); //=> '2014-03-03', weeks always start on Mondays
      * @example DateTime.local(2014, 3, 3, 5, 30).startOf('day').toISOTime(); //=> '00:00.000-05:00'
      * @example DateTime.local(2014, 3, 3, 5, 30).startOf('hour').toISOTime(); //=> '05:00:00.000-05:00'
      * @return {DateTime}
@@ -7184,10 +7020,9 @@ var luxon = (function (exports) {
     }
     /**
      * "Set" this DateTime to the end (meaning the last millisecond) of a unit of time
-     * @param {string} unit - The unit to go to the end of. Can be 'year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second', or 'millisecond'.
+     * @param {string} unit - The unit to go to the end of. Can be 'year', 'month', 'day', 'hour', 'minute', 'second', or 'millisecond'.
      * @example DateTime.local(2014, 3, 3).endOf('month').toISO(); //=> '2014-03-31T23:59:59.999-05:00'
      * @example DateTime.local(2014, 3, 3).endOf('year').toISO(); //=> '2014-12-31T23:59:59.999-05:00'
-     * @example DateTime.local(2014, 3, 3).endOf('week').toISO(); // => '2014-03-09T23:59:59.999-05:00', weeks start on Mondays
      * @example DateTime.local(2014, 3, 3, 5, 30).endOf('day').toISO(); //=> '2014-03-03T23:59:59.999-05:00'
      * @example DateTime.local(2014, 3, 3, 5, 30).endOf('hour').toISO(); //=> '2014-03-03T05:59:59.999-05:00'
      * @return {DateTime}
@@ -7207,10 +7042,10 @@ var luxon = (function (exports) {
      * @see https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
      * @param {string} fmt - the format string
      * @param {Object} opts - opts to override the configuration options
-     * @example DateTime.now().toFormat('yyyy LLL dd') //=> '2017 Apr 22'
-     * @example DateTime.now().setLocale('fr').toFormat('yyyy LLL dd') //=> '2017 avr. 22'
-     * @example DateTime.now().toFormat('yyyy LLL dd', { locale: "fr" }) //=> '2017 avr. 22'
-     * @example DateTime.now().toFormat("HH 'hours and' mm 'minutes'") //=> '20 hours and 55 minutes'
+     * @example DateTime.local().toFormat('yyyy LLL dd') //=> '2017 Apr 22'
+     * @example DateTime.local().setLocale('fr').toFormat('yyyy LLL dd') //=> '2017 avr. 22'
+     * @example DateTime.local().toFormat('yyyy LLL dd', { locale: "fr" }) //=> '2017 avr. 22'
+     * @example DateTime.local().toFormat("HH 'hours and' mm 'minutes'") //=> '20 hours and 55 minutes'
      * @return {string}
      */
     ;
@@ -7229,15 +7064,15 @@ var luxon = (function (exports) {
      * Defaults to the system's locale if no locale has been specified
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
      * @param opts {Object} - Intl.DateTimeFormat constructor options and configuration options
-     * @example DateTime.now().toLocaleString(); //=> 4/20/2017
-     * @example DateTime.now().setLocale('en-gb').toLocaleString(); //=> '20/04/2017'
-     * @example DateTime.now().toLocaleString({ locale: 'en-gb' }); //=> '20/04/2017'
-     * @example DateTime.now().toLocaleString(DateTime.DATE_FULL); //=> 'April 20, 2017'
-     * @example DateTime.now().toLocaleString(DateTime.TIME_SIMPLE); //=> '11:32 AM'
-     * @example DateTime.now().toLocaleString(DateTime.DATETIME_SHORT); //=> '4/20/2017, 11:32 AM'
-     * @example DateTime.now().toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }); //=> 'Thursday, April 20'
-     * @example DateTime.now().toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }); //=> 'Thu, Apr 20, 11:27 AM'
-     * @example DateTime.now().toLocaleString({ hour: '2-digit', minute: '2-digit', hour12: false }); //=> '11:32'
+     * @example DateTime.local().toLocaleString(); //=> 4/20/2017
+     * @example DateTime.local().setLocale('en-gb').toLocaleString(); //=> '20/04/2017'
+     * @example DateTime.local().toLocaleString({ locale: 'en-gb' }); //=> '20/04/2017'
+     * @example DateTime.local().toLocaleString(DateTime.DATE_FULL); //=> 'April 20, 2017'
+     * @example DateTime.local().toLocaleString(DateTime.TIME_SIMPLE); //=> '11:32 AM'
+     * @example DateTime.local().toLocaleString(DateTime.DATETIME_SHORT); //=> '4/20/2017, 11:32 AM'
+     * @example DateTime.local().toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }); //=> 'Thursday, April 20'
+     * @example DateTime.local().toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }); //=> 'Thu, Apr 20, 11:27 AM'
+     * @example DateTime.local().toLocaleString({ hour: '2-digit', minute: '2-digit', hour12: false }); //=> '11:32'
      * @return {string}
      */
     ;
@@ -7254,7 +7089,7 @@ var luxon = (function (exports) {
      * Defaults to the system's locale if no locale has been specified
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/formatToParts
      * @param opts {Object} - Intl.DateTimeFormat constructor options, same as `toLocaleString`.
-     * @example DateTime.now().toLocaleParts(); //=> [
+     * @example DateTime.local().toLocaleParts(); //=> [
      *                                   //=>   { type: 'day', value: '25' },
      *                                   //=>   { type: 'literal', value: '/' },
      *                                   //=>   { type: 'month', value: '05' },
@@ -7279,9 +7114,9 @@ var luxon = (function (exports) {
      * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
      * @param {string} [opts.format='extended'] - choose between the basic and extended format
      * @example DateTime.utc(1982, 5, 25).toISO() //=> '1982-05-25T00:00:00.000Z'
-     * @example DateTime.now().toISO() //=> '2017-04-22T20:47:05.335-04:00'
-     * @example DateTime.now().toISO({ includeOffset: false }) //=> '2017-04-22T20:47:05.335'
-     * @example DateTime.now().toISO({ format: 'basic' }) //=> '20170422T204705.335-0400'
+     * @example DateTime.local().toISO() //=> '2017-04-22T20:47:05.335-04:00'
+     * @example DateTime.local().toISO({ includeOffset: false }) //=> '2017-04-22T20:47:05.335'
+     * @example DateTime.local().toISO({ format: 'basic' }) //=> '20170422T204705.335-0400'
      * @return {string}
      */
     ;
@@ -7336,12 +7171,10 @@ var luxon = (function (exports) {
      * @param {boolean} [opts.suppressMilliseconds=false] - exclude milliseconds from the format if they're 0
      * @param {boolean} [opts.suppressSeconds=false] - exclude seconds from the format if they're 0
      * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
-     * @param {boolean} [opts.includePrefix=false] - include the `T` prefix
      * @param {string} [opts.format='extended'] - choose between the basic and extended format
      * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime() //=> '07:34:19.361Z'
      * @example DateTime.utc().set({ hour: 7, minute: 34, seconds: 0, milliseconds: 0 }).toISOTime({ suppressSeconds: true }) //=> '07:34Z'
      * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime({ format: 'basic' }) //=> '073419.361Z'
-     * @example DateTime.utc().set({ hour: 7, minute: 34 }).toISOTime({ includePrefix: true }) //=> 'T07:34:19.361Z'
      * @return {string}
      */
     ;
@@ -7354,8 +7187,6 @@ var luxon = (function (exports) {
           suppressSeconds = _ref6$suppressSeconds === void 0 ? false : _ref6$suppressSeconds,
           _ref6$includeOffset = _ref6.includeOffset,
           includeOffset = _ref6$includeOffset === void 0 ? true : _ref6$includeOffset,
-          _ref6$includePrefix = _ref6.includePrefix,
-          includePrefix = _ref6$includePrefix === void 0 ? false : _ref6$includePrefix,
           _ref6$format = _ref6.format,
           format = _ref6$format === void 0 ? "extended" : _ref6$format;
 
@@ -7363,7 +7194,6 @@ var luxon = (function (exports) {
         suppressSeconds: suppressSeconds,
         suppressMilliseconds: suppressMilliseconds,
         includeOffset: includeOffset,
-        includePrefix: includePrefix,
         format: format
       });
     }
@@ -7407,9 +7237,9 @@ var luxon = (function (exports) {
      * @param {boolean} [opts.includeZone=false] - include the zone, such as 'America/New_York'. Overrides includeOffset.
      * @param {boolean} [opts.includeOffset=true] - include the offset, such as 'Z' or '-04:00'
      * @example DateTime.utc().toSQL() //=> '05:15:16.345'
-     * @example DateTime.now().toSQL() //=> '05:15:16.345 -04:00'
-     * @example DateTime.now().toSQL({ includeOffset: false }) //=> '05:15:16.345'
-     * @example DateTime.now().toSQL({ includeZone: false }) //=> '05:15:16.345 America/New_York'
+     * @example DateTime.local().toSQL() //=> '05:15:16.345 -04:00'
+     * @example DateTime.local().toSQL({ includeOffset: false }) //=> '05:15:16.345'
+     * @example DateTime.local().toSQL({ includeZone: false }) //=> '05:15:16.345 America/New_York'
      * @return {string}
      */
     ;
@@ -7506,10 +7336,10 @@ var luxon = (function (exports) {
       return this.toJSDate();
     }
     /**
-     * Returns a JavaScript object with this DateTime's year, month, day, and so on.
+     * Returns a Javascript object with this DateTime's year, month, day, and so on.
      * @param opts - options for generating the object
      * @param {boolean} [opts.includeConfig=false] - include configuration attributes in the output
-     * @example DateTime.now().toObject() //=> { year: 2017, month: 4, day: 22, hour: 20, minute: 49, second: 42, millisecond: 268 }
+     * @example DateTime.local().toObject() //=> { year: 2017, month: 4, day: 22, hour: 20, minute: 49, second: 42, millisecond: 268 }
      * @return {Object}
      */
     ;
@@ -7531,7 +7361,7 @@ var luxon = (function (exports) {
       return base;
     }
     /**
-     * Returns a JavaScript Date equivalent to this DateTime.
+     * Returns a Javascript Date equivalent to this DateTime.
      * @return {Date}
      */
     ;
@@ -7602,7 +7432,7 @@ var luxon = (function (exports) {
         opts = {};
       }
 
-      return this.diff(DateTime.now(), unit, opts);
+      return this.diff(DateTime.local(), unit, opts);
     }
     /**
      * Return an Interval spanning between this DateTime and another DateTime
@@ -7615,23 +7445,23 @@ var luxon = (function (exports) {
       return this.isValid ? Interval.fromDateTimes(this, otherDateTime) : this;
     }
     /**
-     * Return whether this DateTime is in the same unit of time as another DateTime.
-     * Higher-order units must also be identical for this function to return `true`.
-     * Note that time zones are **ignored** in this comparison, which compares the **local** calendar time. Use {@link setZone} to convert one of the dates if needed.
+     * Return whether this DateTime is in the same unit of time as another DateTime
      * @param {DateTime} otherDateTime - the other DateTime
      * @param {string} unit - the unit of time to check sameness on
-     * @example DateTime.now().hasSame(otherDT, 'day'); //~> true if otherDT is in the same current calendar day
+     * @example DateTime.local().hasSame(otherDT, 'day'); //~> true if both the same calendar day
      * @return {boolean}
      */
     ;
 
     _proto.hasSame = function hasSame(otherDateTime, unit) {
       if (!this.isValid) return false;
-      var inputMs = otherDateTime.valueOf();
-      var otherZoneDateTime = this.setZone(otherDateTime.zone, {
-        keepLocalTime: true
-      });
-      return otherZoneDateTime.startOf(unit) <= inputMs && inputMs <= otherZoneDateTime.endOf(unit);
+
+      if (unit === "millisecond") {
+        return this.valueOf() === otherDateTime.valueOf();
+      } else {
+        var inputMs = otherDateTime.valueOf();
+        return this.startOf(unit) <= inputMs && inputMs <= this.endOf(unit);
+      }
     }
     /**
      * Equality check
@@ -7649,19 +7479,19 @@ var luxon = (function (exports) {
      * Returns a string representation of a this time relative to now, such as "in two days". Can only internationalize if your
      * platform supports Intl.RelativeTimeFormat. Rounds down by default.
      * @param {Object} options - options that affect the output
-     * @param {DateTime} [options.base=DateTime.now()] - the DateTime to use as the basis to which this time is compared. Defaults to now.
+     * @param {DateTime} [options.base=DateTime.local()] - the DateTime to use as the basis to which this time is compared. Defaults to now.
      * @param {string} [options.style="long"] - the style of units, must be "long", "short", or "narrow"
      * @param {string} options.unit - use a specific unit; if omitted, the method will pick the unit. Use one of "years", "quarters", "months", "weeks", "days", "hours", "minutes", or "seconds"
      * @param {boolean} [options.round=true] - whether to round the numbers in the output.
-     * @param {number} [options.padding=0] - padding in milliseconds. This allows you to round up the result if it fits inside the threshold. Don't use in combination with {round: false} because the decimal output will include the padding.
+     * @param {boolean} [options.padding=0] - padding in milliseconds. This allows you to round up the result if it fits inside the threshold. Don't use in combination with {round: false} because the decimal output will include the padding.
      * @param {string} options.locale - override the locale of this DateTime
      * @param {string} options.numberingSystem - override the numberingSystem of this DateTime. The Intl system may choose not to honor this
-     * @example DateTime.now().plus({ days: 1 }).toRelative() //=> "in 1 day"
-     * @example DateTime.now().setLocale("es").toRelative({ days: 1 }) //=> "dentro de 1 día"
-     * @example DateTime.now().plus({ days: 1 }).toRelative({ locale: "fr" }) //=> "dans 23 heures"
-     * @example DateTime.now().minus({ days: 2 }).toRelative() //=> "2 days ago"
-     * @example DateTime.now().minus({ days: 2 }).toRelative({ unit: "hours" }) //=> "48 hours ago"
-     * @example DateTime.now().minus({ hours: 36 }).toRelative({ round: false }) //=> "1.5 days ago"
+     * @example DateTime.local().plus({ days: 1 }).toRelative() //=> "in 1 day"
+     * @example DateTime.local().setLocale("es").toRelative({ days: 1 }) //=> "dentro de 1 día"
+     * @example DateTime.local().plus({ days: 1 }).toRelative({ locale: "fr" }) //=> "dans 23 heures"
+     * @example DateTime.local().minus({ days: 2 }).toRelative() //=> "2 days ago"
+     * @example DateTime.local().minus({ days: 2 }).toRelative({ unit: "hours" }) //=> "48 hours ago"
+     * @example DateTime.local().minus({ hours: 36 }).toRelative({ round: false }) //=> "1.5 days ago"
      */
     ;
 
@@ -7684,14 +7514,14 @@ var luxon = (function (exports) {
      * Returns a string representation of this date relative to today, such as "yesterday" or "next month".
      * Only internationalizes on platforms that supports Intl.RelativeTimeFormat.
      * @param {Object} options - options that affect the output
-     * @param {DateTime} [options.base=DateTime.now()] - the DateTime to use as the basis to which this time is compared. Defaults to now.
+     * @param {DateTime} [options.base=DateTime.local()] - the DateTime to use as the basis to which this time is compared. Defaults to now.
      * @param {string} options.locale - override the locale of this DateTime
      * @param {string} options.unit - use a specific unit; if omitted, the method will pick the unit. Use one of "years", "quarters", "months", "weeks", or "days"
      * @param {string} options.numberingSystem - override the numberingSystem of this DateTime. The Intl system may choose not to honor this
-     * @example DateTime.now().plus({ days: 1 }).toRelativeCalendar() //=> "tomorrow"
-     * @example DateTime.now().setLocale("es").plus({ days: 1 }).toRelative() //=> ""mañana"
-     * @example DateTime.now().plus({ days: 1 }).toRelativeCalendar({ locale: "fr" }) //=> "demain"
-     * @example DateTime.now().minus({ days: 2 }).toRelativeCalendar() //=> "2 days ago"
+     * @example DateTime.local().plus({ days: 1 }).toRelativeCalendar() //=> "tomorrow"
+     * @example DateTime.local().setLocale("es").plus({ days: 1 }).toRelative() //=> ""mañana"
+     * @example DateTime.local().plus({ days: 1 }).toRelativeCalendar({ locale: "fr" }) //=> "demain"
+     * @example DateTime.local().minus({ days: 2 }).toRelativeCalendar() //=> "2 days ago"
      */
     ;
 
@@ -8067,7 +7897,7 @@ var luxon = (function (exports) {
       }
       /**
        * Get the UTC offset of this DateTime in minutes
-       * @example DateTime.now().offset //=> -240
+       * @example DateTime.local().offset //=> -240
        * @example DateTime.utc().offset //=> 0
        * @type {number}
        */
@@ -8204,16 +8034,6 @@ var luxon = (function (exports) {
       key: "DATE_MED",
       get: function get() {
         return DATE_MED;
-      }
-      /**
-       * {@link toLocaleString} format like 'Fri, Oct 14, 1983'
-       * @type {Object}
-       */
-
-    }, {
-      key: "DATE_MED_WITH_WEEKDAY",
-      get: function get() {
-        return DATE_MED_WITH_WEEKDAY;
       }
       /**
        * {@link toLocaleString} format like 'October 14, 1983'
@@ -8421,8 +8241,6 @@ var luxon = (function (exports) {
     }
   }
 
-  var VERSION = "1.26.0";
-
   exports.DateTime = DateTime;
   exports.Duration = Duration;
   exports.FixedOffsetZone = FixedOffsetZone;
@@ -8432,7 +8250,6 @@ var luxon = (function (exports) {
   exports.InvalidZone = InvalidZone;
   exports.LocalZone = LocalZone;
   exports.Settings = Settings;
-  exports.VERSION = VERSION;
   exports.Zone = Zone;
 
   return exports;
