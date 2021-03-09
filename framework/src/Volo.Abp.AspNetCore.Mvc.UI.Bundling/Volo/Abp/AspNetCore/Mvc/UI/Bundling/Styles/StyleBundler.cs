@@ -11,10 +11,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles
         private readonly IWebHostEnvironment _hostingEnvironment;
         public override string FileExtension => "css";
 
-        public StyleBundler(IWebContentFileProvider webContentFileProvider, ICssMinifier minifier, IWebHostEnvironment hostingEnvironment) 
-            : base(webContentFileProvider, minifier)
+        public StyleBundler(IWebHostEnvironment hostEnvironment, ICssMinifier minifier) 
+            : base(hostEnvironment, minifier)
         {
-            _hostingEnvironment = hostingEnvironment;
+            _hostingEnvironment = hostEnvironment;
         }
 
         public string GetAbsolutePath(string relativePath)
