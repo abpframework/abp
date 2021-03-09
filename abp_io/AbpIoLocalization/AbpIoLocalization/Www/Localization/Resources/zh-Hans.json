@@ -8,6 +8,7 @@
     "ProjectName": "项目名称",
     "ProjectType": "项目类型",
     "DatabaseProvider": "数据库提供者",
+    "DatabaseManagementSystem": "数据库管理系统",
     "NTier": "N层",
     "IncludeUserInterface": "包含用户界面",
     "CreateNow": "现在创建",
@@ -194,7 +195,7 @@
     "MultipleUIOptionsExplanation": "核心框架设计为独立与UI,可以和任何类型的UI系统一起使用. 同时提供了多个开箱即用的预构建集成选项.",
     "MultipleDBOptionsExplanation": "该框架可以使用任何数据源,并且以下提供程序已得到正式开发和支持；",
     "SelectLanguage": "选择语言",
-	"LatestArticleOnCommunity": "关于ABP社区的最新文章",
-	"Register": "寄存器"
+    "LatestArticleOnCommunity": "关于ABP社区的最新文章",
+    "Register": "寄存器"
   }
 }

@@ -28,7 +28,7 @@ namespace Volo.CmsKit.Comments
 
         }
 
-        public Comment(
+        internal Comment(
             Guid id,
             [NotNull] string entityType,
             [NotNull] string entityId,

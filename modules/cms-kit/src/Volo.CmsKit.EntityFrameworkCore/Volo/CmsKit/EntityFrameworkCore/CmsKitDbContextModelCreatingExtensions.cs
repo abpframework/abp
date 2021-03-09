@@ -8,7 +8,6 @@ using Volo.CmsKit.Comments;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Users;
 using Volo.Abp.Users.EntityFrameworkCore;
-using Volo.CmsKit.Contents;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
@@ -111,26 +110,6 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 builder.Ignore<Rating>();
             }
 
-            if (GlobalFeatureManager.Instance.IsEnabled<ContentsFeature>())
-            {
-                builder.Entity<Content>(b =>
-                {
-                    b.ToTable(options.TablePrefix + "Contents", options.Schema);
-
-                    b.ConfigureByConvention();
-
-                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(ContentConsts.MaxEntityTypeLength);
-                    b.Property(x => x.EntityId).IsRequired().HasMaxLength(ContentConsts.MaxEntityIdLength);
-                    b.Property(x => x.Value).IsRequired().HasMaxLength(ContentConsts.MaxValueLength);
-
-                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
-                });
-            }
-            else
-            {
-                builder.Ignore<Content>();
-            }
-
             if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
             {
                 builder.Entity<Tag>(b =>
@@ -179,6 +158,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
                     b.Property(x => x.Slug).IsRequired().HasMaxLength(PageConsts.MaxSlugLength);
+                    b.Property(x => x.Content).HasMaxLength(PageConsts.MaxContentLength);
 
                     b.HasIndex(x => new { x.TenantId, Url = x.Slug });
                 });
@@ -207,14 +187,12 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.ConfigureByConvention();
 
-                    b.Property(p => p.Title).IsRequired().HasMaxLength(BlogPostConsts.MaxTitleLength);
-
-                    b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogPostConsts.MaxSlugLength);
-
-                    b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
-
                     b.Property(p => p.AuthorId).IsRequired();
-
+                    b.Property(p => p.Title).IsRequired().HasMaxLength(BlogPostConsts.MaxTitleLength);
+                    b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogPostConsts.MaxSlugLength);
+                    b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
+                    b.Property(p => p.Content).HasMaxLength(BlogPostConsts.MaxContentLength);
+                    
                     b.HasIndex(x => new { x.Slug, x.BlogId });
                 });
 
@@ -242,6 +220,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.ConfigureByConvention();
 
+                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxEntityTypeLength);
                     b.Property(x => x.Name).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxNameLength);
                     b.Property(x => x.MimeType).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxMimeTypeLength);
                     b.Property(x => x.Size).HasMaxLength(MediaDescriptorConsts.MaxSizeLength);

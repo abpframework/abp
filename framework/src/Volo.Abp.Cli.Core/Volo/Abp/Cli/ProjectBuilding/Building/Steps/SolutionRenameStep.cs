@@ -18,6 +18,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     context.BuildArgs.SolutionName.CompanyName,
                     context.BuildArgs.SolutionName.ProjectName
                 ).Run();
+
+                new SolutionRenamer(
+                    context.Files,
+                    null,
+                    "MyProjectName",
+                    null,
+                    SolutionName.Parse(context.BuildArgs.SolutionName.CompanyName).ProjectName
+                ).Run();
             }
             else
             {

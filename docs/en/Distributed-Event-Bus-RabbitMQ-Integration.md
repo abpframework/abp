@@ -90,7 +90,7 @@ You can use any of the [ConnectionFactry](http://rabbitmq.github.io/rabbitmq-dot
 
 **Example: Specify the connection port**
 
-````csharp
+````json
 {
   "RabbitMQ": {
     "Connections": {
@@ -102,6 +102,26 @@ You can use any of the [ConnectionFactry](http://rabbitmq.github.io/rabbitmq-dot
   }
 }
 ````
+
+If you need to connect to the RabbitMQ cluster, you can use the `;` character to separate the host names.
+
+**Example: Connect to the RabbitMQ cluster**
+
+```json
+{
+  "RabbitMQ": {
+    "Connections": {
+      "Default": {
+        "HostName": "123.123.123.123;234.234.234.234"
+      }
+    },
+    "EventBus": {
+      "ClientName": "MyClientName",
+      "ExchangeName": "MyExchangeName"
+    }
+  }
+}
+```
 
 ### The Options Classes
 

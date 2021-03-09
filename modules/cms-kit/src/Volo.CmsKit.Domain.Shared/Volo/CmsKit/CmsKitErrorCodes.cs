@@ -24,10 +24,16 @@
         {
             public const string SlugAlreadyExist = "CmsKit:BlogPost:0001";
         }
+
+        public static class Comments
+        {
+            public const string EntityNotCommentable = "CmsKit:Comments:0001";
+        }
         
         public static class MediaDescriptors
         {
             public const string InvalidName = "CmsKit:Media:0001";
+            public const string EntityTypeDoesntExist = "CmsKit:Media:0002";
         }
     }
 }

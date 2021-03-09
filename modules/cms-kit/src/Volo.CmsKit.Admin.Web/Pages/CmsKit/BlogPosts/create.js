@@ -6,14 +6,14 @@
     var $formCreate = $('#form-blog-post-create');
     var $title = $('#ViewModel_Title');
     var $shortDescription = $('#ViewModel_ShortDescription');
+    var $coverImage = $('#ViewModel_CoverImageMediaId');
     var $url = $('#ViewModel_Slug');
     var $buttonSubmit = $('#button-blog-post-create');
-    var $pageContentInput = $('#ViewModel_Value');
+    var $pageContentInput = $('#ViewModel_Content');
     var $tagsInput = $('.tag-editor-form input[name=tags]');
     var $fileInput = $('#BlogPostCoverImage');
     var $tagsWrapper = $('#blog-post-tags-wrapper');
 
-    var UPPY_UPLOAD_ENDPOINT = "/api/cms-kit-admin/blogs/blog-posts/{0}/cover-image";
     var UPPY_FILE_ID = "uppy-upload-file";
 
     var isTagsEnabled = true;
@@ -37,11 +37,14 @@
 
         if ($formCreate.valid()) {
 
-            abp.ui.setBusy();
-
             $formCreate.ajaxSubmit({
                 success: function (result) {
-                    submitEntityContent(result.id);
+                    if (isTagsEnabled) {
+                        submitEntityTags(result.id);
+                    }
+                    else {
+                        finishSaving();
+                    }
                 },
                 error: function (result) {
                     abp.notify.error(result.responseJSON.error.message);
@@ -49,34 +52,24 @@
                 }
             });
         }
+        else {
+            abp.ui.clearBusy();
+        }
     });
 
     $buttonSubmit.click(function (e) {
         e.preventDefault();
-        $formCreate.submit();
+        submitCoverImage();
     });
-
-    function submitEntityContent(blogPostId) {
-        volo.cmsKit.admin.contents.contentAdmin
-            .create(
-                {
-                    entityType: 'BlogPost',
-                    entityId: blogPostId,
-                    value: $pageContentInput.val()
-                })
-            .then(function (result) {
-                if (isTagsEnabled) {
-                    submitEntityTags(blogPostId)
-                }
-                else {
-                    submitCoverImage(blogPostId);
-                }
-            });
-    }
 
     function submitEntityTags(blogPostId) {
 
-        var tags = $tagsInput.val().split(",");
+        var tags = $tagsInput.val().split(',').map(x => x.trim()).filter(x => x);
+
+        if (tags.length === 0) {
+            finishSaving();
+            return;
+        }
 
         volo.cmsKit.admin.tags.entityTagAdmin
             .setEntityTags({
@@ -85,7 +78,7 @@
                 tags: tags
             })
             .then(function (result) {
-                submitCoverImage(blogPostId);
+                finishSaving(result);
             });
     }
 
@@ -96,9 +89,11 @@
         return headers;
     }
 
-    function submitCoverImage(blogPostId) {
+    function submitCoverImage() {
+        abp.ui.setBusy();
+
         var UPPY_OPTIONS = {
-            endpoint: UPPY_UPLOAD_ENDPOINT.replace("{0}", blogPostId),
+            endpoint: fileUploadUri,
             formData: true,
             fieldName: "file",
             method: "post",
@@ -124,12 +119,14 @@
                 if (result.failed.length > 0) {
                     abp.message.error(l("UploadFailedMessage"));
                 } else {
-                    finishSaving();
+                    $coverImage.val(result.successful[0].response.body.id);
+
+                    $formCreate.submit();
                 }
             });
         }
         else {
-            finishSaving();
+            $formCreate.submit();
         }
     }
 
@@ -209,4 +206,77 @@
                 }
             });
     });
+
+    // -----------------------------------
+    var fileUploadUri = "/api/cms-kit-admin/media/blogpost";
+    var fileUriPrefix = "/api/cms-kit/media/";
+
+    var editorDataKey = "tuiEditor";
+
+    initAllEditors();
+
+    function initAllEditors() {
+        $('.content-editor').each(function (i, item) {
+            initEditor(item);
+        });
+    }
+
+    function initEditor(element) {
+        var $editorContainer = $(element);
+        var inputName = $editorContainer.data('input-id');
+        var $editorInput = $('#' + inputName);
+        var initialValue = $editorInput.val();
+
+        var editor = $editorContainer.tuiEditor({
+            usageStatistics: false,
+            useCommandShortcut: true,
+            initialValue: initialValue,
+            previewStyle: 'tab',
+            height: "25em",
+            minHeight: "25em",
+            initialEditType: initialValue ? 'wysiwyg' : 'markdown',
+            language: $editorContainer.data("language"),
+            hooks: {
+                addImageBlobHook: uploadFile,
+            },
+            events: {
+                change: function (_val) {
+                    $editorInput.val(editor.getHtml());
+                    $editorInput.trigger("change");
+                }
+            }
+        }).data(editorDataKey);
+    }
+
+    function uploadFile(blob, callback, source) {
+        var UPPY_OPTIONS = {
+            endpoint: fileUploadUri,
+            formData: true,
+            fieldName: "file",
+            method: "post",
+            headers: getUppyHeaders()
+        };
+
+        var UPPY = Uppy.Core().use(Uppy.XHRUpload, UPPY_OPTIONS);
+
+        UPPY.reset();
+
+        UPPY.addFile({
+            id: "content-file",
+            name: blob.name,
+            type: blob.type,
+            data: blob,
+        });
+
+        UPPY.upload().then((result) => {
+            if (result.failed.length > 0) {
+                abp.message.error("File upload failed");
+            } else {
+                var mediaDto = result.successful[0].response.body;
+                var fileUrl = (fileUriPrefix + mediaDto.id);
+
+                callback(fileUrl, mediaDto.name);
+            }
+        });
+    }
 });

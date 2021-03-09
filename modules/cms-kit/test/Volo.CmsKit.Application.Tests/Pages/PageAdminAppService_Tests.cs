@@ -64,7 +64,8 @@ namespace Volo.CmsKit.Pages
             var dto = new CreatePageInputDto
             {
                 Title = "test",
-                Slug = "test-url"
+                Slug = "test-url",
+                Content = "test*content"
             };
 
             await Should.NotThrowAsync(async () => await _pageAdminAppService.CreateAsync(dto));
@@ -94,7 +95,8 @@ namespace Volo.CmsKit.Pages
             var dto = new UpdatePageInputDto
             {
                 Title = _data.Page_1_Title + "++",
-                Slug = _data.Page_1_Slug+ "test"
+                Slug = _data.Page_1_Slug+ "test",
+                Content = "changed"
             };
 
             await Should.NotThrowAsync(async () => await _pageAdminAppService.UpdateAsync(_data.Page_1_Id, dto));
@@ -106,6 +108,9 @@ namespace Volo.CmsKit.Pages
             
             updatedPage.Slug.ShouldNotBe(_data.Page_1_Slug);
             updatedPage.Slug.ShouldBe(dto.Slug);
+            
+            updatedPage.Content.ShouldNotBe(_data.Content_1);
+            updatedPage.Content.ShouldBe(dto.Content);
         }
         
         [Fact]
