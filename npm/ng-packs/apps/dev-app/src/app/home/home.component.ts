@@ -14,6 +14,6 @@ export class HomeComponent {
   constructor(private oAuthService: OAuthService, private authService: AuthService) {}
 
   login() {
-    this.authService.initLogin();
+    this.authService.navigateToLogin();
   }
 }
