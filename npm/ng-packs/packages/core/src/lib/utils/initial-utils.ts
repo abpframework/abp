@@ -1,14 +1,12 @@
 import { registerLocaleData } from '@angular/common';
 import { Injector } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { tap } from 'rxjs/operators';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { ABP } from '../models/common';
 import { Environment } from '../models/environment';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
-import { AuthService } from '../services/auth.service';
+import { AuthFlowInitializerService } from '../services/auth-flow-initializer.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
@@ -27,7 +25,7 @@ export function getInitialData(injector: Injector) {
     environmentService.setState(options.environment as Environment);
     await getRemoteEnv(injector, options.environment);
     await parseTenantFromUrl(injector);
-    await injector.get(AuthService).init();
+    await injector.get(AuthFlowInitializerService).init();
 
     if (options.skipGetAppConfiguration) return;
 

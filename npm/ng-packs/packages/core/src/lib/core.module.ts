@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -26,10 +26,11 @@ import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { LocaleProvider } from './providers/locale.provider';
+import { AuthFlowInitializerService } from './services/auth-flow-initializer.service';
 import { LocalizationService } from './services/localization.service';
 import { ProfileState } from './states/profile.state';
 import { oAuthStorage } from './strategies/auth-flow.strategy';
-import { CORE_OPTIONS, coreOptionsFactory } from './tokens/options.token';
+import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
@@ -178,6 +179,7 @@ export class CoreModule {
           useFactory: noop,
         },
         { provide: OAuthStorage, useFactory: storageFactory },
+        AuthFlowInitializerService,
       ],
     };
   }

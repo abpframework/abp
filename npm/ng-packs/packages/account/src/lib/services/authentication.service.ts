@@ -48,7 +48,7 @@ export class AuthenticationService {
 
         this.router.navigate([redirectUrl]);
 
-        const strategy = this.authService.activeAuthFlowStrategy;
+        const strategy = this.authService.strategy;
         if (strategy instanceof AuthPasswordFlowStrategy) strategy.setRememberMe(remember);
       }),
     );
