@@ -375,6 +375,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Sms.Aliyun.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Server", "src\Volo.Abp.AspNetCore.Components.Server\Volo.Abp.AspNetCore.Components.Server.csproj", "{863C18F9-2407-49F9-9ADC-F6229AF3B385}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Server.Theming", "src\Volo.Abp.AspNetCore.Components.Server.Theming\Volo.Abp.AspNetCore.Components.Server.Theming.csproj", "{B4B6B7DE-9798-4007-B1DF-7EE7929E392A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1117,6 +1119,10 @@ Global
 		{863C18F9-2407-49F9-9ADC-F6229AF3B385}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{863C18F9-2407-49F9-9ADC-F6229AF3B385}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{863C18F9-2407-49F9-9ADC-F6229AF3B385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4B6B7DE-9798-4007-B1DF-7EE7929E392A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B6B7DE-9798-4007-B1DF-7EE7929E392A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B6B7DE-9798-4007-B1DF-7EE7929E392A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B6B7DE-9798-4007-B1DF-7EE7929E392A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1306,6 +1312,7 @@ Global
 		{ACFBA3FB-18CE-4655-9D14-1F1F5C3DFC30} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{DADEA538-3CA1-4ADE-A7E6-EF77A0CE4401} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{863C18F9-2407-49F9-9ADC-F6229AF3B385} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{B4B6B7DE-9798-4007-B1DF-7EE7929E392A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
