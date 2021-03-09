@@ -54,9 +54,9 @@
     <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Volo.Abp.BlazoriseUI\Volo.Abp.BlazoriseUI.csproj" />
-    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Components.UI.BasicTheme\Volo.Abp.AspNetCore.Components.UI.BasicTheme.csproj" />
-    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Components.UI.Theming\Volo.Abp.AspNetCore.Components.UI.Theming.csproj" />
-    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server\Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server.csproj" />
+    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.BasicTheme\Volo.Abp.AspNetCore.Components.Web.BasicTheme.csproj" />
+    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
+    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server\Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server.csproj" />
     
     
     <ProjectReference Include="..\..\..\modules\account\src\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj" />

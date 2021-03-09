@@ -5,19 +5,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Components.UI.BasicTheme;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Modularity;
-using Volo.Abp.AspNetCore.Components.UI.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.UI.Navigation;
 using MyCompanyName.MyProjectName.Blazor.Menus;
+using Volo.Abp.AspNetCore.Components.Web.BasicTheme;
 using Volo.Abp.Identity.Blazor;
 using Volo.Abp.TenantManagement.Blazor;
-using Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server;
-using Volo.Abp.AspNetCore.Components.UI.Theming.Toolbars;
+using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 
 namespace AbpBlazorServerDemo
 {
@@ -26,7 +26,7 @@ namespace AbpBlazorServerDemo
         typeof( AbpAspNetCoreMvcModule ),
         typeof( AbpAspNetCoreMvcUiBasicThemeModule ),
         typeof( AbpBlazoriseUIModule ),
-        typeof( AbpAspNetCoreComponentsUiBasicThemeModule ),
+        typeof( AbpAspNetCoreComponentsWebBasicThemeModule ),
         typeof( AbpIdentityBlazorModule ),
         typeof( AbpTenantManagementBlazorModule )
     )]
