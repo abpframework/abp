@@ -20,22 +20,6 @@ namespace Volo.CmsKit.Blogs
             DefaultBlogFeatureProvider = defaultBlogFeatureProvider;
         }
 
-        public async Task<List<BlogFeature>> GetListAsync(Guid blogId)
-        {
-            var blogFeatures = await BlogFeatureRepository.GetListAsync(blogId);
-
-            /* TODO: Creating transient entities in DefaultBlogFeatureProvider.GetDefaultFeaturesAsync
-                     is not a good idea. Returned list will contain mixed (some in db some in-memory).
-                     For example, if I delete/update one of the BlogFeature comes from in-memory,
-                     I will have an strange behaviour. You should find another way.
-             */
-            var defaultFeatures = await DefaultBlogFeatureProvider.GetDefaultFeaturesAsync(blogId);
-
-            defaultFeatures.ForEach(x => blogFeatures.Add(x));
-
-            return blogFeatures.Distinct(new BlogFeatureEqualityComparer()).ToList();
-        }
-
         public async Task SetAsync(Guid blogId, string featureName, bool isEnabled)
         {
             var blogFeature = await BlogFeatureRepository.FindAsync(blogId, featureName);
@@ -48,6 +32,16 @@ namespace Volo.CmsKit.Blogs
             {
                 blogFeature.IsEnabled = isEnabled;
                 await BlogFeatureRepository.UpdateAsync(blogFeature);
+            }
+        }
+
+        public async Task SetDefaultsAsync(Guid blogId)
+        {
+            var defaultFeatures = await DefaultBlogFeatureProvider.GetDefaultFeaturesAsync(blogId);
+
+            foreach (var feature in defaultFeatures)
+            {
+                await SetAsync(blogId, feature.FeatureName, isEnabled: true);
             }
         }
     }

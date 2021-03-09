@@ -32,7 +32,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         public virtual async Task<List<BlogFeatureDto>> GetListAsync(Guid blogId)
         {
-            var blogFeatures = await BlogFeatureManager.GetListAsync(blogId);
+            var blogFeatures = await BlogFeatureRepository.GetListAsync(blogId);
 
             return ObjectMapper.Map<List<BlogFeature>, List<BlogFeatureDto>>(blogFeatures);
         }
