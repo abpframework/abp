@@ -9,11 +9,11 @@ namespace Volo.Abp.Security.Claims
     public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientDependency
     {
         protected IServiceScopeFactory ServiceScopeFactory { get; }
-        protected AbpClaimsPrincipalFactoryOptions Options { get; }
+        protected AbpClaimsPrincipalOptions Options { get; }
 
         public AbpClaimsPrincipalFactory(
             IServiceScopeFactory serviceScopeFactory,
-            IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimOptions)
+            IOptions<AbpClaimsPrincipalOptions> abpClaimOptions)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Options = abpClaimOptions.Value;
