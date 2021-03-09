@@ -1,7 +1,7 @@
 ﻿@page "/"
 @namespace MyCompanyName.MyProjectName.Blazor.Server.Pages
 @using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
-@using Volo.Abp.AspNetCore.Components.Server.Theming.Bundling
+@using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server.Bundling
 @{
     Layout = null;
 }
@@ -14,11 +14,11 @@
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="~/" />
     
-    <abp-style-bundle name="@BlazorStandardBundles.Styles.Global" />
+    <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
 </head>
 <body>
     <component type="typeof(App)" render-mode="Server" />
 
-    <abp-script-bundle name="@BlazorStandardBundles.Scripts.Global" />
+    <abp-script-bundle name="@BlazorBasicThemeBundles.Scripts.Global" />
 </body>
 </html>
