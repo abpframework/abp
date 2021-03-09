@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Volo.Abp.Collections;
+﻿using Volo.Abp.Collections;
 
 namespace Volo.Abp.Security.Claims
 {
