@@ -54,6 +54,8 @@ export abstract class AuthFlowStrategy {
       })
       .catch(this.catchError);
   }
+
+  setRememberMe(remember: boolean) {}
 }
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
