@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars;
+using Volo.Abp.BlazoriseUI;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout
 {
@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout
         public RenderFragment ChildContent { get; set; }
 
         [Parameter]
-        public List<BlazoriseUI.BreadcrumbItem> BreadcrumbItems { get; set; }
+        public List<BreadcrumbItem> BreadcrumbItems { get; set; }
         
         [Parameter] 
         public PageToolbar Toolbar { get; set; }
@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout
 
         public PageHeader()
         {
-            BreadcrumbItems = new List<BlazoriseUI.BreadcrumbItem>();
+            BreadcrumbItems = new List<BreadcrumbItem>();
             ToolbarItemRenders = new List<RenderFragment>();
         }
 
