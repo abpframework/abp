@@ -26,7 +26,6 @@ import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { LocaleProvider } from './providers/locale.provider';
-import { AuthFlowInitializer } from './services/auth-flow-initializer';
 import { LocalizationService } from './services/localization.service';
 import { ProfileState } from './states/profile.state';
 import { oAuthStorage } from './strategies/auth-flow.strategy';
@@ -179,7 +178,6 @@ export class CoreModule {
           useFactory: noop,
         },
         { provide: OAuthStorage, useFactory: storageFactory },
-        AuthFlowInitializer,
       ],
     };
   }

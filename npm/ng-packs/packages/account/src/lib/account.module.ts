@@ -15,7 +15,6 @@ import { AccountConfigOptions } from './models/config-options';
 import { ACCOUNT_CONFIG_OPTIONS } from './tokens/config-options.token';
 import { accountConfigOptionsFactory } from './utils/factory-utils';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
-import { AuthenticationService } from './services/authentication.service';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
@@ -48,7 +47,6 @@ export class AccountModule {
       ngModule: AccountModule,
       providers: [
         AuthenticationFlowGuard,
-        AuthenticationService,
         { provide: ACCOUNT_CONFIG_OPTIONS, useValue: options },
         {
           provide: 'ACCOUNT_OPTIONS',

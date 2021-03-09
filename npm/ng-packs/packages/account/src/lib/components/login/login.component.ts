@@ -1,13 +1,13 @@
-import { ConfigStateService } from '@abp/ng.core';
+import { ConfigStateService, AuthService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import snq from 'snq';
 import { eAccountComponents } from '../../enums/components';
-import { AuthenticationService } from '../../services/authentication.service';
+import { getRedirectUrl } from '../../utils/auth-utils';
 
 const { maxLength, required } = Validators;
 
@@ -25,11 +25,11 @@ export class LoginComponent implements OnInit {
   authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
-    private fb: FormBuilder,
-    private store: Store,
-    private toasterService: ToasterService,
-    private authenticationService: AuthenticationService,
-    private configState: ConfigStateService,
+    protected injector: Injector,
+    protected fb: FormBuilder,
+    protected toasterService: ToasterService,
+    protected authService: AuthService,
+    protected configState: ConfigStateService,
   ) {}
 
   ngOnInit() {
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
       password: ['', [required, maxLength(128)]],
-      remember: [false],
+      rememberMe: [false],
     });
   }
 
@@ -57,10 +57,12 @@ export class LoginComponent implements OnInit {
 
     this.inProgress = true;
 
-    const { username, password, remember } = this.form.value;
+    const { username, password, rememberMe } = this.form.value;
 
-    this.authenticationService
-      .login(username, password, remember)
+    const redirectUrl = getRedirectUrl(this.injector);
+
+    this.authService
+      .login({ username, password, rememberMe, redirectUrl })
       .pipe(
         catchError(err => {
           this.toasterService.error(

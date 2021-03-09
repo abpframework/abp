@@ -1,7 +1,7 @@
 <h4>{{ 'AbpAccount::Login' | abpLocalization }}</h4>
 <strong *ngIf="isSelfRegistrationEnabled">
   {{ 'AbpAccount::AreYouANewUser' | abpLocalization }}
-  <a class="text-decoration-none" routerLink="/account/register">{{
+  <a class="text-decoration-none" routerLink="/account/register" queryParamsHandling="preserve">{{
     'AbpAccount::Register' | abpLocalization
   }}</a>
 </strong>
@@ -37,7 +37,7 @@
           class="form-check-input"
           type="checkbox"
           id="login-input-remember-me"
-          formControlName="remember"
+          formControlName="rememberMe"
         />
         {{ 'AbpAccount::RememberMe' | abpLocalization }}
       </label>

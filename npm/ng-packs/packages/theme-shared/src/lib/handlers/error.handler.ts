@@ -257,7 +257,7 @@ export class ErrorHandler {
   }
 
   private navigateToLogin() {
-    this.injector.get(AuthService).initLogin();
+    this.injector.get(AuthService).navigateToLogin();
   }
 
   createErrorComponent(instance: Partial<HttpErrorWrapperComponent>) {

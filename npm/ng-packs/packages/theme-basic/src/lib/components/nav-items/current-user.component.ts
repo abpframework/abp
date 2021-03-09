@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   // tslint:disable-next-line: component-max-inline-declarations
   template: `
     <ng-template #loginBtn>
-      <a role="button" class="nav-link pointer" (click)="initLogin()">{{
+      <a role="button" class="nav-link pointer" (click)="navigateToLogin()">{{
         'AbpAccount::Login' | abpLocalization
       }}</a>
     </ng-template>
@@ -54,8 +54,8 @@ export class CurrentUserComponent {
 
   constructor(private authService: AuthService, private configState: ConfigStateService) {}
 
-  initLogin() {
-    this.authService.initLogin();
+  navigateToLogin() {
+    this.authService.navigateToLogin();
   }
 
   logout() {

@@ -1,4 +1,4 @@
-import { ConfigStateService } from '@abp/ng.core';
+import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,7 +8,7 @@ import snq from 'snq';
 import { eAccountComponents } from '../../enums/components';
 import { AccountService } from '../../proxy/account/account.service';
 import { RegisterDto } from '../../proxy/account/models';
-import { AuthenticationService } from '../../services';
+import { getRedirectUrl } from '../../utils/auth-utils';
 const { maxLength, required, email } = Validators;
 
 @Component({
@@ -25,12 +25,12 @@ export class RegisterComponent implements OnInit {
   authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
-    private fb: FormBuilder,
-    private accountService: AccountService,
-    private configState: ConfigStateService,
-    private toasterService: ToasterService,
-    private authenticationSerivice: AuthenticationService,
-    private injector: Injector,
+    protected fb: FormBuilder,
+    protected accountService: AccountService,
+    protected configState: ConfigStateService,
+    protected toasterService: ToasterService,
+    protected authService: AuthService,
+    protected injector: Injector,
   ) {}
 
   ngOnInit() {
@@ -79,7 +79,13 @@ export class RegisterComponent implements OnInit {
     this.accountService
       .register(newUser)
       .pipe(
-        switchMap(() => this.authenticationSerivice.login(newUser.userName, newUser.password)),
+        switchMap(() =>
+          this.authService.login({
+            username: newUser.userName,
+            password: newUser.password,
+            redirectUrl: getRedirectUrl(this.injector),
+          }),
+        ),
         catchError(err => {
           this.toasterService.error(
             snq(() => err.error.error_description) ||

@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -6,9 +7,16 @@ import { from, Observable, of } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
+import { SessionStateService } from '../services/session-state.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
-import { RestService } from '../services/rest.service';
+
+export interface LoginParams {
+  username: string;
+  password: string;
+  rememberMe?: boolean;
+  redirectUrl?: string;
+}
 
 export const oAuthStorage = localStorage;
 
@@ -21,9 +29,9 @@ export abstract class AuthFlowStrategy {
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
   abstract checkIfInternalAuth(): boolean;
-  abstract login(): void;
+  abstract navigateToLogin(): void;
   abstract logout(): Observable<any>;
-  abstract destroy(): void;
+  abstract login(params?: LoginParams): Observable<any>;
 
   private catchError = err => this.store.dispatch(new RestOccurError(err));
 
@@ -54,8 +62,6 @@ export abstract class AuthFlowStrategy {
       })
       .catch(this.catchError);
   }
-
-  setRememberMe(remember: boolean) {}
 }
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
@@ -68,7 +74,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
       .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
 
-  login() {
+  navigateToLogin() {
     this.oAuthService.initCodeFlow();
   }
 
@@ -81,7 +87,10 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     return from(this.oAuthService.revokeTokenAndLogout());
   }
 
-  destroy() {}
+  login() {
+    this.oAuthService.initCodeFlow();
+    return of(null);
+  }
 }
 
 export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
@@ -112,11 +121,20 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       });
   }
 
-  async init() {
-    this.oAuthService.events.pipe(filter(event => event.type === 'logout')).subscribe(() => {
-      this.removeRememberMe();
-    });
+  private setRememberMe(remember: boolean) {
+    this.removeRememberMe();
+    localStorage.setItem(this.storageKey, 'true');
+    document.cookie = `${this.cookieKey}=true${
+      remember ? ';expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
+    }`;
+  }
 
+  private removeRememberMe() {
+    localStorage.removeItem(this.storageKey);
+    document.cookie = this.cookieKey + '= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+  }
+
+  async init() {
     if (!getCookieValueByName('rememberMe') && localStorage.getItem(this.storageKey)) {
       this.oAuthService.logOut();
     }
@@ -124,7 +142,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     return super.init().then(() => this.listenToTokenExpiration());
   }
 
-  login() {
+  navigateToLogin() {
     const router = this.injector.get(Router);
     router.navigateByUrl('/account/login');
   }
@@ -133,29 +151,38 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     return true;
   }
 
+  login(params: LoginParams): Observable<any> {
+    const sessionState = this.injector.get(SessionStateService);
+    const router = this.injector.get(Router);
+    const tenant = sessionState.getTenant();
+
+    return from(
+      this.oAuthService.fetchTokenUsingPasswordFlow(
+        params.username,
+        params.password,
+        new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
+      ),
+    ).pipe(
+      switchMap(() => this.appConfigService.get()),
+      tap(res => {
+        this.configState.setState(res);
+        this.setRememberMe(params.rememberMe);
+        router.navigate([params.redirectUrl || '/']);
+      }),
+    );
+  }
+
   logout() {
     const router = this.injector.get(Router);
 
     return from(this.oAuthService.revokeTokenAndLogout()).pipe(
       switchMap(() => this.appConfigService.get()),
-      tap(res => this.configState.setState(res)),
-      tap(() => router.navigateByUrl('/')),
+      tap(res => {
+        this.configState.setState(res);
+        router.navigateByUrl('/');
+        this.removeRememberMe();
+      }),
     );
-  }
-
-  destroy() {}
-
-  setRememberMe(remember: boolean) {
-    this.removeRememberMe();
-    localStorage.setItem(this.storageKey, 'true');
-    document.cookie = `${this.cookieKey}=true${
-      remember ? ';expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
-    }`;
-  }
-
-  removeRememberMe() {
-    localStorage.removeItem(this.storageKey);
-    document.cookie = this.cookieKey + '= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
   }
 }
 

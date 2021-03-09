@@ -1,10 +1,10 @@
 import { Injectable, Injector } from '@angular/core';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import {
-  AuthCodeFlowStrategy,
   AuthFlowStrategy,
-  AuthPasswordFlowStrategy,
   AUTH_FLOW_STRATEGY,
+  LoginParams,
 } from '../strategies/auth-flow.strategy';
 import { EnvironmentService } from './environment.service';
 
@@ -12,30 +12,50 @@ import { EnvironmentService } from './environment.service';
   providedIn: 'root',
 })
 export class AuthService {
-  private _strategy: AuthFlowStrategy;
-
-  set strategy(strategy: AuthFlowStrategy) {
-    if (this.strategy) this.strategy.destroy();
-    this._strategy = strategy;
-  }
-
-  get strategy() {
-    return this._strategy;
-  }
+  private strategy: AuthFlowStrategy;
 
   get isInternalAuth() {
     return this.strategy.isInternalAuth;
   }
 
+  constructor(protected injector: Injector) {}
+
   async init() {
-    return await this.strategy.init();
+    const environmentService = this.injector.get(EnvironmentService);
+
+    return environmentService
+      .getEnvironment$()
+      .pipe(
+        map(env => env?.oAuthConfig),
+        filter(oAuthConfig => !!oAuthConfig),
+        tap(oAuthConfig => {
+          this.strategy =
+            oAuthConfig.responseType === 'code'
+              ? AUTH_FLOW_STRATEGY.Code(this.injector)
+              : AUTH_FLOW_STRATEGY.Password(this.injector);
+        }),
+        switchMap(() => from(this.strategy.init())),
+        take(1),
+      )
+      .toPromise();
   }
 
   logout(): Observable<any> {
     return this.strategy.logout();
   }
 
+  /**
+   * @deprecated Use navigateToLogin method instead. To be deleted in v5.0
+   */
   initLogin() {
-    this.strategy.login();
+    this.strategy.navigateToLogin();
+  }
+
+  navigateToLogin() {
+    this.strategy.navigateToLogin();
+  }
+
+  login(params: LoginParams) {
+    return this.strategy.login(params);
   }
 }
