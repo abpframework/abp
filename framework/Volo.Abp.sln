@@ -367,7 +367,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Compone
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Abstractions", "src\Volo.Abp.EventBus.Abstractions\Volo.Abp.EventBus.Abstractions.csproj", "{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server", "src\Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server\Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server.csproj", "{F35E5CFC-569F-4D7D-A30F-DD8AE97FEC5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Server.BasicTheme", "src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj", "{F35E5CFC-569F-4D7D-A30F-DD8AE97FEC5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Sms.Aliyun", "src\Volo.Abp.Sms.Aliyun\Volo.Abp.Sms.Aliyun.csproj", "{ACFBA3FB-18CE-4655-9D14-1F1F5C3DFC30}"
 EndProject

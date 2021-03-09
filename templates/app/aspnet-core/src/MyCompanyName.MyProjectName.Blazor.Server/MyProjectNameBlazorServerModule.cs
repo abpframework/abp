@@ -51,7 +51,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAspNetCoreSerilogModule), 
         typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreComponentsWebBasicThemeServerModule),
+        typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
         typeof(AbpIdentityBlazorModule),
         typeof(AbpTenantManagementBlazorModule)
        )]

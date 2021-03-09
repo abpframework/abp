@@ -7,13 +7,13 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server
     [DependsOn(
         typeof(AbpAspNetCoreComponentsWebBasicThemeModule)
         )]
-    public class AbpAspNetCoreComponentsWebBasicThemeServerModule : AbpModule
+    public class AbpAspNetCoreComponentsServerBasicThemeModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpRouterOptions>(options =>
             {
-                options.AdditionalAssemblies.Add(typeof(AbpAspNetCoreComponentsWebBasicThemeServerModule).Assembly);
+                options.AdditionalAssemblies.Add(typeof(AbpAspNetCoreComponentsServerBasicThemeModule).Assembly);
             });
 
             Configure<AbpToolbarOptions>(options =>
