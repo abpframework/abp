@@ -12,7 +12,5 @@ namespace Volo.CmsKit.Public.Blogs
         Task<PagedResultDto<BlogPostPublicDto>> GetListAsync([NotNull] string blogSlug, PagedAndSortedResultRequestDto input);
 
         Task<BlogPostPublicDto> GetAsync([NotNull] string blogSlug, [NotNull] string blogPostSlug);
-
-        Task<RemoteStreamContent> GetCoverImageAsync(Guid id);
     }
 }

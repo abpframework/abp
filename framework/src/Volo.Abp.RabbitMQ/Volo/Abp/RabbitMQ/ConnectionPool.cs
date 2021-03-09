@@ -26,10 +26,13 @@ namespace Volo.Abp.RabbitMQ
 
             return Connections.GetOrAdd(
                 connectionName,
-                () => Options
-                    .Connections
-                    .GetOrDefault(connectionName)
-                    .CreateConnection()
+                () =>
+                {
+                    var connection = Options.Connections.GetOrDefault(connectionName);
+                    var hostnames = connection.HostName.TrimEnd(';').Split(';');
+                    // Handle Rabbit MQ Cluster.
+                    return hostnames.Length == 1 ? connection.CreateConnection() : connection.CreateConnection(hostnames);
+                }
             );
         }
 

@@ -60,7 +60,7 @@
                         {
                             text: l('Details'),
                             action: function (data) {
-                                window.location = abp.appPath + 'CmsKit/Comments/Details/' + data.record.id;
+                                location.href = 'Comments/' + data.record.id;
                             }
                         },
                         {

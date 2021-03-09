@@ -25,8 +25,6 @@ namespace Volo.CmsKit.MongoDB
 
         IMongoCollection<Rating> Ratings { get; }
 
-        IMongoCollection<Content> Contents { get; }
-
         IMongoCollection<Tag> Tags { get; }
 
         IMongoCollection<EntityTag> EntityTags { get; }
