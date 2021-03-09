@@ -1,6 +1,6 @@
 export * from './application-configuration.service';
 export * from './auth.service';
-export * from './auth-flow-initializer.service';
+export * from './auth-flow-initializer';
 export * from './config-state.service';
 export * from './content-projection.service';
 export * from './dom-insertion.service';
