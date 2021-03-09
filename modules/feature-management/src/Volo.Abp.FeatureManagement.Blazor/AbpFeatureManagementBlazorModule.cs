@@ -1,11 +1,11 @@
-﻿using Volo.Abp.AspNetCore.Components.UI.Theming;
+﻿using Volo.Abp.AspNetCore.Components.Web.Theming;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.FeatureManagement.Blazor
 {
     [DependsOn(
-        typeof(AbpAspNetCoreComponentsUiThemingModule),
+        typeof(AbpAspNetCoreComponentsWebThemingModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpFeatureManagementApplicationContractsModule)
     )]

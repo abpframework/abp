@@ -15,8 +15,8 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server;
-using Volo.Abp.AspNetCore.Components.UI.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
@@ -51,7 +51,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAspNetCoreSerilogModule), 
         typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreComponentsUiBasicThemeServerModule),
+        typeof(AbpAspNetCoreComponentsWebBasicThemeServerModule),
         typeof(AbpIdentityBlazorModule),
         typeof(AbpTenantManagementBlazorModule)
        )]
