@@ -7,7 +7,7 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
 {
     [DependsOn(
-        typeof(AbpAspNetCoreComponentsUiBasicThemeModule),
+        typeof(AbpAspNetCoreComponentsWebBasicThemeModule),
         typeof(AbpHttpClientIdentityModelWebAssemblyModule)
         )]
     public class AbpAspNetCoreComponentsWebAssemblyBasicThemeModule : AbpModule

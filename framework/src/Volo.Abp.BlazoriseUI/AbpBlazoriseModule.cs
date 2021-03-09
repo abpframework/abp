@@ -8,7 +8,7 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BlazoriseUI
 {
     [DependsOn(
-        typeof(AbpAspNetCoreComponentsUIModule),
+        typeof(AbpAspNetCoreComponentsWebModule),
         typeof(AbpDddApplicationContractsModule),
         typeof(AbpAuthorizationModule)
         )]

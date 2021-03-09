@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Components.Web
         typeof(AbpUiModule),
         typeof(AbpAspNetCoreComponentsModule)
         )]
-    public class AbpAspNetCoreComponentsUIModule : AbpModule
+    public class AbpAspNetCoreComponentsWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {

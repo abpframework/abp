@@ -4,9 +4,9 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme
 {
     [DependsOn(
-        typeof(AbpAspNetCoreComponentsUiThemingModule)
+        typeof(AbpAspNetCoreComponentsWebThemingModule)
         )]
-    public class AbpAspNetCoreComponentsUiBasicThemeModule : AbpModule
+    public class AbpAspNetCoreComponentsWebBasicThemeModule : AbpModule
     {
         
     }
