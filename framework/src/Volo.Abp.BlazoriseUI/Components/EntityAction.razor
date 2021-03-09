@@ -3,14 +3,14 @@
 
 @if (ParentActions.Type == ActionType.Dropdown)
 {
-    if (IsVisible && Primary == false)
+    if (IsEntityActionVisible && Primary == false)
     {
         <DropdownItem Clicked="@ActionClickedAsync">@Text</DropdownItem>
     }
 }
 else
 {
-    if (IsVisible)
+    if (IsEntityActionVisible)
     {
         <Blazorise.Button Block="true"
                           Color="@Color"

@@ -12,6 +12,7 @@ namespace Volo.Abp.AspNetCore.Components.Extensibility.EntityActions
         public bool Primary { get; set; }
         public object Color { get; set; }
         public string Icon { get; set; }
+        public Func<object, Task<bool>> Visible { get; set; }
         public bool Equals(EntityAction other)
         {
             return string.Equals(Text, other?.Text, StringComparison.OrdinalIgnoreCase);

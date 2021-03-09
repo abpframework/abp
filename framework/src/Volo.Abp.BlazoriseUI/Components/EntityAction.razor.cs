@@ -12,7 +12,7 @@ namespace Volo.Abp.BlazoriseUI.Components
 {
     public partial class EntityAction<TItem> : ComponentBase
     {
-        internal bool IsVisible = true;
+        internal bool IsEntityActionVisible = true;
 
         [Parameter]
         public string Text { get; set; }
@@ -35,6 +35,9 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter]
         public string Icon { get; set; }
 
+        [Parameter]
+        public Func<Task<bool>> Visible { get; set; }
+
         [CascadingParameter]
         public EntityActions<TItem> ParentActions { get; set; }
 
@@ -48,9 +51,11 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await base.OnInitializedAsync();
             await SetDefaultValuesAsync();
-            if (!RequiredPolicy.IsNullOrEmpty())
+            IsEntityActionVisible = await Visible?.Invoke();
+
+            if (!RequiredPolicy.IsNullOrEmpty() && !IsEntityActionVisible)
             {
-                IsVisible = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
+                IsEntityActionVisible = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
             }
             ParentActions.AddAction(this);
         }

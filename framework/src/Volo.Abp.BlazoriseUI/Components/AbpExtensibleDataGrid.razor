@@ -30,6 +30,7 @@
                                                       Icon="@action.Icon"
                                                       Clicked="async () => await action.Clicked(context)"
                                                       ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
+                                                      Visible="async () => await action.Visible?.Invoke(context)"
                                                       Text="@action.Text">
                                         </EntityAction>
                                     }
@@ -40,6 +41,7 @@
                                                       Clicked="async () => await action.Clicked(context)"
                                                       Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.None)"
                                                       Icon="@action.Icon"
+                                                      Visible="async () => await action.Visible?.Invoke(context)"
                                                       Text="@action.Text">
                                         </EntityAction>
                                     }
