@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
-using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
+namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server
 {
     public class BasicThemeToolbarContributor : IToolbarContributor
     {

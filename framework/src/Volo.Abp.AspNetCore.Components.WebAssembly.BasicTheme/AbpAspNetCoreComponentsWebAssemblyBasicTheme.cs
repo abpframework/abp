@@ -1,12 +1,14 @@
-﻿using Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Toolbars;
+﻿using Volo.Abp.AspNetCore.Components.Web.BasicTheme;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
+using Volo.Abp.Http.Client.IdentityModel.WebAssembly;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
 {
     [DependsOn(
-        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule)
+        typeof(AbpAspNetCoreComponentsUiBasicThemeModule),
+        typeof(AbpHttpClientIdentityModelWebAssemblyModule)
         )]
     public class AbpAspNetCoreComponentsWebAssemblyBasicThemeModule : AbpModule
     {

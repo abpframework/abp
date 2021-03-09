@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Volo.Abp.AspNetCore.Components.UI.Security;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 

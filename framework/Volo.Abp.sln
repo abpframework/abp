@@ -359,21 +359,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Json.Tests", "test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Http.Tests", "test\Volo.Abp.Http.Tests\Volo.Abp.Http.Tests.csproj", "{A37BFEB5-7C57-4CDC-93B8-B5CE4BB9ACE1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.UI", "src\Volo.Abp.AspNetCore.Components.UI\Volo.Abp.AspNetCore.Components.UI.csproj", "{F03A1CEA-FA44-4F30-BFC2-00BC2EAAB4E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.Web", "src\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj", "{F03A1CEA-FA44-4F30-BFC2-00BC2EAAB4E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.UI.BasicTheme", "src\Volo.Abp.AspNetCore.Components.UI.BasicTheme\Volo.Abp.AspNetCore.Components.UI.BasicTheme.csproj", "{5AD34048-5DAA-4067-9C7D-09295617A057}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.Web.BasicTheme", "src\Volo.Abp.AspNetCore.Components.Web.BasicTheme\Volo.Abp.AspNetCore.Components.Web.BasicTheme.csproj", "{5AD34048-5DAA-4067-9C7D-09295617A057}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.UI.Theming", "src\Volo.Abp.AspNetCore.Components.UI.Theming\Volo.Abp.AspNetCore.Components.UI.Theming.csproj", "{B9133C38-AC24-4E2F-B581-D124CF410CDF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly", "src\Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly\Volo.Abp.AspNetCore.Components.UI.Theming.WebAssembly.csproj", "{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly", "src\Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly\Volo.Abp.AspNetCore.Components.UI.BasicTheme.WebAssembly.csproj", "{616282F9-6901-4098-B515-EBDF41C57C4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Components.Web.Theming", "src\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj", "{B9133C38-AC24-4E2F-B581-D124CF410CDF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EventBus.Abstractions", "src\Volo.Abp.EventBus.Abstractions\Volo.Abp.EventBus.Abstractions.csproj", "{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Server", "src\Volo.Abp.AspNetCore.Components.Server\Volo.Abp.AspNetCore.Components.Server.csproj", "{41743609-6CDC-46F7-8C83-BCFBA5555AC0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server", "src\Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server\Volo.Abp.AspNetCore.Components.UI.BasicTheme.Server.csproj", "{F35E5CFC-569F-4D7D-A30F-DD8AE97FEC5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server", "src\Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server\Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server.csproj", "{F35E5CFC-569F-4D7D-A30F-DD8AE97FEC5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Sms.Aliyun", "src\Volo.Abp.Sms.Aliyun\Volo.Abp.Sms.Aliyun.csproj", "{ACFBA3FB-18CE-4655-9D14-1F1F5C3DFC30}"
 EndProject
@@ -1101,22 +1095,10 @@ Global
 		{B9133C38-AC24-4E2F-B581-D124CF410CDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9133C38-AC24-4E2F-B581-D124CF410CDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9133C38-AC24-4E2F-B581-D124CF410CDF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52}.Release|Any CPU.Build.0 = Release|Any CPU
-		{616282F9-6901-4098-B515-EBDF41C57C4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{616282F9-6901-4098-B515-EBDF41C57C4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{616282F9-6901-4098-B515-EBDF41C57C4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{616282F9-6901-4098-B515-EBDF41C57C4F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{41743609-6CDC-46F7-8C83-BCFBA5555AC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41743609-6CDC-46F7-8C83-BCFBA5555AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41743609-6CDC-46F7-8C83-BCFBA5555AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41743609-6CDC-46F7-8C83-BCFBA5555AC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F35E5CFC-569F-4D7D-A30F-DD8AE97FEC5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F35E5CFC-569F-4D7D-A30F-DD8AE97FEC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F35E5CFC-569F-4D7D-A30F-DD8AE97FEC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1313,10 +1295,7 @@ Global
 		{F03A1CEA-FA44-4F30-BFC2-00BC2EAAB4E2} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{5AD34048-5DAA-4067-9C7D-09295617A057} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{B9133C38-AC24-4E2F-B581-D124CF410CDF} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
-		{FFA80CA2-3DEE-4EFE-8120-80342A0BEA52} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
-		{616282F9-6901-4098-B515-EBDF41C57C4F} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{8FDB3BF7-AD89-43F6-8DEB-C3E29B8801FE} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
-		{41743609-6CDC-46F7-8C83-BCFBA5555AC0} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{F35E5CFC-569F-4D7D-A30F-DD8AE97FEC5A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{ACFBA3FB-18CE-4655-9D14-1F1F5C3DFC30} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{DADEA538-3CA1-4ADE-A7E6-EF77A0CE4401} = {447C8A77-E5F0-4538-8687-7383196D04EA}
