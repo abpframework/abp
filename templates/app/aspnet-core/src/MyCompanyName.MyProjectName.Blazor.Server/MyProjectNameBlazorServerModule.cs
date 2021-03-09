@@ -15,6 +15,7 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.AspNetCore.Components.Server.Theming.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Mvc;
@@ -27,7 +28,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Blazor;
@@ -85,14 +85,10 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureLocalizationServices();
             ConfigureAutoApiControllers();
-
             ConfigureHttpClient(context);
-
             ConfigureBlazorise(context);
             ConfigureRouter(context);
             ConfigureMenu(context);
-
-            context.Services.AddServerSideBlazor();
         }
 
         private void ConfigureUrls(IConfiguration configuration)
@@ -109,6 +105,14 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             {
                 options.StyleBundles.Configure(
                     BasicThemeBundles.Styles.Global,
+                    bundle =>
+                    {
+                        bundle.AddFiles("/global-styles.css");
+                    }
+                );
+                
+                options.StyleBundles.Configure(
+                    BlazorStandardBundles.Styles.Global,
                     bundle =>
                     {
                         bundle.AddFiles("/global-styles.css");

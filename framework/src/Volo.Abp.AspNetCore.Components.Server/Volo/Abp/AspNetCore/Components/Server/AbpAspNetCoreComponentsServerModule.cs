@@ -9,6 +9,11 @@ namespace Volo.Abp.AspNetCore.Components.Server
         )]
     public class AbpAspNetCoreComponentsServerModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddServerSideBlazor();
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             context.GetEnvironment().WebRootFileProvider =
