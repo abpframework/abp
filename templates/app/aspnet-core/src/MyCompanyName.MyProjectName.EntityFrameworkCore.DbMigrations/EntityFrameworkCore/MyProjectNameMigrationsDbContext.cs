@@ -9,6 +9,9 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+using Volo.CmsKit.EntityFrameworkCore;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
@@ -39,6 +42,9 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             builder.ConfigureIdentityServer();
             builder.ConfigureFeatureManagement();
             builder.ConfigureTenantManagement();
+            //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+            builder.ConfigureCmsKit();
+            //</TEMPLATE-REMOVE>
 
             /* Configure your own tables/entities inside the ConfigureMyProjectName method */
 
