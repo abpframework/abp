@@ -240,7 +240,6 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseAbpRequestLocalization();
-            app.UseAbpSecurityHeaders();
 
             if (!env.IsDevelopment())
             {
