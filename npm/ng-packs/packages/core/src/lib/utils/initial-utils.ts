@@ -6,7 +6,7 @@ import { ABP } from '../models/common';
 import { Environment } from '../models/environment';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
-import { AuthService } from '../services';
+import { AuthService } from '../services/auth.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
