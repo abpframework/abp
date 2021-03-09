@@ -54,7 +54,7 @@ namespace Volo.Abp.IdentityServer
                 options.EtoMappings.Add<IdentityResource, IdentityResourceEto>(typeof(AbpIdentityServerDomainModule));
             });
 
-            Configure<AbpClaimsPrincipalOptions>(options =>
+            Configure<AbpClaimsServiceOptions>(options =>
             {
                 options.RequestedClaims.AddRange(new []{
                     AbpClaimTypes.TenantId,

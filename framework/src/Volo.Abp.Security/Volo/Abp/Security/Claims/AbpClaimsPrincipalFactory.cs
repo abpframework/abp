@@ -9,14 +9,14 @@ namespace Volo.Abp.Security.Claims
     public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientDependency
     {
         protected IServiceScopeFactory ServiceScopeFactory { get; }
-        protected AbpClaimsPrincipalOptions Options { get; }
+        protected AbpClaimsPrincipalFactoryOptions FactoryOptions { get; }
 
         public AbpClaimsPrincipalFactory(
             IServiceScopeFactory serviceScopeFactory,
-            IOptions<AbpClaimsPrincipalOptions> abpClaimOptions)
+            IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimOptions)
         {
             ServiceScopeFactory = serviceScopeFactory;
-            Options = abpClaimOptions.Value;
+            FactoryOptions = abpClaimOptions.Value;
         }
 
         public virtual async Task<ClaimsPrincipal> CreateAsync()
@@ -27,7 +27,7 @@ namespace Volo.Abp.Security.Claims
 
                 var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, scope.ServiceProvider);
 
-                foreach (var contributorType in Options.Contributors)
+                foreach (var contributorType in FactoryOptions.Contributors)
                 {
                     var contributor = (IAbpClaimsPrincipalContributor) scope.ServiceProvider.GetRequiredService(contributorType);
                     await contributor.ContributeAsync(context);

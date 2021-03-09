@@ -61,7 +61,7 @@ namespace Volo.Abp.Security
                 }
             });
 
-            services.Configure<AbpClaimsPrincipalOptions>(options =>
+            services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
             {
                 options.Contributors.AddIfNotContains(contributorTypes);
             });

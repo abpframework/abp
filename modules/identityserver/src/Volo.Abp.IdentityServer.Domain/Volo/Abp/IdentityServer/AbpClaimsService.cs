@@ -11,7 +11,7 @@ namespace Volo.Abp.IdentityServer
 {
     public class AbpClaimsService : DefaultClaimsService
     {
-        protected readonly AbpClaimsPrincipalOptions Options;
+        protected readonly AbpClaimsServiceOptions Options;
 
         private static readonly string[] AdditionalOptionalClaimNames =
         {
@@ -26,7 +26,7 @@ namespace Volo.Abp.IdentityServer
         public AbpClaimsService(
             IProfileService profile,
             ILogger<DefaultClaimsService> logger,
-            IOptions<AbpClaimsPrincipalOptions> options)
+            IOptions<AbpClaimsServiceOptions> options)
             : base(profile, logger)
         {
             Options = options.Value;

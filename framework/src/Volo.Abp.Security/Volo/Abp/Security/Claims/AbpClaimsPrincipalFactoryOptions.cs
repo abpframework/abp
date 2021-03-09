@@ -3,16 +3,13 @@ using Volo.Abp.Collections;
 
 namespace Volo.Abp.Security.Claims
 {
-    public class AbpClaimsPrincipalOptions
+    public class AbpClaimsPrincipalFactoryOptions
     {
         public ITypeList<IAbpClaimsPrincipalContributor> Contributors { get; }
 
-        public List<string> RequestedClaims { get; }
-
-        public AbpClaimsPrincipalOptions()
+        public AbpClaimsPrincipalFactoryOptions()
         {
             Contributors = new TypeList<IAbpClaimsPrincipalContributor>();
-            RequestedClaims = new List<string>();
         }
     }
 }
