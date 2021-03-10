@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
@@ -109,8 +108,6 @@ namespace Volo.Abp.PermissionManagement
             {
                 await PermissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
             }
-
-            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         protected virtual async Task CheckProviderPolicy(string providerName)
