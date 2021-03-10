@@ -39,6 +39,8 @@ using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
 using Volo.CmsKit.Public.Web;
+using System;
+using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit
 {
@@ -80,6 +82,8 @@ namespace Volo.CmsKit
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+
+            ConfigureCmsKit(context);
 
             Configure<AbpDbContextOptions>(options =>
             {
@@ -128,6 +132,20 @@ namespace Volo.CmsKit
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
+        }
+
+        private void ConfigureCmsKit(ServiceConfigurationContext context)
+        {
+            Configure<CmsKitReactionOptions>(options =>
+            {
+                options.EntityTypes.Add(
+                    new ReactionEntityTypeDefinition("quote", 
+                    reactions: new[]
+                    {
+                        new ReactionDefinition(StandardReactions.ThumbsUp),
+                        new ReactionDefinition(StandardReactions.ThumbsDown),
+                    }));
             });
         }
 

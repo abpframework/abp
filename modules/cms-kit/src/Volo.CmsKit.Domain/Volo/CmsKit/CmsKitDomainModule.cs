@@ -12,6 +12,8 @@ using Volo.CmsKit.Localization;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
+using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Comments;
 
 namespace Volo.CmsKit
 {
@@ -25,22 +27,45 @@ namespace Volo.CmsKit
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<CmsKitReactionOptions>(options =>
+            if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
             {
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.ThumbsUp));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.ThumbsDown));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Smile));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Wink));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Confused));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Victory));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Rock));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Eyes));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Heart));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.HeartBroken));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Rocket));
-                options.Reactions.AddIfNotContains(new ReactionDefinition(StandardReactions.Pray));
+                Configure<CmsKitReactionOptions>(options =>
+                {
+                    if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
+                    {
+                        options.EntityTypes.Add(
+                            new ReactionEntityTypeDefinition(
+                                BlogPostConsts.EntityType,
+                                reactions: new[]
+                                {
+                                    new ReactionDefinition(StandardReactions.Smile),
+                                    new ReactionDefinition(StandardReactions.ThumbsUp),
+                                    new ReactionDefinition(StandardReactions.ThumbsDown),
+                                    new ReactionDefinition(StandardReactions.Confused),
+                                    new ReactionDefinition(StandardReactions.Eyes),
+                                    new ReactionDefinition(StandardReactions.Heart),
+                                    new ReactionDefinition(StandardReactions.HeartBroken),
+                                    new ReactionDefinition(StandardReactions.Wink),
+                                    new ReactionDefinition(StandardReactions.Pray),
+                                    new ReactionDefinition(StandardReactions.Rocket),
+                                    new ReactionDefinition(StandardReactions.Victory),
+                                    new ReactionDefinition(StandardReactions.Rock),
+                                }));
+                    }
 
-            });
+                    if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+                    {
+                        options.EntityTypes.Add(
+                            new ReactionEntityTypeDefinition(
+                                CommentConsts.EntityType,
+                                reactions: new[]
+                                {
+                                    new ReactionDefinition(StandardReactions.ThumbsUp),
+                                    new ReactionDefinition(StandardReactions.ThumbsDown),
+                                }));
+                    }
+                });
+            }
 
             if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
             {
