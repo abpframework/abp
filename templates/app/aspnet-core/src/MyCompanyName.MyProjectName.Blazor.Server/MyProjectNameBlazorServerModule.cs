@@ -33,6 +33,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.SettingManagement.Blazor;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Blazor;
 using Volo.Abp.UI;
@@ -54,7 +55,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
         typeof(AbpIdentityBlazorModule),
-        typeof(AbpTenantManagementBlazorModule)
+        typeof(AbpTenantManagementBlazorModule),
+        typeof(AbpSettingManagementBlazorModule)
        )]
     public class MyProjectNameBlazorServerModule : AbpModule
     {
