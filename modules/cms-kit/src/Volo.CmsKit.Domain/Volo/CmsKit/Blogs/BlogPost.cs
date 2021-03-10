@@ -12,17 +12,19 @@ namespace Volo.CmsKit.Blogs
     {
         public virtual Guid BlogId { get; protected set; }
 
-        [NotNull] 
+        [NotNull]
         public virtual string Title { get; protected set; }
 
-        [NotNull] 
+        [NotNull]
         public virtual string Slug { get; protected set; }
 
-        [NotNull] 
+        [NotNull]
         public virtual string ShortDescription { get; protected set; }
 
         public virtual string Content { get; protected set; }
-        
+
+        public Guid? CoverImageMediaId { get; set; }
+
         public virtual Guid? TenantId { get; protected set; }
 
         public Guid AuthorId { get; set; }
@@ -41,6 +43,7 @@ namespace Volo.CmsKit.Blogs
             [NotNull] string slug,
             [CanBeNull] string shortDescription = null,
             [CanBeNull] string content = null,
+            [CanBeNull] Guid? coverImageMediaId = null,
             [CanBeNull] Guid? tenantId = null) : base(id)
         {
             TenantId = tenantId;
@@ -50,6 +53,7 @@ namespace Volo.CmsKit.Blogs
             SetSlug(slug);
             SetShortDescription(shortDescription);
             SetContent(content);
+            CoverImageMediaId = coverImageMediaId;
         }
 
         public virtual void SetTitle(string title)

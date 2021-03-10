@@ -43,7 +43,12 @@
     }}</label>
   </div>
 
-  <div [@collapse]="form.get('smtpUseDefaultCredentials').value ? 'collapsed' : 'expanded'">
+  <div
+    [@collapse]="{
+      value: form.get('smtpUseDefaultCredentials').value ? 'collapsed' : 'expanded',
+      params: { time: '200ms', easing: 'linear' }
+    }"
+  >
     <div class="form-group">
       <label>{{ 'AbpSettingManagement::SmtpDomain' | abpLocalization }}</label>
       <input type="text" class="form-control" formControlName="smtpDomain" />

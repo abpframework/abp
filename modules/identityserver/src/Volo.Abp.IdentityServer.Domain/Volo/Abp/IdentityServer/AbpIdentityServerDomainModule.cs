@@ -10,7 +10,6 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.AspNetIdentity;
-using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.IdentityResources;
@@ -19,6 +18,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Security;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Validation;
 using Volo.Abp.Threading;
 
@@ -52,6 +52,14 @@ namespace Volo.Abp.IdentityServer
                 options.EtoMappings.Add<Client, ClientEto>(typeof(AbpIdentityServerDomainModule));
                 options.EtoMappings.Add<DeviceFlowCodes, DeviceFlowCodesEto>(typeof(AbpIdentityServerDomainModule));
                 options.EtoMappings.Add<IdentityResource, IdentityResourceEto>(typeof(AbpIdentityServerDomainModule));
+            });
+
+            Configure<AbpClaimsServiceOptions>(options =>
+            {
+                options.RequestedClaims.AddRange(new []{
+                    AbpClaimTypes.TenantId,
+                    AbpClaimTypes.EditionId
+                });
             });
 
             AddIdentityServer(context.Services);

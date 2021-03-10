@@ -1,11 +1,15 @@
 ﻿@page
 
 @using Volo.CmsKit.Public.Web.Pages
-@using Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs 
+@using Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs
 
 @inherits CmsKitPublicPageBase
 
 @model IndexModel
+
+@{
+    const string dummyImageSource = "https://dummyimage.com/300x200/a3a3a3/fff.png";
+}
 
 <abp-row id="blogs-container">
     @foreach (var blog in Model.Blogs.Items)
@@ -21,7 +25,14 @@
                     </abp-card-subtitle>
                 </abp-card-header>
                 <abp-card-body>
-                    <img src="/api/cms-kit-public/blog-posts/@blog.Id/cover-image" class="card-img-top" style="max-width:200px;max-height:200px;" onerror="this.src='https://dummyimage.com/300x200/a3a3a3/fff.png'" />
+                    @if (blog.CoverImageMediaId != null)
+                    {
+                        <img src="/api/cms-kit/media/@blog.CoverImageMediaId" class="card-img-top" style="max-width:200px;max-height:200px;" onerror="this.src='@dummyImageSource'" />
+                    }
+                    else
+                    {
+                        <img src="@dummyImageSource" class="card-img-top" style="max-width:200px;max-height:200px;" />
+                    }
                     <abp-card-text>
                         @blog.ShortDescription
                     </abp-card-text>

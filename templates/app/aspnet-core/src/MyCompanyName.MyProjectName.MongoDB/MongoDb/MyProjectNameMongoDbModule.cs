@@ -9,6 +9,9 @@ using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.TenantManagement.MongoDB;
 using Volo.Abp.Uow;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+using Volo.CmsKit.MongoDB;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.MongoDB
 {
@@ -21,6 +24,9 @@ namespace MyCompanyName.MyProjectName.MongoDB
         typeof(AbpBackgroundJobsMongoDbModule),
         typeof(AbpAuditLoggingMongoDbModule),
         typeof(AbpTenantManagementMongoDbModule),
+        //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+        typeof(CmsKitMongoDbModule),
+        //</TEMPLATE-REMOVE>
         typeof(AbpFeatureManagementMongoDbModule)
         )]
     public class MyProjectNameMongoDbModule : AbpModule
