@@ -215,8 +215,25 @@
     "Gateway": "Gateway",
     "State": "State",
     "FailReason": "Fail reason",
-    "ReIndexAllPosts": "ReIndex All Posts",
-    "ReIndexAllPostsConfirmationMessage": "Are you sure to reindex all posts?",
-    "SuccessfullyReIndexAllPosts": "Successfully reindex for all posts"
+    "ReIndexAllPosts": "Reindex All Posts",
+    "ReIndexAllPostsConfirmationMessage": "Are you sure you want to reindex all posts?",
+    "SuccessfullyReIndexAllPosts": "All posts have been successfully reindexed.",
+    "Permission:FullSearch": "Full text search",
+    "Menu:CliAnalytics": "Cli Analytics",
+    "TemplateName": "Template name",
+    "TemplateVersion": "Template version",
+    "DatabaseProvider": "Database provider",
+    "IsTiered": "Is Tiered",
+    "ProjectName": "Project name",
+    "Username": "User name",
+    "Tool": "Tool",
+    "Command": "Command",
+    "UiFramework": "Ui framework",
+    "Options": "Options",
+    "CliAnalytics": "Cli Analytics",
+    "Permission:CliAnalyticses": "Cli Analyticses",
+    "Permission:CliAnalytics": "Cli Analytics",
+    "Search": "Search",
+    "ClearFilter": "Clear filter"
   }
 }

@@ -31,6 +31,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
             var steps = new List<ProjectBuildPipelineStep>();
 
             DeleteUnrelatedUiProject(context, steps);
+            SetRandomPortForHostProject(context, steps);
             RandomizeStringEncryption(context, steps);
 
             return steps;
@@ -52,6 +53,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MicroserviceName.Web"));
                     break;
             }
+        }
+
+        private static void SetRandomPortForHostProject(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new MicroserviceServiceRandomPortStep("44371"));
         }
 
         private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
