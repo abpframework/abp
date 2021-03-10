@@ -217,6 +217,21 @@
     "FailReason": "失败原因",
     "ReIndexAllPosts": "重新索引所有帖子",
     "ReIndexAllPostsConfirmationMessage": "你确定要重新索引所有的帖子吗",
-    "SuccessfullyReIndexAllPosts": "成功索引所有的帖子"
+    "SuccessfullyReIndexAllPosts": "成功索引所有的帖子",
+    "ClearFilter": "清除过滤",
+    "LicensePrivateKey": "许可私有密钥",
+    "LicensePublicKey": "许可公有密钥",
+    "ApiKey": "NuGet API密钥",
+    "ShowInvoiceRequestsOfOrganization": "发票请求",
+    "ShowQuestionsOfOrganization": "问题",
+    "Question": "问题",
+    "Open": "打开",
+    "Questions": "问题",
+    "InvoiceRequests": "发票请求",
+    "Address": "地址",
+    "TaxNo": "税号",
+    "Permission:InvoiceRequest": "发票请求",
+    "Permission:Question": "问题"
+
   }
 }
