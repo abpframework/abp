@@ -70,6 +70,11 @@ export class Body {
 
   constructor(options: BodyOptions) {
     Object.assign(this, options);
+    this.setUrlQuotes();
+  }
+
+  private setUrlQuotes() {
+    this.url = /{/.test(this.url) ? `\`/${this.url}\`` : `'/${this.url}'`;
   }
 }
 
