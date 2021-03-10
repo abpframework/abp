@@ -39,6 +39,10 @@ using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
 using Volo.CmsKit.Public.Web;
+using System;
+using Volo.CmsKit.Tags;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.MediaDescriptors;
 
 namespace Volo.CmsKit
 {
@@ -80,6 +84,8 @@ namespace Volo.CmsKit
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+
+            ConfigureCmsKit(context);
 
             Configure<AbpDbContextOptions>(options =>
             {
@@ -128,6 +134,24 @@ namespace Volo.CmsKit
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
+        }
+
+        private void ConfigureCmsKit(ServiceConfigurationContext context)
+        {
+            Configure<CmsKitTagOptions>(options =>
+            {
+                options.EntityTypes.Add(new TagEntityTypeDefiniton("quote"));
+            });
+
+            Configure<CmsKitCommentOptions>(options =>
+            {
+                options.EntityTypes.Add(new CommentEntityTypeDefinition("quote"));
+            });
+
+            Configure<CmsKitMediaOptions>(options =>
+            {
+                options.EntityTypes.Add(new MediaDescriptorDefinition("quote"));
             });
         }
 
