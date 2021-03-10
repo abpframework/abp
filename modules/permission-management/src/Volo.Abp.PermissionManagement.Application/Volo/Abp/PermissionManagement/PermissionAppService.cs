@@ -109,6 +109,8 @@ namespace Volo.Abp.PermissionManagement
             {
                 await PermissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
             }
+
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         protected virtual async Task CheckProviderPolicy(string providerName)
