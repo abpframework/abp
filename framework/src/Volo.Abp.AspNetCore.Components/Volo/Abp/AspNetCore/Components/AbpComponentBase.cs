@@ -64,7 +64,7 @@ namespace Volo.Abp.AspNetCore.Components
         protected IUiNotificationService Notify => LazyGetNonScopedRequiredService(ref _notify);
         private IUiNotificationService _notify;
         
-        protected IUserExceptionInformer UserExceptionInformer => LazyGetRequiredService(ref _userExceptionInformer);
+        protected IUserExceptionInformer UserExceptionInformer => LazyGetNonScopedRequiredService(ref _userExceptionInformer);
         private IUserExceptionInformer _userExceptionInformer;
 
         protected IAlertManager AlertManager => LazyGetNonScopedRequiredService(ref _alertManager);

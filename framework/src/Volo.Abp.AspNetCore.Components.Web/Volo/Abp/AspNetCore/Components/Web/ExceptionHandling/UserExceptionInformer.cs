@@ -11,7 +11,7 @@ using Volo.Abp.Http;
 namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
 {
     [Dependency(ReplaceServices = true)]
-    public class UserExceptionInformer : IUserExceptionInformer, ITransientDependency
+    public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
     {
         public ILogger<UserExceptionInformer> Logger { get; set; }
         protected IUiMessageService MessageService { get; }

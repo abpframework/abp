@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.AspNetCore.Components.ExceptionHandling;
 
 namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
 {
