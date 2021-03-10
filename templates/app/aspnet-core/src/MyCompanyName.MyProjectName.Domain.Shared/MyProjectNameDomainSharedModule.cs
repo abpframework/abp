@@ -12,6 +12,9 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+using Volo.CmsKit;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName
 {
@@ -23,6 +26,9 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpIdentityServerDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
+        //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+        typeof(CmsKitDomainSharedModule),
+        //</TEMPLATE-REMOVE>
         typeof(AbpTenantManagementDomainSharedModule)
         )]
     public class MyProjectNameDomainSharedModule : AbpModule
