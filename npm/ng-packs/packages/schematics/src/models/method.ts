@@ -54,7 +54,7 @@ export class Body {
     switch (bindingSourceId) {
       case eBindingSourceId.Model:
       case eBindingSourceId.Query:
-        this.params.push(`${paramName}: ${value}`);
+        this.params.push(paramName === value ? value : `${paramName}: ${value}`);
         break;
       case eBindingSourceId.Body:
         this.body = value;
