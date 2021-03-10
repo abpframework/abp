@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
                 return RedirectSafely(returnUrl, returnUrlHash);
             }
 
-            return Challenge(new AuthenticationProperties {RedirectUri = returnUrl}, ChallengeAuthenticationSchemas);
+            return Challenge(new AuthenticationProperties {RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)}, ChallengeAuthenticationSchemas);
         }
 
         [HttpGet]
@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
                 return RedirectSafely(returnUrl, returnUrlHash);
             }
 
-            return SignOut(new AuthenticationProperties {RedirectUri = returnUrl}, ChallengeAuthenticationSchemas);
+            return SignOut(new AuthenticationProperties {RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)}, ChallengeAuthenticationSchemas);
         }
 
         [HttpGet]
