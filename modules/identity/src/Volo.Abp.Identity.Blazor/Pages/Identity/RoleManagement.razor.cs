@@ -35,6 +35,23 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             HasManagePermissionsPermission = await AuthorizationService.IsGrantedAsync(IdentityPermissions.Roles.ManagePermissions);
         }
 
+        protected override async Task DeleteEntityAsync(IdentityRoleDto entity)
+        {
+            //TODO: I will move try/catch to base class, doing here for test purpose 
+            try
+            {
+                await CheckDeletePolicyAsync();
+
+                await AppService.DeleteAsync(entity.Id);
+                await GetEntitiesAsync();
+            }
+            catch (Exception ex)
+            {
+                await ShowError(ex);
+                //await Message.Error("Error: " + ex.Message); //This works if I uncomment
+            }
+        }
+
         protected override string GetDeleteConfirmationMessage(IdentityRoleDto entity)
         {
             return string.Format(L["RoleDeletionConfirmationMessage"], entity.Name);

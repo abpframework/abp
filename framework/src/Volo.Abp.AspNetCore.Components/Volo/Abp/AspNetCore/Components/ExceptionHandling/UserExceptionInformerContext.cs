@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
+namespace Volo.Abp.AspNetCore.Components.ExceptionHandling
 {
     public class UserExceptionInformerContext
     {

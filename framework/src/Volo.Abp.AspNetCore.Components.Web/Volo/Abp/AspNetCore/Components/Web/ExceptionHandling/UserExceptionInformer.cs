@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.AspNetCore.Components.ExceptionHandling;
 using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
@@ -8,6 +10,7 @@ using Volo.Abp.Http;
 
 namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
 {
+    [Dependency(ReplaceServices = true)]
     public class UserExceptionInformer : IUserExceptionInformer, ITransientDependency
     {
         public ILogger<UserExceptionInformer> Logger { get; set; }
@@ -25,16 +28,31 @@ namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling
 
         public void Inform(UserExceptionInformerContext context)
         {
+            //TODO: Create sync versions of the MessageService APIs.
+
             var errorInfo = GetErrorInfo(context);
 
             if (errorInfo.Details.IsNullOrEmpty())
             {
-                //TODO: Should we introduce MessageService.Error (sync) method instead of such a usage (without await)..?
                 MessageService.Error(errorInfo.Message);
             }
             else
             {
                 MessageService.Error(errorInfo.Details, errorInfo.Message);
+            }
+        }
+
+        public async Task InformAsync(UserExceptionInformerContext context)
+        {
+            var errorInfo = GetErrorInfo(context);
+
+            if (errorInfo.Details.IsNullOrEmpty())
+            {
+                await MessageService.Error(errorInfo.Message);
+            }
+            else
+            {
+                await MessageService.Error(errorInfo.Details, errorInfo.Message);
             }
         }
 
