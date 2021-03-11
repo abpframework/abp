@@ -1,5 +1,6 @@
 import { eBindingSourceId, eMethodModifier } from '../enums';
-import { camel } from '../utils';
+import { isValidProp } from '../utils/prop';
+import { camel } from '../utils/text';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
@@ -44,12 +45,16 @@ export class Body {
     const { bindingSourceId, descriptorName, jsonName, name, nameOnMethod } = param;
     const camelName = camel(name);
     const paramName = jsonName || camelName;
-    const value = descriptorName ? `${descriptorName}.${paramName}` : nameOnMethod;
+    const value = descriptorName
+      ? isValidProp(paramName)
+        ? `${descriptorName}.${paramName}`
+        : `${descriptorName}['${paramName}']`
+      : nameOnMethod;
 
     switch (bindingSourceId) {
       case eBindingSourceId.Model:
       case eBindingSourceId.Query:
-        this.params.push(`${paramName}: ${value}`);
+        this.params.push(paramName === value ? value : `${paramName}: ${value}`);
         break;
       case eBindingSourceId.Body:
         this.body = value;
@@ -65,6 +70,11 @@ export class Body {
 
   constructor(options: BodyOptions) {
     Object.assign(this, options);
+    this.setUrlQuotes();
+  }
+
+  private setUrlQuotes() {
+    this.url = /{/.test(this.url) ? `\`/${this.url}\`` : `'/${this.url}'`;
   }
 }
 
