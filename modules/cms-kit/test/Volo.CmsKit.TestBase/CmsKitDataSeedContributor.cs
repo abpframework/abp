@@ -46,6 +46,7 @@ namespace Volo.CmsKit
         private readonly BlogManager _blogManager;
         private readonly IOptions<CmsKitMediaOptions> _mediaOptions;
         private readonly IOptions<CmsKitCommentOptions> _commentsOptions;
+        private readonly IOptions<CmsKitRatingOptions> _ratingOptions;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
@@ -70,7 +71,8 @@ namespace Volo.CmsKit
             IBlobContainer<MediaContainer> mediaBlobContainer,
             BlogManager blogManager,
             IOptions<CmsKitMediaOptions> cmsMediaOptions,
-            IOptions<CmsKitCommentOptions> commentsOptions)
+            IOptions<CmsKitCommentOptions> commentsOptions,
+            IOptions<CmsKitRatingOptions> ratingOptions)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
@@ -95,6 +97,7 @@ namespace Volo.CmsKit
             _blogManager = blogManager;
             _mediaOptions = cmsMediaOptions;
             _commentsOptions = commentsOptions;
+            this._ratingOptions = ratingOptions;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -158,6 +161,9 @@ namespace Volo.CmsKit
 
             _reactionOptions.Value.EntityTypes.Add(new ReactionEntityTypeDefinition(_cmsKitTestData.EntityType1, reactions));
             _reactionOptions.Value.EntityTypes.Add(new ReactionEntityTypeDefinition(_cmsKitTestData.EntityType2, reactions));
+
+            _ratingOptions.Value.EntityTypes.Add(new RatingEntityTypeDefinition(_cmsKitTestData.EntityType1));
+            _ratingOptions.Value.EntityTypes.Add(new RatingEntityTypeDefinition(_cmsKitTestData.EntityType2));
 
             return Task.CompletedTask;
         }
