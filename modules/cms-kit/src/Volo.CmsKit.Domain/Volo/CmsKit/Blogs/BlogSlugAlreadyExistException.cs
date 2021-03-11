@@ -8,14 +8,13 @@ namespace Volo.CmsKit.Blogs
     public class BlogSlugAlreadyExistException : BusinessException
     {
         public BlogSlugAlreadyExistException(string slug)
+            : base(code: CmsKitErrorCodes.Blogs.SlugAlreadyExists)
         {
-            Code = CmsKitErrorCodes.Blogs.SlugAlreadyExists;
-
             WithData(nameof(Blog.Slug), slug);
         }
         
-        public BlogSlugAlreadyExistException(
-            SerializationInfo serializationInfo, StreamingContext context) : base(serializationInfo, context)
+        public BlogSlugAlreadyExistException(SerializationInfo serializationInfo, StreamingContext context) 
+            : base(serializationInfo, context)
         {
         }
     }
