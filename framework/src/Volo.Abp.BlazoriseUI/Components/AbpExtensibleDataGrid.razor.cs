@@ -8,6 +8,8 @@ using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Localization;
+using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
@@ -45,6 +47,18 @@ namespace Volo.Abp.BlazoriseUI.Components
                 builder.AddAttribute(0, DataFieldAttributeName, data);
                 builder.CloseComponent();
             };
+        }
+
+        protected Task<bool> VisibleCore(EntityAction action, TItem item)
+        {
+            if (action.Visible != null)
+            {
+                return action.Visible.Invoke(item);
+            }
+            else
+            {
+                return Task.FromResult(true);
+            }
         }
     }
 }
