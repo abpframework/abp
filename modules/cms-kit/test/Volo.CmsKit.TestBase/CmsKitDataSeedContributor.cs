@@ -39,7 +39,7 @@ namespace Volo.CmsKit
         private readonly IBlogFeatureRepository _blogFeatureRepository;
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly BlogPostManager _blogPostManager;
-        private readonly IOptions<CmsKitOptions> _options;
+        private readonly IOptions<CmsKitReactionOptions> _reactionOptions;
         private readonly IOptions<CmsKitTagOptions> _tagOptions;
         private readonly IMediaDescriptorRepository _mediaDescriptorRepository;
         private readonly IBlobContainer<MediaContainer> _mediaBlobContainer;
@@ -64,7 +64,7 @@ namespace Volo.CmsKit
             BlogPostManager blogPostmanager,
             IBlogFeatureRepository blogFeatureRepository,
             EntityTagManager entityTagManager,
-            IOptions<CmsKitOptions> options,
+            IOptions<CmsKitReactionOptions> reactionOptions,
             IOptions<CmsKitTagOptions> tagOptions,
             IMediaDescriptorRepository mediaDescriptorRepository,
             IBlobContainer<MediaContainer> mediaBlobContainer,
@@ -88,7 +88,7 @@ namespace Volo.CmsKit
             _blogPostRepository = blogPostRepository;
             _blogPostManager = blogPostmanager;
             _blogFeatureRepository = blogFeatureRepository;
-            _options = options;
+            _reactionOptions = reactionOptions;
             _tagOptions = tagOptions;
             _mediaDescriptorRepository = mediaDescriptorRepository;
             _mediaBlobContainer = mediaBlobContainer;
@@ -139,6 +139,25 @@ namespace Volo.CmsKit
 
             _commentsOptions.Value.EntityTypes.Add(
                 new CommentEntityTypeDefinition(_cmsKitTestData.EntityType1));
+
+            List<ReactionDefinition> reactions = new()
+            {
+                new ReactionDefinition(StandardReactions.Smile),
+                new ReactionDefinition(StandardReactions.ThumbsUp),
+                new ReactionDefinition(StandardReactions.ThumbsDown),
+                new ReactionDefinition(StandardReactions.Confused),
+                new ReactionDefinition(StandardReactions.Eyes),
+                new ReactionDefinition(StandardReactions.Heart),
+                new ReactionDefinition(StandardReactions.HeartBroken),
+                new ReactionDefinition(StandardReactions.Wink),
+                new ReactionDefinition(StandardReactions.Pray),
+                new ReactionDefinition(StandardReactions.Rocket),
+                new ReactionDefinition(StandardReactions.Victory),
+                new ReactionDefinition(StandardReactions.Rock),
+            };
+
+            _reactionOptions.Value.EntityTypes.Add(new ReactionEntityTypeDefinition(_cmsKitTestData.EntityType1, reactions));
+            _reactionOptions.Value.EntityTypes.Add(new ReactionEntityTypeDefinition(_cmsKitTestData.EntityType2, reactions));
 
             return Task.CompletedTask;
         }
@@ -209,31 +228,31 @@ namespace Volo.CmsKit
 
         private async Task SeedReactionsAsync()
         {
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User1Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
                 StandardReactions.Confused);
 
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User1Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
                 StandardReactions.ThumbsUp);
 
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User1Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId2,
                 StandardReactions.Heart);
 
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User1Id,
                 _cmsKitTestData.EntityType2,
                 _cmsKitTestData.EntityId1,
                 StandardReactions.Rocket);
 
-            await _reactionManager.CreateAsync(
+            await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User2Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,

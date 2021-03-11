@@ -97,7 +97,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetPagedListAsync_ShouldWorkProperly_WithBlogId_WhileGetting10_WithoutSorting()
         {
-            var result = await blogPostRepository.GetPagedListAsync(testData.Blog_Id, 0, 10, default);
+            var result = await blogPostRepository.GetListAsync(null, testData.Blog_Id);
 
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();
@@ -107,7 +107,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetPagedListAsync_ShouldHaveAuthor_WithBlogId_WhileGetting10_WithoutSorting()
         {
-            var result = await blogPostRepository.GetPagedListAsync(testData.Blog_Id, 0, 10, default);
+            var result = await blogPostRepository.GetListAsync(null, testData.Blog_Id);
 
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();
@@ -119,7 +119,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetPagedListAsync_ShouldWorkProperly_WithBlogId_WhileGetting1_WithoutSorting()
         {
-            var result = await blogPostRepository.GetPagedListAsync(testData.Blog_Id, default, 1, default);
+            var result = await blogPostRepository.GetListAsync(blogId: testData.Blog_Id, maxResultCount: 1);
 
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();
@@ -129,7 +129,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetPagedListAsync_ShouldWorkProperly_WithBlogId_WhileGetting1InPage2_WithoutSorting()
         {
-            var result = await blogPostRepository.GetPagedListAsync(testData.Blog_Id, 1, 1, default);
+            var result = await blogPostRepository.GetListAsync(blogId: testData.Blog_Id, skipCount: 1, maxResultCount: 1);
 
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();
@@ -139,7 +139,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetPagedListAsync_ShouldWorkProperly_WithBlogId_WhileGetting10_WithSortingByTitle()
         {
-            var result = await blogPostRepository.GetPagedListAsync(testData.Blog_Id, default, 10, nameof(BlogPost.Title));
+            var result = await blogPostRepository.GetListAsync(blogId: testData.Blog_Id, sorting: $"{nameof(BlogPost.Title)} asc");
 
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();

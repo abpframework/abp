@@ -29,17 +29,20 @@ namespace Volo.CmsKit.MediaDescriptors
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-            var result = Options.EntityTypes.SingleOrDefault(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)) ??
-                         throw new EntityCantHaveMediaException(entityType);
+            var definition = Options.EntityTypes.SingleOrDefault(
+                x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)
+            ) ?? throw new EntityCantHaveMediaException(entityType);
 
-            return Task.FromResult(result);
+            return Task.FromResult(definition);
         }
 
         public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
 
-            var isDefined = Options.EntityTypes.Any(a => a.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase));
+            var isDefined = Options.EntityTypes.Any(
+                a => a.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)
+            );
 
             return Task.FromResult(isDefined);
         }

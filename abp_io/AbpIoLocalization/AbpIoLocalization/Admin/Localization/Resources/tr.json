@@ -182,6 +182,20 @@
     "Permission:CliAnalyticses": "Cli Analitikleri",
     "Permission:CliAnalytics": "Cli Analitik",
     "Search": "Ara",
-    "ClearFilter": "Filtreyi temizle"
+    "ShowPaymentsOfOrganization": "Ödemeler",
+    "ClearFilter": "Filtreyi temizle",
+    "LicensePrivateKey": "Lisans özel anahtar",
+    "LicensePublicKey": "Lisans genel key",
+    "ApiKey": "NuGet API anahatar",
+    "ShowInvoiceRequestsOfOrganization": "Fatura talepleri",
+    "ShowQuestionsOfOrganization": "Sorular",
+    "Question": "Soru",
+    "Open": "Aç",
+    "Questions": "Sorular",
+    "InvoiceRequests": "Fatura talepleri",
+    "Address": "Adres",
+    "TaxNo": "Vergi no",
+    "Permission:InvoiceRequest": "Fatura Talebi",
+    "Permission:Question": "Soru"
   }
 }
