@@ -5,3 +5,4 @@
         string Current { get; }
     }
 }
+
