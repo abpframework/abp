@@ -36,10 +36,10 @@ namespace Volo.CmsKit.Public.Blogs
         {
             var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-            var blogPosts = await BlogPostRepository.GetPagedListAsync(blog.Id, input.SkipCount, input.MaxResultCount, input.Sorting);
+            var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id,input.MaxResultCount, input.SkipCount, input.Sorting);
 
             return new PagedResultDto<BlogPostPublicDto>(
-                await BlogPostRepository.GetCountAsync(blog.Id),
+                await BlogPostRepository.GetCountAsync(blogId: blog.Id),
                 ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
         }
     }
