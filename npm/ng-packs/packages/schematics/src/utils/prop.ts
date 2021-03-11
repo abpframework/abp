@@ -1,9 +1,9 @@
-export const isValidProp = (name: string) => {
+export const shouldQuoteProp = (key: string) => {
   try {
-    new Function('return {}.' + name);
+    new Function('return {}.' + key);
   } catch (_) {
-    return false;
+    return true;
   }
 
-  return true;
+  return false;
 };
