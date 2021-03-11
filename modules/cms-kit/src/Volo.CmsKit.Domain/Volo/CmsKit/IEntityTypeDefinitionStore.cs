@@ -5,7 +5,7 @@ using Volo.Abp.DependencyInjection;
 namespace Volo.CmsKit
 {
     public interface IEntityTypeDefinitionStore<TPolicyDefinition> : ITransientDependency
-        where TPolicyDefinition : class
+        where TPolicyDefinition : EntityTypeDefinition
     {
         Task<TPolicyDefinition> GetAsync([NotNull] string entityType);
 
