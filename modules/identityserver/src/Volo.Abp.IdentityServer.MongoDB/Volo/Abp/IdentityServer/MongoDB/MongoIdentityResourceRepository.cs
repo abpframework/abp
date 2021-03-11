@@ -24,7 +24,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||
                          x.DisplayName.Contains(filter))
-                .OrderBy(sorting ?? nameof(IdentityResource.Name))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityResource.Name) : sorting)
                 .As<IMongoQueryable<IdentityResource>>()
                 .PageBy<IdentityResource, IMongoQueryable<IdentityResource>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));

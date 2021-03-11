@@ -43,7 +43,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
                                                             x.Description.Contains(filter) ||
                                                             x.DisplayName.Contains(filter))
-                .OrderBy(sorting ?? "name desc")
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiScope.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
