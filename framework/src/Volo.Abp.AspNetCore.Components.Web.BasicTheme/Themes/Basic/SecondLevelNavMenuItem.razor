@@ -12,12 +12,11 @@
         <a class="dropdown-item @cssClass @disabled" href="@url" target="@MenuItem.Target" id="@elementId">
             @if (MenuItem.Icon != null)
             {
-                if (MenuItem.Icon.StartsWith("fa"))
-                {
-                    <i class="@MenuItem.Icon"></i>
-                }
+                <i class="@MenuItem.Icon mr-1"></i>
             }
-            @MenuItem.DisplayName
+            <span>
+                @MenuItem.DisplayName
+            </span>
         </a>
     }
 }
@@ -26,10 +25,11 @@ else
     <div class="dropdown-submenu">
         <a role="button" @onclick="ToggleSubMenu" class="btn dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-            <span class="lp-icon">
-                <i class="@(MenuItem.Icon ?? "")"></i>
-            </span>
-            <span class="lp-text">
+            @if (MenuItem.Icon != null)
+            {
+                <i class="@MenuItem.Icon mr-1"></i>
+            }
+            <span>
                 @MenuItem.DisplayName
             </span>
         </a>

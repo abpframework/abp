@@ -12,8 +12,7 @@ namespace Volo.Abp.SettingManagement.Blazor
     [DependsOn(
         typeof(AbpAutoMapperModule),
         typeof(AbpAspNetCoreComponentsWebThemingModule),
-        typeof(AbpSettingManagementDomainSharedModule),
-        typeof(AbpSettingManagementHttpApiClientModule)
+        typeof(AbpSettingManagementApplicationContractsModule)
     )]
     public class AbpSettingManagementBlazorModule : AbpModule
     {
