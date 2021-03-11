@@ -85,6 +85,7 @@
     "prettier": "^2.2.0",
     "protractor": "~7.0.0",
     "rxjs": "~6.6.3",
+    "should-quote": "^1.0.0",
     "snq": "^1.0.3",
     "symlink-manager": "^1.5.0",
     "ts-node": "~7.0.0",
