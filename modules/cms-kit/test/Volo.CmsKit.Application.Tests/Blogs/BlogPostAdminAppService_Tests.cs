@@ -98,7 +98,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetListAsync_ShouldWorkProperly_WithDefaultParameters()
         {
-            var list = await blogPostAdminAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            var list = await blogPostAdminAppService.GetListAsync(new BlogPostGetListInput());
 
             list.ShouldNotBeNull();
             list.TotalCount.ShouldBe(2);
