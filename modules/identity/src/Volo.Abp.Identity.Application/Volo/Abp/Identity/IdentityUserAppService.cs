@@ -40,11 +40,6 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Default)]
         public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
-            {
-                input.Sorting = nameof(IdentityUser.Name);
-            }
-
             var count = await UserRepository.GetCountAsync(input.Filter);
             var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
