@@ -8,7 +8,7 @@
 @model IndexModel
 
 @{
-    const string dummyImageSource = "https://dummyimage.com/300x200/a3a3a3/fff.png";
+    const string dummyImageSource = "https://dummyimage.com/320x180/a3a3a3/fff.png";
 }
 
 <abp-row id="blogs-container">
@@ -22,7 +22,7 @@
                 }
                 else
                 {
-                    <img src="@dummyImageSource" class="card-img-top" />
+                    <img src="@(dummyImageSource)?text=@blog.Title" class="card-img-top" />
                 } 
             <abp-card-body class="p-4">
                 <h5>@blog.Title</h5> 
