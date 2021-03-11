@@ -9,7 +9,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.CmsKit.Reactions
 {
-    public class DefaultReactionDefinitionStore : IReactionDefinitionStore, ITransientDependency
+    public class DefaultReactionDefinitionStore : IReactionDefinitionStore
     {
         protected CmsKitReactionOptions Options { get; }
 

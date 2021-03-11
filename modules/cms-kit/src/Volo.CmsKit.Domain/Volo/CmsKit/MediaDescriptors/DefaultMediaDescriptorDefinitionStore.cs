@@ -10,7 +10,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.CmsKit.MediaDescriptors
 {
-    public class DefaultMediaDescriptorDefinitionStore : IMediaDescriptorDefinitionStore, ITransientDependency
+    public class DefaultMediaDescriptorDefinitionStore : IMediaDescriptorDefinitionStore
     {
         protected CmsKitMediaOptions Options { get; }
 
@@ -25,7 +25,7 @@ namespace Volo.CmsKit.MediaDescriptors
         /// <param name="entityType">EntityType to get definition.</param>
         /// <exception cref="EntityCantHaveMediaException">Thrown when EntityType is not configured as taggable.</exception>
         /// <exception cref="InvalidOperationException">More than one element satisfies the condition in predicate.</exception>
-        public virtual Task<MediaDescriptorDefinition> GetDefinitionAsync([NotNull] string entityType)
+        public virtual Task<MediaDescriptorDefinition> GetAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 

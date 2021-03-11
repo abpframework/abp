@@ -10,7 +10,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.CmsKit.Comments
 {
-    public class DefaultCommentEntityTypeDefinitionStore : ICommentEntityTypeDefinitionStore, ITransientDependency
+    public class DefaultCommentEntityTypeDefinitionStore : ICommentEntityTypeDefinitionStore
     {
         protected CmsKitCommentOptions Options { get; }
 
@@ -19,7 +19,7 @@ namespace Volo.CmsKit.Comments
             Options = options.Value;
         }
 
-        public virtual Task<CommentEntityTypeDefinition> GetDefinitionAsync([NotNull] string entityType)
+        public virtual Task<CommentEntityTypeDefinition> GetAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
