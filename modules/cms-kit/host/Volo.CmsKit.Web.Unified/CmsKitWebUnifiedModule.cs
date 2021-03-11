@@ -43,6 +43,7 @@ using System;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit
 {
@@ -152,6 +153,17 @@ namespace Volo.CmsKit
             Configure<CmsKitMediaOptions>(options =>
             {
                 options.EntityTypes.Add(new MediaDescriptorDefinition("quote"));
+            });
+            
+            Configure<CmsKitReactionOptions>(options =>
+            {
+                options.EntityTypes.Add(
+                    new ReactionEntityTypeDefinition("quote", 
+                    reactions: new[]
+                    {
+                        new ReactionDefinition(StandardReactions.ThumbsUp),
+                        new ReactionDefinition(StandardReactions.ThumbsDown),
+                    }));
             });
         }
 
