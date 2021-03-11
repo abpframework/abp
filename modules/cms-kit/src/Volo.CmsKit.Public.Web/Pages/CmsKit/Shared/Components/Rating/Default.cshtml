@@ -56,8 +56,9 @@
                         </div>
                     }
 
+                    <small class="live-rating text-center d-inline-block" style="width: 24px">@(Model.CurrentRating != null ? Model.CurrentRating + "  " : 0 + "")</small>
+
                     <span class="my-rating btn btn-secondary btn-sm py-1 ml-2" data-rating="@(Model.CurrentRating ?? 0)" data-authenticated="@(Model.CurrentRating != null)">
-                        <small class="live-rating text-center d-inline-block" style="width: 24px">@(Model.CurrentRating != null ? Model.CurrentRating + "  " : 0 + "")</small>
                     </span>
                 }
                 else
@@ -69,14 +70,3 @@
         </div>
     </div>
 </div>
-<style>
-    .reaction-in-comment span.area-title {
-        display: none;
-    }
-
-    span.area-title {
-        font-weight: 600;
-        padding: 3px;
-        display: block;
-    }
-</style>

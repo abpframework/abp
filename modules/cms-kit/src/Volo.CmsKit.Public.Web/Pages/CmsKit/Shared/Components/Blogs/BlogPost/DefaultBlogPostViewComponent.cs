@@ -5,11 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Blogs;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPost
 {
-    [ViewComponent(Name = "CmsDefaultBlogPost")]
+    [Widget(StyleFiles = new[]
+    {
+        "/Pages/CmsKit/Shared/Components/Blogs/BlogPost/default.css"
+    })]
     public class DefaultBlogPostViewComponent : AbpViewComponent
     {
         protected IBlogPostPublicAppService BlogPostPublicAppService { get; }
