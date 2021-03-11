@@ -59,7 +59,7 @@ namespace Volo.CmsKit.Public.Reactions
         [Authorize]
         public virtual async Task CreateAsync(string entityType, string entityId, string reaction)
         {
-            await ReactionManager.CreateAsync(
+            await ReactionManager.GetOrCreateAsync(
                 CurrentUser.GetId(),
                 entityType,
                 entityId,
