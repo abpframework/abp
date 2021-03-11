@@ -10,19 +10,43 @@
 
 <abp-card>
     <img src="/api/cms-kit/media/@Model.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
-    <abp-card-body>
-        <abp-card-title>@Model.Title</abp-card-title>
-        <abp-card-subtitle>@Model.Author?.UserName</abp-card-subtitle>
-
-        @Html.Raw(Model.Content)
-    </abp-card-body>
-    <abp-card-footer>
-        <abp-card-subtitle>@Model.CreationTime</abp-card-subtitle>
-        @if (Model.LastModificationTime != null)
-        {
-            <abp-card-text><i>@L["LastModification"].Value : @Model.LastModificationTime</i></abp-card-text>
-        }
-    </abp-card-footer>
+    <abp-card-body> 
+        <abp-row>
+            <div class="col-lg-8 col-md-10 mx-auto pb-4">
+                <h1 class="mt-lg-4 mt-md-3">@Model.Title</h1>
+                <p class="mb-lg-5 mb-md-3">
+                    <span class="font-weight-bold">@@@Model.Author?.UserName</span>
+                    <small style="opacity:.65;">@Model.CreationTime</small>
+                </p>
+                @Html.Raw(Model.Content) 
+                <p>
+                    @if (Model.LastModificationTime != null)
+                    {
+                    <small style="opacity:.65;">@L["LastModification"].Value : @Model.LastModificationTime</small>
+                    }
+                </p>
+            </div>
+        </abp-row>
+    </abp-card-body> 
 </abp-card>
 
 
+<style>
+    .card-body img { 
+        width: 100%;
+        border-radius: 4px;
+        margin: 20px 0;
+    }
+    .badge.badge-light {
+        color: #757575;
+        background: #f2f2f2;
+    }
+    .reaction-in-comment span.area-title {
+        display: none;
+    }
+    span.area-title {
+        font-weight: 600;
+        padding: 3px;
+        display: block;
+    }
+</style>

@@ -4,32 +4,51 @@
 
 @if (CurrentUser.IsAuthenticated || Model.Reactions.Count(r => r.Count > 0) > 0)
 {
-    <div class="text-center text-md-right">
-        <div class="px-2 py-1 my-2 card border-0 shadow-sm d-inline-block">
-            <span class="cms-reaction-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+    <div class="p-3 my-3 card">
+        <div class="row">
+            <div class="col-auto text-left">
+                <span class="area-title">
+                    Reactions
+                </span>
+            </div>
+            <div class="col text-right">
+                <span class="cms-reaction-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
 
-                @if (CurrentUser.IsAuthenticated)
-                {
-                    <a class="cms-reaction-select-icon" href="javascript:;">
-                        <i class="fa fa-smile-o text-muted"></i>
-                    </a>
-                    <div class="cms-reaction-selection-popover-content" style="display: none">
-                        @foreach (var reaction in Model.Reactions)
-                        {
-                            <span class="m-2 p-2 w-25 d-inline-block text-center cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "shadow-sm  bg-light rounded cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name">
-                                <i class="@reaction.Icon fa-2x"></i>
-                            </span>
-                        }
-                    </div>
-                }
-                @foreach (var reaction in Model.Reactions.Where(r => r.Count > 0))
-                {
-                    <span class="ml-1 cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name" data-click-action="@(CurrentUser.IsAuthenticated ? "true" : "false")">
-                        <i class="@reaction.Icon"></i>
-                        <small class="text-muted" style="opacity: .45;">@(reaction.Count)</small>
-                    </span>
-                }
-            </span>
+                    @foreach (var reaction in Model.Reactions.Where(r => r.Count > 0))
+                    {
+                        <span class="ml-1 cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name" data-click-action="@(CurrentUser.IsAuthenticated ? "true" : "false")">
+                            <i class="@reaction.Icon"></i>
+                            <small class="text-muted" style="opacity: .45;">@(reaction.Count)</small>
+                        </span>
+                    }
+                    @if (CurrentUser.IsAuthenticated)
+                    {
+                        <a class="cms-reaction-select-icon btn btn-secondary text-light btn-sm py-1 ml-2" href="javascript:;">
+                            <i class="fa fa-smile-o"></i>
+                        </a>
+                        <div class="cms-reaction-selection-popover-content" style="display: none">
+                            @foreach (var reaction in Model.Reactions)
+                            {
+                                <span class="m-2 p-2 w-25 d-inline-block text-center cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "shadow-sm  bg-light rounded cms-reaction-icon-selected" : "")" data-reaction-name="@reaction.Name">
+                                    <i class="@reaction.Icon fa-2x"></i>
+                                </span>
+                            }
+                        </div>
+                    }
+                </span>
+            </div>
         </div>
     </div>
 }
+
+<style>
+    .reaction-in-comment span.area-title {
+        display: none;
+    }
+
+    span.area-title {
+        font-weight: 600;
+        padding: 3px;
+        display: block;
+    }
+</style>

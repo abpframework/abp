@@ -25,7 +25,7 @@
 }
 @{
     Func<dynamic, IHtmlContent> GetCommentArea(Guid? repliedCommentId, bool cancelButton = false) =>
-    @<div class="cms-comment-form-area bg-light card p-3 mx-0 mt-4  @(repliedCommentId.HasValue ? "my-1" : "mb-0")"
+    @<div class="cms-comment-form-area bg-light card p-3 mx-0  @(repliedCommentId.HasValue ? "my-1" : "mb-0")"
           data-reply-id="@(repliedCommentId?.ToString() ?? "")"
           style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
