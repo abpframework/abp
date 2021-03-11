@@ -10,7 +10,6 @@ export * from './import';
 export * from './model';
 export * from './namespace';
 export * from './path';
-export * from './prop';
 export * from './rule';
 export * from './service';
 export * from './source';
