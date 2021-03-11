@@ -3,7 +3,7 @@ using Volo.Abp.Cli.ProjectBuilding.Files;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    public class RemoveEfCoreDependencyFromPublicStep : ProjectBuildPipelineStep
+    public class RemoveEfCoreRelatedCodeStep : ProjectBuildPipelineStep
     {
         public override void Execute(ProjectBuildContext context)
         {
