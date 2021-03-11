@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
@@ -82,7 +83,7 @@ namespace Volo.CmsKit.Public.Comments
 
             if (comment.CreatorId != CurrentUser.GetId())
             {
-                throw new BusinessException(); //TODO: AbpAuthorizationException!
+                throw new AbpAuthorizationException();
             }
 
             comment.SetText(input.Text);
@@ -99,7 +100,7 @@ namespace Volo.CmsKit.Public.Comments
 
             if (comment.CreatorId != CurrentUser.GetId())
             {
-                throw new BusinessException(); //TODO: AbpAuthorizationException!
+                throw new AbpAuthorizationException();
             }
 
             await CommentRepository.DeleteWithRepliesAsync(comment);

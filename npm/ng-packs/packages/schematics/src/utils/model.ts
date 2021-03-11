@@ -134,7 +134,7 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
     genericsCollector.reset();
 
     typeDef.properties?.forEach(prop => {
-      const name = camel(prop.name);
+      const name = prop.jsonName || camel(prop.name);
       const type = simplifyType(prop.typeSimple);
       const refs = parseType(prop.type).reduce(
         (acc: string[], r) => acc.concat(parseGenerics(r).toGenerics()),

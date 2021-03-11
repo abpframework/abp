@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Shouldly;
 using Xunit;
-using Volo.CmsKit.Blogs.Extensions;
-using Shouldly;
-using Unidecode.NET;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -20,7 +13,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "my-awesome-name";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);
@@ -33,7 +26,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "my-perfect-title-v.2";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);
@@ -47,7 +40,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "are-you-gonna-die";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);
@@ -61,7 +54,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "we-machines-challenge";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);
@@ -75,7 +68,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "go-and-code-part-2";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);
@@ -89,7 +82,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "moe-klassnoe-nazvanie";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);
@@ -103,7 +96,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "ozel-turkce-karakterler-gusioc";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);
@@ -117,7 +110,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "wo-de-zhen-bang-tou-xian";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);
@@ -131,7 +124,7 @@ namespace Volo.CmsKit.Blogs
             var expected = "lets-rock";
 
             // Act
-            var actual = name.NormalizeSlug();
+            var actual = SlugNormalizer.Normalize(name);
 
             // Assert
             actual.ShouldBe(expected);

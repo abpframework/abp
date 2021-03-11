@@ -1,5 +1,6 @@
 ﻿@page
 
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageSearchBox
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
 @using Volo.CmsKit.Admin.Web.Pages
 @using Volo.CmsKit.Admin.Web.Menus
@@ -27,7 +28,13 @@
 <div id="CmsKitBlogPostsWrapper">
     <abp-card>
         <abp-card-body>
-            <abp-table striped-rows="true" id="BlogPostsTable" class="nowrap"></abp-table>
+            <abp-row>
+                <abp-column>
+                    @await Component.InvokeAsync(typeof(AbpPageSearchBoxViewComponent))
+                </abp-column>
+            </abp-row>
         </abp-card-body>
     </abp-card>
+    
+    <abp-table striped-rows="true" id="BlogPostsTable" class="nowrap"></abp-table>
 </div>

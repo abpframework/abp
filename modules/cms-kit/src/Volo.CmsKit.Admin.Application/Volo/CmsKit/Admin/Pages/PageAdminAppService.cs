@@ -16,10 +16,15 @@ namespace Volo.CmsKit.Admin.Pages
     public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
     {
         protected IPageRepository PageRepository { get; }
-        
-        public PageAdminAppService(IPageRepository pageRepository)
+
+        protected PageManager PageManager { get; }
+
+        public PageAdminAppService(
+            IPageRepository pageRepository,
+            PageManager pageManager)
         {
             PageRepository = pageRepository;
+            PageManager = pageManager;
         }
 
         public virtual async Task<PageDto> GetAsync(Guid id)
@@ -48,9 +53,7 @@ namespace Volo.CmsKit.Admin.Pages
         [Authorize(CmsKitAdminPermissions.Pages.Create)]
         public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
         {
-            await CheckPageSlugAsync(input.Slug);
-
-            var page = new Page(GuidGenerator.Create(), input.Title, input.Slug, input.Content, CurrentTenant.Id);
+            var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content);
 
             await PageRepository.InsertAsync(page);
             
@@ -62,13 +65,9 @@ namespace Volo.CmsKit.Admin.Pages
         {
             var page = await PageRepository.GetAsync(id);
 
-            if (page.Slug != input.Slug)
-            {
-                await CheckPageSlugAsync(input.Slug);
-            }
+            await PageManager.SetSlugAsync(page, input.Slug);
 
             page.SetTitle(input.Title);
-            page.SetSlug(input.Slug);
             page.SetContent(input.Content);
 
             await PageRepository.UpdateAsync(page);
@@ -80,14 +79,6 @@ namespace Volo.CmsKit.Admin.Pages
         public virtual async Task DeleteAsync(Guid id)
         {
             await PageRepository.DeleteAsync(id);
-        }
-
-        protected virtual async Task CheckPageSlugAsync(string slug)
-        {
-            if (await PageRepository.ExistsAsync(slug))
-            {
-                throw new PageSlugAlreadyExistsException(slug);
-            }
         }
     }
 }

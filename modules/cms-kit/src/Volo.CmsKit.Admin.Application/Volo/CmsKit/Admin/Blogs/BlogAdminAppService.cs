@@ -16,13 +16,18 @@ namespace Volo.CmsKit.Admin.Blogs
     {
         protected IBlogRepository BlogRepository { get; }
         protected BlogManager BlogManager { get; }
-        
-        public BlogAdminAppService(IBlogRepository blogRepository, BlogManager blogManager)
+        protected BlogFeatureManager BlogFeatureManager{ get; }
+
+        public BlogAdminAppService(
+            IBlogRepository blogRepository, 
+            BlogManager blogManager, 
+            BlogFeatureManager blogFeatureManager = null)
         {
             BlogRepository = blogRepository;
             BlogManager = blogManager;
+            BlogFeatureManager = blogFeatureManager;
         }
-        
+
         public virtual async Task<BlogDto> GetAsync(Guid id)
         {
             var blog = await BlogRepository.GetAsync(id);
@@ -48,7 +53,9 @@ namespace Volo.CmsKit.Admin.Blogs
         {
             var blog = await BlogManager.CreateAsync(input.Name, input.Slug);
 
-            await BlogRepository.InsertAsync(blog);
+            await BlogRepository.InsertAsync(blog, autoSave: true);
+
+            await BlogFeatureManager.SetDefaultsAsync(blog.Id);
 
             return ObjectMapper.Map<Blog, BlogDto>(blog);
         }
