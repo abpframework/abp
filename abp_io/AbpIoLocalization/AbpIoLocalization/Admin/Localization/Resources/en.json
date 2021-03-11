@@ -207,7 +207,7 @@
     "DeleteCoverImageConfirmationMessage": "Are you sure you want to delete the cover image for \"{0}\"?",
     "DeleteCoverImageSuccessMessage": "Cover image successfully deleted",
     "PaymentsOf": "Payments of",
-    "ShowPaymentsOfOrganization": "Show payments",
+    "ShowPaymentsOfOrganization": "Payments",
     "Date": "Date",
     "Products": "Products",
     "TotalAmount": "Total amount",
@@ -234,6 +234,19 @@
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli Analytics",
     "Search": "Search",
-    "ClearFilter": "Clear filter"
+    "ClearFilter": "Clear filter",
+    "LicensePrivateKey": "License private key",
+    "LicensePublicKey": "License public key",
+    "ApiKey": "NuGet API key",
+    "ShowInvoiceRequestsOfOrganization": "Invoice requests",
+    "ShowQuestionsOfOrganization": "Questions",
+    "Question": "Question",
+    "Open": "Open",
+    "Questions": "Questions",
+    "InvoiceRequests": "Invoice Requests",
+    "Address": "Address",
+    "TaxNo": "Tax No",
+    "Permission:InvoiceRequest": "Invoice Request",
+    "Permission:Question": "Question"
   }
 }

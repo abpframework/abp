@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Volo.CmsKit.Blogs;
-using Volo.CmsKit.Contents;
-using Volo.CmsKit.Pages;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
 

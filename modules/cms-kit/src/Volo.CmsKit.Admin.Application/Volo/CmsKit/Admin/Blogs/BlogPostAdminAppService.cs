@@ -3,10 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
-using Volo.Abp.BlobStoring;
-using Volo.Abp.Content;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
@@ -87,20 +83,15 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual async Task<PagedResultDto<BlogPostDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public virtual async Task<PagedResultDto<BlogPostDto>> GetListAsync(BlogPostGetListInput input)
         {
-            if (input.Sorting.IsNullOrEmpty())
-            {
-                input.Sorting = nameof(BlogPost.CreationTime) + " desc";
-            }
+            var blogPosts = await BlogPostRepository.GetListAsync(input.Filter, input.BlogId, input.MaxResultCount, input.SkipCount, input.Sorting);
 
-            var blogPosts = await BlogPostRepository.GetPagedListAsync(input.SkipCount, input.MaxResultCount, input.Sorting, includeDetails: true);
+            var count = await BlogPostRepository.GetCountAsync(input.Filter);
 
-            var count = await BlogPostRepository.GetCountAsync();
-
-            return new PagedResultDto<BlogPostDto>(
-                count,
-                ObjectMapper.Map<List<BlogPost>, List<BlogPostDto>>(blogPosts));
+            var dtoList = ObjectMapper.Map<List<BlogPost>, List<BlogPostDto>>(blogPosts);
+            
+            return new PagedResultDto<BlogPostDto>(count, dtoList);
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Delete)]

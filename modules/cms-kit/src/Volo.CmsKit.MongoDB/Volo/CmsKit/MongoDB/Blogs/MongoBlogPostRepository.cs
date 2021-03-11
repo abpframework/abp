@@ -27,41 +27,51 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
 
+            var token = GetCancellationToken(cancellationToken);
+            
             var blogPost = await GetAsync(x =>
                     x.BlogId == blogId &&
                     x.Slug.ToLower() == slug,
-                cancellationToken: GetCancellationToken(cancellationToken));
+                cancellationToken: token);
 
-            var dbContext = await GetDbContextAsync();
+            var dbContext = await GetDbContextAsync(token);
 
-            blogPost.Author = await dbContext.Collection<CmsUser>().AsQueryable().FirstOrDefaultAsync(x => x.Id == blogPost.AuthorId);
+            blogPost.Author = await dbContext.Collection<CmsUser>().AsQueryable().FirstOrDefaultAsync(x => x.Id == blogPost.AuthorId, token);
 
             return blogPost;
         }
 
-        public async Task<int> GetCountAsync(Guid blogId, CancellationToken cancellationToken = default)
+        public async Task<int> GetCountAsync(
+            string filter = null, 
+            Guid? blogId = null, 
+            CancellationToken cancellationToken = default)
         {
-            return await AsyncExecuter.CountAsync(
-                await WithDetailsAsync(),
-                x => x.BlogId == blogId,
-                GetCancellationToken(cancellationToken));
+            var token = GetCancellationToken(cancellationToken);
+            
+            return await (await GetMongoQueryableAsync(token))
+                .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
+                .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
+                .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<BlogPost>> GetPagedListAsync(Guid blogId, int skipCount, int maxResultCount,
-            string sorting, bool includeDetails = false, CancellationToken cancellationToken = default)
+        public async Task<List<BlogPost>> GetListAsync(
+            string filter = null,
+            Guid? blogId = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string sorting = null,
+            CancellationToken cancellationToken = default)
         {
             var token = GetCancellationToken(cancellationToken);
             var dbContext = await GetDbContextAsync(token);
             var blogPostQueryable = dbContext.Collection<BlogPost>().AsQueryable();
             var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
 
-            IQueryable<BlogPost> queryable = blogPostQueryable
-                .Where(x => x.BlogId == blogId);
+            var queryable = blogPostQueryable
+                .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
+                .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
 
-            if (!sorting.IsNullOrWhiteSpace())
-            {
-                queryable = queryable.OrderBy(sorting);
-            }
+            queryable = queryable.OrderBy(sorting ?? $"{nameof(BlogPost.CreationTime)} desc");
 
             var combinedQueryable = queryable
                                     .Join(

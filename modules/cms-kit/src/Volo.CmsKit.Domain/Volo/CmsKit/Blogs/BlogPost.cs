@@ -3,7 +3,6 @@ using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
-using Volo.CmsKit.Blogs.Extensions;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs
@@ -65,7 +64,7 @@ namespace Volo.CmsKit.Blogs
         {
             Check.NotNullOrWhiteSpace(slug, nameof(slug), BlogPostConsts.MaxSlugLength, BlogPostConsts.MinSlugLength);
 
-            Slug = slug.NormalizeSlug();
+            Slug = SlugNormalizer.Normalize(slug);
         }
 
         public virtual void SetShortDescription(string shortDescription)

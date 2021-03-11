@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.EventBus.Local;
-using Volo.Abp.Uow;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -22,17 +20,6 @@ namespace Volo.CmsKit.Blogs
             DefaultBlogFeatureProvider = defaultBlogFeatureProvider;
         }
 
-        public async Task<List<BlogFeature>> GetListAsync(Guid blogId)
-        {
-            var blogFeatures = await BlogFeatureRepository.GetListAsync(blogId);
-
-            var defaultFeatures = await DefaultBlogFeatureProvider.GetDefaultFeaturesAsync(blogId);
-
-            defaultFeatures.ForEach(x => blogFeatures.AddIfNotContains(x));
-
-            return blogFeatures;
-        }
-
         public async Task SetAsync(Guid blogId, string featureName, bool isEnabled)
         {
             var blogFeature = await BlogFeatureRepository.FindAsync(blogId, featureName);
@@ -45,6 +32,16 @@ namespace Volo.CmsKit.Blogs
             {
                 blogFeature.IsEnabled = isEnabled;
                 await BlogFeatureRepository.UpdateAsync(blogFeature);
+            }
+        }
+
+        public async Task SetDefaultsAsync(Guid blogId)
+        {
+            var defaultFeatures = await DefaultBlogFeatureProvider.GetDefaultFeaturesAsync(blogId);
+
+            foreach (var feature in defaultFeatures)
+            {
+                await SetAsync(blogId, feature.FeatureName, isEnabled: true);
             }
         }
     }

@@ -20,7 +20,7 @@ namespace Volo.CmsKit.Pages
         {
         }
 
-        public Page(Guid id, [NotNull] string title, [NotNull] string slug, string content = null, Guid? tenantId = null) : base(id)
+        internal Page(Guid id, [NotNull] string title, [NotNull] string slug, string content = null, Guid? tenantId = null) : base(id)
         {
             TenantId = tenantId;
             
@@ -34,7 +34,7 @@ namespace Volo.CmsKit.Pages
             Title = Check.NotNullOrEmpty(title, nameof(title), PageConsts.MaxTitleLength);
         }
 
-        public virtual void SetSlug(string slug)
+        internal virtual void SetSlug(string slug)
         {
             Slug = Check.NotNullOrEmpty(slug, nameof(slug), PageConsts.MaxSlugLength);
         }
