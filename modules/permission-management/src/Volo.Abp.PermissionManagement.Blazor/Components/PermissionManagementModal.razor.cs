@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Volo.Abp.PermissionManagement.Localization;
 
 namespace Volo.Abp.PermissionManagement.Blazor.Components
 {
@@ -65,39 +67,51 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             }
         }
 
+        public PermissionManagementModal()
+        {
+            LocalizationResource = typeof(AbpPermissionManagementResource);
+        }
+
         public async Task OpenAsync(string providerName, string providerKey, string entityDisplayName = null)
         {
-            _providerName = providerName;
-            _providerKey = providerKey;
-
-            var result = await PermissionAppService.GetAsync(_providerName, _providerKey);
-
-            _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
-            _groups = result.Groups;
-
-            _grantedPermissionCount = 0;
-            _notGrantedPermissionCount = 0;
-            foreach (var permission in _groups.SelectMany(x => x.Permissions))
+            try
             {
-                if (permission.IsGranted && permission.GrantedProviders.All(x => x.ProviderName != _providerName))
+                _providerName = providerName;
+                _providerKey = providerKey;
+
+                var result = await PermissionAppService.GetAsync(_providerName, _providerKey);
+
+                _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
+                _groups = result.Groups;
+
+                _grantedPermissionCount = 0;
+                _notGrantedPermissionCount = 0;
+                foreach (var permission in _groups.SelectMany(x => x.Permissions))
                 {
-                    _disabledPermissions.Add(permission);
-                    continue;
+                    if (permission.IsGranted && permission.GrantedProviders.All(x => x.ProviderName != _providerName))
+                    {
+                        _disabledPermissions.Add(permission);
+                        continue;
+                    }
+
+                    if (permission.IsGranted)
+                    {
+                        _grantedPermissionCount++;
+                    }
+                    else
+                    {
+                        _notGrantedPermissionCount++;
+                    }
                 }
 
-                if (permission.IsGranted)
-                {
-                    _grantedPermissionCount++;
-                }
-                else
-                {
-                    _notGrantedPermissionCount++;
-                }
+                _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
+
+                await InvokeAsync(_modal.Show);
             }
-
-            _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
-
-            await InvokeAsync(_modal.Show);
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         private Task CloseModal()
@@ -107,17 +121,24 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
 
         private async Task SaveAsync()
         {
-            var updateDto = new UpdatePermissionsDto
+            try
             {
-                Permissions = _groups
-                    .SelectMany(g => g.Permissions)
-                    .Select(p => new UpdatePermissionDto { IsGranted = p.IsGranted, Name = p.Name })
-                    .ToArray()
-            };
+                var updateDto = new UpdatePermissionsDto
+                {
+                    Permissions = _groups
+                        .SelectMany(g => g.Permissions)
+                        .Select(p => new UpdatePermissionDto { IsGranted = p.IsGranted, Name = p.Name })
+                        .ToArray()
+                };
 
-            await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
+                await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
 
-            await InvokeAsync(_modal.Hide);
+                await InvokeAsync(_modal.Hide);
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         private string GetNormalizedGroupName(string name)

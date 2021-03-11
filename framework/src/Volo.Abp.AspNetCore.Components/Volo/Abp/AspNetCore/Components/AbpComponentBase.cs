@@ -140,8 +140,9 @@ namespace Volo.Abp.AspNetCore.Components
             return localizer;
         }
         
-        protected async Task ShowError(Exception exception)
+        protected async Task HandleErrorAsync(Exception exception)
         {
+            Logger.LogException(exception);
             await InvokeAsync(async () =>
             {
                 await UserExceptionInformer.InformAsync(new UserExceptionInformerContext(exception));
