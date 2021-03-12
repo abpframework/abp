@@ -45,8 +45,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.3-preview8" />
-    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.3-preview8" />
+    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.3" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.3" />
   </ItemGroup>
   
   <ItemGroup>
