@@ -10,7 +10,7 @@
     "@abp/jquery": "~4.2.2",
     "@abp/markdown-it": "~4.2.2",
     "tui-editor": "^1.4.10",
-	  "tui-code-snippet": "^2.3.2"
+    "tui-code-snippet": "^2.3.2"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
