@@ -3,7 +3,7 @@ import { Exception } from '../enums';
 import { Type } from '../models';
 import { interpolate } from './common';
 import { parseNamespace } from './namespace';
-import { shouldQuoteProp } from './prop';
+const shouldQuote = require('should-quote');
 
 export interface EnumGeneratorParams {
   targetPath: string;
@@ -34,7 +34,7 @@ export function createImportRefToEnumMapper({ solution, types }: EnumGeneratorPa
 
     const namespace = parseNamespace(solution, ref);
     const members = enumNames!.map((key, i) => ({
-      key: shouldQuoteProp(key) ? `'${key}'` : key,
+      key: shouldQuote(key) ? `'${key}'` : key,
       value: enumValues[i],
     }));
 
