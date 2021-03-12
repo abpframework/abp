@@ -7,7 +7,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {
-    public class DataGridEntityActionsColumn<TItem> : DataGridColumn<TItem>
+    public partial class DataGridEntityActionsColumn<TItem> : DataGridColumn<TItem>
     {
         [Inject]
         public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
