@@ -289,10 +289,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                 .Where(predicate)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
-            foreach (var entity in entities)
-            {
-                dbSet.Remove(entity);
-            }
+            await DeleteManyAsync(entities, autoSave, cancellationToken);
 
             if (autoSave)
             {

@@ -10,6 +10,9 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+using Volo.CmsKit.EntityFrameworkCore;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
@@ -23,6 +26,9 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+        typeof(CmsKitEntityFrameworkCoreModule),
+        //</TEMPLATE-REMOVE>
         typeof(AbpFeatureManagementEntityFrameworkCoreModule)
         )]
     public class MyProjectNameEntityFrameworkCoreModule : AbpModule

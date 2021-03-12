@@ -118,7 +118,17 @@ namespace Volo.Abp.Domain.Entities
 
         public static bool IsEntity([NotNull] Type type)
         {
+            Check.NotNull(type, nameof(type));
             return typeof(IEntity).IsAssignableFrom(type);
+        }
+
+        public static void CheckEntity([NotNull] Type type)
+        {
+            Check.NotNull(type, nameof(type));
+            if (!IsEntity(type))
+            {
+                throw new AbpException($"Given {nameof(type)} is not an entity: {type.AssemblyQualifiedName}. It must implement {typeof(IEntity).AssemblyQualifiedName}.");
+            }
         }
 
         public static bool IsEntityWithId([NotNull] Type type)

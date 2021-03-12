@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Volo.Abp.AutoMapper;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
-using Volo.CmsKit.Contents;
 using Volo.CmsKit.Pages;
+using Volo.CmsKit.Public.Blogs;
 using Volo.CmsKit.Public.Comments;
-using Volo.CmsKit.Public.Contents;
 using Volo.CmsKit.Public.Pages;
 using Volo.CmsKit.Public.Ratings;
 using Volo.CmsKit.Ratings;
@@ -16,7 +16,7 @@ namespace Volo.CmsKit.Public
     {
         public PublicApplicationAutoMapperProfile()
         {
-            CreateMap<CmsUser, CmsUserDto>();
+            CreateMap<CmsUser, Comments.CmsUserDto>();
 
             CreateMap<Comment, CommentDto>()
                 .Ignore(x=> x.Author);
@@ -27,9 +27,9 @@ namespace Volo.CmsKit.Public
 
             CreateMap<Rating, RatingDto>();
             
-            CreateMap<Content, ContentDto>();
-            
             CreateMap<Page, PageDto>();
+
+            CreateMap<BlogPost, BlogPostPublicDto>(MemberList.None);
         }
     }
 }

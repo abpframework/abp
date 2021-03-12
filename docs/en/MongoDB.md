@@ -254,7 +254,7 @@ public async override Task DeleteAsync(
 
 ### Access to the MongoDB API
 
-In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabaseAsync()` or `GetCollectionAsync()` extension methods. Example:
+In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabaseAsync()`, `GetCollectionAsync()` or `GetAggregateAsync()` extension methods. Example:
 
 ```csharp
 public class BookService
@@ -270,6 +270,7 @@ public class BookService
     {
         IMongoDatabase database = await _bookRepository.GetDatabaseAsync();
         IMongoCollection<Book> books = await _bookRepository.GetCollectionAsync();
+        IAggregateFluent<Book> bookAggregate = await _bookRepository.GetAggregateAsync();
     }
 }
 ```

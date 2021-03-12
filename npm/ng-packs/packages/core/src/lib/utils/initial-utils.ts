@@ -1,9 +1,7 @@
 import { registerLocaleData } from '@angular/common';
 import { Injector } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { tap } from 'rxjs/operators';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { ABP } from '../models/common';
 import { Environment } from '../models/environment';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';

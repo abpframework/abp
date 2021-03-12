@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Tags;
 
@@ -23,13 +22,19 @@ namespace Volo.CmsKit.Admin.Tags
             TagUpdateDto>,
         ITagAdminAppService
     {
-        protected ITagManager TagManager { get; }
+        protected TagManager TagManager { get; }
+        protected ITagDefinitionStore TagDefinitionStore { get; }
+        protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
         public TagAdminAppService(
             IRepository<Tag, Guid> repository,
-            ITagManager tagManager) : base(repository)
+            TagManager tagManager,
+            ITagDefinitionStore tagDefinitionStore,
+            IStringLocalizerFactory stringLocalizerFactory) : base(repository)
         {
             TagManager = tagManager;
+            TagDefinitionStore = tagDefinitionStore;
+            StringLocalizerFactory = stringLocalizerFactory;
 
             GetListPolicyName = CmsKitAdminPermissions.Tags.Default;
             GetPolicyName = CmsKitAdminPermissions.Tags.Default;
@@ -41,13 +46,14 @@ namespace Volo.CmsKit.Admin.Tags
         [Authorize(CmsKitAdminPermissions.Tags.Create)]
         public override async Task<TagDto> CreateAsync(TagCreateDto input)
         {
-            var tag = await TagManager.InsertAsync(
+            var tag = await TagManager.CreateAsync(
                 GuidGenerator.Create(),
                 input.EntityType,
-                input.Name,
-                CurrentTenant?.Id);
-            
-            return MapToGetOutputDto(tag);
+                input.Name);
+
+            await Repository.InsertAsync(tag);
+
+            return await MapToGetOutputDtoAsync(tag);
         }
 
         [Authorize(CmsKitAdminPermissions.Tags.Update)]
@@ -57,16 +63,33 @@ namespace Volo.CmsKit.Admin.Tags
                 id,
                 input.Name);
 
-            return MapToGetOutputDto(tag);
+            await Repository.UpdateAsync(tag);
+
+            return await MapToGetOutputDtoAsync(tag);
         }
-        protected override IQueryable<Tag> CreateFilteredQuery(TagGetListInput input)
+
+        protected override async Task<IQueryable<Tag>> CreateFilteredQueryAsync(TagGetListInput input)
         {
-            return base.CreateFilteredQuery(input)
+            return (await base.CreateFilteredQueryAsync(input))
                     .WhereIf(
                         !input.Filter.IsNullOrEmpty(),
                         x =>
                             x.Name.ToLower().Contains(input.Filter) ||
                             x.EntityType.ToLower().Contains(input.Filter));
+        }
+
+        public virtual async Task<List<TagDefinitionDto>> GetTagDefinitionsAsync()
+        {
+            var definitions = await TagDefinitionStore.GetTagEntityTypeDefinitionListAsync();
+
+            return definitions
+                        .Select(s => 
+                            new TagDefinitionDto
+                            {
+                                EntityType = s.EntityType, 
+                                DisplayName = s.DisplayName?.Localize(StringLocalizerFactory) ?? s.EntityType
+                            })
+                        .ToList();
         }
     }
 }

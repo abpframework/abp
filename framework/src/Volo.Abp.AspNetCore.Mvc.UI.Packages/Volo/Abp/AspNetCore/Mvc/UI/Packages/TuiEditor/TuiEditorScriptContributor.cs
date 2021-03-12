@@ -16,6 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
+            context.Files.AddIfNotContains("/libs/tui-editor/tui-editor-jquery-patch.js");
             context.Files.AddIfNotContains("/libs/to-mark/to-mark.min.js");
 
             if (context.FileProvider.GetFileInfo("/libs/tui-code-snippet/tui-code-snippet.min.js").Exists)

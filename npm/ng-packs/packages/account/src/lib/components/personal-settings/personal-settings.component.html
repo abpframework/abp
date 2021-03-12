@@ -1,0 +1,46 @@
+<form validateOnSubmit *ngIf="form" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="form-group">
+    <label for="username">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label
+    ><span> * </span
+    ><input
+      type="text"
+      id="username"
+      class="form-control"
+      formControlName="userName"
+      autofocus
+      (keydown.space)="$event.preventDefault()"
+    />
+  </div>
+  <div class="row">
+    <div class="col col-md-6">
+      <div class="form-group">
+        <label for="name">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label
+        ><input type="text" id="name" class="form-control" formControlName="name" />
+      </div>
+    </div>
+    <div class="col col-md-6">
+      <div class="form-group">
+        <label for="surname">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label
+        ><input type="text" id="surname" class="form-control" formControlName="surname" />
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="email-address">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label
+    ><span> * </span
+    ><input type="text" id="email-address" class="form-control" formControlName="email" />
+  </div>
+  <div class="form-group">
+    <label for="phone-number">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label
+    ><input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />
+  </div>
+  <abp-button
+    buttonType="submit"
+    iconClass="fa fa-check"
+    buttonClass="btn btn-primary color-white"
+    [loading]="inProgress"
+    [disabled]="form?.invalid"
+  >
+    {{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
+  >
+</form>

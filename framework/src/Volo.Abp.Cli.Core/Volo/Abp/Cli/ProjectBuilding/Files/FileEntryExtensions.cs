@@ -28,6 +28,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Files
 
         public static void RemoveTemplateCodeMarkers(this FileEntry file)
         {
+            if (!file.Content.Contains("</TEMPLATE-REMOVE>"))
+            {
+                return;
+            }
+
             file.NormalizeLineEndings();
 
             var lines = file.GetLines();
@@ -59,6 +64,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Files
 
         private static void RemoveMarkedTemplateCode(this FileEntry file, string beginMark)
         {
+            if (!file.Content.Contains("</TEMPLATE-REMOVE>"))
+            {
+                return;
+            }
+
             file.NormalizeLineEndings();
 
             var lines = file.GetLines();

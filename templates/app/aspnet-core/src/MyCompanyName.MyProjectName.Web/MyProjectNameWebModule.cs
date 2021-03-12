@@ -30,12 +30,14 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit.Web;
 
 namespace MyCompanyName.MyProjectName.Web
 {
@@ -45,11 +47,15 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpSettingManagementWebModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpAspNetCoreSerilogModule),
+        //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+        typeof(CmsKitWebModule),
+        //</TEMPLATE-REMOVE>
         typeof(AbpSwashbuckleModule)
         )]
     public class MyProjectNameWebModule : AbpModule
@@ -213,6 +219,7 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseAbpRequestLocalization();
+            app.UseAbpSecurityHeaders();
 
             if (!env.IsDevelopment())
             {

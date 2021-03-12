@@ -125,14 +125,17 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .WhereIf(minExecutionDuration != null && minExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
         }
 
-        public virtual async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(DateTime startDate, DateTime endDate)
+        public virtual async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(
+            DateTime startDate,
+            DateTime endDate,
+            CancellationToken cancellationToken = default)
         {
             var result = await (await GetDbSetAsync()).AsNoTracking()
                 .Where(a => a.ExecutionTime < endDate.AddDays(1) && a.ExecutionTime > startDate)
                 .OrderBy(t => t.ExecutionTime)
                 .GroupBy(t => new { t.ExecutionTime.Date })
                 .Select(g => new { Day = g.Min(t => t.ExecutionTime), avgExecutionTime = g.Average(t => t.ExecutionDuration) })
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
@@ -148,14 +151,16 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return (await GetQueryableAsync()).IncludeDetails();
         }
 
-        public virtual async Task<EntityChange> GetEntityChange(Guid entityChangeId)
+        public virtual async Task<EntityChange> GetEntityChange(
+            Guid entityChangeId,
+            CancellationToken cancellationToken = default)
         {
             var entityChange = await (await GetDbContextAsync()).Set<EntityChange>()
                                     .AsNoTracking()
                                     .IncludeDetails()
                                     .Where(x => x.Id == entityChangeId)
                                     .OrderBy(x => x.Id)
-                                    .FirstOrDefaultAsync();
+                                    .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
             if (entityChange == null)
             {
@@ -201,10 +206,12 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return totalCount;
         }
 
-        public virtual async Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId)
+        public virtual async Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(
+            Guid entityChangeId,
+            CancellationToken cancellationToken = default)
         {
             var auditLog = await (await GetDbSetAsync()).AsNoTracking().IncludeDetails()
-                .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId)).FirstAsync();
+                .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId)).FirstAsync(GetCancellationToken(cancellationToken));
 
             return new EntityChangeWithUsername()
             {
@@ -213,7 +220,10 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             };
         }
 
-        public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName)
+        public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(
+            string entityId,
+            string entityTypeFullName,
+            CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
 
@@ -225,7 +235,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return await (from e in query
                         join auditLog in dbContext.AuditLogs on e.AuditLogId equals auditLog.Id
                         select new EntityChangeWithUsername {EntityChange = e, UserName = auditLog.UserName})
-                        .OrderByDescending(x => x.EntityChange.ChangeTime).ToListAsync();
+                        .OrderByDescending(x => x.EntityChange.ChangeTime).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         protected virtual async Task<IQueryable<EntityChange>> GetEntityChangeListQueryAsync(

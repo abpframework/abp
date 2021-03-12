@@ -9,8 +9,8 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
     [ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
     public interface ITenantManagementDbContext : IEfCoreDbContext
     {
-        DbSet<Tenant> Tenants { get; set; }
+        DbSet<Tenant> Tenants { get; }
 
-        DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
+        DbSet<TenantConnectionString> TenantConnectionStrings { get; }
     }
 }

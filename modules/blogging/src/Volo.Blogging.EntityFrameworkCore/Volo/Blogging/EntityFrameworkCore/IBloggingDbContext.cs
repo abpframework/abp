@@ -16,14 +16,14 @@ namespace Volo.Blogging.EntityFrameworkCore
     {
         DbSet<BlogUser> Users { get; }
 
-        DbSet<Blog> Blogs { get; set; }
+        DbSet<Blog> Blogs { get; }
 
-        DbSet<Post> Posts { get; set; }
+        DbSet<Post> Posts { get; }
 
-        DbSet<Comment> Comments { get; set; }
+        DbSet<Comment> Comments { get; }
 
-        DbSet<PostTag> PostTags { get; set; }
+        DbSet<PostTag> PostTags { get; }
 
-        DbSet<Tag> Tags { get; set; }
+        DbSet<Tag> Tags { get; }
     }
 }

@@ -78,7 +78,7 @@ public static class CustomizeUserDemoEfCoreEntityExtensionMappings
                     nameof(AppUser.Title),
                     (entityBuilder, propertyBuilder) =>
                     {
-                        propertyBuilder.IsRequired();
+                        propertyBuilder.HasDefaultValue();
                         propertyBuilder.HasMaxLength(UserConsts.MaxTitleLength);
                     }
                 ).MapEfCoreProperty<IdentityUser, int>(
