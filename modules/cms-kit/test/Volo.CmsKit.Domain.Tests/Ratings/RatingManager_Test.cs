@@ -29,7 +29,7 @@ namespace Volo.CmsKit.Ratings
             var user = await _userRepository.GetAsync(_cmsKitTestData.User1Id);
             short starCount = 4;
 
-            var rating = await _ratingManager.SetStarAsync(user, BlogPostConsts.EntityType, _cmsKitTestData.BlogPost_1_Id.ToString(), starCount);
+            var rating = await _ratingManager.SetStarAsync(user, _cmsKitTestData.EntityType1, _cmsKitTestData.BlogPost_1_Id.ToString(), starCount);
 
             rating.ShouldNotBeNull();
             rating.Id.ShouldNotBe(Guid.Empty);
