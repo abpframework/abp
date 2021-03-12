@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
     [Widget(
         StyleFiles = new[]
         {
-            "/Pages/CmsKit/Shared/Components/Blogs/BlogPost/default.css"
+            "/Pages/CmsKit/Shared/Components/Tags/default.css"
         })]
     public class TagViewComponent : AbpViewComponent
     {
