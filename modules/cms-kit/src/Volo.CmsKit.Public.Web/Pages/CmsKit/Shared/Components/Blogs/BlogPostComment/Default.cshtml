@@ -7,16 +7,9 @@
 
 @model DefaultBlogPostCommentViewComponent.DefaultBlogPostCommentViewModel
 
-
-<abp-card> 
-    <abp-card-body>
-        <span class="area-title pt-0 pb-3">
-            @L["Comments"]
-        </span>
+  
         @await Component.InvokeAsync(typeof(CommentingViewComponent), new
            {
                entityType = Model.EntityType,
                entityId = Model.EntityId
-           })
-    </abp-card-body>
-</abp-card>
+           }) 

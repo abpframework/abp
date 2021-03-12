@@ -8,3 +8,7 @@ span.area-title {
     padding: 3px;
     display: block;
 }
+
+.popover {
+    min-width: 276px;
+}

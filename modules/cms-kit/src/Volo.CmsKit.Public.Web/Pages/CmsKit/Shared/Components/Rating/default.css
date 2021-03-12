@@ -59,3 +59,12 @@ span.area-title {
     padding: 3px;
     display: block;
 }
+.reaction-in-comment .card {
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.popover {
+    min-width: 276px;
+}
