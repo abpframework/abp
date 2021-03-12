@@ -1,9 +1,9 @@
 import { eBindingSourceId, eMethodModifier } from '../enums';
-import { shouldQuoteProp } from '../utils/prop';
 import { camel } from '../utils/text';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
+const shouldQuote = require('should-quote');
 
 export class Method {
   body: Body;
@@ -46,7 +46,7 @@ export class Body {
     const camelName = camel(name);
     const paramName = jsonName || camelName;
     const value = descriptorName
-      ? shouldQuoteProp(paramName)
+      ? shouldQuote(paramName)
         ? `${descriptorName}['${paramName}']`
         : `${descriptorName}.${paramName}`
       : nameOnMethod;
