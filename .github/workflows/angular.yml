@@ -2,8 +2,14 @@ name: 'Angular'
 on:
   pull_request:
     paths:
-      - 'npm/ng-packs/**'
+      - 'npm/ng-packs/**/*.ts'
+      - 'npm/ng-packs/**/*.html'
+      - 'npm/ng-packs/*.json'
       - '!npm/ng-packs/scripts/**'
+      - '!npm/ng-packs/packages/schematics/**'
+    branches:
+      - 'rel-*'
+      - 'dev'
 jobs:
   build-test-lint:
     runs-on: ubuntu-18.04
