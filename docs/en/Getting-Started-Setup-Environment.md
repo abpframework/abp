@@ -37,6 +37,12 @@ The following tools should be installed on your development machine:
 
 {{ end }}
 
+### Install the Entity Framework Core tools CLI
+
+````shell
+dotnet tool install --global dotnet-ef
+````
+
 ### Install the ABP CLI
 
 [ABP CLI](./CLI.md) is a command line interface that is used to automate some common tasks for ABP based solutions. First, you need to install the ABP CLI using the following command:
