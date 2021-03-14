@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    public class RemoveProjectFromTyeStep : ProjectBuildPipelineStep
+    public class RemoveProjectFromPrometheusStep : ProjectBuildPipelineStep
     {
         private readonly string _name;
 
-        public RemoveProjectFromTyeStep(string name)
+        public RemoveProjectFromPrometheusStep(string name)
         {
             _name = name;
         }
 
         public override void Execute(ProjectBuildContext context)
         {
-            var tyeFile = context.Files.FirstOrDefault(f => f.Name == "/tye.yaml");
+            var tyeFile = context.Files.FirstOrDefault(f => f.Name == "/etc/prometheus/prometheus.yml");
 
             if (tyeFile == null)
             {
@@ -25,12 +25,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             var lines = tyeFile.GetLines();
             var newLines = new List<string>();
 
-            var nameLine = $"- name:";
+            var nameLine = $"- job_name:";
             var isOneOfTargetLines = false;
 
             foreach (var line in lines)
             {
-                if (line.Trim().Equals($"{nameLine} {_name}"))
+                if (line.Trim().Equals($"{nameLine} '{_name}'"))
                 {
                     isOneOfTargetLines = true;
                     continue;
