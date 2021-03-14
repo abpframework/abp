@@ -231,7 +231,11 @@
     "Address": "地址",
     "TaxNo": "税号",
     "Permission:InvoiceRequest": "发票请求",
-    "Permission:Question": "问题"
+    "Permission:Question": "问题",
+    "AddNoteSuccessMessage": "注释添加成功",
+    "NameSurname": "姓",
+    "Note": "注释",
+    "Add": "添加"
 
   }
 }
