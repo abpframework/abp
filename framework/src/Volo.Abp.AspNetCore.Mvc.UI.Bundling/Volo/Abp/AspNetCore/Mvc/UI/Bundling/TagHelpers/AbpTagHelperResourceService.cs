@@ -67,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
                 if (file == null || !file.Exists)
                 {
-                    throw new AbpException($"Could not find the bundle file '{bundleFile}' in the bundle named '{bundleName}'");
+                    throw new AbpException($"Could not find the bundle file '{bundleFile}' for the bundle '{bundleName}'!");
                 }
 
                 if (file.Length > 0)
