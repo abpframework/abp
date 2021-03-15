@@ -1,6 +1,7 @@
 # Send Real-time Notifications via SignalR in ABP Project
 
 SignalR is an open source library that adds real-time operation functionality to applications. Real-time web functionality enables server-side code to instantly send content to clients without refreshing the page. I'll show you how to add SignalR and use it to send notifications from backend. I'll implement this functionality in MVC template of ABP Framework.
+
 ![signalr-architecture](signalr-architecture.png)
 
 ## Implement Backend
