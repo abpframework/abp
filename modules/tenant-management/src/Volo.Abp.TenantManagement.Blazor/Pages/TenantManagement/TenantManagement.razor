@@ -78,7 +78,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"]</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
+                                <TextEdit @bind-Text="@NewEntity.Name">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -131,7 +131,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"]</FieldLabel>
-                                <TextEdit @bind-Text="@EditingEntity.Name" Autofocus="true">
+                                <TextEdit @bind-Text="@EditingEntity.Name">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
