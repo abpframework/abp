@@ -49,7 +49,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 cancellationToken
             );
 
-            return await query.OrderBy(sorting ?? nameof(IdentitySecurityLog.CreationTime) + " desc")
+            return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
         }
