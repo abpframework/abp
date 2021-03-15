@@ -9,19 +9,20 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
     [ViewComponent(Name = "CmsDefaultPage")]
     public class DefaultPageViewComponent : AbpViewComponent
     {
-        protected readonly IPageAppService PageAppService;
+        protected IPagePublicAppService PagePublicAppService { get; }
 
-        public DefaultPageViewComponent(IPageAppService pageAppService)
+        public DefaultPageViewComponent(IPagePublicAppService pagePublicAppService)
         {
-            PageAppService = pageAppService;
+            PagePublicAppService = pagePublicAppService;
         }
         
-        public virtual async Task<IViewComponentResult> InvokeAsync(Guid pageId, string title, string description)
+        public virtual async Task<IViewComponentResult> InvokeAsync(Guid pageId, string title, string content)
         {
             var model = new PageViewModel
             {
                 Id = pageId,
-                Title = title
+                Title = title,
+                Content = content
             };
             
             return View("~/Pages/CmsKit/Shared/Components/Pages/Default.cshtml", model);
@@ -33,5 +34,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
         public Guid Id { get; set; }
         
         public string Title { get; set; }
+
+        public string Content { get; set; }
     }
 }

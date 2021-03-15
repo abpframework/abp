@@ -24,6 +24,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         {
             var steps = new List<ProjectBuildPipelineStep>();
 
+            ConfigureTenantSchema(context, steps);
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
             RemoveMigrations(context, steps);
@@ -38,6 +39,19 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             return steps;
         }
 
+        private static void ConfigureTenantSchema(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.ExtraProperties.ContainsKey("separate-tenant-schema"))
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations", "MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+            }
+            else
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations"));
+            }
+        }
+
         private static void SwitchDatabaseProvider(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             if (context.BuildArgs.DatabaseProvider == DatabaseProvider.MongoDb)
@@ -50,6 +64,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
+                steps.Add(new RemoveEfCoreRelatedCodeStep());
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
@@ -138,11 +153,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             else if (context.BuildArgs.UiFramework != UiFramework.NotSpecified && context.BuildArgs.UiFramework != UiFramework.Mvc)
             {
                 steps.Add(new ChangePublicAuthPortStep());
-            }
-
-            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.NotSpecified && context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
-            {
-                steps.Add(new RemoveEfCoreDependencyFromPublicStep());
             }
 
             // We disabled cms-kit for v4.2 release.
@@ -284,6 +294,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 SemanticVersion.Parse(context.BuildArgs.Version) > new SemanticVersion(4,1,99))
             {
                 steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/Migrations"));
+                steps.Add(new RemoveFolderStep("/aspnet-core/src/MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations/TenantMigrations"));
             }
         }
 

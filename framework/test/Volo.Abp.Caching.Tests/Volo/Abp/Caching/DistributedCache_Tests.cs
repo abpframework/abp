@@ -712,5 +712,240 @@ namespace Volo.Abp.Caching
             (await personCache.GetAsync("john")).Name.ShouldBe("John Nash");
             (await personCache.GetAsync("baris")).ShouldBeNull();
         }
+
+        [Fact]
+        public async Task Should_Get_And_Add_Multiple_Items_Async()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+
+            var testkey3 = new[] {testkey, testkey2};
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            await personCache.SetAsync(testkey, new PersonCacheItem("john"));
+
+            var cacheValue = await personCache.GetManyAsync(testkey3);
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.Name.ShouldBe("john");
+            cacheValue[1].Value.ShouldBeNull();
+
+            cacheValue = await personCache.GetOrAddManyAsync(testkey3, (missingKeys) =>
+            {
+                var missingKeyArray = missingKeys.ToArray();
+                missingKeyArray.Length.ShouldBe(1);
+                missingKeyArray[0].ShouldBe(testkey2);
+
+                return Task.FromResult(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new(testkey2, new PersonCacheItem("jack"))
+                });
+            });
+
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.Name.ShouldBe("john");
+            cacheValue[1].Value.Name.ShouldBe("jack");
+
+            cacheValue = await personCache.GetManyAsync(testkey3);
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.Name.ShouldBe("john");
+            cacheValue[1].Value.Name.ShouldBe("jack");
+        }
+
+        [Fact]
+        public async Task Cache_Should_Only_Available_In_Uow_For_GetOrAddManyAsync()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+
+            var testkey3 = new[] {testkey, testkey2};
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+                var cacheValue = await personCache.GetOrAddManyAsync(testkey3, (missingKeys) => Task.FromResult(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new(testkey, new PersonCacheItem("john")),
+                    new(testkey2, new PersonCacheItem("jack")),
+                }), considerUow: true);
+
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.Name.ShouldBe("john");
+                cacheValue[1].Value.Name.ShouldBe("jack");
+
+                cacheValue = await personCache.GetManyAsync(testkey3, considerUow: true);
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.Name.ShouldBe("john");
+                cacheValue[1].Value.Name.ShouldBe("jack");
+
+                cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: false);
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.ShouldBeNull();
+                cacheValue[1].Value.ShouldBeNull();
+
+                uow.OnCompleted(async () =>
+                {
+                    cacheValue = await personCache.GetManyAsync(testkey3, considerUow: false);
+                    cacheValue.ShouldNotBeNull();
+                    cacheValue[0].Value.Name.ShouldBe("john");
+                    cacheValue[1].Value.Name.ShouldBe("jack");
+                });
+
+                await uow.CompleteAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Cache_Should_Rollback_With_Uow_For_GetOrAddManyAsync()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+
+            var testkey3 = new[] {testkey, testkey2};
+
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue = await personCache.GetManyAsync(testkey3,  considerUow: false);
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.ShouldBeNull();
+            cacheValue[1].Value.ShouldBeNull();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                cacheValue = await personCache.GetOrAddManyAsync(testkey3, (missingKeys) => Task.FromResult(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new(testkey, new PersonCacheItem("john")),
+                    new(testkey2, new PersonCacheItem("jack")),
+                }), considerUow: true);
+
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.Name.ShouldBe("john");
+                cacheValue[1].Value.Name.ShouldBe("jack");
+
+                cacheValue = await personCache.GetManyAsync(testkey3, considerUow: true);
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.Name.ShouldBe("john");
+                cacheValue[1].Value.Name.ShouldBe("jack");
+
+                cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: false);
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.ShouldBeNull();
+                cacheValue[1].Value.ShouldBeNull();
+            }
+
+            cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: false);
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.ShouldBeNull();
+            cacheValue[1].Value.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task Should_Remove_Multiple_Items_Async()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+            var testkey3 = new[] {testkey, testkey2};
+
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            await personCache.SetManyAsync(new List<KeyValuePair<string, PersonCacheItem>>
+            {
+                new(testkey, new PersonCacheItem("john")),
+                new(testkey2, new PersonCacheItem("jack"))
+            });
+
+            await personCache.RemoveManyAsync(testkey3);
+
+            var cacheValue = await personCache.GetManyAsync(testkey3);
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.ShouldBeNull();
+            cacheValue[1].Value.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task Cache_Should_Only_Available_In_Uow_For_RemoveManyAsync()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+            var testkey3 = new[] {testkey, testkey2};
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: false);
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.ShouldBeNull();
+            cacheValue[1].Value.ShouldBeNull();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                await personCache.SetManyAsync(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new(testkey, new PersonCacheItem("john")),
+                    new(testkey2, new PersonCacheItem("jack"))
+                });
+
+                cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: true);
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.Name.ShouldBe("john");
+                cacheValue[1].Value.Name.ShouldBe("jack");
+
+                await personCache.RemoveManyAsync(testkey3, considerUow: true);
+
+                cacheValue = await personCache.GetManyAsync(testkey3, considerUow: false);
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.Name.ShouldBe("john");
+                cacheValue[1].Value.Name.ShouldBe("jack");
+
+                uow.OnCompleted(async () =>
+                {
+                    cacheValue = await personCache.GetManyAsync(testkey3, considerUow: false);
+                    cacheValue.ShouldNotBeNull();
+                    cacheValue[0].Value.ShouldBeNull();
+                    cacheValue[1].Value.ShouldBeNull();
+                });
+
+                await uow.CompleteAsync();
+            }
+
+        }
+
+        [Fact]
+        public async Task Cache_Should_Rollback_With_Uow_For_RemoveManyAsync()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+            var testkey3 = new[] {testkey, testkey2};
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: false);
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.ShouldBeNull();
+            cacheValue[1].Value.ShouldBeNull();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                await personCache.SetManyAsync(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new(testkey, new PersonCacheItem("john")),
+                    new(testkey2, new PersonCacheItem("jack"))
+                },  considerUow: true);
+
+                cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: true);
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.Name.ShouldBe("john");
+                cacheValue[1].Value.Name.ShouldBe("jack");
+
+                await personCache.RemoveManyAsync(testkey3, considerUow: true);
+
+                cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: true);
+                cacheValue.Length.ShouldBe(2);
+                cacheValue[0].Value.ShouldBeNull();
+                cacheValue[1].Value.ShouldBeNull();
+            }
+
+            cacheValue =  await personCache.GetManyAsync(testkey3, considerUow: true);
+            cacheValue.Length.ShouldBe(2);
+            cacheValue[0].Value.ShouldBeNull();
+            cacheValue[1].Value.ShouldBeNull();
+        }
     }
 }

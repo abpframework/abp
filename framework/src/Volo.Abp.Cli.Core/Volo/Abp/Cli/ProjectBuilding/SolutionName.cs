@@ -17,6 +17,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
             ProjectName = projectName;
         }
 
+        public static SolutionName Parse(string fullName, string microserviceName)
+        {
+            return new SolutionName(fullName + "." + microserviceName, fullName, microserviceName);
+        }
+
         public static SolutionName Parse(string fullName)
         {
             if (fullName.Length < 1)

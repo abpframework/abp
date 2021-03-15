@@ -14,7 +14,6 @@ using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http.Client.Authentication;
-using Volo.Abp.Http.Client.Content;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
@@ -112,7 +111,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 /* returning a class that holds a reference to response
                  * content just to be sure that GC does not dispose of
                  * it before we finish doing our work with the stream */
-                return (T)((object)new ReferencedRemoteStreamContent(await responseContent.ReadAsStreamAsync(), responseContent));
+                return (T)(object)new RemoteStreamContent(await responseContent.ReadAsStreamAsync())
+                {
+                    ContentType = responseContent.Headers.ContentType?.ToString()
+                };
             }
 
             var stringContent = await responseContent.ReadAsStringAsync();

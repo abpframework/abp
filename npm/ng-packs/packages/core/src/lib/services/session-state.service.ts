@@ -6,12 +6,6 @@ import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenan
 import { InternalStore } from '../utils/internal-store-utils';
 import { ConfigStateService } from './config-state.service';
 
-export interface SessionDetail {
-  openedTabCount: number;
-  lastExitTime: number;
-  remember: boolean;
-}
-
 @Injectable({
   providedIn: 'root',
 })

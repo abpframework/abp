@@ -1,0 +1,7 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "密码长度必须大于{0}字符. ",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "密码必须至少包含一个非字母数字字符."
+  }
+}

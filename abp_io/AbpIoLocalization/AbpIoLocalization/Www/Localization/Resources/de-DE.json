@@ -185,6 +185,8 @@
     "SeeCliDocumentForMoreInformation": "Weitere Optionen finden Sie im <a href=\"{0}\">ABP CLI-Dokument</a> oder wählen Sie oben die Registerkarte \"Direkter Download\".",
     "Optional": "Optional",
     "LocalFrameworkRef": "Behalten Sie die lokale Projektreferenz für die Framework-Pakete bei.",
-    "SelectLanguage": "Sprache auswählen"
+    "SelectLanguage": "Sprache auswählen",
+	"LatestArticleOnCommunity": "Neuester Artikel zur ABP Community",
+	"Register": "Registrieren"
   }
 }

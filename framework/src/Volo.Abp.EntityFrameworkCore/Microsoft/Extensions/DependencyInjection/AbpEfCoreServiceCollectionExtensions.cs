@@ -21,7 +21,17 @@ namespace Microsoft.Extensions.DependencyInjection
 
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {
-                services.Replace(ServiceDescriptor.Transient(dbContextType, typeof(TDbContext)));
+                services.Replace(
+                    ServiceDescriptor.Transient(
+                        dbContextType,
+                        sp => sp.GetRequiredService(typeof(TDbContext))
+                    )
+                );
+
+                services.Configure<AbpDbContextOptions>(opts =>
+                {
+                    opts.DbContextReplacements[dbContextType] = typeof(TDbContext);
+                });
             }
 
             new EfCoreRepositoryRegistrar(options).AddRepositories();
