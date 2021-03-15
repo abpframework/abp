@@ -1,0 +1,7 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "HelloText": "嗨 {0}",
+    "HowAreYou": "你好嗎?"
+  }
+}
