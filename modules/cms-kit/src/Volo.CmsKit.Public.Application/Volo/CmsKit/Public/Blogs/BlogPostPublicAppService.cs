@@ -15,16 +15,12 @@ namespace Volo.CmsKit.Public.Blogs
 
         protected IBlogPostRepository BlogPostRepository { get; }
 
-        protected IBlobContainer<BlogPostCoverImageContainer> BlobContainer { get; }
-
         public BlogPostPublicAppService(
             IBlogRepository blogRepository,
-            IBlogPostRepository blogPostRepository,
-            IBlobContainer<BlogPostCoverImageContainer> blobContainer)
+            IBlogPostRepository blogPostRepository)
         {
             BlogRepository = blogRepository;
             BlogPostRepository = blogPostRepository;
-            BlobContainer = blobContainer;
         }
 
         public virtual async Task<BlogPostPublicDto> GetAsync([NotNull] string blogSlug, [NotNull] string blogPostSlug)
@@ -40,18 +36,11 @@ namespace Volo.CmsKit.Public.Blogs
         {
             var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-            var blogPosts = await BlogPostRepository.GetPagedListAsync(blog.Id, input.SkipCount, input.MaxResultCount, input.Sorting);
+            var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id,input.MaxResultCount, input.SkipCount, input.Sorting);
 
             return new PagedResultDto<BlogPostPublicDto>(
-                await BlogPostRepository.GetCountAsync(blog.Id),
+                await BlogPostRepository.GetCountAsync(blogId: blog.Id),
                 ObjectMapper.Map<List<BlogPost>, List<BlogPostPublicDto>>(blogPosts));
-        }
-
-        public virtual async Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
-        {
-            var stream = await BlobContainer.GetAsync(id.ToString());
-
-            return new RemoteStreamContent(stream);
         }
     }
 }

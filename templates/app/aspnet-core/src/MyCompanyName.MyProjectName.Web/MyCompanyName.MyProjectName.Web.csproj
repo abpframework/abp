@@ -50,6 +50,9 @@
     <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Web\Volo.Abp.TenantManagement.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Web\Volo.Abp.FeatureManagement.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Web\Volo.Abp.SettingManagement.Web.csproj" />
+    <!--<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>-->
+    <ProjectReference Include="..\..\..\..\..\modules\cms-kit\src\Volo.CmsKit.Web\Volo.CmsKit.Web.csproj" />
+    <!--</TEMPLATE-REMOVE>-->
   </ItemGroup>
 
 </Project>

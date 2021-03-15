@@ -14,7 +14,7 @@ namespace Volo.Abp.Modularity
             var moduleLoader = new ModuleLoader();
             var modules = moduleLoader.LoadModules(
                 new ServiceCollection()
-                    .AddSingleton<IInitLogger>(new DefaultInitLogger()),
+                    .AddSingleton<IInitLoggerFactory>(new DefaultInitLoggerFactory()),
                 typeof(MyStartupModule),
                 new PlugInSourceList()
             );
@@ -28,7 +28,7 @@ namespace Volo.Abp.Modularity
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                
+
             }
         }
     }
