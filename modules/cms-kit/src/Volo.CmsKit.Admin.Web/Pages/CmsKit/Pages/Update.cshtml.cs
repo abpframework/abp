@@ -57,6 +57,14 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages
             [HiddenInput]
             [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
             public string Content { get; set; }
+            
+            [TextArea(Rows = 6)]
+            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxScriptLength))]
+            public string Script { get; set; }
+
+            [TextArea(Rows = 6)]
+            [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxStyleLength))]
+            public string Style { get; set; }
         }
     }
 }

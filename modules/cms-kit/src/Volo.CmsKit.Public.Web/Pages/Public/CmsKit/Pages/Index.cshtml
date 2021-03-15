@@ -7,7 +7,17 @@
 
 @section styles{
     <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
+    <style>
+        @Html.Raw(Model.Page.Style)
+    </style>
 }
+
+@section scripts{
+    <script>
+        @Html.Raw(Model.Page.Script)
+    </script>
+}
+
 @await Component.InvokeAsync(typeof(DefaultPageViewComponent),
     new
     {
