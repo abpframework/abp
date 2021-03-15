@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.SymbolStore;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,10 @@ namespace Volo.Abp.BlazoriseUI.Components
 {
     public partial class EntityAction<TItem> : ComponentBase
     {
-        internal bool IsVisible = true;
+        [Parameter] 
+        public bool IsVisible { get; set; } = true;
+
+        internal bool HasPermission { get; set; } = true;
 
         [Parameter]
         public string Text { get; set; }
@@ -44,7 +48,7 @@ namespace Volo.Abp.BlazoriseUI.Components
             await SetDefaultValuesAsync();
             if (!RequiredPolicy.IsNullOrEmpty())
             {
-                IsVisible = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
+                HasPermission = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
             }
             ParentActions.AddAction(this);
         }

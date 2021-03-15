@@ -52,7 +52,7 @@ namespace Volo.Abp.BlazoriseUI.Components
             {
                 if (ParentEntityActionsColumn != null)
                 {
-                    ParentEntityActionsColumn.Displayable = Actions.Any(t => t.IsVisible);
+                    ParentEntityActionsColumn.Displayable = Actions.Any(t => t.IsVisible && t.HasPermission);
                 }
 
                 await InvokeAsync(StateHasChanged);
