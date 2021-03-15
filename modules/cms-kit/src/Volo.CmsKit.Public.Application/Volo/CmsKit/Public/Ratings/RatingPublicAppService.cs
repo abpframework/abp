@@ -13,11 +13,16 @@ namespace Volo.CmsKit.Public.Ratings
     {
         protected IRatingRepository RatingRepository { get; }
         public ICmsUserLookupService CmsUserLookupService { get; }
+        protected RatingManager RatingManager { get; }
 
-        public RatingPublicAppService(IRatingRepository ratingRepository, ICmsUserLookupService cmsUserLookupService)
+        public RatingPublicAppService(
+            IRatingRepository ratingRepository,
+            ICmsUserLookupService cmsUserLookupService,
+            RatingManager ratingManager)
         {
             RatingRepository = ratingRepository;
             CmsUserLookupService = cmsUserLookupService;
+            RatingManager = ratingManager;
         }
 
         [Authorize]
@@ -27,26 +32,7 @@ namespace Volo.CmsKit.Public.Ratings
             var userId = CurrentUser.GetId();
             var user = await CmsUserLookupService.GetByIdAsync(userId);
 
-            var currentUserRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, userId);
-
-            if (currentUserRating != null)
-            {
-                currentUserRating.SetStarCount(input.StarCount);
-                var updatedRating = await RatingRepository.UpdateAsync(currentUserRating);
-
-                return ObjectMapper.Map<Rating, RatingDto>(updatedRating);
-            }
-
-            var rating = await RatingRepository.InsertAsync(
-                new Rating(
-                    GuidGenerator.Create(),
-                    entityType,
-                    entityId,
-                    input.StarCount,
-                    user.Id,
-                    CurrentTenant.Id
-                )
-            );
+            var rating = await RatingManager.SetStarAsync(user, entityType, entityId, input.StarCount);
 
             return ObjectMapper.Map<Rating, RatingDto>(rating);
         }
