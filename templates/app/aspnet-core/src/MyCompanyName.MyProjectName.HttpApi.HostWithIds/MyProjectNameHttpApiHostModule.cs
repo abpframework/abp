@@ -10,8 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Microsoft.OpenApi.Models;
+using MyCompanyName.MyProjectName.Web.Theme;
+using MyCompanyName.MyProjectName.Web.Theme.Bundling;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -19,7 +20,6 @@ using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
@@ -37,7 +37,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(MyProjectNameWebThemeModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreSerilogModule),
@@ -67,7 +67,7 @@ namespace MyCompanyName.MyProjectName
             Configure<AbpBundlingOptions>(options =>
             {
                 options.StyleBundles.Configure(
-                    BasicThemeBundles.Styles.Global,
+                    MyProjectNameThemeBundles.Styles.Global,
                     bundle => { bundle.AddFiles("/global-styles.css"); }
                 );
             });

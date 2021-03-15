@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <Import Project="..\..\common.props" />
+    
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <RootNamespace>MyCompanyName.MyProjectName.Web.Theme</RootNamespace>
+        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+        <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+        <PreserveCompilationReferences>true</PreserveCompilationReferences>
+        <UserSecretsId>MyCompanyName.MyProjectName-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <EmbeddedResource Include="wwwroot\**\*.*" />
+        <Content Remove="wwwroot\**\*.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />
+        <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.*" />
+    </ItemGroup>
+
+</Project>

@@ -12,6 +12,8 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using MyCompanyName.MyProjectName.Web.Theme;
+using MyCompanyName.MyProjectName.Web.Theme.Bundling;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -19,8 +21,6 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Serilog;
@@ -49,7 +49,7 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
         typeof(AbpAspNetCoreMvcClientModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(MyProjectNameWebThemeModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpFeatureManagementWebModule),
@@ -97,7 +97,7 @@ namespace MyCompanyName.MyProjectName.Web
             Configure<AbpBundlingOptions>(options =>
             {
                 options.StyleBundles.Configure(
-                    BasicThemeBundles.Styles.Global,
+                    MyProjectNameThemeBundles.Styles.Global,
                     bundle =>
                     {
                         bundle.AddFiles("/global-styles.css");
@@ -179,7 +179,6 @@ namespace MyCompanyName.MyProjectName.Web
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}permission-management{0}src{0}Volo.Abp.PermissionManagement.Web", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}modules{0}identity{0}src{0}Volo.Abp.Identity.Web", Path.DirectorySeparatorChar)));
                     //</TEMPLATE-REMOVE>
