@@ -4,14 +4,16 @@
 
 @inject IStringLocalizer<CmsKitResource> L
 
-<h1>@Model.Title</h1>
+@{
+    const string dummyImageSource = "https://dummyimage.com/300x200/a3a3a3/fff.png";
+}
 
 <abp-card>
-    <abp-card-header>
-        <abp-card-subtitle>@Model.Author?.UserName</abp-card-subtitle>
-    </abp-card-header>
-
+    <img src="/api/cms-kit/media/@Model.CoverImageMediaId" class="card-img-top" onerror="this.src='@dummyImageSource'" />
     <abp-card-body>
+        <abp-card-title>@Model.Title</abp-card-title>
+        <abp-card-subtitle>@Model.Author?.UserName</abp-card-subtitle>
+
         @Html.Raw(Model.Content)
     </abp-card-body>
     <abp-card-footer>
