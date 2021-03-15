@@ -17,7 +17,6 @@ namespace Volo.Abp.AspNetCore.Components.Server.Theming.Bundling
             context.Files.AddIfNotContains("/_content/Blazorise/blazorise.css");
             context.Files.AddIfNotContains("/_content/Blazorise.Bootstrap/blazorise.bootstrap.css");
             context.Files.AddIfNotContains("/_content/Blazorise.Snackbar/blazorise.snackbar.css");
-            context.Files.AddIfNotContains("/_content/Volo.Abp.AspNetCore.Components.Web.BasicTheme/libs/abp/css/theme.css");
         }
     }
 }
