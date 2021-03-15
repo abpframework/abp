@@ -83,7 +83,7 @@
 
             $('#fullsearch').keyup(function (e) {
                 if (e.key === 'Enter') {
-                    window.open($(this).data('fullsearch-url') + this.value);
+                    window.open($(this).data('fullsearch-url') + "?keyword=" + encodeURIComponent(this.value));
                 }
             });
         };

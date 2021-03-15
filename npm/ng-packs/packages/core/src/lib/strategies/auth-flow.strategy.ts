@@ -58,9 +58,13 @@ export abstract class AuthFlowStrategy {
           return Promise.resolve();
         }
 
-        return this.oAuthService.refreshToken() as Promise<any>;
+        return this.refreshToken();
       })
       .catch(this.catchError);
+  }
+
+  protected refreshToken() {
+    return this.oAuthService.refreshToken().catch(() => clearOAuthStorage());
   }
 }
 
@@ -111,9 +115,10 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       )
       .subscribe(() => {
         if (this.oAuthService.getRefreshToken()) {
-          this.oAuthService.refreshToken();
+          this.refreshToken();
         } else {
           this.oAuthService.logOut();
+          this.removeRememberMe();
           this.appConfigService.get().subscribe(res => {
             this.configState.setState(res);
           });
@@ -183,6 +188,13 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
         this.removeRememberMe();
       }),
     );
+  }
+
+  protected refreshToken() {
+    return this.oAuthService.refreshToken().catch(() => {
+      clearOAuthStorage();
+      this.removeRememberMe();
+    });
   }
 }
 
