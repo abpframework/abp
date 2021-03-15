@@ -21,7 +21,9 @@ namespace Volo.CmsKit.Pages
         public virtual async Task<Page> CreateAsync(
             [NotNull] string title,
             [NotNull] string slug,
-            [CanBeNull] string content = null)
+            [CanBeNull] string content = null,
+            [CanBeNull] string script = null,
+            [CanBeNull] string style = null)
         {
             Check.NotNullOrEmpty(title, nameof(title));
             Check.NotNullOrEmpty(slug, nameof(slug));
@@ -32,7 +34,9 @@ namespace Volo.CmsKit.Pages
                 GuidGenerator.Create(),
                 title,
                 slug, 
-                content, 
+                content,
+                script,
+                style,
                 CurrentTenant.Id);
         }
 

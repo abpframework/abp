@@ -53,7 +53,7 @@ namespace Volo.CmsKit.Admin.Pages
         [Authorize(CmsKitAdminPermissions.Pages.Create)]
         public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
         {
-            var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content);
+            var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style);
 
             await PageRepository.InsertAsync(page);
             
@@ -69,6 +69,8 @@ namespace Volo.CmsKit.Admin.Pages
 
             page.SetTitle(input.Title);
             page.SetContent(input.Content);
+            page.SetScript(input.Script);
+            page.SetStyle(input.Style);
 
             await PageRepository.UpdateAsync(page);
             
