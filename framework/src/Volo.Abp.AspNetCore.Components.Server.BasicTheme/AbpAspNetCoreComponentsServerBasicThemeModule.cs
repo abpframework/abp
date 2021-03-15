@@ -1,12 +1,13 @@
-﻿using Volo.Abp.AspNetCore.Components.Server.Theming;
+﻿using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
+using Volo.Abp.AspNetCore.Components.Server.Theming;
 using Volo.Abp.AspNetCore.Components.Server.Theming.Bundling;
-using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server.Bundling;
+using Volo.Abp.AspNetCore.Components.Web.BasicTheme;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server
+namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme
 {
     [DependsOn(
         typeof(AbpAspNetCoreComponentsWebBasicThemeModule),
@@ -16,11 +17,6 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpRouterOptions>(options =>
-            {
-                options.AdditionalAssemblies.Add(typeof(AbpAspNetCoreComponentsServerBasicThemeModule).Assembly);
-            });
-
             Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new BasicThemeToolbarContributor());

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Server.Bundling
+namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
 {
     public class BlazorBasicThemeStyleContributor : BundleContributor
     {
