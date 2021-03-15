@@ -55,7 +55,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
           return Promise.resolve();
         }
 
-        return this.oAuthService.refreshToken() as Promise<any>;
+        return this.oAuthService.refreshToken().catch(() => clearOAuthStorage());
       })
       .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
