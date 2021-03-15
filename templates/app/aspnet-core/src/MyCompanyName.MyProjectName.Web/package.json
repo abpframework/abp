@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
-    "@abp/cms-kit": "^4.2.1",
+    "@abp/cms-kit": "^4.2.2",
     //</TEMPLATE-REMOVE>
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.2.1"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.2.2"
   }
 }

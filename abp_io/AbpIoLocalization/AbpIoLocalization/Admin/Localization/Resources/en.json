@@ -247,6 +247,10 @@
     "Address": "Address",
     "TaxNo": "Tax No",
     "Permission:InvoiceRequest": "Invoice Request",
-    "Permission:Question": "Question"
+    "Permission:Question": "Question",
+    "AddNoteSuccessMessage": "Note successfully added",
+    "NameSurname": "Name Surname",
+    "Note": "Note",
+    "Add": "Add"
   }
 }
