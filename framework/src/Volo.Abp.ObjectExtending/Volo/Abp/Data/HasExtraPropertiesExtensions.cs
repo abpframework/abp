@@ -118,6 +118,7 @@ namespace Volo.Abp.Data
             foreach (var property in properties)
             {
                 property.SetValue(source, source.ExtraProperties[property.Name]);
+                source.RemoveProperty(property.Name);
             }
         }
     }

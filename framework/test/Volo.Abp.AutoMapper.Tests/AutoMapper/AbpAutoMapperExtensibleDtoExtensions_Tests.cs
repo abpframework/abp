@@ -53,15 +53,15 @@ namespace AutoMapper
             _objectMapper.Map(person, personDto);
 
             //Defined in both classes
-            personDto.GetProperty<string>("Name").ShouldBe("John");
+            personDto.HasProperty("Name").ShouldBe(false);
             personDto.Name.ShouldBe("John");
 
             //Defined in both classes
-            personDto.GetProperty<int>("Age").ShouldBe(42);
+            personDto.HasProperty("Age").ShouldBe(false);
             personDto.Age.ShouldBe(42);
 
             //Should not clear existing values
-            personDto.GetProperty<bool>("IsActive").ShouldBe(true);
+            personDto.HasProperty("IsActive").ShouldBe(false);
             personDto.IsActive.ShouldBe(true);
         }
     }
