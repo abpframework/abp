@@ -1,5 +1,12 @@
-import { AuthService, ConfigStateService, CurrentUserDto } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import {
+  AuthService,
+  ConfigStateService,
+  CurrentUserDto,
+  EnvironmentService,
+  HAS_ACCOUNT_MODULE,
+} from '@abp/ng.core';
+import { Component, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -35,7 +42,7 @@ import { Observable } from 'rxjs';
         aria-labelledby="dropdownMenuLink"
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
-        <a class="dropdown-item" routerLink="/account/manage-profile"
+        <a class="dropdown-item pointer" (click)="navigateToManageProfile()"
           ><i class="fa fa-cog mr-1"></i>{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
@@ -52,7 +59,23 @@ export class CurrentUserComponent {
     return window.innerWidth < 992;
   }
 
-  constructor(private authService: AuthService, private configState: ConfigStateService) {}
+  constructor(
+    @Inject(HAS_ACCOUNT_MODULE) private hasAccountModule,
+    private authService: AuthService,
+    private configState: ConfigStateService,
+    private environment: EnvironmentService,
+    private router: Router,
+  ) {}
+
+  navigateToManageProfile() {
+    if (this.hasAccountModule) {
+      this.router.navigateByUrl('/account/manage');
+      return;
+    }
+
+    const { issuer } = this.environment.getEnvironment().oAuthConfig;
+    window.open(`${issuer}/Account/Manage?returnUrl=${window.location.href}`, '_self');
+  }
 
   navigateToLogin() {
     this.authService.navigateToLogin();
