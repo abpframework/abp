@@ -4,7 +4,7 @@
 
 ### Manage Profile Page
 
-Prior to V4.3, the manage your profile link in the current user dropdown on the top bar redirects to MVC's manage profile page. As of v4.3, the URL will be changed as `/account/manage-profile` to redirect users to the manage profile page in the account module of Angular UI instead of MVC. So you have to install and implement the account module to your Angular project when you update the ABP to v4.3.
+Before v4.3, the "Manage Your Profile" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, the same link will land on a page in the Angular UI account module instead. So you have to install and implement the account module to your Angular project when you update the ABP to v4.3.
 
 #### Account Module Implementation
 
