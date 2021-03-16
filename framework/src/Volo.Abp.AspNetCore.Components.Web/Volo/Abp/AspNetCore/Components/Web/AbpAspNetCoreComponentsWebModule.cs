@@ -21,10 +21,6 @@ namespace Volo.Abp.AspNetCore.Components.Web
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.Replace(ServiceDescriptor.Transient<IComponentActivator, ServiceProviderComponentActivator>());
-
-            //context.Services
-            //    .GetHostBuilder().Logging
-            //    .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
         }
     }
 }
