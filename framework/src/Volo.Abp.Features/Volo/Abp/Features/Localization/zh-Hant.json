@@ -1,0 +1,8 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Volo.Feature:010001": "功能尚未啟用: {FeatureName}",
+    "Volo.Feature:010002": "請求的功能尚未啟用。這些功能被須全部啟用: {FeatureNames}",
+    "Volo.Feature:010003": "請求的功能尚未啟用。這些功能至少需啟用一個: {FeatureNames}"
+  }
+}

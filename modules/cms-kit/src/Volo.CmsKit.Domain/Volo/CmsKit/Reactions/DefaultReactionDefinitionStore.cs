@@ -9,7 +9,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.CmsKit.Reactions
 {
-    public class DefaultReactionDefinitionStore : IReactionDefinitionStore, ITransientDependency
+    public class DefaultReactionDefinitionStore : IReactionDefinitionStore
     {
         protected CmsKitReactionOptions Options { get; }
 
@@ -46,6 +46,12 @@ namespace Volo.CmsKit.Reactions
             return Task.FromResult(isDefined);
         }
 
+        /// <summary>
+        /// Gets single <see cref="ReactionEntityTypeDefinition"/> by entityType.
+        /// </summary>
+        /// <param name="entityType">EntityType to get definition.</param>
+        /// <exception cref="EntityCantHaveReactionException">Thrown when EntityType is not configured as taggable.</exception>
+        /// <exception cref="InvalidOperationException">More than one element satisfies the condition in predicate.</exception>
         public virtual Task<ReactionEntityTypeDefinition> GetAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));

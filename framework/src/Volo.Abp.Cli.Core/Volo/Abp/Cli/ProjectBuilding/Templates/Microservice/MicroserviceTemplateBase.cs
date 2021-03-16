@@ -37,6 +37,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                         "/applications/web/src/MyCompanyName.MyProjectName.Web"));
                     steps.Add(new RemoveFolderStep("/applications/web"));
                     steps.Add(new RemoveProjectFromTyeStep("web"));
+                    steps.Add(new RemoveProjectFromPrometheusStep("web"));
 
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
@@ -51,6 +52,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                         "/applications/web/src/MyCompanyName.MyProjectName.Web"));
                     steps.Add(new RemoveFolderStep("/applications/web"));
                     steps.Add(new RemoveProjectFromTyeStep("web"));
+                    steps.Add(new RemoveProjectFromPrometheusStep("web"));
 
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
@@ -64,6 +66,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                     steps.Add(new RemoveFolderStep("/applications/web"));
                     steps.Add(new RemoveFolderStep("/angular"));
                     steps.Add(new RemoveProjectFromTyeStep("web"));
+                    steps.Add(new RemoveProjectFromPrometheusStep("web"));
                     break;
 
                 case UiFramework.Mvc:

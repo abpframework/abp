@@ -44,6 +44,7 @@ using Volo.CmsKit.Tags;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Ratings;
 
 namespace Volo.CmsKit
 {
@@ -164,6 +165,11 @@ namespace Volo.CmsKit
                         new ReactionDefinition(StandardReactions.ThumbsUp),
                         new ReactionDefinition(StandardReactions.ThumbsDown),
                     }));
+            });
+
+            Configure<CmsKitRatingOptions>(options =>
+            {
+                options.EntityTypes.Add(new RatingEntityTypeDefinition("quote"));
             });
         }
 
