@@ -9,7 +9,8 @@ namespace Volo.Abp.AspNetCore.Components.Server.Theming
     [DependsOn(
         typeof(AbpAspNetCoreComponentsServerModule),
         typeof(AbpAspNetCoreMvcUiPackagesModule),
-        typeof(AbpAspNetCoreComponentsWebThemingModule)
+        typeof(AbpAspNetCoreComponentsWebThemingModule),
+        typeof(AbpAspNetCoreMvcUiBundlingModule)
         )]
     public class AbpAspNetCoreComponentsServerThemingModule : AbpModule
     {

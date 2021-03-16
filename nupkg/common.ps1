@@ -48,6 +48,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.Contracts",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy",

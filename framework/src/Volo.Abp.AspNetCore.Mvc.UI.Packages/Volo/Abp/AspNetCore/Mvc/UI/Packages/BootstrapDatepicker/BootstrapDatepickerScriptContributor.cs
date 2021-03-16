@@ -18,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
 
         public override void ConfigureDynamicResources(BundleConfigurationContext context)
         {
-            var fileName = context.LocalizationOptions.GetCurrentUICultureLanguageFilesMap(PackageName);
+            var fileName = context.LazyServiceProvider.LazyGetRequiredService<AbpLocalizationOptions>().GetCurrentUICultureLanguageFilesMap(PackageName);
             var filePath = $"/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{fileName}.min.js";
             if (context.FileProvider.GetFileInfo(filePath).Exists)
             {

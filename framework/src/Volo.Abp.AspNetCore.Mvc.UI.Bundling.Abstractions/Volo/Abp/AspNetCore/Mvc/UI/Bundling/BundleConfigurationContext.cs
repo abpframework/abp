@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
@@ -16,16 +14,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public IServiceProvider ServiceProvider { get; }
 
-        private readonly IAbpLazyServiceProvider _lazyServiceProvider;
+        public IAbpLazyServiceProvider LazyServiceProvider { get; }
 
         public BundleConfigurationContext(IServiceProvider serviceProvider, IFileProvider fileProvider)
         {
             Files = new List<string>();
             ServiceProvider = serviceProvider;
-            _lazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
+            LazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
             FileProvider = fileProvider;
         }
-
-        public AbpLocalizationOptions LocalizationOptions => _lazyServiceProvider.LazyGetRequiredService<IOptions<AbpLocalizationOptions>>().Value;
     }
 }
