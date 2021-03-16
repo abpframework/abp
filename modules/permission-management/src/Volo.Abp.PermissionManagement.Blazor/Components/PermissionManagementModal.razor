@@ -1,8 +1,8 @@
 ﻿@using Microsoft.Extensions.Localization
 @using Volo.Abp.PermissionManagement.Localization
 @inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
-<Modal @ref="_modal">
-    <ModalContent Size="ModalSize.Large" IsCentered="true">
+<Modal @ref="_modal" Closing="@ClosingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>@L["Permissions"] - @_entityDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />

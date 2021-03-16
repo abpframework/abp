@@ -136,5 +136,10 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             var resource = LocalizationOptions.Value.Resources.Values.FirstOrDefault(x => x.ResourceName == resourceName);
             return HtmlLocalizerFactory.Create(resource != null ? resource.ResourceType : LocalizationOptions.Value.DefaultResourceType);
         }
+
+        protected virtual void ClosingModal( ModalClosingEventArgs eventArgs )
+        {
+            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
+        }
     }
 }
