@@ -29,4 +29,9 @@
     <Content Remove="Components\**\*.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Pages\Public\CmsKit\Blogs\index.css" />
+    <None Remove="Pages\Public\CmsKit\Pages\index.css" />
+  </ItemGroup>
+
 </Project>

@@ -114,6 +114,9 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
                 options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+
+                options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
+                options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
             });
 
             Configure<AbpBackgroundJobOptions>(options =>

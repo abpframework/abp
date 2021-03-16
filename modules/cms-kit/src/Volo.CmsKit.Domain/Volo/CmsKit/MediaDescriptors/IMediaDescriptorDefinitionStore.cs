@@ -1,12 +1,7 @@
-﻿using JetBrains.Annotations;
-using System.Threading.Tasks;
-
-namespace Volo.CmsKit.MediaDescriptors
+﻿namespace Volo.CmsKit.MediaDescriptors
 {
-    public interface IMediaDescriptorDefinitionStore
+    public interface IMediaDescriptorDefinitionStore : IEntityTypeDefinitionStore<MediaDescriptorDefinition>
     {
-        Task<bool> IsDefinedAsync([NotNull] string entityType);
 
-        Task<MediaDescriptorDefinition> GetDefinitionAsync([NotNull] string entityType);
     }
 }

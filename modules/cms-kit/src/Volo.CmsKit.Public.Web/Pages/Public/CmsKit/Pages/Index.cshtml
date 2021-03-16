@@ -5,6 +5,9 @@
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages.IndexModel
 @inject IHtmlLocalizer<CmsKitResource> L
 
+@section styles{
+    <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
+}
 @await Component.InvokeAsync(typeof(DefaultPageViewComponent),
     new
     {

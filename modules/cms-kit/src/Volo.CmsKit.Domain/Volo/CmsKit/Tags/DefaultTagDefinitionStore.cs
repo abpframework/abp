@@ -9,7 +9,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.CmsKit.Tags
 {
-    public class DefaultTagDefinitionStore : ITagDefinitionStore, ITransientDependency
+    public class DefaultTagDefinitionStore : ITagDefinitionStore
     {
         protected CmsKitTagOptions CmsKitTagOptions { get; }
 
@@ -24,7 +24,7 @@ namespace Volo.CmsKit.Tags
         /// <param name="entityType">EntityType to get definition.</param>
         /// <exception cref="EntityNotTaggableException">Thrown when EntityType is not configured as taggable.</exception>
         /// <exception cref="InvalidOperationException">More than one element satisfies the condition in predicate.</exception>
-        public virtual Task<TagEntityTypeDefiniton> GetTagEntityTypeDefinitionAsync([NotNull] string entityType)
+        public virtual Task<TagEntityTypeDefiniton> GetAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 

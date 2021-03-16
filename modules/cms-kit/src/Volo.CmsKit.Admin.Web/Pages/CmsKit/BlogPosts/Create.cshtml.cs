@@ -62,6 +62,9 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
             [HiddenInput]
             [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxContentLength))]
             public string Content { get; set; }
+
+            [HiddenInput]
+            public Guid? CoverImageMediaId { get; set; }
         }
     }
 }

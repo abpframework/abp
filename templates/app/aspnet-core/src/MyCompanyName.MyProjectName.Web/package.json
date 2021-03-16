@@ -3,6 +3,9 @@
   "name": "my-app",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.2.1"
+    //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+    "@abp/cms-kit": "^4.2.2",
+    //</TEMPLATE-REMOVE>
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^4.2.2"
   }
 }

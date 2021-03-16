@@ -4,10 +4,10 @@ using JetBrains.Annotations;
 
 namespace Volo.CmsKit.Reactions
 {
-    public interface IReactionDefinitionStore
+    public interface IReactionDefinitionStore : IEntityTypeDefinitionStore<ReactionEntityTypeDefinition>
     {
-        Task<List<ReactionDefinition>> GetReactionsAsync([CanBeNull] string entityType = null);
+        Task<List<ReactionDefinition>> GetReactionsAsync([NotNull] string entityType);
 
-        Task<ReactionDefinition> GetReactionOrNullAsync([NotNull] string reactionName, [CanBeNull] string entityType = null);
+        Task<ReactionDefinition> GetReactionOrNullAsync([NotNull] string reactionName, [NotNull] string entityType);
     }
 }

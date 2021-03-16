@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -53,49 +48,12 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [HttpGet]
-        [Route("{id}/cover-image")]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
-        {
-            Response.Headers.Add("Content-Disposition", $"inline;filename=\"{id}\"");
-            Response.Headers.Add("Accept-Ranges", "bytes");
-            Response.Headers.Add("Cache-Control", "max-age=120");
-            Response.ContentType = "image";
-
-            return BlogPostAdminAppService.GetCoverImageAsync(id);
-        }
-
-        [HttpGet]
-        [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual Task<PagedResultDto<BlogPostDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public virtual Task<PagedResultDto<BlogPostDto>> GetListAsync(BlogPostGetListInput input)
         {
             return BlogPostAdminAppService.GetListAsync(input);
         }
-
-        [NonAction]
-        public virtual Task SetCoverImageAsync(Guid id, RemoteStreamContent streamContent)
-        {
-            return BlogPostAdminAppService.SetCoverImageAsync(id, streamContent);
-        }
-
-        [HttpPost]
-        [Route("{id}/cover-image")]
-        [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]
-        public virtual async Task<IActionResult> UploadCoverImageAsync(Guid id, IFormFile file)
-        {
-            if (file == null)
-            {
-                return BadRequest();
-            }
-
-            using (var stream = file.OpenReadStream())
-            {
-                await BlogPostAdminAppService.SetCoverImageAsync(id, new RemoteStreamContent(stream));
-            }
-
-            return CreatedAtAction(nameof(GetCoverImageAsync), new { id });
-        }
-
+     
         [HttpPut]
         [Route("{id}")]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Update)]

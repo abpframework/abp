@@ -25,7 +25,7 @@ namespace Volo.Abp.Modularity
         }
 
         private List<IAbpModuleDescriptor> GetDescriptors(
-            IServiceCollection services, 
+            IServiceCollection services,
             Type startupModuleType,
             PlugInSourceList plugInSources)
         {
@@ -43,14 +43,16 @@ namespace Volo.Abp.Modularity
             Type startupModuleType,
             PlugInSourceList plugInSources)
         {
+            var logger = services.GetInitLogger<AbpApplicationBase>();
+
             //All modules starting from the startup module
-            foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType))
+            foreach (var moduleType in AbpModuleHelper.FindAllModuleTypes(startupModuleType, logger))
             {
                 modules.Add(CreateModuleDescriptor(services, moduleType));
             }
 
             //Plugin modules
-            foreach (var moduleType in plugInSources.GetAllModules())
+            foreach (var moduleType in plugInSources.GetAllModules(logger))
             {
                 if (modules.Any(m => m.Type == moduleType))
                 {

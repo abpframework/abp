@@ -31,16 +31,16 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
 
         public virtual async Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
         {
-            var definition = await MediaDescriptorDefinitionStore.GetDefinitionAsync(inputStream.EntityType);
+            var definition = await MediaDescriptorDefinitionStore.GetAsync(inputStream.EntityType);
 
+            /* TODO: Shouldn't CreatePolicies be a dictionary and we check for inputStream.EntityType? */
             await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
 
-            var newId = GuidGenerator.Create();
             using (var stream = inputStream.GetStream())
             {
                 var newEntity = await MediaDescriptorManager.CreateAsync(inputStream.EntityType, inputStream.Name, inputStream.ContentType, inputStream.ContentLength ?? 0);
 
-                await MediaContainer.SaveAsync(newId.ToString(), stream);
+                await MediaContainer.SaveAsync(newEntity.Id.ToString(), stream);
                 await MediaDescriptorRepository.InsertAsync(newEntity);
 
                 return ObjectMapper.Map<MediaDescriptor, MediaDescriptorDto>(newEntity);
@@ -51,8 +51,9 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         {
             var mediaDescriptor = await MediaDescriptorRepository.GetAsync(id);
 
-            var definition = await MediaDescriptorDefinitionStore.GetDefinitionAsync(mediaDescriptor.EntityType);
+            var definition = await MediaDescriptorDefinitionStore.GetAsync(mediaDescriptor.EntityType);
 
+            /* TODO: Shouldn't DeletePolicies be a dictionary and we check for inputStream.EntityType? */
             await CheckAnyOfPoliciesAsync(definition.DeletePolicies);
 
             await MediaContainer.DeleteAsync(id.ToString());

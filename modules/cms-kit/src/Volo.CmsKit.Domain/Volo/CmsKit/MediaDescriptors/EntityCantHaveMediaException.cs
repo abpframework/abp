@@ -9,10 +9,10 @@ namespace Volo.CmsKit.MediaDescriptors
         {
         }
 
-        public EntityCantHaveMediaException(string entityType) 
+        public EntityCantHaveMediaException(string entityType)
+          : base(code: CmsKitErrorCodes.MediaDescriptors.EntityTypeDoesntExist)
         {
             EntityType = entityType;
-            Code = CmsKitErrorCodes.MediaDescriptors.EntityTypeDoesntExist;
             WithData(nameof(entityType), EntityType);
         }
 

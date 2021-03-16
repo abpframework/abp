@@ -8,11 +8,19 @@
             public const string EntityNotTaggable = "CmsKit:Tag:0002";
         }
 
-        public const string ContentAlreadyExist = "CmsKit:0002";
-
         public static class Pages
         {
             public const string SlugAlreadyExist = "CmsKit:Page:0001";
+        }
+
+        public static class Ratings
+        {
+            public const string EntityCantHaveRating = "CmsKit:Rating:0001";
+        }
+
+        public static class Reactions
+        {
+            public const string EntityCantHaveReaction = "CmsKit:Reaction:0001";
         }
 
         public static class Blogs
