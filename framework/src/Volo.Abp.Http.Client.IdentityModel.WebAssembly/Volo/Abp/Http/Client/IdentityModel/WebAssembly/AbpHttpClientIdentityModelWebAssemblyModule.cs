@@ -1,11 +1,13 @@
 ﻿using IdentityModel;
+using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Http.Client.IdentityModel.WebAssembly
 {
     [DependsOn(
-        typeof(AbpHttpClientIdentityModelModule)
+        typeof(AbpHttpClientIdentityModelModule),
+        typeof(AbpAspNetCoreComponentsWebAssemblyModule)
     )]
     public class AbpHttpClientIdentityModelWebAssemblyModule : AbpModule
     {
