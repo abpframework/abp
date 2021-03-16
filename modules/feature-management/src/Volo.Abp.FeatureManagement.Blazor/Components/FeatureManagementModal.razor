@@ -3,7 +3,7 @@
 
 @inherits AbpFeatureManagementComponentBase
 
-<Modal @ref="Modal">
+<Modal @ref="Modal" Closing="@ClosingModal">
     <ModalContent Size="ModalSize.Large" IsCentered="true">
         <ModalHeader>
             <ModalTitle>@L["Features"]</ModalTitle>

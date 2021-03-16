@@ -75,7 +75,7 @@
 @* ************************* CREATE MODAL ************************* *@
 @if ( HasCreatePermission )
 {
-    <Modal @ref="CreateModal">
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -183,7 +183,7 @@
 @* ************************* EDIT MODAL ************************* *@
 @if ( HasUpdatePermission )
 {
-    <Modal @ref="EditModal">
+    <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
