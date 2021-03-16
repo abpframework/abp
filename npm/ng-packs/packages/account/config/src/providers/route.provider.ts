@@ -29,7 +29,7 @@ export function configureRoutes(routes: RoutesService) {
         order: 2,
       },
       {
-        path: '/account/manage-profile',
+        path: '/account/manage',
         name: eAccountRouteNames.ManageProfile,
         parentName: eAccountRouteNames.Account,
         order: 3,
