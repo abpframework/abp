@@ -24,6 +24,7 @@ namespace Volo.Abp.BlazoriseUI
             context.Services.AddBlazorise(options =>
             {
                 options.DelayTextOnKeyPress = true;
+                options.DelayTextOnKeyPressInterval = 800;
             });
 
             context.Services.AddSingleton(typeof(AbpBlazorMessageLocalizerHelper<>));
