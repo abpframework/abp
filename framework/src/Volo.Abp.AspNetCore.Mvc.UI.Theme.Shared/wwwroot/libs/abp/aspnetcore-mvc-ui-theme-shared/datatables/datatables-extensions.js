@@ -238,7 +238,7 @@ var abp = abp || {};
 
                     var $actionButton = $(cells[colIndex]).find(".abp-action-button");
                     if ($actionButton.length === 0) {
-                        $(cells[colIndex]).append($actionContainer);
+                        $(cells[colIndex]).empty().append($actionContainer);
                     }
                 }
             }
