@@ -15,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
     [DependsOn(
         typeof(AbpAspNetCoreMvcClientCommonModule),
         typeof(AbpUiModule),
-        typeof(AbpAspNetCoreComponentsModule)
+        typeof(AbpAspNetCoreComponentsWebModule)
         )]
     public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
     {
