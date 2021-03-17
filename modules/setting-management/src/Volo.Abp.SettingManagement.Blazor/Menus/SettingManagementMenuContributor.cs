@@ -37,7 +37,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Menus
                     new ApplicationMenuItem(
                         SettingManagementMenus.GroupName,
                         l["Settings"],
-                        "setting-management",
+                        "~/setting-management",
                         icon: "fa fa-cog"
                     )
                 );

@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
             return Configuration;
         }
 
-        internal void Set(ApplicationConfigurationDto configuration)
+        public void Set(ApplicationConfigurationDto configuration)
         {
             Configuration = configuration;
         }

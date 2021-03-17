@@ -1,9 +1,7 @@
 ﻿@page "/identity/users"
 @attribute [Authorize( IdentityPermissions.Users.Default )]
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.PermissionManagement.Blazor.Components
-@using Microsoft.Extensions.Localization
 @using Volo.Abp.Identity.Localization
 @inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
 
@@ -17,7 +15,7 @@
                 <h1>@L["Users"]</h1>
             </Column>
             <Column ColumnSize="ColumnSize.IsAuto">
-                @if (HasCreatePermission)
+                @if ( HasCreatePermission )
                 {
                     <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">
                         <Icon Margin="Margin.Is1.FromRight" Name="IconName.Add"></Icon>@L["NewUser"]
@@ -75,10 +73,9 @@
 </Card>
 
 @* ************************* CREATE MODAL ************************* *@
-@if (HasCreatePermission)
+@if ( HasCreatePermission )
 {
-    <Modal @ref="CreateModal">
-        <ModalBackdrop />
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -97,7 +94,7 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                            <TextEdit @bind-Text="NewEntity.UserName" Autofocus="true">
+                                            <TextEdit @bind-Text="NewEntity.UserName">
                                                 <Feedback>
                                                     <ValidationError />
                                                 </Feedback>
@@ -159,9 +156,9 @@
                                     </Field>
                                 </TabPanel>
                                 <TabPanel Name="Roles">
-                                    @if (NewUserRoles != null)
+                                    @if ( NewUserRoles != null )
                                     {
-                                        @foreach (var role in NewUserRoles)
+                                        @foreach ( var role in NewUserRoles )
                                         {
                                             <Field>
                                                 <input type="hidden" @bind-value="@role.Name" />
@@ -184,10 +181,9 @@
 }
 
 @* ************************* EDIT MODAL ************************* *@
-@if (HasUpdatePermission)
+@if ( HasUpdatePermission )
 {
-    <Modal @ref="EditModal">
-        <ModalBackdrop />
+    <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -208,7 +204,7 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                            <TextEdit @bind-Text="EditingEntity.UserName" Autofocus="true">
+                                            <TextEdit @bind-Text="EditingEntity.UserName">
                                                 <Feedback>
                                                     <ValidationError />
                                                 </Feedback>
@@ -270,9 +266,9 @@
                                     </Field>
                                 </TabPanel>
                                 <TabPanel Name="Roles">
-                                    @if (EditUserRoles != null)
+                                    @if ( EditUserRoles != null )
                                     {
-                                        @foreach (var role in EditUserRoles)
+                                        @foreach ( var role in EditUserRoles )
                                         {
                                             <Field>
                                                 <input type="hidden" @bind-value="@role.Name" />
@@ -294,7 +290,7 @@
     </Modal>
 }
 
-@if (HasManagePermissionsPermission)
+@if ( HasManagePermissionsPermission )
 {
     <PermissionManagementModal @ref="PermissionManagementModal" />
 }

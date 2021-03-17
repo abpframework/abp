@@ -8,13 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly\Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise" Version="0.9.3-preview8" />
-        <PackageReference Include="Blazorise.DataGrid" Version="0.9.3-preview8" />
-        <PackageReference Include="Blazorise.Snackbar" Version="0.9.3-preview8" />
+        <PackageReference Include="Blazorise" Version="0.9.3" />
+        <PackageReference Include="Blazorise.DataGrid" Version="0.9.3" />
+        <PackageReference Include="Blazorise.Snackbar" Version="0.9.3" />
     </ItemGroup>
 
 </Project>

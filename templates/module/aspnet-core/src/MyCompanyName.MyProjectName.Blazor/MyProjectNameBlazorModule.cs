@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Blazor.Menus;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;

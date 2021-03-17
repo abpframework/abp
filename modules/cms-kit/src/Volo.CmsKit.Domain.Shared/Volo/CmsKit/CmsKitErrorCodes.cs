@@ -13,6 +13,11 @@
             public const string SlugAlreadyExist = "CmsKit:Page:0001";
         }
 
+        public static class Ratings
+        {
+            public const string EntityCantHaveRating = "CmsKit:Rating:0001";
+        }
+
         public static class Reactions
         {
             public const string EntityCantHaveReaction = "CmsKit:Reaction:0001";

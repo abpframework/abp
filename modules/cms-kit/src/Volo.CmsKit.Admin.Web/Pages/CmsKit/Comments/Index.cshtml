@@ -15,14 +15,14 @@
     PageLayout.Content.Title = L["Comments"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
     PageLayout.Content.MenuItemName = CmsKitAdminMenus.Comments.CommentsMenu;
-    
+
     var defaultStartDate = DateTime.Now.AddDays(-7).Date.ToShortDateString();
 }
 
 @section styles{
     <abp-style-bundle>
         <abp-style src="/Pages/CmsKit/Comments/index.css" />
-    </abp-style-bundle>    
+    </abp-style-bundle>
 }
 
 @section scripts {
@@ -31,9 +31,9 @@
     </abp-script-bundle>
 }
 
-<div id="CmsKitCommentsWrapper">
-    <abp-card>
-        <abp-card-body>
+<abp-card class="mb-4">
+    <abp-card-body>
+        <div id="CmsKitCommentsWrapper">
             <abp-row>
                 <abp-column>
                     <form id="CmsKitCommentsFilterForm" method="post">
@@ -47,13 +47,13 @@
                                 </abp-column>
                             </abp-column>
                             <abp-column size-lg="_2" size-md="_6">
-                                <abp-input asp-for="@Model.EntityType" label="@L["EntityType"].Value" type="text"/>
+                                <abp-input asp-for="@Model.EntityType" label="@L["EntityType"].Value" type="text" />
                             </abp-column>
                             <abp-column size-lg="_2" size-md="_6">
-                                <abp-input asp-for="@Model.EntityId" label="@L["EntityId"].Value" type="text"/>
+                                <abp-input asp-for="@Model.EntityId" label="@L["EntityId"].Value" type="text" />
                             </abp-column>
                             <abp-column size-lg="_2" size-md="_12">
-                                <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text"/>
+                                <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text" />
                             </abp-column>
                             <abp-column size-lg="_2" size-md="_12">
                                 <abp-button class="mt-md-4" size="Block" button-type="Primary" type="submit">
@@ -64,8 +64,12 @@
                     </form>
                 </abp-column>
             </abp-row>
-        </abp-card-body>
-    </abp-card>
-    
-    <abp-table striped-rows="true" id="CommentsTable" class="nowrap"></abp-table>
-</div>
+        </div>
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="CommentsTable" class="nowrap"></abp-table>
+    </abp-card-body>
+</abp-card>

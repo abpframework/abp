@@ -4,6 +4,7 @@
 @using Volo.Abp.FeatureManagement.Blazor.Components
 @using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.TenantManagement.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inject AbpBlazorMessageLocalizerHelper<AbpTenantManagementResource> LH
 @inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
 
@@ -15,7 +16,7 @@
                 <Heading Size="HeadingSize.Is1">@L["Tenants"]</Heading>
             </Column>
             <Column ColumnSize="ColumnSize.IsAuto">
-                @if (HasCreatePermission)
+                @if ( HasCreatePermission )
                 {
                     <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">
                         <Icon Margin="Margin.Is1.FromRight" Name="IconName.Add"></Icon>@L["NewTenant"]
@@ -63,10 +64,9 @@
 </Card>
 
 @* ************************* CREATE MODAL ************************* *@
-@if (HasCreatePermission)
+@if ( HasCreatePermission )
 {
-    <Modal @ref="CreateModal">
-        <ModalBackdrop />
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -78,7 +78,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"]</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
+                                <TextEdit @bind-Text="@NewEntity.Name">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -117,10 +117,9 @@
 }
 
 @* ************************* EDIT MODAL ************************* *@
-@if (HasUpdatePermission)
+@if ( HasUpdatePermission )
 {
-    <Modal @ref="EditModal">
-        <ModalBackdrop />
+    <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -132,7 +131,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"]</FieldLabel>
-                                <TextEdit @bind-Text="@EditingEntity.Name" Autofocus="true">
+                                <TextEdit @bind-Text="@EditingEntity.Name">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>

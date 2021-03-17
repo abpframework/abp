@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
@@ -38,56 +39,69 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
 
         public virtual async Task OpenAsync([NotNull]string providerName, string providerKey = null)
         {
-            ProviderName = providerName;
-            ProviderKey = providerKey;
-
-            ToggleValues = new Dictionary<string, bool>();
-            SelectionStringValues = new Dictionary<string, string>();
-
-            Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey)).Groups;
-
-            SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
-
-            foreach (var featureGroupDto in Groups)
+            try
             {
-                foreach (var featureDto in featureGroupDto.Features)
-                {
-                    if (featureDto.ValueType is ToggleStringValueType)
-                    {
-                        ToggleValues.Add(featureDto.Name, bool.Parse(featureDto.Value));
-                    }
+                ProviderName = providerName;
+                ProviderKey = providerKey;
 
-                    if (featureDto.ValueType is SelectionStringValueType)
+                ToggleValues = new Dictionary<string, bool>();
+                SelectionStringValues = new Dictionary<string, string>();
+
+                Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey)).Groups;
+
+                SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
+
+                foreach (var featureGroupDto in Groups)
+                {
+                    foreach (var featureDto in featureGroupDto.Features)
                     {
-                        SelectionStringValues.Add(featureDto.Name, featureDto.Value);
+                        if (featureDto.ValueType is ToggleStringValueType)
+                        {
+                            ToggleValues.Add(featureDto.Name, bool.Parse(featureDto.Value));
+                        }
+
+                        if (featureDto.ValueType is SelectionStringValueType)
+                        {
+                            SelectionStringValues.Add(featureDto.Name, featureDto.Value);
+                        }
                     }
                 }
-            }
 
-            Modal.Show();
+                await InvokeAsync(Modal.Show);
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         public virtual Task CloseModal()
         {
-            Modal.Hide();
-            return Task.CompletedTask;
+            return InvokeAsync(Modal.Hide);
         }
 
         protected virtual async Task SaveAsync()
         {
-            var features = new UpdateFeaturesDto
+            try
             {
-                Features = Groups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
+                var features = new UpdateFeaturesDto
                 {
-                    Name = f.Name,
-                    Value = f.ValueType is ToggleStringValueType ? ToggleValues[f.Name].ToString() :
+                    Features = Groups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
+                    {
+                        Name = f.Name,
+                        Value = f.ValueType is ToggleStringValueType ? ToggleValues[f.Name].ToString() :
                             f.ValueType is SelectionStringValueType ? SelectionStringValues[f.Name] : f.Value
-                }).ToList()
-            };
+                    }).ToList()
+                };
 
-            await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
+                await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
 
-            Modal.Hide();
+                await InvokeAsync(Modal.Hide);
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         protected virtual string GetNormalizedGroupName(string name)
@@ -121,6 +135,11 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
         {
             var resource = LocalizationOptions.Value.Resources.Values.FirstOrDefault(x => x.ResourceName == resourceName);
             return HtmlLocalizerFactory.Create(resource != null ? resource.ResourceType : LocalizationOptions.Value.DefaultResourceType);
+        }
+
+        protected virtual void ClosingModal( ModalClosingEventArgs eventArgs )
+        {
+            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         }
     }
 }

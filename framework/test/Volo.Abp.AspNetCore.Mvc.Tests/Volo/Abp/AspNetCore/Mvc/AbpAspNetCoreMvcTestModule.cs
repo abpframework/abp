@@ -108,7 +108,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var app = context.GetApplicationBuilder();
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseAbpRequestLocalization();
             app.UseAbpSecurityHeaders();
             app.UseRouting();

@@ -1,19 +1,15 @@
 ﻿using Volo.Abp.BlobStoring;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using Volo.Abp;
 using Volo.Abp.Domain;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
-using Volo.CmsKit.GlobalFeatures;
-using Volo.CmsKit.Localization;
-using Volo.CmsKit.Pages;
-using Volo.CmsKit.Reactions;
-using Volo.CmsKit.Tags;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Localization;
+using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit
 {
@@ -64,6 +60,19 @@ namespace Volo.CmsKit
                                     new ReactionDefinition(StandardReactions.ThumbsDown),
                                 }));
                     }
+                });
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
+            {
+                Configure<CmsKitRatingOptions>(options =>
+                {
+                    if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
+                    {
+                        options.EntityTypes.Add(new RatingEntityTypeDefinition(BlogPostConsts.EntityType));
+                    }
+
+                    // TODO: Define entity types here which can be rated.
                 });
             }
 
