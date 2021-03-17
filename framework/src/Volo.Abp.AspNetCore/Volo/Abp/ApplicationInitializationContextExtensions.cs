@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using JetBrains.Annotations;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,12 @@ namespace Volo.Abp
         public static IWebHostEnvironment GetEnvironment(this ApplicationInitializationContext context)
         {
             return context.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+        }
+
+        [CanBeNull]
+        public static IWebHostEnvironment GetEnvironmentOrNull(this ApplicationInitializationContext context)
+        {
+            return context.ServiceProvider.GetService<IWebHostEnvironment>();
         }
 
         public static IConfiguration GetConfiguration(this ApplicationInitializationContext context)
