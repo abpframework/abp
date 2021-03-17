@@ -2,7 +2,7 @@
 
 ABP can dynamically create C# API client proxies to call your remote HTTP services (REST APIs). In this way, you don't need to deal with `HttpClient` and other low level details to call remote services and get results.
 
-Dynamic C# proxies automatically handles the following stuff for you;
+Dynamic C# proxies automatically handle the following stuff for you;
 
 * Maps C# **method calls** to remote server **HTTP calls** by considering the HTTP method, route, query string parameters, request payload and other details.
 * **Authenticates** the HTTP Client by adding access token to the HTTP header.
