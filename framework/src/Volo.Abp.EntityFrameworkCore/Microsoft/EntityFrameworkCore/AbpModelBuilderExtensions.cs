@@ -1,12 +1,51 @@
-﻿using Volo.Abp.EntityFrameworkCore;
+﻿using Volo.Abp;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
 
 namespace Microsoft.EntityFrameworkCore
 {
     public static class AbpModelBuilderExtensions
     {
+        private const string ModelLazyServiceProviderAnnotationKey = "_Abp_LazyServiceProvider";
         private const string ModelDatabaseProviderAnnotationKey = "_Abp_DatabaseProvider";
         private const string ModelMultiTenancySideAnnotationKey = "_Abp_MultiTenancySide";
+
+
+        public static void SetLazyServiceProvider(
+            this ModelBuilder modelBuilder,
+            IAbpLazyServiceProvider abpLazyServiceProvider)
+        {
+            modelBuilder.Model.SetAnnotation(ModelLazyServiceProviderAnnotationKey, abpLazyServiceProvider);
+        }
+
+        public static IAbpLazyServiceProvider GetLazyServiceProvider(this ModelBuilder modelBuilder)
+        {
+            var value = modelBuilder.Model[ModelLazyServiceProviderAnnotationKey];
+            if (value == null)
+            {
+                throw new AbpException(
+                    $"There is no {nameof(IAbpLazyServiceProvider)} available in {nameof(ModelBuilder)}");
+            }
+
+            return (IAbpLazyServiceProvider) value;
+        }
+
+        public static IAbpLazyServiceProvider GetLazyServiceProviderOrNull(this ModelBuilder modelBuilder)
+        {
+            var value = modelBuilder.Model[ModelLazyServiceProviderAnnotationKey];
+            if (value == null)
+            {
+                return null;
+            }
+
+            return (IAbpLazyServiceProvider) value;
+        }
+
+        public static void RemoveLazyServiceProvider(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Model.RemoveAnnotation(ModelLazyServiceProviderAnnotationKey);
+        }
 
         #region MultiTenancySide
 

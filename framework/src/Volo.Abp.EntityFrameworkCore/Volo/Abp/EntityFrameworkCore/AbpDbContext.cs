@@ -93,6 +93,8 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.SetLazyServiceProvider(LazyServiceProvider);
+
             TrySetDatabaseProvider(modelBuilder);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

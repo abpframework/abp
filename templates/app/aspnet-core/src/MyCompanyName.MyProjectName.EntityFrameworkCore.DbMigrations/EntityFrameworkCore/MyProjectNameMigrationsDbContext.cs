@@ -22,7 +22,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
      */
     public class MyProjectNameMigrationsDbContext : AbpDbContext<MyProjectNameMigrationsDbContext>
     {
-        public MyProjectNameMigrationsDbContext(DbContextOptions<MyProjectNameMigrationsDbContext> options) 
+        public MyProjectNameMigrationsDbContext(DbContextOptions<MyProjectNameMigrationsDbContext> options)
             : base(options)
         {
 
@@ -49,6 +49,8 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             /* Configure your own tables/entities inside the ConfigureMyProjectName method */
 
             builder.ConfigureMyProjectName();
+
+            builder.RemoveLazyServiceProvider();
         }
     }
 }

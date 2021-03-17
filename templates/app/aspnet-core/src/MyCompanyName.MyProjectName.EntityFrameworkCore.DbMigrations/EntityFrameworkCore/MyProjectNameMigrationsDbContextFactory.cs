@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
@@ -13,12 +15,21 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         {
             MyProjectNameEfCoreEntityExtensionMappings.Configure();
 
-            var configuration = BuildConfiguration();
+            var application = AbpApplicationFactory.Create<MyProjectNameEntityFrameworkCoreDbMigrationsModule>(
+                options =>
+                {
+                    options.UseAutofac();
+                });
 
-            var builder = new DbContextOptionsBuilder<MyProjectNameMigrationsDbContext>()
-                .UseSqlServer(configuration.GetConnectionString("Default"));
+            application.Services.ReplaceConfiguration(BuildConfiguration());
 
-            return new MyProjectNameMigrationsDbContext(builder.Options);
+            application.Services.AddTransient(provider =>
+                new DbContextOptionsBuilder<MyProjectNameMigrationsDbContext>()
+                    .UseSqlServer(provider.GetRequiredService<IConfiguration>().GetConnectionString("Default")).Options);
+
+            application.Initialize();
+
+            return application.ServiceProvider.GetRequiredService<MyProjectNameMigrationsDbContext>();
         }
 
         private static IConfigurationRoot BuildConfiguration()

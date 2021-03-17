@@ -1,6 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Users.EntityFrameworkCore;
 
@@ -8,18 +9,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     public static class IdentityDbContextModelBuilderExtensions
     {
-        public static void ConfigureIdentity(
-            [NotNull] this ModelBuilder builder,
-            [CanBeNull] Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
+        public static void ConfigureIdentity([NotNull] this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new IdentityModelBuilderConfigurationOptions(
-                AbpIdentityDbProperties.DbTablePrefix,
-                AbpIdentityDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
+            var options = builder.GetLazyServiceProvider()
+                .LazyGetRequiredService<IOptions<IdentityModelBuilderConfigurationOptions>>().Value;
 
             builder.Entity<IdentityUser>(b =>
             {

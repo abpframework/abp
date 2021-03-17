@@ -53,6 +53,11 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                  * See also MyProjectNameMigrationsDbContextFactory for EF Core tooling. */
                 options.UseSqlServer();
             });
+
+            Configure<IdentityModelBuilderConfigurationOptions>(options =>
+            {
+                options.TablePrefix = "MyIdentity";
+            });
         }
     }
 }
