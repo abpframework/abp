@@ -142,7 +142,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         protected virtual string GetAppHomeUrl()
         {
-            return "~/";
+            return Url.Content("~/");
         }
     }
 }
