@@ -31,7 +31,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            if (!GlobalFeatureManager.Instance.IsEnabled<CmsUserFeature>())
+            if (GlobalFeatureManager.Instance.IsEnabled<CmsUserFeature>())
             {
                 builder.Entity<CmsUser>(b =>
                 {
