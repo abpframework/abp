@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.Modularity;
 
@@ -18,6 +19,11 @@ namespace Volo.Abp.AspNetCore.Components.Server
             context.Services.AddServerSideBlazor();
             
             Configure<AbpAspNetCoreUnitOfWorkOptions>(options =>
+            {
+                options.IgnoredUrls.AddIfNotContains("/_blazor");
+            });
+            
+            Configure<AbpAspNetCoreAuditingOptions>(options =>
             {
                 options.IgnoredUrls.AddIfNotContains("/_blazor");
             });

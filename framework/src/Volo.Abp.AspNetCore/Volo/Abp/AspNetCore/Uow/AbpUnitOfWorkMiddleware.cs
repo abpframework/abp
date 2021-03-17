@@ -22,8 +22,7 @@ namespace Volo.Abp.AspNetCore.Uow
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (context.Request.Path.Value != null &&
-                _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x)))
+            if (IsIgnoredUrl(context))
             {
                 await next(context);
                 return;
@@ -34,6 +33,12 @@ namespace Volo.Abp.AspNetCore.Uow
                 await next(context);
                 await uow.CompleteAsync(context.RequestAborted);
             }
+        }
+
+        private bool IsIgnoredUrl(HttpContext context)
+        {
+            return context.Request.Path.Value != null &&
+                   _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x));
         }
     }
 }
