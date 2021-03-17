@@ -261,12 +261,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
-
-            app.UseConfiguredEndpoints(endpoints =>
-            {
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-            });
+            app.UseConfiguredEndpoints();
         }
     }
 }
