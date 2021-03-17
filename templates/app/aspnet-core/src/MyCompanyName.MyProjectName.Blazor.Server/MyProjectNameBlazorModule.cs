@@ -16,6 +16,7 @@ using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Components.Server.BasicTheme;
+using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.Server.Theming.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Mvc;
@@ -105,6 +106,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
         {
             Configure<AbpBundlingOptions>(options =>
             {
+                // MVC UI
                 options.StyleBundles.Configure(
                     BasicThemeBundles.Styles.Global,
                     bundle =>
@@ -113,11 +115,12 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
                     }
                 );
                 
+                //BLAZOR UI
                 options.StyleBundles.Configure(
-                    BlazorStandardBundles.Styles.Global,
+                    BlazorBasicThemeBundles.Styles.Global,
                     bundle =>
                     {
-                        bundle.AddFiles("/global-styles.css");
+                        bundle.AddFiles("/blazor-global-styles.css");
                     }
                 );
             });
