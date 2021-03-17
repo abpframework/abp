@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Notifications;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlazoriseUI

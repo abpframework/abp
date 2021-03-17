@@ -24,14 +24,14 @@ namespace Volo.Abp.Identity.Blazor
             identityMenuItem.AddItem(new ApplicationMenuItem(
                     IdentityMenuNames.Roles,
                     l["Roles"],
-                    url: "identity/roles",
+                    url: "~/identity/roles",
                     requiredPermissionName: IdentityPermissions.Roles.Default));
 
 
             identityMenuItem.AddItem(new ApplicationMenuItem(
                 IdentityMenuNames.Users,
                 l["Users"],
-                url: "identity/users",
+                url: "~/identity/users",
                 requiredPermissionName: IdentityPermissions.Users.Default));
 
             return Task.CompletedTask;

@@ -219,7 +219,6 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseAbpRequestLocalization();
-            app.UseAbpSecurityHeaders();
 
             if (!env.IsDevelopment())
             {
@@ -227,7 +226,7 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();

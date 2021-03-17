@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Hosting;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Minify.Scripts;
 
@@ -8,8 +9,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts
     {
         public override string FileExtension => "js";
 
-        public ScriptBundler(IWebContentFileProvider webContentFileProvider, IJavascriptMinifier minifier)
-            : base(webContentFileProvider, minifier)
+        public ScriptBundler(IWebHostEnvironment hostEnvironment, IJavascriptMinifier minifier)
+            : base(hostEnvironment, minifier)
         {
         }
 

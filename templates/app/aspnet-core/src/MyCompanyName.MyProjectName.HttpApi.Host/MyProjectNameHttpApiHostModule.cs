@@ -118,6 +118,7 @@ namespace MyCompanyName.MyProjectName
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo {Title = "MyProjectName API", Version = "v1"});
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
         }
 
@@ -188,7 +189,6 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseAbpRequestLocalization();
-            app.UseAbpSecurityHeaders();
 
             if (!env.IsDevelopment())
             {
@@ -196,7 +196,7 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();

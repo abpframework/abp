@@ -56,7 +56,9 @@ namespace Volo.Abp.AuditLogging.MongoDB
                 cancellationToken
             );
 
-            return await query.OrderBy(sorting ?? "executionTime desc").As<IMongoQueryable<AuditLog>>()
+            return await query
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(AuditLog.ExecutionTime) + " DESC") : sorting)
+                .As<IMongoQueryable<AuditLog>>()
                 .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -180,7 +182,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
             var query = await GetEntityChangeListQueryAsync(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, cancellationToken);
 
             return await query
-                .OrderBy(sorting ?? "changeTime desc")
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(EntityChange.ChangeTime) + " DESC") : sorting)
                 .As<IMongoQueryable<EntityChange>>()
                 .PageBy<EntityChange, IMongoQueryable<EntityChange>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));

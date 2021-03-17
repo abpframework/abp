@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
                         x => x.Name.Contains(filter) ||
                         x.NormalizedName.Contains(filter))
-                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.Name) : sorting)
                 .As<IMongoQueryable<IdentityRole>>()
                 .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));

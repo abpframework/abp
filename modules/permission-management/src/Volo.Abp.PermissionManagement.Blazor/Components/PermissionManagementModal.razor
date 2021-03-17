@@ -1,8 +1,7 @@
 ﻿@using Microsoft.Extensions.Localization
 @using Volo.Abp.PermissionManagement.Localization
-@inject IStringLocalizer<AbpPermissionManagementResource> L
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
 <Modal @ref="_modal">
-    <ModalBackdrop />
     <ModalContent Size="ModalSize.Large" IsCentered="true">
         <ModalHeader>
             <ModalTitle>@L["Permissions"] - @_entityDisplayName</ModalTitle>
