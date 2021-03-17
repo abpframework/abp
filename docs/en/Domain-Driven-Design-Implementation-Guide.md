@@ -533,7 +533,7 @@ public class Issue : AggregateRoot<Guid>
         if (!IsClosed)
         {
             throw new IssueStateException(
-                "Can not open a locked issue! Unlock it first."
+                "Can not lock an open issue! Close it first."
             );
         }
 
@@ -673,13 +673,13 @@ public class Issue : AggregateRoot<Guid>
 This method perfectly guarantees to apply the business logic when you want to assign an issue to a user. However, it has some problems;
 
 * It makes the entity class **depending on an external service** which makes the entity **complicated**.
-* It makes **hard to use** the entity. The code that uses the entity now needs to inject `IUserIssueService` and pass to the `AssignToAsync` method.
+* It makes the entity **hard to use**. The code that uses the entity now needs to inject `IUserIssueService` and pass to the `AssignToAsync` method.
 
 An alternative way of implementing this business logic is to introduce a **Domain Service**, which will be explained later.
 
 ### Repositories
 
-A [Repository](Repositories.md) is a collection-like interface that is used by the Domain and Application Layers to access to the data persistence system (the database) to read and write the Business Objects, generally the Aggregates.
+A [Repository](Repositories.md) is a collection-like interface that is used by the Domain and Application Layers to access the data persistence system (the database) to read and write the Business Objects, generally the Aggregates.
 
 Common Repository principles are;
 
@@ -1328,7 +1328,7 @@ The main goals of these suggestions are;
 
 * Make client code easy to develop and extend;
   * Dealing with **similar, but not same** DTOs are problematic on the client side.
-  * It is common to **need to other properties** on the UI/client in the future. Returning all properties (by considering security and privileges) of an entity makes client code easy to improve without requiring to touch to the backend code.
+  * It is common to **need the other properties** on the UI/client in the future. Returning all properties (after considering security and privileges) of an entity makes client code easy to improve without requiring them to touch backend code.
   * If you are opening your API to **3rd-party clients** that you don't know requirements of each client.
 * Make the server side code easy to develop and extend;
   * You have less class to **understand and maintain**.
