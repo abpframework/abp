@@ -251,6 +251,8 @@
     "AddNoteSuccessMessage": "Note successfully added",
     "NameSurname": "Name Surname",
     "Note": "Note",
-    "Add": "Add"
+    "Add": "Add",
+    "ProjectDownloads": "Project Downloads",
+    "ShowProjectDownloadsOfOrganization": "Project Downloads"
   }
 }

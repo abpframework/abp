@@ -235,7 +235,8 @@
     "AddNoteSuccessMessage": "注释添加成功",
     "NameSurname": "姓",
     "Note": "注释",
-    "Add": "添加"
-
+    "Add": "添加",
+    "ProjectDownloads": "项目下载",
+    "ShowProjectDownloadsOfOrganization": "项目下载"
   }
 }
