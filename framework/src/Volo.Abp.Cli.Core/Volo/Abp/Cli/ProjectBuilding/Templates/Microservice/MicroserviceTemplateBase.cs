@@ -34,37 +34,37 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
             {
                 case UiFramework.None:
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
-                        "/applications/web/src/MyCompanyName.MyProjectName.Web"));
-                    steps.Add(new RemoveFolderStep("/applications/web"));
+                        "/apps/web/src/MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveFolderStep("/apps/web"));
                     steps.Add(new RemoveProjectFromTyeStep("web"));
                     steps.Add(new RemoveProjectFromPrometheusStep("web"));
 
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
-                        "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
-                    steps.Add(new RemoveFolderStep("/applications/blazor"));
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveFolderStep("/apps/blazor"));
                     steps.Add(new RemoveProjectFromTyeStep("blazor"));
 
-                    steps.Add(new RemoveFolderStep("/angular"));
+                    steps.Add(new RemoveFolderStep("/apps/angular"));
                     break;
 
                 case UiFramework.Angular:
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
-                        "/applications/web/src/MyCompanyName.MyProjectName.Web"));
-                    steps.Add(new RemoveFolderStep("/applications/web"));
+                        "/apps/web/src/MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveFolderStep("/apps/web"));
                     steps.Add(new RemoveProjectFromTyeStep("web"));
                     steps.Add(new RemoveProjectFromPrometheusStep("web"));
 
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
-                        "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
-                    steps.Add(new RemoveFolderStep("/applications/blazor"));
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveFolderStep("/apps/blazor"));
                     steps.Add(new RemoveProjectFromTyeStep("blazor"));
                     break;
 
                 case UiFramework.Blazor:
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
-                        "/applications/web/src/MyCompanyName.MyProjectName.Web"));
-                    steps.Add(new RemoveFolderStep("/applications/web"));
-                    steps.Add(new RemoveFolderStep("/angular"));
+                        "/apps/web/src/MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveFolderStep("/apps/web"));
+                    steps.Add(new RemoveFolderStep("/apps/angular"));
                     steps.Add(new RemoveProjectFromTyeStep("web"));
                     steps.Add(new RemoveProjectFromPrometheusStep("web"));
                     break;
@@ -72,15 +72,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                 case UiFramework.Mvc:
                 case UiFramework.NotSpecified:
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
-                        "/applications/blazor/src/MyCompanyName.MyProjectName.Blazor"));
-                    steps.Add(new RemoveFolderStep("/applications/blazor"));
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveFolderStep("/apps/blazor"));
                     steps.Add(new RemoveProjectFromTyeStep("blazor"));
 
-                    steps.Add(new RemoveFolderStep("/angular"));
+                    steps.Add(new RemoveFolderStep("/apps/angular"));
                     break;
             }
 
-            steps.Add(new RemoveFolderStep("/microservices/template"));
+            steps.Add(new RemoveFolderStep("/services/template"));
         }
 
         private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
