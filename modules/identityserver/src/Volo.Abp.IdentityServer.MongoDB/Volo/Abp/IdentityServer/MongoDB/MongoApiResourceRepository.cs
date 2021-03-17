@@ -50,7 +50,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                          x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||
                          x.DisplayName.Contains(filter))
-                .OrderBy(sorting ?? nameof(ApiResource.Name))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiResource.Name) : sorting)
                 .As<IMongoQueryable<ApiResource>>()
                 .PageBy<ApiResource, IMongoQueryable<ApiResource>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));

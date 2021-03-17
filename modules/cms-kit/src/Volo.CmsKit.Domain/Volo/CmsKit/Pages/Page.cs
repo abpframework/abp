@@ -15,18 +15,31 @@ namespace Volo.CmsKit.Pages
         public virtual string Slug { get; protected set; }
 
         public virtual string Content { get; protected set; }
-        
+
+        public virtual string Script { get; protected set; }
+
+        public virtual string Style { get; protected set; }
+
         protected Page()
         {
         }
 
-        internal Page(Guid id, [NotNull] string title, [NotNull] string slug, string content = null, Guid? tenantId = null) : base(id)
+        internal Page(
+            Guid id,
+            [NotNull] string title,
+            [NotNull] string slug,
+            string content = null,
+            string script = null,
+            string style = null,
+            Guid? tenantId = null) : base(id)
         {
             TenantId = tenantId;
             
             SetTitle(title);
             SetSlug(slug);
             SetContent(content);
+            SetScript(script);
+            SetStyle(style);
         }
 
         public virtual void SetTitle(string title)
@@ -42,6 +55,16 @@ namespace Volo.CmsKit.Pages
         public virtual void SetContent(string content)
         {
             Content = Check.Length(content, nameof(content), PageConsts.MaxContentLength);
+        }
+
+        public virtual void SetScript(string script)
+        {
+            Script = Check.Length(script, nameof(script), PageConsts.MaxScriptLength);
+        }
+
+        public virtual void SetStyle(string style)
+        {
+            Style = Check.Length(style, nameof(style), PageConsts.MaxStyleLength);
         }
     }
 }

@@ -32,10 +32,9 @@
 </Card>
 
 @* ************************* CREATE MODAL ************************* *@
-@if (HasCreatePermission)
+@if ( HasCreatePermission )
 {
-    <Modal @ref="CreateModal">
-        <ModalBackdrop/>
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -54,7 +53,7 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                            <TextEdit @bind-Text="NewEntity.UserName" Autofocus="true">
+                                            <TextEdit @bind-Text="NewEntity.UserName">
                                                 <Feedback>
                                                     <ValidationError/>
                                                 </Feedback>
@@ -117,9 +116,9 @@
                                     <ExtensionProperties TEntityType="IdentityUserCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH"/>
                                 </TabPanel>
                                 <TabPanel Name="Roles">
-                                    @if (NewUserRoles != null)
+                                    @if ( NewUserRoles != null )
                                     {
-                                        @foreach (var role in NewUserRoles)
+                                        @foreach ( var role in NewUserRoles )
                                         {
                                             <Field>
                                                 <input type="hidden" @bind-value="@role.Name"/>
@@ -142,10 +141,9 @@
 }
 
 @* ************************* EDIT MODAL ************************* *@
-@if (HasUpdatePermission)
+@if ( HasUpdatePermission )
 {
-    <Modal @ref="EditModal">
-        <ModalBackdrop/>
+    <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -166,7 +164,7 @@
                                     <Validation MessageLocalizer="@LH.Localize">
                                         <Field>
                                             <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                            <TextEdit @bind-Text="EditingEntity.UserName" Autofocus="true">
+                                            <TextEdit @bind-Text="EditingEntity.UserName">
                                                 <Feedback>
                                                     <ValidationError/>
                                                 </Feedback>
@@ -229,9 +227,9 @@
                                     <ExtensionProperties TEntityType="IdentityUserUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"/>
                                 </TabPanel>
                                 <TabPanel Name="Roles">
-                                    @if (EditUserRoles != null)
+                                    @if ( EditUserRoles != null )
                                     {
-                                        @foreach (var role in EditUserRoles)
+                                        @foreach ( var role in EditUserRoles )
                                         {
                                             <Field>
                                                 <input type="hidden" @bind-value="@role.Name"/>
@@ -253,7 +251,7 @@
     </Modal>
 }
 
-@if (HasManagePermissionsPermission)
+@if ( HasManagePermissionsPermission )
 {
     <PermissionManagementModal @ref="PermissionManagementModal"/>
 }

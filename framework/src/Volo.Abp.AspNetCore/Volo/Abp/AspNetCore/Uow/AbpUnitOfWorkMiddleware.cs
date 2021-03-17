@@ -16,6 +16,14 @@ namespace Volo.Abp.AspNetCore.Uow
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            //TODO: Make this configurable.
+            if (context.Request.Path.Value != null &&
+                context.Request.Path.Value.StartsWith("/_blazor"))
+            {
+                await next(context);
+                return;
+            }
+            
             using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
             {
                 await next(context);

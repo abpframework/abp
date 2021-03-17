@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using Volo.Abp.DynamicProxy;
-using Volo.Abp.Localization;
+using System.Linq;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
@@ -106,7 +105,21 @@ namespace Volo.Abp.Data
                 throw new ArgumentException($"Given {nameof(source)} object does not implement the {nameof(IHasExtraProperties)} interface!", nameof(source));
             }
 
-            ((IHasExtraProperties) source).SetDefaultsForExtraProperties(objectType);
+            ((IHasExtraProperties)source).SetDefaultsForExtraProperties(objectType);
+        }
+
+        public static void SetExtraPropertiesToRegularProperties(this IHasExtraProperties source)
+        {
+            var properties = source.GetType().GetProperties()
+                .Where(x => source.ExtraProperties.ContainsKey(x.Name)
+                            && x.GetSetMethod(true) != null)
+                .ToList();
+
+            foreach (var property in properties)
+            {
+                property.SetValue(source, source.ExtraProperties[property.Name]);
+                source.RemoveProperty(property.Name);
+            }
         }
     }
 }

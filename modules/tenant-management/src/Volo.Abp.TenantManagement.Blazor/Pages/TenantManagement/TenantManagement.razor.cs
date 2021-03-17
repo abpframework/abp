@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Blazorise;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
@@ -23,8 +22,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 
         protected FeatureManagementModal FeatureManagementModal;
 
-        protected TenantInfoModel TenantInfo;
-
         protected PageToolbar Toolbar { get; } = new();
 
         protected List<TableColumn> TenantManagementTableColumns => TableColumns.Get<TenantManagement>();
@@ -39,8 +36,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
             DeletePolicyName = TenantManagementPermissions.Tenants.Delete;
 
             ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
-
-            TenantInfo = new TenantInfoModel();
         }
 
         protected override async Task SetPermissionsAsync()
@@ -122,10 +117,5 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 
             return base.SetTableColumnsAsync();
         }
-    }
-
-    public class TenantInfoModel
-    {
-        public Guid Id { get; set; }
     }
 }

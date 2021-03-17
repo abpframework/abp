@@ -27,6 +27,8 @@ namespace Volo.Abp.AutoMapper
 
             context.Services.AddSingleton<MapperAccessor>(CreateMappings);
             context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
+
+            context.Services.AddTransient(typeof(AbpMultiLingualMapperAction<,,>));
         }
 
         private MapperAccessor CreateMappings(IServiceProvider serviceProvider)
