@@ -17,9 +17,9 @@ namespace Volo.CmsKit.GlobalFeatures
 
         public TagsFeature Tags => GetFeature<TagsFeature>();
 
-        public ContentsFeature Contents => GetFeature<ContentsFeature>();
-
         public PagesFeature Pages => GetFeature<PagesFeature>();
+
+        public CmsUserFeature User => GetFeature<CmsUserFeature>();
 
         public GlobalCmsKitFeatures([NotNull] GlobalFeatureManager featureManager)
             : base(featureManager)
@@ -29,9 +29,9 @@ namespace Volo.CmsKit.GlobalFeatures
             AddFeature(new CommentsFeature(this));
             AddFeature(new RatingsFeature(this));
             AddFeature(new TagsFeature(this));
-            AddFeature(new ContentsFeature(this));
             AddFeature(new PagesFeature(this));
             AddFeature(new BlogsFeature(this));
+            AddFeature(new CmsUserFeature(this));
         }
     }
 }
