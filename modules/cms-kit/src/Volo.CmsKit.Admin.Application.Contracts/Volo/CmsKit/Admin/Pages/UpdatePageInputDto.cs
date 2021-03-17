@@ -18,5 +18,11 @@ namespace Volo.CmsKit.Admin.Pages
         
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxContentLength))]
         public string Content { get; set; }
+
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxScriptLength))]
+        public string Script { get; set; }
+
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxStyleLength))]
+        public string Style { get; set; }
     }
 }
