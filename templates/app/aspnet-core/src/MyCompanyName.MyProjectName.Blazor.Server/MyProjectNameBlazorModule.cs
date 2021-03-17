@@ -58,7 +58,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
         typeof(AbpTenantManagementBlazorModule),
         typeof(AbpSettingManagementBlazorModule)
        )]
-    public class MyProjectNameBlazorServerModule : AbpModule
+    public class MyProjectNameBlazorModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
@@ -70,7 +70,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
                     typeof(MyProjectNameDomainSharedModule).Assembly,
                     typeof(MyProjectNameApplicationModule).Assembly,
                     typeof(MyProjectNameApplicationContractsModule).Assembly,
-                    typeof(MyProjectNameBlazorServerModule).Assembly
+                    typeof(MyProjectNameBlazorModule).Assembly
                 );
             });
         }
@@ -157,7 +157,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain"));
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Application.Contracts"));
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Application"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameBlazorServerModule>(hostingEnvironment.ContentRootPath);
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameBlazorModule>(hostingEnvironment.ContentRootPath);
                 });
             }
         }
@@ -209,7 +209,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
         {
             Configure<AbpRouterOptions>(options =>
             {
-                options.AppAssembly = typeof(MyProjectNameBlazorServerModule).Assembly;
+                options.AppAssembly = typeof(MyProjectNameBlazorModule).Assembly;
             });
         }
 
@@ -225,7 +225,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<MyProjectNameBlazorServerModule>();
+                options.AddMaps<MyProjectNameBlazorModule>();
             });
         }
 
