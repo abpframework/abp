@@ -408,6 +408,10 @@
                     }
                 }
 
+                if (!column.render) {
+                    column.render = $.fn.dataTable.render.text();
+                }
+
                 if (column.rowAction) {
                     customizeRowActionColumn(column);
                 }
