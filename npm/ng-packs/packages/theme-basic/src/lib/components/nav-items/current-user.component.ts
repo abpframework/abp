@@ -1,5 +1,6 @@
 import { AuthService, ConfigStateService, CurrentUserDto } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { NAVIGATE_TO_MANAGE_PROFILE } from '@abp/ng.theme.shared';
+import { Component, Inject, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -35,7 +36,9 @@ import { Observable } from 'rxjs';
         aria-labelledby="dropdownMenuLink"
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
-        <a class="dropdown-item" routerLink="/account/manage-profile"
+        <a
+          class="dropdown-item pointer"
+          (click)="navigateToManageProfile && navigateToManageProfile()"
           ><i class="fa fa-cog mr-1"></i>{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
@@ -52,8 +55,11 @@ export class CurrentUserComponent {
     return window.innerWidth < 992;
   }
 
-  constructor(private authService: AuthService, private configState: ConfigStateService) {}
-
+  constructor(
+    @Optional() @Inject(NAVIGATE_TO_MANAGE_PROFILE) public navigateToManageProfile,
+    private authService: AuthService,
+    private configState: ConfigStateService,
+  ) {}
   navigateToLogin() {
     this.authService.navigateToLogin();
   }
