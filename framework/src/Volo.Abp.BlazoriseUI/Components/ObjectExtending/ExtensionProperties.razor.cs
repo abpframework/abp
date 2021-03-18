@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
-using System;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending

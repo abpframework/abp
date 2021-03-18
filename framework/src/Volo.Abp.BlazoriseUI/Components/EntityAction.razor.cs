@@ -52,8 +52,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await base.OnInitializedAsync();
             await SetDefaultValuesAsync();
-            IsEntityActionVisible = await Visible?.Invoke();
-            if (!RequiredPolicy.IsNullOrEmpty() && IsEntityActionVisible)
+            if (!RequiredPolicy.IsNullOrEmpty())
             {
                 HasPermission = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
             }

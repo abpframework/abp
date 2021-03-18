@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
+namespace Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns
 {
     public class TableColumnDictionary : Dictionary<string, List<TableColumn>>
     {

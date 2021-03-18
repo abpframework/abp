@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
-using Volo.Abp.Http.Client.Authentication;
+//using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
@@ -32,17 +32,17 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
         [Parameter]
         public ObjectExtensionPropertyInfo PropertyInfo { get; set; }
 
-        [Inject]
-        public IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; set; }
+        //[Inject]
+        //public IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; set; }
 
-        [Inject]
-        public IHttpClientFactory HttpClientFactory { get; set; }
+        //[Inject]
+        //public IHttpClientFactory HttpClientFactory { get; set; }
 
         [Inject]
         public ICurrentTenant CurrentTenant { get; set; }
 
-        [Inject]
-        public IOptions<AbpRemoteServiceOptions> RemoteServiceOptions { get; set; }
+        //[Inject]
+        //public IOptions<AbpRemoteServiceOptions> RemoteServiceOptions { get; set; }
 
         public string TextPropertyName => PropertyInfo.Name + "_Text";
 
@@ -94,28 +94,28 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
                 url += $"?{PropertyInfo.Lookup.FilterParamName}={filter.Trim()}";
             }
 
-            var client = HttpClientFactory.CreateClient();
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-            AddHeaders(requestMessage);
+            //var client = HttpClientFactory.CreateClient();
+            //var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            //AddHeaders(requestMessage);
 
-            if (!uri.IsAbsoluteUri)
-            {
-                var remoteServiceConfig = RemoteServiceOptions.Value.RemoteServices.GetConfigurationOrDefault("Default");
-                client.BaseAddress = new Uri(remoteServiceConfig.BaseUrl);
-                await ClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(remoteServiceConfig.BaseUrl), string.Empty));
-            }
+            //if (!uri.IsAbsoluteUri)
+            //{
+            //    var remoteServiceConfig = RemoteServiceOptions.Value.RemoteServices.GetConfigurationOrDefault("Default");
+            //    client.BaseAddress = new Uri(remoteServiceConfig.BaseUrl);
+            //    await ClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(remoteServiceConfig.BaseUrl), string.Empty));
+            //}
 
-            var response = await client.SendAsync(requestMessage);
-            var document = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
-            var itemsArrayProp = document.RootElement.GetProperty(PropertyInfo.Lookup.ResultListPropertyName);
-            foreach (var item in itemsArrayProp.EnumerateArray())
-            {
-                selectItems.Add(new SelectItem<object>
-                {
-                    Text = item.GetProperty(PropertyInfo.Lookup.DisplayPropertyName).GetString(),
-                    Value = JsonSerializer.Deserialize(item.GetProperty(PropertyInfo.Lookup.ValuePropertyName).GetRawText(), PropertyInfo.Type)
-                });
-            }
+            //var response = await client.SendAsync(requestMessage);
+            //var document = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
+            //var itemsArrayProp = document.RootElement.GetProperty(PropertyInfo.Lookup.ResultListPropertyName);
+            //foreach (var item in itemsArrayProp.EnumerateArray())
+            //{
+            //    selectItems.Add(new SelectItem<object>
+            //    {
+            //        Text = item.GetProperty(PropertyInfo.Lookup.DisplayPropertyName).GetString(),
+            //        Value = JsonSerializer.Deserialize(item.GetProperty(PropertyInfo.Lookup.ValuePropertyName).GetRawText(), PropertyInfo.Type)
+            //    });
+            //}
 
             return selectItems;
         }
@@ -143,7 +143,7 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
                 requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture));
             }
 
-            requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MimeTypes.Application.Json));
+            //requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MimeTypes.Application.Json));
         }
     }
 }

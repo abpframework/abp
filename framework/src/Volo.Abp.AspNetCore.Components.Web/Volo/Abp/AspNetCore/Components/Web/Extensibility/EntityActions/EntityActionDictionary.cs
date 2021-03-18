@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.AspNetCore.Components.Extensibility.EntityActions
+namespace Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions
 {
     public class EntityActionDictionary : Dictionary<string, List<EntityAction>>
     {

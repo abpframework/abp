@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.AspNetCore.Components.Extensibility.EntityActions
+namespace Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions
 {
     public class EntityAction : IEquatable<EntityAction>
     {

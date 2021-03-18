@@ -1,9 +1,9 @@
 ﻿using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 
-namespace Volo.Abp.AspNetCore.Components.Extensibility.TableColumns
+namespace Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns
 {
     public class TableColumn
     {

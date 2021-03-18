@@ -3,13 +3,11 @@ using Blazorise.Extensions;
 using Blazorise.DataGrid;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
-using JetBrains.Annotations;
-using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
-using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 
 namespace Volo.Abp.BlazoriseUI.Components
 {

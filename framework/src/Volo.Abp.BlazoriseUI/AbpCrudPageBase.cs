@@ -13,14 +13,14 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
-using Volo.Abp.AspNetCore.Components.Extensibility.EntityActions;
-using Volo.Abp.AspNetCore.Components.Extensibility.TableColumns;
 using Volo.Abp.Localization;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
 using Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
+using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 
 namespace Volo.Abp.BlazoriseUI
 {
@@ -565,7 +565,7 @@ namespace Volo.Abp.BlazoriseUI
                             Title = propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory),
                             Data = $"ExtraProperties[{propertyInfo.Name}]"
                         };
-                        
+
                         if (propertyInfo.IsDate() || propertyInfo.IsDateTime())
                         {
                             column.DisplayFormat = propertyInfo.GetDateEditInputFormatOrNull();
