@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.FeatureManagement.Blazor\Volo.Abp.FeatureManagement.Blazor.csproj"/>
+        <ProjectReference Include="..\Volo.Abp.PermissionManagement.Blazor\Volo.Abp.PermissionManagement.Blazor.csproj"/>
     </ItemGroup>
 
 </Project>
