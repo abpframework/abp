@@ -7,6 +7,7 @@
   "scripts": {
     "ng": "ng",
     "symlink": "symlink",
+    "symlink-all": "symlink copy --angular --prod --all-packages --no-watch --sync --excluded-packages @abp/ng.schematics",
     "start": "ng serve dev-app",
     "start:internal": "ng serve dev-app --configuration=internal",
     "start:regression": "ng serve dev-app --configuration=regression",
