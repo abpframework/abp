@@ -5,7 +5,8 @@ namespace Volo.Abp.SettingManagement.Blazor.WebAssembly
 {
     [DependsOn(
         typeof(AbpSettingManagementBlazorModule),
-        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule)
+        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule),
+        typeof(AbpSettingManagementHttpApiClientModule)
     )]
     public class AbpSettingManagementBlazorWebAssemblyModule : AbpModule
     {

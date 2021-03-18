@@ -5,9 +5,10 @@ namespace Volo.Abp.FeatureManagement.Blazor.WebAssembly
 {
     [DependsOn(
         typeof(AbpFeatureManagementBlazorModule),
-        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule)
+        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule),
+        typeof(AbpFeatureManagementHttpApiClientModule)
     )]
-    public class AbpTenantManagementBlazorWebAssemblyModule : AbpModule
+    public class AbpFeatureManagementBlazorWebAssemblyModule : AbpModule
     {
     }
 }

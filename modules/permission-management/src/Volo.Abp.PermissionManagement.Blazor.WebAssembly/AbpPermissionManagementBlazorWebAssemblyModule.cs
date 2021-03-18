@@ -5,7 +5,8 @@ namespace Volo.Abp.PermissionManagement.Blazor.WebAssembly
 {
     [DependsOn(
         typeof(AbpPermissionManagementBlazorModule),
-        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule)
+        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule),
+        typeof(AbpPermissionManagementHttpApiClientModule)
     )]
     public class AbpPermissionManagementBlazorWebAssemblyModule : AbpModule
     {

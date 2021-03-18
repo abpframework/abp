@@ -12,6 +12,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Blazor.Server\Volo.Abp.FeatureManagement.Blazor.Server.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.TenantManagement.Blazor\Volo.Abp.TenantManagement.Blazor.csproj" />
     </ItemGroup>
 
