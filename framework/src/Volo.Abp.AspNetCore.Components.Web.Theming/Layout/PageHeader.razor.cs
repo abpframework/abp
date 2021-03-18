@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars;
+using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.BlazoriseUI;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Layout
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout
 {
     public partial class PageHeader : ComponentBase
     {

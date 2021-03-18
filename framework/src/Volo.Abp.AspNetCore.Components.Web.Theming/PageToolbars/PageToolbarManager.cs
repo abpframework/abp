@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars
 {
     public class PageToolbarManager : IPageToolbarManager, ITransientDependency
     {

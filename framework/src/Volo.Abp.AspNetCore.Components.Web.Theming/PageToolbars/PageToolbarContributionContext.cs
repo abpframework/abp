@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.PageToolbars
+namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars
 {
     public class PageToolbarContributionContext
     {
