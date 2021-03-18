@@ -27,7 +27,9 @@ namespace Volo.Abp.Users.EntityFrameworkCore
 
         public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(u => ids.Contains(u.Id)).ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .Where(u => ids.Contains(u.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<TUser>> SearchAsync(
@@ -37,7 +39,7 @@ namespace Volo.Abp.Users.EntityFrameworkCore
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
@@ -55,7 +57,7 @@ namespace Volo.Abp.Users.EntityFrameworkCore
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     u =>

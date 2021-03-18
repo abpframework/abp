@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
@@ -15,6 +13,17 @@ namespace Volo.Abp.Domain.Entities
     /// </summary>
     public static class EntityHelper
     {
+        public static bool IsMultiTenant<TEntity>()
+            where TEntity : IEntity
+        {
+            return IsMultiTenant(typeof(TEntity));
+        }
+
+        public static bool IsMultiTenant(Type type)
+        {
+            return typeof(IMultiTenant).IsAssignableFrom(type);
+        }
+
         public static bool EntityEquals(IEntity entity1, IEntity entity2)
         {
             if (entity1 == null || entity2 == null)
@@ -109,7 +118,17 @@ namespace Volo.Abp.Domain.Entities
 
         public static bool IsEntity([NotNull] Type type)
         {
+            Check.NotNull(type, nameof(type));
             return typeof(IEntity).IsAssignableFrom(type);
+        }
+
+        public static void CheckEntity([NotNull] Type type)
+        {
+            Check.NotNull(type, nameof(type));
+            if (!IsEntity(type))
+            {
+                throw new AbpException($"Given {nameof(type)} is not an entity: {type.AssemblyQualifiedName}. It must implement {typeof(IEntity).AssemblyQualifiedName}.");
+            }
         }
 
         public static bool IsEntityWithId([NotNull] Type type)

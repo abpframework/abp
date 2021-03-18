@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
@@ -18,26 +19,26 @@ namespace Volo.Blogging.Posts
 
         }
 
-        public async Task<List<Post>> GetPostsByBlogId(Guid id)
+        public async Task<List<Post>> GetPostsByBlogId(Guid id, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToListAsync();
+            return await (await GetDbSetAsync()).Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null)
+        public async Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null, CancellationToken cancellationToken = default)
         {
-            var query = DbSet.Where(p => blogId == p.BlogId && p.Url == url);
+            var query = (await GetDbSetAsync()).Where(p => blogId == p.BlogId && p.Url == url);
 
             if (excludingPostId != null)
             {
                 query = query.Where(p => excludingPostId != p.Id);
             }
 
-            return query.AnyAsync();
+            return await query.AnyAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Post> GetPostByUrl(Guid blogId, string url)
+        public async Task<Post> GetPostByUrl(Guid blogId, string url, CancellationToken cancellationToken = default)
         {
-            var post = await DbSet.FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url);
+            var post = await (await GetDbSetAsync()).FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url, GetCancellationToken(cancellationToken));
 
             if (post == null)
             {
@@ -47,22 +48,22 @@ namespace Volo.Blogging.Posts
             return post;
         }
 
-        public async Task<List<Post>> GetOrderedList(Guid blogId,bool descending = false)
+        public async Task<List<Post>> GetOrderedList(Guid blogId,bool descending = false, CancellationToken cancellationToken = default)
         {
             if (!descending)
             {
-                return await DbSet.Where(x=>x.BlogId==blogId).OrderByDescending(x => x.CreationTime).ToListAsync();
+                return await (await GetDbSetAsync()).Where(x=>x.BlogId==blogId).OrderByDescending(x => x.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
             }
             else
             {
-                return await DbSet.Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync();
+                return await (await GetDbSetAsync()).Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
             }
 
         }
 
-        public override IQueryable<Post> WithDetails()
+        public override async Task<IQueryable<Post>> WithDetailsAsync()
         {
-            return GetQueryable().IncludeDetails();
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }

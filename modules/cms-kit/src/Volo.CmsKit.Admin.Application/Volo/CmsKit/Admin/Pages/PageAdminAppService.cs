@@ -1,108 +1,86 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp;
-using Volo.CmsKit.Contents;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
+using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Pages
 {
+    [RequiresGlobalFeature(typeof(PagesFeature))]
+    [Authorize(CmsKitAdminPermissions.Pages.Default)]
     public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
     {
-        protected readonly IPageRepository PageRepository;
-        protected readonly IContentRepository ContentRepository;
+        protected IPageRepository PageRepository { get; }
 
-        public PageAdminAppService(IPageRepository pageRepository, IContentRepository contentRepository)
+        protected PageManager PageManager { get; }
+
+        public PageAdminAppService(
+            IPageRepository pageRepository,
+            PageManager pageManager)
         {
             PageRepository = pageRepository;
-            ContentRepository = contentRepository;
+            PageManager = pageManager;
         }
 
         public virtual async Task<PageDto> GetAsync(Guid id)
         {
             var page = await PageRepository.GetAsync(id);
-
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
-        public virtual async Task<PageDto> CreatePageAsync(CreatePageInputDto input)
+        public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
         {
-            var page = await CreatePageAsync(input.Title, input.Url, input.Description);
+            var count = await PageRepository.GetCountAsync(input.Filter);
+            
+            var pages = await PageRepository.GetListAsync(
+                input.Filter,
+                input.MaxResultCount,
+                input.SkipCount,
+                input.Sorting
+            );
+
+            return new PagedResultDto<PageDto>(
+                count,
+                ObjectMapper.Map<List<Page>, List<PageDto>>(pages)
+            );
+        }
+
+        [Authorize(CmsKitAdminPermissions.Pages.Create)]
+        public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
+        {
+            var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style);
 
             await PageRepository.InsertAsync(page);
             
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
-        public virtual async Task<PageDto> CreatePageWithContentAsync(CreatePageWithContentInputDto input)
-        {
-            var page = await CreatePageAsync(input.Title, input.Url, input.Description);
-
-            await PageRepository.InsertAsync(page);
-            
-            var content = new Content(
-                GuidGenerator.Create(),
-                nameof(Page),
-                page.Id.ToString(),
-                input.Content,
-                page.TenantId);
-
-            await ContentRepository.InsertAsync(content);
-            
-            return ObjectMapper.Map<Page, PageDto>(page);
-        }
-
-        public virtual async Task<PageDto> UpdatePageAsync(Guid id, UpdatePageInputDto input)
+        [Authorize(CmsKitAdminPermissions.Pages.Update)]
+        public virtual async Task<PageDto> UpdateAsync(Guid id, UpdatePageInputDto input)
         {
             var page = await PageRepository.GetAsync(id);
 
-            if (page.Url != input.Url)
-            {
-                await CheckPageUrlAsync(input.Url);
-            }
+            await PageManager.SetSlugAsync(page, input.Slug);
 
-            page.Title = input.Title;
-            page.Url = input.Url;
-            page.Description = input.Description;
+            page.SetTitle(input.Title);
+            page.SetContent(input.Content);
+            page.SetScript(input.Script);
+            page.SetStyle(input.Style);
 
             await PageRepository.UpdateAsync(page);
-
+            
             return ObjectMapper.Map<Page, PageDto>(page);
         }
 
-        public virtual Task<bool> DoesUrlExistAsync(CheckUrlInputDto input)
-        {
-            return PageRepository.DoesExistAsync(input.Url);
-        }
-
-        public virtual async Task UpdatePageContentAsync(Guid id, UpdatePageContentInputDto input)
-        {
-            var pageContent = await ContentRepository.GetAsync(nameof(Page), id.ToString());
-            
-            pageContent.SetValue(input.Content);
-
-            await ContentRepository.UpdateAsync(pageContent);
-        }
-
+        [Authorize(CmsKitAdminPermissions.Pages.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
-            await ContentRepository.DeleteAsync(nameof(Page), id.ToString(), CurrentTenant?.Id, CancellationToken.None);
-            await PageRepository.DeleteAsync(id, cancellationToken: CancellationToken.None);
-        }
-
-        protected virtual async Task<Page> CreatePageAsync(string title, string url, string description)
-        {
-            await CheckPageUrlAsync(url);
-
-            return new Page(GuidGenerator.Create(), title, url, description, CurrentTenant?.Id);
-        }
-
-        protected virtual async Task CheckPageUrlAsync(string url)
-        {
-            if (await PageRepository.DoesExistAsync(url))
-            {
-                throw new UserFriendlyException("Url exist");
-            }
+            await PageRepository.DeleteAsync(id);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -15,12 +16,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public ILogger<BundlerBase> Logger { get; set; }
 
-        protected IWebContentFileProvider WebContentFileProvider { get; }
+        protected IWebHostEnvironment HostEnvironment { get; }
         protected IMinifier Minifier { get; }
 
-        protected BundlerBase(IWebContentFileProvider webContentFileProvider, IMinifier minifier)
+        protected BundlerBase(IWebHostEnvironment hostEnvironment, IMinifier minifier)
         {
-            WebContentFileProvider = webContentFileProvider;
+            HostEnvironment = hostEnvironment;
             Minifier = minifier;
 
             Logger = NullLogger<BundlerBase>.Instance;
@@ -100,11 +101,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual IFileInfo GetFileInfo(IBundlerContext context, string file)
         {
-            var fileInfo = WebContentFileProvider.GetFileInfo(file);
+            var fileInfo = HostEnvironment.WebRootFileProvider.GetFileInfo(file);
 
             if (!fileInfo.Exists)
             {
-                throw new AbpException($"Could not find file '{file}' using {nameof(IWebContentFileProvider)}");
+                throw new AbpException($"Could not find file '{file}'");
             }
 
             return fileInfo;
@@ -127,7 +128,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             foreach (var suffix in _minFileSuffixes)
             {
-                var fileInfo = WebContentFileProvider.GetFileInfo(
+                var fileInfo = HostEnvironment.WebRootFileProvider.GetFileInfo(
                     $"{file.RemovePostFix($".{FileExtension}")}.{suffix}.{FileExtension}"
                 );
 

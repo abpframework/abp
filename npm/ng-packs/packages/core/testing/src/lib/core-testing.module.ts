@@ -4,6 +4,7 @@ import {
   coreOptionsFactory,
   CORE_OPTIONS,
   LIST_QUERY_DEBOUNCE_TIME,
+  LOADER_DELAY,
   PermissionService,
   RestService,
 } from '@abp/ng.core';
@@ -33,7 +34,10 @@ export class CoreTestingModule {
         { provide: APP_BASE_HREF, useValue: baseHref },
         {
           provide: 'CORE_OPTIONS',
-          useValue: options,
+          useValue: {
+            skipGetAppConfiguration: true,
+            ...options,
+          },
         },
         {
           provide: CORE_OPTIONS,
@@ -51,6 +55,10 @@ export class CoreTestingModule {
         {
           provide: RestService,
           useClass: MockRestService,
+        },
+        {
+          provide: LOADER_DELAY,
+          useValue: 0,
         },
         provideRoutes(routes),
       ],

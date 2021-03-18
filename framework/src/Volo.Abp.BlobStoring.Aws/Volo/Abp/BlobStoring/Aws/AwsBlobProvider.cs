@@ -12,15 +12,19 @@ namespace Volo.Abp.BlobStoring.Aws
     {
         protected IAwsBlobNameCalculator AwsBlobNameCalculator { get; }
         protected IAmazonS3ClientFactory AmazonS3ClientFactory { get; }
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
-        public AwsBlobProvider(IAwsBlobNameCalculator awsBlobNameCalculator,
-            IAmazonS3ClientFactory amazonS3ClientFactory)
+        public AwsBlobProvider(
+            IAwsBlobNameCalculator awsBlobNameCalculator,
+            IAmazonS3ClientFactory amazonS3ClientFactory,
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
             AwsBlobNameCalculator = awsBlobNameCalculator;
             AmazonS3ClientFactory = amazonS3ClientFactory;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
-        public async override Task SaveAsync(BlobProviderSaveArgs args)
+        public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var blobName = AwsBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetAwsConfiguration();
@@ -48,7 +52,7 @@ namespace Volo.Abp.BlobStoring.Aws
             }
         }
 
-        public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = AwsBlobNameCalculator.Calculate(args);
             var containerName = GetContainerName(args);
@@ -70,7 +74,7 @@ namespace Volo.Abp.BlobStoring.Aws
             }
         }
 
-        public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = AwsBlobNameCalculator.Calculate(args);
             var containerName = GetContainerName(args);
@@ -81,7 +85,7 @@ namespace Volo.Abp.BlobStoring.Aws
             }
         }
 
-        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = AwsBlobNameCalculator.Calculate(args);
             var containerName = GetContainerName(args);
@@ -111,7 +115,7 @@ namespace Volo.Abp.BlobStoring.Aws
             return await AmazonS3ClientFactory.GetAmazonS3Client(configuration);
         }
 
-        private async Task<bool> BlobExistsAsync(AmazonS3Client amazonS3Client, string containerName, string blobName)
+        protected virtual async Task<bool> BlobExistsAsync(AmazonS3Client amazonS3Client, string containerName, string blobName)
         {
             // Make sure Blob Container exists.
             if (!await AmazonS3Util.DoesS3BucketExistV2Async(amazonS3Client, containerName))
@@ -147,12 +151,12 @@ namespace Volo.Abp.BlobStoring.Aws
             }
         }
 
-        private static string GetContainerName(BlobProviderArgs args)
+        protected virtual string GetContainerName(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetAwsConfiguration();
             return configuration.ContainerName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : configuration.ContainerName;
+                : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
         }
     }
 }

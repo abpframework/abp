@@ -11,6 +11,13 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
+        /// <summary>
+        /// Default: false.
+        /// </summary>
+        public static bool EnableObsoleteDbContextCreationWarning { get; } = false;
+
+        public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
+
         public Guid Id { get; } = Guid.NewGuid();
 
         public IAbpUnitOfWorkOptions Options { get; private set; }
@@ -255,27 +262,6 @@ namespace Volo.Abp.Uow
             }
         }
 
-        protected virtual void RollbackAll()
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                try
-                {
-                    (databaseApi as ISupportsRollback)?.Rollback();
-                }
-                catch { }
-            }
-
-            foreach (var transactionApi in GetAllActiveTransactionApis())
-            {
-                try
-                {
-                    (transactionApi as ISupportsRollback)?.Rollback();
-                }
-                catch { }
-            }
-        }
-
         protected virtual async Task RollbackAllAsync(CancellationToken cancellationToken)
         {
             foreach (var databaseApi in GetAllActiveDatabaseApis())
@@ -302,7 +288,7 @@ namespace Volo.Abp.Uow
                 }
             }
         }
-        
+
         protected virtual async Task CommitTransactionsAsync()
         {
             foreach (var transaction in GetAllActiveTransactionApis())

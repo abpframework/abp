@@ -15,6 +15,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             _options = options.Value;
         }
 
+        public void OnGet()
+        {
+
+        }
+
         public IActionResult OnGetAuditSuccessForGetRequests()
         {
             return new OkResult();

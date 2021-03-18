@@ -24,13 +24,13 @@ namespace Volo.Abp.Identity.MongoDB
         {
             if (ignoredId == null)
             {
-                return await GetMongoQueryable()
+                return await (await GetMongoQueryableAsync(cancellationToken))
                     .Where(ct => ct.Name == name)
                     .AnyAsync(GetCancellationToken(cancellationToken));
             }
             else
             {
-                return await GetMongoQueryable()
+                return await (await GetMongoQueryableAsync(cancellationToken))
                     .Where(ct => ct.Id != ignoredId && ct.Name == name)
                     .AnyAsync(GetCancellationToken(cancellationToken));
             }
@@ -43,23 +43,23 @@ namespace Volo.Abp.Identity.MongoDB
             string filter,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.Name.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(IdentityClaimType.Name))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
                 .As<IMongoQueryable<IdentityClaimType>>()
                 .PageBy<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
+            return await (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(
                     !filter.IsNullOrWhiteSpace(),
                     u =>

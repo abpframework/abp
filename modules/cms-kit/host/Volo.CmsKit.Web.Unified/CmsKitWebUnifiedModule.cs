@@ -15,6 +15,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
@@ -30,6 +31,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.Web;
@@ -37,6 +39,12 @@ using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
 using Volo.CmsKit.Public.Web;
+using System;
+using Volo.CmsKit.Tags;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Ratings;
 
 namespace Volo.CmsKit
 {
@@ -63,8 +71,10 @@ namespace Volo.CmsKit
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreSerilogModule)
-        )]
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
+        typeof(AbpSwashbuckleModule)
+    )]
     public class CmsKitWebUnifiedModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -76,6 +86,8 @@ namespace Volo.CmsKit
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+
+            ConfigureCmsKit(context);
 
             Configure<AbpDbContextOptions>(options =>
             {
@@ -127,6 +139,40 @@ namespace Volo.CmsKit
             });
         }
 
+        private void ConfigureCmsKit(ServiceConfigurationContext context)
+        {
+            Configure<CmsKitTagOptions>(options =>
+            {
+                options.EntityTypes.Add(new TagEntityTypeDefiniton("quote"));
+            });
+
+            Configure<CmsKitCommentOptions>(options =>
+            {
+                options.EntityTypes.Add(new CommentEntityTypeDefinition("quote"));
+            });
+
+            Configure<CmsKitMediaOptions>(options =>
+            {
+                options.EntityTypes.Add(new MediaDescriptorDefinition("quote"));
+            });
+            
+            Configure<CmsKitReactionOptions>(options =>
+            {
+                options.EntityTypes.Add(
+                    new ReactionEntityTypeDefinition("quote", 
+                    reactions: new[]
+                    {
+                        new ReactionDefinition(StandardReactions.ThumbsUp),
+                        new ReactionDefinition(StandardReactions.ThumbsDown),
+                    }));
+            });
+
+            Configure<CmsKitRatingOptions>(options =>
+            {
+                options.EntityTypes.Add(new RatingEntityTypeDefinition("quote"));
+            });
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -143,7 +189,7 @@ namespace Volo.CmsKit
             }
 
             app.UseHttpsRedirection();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
 
@@ -156,7 +202,7 @@ namespace Volo.CmsKit
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });

@@ -5,7 +5,6 @@ namespace Volo.Abp.PermissionManagement
 {
     public class PermissionManagementOptions
     {
-        //TODO: rename to Providers
         public ITypeList<IPermissionManagementProvider> ManagementProviders { get; }
 
         public Dictionary<string, string> ProviderPolicies { get; }

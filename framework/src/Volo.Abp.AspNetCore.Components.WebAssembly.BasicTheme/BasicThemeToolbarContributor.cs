@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Toolbars;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
 {

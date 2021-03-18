@@ -34,12 +34,13 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
 
                 await AddPathsToTsConfigAsync(angularPath, angularProjectsPath, projects);
-
+                await CreateTsConfigProdJsonAsync(angularPath);
+                await AddScriptsToPackageJsonAsync(angularPath);
                 await AddProjectToAngularJsonAsync(angularPath, projects);
             }
             catch (Exception e)
             {
-                Logger.LogError("Unable to add angular source code: " + e.Message);
+                Logger.LogError("Unable to add angular source code: " + e.Message + Environment.NewLine + e.StackTrace);
             }
         }
 
@@ -93,6 +94,61 @@ namespace Volo.Abp.Cli.ProjectModification
             File.WriteAllText(angularJsonFilePath, json.ToString(Formatting.Indented));
         }
 
+        private async Task AddScriptsToPackageJsonAsync(string angularPath)
+        {
+            var packageJsonFilePath = Path.Combine(angularPath, "package.json");
+            var fileContent = File.ReadAllText(packageJsonFilePath);
+
+            var json = JObject.Parse(fileContent);
+
+            var scriptsJobject = (JObject) json["scripts"];
+
+            if (scriptsJobject == null || scriptsJobject["postinstall"] != null || scriptsJobject["compile:ivy"] != null)
+            {
+                return;
+            }
+
+            scriptsJobject["postinstall"] = "npm run compile:ivy";
+            scriptsJobject["compile:ivy"] = "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules";
+
+            File.WriteAllText(packageJsonFilePath, json.ToString(Formatting.Indented));
+        }
+
+        private async Task CreateTsConfigProdJsonAsync(string angularPath)
+        {
+            var tsConfigProdJsonFilePath = Path.Combine(angularPath, "tsconfig.prod.json");
+
+            if (File.Exists(tsConfigProdJsonFilePath))
+            {
+                return;
+            }
+
+            var json = new JObject(
+                new JProperty("compileOnSave", false),
+                new JProperty("compilerOptions", new JObject(
+                    new JProperty("baseUrl", "./"),
+                    new JProperty("outDir", "./dist/out-tsc"),
+                    new JProperty("sourceMap", true),
+                    new JProperty("declaration", false),
+                    new JProperty("downlevelIteration", true),
+                    new JProperty("experimentalDecorators", true),
+                    new JProperty("module", "esnext"),
+                    new JProperty("moduleResolution", "node"),
+                    new JProperty("importHelpers", true),
+                    new JProperty("target", "es2015"),
+                    new JProperty("typeRoots", new JArray(new JValue("node_modules/@types"))),
+                    new JProperty("lib", new JArray(new JValue("es2018"), new JValue("dom"))),
+                    new JProperty("types", new JArray(new JValue("jest")))
+                )),
+                new JProperty("angularCompilerOptions", new JObject(
+                    new JProperty("fullTemplateTypeCheck", true),
+                    new JProperty("strictInjectionParameters", true)
+                ))
+            );
+
+            File.WriteAllText(tsConfigProdJsonFilePath, json.ToString(Formatting.Indented));
+        }
+
         private async Task AddPathsToTsConfigAsync(string angularPath, string angularProjectsPath,
             List<string> projects)
         {
@@ -105,7 +161,8 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 var projectPackageName = await GetProjectPackageNameAsync(angularProjectsPath, project);
 
-                var publicApis = Directory.GetFiles(Path.Combine(angularProjectsPath, project), "*public-api.ts", SearchOption.AllDirectories)
+                var publicApis = Directory.GetFiles(Path.Combine(angularProjectsPath, project), "*public-api.ts",
+                        SearchOption.AllDirectories)
                     .Where(p => !p.Contains("\\node_modules\\"))
                     .Select(p => p.RemovePreFix(angularPath).Replace("\\", "/").RemovePreFix("/"));
 
@@ -125,6 +182,11 @@ namespace Volo.Abp.Cli.ProjectModification
                     else
                     {
                         subFolderName = $"/{subFolderName}";
+                    }
+
+                    if (compilerOptions["paths"][$"{projectPackageName}{subFolderName}"] != null)
+                    {
+                        continue;
                     }
 
                     ((JObject) compilerOptions["paths"]).Add(
@@ -166,8 +228,10 @@ namespace Volo.Abp.Cli.ProjectModification
                         {
                             continue;
                         }
+
                         Directory.Move(folderUnderProject, Path.Combine(folder, Path.GetFileName(folderUnderProject)));
                     }
+
                     projectsInFolder = Directory.GetDirectories(folder);
                 }
 

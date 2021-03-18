@@ -90,29 +90,30 @@ namespace Volo.Abp.RabbitMQ
 
                     lock (ChannelSendSyncLock)
                     {
-                        QueueBindCommands.TryPeek(out var command);
-
-                        switch (command.Type)
+                        if (QueueBindCommands.TryPeek(out var command))
                         {
-                            case QueueBindType.Bind:
-                                Channel.QueueBind(
-                                    queue: Queue.QueueName,
-                                    exchange: Exchange.ExchangeName,
-                                    routingKey: command.RoutingKey
-                                );
-                                break;
-                            case QueueBindType.Unbind:
-                                Channel.QueueUnbind(
-                                    queue: Queue.QueueName,
-                                    exchange: Exchange.ExchangeName,
-                                    routingKey: command.RoutingKey
-                                );
-                                break;
-                            default:
-                                throw new AbpException($"Unknown {nameof(QueueBindType)}: {command.Type}");
-                        }
+                            switch (command.Type)
+                            {
+                                case QueueBindType.Bind:
+                                    Channel.QueueBind(
+                                        queue: Queue.QueueName,
+                                        exchange: Exchange.ExchangeName,
+                                        routingKey: command.RoutingKey
+                                    );
+                                    break;
+                                case QueueBindType.Unbind:
+                                    Channel.QueueUnbind(
+                                        queue: Queue.QueueName,
+                                        exchange: Exchange.ExchangeName,
+                                        routingKey: command.RoutingKey
+                                    );
+                                    break;
+                                default:
+                                    throw new AbpException($"Unknown {nameof(QueueBindType)}: {command.Type}");
+                            }
 
-                        QueueBindCommands.TryDequeue(out command);
+                            QueueBindCommands.TryDequeue(out command);
+                        }
                     }
                 }
             }
@@ -143,10 +144,10 @@ namespace Volo.Abp.RabbitMQ
 
             try
             {
-                var channel = ConnectionPool
+                Channel = ConnectionPool
                     .Get(ConnectionName)
                     .CreateModel();
-                channel.ExchangeDeclare(
+                Channel.ExchangeDeclare(
                     exchange: Exchange.ExchangeName,
                     type: Exchange.Type,
                     durable: Exchange.Durable,
@@ -154,7 +155,7 @@ namespace Volo.Abp.RabbitMQ
                     arguments: Exchange.Arguments
                 );
 
-                channel.QueueDeclare(
+                Channel.QueueDeclare(
                     queue: Queue.QueueName,
                     durable: Queue.Durable,
                     exclusive: Queue.Exclusive,
@@ -162,19 +163,14 @@ namespace Volo.Abp.RabbitMQ
                     arguments: Queue.Arguments
                 );
 
-                var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += async (model, basicDeliverEventArgs) =>
-                {
-                    await HandleIncomingMessageAsync(channel, basicDeliverEventArgs);
-                };
+                var consumer = new AsyncEventingBasicConsumer(Channel);
+                consumer.Received += HandleIncomingMessageAsync;
 
-                channel.BasicConsume(
+                Channel.BasicConsume(
                     queue: Queue.QueueName,
                     autoAck: false,
                     consumer: consumer
                 );
-
-                Channel = channel;
             }
             catch (Exception ex)
             {
@@ -183,19 +179,29 @@ namespace Volo.Abp.RabbitMQ
             }
         }
 
-        protected virtual async Task HandleIncomingMessageAsync(IModel channel, BasicDeliverEventArgs basicDeliverEventArgs)
+        protected virtual async Task HandleIncomingMessageAsync(object sender, BasicDeliverEventArgs basicDeliverEventArgs)
         {
             try
             {
                 foreach (var callback in Callbacks)
                 {
-                    await callback(channel, basicDeliverEventArgs);
+                    await callback(Channel, basicDeliverEventArgs);
                 }
 
-                channel.BasicAck(basicDeliverEventArgs.DeliveryTag, multiple: false);
+                Channel.BasicAck(basicDeliverEventArgs.DeliveryTag, multiple: false);
             }
             catch (Exception ex)
             {
+                try
+                {
+                    Channel.BasicNack(
+                        basicDeliverEventArgs.DeliveryTag,
+                        multiple: false,
+                        requeue: true
+                    );
+                }
+                catch { }
+                
                 Logger.LogException(ex);
                 await ExceptionNotifier.NotifyAsync(ex);
             }

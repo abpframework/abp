@@ -1,0 +1,48 @@
+﻿@using Volo.Abp.UI.Navigation
+@{
+    var elementId = MenuItem.ElementId ?? "MenuItem_" + MenuItem.Name.Replace(".", "_");
+    var cssClass = string.IsNullOrEmpty(MenuItem.CssClass) ? string.Empty : MenuItem.CssClass;
+    var disabled = MenuItem.IsDisabled ? "disabled" : string.Empty;
+    var url = MenuItem.Url == null ? "#" : MenuItem.Url.TrimStart('/', '~');
+}
+@if (MenuItem.IsLeaf)
+{
+    if (MenuItem.Url != null)
+    {
+        <li class="nav-item @cssClass @disabled" id="@elementId">
+            <a class="nav-link" href="@url" target="@MenuItem.Target">
+                @if (MenuItem.Icon != null)
+                {
+                    if (MenuItem.Icon.StartsWith("fa"))
+                    {
+                        <i class="@MenuItem.Icon mr-1"></i>
+                    }
+                }
+                @MenuItem.DisplayName
+            </a>
+        </li>
+    }
+}
+else
+{
+    <li class="nav-item">
+        <div class="dropdown">
+            <a class="nav-link dropdown-toggle" @onclick="ToggleSubMenu" id="Menu_@(MenuItem.Name)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @if (MenuItem.Icon != null)
+                {
+                    if (MenuItem.Icon.StartsWith("fa"))
+                    {
+                        <i class="@MenuItem.Icon mr-1"></i>
+                    }
+                }
+                @MenuItem.DisplayName
+            </a>
+            <div class="dropdown-menu border-0 shadow-sm @(IsSubMenuOpen ? "show" : "")" aria-labelledby="Menu_@(MenuItem.Name)">
+                @foreach (var childMenuItem in MenuItem.Items)
+                {
+                    <SecondLevelNavMenuItem MenuItem="childMenuItem"/>
+                }
+            </div>
+        </div>
+    </li>
+}

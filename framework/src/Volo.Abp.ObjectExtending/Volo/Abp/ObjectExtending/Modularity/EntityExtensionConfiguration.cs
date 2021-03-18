@@ -67,7 +67,8 @@ namespace Volo.Abp.ObjectExtending.Modularity
                lookupTextPropertyName,
                () => new ExtensionPropertyConfiguration(this, typeof(string), lookupTextPropertyName)
            );
-            lookupTextPropertyInfo.DisplayName = propertyInfo.DisplayName ?? new FixedLocalizableString(propertyInfo.Name);
+            
+            lookupTextPropertyInfo.DisplayName = propertyInfo.DisplayName;
         }
 
         [NotNull]

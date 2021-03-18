@@ -7,13 +7,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
 {
     public class AbpValidationActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        private readonly IModelStateValidator _validator;
-
-        public AbpValidationActionFilter(IModelStateValidator validator)
-        {
-            _validator = validator;
-        }
-
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             //TODO: Configuration to disable validation for controllers..?
@@ -25,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
                 return;
             }
 
-            _validator.Validate(context.ModelState);
+            context.GetRequiredService<IModelStateValidator>().Validate(context.ModelState);
             await next();
         }
     }

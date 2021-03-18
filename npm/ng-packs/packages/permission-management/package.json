@@ -1,13 +1,13 @@
 {
   "name": "@abp/ng.permission-management",
-  "version": "4.1.0-rc.2",
+  "version": "4.2.2",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.theme.shared": "~4.1.0-rc.2",
+    "@abp/ng.theme.shared": "~4.2.2",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

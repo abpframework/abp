@@ -32,7 +32,7 @@ namespace Volo.Abp.Auditing
         }
 
         [Fact]
-        public async Task Should_Write_AuditLog_For_Classes_That_Implement_IAuditingEnabled()
+        public async Task Should_Write_AuditLog_For_Classes_That_Implement_IAuditingEnabled_With_Containing_Scope()
         {
             var myAuditedObject1 = GetRequiredService<MyAuditedObject1>();
 
@@ -42,9 +42,17 @@ namespace Volo.Abp.Auditing
                 await scope.SaveAsync();
             }
 
-#pragma warning disable 4014
-            _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
-#pragma warning restore 4014
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+        }
+        
+        [Fact]
+        public async Task Should_Write_AuditLog_For_Classes_That_Implement_IAuditingEnabled_Without_An_Explicit_Scope()
+        {
+            var myAuditedObject1 = GetRequiredService<MyAuditedObject1>();
+
+            await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 });
+
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
 
         public interface IMyAuditedObject : ITransientDependency, IAuditingEnabled
@@ -54,13 +62,13 @@ namespace Volo.Abp.Auditing
 
         public class MyAuditedObject1 : IMyAuditedObject
         {
-            public async virtual Task<ResultObject> DoItAsync(InputObject inputObject)
+            public virtual Task<ResultObject> DoItAsync(InputObject inputObject)
             {
-                return new ResultObject
+                return Task.FromResult(new ResultObject
                 {
                     Value1 = inputObject.Value1 + "-result",
                     Value2 = inputObject.Value2 + 1
-                };
+                });
             }
         }
 

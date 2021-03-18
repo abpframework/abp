@@ -6,35 +6,35 @@ namespace Volo.Abp.Identity.Blazor
 {
     public class AbpIdentityWebMainMenuContributor : IMenuContributor
     {
-        public virtual async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        public virtual Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
             if (context.Menu.Name != StandardMenus.Main)
             {
-                return;
+                return Task.CompletedTask;
             }
 
-            var hasRolePermission = await context.IsGrantedAsync(IdentityPermissions.Roles.Default);
-            var hasUserPermission = await context.IsGrantedAsync(IdentityPermissions.Users.Default);
+            var administrationMenu = context.Menu.GetAdministration();
 
-            if (hasRolePermission || hasUserPermission)
-            {
-                var administrationMenu = context.Menu.GetAdministration();
+            var l = context.GetLocalizer<IdentityResource>();
 
-                var l = context.GetLocalizer<IdentityResource>();
+            var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"],
+                icon: "far fa-id-card");
+            administrationMenu.AddItem(identityMenuItem);
 
-                var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"], icon: "far fa-id-card");
-                administrationMenu.AddItem(identityMenuItem);
+            identityMenuItem.AddItem(new ApplicationMenuItem(
+                    IdentityMenuNames.Roles,
+                    l["Roles"],
+                    url: "~/identity/roles",
+                    requiredPermissionName: IdentityPermissions.Roles.Default));
 
-                if (hasRolePermission)
-                {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "identity/roles"));
-                }
 
-                if (hasUserPermission)
-                {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "identity/users"));
-                }
-            }
+            identityMenuItem.AddItem(new ApplicationMenuItem(
+                IdentityMenuNames.Users,
+                l["Users"],
+                url: "~/identity/users",
+                requiredPermissionName: IdentityPermissions.Users.Default));
+
+            return Task.CompletedTask;
         }
     }
 }

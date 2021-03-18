@@ -128,7 +128,7 @@ public async Task<IdentityUser> FindByNormalizedUserNameAsync(
     bool includeDetails = true,
     CancellationToken cancellationToken = default)
 {
-    return await GetMongoQueryable()
+    return await (await GetMongoQueryableAsync())
         .FirstOrDefaultAsync(
             u => u.NormalizedUserName == normalizedUserName,
             GetCancellationToken(cancellationToken)
@@ -139,8 +139,8 @@ public async Task<IdentityUser> FindByNormalizedUserNameAsync(
 `GetCancellationToken` fallbacks to the `ICancellationTokenProvider.Token` to obtain the cancellation token if it is not provided by the caller code.
 
 * **Do** ignore the `includeDetails` parameters for the repository implementation since MongoDB loads the aggregate root as a whole (including sub collections) by default.
-* **Do** use the `GetMongoQueryable()` method to obtain an `IQueryable<TEntity>` to perform queries  wherever possible. Because;
-  *  `GetMongoQueryable()` method automatically uses the `ApplyDataFilters` method to filter the data based on the current data filters (like soft delete and multi-tenancy).
+* **Do** use the `GetMongoQueryableAsync()` method to obtain an `IQueryable<TEntity>` to perform queries  wherever possible. Because;
+  *  `GetMongoQueryableAsync()` method automatically uses the `ApplyDataFilters` method to filter the data based on the current data filters (like soft delete and multi-tenancy).
   * Using `IQueryable<TEntity>` makes the code as much as similar to the EF Core repository implementation and easy to write and read.
 * **Do** implement data filtering if it is not possible to use the `GetMongoQueryable()` method.
 

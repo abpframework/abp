@@ -2,10 +2,9 @@
 @attribute [Authorize( IdentityPermissions.Roles.Default )]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.PermissionManagement.Blazor.Components
-@using Microsoft.Extensions.Localization
 @using Volo.Abp.Identity.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
 
 @inherits AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
@@ -76,8 +75,7 @@
 @* ************************* CREATE MODAL ************************* *@
 @if (HasCreatePermission)
 {
-    <Modal @ref="CreateModal">
-        <ModalBackdrop />
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -89,7 +87,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
+                                <TextEdit @bind-Text="@NewEntity.Name">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -113,8 +111,7 @@
 @* ************************* EDIT MODAL ************************* *@
 @if (HasUpdatePermission)
 {
-    <Modal @ref="EditModal">
-        <ModalBackdrop />
+    <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -127,7 +124,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["DisplayName:RoleName"]</FieldLabel>
-                                <TextEdit @bind-Text="EditingEntity.Name" Autofocus="true">
+                                <TextEdit @bind-Text="EditingEntity.Name">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>

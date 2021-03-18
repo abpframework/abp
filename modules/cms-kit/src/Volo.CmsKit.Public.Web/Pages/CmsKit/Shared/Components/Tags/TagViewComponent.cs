@@ -5,12 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Tags;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
 {
-    [ViewComponent(Name = "CmsTags")]
+    [Widget(
+        StyleFiles = new[]
+        {
+            "/Pages/CmsKit/Shared/Components/Tags/default.css"
+        })]
     public class TagViewComponent : AbpViewComponent
     {
         protected readonly ITagAppService TagAppService;
@@ -24,11 +29,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
             string entityType,
             string entityId)
         {
-            var tagDtos = await TagAppService.GetAllRelatedTagsAsync(new GetRelatedTagsInput
-            {
-                EntityId = entityId,
-                EntityType = entityType
-            });
+            var tagDtos = await TagAppService.GetAllRelatedTagsAsync(entityType, entityId);
 
             var viewModel = new TagViewModel
             {

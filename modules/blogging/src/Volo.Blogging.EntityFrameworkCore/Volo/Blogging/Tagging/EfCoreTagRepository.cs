@@ -17,29 +17,29 @@ namespace Volo.Blogging.Tagging
         {
         }
 
-        public async Task<List<Tag>> GetListAsync(Guid blogId)
+        public async Task<List<Tag>> GetListAsync(Guid blogId, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(t=>t.BlogId == blogId).ToListAsync();
+            return await (await GetDbSetAsync()).Where(t=>t.BlogId == blogId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Tag> GetByNameAsync(Guid blogId, string name)
+        public async Task<Tag> GetByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
         {
-            return await DbSet.FirstAsync(t=> t.BlogId == blogId && t.Name == name);
+            return await (await GetDbSetAsync()).FirstAsync(t=> t.BlogId == blogId && t.Name == name, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Tag> FindByNameAsync(Guid blogId, string name)
+        public async Task<Tag> FindByNameAsync(Guid blogId, string name, CancellationToken cancellationToken = default)
         {
-            return await DbSet.FirstOrDefaultAsync(t => t.BlogId == blogId && t.Name == name);
+            return await (await GetDbSetAsync()).FirstOrDefaultAsync(t => t.BlogId == blogId && t.Name == name, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids)
+        public async Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(t => ids.Contains(t.Id)).ToListAsync();
+            return await (await GetDbSetAsync()).Where(t => ids.Contains(t.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task DecreaseUsageCountOfTagsAsync(List<Guid> ids, CancellationToken cancellationToken = default)
         {
-            var tags = await DbSet
+            var tags = await (await GetDbSetAsync())
                 .Where(t => ids.Any(id => id == t.Id))
                 .ToListAsync(GetCancellationToken(cancellationToken));
 

@@ -4,6 +4,7 @@
 @using Volo.Abp.FeatureManagement.Blazor.Components
 @using Microsoft.AspNetCore.Components.Forms
 @using Volo.Abp.TenantManagement.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inject AbpBlazorMessageLocalizerHelper<AbpTenantManagementResource> LH
 @inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
 
@@ -15,7 +16,7 @@
                 <Heading Size="HeadingSize.Is1">@L["Tenants"]</Heading>
             </Column>
             <Column ColumnSize="ColumnSize.IsAuto">
-                @if (HasCreatePermission)
+                @if ( HasCreatePermission )
                 {
                     <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">
                         <Icon Margin="Margin.Is1.FromRight" Name="IconName.Add"></Icon>@L["NewTenant"]
@@ -41,10 +42,6 @@
                                           Clicked="() => OpenEditModalAsync(context)"
                                           Text="@L["Edit"]"></EntityAction>
                             <EntityAction TItem="TenantDto"
-                                          RequiredPolicy="@ManageConnectionStringsPolicyName"
-                                          Clicked="() => OpenEditConnectionStringModalAsync(context)"
-                                          Text="@L["ConnectionStrings"]"></EntityAction>
-                            <EntityAction TItem="TenantDto"
                                           RequiredPolicy="@ManageFeaturesPolicyName"
                                           Clicked="() => FeatureManagementModal.OpenAsync(FeatureProviderName, context.Id.ToString())"
                                           Text="@L["Features"]"></EntityAction>
@@ -67,10 +64,9 @@
 </Card>
 
 @* ************************* CREATE MODAL ************************* *@
-@if (HasCreatePermission)
+@if ( HasCreatePermission )
 {
-    <Modal @ref="CreateModal">
-        <ModalBackdrop />
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -82,7 +78,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"]</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
+                                <TextEdit @bind-Text="@NewEntity.Name">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -121,10 +117,9 @@
 }
 
 @* ************************* EDIT MODAL ************************* *@
-@if (HasUpdatePermission)
+@if ( HasUpdatePermission )
 {
-    <Modal @ref="EditModal">
-        <ModalBackdrop />
+    <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
             <Form>
                 <ModalHeader>
@@ -136,7 +131,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"]</FieldLabel>
-                                <TextEdit @bind-Text="@EditingEntity.Name" Autofocus="true">
+                                <TextEdit @bind-Text="@EditingEntity.Name">
                                     <Feedback>
                                         <ValidationError />
                                     </Feedback>
@@ -148,45 +143,6 @@
                 <ModalFooter>
                     <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
                     <SubmitButton Clicked="@UpdateEntityAsync" />
-                </ModalFooter>
-            </Form>
-        </ModalContent>
-    </Modal>
-}
-
-@* ************************* EDIT CONNECTION STRING MODAL ************************* *@
-@if (HasManageConnectionStringsPermission)
-{
-    <Modal @ref="@ManageConnectionStringModal">
-        <ModalBackdrop />
-        <ModalContent Centered="true">
-            <Form>
-                <ModalHeader>
-                    <ModalTitle>@L["ConnectionStrings"]</ModalTitle>
-                    <CloseButton Clicked="CloseEditConnectionStringModal" />
-                </ModalHeader>
-                <ModalBody>
-                    <Validations @ref="@ManageConnectionStringValidations" Model="@TenantInfo" ValidateOnLoad="false">
-                        <Validation MessageLocalizer="@LH.Localize">
-                            <Field>
-                                <FieldLabel>@L["DisplayName:UseSharedDatabase"]</FieldLabel>
-                                <Check TValue="bool" @bind-Checked="@TenantInfo.UseSharedDatabase" Cursor="@Cursor.Pointer" />
-                            </Field>
-                        </Validation>
-                        @if (!TenantInfo.UseSharedDatabase)
-                        {
-                            <Validation MessageLocalizer="@LH.Localize">
-                                <Field>
-                                    <FieldLabel>@L["DisplayName:DefaultConnectionString"]</FieldLabel>
-                                    <TextEdit @bind-Text="@TenantInfo.DefaultConnectionString" />
-                                </Field>
-                            </Validation>
-                        }
-                    </Validations>
-                </ModalBody>
-                <ModalFooter>
-                    <Button Color="Color.Secondary" Clicked="CloseEditConnectionStringModal">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@UpdateConnectionStringAsync" />
                 </ModalFooter>
             </Form>
         </ModalContent>

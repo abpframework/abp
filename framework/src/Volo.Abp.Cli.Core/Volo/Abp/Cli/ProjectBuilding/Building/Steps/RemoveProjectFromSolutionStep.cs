@@ -7,8 +7,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
     public class RemoveProjectFromSolutionStep : ProjectBuildPipelineStep
     {
         private readonly string _projectName;
-        private readonly string _solutionFilePath;
-        private readonly string _projectFolderPath;
+        private string _solutionFilePath;
+        private string _projectFolderPath;
 
         private string ProjectNameWithQuotes => $"\"{_projectName}\"";
 
@@ -18,12 +18,19 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             string projectFolderPath = null)
         {
             _projectName = projectName;
-            _solutionFilePath = solutionFilePath ?? "/aspnet-core/MyCompanyName.MyProjectName.sln";
-            _projectFolderPath = projectFolderPath ?? ("/aspnet-core/src/" + projectName);
+            _solutionFilePath = solutionFilePath;
+            _projectFolderPath = projectFolderPath;
         }
 
         public override void Execute(ProjectBuildContext context)
         {
+            SetSolutionAndProjectPathsIfNull(context);
+
+            if (_solutionFilePath == null || _projectFolderPath == null)
+            {
+                return;
+            }
+
             new RemoveFolderStep(_projectFolderPath).Execute(context);
             var solutionFile = context.GetFile(_solutionFilePath);
             solutionFile.NormalizeLineEndings();
@@ -74,6 +81,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             }
 
             return null;
+        }
+
+        private void SetSolutionAndProjectPathsIfNull(ProjectBuildContext context)
+        {
+            if (_solutionFilePath == null)
+            {
+                _solutionFilePath = context.FindFile("/aspnet-core/MyCompanyName.MyProjectName.sln")?.Name ??
+                                    context.FindFile("/MyCompanyName.MyProjectName.sln")?.Name ??
+                                    context.FindFile("/MyCompanyName.MyProjectName.MicroserviceName.sln")?.Name;
+            }
+            if (_projectFolderPath == null)
+            {
+                _projectFolderPath = context.FindFile("/aspnet-core/src/" + _projectName.EnsureEndsWith('/'))?.Name ??
+                                     context.FindFile("/src/" + _projectName.EnsureEndsWith('/'))?.Name;
+            }
         }
     }
 }

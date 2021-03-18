@@ -22,15 +22,17 @@ namespace Volo.Abp.RabbitMQ
 
         public virtual IConnection Get(string connectionName = null)
         {
-            connectionName = connectionName
-                             ?? RabbitMqConnections.DefaultConnectionName;
+            connectionName ??= RabbitMqConnections.DefaultConnectionName;
 
             return Connections.GetOrAdd(
                 connectionName,
-                () => Options
-                    .Connections
-                    .GetOrDefault(connectionName)
-                    .CreateConnection()
+                () =>
+                {
+                    var connection = Options.Connections.GetOrDefault(connectionName);
+                    var hostnames = connection.HostName.TrimEnd(';').Split(';');
+                    // Handle Rabbit MQ Cluster.
+                    return hostnames.Length == 1 ? connection.CreateConnection() : connection.CreateConnection(hostnames);
+                }
             );
         }
 

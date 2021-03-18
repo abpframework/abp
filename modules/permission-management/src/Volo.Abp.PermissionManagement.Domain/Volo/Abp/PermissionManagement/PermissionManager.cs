@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -24,6 +25,8 @@ namespace Volo.Abp.PermissionManagement
         protected IReadOnlyList<IPermissionManagementProvider> ManagementProviders => _lazyProviders.Value;
 
         protected PermissionManagementOptions Options { get; }
+        
+        protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
 
         private readonly Lazy<List<IPermissionManagementProvider>> _lazyProviders;
 
@@ -33,10 +36,12 @@ namespace Volo.Abp.PermissionManagement
             IServiceProvider serviceProvider,
             IGuidGenerator guidGenerator,
             IOptions<PermissionManagementOptions> options,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant, 
+            IDistributedCache<PermissionGrantCacheItem> cache)
         {
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
+            Cache = cache;
             PermissionGrantRepository = permissionGrantRepository;
             PermissionDefinitionManager = permissionDefinitionManager;
             Options = options.Value;
@@ -104,11 +109,32 @@ namespace Volo.Abp.PermissionManagement
 
             await provider.SetAsync(permissionName, providerKey, isGranted);
         }
-
+        
         public virtual async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)
         {
+            using (CurrentTenant.Change(permissionGrant.TenantId))
+            {
+                //Invalidating the cache for the old key
+                await Cache.RemoveAsync(
+                    PermissionGrantCacheItem.CalculateCacheKey(
+                        permissionGrant.Name,
+                        permissionGrant.ProviderName,
+                        permissionGrant.ProviderKey
+                    )
+                );
+            }
+            
             permissionGrant.ProviderKey = providerKey;
             return await PermissionGrantRepository.UpdateAsync(permissionGrant);
+        }
+
+        public virtual async Task DeleteAsync(string providerName, string providerKey)
+        {
+            var permissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
+            foreach (var permissionGrant in permissionGrants)
+            {
+                await PermissionGrantRepository.DeleteAsync(permissionGrant);
+            }
         }
 
         protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)

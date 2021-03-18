@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Modularity;
@@ -9,7 +9,7 @@ using Volo.Abp.UI.Navigation;
 namespace Volo.Abp.Identity.Blazor
 {
     [DependsOn(
-        typeof(AbpIdentityHttpApiClientModule),
+        typeof(AbpIdentityApplicationContractsModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpPermissionManagementBlazorModule),
         typeof(AbpBlazoriseUIModule)

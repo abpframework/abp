@@ -23,6 +23,11 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             CancellationToken cancellationToken = default
         );
 
+        Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default
+        );
+
         Task<IdentityResource> FindByNameAsync(
             string name,
             bool includeDetails = true,

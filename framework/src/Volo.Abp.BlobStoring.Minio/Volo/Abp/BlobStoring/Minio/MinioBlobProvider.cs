@@ -10,13 +10,17 @@ namespace Volo.Abp.BlobStoring.Minio
     public class MinioBlobProvider : BlobProviderBase, ITransientDependency
     {
         protected IMinioBlobNameCalculator MinioBlobNameCalculator { get; }
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
-        public MinioBlobProvider(IMinioBlobNameCalculator minioBlobNameCalculator)
+        public MinioBlobProvider(
+            IMinioBlobNameCalculator minioBlobNameCalculator,
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
             MinioBlobNameCalculator = minioBlobNameCalculator;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
-        public async override Task SaveAsync(BlobProviderSaveArgs args)
+        public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetMinioConfiguration();
@@ -36,7 +40,7 @@ namespace Volo.Abp.BlobStoring.Minio
             await client.PutObjectAsync(containerName, blobName, args.BlobStream, args.BlobStream.Length);
         }
 
-        public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
@@ -51,7 +55,7 @@ namespace Volo.Abp.BlobStoring.Minio
             return false;
         }
 
-        public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
@@ -60,7 +64,7 @@ namespace Volo.Abp.BlobStoring.Minio
             return await BlobExistsAsync(client, containerName, blobName);
         }
 
-        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
@@ -108,7 +112,7 @@ namespace Volo.Abp.BlobStoring.Minio
             }
         }
 
-        private async Task<bool> BlobExistsAsync(MinioClient client, string containerName , string blobName)
+        protected virtual async Task<bool> BlobExistsAsync(MinioClient client, string containerName , string blobName)
         {
             // Make sure Blob Container exists.
             if (await client.BucketExistsAsync(containerName))
@@ -133,13 +137,13 @@ namespace Volo.Abp.BlobStoring.Minio
             return false;
         }
 
-        private static string GetContainerName(BlobProviderArgs args)
+        protected virtual string GetContainerName(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetMinioConfiguration();
 
             return configuration.BucketName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : configuration.BucketName;
+                : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.BucketName);
         }
     }
 }

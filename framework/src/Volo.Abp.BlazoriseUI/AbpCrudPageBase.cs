@@ -8,15 +8,12 @@ using JetBrains.Annotations;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Components;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlazoriseUI.Components;
-using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
 {
@@ -230,10 +227,17 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task GetEntitiesAsync()
         {
-            await UpdateGetListInputAsync();
-            var result = await AppService.GetListAsync(GetListInput);
-            Entities = MapToListViewModel(result.Items);
-            TotalCount = (int?)result.TotalCount;
+            try
+            {
+                await UpdateGetListInputAsync();
+                var result = await AppService.GetListAsync(GetListInput);
+                Entities = MapToListViewModel(result.Items);
+                TotalCount = (int?)result.TotalCount;
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         private IReadOnlyList<TListViewModel> MapToListViewModel(IReadOnlyList<TGetListOutputDto> dtos)
@@ -272,7 +276,7 @@ namespace Volo.Abp.BlazoriseUI
 
             await GetEntitiesAsync();
 
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
 
         protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TListViewModel> e)
@@ -285,44 +289,67 @@ namespace Volo.Abp.BlazoriseUI
 
             await GetEntitiesAsync();
 
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
 
         protected virtual async Task OpenCreateModalAsync()
         {
-            CreateValidationsRef?.ClearAll();
+            try
+            {
+                CreateValidationsRef?.ClearAll();
 
-            await CheckCreatePolicyAsync();
+                await CheckCreatePolicyAsync();
 
-            NewEntity = new TCreateViewModel();
+                NewEntity = new TCreateViewModel();
 
-            // Mapper will not notify Blazor that binded values are changed
-            // so we need to notify it manually by calling StateHasChanged
-            await InvokeAsync(() => StateHasChanged());
-
-            CreateModal.Show();
+                // Mapper will not notify Blazor that binded values are changed
+                // so we need to notify it manually by calling StateHasChanged
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                    CreateModal?.Show();
+                });
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         protected virtual Task CloseCreateModalAsync()
         {
-            CreateModal.Hide();
-            return Task.CompletedTask;
+            return InvokeAsync(CreateModal.Hide);
+        }
+
+        protected virtual void ClosingCreateModal(ModalClosingEventArgs eventArgs)
+        {
+            // cancel close if clicked outside of modal area
+            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         }
 
         protected virtual async Task OpenEditModalAsync(TListViewModel entity)
         {
-            EditValidationsRef?.ClearAll();
+            try
+            {
+                EditValidationsRef?.ClearAll();
 
-            await CheckUpdatePolicyAsync();
+                await CheckUpdatePolicyAsync();
 
-            var entityDto = await AppService.GetAsync(entity.Id);
+                var entityDto = await AppService.GetAsync(entity.Id);
 
-            EditingEntityId = entity.Id;
-            EditingEntity = MapToEditingEntity(entityDto);
+                EditingEntityId = entity.Id;
+                EditingEntity = MapToEditingEntity(entityDto);
 
-            await InvokeAsync(() => StateHasChanged());
-
-            EditModal.Show();
+                await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                    EditModal?.Show();
+                });
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         protected virtual TUpdateViewModel MapToEditingEntity(TGetOutputDto entityDto)
@@ -352,24 +379,34 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual Task CloseEditModalAsync()
         {
-            EditModal.Hide();
+            InvokeAsync(EditModal.Hide);
             return Task.CompletedTask;
+        }
+
+        protected virtual void ClosingEditModal(ModalClosingEventArgs eventArgs)
+        {
+            // cancel close if clicked outside of modal area
+            eventArgs.Cancel = eventArgs.CloseReason == CloseReason.FocusLostClosing;
         }
 
         protected virtual async Task CreateEntityAsync()
         {
-            if (CreateValidationsRef?.ValidateAll() ?? true)
+            try
             {
-                await OnCreatingEntityAsync();
+                if (CreateValidationsRef?.ValidateAll() ?? true)
+                {
+                    await OnCreatingEntityAsync();
 
-                await CheckCreatePolicyAsync();
-                var createInput = MapToCreateInput(NewEntity);
-                await AppService.CreateAsync(createInput);
-                await GetEntitiesAsync();
+                    await CheckCreatePolicyAsync();
+                    var createInput = MapToCreateInput(NewEntity);
+                    await AppService.CreateAsync(createInput);
 
-                await OnCreatedEntityAsync();
-
-                CreateModal.Hide();
+                    await OnCreatedEntityAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
             }
         }
 
@@ -378,25 +415,31 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        protected virtual Task OnCreatedEntityAsync()
+        protected virtual async Task OnCreatedEntityAsync()
         {
-            return Task.CompletedTask;
+            await GetEntitiesAsync();
+
+            await InvokeAsync(CreateModal.Hide);
         }
 
         protected virtual async Task UpdateEntityAsync()
         {
-            if (EditValidationsRef?.ValidateAll() ?? true)
+            try
             {
-                await OnUpdatingEntityAsync();
+                if (EditValidationsRef?.ValidateAll() ?? true)
+                {
+                    await OnUpdatingEntityAsync();
 
-                await CheckUpdatePolicyAsync();
-                var updateInput = MapToUpdateInput(EditingEntity);
-                await AppService.UpdateAsync(EditingEntityId, updateInput);
-                await GetEntitiesAsync();
+                    await CheckUpdatePolicyAsync();
+                    var updateInput = MapToUpdateInput(EditingEntity);
+                    await AppService.UpdateAsync(EditingEntityId, updateInput);
 
-                await OnUpdatedEntityAsync();
-
-                EditModal.Hide();
+                    await OnUpdatedEntityAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
             }
         }
 
@@ -405,17 +448,26 @@ namespace Volo.Abp.BlazoriseUI
             return Task.CompletedTask;
         }
 
-        protected virtual Task OnUpdatedEntityAsync()
+        protected virtual async Task OnUpdatedEntityAsync()
         {
-            return Task.CompletedTask;
+            await GetEntitiesAsync();
+
+            await InvokeAsync(EditModal.Hide);
         }
 
         protected virtual async Task DeleteEntityAsync(TListViewModel entity)
         {
-            await CheckDeletePolicyAsync();
+            try
+            {
+                await CheckDeletePolicyAsync();
 
-            await AppService.DeleteAsync(entity.Id);
-            await GetEntitiesAsync();
+                await AppService.DeleteAsync(entity.Id);
+                await GetEntitiesAsync();
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
@@ -439,10 +491,10 @@ namespace Volo.Abp.BlazoriseUI
         }
 
         /// <summary>
-        /// Calls IAuthorizationService.CheckAsync for the given <see cref="policyName"/>.
+        /// Calls IAuthorizationService.CheckAsync for the given <paramref name="policyName"/>.
         /// Throws <see cref="AbpAuthorizationException"/> if given policy was not granted for the current user.
         ///
-        /// Does nothing if <see cref="policyName"/> is null or empty.
+        /// Does nothing if <paramref name="policyName"/> is null or empty.
         /// </summary>
         /// <param name="policyName">A policy name to check</param>
         protected virtual async Task CheckPolicyAsync([CanBeNull] string policyName)

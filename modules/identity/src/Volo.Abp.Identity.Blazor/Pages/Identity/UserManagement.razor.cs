@@ -46,7 +46,14 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         {
             await base.OnInitializedAsync();
 
-            Roles = (await AppService.GetAssignableRolesAsync()).Items;
+            try
+            {
+                Roles = (await AppService.GetAssignableRolesAsync()).Items;
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
         
         protected override async Task SetPermissionsAsync()
@@ -79,17 +86,24 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override async Task OpenEditModalAsync(IdentityUserDto entity)
         {
-            EditModalSelectedTab = DefaultSelectedTab;
-
-            var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
-
-            EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
+            try
             {
-                Name = x.Name,
-                IsAssigned = userRoleNames.Contains(x.Name)
-            }).ToArray();
+                EditModalSelectedTab = DefaultSelectedTab;
 
-            await base.OpenEditModalAsync(entity);
+                var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
+
+                EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
+                {
+                    Name = x.Name,
+                    IsAssigned = userRoleNames.Contains(x.Name)
+                }).ToArray();
+
+                await base.OpenEditModalAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(ex);
+            }
         }
 
         protected override Task OnUpdatingEntityAsync()

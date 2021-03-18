@@ -20,7 +20,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            var query = from apiResource in DbSet.IncludeDetails(includeDetails)
+            var query = from apiResource in (await GetDbSetAsync()).IncludeDetails(includeDetails)
                 where apiResource.Name == apiResourceName
                 orderby apiResource.Id
                 select apiResource;
@@ -31,7 +31,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
         public async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            var query = from apiResource in DbSet.IncludeDetails(includeDetails)
+            var query = from apiResource in (await GetDbSetAsync()).IncludeDetails(includeDetails)
                 where apiResourceNames.Contains(apiResource.Name)
                 orderby apiResource.Name
                 select apiResource;
@@ -44,7 +44,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from api in DbSet.IncludeDetails(includeDetails)
+            var query = from api in (await GetDbSetAsync()).IncludeDetails(includeDetails)
                         where api.Scopes.Any(x => scopeNames.Contains(x.Scope))
                         select api;
 
@@ -58,53 +58,71 @@ namespace Volo.Abp.IdentityServer.ApiResources
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||
                          x.DisplayName.Contains(filter))
-                .OrderBy(sorting ?? "name desc")
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiResource.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.Name.Contains(filter) ||
+                            x.Description.Contains(filter) ||
+                            x.DisplayName.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name, GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync()).AnyAsync(ar => ar.Id != expectedId && ar.Name == name, GetCancellationToken(cancellationToken));
         }
 
         public async override Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var resourceClaims = DbContext.Set<ApiResourceClaim>().Where(sc => sc.ApiResourceId == id);
+            var dbContext = await GetDbContextAsync();
+
+            var resourceClaims = dbContext.Set<ApiResourceClaim>().Where(sc => sc.ApiResourceId == id);
             foreach (var scopeClaim in resourceClaims)
             {
-                DbContext.Set<ApiResourceClaim>().Remove(scopeClaim);
+                dbContext.Set<ApiResourceClaim>().Remove(scopeClaim);
             }
 
-            var resourceScopes = DbContext.Set<ApiResourceScope>().Where(s => s.ApiResourceId == id);
+            var resourceScopes = dbContext.Set<ApiResourceScope>().Where(s => s.ApiResourceId == id);
             foreach (var scope in resourceScopes)
             {
-                DbContext.Set<ApiResourceScope>().Remove(scope);
+                dbContext.Set<ApiResourceScope>().Remove(scope);
             }
 
-            var resourceSecrets = DbContext.Set<ApiResourceSecret>().Where(s => s.ApiResourceId == id);
+            var resourceSecrets = dbContext.Set<ApiResourceSecret>().Where(s => s.ApiResourceId == id);
             foreach (var secret in resourceSecrets)
             {
-                DbContext.Set<ApiResourceSecret>().Remove(secret);
+                dbContext.Set<ApiResourceSecret>().Remove(secret);
             }
 
-            var apiResourceProperties = DbContext.Set<ApiResourceProperty>().Where(s => s.ApiResourceId == id);
+            var apiResourceProperties = dbContext.Set<ApiResourceProperty>().Where(s => s.ApiResourceId == id);
             foreach (var property in apiResourceProperties)
             {
-                DbContext.Set<ApiResourceProperty>().Remove(property);
+                dbContext.Set<ApiResourceProperty>().Remove(property);
             }
 
             await base.DeleteAsync(id, autoSave, cancellationToken);
         }
 
+        [Obsolete("Use WithDetailsAsync method.")]
         public override IQueryable<ApiResource> WithDetails()
         {
             return GetQueryable().IncludeDetails();
+        }
+
+        public override async Task<IQueryable<ApiResource>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }

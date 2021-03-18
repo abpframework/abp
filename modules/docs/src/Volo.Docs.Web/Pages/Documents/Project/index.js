@@ -71,9 +71,11 @@
                 });
             };
 
-            $('#filter').keyup(function (e) {
+            $('#filter').on('input', (e) => {
                 filterDocumentItems(e.target.value);
+            })
 
+            $('#filter').keyup(function (e) {
                 if (e.key === 'Enter') {
                     gotoFilteredDocumentIfThereIsOnlyOne();
                 }
@@ -81,7 +83,7 @@
 
             $('#fullsearch').keyup(function (e) {
                 if (e.key === 'Enter') {
-                    window.open($(this).data('fullsearch-url') + this.value);
+                    window.open($(this).data('fullsearch-url') + "?keyword=" + encodeURIComponent(this.value));
                 }
             });
         };

@@ -1,13 +1,10 @@
-import { Injectable } from '@angular/core';
-import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  Router,
-} from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Injectable, Injector } from '@angular/core';
+import { NavigationStart } from '@angular/router';
+import { of, Subject, timer } from 'rxjs';
+import { map, mapTo, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { LOADER_DELAY } from '../tokens/lodaer-delay.token';
 import { InternalStore } from '../utils/internal-store-utils';
+import { RouterEvents } from './router-events.service';
 
 export interface RouterWaitState {
   loading: boolean;
@@ -18,20 +15,29 @@ export interface RouterWaitState {
 })
 export class RouterWaitService {
   private store = new InternalStore<RouterWaitState>({ loading: false });
-  constructor(private router: Router) {
-    this.router.events
+  private destroy$ = new Subject();
+  private delay: number;
+  constructor(private routerEvents: RouterEvents, injector: Injector) {
+    this.delay = injector.get(LOADER_DELAY, 500);
+    this.updateLoadingStatusOnNavigationEvents();
+  }
+
+  private updateLoadingStatusOnNavigationEvents() {
+    this.routerEvents
+      .getAllNavigationEvents()
       .pipe(
-        filter(
-          event =>
-            event instanceof NavigationStart ||
-            event instanceof NavigationEnd ||
-            event instanceof NavigationError ||
-            event instanceof NavigationCancel,
+        map(event => event instanceof NavigationStart),
+        switchMap(condition =>
+          condition
+            ? this.delay === 0
+              ? of(true)
+              : timer(this.delay || 0).pipe(mapTo(true), takeUntil(this.destroy$))
+            : of(false),
         ),
+        tap(() => this.destroy$.next()),
       )
-      .subscribe(event => {
-        if (event instanceof NavigationStart) this.setLoading(true);
-        else this.setLoading(false);
+      .subscribe(status => {
+        this.setLoading(status);
       });
   }
 

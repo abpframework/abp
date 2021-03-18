@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
 
         public void AddStyles(BundleContext context)
         {
-            context.Add("_content/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme/libs/abp/css/theme.css");
+            context.Add("_content/Volo.Abp.AspNetCore.Components.Web.BasicTheme/libs/abp/css/theme.css");
         }
     }
 }

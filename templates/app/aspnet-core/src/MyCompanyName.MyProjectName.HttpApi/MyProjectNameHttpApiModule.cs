@@ -6,7 +6,11 @@ using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+using Volo.CmsKit;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName
 {
@@ -16,7 +20,11 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpFeatureManagementHttpApiModule)
+        typeof(AbpFeatureManagementHttpApiModule),
+        //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+        typeof(CmsKitHttpApiModule),
+        //</TEMPLATE-REMOVE>
+        typeof(AbpSettingManagementHttpApiModule)
         )]
     public class MyProjectNameHttpApiModule : AbpModule
     {

@@ -9,13 +9,17 @@ namespace Volo.Abp.BlobStoring.Azure
     public class AzureBlobProvider : BlobProviderBase, ITransientDependency
     {
         protected IAzureBlobNameCalculator AzureBlobNameCalculator { get; }
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
-        public AzureBlobProvider(IAzureBlobNameCalculator azureBlobNameCalculator)
+        public AzureBlobProvider(
+            IAzureBlobNameCalculator azureBlobNameCalculator,
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
             AzureBlobNameCalculator = azureBlobNameCalculator;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
-        public async override Task SaveAsync(BlobProviderSaveArgs args)
+        public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetAzureConfiguration();
@@ -33,7 +37,7 @@ namespace Volo.Abp.BlobStoring.Azure
             await GetBlobClient(args, blobName).UploadAsync(args.BlobStream, true);
         }
 
-        public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
 
@@ -45,14 +49,14 @@ namespace Volo.Abp.BlobStoring.Azure
             return false;
         }
 
-        public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
 
             return await BlobExistsAsync(args, blobName);
         }
 
-        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
 
@@ -87,22 +91,22 @@ namespace Volo.Abp.BlobStoring.Azure
             await blobContainerClient.CreateIfNotExistsAsync();
         }
 
-        private async Task<bool> BlobExistsAsync(BlobProviderArgs args, string blobName)
+        protected virtual async Task<bool> BlobExistsAsync(BlobProviderArgs args, string blobName)
         {
             // Make sure Blob Container exists.
             return await ContainerExistsAsync(GetBlobContainerClient(args)) &&
                    (await GetBlobClient(args, blobName).ExistsAsync()).Value;
         }
 
-        private static string GetContainerName(BlobProviderArgs args)
+        protected virtual string GetContainerName(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetAzureConfiguration();
             return configuration.ContainerName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : configuration.ContainerName;
+                : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
         }
 
-        private static async Task<bool> ContainerExistsAsync(BlobContainerClient blobContainerClient)
+        protected virtual async Task<bool> ContainerExistsAsync(BlobContainerClient blobContainerClient)
         {
             return (await blobContainerClient.ExistsAsync()).Value;
         }

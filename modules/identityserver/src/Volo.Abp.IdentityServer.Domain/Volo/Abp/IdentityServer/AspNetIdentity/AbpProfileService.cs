@@ -24,7 +24,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         }
 
         [UnitOfWork]
-        public async override Task GetProfileDataAsync(ProfileDataRequestContext context)
+        public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             using (CurrentTenant.Change(context.Subject.FindTenantId()))
             {
@@ -33,7 +33,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         }
 
         [UnitOfWork]
-        public async override Task IsActiveAsync(IsActiveContext context)
+        public override async Task IsActiveAsync(IsActiveContext context)
         {
             using (CurrentTenant.Change(context.Subject.FindTenantId()))
             {

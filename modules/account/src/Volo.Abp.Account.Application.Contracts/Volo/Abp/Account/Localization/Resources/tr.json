@@ -60,6 +60,8 @@
     "Volo.Account:InvalidEmailAddress": "Email adresi bulunamadı: {0}",
     "PasswordReset": "Şifre Sıfırlama",
     "PasswordResetInfoInEmail": "Şifrenizi sıfırlamanız için bir talep aldık! Eğer bu talebi siz gerçekleştirmişseniz, şifrenizi sıfırlamak için bağlantıya tıklayın.",
-    "ResetMyPassword": "Şifremi sıfırla"
+    "ResetMyPassword": "Şifremi sıfırla",
+    "AccessDenied": "Erişim reddedildi!",
+    "AccessDeniedMessage": "Bu kaynağa erişiminiz yok."
   }
 }

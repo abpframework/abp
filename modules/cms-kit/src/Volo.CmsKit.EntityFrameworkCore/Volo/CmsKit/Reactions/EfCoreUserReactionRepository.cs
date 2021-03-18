@@ -30,7 +30,7 @@ namespace Volo.CmsKit.Reactions
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
             Check.NotNullOrWhiteSpace(reactionName, nameof(reactionName));
 
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x =>
                     x.CreatorId == userId &&
                     x.EntityType == entityType &&
@@ -48,7 +48,7 @@ namespace Volo.CmsKit.Reactions
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x =>
                     x.CreatorId == userId &&
                     x.EntityType == entityType &&
@@ -64,7 +64,7 @@ namespace Volo.CmsKit.Reactions
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x =>
                     x.EntityType == entityType &&
                     x.EntityId == entityId)

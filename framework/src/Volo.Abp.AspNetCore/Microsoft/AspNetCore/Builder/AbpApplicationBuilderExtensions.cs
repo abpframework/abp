@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
@@ -81,6 +82,11 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseAbpClaimsMap(this IApplicationBuilder app)
         {
             return app.UseMiddleware<AbpClaimsMapMiddleware>();
+        }
+
+        public static IApplicationBuilder UseAbpSecurityHeaders(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
         }
     }
 }

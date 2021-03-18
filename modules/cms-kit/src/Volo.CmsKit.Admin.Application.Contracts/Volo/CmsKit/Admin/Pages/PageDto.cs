@@ -3,12 +3,17 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Pages
 {
-    public class PageDto : EntityDto<Guid>
+    [Serializable]
+    public class PageDto : AuditedEntityDto<Guid>
     {
         public string Title { get; set; }
 
-        public string Url { get; set; }
+        public string Slug { get; set; }
         
-        public string Description { get; set; }
+        public string Content { get; set; }
+
+        public string Script { get; set; }
+
+        public string Style { get; set; }
     }
 }

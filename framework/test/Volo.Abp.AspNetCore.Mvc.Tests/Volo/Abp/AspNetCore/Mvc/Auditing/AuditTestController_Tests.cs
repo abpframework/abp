@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -29,6 +30,17 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         }
 
         [Fact]
+        public async Task Should_Get_Correct_ServiceName_And_MethodName()
+        {
+            _options.IsEnabledForGetRequests = true;
+            _options.AlwaysLogOnException = false;
+            await GetResponseAsync("/api/audit-test/");
+            await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x =>
+                x.Actions.Any(a => a.ServiceName == typeof(AuditTestController).FullName) &&
+                x.Actions.Any(a => a.MethodName == nameof(AuditTestController.Get))));
+        }
+
+        [Fact]
         public async Task Should_Trigger_Middleware_And_AuditLog_Success_For_GetRequests()
         {
             _options.IsEnabledForGetRequests = true;
@@ -51,7 +63,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
             await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
-        
+
         [Fact]
         public async Task Should_Trigger_Middleware_And_AuditLog_Exception_When_Returns_Object()
         {

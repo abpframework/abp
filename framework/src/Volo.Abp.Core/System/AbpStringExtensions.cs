@@ -88,7 +88,7 @@ namespace System
         /// Gets index of nth occurrence of a char in a string.
         /// </summary>
         /// <param name="str">source string to be searched</param>
-        /// <param name="c">Char to search in <see cref="str"/></param>
+        /// <param name="c">Char to search in <paramref name="str"/></param>
         /// <param name="n">Count of the occurrence</param>
         public static int NthIndexOf(this string str, char c, int n)
         {
@@ -260,8 +260,9 @@ namespace System
         /// </summary>
         /// <param name="str">String to convert</param>
         /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
+        /// <param name="handleAbbreviations">set true to if you want to convert 'XYZ' to 'xyz'.</param>
         /// <returns>camelCase of the string</returns>
-        public static string ToCamelCase(this string str, bool useCurrentCulture = false)
+        public static string ToCamelCase(this string str, bool useCurrentCulture = false, bool handleAbbreviations = false)
         {
             if (string.IsNullOrWhiteSpace(str))
             {
@@ -269,6 +270,11 @@ namespace System
             }
 
             if (str.Length == 1)
+            {
+                return useCurrentCulture ? str.ToLower() : str.ToLowerInvariant();
+            }
+
+            if (handleAbbreviations && IsAllUpperCase(str))
             {
                 return useCurrentCulture ? str.ToLower() : str.ToLowerInvariant();
             }
@@ -544,6 +550,19 @@ namespace System
             Check.NotNull(encoding, nameof(encoding));
 
             return encoding.GetBytes(str);
+        }
+
+        private static bool IsAllUpperCase(string input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsLetter(input[i]) && !Char.IsUpper(input[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

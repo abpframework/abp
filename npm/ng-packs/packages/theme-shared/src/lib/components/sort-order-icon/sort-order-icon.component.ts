@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+/**
+ * @deprecated To be deleted in v5.0. Use ngx-datatale instead.
+ */
 @Component({
   selector: 'abp-sort-order-icon',
   templateUrl: './sort-order-icon.component.html',

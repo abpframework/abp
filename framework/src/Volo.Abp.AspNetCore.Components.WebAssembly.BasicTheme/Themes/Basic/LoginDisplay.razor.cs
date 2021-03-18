@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
 
         protected ApplicationMenu Menu { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             Menu = await MenuManager.GetAsync(StandardMenus.User);
 
@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
 
         protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
         {
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
 
         public void Dispose()

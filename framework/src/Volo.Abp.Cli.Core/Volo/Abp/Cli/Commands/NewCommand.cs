@@ -12,11 +12,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -31,14 +33,17 @@ namespace Volo.Abp.Cli.Commands
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
         public ITemplateInfoProvider TemplateInfoProvider { get; }
+        public ConnectionStringProvider ConnectionStringProvider { get; }
 
         public NewCommand(TemplateProjectBuilder templateProjectBuilder
             , ITemplateInfoProvider templateInfoProvider,
-            EfCoreMigrationManager efCoreMigrationManager)
+            EfCoreMigrationManager efCoreMigrationManager,
+            ConnectionStringProvider connectionStringProvider)
         {
             _efCoreMigrationManager = efCoreMigrationManager;
             TemplateProjectBuilder = templateProjectBuilder;
             TemplateInfoProvider = templateInfoProvider;
+            ConnectionStringProvider = connectionStringProvider;
 
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -63,6 +68,10 @@ namespace Volo.Abp.Cli.Commands
             if (template != null)
             {
                 Logger.LogInformation("Template: " + template);
+            }
+            else
+            {
+                template = (await TemplateInfoProvider.GetDefaultAsync()).Name;
             }
 
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
@@ -107,6 +116,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
+            var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
+            if (publicWebSite)
+            {
+                Logger.LogInformation("Public Web Site: yes");
+            }
+
             var mobileApp = GetMobilePreference(commandLineArgs);
             if (mobileApp != MobileApp.None)
             {
@@ -132,35 +147,58 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var createSolutionFolder = GetCreateSolutionFolderPreference(commandLineArgs);
-            if (!createSolutionFolder)
-            {
-                Logger.LogInformation("Create Solution Folder: no");
-            }
 
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
 
             var outputFolderRoot =
                 outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory();
 
-            outputFolder = createSolutionFolder ?
-                Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
-                outputFolderRoot;
+            SolutionName solutionName;
+            if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
+            {
+                var microserviceSolutionName = FindMicroserviceSolutionName(outputFolderRoot);
+
+                if (microserviceSolutionName == null)
+                {
+                    throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
+                }
+
+                solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
+                outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, projectName);
+                uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;
+            }
+            else
+            {
+                solutionName = SolutionName.Parse(projectName);
+
+                outputFolder = createSolutionFolder ?
+                    Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
+                    outputFolderRoot;
+            }
 
             Volo.Abp.IO.DirectoryHelper.CreateIfNotExists(outputFolder);
 
             Logger.LogInformation("Output folder: " + outputFolder);
 
+            if (connectionString == null &&
+                databaseManagementSystem != DatabaseManagementSystem.NotSpecified &&
+                databaseManagementSystem != DatabaseManagementSystem.SQLServer)
+            {
+                connectionString = ConnectionStringProvider.GetByDbms(databaseManagementSystem, outputFolder);
+            }
+
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
             var result = await TemplateProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
-                    SolutionName.Parse(projectName),
+                    solutionName,
                     template,
                     version,
                     databaseProvider,
                     databaseManagementSystem,
                     uiFramework,
                     mobileApp,
+                    publicWebSite,
                     gitHubAbpLocalRepositoryPath,
                     gitHubVoloLocalRepositoryPath,
                     templateSource,
@@ -208,32 +246,44 @@ namespace Volo.Abp.Cli.Commands
                 }
             }
 
-            DeleteMigrationsIfNeeded(databaseProvider, databaseManagementSystem, outputFolder);
-
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
-            if (AppTemplateBase.IsAppTemplate(template ?? (await TemplateInfoProvider.GetDefaultAsync()).Name))
+
+            if (AppTemplateBase.IsAppTemplate(template))
             {
                 var isCommercial = template == AppProTemplate.TemplateName;
                 OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
             }
+            else if (MicroserviceTemplateBase.IsMicroserviceTemplate(template))
+            {
+                OpenMicroserviceDocumentPage();
+            }
         }
 
-        private void DeleteMigrationsIfNeeded(DatabaseProvider databaseProvider, DatabaseManagementSystem databaseManagementSystem, string outputFolder)
+        private string FindMicroserviceSolutionName(string outputFolderRoot)
         {
-            if (databaseManagementSystem == DatabaseManagementSystem.NotSpecified || databaseManagementSystem == DatabaseManagementSystem.SQLServer)
+            var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+
+            if (slnFile == null)
             {
-                return;
+                return null;
             }
 
-            if (databaseProvider != DatabaseProvider.NotSpecified && databaseProvider != DatabaseProvider.EntityFrameworkCore)
+            return Path.GetFileName(slnFile).RemovePostFix(".sln");
+        }
+
+        private UiFramework FindMicroserviceSolutionUiFramework(string outputFolderRoot)
+        {
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "applications", "blazor")))
             {
-                return;
+                return UiFramework.Blazor;
+            }
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "applications", "web")))
+            {
+                return UiFramework.Mvc;
             }
 
-            Logger.LogInformation($"Deleting migrations...");
-
-            _efCoreMigrationManager.RemoveAllMigrations(outputFolder);
+            return UiFramework.None;
         }
 
         private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
@@ -245,19 +295,14 @@ namespace Volo.Abp.Cli.Commands
             var tieredYesNo = tiered ? "yes" : "no";
             var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                url = url.Replace("&", "^&");
-                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Process.Start("xdg-open", url);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                Process.Start("open", url);
-            }
+            CmdHelper.OpenWebPage(url);
+        }
+
+        private void OpenMicroserviceDocumentPage()
+        {
+            var url = "https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index";
+
+            CmdHelper.OpenWebPage(url);
         }
 
         private bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
@@ -379,6 +424,11 @@ namespace Volo.Abp.Cli.Commands
 
         protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
         {
+            if (commandLineArgs.Options.ContainsKey("no-ui"))
+            {
+                return UiFramework.None;
+            }
+
             var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
             switch (optionValue)
             {
@@ -462,6 +512,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "m";
                 public const string Long = "mobile";
+            }
+
+            public static class PublicWebSite
+            {
+                public const string Long = "with-public-website";
             }
 
             public static class TemplateSource

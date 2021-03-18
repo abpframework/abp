@@ -14,14 +14,14 @@ ABP BLOB Storage system is also compatible to other ABP Framework features like 
 
 ## BLOB Storage Providers
 
-The ABP Framework has already the following storage provider implementations;
+The ABP Framework has already the following storage provider implementations:
 
 * [File System](Blob-Storing-File-System.md): Stores BLOBs in a folder of the local file system, as standard files.
 * [Database](Blob-Storing-Database.md): Stores BLOBs in a database.
 * [Azure](Blob-Storing-Azure.md): Stores BLOBs on the [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
 * [Aliyun](Blob-Storing-Aliyun.md): Stores BLOBs on the [Aliyun Storage Service](https://help.aliyun.com/product/31815.html).
 * [Minio](Blob-Storing-Minio.md): Stores BLOBs on the [MinIO Object storage](https://min.io/).
-* [Aws](Blob-Storing-Aws.md): Stores BLOBs on the[Amazon Simple Storage Service](https://aws.amazon.com/s3/).
+* [Aws](Blob-Storing-Aws.md): Stores BLOBs on the [Amazon Simple Storage Service](https://aws.amazon.com/s3/).
 
 More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](Blob-Storing-Custom-Provider.md) and [contribute](Contribution/Index.md) to the ABP Framework.
 

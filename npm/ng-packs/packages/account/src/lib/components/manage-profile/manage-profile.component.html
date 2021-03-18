@@ -1,0 +1,62 @@
+<div id="AbpContentToolbar"></div>
+
+<div class="card border-0 shadow-sm min-h-400" [abpLoading]="!(profile$ | async)">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-3">
+        <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
+          <li
+            *ngIf="!hideChangePasswordTab && (profile$ | async)"
+            class="nav-item"
+            (click)="selectedTab = 0"
+          >
+            <a
+              class="nav-link"
+              [ngClass]="{ active: selectedTab === 0 }"
+              role="tab"
+              href="javascript:void(0)"
+              >{{ 'AbpUi::ChangePassword' | abpLocalization }}</a
+            >
+          </li>
+          <li class="nav-item mb-2" (click)="selectedTab = 1">
+            <a
+              class="nav-link"
+              [ngClass]="{ active: selectedTab === 1 }"
+              role="tab"
+              href="javascript:void(0)"
+              >{{ 'AbpAccount::PersonalSettings' | abpLocalization }}</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="profile$ | async" class="col-12 col-md-9">
+        <div class="tab-content" *ngIf="selectedTab === 0" [@fadeIn]>
+          <div class="tab-pane active" role="tabpanel">
+            <h4>
+              {{ 'AbpIdentity::ChangePassword' | abpLocalization }}
+              <hr />
+            </h4>
+            <abp-change-password-form
+              *abpReplaceableTemplate="{
+                componentKey: changePasswordKey
+              }"
+            ></abp-change-password-form>
+          </div>
+        </div>
+        <div class="tab-content" *ngIf="selectedTab === 1" [@fadeIn]>
+          <div class="tab-pane active" role="tabpanel">
+            <h4>
+              {{ 'AbpIdentity::PersonalSettings' | abpLocalization }}
+              <hr />
+            </h4>
+            <abp-personal-settings-form
+              *abpReplaceableTemplate="{
+                componentKey: personalSettingsKey
+              }"
+            ></abp-personal-settings-form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

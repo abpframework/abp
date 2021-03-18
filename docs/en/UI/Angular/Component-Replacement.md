@@ -350,7 +350,7 @@ import {
   ApplicationConfiguration,
   AuthService,
   ConfigState,
-  SessionState,
+  SessionStateService,
   SetLanguage,
 } from '@abp/ng.core';
 import { Component, AfterViewInit } from '@angular/core';
@@ -396,10 +396,10 @@ export class NavItemsComponent implements AfterViewInit {
   }
 
   get selectedLangCulture(): string {
-    return this.store.selectSnapshot(SessionState.getLanguage);
+    return this.sessionState.getLanguage();
   }
 
-  constructor(private store: Store, private authService: AuthService) {}
+  constructor(private store: Store, private authService: AuthService, private sessionState: SessionStateService) {}
 
   ngAfterViewInit() {
     fromEvent(window, 'resize')
@@ -546,4 +546,5 @@ The final UI looks like below:
 
 ## See Also
 
+- [How Replaceable Components Work with Extensions](./How-Replaceable-Components-Work-with-Extensions.md)
 - [How to Replace PermissionManagementComponent](./Permission-Management-Component-Replacement.md)
