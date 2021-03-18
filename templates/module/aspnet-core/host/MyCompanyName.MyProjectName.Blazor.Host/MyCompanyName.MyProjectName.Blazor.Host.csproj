@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Blazor\Volo.Abp.Identity.Blazor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Blazor.WebAssembly\Volo.Abp.Identity.Blazor.WebAssembly.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\account\src\Volo.Abp.Account.Blazor\Volo.Abp.Account.Blazor.csproj" />
   </ItemGroup>
 
