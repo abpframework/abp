@@ -79,7 +79,7 @@ namespace MyCompanyName.MyProjectName.Web
             var configuration = context.Services.GetConfiguration();
 
             ConfigureBundles();
-            ConfigureCache(configuration);
+            ConfigureCache();
             ConfigureRedis(context, configuration, hostingEnvironment);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
@@ -104,7 +104,7 @@ namespace MyCompanyName.MyProjectName.Web
             });
         }
 
-        private void ConfigureCache(IConfiguration configuration)
+        private void ConfigureCache()
         {
             Configure<AbpDistributedCacheOptions>(options =>
             {
@@ -260,7 +260,6 @@ namespace MyCompanyName.MyProjectName.Web
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-            app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
         }

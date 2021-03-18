@@ -198,6 +198,27 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     corsOrigins: new[] { blazorRootUrl.RemovePostFix("/") }
                 );
             }
+            
+            //Blazor Server Tiered Client
+            var blazorServerTieredClientId = configurationSection["MyProjectName_BlazorServerTiered:ClientId"];
+            if (!blazorServerTieredClientId.IsNullOrWhiteSpace())
+            {
+                var blazorServerTieredClientRootUrl = configurationSection["MyProjectName_BlazorServerTiered:RootUrl"].EnsureEndsWith('/');
+
+                /* MyProjectName_BlazorServerTiered client is only needed if you created a tiered blazor server
+                 * solution. Otherwise, you can delete this client. */
+
+                await CreateClientAsync(
+                    name: webClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "hybrid" },
+                    secret: (configurationSection["MyProjectName_BlazorServerTiered:ClientSecret"] ?? "1q2w3e*").Sha256(),
+                    redirectUri: $"{blazorServerTieredClientRootUrl}signin-oidc",
+                    postLogoutRedirectUri: $"{blazorServerTieredClientRootUrl}signout-callback-oidc",
+                    frontChannelLogoutUri: $"{blazorServerTieredClientRootUrl}Account/FrontChannelLogout",
+                    corsOrigins: new[] { blazorServerTieredClientRootUrl.RemovePostFix("/") }
+                );
+            }
 
             // Swagger Client
             var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];

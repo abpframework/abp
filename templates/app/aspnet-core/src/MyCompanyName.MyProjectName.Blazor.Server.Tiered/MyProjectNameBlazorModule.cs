@@ -4,14 +4,17 @@ using System.Net.Http;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
+using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.Components.Server.BasicTheme;
@@ -26,14 +29,17 @@ using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.Blazor.Server;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement.Blazor.Server;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Blazor.Server;
@@ -81,7 +87,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             var configuration = context.Services.GetConfiguration();
 
             ConfigureUrls(configuration);
+            ConfigureCache();
             ConfigureBundles();
+            ConfigureMultiTenancy();
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
@@ -90,6 +98,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             ConfigureBlazorise(context);
             ConfigureRouter(context);
             ConfigureMenu(context);
+            ConfigureRedis(context, configuration, hostingEnvironment);
+            ConfigureSwaggerServices(context.Services);
         }
 
         private void ConfigureUrls(IConfiguration configuration)
@@ -97,6 +107,14 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             Configure<AppUrlOptions>(options =>
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+            });
+        }
+        
+        private void ConfigureCache()
+        {
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
             });
         }
 
@@ -121,6 +139,14 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                         bundle.AddFiles("/blazor-global-styles.css");
                     }
                 );
+            });
+        }
+        
+        private void ConfigureMultiTenancy()
+        {
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
         }
 
@@ -220,6 +246,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor());
             });
+            
+            Configure<AbpToolbarOptions>(options =>
+            {
+                options.Contributors.Add(new MyProjectNameToolbarContributor());
+            });
         }
 
         private void ConfigureRouter(ServiceConfigurationContext context)
@@ -237,6 +268,32 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.AddMaps<MyProjectNameBlazorModule>();
             });
         }
+        
+        private void ConfigureSwaggerServices(IServiceCollection services)
+        {
+            services.AddSwaggerGen(
+                options =>
+                {
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
+                    options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
+                }
+            );
+        }
+
+        private void ConfigureRedis(
+            ServiceConfigurationContext context,
+            IConfiguration configuration,
+            IWebHostEnvironment hostingEnvironment)
+        {
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+                context.Services
+                    .AddDataProtection()
+                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+            }
+        }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
@@ -253,10 +310,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             if (!env.IsDevelopment())
             {
                 app.UseErrorPage();
-                app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();
@@ -267,8 +322,13 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 app.UseMultiTenancy();
             }
 
-            app.UseUnitOfWork();
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseAbpSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+            });
+            app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
         }
     }
