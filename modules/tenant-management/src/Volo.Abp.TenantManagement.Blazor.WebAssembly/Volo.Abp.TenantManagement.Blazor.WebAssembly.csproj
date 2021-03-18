@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Volo.Abp.TenantManagement.Blazor\Volo.Abp.TenantManagement.Blazor.csproj" />
+      <ProjectReference Include="..\Volo.Abp.TenantManagement.HttpApi.Client\Volo.Abp.TenantManagement.HttpApi.Client.csproj" />
     </ItemGroup>
     
 </Project>
