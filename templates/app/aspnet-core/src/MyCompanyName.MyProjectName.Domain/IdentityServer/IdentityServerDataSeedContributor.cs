@@ -209,7 +209,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                  * solution. Otherwise, you can delete this client. */
 
                 await CreateClientAsync(
-                    name: webClientId,
+                    name: blazorServerTieredClientId,
                     scopes: commonScopes,
                     grantTypes: new[] { "hybrid" },
                     secret: (configurationSection["MyProjectName_BlazorServerTiered:ClientSecret"] ?? "1q2w3e*").Sha256(),
