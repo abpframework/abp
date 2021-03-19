@@ -20,7 +20,7 @@ namespace Volo.Abp.GlobalFeatures
         [Fact]
         public async Task Interceptor_Test()
         {
-            var ex = await Assert.ThrowsAsync<AbpGlobalFeatureNotEnableException>(async () =>
+            var ex = await Assert.ThrowsAsync<AbpGlobalFeatureNotEnabledException>(async () =>
             {
                 await _testAppServiceV1.TestMethod();
             });

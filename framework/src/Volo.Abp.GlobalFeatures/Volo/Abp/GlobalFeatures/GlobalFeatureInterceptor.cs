@@ -17,7 +17,7 @@ namespace Volo.Abp.GlobalFeatures
 
             if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(invocation.TargetObject.GetType(), out var attribute))
             {
-                throw new AbpGlobalFeatureNotEnableException(code: AbpGlobalFeatureErrorCodes.GlobalFeatureIsNotEnabled)
+                throw new AbpGlobalFeatureNotEnabledException(code: AbpGlobalFeatureErrorCodes.GlobalFeatureIsNotEnabled)
                     .WithData("ServiceName", invocation.TargetObject.GetType().FullName)
                     .WithData("GlobalFeatureName", attribute.Name);
             }
