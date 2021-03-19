@@ -40,6 +40,9 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+using Volo.CmsKit.Web;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.Web
 {
@@ -56,6 +59,9 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpIdentityWebModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpAspNetCoreSerilogModule),
+        //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+        typeof(CmsKitWebModule),
+        //</TEMPLATE-REMOVE>
         typeof(AbpSwashbuckleModule)
         )]
     public class MyProjectNameWebModule : AbpModule

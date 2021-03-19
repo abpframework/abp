@@ -36,6 +36,9 @@
     <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Web\Volo.Abp.SettingManagement.Web.csproj" />
     <ProjectReference Include="..\MyCompanyName.MyProjectName.HttpApi\MyCompanyName.MyProjectName.HttpApi.csproj" />
     <ProjectReference Include="..\MyCompanyName.MyProjectName.HttpApi.Client\MyCompanyName.MyProjectName.HttpApi.Client.csproj" />
+    <!--<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>-->
+    <ProjectReference Include="..\..\..\..\..\modules\cms-kit\src\Volo.CmsKit.Web\Volo.CmsKit.Web.csproj" />
+    <!--</TEMPLATE-REMOVE>-->
   </ItemGroup>
 
   <ItemGroup>
