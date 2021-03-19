@@ -5,9 +5,9 @@ namespace Volo.Abp.GlobalFeatures
 {
     public static class GlobalFeatureHelper
     {
-        public static bool IsGlobalFeatureEnabled(Type controllerType, out RequiresGlobalFeatureAttribute attribute)
+        public static bool IsGlobalFeatureEnabled(Type type, out RequiresGlobalFeatureAttribute attribute)
         {
-            attribute = ReflectionHelper.GetSingleAttributeOrDefault<RequiresGlobalFeatureAttribute>(controllerType);
+            attribute = ReflectionHelper.GetSingleAttributeOrDefault<RequiresGlobalFeatureAttribute>(type);
             return attribute == null || GlobalFeatureManager.Instance.IsEnabled(attribute.GetFeatureName());
         }
     }
