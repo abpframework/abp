@@ -47,6 +47,9 @@ using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+using Volo.CmsKit.Web;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
 {
@@ -64,6 +67,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
         typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
         typeof(AbpIdentityBlazorServerModule),
         typeof(AbpTenantManagementBlazorServerModule),
+        //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+        typeof(CmsKitWebModule),
+        //</TEMPLATE-REMOVE>
         typeof(AbpSettingManagementBlazorServerModule)
        )]
     public class MyProjectNameBlazorModule : AbpModule
