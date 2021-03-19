@@ -3385,7 +3385,7 @@ tui-chart@^3.7.0:
     raphael "https://github.com/nhn/raphael.git#2.2.0-c"
     tui-code-snippet "^2.3.1"
 
-tui-code-snippet@^1.5.0:
+tui-code-snippet@1.5.2, tui-code-snippet@^1.5.0:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/tui-code-snippet/-/tui-code-snippet-1.5.2.tgz#f4b8f0f1ac996b0b5b621f77c9507af19a0de238"
   integrity sha512-6UqTlQaaC1KLcmC0HAoq5dtl1G4Fib+R+NC7pmaV7kiIlZ7JqKhUmnOoGRcreAyzd81UTK/vCvhrw9QJskpCFQ==
