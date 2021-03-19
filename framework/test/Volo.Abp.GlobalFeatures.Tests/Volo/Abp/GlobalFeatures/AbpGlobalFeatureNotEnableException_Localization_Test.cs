@@ -19,7 +19,7 @@ namespace Volo.Abp.GlobalFeatures
         {
             using (CultureHelper.Use("zh-Hans"))
             {
-                var exception = new AbpGlobalFeatureNotEnableException(code: AbpGlobalFeatureErrorCodes.GlobalFeatureIsNotEnabled)
+                var exception = new AbpGlobalFeatureNotEnabledException(code: AbpGlobalFeatureErrorCodes.GlobalFeatureIsNotEnabled)
                     .WithData("ServiceName", "MyService")
                     .WithData("GlobalFeatureName", "TestFeature");;
                 var errorInfo = _exceptionToErrorInfoConverter.Convert(exception, false);

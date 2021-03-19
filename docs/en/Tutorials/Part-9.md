@@ -1116,7 +1116,7 @@ namespace Acme.BookStore.Blazor.Pages
 
             await GetAuthorsAsync();
 
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
 
         private void OpenCreateAuthorModal()
