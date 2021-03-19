@@ -53,3 +53,4 @@ export const environment = {
 
 According to this flow, the user is redirected to the login page in the account module.
 
+> Note: The resource owner password flow does not support the two-factor authentication for some technical reasons.

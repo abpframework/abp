@@ -50,7 +50,7 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
-### Account Module Implementation for Commercial Templates
+### Account Public Module Implementation for Commercial Templates
 
 The pro startup template comes with `@volo/abp.ng.account` package. You should update the package version to v4.3-rc or higher version. The package can be updated by running the following command:
 
@@ -59,18 +59,18 @@ npm install @volo/abp.ng.account@next
 ```
 > Make sure v4.3-rc or higher version is installed.
 
-`AccountConfigModule` is already imported to `app.module.ts` in the startup template. So no need to import the module to the `AppModule`. If you removed the `AccountConfigModule` from the `AppModule`, you can import it as shown below:
+Open the `app.module.ts` and add `AccountPublicConfigModule.forRoot()` to the imports array as shown below:
 
 ```js
 // app.module.ts
 
-import { AccountConfigModule } from '@volo/abp.ng.account/config';
+import { AccountPublicConfigModule } from '@volo/abp.ng.account/public/config';
 //...
 
 @NgModule({
   imports: [
     //...
-    AccountConfigModule.forRoot()
+    AccountPublicConfigModule.forRoot()
   ],
   //...
 })
@@ -85,7 +85,7 @@ const routes: Routes = [
   //...
   {
     path: 'account',
-    loadChildren: () => import('@volo/abp.ng.account').then(m => m.AccountPublicModule.forLazy()),
+    loadChildren: () => import('@volo/abp.ng.account/public').then(m => m.AccountPublicModule.forLazy()),
   },
   //...
 export class AppRoutingModule {}
@@ -94,6 +94,10 @@ export class AppRoutingModule {}
 ### Manage Profile Page
 
 Before v4.3, the "Manage Your Profile" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, if you implemented the account module to your project, the same link will land on a page in the Angular UI account module instead.
+
+### My Security Logs Page [COMMERCIAL]
+
+Before v4.3, the "My Security Logs" link in the current user dropdown on the top bar redirected the user to MVC's my security logs page. As of v4.3, if you implemented the account module to your project, the same link will land on a page in the Angular UI account public module instead.
 
 ### Resource Owner Password Flow
 
@@ -115,5 +119,7 @@ export const environment = {
   // other options removed for sake of brevity
 } as Config.Environment;
 ```
+
+> Note: The resource owner password flow does not support the two-factor authentication for some technical reasons.
 
 See the [Authorization in Angular UI](./Authorization) document for more details.
