@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.CmsKit.Admin.Web.Bundles
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
 {
     public class SlugifyScriptContributor : BundleContributor
     {
