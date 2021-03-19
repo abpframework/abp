@@ -97,7 +97,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             ConfigureHttpClient(context);
             ConfigureBlazorise(context);
             ConfigureRouter(context);
-            ConfigureMenu(context);
+            ConfigureMenu(configuration);
             ConfigureRedis(context, configuration, hostingEnvironment);
             ConfigureSwaggerServices(context.Services);
         }
@@ -240,11 +240,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 .AddFontAwesomeIcons();
         }
 
-        private void ConfigureMenu(ServiceConfigurationContext context)
+        private void ConfigureMenu(IConfiguration configuration)
         {
             Configure<AbpNavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+                options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
             
             Configure<AbpToolbarOptions>(options =>
