@@ -153,9 +153,9 @@ ABP的启动解决方案中包含两个用于集成Entity Framework Core的项�
 * `Application.Contracts` 依赖`Domain.Shared`项目,可以在DTO中重用`Domain.Shared`中的类型.例如,`Domain.Shared`项目中的枚举类型 `IssueType` 同样被`Contracts`项目中的`CreateIssueDto`DTO所引用.
 * `Application` 依赖`Application.Contracts`项目,因为此项目需要实现应用服务的接口及接口使用的DTO.另外也依赖`Domain`项目,因为应用服务的实现必须依赖领域层中的对象.
 * `EntityFrameworkCore` 依赖`Domain`项目,因为此项目需要将领域对象(实体或值对象)映射到数据库的表,另外还需要实现`Domain`项目中的仓储接口.
-* `HttpApi` 依赖`Application.Contacts`项目,因为Controllers需要注入应用服务.
-* `HttpApi.Client` 依赖`Application.Contacts`项目,因为此项目需要是使用应用服务.
-* `Web` 依赖`HttpApi`项目,因为此项目对外提供HTTP APIs.另外Pages或Components 需要使用应用服务,所以还间接依赖了`Application.Contacts`项目
+* `HttpApi` 依赖`Application.Contracts`项目,因为Controllers需要注入应用服务.
+* `HttpApi.Client` 依赖`Application.Contracts`项目,因为此项目需要是使用应用服务.
+* `Web` 依赖`HttpApi`项目,因为此项目对外提供HTTP APIs.另外Pages或Components 需要使用应用服务,所以还间接依赖了`Application.Contracts`项目
 
 #### 虚线依赖
 
@@ -1798,7 +1798,7 @@ public async Task ChangeTitleAsync(Issue issue, string title)
 
 为了更清楚的实现,你可以为不同的应用类型创建不同的项目(`.csproj`):
 
-* `IssueTracker.Admin.Application` 和 `IssueTracker.Admin.Application.Contacts` 为后台管理系统提供服务.
+* `IssueTracker.Admin.Application` 和 `IssueTracker.Admin.Application.Contracts` 为后台管理系统提供服务.
 * `IssueTracker.Public.Application` 和 `IssueTracker.Public.Application.Contracts` 为公开网站提供服务.
 * `IssueTracker.Mobile.Application` 和 `IssueTracker.Mobile.Application.Contracts` 为移动端应用提供服务.
 
