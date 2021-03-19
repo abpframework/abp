@@ -70,13 +70,13 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
                     new EntityAction
                     {
                         Text = L["Edit"],
-                        RequiredPolicy = UpdatePolicyName,
+                        Visible = (data) => HasUpdatePermission,
                         Clicked = async (data) => { await OpenEditModalAsync(data.As<TenantDto>()); }
                     },
                     new EntityAction
                     {
                         Text = L["Features"],
-                        RequiredPolicy = ManageFeaturesPolicyName,
+                        Visible = (data) => HasManageFeaturesPermission,
                         Clicked = async (data) =>
                         {
                             var tenant = data.As<TenantDto>();
@@ -86,7 +86,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
                     new EntityAction
                     {
                         Text = L["Delete"],
-                        RequiredPolicy = DeletePolicyName,
+                        Visible = (data) => HasDeletePermission,
                         Clicked = async (data) => await DeleteEntityAsync(data.As<TenantDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<TenantDto>())
                     }

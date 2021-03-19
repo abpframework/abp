@@ -214,11 +214,11 @@ namespace Volo.Abp.BlazoriseUI
 
         protected override async Task OnInitializedAsync()
         {
+            await SetPermissionsAsync();
             await SetEntityActionsAsync();
             await SetTableColumnsAsync();
             await SetToolbarItemsAsync();
             await SetBreadcrumbItemsAsync();
-            await SetPermissionsAsync();
         }
 
         protected virtual async Task SetPermissionsAsync()

@@ -25,23 +25,21 @@
                                     if (action.ConfirmationMessage != null)
                                     {
                                         <EntityAction TItem="TItem"
-                                                      RequiredPolicy="@action.RequiredPolicy"
                                                       Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
                                                       Icon="@action.Icon"
                                                       Clicked="async () => await action.Clicked(context)"
                                                       ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
-                                                      Visible="async () => await VisibleCore(action, context)"
+                                                      Visible="@(action.Visible!=null ? action.Visible(context) : true)"
                                                       Text="@action.Text">
                                         </EntityAction>
                                     }
                                     else
                                     {
                                         <EntityAction TItem="TItem"
-                                                      RequiredPolicy="@action.RequiredPolicy"
                                                       Clicked="async () => await action.Clicked(context)"
                                                       Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.None)"
                                                       Icon="@action.Icon"
-                                                      Visible="async () => await VisibleCore(action, context)"
+                                                      Visible="@(action.Visible!=null ? action.Visible(context) : true)"
                                                       Text="@action.Text">
                                         </EntityAction>
                                     }

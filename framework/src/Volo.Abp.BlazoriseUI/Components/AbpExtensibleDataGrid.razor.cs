@@ -46,16 +46,5 @@ namespace Volo.Abp.BlazoriseUI.Components
                 builder.CloseComponent();
             };
         }
-
-        protected async Task<bool> VisibleCore(EntityAction action, TItem item)
-        {
-            var isVisible = true;
-            if (action.Visible != null)
-            {
-                isVisible = await action.Visible.Invoke(item);
-            }
-
-            return isVisible;
-        }
     }
 }

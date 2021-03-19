@@ -48,13 +48,13 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     new EntityAction
                     {
                         Text = L["Edit"],
-                        RequiredPolicy = UpdatePolicyName,
+                        Visible = (data) => HasUpdatePermission,
                         Clicked = async (data) => { await OpenEditModalAsync(data.As<IdentityRoleDto>()); }
                     },
                     new EntityAction
                     {
                         Text = L["Permissions"],
-                        RequiredPolicy = ManagePermissionsPolicyName,
+                        Visible = (data) => HasManagePermissionsPermission,
                         Clicked = async (data) =>
                         {
                             await PermissionManagementModal.OpenAsync(PermissionProviderName,
@@ -64,7 +64,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                     new EntityAction
                     {
                         Text = L["Delete"],
-                        RequiredPolicy = DeletePolicyName,
+                        Visible = (data) => HasDeletePermission,
                         Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityRoleDto>()),
                         ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityRoleDto>())
                     }
