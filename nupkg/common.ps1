@@ -219,6 +219,8 @@ $projects = (
     "modules/feature-management/src/Volo.Abp.FeatureManagement.MongoDB",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Web",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor.Server",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor.WebAssembly",
 
     # modules/identity
     "modules/identity/src/Volo.Abp.Identity.Application.Contracts",
@@ -232,6 +234,8 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.MongoDB",
     "modules/identity/src/Volo.Abp.Identity.Web",
     "modules/identity/src/Volo.Abp.Identity.Blazor",
+    "modules/identity/src/Volo.Abp.Identity.Blazor.Server",
+    "modules/identity/src/Volo.Abp.Identity.Blazor.WebAssembly",
     "modules/identity/src/Volo.Abp.PermissionManagement.Domain.Identity",
     
     # modules/identityserver
@@ -252,9 +256,13 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.MongoDB",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Web",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor.Server",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor.WebAssembly",
 
     # modules/setting-management
     "modules/setting-management/src/Volo.Abp.SettingManagement.Blazor",
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Blazor.Server",
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Blazor.WebAssembly",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain.Shared",
     "modules/setting-management/src/Volo.Abp.SettingManagement.EntityFrameworkCore",
@@ -265,6 +273,8 @@ $projects = (
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Application.Contracts",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Application",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Blazor",
+    "modules/tenant-management/src/Volo.Abp.TenantManagement.Blazor.Server",
+    "modules/tenant-management/src/Volo.Abp.TenantManagement.Blazor.WebAssembly",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Domain",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.Domain.Shared",
     "modules/tenant-management/src/Volo.Abp.TenantManagement.EntityFrameworkCore",

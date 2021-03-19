@@ -14,6 +14,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             _options = options.Value;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok();
+        }
+
         [Route("audit-success")]
         public IActionResult AuditSuccessForGetRequests()
         {

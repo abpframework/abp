@@ -200,6 +200,8 @@
     "AddNoteSuccessMessage": "Not başarıyla eklendi",
     "NameSurname": "Adı Soyadı",
     "Note": "Not",
-    "Add": "Ekle"
+    "Add": "Ekle",
+    "ProjectDownloads": "Proje İndirmeleri",
+    "ShowProjectDownloadsOfOrganization": "Proje İndirmeleri"
   }
 }

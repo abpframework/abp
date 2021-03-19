@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Collections.Generic;
@@ -174,6 +175,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.EntityFrameworkCore, isProjectTiered);
                 await RemoveProjectByPostFix(module, moduleSolutionFile, "test", ".EntityFrameworkCore.Tests");
+                await RemoveProjectByPostFix(module, moduleSolutionFile, "test", ".Application.Tests");
                 ChangeDomainTestReferenceToMongoDB(module, moduleSolutionFile);
             }
         }
@@ -214,18 +216,16 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            var projectFolderPath = Directory.GetDirectories(srcPath).FirstOrDefault(d => d.EndsWith(postFix));
+            var projectFolderPaths = Directory.GetDirectories(srcPath).Where(d => d.EndsWith(postFix)).ToList();
 
-            if (projectFolderPath == null)
+            foreach (var projectFolderPath in projectFolderPaths)
             {
-                return;
-            }
+                await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, new DirectoryInfo(projectFolderPath).Name);
 
-            await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, new DirectoryInfo(projectFolderPath).Name);
-
-            if (Directory.Exists(projectFolderPath))
-            {
-                Directory.Delete(projectFolderPath, true);
+                if (Directory.Exists(projectFolderPath))
+                {
+                    Directory.Delete(projectFolderPath, true);
+                }
             }
         }
 
@@ -245,8 +245,8 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            var csprojFile = Directory.GetFiles(projectFolderPath).FirstOrDefault(p => p.EndsWith(".csproj"));
-            var moduleFile = Directory.GetFiles(projectFolderPath).FirstOrDefault(p => p.EndsWith("DomainTestModule.cs"));
+            var csprojFile = Directory.GetFiles(projectFolderPath, "*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+            var moduleFile = Directory.GetFiles(projectFolderPath, "*DomainTestModule.cs", SearchOption.AllDirectories).FirstOrDefault();
 
             if (csprojFile == null || moduleFile == null)
             {

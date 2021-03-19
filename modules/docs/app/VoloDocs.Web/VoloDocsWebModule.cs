@@ -150,7 +150,7 @@ namespace VoloDocs.Web
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
