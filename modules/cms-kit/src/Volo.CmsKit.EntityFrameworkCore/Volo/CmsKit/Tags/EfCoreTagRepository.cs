@@ -96,8 +96,8 @@ namespace Volo.CmsKit.Tags
                 .WhereIf(
                     !filter.IsNullOrEmpty(),
                     x =>
-                        x.Name.ToLower().Contains(filter) ||
-                        x.EntityType.ToLower().Contains(filter));
+                        x.Name.ToLower().Contains(filter.ToLower()) ||
+                        x.EntityType.ToLower().Contains(filter.ToLower()));
         }
     }
 }
