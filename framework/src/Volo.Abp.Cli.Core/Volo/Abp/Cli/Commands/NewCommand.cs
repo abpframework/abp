@@ -444,6 +444,8 @@ namespace Volo.Abp.Cli.Commands
                     return UiFramework.Angular;
                 case "blazor":
                     return UiFramework.Blazor;
+                case "blazor-server":
+                    return UiFramework.BlazorServer;
                 default:
                     return UiFramework.NotSpecified;
             }

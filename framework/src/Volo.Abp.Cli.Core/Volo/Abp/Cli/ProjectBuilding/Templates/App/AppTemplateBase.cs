@@ -87,9 +87,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     ConfigureWithAngularUi(context, steps);
                     break;
 
-
                 case UiFramework.Blazor:
                     ConfigureWithBlazorUi(context, steps);
+                    break;
+
+                case UiFramework.BlazorServer:
+                    ConfigureWithBlazorServerUi(context, steps);
                     break;
 
                 case UiFramework.Mvc:
@@ -98,9 +101,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     break;
             }
 
-            if (context.BuildArgs.UiFramework != UiFramework.Blazor)
+            if (context.BuildArgs.UiFramework != UiFramework.Blazor && context.BuildArgs.UiFramework != UiFramework.BlazorServer)
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+            }
+
+            if (context.BuildArgs.UiFramework != UiFramework.BlazorServer)
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
             }
 
             if (context.BuildArgs.UiFramework != UiFramework.Angular)
@@ -207,6 +216,30 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             }
         }
 
+        private static void ConfigureWithBlazorServerUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+
+            if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
+            {
+                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered", "MyCompanyName.MyProjectName.Blazor"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
+            }
+            else
+            {
+                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server", "MyCompanyName.MyProjectName.Blazor"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44313"));
+            }
+        }
+
         private static void ConfigureWithMvcUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
@@ -265,6 +298,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 return;
             }
 
+            //todo: discuss blazor ports
             steps.Add(new TemplateRandomSslPortStep(
                     new List<string>
                     {
