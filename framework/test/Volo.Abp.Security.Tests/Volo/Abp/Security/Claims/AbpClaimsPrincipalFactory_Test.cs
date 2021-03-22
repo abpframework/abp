@@ -44,12 +44,12 @@ namespace Volo.Abp.Security.Claims
         [Fact]
         public async Task Create_With_Exists_ClaimsPrincipal()
         {
-            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(TestAuthenticationType, ClaimTypes.NameIdentifier, ClaimTypes.Role));
-            claimsPrincipal.Identities.First().AddClaim(new Claim(ClaimTypes.NameIdentifier, "123"));
+            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(TestAuthenticationType, ClaimTypes.Name, ClaimTypes.Role));
+            claimsPrincipal.Identities.First().AddClaim(new Claim(ClaimTypes.Name, "123"));
             claimsPrincipal.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "admin"));
 
             await _abpClaimsPrincipalFactory.CreateAsync(claimsPrincipal);
-            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.NameIdentifier && x.Value == "123");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == "123");
             claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "admin");
             claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "admin2@abp.io");
             claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == "admin@abp.io");

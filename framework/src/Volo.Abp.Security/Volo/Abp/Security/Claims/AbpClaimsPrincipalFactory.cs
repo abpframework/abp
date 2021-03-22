@@ -8,6 +8,8 @@ namespace Volo.Abp.Security.Claims
 {
     public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientDependency
     {
+        public static string AuthenticationType => "Abp.Application";
+
         protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected AbpClaimsPrincipalFactoryOptions Options { get; }
 
@@ -23,7 +25,10 @@ namespace Volo.Abp.Security.Claims
         {
             using (var scope = ServiceScopeFactory.CreateScope())
             {
-                var claimsPrincipal = existsClaimsPrincipal ?? new ClaimsPrincipal();
+                var claimsPrincipal = existsClaimsPrincipal ?? new ClaimsPrincipal(new ClaimsIdentity(
+                    AuthenticationType,
+                    AbpClaimTypes.UserName,
+                    AbpClaimTypes.Role));
 
                 var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, scope.ServiceProvider);
 
