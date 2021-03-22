@@ -159,19 +159,21 @@ namespace Volo.Abp.Cli.ProjectModification
             if (blazorProject == null)
             {
                 await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.Blazor, isProjectTiered);
+                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorServer, isProjectTiered);
+                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
                 await RemoveProjectByPostFix(module, moduleSolutionFile, "src", ".Blazor");
             }
             else
             {
-                var isBlazorServer = IsBlazorServerProject(blazorProject);
+                var isBlazorServer = BlazorProjectTypeChecker.IsBlazorServerProject(blazorProject);
 
                 if (isBlazorServer)
                 {
-                    await RemoveProjectByPostFix(module, moduleSolutionFile, "src", ".Blazor.WebAssembly");
+                    await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
                 }
                 else
                 {
-                    await RemoveProjectByPostFix(module, moduleSolutionFile, "src", ".Blazor.Server");
+                    await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorServer, isProjectTiered);
                 }
             }
 
@@ -193,13 +195,6 @@ namespace Volo.Abp.Cli.ProjectModification
                 await RemoveProjectByPostFix(module, moduleSolutionFile, "test", ".Application.Tests");
                 ChangeDomainTestReferenceToMongoDB(module, moduleSolutionFile);
             }
-        }
-
-        private bool IsBlazorServerProject(string blazorProjectPath)
-        {
-            var blazorProjectCsprojContent = File.ReadAllText(blazorProjectPath);
-
-            return !blazorProjectCsprojContent.Contains("Microsoft.NET.Sdk.BlazorWebAssembly");
         }
 
         private async Task RemoveProjectByTarget(ModuleWithMastersInfo module, string moduleSolutionFile,
@@ -589,13 +584,13 @@ namespace Volo.Abp.Cli.ProjectModification
                 {
                     Name = $"{module.Name}.Blazor.WebAssembly",
                     ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorWebAssemblyModule",
-                    Target = NuGetPackageTarget.Blazor
+                    Target = NuGetPackageTarget.BlazorWebAssembly
                 },
                 new NugetPackageInfo
                 {
                     Name = $"{module.Name}.Blazor.Server",
                     ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorServerModule",
-                    Target = NuGetPackageTarget.Blazor
+                    Target = NuGetPackageTarget.BlazorServer
                 },
                 new NugetPackageInfo
                 {
