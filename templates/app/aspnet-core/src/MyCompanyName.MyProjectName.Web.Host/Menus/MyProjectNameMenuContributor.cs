@@ -10,6 +10,9 @@ using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Users;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+using Volo.CmsKit.Admin.Web.Menus;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.Web.Menus
 {
@@ -39,8 +42,21 @@ namespace MyCompanyName.MyProjectName.Web.Menus
             var administration = context.Menu.GetAdministration();
             var l = context.GetLocalizer<MyProjectNameResource>();
 
-            context.Menu.Items.Insert(0, new ApplicationMenuItem(MyProjectNameMenus.Home, l["Menu:Home"], "~/"));
+            context.Menu.Items.Insert(
+                0,
+                new ApplicationMenuItem(
+                    MyProjectNameMenus.Home,
+                    l["Menu:Home"],
+                    "~/",
+                    icon: "fas fa-home",
+                    order: 0
+                )
+            );
 
+            //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
+            context.Menu.SetSubItemOrder(CmsKitAdminMenus.GroupName, 1);
+            //</TEMPLATE-REMOVE>
+            
             if (MultiTenancyConsts.IsEnabled)
             {
                 administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
