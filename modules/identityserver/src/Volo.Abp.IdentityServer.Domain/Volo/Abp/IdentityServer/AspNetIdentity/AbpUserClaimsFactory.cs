@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Security.Claims;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.IdentityServer.AspNetIdentity
