@@ -15,7 +15,7 @@ namespace Volo.Abp.EntityFrameworkCore
     public class DbContext_Replace_Tests : EntityFrameworkCoreTestBase
     {
         private readonly IBasicRepository<ThirdDbContextDummyEntity, Guid> _dummyRepository;
-        private readonly IPersonRepository _personRepository; 
+        private readonly IPersonRepository _personRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly AbpDbContextOptions _options;
 
@@ -31,8 +31,6 @@ namespace Volo.Abp.EntityFrameworkCore
         public async Task Should_Replace_DbContext()
         {
             _options.GetReplacedTypeOrSelf(typeof(IThirdDbContext)).ShouldBe(typeof(TestAppDbContext));
-            
-            (ServiceProvider.GetRequiredService<IThirdDbContext>() is TestAppDbContext).ShouldBeTrue();
 
             using (var uow = _unitOfWorkManager.Begin())
             {
@@ -44,11 +42,11 @@ namespace Volo.Abp.EntityFrameworkCore
 
                 var instance3 = await _personRepository.GetDbContextAsync();
                 (instance3 is TestAppDbContext).ShouldBeTrue();
-                
+
                 // All instances should be the same!
                 instance3.ShouldBe(instance1);
                 instance3.ShouldBe(instance2);
-                
+
                 await uow.CompleteAsync();
             }
         }

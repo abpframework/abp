@@ -7,11 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
     public interface IEfCoreDbContext : IDisposable, IInfrastructure<IServiceProvider>, IDbContextDependencies, IDbSetCache, IDbContextPoolable
     {
+        IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
         EntityEntry<TEntity> Attach<TEntity>([NotNull] TEntity entity) where TEntity : class;
 
         EntityEntry Attach([NotNull] object entity);

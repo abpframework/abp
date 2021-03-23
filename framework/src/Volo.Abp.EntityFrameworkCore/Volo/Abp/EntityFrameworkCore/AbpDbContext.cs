@@ -31,7 +31,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency
+    public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext
         where TDbContext : DbContext
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }

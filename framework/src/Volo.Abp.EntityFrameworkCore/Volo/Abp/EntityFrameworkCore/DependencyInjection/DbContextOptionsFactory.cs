@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,10 +11,42 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
     public static class DbContextOptionsFactory
     {
-        public static DbContextOptions<TDbContext> Create<TDbContext>(IServiceProvider serviceProvider)
+        internal static DbContextOptions CreateDbContextOptions<TDbContext>(IServiceProvider serviceProvider)
+            where TDbContext : AbpDbContext<TDbContext>
+        {
+            return CreateDbContextOptionsWithContext<TDbContext>(serviceProvider);
+        }
+
+        public static DbContextOptions<TDbContext> CreateDbContextOptionsWithContext<TDbContext>(IServiceProvider serviceProvider)
             where TDbContext : AbpDbContext<TDbContext>
         {
             var creationContext = GetCreationContext<TDbContext>(serviceProvider);
+
+            var context = new AbpDbContextConfigurationContext<TDbContext>(
+                creationContext.ConnectionString,
+                serviceProvider,
+                creationContext.ConnectionStringName,
+                creationContext.ExistingConnection
+            );
+
+            var options = GetDbContextOptions<TDbContext>(serviceProvider);
+
+            PreConfigure(options, context);
+            Configure(options, context);
+
+            return context.DbContextOptions.Options;
+        }
+
+        internal static async Task<DbContextOptions> CreateDbContextOptionsAsync<TDbContext>(IServiceProvider serviceProvider)
+            where TDbContext : AbpDbContext<TDbContext>
+        {
+            return await CreateDbContextOptionsWithContextAsync<TDbContext>(serviceProvider);
+        }
+
+        public static async Task<DbContextOptions<TDbContext>> CreateDbContextOptionsWithContextAsync<TDbContext>(IServiceProvider serviceProvider)
+            where TDbContext : AbpDbContext<TDbContext>
+        {
+            var creationContext = await GetCreationContextAsync<TDbContext>(serviceProvider);
 
             var context = new AbpDbContextConfigurationContext<TDbContext>(
                 creationContext.ConnectionString,
@@ -95,6 +128,44 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             );
         }
 
+        private static async Task<DbContextCreationContext> GetCreationContextAsync<TDbContext>(IServiceProvider serviceProvider)
+            where TDbContext : AbpDbContext<TDbContext>
+        {
+            var context = DbContextCreationContext.Current;
+            if (context != null)
+            {
+                return context;
+            }
+
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
+            var connectionString = await ResolveConnectionStringAsync<TDbContext>(serviceProvider, connectionStringName);
+
+            return new DbContextCreationContext(
+                connectionStringName,
+                connectionString
+            );
+        }
+
+        private static Task<string> ResolveConnectionStringAsync<TDbContext>(
+            IServiceProvider serviceProvider,
+            string connectionStringName)
+        {
+            // Use DefaultConnectionStringResolver.Resolve when we remove IConnectionStringResolver.Resolve
+            var connectionStringResolver = serviceProvider.GetRequiredService<IConnectionStringResolver>();
+            var currentTenant = serviceProvider.GetRequiredService<ICurrentTenant>();
+
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (currentTenant.Change(null))
+                {
+                    return connectionStringResolver.ResolveAsync(connectionStringName);
+                }
+            }
+
+            return connectionStringResolver.ResolveAsync(connectionStringName);
+        }
+
         private static string ResolveConnectionString<TDbContext>(
             IServiceProvider serviceProvider,
             string connectionStringName)
@@ -116,5 +187,6 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             return connectionStringResolver.Resolve(connectionStringName);
 #pragma warning restore 618
         }
+
     }
 }

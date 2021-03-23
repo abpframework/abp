@@ -14,6 +14,7 @@ using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.EntityFrameworkCore;
 using Volo.Abp.Timing;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
@@ -39,7 +40,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
                 });
-                
+
                 options.Entity<Author>(opt =>
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Books);
@@ -61,7 +62,10 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
-            context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
+            using (var uow = context.ServiceProvider.GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                context.ServiceProvider.GetRequiredService<IDbContextProvider<SecondDbContext>>().GetDbContext().Database.Migrate();
+            }
         }
 
         private static SqliteConnection CreateDatabaseAndGetConnection()
@@ -76,7 +80,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     @"CREATE VIEW View_PersonView AS 
                       SELECT Name, CreationTime, Birthday, LastActive FROM People");
             }
-            
+
             return connection;
         }
     }

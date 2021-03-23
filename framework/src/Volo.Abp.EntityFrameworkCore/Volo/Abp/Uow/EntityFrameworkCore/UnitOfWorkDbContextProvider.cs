@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -30,7 +32,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICurrentTenant currentTenant, 
+            ICurrentTenant currentTenant,
             IOptions<AbpDbContextOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
@@ -151,14 +153,14 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         {
             return unitOfWork.Options.IsTransactional
                 ? CreateDbContextWithTransaction(unitOfWork)
-                : unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                : GetDbContext(unitOfWork);
         }
 
         private async Task<TDbContext> CreateDbContextAsync(IUnitOfWork unitOfWork)
         {
             return unitOfWork.Options.IsTransactional
                 ? await CreateDbContextWithTransactionAsync(unitOfWork)
-                : unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                : await GetDbContextAsync(unitOfWork);
         }
 
         [Obsolete("Use CreateDbContextWithTransactionAsync.")]
@@ -169,7 +171,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             if (activeTransaction == null)
             {
-                var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                var dbContext = GetDbContext(unitOfWork);
 
                 var dbtransaction = unitOfWork.Options.IsolationLevel.HasValue
                     ? dbContext.Database.BeginTransaction(unitOfWork.Options.IsolationLevel.Value)
@@ -190,7 +192,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             {
                 DbContextCreationContext.Current.ExistingConnection = activeTransaction.DbContextTransaction.GetDbTransaction().Connection;
 
-                var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                var dbContext = GetDbContext(unitOfWork);
 
                 if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
@@ -234,7 +236,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             if (activeTransaction == null)
             {
-                var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                var dbContext = await GetDbContextAsync(unitOfWork);
 
                 var dbTransaction = unitOfWork.Options.IsolationLevel.HasValue
                     ? await dbContext.Database.BeginTransactionAsync(unitOfWork.Options.IsolationLevel.Value, GetCancellationToken())
@@ -255,7 +257,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             {
                 DbContextCreationContext.Current.ExistingConnection = activeTransaction.DbContextTransaction.GetDbTransaction().Connection;
 
-                var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
+                var dbContext = await GetDbContextAsync(unitOfWork);
 
                 if (dbContext.As<DbContext>().HasRelationalTransactionManager())
                 {
@@ -295,6 +297,36 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
                 return dbContext;
             }
+        }
+
+        private async Task<TDbContext> GetDbContextAsync(IUnitOfWork unitOfWork)
+        {
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+
+            var generic = typeof(DbContextOptionsFactory).GetMethod(
+                nameof(DbContextOptionsFactory.CreateDbContextOptionsAsync),
+                BindingFlags.Static | BindingFlags.NonPublic).MakeGenericMethod(targetDbContextType);
+
+            var options = await (Task<DbContextOptions>)generic.Invoke(this, new object[]{ unitOfWork.ServiceProvider });
+            var dbContext = (TDbContext)Activator.CreateInstance(targetDbContextType, args: options);
+
+            dbContext.LazyServiceProvider = unitOfWork.ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
+            return dbContext;
+        }
+
+        private TDbContext GetDbContext(IUnitOfWork unitOfWork)
+        {
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TDbContext));
+
+            var generic = typeof(DbContextOptionsFactory).GetMethod(
+                nameof(DbContextOptionsFactory.CreateDbContextOptions),
+                BindingFlags.Static | BindingFlags.NonPublic).MakeGenericMethod(targetDbContextType);
+
+            var options = (DbContextOptions)generic.Invoke(this, new object[]{ unitOfWork.ServiceProvider });
+            var dbContext = (TDbContext)Activator.CreateInstance(targetDbContextType, args: options);
+
+            dbContext.LazyServiceProvider = unitOfWork.ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
+            return dbContext;
         }
 
         private async Task<string> ResolveConnectionStringAsync(string connectionStringName)

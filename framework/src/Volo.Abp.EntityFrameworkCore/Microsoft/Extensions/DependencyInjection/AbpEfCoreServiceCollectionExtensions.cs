@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class AbpEfCoreServiceCollectionExtensions
     {
         public static IServiceCollection AddAbpDbContext<TDbContext>(
-            this IServiceCollection services, 
+            this IServiceCollection services,
             Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null)
             where TDbContext : AbpDbContext<TDbContext>
         {
@@ -17,17 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new AbpDbContextRegistrationOptions(typeof(TDbContext), services);
             optionsBuilder?.Invoke(options);
 
-            services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
-
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {
-                services.Replace(
-                    ServiceDescriptor.Transient(
-                        dbContextType,
-                        sp => sp.GetRequiredService(typeof(TDbContext))
-                    )
-                );
-
                 services.Configure<AbpDbContextOptions>(opts =>
                 {
                     opts.DbContextReplacements[dbContextType] = typeof(TDbContext);
