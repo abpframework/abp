@@ -217,9 +217,20 @@ namespace Volo.Abp.BlazoriseUI
             await SetPermissionsAsync();
             await SetEntityActionsAsync();
             await SetTableColumnsAsync();
-            await SetToolbarItemsAsync();
-            await SetBreadcrumbItemsAsync();
+            await InvokeAsync(StateHasChanged);
         }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await base.OnAfterRenderAsync(firstRender);
+                await SetToolbarItemsAsync();
+                await SetBreadcrumbItemsAsync();
+            }
+        }
+
+
 
         protected virtual async Task SetPermissionsAsync()
         {
@@ -477,6 +488,7 @@ namespace Volo.Abp.BlazoriseUI
 
                 await AppService.DeleteAsync(entity.Id);
                 await GetEntitiesAsync();
+                await InvokeAsync(StateHasChanged);
             }
             catch (Exception ex)
             {

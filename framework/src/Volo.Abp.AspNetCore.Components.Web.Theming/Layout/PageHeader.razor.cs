@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
@@ -39,12 +40,14 @@ namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout
             ToolbarItemRenders = new List<RenderFragment>();
         }
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnParametersSetAsync()
         {
+            await base.OnParametersSetAsync();
             if (Toolbar!=null)
             {
+                Console.WriteLine("Toolbar is not null");
                 var toolbarItems = await PageToolbarManager.GetItemsAsync(Toolbar);
-
+                Console.WriteLine($"Toolbar item count:{toolbarItems.Length}");
                 ToolbarItemRenders.Clear();
 
                 foreach (var item in toolbarItems)
@@ -65,6 +68,11 @@ namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout
                     });
                 }
             }
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
         }
     }
 }
