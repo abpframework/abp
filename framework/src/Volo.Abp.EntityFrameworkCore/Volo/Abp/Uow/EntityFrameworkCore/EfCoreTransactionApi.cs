@@ -34,9 +34,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             foreach (var dbContext in AttendedDbContexts)
             {
-                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager() &&
+                    dbContext.Database.GetDbConnection() == DbContextTransaction.GetDbTransaction().Connection)
                 {
-                    continue; //Relational databases use the shared transaction
+                    continue; //Relational databases use the shared transaction if they are using the same connection
                 }
 
                 await dbContext.Database.CommitTransactionAsync(CancellationTokenProvider.Token);
@@ -54,9 +55,10 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
             foreach (var dbContext in AttendedDbContexts)
             {
-                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager() &&
+                    dbContext.Database.GetDbConnection() == DbContextTransaction.GetDbTransaction().Connection)
                 {
-                    continue; //Relational databases use the shared transaction
+                    continue; //Relational databases use the shared transaction if they are using the same connection
                 }
 
                 await dbContext.Database.RollbackTransactionAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
