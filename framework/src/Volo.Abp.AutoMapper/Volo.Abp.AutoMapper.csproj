@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiLingualObject\Volo.Abp.MultiLingualObject.csproj" />
     <ProjectReference Include="..\Volo.Abp.ObjectExtending\Volo.Abp.ObjectExtending.csproj" />
     <ProjectReference Include="..\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
   </ItemGroup>

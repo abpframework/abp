@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
 {
@@ -26,7 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
                 return;
             }
 
-            if (!IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
+            if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
             {
                 var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
                 logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute.Name}' feature.");
@@ -34,13 +34,10 @@ namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures
                 return;
             }
 
-            await next();
-        }
-
-        protected virtual bool IsGlobalFeatureEnabled(Type controllerType, out RequiresGlobalFeatureAttribute attribute)
-        {
-            attribute = ReflectionHelper.GetSingleAttributeOrDefault<RequiresGlobalFeatureAttribute>(controllerType);
-            return attribute == null || GlobalFeatureManager.Instance.IsEnabled(attribute.GetFeatureName());
+            using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.GlobalFeatureChecking))
+            {
+                await next();
+            }
         }
     }
 }

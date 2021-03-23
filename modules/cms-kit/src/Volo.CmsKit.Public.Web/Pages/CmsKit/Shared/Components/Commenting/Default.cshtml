@@ -25,7 +25,7 @@
 }
 @{
     Func<dynamic, IHtmlContent> GetCommentArea(Guid? repliedCommentId, bool cancelButton = false) =>
-    @<div class="cms-comment-form-area bg-light card p-3 mx-0 mt-4  @(repliedCommentId.HasValue ? "my-1" : "mb-0")"
+    @<div class="cms-comment-form-area bg-light card p-3 mx-0  @(repliedCommentId.HasValue ? "my-3" : "mt-3")"
           data-reply-id="@(repliedCommentId?.ToString() ?? "")"
           style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
@@ -113,7 +113,7 @@
     </div>;
 }
 
-<div class="cms-comment-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+<div class="cms-comment-area mb-5" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
     @if (CurrentUser.IsAuthenticated)
     {
         <div id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}")">
@@ -129,28 +129,28 @@
     @foreach (var comment in Model.Comments)
     {
         <div class="comment">
-            <div class="card p-3 mx-0 my-4">
+            <div class="card p-3 mx-0 my-3">
                 <h5>
                     @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
                 </h5>
 
                 @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
 
-            <div class="form-row mt-2">
-                <div class="col">
-                    <div class="my-2 ">
-                        @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
+                <div class="form-row mt-2">
+                    <div class="col">
+                        <div class="my-2 ">
+                            @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="reaction-in-comment">
+                            @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                            {
+                                @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = comment.Id.ToString() })
+                            }
+                        </div>
                     </div>
                 </div>
-                <div class="col-auto">
-                    <div class="reaction-in-comment">
-                        @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-                        {
-                            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = comment.Id.ToString() })
-                        }
-                    </div>
-                </div>
-            </div>
                 @GetEditArea(comment.Id, comment.Text).Invoke(null)
 
                 @if (comment.Replies.Any())
@@ -165,21 +165,21 @@
 
                                 @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
 
-                            <div class="form-row mt-2">
-                                <div class="col">
-                                    <div class="my-2 ">
-                                        @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
+                                <div class="form-row mt-2">
+                                    <div class="col">
+                                        <div class="my-2 ">
+                                            @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="reaction-in-comment">
+                                            @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                                            {
+                                                @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = reply.Id.ToString() })
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-auto">
-                                    <div class="reaction-in-comment">
-                                        @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-                                        {
-                                            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = reply.Id.ToString() })
-                                        }
-                                    </div>
-                                </div>
-                            </div>
 
                                 @GetEditArea(reply.Id, reply.Text).Invoke(null)
                             </div>
@@ -190,7 +190,7 @@
                         <div class=" mt-2">
                             @if (CurrentUser.IsAuthenticated)
                             {
-                                <a href="#" class="comment-links  comment-reply-link btn btn-primary btn-sm"  data-reply-id="@comment.Id.ToString()">
+                                <a href="#" class="comment-links  comment-reply-link btn btn-primary btn-sm" data-reply-id="@comment.Id.ToString()">
                                     <i class="fa fa-reply mr-1"></i> @L["Reply"]
                                 </a>
                             }
@@ -210,3 +210,4 @@
         </div>
     }
 </div>
+ 

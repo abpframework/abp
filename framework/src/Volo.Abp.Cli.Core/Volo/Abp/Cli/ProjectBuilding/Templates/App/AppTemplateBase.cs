@@ -64,6 +64,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
+                steps.Add(new RemoveEfCoreRelatedCodeStep());
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
@@ -152,11 +153,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             else if (context.BuildArgs.UiFramework != UiFramework.NotSpecified && context.BuildArgs.UiFramework != UiFramework.Mvc)
             {
                 steps.Add(new ChangePublicAuthPortStep());
-            }
-
-            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.NotSpecified && context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
-            {
-                steps.Add(new RemoveEfCoreDependencyFromPublicStep());
             }
 
             // We disabled cms-kit for v4.2 release.

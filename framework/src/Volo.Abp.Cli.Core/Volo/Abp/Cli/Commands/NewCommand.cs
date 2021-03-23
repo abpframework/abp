@@ -274,13 +274,17 @@ namespace Volo.Abp.Cli.Commands
 
         private UiFramework FindMicroserviceSolutionUiFramework(string outputFolderRoot)
         {
-            if (Directory.Exists(Path.Combine(outputFolderRoot, "applications", "blazor")))
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "apps", "blazor")))
             {
                 return UiFramework.Blazor;
             }
-            if (Directory.Exists(Path.Combine(outputFolderRoot, "applications", "web")))
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "apps", "web")))
             {
                 return UiFramework.Mvc;
+            }
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "apps", "angular")))
+            {
+                return UiFramework.Angular;
             }
 
             return UiFramework.None;

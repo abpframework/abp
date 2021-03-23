@@ -1,4 +1,4 @@
-﻿var abp = abp || {};
+var abp = abp || {};
 (function($) {
 
     if (!$) {
@@ -99,19 +99,28 @@
         options.success = undefined;
         options.error = undefined;
 
-        return $.Deferred(function ($dfd) {
-            $.ajax(options)
+        var xhr = null;
+        var promise = $.Deferred(function ($dfd) {
+            xhr = $.ajax(options)
                 .done(function (data, textStatus, jqXHR) {
                     $dfd.resolve(data);
                     userOptions.success && userOptions.success(data);
                 }).fail(function (jqXHR) {
+                    if(jqXHR.status === 0 || jqXHR.statusText === 'abort') {
+                        //ajax request is abort, ignore error handle.
+                        return;
+                    }
                     if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
                         abp.ajax.handleAbpErrorResponse(jqXHR, userOptions, $dfd);
                     } else {
                         abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
                     }
                 });
-        });
+        }).promise();
+
+        promise['jqXHR'] = xhr;
+
+        return promise;
     };
 
     $.extend(abp.ajax, {

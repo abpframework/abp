@@ -1,9 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using Blazorise;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.FeatureManagement.Blazor.Components;
 using Volo.Abp.TenantManagement.Localization;
 
@@ -18,8 +14,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
 
         protected FeatureManagementModal FeatureManagementModal;
 
-        protected TenantInfoModel TenantInfo;
-
         public TenantManagement()
         {
             LocalizationResource = typeof(AbpTenantManagementResource);
@@ -30,8 +24,6 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
             DeletePolicyName = TenantManagementPermissions.Tenants.Delete;
 
             ManageFeaturesPolicyName = TenantManagementPermissions.Tenants.ManageFeatures;
-
-            TenantInfo = new TenantInfoModel();
         }
 
         protected override async Task SetPermissionsAsync()
@@ -45,10 +37,5 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement
         {
             return string.Format(L["TenantDeletionConfirmationMessage"], entity.Name);
         }
-    }
-
-    public class TenantInfoModel
-    {
-        public Guid Id { get; set; }
     }
 }

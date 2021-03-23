@@ -37,7 +37,9 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
 using Volo.CmsKit.Web;
+//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.Web
 {
@@ -219,7 +221,6 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseAbpRequestLocalization();
-            app.UseAbpSecurityHeaders();
 
             if (!env.IsDevelopment())
             {
@@ -227,7 +228,7 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();

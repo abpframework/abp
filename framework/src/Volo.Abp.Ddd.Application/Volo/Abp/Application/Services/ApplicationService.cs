@@ -12,6 +12,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Guids;
 using Volo.Abp.Linq;
 using Volo.Abp.Localization;
@@ -31,6 +32,7 @@ namespace Volo.Abp.Application.Services
         IValidationEnabled,
         IUnitOfWorkEnabled,
         IAuditingEnabled,
+        IGlobalFeatureCheckingEnabled,
         ITransientDependency
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }

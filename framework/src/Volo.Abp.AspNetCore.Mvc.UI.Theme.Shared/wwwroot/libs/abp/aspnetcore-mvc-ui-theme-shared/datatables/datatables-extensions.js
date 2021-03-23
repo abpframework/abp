@@ -1,4 +1,4 @@
-﻿var abp = abp || {};
+var abp = abp || {};
 (function ($) {
 
     var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
@@ -78,7 +78,7 @@
                     return "";
                 }
 
-                var $button = $('<button type="button" class="btn btn-primary"></button>');
+                var $button = $('<button type="button" class="btn btn-primary abp-action-button"></button>');
 
                 if (firstItem.displayNameHtml) {
                     $button.html(firstItem.text);
@@ -119,7 +119,7 @@
 
             var $container = $('<div/>')
                 .addClass('dropdown')
-                .addClass('action-button');
+                .addClass('abp-action-button');
 
             var $dropdownButton = $('<button/>');
 
@@ -236,9 +236,9 @@
                     var $actionContainer = _createRowAction(aData, column.rowAction, tableInstance);
                     hideEmptyColumn($actionContainer, tableInstance, colIndex);
 
-                    var $actionButton = $(cells[colIndex]).find(".action-button");
+                    var $actionButton = $(cells[colIndex]).find(".abp-action-button");
                     if ($actionButton.length === 0) {
-                        $(cells[colIndex]).append($actionContainer);
+                        $(cells[colIndex]).empty().append($actionContainer);
                     }
                 }
             }
@@ -406,6 +406,10 @@
                     if (render) {
                         column.render = render;
                     }
+                }
+
+                if (!column.render) {
+                    column.render = $.fn.dataTable.render.text();
                 }
 
                 if (column.rowAction) {

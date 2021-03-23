@@ -10,7 +10,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.CmsKit.MediaDescriptors
 {
-    public class DefaultMediaDescriptorDefinitionStore : IMediaDescriptorDefinitionStore, ITransientDependency
+    public class DefaultMediaDescriptorDefinitionStore : IMediaDescriptorDefinitionStore
     {
         protected CmsKitMediaOptions Options { get; }
 
@@ -25,21 +25,24 @@ namespace Volo.CmsKit.MediaDescriptors
         /// <param name="entityType">EntityType to get definition.</param>
         /// <exception cref="EntityCantHaveMediaException">Thrown when EntityType is not configured as taggable.</exception>
         /// <exception cref="InvalidOperationException">More than one element satisfies the condition in predicate.</exception>
-        public virtual Task<MediaDescriptorDefinition> GetDefinitionAsync([NotNull] string entityType)
+        public virtual Task<MediaDescriptorDefinition> GetAsync([NotNull] string entityType)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-            var result = Options.EntityTypes.SingleOrDefault(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)) ??
-                         throw new EntityCantHaveMediaException(entityType);
+            var definition = Options.EntityTypes.SingleOrDefault(
+                x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)
+            ) ?? throw new EntityCantHaveMediaException(entityType);
 
-            return Task.FromResult(result);
+            return Task.FromResult(definition);
         }
 
         public virtual Task<bool> IsDefinedAsync([NotNull] string entityType)
         {
             Check.NotNullOrEmpty(entityType, nameof(entityType));
 
-            var isDefined = Options.EntityTypes.Any(a => a.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase));
+            var isDefined = Options.EntityTypes.Any(
+                a => a.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase)
+            );
 
             return Task.FromResult(isDefined);
         }
