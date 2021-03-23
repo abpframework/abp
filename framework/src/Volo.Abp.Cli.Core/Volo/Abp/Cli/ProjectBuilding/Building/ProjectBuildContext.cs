@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
@@ -19,6 +20,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
         public ProjectResult Result { get; set; }
         
+        public List<string> Symbols { get; } //TODO: Fill the symbols, like "UI-Angular", "CMS-KIT"!
+        
         public ProjectBuildContext(
             TemplateInfo template,
             ModuleInfo module,
@@ -29,6 +32,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             Module = module;
             TemplateFile = Check.NotNull(templateFile, nameof(templateFile));
             BuildArgs = Check.NotNull(buildArgs, nameof(buildArgs));
+            Symbols = new List<string>();
 
             Result = new ProjectResult();
         }
