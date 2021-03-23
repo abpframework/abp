@@ -209,7 +209,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                         }
                         else
                         {
-                            dbContext.Database.BeginTransactionAsync();
+                            dbContext.Database.BeginTransaction();
                         }
                     }
                 }
