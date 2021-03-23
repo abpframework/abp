@@ -216,7 +216,7 @@
     "Permission:PaymentRequest": "Ödeme isteği",
     "CreatorEmailAddress": "Oluşturan kişinin e-posta adresi",
     "EmailSendDate": "E-posta gönderme tarihi",
-    "PaymentRequestsOf{0}Organization":  "\"{0}\" kuruluşunun ödeme istekleri",
+    "PaymentRequestsOf{0}Organization": "\"{0}\" kuruluşunun ödeme istekleri",
     "PaymentDetails": "Ödeme Detayları",
     "PaymentProduct": "Ödeme Ürünü",
     "ProductName": "Ürün İsmi",

@@ -251,7 +251,7 @@
     "Permission:PaymentRequest": "支付请求",
     "CreatorEmailAddress": "创作者的电子邮件地址",
     "EmailSendDate": "电子邮件发送日期",
-    "PaymentRequestsOf{0}Organization":  "\"{0}\" 组织的付款请求",
+    "PaymentRequestsOf{0}Organization": "\"{0}\" 组织的付款请求",
     "PaymentDetails": "付款详情",
     "PaymentProduct": "付款产品",
     "ProductName": "产品名称",
