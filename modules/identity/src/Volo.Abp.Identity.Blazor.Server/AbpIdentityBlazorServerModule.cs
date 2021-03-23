@@ -6,8 +6,7 @@ namespace Volo.Abp.Identity.Blazor.Server
 {
     [DependsOn(
         typeof(AbpIdentityBlazorModule),
-        typeof(AbpPermissionManagementBlazorServerModule),
-        typeof(AbpAspNetCoreComponentsServerThemingModule)
+        typeof(AbpPermissionManagementBlazorServerModule)
     )]
     public class AbpIdentityBlazorServerModule : AbpModule
     {

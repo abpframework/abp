@@ -1,12 +1,14 @@
+using System.Collections.Generic;
+
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public class AbpBundlingOptions
     {
-        public BundleConfigurationCollection StyleBundles { get; set; }
+        public BundleConfigurationCollection StyleBundles { get; }
 
-        public BundleConfigurationCollection ScriptBundles { get; set; }
+        public BundleConfigurationCollection ScriptBundles { get; }
 
-        //TODO: Add option to enable/disable bundling / minification
+        public HashSet<string> MinificationIgnoredFiles { get; }
 
         /// <summary>
         /// Default: "__bundles".
@@ -22,6 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             StyleBundles = new BundleConfigurationCollection();
             ScriptBundles = new BundleConfigurationCollection();
+            MinificationIgnoredFiles = new HashSet<string>();
         }
     }
 }

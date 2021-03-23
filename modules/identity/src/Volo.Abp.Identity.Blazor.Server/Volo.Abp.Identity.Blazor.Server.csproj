@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Server.Theming\Volo.Abp.AspNetCore.Components.Server.Theming.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.Identity.Blazor\Volo.Abp.Identity.Blazor.csproj"/>
         <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Blazor.Server\Volo.Abp.PermissionManagement.Blazor.Server.csproj" />
     </ItemGroup>

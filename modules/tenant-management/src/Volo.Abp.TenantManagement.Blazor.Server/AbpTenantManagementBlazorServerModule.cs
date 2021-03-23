@@ -6,8 +6,7 @@ namespace Volo.Abp.TenantManagement.Blazor.Server
 {
     [DependsOn(
         typeof(AbpTenantManagementBlazorModule),
-        typeof(AbpFeatureManagementBlazorServerModule),
-        typeof(AbpAspNetCoreComponentsServerThemingModule)
+        typeof(AbpFeatureManagementBlazorServerModule)
         )]
     public class AbpTenantManagementBlazorServerModule : AbpModule
     {
