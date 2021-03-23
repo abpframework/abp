@@ -253,6 +253,16 @@
     "Note": "Note",
     "Add": "Add",
     "ProjectDownloads": "Project Downloads",
-    "ShowProjectDownloadsOfOrganization": "Project Downloads"
+    "ShowProjectDownloadsOfOrganization": "Project Downloads",
+    "ShowAuditLogsOfOrganization": "Audit Logs",
+    "Enum:EntityChangeType:0": "Crated",
+    "Enum:EntityChangeType:1": "Updated",
+    "Enum:EntityChangeType:2": "Deleted",
+    "TenantId": "Tenant ID",
+    "ChangeTime": "Change time",
+    "EntityTypeFullName": "Entity type full name",
+    "AuditLogsOf{0}Organization": "Audit logs of \"{0}\" organization",
+    "Permission:EntityChange": "Entity Change",
+    "Permission:ProjectDownload": "Project Download"
   }
 }

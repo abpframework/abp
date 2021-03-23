@@ -4,6 +4,6 @@ namespace Volo.Abp.Cli.Configuration
 {
     public class AbpCliConfig
     {
-        public BundleConfig Bundle { get; set; }
+        public BundleConfig Bundle { get; set; } = new();
     }
 }

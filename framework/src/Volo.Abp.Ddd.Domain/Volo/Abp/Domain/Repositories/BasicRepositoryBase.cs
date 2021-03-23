@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -94,6 +95,8 @@ namespace Volo.Abp.Domain.Repositories
         }
 
         public abstract Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default);
+
+        public abstract Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = false, CancellationToken cancellationToken = default);
 
         public abstract Task<long> GetCountAsync(CancellationToken cancellationToken = default);
 

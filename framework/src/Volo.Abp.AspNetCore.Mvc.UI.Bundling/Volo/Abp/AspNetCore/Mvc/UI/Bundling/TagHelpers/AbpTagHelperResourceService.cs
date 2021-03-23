@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         public ILogger<AbpTagHelperResourceService> Logger { get; set; }
         protected IBundleManager BundleManager { get; }
         protected IWebHostEnvironment HostingEnvironment { get; }
-        protected readonly AbpBundlingOptions Options;
+        protected AbpBundlingOptions Options { get; }
 
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager,
