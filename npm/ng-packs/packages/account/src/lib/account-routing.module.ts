@@ -78,7 +78,7 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'manage-profile',
+        path: 'manage',
         component: ReplaceableRouteContainerComponent,
         canActivate: [AuthGuard],
         data: {
