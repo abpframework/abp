@@ -7,7 +7,6 @@ namespace Volo.Abp.TenantManagement.Blazor.WebAssembly
     [DependsOn(
         typeof(AbpTenantManagementBlazorModule),
         typeof(AbpFeatureManagementBlazorWebAssemblyModule),
-        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule),
         typeof(AbpTenantManagementHttpApiClientModule)
         )]
     public class AbpTenantManagementBlazorWebAssemblyModule : AbpModule
