@@ -325,7 +325,7 @@ var abp = abp || {};
      * AJAX extension for datatables                                         *
      *************************************************************************/
     (function () {
-        datatables.createAjax = function (serverMethod, inputAction, responseCallback) {
+        datatables.createAjax = function (serverMethod, inputAction, responseCallback, cancelPreviousRequest) {
             responseCallback = responseCallback || function(result) {
                 return {
                     recordsTotal: result.totalCount,
@@ -333,10 +333,11 @@ var abp = abp || {};
                     data: result.items
                 };
             }
+            var promise = null;
             return function (requestData, callback, settings) {
                 var input = typeof inputAction === 'function'
                     ? inputAction(requestData, settings)
-                    : typeof inputAction === 'object'
+                    : (typeof inputAction === 'object' && inputAction)
                         ? inputAction : {};
 
                 //Paging
@@ -368,7 +369,12 @@ var abp = abp || {};
                 }
 
                 if (callback) {
-                    serverMethod(input).then(function (result) {
+                    if(cancelPreviousRequest && promise && promise.jqXHR) {
+                        promise.jqXHR.abort();
+                    }
+                    promise = serverMethod(input);
+                    promise.then(function (result) {
+                        promise = null;
                         callback(responseCallback(result));
                     });
                 }
