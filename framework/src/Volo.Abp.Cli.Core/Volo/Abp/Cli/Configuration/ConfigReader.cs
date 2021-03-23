@@ -30,18 +30,24 @@ namespace Volo.Abp.Cli.Configuration
             
             using (var document = JsonDocument.Parse(settingsFileContent,documentOptions))
             {
-                var element = document.RootElement.GetProperty("AbpCli");
-                var configText = element.GetRawText();
-                var options = new JsonSerializerOptions
+                if (document.RootElement.TryGetProperty("AbpCli", out var element))
                 {
-                    Converters =
+                    var configJson = element.GetRawText();
+                    var options = new JsonSerializerOptions
                     {
-                        new JsonStringEnumConverter()
-                    },
-                    ReadCommentHandling = JsonCommentHandling.Skip
-                };
+                        Converters =
+                        {
+                            new JsonStringEnumConverter()
+                        },
+                        ReadCommentHandling = JsonCommentHandling.Skip
+                    };
                 
-                return JsonSerializer.Deserialize<AbpCliConfig>(configText, options);
+                    return JsonSerializer.Deserialize<AbpCliConfig>(configJson, options);
+                }
+                else
+                {
+                    return new AbpCliConfig();
+                }
             }
         }
     }
