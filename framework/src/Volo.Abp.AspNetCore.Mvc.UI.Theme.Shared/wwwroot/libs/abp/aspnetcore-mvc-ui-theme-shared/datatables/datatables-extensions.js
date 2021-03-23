@@ -373,8 +373,9 @@ var abp = abp || {};
                         promise.jqXHR.abort();
                     }
                     promise = serverMethod(input);
-                    promise.then(function (result) {
+                    promise.always(function () {
                         promise = null;
+                    }).then(function (result) {
                         callback(responseCallback(result));
                     });
                 }
