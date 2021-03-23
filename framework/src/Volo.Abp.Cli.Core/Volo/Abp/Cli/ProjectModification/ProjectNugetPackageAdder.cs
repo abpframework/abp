@@ -105,7 +105,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 ModuleClassDependcyAdder.Add(moduleFiles.First(), package.ModuleClass);
             }
 
-            if (package.Target == NuGetPackageTarget.Blazor || package.Target == NuGetPackageTarget.BlazorServer || package.Target == NuGetPackageTarget.BlazorWebAssembly)
+            if (useDotnetCliToInstall && (package.Target == NuGetPackageTarget.Blazor || package.Target == NuGetPackageTarget.BlazorServer || package.Target == NuGetPackageTarget.BlazorWebAssembly))
             {
                 await RunBundleForBlazorAsync(projectFile);
             }
