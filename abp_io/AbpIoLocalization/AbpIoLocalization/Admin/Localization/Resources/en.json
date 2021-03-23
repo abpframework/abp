@@ -267,7 +267,7 @@
     "Permission:PaymentRequest": "Payment Request",
     "CreatorEmailAddress": "Creator email address",
     "EmailSendDate": "Email send date",
-    "PaymentRequestsOf{0}Organization": "Payment request of \"{0}\" organization",
+    "PaymentRequestsOf{0}Organization": "Payment requests of \"{0}\" organization",
     "PaymentDetails": "Payment Details",
     "PaymentProduct": "Payment Product",
     "ProductName": "Product Name",
