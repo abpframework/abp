@@ -1,15 +1,14 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
+namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
-    public class AppTemplateProjectRenameStep : ProjectBuildPipelineStep
+    public class TemplateProjectRenameStep : ProjectBuildPipelineStep
     {
         private readonly string _oldProjectName;
         private readonly string _newProjectName;
 
-        public AppTemplateProjectRenameStep(
+        public TemplateProjectRenameStep(
             string oldProjectName,
             string newProjectName)
         {
@@ -19,10 +18,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         public override void Execute(ProjectBuildContext context)
         {
-            context
-                .GetFile("/aspnet-core/MyCompanyName.MyProjectName.sln")
-                .ReplaceText(_oldProjectName, _newProjectName);
-            
             RenameHelper.RenameAll(context.Files, _oldProjectName, _newProjectName);
         }
     }
