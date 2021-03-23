@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq.Dynamic.Core;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
@@ -20,18 +23,21 @@ namespace Volo.Abp.AspNetCore.Components.Server.Extensibility
         public AbpRemoteServiceOptions RemoteServiceOptions { get; }
 
         public ICurrentTenant CurrentTenant { get; }
+        public IHttpContextAccessor HttpContextAccessor { get; }
         public NavigationManager NavigationManager { get; }
 
         public BlazorServerLookupApiRequestService(IHttpClientFactory httpClientFactory,
             IRemoteServiceHttpClientAuthenticator httpClientAuthenticator,
             ICurrentTenant currentTenant,
             IOptions<AbpRemoteServiceOptions> remoteServiceOptions,
+            IHttpContextAccessor httpContextAccessor,
             NavigationManager navigationManager)
         {
             HttpClientFactory = httpClientFactory;
             HttpClientAuthenticator = httpClientAuthenticator;
             RemoteServiceOptions = remoteServiceOptions.Value;
             CurrentTenant = currentTenant;
+            HttpContextAccessor = httpContextAccessor;
             NavigationManager = navigationManager;
         }
 
@@ -39,7 +45,6 @@ namespace Volo.Abp.AspNetCore.Components.Server.Extensibility
         {
             var client = HttpClientFactory.CreateClient();
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-            AddHeaders(requestMessage);
 
             var uri = new Uri(url, UriKind.RelativeOrAbsolute);
             if (!uri.IsAbsoluteUri)
@@ -47,21 +52,26 @@ namespace Volo.Abp.AspNetCore.Components.Server.Extensibility
                 var baseUrl = string.Empty;
                 try
                 {
+                    //Blazor tiered -- mode
                     var remoteServiceConfig = RemoteServiceOptions.RemoteServices.GetConfigurationOrDefault("Default");
                     baseUrl = remoteServiceConfig.BaseUrl;
+                    client.BaseAddress = new Uri(baseUrl);
+                    AddHeaders(requestMessage);
+                    await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client,
+                        requestMessage, new RemoteServiceConfiguration(baseUrl), string.Empty));
                 }
-                catch (AbpException)
+                catch (AbpException) // Blazor-Server mode.
                 {
                     baseUrl = NavigationManager.BaseUri;
+                    client.BaseAddress = new Uri(baseUrl);
+                    foreach (var header in HttpContextAccessor.HttpContext.Request.Headers)
+                    {
+                        requestMessage.Headers.Add(header.Key, header.Value.ToArray());
+                    }
                 }
-
-                client.BaseAddress = new Uri(baseUrl);
-                await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client,
-                    requestMessage, new RemoteServiceConfiguration(baseUrl), string.Empty));
             }
 
             var response = await client.SendAsync(requestMessage);
-
             return await response.Content.ReadAsStringAsync();
         }
 
