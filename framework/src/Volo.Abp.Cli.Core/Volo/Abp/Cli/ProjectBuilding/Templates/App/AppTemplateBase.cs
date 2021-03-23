@@ -232,8 +232,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             }
             else
             {
-                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server", "MyCompanyName.MyProjectName.Blazor"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server", "MyCompanyName.MyProjectName.Blazor"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44313"));
@@ -342,7 +342,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor) &&
+            if ( (context.BuildArgs.UiFramework == UiFramework.Mvc
+                 || context.BuildArgs.UiFramework == UiFramework.Blazor
+                 || context.BuildArgs.UiFramework == UiFramework.BlazorServer) &&
                 context.BuildArgs.MobileApp == MobileApp.None)
             {
                 steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
