@@ -12,6 +12,7 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.ProjectBuilding.Files;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -101,8 +102,7 @@ namespace Volo.Abp.Cli.ProjectModification
             if (withSourceCode || newTemplate || newProTemplate)
             {
                 var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
-                await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version, newTemplate,
-                    newProTemplate);
+                await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version, newTemplate, newProTemplate);
                 await RemoveUnnecessaryProjectsAsync(Path.GetDirectoryName(solutionFile), module, projectFiles);
 
                 if (addSourceCodeToSolutionFile)
@@ -155,9 +155,26 @@ namespace Volo.Abp.Cli.ProjectModification
             var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly).First();
             var isProjectTiered = await IsProjectTiered(projectFiles);
 
-            if (!projectFiles.Any(p => p.EndsWith(".Blazor.csproj")))
+            var blazorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".Blazor.csproj"));
+            if (blazorProject == null)
             {
                 await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.Blazor, isProjectTiered);
+                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorServer, isProjectTiered);
+                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
+                await RemoveProjectByPostFix(module, moduleSolutionFile, "src", ".Blazor");
+            }
+            else
+            {
+                var isBlazorServer = BlazorProjectTypeChecker.IsBlazorServerProject(blazorProject);
+
+                if (isBlazorServer)
+                {
+                    await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
+                }
+                else
+                {
+                    await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorServer, isProjectTiered);
+                }
             }
 
             if (!projectFiles.Any(p => p.EndsWith(".Web.csproj")))
@@ -565,9 +582,15 @@ namespace Volo.Abp.Cli.ProjectModification
                 },
                 new NugetPackageInfo
                 {
-                    Name = $"{module.Name}.Blazor",
-                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorModule",
-                    Target = NuGetPackageTarget.Blazor
+                    Name = $"{module.Name}.Blazor.WebAssembly",
+                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorWebAssemblyModule",
+                    Target = NuGetPackageTarget.BlazorWebAssembly
+                },
+                new NugetPackageInfo
+                {
+                    Name = $"{module.Name}.Blazor.Server",
+                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorServerModule",
+                    Target = NuGetPackageTarget.BlazorServer
                 },
                 new NugetPackageInfo
                 {

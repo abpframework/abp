@@ -49,6 +49,12 @@ namespace Volo.Abp.Cli.ProjectModification
                            FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Host");
                 case NuGetPackageTarget.Blazor:
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+                case NuGetPackageTarget.BlazorWebAssembly:
+                    var BlazorWebAssemblyTargetProject = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+                    return !BlazorProjectTypeChecker.IsBlazorServerProject(BlazorWebAssemblyTargetProject) ? BlazorWebAssemblyTargetProject : null;
+                case NuGetPackageTarget.BlazorServer:
+                    var BlazorServerTargetProject = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+                    return BlazorProjectTypeChecker.IsBlazorServerProject(BlazorServerTargetProject) ? BlazorServerTargetProject : null;
                 default:
                     return null;
             }

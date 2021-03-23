@@ -44,7 +44,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             if (context.BuildArgs.ExtraProperties.ContainsKey("separate-tenant-schema"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
-                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations", "MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.EntityFrameworkCore.SeparateDbMigrations", "MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
             }
             else
             {
@@ -87,9 +87,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     ConfigureWithAngularUi(context, steps);
                     break;
 
-
                 case UiFramework.Blazor:
                     ConfigureWithBlazorUi(context, steps);
+                    break;
+
+                case UiFramework.BlazorServer:
+                    ConfigureWithBlazorServerUi(context, steps);
                     break;
 
                 case UiFramework.Mvc:
@@ -98,9 +101,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     break;
             }
 
-            if (context.BuildArgs.UiFramework != UiFramework.Blazor)
+            if (context.BuildArgs.UiFramework != UiFramework.Blazor && context.BuildArgs.UiFramework != UiFramework.BlazorServer)
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+            }
+
+            if (context.BuildArgs.UiFramework != UiFramework.BlazorServer)
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
             }
 
             if (context.BuildArgs.UiFramework != UiFramework.Angular)
@@ -147,7 +156,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) || context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
             {
-                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Public.Host","MyCompanyName.MyProjectName.Web.Public"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Public.Host","MyCompanyName.MyProjectName.Web.Public"));
                 steps.Add(new ChangeDbMigratorPublicPortStep());
             }
             else if (context.BuildArgs.UiFramework != UiFramework.NotSpecified && context.BuildArgs.UiFramework != UiFramework.Mvc)
@@ -181,7 +190,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
-                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
             }
         }
@@ -202,8 +211,32 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
-                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
+            }
+        }
+
+        private static void ConfigureWithBlazorServerUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+
+            if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
+            {
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered", "MyCompanyName.MyProjectName.Blazor"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server"));
+                steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
+            }
+            else
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server.Tiered"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server", "MyCompanyName.MyProjectName.Blazor"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44313"));
             }
         }
 
@@ -213,7 +246,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
-                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
                 steps.Add(new AppTemplateChangeDbMigratorPortSettingsStep("44300"));
             }
             else
@@ -248,7 +281,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
-                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
             }
         }
@@ -265,6 +298,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 return;
             }
 
+            //todo: discuss blazor ports
             steps.Add(new TemplateRandomSslPortStep(
                     new List<string>
                     {
@@ -308,7 +342,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor) &&
+            if ( (context.BuildArgs.UiFramework == UiFramework.Mvc
+                 || context.BuildArgs.UiFramework == UiFramework.Blazor
+                 || context.BuildArgs.UiFramework == UiFramework.BlazorServer) &&
                 context.BuildArgs.MobileApp == MobileApp.None)
             {
                 steps.Add(new MoveFolderStep("/aspnet-core/", "/"));

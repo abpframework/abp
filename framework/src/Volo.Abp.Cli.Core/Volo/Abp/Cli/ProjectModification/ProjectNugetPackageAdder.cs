@@ -37,7 +37,7 @@ namespace Volo.Abp.Cli.ProjectModification
             DerivedClassFinder moduleClassFinder,
             ModuleClassDependcyAdder moduleClassDependcyAdder,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            BundleCommand bundleCommand, 
+            BundleCommand bundleCommand,
             CliHttpClientFactory cliHttpClientFactory)
         {
             JsonSerializer = jsonSerializer;
@@ -105,7 +105,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 ModuleClassDependcyAdder.Add(moduleFiles.First(), package.ModuleClass);
             }
 
-            if (package.Target == NuGetPackageTarget.Blazor)
+            if (useDotnetCliToInstall && (package.Target == NuGetPackageTarget.Blazor || package.Target == NuGetPackageTarget.BlazorServer || package.Target == NuGetPackageTarget.BlazorWebAssembly))
             {
                 await RunBundleForBlazorAsync(projectFile);
             }
