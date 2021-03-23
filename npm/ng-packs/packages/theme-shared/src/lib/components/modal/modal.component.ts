@@ -193,10 +193,10 @@ export class ModalComponent implements OnDestroy {
     fromEvent(window, 'beforeunload')
       .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
-        if (this.isFormDirty) {
+        event.preventDefault();
+        if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
           event.returnValue = true;
         } else {
-          event.returnValue = false;
           delete event.returnValue;
         }
       });

@@ -1,6 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { AuthConfig, OAuthInfoEvent, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { from, Observable, of } from 'rxjs';
@@ -29,7 +29,7 @@ export abstract class AuthFlowStrategy {
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
   abstract checkIfInternalAuth(): boolean;
-  abstract navigateToLogin(): void;
+  abstract navigateToLogin(queryParams?: Params): void;
   abstract logout(): Observable<any>;
   abstract login(params?: LoginParams): Observable<any>;
 
@@ -78,8 +78,8 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
       .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
 
-  navigateToLogin() {
-    this.oAuthService.initCodeFlow();
+  navigateToLogin(queryParams?: Params) {
+    this.oAuthService.initCodeFlow(null, queryParams);
   }
 
   checkIfInternalAuth() {
@@ -147,9 +147,9 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     return super.init().then(() => this.listenToTokenExpiration());
   }
 
-  navigateToLogin() {
+  navigateToLogin(queryParams?: Params) {
     const router = this.injector.get(Router);
-    router.navigateByUrl('/account/login');
+    router.navigate(['/account/login'], { queryParams });
   }
 
   checkIfInternalAuth() {
@@ -172,7 +172,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       tap(res => {
         this.configState.setState(res);
         this.setRememberMe(params.rememberMe);
-        router.navigate([params.redirectUrl || '/']);
+        if (params.redirectUrl) router.navigate([params.redirectUrl]);
       }),
     );
   }
