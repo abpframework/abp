@@ -34,6 +34,8 @@ namespace Volo.CmsKit.Admin
 
             CreateMap<TagEntityTypeDefiniton, TagDefinitionDto>(MemberList.Destination);
 
+            CreateMap<Tag, TagDto>();
+
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
         }
     }

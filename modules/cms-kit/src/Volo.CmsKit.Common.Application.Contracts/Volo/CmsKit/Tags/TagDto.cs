@@ -8,6 +8,6 @@ namespace Volo.CmsKit.Tags
     {
         public string EntityType { get; set; }
 
-        public string Name { get; protected set; }
+        public string Name { get; set; }
     }
 }
