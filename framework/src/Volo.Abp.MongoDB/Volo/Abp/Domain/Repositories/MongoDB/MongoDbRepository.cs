@@ -442,7 +442,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return await (await GetMongoQueryableAsync(cancellationToken)).ToListAsync(cancellationToken);
         }
 
-        public override async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public override async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             cancellationToken = GetCancellationToken(cancellationToken);
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(predicate).ToListAsync(cancellationToken);

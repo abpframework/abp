@@ -253,7 +253,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return (await GetQueryableAsync()).ToList();
         }
 
-        public override async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public override async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return (await GetQueryableAsync()).Where(predicate).ToList();
         }

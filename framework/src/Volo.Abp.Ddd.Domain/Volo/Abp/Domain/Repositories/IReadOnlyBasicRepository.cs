@@ -28,7 +28,7 @@ namespace Volo.Abp.Domain.Repositories
         /// <returns>Entity</returns>
         Task<List<TEntity>> GetListAsync(
             [NotNull] Expression<Func<TEntity, bool>> predicate,
-            bool includeDetails = true,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default);
 
         /// <summary>
