@@ -8,9 +8,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
-using Volo.CmsKit;
-//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName
 {
@@ -21,9 +18,6 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpFeatureManagementHttpApiModule),
-        //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
-        typeof(CmsKitHttpApiModule),
-        //</TEMPLATE-REMOVE>
         typeof(AbpSettingManagementHttpApiModule)
         )]
     public class MyProjectNameHttpApiModule : AbpModule
