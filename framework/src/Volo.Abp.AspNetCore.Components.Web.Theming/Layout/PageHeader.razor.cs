@@ -45,9 +45,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout
             await base.OnParametersSetAsync();
             if (Toolbar!=null)
             {
-                Console.WriteLine("Toolbar is not null");
                 var toolbarItems = await PageToolbarManager.GetItemsAsync(Toolbar);
-                Console.WriteLine($"Toolbar item count:{toolbarItems.Length}");
                 ToolbarItemRenders.Clear();
 
                 foreach (var item in toolbarItems)
