@@ -21,6 +21,7 @@
       "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
       "@abp/ng.theme.shared/extensions": ["packages/theme-shared/extensions/src/public-api.ts"],
       "@abp/ng.components/tree": ["packages/components/tree/src/public-api.ts"],
+      "@abp/ng.components/page": ["packages/components/page/src/public-api.ts"],
       "@abp/ng.theme.basic": ["packages/theme-basic/src/public-api.ts"],
       "@abp/ng.account": ["packages/account/src/public-api.ts"],
       "@abp/ng.account/config": ["packages/account/config/src/public-api.ts"],
