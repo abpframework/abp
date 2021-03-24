@@ -38,7 +38,7 @@ namespace Volo.CmsKit.Blogs
         {
             var query = await GetListQueryAsync(filter);
 
-            return await query.OrderBy(sorting ?? "creationTime desc")
+            return await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
                               .PageBy(skipCount, maxResultCount)
                               .ToListAsync(GetCancellationToken(cancellationToken));
         }
