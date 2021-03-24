@@ -187,7 +187,7 @@
             },
             events: {
                 change: function (_val) {
-                    $editorInput.val(editor.getHtml());
+                    $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
                 }
             }
