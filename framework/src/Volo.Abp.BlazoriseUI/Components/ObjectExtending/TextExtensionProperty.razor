@@ -1,0 +1,14 @@
+﻿@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.BlazoriseUI
+@using Volo.Abp.Localization
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <Field>
+        <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
+        <TextEdit @bind-Text="@Value" Role="@PropertyInfo.GetTextRole()" InputMode="@PropertyInfo.GetTextInputMode()">
+          
+        </TextEdit>
+    </Field>
+}

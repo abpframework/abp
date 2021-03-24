@@ -1,6 +1,6 @@
 ﻿@typeparam TItem
 
-@if (IsVisible && HasPermission)
+@if (Visible && HasPermission)
 {
     if (ParentActions.Type == ActionType.Dropdown)
     {
@@ -14,6 +14,10 @@
         <Button Block="true"
                 Color="@Color"
                 Clicked="@ActionClickedAsync">
+            @if(!string.IsNullOrEmpty(Icon))
+            {
+                <Icon Name="@Icon"/>
+            }
             @Text
         </Button>
     }
