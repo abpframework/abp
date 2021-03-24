@@ -2,6 +2,7 @@ import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
+import { PageModule } from '@abp/ng.components/page';
 import { SettingManagementComponent } from './components/setting-management.component';
 import { SettingManagementRoutingModule } from './setting-management-routing.module';
 import { SettingManagementState } from './states/setting-management.state';
@@ -13,6 +14,7 @@ import { SettingManagementState } from './states/setting-management.state';
     SettingManagementRoutingModule,
     CoreModule,
     ThemeSharedModule,
+    PageModule,
     NgxsModule.forFeature([SettingManagementState]),
   ],
 })
