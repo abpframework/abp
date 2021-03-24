@@ -67,6 +67,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var context = new ProjectBuildContext(
                 null,
                 moduleInfo,
+                null,
                 templateFile,
                 args
             );

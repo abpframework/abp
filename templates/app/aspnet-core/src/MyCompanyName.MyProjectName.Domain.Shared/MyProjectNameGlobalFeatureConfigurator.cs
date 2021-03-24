@@ -1,5 +1,4 @@
-﻿using Volo.Abp.GlobalFeatures;
-using Volo.Abp.Threading;
+﻿using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -11,13 +10,6 @@ namespace MyCompanyName.MyProjectName
         {
             OneTimeRunner.Run(() =>
             {
-                //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
-                GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-                {
-                    cmsKit.EnableAll();
-                });
-
-                //</TEMPLATE-REMOVE>
                 /* You can configure (enable/disable) global features of the used modules here.
                  *
                  * YOU CAN SAFELY DELETE THIS CLASS AND REMOVE ITS USAGES IF YOU DON'T NEED TO IT!

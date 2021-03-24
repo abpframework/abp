@@ -53,7 +53,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
-                .OrderBy(sorting ?? nameof(OrganizationUnit.DisplayName))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(OrganizationUnit.DisplayName) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -99,7 +99,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         select role;
 
             query = query
-                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
                 .PageBy(skipCount, maxResultCount);
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
@@ -135,7 +135,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .Where(r => !roleIds.Contains(r.Id))
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
-                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
         }
@@ -165,7 +165,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, filter);
 
-            return await query.IncludeDetails(includeDetails).OrderBy(sorting ?? nameof(IdentityUser.UserName))
+            return await query.IncludeDetails(includeDetails).OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.UserName) : sorting)
                         .PageBy(skipCount, maxResultCount)
                         .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -209,7 +209,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             return await query
                 .IncludeDetails(includeDetails)
-                .OrderBy(sorting ?? nameof(IdentityUser.Name))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
         }

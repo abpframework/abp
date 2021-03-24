@@ -67,7 +67,7 @@ namespace Volo.CmsKit.MongoDB.Comments
                 creationEndDate, 
                 token);
 
-            var comments = await query.OrderBy(sorting ?? "creationTime desc")
+            var comments = await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
                 .As<IMongoQueryable<Comment>>()
                 .PageBy<Comment, IMongoQueryable<Comment>>(skipCount, maxResultCount)
                 .ToListAsync(token);

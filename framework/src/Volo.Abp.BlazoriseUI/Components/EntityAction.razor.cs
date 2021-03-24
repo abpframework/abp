@@ -10,7 +10,7 @@ namespace Volo.Abp.BlazoriseUI.Components
     public partial class EntityAction<TItem> : ComponentBase
     {
         [Parameter] 
-        public bool IsVisible { get; set; } = true;
+        public bool Visible { get; set; }
 
         internal bool HasPermission { get; set; } = true;
 
@@ -33,6 +33,9 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter]
         public Func<string> ConfirmationMessage { get; set; }
 
+        [Parameter]
+        public string Icon { get; set; }
+
         [CascadingParameter]
         public EntityActions<TItem> ParentActions { get; set; }
 
@@ -46,6 +49,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         {
             await base.OnInitializedAsync();
             await SetDefaultValuesAsync();
+            
             if (!RequiredPolicy.IsNullOrEmpty())
             {
                 HasPermission = await AuthorizationService.IsGrantedAsync(RequiredPolicy);

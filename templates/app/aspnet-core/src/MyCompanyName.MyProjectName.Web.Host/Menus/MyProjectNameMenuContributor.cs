@@ -10,9 +10,6 @@ using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Users;
-//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
-using Volo.CmsKit.Admin.Web.Menus;
-//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.Web.Menus
 {
@@ -52,10 +49,6 @@ namespace MyCompanyName.MyProjectName.Web.Menus
                     order: 0
                 )
             );
-
-            //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
-            context.Menu.SetSubItemOrder(CmsKitAdminMenus.GroupName, 1);
-            //</TEMPLATE-REMOVE>
             
             if (MultiTenancyConsts.IsEnabled)
             {

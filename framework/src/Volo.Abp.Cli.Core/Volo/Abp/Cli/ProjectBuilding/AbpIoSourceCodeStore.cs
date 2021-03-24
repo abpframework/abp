@@ -159,6 +159,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         private async Task<string> GetTemplateNugetVersionAsync(string name, string type, string version)
         {
+            if (type != SourceCodeTypes.Template)
+            {
+                return null;
+            }
+
             try
             {
                 var url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-nuget-version/";
