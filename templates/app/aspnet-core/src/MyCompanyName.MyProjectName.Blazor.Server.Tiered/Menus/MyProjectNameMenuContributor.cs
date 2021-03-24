@@ -10,9 +10,6 @@ using Volo.Abp.SettingManagement.Blazor.Menus;
 using Volo.Abp.TenantManagement.Blazor.Navigation;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Users;
-//<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
-using Volo.CmsKit.Admin.Web.Menus;
-//</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus
 {
@@ -52,11 +49,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus
                     order: 0
                 )
             );
-            
-            //<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>
-            context.Menu.SetSubItemOrder(CmsKitAdminMenus.GroupName, 1);
-            //</TEMPLATE-REMOVE>
-            
+                        
             if (MultiTenancyConsts.IsEnabled)
             {
                 administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
