@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Markdig;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,23 @@ namespace Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs
             {
                 TagsFeature = await BlogFeatureAppService.GetOrDefaultAsync(BlogPost.BlogId, GlobalFeatures.TagsFeature.Name);
             }
+        }
+
+
+        public string RenderMarkdownToHtmlAsString(string content)
+        {
+            if (content.IsNullOrWhiteSpace())
+            {
+                return "";
+            }
+
+            return Markdig.Markdown.ToHtml(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)),
+                new MarkdownPipelineBuilder()
+                    .UseAutoLinks()
+                    .UseBootstrap()
+                    .UseGridTables()
+                    .UsePipeTables()
+                    .Build());
         }
     }
 }

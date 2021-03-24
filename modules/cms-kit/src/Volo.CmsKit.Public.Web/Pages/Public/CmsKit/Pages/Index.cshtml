@@ -2,11 +2,15 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.CmsKit.Localization
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages
+
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages.IndexModel
+
 @inject IHtmlLocalizer<CmsKitResource> L
 
 @section styles{
+    
     <abp-style src="/Pages/Public/CmsKit/Pages/index.css" />
+
     <style>
         @Html.Raw(Model.Page.Style)
     </style>
