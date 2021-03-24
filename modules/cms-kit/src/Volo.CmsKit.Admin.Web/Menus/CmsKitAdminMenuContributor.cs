@@ -50,7 +50,7 @@ namespace Volo.CmsKit.Admin.Web.Menus
                         CmsKitAdminMenus.Blogs.BlogsMenu,
                         l["Blogs"],
                         "/Cms/Blogs",
-                        "fa fa-file-signature"
+                        "fa fa-blog"
                     ));
                 }
 
@@ -60,7 +60,7 @@ namespace Volo.CmsKit.Admin.Web.Menus
                         CmsKitAdminMenus.BlogPosts.BlogPostsMenu,
                         l["BlogPosts"],
                         "/Cms/BlogPosts",
-                        "fa fa-blog"
+                        "fa fa-file-signature"
                     ));
                 }
             }
