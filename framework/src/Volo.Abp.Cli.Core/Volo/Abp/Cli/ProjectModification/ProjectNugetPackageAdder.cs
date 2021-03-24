@@ -83,6 +83,11 @@ namespace Volo.Abp.Cli.ProjectModification
             bool withSourceCode = false,
             bool addSourceCodeToSolutionFile = false)
         {
+            if (version == null)
+            {
+                version = GetAbpVersionOrNull(projectFile);
+            }
+
             await AddAsPackageReference(projectFile, package, version, useDotnetCliToInstall);
 
             if (withSourceCode)
@@ -204,11 +209,6 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            if (version == null)
-            {
-                version = GetAbpVersionOrNull(projectFileContent);
-            }
-
             using (DirectoryHelper.ChangeCurrentDirectory(Path.GetDirectoryName(projectFile)))
             {
                 Logger.LogInformation(
@@ -301,8 +301,10 @@ namespace Volo.Abp.Cli.ProjectModification
             return Task.CompletedTask;
         }
 
-        private string GetAbpVersionOrNull(string projectFileContent)
+        private string GetAbpVersionOrNull(string projectFile)
         {
+            var projectFileContent = File.ReadAllText(projectFile);
+
             var doc = new XmlDocument() {PreserveWhitespace = true};
 
             doc.Load(StreamHelper.GenerateStreamFromString(projectFileContent));
