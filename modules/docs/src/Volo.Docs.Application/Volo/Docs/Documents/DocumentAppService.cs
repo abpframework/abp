@@ -195,7 +195,7 @@ namespace Volo.Docs.Documents
 
         public async Task<List<string>> GetDocumentLinksAsync()
         {
-            List<string> navigationNodes = new List<string>();
+            List<string> documentLinks = new List<string>();
             
             var projects = await _projectRepository.GetListAsync();
             
@@ -229,11 +229,11 @@ namespace Volo.Docs.Documents
                         .Select(x => x.Path)
                         .ToList();
                 
-                    navigationNodes.AddRange(leafs);
+                    documentLinks.AddRange(leafs);
                 }
             }
             
-            return navigationNodes;
+            return documentLinks;
         }
 
         public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)

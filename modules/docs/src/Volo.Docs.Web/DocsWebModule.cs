@@ -1,7 +1,8 @@
-using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -15,6 +16,8 @@ using Volo.Docs.Bundling;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Localization;
 using Volo.Docs.Markdown;
+using Volo.Docs.Middlewares;
+using Volo.Docs.Seo;
 
 namespace Volo.Docs
 {
@@ -85,6 +88,20 @@ namespace Volo.Docs
                     .Extensions<PrismjsScriptBundleContributor>()
                     .Add<PrismjsScriptBundleContributorDocsExtension>();
             });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var app = context.GetApplicationBuilder();
+            
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var seoOptions = scope.ServiceProvider.GetRequiredService<IOptions<DocsSeoOptions>>().Value;
+                if (seoOptions.IsEnabled)
+                {
+                    app.UseMiddleware<RequestSeoMiddleware>();
+                }
+            }
         }
     }
 }
