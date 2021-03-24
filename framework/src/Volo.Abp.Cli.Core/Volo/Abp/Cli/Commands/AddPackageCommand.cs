@@ -35,11 +35,16 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
+            var withSourceCode =commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
+            var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
 
             await ProjectNugetPackageAdder.AddAsync(
                 GetProjectFile(commandLineArgs),
                 commandLineArgs.Target,
-                version
+                version,
+                true,
+                withSourceCode,
+                addSourceCodeToSolutionFile
             );
         }
 
@@ -127,6 +132,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "v";
                 public const string Long = "version";
+            }
+
+            public static class SourceCode
+            {
+                public const string Long = "with-source-code";
             }
         }
     }
