@@ -5,7 +5,7 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "@abp/ng.core",
     "@fortawesome/fontawesome-free",
     "@ng-bootstrap/ng-bootstrap",
