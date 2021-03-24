@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -29,11 +30,11 @@ using Volo.Docs.Admin;
 using Volo.Docs.Localization;
 using VoloDocs.EntityFrameworkCore;
 using Localization.Resources.AbpUi;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.Account;
 using Volo.Abp.Validation.Localization;
 using Volo.Docs.Documents.FullSearch.Elastic;
+using Volo.Docs.Seo;
 
 namespace VoloDocs.Web
 {
@@ -142,6 +143,24 @@ namespace VoloDocs.Web
             Configure<RazorPagesOptions>(options =>
             {
                 options.Conventions.AddPageRoute("/Error", "error/{statusCode}");
+            });
+            
+            Configure<DocsSeoOptions>(options =>
+            {
+                options.IsEnabled = true;
+                options.RobotsTxt = new List<RobotsTxtOptions>
+                {
+                    new RobotsTxtOptions
+                    {
+                        UserAgent = "*", 
+                        DisallowUrls = new List<string>(), 
+                        AllowUrls = new List<string> {"*"}
+                    }
+                };
+                options.Sitemap = new SitemapOptions {AdditionalSitemapItems = new List<SitemapUrlOptions>
+                {
+                    new SitemapUrlOptions { Url = "contact", ModifiedDate = DateTime.Now, Priority = 1}
+                }};
             });
         }
 

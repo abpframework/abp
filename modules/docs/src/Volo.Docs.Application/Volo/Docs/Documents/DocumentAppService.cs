@@ -193,6 +193,49 @@ namespace Volo.Docs.Documents
             return await Task.FromResult(_docsElasticSearchOptions.Enable);
         }
 
+        public async Task<List<string>> GetDocumentLinksAsync()
+        {
+            List<string> navigationNodes = new List<string>();
+            
+            var projects = await _projectRepository.GetListAsync();
+            
+            foreach (var project in projects)
+            {
+                var documents = await _documentRepository.GetListByProjectId(project.Id);
+            
+                if (!documents.Any())
+                {
+                    continue;
+                }
+                
+                foreach (var document in documents)
+                {
+                    var navigationDocument = await GetDocumentWithDetailsDtoAsync(
+                        project,
+                        project.NavigationDocumentName,
+                        document.LanguageCode,
+                        document.Version
+                    );
+                    
+                    if (!DocsJsonSerializerHelper.TryDeserialize<NavigationNode>(navigationDocument.Content,
+                        out var navigationNode))
+                    {
+                        throw new UserFriendlyException(
+                            $"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
+                    }
+                    
+                    var leafs = navigationNode.Items.GetAllNodes(x => x.Items)
+                        .Where(x => !x.Path.IsNullOrWhiteSpace())
+                        .Select(x => x.Path)
+                        .ToList();
+                
+                    navigationNodes.AddRange(leafs);
+                }
+            }
+            
+            return navigationNodes;
+        }
+
         public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
