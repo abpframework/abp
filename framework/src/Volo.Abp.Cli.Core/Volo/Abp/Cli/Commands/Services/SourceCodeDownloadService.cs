@@ -17,15 +17,17 @@ namespace Volo.Abp.Cli.Commands.Services
     public class SourceCodeDownloadService : ITransientDependency
     {
         public ModuleProjectBuilder ModuleProjectBuilder { get; }
+        public PackageProjectBuilder PackageProjectBuilder { get; }
         public ILogger<SourceCodeDownloadService> Logger { get; set; }
 
-        public SourceCodeDownloadService(ModuleProjectBuilder moduleProjectBuilder)
+        public SourceCodeDownloadService(ModuleProjectBuilder moduleProjectBuilder, PackageProjectBuilder packageProjectBuilder)
         {
             ModuleProjectBuilder = moduleProjectBuilder;
+            PackageProjectBuilder = packageProjectBuilder;
             Logger = NullLogger<SourceCodeDownloadService>.Instance;
         }
 
-        public async Task DownloadAsync(string moduleName, string outputFolder, string version, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath, AbpCommandLineOptions options)
+        public async Task DownloadModuleAsync(string moduleName, string outputFolder, string version, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath, AbpCommandLineOptions options)
         {
             Logger.LogInformation("Downloading source code of " + moduleName);
             Logger.LogInformation("Version: " + version);
@@ -88,6 +90,62 @@ namespace Volo.Abp.Cli.Commands.Services
             }
 
             Logger.LogInformation($"'{moduleName}' has been successfully downloaded to '{outputFolder}'");
+        }
+
+        public async Task DownloadPackageAsync(string packageName, string outputFolder, string version)
+        {
+            Logger.LogInformation("Downloading source code of " + packageName);
+            Logger.LogInformation("Version: " + version);
+            Logger.LogInformation("Output folder: " + outputFolder);
+
+            var result = await PackageProjectBuilder.BuildAsync(
+                new ProjectBuildArgs(
+                    SolutionName.Parse(packageName),
+                    packageName,
+                    version
+                )
+            );
+
+            using (var templateFileStream = new MemoryStream(result.ZipContent))
+            {
+                using (var zipInputStream = new ZipInputStream(templateFileStream))
+                {
+                    var zipEntry = zipInputStream.GetNextEntry();
+                    while (zipEntry != null)
+                    {
+                        if (IsAngularTestFile(zipEntry.Name))
+                        {
+                            zipEntry = zipInputStream.GetNextEntry();
+                            continue;
+                        }
+
+                        var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
+                        var directoryName = Path.GetDirectoryName(fullZipToPath);
+
+                        if (!string.IsNullOrEmpty(directoryName))
+                        {
+                            Directory.CreateDirectory(directoryName);
+                        }
+
+                        var fileName = Path.GetFileName(fullZipToPath);
+                        if (fileName.Length == 0)
+                        {
+                            zipEntry = zipInputStream.GetNextEntry();
+                            continue;
+                        }
+
+                        var buffer = new byte[4096]; // 4K is optimum
+                        using (var streamWriter = File.Create(fullZipToPath))
+                        {
+                            StreamUtils.Copy(zipInputStream, streamWriter, buffer);
+                        }
+
+                        zipEntry = zipInputStream.GetNextEntry();
+                    }
+                }
+            }
+
+            Logger.LogInformation($"'{packageName}' has been successfully downloaded to '{outputFolder}'");
         }
 
         private bool IsAngularTestFile(string zipEntryName)

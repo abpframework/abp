@@ -196,6 +196,7 @@
     "MultipleDBOptionsExplanation": "The framework can work with any data source, while the following providers are officially developed and supported;",
     "SelectLanguage": "Select language",
 	"LatestArticleOnCommunity": "Latest Article on ABP Community",
-	"Register": "Register"
+	"Register": "Register",
+	"IsDownloadable": "Is downloadable"
   }
 }

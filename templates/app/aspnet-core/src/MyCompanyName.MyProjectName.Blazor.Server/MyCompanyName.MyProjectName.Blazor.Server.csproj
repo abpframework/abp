@@ -32,9 +32,6 @@
     <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Blazor.Server\Volo.Abp.Identity.Blazor.Server.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Blazor.Server\Volo.Abp.TenantManagement.Blazor.Server.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Blazor.Server\Volo.Abp.SettingManagement.Blazor.Server.csproj" />
-    <!--<TEMPLATE-REMOVE IF-NOT='CMS-KIT'>-->
-    <ProjectReference Include="..\..\..\..\..\modules\cms-kit\src\Volo.CmsKit.Web\Volo.CmsKit.Web.csproj" />
-    <!--</TEMPLATE-REMOVE>-->
   </ItemGroup>
 
   <ItemGroup>
