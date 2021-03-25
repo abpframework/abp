@@ -17,7 +17,7 @@ This version was a big development journey for us; [150+ issues](https://github.
 
 ## The Migration Guide
 
-We normally don't make breaking changes in minor versions. However, this version has some small breaking changes, mostly related to Blazor UI WebAssembly & Server separation. **Please check the [migration guide](https://docs.abp.io/en/abp/4.3/Migration-Guides/Abp-4_3) before starting with the version 4.3**.
+We normally don't make breaking changes in feature versions. However, this version has some small **breaking changes** mostly related to Blazor UI WebAssembly & Server separation. **Please check the [migration guide](https://docs.abp.io/en/abp/4.3/Migration-Guides/Abp-4_3) before starting with the version 4.3**.
 
 ## Get Started With The 4.3 RC
 
@@ -49,7 +49,7 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/4.3/CLI) for all the 
 
 ### CMS Kit
 
-TODO
+CMS Kit was a module we were working for the last couple of months. It is usable now and we are releasing the initial version with this release.
 
 ### Blazor Server Side
 
