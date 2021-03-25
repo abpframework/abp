@@ -242,7 +242,6 @@
                 change: function (_val) {
                     $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
-                    debugger;
                     reflectContentChanges(editor.getHtml());
                 }
             }
