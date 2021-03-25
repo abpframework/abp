@@ -61,7 +61,7 @@
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
-            height: "25em",
+            height: "95vh",
             minHeight: "25em",
             initialEditType: initialValue ? 'wysiwyg' : 'markdown',
             language: $editorContainer.data("language"),

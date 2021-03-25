@@ -28,6 +28,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
             RemoveMigrations(context, steps);
+            ConfigureTieredArchitecture(context, steps);
             ConfigurePublicWebSite(context, steps);
             RemoveUnnecessaryPorts(context, steps);
             RandomizeSslPorts(context, steps);
@@ -64,7 +65,10 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
-                steps.Add(new RemoveEfCoreRelatedCodeStep());
+            }
+            else
+            {
+                context.Symbols.Add("EFCORE");
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
@@ -144,14 +148,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         {
             if (!context.BuildArgs.PublicWebSite)
             {
-                if (!context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) &&
-                    !context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+                if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) ||
+                    context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
                 {
-                    steps.Add(new RemovePublicRedisStep());
+                    context.Symbols.Add("PUBLIC-REDIS");
                 }
-
-                steps.Add(new RemoveCmsKitStep());
-                return;
+            }
+            else
+            {
+                context.Symbols.Add("public-website");
             }
 
             if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) || context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
@@ -164,14 +169,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new ChangePublicAuthPortStep());
             }
 
-            // We disabled cms-kit for v4.2 release.
-            if (true || context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit"))
+            if (!context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit"))
             {
-                steps.Add(new RemoveCmsKitStep());
-            }
-            else
-            {
-                steps.Add(new RemoveGlobalFeaturesPackageStep());
+                context.Symbols.Add("CMS-KIT");
             }
         }
 
@@ -197,6 +197,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void ConfigureWithBlazorUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            context.Symbols.Add("ui:blazor");
+
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
@@ -218,6 +220,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void ConfigureWithBlazorServerUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            context.Symbols.Add("ui:blazor-server");
+
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
@@ -242,6 +246,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void ConfigureWithMvcUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            context.Symbols.Add("ui:mvc");
+
             if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
@@ -262,6 +268,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void ConfigureWithAngularUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            context.Symbols.Add("ui:angular");
+
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
@@ -310,6 +318,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     }
                 )
             );
+        }
+
+        private void ConfigureTieredArchitecture(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long) ||
+                context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+            {
+                context.Symbols.Add("tiered");
+            }
         }
 
         private static void RandomizeStringEncryption(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

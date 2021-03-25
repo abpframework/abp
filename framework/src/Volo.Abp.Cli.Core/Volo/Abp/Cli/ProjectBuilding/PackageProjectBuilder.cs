@@ -8,46 +8,46 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public class ModuleProjectBuilder : IProjectBuilder, ITransientDependency
+    public class PackageProjectBuilder : IProjectBuilder, ITransientDependency
     {
-        public ILogger<ModuleProjectBuilder> Logger { get; set; }
-
+        public ILogger<PackageProjectBuilder> Logger { get; set; }
         protected ISourceCodeStore SourceCodeStore { get; }
-        protected IModuleInfoProvider ModuleInfoProvider { get; }
+        protected INugetPackageInfoProvider NugetPackageInfoProvider { get; }
         protected ICliAnalyticsCollect CliAnalyticsCollect { get; }
         protected AbpCliOptions Options { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IApiKeyService ApiKeyService { get; }
 
-        public ModuleProjectBuilder(ISourceCodeStore sourceCodeStore,
-            IModuleInfoProvider moduleInfoProvider,
+        public PackageProjectBuilder(ISourceCodeStore sourceCodeStore,
+            INugetPackageInfoProvider nugetPackageInfoProvider,
             ICliAnalyticsCollect cliAnalyticsCollect,
             IOptions<AbpCliOptions> options,
             IJsonSerializer jsonSerializer,
             IApiKeyService apiKeyService)
         {
             SourceCodeStore = sourceCodeStore;
-            ModuleInfoProvider = moduleInfoProvider;
+            NugetPackageInfoProvider = nugetPackageInfoProvider;
             CliAnalyticsCollect = cliAnalyticsCollect;
             Options = options.Value;
             JsonSerializer = jsonSerializer;
             ApiKeyService = apiKeyService;
 
-            Logger = NullLogger<ModuleProjectBuilder>.Instance;
+            Logger = NullLogger<PackageProjectBuilder>.Instance;
         }
 
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
         {
-            var moduleInfo = await GetModuleInfoAsync(args);
+            var packageInfo = await GetPackageInfoAsync(args);
 
             var templateFile = await SourceCodeStore.GetAsync(
                 args.TemplateName,
-                SourceCodeTypes.Module,
+                SourceCodeTypes.Package,
                 args.Version,
                 null,
                 args.ExtraProperties.ContainsKey(GetSourceCommand.Options.Preview.Long)
@@ -66,18 +66,13 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             var context = new ProjectBuildContext(
                 null,
-                moduleInfo,
                 null,
+                packageInfo,
                 templateFile,
                 args
             );
 
-            ModuleProjectBuildPipelineBuilder.Build(context).Execute();
-
-            if (!moduleInfo.DocumentUrl.IsNullOrEmpty())
-            {
-                Logger.LogInformation("Check out the documents at " + moduleInfo.DocumentUrl);
-            }
+            PackageProjectBuildPipelineBuilder.Build(context).Execute();
 
             // Exclude unwanted or known options.
             var options = args.ExtraProperties
@@ -106,9 +101,9 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return new ProjectBuildResult(context.Result.ZipContent, args.TemplateName);
         }
 
-        private async Task<ModuleInfo> GetModuleInfoAsync(ProjectBuildArgs args)
+        private async Task<NugetPackageInfo> GetPackageInfoAsync(ProjectBuildArgs args)
         {
-            return await ModuleInfoProvider.GetAsync(args.TemplateName);
+            return await NugetPackageInfoProvider.GetAsync(args.TemplateName);
         }
     }
 }
