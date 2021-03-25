@@ -144,24 +144,6 @@ namespace VoloDocs.Web
             {
                 options.Conventions.AddPageRoute("/Error", "error/{statusCode}");
             });
-            
-            Configure<DocsSeoOptions>(options =>
-            {
-                options.IsEnabled = true;
-                options.RobotsTxt = new List<RobotsTxtOptions>
-                {
-                    new RobotsTxtOptions
-                    {
-                        UserAgent = "*", 
-                        DisallowUrls = new List<string>(), 
-                        AllowUrls = new List<string> {"*"}
-                    }
-                };
-                options.Sitemap = new SitemapOptions {AdditionalSitemapItems = new List<SitemapUrlOptions>
-                {
-                    new SitemapUrlOptions { Url = "contact", ModifiedDate = DateTime.Now, Priority = 1}
-                }};
-            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
