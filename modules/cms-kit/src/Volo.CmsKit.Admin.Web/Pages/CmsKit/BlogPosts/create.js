@@ -174,17 +174,16 @@
     });
 
     var shorDescriptionEdited = false;
-    $pageContentInput.on('change', function () {
+
+    function reflectContentChanges(htmlContent) {
         if (shorDescriptionEdited) {
             return;
         }
 
-        var htmlValue = $pageContentInput.val();
-
-        var plainValue = jQuery('<div>').html(htmlValue).text().replace(/\n/g, ' ').substring(0, 120);
+        var plainValue = jQuery('<div>').html(htmlContent).text().replace(/\n/g, ' ').substring(0, 120);
 
         $shortDescription.val(plainValue);
-    });
+    }
 
     $shortDescription.on('change', function () {
         shorDescriptionEdited = true;
@@ -243,6 +242,8 @@
                 change: function (_val) {
                     $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
+                    debugger;
+                    reflectContentChanges(editor.getHtml());
                 }
             }
         }).data(editorDataKey);
