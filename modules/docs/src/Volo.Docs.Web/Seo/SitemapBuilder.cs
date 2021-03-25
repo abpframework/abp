@@ -11,7 +11,7 @@ namespace Volo.Docs.Seo
 
         private List<SitemapUrl> _urls = new List<SitemapUrl>();
 
-        internal void AddUrl(string url, DateTime? modified = null, double? priority = null)
+        public void AddUrl(string url, DateTime? modified = null, double? priority = null)
         {
             _urls.Add(new SitemapUrl()
             {

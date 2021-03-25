@@ -3,9 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Volo.Docs.Documents;
 using Volo.Docs.Seo;
 
 namespace Volo.Docs.Middlewares
@@ -13,17 +11,17 @@ namespace Volo.Docs.Middlewares
     public class RequestSeoMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IDocumentAppService _documentAppService;
         private readonly DocsSeoOptions _docsSeoOptions;
+        private readonly DocsSeoBuilder _docsSeoBuilder;
 
         public RequestSeoMiddleware(
             RequestDelegate next, 
-            IDocumentAppService documentAppService,
-            IOptions<DocsSeoOptions> docsSeoOptions
-            )
+            IOptions<DocsSeoOptions> docsSeoOptions, 
+            DocsSeoBuilder docsSeoBuilder
+        )
         {
             _next = next;
-            _documentAppService = documentAppService;
+            _docsSeoBuilder = docsSeoBuilder;
             _docsSeoOptions = docsSeoOptions.Value;
         }
 
@@ -52,7 +50,7 @@ namespace Volo.Docs.Middlewares
 
         private async Task<string> GenerateSitemapAsync(string baseUrl)
         {
-            var links = await _documentAppService.GetDocumentLinksAsync();
+            var links = await _docsSeoBuilder.GetDocumentLinksAsync();
             var siteMapBuilder = new SitemapBuilder();
                             
             foreach(var link in links)

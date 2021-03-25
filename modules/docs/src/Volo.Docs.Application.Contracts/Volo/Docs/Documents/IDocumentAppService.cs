@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
@@ -20,6 +21,6 @@ namespace Volo.Docs.Documents
         
         Task<bool> FullSearchEnabledAsync();
 
-        Task<List<string>> GetDocumentLinksAsync();
+        Task<List<DocumentWithDetailsDto>> GetListByProjectId(Guid projectId);
     }
 }

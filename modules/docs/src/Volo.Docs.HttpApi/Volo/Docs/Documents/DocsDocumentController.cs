@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -62,10 +63,10 @@ namespace Volo.Docs.Documents
         }
 
         [HttpGet]
-        [Route("document-links")]
-        public Task<List<string>> GetDocumentLinksAsync()
+        [Route("projectId={projectId}")]
+        public Task<List<DocumentWithDetailsDto>> GetListByProjectId(Guid projectId)
         {
-            return DocumentAppService.GetDocumentLinksAsync();
+            return DocumentAppService.GetListByProjectId(projectId);
         }
 
         [HttpGet]
