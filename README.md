@@ -1,6 +1,6 @@
 # ABP Framework
 
-![build and test](https://github.com/abpframework/abp/workflows/build%20and%20test/badge.svg)
+![build and test](https://img.shields.io/github/workflow/status/abpframework/abp/build%20and%20test/dev?style=flat-square)
 [![NuGet](https://img.shields.io/nuget/v/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
 [![NuGet (with prereleases)](https://img.shields.io/nuget/vpre/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
 [![MyGet (nightly builds)](https://img.shields.io/myget/abp-nightly/vpre/Volo.Abp.svg?style=flat-square)](https://docs.abp.io/en/abp/latest/Nightly-Builds)
