@@ -10,7 +10,7 @@ namespace Volo.Abp.BlazoriseUI.Components
     public partial class EntityAction<TItem> : ComponentBase
     {
         [Parameter] 
-        public bool Visible { get; set; }
+        public bool Visible { get; set; } = true;
 
         internal bool HasPermission { get; set; } = true;
 
