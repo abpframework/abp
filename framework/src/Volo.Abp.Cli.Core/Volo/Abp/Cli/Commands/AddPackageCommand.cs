@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -39,6 +40,7 @@ namespace Volo.Abp.Cli.Commands
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
 
             await ProjectNugetPackageAdder.AddAsync(
+                GetSolutionFile(commandLineArgs),
                 GetProjectFile(commandLineArgs),
                 commandLineArgs.Target,
                 version,
@@ -94,30 +96,24 @@ namespace Volo.Abp.Cli.Commands
                 return providedProjectFile;
             }
 
-            var foundProjectFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.csproj");
-            if (foundProjectFiles.Length == 1)
+            return Directory.GetFiles(Directory.GetCurrentDirectory(), "*.csproj").FirstOrDefault();
+        }
+
+        protected virtual string GetSolutionFile(CommandLineArgs commandLineArgs)
+        {
+            var providedSolutionFile = PathHelper.NormalizePath(
+                commandLineArgs.Options.GetOrNull(
+                    Options.Solution.Short,
+                    Options.Solution.Long
+                )
+            );
+
+            if (!providedSolutionFile.IsNullOrWhiteSpace())
             {
-                return foundProjectFiles[0];
+                return providedSolutionFile;
             }
 
-            if (foundProjectFiles.Length == 0)
-            {
-                throw new CliUsageException("'abp add-package' command should be used inside a folder contaning a .csproj file!");
-            }
-
-            //foundProjectFiles.Length > 1
-
-            var sb = new StringBuilder("There are multiple project (.csproj) files in the current directory. Please specify one of the files below:");
-
-            foreach (var foundProjectFile in foundProjectFiles)
-            {
-                sb.AppendLine("* " + foundProjectFile);
-            }
-
-            sb.AppendLine("Example:");
-            sb.AppendLine($"abp add-package {commandLineArgs.Target} -p {foundProjectFiles[0]}");
-
-            throw new CliUsageException(sb.ToString());
+            return Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln").FirstOrDefault();
         }
 
         public static class Options
@@ -126,6 +122,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "p";
                 public const string Long = "project";
+            }
+
+            public static class Solution
+            {
+                public const string Short = "s";
+                public const string Long = "solution";
             }
 
             public static class Version
