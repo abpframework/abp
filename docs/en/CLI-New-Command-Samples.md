@@ -127,7 +127,7 @@ Module are reusable sub applications used by your main project. Using ABP Module
   abp new Acme.IssueManagement -t module --no-ui
   ```
 
-## Create an ABP solution from a specific version
+## Create a solution from a specific version
 
 When you create a solution, it always creates with the latest version. To create a project from an older version, you can pass the `--version` parameter.
 
