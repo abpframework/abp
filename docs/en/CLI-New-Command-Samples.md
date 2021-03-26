@@ -15,7 +15,7 @@ The following commands are for creating Angular UI projects:
 * **Entity Framework Core**, default app template, **separate Identity Server**, creates the project in a new folder:
 
   ```bash
-abp new Acme.BookStore -t app -u angular -m none --separate-identity-server --database-provider ef -csf
+  abp new Acme.BookStore -t app -u angular -m none --separate-identity-server --database-provider ef -csf
   ```
 
 * **Entity Framework Core**,  **custom connection string**, creates the project in a new folder:
@@ -23,7 +23,6 @@ abp new Acme.BookStore -t app -u angular -m none --separate-identity-server --da
   ```bash
   abp new Acme.BookStore -u angular -csf --connection-string Server=localhost;Database=MyDatabase;Trusted_Connection=True
   ```
-
 
 *  **MongoDB**,  default app template, mobile project included:
 
@@ -82,13 +81,11 @@ The following commands are for creating Blazor projects:
   abp new Acme.BookStore -u blazor --separate-identity-server
   ```
 
-
 * **MongoDB**, no mobile app, creates the project in a new folder:
 
   ```bash
   abp new Acme.BookStore -u blazor --database-provider mongodb --mobile none -csf
   ```
-
 
 ## No UI 
 
@@ -99,7 +96,6 @@ In the default app template, there is always a frontend project. In this option 
     ```bash
     abp new Acme.BookStore -u none --separate-identity-server -csf
     ```
-
 * **MongoDB**, no mobile app:
 
     ```bash
@@ -116,7 +112,6 @@ It's a template of a basic .NET console application with ABP module architecture
   abp new Acme.BookStore -t console -csf
   ```
 
-
 ## Module
 
 Module are reusable sub applications used by your main project. Using ABP Module is a best practice if you are building a microservice solution. As modules are not final applications, each module has all the frontend UI projects and database providers. The module template comes with an MVC UI to be able to develop without the final solution. But if you will develop your module under a final solution, you add `--no-ui` parameter to exclude MVC UI project.
@@ -126,8 +121,6 @@ Module are reusable sub applications used by your main project. Using ABP Module
   ```bash
   abp new Acme.IssueManagement -t module
   ```
-
-
 * The same with the upper but doesn't include MVC startup project.
 
   ```bash
@@ -140,9 +133,9 @@ When you create a solution, it always creates with the latest version. To create
 
 * Create a solution from v3.3.0, with Angular UI and Entity Framework Core.
 
-```bash
-abp new Acme.BookStore -t app -u angular -m none --database-provider ef -csf --version 3.3.0
-```
+  ```bash
+  abp new Acme.BookStore -t app -u angular -m none --database-provider ef -csf --version 3.3.0
+  ```
 
 To get the ABP version list, checkout following link: https://www.nuget.org/packages/Volo.Abp.Core/
 
@@ -156,13 +149,11 @@ ABP CLI uses the default [app template](https://github.com/abpframework/abp/tree
   abp new Acme.BookStore -t app -u mvc --mobile none --database-provider ef --template-source "c:\MyProjects\templates\app"
   ```
 
-
 * Same with the previous one except this command retrieves the template from the URL `https://myabp.com/app-template.zip`.
 
   ```bash
   abp new Acme.BookStore -t app -u mvc --mobile none --database-provider ef --template-source https://myabp.com/app-template.zip
   ```
-
 
 ## Create a preview version
 
@@ -196,7 +187,6 @@ ABP CLI always assigns random ports to the hostable projects. If you need to kee
   abp new Acme.BookStore --no-random-port -csf
   ```
 
-
 ## Use local ABP framework references
 
 ABP libraries are referenced from NuGet by default in the ABP solutions. Sometimes you need to reference ABP libraries locally to your solution. This is useful to debug the framework itself. Your local ABP Framework 's root directory must have the `Volo.Abp.sln` file. You can copy the content of the following directory to your file system https://github.com/abpframework/abp/tree/dev/framework
@@ -208,7 +198,6 @@ ABP libraries are referenced from NuGet by default in the ABP solutions. Sometim
   ```bash
   abp new Acme.BookStore --local-framework-ref --abp-path C:\source\abp\framework
   ```
-
 
 **Output**:
 
