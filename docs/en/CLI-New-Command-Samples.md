@@ -159,7 +159,7 @@ ABP CLI uses the default [app template](https://github.com/abpframework/abp/tree
 
 ABP CLI always uses the latest version. In order to create a solution from a preview (RC) version add the `--preview` parameter.
 
-* Blazor UI, Entity Framework Core, no mobile, preview version, creates the project in a new folder:
+* Blazor UI, Entity Framework Core, no mobile, **preview version**, creates the project in a new folder:
 
   ```bash
   abp new Acme.BookStore -t app -u blazor --mobile none -csf --preview
