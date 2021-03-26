@@ -7,14 +7,27 @@
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
+@using Volo.CmsKit.Public.Web.Renderers
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
 
 @inherits CmsKitPublicPageBase
 
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs.BlogPostModel
 
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
 
 @section styles{
+<abp-abp-style-bundle>
     <abp-style src="/Pages/Public/CmsKit/Blogs/blogPost.css" />
+    <abp-style type="typeof(HighlightJsStyleContributor)" />
+</abp-abp-style-bundle>
+}
+
+@section scripts{
+<abp-script-bundle>
+    <abp-script type="typeof(HighlightJsScriptContributor)" />
+    <abp-script src="/Pages/Public/CmsKit/highlightOnLoad.js" />
+</abp-script-bundle>
 }
 
 @{
@@ -31,7 +44,9 @@
                     <span class="font-weight-bold">@@@Model.BlogPost.Author?.UserName</span>
                     <small style="opacity:.65;">@Model.BlogPost.CreationTime</small>
                 </p>
-                @Html.Raw(Model.BlogPost.Content)
+
+                @Html.Raw(await MarkdownRenderer.RenderAsync(Model.BlogPost.Content))
+
                 <p class="mb-3">
                     @if (Model.BlogPost.LastModificationTime != null)
                     {
@@ -45,10 +60,10 @@
                     if (Model.TagsFeature?.IsEnabled == true)
                     {
                         @await Component.InvokeAsync(typeof(TagViewComponent), new
-                        {
-                            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                            entityId = Model.BlogPost.Id.ToString()
-                        })
+                {
+                entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                entityId = Model.BlogPost.Id.ToString()
+                })
                     }
                 }
             </div>
@@ -62,8 +77,8 @@
                     {
                         @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
                         {
-                            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                            entityId = Model.BlogPost.Id.ToString()
+                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                        entityId = Model.BlogPost.Id.ToString()
                         })
                     }
                 }
@@ -76,8 +91,8 @@
                     {
                         @await Component.InvokeAsync(typeof(RatingViewComponent), new
                         {
-                            entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
-                            entityId = Model.BlogPost.Id.ToString()
+                        entityType = Volo.CmsKit.Blogs.BlogPostConsts.EntityType,
+                        entityId = Model.BlogPost.Id.ToString()
                         })
                     }
                 }
