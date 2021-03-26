@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using NuGet.Versioning;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
@@ -91,6 +92,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Check.NotNull(moduleName, nameof(moduleName));
 
             var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
+            module = RemoveIncompatiblePackages(module, version);
 
             Logger.LogInformation(
                 $"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
@@ -129,6 +131,39 @@ namespace Volo.Abp.Cli.ProjectModification
             await RunBundleForBlazorAsync(projectFiles, module);
 
             ModifyDbContext(projectFiles, module, skipDbMigrations);
+        }
+
+        private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
+        {
+            module.NugetPackages.RemoveAll(np => IsPackageInCompatible(np, version));
+            return module;
+        }
+
+        private bool IsPackageInCompatible(NugetPackageInfo package, string version)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(package.MinVersion))
+                {
+                    if (SemanticVersion.Parse(package.MinVersion) > SemanticVersion.Parse(version))
+                    {
+                        return true;
+                    }
+                }
+                if (!string.IsNullOrWhiteSpace(package.MaxVersion))
+                {
+                    if (SemanticVersion.Parse(package.MaxVersion) < SemanticVersion.Parse(version))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
         }
 
         private async Task RunBundleForBlazorAsync(string[] projectFiles, ModuleWithMastersInfo module)
