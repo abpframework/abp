@@ -64,7 +64,8 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
             var token = GetCancellationToken(cancellationToken);
             var dbContext = await GetDbContextAsync(token);
-            var blogPostQueryable = dbContext.Collection<BlogPost>().AsQueryable();
+            var blogPostQueryable = await GetQueryableAsync();
+            
             var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
 
             var queryable = blogPostQueryable
