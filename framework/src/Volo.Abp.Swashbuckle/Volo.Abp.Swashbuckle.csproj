@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.5" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
     </ItemGroup>
 
     <ItemGroup>

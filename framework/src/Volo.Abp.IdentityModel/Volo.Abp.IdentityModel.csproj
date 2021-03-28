@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="4.5.0" />
+    <PackageReference Include="IdentityModel" Version="5.1.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftPackageVersion)" />
     <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
