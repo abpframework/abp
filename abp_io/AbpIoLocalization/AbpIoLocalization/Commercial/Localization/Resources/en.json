@@ -287,6 +287,7 @@
     "PrivateTicketEmailSupport": "Private ticket & email support",
     "BuyNow": "Buy Now",
     "PayViaAmexCard": "How can I pay via my AMEX card?",
-    "PayViaAmexCardDescription": "The default payment gateway 'Iyzico' may decline some AMEX credit cards due to the security measures. In this case, you can pay through the alternative payment gateway '2Checkout'."
+    "PayViaAmexCardDescription": "The default payment gateway 'Iyzico' may decline some AMEX credit cards due to the security measures. In this case, you can pay through the alternative payment gateway '2Checkout'.",
+    "ThankYou": "Thank you"
   }
 }
