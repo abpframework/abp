@@ -78,15 +78,23 @@ If you write `blazor` as the UI type, it will create Blazor WebAssembly just as 
 
 ### Blazor UI Module Extensibility
 
-TODO
+Module Entity Extensions and some other extensibility features was not supported by the Blazor UI. With this version, we've implemented that system for Blazor UI.
+
+For anyone wondering what is the module entity extensions, please check [the document](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) or [this community video](https://community.abp.io/articles/overview-of-abp-framework-4.1-module-extensions-part-1-n04f7bhf).
 
 ### Angular UI Resource Owner Password Flow
 
-TODO
+Login page was removed from the Angular UI in previous versions, because Authorization Code flow is the recommended approach for SPAs. However, it requires to redirect user to the authentication server, login there and come back to the application. We got many feedback because this brings overhead for simple applications.
+
+With the version 4.3, Angular UI has an option to use its own login page with resource owner password flow.
+
+TODO: How to enable it?
 
 ### Volo.Abp.EntityFrameworkCore.Oracle Package
 
-TODO
+We couldn't update the [Oracle.EntityFrameworkCore](https://www.nuget.org/packages/Oracle.EntityFrameworkCore/) package on .NET 5.0 upgrade since it was not supporting .NET 5.0 at that time. Now, it supports .NET 5.0 and we've upgraded the package.
+
+See [the documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Oracle-Official) to learn how to switch to this package for Oracle database.
 
 ### Add Basic Theme Into Your Solution
 
