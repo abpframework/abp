@@ -13,11 +13,19 @@ import {
 })
 export class PageComponent {
   @Input() title: string;
-  @Input() record: any;
 
-  @Input() titleVisible = true;
-  @Input() breadcrumbVisible = true;
-  @Input() toolbarVisible = true;
+  toolbarVisible = false;
+  _toolbarData: any;
+  @Input('toolbar') set toolbarData(val: any) {
+    this._toolbarData = val;
+    this.toolbarVisible = true;
+  }
+
+  get toolbarData() {
+    return this._toolbarData;
+  }
+
+  @Input('breadcrumb') breadcrumbVisible = true;
 
   pageParts = {
     title: PageParts.title,
