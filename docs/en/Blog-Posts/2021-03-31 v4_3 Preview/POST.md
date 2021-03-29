@@ -15,9 +15,15 @@ Beside the new features above, we've done many performance improvements, enhance
 
 This version was a big development journey for us; [150+ issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A4.3-preview) resolved, [260+ PRs](https://github.com/abpframework/abp/pulls?q=is%3Aopen+is%3Apr+milestone%3A4.3-preview) merged and 1,600+ commits done only in the [main framework repository](https://github.com/abpframework/abp). **Thanks to the ABP Framework team and all the contributors.**
 
+> ABP Commercial 4.3 RC has also been published. We will write a separate blog post for it.
+
 ## The Migration Guide
 
 We normally don't make breaking changes in feature versions. However, this version has some small **breaking changes** mostly related to Blazor UI WebAssembly & Server separation. **Please check the [migration guide](https://docs.abp.io/en/abp/4.3/Migration-Guides/Abp-4_3) before starting with the version 4.3**.
+
+## Known Issues
+
+There are some minor issues those will be fixed in the stable release. You can see the known issues [here](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A4.3-final).
 
 ## Get Started With The 4.3 RC
 
@@ -60,7 +66,7 @@ CMS (Content Management System) Kit was a module we were working for the last co
 
 All features are separately usable. For example, you can create an image gallery and reuse the Comments and Tags features for the images. You can enable/disable features individually using the [Global Features System](https://docs.abp.io/en/abp/4.3/global-features).
 
-> We will create a separate blog post for the CMS Kit module, so I keep this short for now.
+> We will create a separate blog post for the CMS Kit module, so I keep it short here.
 
 ### Blazor Server Side
 
@@ -130,11 +136,32 @@ TODO
 
 ### IInitLogger
 
-TODO
+In ASP.NET Core, logging is not possible before the dependency injection phase is completed. For example, you can't write log in `ConfigureServices` method. However, we sometimes need to write logs in this stage.
+
+Introducing the `IInitLogger` service, which allows to write logs inside the `ConfigureServices` method.
+
+**Example:**
+
+````csharp
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var logger = context.Services.GetInitLogger<MyModule>();
+        logger.LogInformation("Some log...");
+    }
+}
+````
+
+Logs are written once the service registration phase is completed. It stores the written logs in memory, then write logs to the actual `ILogger` when it is ready.
+
+> Notice: Startup templates come with [Serilog](https://serilog.net/) pre-installed. So, you can write logs everywhere by directly using its static API (ex: `Log.Information("...");`). The `InitLogger` is a way to write pre-initialization logs without depending a particular logging library. So, it makes it very handy to write logs inside reusable modules.
 
 ### Multi-Lingual Entities
 
-TODO
+ABP's [localization system](https://docs.abp.io/en/abp/latest/Localization) works well when you want to localizer your application UI. However, in some applications, you may also need to localize your data. For example, if you have a *Product* entity, you may need to show Product's *Description* property in the current user's language. *Multi-Language Entities* provides a pattern to localize your entities.
+
+TODO: EXAMPLE
 
 ### Other News
 
