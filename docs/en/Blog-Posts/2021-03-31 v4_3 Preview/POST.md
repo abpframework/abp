@@ -64,15 +64,17 @@ All features are separately usable. For example, you can create an image gallery
 
 ### Blazor Server Side
 
-We'd implemented Blazor WebAssembly before. With the version 4.3, we have the Blazor Server Side option too. All the current functionalities are available to the Blazor Server. You can select Blazor Server as the UI type while creating a new solution.
+We'd implemented Blazor WebAssembly before. With the version 4.3, we have the Blazor Server Side option too. All the current functionalities are available to the Blazor Server.
 
-Example:
+You can select Blazor Server as the UI type while creating a new solution.
+
+**Example:**
 
 ````bash
 abp new Acme.BookStore -u blazor-server
 ````
 
-If you write `blazor` as the UI type, it will create Blazor WebAssembly just as before.
+If you write `blazor` as the UI type, it will create Blazor WebAssembly just as before. You can also select the Blazor Server on the [get started](https://abp.io/get-started) page.
 
 ### Blazor UI Module Extensibility
 
