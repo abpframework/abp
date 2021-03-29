@@ -16,7 +16,7 @@ export class PageComponent {
 
   toolbarVisible = false;
   _toolbarData: any;
-  @Input() set toolbarData(val: any) {
+  @Input('toolbar') set toolbarData(val: any) {
     this._toolbarData = val;
     this.toolbarVisible = true;
   }
