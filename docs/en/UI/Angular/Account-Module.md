@@ -122,4 +122,4 @@ export const environment = {
 
 > Note: The resource owner password flow does not support the two-factor authentication for some technical reasons.
 
-See the [Authorization in Angular UI](./Authorization) document for more details.
+See the [Authorization in Angular UI](./Authorization.md) document for more details.
