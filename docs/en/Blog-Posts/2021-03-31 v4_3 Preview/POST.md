@@ -58,7 +58,7 @@ CMS (Content Management System) Kit was a module we were working for the last co
 * **Reactions**: Allows users to react to a content via emojis, like smile, upvote, downvote, etc.
 * **Rating**: This component is used to rate a content by users.
 
-All features are separately usable. For example, you can create an image gallery and reuse the Comments and Tags features for the images. You can enable/disable features individually using the [Global Features System](https://docs.abp.io/en/abp/latest/global-features).
+All features are separately usable. For example, you can create an image gallery and reuse the Comments and Tags features for the images. You can enable/disable features individually using the [Global Features System](https://docs.abp.io/en/abp/4.3/global-features).
 
 > We will create a separate blog post for the CMS Kit module, so I keep this short for now.
 
@@ -80,23 +80,51 @@ If you write `blazor` as the UI type, it will create Blazor WebAssembly just as 
 
 Module Entity Extensions and some other extensibility features was not supported by the Blazor UI. With this version, we've implemented that system for Blazor UI.
 
-For anyone wondering what is the module entity extensions, please check [the document](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) or [this community video](https://community.abp.io/articles/overview-of-abp-framework-4.1-module-extensions-part-1-n04f7bhf).
+For anyone wondering what is the module entity extensions, please check [the document](https://docs.abp.io/en/abp/4.3/Module-Entity-Extensions) or [this community video](https://community.abp.io/articles/overview-of-abp-framework-4.1-module-extensions-part-1-n04f7bhf).
 
 ### Angular UI Resource Owner Password Flow
 
 Login page was removed from the Angular UI in previous versions, because Authorization Code flow is the recommended approach for SPAs. However, it requires to redirect user to the authentication server, login there and come back to the application. We got many feedback because this brings overhead for simple applications.
 
-With the version 4.3, Angular UI has an option to use its own login page with resource owner password flow.
-
-TODO: How to enable it?
+With the version 4.3, Angular UI has an option to use its own login page with resource owner password flow. Please refer to [the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/UI/Angular/Account-Module.md) to learn how to make it working.
 
 ### Volo.Abp.EntityFrameworkCore.Oracle Package
 
 We couldn't update the [Oracle.EntityFrameworkCore](https://www.nuget.org/packages/Oracle.EntityFrameworkCore/) package on .NET 5.0 upgrade since it was not supporting .NET 5.0 at that time. Now, it supports .NET 5.0 and we've upgraded the package.
 
-See [the documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Oracle-Official) to learn how to switch to this package for Oracle database.
+See [the documentation](https://docs.abp.io/en/abp/4.3/Entity-Framework-Core-Oracle-Official) to learn how to switch to this package for Oracle database.
 
 ### Add Basic Theme Into Your Solution
+
+ABP Framework provides a strong theming system. However, the default theme, named the Basic Theme, has a non-styled, base Bootstrap UI. It is expected that you override styles and UI components of that theme in a serious application.
+
+There are some articles (see for [mvc](https://community.abp.io/articles/creating-a-new-ui-theme-by-copying-the-basic-theme-for-mvc-ui-yt9b18io) & [blazor](https://community.abp.io/articles/creating-a-new-ui-theme-by-copying-the-basic-theme-for-blazor-ui-qaf5ho1b)) to explain how to include the Basic Theme's source code into your solution to fully modify it. However, it still requires some manual work.
+
+With this version, ABP CLI providing a command to add the Basic Theme's source code into your solution. Run the following command in a command-line terminal inside the root directory of your solution:
+
+**MVC UI**
+
+````bash
+abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic --with-source-code --add-to-solution
+````
+
+**Blazor Web Assembly UI**
+
+````bash
+abp add-package Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme --with-source-code --add-to-solution
+abp add-package Volo.Abp.AspNetCore.Components.Web.BasicTheme --with-source-code --add-to-solution
+````
+
+**Blazor Server UI**
+
+````bash
+abp add-package Volo.Abp.AspNetCore.Components.Server.BasicTheme --with-source-code --add-to-solution
+abp add-package Volo.Abp.AspNetCore.Components.Web.BasicTheme --with-source-code --add-to-solution
+````
+
+As you see, Blazor UI developers should add two packages. The Basic Theme consists of two packages for the Blazor UI: one for wasm / server and one shared.
+
+**Angular UI**
 
 TODO
 
