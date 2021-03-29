@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Http.Client;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 
 namespace Volo.CmsKit
@@ -9,5 +10,12 @@ namespace Volo.CmsKit
         )]
     public class CmsKitCommonHttpApiClientModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddHttpClientProxies(
+                typeof(CmsKitCommonApplicationContractsModule).Assembly,
+                CmsKitCommonRemoteServiceConsts.RemoteServiceName
+            );
+        }
     }
 }

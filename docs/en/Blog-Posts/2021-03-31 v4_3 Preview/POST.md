@@ -49,23 +49,52 @@ See the [ABP CLI documentation](https://docs.abp.io/en/abp/4.3/CLI) for all the 
 
 ### CMS Kit
 
-CMS Kit was a module we were working for the last couple of months. It is usable now and we are releasing the initial version with this release.
+CMS (Content Management System) Kit was a module we were working for the last couple of months. It is usable now and we are releasing the initial version with this release. We are considering this module as pre-mature. It will be improved in the next versions. The goal to to provide a flexible and extensible CMS infrastructure to .NET community. It currently has the following features;
+
+* **Pages**: Used to create UI pages with a Markdown + WYSIWYG editor. Once you create a page, it becomes available via URL like `/pages/my-page-url`.
+* **Blog**: A built-in blog system that supports multiple blogs with blog posts.
+* **Comments**: Allows users to write comments under contents. It is used for blog posts.
+* **Tags**: To add tag feature to any type of content/entity. It is used for blog posts.
+* **Reactions**: Allows users to react to a content via emojis, like smile, upvote, downvote, etc.
+* **Rating**: This component is used to rate a content by users.
+
+All features are separately usable. For example, you can create an image gallery and reuse the Comments and Tags features for the images. You can enable/disable features individually using the [Global Features System](https://docs.abp.io/en/abp/latest/global-features).
+
+> We will create a separate blog post for the CMS Kit module, so I keep this short for now.
 
 ### Blazor Server Side
 
-TODO
+We'd implemented Blazor WebAssembly before. With the version 4.3, we have the Blazor Server Side option too. All the current functionalities are available to the Blazor Server.
+
+You can select Blazor Server as the UI type while creating a new solution.
+
+**Example:**
+
+````bash
+abp new Acme.BookStore -u blazor-server
+````
+
+If you write `blazor` as the UI type, it will create Blazor WebAssembly just as before. You can also select the Blazor Server on the [get started](https://abp.io/get-started) page.
 
 ### Blazor UI Module Extensibility
 
-TODO
+Module Entity Extensions and some other extensibility features was not supported by the Blazor UI. With this version, we've implemented that system for Blazor UI.
+
+For anyone wondering what is the module entity extensions, please check [the document](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) or [this community video](https://community.abp.io/articles/overview-of-abp-framework-4.1-module-extensions-part-1-n04f7bhf).
 
 ### Angular UI Resource Owner Password Flow
 
-TODO
+Login page was removed from the Angular UI in previous versions, because Authorization Code flow is the recommended approach for SPAs. However, it requires to redirect user to the authentication server, login there and come back to the application. We got many feedback because this brings overhead for simple applications.
+
+With the version 4.3, Angular UI has an option to use its own login page with resource owner password flow.
+
+TODO: How to enable it?
 
 ### Volo.Abp.EntityFrameworkCore.Oracle Package
 
-TODO
+We couldn't update the [Oracle.EntityFrameworkCore](https://www.nuget.org/packages/Oracle.EntityFrameworkCore/) package on .NET 5.0 upgrade since it was not supporting .NET 5.0 at that time. Now, it supports .NET 5.0 and we've upgraded the package.
+
+See [the documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Oracle-Official) to learn how to switch to this package for Oracle database.
 
 ### Add Basic Theme Into Your Solution
 

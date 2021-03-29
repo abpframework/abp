@@ -18,11 +18,12 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
 
             ToolbarItemRenders.Clear();
 
+            var sequence = 0;
             foreach (var item in toolbar.Items)
             {
                 ToolbarItemRenders.Add(builder =>
                 {
-                    builder.OpenComponent(0, item.ComponentType);
+                    builder.OpenComponent(sequence++, item.ComponentType);
                     builder.CloseComponent();
                 });
             }
