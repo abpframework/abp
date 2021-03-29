@@ -74,7 +74,7 @@ namespace Volo.CmsKit.Comments
                 sorting = "comment." + sorting;
             }
 
-            query = query.OrderBy(sorting ?? "comment.creationTime desc")
+            query = query.OrderBy(sorting.IsNullOrEmpty() ? "comment.creationTime desc" : sorting)
                 .PageBy(skipCount, maxResultCount);
 
             return await query.ToListAsync(token);

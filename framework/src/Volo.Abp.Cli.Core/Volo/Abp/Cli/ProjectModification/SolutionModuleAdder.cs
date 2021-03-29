@@ -7,11 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using NuGet.Versioning;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.ProjectBuilding.Files;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -90,6 +92,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Check.NotNull(moduleName, nameof(moduleName));
 
             var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
+            module = RemoveIncompatiblePackages(module, version);
 
             Logger.LogInformation(
                 $"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
@@ -101,8 +104,7 @@ namespace Volo.Abp.Cli.ProjectModification
             if (withSourceCode || newTemplate || newProTemplate)
             {
                 var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
-                await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version, newTemplate,
-                    newProTemplate);
+                await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version, newTemplate, newProTemplate);
                 await RemoveUnnecessaryProjectsAsync(Path.GetDirectoryName(solutionFile), module, projectFiles);
 
                 if (addSourceCodeToSolutionFile)
@@ -131,6 +133,39 @@ namespace Volo.Abp.Cli.ProjectModification
             ModifyDbContext(projectFiles, module, skipDbMigrations);
         }
 
+        private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
+        {
+            module.NugetPackages.RemoveAll(np => IsPackageInCompatible(np, version));
+            return module;
+        }
+
+        private bool IsPackageInCompatible(NugetPackageInfo package, string version)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(package.MinVersion))
+                {
+                    if (SemanticVersion.Parse(package.MinVersion) > SemanticVersion.Parse(version))
+                    {
+                        return true;
+                    }
+                }
+                if (!string.IsNullOrWhiteSpace(package.MaxVersion))
+                {
+                    if (SemanticVersion.Parse(package.MaxVersion) < SemanticVersion.Parse(version))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+        }
+
         private async Task RunBundleForBlazorAsync(string[] projectFiles, ModuleWithMastersInfo module)
         {
             var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
@@ -155,9 +190,26 @@ namespace Volo.Abp.Cli.ProjectModification
             var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly).First();
             var isProjectTiered = await IsProjectTiered(projectFiles);
 
-            if (!projectFiles.Any(p => p.EndsWith(".Blazor.csproj")))
+            var blazorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".Blazor.csproj"));
+            if (blazorProject == null)
             {
                 await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.Blazor, isProjectTiered);
+                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorServer, isProjectTiered);
+                await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
+                await RemoveProjectByPostFix(module, moduleSolutionFile, "src", ".Blazor");
+            }
+            else
+            {
+                var isBlazorServer = BlazorProjectTypeChecker.IsBlazorServerProject(blazorProject);
+
+                if (isBlazorServer)
+                {
+                    await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
+                }
+                else
+                {
+                    await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorServer, isProjectTiered);
+                }
             }
 
             if (!projectFiles.Any(p => p.EndsWith(".Web.csproj")))
@@ -348,7 +400,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
             else
             {
-                await SourceCodeDownloadService.DownloadAsync(
+                await SourceCodeDownloadService.DownloadModuleAsync(
                     module.Name,
                     targetModuleFolder,
                     version,
@@ -421,7 +473,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     continue;
                 }
 
-                await ProjectNugetPackageAdder.AddAsync(targetProjectFile, nugetPackage, null, useDotnetCliToInstall);
+                await ProjectNugetPackageAdder.AddAsync(null, targetProjectFile, nugetPackage, null, useDotnetCliToInstall);
             }
 
             var mvcNpmPackages = module.NpmPackages?.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Mvc))
@@ -565,9 +617,15 @@ namespace Volo.Abp.Cli.ProjectModification
                 },
                 new NugetPackageInfo
                 {
-                    Name = $"{module.Name}.Blazor",
-                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorModule",
-                    Target = NuGetPackageTarget.Blazor
+                    Name = $"{module.Name}.Blazor.WebAssembly",
+                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorWebAssemblyModule",
+                    Target = NuGetPackageTarget.BlazorWebAssembly
+                },
+                new NugetPackageInfo
+                {
+                    Name = $"{module.Name}.Blazor.Server",
+                    ModuleClass = $"{module.Name}.Blazor.{moduleProjectName}BlazorServerModule",
+                    Target = NuGetPackageTarget.BlazorServer
                 },
                 new NugetPackageInfo
                 {

@@ -108,7 +108,8 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
 
                 var isLinked = await IdentityLinkUserManager.IsLinkedAsync(
                     new IdentityLinkUserInfo(CurrentUser.GetId(), CurrentTenant.Id),
-                    new IdentityLinkUserInfo(linkUserId, linkTenantId));
+                    new IdentityLinkUserInfo(linkUserId, linkTenantId),
+                    true);
 
                 if (isLinked)
                 {

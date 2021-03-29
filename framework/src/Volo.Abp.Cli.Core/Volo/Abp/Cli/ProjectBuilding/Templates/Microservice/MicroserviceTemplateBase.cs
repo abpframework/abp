@@ -30,6 +30,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
 
         private static void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            //TODO: move common tasks to methods
             switch (context.BuildArgs.UiFramework)
             {
                 case UiFramework.None:
@@ -41,8 +42,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
 
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server",null,
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                     steps.Add(new RemoveFolderStep("/apps/blazor"));
                     steps.Add(new RemoveProjectFromTyeStep("blazor"));
+                    steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
 
                     steps.Add(new RemoveFolderStep("/apps/angular"));
                     break;
@@ -56,8 +60,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
 
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server",null,
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                     steps.Add(new RemoveFolderStep("/apps/blazor"));
                     steps.Add(new RemoveProjectFromTyeStep("blazor"));
+                    steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
                     break;
 
                 case UiFramework.Blazor:
@@ -67,14 +74,48 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                     steps.Add(new RemoveFolderStep("/apps/angular"));
                     steps.Add(new RemoveProjectFromTyeStep("web"));
                     steps.Add(new RemoveProjectFromPrometheusStep("web"));
+
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server",
+                        "/apps/blazor/MyCompanyName.MyProjectName.Blazor.sln",
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server",
+                        null,
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
+                    steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
+
+                    break;
+
+                case UiFramework.BlazorServer:
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web",null,
+                        "/apps/web/src/MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveFolderStep("/apps/web"));
+                    steps.Add(new RemoveFolderStep("/apps/angular"));
+                    steps.Add(new RemoveProjectFromTyeStep("web"));
+                    steps.Add(new RemoveProjectFromPrometheusStep("web"));
+
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",
+                        "/apps/blazor/MyCompanyName.MyProjectName.Blazor.sln",
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",
+                        null,
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromTyeStep("blazor"));
+
+                    steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server",
+                        "MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RenameProjectInTyeStep("blazor-server", "blazor"));
+
                     break;
 
                 case UiFramework.Mvc:
                 case UiFramework.NotSpecified:
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server",null,
+                        "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                     steps.Add(new RemoveFolderStep("/apps/blazor"));
                     steps.Add(new RemoveProjectFromTyeStep("blazor"));
+                    steps.Add(new RemoveProjectFromTyeStep("blazor-server"));
 
                     steps.Add(new RemoveFolderStep("/apps/angular"));
                     break;

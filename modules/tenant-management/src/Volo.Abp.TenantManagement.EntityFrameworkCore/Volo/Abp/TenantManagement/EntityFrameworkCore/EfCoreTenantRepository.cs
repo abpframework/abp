@@ -62,7 +62,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                     u =>
                         u.Name.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(Tenant.Name))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

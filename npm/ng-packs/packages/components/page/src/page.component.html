@@ -1,0 +1,41 @@
+<div class="row entry-row">
+  <ng-container *ngIf="titleVisible">
+    <ng-container *ngIf="customTitle; else defaultTitleTemplate">
+      <ng-content select="abp-page-title-container"></ng-content>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="breadcrumbVisible">
+    <ng-container *ngIf="customBreadcrumb; else defaultBreadcrumbTemplate">
+      <ng-content select="abp-page-breadcrumb-container"></ng-content>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="toolbarVisible">
+    <ng-container *ngIf="customToolbar; else defaultPageToolbarTemplate">
+      <ng-content select="abp-page-toolbar-container"></ng-content>
+    </ng-container>
+  </ng-container>
+</div>
+
+<ng-content></ng-content>
+
+<ng-template #defaultTitleTemplate>
+  <div class="col-auto" *abpPagePart="pageParts.title">
+    <h1 class="content-header-title">
+      {{ title }}
+    </h1>
+  </div>
+</ng-template>
+
+<ng-template #defaultBreadcrumbTemplate>
+  <div class="col-lg-auto pl-lg-0" *abpPagePart="pageParts.breadcrumb">
+    <abp-breadcrumb></abp-breadcrumb>
+  </div>
+</ng-template>
+
+<ng-template #defaultPageToolbarTemplate>
+  <div class="col" *abpPagePart="pageParts.toolbar; context: record">
+    <abp-page-toolbar [record]="record"></abp-page-toolbar>
+  </div>
+</ng-template>

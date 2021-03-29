@@ -9,7 +9,7 @@ using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
-using Tag = MongoDB.Driver.Tag;
+using Tag = Volo.CmsKit.Tags.Tag;
 
 namespace Volo.CmsKit.MongoDB
 {

@@ -1,0 +1,121 @@
+﻿@typeparam TItem
+@using Blazorise.DataGrid;
+@using Volo.Abp.Data
+@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
+
+<DataGrid TItem="TItem"
+          Data="@Data"
+          ReadData="@ReadData"
+          TotalItems="@TotalItems"
+          ShowPager="@ShowPager"
+          CurrentPage="@CurrentPage"
+          PageSize="@PageSize">
+    <DataGridColumns>
+        @if (Columns != null)
+        {
+            @foreach (var column in Columns)
+            {
+                if (column.Actions.Any())
+                {
+                    <DataGridEntityActionsColumn TItem="TItem" @ref="ActionColumns[column.Title]" Caption="@column.Title">
+                        <DisplayTemplate>
+                            <EntityActions TItem="TItem" EntityActionsColumn="ActionColumns[column.Title]">
+                                @foreach (var action in column.Actions)
+                                {
+                                    if (action.ConfirmationMessage != null)
+                                    {
+                                        <EntityAction TItem="TItem"
+                                                      Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
+                                                      Icon="@action.Icon"
+                                                      Clicked="async () => await action.Clicked(context)"
+                                                      ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
+                                                      Visible="@(action.Visible!=null ? action.Visible(context) : true)"
+                                                      Text="@action.Text">
+                                        </EntityAction>
+                                    }
+                                    else
+                                    {
+                                        <EntityAction TItem="TItem"
+                                                      Clicked="async () => await action.Clicked(context)"
+                                                      Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.None)"
+                                                      Icon="@action.Icon"
+                                                      Visible="@(action.Visible!=null ? action.Visible(context) : true)"
+                                                      Text="@action.Text">
+                                        </EntityAction>
+                                    }
+                                }
+                            </EntityActions>
+                        </DisplayTemplate>
+                    </DataGridEntityActionsColumn>
+                }
+                else
+                {
+                    @if (column.Component != null)
+                    {
+                        <DataGridColumn TItem="TItem" Field="@typeof(TItem).GetProperties().First().Name" Caption="@column.Title">
+                            <DisplayTemplate>
+                                @RenderCustomTableColumnComponent(column.Component, context)
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    }
+                    else
+                    {
+                        if (!ExtensionPropertiesRegex.IsMatch(column.Data))
+                        {
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title"/>
+                        }
+                        else
+                        {
+                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" Caption="@column.Title">
+                                <DisplayTemplate>
+                                    @{
+                                        var entity = context as IHasExtraProperties;
+                                        var propertyName = ExtensionPropertiesRegex.Match(column.Data).Groups[1].Value;
+                                        var propertyValue = entity.GetProperty(propertyName);
+                                        if (propertyValue != null && propertyValue.GetType() == typeof(bool))
+                                        {
+                                            if ((bool) propertyValue)
+                                            {
+                                                <Icon class="text-success" Name="IconName.Check"/>
+                                            }
+                                            else
+                                            {
+                                                <Icon class="text-danger" Name="IconName.Times"/>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (column.ValueConverter != null)
+                                            {
+                                                if (column.DisplayFormat == null)
+                                                {
+                                                    @(column.ValueConverter(propertyValue))
+                                                }
+                                                else
+                                                {
+                                                    @(string.Format(column.DisplayFormat, column.ValueConverter(propertyValue)))
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (column.DisplayFormat == null)
+                                                {
+                                                    @(propertyValue)
+                                                }
+                                                else
+                                                {
+                                                    @(string.Format(column.DisplayFormat, propertyValue))
+                                                }
+                                            }
+                                            
+                                        }
+                                    }
+                                </DisplayTemplate>
+                            </DataGridColumn>
+                        }
+                    }
+                }
+            }
+        }
+    </DataGridColumns>
+</DataGrid>

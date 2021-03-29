@@ -38,6 +38,22 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public async Task GetListAsync_With_Predicate()
+        {
+            var persons = await PersonRepository.GetListAsync(p => p.Name.Contains("D"));
+
+            persons.Count.ShouldBeGreaterThan(0);
+            persons.ShouldAllBe(p => p.Name.Contains("D"));
+        }
+
+        [Fact]
+        public async Task GetListAsync_Should_Return_Empty_With_Predicate()
+        {
+            var persons = await PersonRepository.GetListAsync(p => p.Name == "Nothing");
+            persons.Count.ShouldBe(0);
+        }
+
+        [Fact]
         public async Task GetPagedListAsync()
         {
             var persons = await PersonRepository.GetPagedListAsync(0, 10, "name");

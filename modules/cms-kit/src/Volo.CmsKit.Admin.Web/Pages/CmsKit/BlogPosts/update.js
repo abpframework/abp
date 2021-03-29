@@ -178,16 +178,16 @@
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
-            height: "25em",
+            height: "95vh",
             minHeight: "25em",
-            initialEditType: initialValue ? 'wysiwyg' : 'markdown',
+            initialEditType: 'markdown',
             language: $editorContainer.data("language"),
             hooks: {
                 addImageBlobHook: uploadFile,
             },
             events: {
                 change: function (_val) {
-                    $editorInput.val(editor.getHtml());
+                    $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
                 }
             }

@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Blazor.WebAssembly\Volo.Abp.FeatureManagement.Blazor.WebAssembly.csproj" />
     </ItemGroup>
 

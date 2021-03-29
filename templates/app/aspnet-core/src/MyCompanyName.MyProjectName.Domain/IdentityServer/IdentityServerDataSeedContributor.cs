@@ -142,14 +142,13 @@ namespace MyCompanyName.MyProjectName.IdentityServer
 
             var configurationSection = _configuration.GetSection("IdentityServer:Clients");
 
+            //<TEMPLATE-REMOVE IF-NOT='ui:mvc&&tiered'>
+
             //Web Client
             var webClientId = configurationSection["MyProjectName_Web:ClientId"];
             if (!webClientId.IsNullOrWhiteSpace())
             {
                 var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"].EnsureEndsWith('/');
-
-                /* MyProjectName_Web client is only needed if you created a tiered
-                 * solution. Otherwise, you can delete this client. */
 
                 await CreateClientAsync(
                     name: webClientId,
@@ -162,6 +161,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
+            
+            //</TEMPLATE-REMOVE>
 
             //Console Test / Angular Client
             var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
@@ -180,6 +181,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
+            
+            //<TEMPLATE-REMOVE IF-NOT='ui:blazor'>
 
             // Blazor Client
             var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
@@ -198,6 +201,10 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     corsOrigins: new[] { blazorRootUrl.RemovePostFix("/") }
                 );
             }
+            
+            //</TEMPLATE-REMOVE>
+            
+            //<TEMPLATE-REMOVE IF-NOT='ui:blazor-server&&tiered'>
             
             //Blazor Server Tiered Client
             var blazorServerTieredClientId = configurationSection["MyProjectName_BlazorServerTiered:ClientId"];
@@ -220,6 +227,8 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 );
             }
 
+            //</TEMPLATE-REMOVE>
+            
             // Swagger Client
             var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
             if (!swaggerClientId.IsNullOrWhiteSpace())
