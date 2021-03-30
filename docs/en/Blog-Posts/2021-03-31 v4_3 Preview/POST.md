@@ -146,7 +146,11 @@ As you see, Blazor UI developers should add two packages. The Basic Theme consis
 
 **Angular UI**
 
-TODO
+Execute the following command in a terminal inside the `angular` folder of your solution:
+
+````bash
+abp add-package @abp/ng.theme.basic --with-source-code
+````
 
 ### IInitLogger
 
