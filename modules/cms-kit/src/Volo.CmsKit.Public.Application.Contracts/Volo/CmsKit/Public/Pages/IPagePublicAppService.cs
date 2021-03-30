@@ -9,4 +9,3 @@ namespace Volo.CmsKit.Public.Pages
         Task<PageDto> FindBySlugAsync([NotNull] string slug);
     }
 }
-}
