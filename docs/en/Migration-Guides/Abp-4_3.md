@@ -1,5 +1,9 @@
 # ABP Framework 4.x to 4.3 Migration Guide
 
+## Common
+
+* `app.UseVirtualFiles()` has been marked as **obsolete**. Use `app.UseStaticFiles()` instead. ABP will handle the virtual file system integrated to the static files middleware.
+
 ## Blazor UI
 
 Implemented the Blazor Server Side support with this release. It required some packages and namespaces arrangements. **Existing Blazor (WebAssembly) applications should done the changes explained in this section**.
@@ -28,4 +32,4 @@ No change on the framework packages, but **module packages are separated as Web 
 
 ### Other Changes
 
-* `EntityAction.RequiredPermission` has been marked as obsolete, because of performance reasons. It is suggested to use the `Visible` property by checking the permission/policy yourself and assigning to a variable. 
+* `EntityAction.RequiredPermission` has been marked as **obsolete**, because of performance reasons. It is suggested to use the `Visible` property by checking the permission/policy yourself and assigning to a variable. 
