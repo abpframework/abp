@@ -19,7 +19,7 @@ This version was a big development journey for us; [150+ issues](https://github.
 
 ## The Migration Guide
 
-We normally don't make breaking changes in feature versions. However, this version has some small **breaking changes** mostly related to Blazor UI WebAssembly & Server separation. **Please check the [migration guide](https://docs.abp.io/en/abp/4.3/Migration-Guides/Abp-4_3) before starting with the version 4.3**.
+We normally don't make breaking changes in feature versions. However, this version has some small **breaking changes** mostly related to Blazor UI WebAssembly & Server separation. **Please check the [migration guide](https://docs.abp.io/en/abp/4.3/Migration-Guides/Abp-4_3) while upgrading to the version 4.3**.
 
 ## Known Issues
 
@@ -80,13 +80,23 @@ You can select Blazor Server as the UI type while creating a new solution.
 abp new Acme.BookStore -u blazor-server
 ````
 
-If you write `blazor` as the UI type, it will create Blazor WebAssembly just as before. You can also select the Blazor Server on the [get started](https://abp.io/get-started) page.
+If you write `blazor` as the UI type, it will create Blazor WebAssembly just as before.
+
+> You can also select the Blazor Server on the [get started](https://abp.io/get-started) page.
+
+Blazor Server applications are actually mixed applications; You can mix the server-side MVC / Razor Pages with the Blazor SPA. This brings an interesting opportunity: MVC / Razor Pages modules can work seamlessly in the Blazor Server applications. For example, CMS Kit module has no Blazor UI yet, but you can use its MVC UI inside your Blazor Server application.
+
+> Blazor Server UI has a `--tiered` option just [like](https://docs.abp.io/en/abp/latest/Startup-Templates/Application#tiered-structure) the MVC / Razor Pages UI. This can be used to separate HTTP API server from UI server (UI application doesn't directly connect to the database).
 
 ### Blazor UI Module Extensibility
 
 Module Entity Extensions and some other extensibility features was not supported by the Blazor UI. With this version, we've implemented that system for Blazor UI.
 
 For anyone wondering what is the module entity extensions, please check [the document](https://docs.abp.io/en/abp/4.3/Module-Entity-Extensions) or [this community video](https://community.abp.io/articles/overview-of-abp-framework-4.1-module-extensions-part-1-n04f7bhf).
+
+### Email Setting Management UI
+
+TODO
 
 ### Angular UI Resource Owner Password Flow
 
@@ -163,7 +173,7 @@ ABP's [localization system](https://docs.abp.io/en/abp/latest/Localization) work
 
 TODO: EXAMPLE
 
-### Other News
+### Other Features/Changes
 
 * [#7423](https://github.com/abpframework/abp/issues/7423) MongoDB repository base aggregation API.
 * [#8163](https://github.com/abpframework/abp/issues/8163) Ignoring files on minification for MVC UI.
