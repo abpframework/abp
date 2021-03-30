@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
-using Volo.Abp.Threading;
 
-namespace Volo.Abp.MultiLingualObject
+namespace Volo.Abp.MultiLingualObjects
 {
     public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientDependency
     {
@@ -25,8 +24,8 @@ namespace Volo.Abp.MultiLingualObject
             TMultiLingual multiLingual,
             string culture = null,
             bool fallbackToParentCultures = true)
-            where TMultiLingual : IHasMultiLingual<TTranslation>
-            where TTranslation : class, IMultiLingualTranslation
+            where TMultiLingual : IMultiLingualObject<TTranslation>
+            where TTranslation : class, IObjectTranslation
         {
             culture ??= CultureInfo.CurrentUICulture.Name;
 
@@ -69,7 +68,7 @@ namespace Volo.Abp.MultiLingualObject
 
         protected virtual TTranslation GetTranslationBasedOnCulturalRecursive<TTranslation>(
             CultureInfo culture, ICollection<TTranslation> translations, int currentDepth)
-            where TTranslation : class, IMultiLingualTranslation
+            where TTranslation : class, IObjectTranslation
         {
             if (culture == null ||
                 culture.Name.IsNullOrWhiteSpace() ||

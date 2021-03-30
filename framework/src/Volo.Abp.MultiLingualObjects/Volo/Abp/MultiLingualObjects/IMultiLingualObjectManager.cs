@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.MultiLingualObject
+namespace Volo.Abp.MultiLingualObjects
 {
     public interface IMultiLingualObjectManager
     {
@@ -8,7 +8,7 @@ namespace Volo.Abp.MultiLingualObject
             TMultiLingual multiLingual,
             string culture = null,
             bool fallbackToParentCultures = true)
-            where TMultiLingual : IHasMultiLingual<TTranslation>
-            where TTranslation : class, IMultiLingualTranslation;
+            where TMultiLingual : IMultiLingualObject<TTranslation>
+            where TTranslation : class, IObjectTranslation;
     }
 }

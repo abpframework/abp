@@ -1,11 +1,11 @@
 ﻿using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.MultiLingualObject
+namespace Volo.Abp.MultiLingualObjects
 {
     [DependsOn(
         typeof(AbpLocalizationModule))]
-    public class AbpMultiLingualObjectModule : AbpModule
+    public class AbpMultiLingualObjectsModule : AbpModule
     {
     }
 }
