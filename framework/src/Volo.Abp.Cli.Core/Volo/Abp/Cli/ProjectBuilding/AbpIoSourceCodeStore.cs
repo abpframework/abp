@@ -91,7 +91,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")), version, latestVersion, nugetVersion);
             }
 
-            var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
+            var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/",".") + "-" + version + ".zip");
 
 #if DEBUG
             if (File.Exists(localCacheFile))

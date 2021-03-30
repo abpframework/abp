@@ -3,7 +3,7 @@ using Volo.Abp.Cli.ProjectBuilding.Templates;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
-    public static class PackageProjectBuildPipelineBuilder
+    public static class NugetPackageProjectBuildPipelineBuilder
     {
         public static ProjectBuildPipeline Build(ProjectBuildContext context)
         {

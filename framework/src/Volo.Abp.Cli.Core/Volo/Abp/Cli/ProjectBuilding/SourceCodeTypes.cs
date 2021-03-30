@@ -6,6 +6,8 @@
 
         public const string Module = "module";
 
-        public const string Package = "package";
+        public const string NugetPackage = "nugetPackage";
+
+        public const string NpmPackage = "npmPackage";
     }
 }

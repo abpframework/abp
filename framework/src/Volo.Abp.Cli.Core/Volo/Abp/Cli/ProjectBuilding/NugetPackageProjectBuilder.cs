@@ -14,9 +14,9 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public class PackageProjectBuilder : IProjectBuilder, ITransientDependency
+    public class NugetPackageProjectBuilder : IProjectBuilder, ITransientDependency
     {
-        public ILogger<PackageProjectBuilder> Logger { get; set; }
+        public ILogger<NugetPackageProjectBuilder> Logger { get; set; }
         protected ISourceCodeStore SourceCodeStore { get; }
         protected INugetPackageInfoProvider NugetPackageInfoProvider { get; }
         protected ICliAnalyticsCollect CliAnalyticsCollect { get; }
@@ -24,7 +24,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
         protected IJsonSerializer JsonSerializer { get; }
         protected IApiKeyService ApiKeyService { get; }
 
-        public PackageProjectBuilder(ISourceCodeStore sourceCodeStore,
+        public NugetPackageProjectBuilder(ISourceCodeStore sourceCodeStore,
             INugetPackageInfoProvider nugetPackageInfoProvider,
             ICliAnalyticsCollect cliAnalyticsCollect,
             IOptions<AbpCliOptions> options,
@@ -38,7 +38,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             JsonSerializer = jsonSerializer;
             ApiKeyService = apiKeyService;
 
-            Logger = NullLogger<PackageProjectBuilder>.Instance;
+            Logger = NullLogger<NugetPackageProjectBuilder>.Instance;
         }
 
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
@@ -47,7 +47,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             var templateFile = await SourceCodeStore.GetAsync(
                 args.TemplateName,
-                SourceCodeTypes.Package,
+                SourceCodeTypes.NugetPackage,
                 args.Version,
                 null,
                 args.ExtraProperties.ContainsKey(GetSourceCommand.Options.Preview.Long)
@@ -68,11 +68,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 null,
                 null,
                 packageInfo,
+                null,
                 templateFile,
                 args
             );
 
-            PackageProjectBuildPipelineBuilder.Build(context).Execute();
+            NugetPackageProjectBuildPipelineBuilder.Build(context).Execute();
 
             // Exclude unwanted or known options.
             var options = args.ExtraProperties

@@ -194,7 +194,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual async Task DownloadSourceCode(string targetFolder, NugetPackageInfo package, string version = null)
         {
-            await SourceCodeDownloadService.DownloadPackageAsync(
+            await SourceCodeDownloadService.DownloadNugetPackageAsync(
                 package.Name,
                 targetFolder,
                 version

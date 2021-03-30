@@ -10,7 +10,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public class NugetPackageInfoProvider : INugetPackageInfoProvider, ITransientDependency
+    public class NpmPackageInfoProvider : INpmPackageInfoProvider, ITransientDependency
     {
         public IJsonSerializer JsonSerializer { get; }
         public ICancellationTokenProvider CancellationTokenProvider { get; }
@@ -18,7 +18,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         private readonly CliHttpClientFactory _cliHttpClientFactory;
 
-        public NugetPackageInfoProvider(
+        public NpmPackageInfoProvider(
             IJsonSerializer jsonSerializer,
             ICancellationTokenProvider cancellationTokenProvider,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
@@ -30,7 +30,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             _cliHttpClientFactory = cliHttpClientFactory;
         }
 
-        public async Task<NugetPackageInfo> GetAsync(string name)
+        public async Task<NpmPackageInfo> GetAsync(string name)
         {
             var packageList = await GetPackageListInternalAsync();
 
@@ -44,18 +44,18 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return package;
         }
 
-        private async Task<List<NugetPackageInfo>> GetPackageListInternalAsync()
+        private async Task<List<NpmPackageInfo>> GetPackageListInternalAsync()
         {
             var client = _cliHttpClientFactory.CreateClient();
 
             using (var responseMessage = await client.GetAsync(
-                $"{CliUrls.WwwAbpIo}api/download/nugetPackages/",
+                $"{CliUrls.WwwAbpIo}api/download/npmPackages/",
                 CancellationTokenProvider.Token
             ))
             {
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
                 var result = await responseMessage.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<NugetPackageInfo>>(result);
+                return JsonSerializer.Deserialize<List<NpmPackageInfo>>(result);
             }
         }
     }
