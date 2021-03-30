@@ -91,7 +91,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Options:");
             sb.AppendLine("");
             sb.AppendLine("  -p|--project <project-file>                           Specify the project file explicitly. (Only available for Nuget packages)");
-            sb.AppendLine("  -s|--solution <project-file>                          Specify the project file explicitly. (Only available for Nuget packages)");
+            sb.AppendLine("  -s|--solution <solution-file>                         Specify the solution file explicitly. (Only available for Nuget packages)");
             sb.AppendLine("  --with-source-code                                    Downloads the source code of the Npm/Nuget package and make other projects depends on it.");
             sb.AppendLine("  --add-to-solution-file                                Adds the downloaded project to .sln file, if source code is downloaded. (Only available for Nuget packages)");
             sb.AppendLine("  -ad|--angular-directory <angular-project-directory>   Specify the Angular project directory explicitly. (Only available for Angular packages)");
