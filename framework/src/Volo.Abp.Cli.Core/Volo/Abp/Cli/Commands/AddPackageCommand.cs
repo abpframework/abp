@@ -90,18 +90,18 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("");
-            sb.AppendLine("  -p|--project <project-file>                           Specify the project file explicitly. (Only available for Nuget packages)");
-            sb.AppendLine("  -s|--solution <solution-file>                         Specify the solution file explicitly. (Only available for Nuget packages)");
-            sb.AppendLine("  --with-source-code                                    Downloads the source code of the Npm/Nuget package and make other projects depends on it.");
-            sb.AppendLine("  --add-to-solution-file                                Adds the downloaded project to .sln file, if source code is downloaded. (Only available for Nuget packages)");
-            sb.AppendLine("  -ad|--angular-directory <angular-project-directory>   Specify the Angular project directory explicitly. (Only available for Angular packages)");
-            sb.AppendLine("  -v|--version <version>                                Specify the version of the package. Default is your project's ABP version or latest ABP version.");
+            sb.AppendLine("  -p|--project <project-file>                           Specifies the project file explicitly. (Only available for NuGet packages)");
+            sb.AppendLine("  -s|--solution <solution-file>                         Specifies the solution file explicitly. (Only available for NuGet packages)");
+            sb.AppendLine("  --with-source-code                                    Downloads the source code of the NPM/NuGet package and make other projects depends on it.");
+            sb.AppendLine("  --add-to-solution-file                                Adds the downloaded project to the .sln file, when source code is downloaded. (Only available for NuGet packages)");
+            sb.AppendLine("  -ad|--angular-directory <angular-project-directory>   Specifies the Angular project directory explicitly. (Only available for Angular packages)");
+            sb.AppendLine("  -v|--version <version>                                Specifies the version of the package. Default is your project's ABP version or latest ABP version.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
-            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the nuget package to the current project.");
-            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the nuget package to the given project.");
-            sb.AppendLine("  abp add-package @abp/ng.theme.basic                                        Adds the npm package to the given angular project.");
+            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the NuGet package to the current project.");
+            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the NuGet package to the given project.");
+            sb.AppendLine("  abp add-package @abp/ng.theme.basic                                        Adds the NPM package to the given corresponding project.");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
