@@ -106,6 +106,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 templateInfo,
                 null,
                 null,
+                null,
                 templateFile,
                 args
             );

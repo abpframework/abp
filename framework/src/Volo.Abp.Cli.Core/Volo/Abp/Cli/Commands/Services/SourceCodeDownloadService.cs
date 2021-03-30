@@ -17,13 +17,17 @@ namespace Volo.Abp.Cli.Commands.Services
     public class SourceCodeDownloadService : ITransientDependency
     {
         public ModuleProjectBuilder ModuleProjectBuilder { get; }
-        public PackageProjectBuilder PackageProjectBuilder { get; }
+        public NugetPackageProjectBuilder NugetPackageProjectBuilder { get; }
+        public NpmPackageProjectBuilder NpmPackageProjectBuilder { get; }
         public ILogger<SourceCodeDownloadService> Logger { get; set; }
 
-        public SourceCodeDownloadService(ModuleProjectBuilder moduleProjectBuilder, PackageProjectBuilder packageProjectBuilder)
+        public SourceCodeDownloadService(ModuleProjectBuilder moduleProjectBuilder,
+            NugetPackageProjectBuilder nugetPackageProjectBuilder,
+            NpmPackageProjectBuilder npmPackageProjectBuilder)
         {
             ModuleProjectBuilder = moduleProjectBuilder;
-            PackageProjectBuilder = packageProjectBuilder;
+            NugetPackageProjectBuilder = nugetPackageProjectBuilder;
+            NpmPackageProjectBuilder = npmPackageProjectBuilder;
             Logger = NullLogger<SourceCodeDownloadService>.Instance;
         }
 
@@ -92,13 +96,13 @@ namespace Volo.Abp.Cli.Commands.Services
             Logger.LogInformation($"'{moduleName}' has been successfully downloaded to '{outputFolder}'");
         }
 
-        public async Task DownloadPackageAsync(string packageName, string outputFolder, string version)
+        public async Task DownloadNugetPackageAsync(string packageName, string outputFolder, string version)
         {
             Logger.LogInformation("Downloading source code of " + packageName);
             Logger.LogInformation("Version: " + version);
             Logger.LogInformation("Output folder: " + outputFolder);
 
-            var result = await PackageProjectBuilder.BuildAsync(
+            var result = await NugetPackageProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
                     SolutionName.Parse(packageName),
                     packageName,
@@ -113,12 +117,56 @@ namespace Volo.Abp.Cli.Commands.Services
                     var zipEntry = zipInputStream.GetNextEntry();
                     while (zipEntry != null)
                     {
-                        if (IsAngularTestFile(zipEntry.Name))
+                        var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
+                        var directoryName = Path.GetDirectoryName(fullZipToPath);
+
+                        if (!string.IsNullOrEmpty(directoryName))
+                        {
+                            Directory.CreateDirectory(directoryName);
+                        }
+
+                        var fileName = Path.GetFileName(fullZipToPath);
+                        if (fileName.Length == 0)
                         {
                             zipEntry = zipInputStream.GetNextEntry();
                             continue;
                         }
 
+                        var buffer = new byte[4096]; // 4K is optimum
+                        using (var streamWriter = File.Create(fullZipToPath))
+                        {
+                            StreamUtils.Copy(zipInputStream, streamWriter, buffer);
+                        }
+
+                        zipEntry = zipInputStream.GetNextEntry();
+                    }
+                }
+            }
+
+            Logger.LogInformation($"'{packageName}' has been successfully downloaded to '{outputFolder}'");
+        }
+
+        public async Task DownloadNpmPackageAsync(string packageName, string outputFolder, string version)
+        {
+            Logger.LogInformation("Downloading source code of " + packageName);
+            Logger.LogInformation("Version: " + version);
+            Logger.LogInformation("Output folder: " + outputFolder);
+
+            var result = await NpmPackageProjectBuilder.BuildAsync(
+                new ProjectBuildArgs(
+                    SolutionName.Parse(packageName),
+                    packageName,
+                    version
+                )
+            );
+
+            using (var templateFileStream = new MemoryStream(result.ZipContent))
+            {
+                using (var zipInputStream = new ZipInputStream(templateFileStream))
+                {
+                    var zipEntry = zipInputStream.GetNextEntry();
+                    while (zipEntry != null)
+                    {
                         var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
                         var directoryName = Path.GetDirectoryName(fullZipToPath);
 
