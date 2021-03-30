@@ -6,8 +6,7 @@ namespace Volo.Abp.AutoMapper
 {
     [DependsOn(
         typeof(AbpAutoMapperModule),
-        typeof(AbpObjectExtendingTestModule),
-        typeof(AbpMultiLingualObjectModule)
+        typeof(AbpObjectExtendingTestModule)
     )]
     public class AutoMapperTestModule : AbpModule
     {
