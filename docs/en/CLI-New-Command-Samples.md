@@ -24,10 +24,10 @@ The following commands are for creating Angular UI projects:
   abp new Acme.BookStore -u angular -csf --connection-string Server=localhost;Database=MyDatabase;Trusted_Connection=True
   ```
 
-* **MongoDB**, default app template, mobile project included:
+* **MongoDB**, default app template, mobile project included, creates solution in `C:\MyProjects\Acme.BookStore`
 
   ```bash
-  abp new Acme.BookStore -u angular --database-provider mongodb
+  abp new Acme.BookStore -u angular --database-provider mongodb --output-folder C:\MyProjects\Acme.BookStore
   ```
 
 * **MongoDB**, default app template, no mobile app, **separate Identity Server**, creates the project in a new folder:
