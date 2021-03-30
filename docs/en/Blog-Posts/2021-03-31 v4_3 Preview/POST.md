@@ -13,7 +13,7 @@ We are super excited to announce the ABP Framework 4.3 RC (Release Candidate). H
 
 Beside the new features above, we've done many performance improvements, enhancements and bug fixes on the current features. See the [4.3 milestone](https://github.com/abpframework/abp/milestone/49) on GitHub for all changes made on this version.
 
-This version was a big development journey for us; [150+ issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A4.3-preview) resolved, [260+ PRs](https://github.com/abpframework/abp/pulls?q=is%3Aopen+is%3Apr+milestone%3A4.3-preview) merged and 1,600+ commits done only in the [main framework repository](https://github.com/abpframework/abp). **Thanks to the ABP Framework team and all the contributors.**
+This version was a big development journey for us; [~160 issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A4.3-preview) resolved, [~300 PRs](https://github.com/abpframework/abp/pulls?q=is%3Aopen+is%3Apr+milestone%3A4.3-preview) merged and **~1,700 commits** done only in the [main framework repository](https://github.com/abpframework/abp). **Thanks to the ABP Framework team and all the contributors.**
 
 > ABP Commercial 4.3 RC has also been published. We will write a separate blog post for it.
 
@@ -96,7 +96,11 @@ For anyone wondering what is the module entity extensions, please check [the doc
 
 ### Email Setting Management UI
 
-TODO
+With this release, a new item is added to the main menu to navigate to the setting management page. This page contains the email setting management UI, as shown below:
+
+![email-settings-page](email-settings-page.png)
+
+The setting page is provided by the [setting management module](https://docs.abp.io/en/abp/4.3/Modules/Setting-Management) and it is extensible; You can add your own tabs to this page for your application settings.
 
 ### Angular UI Resource Owner Password Flow
 
