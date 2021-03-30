@@ -66,11 +66,11 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
+    this.clearSubscription();
+
     if (this.renderLogic?.onDestroy) {
       this.renderLogic.onDestroy(this.type, this.injector, this.context);
     }
-
-    this.clearSubscription();
   }
 
   shouldRender(type: string) {
