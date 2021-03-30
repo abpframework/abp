@@ -55,7 +55,7 @@ namespace Volo.Abp.MultiLingualObject
             if (fallbackToParentCultures)
             {
                 translation =
-                    GeTranslationBasedOnCulturalRecursive(
+                    GetTranslationBasedOnCulturalRecursive(
                         CultureInfo.CurrentUICulture.Parent, multiLingual.Translations, 0);
                 if (translation != null)
                 {
@@ -75,7 +75,7 @@ namespace Volo.Abp.MultiLingualObject
             return translation;
         }
 
-        protected virtual TTranslation GeTranslationBasedOnCulturalRecursive<TTranslation>(
+        protected virtual TTranslation GetTranslationBasedOnCulturalRecursive<TTranslation>(
             CultureInfo culture, ICollection<TTranslation> translations, int currentDepth)
             where TTranslation : class, IMultiLingualTranslation
         {
@@ -88,7 +88,7 @@ namespace Volo.Abp.MultiLingualObject
             var translation = translations.FirstOrDefault(pt =>
                 pt.Language.Equals(culture.Name, StringComparison.OrdinalIgnoreCase));
             return translation ??
-                   GeTranslationBasedOnCulturalRecursive(culture.Parent,
+                   GetTranslationBasedOnCulturalRecursive(culture.Parent,
                        translations, currentDepth + 1);
         }
     }
