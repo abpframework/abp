@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.MultiLingualObject.TestObjects
+namespace Volo.Abp.MultiLingualObjects.TestObjects
 {
-    public class MultiLingualBook :  IHasMultiLingual<MultiLingualBookTranslation>
+    public class MultiLingualBook :  IMultiLingualObject<MultiLingualBookTranslation>
     {
         public MultiLingualBook(Guid id, decimal price)
         {

@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiLingualObject.TestObjects;
+using Volo.Abp.MultiLingualObjects.TestObjects;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.MultiLingualObject
+namespace Volo.Abp.MultiLingualObjects
 {
-    public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingualObjectTestModule>
+    public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingualObjectsTestModule>
     {
         private readonly IMultiLingualObjectManager _multiLingualObjectManager;
         private readonly MultiLingualBook _book;
@@ -38,17 +38,6 @@ namespace Volo.Abp.MultiLingualObject
 
             _book.Translations.Add(en);
             _book.Translations.Add(zh);
-        }
-
-        [Fact]
-        public void GetTranslation()
-        {
-            using (CultureHelper.Use("en-us"))
-            {
-                var translation =  _multiLingualObjectManager.GetTranslation<MultiLingualBook, MultiLingualBookTranslation>(_book);
-
-                translation.Name.ShouldBe("C# in Depth");
-            }
         }
 
         [Fact]

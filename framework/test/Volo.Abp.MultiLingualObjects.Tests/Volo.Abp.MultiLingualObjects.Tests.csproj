@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-        <ProjectReference Include="..\..\src\Volo.Abp.MultiLingualObject\Volo.Abp.MultiLingualObject.csproj" />
+        <ProjectReference Include="..\..\src\Volo.Abp.MultiLingualObjects\Volo.Abp.MultiLingualObjects.csproj" />
         <ProjectReference Include="..\..\src\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
         <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.MultiLingualObject.TestObjects
+namespace Volo.Abp.MultiLingualObjects.TestObjects
 {
     public class MultiLingualBookDto
     {
