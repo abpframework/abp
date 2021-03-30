@@ -517,7 +517,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             );
         }
 
-        public async Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -531,7 +531,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             );
         }
 
-        public async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken = GetCancellationToken(cancellationToken);
 
