@@ -23,25 +23,25 @@ namespace Volo.Abp.MultiLingualObject
 
         public TTranslation GetTranslation<TMultiLingual, TTranslation>(
             TMultiLingual multiLingual,
-            bool fallbackToParentCultures = true,
-            string culture = null)
+            string culture = null,
+            bool fallbackToParentCultures = true)
             where TMultiLingual : IHasMultiLingual<TTranslation>
             where TTranslation : class, IMultiLingualTranslation
         {
             return AsyncHelper.RunSync(() =>
-                GetTranslationAsync<TMultiLingual, TTranslation>(multiLingual, fallbackToParentCultures, culture));
+                GetTranslationAsync<TMultiLingual, TTranslation>(multiLingual, culture, fallbackToParentCultures));
         }
 
         public virtual async Task<TTranslation> GetTranslationAsync<TMultiLingual, TTranslation>(
             TMultiLingual multiLingual,
-            bool fallbackToParentCultures = true,
-            string culture = null)
+            string culture = null,
+            bool fallbackToParentCultures = true)
             where TMultiLingual : IHasMultiLingual<TTranslation>
             where TTranslation : class, IMultiLingualTranslation
         {
             culture ??= CultureInfo.CurrentUICulture.Name;
 
-            if (multiLingual.Translations == null || !multiLingual.Translations.Any())
+            if (multiLingual.Translations.IsNullOrEmpty())
             {
                 return null;
             }
@@ -54,9 +54,12 @@ namespace Volo.Abp.MultiLingualObject
 
             if (fallbackToParentCultures)
             {
-                translation =
-                    GetTranslationBasedOnCulturalRecursive(
-                        CultureInfo.CurrentUICulture.Parent, multiLingual.Translations, 0);
+                translation = GetTranslationBasedOnCulturalRecursive(
+                    CultureInfo.CurrentUICulture.Parent,
+                    multiLingual.Translations,
+                    0
+                );
+                
                 if (translation != null)
                 {
                     return translation;
@@ -79,17 +82,16 @@ namespace Volo.Abp.MultiLingualObject
             CultureInfo culture, ICollection<TTranslation> translations, int currentDepth)
             where TTranslation : class, IMultiLingualTranslation
         {
-            if (culture == null || culture.Name.IsNullOrWhiteSpace() || translations.IsNullOrEmpty() ||
+            if (culture == null ||
+                culture.Name.IsNullOrWhiteSpace() ||
+                translations.IsNullOrEmpty() ||
                 currentDepth > MaxCultureFallbackDepth)
             {
                 return null;
             }
 
-            var translation = translations.FirstOrDefault(pt =>
-                pt.Language.Equals(culture.Name, StringComparison.OrdinalIgnoreCase));
-            return translation ??
-                   GetTranslationBasedOnCulturalRecursive(culture.Parent,
-                       translations, currentDepth + 1);
+            var translation = translations.FirstOrDefault(pt => pt.Language.Equals(culture.Name, StringComparison.OrdinalIgnoreCase));
+            return translation ?? GetTranslationBasedOnCulturalRecursive(culture.Parent, translations, currentDepth + 1);
         }
     }
 }
