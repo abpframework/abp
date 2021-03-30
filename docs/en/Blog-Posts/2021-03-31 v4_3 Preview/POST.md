@@ -9,7 +9,6 @@ We are super excited to announce the ABP Framework 4.3 RC (Release Candidate). H
 * **Volo.Abp.EntityFrameworkCore.Oracle** package is now compatible with .NET 5.
 * CLI support to easily add the **Basic Theme** into the solution.
 * New **IInitLogger** service to write logs before dependency injection phase completed.
-* Infrastructure for **multi-lingual entities**.
 
 Beside the new features above, we've done many performance improvements, enhancements and bug fixes on the current features. See the [4.3 milestone](https://github.com/abpframework/abp/milestone/49) on GitHub for all changes made on this version.
 
@@ -174,12 +173,6 @@ public class MyModule : AbpModule
 Logs are written once the service registration phase is completed. It stores the written logs in memory, then write logs to the actual `ILogger` when it is ready.
 
 > Notice: Startup templates come with [Serilog](https://serilog.net/) pre-installed. So, you can write logs everywhere by directly using its static API (ex: `Log.Information("...");`). The `InitLogger` is a way to write pre-initialization logs without depending a particular logging library. So, it makes it very handy to write logs inside reusable modules.
-
-### Multi-Lingual Entities
-
-ABP's [localization system](https://docs.abp.io/en/abp/latest/Localization) works well when you want to localizer your application UI. However, in some applications, you may also need to localize your data. For example, if you have a *Product* entity, you may need to show Product's *Description* property in the current user's language. *Multi-Language Entities* provides a pattern to localize your entities.
-
-TODO: EXAMPLE
 
 ### Other Features/Changes
 
