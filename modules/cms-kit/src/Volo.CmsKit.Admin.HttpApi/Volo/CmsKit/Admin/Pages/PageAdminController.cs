@@ -11,7 +11,7 @@ using Volo.CmsKit.Permissions;
 namespace Volo.CmsKit.Admin.Pages
 {
     [RequiresGlobalFeature(typeof(PagesFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Authorize(CmsKitAdminPermissions.Pages.Default)]
     [Route("api/cms-kit-admin/pages")]

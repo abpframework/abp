@@ -14,7 +14,7 @@ using Volo.CmsKit.Tags;
 namespace Volo.CmsKit.Admin.Tags
 {
     [RequiresGlobalFeature(typeof(TagsFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
     [Route("api/cms-kit-admin/tags")]
