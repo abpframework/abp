@@ -20,7 +20,6 @@
     <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
     <ProjectReference Include="..\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj" />
     <ProjectReference Include="..\Volo.Abp.Guids\Volo.Abp.Guids.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiLingualObject\Volo.Abp.MultiLingualObject.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
     <ProjectReference Include="..\Volo.Abp.Specifications\Volo.Abp.Specifications.csproj" />

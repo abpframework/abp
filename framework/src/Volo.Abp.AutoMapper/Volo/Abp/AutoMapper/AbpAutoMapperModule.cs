@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiLingualObject;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
 
@@ -13,8 +12,7 @@ namespace Volo.Abp.AutoMapper
     [DependsOn(
         typeof(AbpObjectMappingModule),
         typeof(AbpObjectExtendingModule),
-        typeof(AbpAuditingModule),
-        typeof(AbpMultiLingualObjectModule)
+        typeof(AbpAuditingModule)
     )]
     public class AbpAutoMapperModule : AbpModule
     {
@@ -29,8 +27,6 @@ namespace Volo.Abp.AutoMapper
 
             context.Services.AddSingleton<MapperAccessor>(CreateMappings);
             context.Services.AddSingleton<IMapperAccessor>(provider => provider.GetRequiredService<MapperAccessor>());
-
-            context.Services.AddTransient(typeof(AbpMultiLingualMapperAction<,,>));
         }
 
         private MapperAccessor CreateMappings(IServiceProvider serviceProvider)
