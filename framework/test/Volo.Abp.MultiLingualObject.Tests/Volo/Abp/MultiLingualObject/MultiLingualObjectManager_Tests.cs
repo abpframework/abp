@@ -41,17 +41,6 @@ namespace Volo.Abp.MultiLingualObject
         }
 
         [Fact]
-        public void GetTranslation()
-        {
-            using (CultureHelper.Use("en-us"))
-            {
-                var translation =  _multiLingualObjectManager.GetTranslation<MultiLingualBook, MultiLingualBookTranslation>(_book);
-
-                translation.Name.ShouldBe("C# in Depth");
-            }
-        }
-
-        [Fact]
         public async Task GetTranslationAsync()
         {
             using (CultureHelper.Use("en-us"))

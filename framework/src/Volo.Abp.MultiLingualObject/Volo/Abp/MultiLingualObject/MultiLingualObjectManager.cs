@@ -21,17 +21,6 @@ namespace Volo.Abp.MultiLingualObject
             SettingProvider = settingProvider;
         }
 
-        public TTranslation GetTranslation<TMultiLingual, TTranslation>(
-            TMultiLingual multiLingual,
-            string culture = null,
-            bool fallbackToParentCultures = true)
-            where TMultiLingual : IHasMultiLingual<TTranslation>
-            where TTranslation : class, IMultiLingualTranslation
-        {
-            return AsyncHelper.RunSync(() =>
-                GetTranslationAsync<TMultiLingual, TTranslation>(multiLingual, culture, fallbackToParentCultures));
-        }
-
         public virtual async Task<TTranslation> GetTranslationAsync<TMultiLingual, TTranslation>(
             TMultiLingual multiLingual,
             string culture = null,
