@@ -176,9 +176,10 @@ TODO: EXAMPLE
 ### Other Features/Changes
 
 * [#7423](https://github.com/abpframework/abp/issues/7423) MongoDB repository base aggregation API.
-* [#8163](https://github.com/abpframework/abp/issues/8163) Ignoring files on minification for MVC UI.
+* [#8163](https://github.com/abpframework/abp/issues/8163) Ignoring given files on minification for MVC UI.
 * [#7799](https://github.com/abpframework/abp/pull/7799) Added `RequiredPermissionName` to `ApplicationMenuItem` for MVC & Blazor UI to easily show/hide menu items based on user permissions. Also added `RequiredPermissionName` to `ToolbarItem` for the MVC UI for the same purpose. 
 * [#7523](https://github.com/abpframework/abp/pull/7523) Add more bundle methods to the distributed cache.
+* [#8013](https://github.com/abpframework/abp/pull/8013) Handle `JsonProperty` attribute on Angular proxy generation.
 
 See the [4.3 milestone](https://github.com/abpframework/abp/milestone/49) on GitHub for all changes made on this version.
 
