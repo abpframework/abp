@@ -41,41 +41,40 @@ export async function parseTenantFromUrl(injector: Injector) {
         }),
       )
       .toPromise();
+  } else {
+    /**
+     * If there is no tenant, we still have to clean up {0}. from baseUrl to avoid incorrect http requests.
+     */
+    setEnvironment(injector, '', tenancyPlaceholder + '.');
   }
 
   return Promise.resolve();
 }
 
-function setEnvironment(injector: Injector, tenancyName: string) {
+function setEnvironment(injector: Injector, tenancyName: string, placeholder = tenancyPlaceholder) {
   const environmentService = injector.get(EnvironmentService);
 
   const environment = clone(environmentService.getEnvironment()) as Environment;
 
   if (environment.application.baseUrl) {
     environment.application.baseUrl = environment.application.baseUrl.replace(
-      tenancyPlaceholder,
+      placeholder,
       tenancyName,
     );
   }
 
   if (environment.oAuthConfig.redirectUri) {
     environment.oAuthConfig.redirectUri = environment.oAuthConfig.redirectUri.replace(
-      tenancyPlaceholder,
+      placeholder,
       tenancyName,
     );
   }
 
-  environment.oAuthConfig.issuer = environment.oAuthConfig.issuer.replace(
-    tenancyPlaceholder,
-    tenancyName,
-  );
+  environment.oAuthConfig.issuer = environment.oAuthConfig.issuer.replace(placeholder, tenancyName);
 
   Object.keys(environment.apis).forEach(api => {
     Object.keys(environment.apis[api]).forEach(key => {
-      environment.apis[api][key] = environment.apis[api][key].replace(
-        tenancyPlaceholder,
-        tenancyName,
-      );
+      environment.apis[api][key] = environment.apis[api][key].replace(placeholder, tenancyName);
     });
   });
 
