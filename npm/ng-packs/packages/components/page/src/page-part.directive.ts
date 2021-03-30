@@ -18,7 +18,7 @@ import { Observable, Subscription, of } from 'rxjs';
 export interface PageRenderStrategy {
   shouldRender(type?: string): boolean | Observable<boolean>;
   onInit?(type?: string, injector?: Injector, context?: any): void;
-  onDestroy?(type: string, injector?: Injector, context?: any): void;
+  onDestroy?(type?: string, injector?: Injector, context?: any): void;
   onContextUpdate?(change?: SimpleChange): void;
 }
 
@@ -84,7 +84,7 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
   protected createRenderStream(type: string) {
     this.clearSubscription();
 
-    this.shouldRender(type).subscribe(this.render);
+    this.subscription = this.shouldRender(type).subscribe(this.render);
   }
 
   protected clearSubscription() {
