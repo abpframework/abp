@@ -193,10 +193,11 @@ ABP libraries are referenced from NuGet by default in the ABP solutions. Sometim
 
 * MVC UI,  Entity Framework Core, **ABP libraries are local project references**:
 
-  The path to the ABP framework solution `C:\source\abp\framework\Volo.Abp.sln`
+The local path must be the root directory of ABP repository. 
+If `C:\source\abp\framework\Volo.Abp.sln` is your framework solution path, then you must write `C:\source\abp` to the `--abp-path` paramter.
 
   ```bash
-  abp new Acme.BookStore --local-framework-ref --abp-path C:\source\abp\framework
+  abp new Acme.BookStore --local-framework-ref --abp-path C:\source\abp
   ```
 
 **Output**:
