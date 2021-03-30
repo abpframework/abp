@@ -260,12 +260,16 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor.WebAssembly",
 
     # modules/setting-management
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Application.Contracts",
+    "modules/setting-management/src/Volo.Abp.SettingManagement.Application",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Blazor",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Blazor.Server",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Blazor.WebAssembly",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain.Shared",
     "modules/setting-management/src/Volo.Abp.SettingManagement.EntityFrameworkCore",
+    "modules/setting-management/src/Volo.Abp.SettingManagement.HttpApi.Client",
+    "modules/setting-management/src/Volo.Abp.SettingManagement.HttpApi",
     "modules/setting-management/src/Volo.Abp.SettingManagement.MongoDB",
     "modules/setting-management/src/Volo.Abp.SettingManagement.Web",
 
