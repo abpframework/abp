@@ -84,12 +84,13 @@ We added SignalR to the `package.json` but it comes into your `node_modules` fol
 #### 4- Usage
 
 We have completed the implementation part. Let's check if it's running...
+We will show the current time which comes from server.
+To do this replace the `Index.cshtml` and `Index.cshtml.cs` with the followings:
 
-To do this easily, open your `Index.cshtml` which is in the Pages folder of your Web project. And replace the content with the following.  Also replace the `Index.cshtml.cs` as well.
+- [Index.cshtml](https://gist.github.com/ebicoglu/f7dc22cca2d353f8bf7f68a03e3395b8#file-index-cshtml)
 
-[Index.cshtml](https://gist.github.com/ebicoglu/f7dc22cca2d353f8bf7f68a03e3395b8#file-index-cshtml)
+- [Index.cshtml.cs](https://gist.github.com/ebicoglu/f7dc22cca2d353f8bf7f68a03e3395b8#file-index-cshtml-cs)
 
-[Index.cshtml.cs](https://gist.github.com/ebicoglu/f7dc22cca2d353f8bf7f68a03e3395b8#file-index-cshtml-cs)
 
 #### 5- See it in action
 

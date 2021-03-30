@@ -32,6 +32,11 @@
     }
     <Column>
         <Row Class="justify-content-end mx-n1">
+            @if (Toolbar == null)
+            {
+                @ChildContent
+            }
+            
             @foreach (var toolbarItemRender in ToolbarItemRenders)
             {
                 <Column ColumnSize="ColumnSize.IsAuto" Class="px-1 pt-2">

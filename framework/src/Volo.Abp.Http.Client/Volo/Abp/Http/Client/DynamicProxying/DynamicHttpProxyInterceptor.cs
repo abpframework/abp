@@ -106,7 +106,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             var responseContent = await MakeRequestAsync(invocation);
 
-            if (typeof(T) == typeof(IRemoteStreamContent))
+            if (typeof(T) == typeof(IRemoteStreamContent) ||
+                typeof(T) == typeof(RemoteStreamContent))
             {
                 /* returning a class that holds a reference to response
                  * content just to be sure that GC does not dispose of

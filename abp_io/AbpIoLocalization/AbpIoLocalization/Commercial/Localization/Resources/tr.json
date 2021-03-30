@@ -30,6 +30,7 @@
     "UserNameNotFound": "{0} kullanıcı adı ile bir kullanıcı yok",
     "SuccessfullyAddedToNewsletter": "Bültenimize abone olduğunuz için teşekkürler!",
     "MyProfile": "Profilim",
-    "EmailNotValid": "Lütfen uygun bir e-posta adresi giriniz"
+    "EmailNotValid": "Lütfen uygun bir e-posta adresi giriniz",
+    "InvalidReCaptchaErrorMessage": "ReCAPTCHA doğrulanırken hata oluştu, lütfen tekrar deneyin."
   }
 }

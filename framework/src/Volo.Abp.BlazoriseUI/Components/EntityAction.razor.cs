@@ -10,7 +10,7 @@ namespace Volo.Abp.BlazoriseUI.Components
     public partial class EntityAction<TItem> : ComponentBase
     {
         [Parameter] 
-        public bool Visible { get; set; }
+        public bool Visible { get; set; } = true;
 
         internal bool HasPermission { get; set; } = true;
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.BlazoriseUI.Components
         public EventCallback Clicked { get; set; }
 
         [Parameter]
-        [Obsolete("Use IsVisible to hide actions based on permissions. Check the permission yourself. It is more performant. This option might be removed in future versions.")]
+        [Obsolete("Use Visible to hide actions based on permissions. Check the permission yourself. It is more performant. This option might be removed in future versions.")]
         public string RequiredPolicy { get; set; }
 
         [Parameter]

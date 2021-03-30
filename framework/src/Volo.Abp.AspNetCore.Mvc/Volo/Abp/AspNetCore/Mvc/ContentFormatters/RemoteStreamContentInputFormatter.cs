@@ -15,7 +15,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 
         protected override bool CanReadType(Type type)
         {
-            return typeof(IRemoteStreamContent) == type;
+            return type == typeof(IRemoteStreamContent) ||
+                   type == typeof(RemoteStreamContent);
         }
 
         public override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)

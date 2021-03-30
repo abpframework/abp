@@ -58,6 +58,7 @@ namespace Volo.Abp.Cli.ProjectModification
         }
 
         public async Task AddAsync(
+            string solutionFile,
             string projectFile,
             string packageName,
             string version = null,
@@ -66,6 +67,7 @@ namespace Volo.Abp.Cli.ProjectModification
             bool addSourceCodeToSolutionFile = false)
         {
             await AddAsync(
+                solutionFile,
                 projectFile,
                 await FindNugetPackageInfoAsync(packageName),
                 version,
@@ -76,6 +78,7 @@ namespace Volo.Abp.Cli.ProjectModification
         }
 
         public async Task AddAsync(
+            string solutionFile,
             string projectFile,
             NugetPackageInfo package,
             string version = null,
@@ -83,6 +86,23 @@ namespace Volo.Abp.Cli.ProjectModification
             bool withSourceCode = false,
             bool addSourceCodeToSolutionFile = false)
         {
+            if (projectFile == null)
+            {
+                if (solutionFile == null)
+                {
+                    throw new CliUsageException("Couldn't find any project/solution.");
+                }
+
+                projectFile = GetProjectFile(solutionFile, package);
+
+                if (projectFile == null)
+                {
+                    throw new CliUsageException("Couldn't find any project/solution.");
+                }
+            }
+
+            solutionFile ??= FindSolutionFile(projectFile);
+
             if (version == null)
             {
                 version = GetAbpVersionOrNull(projectFile);
@@ -92,17 +112,30 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (withSourceCode)
             {
-                await AddSourceCode(projectFile, package, version);
-                await ConvertPackageReferenceToProjectReference(projectFile, package);
+                await AddSourceCode(projectFile, solutionFile, package, version);
+                await ConvertPackageReferenceToProjectReference(projectFile, solutionFile, package);
 
                 if (addSourceCodeToSolutionFile)
                 {
-                    await SolutionFileModifier.AddPackageToSolutionFileAsync(package, FindSolutionFile(projectFile));
+                    await SolutionFileModifier.AddPackageToSolutionFileAsync(package, solutionFile);
                 }
             }
         }
 
-        private async Task ConvertPackageReferenceToProjectReference(string projectFile, NugetPackageInfo package)
+        private string GetProjectFile(string solutionFile, NugetPackageInfo package)
+        {
+            var projectFiles = Directory.GetFiles(Path.GetDirectoryName(solutionFile), "*.csproj", SearchOption.AllDirectories);
+            var isSolutionTiered = IsSolutionTiered(projectFiles);
+
+            var projectFile = ProjectFinder.FindNuGetTargetProjectFile(
+                projectFiles,
+                isSolutionTiered && package.TieredTarget != NuGetPackageTarget.Undefined
+                    ? package.TieredTarget
+                    : package.Target);
+            return projectFile;
+        }
+
+        protected virtual async Task ConvertPackageReferenceToProjectReference(string projectFile,string solutionFile, NugetPackageInfo package)
         {
             var content = File.ReadAllText(projectFile);
             var doc = new XmlDocument() {PreserveWhitespace = true};
@@ -117,7 +150,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            var downloadedProjectPath = FindRelativeFolderToDownloadPackage(projectFile, package);
+            var downloadedProjectPath = FindRelativeFolderToDownloadPackage(projectFile, solutionFile, package);
             var oldNodeIncludeValue = nodes[0]?.Attributes?["Include"]?.Value;
 
             if (package.Name == oldNodeIncludeValue)
@@ -135,9 +168,9 @@ namespace Volo.Abp.Cli.ProjectModification
             File.WriteAllText(projectFile, doc.OuterXml);
         }
 
-        private async Task AddSourceCode(string projectFile, NugetPackageInfo package, string version = null)
+        protected virtual async Task AddSourceCode(string projectFile, string solutionFile, NugetPackageInfo package, string version = null)
         {
-            var targetFolder = FindFolderToDownloadPackage(projectFile, package);
+            var targetFolder = FindFolderToDownloadPackage(solutionFile, package);
 
             if (Directory.Exists(targetFolder))
             {
@@ -147,35 +180,35 @@ namespace Volo.Abp.Cli.ProjectModification
             await DownloadSourceCode(targetFolder, package, version);
         }
 
-        private string FindFolderToDownloadPackage(string projectFile, NugetPackageInfo package)
+        protected virtual string FindFolderToDownloadPackage(string solutionFile, NugetPackageInfo package)
         {
-            return Path.Combine(FindSolutionFolder(projectFile), "packages", package.Name);
+            return Path.Combine(Path.GetDirectoryName(solutionFile), "packages", package.Name);
         }
 
-        private string FindRelativeFolderToDownloadPackage(string projectFile, NugetPackageInfo package)
+        protected virtual string FindRelativeFolderToDownloadPackage(string projectFile, string solutionFile, NugetPackageInfo package)
         {
-            var folder =  Path.Combine(FindSolutionFolder(projectFile), "packages", package.Name);
+            var folder =  Path.Combine(Path.GetDirectoryName(solutionFile), "packages", package.Name);
 
             return new Uri(projectFile).MakeRelativeUri(new Uri(folder)).ToString().Replace("/", "\\");
         }
 
-        private async Task DownloadSourceCode(string targetFolder, NugetPackageInfo package, string version = null)
+        protected virtual async Task DownloadSourceCode(string targetFolder, NugetPackageInfo package, string version = null)
         {
-            await SourceCodeDownloadService.DownloadPackageAsync(
+            await SourceCodeDownloadService.DownloadNugetPackageAsync(
                 package.Name,
                 targetFolder,
                 version
             );
         }
 
-        private string FindSolutionFile(string projectFile)
+        protected virtual string FindSolutionFile(string projectFile)
         {
             var folder = FindSolutionFolder(projectFile);
 
             return Directory.GetFiles(folder, "*.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
         }
 
-        private string FindSolutionFolder(string projectFile)
+        protected virtual string FindSolutionFolder(string projectFile)
         {
             var targetFolder = Path.GetDirectoryName(projectFile);
 
@@ -199,7 +232,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return targetFolder;
         }
 
-        private async Task AddAsPackageReference(string projectFile, NugetPackageInfo package, string version,
+        protected virtual async Task AddAsPackageReference(string projectFile, NugetPackageInfo package, string version,
             bool useDotnetCliToInstall)
         {
             var projectFileContent = File.ReadAllText(projectFile);
@@ -250,7 +283,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger.LogInformation("Successfully installed.");
         }
 
-        private Task AddUsingDotnetCli(NugetPackageInfo package, string version = null)
+        protected virtual Task AddUsingDotnetCli(NugetPackageInfo package, string version = null)
         {
             var versionOption = version == null ? "" : $" -v {version}";
 
@@ -259,7 +292,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return Task.CompletedTask;
         }
 
-        private Task AddToCsprojManuallyAsync(string projectFile, NugetPackageInfo package, string version = null)
+        protected virtual Task AddToCsprojManuallyAsync(string projectFile, NugetPackageInfo package, string version = null)
         {
             var projectFileContent = File.ReadAllText(projectFile);
             var doc = new XmlDocument() {PreserveWhitespace = true};
@@ -301,7 +334,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return Task.CompletedTask;
         }
 
-        private string GetAbpVersionOrNull(string projectFile)
+        protected virtual string GetAbpVersionOrNull(string projectFile)
         {
             var projectFileContent = File.ReadAllText(projectFile);
 
@@ -344,6 +377,14 @@ namespace Volo.Abp.Cli.ProjectModification
             args.Options.Add(BundleCommand.Options.ForceBuild.Short, string.Empty);
 
             await BundleCommand.ExecuteAsync(args);
+        }
+
+        protected virtual bool IsSolutionTiered(string[] projectFiles)
+        {
+            return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
+                       .Any(p => p.EndsWith(".HttpApi.Host"))
+                   && projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
+                       .Any(p => p.EndsWith(".IdentityServer"));
         }
     }
 }

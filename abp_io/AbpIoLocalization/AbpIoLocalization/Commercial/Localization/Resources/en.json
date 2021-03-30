@@ -128,13 +128,13 @@
     "YourFullName": "Your full name",
     "EmailField": "E-mail Address",
     "YourEmailAddress": "Your e-mail address",
-    "HowMayWeHelpYou": "How may we help you",
+    "HowMayWeHelpYou": "How may we help you?",
     "SendMessage": "Send Message",
     "Success": "Success",
-    "WeWillReplyYou.": "Your message is sent! We will reply you in a short time.",
+    "WeWillReplyYou": "We received your message and will be in touch shortly.",
     "GoHome": "Go Home",
     "CreateLiveDemo": "Create Live Demo",
-    "RegisterToTheNewsletter": "Register to the newsletter to get information on happenings about ABP.IO, like new releases.",
+    "RegisterToTheNewsletter": "Register for the newsletter to receive information regarding ABP.IO, including new releases etc.",
     "EnterYourEmailOrLogin": "Enter your e-mail address to create your demo or <a href=\"{0}\">Login</a> using your existing account.",
     "ApplicationTemplate": "Application Template",
     "ApplicationTemplateExplanation": "Application startup template is used to create a new web application.",
@@ -287,6 +287,8 @@
     "PrivateTicketEmailSupport": "Private ticket & email support",
     "BuyNow": "Buy Now",
     "PayViaAmexCard": "How can I pay via my AMEX card?",
-    "PayViaAmexCardDescription": "The default payment gateway 'Iyzico' may decline some AMEX credit cards due to the security measures. In this case, you can pay through the alternative payment gateway '2Checkout'."
+    "PayViaAmexCardDescription": "The default payment gateway 'Iyzico' may decline some AMEX credit cards due to the security measures. In this case, you can pay through the alternative payment gateway '2Checkout'.",
+    "ThankYou": "Thank you",
+    "InvalidReCaptchaErrorMessage": "There was an error verifying reCAPTCHA. Please try again."
   }
 }

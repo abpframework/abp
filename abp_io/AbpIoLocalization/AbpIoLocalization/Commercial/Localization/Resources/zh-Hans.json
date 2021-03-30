@@ -131,7 +131,7 @@
     "HowMayWeHelpYou": "我们如何帮助你",
     "SendMessage": "发送消息",
     "Success": "成功",
-    "WeWillReplyYou.": "你的消息已经发送! 我们会在短时间内给你答复.",
+    "WeWillReplyYou": "你的消息已经发送! 我们会在短时间内给你答复.",
     "GoHome": "回到主页面",
     "CreateLiveDemo": "创建在线演示",
     "RegisterToTheNewsletter": "注册到时事简报以获取有关ABP.IO的消息,比如新发布的内容.",
@@ -287,6 +287,7 @@
     "PrivateTicketEmailSupport": "私有票和email支持",
     "BuyNow": "现在购买",
     "PayViaAmexCard": "我如何通过我的AMEX卡付款？",
-    "PayViaAmexCardDescription": "由于安全措施，默认付款网关“ Iyzico”可能会拒绝某些AMEX信用卡。 在这种情况下，您可以通过备用付款网关“ 2Checkout”付款。"
+    "PayViaAmexCardDescription": "由于安全措施，默认付款网关“ Iyzico”可能会拒绝某些AMEX信用卡。 在这种情况下，您可以通过备用付款网关“ 2Checkout”付款。",
+    "InvalidReCaptchaErrorMessage": "验证reCAPTCHA时出错，请重试。"
   }
 }

@@ -204,14 +204,22 @@
     "ProjectDownloads": "Proje İndirmeleri",
     "ShowProjectDownloadsOfOrganization": "Proje İndirmeleri",
     "ShowAuditLogsOfOrganization": "Denetim Günlükleri",
-    "Enum:EntityChangeType:0": "Crated",
+    "Enum:EntityChangeType:0": "Oluşturuldu",
     "Enum:EntityChangeType:1": "Güncellendi",
     "Enum:EntityChangeType:2": "Silindi",
     "TenantId": "Kiracı Kimliği",
     "ChangeTime": "Değişiklik Zamanı",
     "EntityTypeFullName": "Varlık türü tam adı",
-    "AuditLogsOf{0}Organization": "\"{0}\" kuruluşunun denetim günlükleri",
+    "AuditLogsFor{0}Organization": "\"{0}\" kuruluşu için denetim günlükleri",
     "Permission:EntityChange": "Varlık Değişikliği",
-    "Permission:ProjectDownload": "Proje Indirme"
+    "Permission:ProjectDownload": "Proje İndirme",
+    "Permission:PaymentRequest": "Ödeme isteği",
+    "CreatorEmailAddress": "Oluşturan kişinin e-posta adresi",
+    "EmailSendDate": "E-posta gönderme tarihi",
+    "PaymentRequestsFor{0}Organization": "\"{0}\" kuruluşu için ödeme istekleri",
+    "PaymentDetails": "Ödeme Detayları",
+    "PaymentProduct": "Ödeme Ürünü",
+    "ProductName": "Ürün İsmi",
+    "Code": "Kod"
   }
 }

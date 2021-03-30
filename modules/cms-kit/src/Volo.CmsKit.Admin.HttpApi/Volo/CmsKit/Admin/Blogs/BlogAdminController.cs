@@ -11,7 +11,7 @@ using Volo.CmsKit.Permissions;
 namespace Volo.CmsKit.Admin.Blogs
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Authorize(CmsKitAdminPermissions.Blogs.Default)]
     [Route("api/cms-kit-admin/blogs")]

@@ -49,7 +49,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var client = _cliHttpClientFactory.CreateClient();
 
             using (var responseMessage = await client.GetAsync(
-                $"{CliUrls.WwwAbpIo}api/download/packages/",
+                $"{CliUrls.WwwAbpIo}api/download/nugetPackages/",
                 CancellationTokenProvider.Token
             ))
             {

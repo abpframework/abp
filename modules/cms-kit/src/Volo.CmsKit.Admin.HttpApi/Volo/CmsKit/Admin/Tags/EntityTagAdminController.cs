@@ -9,7 +9,7 @@ using Volo.CmsKit.Permissions;
 namespace Volo.CmsKit.Admin.Tags
 {
     [RequiresGlobalFeature(typeof(TagsFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-admin/entity-tags")]
     public class EntityTagAdminController : CmsKitAdminController, IEntityTagAdminAppService

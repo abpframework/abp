@@ -255,14 +255,22 @@
     "ProjectDownloads": "Project Downloads",
     "ShowProjectDownloadsOfOrganization": "Project Downloads",
     "ShowAuditLogsOfOrganization": "Audit Logs",
-    "Enum:EntityChangeType:0": "Crated",
+    "Enum:EntityChangeType:0": "Created",
     "Enum:EntityChangeType:1": "Updated",
     "Enum:EntityChangeType:2": "Deleted",
     "TenantId": "Tenant ID",
     "ChangeTime": "Change time",
     "EntityTypeFullName": "Entity type full name",
-    "AuditLogsOf{0}Organization": "Audit logs of \"{0}\" organization",
+    "AuditLogsFor{0}Organization": "Audit logs for \"{0}\" organization",
     "Permission:EntityChange": "Entity Change",
-    "Permission:ProjectDownload": "Project Download"
+    "Permission:ProjectDownload": "Project Download",
+    "Permission:PaymentRequest": "Payment Request",
+    "CreatorEmailAddress": "Creator email address",
+    "EmailSendDate": "Email send date",
+    "PaymentRequestsFor{0}Organization": "Payment requests for \"{0}\" organization",
+    "PaymentDetails": "Payment Details",
+    "PaymentProduct": "Payment Product",
+    "ProductName": "Product Name",
+    "Code": "Code"
   }
 }
