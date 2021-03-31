@@ -20,6 +20,6 @@ namespace Volo.Docs.Documents
         
         Task<bool> FullSearchEnabledAsync();
 
-        Task<List<string>> GetLinksAsync();
+        Task<List<string>> GetUrlsAsync(string prefix);
     }
 }

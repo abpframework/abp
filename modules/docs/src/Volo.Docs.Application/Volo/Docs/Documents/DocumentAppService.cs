@@ -194,13 +194,18 @@ namespace Volo.Docs.Documents
             return await Task.FromResult(_docsElasticSearchOptions.Enable);
         }
 
-        public async Task<List<string>> GetLinksAsync()
+        public async Task<List<string>> GetUrlsAsync(string prefix)
         {
-            var documentLinks = new List<string>();
+            var documentUrls = new List<string>();
             var projects = await _projectRepository.GetListAsync();
 
             foreach (var project in projects)
             {
+                if (project.ShortName == "ABP Commercial" || project.Name == "ABP Commercial")
+                {
+                    continue;
+                }
+                
                 var documents = await _documentRepository.GetListByProjectId(project.Id);
 
                 foreach (var document in documents)
@@ -214,53 +219,51 @@ namespace Volo.Docs.Documents
                     
                     navigationNode.Items?.ForEach(node =>
                     {
-                        documentLinks.AddIfNotContains(
-                            GetDocumentLinks(node, documentLinks, document.LanguageCode,
-                                project.ShortName, document.Version, document.Format)
+                        documentUrls.AddIfNotContains(
+                            GetDocumentLinks(node, documentUrls, prefix, project.ShortName, document)
                         );
                     });
                 }
             }
 
-            return documentLinks;
+            return documentUrls;
         }
 
-        private List<string> GetDocumentLinks(NavigationNode node, List<string> documentLinks, string languageName,
-            string shortName, string version, string format)
+        private List<string> GetDocumentLinks(NavigationNode node, List<string> documentUrls, string prefix, 
+            string shortName, Document document)
         {
             if (!IsExternalLink(node.Path))
             {
-                documentLinks.AddIfNotContains(NormalizePath(node.Path, languageName, shortName, version, format));
+                documentUrls.AddIfNotContains(
+                    NormalizePath(prefix, node.Path, shortName, document)
+                );
             }
 
             node.Items?.ForEach(childNode =>
             {
-                GetDocumentLinks(childNode, documentLinks, languageName, shortName, version, format);
+                GetDocumentLinks(childNode, documentUrls, prefix, shortName, document);
             });
 
-            return documentLinks;
+            return documentUrls;
         }
 
-        private string NormalizePath(string path, string languageCode, string projectName, string version,
-            string projectFormat)
+        private string NormalizePath(string prefix, string path, string shortName, Document document)
         {
-            var pathWithoutFileExtension = RemoveFileExtensionFromPath(path, projectFormat);
+            var pathWithoutFileExtension = RemoveFileExtensionFromPath(path, document.Format);
+            var normalizedPath = prefix + document.LanguageCode + "/" + shortName + "/" + document.Version + "/" + pathWithoutFileExtension;
 
-            //TODO: get prefix from DocsUiOptions?
-            var prefix = "/";
-
-            return prefix + languageCode + "/" + projectName + "/" + version + "/" + pathWithoutFileExtension;
+            return normalizedPath;
         }
 
-        private string RemoveFileExtensionFromPath(string path, string projectFormat)
+        private string RemoveFileExtensionFromPath(string path, string format)
         {
             if (path == null)
             {
                 return null;
             }
 
-            return path.EndsWith("." + projectFormat)
-                ? path.Left(path.Length - projectFormat.Length - 1)
+            return path.EndsWith("." + format)
+                ? path.Left(path.Length - format.Length - 1)
                 : path;
         }
 
