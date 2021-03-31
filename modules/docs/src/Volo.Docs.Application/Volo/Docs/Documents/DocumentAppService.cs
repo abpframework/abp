@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -193,6 +194,87 @@ namespace Volo.Docs.Documents
             return await Task.FromResult(_docsElasticSearchOptions.Enable);
         }
 
+        public async Task<List<string>> GetLinksAsync()
+        {
+            var documentLinks = new List<string>();
+            var projects = await _projectRepository.GetListAsync();
+
+            foreach (var project in projects)
+            {
+                var documents = await _documentRepository.GetListByProjectId(project.Id);
+
+                foreach (var document in documents)
+                {
+                    var navigationNode = await GetNavigationAsync(new GetNavigationDocumentInput
+                    {
+                        ProjectId = project.Id,
+                        LanguageCode = document.LanguageCode,
+                        Version = document.Version
+                    });
+                    
+                    navigationNode.Items?.ForEach(node =>
+                    {
+                        documentLinks.AddIfNotContains(
+                            GetDocumentLinks(node, documentLinks, document.LanguageCode,
+                                project.ShortName, document.Version, document.Format)
+                        );
+                    });
+                }
+            }
+
+            return documentLinks;
+        }
+
+        private List<string> GetDocumentLinks(NavigationNode node, List<string> documentLinks, string languageName,
+            string shortName, string version, string format)
+        {
+            if (!IsExternalLink(node.Path))
+            {
+                documentLinks.AddIfNotContains(NormalizePath(node.Path, languageName, shortName, version, format));
+            }
+
+            node.Items?.ForEach(childNode =>
+            {
+                GetDocumentLinks(childNode, documentLinks, languageName, shortName, version, format);
+            });
+
+            return documentLinks;
+        }
+
+        private string NormalizePath(string path, string languageCode, string projectName, string version,
+            string projectFormat)
+        {
+            var pathWithoutFileExtension = RemoveFileExtensionFromPath(path, projectFormat);
+
+            //TODO: get prefix from DocsUiOptions?
+            var prefix = "/";
+
+            return prefix + languageCode + "/" + projectName + "/" + version + "/" + pathWithoutFileExtension;
+        }
+
+        private string RemoveFileExtensionFromPath(string path, string projectFormat)
+        {
+            if (path == null)
+            {
+                return null;
+            }
+
+            return path.EndsWith("." + projectFormat)
+                ? path.Left(path.Length - projectFormat.Length - 1)
+                : path;
+        }
+
+        private static bool IsExternalLink(string path)
+        {
+            if (path.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            return path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                   path.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
@@ -353,7 +435,6 @@ namespace Volo.Docs.Documents
             }
 
             return project.ExtraProperties["VersionBranchPrefix"].ToString();
-
         }
 
         private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
