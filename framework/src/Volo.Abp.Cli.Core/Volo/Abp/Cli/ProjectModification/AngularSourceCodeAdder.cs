@@ -272,6 +272,11 @@ namespace Volo.Abp.Cli.ProjectModification
 
                     Directory.Move(projectInFolder, destDirName);
                 }
+
+                if (!Directory.GetFiles(folder).Any() && !Directory.GetDirectories(folder).Any())
+                {
+                    Directory.Delete(folder, true);
+                }
             }
 
             return projects;
