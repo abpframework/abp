@@ -80,6 +80,8 @@ abp new Acme.BookStore
 * `Acme.BookStore` is the solution name here.
 * Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
 
+For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Samples.md)
+
 #### Options
 
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
