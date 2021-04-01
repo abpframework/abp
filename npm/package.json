@@ -11,7 +11,7 @@
     "@types/fs-extra": "^8.0.1",
     "glob": "^7.1.5",
     "lerna": "^3.18.4",
-    "npm-check-updates": "^3.1.25"
+    "npm-check-updates": "^11.3.0"
   },
   "dependencies": {
     "commander": "^6.0.0",
