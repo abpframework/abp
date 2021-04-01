@@ -1,5 +1,6 @@
 param(
-  [string]$Version
+  [string]$Version,
+  [string]$Registry
 )
 
 npm install
@@ -11,10 +12,12 @@ if (-Not $Version) {
   $Version = $NextVersion;
 }
 
-echo $Version
+if (-Not $Registry) {
+  $Registry = "https://registry.npmjs.org";
+}
 
-$NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry https://registry.npmjs.org'"
-$PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry https://registry.npmjs.org'"
+$NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry"
+$PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry $Registry'"
 $UpdateGulpCommand = "npm run update-gulp"
 $UpdateNgPacksCommand = "yarn update"
 
