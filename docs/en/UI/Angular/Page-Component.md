@@ -1,8 +1,8 @@
 # Page Component
 
-ABP provides a component that wraps your content with some built-in components to recude the amount of code you need to write.
+ABP provides a component that wraps your content with some built-in components to reduce the amount of code you need to write.
 
-If the template of a component looks like as follows, you can utilize the `abp-page` components.
+If the template of a component looks as follows, you can utilize the `abp-page` component.
 
 E.g. 
 
@@ -22,13 +22,21 @@ E.g.
 </div>
 
 <div id="app-id">
-  <!-- .... -->
+  <!-- app content here -->
 </div>
 ```
 
 ## Page Parts
 
-PageComponent divides the template shown above into three parts, `title`, `breadcrumb`, `toolbar`. Each can be configured separately. 
+PageComponent divides the template shown above into three parts, `title`, `breadcrumb`, `toolbar`. Each can be configured separately. There, also, is an enum exported from the package that describes each part.
+
+```javascript
+export enum PageParts {
+  title = 'PageTitleContainerComponent',
+  breadcrumb = 'PageBreadcrumbContainerComponent',
+  toolbar = 'PageToolbarContainerComponent',
+}
+```
 
 ## Usage
 
@@ -65,7 +73,7 @@ And change the template of `app.component.ts` to the following:
 
 ## Overriding template
 
-If you need to replace the template of any part, you can use following sub components. 
+If you need to replace the template of any part, you can use the following sub-components. 
 
 ```html
 <abp-page>
@@ -111,15 +119,7 @@ It also can take a context input as follows:
 </div>
 ```
 
-```javascript
-enum PageParts {
-  title = 'PageTitleContainerComponent',
-  breadcrumb = 'PageBreadcrumbContainerComponent',
-  toolbar = 'PageToolbarContainerComponent',
-}
-```
-
-It's render strategy can be provided through Angular's Depedency Injection system. 
+Its render strategy can be provided through Angular's Dependency Injection system. 
 
 It expects a service through the `PAGE_RENDER_STRATEGY` injection token that implements the following interface.
 
@@ -132,11 +132,11 @@ interface PageRenderStrategy {
 }
 ```
 
-* `shouldRender` (required): It takes a string input named `type` and expects a `boolean` or `Observable<boolean>`. 
+* `shouldRender` (required): It takes a string input named `type` and expects a `boolean` or `Observable<boolean>` in return. 
 * `onInit` (optional): Will be called when the directive is initiated. Three inputs will be passed into this method. 
   * `type`: type of the page part
   * `injector`: injector of the directive which could be used to retrieve anything from directive's DI tree.
-  * `context`: whatever context is available at initialization phase. 
+  * `context`: whatever context is available at the initialization phase. 
 * `onDestroy` (optional): Will be called when the directive is destroyed. The parameters are the same with `onInit`
 * `onContextUpdate` (optional): Will be called when the context is updated. 
   * `change`: changes of the `context` will be passed through this method. 
@@ -153,7 +153,7 @@ import { 
 @Injectable()
 export class MyPageRenderStrategy implements PageRenderStrategy {
   shouldRender(type: string) {
-    // meaning everything but breadcrumb will be rendered
+    // meaning everything but breadcrumb and custom-part will be rendered
     return type !== PageParts.breadcrumb && type !== 'custom-part';
   }
 
@@ -209,3 +209,7 @@ export class AppComponent {}
 })
 export class AppModule {}
 ```
+
+## See Also
+
+- [Page Toolbar Extensions for Angular UI](./Page-Page-Toolbar-Extensions.md)
