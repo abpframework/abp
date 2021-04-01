@@ -37,7 +37,7 @@ We prepare migration guides if the new version brings breaking changes for exist
 
 ### Upgrading the Startup Template
 
-Sometimes we introduce new features/changes that requires to **make changes in the startup template**. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your solution.
+Sometimes we introduce new features/changes that requires to **make changes in the startup template**. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your existing solution.
 
 It is not practical to document the necessary changes line by line. In this case, we suggest you to create an example solution, one with your existing version and one with the new version and compare them using a diff tool. You can [see this guide](Migration-Guides/Upgrading-Startup-Template.md) to learn how you can do it using WinMerge application.
 
