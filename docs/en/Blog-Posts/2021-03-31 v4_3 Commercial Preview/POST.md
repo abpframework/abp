@@ -1,6 +1,6 @@
 # ABP Commercial 4.3 RC Has Been Published
 
-ABP Commercial version 4.3 RC (Release Candidate) has been published alongside ABP Framework 4.3. RC (TODO: link). I will introduce the new features in this blog post. Here, a list of highlights for this release;
+ABP Commercial version 4.3 RC (Release Candidate) has been published alongside [ABP Framework 4.3. RC](https://blog.abp.io/abp/ABP-Framework-4.3-RC-Has-Been-Published). I will introduce the new features in this blog post. Here, a list of highlights for this release;
 
 * The **microservice starter template** is getting more mature. We've also added a **service template** to add new microservices to the solution.
 * New option for the application starter template to have a **separate database schema for tenant databases**.
@@ -15,7 +15,7 @@ Here, some other features already covered in the ABP Framework announcement, but
 * **Email setting** management UI
 * **Module extensibility** system is now available for the **Blazor UI** too.
 
-> This post doesn't cover the features and changes done on the ABP Framework side. Please also see the **ABP Framework 4.3. RC blog post** (TODO: link).
+> This post doesn't cover the features and changes done on the ABP Framework side. Please also see the **[ABP Framework 4.3. RC blog post](https://blog.abp.io/abp/ABP-Framework-4.3-RC-Has-Been-Published)**.
 
 ## The Migration Guide
 
@@ -69,7 +69,7 @@ Automatic migration only tries one time. If it fails, it writes the exception lo
 
 ### New Module: CMS Kit
 
-CMS Kit module initial version has been released with this version. As stated in the ABP Framework 4.3 announcement post (TODO: link), it should be considered premature for now.
+CMS Kit module initial version has been released with this version. As stated in the [ABP Framework 4.3 announcement post](https://blog.abp.io/abp/ABP-Framework-4.3-RC-Has-Been-Published), it should be considered premature for now.
 
 For ABP Commercial application startup template, we are providing an option to include the CMS Kit into the solution while creating new solutions:
 
