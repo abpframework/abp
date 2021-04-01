@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using JetBrains.Annotations;
 using Volo.Abp.Content;
@@ -68,7 +70,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             var parameters = action
                 .Parameters
-                .Where(p => p.BindingSourceId == ParameterBindingSources.Form)
+                .Where(p => p.BindingSourceId == ParameterBindingSources.Form || p.BindingSourceId == ParameterBindingSources.FormFile)
                 .ToArray();
 
             if (!parameters.Any())
@@ -76,24 +78,67 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 return null;
             }
 
-            var postDataBuilder = new StringBuilder();
-
-            var isFirstParam = true;
-            foreach (var queryStringParameter in parameters)
+            if (parameters.Any(x => x.BindingSourceId == ParameterBindingSources.FormFile))
             {
-                var value = HttpActionParameterHelper.FindParameterValue(methodArguments, queryStringParameter);
-                if (value == null)
+                var postDataBuilder = new MultipartFormDataContent();
+                foreach (var parameter in parameters)
                 {
-                    continue;
+                    var value = HttpActionParameterHelper.FindParameterValue(methodArguments, parameter);
+                    if (value == null)
+                    {
+                        continue;
+                    }
+
+                    if (value is IRemoteStreamContent remoteStreamContent)
+                    {
+                        var streamContent = new StreamContent(remoteStreamContent.GetStream());
+                        if (!remoteStreamContent.ContentType.IsNullOrWhiteSpace())
+                        {
+                            streamContent.Headers.ContentType = new MediaTypeHeaderValue(remoteStreamContent.ContentType);
+                        }
+                        postDataBuilder.Add(streamContent, parameter.Name, parameter.Name);
+                    }
+                    else if (value is IEnumerable<IRemoteStreamContent> remoteStreamContents)
+                    {
+                        foreach (var content in remoteStreamContents)
+                        {
+                            var streamContent = new StreamContent(content.GetStream());
+                            if (!content.ContentType.IsNullOrWhiteSpace())
+                            {
+                                streamContent.Headers.ContentType = new MediaTypeHeaderValue(content.ContentType);
+                            }
+                            postDataBuilder.Add(streamContent, parameter.Name, parameter.Name);
+                        }
+                    }
+                    else
+                    {
+                        postDataBuilder.Add(new StringContent(value.ToString(), Encoding.UTF8), parameter.Name);
+                    }
                 }
 
-                postDataBuilder.Append(isFirstParam ? "?" : "&");
-                postDataBuilder.Append(queryStringParameter.Name + "=" + System.Net.WebUtility.UrlEncode(value.ToString()));
-
-                isFirstParam = false;
+                return postDataBuilder;
             }
+            else
+            {
+                var postDataBuilder = new StringBuilder();
 
-            return new StringContent(postDataBuilder.ToString(), Encoding.UTF8, MimeTypes.Application.XWwwFormUrlencoded);
+                var isFirstParam = true;
+                foreach (var parameter in parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Form))
+                {
+                    var value = HttpActionParameterHelper.FindParameterValue(methodArguments, parameter);
+                    if (value == null)
+                    {
+                        continue;
+                    }
+
+                    postDataBuilder.Append(isFirstParam ? "?" : "&");
+                    postDataBuilder.Append(parameter.Name + "=" + System.Net.WebUtility.UrlEncode(value.ToString()));
+
+                    isFirstParam = false;
+                }
+
+                return new StringContent(postDataBuilder.ToString(), Encoding.UTF8, MimeTypes.Application.XWwwFormUrlencoded);
+            }
         }
     }
 }
