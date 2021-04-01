@@ -19,7 +19,8 @@ $solutions = (
     "modules/tenant-management",
     "modules/users",
     "modules/virtual-file-explorer",
-    "modules/blob-storing-database"
+    "modules/blob-storing-database",
+    "modules/cms-kit"
 )
 
 # List of projects
