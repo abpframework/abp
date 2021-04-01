@@ -419,8 +419,8 @@ namespace Volo.Abp.Cli.Commands
                     return DatabaseManagementSystem.OracleDevart;
                 case "sqlite":
                     return DatabaseManagementSystem.SQLite;
-                case "oracle": // Currently disabled. See https://github.com/abpframework/abp/issues/6513
-                    // return DatabaseManagementSystem.Oracle;
+                case "oracle":
+                    return DatabaseManagementSystem.Oracle;
                 default:
                     return DatabaseManagementSystem.NotSpecified;
             }
