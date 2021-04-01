@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Auditing
@@ -16,16 +17,19 @@ namespace Volo.Abp.AspNetCore.Auditing
         protected AbpAuditingOptions AuditingOptions { get; }
         protected AbpAspNetCoreAuditingOptions AspNetCoreAuditingOptions { get; }
         protected ICurrentUser CurrentUser { get; }
+        protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
         public AbpAuditingMiddleware(
             IAuditingManager auditingManager,
             ICurrentUser currentUser,
             IOptions<AbpAuditingOptions> auditingOptions,
-            IOptions<AbpAspNetCoreAuditingOptions> aspNetCoreAuditingOptions)
+            IOptions<AbpAspNetCoreAuditingOptions> aspNetCoreAuditingOptions,
+            IUnitOfWorkManager unitOfWorkManager)
         {
             _auditingManager = auditingManager;
 
             CurrentUser = currentUser;
+            UnitOfWorkManager = unitOfWorkManager;
             AuditingOptions = auditingOptions.Value;
             AspNetCoreAuditingOptions = aspNetCoreAuditingOptions.Value;
         }
@@ -44,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Auditing
                 try
                 {
                     await next(context);
-                    
+
                     Debug.Assert(_auditingManager.Current != null);
                     if (_auditingManager.Current.Log.Exceptions.Any())
                     {
@@ -60,6 +64,11 @@ namespace Volo.Abp.AspNetCore.Auditing
                 {
                     if (ShouldWriteAuditLog(context, hasError))
                     {
+                        if (UnitOfWorkManager.Current != null)
+                        {
+                            await UnitOfWorkManager.Current.SaveChangesAsync();
+                        }
+
                         await saveHandle.SaveAsync();
                     }
                 }
