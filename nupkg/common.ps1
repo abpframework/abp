@@ -300,7 +300,7 @@ $projects = (
     "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Domain",
     "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Domain.Shared",
     "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
-    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.MongoDB"
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.MongoDB",
 	
     # abp/cms-kit	
     "modules/cms-kit/src/Volo.CmsKit.Admin.Application",
