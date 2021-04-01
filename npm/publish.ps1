@@ -19,11 +19,13 @@ if (-Not $Registry) {
 $NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry"
 $PacksPublishCommand = "npm run lerna -- exec 'npm publish --registry $Registry'"
 $UpdateGulpCommand = "npm run update-gulp"
-$UpdateNgPacksCommand = "yarn update"
+$UpdateNgPacksCommand = "yarn update --registry $Registry"
 
-$IsRc = $(node publish-utils.js --rc) -eq "true";
+$IsRc = $(node publish-utils.js --rc --customVersion $Version) -eq "true";
 
-if ($IsRc) { 
+
+
+if ($IsRc) {
   $NgPacksPublishCommand += " --rc"
   $UpdateGulpCommand += " -- --rc"
   $PacksPublishCommand = $PacksPublishCommand.Substring(0, $PacksPublishCommand.Length - 1) + " --tag next'"

@@ -5,6 +5,7 @@ const { program } = require('commander');
 
 program.version('0.0.1');
 program.option('-r, --rc', 'whether version is rc');
+program.option('-rg, --registry <registry>', 'target npm server registry')
 program.parse(process.argv);
 
 const packages = (process.argv[3] || 'abp').split(',').join('|');
@@ -14,8 +15,8 @@ const check = (pkgJsonPath) => {
     return childProcess
       .execSync(
         `ncu "/^@(${packages}).*$/" --packageFile ${pkgJsonPath} -u${
-          program.rc ? ' --greatest' : ''
-        }`
+          program.rc ? ' --target greatest' : ''
+        }${program.registry ? ` --registry ${program.registry}` : ''}`
       )
       .toString();
   } catch (error) {
