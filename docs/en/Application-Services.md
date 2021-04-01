@@ -468,8 +468,35 @@ namespace MyProject.Test
     {
         Task Upload(Guid id, IRemoteStreamContent streamContent);
         Task<IRemoteStreamContent> Download(Guid id);
+
+        Task CreateFile(CreateFileInput input);
+        Task CreateMultipleFile(CreateMultipleFileInput input);
+    }
+
+    public class CreateFileInput
+    {
+        public Guid Id { get; set; }
+
+        public IRemoteStreamContent Content { get; set; }
+    }
+
+    public class CreateMultipleFileInput
+    {
+        public Guid Id { get; set; }
+
+        public IEnumerable<IRemoteStreamContent> Contents { get; set; }
     }
 }
+````
+
+**You need to configure `AbpAspNetCoreMvcOptions` to add DTO class to `FormBodyBindingIgnoredTypes` to use `IRemoteStreamContent` in** **DTO ([Data Transfer Object](Data-Transfer-Objects.md))**
+
+````csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateFileInput));
+    options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMultipleFileInput));
+});
 ````
 
 **Example: Application Service Implementation that can be used to get and return streams**
@@ -501,6 +528,27 @@ namespace MyProject.Test
             using (var fs = new FileStream("C:\\Temp\\" + id + ".blob", FileMode.Create))
             {
                 await streamContent.GetStream().CopyToAsync(fs);
+                await fs.FlushAsync();
+            }
+        }
+
+        public async Task CreateFileAsync(CreateFileInput input)
+        {
+            using (var fs = new FileStream("C:\\Temp\\" + input.Id + ".blob", FileMode.Create))
+            {
+                await input.Content.GetStream().CopyToAsync(fs);
+                await fs.FlushAsync();
+            }
+        }
+
+        public async Task CreateMultipleFileAsync(CreateMultipleFileInput input)
+        {
+            using (var fs = new FileStream("C:\\Temp\\" + input.Id + ".blob", FileMode.Append))
+            {
+                foreach (var content in input.Contents)
+                {
+                    await content.GetStream().CopyToAsync(fs);
+                }
                 await fs.FlushAsync();
             }
         }
