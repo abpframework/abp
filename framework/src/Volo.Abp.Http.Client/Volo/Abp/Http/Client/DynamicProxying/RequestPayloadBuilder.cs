@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -91,7 +92,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     if (value is IRemoteStreamContent remoteStreamContent)
                     {
                         var streamContent = new StreamContent(remoteStreamContent.GetStream());
-                        streamContent.Headers.ContentType = new MediaTypeHeaderValue(remoteStreamContent.ContentType);
+                        if (!remoteStreamContent.ContentType.IsNullOrWhiteSpace())
+                        {
+                            streamContent.Headers.ContentType = new MediaTypeHeaderValue(remoteStreamContent.ContentType);
+                        }
                         postDataBuilder.Add(streamContent, parameter.Name, parameter.Name);
                     }
                     else if (value is IEnumerable<IRemoteStreamContent> remoteStreamContents)
@@ -99,7 +103,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                         foreach (var content in remoteStreamContents)
                         {
                             var streamContent = new StreamContent(content.GetStream());
-                            streamContent.Headers.ContentType = new MediaTypeHeaderValue(content.ContentType);
+                            if (!content.ContentType.IsNullOrWhiteSpace())
+                            {
+                                streamContent.Headers.ContentType = new MediaTypeHeaderValue(content.ContentType);
+                            }
                             postDataBuilder.Add(streamContent, parameter.Name, parameter.Name);
                         }
                     }
