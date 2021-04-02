@@ -30,7 +30,7 @@ const updatePackages = (pkgJsonPath) => {
     const result = childProcess
       .execSync(
         `ncu "/^@abp.*$/" --packageFile ${pkgJsonPath} -u${
-          program.rc ? ' --greatest' : ''
+          program.rc ? ' --target greatest' : ''
         }`
       )
       .toString();
