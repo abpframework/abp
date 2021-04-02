@@ -12,7 +12,7 @@ We are super excited to announce the ABP Framework 4.3 RC (Release Candidate). H
 
 Besides the new features above, we've done many performance improvements, enhancements and bug fixes on the current features. See the [4.3 milestone](https://github.com/abpframework/abp/milestone/49?closed=1) on GitHub for all changes made on this version.
 
-This version was a big development journey for us; [~160 issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A4.3-preview) resolved, [~300 PRs](https://github.com/abpframework/abp/pulls?q=is%3Aopen+is%3Apr+milestone%3A4.3-preview) merged and **~1,700 commits** done only in the [main framework repository](https://github.com/abpframework/abp). **Thanks to the ABP Framework team and all the contributors.**
+This version was a big development journey for us; [~160 issues](https://github.com/abpframework/abp/issues?q=is%3Aissue+milestone%3A4.3-preview+is%3Aclosed) resolved, [~300 PRs](https://github.com/abpframework/abp/issues?q=is%3Apr+milestone%3A4.3-preview+is%3Aclosed) merged and **~1,700 commits** done only in the [main framework repository](https://github.com/abpframework/abp). **Thanks to the ABP Framework team and all the contributors.**
 
 > ABP Commercial 4.3 RC has also been published. We will write a separate blog post for it.
 
