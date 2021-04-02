@@ -88,10 +88,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {
                 Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
-                return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")), version, latestVersion, nugetVersion);
+                return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
+                    version, latestVersion, nugetVersion);
             }
 
-            var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/",".") + "-" + version + ".zip");
+            var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
 
 #if DEBUG
             if (File.Exists(localCacheFile))
@@ -127,7 +128,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
         }
 
-        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null, bool includePreReleases = false)
+        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null,
+            bool includePreReleases = false)
         {
             if (url == null)
             {
@@ -138,12 +140,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
             {
                 var client = _cliHttpClientFactory.CreateClient();
                 var stringContent = new StringContent(
-                    JsonSerializer.Serialize(new GetLatestSourceCodeVersionDto { Name = name, IncludePreReleases = includePreReleases }),
+                    JsonSerializer.Serialize(new GetLatestSourceCodeVersionDto
+                        {Name = name, IncludePreReleases = includePreReleases}),
                     Encoding.UTF8,
                     MimeTypes.Application.Json
                 );
 
-                using (var response = await client.PostAsync(url, stringContent, _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
+                using (var response = await client.PostAsync(url, stringContent,
+                    _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
                 {
                     await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                     var result = await response.Content.ReadAsStringAsync();
@@ -170,12 +174,13 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 var client = _cliHttpClientFactory.CreateClient();
 
                 var stringContent = new StringContent(
-                    JsonSerializer.Serialize(new GetTemplateNugetVersionDto { Name = name, Version = version }),
+                    JsonSerializer.Serialize(new GetTemplateNugetVersionDto {Name = name, Version = version}),
                     Encoding.UTF8,
                     MimeTypes.Application.Json
                 );
 
-                using (var response = await client.PostAsync(url, stringContent, _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
+                using (var response = await client.PostAsync(url, stringContent,
+                    _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
                 {
                     await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                     var result = await response.Content.ReadAsStringAsync();
@@ -196,19 +201,20 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             try
             {
-                var client = _cliHttpClientFactory.CreateClient();
+                var client = _cliHttpClientFactory.CreateClient(timeout: TimeSpan.FromMinutes(5));
 
                 if (input.TemplateSource.IsNullOrWhiteSpace())
                 {
                     responseMessage = await client.PostAsync(
                         url,
                         new StringContent(JsonSerializer.Serialize(input), Encoding.UTF8, MimeTypes.Application.Json),
-                       _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))
+                        _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))
                     );
                 }
                 else
                 {
-                    responseMessage = await client.GetAsync(input.TemplateSource, _cliHttpClientFactory.GetCancellationToken());
+                    responseMessage = await client.GetAsync(input.TemplateSource,
+                        _cliHttpClientFactory.GetCancellationToken());
                 }
 
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
@@ -219,7 +225,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}", url, responseMessage?.ToString(), Environment.NewLine, ex.Message);
+                Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}", url,
+                    responseMessage?.ToString(), Environment.NewLine, ex.Message);
                 throw;
             }
         }
@@ -239,7 +246,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 stringBuilder.AppendLine(cacheFile);
             }
 
-            var matches = Regex.Matches(stringBuilder.ToString(), $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName})-(.+).zip");
+            var matches = Regex.Matches(stringBuilder.ToString(),
+                $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName}|{WpfTemplate.TemplateName})-(.+).zip");
             foreach (Match match in matches)
             {
                 templateList.Add((match.Groups[1].Value, match.Groups[2].Value));
