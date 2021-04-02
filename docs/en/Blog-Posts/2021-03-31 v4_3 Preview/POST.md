@@ -63,7 +63,7 @@ CMS (Content Management System) Kit was a module we worked on for the last coupl
 * **Reactions**: Allows users to react to content via emojis, like a smile, upvote, downvote, etc.
 * **Rating**: This component is used to rate content by users.
 
-All features are separately usable. For example, you can create an image gallery and reuse the Comments and Tags features for the images. You can enable/disable features individually using the [Global Features System](https://docs.abp.io/en/abp/4.3/global-features).
+All features are separately usable. For example, you can create an image gallery and reuse the Comments and Tags features for the images. You can enable/disable features individually using the [Global Features System](https://docs.abp.io/en/abp/4.3/Global-Features).
 
 > We will create a separate blog post for the CMS Kit module, so I keep it short.
 
