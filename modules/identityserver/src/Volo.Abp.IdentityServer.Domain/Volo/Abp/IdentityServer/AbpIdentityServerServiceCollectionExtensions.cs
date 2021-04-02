@@ -10,5 +10,10 @@ namespace Volo.Abp.IdentityServer
         {
             services.Replace(ServiceDescriptor.Transient<IRedirectUriValidator, AbpStrictRedirectUriValidator>());
         }
+
+        public static void AddAbpClientConfigurationValidator(this IServiceCollection services)
+        {
+            services.Replace(ServiceDescriptor.Transient<IClientConfigurationValidator, AbpClientConfigurationValidator>());
+        }
     }
 }
