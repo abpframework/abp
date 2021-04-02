@@ -20,6 +20,10 @@
                     abp.notify.success(l('SuccessfullySaved'));
                     abp.ui.clearBusy();
                     location.href = "../Pages";
+                },
+                error: function(result){
+                    abp.ui.clearBusy();
+                    abp.notify.error(result.responseJSON.error.message);
                 }
             });
         }
