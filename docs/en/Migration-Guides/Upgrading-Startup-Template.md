@@ -84,5 +84,5 @@ Comparison result clearly shows the necessary changes should be done on upgrade.
 ## Notes
 
 * Sometimes, you may find some changes are unnecessary for your own solution. You may deleted these or already customized. In these cases, you can just ignore it.
-* If you do not upgrade your solution as described in this document, your application will continue to work as long as you implement the breaking changes documented in the [migration guide](Index.md).
+* If you do not upgrade your solution as described in this document, your application will continue to work as long as you implement the breaking changes documented in the [migration guide](Index.md). However, you may not get benefit of some new features those require changes in your solution files.
 * Most of the times, there will be a few or no differences on the startup templates. When there are  important changes, we write a note to the related migration guide, so you apply them manually.
