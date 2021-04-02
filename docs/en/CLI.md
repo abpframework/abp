@@ -166,8 +166,8 @@ abp add-package Volo.Abp.MongoDB
 #### Options
 
 * `--project` or `-p`: Specifies the project (.csproj) file path. If not specified, CLI tries to find a .csproj file in the current directory.
-* `--with-source-code`: Downloads the source code of the package to your solution folder and uses local project references instead of NuGet/NPM packages. This options is always `True` if `--new` is used.
-* `--add-to-solution-file`: Adds the downloaded/created package to your solution file, so you will also see the projects of the package when you open the solution on a IDE. (only available when `--with-source-code` is `True`.)
+* `--with-source-code`: Downloads the source code of the package to your solution folder and uses local project references instead of NuGet/NPM packages.
+* `--add-to-solution-file`: Adds the downloaded package to your solution file, so you will also see the package when you open the solution on a IDE. (only available when `--with-source-code` is True.)
 
 ### add-module
 
