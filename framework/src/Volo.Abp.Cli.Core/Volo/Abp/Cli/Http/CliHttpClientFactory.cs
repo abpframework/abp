@@ -8,12 +8,13 @@ namespace Volo.Abp.Cli.Http
 {
     public class CliHttpClientFactory : ISingletonDependency
     {
-        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(1);
+        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(2);
 
         private readonly IHttpClientFactory _clientFactory;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
-        public CliHttpClientFactory(IHttpClientFactory clientFactory, ICancellationTokenProvider cancellationTokenProvider)
+        public CliHttpClientFactory(IHttpClientFactory clientFactory,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
             _clientFactory = clientFactory;
             _cancellationTokenProvider = cancellationTokenProvider;
