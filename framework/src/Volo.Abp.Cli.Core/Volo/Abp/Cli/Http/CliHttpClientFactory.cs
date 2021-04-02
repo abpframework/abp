@@ -13,7 +13,8 @@ namespace Volo.Abp.Cli.Http
         private readonly IHttpClientFactory _clientFactory;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
-        public CliHttpClientFactory(IHttpClientFactory clientFactory, ICancellationTokenProvider cancellationTokenProvider)
+        public CliHttpClientFactory(IHttpClientFactory clientFactory,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
             _clientFactory = clientFactory;
             _cancellationTokenProvider = cancellationTokenProvider;
