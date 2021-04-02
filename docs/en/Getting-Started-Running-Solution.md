@@ -3,7 +3,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }
@@ -15,7 +15,7 @@
 
 ### Connection String
 
-Check the **connection string** in the `appsettings.json` file under the {{if Tiered == "Yes"}}`.IdentityServer` and `.HttpApi.Host` projects{{else}}{{if UI=="MVC"}}`.Web` project{{else}}`.HttpApi.Host` project{{end}}{{end}}
+Check the **connection string** in the `appsettings.json` file under the {{if Tiered == "Yes"}}`.IdentityServer` and `.HttpApi.Host` projects{{else}}{{if UI=="MVC"}}`.Web` project{{else if UI=="BlazorServer"}}`.Blazor` project{{else}}`.HttpApi.Host` project{{end}}{{end}}.
 
 {{ if DB == "EF" }}
 
@@ -91,7 +91,7 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 ## Run the Application
 
-{{ if UI == "MVC" }}
+{{ if UI == "MVC" || UI == "BlazorServer" }}
 
 {{ if Tiered == "Yes" }}
 
@@ -109,7 +109,7 @@ You can login, but you cannot enter to the main application here. This is **just
 
 This is the HTTP API that is used by the web application.
 
-3. Lastly, ensure that the `.Web` project is the startup project and run the application which will open a **welcome** page in your browser
+3. Lastly, ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the startup project and run the application which will open a **welcome** page in your browser
 
 ![mvc-tiered-app-home](images/bookstore-home.png)
 
@@ -119,7 +119,7 @@ Click to the **login** button which will redirect you to the *authentication ser
 
 {{ else # Tiered != "Yes" }}
 
-Ensure that the `.Web` project is the startup project. Run the application which will open the **login** page in your browser:
+Ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the startup project. Run the application which will open the **login** page in your browser:
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
@@ -127,7 +127,7 @@ Ensure that the `.Web` project is the startup project. Run the application which
 
 {{ end # Tiered }}
 
-{{ else # UI != "MVC" }}
+{{ else # UI != MVC || BlazorServer }}
 
 ### Running the HTTP API Host (Server Side)
 
