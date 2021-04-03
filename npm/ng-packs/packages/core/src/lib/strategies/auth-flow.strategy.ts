@@ -140,7 +140,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   async init() {
-    if (!getCookieValueByName('rememberMe') && localStorage.getItem(this.storageKey)) {
+    this.setRememberMe(false);
+    if (!getCookieValueByName(this.cookieKey) && localStorage.getItem(this.storageKey)) {
       this.oAuthService.logOut();
     }
 
