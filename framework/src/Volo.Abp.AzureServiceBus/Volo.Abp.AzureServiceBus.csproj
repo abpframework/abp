@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
+    
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.1.1" />
+        <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
+    </ItemGroup>
+
+</Project>
