@@ -33,6 +33,8 @@ This version will focus on .NET 6 and performance improvements.
 
 **Planned release date**: End of Quarter 4, 2021.
 
+> Note: v5.0 features will be more clear in the next months. We will consider to add new features from the *Backlog Items*.
+
 ## Backlog Items
 
 The *Next Versions* section above shows the main focus of the planned versions. However, in each release we add new features to the core framework and the [application modules](Modules/Index.md).
