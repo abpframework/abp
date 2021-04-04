@@ -9,7 +9,7 @@ This document provides a road map, release schedule and planned features for the
 This version will focus on **documentation** and **improvements** of current features. In addition, the following features are planned;
 
 * Publishing distributed events as transactional ([#6126](https://github.com/abpframework/abp/issues/6126))
-* Revisit the [microservice demo solution](Samples/Microservice-Demo.md)
+* Revisit the microservice demo solution ([#8385](https://github.com/abpframework/abp/issues/8385))
 * A new UI Theme alternative to the Basic Theme ([#6132](https://github.com/abpframework/abp/issues/6132))
 * Improvements and new features to the [CMS Kit](Modules/Cms-Kit.md) module ([#8380](https://github.com/abpframework/abp/issues/8380) [#8381](https://github.com/abpframework/abp/issues/8381))
 * Pre-configured test project for the [Blazor UI](UI/Blazor/Overall.md) ([#5516](https://github.com/abpframework/abp/issues/5516))
