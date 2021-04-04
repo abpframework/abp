@@ -29,6 +29,7 @@ This version will focus on .NET 6 and performance improvements.
 * .NET Trimming compatibility
 * Using source generators and reducing reflection usage
 * Performance improvements
+* Improving the abp.io platform
 * API Versioning system: finalize & document ([#497](https://github.com/abpframework/abp/issues/497))
 
 **Planned release date**: End of Quarter 4, 2021.
