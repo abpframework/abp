@@ -1,3 +1,4 @@
+import { isDevMode } from '@angular/core';
 import { SubscriptionService } from '@abp/ng.core';
 import {
   Component,
@@ -206,14 +207,20 @@ export class ModalComponent implements OnDestroy {
 
     setTimeout(() => {
       if (!this.abpClose) return;
-      console.warn(
-        'Please use abpClose directive instead of #abpClose template variable. #abpClose will be removed in v5.0',
-      );
+      this.warnForDeprecatedClose();
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => this.close());
     }, 0);
 
     this.init.emit();
+  }
+
+  private warnForDeprecatedClose() {
+    if (isDevMode()) {
+      console.warn(
+        'Please use abpClose directive instead of #abpClose template variable. #abpClose will be removed in v5.0',
+      );
+    }
   }
 }
