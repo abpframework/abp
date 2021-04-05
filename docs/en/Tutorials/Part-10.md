@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -1078,7 +1078,7 @@ That's all. Just run the application and try to create or edit an author.
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ### The Book List
 

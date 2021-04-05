@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -832,7 +832,7 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ## The Author Management Page
 
