@@ -1,5 +1,9 @@
 # Razor Integration
 
+
+The Razor template is a standard C# class, so you can freely use the functions of C#, such as `dependency injection`, using `LINQ`, custom methods, and even using `Repository`.
+
+
 ## Installation
 
 It is suggested to use the [ABP CLI](CLI.md) to install this package.
@@ -41,9 +45,30 @@ You need to add the `MetadataReference` of the type used in the template to `CSh
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    Configure<CSharpCompilerOptions>(options =>
+    Configure<AbpRazorTemplateCSharpCompilerOptions>(options =>
     {
         options.References.Add(MetadataReference.CreateFromFile(typeof(YourModule).Assembly.Location));
+    });
+}
+````
+
+## Add MetadataReference for a template.
+
+You can add some `MetadataReference` to the template
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    services.Configure<AbpCompiledViewProviderOptions>(options =>
+    {
+        //Hello is template name.
+        options.TemplateReferences.Add("Hello", new List<Assembly>()
+            {
+                Assembly.Load("Microsoft.Extensions.Logging.Abstractions"),
+                Assembly.Load("Microsoft.Extensions.Logging")
+            }
+            .Select(x => MetadataReference.CreateFromFile(x.Location))
+            .ToList());
     });
 }
 ````
@@ -72,6 +97,11 @@ public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
 * `TemplateDefinition` is the class represents a template. Each template must have a unique name (that will be used while you are rendering the template).
 * `/Demos/Hello/Hello.cshtml` is the path of the template file.
 * `isInlineLocalized` is used to declare if you are using a single template for all languages (`true`) or different templates for each language (`false`). See the Localization section below for more.
+
+### The Template Base
+
+Every `cshtml` template page needs to inherit `RazorTemplatePageBase` or `RazorTemplatePageBase<Model>`.
+There are some useful properties in the base class that can be used in templates. eg: `Localizer`, `ServiceProvider`.
 
 ### The Template Content
 
