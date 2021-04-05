@@ -37,6 +37,7 @@ import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
+import { ModalCloseDirective } from './components/modal/modal-close.directive';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -55,6 +56,7 @@ const declarationsWithExports = [
   NgxDatatableListDirective,
   LoadingDirective,
   TableSortDirective,
+  ModalCloseDirective,
 ];
 
 @NgModule({
