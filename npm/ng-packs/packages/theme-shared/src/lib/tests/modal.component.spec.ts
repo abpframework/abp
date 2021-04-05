@@ -51,7 +51,7 @@ describe('ModalComponent', () => {
 
         <ng-template #abpFooter>
           <div class="footer">
-            <button id="abp-close" #abpClose></button>
+            <button id="abp-close" abpClose></button>
             <abp-button>Submit</abp-button>
           </div>
         </ng-template>
