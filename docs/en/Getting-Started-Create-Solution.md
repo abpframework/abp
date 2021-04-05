@@ -15,7 +15,7 @@
 
 We will use the ABP CLI to create a new ABP project.
 
-> Alternatively, you can **create and download** projects from [ABP Framework website](https://abp.io/get-started) by easily selecting the all the options from the page.
+> Alternatively, you can **create and download** projects from the [ABP Framework website](https://abp.io/get-started) by easily selecting all options from the page.
 
 Use the `new` command of the ABP CLI to create a new project:
 
@@ -49,7 +49,7 @@ The solution has a layered structure (based on the [Domain Driven Design](Domain
 
 #### MongoDB Transactions
 
-The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable the it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
+The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
