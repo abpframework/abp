@@ -162,7 +162,7 @@ Inline localization uses the [localization system](Localization.md) to localize 
 
 Assuming you need to send an email to a user to reset her/his password. Here, the model/template content:
 
-````
+````csharp
 namespace ResetMyPasswordModelNamespace
 {
     public class ResetMyPasswordModel
@@ -174,7 +174,7 @@ namespace ResetMyPasswordModelNamespace
 }
 ````
 
-````
+````html
 @inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase<ResetMyPasswordModelNamespace.ResetMyPasswordModel>
 <a title="@Localizer["ResetMyPasswordTitle"]" href="@Model.Link">@Localizer["ResetMyPassword", Model.Name]</a>
 ````
@@ -215,7 +215,7 @@ var result = await _templateRenderer.RenderAsync(
 
 You will see the localized result:
 
-````csharp
+````html
 <a title="Reset my password" href="https://abp.io/example-link?userId=123&token=ABC">Hi john, Click here to reset your password</a>
 ````
 
@@ -281,7 +281,7 @@ For example, you may want to create a single layout for all of your email templa
 
 First, create a template file just like before:
 
-````csharp
+````html
 @inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -331,7 +331,7 @@ ABP passes the `model` that can be used to access to the model inside the templa
 
 An example template content:
 
-````csharp
+````html
 @inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase
 A global object value: @GlobalContext["myGlobalObject"]
 ````
