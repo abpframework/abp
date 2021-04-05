@@ -1,7 +1,5 @@
 # Entity Action Extensions for Blazor UI
 
-## Introduction
-
 Entity action extension system allows you to add a **new action** to the action menu for an entity. A **Click Me** action was added to the *User Management* page below:
 
 ![user-action-extension-click-me](../../images/user-action-blazor-extension-click-me.png)
