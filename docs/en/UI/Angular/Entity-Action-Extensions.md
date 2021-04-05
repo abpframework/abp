@@ -180,7 +180,7 @@ Let's employ dependency injection to extend the functionality of `IdentityModule
     </ng-template>
 
     <ng-template #abpFooter>
-      <button type="button" class="btn btn-secondary" #abpClose>
+      <button type="button" class="btn btn-secondary" abpClose>
         {%{{{ 'AbpUi::Close' | abpLocalization }}}%}
       </button>
     </ng-template>
