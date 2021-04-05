@@ -882,6 +882,15 @@
                   ]
                 }
               ]
+            },
+            {
+              "text": "Components",
+              "items": [
+                {
+                  "text": "Page",
+                  "path": "UI/Angular/Page-Component.md"
+                }
+              ]
             }
           ]
         },
