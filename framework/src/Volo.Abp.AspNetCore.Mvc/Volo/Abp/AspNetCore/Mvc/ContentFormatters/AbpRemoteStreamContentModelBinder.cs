@@ -115,13 +115,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
                     }
                 }
             }
-            else
-            {
-                postedFiles.Add(new RemoteStreamContent(request.Body)
-                {
-                    ContentType = request.ContentType
-                });
-            }
         }
     }
 }
