@@ -1005,14 +1005,6 @@
           "path": "Modules/Background-Jobs.md"
         },
         {
-          "text": "Blogging",
-          "path": "Modules/Blogging.md"
-        },
-        {
-          "text": "Client Simulation",
-          "path": "Modules/Client-Simulation.md"
-        },
-        {
           "text": "CMS Kit",
           "path": "Modules/Cms-Kit.md"
         },
@@ -1043,10 +1035,6 @@
         {
           "text": "Tenant Management",
           "path": "Modules/Tenant-Management.md"
-        },
-        {
-          "text": "Users",
-          "path": "Modules/Users.md"
         },
         {
           "text": "Virtual File Explorer",
