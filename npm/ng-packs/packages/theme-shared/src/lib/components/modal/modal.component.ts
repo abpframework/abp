@@ -78,6 +78,9 @@ export class ModalComponent implements OnDestroy {
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
 
+  /**
+   * @deprecated will be removed in v5.0
+   */
   @ContentChild('abpClose', { static: false, read: ElementRef })
   abpClose: ElementRef<any>;
 
@@ -203,6 +206,9 @@ export class ModalComponent implements OnDestroy {
 
     setTimeout(() => {
       if (!this.abpClose) return;
+      console.warn(
+        'Please use abpClose directive instead of #abpClose template variable. #abpClose will be removed in v5.0',
+      );
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => this.close());
