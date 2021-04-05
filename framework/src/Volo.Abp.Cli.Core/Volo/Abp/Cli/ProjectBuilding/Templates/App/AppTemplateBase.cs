@@ -169,10 +169,23 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new ChangePublicAuthPortStep());
             }
 
-            if (!context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit"))
+            if (!context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit") && IsCmsKitSupportedForTargetVersion(context))
             {
                 context.Symbols.Add("CMS-KIT");
             }
+        }
+
+        private bool IsCmsKitSupportedForTargetVersion(ProjectBuildContext context)
+        {
+            if (string.IsNullOrWhiteSpace(context.BuildArgs.Version))
+            {
+                // We'll return true after 4.3.0 stable release. see https://github.com/abpframework/abp/issues/8394
+                // return true;
+
+                return context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long);
+            }
+
+            return SemanticVersion.Parse(context.BuildArgs.Version) > SemanticVersion.Parse("4.2.9");
         }
 
         private static void ConfigureWithoutUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
