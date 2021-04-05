@@ -9,6 +9,12 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
     public class VirtualFolderLocalizedTemplateContentReader : ILocalizedTemplateContentReader
     {
         private Dictionary<string, string> _dictionary;
+        private readonly string[] _fileExtension;
+
+        public VirtualFolderLocalizedTemplateContentReader(string[] fileExtension)
+        {
+            _fileExtension = fileExtension;
+        }
 
         public async Task ReadContentsAsync(
             IVirtualFileProvider virtualFileProvider,
@@ -29,7 +35,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                     continue;
                 }
 
-                _dictionary.Add(file.Name.RemovePostFix(".tpl"), await file.ReadAsStringAsync());
+                _dictionary.Add(file.Name.RemovePostFix(_fileExtension), await file.ReadAsStringAsync());
             }
         }
 

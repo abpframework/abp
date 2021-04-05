@@ -7,13 +7,13 @@ using Scriban;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating.Scriban
 {
-    public class TemplateLocalizer : IScriptCustomFunction
+    public class ScribanTemplateLocalizer : IScriptCustomFunction
     {
         private readonly IStringLocalizer _localizer;
 
-        public TemplateLocalizer(IStringLocalizer localizer)
+        public ScribanTemplateLocalizer(IStringLocalizer localizer)
         {
             _localizer = localizer;
         }

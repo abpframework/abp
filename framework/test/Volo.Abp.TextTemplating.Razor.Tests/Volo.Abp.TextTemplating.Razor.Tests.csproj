@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\common.test.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Volo\Abp\TextTemplating\Razor\SampleTemplates\**\*.cshtml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <None Remove="Volo\Abp\TextTemplating\Razor\SampleTemplates\**\*.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating.Razor\Volo.Abp.TextTemplating.Razor.csproj" />
+        <ProjectReference Include="..\Volo.Abp.TextTemplating.Tests\Volo.Abp.TextTemplating.Tests.csproj" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    </ItemGroup>
+
+</Project>

@@ -7,7 +7,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.TextTemplating
 {
     [DependsOn(
-        typeof(AbpTextTemplatingModule),
+        typeof(AbpTextTemplatingAbstractionsModule),
         typeof(AbpTestBaseModule),
         typeof(AbpAutofacModule),
         typeof(AbpLocalizationModule)
