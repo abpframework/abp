@@ -2,28 +2,35 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.Language;
+using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.TextTemplating.Razor
 {
-    public class DefaultCompiledViewProvider : ICompiledViewProvider, ITransientDependency
+    public class DefaultAbpCompiledViewProvider : IAbpCompiledViewProvider, ITransientDependency
     {
         private static readonly ConcurrentDictionary<string, Assembly> CachedAssembles = new ConcurrentDictionary<string, Assembly>();
 
-        private readonly CSharpCompiler _cSharpCompiler;
-        private readonly IRazorProjectEngineFactory _razorProjectEngineFactory;
+        private readonly AbpCompiledViewProviderOptions _options;
+        private readonly AbpRazorTemplateCSharpCompiler _razorTemplateCSharpCompiler;
+        private readonly IAbpRazorProjectEngineFactory _razorProjectEngineFactory;
         private readonly ITemplateContentProvider _templateContentProvider;
 
-        public DefaultCompiledViewProvider(
-            IRazorProjectEngineFactory razorProjectEngineFactory,
-            CSharpCompiler cSharpCompiler,
+        public DefaultAbpCompiledViewProvider(
+            IOptions<AbpCompiledViewProviderOptions> options,
+            IAbpRazorProjectEngineFactory razorProjectEngineFactory,
+            AbpRazorTemplateCSharpCompiler razorTemplateCSharpCompiler,
             ITemplateContentProvider templateContentProvider)
         {
+            _options = options.Value;
+
             _razorProjectEngineFactory = razorProjectEngineFactory;
-            _cSharpCompiler = cSharpCompiler;
+            _razorTemplateCSharpCompiler = razorTemplateCSharpCompiler;
             _templateContentProvider = templateContentProvider;
         }
 
@@ -58,7 +65,13 @@ namespace Volo.Abp.TextTemplating.Razor
 
             var cSharpDocument = codeDocument.GetCSharpDocument();
 
-            return _cSharpCompiler.CreateAssembly(cSharpDocument.GeneratedCode, templateDefinition.Name);
+            var templateReferences = _options.TemplateReferences
+                .GetOrDefault(templateDefinition.Name)
+                ?.Select(x => x)
+                .Cast<MetadataReference>()
+                .ToList();
+
+            return _razorTemplateCSharpCompiler.CreateAssembly(cSharpDocument.GeneratedCode, templateDefinition.Name, templateReferences);
         }
     }
 }

@@ -12,11 +12,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.TextTemplating.Razor
 {
-    public class CSharpCompiler : ISingletonDependency
+    public class AbpRazorTemplateCSharpCompiler : ISingletonDependency
     {
-        protected CSharpCompilerOptions Options { get; }
+        protected AbpRazorTemplateCSharpCompilerOptions Options { get; }
 
-        public CSharpCompiler(IOptions<CSharpCompilerOptions> options)
+        public AbpRazorTemplateCSharpCompiler(IOptions<AbpRazorTemplateCSharpCompilerOptions> options)
         {
             Options = options.Value;
         }
@@ -35,7 +35,7 @@ namespace Volo.Abp.TextTemplating.Razor
                 Assembly.Load("Microsoft.Extensions.Localization"),
                 Assembly.Load("Microsoft.Extensions.Localization.Abstractions"),
 
-                typeof(CSharpCompiler).Assembly
+                typeof(AbpRazorTemplateCSharpCompiler).Assembly
             }
             .Select(x => MetadataReference.CreateFromFile(x.Location))
             .ToImmutableList();

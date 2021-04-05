@@ -17,7 +17,7 @@ namespace Volo.Abp.TextTemplating.Razor
                 options.FileSets.AddEmbedded<RazorTextTemplatingTestModule>("Volo.Abp.TextTemplating.Razor");
             });
 
-            Configure<CSharpCompilerOptions>(options =>
+            Configure<AbpRazorTemplateCSharpCompilerOptions>(options =>
             {
                 options.References.Add(MetadataReference.CreateFromFile(typeof(RazorTextTemplatingTestModule).Assembly.Location));
             });

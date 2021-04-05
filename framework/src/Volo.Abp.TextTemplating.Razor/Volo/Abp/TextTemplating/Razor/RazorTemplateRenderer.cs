@@ -16,20 +16,20 @@ namespace Volo.Abp.TextTemplating.Razor
     public class RazorTemplateRenderer : ITemplateRenderer, ITransientDependency
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ICompiledViewProvider _compiledViewProvider;
+        private readonly IAbpCompiledViewProvider _abpCompiledViewProvider;
         private readonly ITemplateDefinitionManager _templateDefinitionManager;
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
         public RazorTemplateRenderer(
             IServiceScopeFactory serviceScopeFactory,
-            ICompiledViewProvider compiledViewProvider,
+            IAbpCompiledViewProvider abpCompiledViewProvider,
             ITemplateDefinitionManager templateDefinitionManager,
             IStringLocalizerFactory stringLocalizerFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _templateDefinitionManager = templateDefinitionManager;
             _stringLocalizerFactory = stringLocalizerFactory;
-            _compiledViewProvider = compiledViewProvider;
+            _abpCompiledViewProvider = abpCompiledViewProvider;
         }
 
         public virtual async Task<string> RenderAsync(
@@ -115,7 +115,7 @@ namespace Volo.Abp.TextTemplating.Razor
             Dictionary<string, object> globalContext,
             object model = null)
         {
-            var assembly = await _compiledViewProvider.GetAssemblyAsync(templateDefinition);
+            var assembly = await _abpCompiledViewProvider.GetAssemblyAsync(templateDefinition);
             var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName);
             var template = (IRazorTemplatePage) Activator.CreateInstance(templateType);
 

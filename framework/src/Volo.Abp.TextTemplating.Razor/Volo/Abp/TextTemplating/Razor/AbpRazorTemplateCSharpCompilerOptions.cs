@@ -3,11 +3,11 @@ using Microsoft.CodeAnalysis;
 
 namespace Volo.Abp.TextTemplating.Razor
 {
-    public class CSharpCompilerOptions
+    public class AbpRazorTemplateCSharpCompilerOptions
     {
         public List<PortableExecutableReference> References { get; }
 
-        public CSharpCompilerOptions()
+        public AbpRazorTemplateCSharpCompilerOptions()
         {
             References = new List<PortableExecutableReference>();
         }

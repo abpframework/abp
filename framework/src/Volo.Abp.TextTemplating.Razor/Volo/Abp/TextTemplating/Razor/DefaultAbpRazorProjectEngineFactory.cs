@@ -5,7 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.TextTemplating.Razor
 {
-    public class DefaultRazorProjectEngineFactory : IRazorProjectEngineFactory, ITransientDependency
+    public class DefaultAbpRazorProjectEngineFactory : IAbpRazorProjectEngineFactory, ITransientDependency
     {
         public virtual async Task<RazorProjectEngine> CreateAsync(Action<RazorProjectEngineBuilder> configure = null)
         {
