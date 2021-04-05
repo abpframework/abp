@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.TextTemplating.Razor
+﻿using Volo.Abp.TextTemplating.Razor.SampleTemplates;
+
+namespace Volo.Abp.TextTemplating.Razor
 {
     public class RazorTestTemplateDefinitionProvider : TemplateDefinitionProvider
     {
@@ -15,6 +17,8 @@
 
             context.GetOrNull(TestTemplates.ShowDecimalNumber)?
                 .WithVirtualFilePath("/SampleTemplates/ShowDecimalNumber.cshtml", true);
+
+            context.Add(new TemplateDefinition(RazorTestTemplates.TestTemplate).WithVirtualFilePath("/SampleTemplates/TestTemplate.cshtml", true));
         }
     }
 }
