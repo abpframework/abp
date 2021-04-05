@@ -4,14 +4,14 @@ ABP provides a component that wraps your content with some built-in components t
 
 If the template of a component looks as follows, you can utilize the `abp-page` component.
 
-E.g. 
+Let's look at the following example without `abp-page` component.
 
-`app.component.ts`
+`dashboard.component.ts`
 
 ```html
 <div class="row entry-row">
   <div class="col-auto">
-    <h1 class="content-header-title">{{ '::AppTitle' | abpLocalization }}</h1>
+    <h1 class="content-header-title">{{ '::Dashboard' | abpLocalization }}</h1>
   </div>
   <div id="breadcrumb" class="col-lg-auto pl-lg-0">
     <abp-breadcrumb></abp-breadcrumb>
@@ -21,8 +21,8 @@ E.g.
   </div>
 </div>
 
-<div id="app-id">
-  <!-- app content here -->
+<div id="dashboard-id">
+  <!-- dashboard content here -->
 </div>
 ```
 
@@ -36,30 +36,32 @@ export enum PageParts {
   breadcrumb = 'PageBreadcrumbContainerComponent',
   toolbar = 'PageToolbarContainerComponent',
 }
+
+// You can import this enum from -> import { PageParts } from '@abp/ng.components/page';
 ```
 
 ## Usage
 
 Firstly, you need to import `PageModule` from `@abp/ng.components/page` as follows:
 
-`app.module.ts`
+`dashboard.module.ts`
 
 ```javascript
 import { PageModule } from '@abp/ng.components/page';
-import { AppComponent } from './app.component';
+import { DashboardComponent } from './dashboard.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [DashboardComponent],
   imports: [PageModule]
 })
-export class AppModule {}
+export class DashboardModule {}
 ```
 
-And change the template of `app.component.ts` to the following:
+And change the template of `dashboard.component.ts` to the following:
 
 ```html
-<abp-page [title]="'::AppTitle' | abpLocalization" [toolbar]="data">
-  <div id="app-id">
+<abp-page [title]="'::Dashboard' | abpLocalization" [toolbar]="data">
+  <div id="dashboard-id">
     <!-- .... -->
   </div>
 </abp-page>
@@ -150,6 +152,7 @@ import { 
   PageParts,
   PAGE_RENDER_STRATEGY
 } from '@abp/ng.components/page';
+
 @Injectable()
 export class MyPageRenderStrategy implements PageRenderStrategy {
   shouldRender(type: string) {
@@ -182,24 +185,24 @@ export class MyPageRenderStrategy implements PageRenderStrategy {
 }
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-dashboard',
   template: `
-    <abp-page [title]="'App::AppTitle' | abpLocalization">
+    <abp-page [title]="'::Dashboard' | abpLocalization">
       <abp-page-toolbar-container>
-        <button>New App</button>
+        <button>New Dashboard</button>
       </abp-page-toolbar-container>
 
-      <div class="app-content">
+      <div class="dashboard-content">
         <h3 *abpPagePart="'custom-part'"> Inner Title </h3>
       </div>
     </abp-page>
   `
 })
-export class AppComponent {}
+export class DashboardComponent {}
 
 @NgModule({
   imports: [PageModule],
-  declarations: [AppComponent],
+  declarations: [DashboardComponent],
   providers: [
     {
       provide: PAGE_RENDER_STRATEGY,
@@ -207,7 +210,7 @@ export class AppComponent {}
     }
   ]
 })
-export class AppModule {}
+export class DashboardModule {}
 ```
 
 ## See Also
