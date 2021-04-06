@@ -107,7 +107,7 @@ namespace Volo.Abp.SettingManagement.DemoApp
             }
 
             app.UseHttpsRedirection();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

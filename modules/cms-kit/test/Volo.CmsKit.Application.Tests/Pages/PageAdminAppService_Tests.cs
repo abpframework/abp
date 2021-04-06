@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Shouldly;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Shouldly;
-using Volo.Abp.Uow;
 using Volo.CmsKit.Admin.Pages;
-using Volo.CmsKit.Contents;
 using Xunit;
 
 namespace Volo.CmsKit.Pages

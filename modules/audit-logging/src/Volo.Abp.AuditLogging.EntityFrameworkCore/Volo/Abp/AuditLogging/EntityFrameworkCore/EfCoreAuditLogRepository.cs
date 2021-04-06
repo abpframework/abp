@@ -54,7 +54,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 includeDetails
             );
 
-            var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
+            var auditLogs = await query
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(AuditLog.ExecutionTime) + " DESC") : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -185,7 +186,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             var query = await GetEntityChangeListQueryAsync(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, includeDetails);
 
-            return await query.OrderBy(sorting ?? "changeTime desc")
+            return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(EntityChange.ChangeTime) + " DESC") : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

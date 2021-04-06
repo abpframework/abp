@@ -14,7 +14,7 @@ namespace Volo.Abp.Kafka
     {
         protected AbpKafkaOptions Options { get; }
 
-        protected ConcurrentDictionary<string, IProducer<string, byte[]>> Producers { get; }
+        protected ConcurrentDictionary<string, Lazy<IProducer<string, byte[]>>> Producers { get; }
 
         protected TimeSpan TotalDisposeWaitDuration { get; set; } = TimeSpan.FromSeconds(10);
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.Kafka
         {
             Options = options.Value;
 
-            Producers = new ConcurrentDictionary<string, IProducer<string, byte[]>>();
+            Producers = new ConcurrentDictionary<string, Lazy<IProducer<string, byte[]>>>();
             Logger = new NullLogger<ProducerPool>();
         }
 
@@ -35,14 +35,14 @@ namespace Volo.Abp.Kafka
             connectionName ??= KafkaConnections.DefaultConnectionName;
 
             return Producers.GetOrAdd(
-                connectionName, connection =>
+                connectionName, connection => new Lazy<IProducer<string, byte[]>>(() =>
                 {
                     var config = Options.Connections.GetOrDefault(connection);
 
                     Options.ConfigureProducer?.Invoke(new ProducerConfig(config));
 
                     return new ProducerBuilder<string, byte[]>(config).Build();
-                });
+                })).Value;
         }
 
         public void Dispose()
@@ -72,7 +72,7 @@ namespace Volo.Abp.Kafka
 
                 try
                 {
-                    producer.Dispose();
+                    producer.Value.Dispose();
                 }
                 catch
                 {

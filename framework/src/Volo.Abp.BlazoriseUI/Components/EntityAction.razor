@@ -1,21 +1,24 @@
 ﻿@typeparam TItem
-@using Blazorise
 
-@if (ParentActions.Type == ActionType.Dropdown)
+@if (Visible && HasPermission)
 {
-    if (IsVisible && Primary == false)
+    if (ParentActions.Type == ActionType.Dropdown)
     {
-        <DropdownItem Clicked="@ActionClickedAsync">@Text</DropdownItem>
+        if (Primary == false)
+        {
+            <DropdownItem Clicked="@ActionClickedAsync">@Text</DropdownItem>
+        }
     }
-}
-else
-{
-    if (IsVisible)
+    else
     {
-        <Blazorise.Button Block="true"
-                          Color="@Color"
-                          Clicked="@ActionClickedAsync">
+        <Button Block="true"
+                Color="@Color"
+                Clicked="@ActionClickedAsync">
+            @if(!string.IsNullOrEmpty(Icon))
+            {
+                <Icon Name="@Icon"/>
+            }
             @Text
-        </Blazorise.Button>
+        </Button>
     }
 }

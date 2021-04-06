@@ -3,7 +3,6 @@ using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
-using Volo.CmsKit.Blogs.Extensions;
 
 namespace Volo.CmsKit.Blogs
 {
@@ -17,7 +16,12 @@ namespace Volo.CmsKit.Blogs
 
         public virtual Guid? TenantId { get; protected set; }
         
-        protected internal Blog(Guid id, [NotNull] string name, [NotNull] string slug, [CanBeNull] Guid? tenantId = null) : base(id)
+        protected internal Blog(
+            Guid id,
+            [NotNull] string name,
+            [NotNull] string slug,
+            [CanBeNull] Guid? tenantId = null
+            ) : base(id)
         {
             SetName(name);
             SetSlug(slug);
@@ -33,7 +37,7 @@ namespace Volo.CmsKit.Blogs
         {
             Check.NotNullOrWhiteSpace(slug, nameof(slug), BlogConsts.MaxNameLength);
 
-            Slug = slug.NormalizeSlug();
+            Slug = SlugNormalizer.Normalize(slug);
         }
     }
 }

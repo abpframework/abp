@@ -98,7 +98,7 @@ namespace Volo.CmsKit.Blogs
         [Fact]
         public async Task GetListAsync_ShouldWorkProperly_WithDefaultParameters()
         {
-            var list = await blogPostAdminAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            var list = await blogPostAdminAppService.GetListAsync(new BlogPostGetListInput());
 
             list.ShouldNotBeNull();
             list.TotalCount.ShouldBe(2);
@@ -156,28 +156,5 @@ namespace Volo.CmsKit.Blogs
             exception.EntityType.ShouldBe(typeof(BlogPost));
             exception.Id.ShouldBe(cmsKitTestData.Page_2_Id);
         }
-
-        [Fact]
-        public async Task SetCoverImage_ShouldNotThrowException_WithCorrectData()
-        {
-            using (var imageStream = GetSampleImageStream())
-            {
-                await WithUnitOfWorkAsync(async () =>
-                {
-                    await blogPostAdminAppService.SetCoverImageAsync(
-                            cmsKitTestData.BlogPost_2_Id,
-                            new RemoteStreamContent(imageStream));
-                });
-            }
-        }
-
-        private Stream GetSampleImageStream()
-        {
-            var assembly = GetType().Assembly;
-            var resourceName = "Volo.CmsKit.Data.BlogPostSample.png";
-
-            return assembly.GetManifestResourceStream(resourceName);
-        }
-        // SetCoverImage
     }
 }

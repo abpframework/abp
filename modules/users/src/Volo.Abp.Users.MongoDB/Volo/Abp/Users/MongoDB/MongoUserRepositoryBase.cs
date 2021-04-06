@@ -54,7 +54,7 @@ namespace Volo.Abp.Users.MongoDB
                         u.Name.Contains(filter) ||
                         u.Surname.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(IUserData.UserName))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IUserData.UserName) : sorting)
                 .As<IMongoQueryable<TUser>>()
                 .PageBy<TUser, IMongoQueryable<TUser>>(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);

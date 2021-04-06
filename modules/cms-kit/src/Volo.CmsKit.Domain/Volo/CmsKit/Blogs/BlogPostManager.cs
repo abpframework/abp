@@ -12,13 +12,17 @@ namespace Volo.CmsKit.Blogs
     {
         protected IBlogPostRepository BlogPostRepository { get; }
         protected IBlogRepository BlogRepository { get; }
+        protected IDefaultBlogFeatureProvider BlogFeatureProvider { get; }
+
 
         public BlogPostManager(
             IBlogPostRepository blogPostRepository,
-            IBlogRepository blogRepository)
+            IBlogRepository blogRepository,
+            IDefaultBlogFeatureProvider blogFeatureProvider)
         {
             BlogPostRepository = blogPostRepository;
             BlogRepository = blogRepository;
+            BlogFeatureProvider = blogFeatureProvider;
         }
 
         public virtual async Task<BlogPost> CreateAsync(
@@ -27,14 +31,13 @@ namespace Volo.CmsKit.Blogs
             [NotNull] string title,
             [NotNull] string slug,
             [CanBeNull] string shortDescription = null,
-            [CanBeNull] string content = null)
+            [CanBeNull] string content = null,
+            [CanBeNull] Guid? coverImageMediaId = null)
         {
             Check.NotNull(author, nameof(author));
             Check.NotNull(blog, nameof(blog));
             Check.NotNullOrEmpty(title, nameof(title));
             Check.NotNullOrEmpty(slug, nameof(slug));
-
-            await CheckBlogExistenceAsync(blog.Id);
 
             var blogPost = new BlogPost(
                         GuidGenerator.Create(),
@@ -44,6 +47,7 @@ namespace Volo.CmsKit.Blogs
                         slug,
                         shortDescription,
                         content,
+                        coverImageMediaId,
                         CurrentTenant.Id
                         );
 

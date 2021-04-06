@@ -6,7 +6,7 @@ namespace Volo.Abp.AutoMapper
     [DependsOn(
         typeof(AbpAutoMapperModule),
         typeof(AbpObjectExtendingTestModule)
-        )]
+    )]
     public class AutoMapperTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

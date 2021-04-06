@@ -11,10 +11,6 @@ namespace Volo.CmsKit.Tags
         [CanBeNull]
         public virtual ILocalizableString DisplayName { get; }
 
-        protected TagEntityTypeDefiniton()
-        {
-        }
-
         public TagEntityTypeDefiniton(
             [NotNull] string entityType,
             [CanBeNull] ILocalizableString displayName = null,
@@ -23,7 +19,6 @@ namespace Volo.CmsKit.Tags
             IEnumerable<string> deletePolicies = null) : base(entityType, createPolicies, updatePolicies, deletePolicies)
         {
             DisplayName = displayName;
-
         }
 
         public bool Equals(TagEntityTypeDefiniton other)

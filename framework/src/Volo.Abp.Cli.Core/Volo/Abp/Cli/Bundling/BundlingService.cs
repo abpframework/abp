@@ -41,12 +41,7 @@ namespace Volo.Abp.Cli.Bundling
             var projectFilePath = projectFiles[0];
 
             var config = ConfigReader.Read(PathHelper.GetWwwRootPath(directory));
-            var bundleConfig = config?.Bundle;
-
-            if (bundleConfig == null)
-            {
-                throw new BundlingException("Bundle section is missing in the appsettings.json configuration file.");
-            }
+            var bundleConfig = config.Bundle;
 
             if (forceBuild)
             {

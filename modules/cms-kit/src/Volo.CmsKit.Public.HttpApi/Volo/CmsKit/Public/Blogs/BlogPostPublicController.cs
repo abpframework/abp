@@ -30,18 +30,6 @@ namespace Volo.CmsKit.Public.Blogs
         }
 
         [HttpGet]
-        [Route("{id}/cover-image")]
-        public virtual Task<RemoteStreamContent> GetCoverImageAsync(Guid id)
-        {
-            Response.Headers.Add("Content-Disposition", $"inline;filename=\"{id}\"");
-            Response.Headers.Add("Accept-Ranges", "bytes");
-            Response.Headers.Add("Cache-Control", "max-age=120");
-            Response.ContentType = "image";
-
-            return BlogPostPublicAppService.GetCoverImageAsync(id);
-        }
-
-        [HttpGet]
         [Route("{blogSlug}")]
         public virtual Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
         {

@@ -6,8 +6,9 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Components.Web;
+using Volo.Abp.AspNetCore.Components.Web.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
-using Volo.Abp.AspNetCore.Components.WebAssembly.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -47,7 +48,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             Check.NotNull(application, nameof(application));
             Check.NotNull(serviceProvider, nameof(serviceProvider));
 
-            var serviceProviderAccessor = (WebAssemblyClientScopeServiceProviderAccessor)
+            var serviceProviderAccessor = (ComponentsClientScopeServiceProviderAccessor)
                 serviceProvider.GetRequiredService<IClientScopeServiceProviderAccessor>();
             serviceProviderAccessor.ServiceProvider = serviceProvider;
 

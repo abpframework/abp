@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.Localization;
@@ -18,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago
 
         public override void ConfigureDynamicResources(BundleConfigurationContext context)
         {
-            var fileName = context.LocalizationOptions.GetCurrentUICultureLanguageFilesMap(PackageName);
+            var fileName = context.LazyServiceProvider.LazyGetRequiredService<IOptions<AbpLocalizationOptions>>().Value.GetCurrentUICultureLanguageFilesMap(PackageName);
             var filePath = $"/libs/timeago/locales/jquery.timeago.{fileName}.js";
             if (context.FileProvider.GetFileInfo(filePath).Exists)
             {

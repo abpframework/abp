@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Blazorise;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
@@ -12,7 +13,6 @@ namespace Volo.Abp.BlazoriseUI.Components
         protected readonly List<EntityAction<TItem>> Actions = new List<EntityAction<TItem>>();
         protected bool HasPrimaryAction => Actions.Any(t => t.Primary);
         protected EntityAction<TItem> PrimaryAction => Actions.FirstOrDefault(t => t.Primary);
-        protected internal ActionType Type => Actions.Count(t => t.IsVisible) > 1 ? ActionType.Dropdown : ActionType.Button;
 
         [Parameter]
         public Color ToggleColor { get; set; } = Color.Primary;
@@ -26,23 +26,39 @@ namespace Volo.Abp.BlazoriseUI.Components
         [Parameter]
         public DataGridEntityActionsColumn<TItem> EntityActionsColumn { get; set; }
 
+        [Parameter]
+        public ActionType Type { get; set; } = ActionType.Dropdown;
+
+        [CascadingParameter]
+        public DataGridEntityActionsColumn<TItem> ParentEntityActionsColumn { get; set; }
+
         [Inject]
         public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
 
         internal void AddAction(EntityAction<TItem> action)
         {
             Actions.Add(action);
-            if (EntityActionsColumn != null)
-            {
-                EntityActionsColumn.Displayable = Actions.Any(t => t.IsVisible);
-            }
-            StateHasChanged();
         }
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
             ToggleText = UiLocalizer["Actions"];
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                if (ParentEntityActionsColumn != null)
+                {
+                    ParentEntityActionsColumn.Displayable = Actions.Any(t => t.Visible && t.HasPermission);
+                }
+
+                await InvokeAsync(StateHasChanged);
+            }
+
+            await base.OnAfterRenderAsync(firstRender);
         }
     }
 }

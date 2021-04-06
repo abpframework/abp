@@ -62,7 +62,7 @@ namespace Volo.Abp
         {
             //TODO: Shutdown if not done before?
         }
-        
+
         protected virtual void SetServiceProvider(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
@@ -79,7 +79,7 @@ namespace Volo.Abp
                     .InitializeModules(new ApplicationInitializationContext(scope.ServiceProvider));
             }
         }
-        
+
         protected virtual void WriteInitLogs(IServiceProvider serviceProvider)
         {
             var logger = serviceProvider.GetService<ILogger<AbpApplicationBase>>();
@@ -87,14 +87,14 @@ namespace Volo.Abp
             {
                 return;
             }
-            
-            var initLogger = serviceProvider.GetRequiredService<IInitLogger>();
-            
+
+            var initLogger = serviceProvider.GetRequiredService<IInitLoggerFactory>().Create<AbpApplicationBase>();
+
             foreach (var entry in initLogger.Entries)
             {
-                logger.LogWithLevel(entry.Level, entry.Message, entry.Exception);
+                logger.Log(entry.LogLevel, entry.EventId, entry.State, entry.Exception, entry.Formatter);
             }
-            
+
             initLogger.Entries.Clear();
         }
 
@@ -108,7 +108,7 @@ namespace Volo.Abp
                     options.PlugInSources
                 );
         }
-        
+
         //TODO: We can extract a new class for this
         protected virtual void ConfigureServices()
         {

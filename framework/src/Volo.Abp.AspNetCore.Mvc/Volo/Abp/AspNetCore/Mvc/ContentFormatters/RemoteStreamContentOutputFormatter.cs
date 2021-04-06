@@ -28,7 +28,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 
                 using (var stream = remoteStream.GetStream())
                 {
-                    stream.Position = 0;
+                    if (stream.CanSeek)
+                    {
+                        stream.Position = 0;
+                    }
+
                     await stream.CopyToAsync(context.HttpContext.Response.Body);
                 }
             }

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <Import Project="..\..\..\..\configureawait.props"/>
+    <Import Project="..\..\..\..\common.props"/>
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.Identity.Blazor\Volo.Abp.Identity.Blazor.csproj"/>
+        <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Blazor.Server\Volo.Abp.PermissionManagement.Blazor.Server.csproj" />
+    </ItemGroup>
+
+</Project>

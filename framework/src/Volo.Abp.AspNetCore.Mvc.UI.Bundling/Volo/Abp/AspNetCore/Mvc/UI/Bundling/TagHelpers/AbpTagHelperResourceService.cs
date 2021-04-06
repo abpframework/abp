@@ -19,18 +19,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
     {
         public ILogger<AbpTagHelperResourceService> Logger { get; set; }
         protected IBundleManager BundleManager { get; }
-        protected IWebContentFileProvider WebContentFileProvider { get; }
         protected IWebHostEnvironment HostingEnvironment { get; }
-        protected readonly AbpBundlingOptions Options;
+        protected AbpBundlingOptions Options { get; }
 
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager,
-            IWebContentFileProvider webContentFileProvider,
             IOptions<AbpBundlingOptions> options,
             IWebHostEnvironment hostingEnvironment)
         {
             BundleManager = bundleManager;
-            WebContentFileProvider = webContentFileProvider;
             HostingEnvironment = hostingEnvironment;
             Options = options.Value;
 
@@ -66,11 +63,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
             foreach (var bundleFile in bundleFiles)
             {
-                var file = WebContentFileProvider.GetFileInfo(bundleFile);
+                var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile);
 
                 if (file == null || !file.Exists)
                 {
-                    throw new AbpException($"Could not find the bundle file '{bundleFile}' from {nameof(IWebContentFileProvider)}");
+                    throw new AbpException($"Could not find the bundle file '{bundleFile}' for the bundle '{bundleName}'!");
                 }
 
                 if (file.Length > 0)

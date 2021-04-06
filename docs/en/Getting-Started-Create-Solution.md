@@ -3,7 +3,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }
@@ -13,17 +13,21 @@
 
 ## Create a New Project
 
+We will use the ABP CLI to create a new ABP project.
+
+> Alternatively, you can **create and download** projects from [ABP Framework website](https://abp.io/get-started) by easily selecting the all the options from the page.
+
 Use the `new` command of the ABP CLI to create a new project:
 
 ````shell
-abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC"}} --tiered{{else}} --separate-identity-server{{end}}{{end}}
+abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u blazor{{else if UI == "BlazorServer"}} -u blazor-server{{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes"}}{{if UI == "MVC" || UI == "BlazorServer"}} --tiered{{else}} --separate-identity-server{{end}}{{end}}
 ````
 
 *You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore.* 
 
 {{ if Tiered == "Yes" }}
 
-{{ if UI == "MVC" }}
+{{ if UI == "MVC" || UI == "BlazorServer" }}
 
 * `--tiered` argument is used to create N-tiered solution where authentication server, UI and API layers are physically separated.
 
@@ -36,8 +40,6 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 {{ end }}
 
 > [ABP CLI document](./CLI.md) covers all of the available commands and options.
-
-> Alternatively, you can **create and download** projects from [ABP Framework website](https://abp.io/get-started) by easily selecting the all the options from the page.
 
 ### The Solution Structure
 

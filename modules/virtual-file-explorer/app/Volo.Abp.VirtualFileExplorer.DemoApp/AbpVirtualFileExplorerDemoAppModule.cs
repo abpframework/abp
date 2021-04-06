@@ -30,7 +30,7 @@ namespace Volo.Abp.VirtualFileExplorer.DemoApp
         {
             var app = context.GetApplicationBuilder();
 
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAbpRequestLocalization();
             app.UseConfiguredEndpoints();

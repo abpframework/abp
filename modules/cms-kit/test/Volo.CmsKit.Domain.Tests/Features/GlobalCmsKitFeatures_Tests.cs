@@ -18,12 +18,11 @@ namespace Volo.CmsKit.Features
         public void Page_Feature_Should_Enable_Dependent_Features()
         {
             _cmsKitFeatures.DisableAll();
-            _cmsKitFeatures.Contents.IsEnabled.ShouldBeFalse();
+            _cmsKitFeatures.User.IsEnabled.ShouldBeFalse();
             _cmsKitFeatures.Pages.IsEnabled.ShouldBeFalse();
             
             _cmsKitFeatures.Pages.Enable();
-
-            _cmsKitFeatures.Contents.IsEnabled.ShouldBeTrue();
+            _cmsKitFeatures.User.IsEnabled.ShouldBeTrue();
             _cmsKitFeatures.Pages.IsEnabled.ShouldBeTrue();
         }
     }

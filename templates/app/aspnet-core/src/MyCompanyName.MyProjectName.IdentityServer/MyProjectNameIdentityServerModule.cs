@@ -114,6 +114,9 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
                 options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"].Split(','));
+
+                options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
+                options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
             });
 
             Configure<AbpBackgroundJobOptions>(options =>
@@ -165,7 +168,6 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseAbpRequestLocalization();
-            app.UseAbpSecurityHeaders();
 
             if (!env.IsDevelopment())
             {
@@ -173,7 +175,7 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();

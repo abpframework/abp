@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -792,7 +792,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
     </button>
 
@@ -832,7 +832,7 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ## The Author Management Page
 
@@ -1116,7 +1116,7 @@ namespace Acme.BookStore.Blazor.Pages
 
             await GetAuthorsAsync();
 
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
 
         private void OpenCreateAuthorModal()

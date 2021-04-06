@@ -4,18 +4,11 @@ using Volo.Abp;
 
 namespace Volo.CmsKit.Comments
 {
-    public class CommentEntityTypeDefinition : IEquatable<CommentEntityTypeDefinition>
+    public class CommentEntityTypeDefinition : EntityTypeDefinition
     {
-        public CommentEntityTypeDefinition([NotNull] string entityType)
+        public CommentEntityTypeDefinition([NotNull] string entityType) : base(entityType)
         {
             EntityType = Check.NotNullOrEmpty(entityType, nameof(entityType));
-        }
-
-        public string EntityType { get; }
-
-        public bool Equals(CommentEntityTypeDefinition other)
-        {
-            return EntityType == other?.EntityType;
         }
     }
 }

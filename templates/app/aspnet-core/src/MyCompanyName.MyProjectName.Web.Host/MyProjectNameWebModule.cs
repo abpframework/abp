@@ -28,7 +28,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
@@ -52,7 +51,6 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpFeatureManagementWebModule),
         typeof(AbpSettingManagementWebModule),
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityWebModule),
@@ -81,7 +79,7 @@ namespace MyCompanyName.MyProjectName.Web
             var configuration = context.Services.GetConfiguration();
 
             ConfigureBundles();
-            ConfigureCache(configuration);
+            ConfigureCache();
             ConfigureRedis(context, configuration, hostingEnvironment);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
@@ -106,7 +104,7 @@ namespace MyCompanyName.MyProjectName.Web
             });
         }
 
-        private void ConfigureCache(IConfiguration configuration)
+        private void ConfigureCache()
         {
             Configure<AbpDistributedCacheOptions>(options =>
             {
@@ -240,7 +238,6 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseAbpRequestLocalization();
-            app.UseAbpSecurityHeaders();
 
             if (!env.IsDevelopment())
             {
@@ -248,7 +245,7 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
 
@@ -258,14 +255,11 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseAuthorization();
-
             app.UseSwagger();
             app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-
-            app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
         }
