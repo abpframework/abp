@@ -3,8 +3,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
-    "DB": ["EF", "Mongo"],
+    "UI": ["MVC", "Blazor"]
 }
 ````
 
@@ -33,7 +32,7 @@ dotnet tool install -g Volo.Abp.Cli
 Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
-abp new TodoApp
+abp new TodoApp{{if UI=="Blazor"}} -u blazor{{end}}
 ````
 
 This will create a new solution, named *TodoApp*. Open the solution in your favorite IDE.
@@ -46,7 +45,24 @@ If you are using Visual Studio, right click to the `TodoApp.DbMigrator` project,
 
 ### Run the Application
 
+{{if UI=="MVC"}}
+
 It is good to run the application before starting the development. Ensure the `TodoApp.Web` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
+
+{{else if UI=="Blazor"}}
+
+It is good to run the application before starting the development. The solution has two main applications;
+
+* `TodoApp.HttpApi.Host` host the server-side HTTP API.
+* `TodoApp.Blazor` is the client-side Blazor WebAssembly application.
+
+Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
+
+![todo-swagger-ui-initial](todo-swagger-ui-initial.png)
+
+You can explore and test your HTTP API with this UI. Now, we can set the `TodoApp.Blazor` as the startup project and run it to open the actual Blazor application UI:
+
+{{end}}
 
 ![todo-ui-initial](todo-ui-initial.png)
 
@@ -75,7 +91,11 @@ namespace TodoApp
 
 ## Database Integration
 
-Next step is to setup the [Entity Framework Core](../../Entity-Framework-Core.md) configuration. Open the `TodoAppDbContext` class in the `EntityFrameworkCore` folder of the *TodoApp.EntityFrameworkCore* project and add a new `DbSet` property to this class:
+Next step is to setup the [Entity Framework Core](../../Entity-Framework-Core.md) configuration.
+
+### Mapping Configuration
+
+Open the `TodoAppDbContext` class in the `EntityFrameworkCore` folder of the *TodoApp.EntityFrameworkCore* project and add a new `DbSet` property to this class:
 
 ````csharp
 public DbSet<TodoItem> TodoItems { get; set; }
@@ -97,6 +117,8 @@ public static void ConfigureTodoApp(this ModelBuilder builder)
 
 We've mapped `TodoItem` entity to a `TodoItems` table in the database.
 
+### Code First Migrations
+
 The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
 Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore.DbMigrations* project and type the following command:
@@ -115,7 +137,7 @@ You can apply changes to the database using the following command, in the same c
 dotnet ef database update
 ````
 
-> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that the `TodoApp.Web` is the startup project and `TodoApp.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="Blazor"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
 
 Now, we can use ABP repositories to save and retrieve todo items, as we'll do in the next section.
 
@@ -126,6 +148,8 @@ An [Application Service](../../Application-Services.md) is used to perform use c
 * Get the list of todo items
 * Create a new todo item
 * Delete an existing todo item
+
+### Application Service Interface
 
 We can start by defining an interface for the application service. Create a new `ITodoAppService` interface in the *TodoApp.Application.Contracts* project, as shown below:
 
@@ -146,6 +170,8 @@ namespace TodoApp
 }
 ````
 
+### Data Transfer Object
+
 `GetListAsync` and `CreateAsync` methods return `TodoItemDto`. Applications Services typically gets and returns DTOs ([Data Transfer Objects](../../Data-Transfer-Objects.md)) instead of entities. So, we should define the DTO class here. Create a new `TodoItemDto` class inside the *TodoApp.Application.Contracts* project:
 
 ````csharp
@@ -161,7 +187,11 @@ namespace TodoApp
 }
 ````
 
-This is a very simple DTO class that matches to our `TodoItem` entity. We are ready to implement the `ITodoAppService`. Create a `TodoAppService` class inside the *TodoApp.Application* project, as shown below:
+This is a very simple DTO class that matches to our `TodoItem` entity. We are ready to implement the `ITodoAppService`.
+
+### Application Service Implementation
+
+Create a `TodoAppService` class inside the *TodoApp.Application* project, as shown below:
 
 ````csharp
 using System;
@@ -189,6 +219,8 @@ namespace TodoApp
 
 This class inherits from the `ApplicationService` class of the ABP Framework and implements the `ITodoAppService` that was defined before. ABP provides default generic [repositories](../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases described before.
 
+#### Getting Todo Items
+
 Let's start by implementing the `GetListAsync` method:
 
 ````csharp
@@ -205,6 +237,8 @@ public async Task<List<TodoItemDto>> GetListAsync()
 ````
 
 We are simply getting the complete `TodoItem` list from database, mapping them to `TodoItemDto` objects and returning as the result.
+
+#### Creating a New Todo Item
 
 Next method is `CreateAsync` and we can implement it as shown below:
 
@@ -225,6 +259,8 @@ public async Task<TodoItemDto> CreateAsync(string text)
 
 Repository's `InsertAsync` method inserts the given `TodoItem` to database and returns the same `TodoItem` object. It also sets the `Id`, so we can use it on the returning object. We are simply returning a `TodoItemDto` by creating from the new `TodoItem` entity.
 
+#### Deleting a Todo Item
+
 Finally, we can implement the `DeleteAsync` as the following code block:
 
 ````csharp
@@ -244,9 +280,11 @@ It is time to show the todo items on the UI! Before starting to write the code, 
 
 > **We will keep the UI side minimal for this tutorial to make the tutorial simple and focused. See the [web application development tutorial](../Part-1.md) to build real-life pages with all aspects.**
 
+{{if UI=="MVC"}}
+
 ### Index.cshtml.cs
 
-Open the `Index.cshtml.cs` file in the `Pages` folder of the *TodoApp.Web* project and replace with the following content:
+Open the `Index.cshtml.cs` file in the `Pages` folder of the *TodoApp.Web* project and replace the content with the following code block:
 
 ````csharp
 using System.Collections.Generic;
@@ -295,11 +333,13 @@ Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project 
                 TODO LIST
             </abp-card-title>
         </abp-card-header>
-        <abp-card-body>
-            
+        <abp-card-body>            
             <!-- FORM FOR NEW TODO ITEMS -->
             <form id="NewItemForm" class="form-inline">
-                <input id="NewItemText" type="text" class="form-control mr-2" placeholder="enter text...">
+                <input id="NewItemText" 
+                       type="text" 
+                       class="form-control mr-2" 
+                       placeholder="enter text...">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
             
@@ -402,6 +442,147 @@ As the final touch, open the `Index.css` file in the `Pages` folder of the *Todo
 ````
 
 This is a simple styling for the todo page. We believe that you can do much better :)
+
+Now, you can run the application again to see the result.
+
+{{else if UI=="Blazor"}}
+
+### Index.razor.cs
+
+Open the `Index.razor.cs` file in the `Pages` folder of the *TodoApp.Blazor* project and replace the content with the following code block:
+
+````csharp
+using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace TodoApp.Blazor.Pages
+{
+    public partial class Index
+    {
+        [Inject]
+        private ITodoAppService TodoAppService { get; set; }
+
+        private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
+        private string NewTodoText { get; set; }
+
+        protected async override Task OnInitializedAsync()
+        {
+            TodoItems = await TodoAppService.GetListAsync();
+        }
+        
+        private async Task Create()
+        {
+            var result = await TodoAppService.CreateAsync(NewTodoText);
+            TodoItems.Add(result);
+            NewTodoText = null;
+        }
+
+        private async Task Delete(TodoItemDto todoItem)
+        {
+            await TodoAppService.DeleteAsync(todoItem.Id);
+            await Notify.Info("Deleted the todo item.");
+            TodoItems.Remove(todoItem);
+        }
+    }
+}
+````
+
+This class uses the `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. In this way, we don't need to refresh the whole todo list from the server.
+
+See the *Dynamic C# Proxies & Auto API Controllers* section below to learn how we could inject and use the application service interface from the Blazor application which is running on the browser! But now, let's continue and complete the application.
+
+### Index.razor
+
+Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* project and replace the content with the following code block:
+
+````xml
+@page "/"
+@inherits TodoAppComponentBase
+<div class="container">
+    <Card>
+        <CardHeader>
+            <CardTitle>
+                TODO LIST
+            </CardTitle>
+        </CardHeader>
+        <CardBody>
+            <!-- FORM FOR NEW TODO ITEMS -->
+            <form id="NewItemForm" 
+                  @onsubmit:preventDefault
+                  @onsubmit="() => Create()"
+                  class="form-inline">
+                <input type="text" 
+                       @bind-value="@NewTodoText"
+                       class="form-control mr-2" 
+                       placeholder="enter text...">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <!-- TODO ITEMS LIST -->
+            <ul id="TodoList">
+                @foreach (var todoItem in TodoItems)
+                {
+                    <li data-id="@todoItem.Id">
+                        <i class="far fa-trash-alt"
+                           @onclick="() => Delete(todoItem)"
+                           ></i> @todoItem.Text
+                    </li>
+                }
+            </ul>
+        </CardBody>
+    </Card>
+</div>
+````
+
+### Index.razor.css
+
+As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Web* project and replace with the following content:
+
+````css
+#TodoList{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#TodoList li {
+    padding: 5px;
+    margin: 5px 0px;
+    border: 1px solid #cccccc;
+    background-color: #f5f5f5;
+}
+
+#TodoList li i
+{
+    opacity: 0.5;
+}
+
+#TodoList li i:hover
+{
+    opacity: 1;
+    color: #ff0000;
+    cursor: pointer;
+}
+````
+
+This is a simple styling for the todo page. We believe that you can do much better :)
+
+Now, you can run the application again to see the result.
+
+### Dynamic C# Proxies & Auto API Controllers
+
+In the `Index.razor.cs` file, we've injected (with the `[Inject]` attribute) and used the `ITodoAppService` just like using a local service. Remember that the Blazor application is running on the browser while the implementation of this application service is running on the server.
+
+The magic is done by the ABP Framework's [Dynamic C# Client Proxy](../../API/Dynamic-CSharp-API-Clients.md) system. It uses the standard `HttpClient` and performs HTTP API requests to the remote server. It also handles all the standard tasks for us, including authorization, JSON serialization and exception handling.
+
+However, you may ask that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by conventions.
+
+If you run the `TodoApp.HttpApi.Host` application, you can see the TODO API:
+
+![todo-api](todo-api.png)
+
+{{end}}
 
 ## Conclusion
 
