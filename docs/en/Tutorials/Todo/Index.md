@@ -16,11 +16,45 @@ This is a single-part, quick tutorial to build a simple todo application with th
 
 You can find source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
+## Pre-Requirements
+
+### IDE
+
+You will need to an IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 5.0+](https://dotnet.microsoft.com/download/dotnet) development.
+
+### ABP CLI
+
+We will use the ABP CLI to create new solutions with the ABP Framework. You can run the following command in a command-line terminal to install it:
+
+````bash
+dotnet tool install -g Volo.Abp.Cli
+````
+
 ## Creating a New Solution
 
-Please create a new solution, named `TodoApp`, by following the [Getting Started](../../Getting-Started.md) document.
+Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
-**TODO: Instead, we can create the solution here!**
+````bash
+abp new TodoApp
+````
+
+This will create a new solution, named *TodoApp*. Open the solution in your favorite IDE.
+
+### Create the Database
+
+If you are using Visual Studio, right click to the `TodoApp.DbMigrator` project, select *Set as StartUp Project*, then hit *Ctrl+F5* to run it without debugging. It will create the initial database and seed the initial data.
+
+> Some IDEs (e.g. Rider) may have problems for the first run since *DbMigrator* adds the initial migration and re-compiles the project. In this case, open a command-line terminal in the folder of the `.DbMigrator` project and execute the `dotnet run` command.
+
+### Run the Application
+
+It is good to run the application before starting the development. Ensure the `TodoApp.Web` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
+
+![todo-ui-initial](todo-ui-initial.png)
+
+You can click to the *Login* button, use `admin` as the username and `1q2w3E*` as the password to login to the application.
+
+All ready. We can start the coding!
 
 ## Domain Layer
 
