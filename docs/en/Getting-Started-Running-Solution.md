@@ -193,12 +193,6 @@ It may take a longer time for the first build. Once it finishes, it opens the An
 
 Enter **admin** as the username and **1q2w3E*** as the password to login to the application. The application is up and running. You can start developing your application based on this startup template.
 
-## Mobile Development
-
-If you want to include a [React Native](https://reactnative.dev/) project in your solution, add `-m react-native` (or `--mobile react-native`) argument to project creation command. This is a basic React Native startup template to develop mobile applications integrated to your ABP based backends.
-
-See the [Getting Started with the React Native](Getting-Started-React-Native.md) document to learn how to configure and run the React Native application.
-
 ## See Also
 
 * [Web Application Development Tutorial](Tutorials/Part-1.md)
