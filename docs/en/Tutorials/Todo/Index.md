@@ -398,17 +398,7 @@ In the first part, we are registering to click events of the trash icons near to
 
 In the second part, we are creating a new todo item on the server. If it succeed, we are then manipulating DOM to insert a new `<li>` element to the todo list. In this way, no need to refresh the whole page after creating a new todo item.
 
-The interesting part here is how we communicate with the server. It seems we are just calling some JavaScript functions like `todoApp.todo.delete(id)` and `todoApp.todo.create(todoText)`.
-
-#### Dynamic JavaScript Proxies & Auto API Controllers
-
- `todoApp.todo.delete(...)` and `todoApp.todo.create(...)` functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. These functions perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
-
-However, you may ask that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by conventions.
-
-If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the TODO API:
-
-![todo-api](todo-api.png)
+The interesting part here is how we communicate with the server. See the *Dynamic JavaScript Proxies & Auto API Controllers* section to understand how it works. But now, let's continue and complete the application.
 
 ### Index.css
 
@@ -444,6 +434,16 @@ As the final touch, open the `Index.css` file in the `Pages` folder of the *Todo
 This is a simple styling for the todo page. We believe that you can do much better :)
 
 Now, you can run the application again to see the result.
+
+### Dynamic JavaScript Proxies & Auto API Controllers
+
+In the `Index.js` file, we've used `todoApp.todo.delete(...)` and `todoApp.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
+
+However, you may ask that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by conventions.
+
+If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
+
+![todo-api](todo-api.png)
 
 {{else if UI=="Blazor"}}
 
@@ -578,7 +578,7 @@ The magic is done by the ABP Framework's [Dynamic C# Client Proxy](../../API/Dyn
 
 However, you may ask that we haven't created any API Controller, so how server handles these requests? This question brings us the [Auto API Controller](../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by conventions.
 
-If you run the `TodoApp.HttpApi.Host` application, you can see the TODO API:
+If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
 ![todo-api](todo-api.png)
 
