@@ -8,13 +8,13 @@
 }
 ````
 
-This is a single-part, quick tutorial to build a simple TODO application with the ABP Framework. Here, a sample screenshot from the final application:
+This is a single-part, quick tutorial to build a simple todo application with the ABP Framework. Here, a screenshot from the final application:
 
 ![todo-list](todo-list.png)
 
 ### Source Code
 
-You can find source code of the example application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
+You can find source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
 ## Creating a New Solution
 
@@ -357,6 +357,10 @@ This is a simple styling for the todo page. We believe that you can do much bett
 
 In this tutorial, we've build a very simple application to warm up to the ABP Framework. If you are looking to build a serious application, please check the [web application development tutorial](../Part-1.md) which covers all the aspects of a real-life web application development.
 
-## Source Code
+### Source Code
 
-You can find source code of the example application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
+You can find source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
+
+## See Also
+
+* [Web Application Development Tutorial](../Part-1.md)
