@@ -221,6 +221,7 @@
     "PaymentProduct": "Ödeme Ürünü",
     "ProductName": "Ürün İsmi",
     "Code": "Kod",
-    "GenerateInvoice": "Fatura Oluştur"
+    "GenerateInvoice": "Fatura Oluştur",
+    "ExportOrganizationsToExcel": "Organizasyonu Excel'e aktar"
   }
 }
