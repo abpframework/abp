@@ -70,7 +70,9 @@ This section explains how to customize data table columns using the properties i
 * `Component`: Type of the component that you want to render. See the "Rendering Custom Components In The Data Table Columns" section for details.
 * `Actions`: Action lists for the column. You can render additional action columns by adding actions to this collection.
 * `ValueConverter`: Simple converter function that is being called before rendering the content.
+* `Sortable`: A boolean field indicating whether the column is sortable or not.
 * `DisplayFormat`: You can specify a custom format for the column.
+* `DisplayFormatProvider` : You can provide a custom `IFormatProvider` for the column. Default value is `CultureInfo.CurrentCulture`.
 
 ## Rendering Custom Components In The Data Table Columns
 
