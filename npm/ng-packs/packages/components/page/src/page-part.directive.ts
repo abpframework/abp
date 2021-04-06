@@ -13,12 +13,13 @@ import {
   SimpleChanges,
   SimpleChange,
 } from '@angular/core';
+import { Observable, Subscription, of } from 'rxjs';
 
 export interface PageRenderStrategy {
-  shouldRender(type: string);
-  onInit?(type: string, injector: Injector, context?: any);
-  onDestroy?(type: string, injector?: Injector, context?: any);
-  onContextUpdate?(change: SimpleChange);
+  shouldRender(type?: string): boolean | Observable<boolean>;
+  onInit?(type?: string, injector?: Injector, context?: any): void;
+  onDestroy?(type?: string, injector?: Injector, context?: any): void;
+  onContextUpdate?(change?: SimpleChange): void;
 }
 
 export const PAGE_RENDER_STRATEGY = new InjectionToken<PageRenderStrategy>('PAGE_RENDER_STRATEGY');
@@ -27,11 +28,15 @@ export const PAGE_RENDER_STRATEGY = new InjectionToken<PageRenderStrategy>('PAGE
 export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
   hasRendered = false;
   type: string;
+  subscription: Subscription;
 
+  @Input('abpPagePartContext') context: any;
   @Input() set abpPagePart(type: string) {
     this.type = type;
-    const shouldRender = this.shouldRender(type);
+    this.createRenderStream(type);
+  }
 
+  render = (shouldRender: boolean) => {
     if (shouldRender && !this.hasRendered) {
       this.viewContainer.createEmbeddedView(this.templateRef);
       this.hasRendered = true;
@@ -39,9 +44,7 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
       this.viewContainer.clear();
       this.hasRendered = false;
     }
-  }
-
-  @Input('abpPagePartContext') context: any;
+  };
 
   constructor(
     private templateRef: TemplateRef<any>,
@@ -63,6 +66,8 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
+    this.clearSubscription();
+
     if (this.renderLogic?.onDestroy) {
       this.renderLogic.onDestroy(this.type, this.injector, this.context);
     }
@@ -70,8 +75,21 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
 
   shouldRender(type: string) {
     if (this.renderLogic) {
-      return this.renderLogic.shouldRender(type);
+      const willRender = this.renderLogic.shouldRender(type);
+      return willRender instanceof Observable ? willRender : of(willRender);
     }
-    return true;
+    return of(true);
+  }
+
+  protected createRenderStream(type: string) {
+    this.clearSubscription();
+
+    this.subscription = this.shouldRender(type).subscribe(this.render);
+  }
+
+  protected clearSubscription() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

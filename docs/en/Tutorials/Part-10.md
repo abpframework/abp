@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -326,6 +326,7 @@ Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Acme.BookStore.Authors;
 using Acme.BookStore.Permissions;
@@ -387,23 +388,17 @@ namespace Acme.BookStore.Books
 
         public override async Task<PagedResultDto<BookDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            //Set a default sorting, if not provided
-            if (input.Sorting.IsNullOrWhiteSpace())
-            {
-                input.Sorting = nameof(Book.Name);
-            }
-            
             //Get the IQueryable<Book> from the repository
             var queryable = await Repository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
             var query = from book in queryable
                 join author in _authorRepository on book.AuthorId equals author.Id
-                orderby input.Sorting //TODO: Can not sort like that!
                 select new {book, author};
 
             //Paging
             query = query
+                .OrderBy(NormalizeSorting(input.Sorting))
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount);
 
@@ -434,6 +429,25 @@ namespace Acme.BookStore.Books
             return new ListResultDto<AuthorLookupDto>(
                 ObjectMapper.Map<List<Author>, List<AuthorLookupDto>>(authors)
             );
+        }
+
+        private static string NormalizeSorting(string sorting)
+        {
+            if (sorting.IsNullOrEmpty())
+            {
+                return $"book.{nameof(Book.Name)}";
+            }
+
+            if (sorting.Contains("authorName", StringComparison.OrdinalIgnoreCase))
+            {
+                return sorting.Replace(
+                    "authorName",
+                    "author.Name", 
+                    StringComparison.OrdinalIgnoreCase
+                );
+            }
+
+            return $"book.{sorting}";
         }
     }
 }
@@ -1078,7 +1092,7 @@ That's all. Just run the application and try to create or edit an author.
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ### The Book List
 

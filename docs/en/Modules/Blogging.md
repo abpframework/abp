@@ -1,3 +1,0 @@
-# Blogging Module
-
-TODO

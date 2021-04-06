@@ -27,7 +27,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public SourceCodeDownloadService SourceCodeDownloadService { get; }
         public SolutionFileModifier SolutionFileModifier { get; }
         public NugetPackageToLocalReferenceConverter NugetPackageToLocalReferenceConverter { get; }
-        public AngularModuleSourceCodeAdder AngularModuleSourceCodeAdder { get; }
+        public AngularSourceCodeAdder AngularSourceCodeAdder { get; }
         public NewCommand NewCommand { get; }
         public BundleCommand BundleCommand { get; }
 
@@ -55,7 +55,7 @@ namespace Volo.Abp.Cli.ProjectModification
             SourceCodeDownloadService sourceCodeDownloadService,
             SolutionFileModifier solutionFileModifier,
             NugetPackageToLocalReferenceConverter nugetPackageToLocalReferenceConverter,
-            AngularModuleSourceCodeAdder angularModuleSourceCodeAdder,
+            AngularSourceCodeAdder angularSourceCodeAdder,
             NewCommand newCommand,
             BundleCommand bundleCommand,
             CliHttpClientFactory cliHttpClientFactory)
@@ -71,7 +71,7 @@ namespace Volo.Abp.Cli.ProjectModification
             SourceCodeDownloadService = sourceCodeDownloadService;
             SolutionFileModifier = solutionFileModifier;
             NugetPackageToLocalReferenceConverter = nugetPackageToLocalReferenceConverter;
-            AngularModuleSourceCodeAdder = angularModuleSourceCodeAdder;
+            AngularSourceCodeAdder = angularSourceCodeAdder;
             NewCommand = newCommand;
             BundleCommand = bundleCommand;
             _cliHttpClientFactory = cliHttpClientFactory;
@@ -327,7 +327,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 foreach (var npmPackage in angularPackages)
                 {
-                    await ProjectNpmPackageAdder.AddAsync(angularPath, npmPackage, true);
+                    await ProjectNpmPackageAdder.AddAngularPackageAsync(angularPath, npmPackage);
                 }
             }
         }
@@ -347,7 +347,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 MoveAngularFolderInNewTemplate(modulesFolderInSolution, moduleName);
             }
 
-            await AngularModuleSourceCodeAdder.AddAsync(solutionFilePath, angularPath);
+            await AngularSourceCodeAdder.AddFromModuleAsync(solutionFilePath, angularPath);
         }
 
         private static void DeleteAngularDirectoriesInModulesFolder(string modulesFolderInSolution)
@@ -490,7 +490,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     {
                         foreach (var npmPackage in mvcNpmPackages)
                         {
-                            await ProjectNpmPackageAdder.AddAsync(Path.GetDirectoryName(targetProject), npmPackage);
+                            await ProjectNpmPackageAdder.AddMvcPackageAsync(Path.GetDirectoryName(targetProject), npmPackage, null, true);
                         }
                     }
                 }

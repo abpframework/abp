@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
@@ -25,8 +26,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
                 var memoryStream = new MemoryStream();
                 await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("UploadAsync"));
                 memoryStream.Position = 0;
-                requestMessage.Content = new StreamContent(memoryStream);
-                requestMessage.Content.Headers.Add("Content-Type", "application/rtf");
+
+                var streamContent = new StreamContent(memoryStream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/rtf");
+
+                requestMessage.Content = new MultipartFormDataContent {{streamContent, "file", "file"}};
 
                 var response = await Client.SendAsync(requestMessage);
 

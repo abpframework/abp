@@ -113,7 +113,12 @@ namespace Volo.Abp.Cli.ProjectModification
             if (withSourceCode)
             {
                 await AddSourceCode(projectFile, solutionFile, package, version);
-                await ConvertPackageReferenceToProjectReference(projectFile, solutionFile, package);
+
+                var projectFilesInSolution = Directory.GetFiles(Path.GetDirectoryName(solutionFile), "*.csproj", SearchOption.AllDirectories);
+                foreach (var projectFileInSolution in projectFilesInSolution)
+                {
+                    await ConvertPackageReferenceToProjectReference(projectFileInSolution, solutionFile, package);
+                }
 
                 if (addSourceCodeToSolutionFile)
                 {
@@ -145,7 +150,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var nodes = doc.SelectNodes(
                 $"/Project/ItemGroup/PackageReference[starts-with(@Include, '{package.Name}')]");
 
-            if (nodes == null)
+            if (nodes == null || nodes.Count < 1)
             {
                 return;
             }
@@ -194,7 +199,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual async Task DownloadSourceCode(string targetFolder, NugetPackageInfo package, string version = null)
         {
-            await SourceCodeDownloadService.DownloadPackageAsync(
+            await SourceCodeDownloadService.DownloadNugetPackageAsync(
                 package.Name,
                 targetFolder,
                 version
@@ -277,7 +282,14 @@ namespace Volo.Abp.Cli.ProjectModification
                                           package.Target == NuGetPackageTarget.BlazorServer ||
                                           package.Target == NuGetPackageTarget.BlazorWebAssembly))
             {
-                await RunBundleForBlazorAsync(projectFile);
+                try
+                {
+                    await RunBundleForBlazorAsync(projectFile);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogWarning("Couldn't run bundle for blazor.");
+                }
             }
 
             Logger.LogInformation("Successfully installed.");

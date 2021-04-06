@@ -59,9 +59,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 return _tyeFileContent;
             }
 
-            var solutionFolderPath = context.BuildArgs.ExtraProperties[NewCommand.Options.OutputFolder.Short] ??
-                                     context.BuildArgs.ExtraProperties[NewCommand.Options.OutputFolder.Long] ??
-                                     Directory.GetCurrentDirectory();
+            var solutionFolderPath = GetSolutionFolderPath(context);
 
             var tyeFilePath = Path.Combine(solutionFolderPath, "tye.yaml");
 
@@ -73,6 +71,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             _tyeFileContent = File.ReadAllText(tyeFilePath);
 
             return _tyeFileContent;
+        }
+
+        private static string GetSolutionFolderPath(ProjectBuildContext context)
+        {
+            if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.OutputFolder.Short))
+            {
+                return context.BuildArgs.ExtraProperties[NewCommand.Options.OutputFolder.Short];
+            }
+
+            if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.OutputFolder.Long))
+            {
+                return context.BuildArgs.ExtraProperties[NewCommand.Options.OutputFolder.Long];
+            }
+
+            return Directory.GetCurrentDirectory();
         }
     }
 }

@@ -31,9 +31,6 @@ namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout
         [Parameter] 
         public PageToolbar Toolbar { get; set; }
 
-        [Parameter]
-        public string PageName { get; set; }
-
         public PageHeader()
         {
             BreadcrumbItems = new List<BreadcrumbItem>();

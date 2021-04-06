@@ -2,7 +2,7 @@
 
 Angular UI account module is available as of v4.3. It contains some pages (login, register, manage your profile, etc.).
 
-If you implement the account module to your project;
+If you add the account module to your project;
 
 - "Manage your profile" link in the current user dropdown on the top bar will redirect the user to a page in the account module.
 - You can switch the authentication flow to the resource owner password flow.
@@ -93,15 +93,15 @@ export class AppRoutingModule {}
 
 ### Manage Profile Page
 
-Before v4.3, the "Manage Your Profile" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, if you implemented the account module to your project, the same link will land on a page in the Angular UI account module instead.
+Before v4.3, the "Manage Your Profile" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account module instead.
 
 ### My Security Logs Page [COMMERCIAL]
 
-Before v4.3, the "My Security Logs" link in the current user dropdown on the top bar redirected the user to MVC's my security logs page. As of v4.3, if you implemented the account module to your project, the same link will land on a page in the Angular UI account public module instead.
+Before v4.3, the "My Security Logs" link in the current user dropdown on the top bar redirected the user to MVC's my security logs page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account public module instead.
 
 ### Resource Owner Password Flow
 
-OAuth is preconfigured as authorization code flow in Angular application templates by default. If you implemented the account module to your project, you can switch the flow to resource owner password flow by changing the OAuth configuration in the _environment.ts_ files as shown below:
+OAuth is preconfigured as authorization code flow in Angular application templates by default. If you added the account module to your project, you can switch the flow to resource owner password flow by changing the OAuth configuration in the _environment.ts_ files as shown below:
 
 ```js
 import { Config } from '@abp/ng.core';
@@ -122,4 +122,4 @@ export const environment = {
 
 > Note: The resource owner password flow does not support the two-factor authentication for some technical reasons.
 
-See the [Authorization in Angular UI](./Authorization) document for more details.
+See the [Authorization in Angular UI](./Authorization.md) document for more details.

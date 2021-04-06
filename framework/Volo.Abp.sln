@@ -331,9 +331,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.GlobalFeatures", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.GlobalFeatures.Tests", "test\Volo.Abp.GlobalFeatures.Tests\Volo.Abp.GlobalFeatures.Tests.csproj", "{231F1581-AA21-44C3-BF27-51EB3AD5355C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiLingualObject", "src\Volo.Abp.MultiLingualObject\Volo.Abp.MultiLingualObject.csproj", "{C9142DED-1F6C-4385-A37D-81E46B233306}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiLingualObjects", "src\Volo.Abp.MultiLingualObjects\Volo.Abp.MultiLingualObjects.csproj", "{C9142DED-1F6C-4385-A37D-81E46B233306}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiLingualObject.Tests", "test\Volo.Abp.MultiLingualObject.Tests\Volo.Abp.MultiLingualObject.Tests.csproj", "{A30D63B0-E952-4052-BAEE-38B8BF924093}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.MultiLingualObjects.Tests", "test\Volo.Abp.MultiLingualObjects.Tests\Volo.Abp.MultiLingualObjects.Tests.csproj", "{A30D63B0-E952-4052-BAEE-38B8BF924093}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Http.Client.IdentityModel.WebAssembly", "src\Volo.Abp.Http.Client.IdentityModel.WebAssembly\Volo.Abp.Http.Client.IdentityModel.WebAssembly.csproj", "{3D35A1E0-A9A1-404F-9B55-5F1A7EB6D5B8}"
 EndProject

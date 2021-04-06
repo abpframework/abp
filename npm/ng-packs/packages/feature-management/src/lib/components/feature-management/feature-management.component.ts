@@ -83,6 +83,7 @@ export class FeatureManagementComponent
 
   getFeatures() {
     this.service.get(this.providerName, this.providerKey).subscribe(res => {
+      if (!res.groups?.length) return;
       this.groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
       this.selectedGroupDisplayName = this.groups[0].displayName;
       this.features = res.groups.reduce(

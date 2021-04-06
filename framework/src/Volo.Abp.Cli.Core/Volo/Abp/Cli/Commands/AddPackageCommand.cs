@@ -18,9 +18,12 @@ namespace Volo.Abp.Cli.Commands
 
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
 
-        public AddPackageCommand(ProjectNugetPackageAdder projectNugetPackageAdder)
+        public ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
+
+        public AddPackageCommand(ProjectNugetPackageAdder projectNugetPackageAdder, ProjectNpmPackageAdder projectNpmPackageAdder)
         {
             ProjectNugetPackageAdder = projectNugetPackageAdder;
+            ProjectNpmPackageAdder = projectNpmPackageAdder;
             Logger = NullLogger<AddPackageCommand>.Instance;
         }
 
@@ -35,19 +38,42 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
+            var isAngularPackage = false;
+            var isNugetPackage = true;
+
+            if (commandLineArgs.Target.StartsWith("@"))
+            {
+                isAngularPackage = true;
+                isNugetPackage = false;
+            }
+
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
             var withSourceCode =commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
-            var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
 
-            await ProjectNugetPackageAdder.AddAsync(
-                GetSolutionFile(commandLineArgs),
-                GetProjectFile(commandLineArgs),
-                commandLineArgs.Target,
-                version,
-                true,
-                withSourceCode,
-                addSourceCodeToSolutionFile
-            );
+            if (isNugetPackage)
+            {
+                var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
+
+                await ProjectNugetPackageAdder.AddAsync(
+                    GetSolutionFile(commandLineArgs),
+                    GetProjectFile(commandLineArgs),
+                    commandLineArgs.Target,
+                    version,
+                    true,
+                    withSourceCode,
+                    addSourceCodeToSolutionFile
+                );
+            }
+            else if (isAngularPackage)
+            {
+                await ProjectNpmPackageAdder.AddAngularPackageAsync(
+                    GetAngularDirectory(commandLineArgs),
+                    commandLineArgs.Target,
+                    version,
+                    withSourceCode
+                );
+            }
+
         }
 
         public string GetUsageInfo()
@@ -56,7 +82,7 @@ namespace Volo.Abp.Cli.Commands
 
             sb.AppendLine("");
             sb.AppendLine("'add-package' command is used to add an ABP package to a project.");
-            sb.AppendLine("It should be used in a folder containing a .csproj file.");
+            sb.AppendLine("It should be used in a folder containing a .csproj file, .sln file or angular.json.");
             sb.AppendLine("");
             sb.AppendLine("Usage:");
             sb.AppendLine("");
@@ -64,13 +90,18 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("");
-            sb.AppendLine("  -p|--project <project-file>    Specify the project file explicitly.");
-            sb.AppendLine("  -v|--version <version>         Specify the version of the package. Default is your project's ABP version or latest ABP version.");
+            sb.AppendLine("  -p|--project <project-file>                           Specifies the project file explicitly. (Only available for NuGet packages)");
+            sb.AppendLine("  -s|--solution <solution-file>                         Specifies the solution file explicitly. (Only available for NuGet packages)");
+            sb.AppendLine("  --with-source-code                                    Downloads the source code of the NPM/NuGet package and make other projects depends on it.");
+            sb.AppendLine("  --add-to-solution-file                                Adds the downloaded project to the .sln file, when source code is downloaded. (Only available for NuGet packages)");
+            sb.AppendLine("  -ad|--angular-directory <angular-project-directory>   Specifies the Angular project directory explicitly. (Only available for Angular packages)");
+            sb.AppendLine("  -v|--version <version>                                Specifies the version of the package. Default is your project's ABP version or latest ABP version.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
-            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the package to the current project.");
-            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the package to the given project.");
+            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the NuGet package to the current project.");
+            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the NuGet package to the given project.");
+            sb.AppendLine("  abp add-package @abp/ng.theme.basic                                        Adds the NPM package to the given corresponding project.");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -116,6 +147,23 @@ namespace Volo.Abp.Cli.Commands
             return Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln").FirstOrDefault();
         }
 
+        protected virtual string GetAngularDirectory(CommandLineArgs commandLineArgs)
+        {
+            var providedAngularDirectory = PathHelper.NormalizePath(
+                commandLineArgs.Options.GetOrNull(
+                    Options.AngularDirectory.Short,
+                    Options.AngularDirectory.Long
+                )
+            );
+
+            if (!providedAngularDirectory.IsNullOrWhiteSpace())
+            {
+                return providedAngularDirectory;
+            }
+
+            return Directory.GetCurrentDirectory();
+        }
+
         public static class Options
         {
             public static class Project
@@ -128,6 +176,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "s";
                 public const string Long = "solution";
+            }
+
+            public static class AngularDirectory
+            {
+                public const string Short = "ad";
+                public const string Long = "angular-directory";
             }
 
             public static class Version
