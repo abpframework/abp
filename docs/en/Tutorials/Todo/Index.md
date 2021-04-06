@@ -99,7 +99,25 @@ public static void ConfigureTodoApp(this ModelBuilder builder)
 
 We've mapped `TodoItem` entity to a `TodoItems` table in the database.
 
-**TODO: DB MIGRATIONS**
+The startup solution is configured to use Entity Framework Core [Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
+
+Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore.DbMigrations* project and type the following command:
+
+````bash
+dotnet ef migrations add Added_TodoItem
+````
+
+This will add a new migration class to the project:
+
+![todo-efcore-migration](todo-efcore-migration.png)
+
+You can apply changes to the database using the following command, in the same command-line terminal:
+
+````bash
+dotnet ef database update
+````
+
+> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that the `TodoApp.Web` is the startup project and `TodoApp.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
 
 Now, we can use ABP repositories to save and retrieve todo items, as we'll do in the next section.
 
