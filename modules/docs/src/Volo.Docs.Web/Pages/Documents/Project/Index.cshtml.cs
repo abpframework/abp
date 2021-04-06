@@ -66,6 +66,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool ShowProjectsCombobox { get; set; }
 
+        public bool IsVersionPreview { get; set; }
+
         public string DocumentLanguageCode { get; set; }
 
         public DocumentParametersDto DocumentPreferences { get; set; }
@@ -283,6 +285,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     if (versionFromUrl != null)
                     {
                         versionFromUrl.IsSelected = true;
+                        IsVersionPreview = versionFromUrl.IsPreview;
                         Version = versionFromUrl.Version;
                     }
                     else
@@ -321,8 +324,9 @@ namespace Volo.Docs.Pages.Documents.Project
                     {
                         return version;
                     }
-                    
+
                     version.DisplayText = $"{version.DisplayText} ({L["Preview"].Value})";
+                    version.IsPreview = true;
 
                 }
             }
@@ -530,6 +534,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             UserPreferences.Add("Document_Language_Code", DocumentLanguageCode);
             UserPreferences.Add("Document_Version", Version);
+            UserPreferences.Add("Release_Status", IsVersionPreview ? "preview" : "stable");
 
             var cookie = Request.Cookies["AbpDocsPreferences"];
 
