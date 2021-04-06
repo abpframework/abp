@@ -227,7 +227,7 @@ public async Task<TodoItemDto> CreateAsync(string text)
 
 Repository's `InsertAsync` method inserts the given `TodoItem` to database and returns the same `TodoItem` object. It also sets the `Id`, so we can use it on the returning object. We are simply returning a `TodoItemDto` by creating from the new `TodoItem` entity.
 
-Finally, we can simple implement the `DeleteAsync` as the following code block:
+Finally, we can implement the `DeleteAsync` as the following code block:
 
 ````csharp
 public async Task DeleteAsync(Guid id)
