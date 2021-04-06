@@ -256,6 +256,7 @@
     "PaymentProduct": "付款产品",
     "ProductName": "产品名称",
     "Code": "代码",
-    "GenerateInvoice": "生成发票"
+    "GenerateInvoice": "生成发票",
+    "ExportOrganizationsToExcel": "将组织出口到Excel"
   }
 }
