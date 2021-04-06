@@ -271,6 +271,8 @@
     "PaymentDetails": "Payment Details",
     "PaymentProduct": "Payment Product",
     "ProductName": "Product Name",
-    "Code": "Code"
+    "Code": "Code",
+    "GenerateInvoice": "Generate Invoice",
+    "ExportOrganizationsToExcel": "Export Organizations To Excel"
   }
 }
