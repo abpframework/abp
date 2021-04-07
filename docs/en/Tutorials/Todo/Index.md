@@ -776,7 +776,7 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
 
 ### home.component.scss
 
-As the final touch, open the `/angular/src/app/home/home.component.scss` file in the `Pages` and replace with the following content:
+As the final touch, open the `/angular/src/app/home/home.component.scss` file and replace its content with the following code block:
 
 ````css
 #TodoList{
