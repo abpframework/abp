@@ -669,13 +669,13 @@ ABP provides a handy feature to automatically create client-side services to eas
 
 Ensure that the `TodoApp.HttpApi.Host` project is running, open a command-line terminal in the `angular` folder and type the following command:
 
-````
+````bash
 abp generate-proxy
 ````
 
 If everything goes well, it should generate an output like shown below:
 
-````
+````bash
 CREATE src/app/proxy/generate-proxy.json (170978 bytes)
 CREATE src/app/proxy/README.md (1000 bytes)
 CREATE src/app/proxy/todo.service.ts (794 bytes)
