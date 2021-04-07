@@ -173,6 +173,46 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 context.Symbols.Add("CMS-KIT");
             }
+            else
+            {
+                RemoveCmsKitDependenciesFromPackageJsonFiles(steps);
+            }
+        }
+
+        private static void RemoveCmsKitDependenciesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+        {
+            var adminCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
+            {
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json"
+            };
+
+            var publicCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
+            {
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public.Host/package.json",
+            };
+
+            var unifiedCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
+            {
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json"
+            };
+
+            foreach (var packageJsonFile in adminCmsPackageInstalledProjectsPackageJsonFiles)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFilesStep(packageJsonFile, "@volo/cms-kit-pro.admin"));
+            }
+
+            foreach (var packageJsonFile in publicCmsPackageInstalledProjectsPackageJsonFiles)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFilesStep(packageJsonFile, "@volo/cms-kit-pro.public"));
+            }
+
+            foreach (var packageJsonFile in unifiedCmsPackageInstalledProjectsPackageJsonFiles)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFilesStep(packageJsonFile, "@volo/cms-kit-pro"));
+            }
         }
 
         private bool IsCmsKitSupportedForTargetVersion(ProjectBuildContext context)
