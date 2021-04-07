@@ -768,7 +768,7 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
 </div>
 ````
 
-### Index.razor.css
+### home.component.css
 
 As the final touch, open the `/angular/src/app/home/home.component.css` file in the `Pages` and replace with the following content:
 
