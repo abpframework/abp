@@ -273,5 +273,6 @@
     "ProductName": "Product Name",
     "Code": "Code",
     "GenerateInvoice": "Generate Invoice"
+    "ExportOrganizationsToExcel": "Export Organizations To Excel"
   }
 }
