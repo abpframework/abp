@@ -20,10 +20,11 @@ namespace Volo.Blogging
             CreateMap<Post, PostWithDetailsDto>().Ignore(x=>x.Writer).Ignore(x=>x.CommentCount).Ignore(x=>x.Tags);
             CreateMap<Comment, CommentWithDetailsDto>().Ignore(x => x.Writer);
             CreateMap<Tag, TagDto>();
-            CreateMap<Post, PostCacheItem>().Ignore(x=>x.Writer).Ignore(x=>x.CommentCount).Ignore(x=>x.Tags);
+            CreateMap<Post, PostCacheItem>().Ignore(x=>x.CommentCount).Ignore(x=>x.Tags);
             CreateMap<PostCacheItem, PostWithDetailsDto>()
                 .IgnoreModificationAuditedObjectProperties()
                 .IgnoreDeletionAuditedObjectProperties()
+                .Ignore(x=>x.Writer)
                 .Ignore(x => x.CommentCount)
                 .Ignore(x => x.Tags);
         }

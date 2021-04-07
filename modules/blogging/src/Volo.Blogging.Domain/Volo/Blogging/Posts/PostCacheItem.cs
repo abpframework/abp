@@ -29,9 +29,6 @@ namespace Volo.Blogging.Posts
 
         public int CommentCount { get; set; }
 
-        [CanBeNull]
-        public BlogUser Writer { get; set; }
-
         public List<Tag> Tags { get; set; }
         
         public Guid? CreatorId { get; set; }
