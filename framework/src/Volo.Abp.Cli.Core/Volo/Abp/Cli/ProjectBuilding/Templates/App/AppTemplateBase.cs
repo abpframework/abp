@@ -184,19 +184,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             var adminCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
             {
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Web/package.json",
-                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json"
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json"
             };
 
             var publicCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
             {
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/package.json",
-                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public.Host/package.json",
-            };
-
-            var unifiedCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
-            {
-                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
-                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json"
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public.Host/package.json"
             };
 
             foreach (var packageJsonFile in adminCmsPackageInstalledProjectsPackageJsonFiles)
@@ -207,11 +203,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             foreach (var packageJsonFile in publicCmsPackageInstalledProjectsPackageJsonFiles)
             {
                 steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFile, "@volo/cms-kit-pro.public"));
-            }
-
-            foreach (var packageJsonFile in unifiedCmsPackageInstalledProjectsPackageJsonFiles)
-            {
-                steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFile, "@volo/cms-kit-pro"));
             }
         }
 
