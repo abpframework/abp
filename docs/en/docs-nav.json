@@ -1,6 +1,10 @@
 {
   "items": [
     {
+      "text": "Quick Start",
+      "path": "Tutorials/Todo/Index.md"
+    },
+    {
       "text": "Getting Started",
       "items": [
         {

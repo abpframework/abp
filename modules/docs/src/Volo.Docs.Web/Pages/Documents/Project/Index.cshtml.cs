@@ -568,10 +568,24 @@ namespace Volo.Docs.Pages.Documents.Project
                     UserPreferences.Remove(key + "_Value");
                 }
 
+                var values = DocumentPreferences?.Parameters?.FirstOrDefault(p => p.Name == key)?.Values;
+
+                if (values == null)
+                {
+                    continue;
+                }
+
+                if (!values.Any(v => v.Key == value))
+                {
+                    var defaultValue = values.FirstOrDefault();
+                    UserPreferences.Add(key, defaultValue.Key);
+                    UserPreferences.Add(key + "_Value", defaultValue.Value);
+
+                    continue;
+                }
+
                 UserPreferences.Add(key, value);
-                UserPreferences.Add(key + "_Value",
-                    DocumentPreferences?.Parameters?.FirstOrDefault(p => p.Name == key)?.Values
-                        .FirstOrDefault(v => v.Key == value).Value);
+                UserPreferences.Add(key + "_Value", values.FirstOrDefault(v => v.Key == value).Value);
             }
 
             if (DocumentPreferences?.Parameters == null)
