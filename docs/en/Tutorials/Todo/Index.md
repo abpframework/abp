@@ -760,7 +760,7 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
       <!-- TODO ITEMS LIST -->
       <ul id="TodoList">
         <li *ngFor="let todoItem of todoItems">
-          <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {{ todoItem.text }}
+          <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
         </li>
       </ul>
     </div>
