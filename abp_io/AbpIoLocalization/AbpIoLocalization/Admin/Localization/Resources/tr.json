@@ -222,6 +222,11 @@
     "ProductName": "Ürün İsmi",
     "Code": "Kod",
     "GenerateInvoice": "Fatura Oluştur",
-    "ExportOrganizationsToExcel": "Organizasyonu Excel'e aktar"
+    "ExportOrganizationsToExcel": "Organizasyonu Excel'e aktar",
+    "ThisExtensionIsNotAllowed": "Bu uzantıya izin verilmiyor.",
+    "TheFileIsTooLarge": "Dosya çok büyük.",
+    "ArticleDeletionConfirmationMessage": "Bu makaleyi kalıcı olarak silmek istediğinizden emin misiniz?",
+    "ChooseCoverImage": "Bir kapak resmi seçin...",
+    "CoverImage": "Kapak Resmi"
   }
 }
