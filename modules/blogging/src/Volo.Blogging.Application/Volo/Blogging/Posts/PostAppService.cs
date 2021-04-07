@@ -20,9 +20,15 @@ namespace Volo.Blogging.Posts
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
         private readonly ICommentRepository _commentRepository;
-        private readonly IDistributedCache<ListResultDto<PostWithDetailsDto>> _postsCache;
+        private readonly IDistributedCache<List<PostCacheItem>> _postsCache;
 
-        public PostAppService(IPostRepository postRepository, ITagRepository tagRepository, ICommentRepository commentRepository, IBlogUserLookupService userLookupService, IDistributedCache<ListResultDto<PostWithDetailsDto>> postsCache)
+        public PostAppService(
+            IPostRepository postRepository,
+            ITagRepository tagRepository,
+            ICommentRepository commentRepository,
+            IBlogUserLookupService userLookupService,
+            IDistributedCache<List<PostCacheItem>> postsCache
+        )
         {
             UserLookupService = userLookupService;
             _postRepository = postRepository;
@@ -33,21 +39,47 @@ namespace Volo.Blogging.Posts
         
         public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
         {
-            var cacheKey = id.ToString() + "-" + tagName;
+            var posts = await _postRepository.GetPostsByBlogId(id);
+            var tag = tagName.IsNullOrWhiteSpace() ? null : await _tagRepository.FindByNameAsync(id, tagName);
+            var userDictionary = new Dictionary<Guid, BlogUserDto>();
+            var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
             
-            return await _postsCache.GetOrAddAsync(
-                cacheKey,
-                async () => await GetPostsByBlogIdAndTagName(id, tagName),
-                () => new DistributedCacheEntryOptions
+            foreach (var postDto in postDtos)
+            {
+                postDto.Tags = await GetTagsOfPost(postDto.Id);
+            }
+            
+            if (tag != null)
+            {
+                postDtos = await FilterPostsByTag(postDtos, tag);
+            }
+            
+            foreach (var postDto in postDtos)
+            {
+                if (postDto.CreatorId.HasValue)
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddHours(6)
+                    if (!userDictionary.ContainsKey(postDto.CreatorId.Value))
+                    {
+                        var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+                        if (creatorUser != null)
+                        {
+                            userDictionary[creatorUser.Id] = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
+                        }
+                    }
+            
+                    if (userDictionary.ContainsKey(postDto.CreatorId.Value))
+                    {
+                        postDto.Writer = userDictionary[(Guid)postDto.CreatorId];
+                    }
                 }
-            );
+            }
+            
+            return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
         
         public async Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedListAsync(Guid blogId)
         {
-            return await _postsCache.GetOrAddAsync(
+            var postCacheItems = await _postsCache.GetOrAddAsync(
                 blogId.ToString(),
                 async () => await GetTimeOrderedPostsAsync(blogId),
                 () => new DistributedCacheEntryOptions
@@ -55,6 +87,22 @@ namespace Volo.Blogging.Posts
                     AbsoluteExpiration = DateTimeOffset.Now.AddHours(6)
                 }
             );
+
+            var postsWithDetails = ObjectMapper.Map<List<PostCacheItem>, List<PostWithDetailsDto>>(postCacheItems);
+            
+            foreach (var post in postsWithDetails)
+            {
+                if (post.CreatorId.HasValue)
+                {
+                    var creatorUser = await UserLookupService.FindByIdAsync(post.CreatorId.Value);
+                    if (creatorUser != null)
+                    {
+                        post.Writer = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
+                    }
+                }
+            }
+            
+            return new ListResultDto<PostWithDetailsDto>(postsWithDetails);
         }
 
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
@@ -157,62 +205,13 @@ namespace Volo.Blogging.Posts
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
 
-        private async Task<ListResultDto<PostWithDetailsDto>> GetPostsByBlogIdAndTagName(Guid id, string tagName)
-        {
-            var posts = await _postRepository.GetPostsByBlogId(id);
-            var tag = tagName.IsNullOrWhiteSpace() ? null : await _tagRepository.FindByNameAsync(id, tagName);
-            var userDictionary = new Dictionary<Guid, BlogUserDto>();
-            var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
-
-            foreach (var postDto in postDtos)
-            {
-                postDto.Tags = await GetTagsOfPost(postDto.Id);
-            }
-
-            if (tag != null)
-            {
-                postDtos = await FilterPostsByTag(postDtos, tag);
-            }
-
-            foreach (var postDto in postDtos)
-            {
-                if (postDto.CreatorId.HasValue)
-                {
-                    if (!userDictionary.ContainsKey(postDto.CreatorId.Value))
-                    {
-                        var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
-                        if (creatorUser != null)
-                        {
-                            userDictionary[creatorUser.Id] = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
-                        }
-                    }
-
-                    if (userDictionary.ContainsKey(postDto.CreatorId.Value))
-                    {
-                        postDto.Writer = userDictionary[(Guid)postDto.CreatorId];
-                    }
-                }
-            }
-
-            return new ListResultDto<PostWithDetailsDto>(postDtos);
-        }
-        
-        private async Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedPostsAsync(Guid blogId)
+        private async Task<List<PostCacheItem>> GetTimeOrderedPostsAsync(Guid blogId)
         {
             var posts = await _postRepository.GetOrderedList(blogId);
 
-            var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
+            var postCacheItems = ObjectMapper.Map<List<Post>, List<PostCacheItem>>(posts);
 
-            foreach (var postDto in postDtos)
-            {
-                var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
-                if (creatorUser != null)
-                {
-                    postDto.Writer = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
-                }
-            }
-
-            return new ListResultDto<PostWithDetailsDto>(postDtos);
+            return postCacheItems;
         }
         
         private async Task<string> RenameUrlIfItAlreadyExistAsync(Guid blogId, string url, Post existingPost = null)
