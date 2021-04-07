@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
+using Volo.Abp.EventBus.Local;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
@@ -21,13 +22,15 @@ namespace Volo.Blogging.Posts
         private readonly ITagRepository _tagRepository;
         private readonly ICommentRepository _commentRepository;
         private readonly IDistributedCache<List<PostCacheItem>> _postsCache;
+        private readonly ILocalEventBus _localEventBus;
 
         public PostAppService(
             IPostRepository postRepository,
             ITagRepository tagRepository,
             ICommentRepository commentRepository,
             IBlogUserLookupService userLookupService,
-            IDistributedCache<List<PostCacheItem>> postsCache
+            IDistributedCache<List<PostCacheItem>> postsCache,
+            ILocalEventBus localEventBus
         )
         {
             UserLookupService = userLookupService;
@@ -35,6 +38,7 @@ namespace Volo.Blogging.Posts
             _tagRepository = tagRepository;
             _commentRepository = commentRepository;
             _postsCache = postsCache;
+            _localEventBus = localEventBus;
         }
         
         public async Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid id, string tagName)
@@ -84,7 +88,7 @@ namespace Volo.Blogging.Posts
                 async () => await GetTimeOrderedPostsAsync(blogId),
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddHours(6)
+                    AbsoluteExpiration = DateTimeOffset.Now.AddHours(1)
                 }
             );
 
@@ -155,6 +159,7 @@ namespace Volo.Blogging.Posts
             await _commentRepository.DeleteOfPost(id);
 
             await _postRepository.DeleteAsync(id);
+            await PublishPostChangedEventAsync(post.BlogId);
         }
 
         [Authorize(BloggingPermissions.Posts.Update)]
@@ -176,6 +181,7 @@ namespace Volo.Blogging.Posts
 
             var tagList = SplitTags(input.Tags);
             await SaveTags(tagList, post);
+            await PublishPostChangedEventAsync(post.BlogId);
 
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
@@ -201,6 +207,7 @@ namespace Volo.Blogging.Posts
 
             var tagList = SplitTags(input.Tags);
             await SaveTags(tagList, post);
+            await PublishPostChangedEventAsync(post.BlogId);
 
             return ObjectMapper.Map<Post, PostWithDetailsDto>(post);
         }
@@ -296,6 +303,15 @@ namespace Volo.Blogging.Posts
             var filteredPostDtos = allPostDtos.Where(p => p.Tags?.Any(t => t.Id == tag.Id) ?? false).ToList();
 
             return Task.FromResult(filteredPostDtos);
+        }
+
+        private async Task PublishPostChangedEventAsync(Guid blogId)
+        {
+            await _localEventBus.PublishAsync(
+                new PostChangedEvent
+                {
+                    BlogId = blogId
+                });
         }
     }
 }

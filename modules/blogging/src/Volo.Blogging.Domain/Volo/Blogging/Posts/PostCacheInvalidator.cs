@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 
 namespace Volo.Blogging.Posts
 {
-    public class PostCacheInvalidator : ILocalEventHandler<EntityChangedEventData<Post>>, ITransientDependency
+    public class PostCacheInvalidator : ILocalEventHandler<PostChangedEvent>, ITransientDependency
     {
         protected IDistributedCache<List<PostCacheItem>> Cache { get; }
 
@@ -16,10 +15,9 @@ namespace Volo.Blogging.Posts
             Cache = cache;
         }
         
-        public virtual async Task HandleEventAsync(EntityChangedEventData<Post> eventData)
+        public virtual async Task HandleEventAsync(PostChangedEvent post)
         {
-            var cacheKey = eventData.Entity.BlogId.ToString();
-            await Cache.RemoveAsync(cacheKey);
+            await Cache.RemoveAsync(post.BlogId.ToString());
         }
     }
 }
