@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
@@ -16,7 +17,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         public override void Execute(ProjectBuildContext context)
         {
-            var packageJsonFile = context.Files.Find(f => f.Name == _packageJsonFilePath);
+            var packageJsonFile = context.Files.FirstOrDefault(f => f.Name == _packageJsonFilePath);
 
             if (packageJsonFile == null)
             {
