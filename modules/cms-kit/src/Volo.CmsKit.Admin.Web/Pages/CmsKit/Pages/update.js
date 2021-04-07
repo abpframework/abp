@@ -61,7 +61,7 @@
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
-            height: "95vh",
+            height: "65vh",
             minHeight: "25em",
             initialEditType: 'markdown',
             language: $editorContainer.data("language"),
