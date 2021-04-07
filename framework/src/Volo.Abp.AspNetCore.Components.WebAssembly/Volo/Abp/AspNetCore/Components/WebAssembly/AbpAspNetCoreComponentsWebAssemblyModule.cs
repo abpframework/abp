@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Volo.Abp.AspNetCore.Components.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -32,8 +29,6 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Replace(ServiceDescriptor.Transient<IComponentActivator, ServiceProviderComponentActivator>());
-
             context.Services
                 .GetHostBuilder().Logging
                 .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
