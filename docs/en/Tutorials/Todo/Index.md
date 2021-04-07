@@ -667,7 +667,9 @@ If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
 ABP provides a handy feature to automatically create client-side services to easily consume HTTP APIs provided by the server.
 
-You first need to run the `TodoApp.HttpApi.Host` project since the proxy generator reads API definitions from the server application. However, there is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop down menu, as shown in the figure below:
+You first need to run the `TodoApp.HttpApi.Host` project since the proxy generator reads API definitions from the server application. 
+
+> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 
 ![run-without-iisexpress](run-without-iisexpress.png)
 
