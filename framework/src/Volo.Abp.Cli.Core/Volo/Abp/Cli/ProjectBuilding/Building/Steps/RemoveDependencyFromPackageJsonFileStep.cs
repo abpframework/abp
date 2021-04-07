@@ -3,12 +3,12 @@ using Newtonsoft.Json.Linq;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    public class RemoveDependencyFromPackageJsonFilesStep : ProjectBuildPipelineStep
+    public class RemoveDependencyFromPackageJsonFileStep : ProjectBuildPipelineStep
     {
         private readonly string _packageJsonFilePath;
         private readonly string _packageName;
 
-        public RemoveDependencyFromPackageJsonFilesStep(string packageJsonFilePath, string packageName)
+        public RemoveDependencyFromPackageJsonFileStep(string packageJsonFilePath, string packageName)
         {
             _packageJsonFilePath = packageJsonFilePath;
             _packageName = packageName;

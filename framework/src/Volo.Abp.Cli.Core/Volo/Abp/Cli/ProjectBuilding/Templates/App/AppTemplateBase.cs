@@ -201,17 +201,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             foreach (var packageJsonFile in adminCmsPackageInstalledProjectsPackageJsonFiles)
             {
-                steps.Add(new RemoveDependencyFromPackageJsonFilesStep(packageJsonFile, "@volo/cms-kit-pro.admin"));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFile, "@volo/cms-kit-pro.admin"));
             }
 
             foreach (var packageJsonFile in publicCmsPackageInstalledProjectsPackageJsonFiles)
             {
-                steps.Add(new RemoveDependencyFromPackageJsonFilesStep(packageJsonFile, "@volo/cms-kit-pro.public"));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFile, "@volo/cms-kit-pro.public"));
             }
 
             foreach (var packageJsonFile in unifiedCmsPackageInstalledProjectsPackageJsonFiles)
             {
-                steps.Add(new RemoveDependencyFromPackageJsonFilesStep(packageJsonFile, "@volo/cms-kit-pro"));
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFile, "@volo/cms-kit-pro"));
             }
         }
 
