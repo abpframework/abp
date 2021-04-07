@@ -3,7 +3,8 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor"]
+    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
+    "DB": ["EF", "Mongo"]
 }
 ````
 
@@ -15,39 +16,59 @@ You can find source code of the completed application [here](https://github.com/
 
 ## Pre-Requirements
 
-### IDE
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 5.0+](https://dotnet.microsoft.com/download/dotnet) development.
 
-You will need to an IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 5.0+](https://dotnet.microsoft.com/download/dotnet) development.
+{{if DB=="Mongo"}}
 
-### ABP CLI
+* [MongoDB Server 4.0+](https://docs.mongodb.com/manual/administration/install-community/)
 
-We will use the ABP CLI to create new solutions with the ABP Framework. You can run the following command in a command-line terminal to install it:
+{{end}}
+
+{{if UI=="NG"}}
+
+* [Node v14.x](https://nodejs.org/)
+
+{{end}}
+
+## Creating a New Solution
+
+We will use the [ABP CLI](../../CLI.md) to create new solutions with the ABP Framework. You can run the following command in a command-line terminal to install it:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-## Creating a New Solution
-
-Create an empty folder, open a command-line terminal and execute the following command in the terminal:
+Then create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
-abp new TodoApp{{if UI=="Blazor"}} -u blazor{{end}}
+abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
 ````
 
-This will create a new solution, named *TodoApp*. Open the solution in your favorite IDE.
+{{if UI=="NG"}}
+
+This will create a new solution, named *TodoApp* with `angular` and `aspnet-core` folders. Once the solution is ready, open the ASP.NET Core solution in your favorite IDE.
+
+{{else}}
+
+This will create a new solution, named *TodoApp*. Once the solution is ready, open it in your favorite IDE.
+
+{{end}}
 
 ### Create the Database
 
 If you are using Visual Studio, right click to the `TodoApp.DbMigrator` project, select *Set as StartUp Project*, then hit *Ctrl+F5* to run it without debugging. It will create the initial database and seed the initial data.
 
+{{if DB=="EF"}}
+
 > Some IDEs (e.g. Rider) may have problems for the first run since *DbMigrator* adds the initial migration and re-compiles the project. In this case, open a command-line terminal in the folder of the `.DbMigrator` project and execute the `dotnet run` command.
+
+{{end}}
 
 ### Run the Application
 
-{{if UI=="MVC"}}
+{{if UI=="MVC" || UI=="BlazorServer"}}
 
-It is good to run the application before starting the development. Ensure the `TodoApp.Web` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
+It is good to run the application before starting the development. Ensure the {{if UI=="BlazorServer"}}`TodoApp.Blazor`{{else}}`TodoApp.Web`{{end}} project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
 
 {{else if UI=="Blazor"}}
 
@@ -61,6 +82,33 @@ Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the a
 ![todo-swagger-ui-initial](todo-swagger-ui-initial.png)
 
 You can explore and test your HTTP API with this UI. Now, we can set the `TodoApp.Blazor` as the startup project and run it to open the actual Blazor application UI:
+
+{{else if UI=="NG"}}
+
+It is good to run the application before starting the development. The solution has two main applications;
+
+* `TodoApp.HttpApi.Host` (in the .NET solution) host the server-side HTTP API.
+* `angular` folder contains the Angular application.
+
+Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
+
+![todo-swagger-ui-initial](todo-swagger-ui-initial.png)
+
+You can explore and test your HTTP API with this UI. If that works, we can run the Angular client application.
+
+First, run the following command to restore the NPM packages;
+
+````bash
+npm install
+````
+
+It will take some time to install all the packages. Then you can run the application using the following command:
+
+````bash
+npm start
+````
+
+This command takes time, but eventually runs and opens the application in your default browser:
 
 {{end}}
 
@@ -90,6 +138,8 @@ namespace TodoApp
 `BasicAggregateRoot` is one the simplest base class to create root entities, and `Guid` is the primary key (`Id`) of the entity here.
 
 ## Database Integration
+
+{{if DB=="EF"}}
 
 Next step is to setup the [Entity Framework Core](../../Entity-Framework-Core.md) configuration.
 
@@ -137,7 +187,28 @@ You can apply changes to the database using the following command, in the same c
 dotnet ef database update
 ````
 
-> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="Blazor"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
+
+{{else if DB=="Mongo"}}
+
+Next step is to setup the [MongoDB](../../MongoDB.md) configuration. Open the `TodoAppMongoDbContext` class in the `MongoDb` folder of the *TodoApp.MongoDB* project and make the following changes;
+
+1. Add a new property to the class:
+
+````csharp
+public IMongoCollection<TodoItem> TodoItems => Collection<TodoItem>();
+````
+
+2. Add the following code inside the `CreateModel` method:
+
+````csharp
+modelBuilder.Entity<TodoItem>(b =>
+{
+    b.CollectionName = "TodoItems";
+});
+````
+
+{{end}}
 
 Now, we can use ABP repositories to save and retrieve todo items, as we'll do in the next section.
 
@@ -212,7 +283,7 @@ namespace TodoApp
             _todoItemRepository = todoItemRepository;
         }
         
-        // TODO: Implement the methods
+        // TODO: Implement the methods here...
     }
 }
 ````
@@ -445,7 +516,7 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 ![todo-api](todo-api.png)
 
-{{else if UI=="Blazor"}}
+{{else if UI=="Blazor" || UI=="BlazorServer"}}
 
 ### Index.razor.cs
 
@@ -490,7 +561,11 @@ namespace TodoApp.Blazor.Pages
 
 This class uses the `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. In this way, we don't need to refresh the whole todo list from the server.
 
+{{if UI=="Blazor"}}
+
 See the *Dynamic C# Proxies & Auto API Controllers* section below to learn how we could inject and use the application service interface from the Blazor application which is running on the browser! But now, let's continue and complete the application.
+
+{{end # Blazor}}
 
 ### Index.razor
 
@@ -570,6 +645,8 @@ This is a simple styling for the todo page. We believe that you can do much bett
 
 Now, you can run the application again to see the result.
 
+{{if UI=="Blazor"}}
+
 ### Dynamic C# Proxies & Auto API Controllers
 
 In the `Index.razor.cs` file, we've injected (with the `[Inject]` attribute) and used the `ITodoAppService` just like using a local service. Remember that the Blazor application is running on the browser while the implementation of this application service is running on the server.
@@ -581,6 +658,156 @@ However, you may ask that we haven't created any API Controller, so how server h
 If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
 ![todo-api](todo-api.png)
+
+{{end # Blazor}}
+
+{{else if UI=="NG"}}
+
+### Service Proxy Generation
+
+ABP provides a handy feature to automatically create client-side services to easily consume HTTP APIs provided by the server.
+
+You first need to run the `TodoApp.HttpApi.Host` project since the proxy generator reads API definitions from the server application. 
+
+> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
+
+![run-without-iisexpress](run-without-iisexpress.png)
+
+Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
+
+````bash
+abp generate-proxy
+````
+
+If everything goes well, it should generate an output like shown below:
+
+````bash
+CREATE src/app/proxy/generate-proxy.json (170978 bytes)
+CREATE src/app/proxy/README.md (1000 bytes)
+CREATE src/app/proxy/todo.service.ts (794 bytes)
+CREATE src/app/proxy/models.ts (66 bytes)
+CREATE src/app/proxy/index.ts (58 bytes)
+````
+
+We can then use the `todoService` to use the server-side HTTP APIs, as we'll do in the next section.
+
+### home.component.ts
+
+Open the `/angular/src/app/home/home.component.ts` file and replace its content with the following code block:
+
+````js
+import { ToasterService } from '@abp/ng.theme.shared';
+import { Component, OnInit } from '@angular/core';
+import { TodoItemDto, TodoService } from '@proxy';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
+})
+export class HomeComponent implements OnInit {
+
+  todoItems: TodoItemDto[];
+  newTodoText: string;
+
+  constructor(
+      private todoService: TodoService,
+      private toasterService: ToasterService)
+  { }
+
+  ngOnInit(): void {
+    this.todoService.getList().subscribe(response => {
+      this.todoItems = response;
+    });
+  }
+  
+  create(): void{
+    this.todoService.create(this.newTodoText).subscribe((result) => {
+      this.todoItems = this.todoItems.concat(result);
+      this.newTodoText = null;
+    });
+  }
+
+  delete(id: string): void {
+    this.todoService.delete(id).subscribe(() => {
+      this.todoItems = this.todoItems.filter(item => item.id !== id);
+      this.toasterService.info('Deleted the todo item.');
+    });
+  }  
+}
+
+````
+
+We've used the `todoService` to get the list of todo items and assigned the returning value to the `todoItems` array. We've also added `create` and `delete` methods. These methods will be used in the view side.
+
+### home.component.html
+
+Open the `/angular/src/app/home/home.component.html` file and replace its content with the following code block:
+
+````html
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">TODO LIST</div>
+    </div>
+    <div class="card-body">
+      <!-- FORM FOR NEW TODO ITEMS -->
+      <form class="form-inline" (ngSubmit)="create()">
+        <input
+          name="NewTodoText"
+          type="text"
+          [(ngModel)]="newTodoText"
+          class="form-control mr-2"
+          placeholder="enter text..."
+        />
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+      <!-- TODO ITEMS LIST -->
+      <ul id="TodoList">
+        <li *ngFor="let todoItem of todoItems">
+          <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+````
+
+### home.component.scss
+
+As the final touch, open the `/angular/src/app/home/home.component.scss` file and replace its content with the following code block:
+
+````css
+#TodoList{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#TodoList li {
+    padding: 5px;
+    margin: 5px 0px;
+    border: 1px solid #cccccc;
+    background-color: #f5f5f5;
+}
+
+#TodoList li i
+{
+    opacity: 0.5;
+}
+
+#TodoList li i:hover
+{
+    opacity: 1;
+    color: #ff0000;
+    cursor: pointer;
+}
+````
+
+This is a simple styling for the todo page. We believe that you can do much better :)
+
+Now, you can run the application again to see the result.
 
 {{end}}
 
