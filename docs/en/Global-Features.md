@@ -1,7 +1,5 @@
 # Global Features
 
-ABP Global Feature system is used to **enable**, **disable**  application & module features **on development time**. Global Features are totally different from [Features](Features.md). 
-
 The purpose of the Global Feature System is to **add a module to your application but disable the features you don't want to use** (or enable only the ones you need). Notice that the features are not determined on runtime, you must select the features **on development time**. Because it will not create database tables, APIs and other stuff for unused features, which is not possible to change then on the runtime.
 
 ## Installation
@@ -26,16 +24,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit().Enable(CommentsFeature.Name); //A
 GlobalFeatureManager.Instance.Modules.CmsKit().Enable("CmsKit.Comments"); //Alternative: Use magic string
 ```
 
-Alternative approach, using a lambda action to control a single module features:
 
-```csharp
-GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-{
-    cmsKit.EnableAll();
-    cmsKit.Reactions.Enable();
-    cmsKit.Enable<ReactionsFeature>();
-});
-```
 
 ### Check if a feature is enabled
 
@@ -60,7 +49,7 @@ public class CommentController : AbpController
 
 ## Implementation
 
-Global Feature system aims module based feature management . So, module has to have own Global Features and Global Module Features class to provide all features.
+Global Feature system aims module based feature management . A module has to have own Global Features itself.
 
 ### Define a Global Feature
 
@@ -82,7 +71,7 @@ public class FooBarFeature : GlobalFeature
 
 ### Define Global Module Features
 
-All global features of a module should be placed under o single **GlobalModuleFeatures** class.
+All global features of a module should be provided by a single **GlobalModuleFeatures** class.
 
 ```csharp
 public class GlobalFooFeatures : GlobalModuleFeatures
