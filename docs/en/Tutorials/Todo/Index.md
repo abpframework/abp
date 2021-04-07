@@ -3,7 +3,8 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor"]
+    "UI": ["MVC", "Blazor", "BlazorServer"],
+    "DB": ["EF", "Mongo"]
 }
 ````
 
@@ -15,39 +16,45 @@ You can find source code of the completed application [here](https://github.com/
 
 ## Pre-Requirements
 
-### IDE
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 5.0+](https://dotnet.microsoft.com/download/dotnet) development.
 
-You will need to an IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 5.0+](https://dotnet.microsoft.com/download/dotnet) development.
+{{if DB=="Mongo"}}
 
-### ABP CLI
+* [MongoDB Server 4.0+](https://docs.mongodb.com/manual/administration/install-community/)
 
-We will use the ABP CLI to create new solutions with the ABP Framework. You can run the following command in a command-line terminal to install it:
+{{end}}
+
+## Creating a New Solution
+
+We will use the [ABP CLI](../../CLI.md) to create new solutions with the ABP Framework. You can run the following command in a command-line terminal to install it:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-## Creating a New Solution
-
-Create an empty folder, open a command-line terminal and execute the following command in the terminal:
+Then create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
-abp new TodoApp{{if UI=="Blazor"}} -u blazor{{end}}
+abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
 ````
 
-This will create a new solution, named *TodoApp*. Open the solution in your favorite IDE.
+This will create a new solution, named *TodoApp*. Once the solution is ready, open it in your favorite IDE.
 
 ### Create the Database
 
 If you are using Visual Studio, right click to the `TodoApp.DbMigrator` project, select *Set as StartUp Project*, then hit *Ctrl+F5* to run it without debugging. It will create the initial database and seed the initial data.
 
+{{if DB=="EF"}}
+
 > Some IDEs (e.g. Rider) may have problems for the first run since *DbMigrator* adds the initial migration and re-compiles the project. In this case, open a command-line terminal in the folder of the `.DbMigrator` project and execute the `dotnet run` command.
+
+{{end}}
 
 ### Run the Application
 
-{{if UI=="MVC"}}
+{{if UI=="MVC" || UI=="BlazorServer"}}
 
-It is good to run the application before starting the development. Ensure the `TodoApp.Web` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
+It is good to run the application before starting the development. Ensure the {{if UI=="BlazorServer"}}`TodoApp.Blazor`{{else}}`TodoApp.Web`{{end}} project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
 
 {{else if UI=="Blazor"}}
 
@@ -90,6 +97,8 @@ namespace TodoApp
 `BasicAggregateRoot` is one the simplest base class to create root entities, and `Guid` is the primary key (`Id`) of the entity here.
 
 ## Database Integration
+
+{{if DB=="EF"}}
 
 Next step is to setup the [Entity Framework Core](../../Entity-Framework-Core.md) configuration.
 
@@ -138,6 +147,27 @@ dotnet ef database update
 ````
 
 > If you are using Visual Studio, you may want to use `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="Blazor"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
+
+{{else if DB=="Mongo"}}
+
+Next step is to setup the [MongoDB](../../MongoDB.md) configuration. Open the `TodoAppMongoDbContext` class in the `MongoDb` folder of the *TodoApp.MongoDB* project and make the following changes;
+
+1. Add a new property to the class:
+
+````csharp
+public IMongoCollection<TodoItem> TodoItems => Collection<TodoItem>();
+````
+
+2. Add the following code inside the `CreateModel` method:
+
+````csharp
+modelBuilder.Entity<TodoItem>(b =>
+{
+    b.CollectionName = "TodoItems";
+});
+````
+
+{{end}}
 
 Now, we can use ABP repositories to save and retrieve todo items, as we'll do in the next section.
 
@@ -445,7 +475,7 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 ![todo-api](todo-api.png)
 
-{{else if UI=="Blazor"}}
+{{else if UI=="Blazor" || UI=="BlazorServer"}}
 
 ### Index.razor.cs
 
@@ -490,7 +520,11 @@ namespace TodoApp.Blazor.Pages
 
 This class uses the `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. In this way, we don't need to refresh the whole todo list from the server.
 
+{{if UI=="Blazor"}}
+
 See the *Dynamic C# Proxies & Auto API Controllers* section below to learn how we could inject and use the application service interface from the Blazor application which is running on the browser! But now, let's continue and complete the application.
+
+{{end # Blazor}}
 
 ### Index.razor
 
@@ -570,6 +604,8 @@ This is a simple styling for the todo page. We believe that you can do much bett
 
 Now, you can run the application again to see the result.
 
+{{if UI=="Blazor"}}
+
 ### Dynamic C# Proxies & Auto API Controllers
 
 In the `Index.razor.cs` file, we've injected (with the `[Inject]` attribute) and used the `ITodoAppService` just like using a local service. Remember that the Blazor application is running on the browser while the implementation of this application service is running on the server.
@@ -582,7 +618,9 @@ If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
 ![todo-api](todo-api.png)
 
-{{end}}
+{{end # Blazor}}
+
+{{end # Blazor || BlazorServer}}
 
 ## Conclusion
 
