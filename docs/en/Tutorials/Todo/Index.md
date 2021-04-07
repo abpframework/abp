@@ -703,7 +703,7 @@ import { TodoItemDto, TodoService } from '@proxy';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
 
@@ -774,9 +774,9 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
 </div>
 ````
 
-### home.component.css
+### home.component.scss
 
-As the final touch, open the `/angular/src/app/home/home.component.css` file in the `Pages` and replace with the following content:
+As the final touch, open the `/angular/src/app/home/home.component.scss` file in the `Pages` and replace with the following content:
 
 ````css
 #TodoList{
