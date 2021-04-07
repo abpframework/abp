@@ -667,7 +667,9 @@ If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
 ABP provides a handy feature to automatically create client-side services to easily consume HTTP APIs provided by the server.
 
-You first need to run the `TodoApp.HttpApi.Host` project since the proxy generator reads API definitions from the server application. However, there is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop down menu, as shown in the figure below:
+You first need to run the `TodoApp.HttpApi.Host` project since the proxy generator reads API definitions from the server application. 
+
+> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 
 ![run-without-iisexpress](run-without-iisexpress.png)
 
@@ -701,7 +703,7 @@ import { TodoItemDto, TodoService } from '@proxy';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
 
@@ -772,9 +774,9 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
 </div>
 ````
 
-### home.component.css
+### home.component.scss
 
-As the final touch, open the `/angular/src/app/home/home.component.css` file in the `Pages` and replace with the following content:
+As the final touch, open the `/angular/src/app/home/home.component.scss` file and replace its content with the following code block:
 
 ````css
 #TodoList{
