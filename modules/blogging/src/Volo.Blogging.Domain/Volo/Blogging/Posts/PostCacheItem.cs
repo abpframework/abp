@@ -9,9 +9,10 @@ using Volo.Blogging.Users;
 namespace Volo.Blogging.Posts
 {
     [Serializable]
-    public class PostCacheItem
+    public class PostCacheItem : ICreationAuditedObject
     {
         public Guid Id { get; set; }
+        
         public Guid BlogId { get; set; }
 
         public string Title { get; set; }
@@ -32,8 +33,9 @@ namespace Volo.Blogging.Posts
         public BlogUser Writer { get; set; }
 
         public List<Tag> Tags { get; set; }
-        public Guid? CreatorId { get; set; }
         
+        public Guid? CreatorId { get; set; }
+
         public DateTime CreationTime { get; set; }
     }
 }

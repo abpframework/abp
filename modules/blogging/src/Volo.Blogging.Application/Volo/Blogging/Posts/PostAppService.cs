@@ -209,9 +209,7 @@ namespace Volo.Blogging.Posts
         {
             var posts = await _postRepository.GetOrderedList(blogId);
 
-            var postCacheItems = ObjectMapper.Map<List<Post>, List<PostCacheItem>>(posts);
-
-            return postCacheItems;
+            return ObjectMapper.Map<List<Post>, List<PostCacheItem>>(posts);
         }
         
         private async Task<string> RenameUrlIfItAlreadyExistAsync(Guid blogId, string url, Post existingPost = null)
