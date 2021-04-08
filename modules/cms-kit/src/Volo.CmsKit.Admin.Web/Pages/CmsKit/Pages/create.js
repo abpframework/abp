@@ -20,6 +20,10 @@
                     abp.notify.success(l('SuccessfullySaved'));
                     abp.ui.clearBusy();
                     location.href = "../Pages";
+                },
+                error: function(result){
+                    abp.ui.clearBusy();
+                    abp.notify.error(result.responseJSON.error.message);
                 }
             });
         }
@@ -86,7 +90,7 @@
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
-            height: "95vh",
+            height: "100%",
             minHeight: "25em",
             initialEditType: 'markdown',
             language: $editorContainer.data("language"),

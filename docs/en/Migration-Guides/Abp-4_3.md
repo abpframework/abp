@@ -1,5 +1,7 @@
 # ABP Framework 4.x to 4.3 Migration Guide
 
+This version comes with some changes in the startup template, mostly related to Blazor UI. This document explains the breaking changes. However, **it is suggested to [compare the startup templates manually](Upgrading-Startup-Template.md) to see all the changes** and apply to your solution.
+
 ## Common
 
 * `app.UseVirtualFiles()` has been marked as **obsolete**. Use `app.UseStaticFiles()` instead. ABP will handle the virtual file system integrated to the static files middleware.

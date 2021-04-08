@@ -73,7 +73,6 @@
                                 commentsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        abp.notify.info(l("SuccessfullyDeleted"));
                                         _dataTable.ajax.reload();
                                     });
                             }

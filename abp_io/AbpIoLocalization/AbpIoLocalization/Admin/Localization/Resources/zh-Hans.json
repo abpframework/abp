@@ -255,6 +255,12 @@
     "PaymentDetails": "付款详情",
     "PaymentProduct": "付款产品",
     "ProductName": "产品名称",
-    "Code": "代码"
+    "Code": "代码",
+    "GenerateInvoice": "生成发票",
+    "ExportOrganizationsToExcel": "将组织导出到Excel",
+    "ThisExtensionIsNotAllowed": "不允许此扩展名.",
+    "TheFileIsTooLarge": "文件过大.",
+    "ArticleDeletionConfirmationMessage": "您确定要硬删除这篇文章吗？",
+    "ChooseCoverImage": "选项一张封面图片"
   }
 }

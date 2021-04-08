@@ -46,10 +46,12 @@ namespace Volo.Abp.IdentityServer
         public async Task IsRedirectUriValidAsync()
         {
             (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("https://t1.api.abp.io:8080/signin-oidc", _testClient)).ShouldBeTrue();
+            (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("https://api.abp.io:8080/signin-oidc", _testClient)).ShouldBeTrue();
             (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("http://t2.ng.abp.io/index.html", _testClient)).ShouldBeTrue();
+            (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("http://ng.abp.io/index.html", _testClient)).ShouldBeTrue();
 
             (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("https://api.abp:8080/", _testClient)).ShouldBeFalse();
-            (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("http://ng.abp.io", _testClient)).ShouldBeFalse();
+            (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("http://ng.abp.io", _testClient)).ShouldBeTrue();
             (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("https://api.t1.abp:8080/", _testClient)).ShouldBeFalse();
             (await _abpStrictRedirectUriValidator.IsRedirectUriValidAsync("http://ng.t1.abp.io", _testClient)).ShouldBeFalse();
         }
@@ -58,10 +60,12 @@ namespace Volo.Abp.IdentityServer
         public async Task IsPostLogoutRedirectUriValidAsync()
         {
             (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("https://t1.api.abp.io:8080/signin-oidc", _testClient)).ShouldBeTrue();
+            (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("https://api.abp.io:8080/signin-oidc", _testClient)).ShouldBeTrue();
             (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("http://t2.ng.abp.io/index.html", _testClient)).ShouldBeTrue();
+            (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("http://ng.abp.io/index.html", _testClient)).ShouldBeTrue();
 
             (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("https://api.abp:8080/", _testClient)).ShouldBeFalse();
-            (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("http://ng.abp.io", _testClient)).ShouldBeFalse();
+            (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("http://ng.abp.io", _testClient)).ShouldBeTrue();
             (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("https://api.t1.abp:8080/", _testClient)).ShouldBeFalse();
             (await _abpStrictRedirectUriValidator.IsPostLogoutRedirectUriValidAsync("http://ng.t1.abp.io", _testClient)).ShouldBeFalse();
         }

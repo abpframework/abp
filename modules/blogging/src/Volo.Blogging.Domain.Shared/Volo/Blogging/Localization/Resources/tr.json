@@ -12,6 +12,7 @@
     "Permission:Posts": "Yazılar",
     "Permission:Tags": "Etiketler",
     "Permission:Comments": "Yorumlar",
+    "Permission:ClearCache": "Önbelleği temizle",
     "Title": "Başlık",
     "Delete": "Sil",
     "Reply": "Yanıtla",
@@ -53,6 +54,8 @@
     "Blogs": "Bloglar",
     "Tags": "Etiketler",
     "ShareOn": "Paylaş",
-    "TitleLengthWarning": "Başlığınınz SEO dostu olabilmesi için 60 karakterden az olmasını sağlayın!"
+    "TitleLengthWarning": "Başlığınınz SEO dostu olabilmesi için 60 karakterden az olmasını sağlayın!",
+    "ClearCache": "Önbelleği temizle",
+    "ClearCacheConfirmationMessage": "Önbelleği temizlemek istediğinizden emin misiniz?"
   }
 }

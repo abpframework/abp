@@ -215,7 +215,7 @@ Open the generated `src/app/my-role/my-role.component.html` file and replace its
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ 'AbpIdentity::Cancel' | abpLocalization }}}%}
     </button>
     <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">{%{{{

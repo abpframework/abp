@@ -101,7 +101,7 @@ postFoo(body: Foo) {
 
 
 
-You may [check here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L23) for complete  `Rest.Request<T>` type, which has only a few chages compared to [HttpRequest](https://angular.io/api/common/http/HttpRequest) class in Angular.
+You may [check here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L23) for complete  `Rest.Request<T>` type, which has only a few changes compared to [HttpRequest](https://angular.io/api/common/http/HttpRequest) class in Angular.
 
 
 
