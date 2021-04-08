@@ -12,8 +12,6 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.GlobalFeatures
 ```
 
-
-
 ## Implementation
 
 Global Feature system aims module based feature management . A module has to have own Global Features itself.
@@ -50,8 +48,6 @@ public class GlobalShoppingFeatures : GlobalModuleFeatures
     }
 }
 ```
-
-
 
 ## Usage
 
