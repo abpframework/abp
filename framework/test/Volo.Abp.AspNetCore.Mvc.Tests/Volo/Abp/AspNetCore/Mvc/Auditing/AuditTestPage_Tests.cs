@@ -73,5 +73,20 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
             await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
+
+        [Fact]
+        public async Task Should_Trigger_Middleware_And_AuditLog_Exception_When_Activate_Page_Failed()
+        {
+            _options.IsEnabledForGetRequests = true;
+            _options.AlwaysLogOnException = true;
+
+            try
+            {
+                await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditActivateFailed", System.Net.HttpStatusCode.InternalServerError);
+            }
+            catch { }
+
+            await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.Exceptions.Any()));
+        }
     }
 }
