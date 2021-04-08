@@ -75,7 +75,7 @@ namespace MyProject
 
 The given `SendAsync` method in the example is an extension method to send sms with primitive paremeters, it basicly creates `SmsMessage` object and pass it. You can also use the default `SendAsync` method which requires `SmsMessage` object.
 
-> `IEmailSender` is the suggested way to send emails, since it makes your code provider independent.
+> `ISmsSender` is the suggested way to send SMS, since it makes your code provider independent.
 
 ## SmsMessage
 
