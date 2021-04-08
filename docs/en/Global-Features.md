@@ -2,110 +2,107 @@
 The purpose of the Global Feature System is to **add a module to your application but disable the features you don't want to use** (or enable only the ones you need). Notice that the features are not determined on runtime, you must select the features **on development time**. Because it will not create database tables, APIs and other stuff for unused features, which is not possible to change then on the runtime.
 
 ## Installation
-Global Feature system is pre-installed in abp startup templates. No need any installation manually.
+> This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-## Usage
+### Using the ABP CLI
 
-### Enable/Disable Existing Features
+Open a command line window in the folder of the project (.csproj file) and type the following command:
 
-```csharp
-//Enable all the CMS Kit Features
-GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
-//Disable all the CMS Kit Features (while it is already disabled by default)
-GlobalFeatureManager.Instance.Modules.CmsKit().DisableAll();
-//Enable a feature
-GlobalFeatureManager.Instance.Modules.CmsKit().Comments.Enable();
-GlobalFeatureManager.Instance.Modules.CmsKit().Enable<CommentsFeature>(); //Alternative: use the feature class
-GlobalFeatureManager.Instance.Modules.CmsKit().Enable(CommentsFeature.Name); //Alternative: use the feature name
-GlobalFeatureManager.Instance.Modules.CmsKit().Enable("CmsKit.Comments"); //Alternative: Use magic string
+```bash
+abp add-package Volo.Abp.GlobalFeatures
 ```
 
-### Check if a feature is enabled
 
-```csharp
-GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>();
-GlobalFeatureManager.Instance.IsEnabled(CommentsFeature.Name); //Alternative
-```
-
-Both methods return `bool`.
-
-Beside the manual check, there is `[RequiresGlobalFeature]` attribute to check it declaratively for a controller or page. ABP returns 404 if the related feature was disabled.
-
-```csharp
-[RequiresGlobalFeature(typeof(CommentsFeature))]
-public class CommentController : AbpController
-{
-  // ...
-}
-```
 
 ## Implementation
+
 Global Feature system aims module based feature management . A module has to have own Global Features itself.
 
 ### Define a Global Feature
+
 A feature class is something like that:
 
 ```csharp
 [GlobalFeatureName(Name)]
-public class FooBarFeature : GlobalFeature
+public class PaymentFeature : GlobalFeature
 {
-    public const string Name = "Foo.Bar";
-    internal FooBarFeature(
-        [NotNull] GlobalFooFeatures features
-    ) : base(features)
+    public const string Name = "Shopping.Payment";
+
+    public PaymentFeature(GlobalModuleFeatures module) : base(module)
     {
     }
 }
 ```
 
 ### Define Global Module Features
-All global features of a module should be provided by a single **GlobalModuleFeatures** class.
+
+All features of a module have to be defined in a Global Module Features class.
 
 ```csharp
-public class GlobalFooFeatures : GlobalModuleFeatures
+public class GlobalShoppingFeatures : GlobalModuleFeatures
 {
-  public const string ModuleName = "Foo";
-  
-  public FooBarFeature FooBar => GetFeature<FooBarFeature>();
-  
-  public GlobalFooFeatures([NotNull] GlobalFeatureManager featureManager)
-    : base(featureManager)
+    public const string ModuleName = "Shopping";
+
+    public GlobalShoppingFeatures(GlobalFeatureManager featureManager) : base(featureManager)
     {
+        AddFeature(new PaymentFeature(this));
+        // And more features...
     }
 }
 ```
 
-### Define Global Module Features Dictionary Extensions
-An extension method is better to configure global fetures easily. 
+
+
+## Usage
+
+### Enable/Disable Features
+
+Global features are managed  by modules. Module Features have to be added to Modules of GlobalFeatureManager.
 
 ```csharp
-public static class GlobalModuleFeaturesDictionaryFooExtensions
+// GerOrAdd might be useful to be sure module features are added.
+var shoppingGlobalFeatures = GlobalFeatureManager.Instance.Modules
+    .GetOrAdd(
+        GlobalShoppingFeatures.ModuleName, 
+        ()=> new GlobalShoppingFeatures(GlobalFeatureManager.Instance));
+
+// Able to Enable/Disable with generic type parameter.
+shoppingGlobalFeatures.Enable<PaymentFeature>();
+shoppingGlobalFeatures.Disable<PaymentFeature>();
+
+// Also able to Enable/Disable with string feature name.
+shoppingGlobalFeatures.Enable(PaymentFeature.Name);
+shoppingGlobalFeatures.Disable("Shopping.Payment");
+```
+
+### Check if a feature is enabled
+
+```csharp
+GlobalFeatureManager.Instance.IsEnabled<PaymentFeature>()
+GlobalFeatureManager.Instance.IsEnabled("Shopping.Payment")
+```
+
+Both methods return `bool`.
+
+```csharp
+if (GlobalFeatureManager.Instance.IsEnabled<PaymentFeature>())
 {
-  public static GlobalFooFeatures Foo(
-    [NotNull] this GlobalModuleFeaturesDictionary modules)
-  {
-    Check.NotNull(modules, nameof(modules));
-    return modules
-      .GetOrAdd(
-      GlobalFooFeatures.ModuleName,
-      _ => new GlobalFooFeatures(modules.FeatureManager)
-    )
-      as GlobalFooFeatures;
-  }
+    // Some strong payment codes here...
 }
 ```
 
-Accessing module & module features look like:
+Beside the manual check, there is `[RequiresGlobalFeature]` attribute to check it declaratively for a controller or page. ABP returns 404 if the related feature was disabled.
 
 ```csharp
-GlobalFeatureManager.Instance.Modules.Foo();
-GlobalFeatureManager.Instance.Modules.Foo().FooBar;
-GlobalFeatureManager.Instance.Modules.Foo().FooBar.Enable();
-GlobalFeatureManager.Instance.Modules.Foo().Enable<FooBarFeature>();
+[RequiresGlobalFeature(typeof(CommentsFeature))]
+public class PaymentController : AbpController
+{
+  // ...
+}
 ```
 
 ## When to configure Global Features?
-Global Features have to be configured before application startup. So best place to configuring it is `PreConfigureServices` with **OneTimeRunner**.
+Global Features have to be configured before application startup. So best place to configuring it is `PreConfigureServices` with **OneTimeRunner** to make sure it runs one time.
 
 ```csharp
 private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
@@ -118,5 +115,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-## See also
-- [Differences Between Features & Global Features](Differences-between-features-and-global-features.md)
+## Features vs Global Features
+[Features](Features.md) & [Global Features](Global-Features.md) are totally different systems.
+
+Features are used to switch on/off application feature for each tenant. So Features, only hides disabled ones, but with Global Features, disabled features pretends like never existed in application.
