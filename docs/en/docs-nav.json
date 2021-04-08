@@ -286,6 +286,10 @@
           ]
         },
         {
+          "text": "SMS Sending",
+          "path": "SMS-Sending.md"
+        },
+        {
           "text": "Event Bus",
           "items": [
             {
