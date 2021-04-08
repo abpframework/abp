@@ -221,6 +221,12 @@
     "PaymentProduct": "Ödeme Ürünü",
     "ProductName": "Ürün İsmi",
     "Code": "Kod",
-    "GenerateInvoice": "Fatura Oluştur"
+    "GenerateInvoice": "Fatura Oluştur",
+    "ExportOrganizationsToExcel": "Excel'e aktar",
+    "ThisExtensionIsNotAllowed": "Bu uzantıya izin verilmiyor.",
+    "TheFileIsTooLarge": "Dosya çok büyük.",
+    "ArticleDeletionConfirmationMessage": "Bu makaleyi kalıcı olarak silmek istediğinizden emin misiniz?",
+    "ChooseCoverImage": "Bir kapak resmi seçin...",
+    "CoverImage": "Kapak Resmi"
   }
 }

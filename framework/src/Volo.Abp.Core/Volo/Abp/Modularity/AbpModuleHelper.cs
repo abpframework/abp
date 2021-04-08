@@ -12,7 +12,7 @@ namespace Volo.Abp.Modularity
         {
             var moduleTypes = new List<Type>();
             logger.Log(LogLevel.Information, "Loaded ABP modules:");
-            AddModuleAndDependenciesResursively(moduleTypes, startupModuleType, logger);
+            AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger);
             return moduleTypes;
         }
 
@@ -37,7 +37,7 @@ namespace Volo.Abp.Modularity
             return dependencies;
         }
 
-        private static void AddModuleAndDependenciesResursively(
+        private static void AddModuleAndDependenciesRecursively(
             List<Type> moduleTypes,
             Type moduleType,
             ILogger logger,
@@ -55,7 +55,7 @@ namespace Volo.Abp.Modularity
 
             foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
             {
-                AddModuleAndDependenciesResursively(moduleTypes, dependedModuleType, logger, depth + 1);
+                AddModuleAndDependenciesRecursively(moduleTypes, dependedModuleType, logger, depth + 1);
             }
         }
     }

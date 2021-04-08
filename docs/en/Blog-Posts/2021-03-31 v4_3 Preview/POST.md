@@ -10,11 +10,11 @@ We are super excited to announce the ABP Framework 4.3 RC (Release Candidate). H
 * CLI support to easily add the **Basic Theme** into the solution.
 * New **IInitLogger** service to write logs before dependency injection phase completed.
 
-Besides the new features above, we've done many performance improvements, enhancements and bug fixes on the current features. See the [4.3 milestone](https://github.com/abpframework/abp/milestone/49) on GitHub for all changes made on this version.
+Besides the new features above, we've done many performance improvements, enhancements and bug fixes on the current features. See the [4.3 milestone](https://github.com/abpframework/abp/milestone/49?closed=1) on GitHub for all changes made on this version.
 
-This version was a big development journey for us; [~160 issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A4.3-preview) resolved, [~300 PRs](https://github.com/abpframework/abp/pulls?q=is%3Aopen+is%3Apr+milestone%3A4.3-preview) merged and **~1,700 commits** done only in the [main framework repository](https://github.com/abpframework/abp). **Thanks to the ABP Framework team and all the contributors.**
+This version was a big development journey for us; [~160 issues](https://github.com/abpframework/abp/issues?q=is%3Aissue+milestone%3A4.3-preview+is%3Aclosed) resolved, [~300 PRs](https://github.com/abpframework/abp/issues?q=is%3Apr+milestone%3A4.3-preview+is%3Aclosed) merged and **~1,700 commits** done only in the [main framework repository](https://github.com/abpframework/abp). **Thanks to the ABP Framework team and all the contributors.**
 
-> ABP Commercial 4.3 RC has also been published. We will write a separate blog post for it.
+> ABP Commercial 4.3 RC has also been published. Check out [the commercial blog post](https://blog.abp.io/abp/ABP-Commercial-4.3-RC-Has-Been-Published).
 
 ## The Migration Guide
 
@@ -63,7 +63,7 @@ CMS (Content Management System) Kit was a module we worked on for the last coupl
 * **Reactions**: Allows users to react to content via emojis, like a smile, upvote, downvote, etc.
 * **Rating**: This component is used to rate content by users.
 
-All features are separately usable. For example, you can create an image gallery and reuse the Comments and Tags features for the images. You can enable/disable features individually using the [Global Features System](https://docs.abp.io/en/abp/4.3/global-features).
+All features are separately usable. For example, you can create an image gallery and reuse the Comments and Tags features for the images. You can enable/disable features individually using the [Global Features System](https://docs.abp.io/en/abp/4.3/Global-Features).
 
 > We will create a separate blog post for the CMS Kit module, so I keep it short.
 
