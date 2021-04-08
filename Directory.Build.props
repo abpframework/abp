@@ -23,7 +23,7 @@
     <xUnitRunnerVisualstudioPackageVersion>2.4.3</xUnitRunnerVisualstudioPackageVersion>
 
     <!-- Mongo2Go https://www.nuget.org/packages/Mongo2Go -->
-    <Mongo2GoPackageVersion>3.0.0</Mongo2GoPackageVersion>
+    <Mongo2GoPackageVersion>3.1.1</Mongo2GoPackageVersion>
 
   </PropertyGroup>
 </Project>
