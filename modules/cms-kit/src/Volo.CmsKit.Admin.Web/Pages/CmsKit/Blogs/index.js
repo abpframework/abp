@@ -49,7 +49,6 @@ $(function () {
                                 blogsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        abp.notify.info(l("SuccessfullyDeleted"));
                                         dataTable.ajax.reload();
                                     });
                             }
