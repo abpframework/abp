@@ -20,8 +20,6 @@ GlobalFeatureManager.Instance.Modules.CmsKit().Enable(CommentsFeature.Name); //A
 GlobalFeatureManager.Instance.Modules.CmsKit().Enable("CmsKit.Comments"); //Alternative: Use magic string
 ```
 
-
-
 ### Check if a feature is enabled
 
 ```csharp
@@ -41,14 +39,10 @@ public class CommentController : AbpController
 }
 ```
 
-
-
 ## Implementation
-
 Global Feature system aims module based feature management . A module has to have own Global Features itself.
 
 ### Define a Global Feature
-
 A feature class is something like that:
 
 ```csharp
@@ -65,7 +59,6 @@ public class FooBarFeature : GlobalFeature
 ```
 
 ### Define Global Module Features
-
 All global features of a module should be provided by a single **GlobalModuleFeatures** class.
 
 ```csharp
@@ -82,10 +75,7 @@ public class GlobalFooFeatures : GlobalModuleFeatures
 }
 ```
 
-
-
 ### Define Global Module Features Dictionary Extensions
-
 An extension method is better to configure global fetures easily. 
 
 ```csharp
@@ -114,10 +104,7 @@ GlobalFeatureManager.Instance.Modules.Foo().FooBar.Enable();
 GlobalFeatureManager.Instance.Modules.Foo().Enable<FooBarFeature>();
 ```
 
-
-
 ## When to configure Global Features?
-
 Global Features have to be configured before application startup. So best place to configuring it is `PreConfigureServices` with **OneTimeRunner**.
 
 ```csharp
@@ -131,8 +118,5 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-
-
 ## See also
-
 - [Differences Between Features & Global Features](Differences-between-features-and-global-features.md)
