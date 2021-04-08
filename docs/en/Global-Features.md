@@ -1,7 +1,7 @@
+# Global Features
 The purpose of the Global Feature System is to **add a module to your application but disable the features you don't want to use** (or enable only the ones you need). Notice that the features are not determined on runtime, you must select the features **on development time**. Because it will not create database tables, APIs and other stuff for unused features, which is not possible to change then on the runtime.
 
 ## Installation
-
 Global Feature system is pre-installed in abp startup templates. No need any installation manually.
 
 ## Usage
