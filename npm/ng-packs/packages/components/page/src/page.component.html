@@ -1,4 +1,4 @@
-<div class="row entry-row">
+<div class="row entry-row" *ngIf="shouldRenderRow">
   <ng-container *ngIf="customTitle; else defaultTitleTemplate">
     <ng-content select="abp-page-title-container"></ng-content>
   </ng-container>

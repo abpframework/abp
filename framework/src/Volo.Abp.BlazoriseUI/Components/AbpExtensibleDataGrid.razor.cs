@@ -46,5 +46,17 @@ namespace Volo.Abp.BlazoriseUI.Components
                 builder.CloseComponent();
             };
         }
+
+        protected virtual string GetConvertedFieldValue(TItem item, TableColumn columnDefinition)
+        {
+            var convertedValue = columnDefinition.ValueConverter.Invoke(item);
+            if (!columnDefinition.DisplayFormat.IsNullOrEmpty())
+            {
+                return string.Format(columnDefinition.DisplayFormatProvider, columnDefinition.DisplayFormat,
+                    convertedValue);
+            }
+
+            return convertedValue;
+        }
     }
 }

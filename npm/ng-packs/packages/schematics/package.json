@@ -13,6 +13,7 @@
     "@angular-devkit/schematics": "~11.0.2",
     "got": "^11.5.2",
     "jsonc-parser": "^2.3.0",
+    "should-quote": "^1.0.0",
     "typescript": "~3.9.2"
   },
   "devDependencies": {

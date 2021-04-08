@@ -255,6 +255,7 @@
     "PaymentDetails": "付款详情",
     "PaymentProduct": "付款产品",
     "ProductName": "产品名称",
-    "Code": "代码"
+    "Code": "代码",
+    "GenerateInvoice": "生成发票"
   }
 }

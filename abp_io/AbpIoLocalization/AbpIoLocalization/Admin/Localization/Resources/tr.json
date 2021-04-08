@@ -220,6 +220,7 @@
     "PaymentDetails": "Ödeme Detayları",
     "PaymentProduct": "Ödeme Ürünü",
     "ProductName": "Ürün İsmi",
-    "Code": "Kod"
+    "Code": "Kod",
+    "GenerateInvoice": "Fatura Oluştur"
   }
 }

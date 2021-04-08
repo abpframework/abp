@@ -154,6 +154,8 @@ abp add-package Volo.Abp.MongoDB
 #### Options
 
 * `--project` 或 `-p`: 指定项目 (.csproj) 路径. 如果未指定,Cli会尝试在当前目录查找.csproj文件.
+* `--with-source-code`: 下载包的源码到你的解决方案文件夹，而不是NuGet/NPM软件包.
+* `--add-to-solution-file`: 添加下载/创建的包添加到解决方案文件中,你在IDE中打开解决方案时也会看到包的项目. (仅当 `--with-source-code` 为 `True` 时可用.)
 
 ### add-module
 
@@ -181,6 +183,7 @@ abp add-module Volo.Blogging
 * `--skip-db-migrations`: 对于EF Core 数据库提供程序,它会自动添加新代码的第一次迁移 (`Add-Migration`) 并且在需要时更新数据库 (`Update-Database`). 指定此选项可跳过此操作.
 * `-sp` 或 `--startup-project`: 启动项目的项目文件夹的相对路径. 默认值是当前文件夹.
 * `--with-source-code`: 添加模块的源代码,而不是NuGet/NPM软件包.
+* `--add-to-solution-file`: 添加下载/创建的模块添加到解决方案文件中,你在IDE中打开解决方案时也会看到模块的项目. (仅当 `--with-source-code` 为 `True` 时可用.)
 
 ### generate-proxy
 

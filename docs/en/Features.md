@@ -326,20 +326,12 @@ if (feature != null)
 
 A feature value is available at the client side too, unless you set `IsVisibleToClients` to `false` on the feature definition. The feature values are exposed from the [Application Configuration API](API/Application-Configuration.md) and usable via some services on the UI.
 
-### ASP.NET Core MVC / Razor Pages UI
+See the following documents to learn how to check features in different UI types:
 
-Use `abp.features` API to get the feature values.
+* [ASP.NET Core MVC / Razor Pages / JavaScript API](UI/AspNetCore/JavaScript-API/Features.md)
+* [Angular](UI/Angular/Features.md)
 
-**Example: Get feature values in the JavaScript code**
-
-````js
-var isEnabled = abp.features.values["MyApp.ExcelReporting"] === "true";
-var count = abp.features.values["MyApp.MaxProductCount"];
-````
-
-### Angular UI
-
-See the [features](Features.md) document for the Angular UI.
+**Blazor** applications can use the same `IFeatureChecker` service as explained above.
 
 ## Feature Management
 
