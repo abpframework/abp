@@ -92,6 +92,30 @@ In addition to use primitive parameters, you can pass a `SmsMessage` object to t
 This class can be useful especially in development time where you generally don't want to send real sms.
 `NullSmsSender` will try to register itself automatically if there is no other registrated sms sender.
 
+## Creating a custom SMS sender
+
+You can easily create your custom provider by creating a class that implements the `ISmsSender` interface.
+
+```csharp
+using System.IO;
+using System.Threading.Tasks;
+using Volo.Abp.Sms;
+using Volo.Abp.DependencyInjection;
+
+namespace AbpDemo
+{
+    public class MyCustomSmsSender : ISmsSender, ITransientDependency
+    {
+        public async Task SendAsync(SmsMessage smsMessage)
+        {
+            // Send sms
+        }
+    }
+}
+```
+
+That's all. Now you can send SMS by using `MyCustomSmsSender` in your application.
+
 ## See also
 
 - [Twilio SMS Sender](https://docs.abp.io/en/commercial/latest/modules/twilio-sms) with [ABP Commercial](https://commercial.abp.io/).
