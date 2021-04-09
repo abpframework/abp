@@ -40,7 +40,7 @@ namespace Volo.Abp.IdentityServer
                     AbsoluteExpirationRelativeToNow = Options.Caching.CorsExpiration
                 });
 
-            var isAllowed = cacheItem.AllowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase);
+            var isAllowed = await IsOriginAllowedAsync(cacheItem.AllowedOrigins, origin);
 
             if (!isAllowed)
             {
@@ -62,6 +62,11 @@ namespace Volo.Abp.IdentityServer
                     AllowedOrigins = (await clientRepository.GetAllDistinctAllowedCorsOriginsAsync()).ToArray()
                 };
             }
+        }
+
+        protected virtual Task<bool> IsOriginAllowedAsync(string[] allowedOrigins, string origin)
+        {
+            return Task.FromResult(allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase));
         }
     }
 }
