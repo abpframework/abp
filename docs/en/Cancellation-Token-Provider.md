@@ -8,7 +8,7 @@ A `CancellationToken` enables cooperative cancellation between threads, thread p
 
 `ICancellationTokenProvider` is an abstraction to provide `CancellationToken` for different scenarios.
 
-Generally, you should pass the `CancellationToken` as a parameter for your method to use it. With the `ICancellationTokenProvider` you don't need to pass `CancellationToken` for every method. `ICancellationTokenProvider` can be injected with the **dependency injection** and provides the token source.
+Generally, you should pass the `CancellationToken` as a parameter for your method to use it. With the `ICancellationTokenProvider` you don't need to pass `CancellationToken` for every method. `ICancellationTokenProvider` can be injected with the **dependency injection** and provides the token from it's source.
 
 **Example:**
 
@@ -32,7 +32,7 @@ namespace MyProject
         {
             while (_cancellationTokenProvider.Token.IsCancellationRequested == false)
             {
-                // Todo
+                // ...
             }
         }
     }
