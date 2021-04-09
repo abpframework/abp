@@ -91,4 +91,56 @@ public class PaymentController : AbpController
 
 It is common to group global features of a module to allow the final application developer easily discover and configure the features.
 
-**TODO: Define a `SubscriptionFeature` and group as a E-Commerce module.**
+Following example shows how to group features of a module.
+
+```csharp
+[GlobalFeatureName("Ecommerce.Subscription")]
+public class SubscriptionFeature : GlobalFeature
+{
+  public SubscriptionFeature(GlobalModuleFeatures module) : base(module)
+  {
+  }
+}
+```
+
+All features of a module have to be defined in a Global Module Features class.
+
+```csharp
+public class GlobalEcommerceFeatures : GlobalModuleFeatures
+{
+  public const string ModuleName = "Ecommerce";
+
+  public SubscriptionFeature Subscription => GetFeature<SubscriptionFeature>();
+	
+  public GlobalEcommerceFeatures(GlobalFeatureManager featureManager) : base(featureManager)
+  {
+    // Added features will be used for EnableAll() & DisableAll() actions for this module.
+    AddFeature(new SubscriptionFeature(this));
+  }
+}
+```
+
+An extension method will be better to discover Global Module Features class
+
+```csharp
+public static class GlobalModuleFeaturesDictionaryEcommerceExtensions
+{
+  public static GlobalEcommerceFeatures Ecommerce([NotNull] this GlobalModuleFeaturesDictionary modules)
+  {
+    Check.NotNull(modules, nameof(modules));
+
+    return modules
+      .GetOrAdd(
+      GlobalEcommerceFeatures.ModuleName,
+      _ => new GlobalEcommerceFeatures(modules.FeatureManager)
+    )
+      as GlobalEcommerceFeatures;
+  }
+```
+
+Final usage will be like below:
+
+```csharp
+GlobalFeatureManager.Instance.Modules.Ecommerce().Subscription.Enable();
+```
+
