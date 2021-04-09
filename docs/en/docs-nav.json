@@ -176,6 +176,10 @@
         {
           "text": "Logging",
           "path": "Logging.md"
+        },
+        {
+          "text": "Cancellation Token Provider",
+          "path": "Cancellation-Token-Provider.md"
         }
       ]
     },
