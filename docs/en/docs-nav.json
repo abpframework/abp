@@ -176,10 +176,6 @@
         {
           "text": "Logging",
           "path": "Logging.md"
-        },
-        {
-          "text": "Cancellation Token Provider",
-          "path": "Cancellation-Token-Provider.md"
         }
       ]
     },
@@ -347,6 +343,10 @@
         {
           "text": "Virtual File System",
           "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "Cancellation Token Provider",
+          "path": "Cancellation-Token-Provider.md"
         }
       ]
     },
