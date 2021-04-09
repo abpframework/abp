@@ -21,11 +21,12 @@ namespace Volo.Abp.Ldap
             context.Services.AddAbpDynamicOptions<AbpLdapOptions, AbpAbpLdapOptionsManager>();
 
             var configuration = context.Services.GetConfiguration();
-            var ldapConfiguration = configuration["Ldap"];
+            Configure<AbpLdapOptions>(configuration.GetSection("Ldap"));
+            /*var ldapConfiguration = configuration["Ldap"];
             if (!ldapConfiguration.IsNullOrEmpty())
             {
                 Configure<AbpLdapOptions>(configuration.GetSection("Ldap"));
-            }
+            }*/
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
