@@ -17,15 +17,19 @@ namespace Volo.Abp.TenantManagement.Blazor.Navigation
 
             var l = context.GetLocalizer<AbpTenantManagementResource>();
 
-            var tenantManagementMenuItem = new ApplicationMenuItem(TenantManagementMenuNames.GroupName,
-                l["Menu:TenantManagement"], icon: "fa fa-users");
+            var tenantManagementMenuItem = new ApplicationMenuItem(
+                TenantManagementMenuNames.GroupName,
+                l["Menu:TenantManagement"],
+                icon: "fa fa-users"
+            );
             administrationMenu.AddItem(tenantManagementMenuItem);
 
             tenantManagementMenuItem.AddItem(new ApplicationMenuItem(
                 TenantManagementMenuNames.Tenants,
                 l["Tenants"],
-                url: "tenant-management/tenants",
-                requiredPermissionName: TenantManagementPermissions.Tenants.Default));
+                url: "~/tenant-management/tenants",
+                requiredPermissionName: TenantManagementPermissions.Tenants.Default
+            ));
 
             return Task.CompletedTask;
         }

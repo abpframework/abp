@@ -1,8 +1,10 @@
 using System;
 using System.Text;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Minify;
@@ -15,13 +17,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public ILogger<BundlerBase> Logger { get; set; }
 
-        protected IWebContentFileProvider WebContentFileProvider { get; }
+        protected IWebHostEnvironment HostEnvironment { get; }
         protected IMinifier Minifier { get; }
+        protected AbpBundlingOptions BundlingOptions { get; }
 
-        protected BundlerBase(IWebContentFileProvider webContentFileProvider, IMinifier minifier)
+        protected BundlerBase(
+            IWebHostEnvironment hostEnvironment,
+            IMinifier minifier,
+            IOptions<AbpBundlingOptions> bundlingOptions)
         {
-            WebContentFileProvider = webContentFileProvider;
+            HostEnvironment = hostEnvironment;
             Minifier = minifier;
+            BundlingOptions = bundlingOptions.Value;
 
             Logger = NullLogger<BundlerBase>.Instance;
         }
@@ -55,14 +62,22 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         private string GetFileContentConsideringMinification(IBundlerContext context, string fileName)
         {
+            var isIgnoredForMinification = BundlingOptions.MinificationIgnoredFiles.Contains(fileName);
             var isMinFile = IsMinFile(fileName);
-            if (!context.IsMinificationEnabled || isMinFile)
+            if (!context.IsMinificationEnabled || isIgnoredForMinification || isMinFile)
             {
                 var fileContent = GetFileInfo(context, fileName).ReadAsString();
                 Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes)");
-                if (context.IsMinificationEnabled && isMinFile)
+                if (context.IsMinificationEnabled)
                 {
-                    Logger.LogDebug("  > Already minified");
+                    if (isMinFile)
+                    {
+                        Logger.LogDebug("  > Already minified.");
+                    }
+                    else if (isIgnoredForMinification)
+                    {
+                        Logger.LogDebug("  > Ignored for minification.");
+                    }
                 }
 
                 return fileContent;
@@ -100,11 +115,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual IFileInfo GetFileInfo(IBundlerContext context, string file)
         {
-            var fileInfo = WebContentFileProvider.GetFileInfo(file);
+            var fileInfo = HostEnvironment.WebRootFileProvider.GetFileInfo(file);
 
             if (!fileInfo.Exists)
             {
-                throw new AbpException($"Could not find file '{file}' using {nameof(IWebContentFileProvider)}");
+                throw new AbpException($"Could not find file '{file}'");
             }
 
             return fileInfo;
@@ -127,7 +142,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             foreach (var suffix in _minFileSuffixes)
             {
-                var fileInfo = WebContentFileProvider.GetFileInfo(
+                var fileInfo = HostEnvironment.WebRootFileProvider.GetFileInfo(
                     $"{file.RemovePostFix($".{FileExtension}")}.{suffix}.{FileExtension}"
                 );
 

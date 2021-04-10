@@ -11,7 +11,7 @@ using Volo.CmsKit.Permissions;
 namespace Volo.CmsKit.Admin.Blogs
 {
     [RequiresGlobalFeature(typeof(BlogsFeature))]
-    [RemoteService(Name = CmsKitCommonRemoteServiceConsts.RemoteServiceName)]
+    [RemoteService(Name = CmsKitAdminRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
     [Route("api/cms-kit-admin/blogs/blog-posts")]
@@ -49,7 +49,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpGet]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual Task<PagedResultDto<BlogPostDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public virtual Task<PagedResultDto<BlogPostDto>> GetListAsync(BlogPostGetListInput input)
         {
             return BlogPostAdminAppService.GetListAsync(input);
         }

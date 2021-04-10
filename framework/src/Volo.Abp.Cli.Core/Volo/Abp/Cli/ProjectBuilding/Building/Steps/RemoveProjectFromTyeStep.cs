@@ -30,13 +30,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
             foreach (var line in lines)
             {
-                if (line.Equals($"{nameLine} {_name}"))
+                if (line.Trim().Equals($"{nameLine} {_name}"))
                 {
                     isOneOfTargetLines = true;
                     continue;
                 }
 
-                if (line.StartsWith(nameLine))
+                if (line.Trim().StartsWith(nameLine))
                 {
                     isOneOfTargetLines = false;
                 }

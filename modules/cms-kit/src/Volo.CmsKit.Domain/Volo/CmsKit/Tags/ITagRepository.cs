@@ -24,6 +24,10 @@ namespace Volo.CmsKit.Tags
             [NotNull] string name,
             CancellationToken cancellationToken = default);
 
+        Task<List<Tag>> GetListAsync(string filter);
+
+        Task<int> GetCountAsync(string filter);
+
         Task<List<Tag>> GetAllRelatedTagsAsync(
             [NotNull] string entityType,
             [NotNull] string entityId,

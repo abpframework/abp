@@ -122,5 +122,44 @@ namespace System.Security.Principal
 
             return Guid.Parse(editionIdOrNull.Value);
         }
+
+        public static ClaimsIdentity AddIfNotContains(this ClaimsIdentity claimsIdentity, Claim claim)
+        {
+            Check.NotNull(claimsIdentity, nameof(claimsIdentity));
+
+            if (!claimsIdentity.Claims.Any(x => string.Equals(x.Type, claim.Type, StringComparison.OrdinalIgnoreCase)))
+            {
+                claimsIdentity.AddClaim(claim);
+            }
+
+            return claimsIdentity;
+        }
+
+        public static ClaimsIdentity AddOrReplace(this ClaimsIdentity claimsIdentity, Claim claim)
+        {
+            Check.NotNull(claimsIdentity, nameof(claimsIdentity));
+
+            foreach (var x in claimsIdentity.FindAll(claim.Type).ToList())
+            {
+                claimsIdentity.RemoveClaim(x);
+            }
+
+            claimsIdentity.AddClaim(claim);
+
+            return claimsIdentity;
+        }
+
+        public static ClaimsPrincipal AddIdentityIfNotContains([NotNull] this ClaimsPrincipal principal,  ClaimsIdentity identity)
+        {
+            Check.NotNull(principal, nameof(principal));
+
+            if (!principal.Identities.Any(x => string.Equals(x.AuthenticationType, identity.AuthenticationType, StringComparison.OrdinalIgnoreCase)))
+            {
+                principal.AddIdentity(identity);
+            }
+
+            return principal;
+        }
+
     }
 }

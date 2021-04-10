@@ -24,7 +24,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected readonly AbpBundlingOptions Options;
         protected readonly AbpBundleContributorOptions ContributorOptions;
-        protected readonly IWebContentFileProvider WebContentFileProvider;
         protected readonly IWebHostEnvironment HostingEnvironment;
         protected readonly IScriptBundler ScriptBundler;
         protected readonly IStyleBundler StyleBundler;
@@ -42,7 +41,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IServiceProvider serviceProvider,
             IDynamicFileProvider dynamicFileProvider,
             IBundleCache bundleCache,
-            IWebContentFileProvider webContentFileProvider,
             IWebRequestResources requestResources)
         {
             Options = options.Value;
@@ -52,7 +50,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             ServiceProvider = serviceProvider;
             DynamicFileProvider = dynamicFileProvider;
             BundleCache = bundleCache;
-            WebContentFileProvider = webContentFileProvider;
             RequestResources = requestResources;
             StyleBundler = styleBundler;
 
@@ -117,7 +114,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             {
                 foreach (var file in files)
                 {
-                    var watchDisposeHandle = WebContentFileProvider.Watch(file).RegisterChangeCallback(_ =>
+                    var watchDisposeHandle = HostingEnvironment.WebRootFileProvider.Watch(file).RegisterChangeCallback(_ =>
                     {
                         lock (cacheValue.WatchDisposeHandles)
                         {
@@ -215,7 +212,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         protected virtual BundleConfigurationContext CreateBundleConfigurationContext()
         {
-            return new BundleConfigurationContext(ServiceProvider, WebContentFileProvider);
+            return new BundleConfigurationContext(ServiceProvider, HostingEnvironment.WebRootFileProvider);
         }
 
         protected virtual List<IBundleContributor> GetContributors(BundleConfigurationCollection bundles, string bundleName)

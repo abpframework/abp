@@ -7,7 +7,7 @@
     var $buttonSubmit = $('#button-page-create');
 
     $createForm.data('validator').settings.ignore = ":hidden, [contenteditable='true']:not([name]), .tui-popup-wrapper";
-    
+
     $createForm.on('submit', function (e) {
         e.preventDefault();
 
@@ -20,6 +20,10 @@
                     abp.notify.success(l('SuccessfullySaved'));
                     abp.ui.clearBusy();
                     location.href = "../Pages";
+                },
+                error: function(result){
+                    abp.ui.clearBusy();
+                    abp.notify.error(result.responseJSON.error.message);
                 }
             });
         }
@@ -53,7 +57,7 @@
     $slug.change(function () {
         slugEdited = true;
     });
-    
+
     // -----------------------------------
     function getUppyHeaders() {
         var headers = {};
@@ -61,7 +65,7 @@
 
         return headers;
     }
-    
+
     var fileUploadUri = "/api/cms-kit-admin/media/page";
     var fileUriPrefix = "/api/cms-kit/media/";
 
@@ -86,16 +90,16 @@
             useCommandShortcut: true,
             initialValue: initialValue,
             previewStyle: 'tab',
-            height: "25em",
+            height: "100%",
             minHeight: "25em",
-            initialEditType: initialValue ? 'wysiwyg' : 'markdown',
+            initialEditType: 'markdown',
             language: $editorContainer.data("language"),
             hooks: {
                 addImageBlobHook: uploadFile,
             },
             events: {
                 change: function (_val) {
-                    $editorInput.val(editor.getHtml());
+                    $editorInput.val(editor.getMarkdown());
                     $editorInput.trigger("change");
                 }
             }

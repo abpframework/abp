@@ -76,6 +76,29 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.json"
             );
 
+            //MyCompanyName.MyProjectName.Blazor.Server
+
+            ChangeProjectReference(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj",
+                "EntityFrameworkCore.DbMigrations",
+                "MongoDB"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
+                "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                "MyCompanyName.MyProjectName.MongoDB",
+                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                "MyProjectNameMongoDbModule"
+            );
+
+            ChangeConnectionStringToMongoDb(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/appsettings.json"
+            );
+
             //MyCompanyName.MyProjectName.HttpApi.HostWithIds
 
             ChangeProjectReference(

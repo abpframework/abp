@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Auditing
@@ -12,67 +14,93 @@ namespace Volo.Abp.AspNetCore.Auditing
     public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
     {
         private readonly IAuditingManager _auditingManager;
-
-        protected AbpAuditingOptions Options { get; }
+        protected AbpAuditingOptions AuditingOptions { get; }
+        protected AbpAspNetCoreAuditingOptions AspNetCoreAuditingOptions { get; }
         protected ICurrentUser CurrentUser { get; }
+        protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
         public AbpAuditingMiddleware(
             IAuditingManager auditingManager,
             ICurrentUser currentUser,
-            IOptions<AbpAuditingOptions> options)
+            IOptions<AbpAuditingOptions> auditingOptions,
+            IOptions<AbpAspNetCoreAuditingOptions> aspNetCoreAuditingOptions,
+            IUnitOfWorkManager unitOfWorkManager)
         {
             _auditingManager = auditingManager;
 
             CurrentUser = currentUser;
-            Options = options.Value;
+            UnitOfWorkManager = unitOfWorkManager;
+            AuditingOptions = auditingOptions.Value;
+            AspNetCoreAuditingOptions = aspNetCoreAuditingOptions.Value;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            bool hasError = false;
-            using (var scope = _auditingManager.BeginScope())
+            if (!AuditingOptions.IsEnabled || IsIgnoredUrl(context))
             {
+                await next(context);
+                return;
+            }
+
+            var hasError = false;
+            using (var saveHandle = _auditingManager.BeginScope())
+            {
+                Debug.Assert(_auditingManager.Current != null);
+
                 try
                 {
                     await next(context);
+
                     if (_auditingManager.Current.Log.Exceptions.Any())
                     {
                         hasError = true;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     hasError = true;
+
+                    if (!_auditingManager.Current.Log.Exceptions.Contains(ex))
+                    {
+                        _auditingManager.Current.Log.Exceptions.Add(ex);
+                    }
+
                     throw;
                 }
                 finally
                 {
                     if (ShouldWriteAuditLog(context, hasError))
                     {
-                        await scope.SaveAsync();
+                        if (UnitOfWorkManager.Current != null)
+                        {
+                            await UnitOfWorkManager.Current.SaveChangesAsync();
+                        }
+
+                        await saveHandle.SaveAsync();
                     }
                 }
             }
         }
 
-        private bool ShouldWriteAuditLog(HttpContext httpContext, bool hasError = false)
+        private bool IsIgnoredUrl(HttpContext context)
         {
-            if (!Options.IsEnabled)
-            {
-                return false;
-            }
+            return context.Request.Path.Value != null &&
+                   AspNetCoreAuditingOptions.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x));
+        }
 
-            if (Options.AlwaysLogOnException && hasError)
+        private bool ShouldWriteAuditLog(HttpContext httpContext, bool hasError)
+        {
+            if (AuditingOptions.AlwaysLogOnException && hasError)
             {
                 return true;
             }
 
-            if (!Options.IsEnabledForAnonymousUsers && !CurrentUser.IsAuthenticated)
+            if (!AuditingOptions.IsEnabledForAnonymousUsers && !CurrentUser.IsAuthenticated)
             {
                 return false;
             }
 
-            if (!Options.IsEnabledForGetRequests &&
+            if (!AuditingOptions.IsEnabledForGetRequests &&
                 string.Equals(httpContext.Request.Method, HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
             {
                 return false;

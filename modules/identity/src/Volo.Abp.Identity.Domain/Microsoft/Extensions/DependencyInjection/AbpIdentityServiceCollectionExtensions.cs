@@ -33,8 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services
                 .AddIdentityCore<IdentityUser>(setupAction)
                 .AddRoles<IdentityRole>()
-                .AddClaimsPrincipalFactory<AbpUserClaimsPrincipalFactory>()
-                .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProvider.LinkUserTokenProviderName);
+                .AddClaimsPrincipalFactory<AbpUserClaimsPrincipalFactory>();
         }
     }
 }

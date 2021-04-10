@@ -1,13 +1,13 @@
-﻿using Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
+﻿using Volo.Abp.AspNetCore.Components.Web.Theming;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.PermissionManagement.Blazor
 {
     [DependsOn(
-        typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule),
+        typeof(AbpAspNetCoreComponentsWebThemingModule),
         typeof(AbpAutoMapperModule),
-        typeof(AbpPermissionManagementHttpApiClientModule)
+        typeof(AbpPermissionManagementApplicationContractsModule)
         )]
     public class AbpPermissionManagementBlazorModule : AbpModule
     {

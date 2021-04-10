@@ -228,6 +228,13 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                 : await (await GetDbSetAsync()).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public override async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return includeDetails
+                ? await (await WithDetailsAsync()).Where(predicate).ToListAsync(GetCancellationToken(cancellationToken))
+                : await (await GetDbSetAsync()).Where(predicate).ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).LongCountAsync(GetCancellationToken(cancellationToken));

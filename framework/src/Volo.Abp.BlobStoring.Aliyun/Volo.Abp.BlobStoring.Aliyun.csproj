@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="aliyun-net-sdk-sts" Version="3.0.4" />
-    <PackageReference Include="Aliyun.OSS.SDK.NetCore" Version="2.12.0" />
+    <PackageReference Include="Aliyun.OSS.SDK.NetCore" Version="2.13.0" />
   </ItemGroup>
 
   <ItemGroup>

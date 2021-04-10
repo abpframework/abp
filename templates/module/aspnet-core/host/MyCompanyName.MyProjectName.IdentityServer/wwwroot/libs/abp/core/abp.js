@@ -684,6 +684,13 @@ var abp = abp || {};
         document.cookie = cookieValue;
     }
 
+    /**
+     * Escape HTML to help prevent XSS attacks. 
+     */
+    abp.utils.htmlEscape = function (html) {
+        return typeof html === 'string' ? html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') : html;
+    }
+
     /* SECURITY ***************************************/
     abp.security = abp.security || {};
     abp.security.antiForgery = abp.security.antiForgery || {};

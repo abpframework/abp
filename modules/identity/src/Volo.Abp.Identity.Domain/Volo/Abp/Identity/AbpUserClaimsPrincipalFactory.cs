@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using System.Security.Principal;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
@@ -69,11 +70,7 @@ namespace Volo.Abp.Identity
 
             using (CurrentPrincipalAccessor.Change(identity))
             {
-                var abpClaimsPrincipal = await AbpClaimsPrincipalFactory.CreateAsync();
-                foreach (var claim in abpClaimsPrincipal.Claims)
-                {
-                    identity.AddIfNotContains(claim);
-                }
+                await AbpClaimsPrincipalFactory.CreateAsync(principal);
             }
 
             return principal;

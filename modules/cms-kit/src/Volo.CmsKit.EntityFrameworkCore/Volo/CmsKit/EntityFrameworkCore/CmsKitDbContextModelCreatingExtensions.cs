@@ -1,19 +1,18 @@
-﻿using System;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Comments;
-using Volo.CmsKit.Reactions;
-using Volo.CmsKit.Users;
 using Volo.Abp.Users.EntityFrameworkCore;
+using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
-using Volo.CmsKit.Blogs;
-using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -32,8 +31,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            //TODO: What if only CMSKit Pro features are enabled? This is kinda workaround for now
-            if (GlobalFeatureManager.Instance.Modules.CmsKit().GetFeatures().Any(f => f.IsEnabled))
+            if (GlobalFeatureManager.Instance.IsEnabled<CmsUserFeature>())
             {
                 builder.Entity<CmsUser>(b =>
                 {
@@ -45,6 +43,10 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.HasIndex(x => new { x.TenantId, x.UserName });
                     b.HasIndex(x => new { x.TenantId, x.Email });
                 });
+            }
+            else
+            {
+                builder.Ignore<CmsUser>();
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())

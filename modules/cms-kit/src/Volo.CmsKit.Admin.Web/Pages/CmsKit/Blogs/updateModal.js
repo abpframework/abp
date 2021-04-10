@@ -2,7 +2,7 @@
 $(function () {
     abp.modals.updateBlog = function () {
         var initModal = function (publicApi, args) {
-            debugger;
+
             var $slug = $('#ViewModel_Slug');
 
             $slug.on('change', function () {
