@@ -343,6 +343,10 @@
         {
           "text": "Virtual File System",
           "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "Cancellation Token Provider",
+          "path": "Cancellation-Token-Provider.md"
         }
       ]
     },
