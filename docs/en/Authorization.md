@@ -393,6 +393,38 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 This is already done for the startup template integration tests.
 
+### Claims Principal Factory
+
+Abp abstracts the way that authentication creates `ClaimsPrincipal`. You can provide a custom `IAbpClaimsPrincipalContributor` to add additional claims.
+
+Example of add `EditionId` of current tenant to user claims:
+
+```csharp
+public class EditionClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+{
+    public async Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+    {
+        var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        if (identity != null)
+        {
+            var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
+            if (currentTenant.Id != null)
+            {
+                var tenantRepository = context.ServiceProvider.GetRequiredService<ITenantRepository>();
+                var tenant = await tenantRepository.FindAsync(currentTenant.Id.Value);
+                if (tenant?.EditionId != null)
+                {
+                    identity.AddOrReplace(new Claim(AbpClaimTypes.EditionId, tenant.EditionId.ToString()));
+                }
+            }
+        }
+    }
+}
+```
+The `EditionClaimsPrincipalContributor` will participate in it when the `CreateAsync` method of `IAbpClaimsPrincipalFactory` is called. 
+
+> The Identity module has integrated it.
+
 ## See Also
 
 * [Permission Management Module](Modules/Permission-Management.md)
