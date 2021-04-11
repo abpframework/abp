@@ -421,6 +421,7 @@ public class EditionClaimsPrincipalContributor : IAbpClaimsPrincipalContributor,
     }
 }
 ```
+
 The `EditionClaimsPrincipalContributor` will participate in it when the `CreateAsync` method of `IAbpClaimsPrincipalFactory` is called. 
 
 > The Identity module has integrated it.
