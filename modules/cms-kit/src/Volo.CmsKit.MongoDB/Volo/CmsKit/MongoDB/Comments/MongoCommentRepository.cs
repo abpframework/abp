@@ -44,8 +44,7 @@ namespace Volo.CmsKit.MongoDB.Comments
 
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
             string filter = null, 
-            string entityType = null, 
-            string entityId = null, 
+            string entityType = null,
             Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null, 
@@ -59,8 +58,7 @@ namespace Volo.CmsKit.MongoDB.Comments
             var token = GetCancellationToken(cancellationToken);
             var query = await GetListQueryAsync(
                 filter, 
-                entityType, 
-                entityId, 
+                entityType,
                 repliedCommentId, 
                 authorUsername, 
                 creationStartDate, 
@@ -94,8 +92,7 @@ namespace Volo.CmsKit.MongoDB.Comments
 
         public async Task<long> GetCountAsync(
             string text = null, 
-            string entityType = null, 
-            string entityId = null,
+            string entityType = null,
             Guid? repliedCommentId = null, 
             string authorUsername = null,
             DateTime? creationStartDate = null,
@@ -105,8 +102,7 @@ namespace Volo.CmsKit.MongoDB.Comments
         {
             var query = await GetListQueryAsync(
                 text, 
-                entityType, 
-                entityId, 
+                entityType,
                 repliedCommentId, 
                 authorUsername, 
                 creationStartDate, 
@@ -172,8 +168,7 @@ namespace Volo.CmsKit.MongoDB.Comments
         
         protected virtual async Task<IQueryable<Comment>> GetListQueryAsync(
             string filter = null, 
-            string entityType = null, 
-            string entityId = null,
+            string entityType = null,
             Guid? repliedCommentId = null, 
             string authorUsername = null,
             DateTime? creationStartDate = null,
@@ -196,7 +191,6 @@ namespace Volo.CmsKit.MongoDB.Comments
             
             return queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
                 .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
-                .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.EntityId == entityId)
                 .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
                 .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
                 .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
