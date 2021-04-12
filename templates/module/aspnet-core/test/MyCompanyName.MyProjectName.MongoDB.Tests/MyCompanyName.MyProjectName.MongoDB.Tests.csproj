@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageReference Include="Mongo2Go" Version="3.0.0" />
+    <PackageReference Include="Mongo2Go" Version="3.1.1" />
     <ProjectReference Include="..\..\src\MyCompanyName.MyProjectName.MongoDB\MyCompanyName.MyProjectName.MongoDB.csproj" />
     <ProjectReference Include="..\MyCompanyName.MyProjectName.TestBase\MyCompanyName.MyProjectName.TestBase.csproj" />
   </ItemGroup>

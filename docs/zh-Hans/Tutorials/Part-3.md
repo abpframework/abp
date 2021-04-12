@@ -718,7 +718,7 @@ export class BookComponent implements OnInit {
   <ng-template #abpBody> </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
     </button>
   </ng-template>
@@ -859,7 +859,7 @@ export class BookComponent implements OnInit {
 
 ````html
 <ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
+  <button type="button" class="btn btn-secondary" abpClose>
       {%{{{ '::Close' | abpLocalization }}}%}
   </button>
 

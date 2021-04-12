@@ -15,6 +15,7 @@ namespace Volo.Blogging
             blogs.AddChild(BloggingPermissions.Blogs.Update, L("Permission:Edit"));
             blogs.AddChild(BloggingPermissions.Blogs.Delete, L("Permission:Delete"));
             blogs.AddChild(BloggingPermissions.Blogs.Create, L("Permission:Create"));
+            blogs.AddChild(BloggingPermissions.Blogs.ClearCache, L("Permission:ClearCache"));
 
             var posts = bloggingGroup.AddPermission(BloggingPermissions.Posts.Default, L("Permission:Posts"));
             posts.AddChild(BloggingPermissions.Posts.Update, L("Permission:Edit"));

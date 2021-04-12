@@ -96,14 +96,26 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending
             return selectItems;
         }
 
-        protected virtual void SelectedValueChanged(object selectedItem)
+        protected virtual Task SelectedValueChanged(object selectedItem)
         {
             SelectedValue = selectedItem;
+
+            return Task.CompletedTask;
         }
 
         protected async Task SearchFilterChangedAsync(string filter)
         {
             lookupItems = await GetLookupItemsAsync(filter);
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+            {
+                await SearchFilterChangedAsync(string.Empty);
+            }
         }
     }
 }
