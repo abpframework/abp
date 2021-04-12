@@ -1,28 +1,53 @@
-﻿namespace Volo.Docs.Documents.FullSearch.Elastic
+﻿using System;
+using Nest;
+using Volo.Abp;
+
+namespace Volo.Docs.Documents.FullSearch.Elastic
 {
     public class DocsElasticSearchOptions
     {
-        public DocsElasticSearchOptions()
-        {
-            Enable = false;
-            IndexName = "abp_documents";
-            AuthenticationMode = ElasticSearchAuthenticationMode.None;
-        }
-
         public bool Enable { get; set; }
 
         public string IndexName { get; set; }
 
-        public ElasticSearchAuthenticationMode AuthenticationMode { get; set; }
+        protected Action<ConnectionSettings> AuthenticationAction { get; set; }
 
-        public DocsElasticSearchBasicAuthenticationOptions BasicAuthentication { get; set; }
-        public DocsElasticSearchApiKeyAuthenticationOptions ApiKeyAuthentication { get; set; }
-
-        public enum ElasticSearchAuthenticationMode
+        public DocsElasticSearchOptions()
         {
-            None = 0,
-            Basic = 1,
-            ApiKey = 2
+            Enable = false;
+            IndexName = "abp_documents";
+        }
+
+        public DocsElasticSearchOptions UseBasicAuthentication(string username, string password)
+        {
+            Check.NotNullOrEmpty(username, nameof(username));
+            Check.NotNullOrEmpty(password, nameof(password));
+
+            AuthenticationAction = settings =>
+            {
+                settings.BasicAuthentication(username, password);
+            };
+
+            return this;
+        }
+
+        public DocsElasticSearchOptions UseApiKeyAuthentication(string id, string apiKey)
+        {
+            Check.NotNullOrEmpty(id, nameof(id));
+            Check.NotNullOrEmpty(apiKey, nameof(apiKey));
+
+            AuthenticationAction = settings =>
+            {
+                settings.ApiKeyAuthentication(id, apiKey);
+            };
+
+            return this;
+        }
+
+        public ConnectionSettings Authenticate(ConnectionSettings connectionSettings)
+        {
+            AuthenticationAction?.Invoke(connectionSettings);
+            return connectionSettings;
         }
     }
 }
