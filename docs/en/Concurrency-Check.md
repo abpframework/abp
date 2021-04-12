@@ -40,8 +40,8 @@ There are two way to use this feature.
 
   Any class can be used which derived from **BasicAggregateRoot** such as `AggrageteRoot<T>`, `AuditedAggregateRoot`, `FullAuditedAggregateRoot` , `CreationAuditedAggregateRoot` , `CreationAuditedAggregateRootWithUser`, `FullAuditedAggregateRootWithUser`  and  `AuditedAggregateRootWithUser`.
 
-  
-
 ## Usage
+Optimistic concurrency control works with regular database operations such as `Update` & `Delete` with Abp Repositories and if there is a concurrency stamp mismatch, **AbpDbConcurrencyException** will be thrown. 
 
-Regular database operations with Abp Repositories check concurrency stamp and if requires throw **AbpDbConcurrencyException**.
+>  Optimistic concurrency control may not be possible when you use `UpdateManyAsync` and `DeleteManyAsync` methods.
+
