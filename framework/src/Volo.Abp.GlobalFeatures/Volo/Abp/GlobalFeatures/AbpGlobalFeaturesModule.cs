@@ -11,7 +11,7 @@ namespace Volo.Abp.GlobalFeatures
     [DependsOn(
         typeof(AbpLocalizationModule),
         typeof(AbpVirtualFileSystemModule),
-        typeof(AbpAuthorizationModule)
+        typeof(AbpAuthorizationAbstractionsModule)
     )]
     public class AbpGlobalFeaturesModule : AbpModule
     {

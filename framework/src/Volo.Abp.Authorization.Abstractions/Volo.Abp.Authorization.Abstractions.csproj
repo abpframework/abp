@@ -5,8 +5,8 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <AssemblyName>Volo.Abp.GlobalFeatures</AssemblyName>
-        <PackageId>Volo.Abp.GlobalFeatures</PackageId>
+        <AssemblyName>Volo.Abp.Authorization.Abstractions</AssemblyName>
+        <PackageId>Volo.Abp.Authorization.Abstractions</PackageId>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -15,15 +15,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Volo\Abp\GlobalFeatures\Localization\*.json" />
-        <EmbeddedResource Include="Volo\Abp\GlobalFeatures\Localization\*.json" />
+        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="$(MicrosoftPackageVersion)" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
-        <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
-        <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
-        <ProjectReference Include="..\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj" />
+        <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     </ItemGroup>
 
 </Project>
