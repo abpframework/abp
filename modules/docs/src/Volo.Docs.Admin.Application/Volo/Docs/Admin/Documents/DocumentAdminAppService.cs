@@ -210,9 +210,8 @@ namespace Volo.Docs.Admin.Documents
 
         public async Task ReindexAsync(Guid documentId)
         {
-            await _documentFullSearch.DeleteAsync(documentId);
             var document = await _documentRepository.GetAsync(documentId);
-            await _documentFullSearch.AddOrUpdateAsync(document);
+            await _documentFullSearch.ReindexDocumentAsync(document);
         }
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)

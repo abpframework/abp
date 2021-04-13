@@ -6,7 +6,7 @@ using Volo.Abp.EventBus;
 
 namespace Volo.Docs.Documents.FullSearch.Elastic
 {
-    public class DocumentChangedEventHandler : ILocalEventHandler<EntityCreatedEventData<Document>>, 
+    public class DocumentChangedEventHandler : ILocalEventHandler<EntityCreatedEventData<Document>>,
         ILocalEventHandler<EntityUpdatedEventData<Document>>,
         ILocalEventHandler<EntityDeletedEventData<Document>>,
         ITransientDependency
@@ -42,7 +42,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         {
             if (_options.Enable)
             {
-                await _documentFullSearch.DeleteAsync(eventData.Entity.Id);
+                await _documentFullSearch.DeleteAsync(eventData.Entity);
             }
         }
     }

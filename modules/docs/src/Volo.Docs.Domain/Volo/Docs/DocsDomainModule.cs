@@ -39,7 +39,7 @@ namespace Volo.Docs
                 options.EtoMappings.Add<Document, DocumentEto>(typeof(DocsDomainModule));
                 options.EtoMappings.Add<Project, ProjectEto>(typeof(DocsDomainModule));
             });
-            
+
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets
@@ -69,10 +69,17 @@ namespace Volo.Docs
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                if (scope.ServiceProvider.GetRequiredService<IOptions<DocsElasticSearchOptions>>().Value.Enable)
+                var elasticSearchOption = scope.ServiceProvider.GetRequiredService<IOptions<DocsElasticSearchOptions>>().Value;
+                if (elasticSearchOption.Enable)
                 {
                     var documentFullSearch = scope.ServiceProvider.GetRequiredService<IDocumentFullSearch>();
                     AsyncHelper.RunSync(() => documentFullSearch.CreateIndexIfNeededAsync());
+                }
+
+                if (elasticSearchOption.ReindexOnStartup)
+                {
+                    var documentFullSearch = scope.ServiceProvider.GetRequiredService<IDocumentFullSearch>();
+                    AsyncHelper.RunSync(() => documentFullSearch.ReindexAllAsync());
                 }
             }
         }

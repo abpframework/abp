@@ -175,8 +175,7 @@ namespace Volo.Docs.Documents
 
             input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
 
-            var esDocs =
-                await _documentFullSearch.SearchAsync(input.Context, project.Id, input.LanguageCode, input.Version);
+            var esDocs = await _documentFullSearch.SearchAsync(input.Context, project, input.LanguageCode, input.Version);
 
             return esDocs.Select(esDoc => new DocumentSearchOutput //TODO: auto map
             {

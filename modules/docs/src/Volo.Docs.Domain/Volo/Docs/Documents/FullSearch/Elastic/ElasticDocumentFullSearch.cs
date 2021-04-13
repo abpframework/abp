@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Nest;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
+using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents.FullSearch.Elastic
 {
@@ -16,14 +18,22 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         private readonly IElasticClientProvider _clientProvider;
         private readonly DocsElasticSearchOptions _options;
         private readonly ILogger<ElasticDocumentFullSearch> _logger;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IDocumentRepository _documentRepository;
 
-        public ElasticDocumentFullSearch(IElasticClientProvider clientProvider,
+        public ElasticDocumentFullSearch(
+            IElasticClientProvider clientProvider,
             IOptions<DocsElasticSearchOptions> options,
+            IProjectRepository projectRepository,
+            IDocumentRepository documentRepository,
             ILogger<ElasticDocumentFullSearch> logger)
         {
             _clientProvider = clientProvider;
-            _logger = logger;
+            _projectRepository = projectRepository;
+            _documentRepository = documentRepository;
             _options = options.Value;
+
+            _logger = logger;
         }
 
         public virtual async Task CreateIndexIfNeededAsync(CancellationToken cancellationToken = default)
@@ -74,12 +84,12 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             await client.IndexAsync(esDocument , x=>x.Index(_options.IndexName), cancellationToken);
         }
 
-        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(Document document, CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
 
             HandleError(await _clientProvider.GetClient()
-                .DeleteAsync(DocumentPath<Document>.Id( NormalizeField(id)), x => x.Index(_options.IndexName), cancellationToken));
+                .DeleteAsync(DocumentPath<Document>.Id( NormalizeField(document.Id)), x => x.Index(_options.IndexName), cancellationToken));
         }
 
         public virtual async Task DeleteAllAsync(CancellationToken cancellationToken = default)
@@ -95,7 +105,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 .DeleteByQueryAsync(request, cancellationToken));
         }
 
-        public virtual async Task DeleteAllByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAllByProjectAsync(Project project, CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
 
@@ -112,7 +122,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                                 new TermQuery
                                 {
                                     Field = "projectId",
-                                    Value = NormalizeField(projectId)
+                                    Value = NormalizeField(project.Id)
                                 }
                             }
                         }
@@ -124,7 +134,64 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 .DeleteByQueryAsync(request, cancellationToken));
         }
 
-        public virtual async Task<List<EsDocument>> SearchAsync(string context, Guid projectId, string languageCode,
+        public virtual async Task ReindexDocumentAsync(Document document, CancellationToken cancellationToken = default)
+        {
+            await DeleteAsync(document, cancellationToken);
+            await AddOrUpdateAsync(document, cancellationToken);
+        }
+
+        public virtual async Task ReindexProjectAsync(Project project, CancellationToken cancellationToken = default)
+        {
+            await DeleteAllByProjectAsync(project, cancellationToken);
+
+            var docs = await _documentRepository.GetListByProjectId(project.Id, cancellationToken);
+
+            foreach (var doc in docs)
+            {
+                if (doc.FileName == project.NavigationDocumentName)
+                {
+                    continue;
+                }
+
+                if (doc.FileName == project.ParametersDocumentName)
+                {
+                    continue;
+                }
+
+                await AddOrUpdateAsync(doc, cancellationToken);
+            }
+        }
+
+        public virtual async Task ReindexAllAsync(CancellationToken cancellationToken = default)
+        {
+            await DeleteAllAsync(cancellationToken);
+
+            var docs = await _documentRepository.GetListAsync(cancellationToken: cancellationToken);
+            var projects = await _projectRepository.GetListAsync(cancellationToken: cancellationToken);
+            foreach (var doc in docs)
+            {
+                var project = projects.FirstOrDefault(x => x.Id == doc.ProjectId);
+                if (project == null)
+                {
+                    continue;
+                }
+
+                if (doc.FileName == project.NavigationDocumentName)
+                {
+                    continue;
+                }
+
+                if (doc.FileName == project.ParametersDocumentName)
+                {
+                    continue;
+                }
+
+                await AddOrUpdateAsync(doc);
+            }
+
+        }
+
+        public virtual async Task<List<EsDocument>> SearchAsync(string context, Project project, string languageCode,
             string version, int? skipCount = null, int? maxResultCount = null,
             CancellationToken cancellationToken = default)
         {
@@ -153,7 +220,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                                 new TermQuery
                                 {
                                     Field = "projectId",
-                                    Value = NormalizeField(projectId)
+                                    Value = NormalizeField(project.Id)
                                 },
                                 new TermQuery
                                 {

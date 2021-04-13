@@ -121,53 +121,12 @@ namespace Volo.Docs.Admin.Projects
         public async Task ReindexAsync(ReindexInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
-
-            await _documentFullSearch.DeleteAllByProjectIdAsync(project.Id);
-
-            var docs = await _documentRepository.GetListByProjectId(project.Id);
-
-            foreach (var doc in docs)
-            {
-                if (doc.FileName == project.NavigationDocumentName)
-                {
-                    continue;
-                }
-
-                if (doc.FileName == project.ParametersDocumentName)
-                {
-                    continue;
-                }
-
-                await _documentFullSearch.AddOrUpdateAsync(doc);
-            }
+            await _documentFullSearch.ReindexProjectAsync(project);
         }
 
         public async Task ReindexAllAsync()
         {
-            await _documentFullSearch.DeleteAllAsync();
-
-            var docs = await _documentRepository.GetListAsync();
-            var projects = await _projectRepository.GetListAsync();
-            foreach (var doc in docs)
-            {
-                var project = projects.FirstOrDefault(x => x.Id == doc.ProjectId);
-                if (project == null)
-                {
-                    continue;
-                }
-
-                if (doc.FileName == project.NavigationDocumentName)
-                {
-                    continue;
-                }
-
-                if (doc.FileName == project.ParametersDocumentName)
-                {
-                    continue;
-                }
-
-                await _documentFullSearch.AddOrUpdateAsync(doc);
-            }
+            await _documentFullSearch.ReindexAllAsync();
         }
     }
 }

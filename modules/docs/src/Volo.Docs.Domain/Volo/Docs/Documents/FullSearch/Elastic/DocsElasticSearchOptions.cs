@@ -8,6 +8,8 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
     {
         public bool Enable { get; set; }
 
+        public bool ReindexOnStartup { get; set; }
+
         public string IndexName { get; set; }
 
         protected Action<ConnectionSettings> AuthenticationAction { get; set; }
@@ -16,6 +18,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         {
             Enable = false;
             IndexName = "abp_documents";
+            ReindexOnStartup = false;
         }
 
         public DocsElasticSearchOptions UseBasicAuthentication(string username, string password)
