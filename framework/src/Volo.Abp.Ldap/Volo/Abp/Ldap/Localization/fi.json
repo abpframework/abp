@@ -1,0 +1,15 @@
+{
+  "culture": "fi",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "Palvelimen isäntä",
+    "Description:Abp.Ldap.ServerHost": "Palvelimen isäntä",
+    "DisplayName:Abp.Ldap.ServerPort": "Palvelimen portti",
+    "Description:Abp.Ldap.ServerPort": "Palvelimen portti",
+    "DisplayName:Abp.Ldap.BaseDc": "Perustoimialueen komponentti",
+    "Description:Abp.Ldap.BaseDc": "Perustoimialueen komponentti",
+    "DisplayName:Abp.Ldap.UserName": "Käyttäjätunnus",
+    "Description:Abp.Ldap.UserName": "Käyttäjätunnus",
+    "DisplayName:Abp.Ldap.Password": "Salasana",
+    "Description:Abp.Ldap.Password": "Salasana"
+  }
+}
