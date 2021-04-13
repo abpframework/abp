@@ -94,6 +94,12 @@ namespace Volo.Abp.Cli.ProjectModification
                 projects.Add(project);
             }
 
+            project = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+            if (project != null && BlazorProjectTypeChecker.IsBlazorServerProject(project))
+            {
+                projects.Add(project);
+            }
+
             return projects.ToArray();
         }
 

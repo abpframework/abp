@@ -189,6 +189,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var moduleDirectory = Path.Combine(solutionDirectory, "modules", module.Name);
             var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly).First();
             var isProjectTiered = await IsProjectTiered(projectFiles);
+            var webPackagesWillBeAddedToBlazorServerProject = false;
 
             var blazorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".Blazor.csproj"));
             if (blazorProject == null)
@@ -205,6 +206,8 @@ namespace Volo.Abp.Cli.ProjectModification
                 if (isBlazorServer)
                 {
                     await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered);
+
+                    webPackagesWillBeAddedToBlazorServerProject = module.NugetPackages.All(np=> np.Target != NuGetPackageTarget.BlazorServer && np.TieredTarget != NuGetPackageTarget.BlazorServer);
                 }
                 else
                 {
@@ -212,7 +215,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
             }
 
-            if (!projectFiles.Any(p => p.EndsWith(".Web.csproj")))
+            if (!projectFiles.Any(p => p.EndsWith(".Web.csproj")) && !webPackagesWillBeAddedToBlazorServerProject)
             {
                 await RemoveProjectByTarget(module, moduleSolutionFile, NuGetPackageTarget.Web, isProjectTiered);
             }
@@ -459,12 +462,19 @@ namespace Volo.Abp.Cli.ProjectModification
         private async Task AddNugetAndNpmReferences(ModuleWithMastersInfo module, string[] projectFiles,
             bool useDotnetCliToInstall)
         {
+            var webPackagesWillBeAddedToBlazorServerProject = SouldWebPackagesBeAddedToBlazorServerProject(module, projectFiles);
+
             foreach (var nugetPackage in module.NugetPackages)
             {
                 var nugetTarget =
                     await IsProjectTiered(projectFiles) && nugetPackage.TieredTarget != NuGetPackageTarget.Undefined
                         ? nugetPackage.TieredTarget
                         : nugetPackage.Target;
+
+                if (webPackagesWillBeAddedToBlazorServerProject && nugetTarget == NuGetPackageTarget.Web)
+                {
+                    nugetTarget = NuGetPackageTarget.BlazorServer;
+                }
 
                 var targetProjectFile = ProjectFinder.FindNuGetTargetProjectFile(projectFiles, nugetTarget);
                 if (targetProjectFile == null)
@@ -499,6 +509,19 @@ namespace Volo.Abp.Cli.ProjectModification
                     Logger.LogDebug("Target project is not available for NPM packages.");
                 }
             }
+        }
+
+        private static bool SouldWebPackagesBeAddedToBlazorServerProject(ModuleWithMastersInfo module, string[] projectFiles)
+        {
+            var blazorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".Blazor.csproj"));
+
+            if (blazorProject == null)
+            {
+                return false;
+            }
+
+            var isBlazorServerProject = BlazorProjectTypeChecker.IsBlazorServerProject(blazorProject);
+            return isBlazorServerProject && module.NugetPackages.All(np => np.Target != NuGetPackageTarget.BlazorServer && np.TieredTarget != NuGetPackageTarget.BlazorServer);
         }
 
         protected void ModifyDbContext(string[] projectFiles, ModuleInfo module, bool skipDbMigrations = false)
