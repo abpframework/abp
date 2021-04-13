@@ -1,6 +1,10 @@
 {
   "items": [
     {
+      "text": "Quick Start",
+      "path": "Tutorials/Todo/Index.md"
+    },
+    {
       "text": "Getting Started",
       "items": [
         {
@@ -282,6 +286,10 @@
           ]
         },
         {
+          "text": "SMS Sending",
+          "path": "SMS-Sending.md"
+        },
+        {
           "text": "Event Bus",
           "items": [
             {
@@ -335,6 +343,10 @@
         {
           "text": "Virtual File System",
           "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "Cancellation Token Provider",
+          "path": "Cancellation-Token-Provider.md"
         }
       ]
     },
@@ -882,6 +894,15 @@
                   ]
                 }
               ]
+            },
+            {
+              "text": "Components",
+              "items": [
+                {
+                  "text": "Page",
+                  "path": "UI/Angular/Page-Component.md"
+                }
+              ]
             }
           ]
         },
@@ -1005,14 +1026,6 @@
           "path": "Modules/Background-Jobs.md"
         },
         {
-          "text": "Blogging",
-          "path": "Modules/Blogging.md"
-        },
-        {
-          "text": "Client Simulation",
-          "path": "Modules/Client-Simulation.md"
-        },
-        {
           "text": "CMS Kit",
           "path": "Modules/Cms-Kit.md"
         },
@@ -1043,10 +1056,6 @@
         {
           "text": "Tenant Management",
           "path": "Modules/Tenant-Management.md"
-        },
-        {
-          "text": "Users",
-          "path": "Modules/Users.md"
         },
         {
           "text": "Virtual File Explorer",

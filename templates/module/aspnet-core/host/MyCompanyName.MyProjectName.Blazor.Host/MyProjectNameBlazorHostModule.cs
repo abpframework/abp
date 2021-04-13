@@ -11,7 +11,7 @@ using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
 using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.Blazor;
+using Volo.Abp.Identity.Blazor.WebAssembly;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 
@@ -20,7 +20,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
     [DependsOn(
         typeof(AbpAutofacWebAssemblyModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
-        typeof(AbpIdentityBlazorModule),
+        typeof(AbpIdentityBlazorWebAssemblyModule),
         typeof(AbpAccountBlazorModule),
         typeof(MyProjectNameBlazorModule)
     )]

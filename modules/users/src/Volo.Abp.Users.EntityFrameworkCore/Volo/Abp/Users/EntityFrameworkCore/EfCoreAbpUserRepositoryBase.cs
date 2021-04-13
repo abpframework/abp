@@ -48,7 +48,7 @@ namespace Volo.Abp.Users.EntityFrameworkCore
                         u.Name.Contains(filter) ||
                         u.Surname.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(IUser.UserName))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IUser.UserName) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

@@ -23,8 +23,17 @@ namespace MyCompanyName.MyProjectName.Web.Menus
             var administration = context.Menu.GetAdministration();
             var l = context.GetLocalizer<MyProjectNameResource>();
 
-            context.Menu.Items.Insert(0, new ApplicationMenuItem(MyProjectNameMenus.Home, l["Menu:Home"], "~/"));
-
+            context.Menu.Items.Insert(
+                0,
+                new ApplicationMenuItem(
+                    MyProjectNameMenus.Home,
+                    l["Menu:Home"],
+                    "~/",
+                    icon: "fas fa-home",
+                    order: 0
+                )
+            );
+            
             if (MultiTenancyConsts.IsEnabled)
             {
                 administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);

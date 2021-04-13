@@ -1,4 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
+import { Params } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import {
@@ -51,8 +52,8 @@ export class AuthService {
     this.strategy.navigateToLogin();
   }
 
-  navigateToLogin() {
-    this.strategy.navigateToLogin();
+  navigateToLogin(queryParams?: Params) {
+    this.strategy.navigateToLogin(queryParams);
   }
 
   login(params: LoginParams) {

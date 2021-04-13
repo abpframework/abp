@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MediaDescriptors;
-using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.MediaDescriptors
 {
@@ -29,16 +27,16 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
             MediaDescriptorDefinitionStore = mediaDescriptorDefinitionStore;
         }
 
-        public virtual async Task<MediaDescriptorDto> CreateAsync(CreateMediaInputStream inputStream)
+        public virtual async Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream)
         {
-            var definition = await MediaDescriptorDefinitionStore.GetAsync(inputStream.EntityType);
+            var definition = await MediaDescriptorDefinitionStore.GetAsync(entityType);
 
             /* TODO: Shouldn't CreatePolicies be a dictionary and we check for inputStream.EntityType? */
             await CheckAnyOfPoliciesAsync(definition.CreatePolicies);
 
-            using (var stream = inputStream.GetStream())
+            using (var stream = inputStream.File.GetStream())
             {
-                var newEntity = await MediaDescriptorManager.CreateAsync(inputStream.EntityType, inputStream.Name, inputStream.ContentType, inputStream.ContentLength ?? 0);
+                var newEntity = await MediaDescriptorManager.CreateAsync(entityType, inputStream.Name, inputStream.File.ContentType, inputStream.File.ContentLength ?? 0);
 
                 await MediaContainer.SaveAsync(newEntity.Id.ToString(), stream);
                 await MediaDescriptorRepository.InsertAsync(newEntity);

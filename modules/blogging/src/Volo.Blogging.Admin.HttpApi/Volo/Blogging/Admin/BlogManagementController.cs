@@ -54,5 +54,12 @@ namespace Volo.Blogging.Admin
         {
             await _blogManagementAppService.DeleteAsync(id);
         }
+
+        [HttpGet]
+        [Route("clear-cache/{id}")]
+        public async Task ClearCacheAsync(Guid id)
+        {
+            await _blogManagementAppService.ClearCacheAsync(id);
+        }
     }
 }

@@ -11,6 +11,7 @@ import {
   Output,
   TemplateRef,
   ViewChild,
+  isDevMode,
 } from '@angular/core';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent, Subject } from 'rxjs';
@@ -78,6 +79,9 @@ export class ModalComponent implements OnDestroy {
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
 
+  /**
+   * @deprecated will be removed in v5.0
+   */
   @ContentChild('abpClose', { static: false, read: ElementRef })
   abpClose: ElementRef<any>;
 
@@ -193,21 +197,30 @@ export class ModalComponent implements OnDestroy {
     fromEvent(window, 'beforeunload')
       .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
-        if (this.isFormDirty) {
+        event.preventDefault();
+        if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
           event.returnValue = true;
         } else {
-          event.returnValue = false;
           delete event.returnValue;
         }
       });
 
     setTimeout(() => {
       if (!this.abpClose) return;
+      this.warnForDeprecatedClose();
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => this.close());
     }, 0);
 
     this.init.emit();
+  }
+
+  private warnForDeprecatedClose() {
+    if (isDevMode()) {
+      console.warn(
+        'Please use abpClose directive instead of #abpClose template variable. #abpClose will be removed in v5.0',
+      );
+    }
   }
 }

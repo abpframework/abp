@@ -32,7 +32,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
                 pipeline.Steps.Add(new DatabaseManagementSystemChangeStep()); // todo: move to custom steps?
             }
 
-            if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor)
+            if ((context.BuildArgs.UiFramework == UiFramework.Mvc || context.BuildArgs.UiFramework == UiFramework.Blazor || context.BuildArgs.UiFramework == UiFramework.BlazorServer)
                 && context.BuildArgs.MobileApp == MobileApp.None && context.Template.Name != MicroserviceProTemplate.TemplateName
                 && context.Template.Name != MicroserviceServiceProTemplate.TemplateName)
             {

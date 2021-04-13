@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Text.Formatting;
 
 namespace Volo.Abp.IdentityServer
@@ -33,6 +32,11 @@ namespace Volo.Abp.IdentityServer
             {
                 var extractResult = FormattedStringValueExtracter.Extract(requestedUri, url, ignoreCase: true);
                 if (extractResult.IsMatch)
+                {
+                    return Task.FromResult(true);
+                }
+
+                if (url.Replace("{0}.", "").Contains(requestedUri, StringComparison.OrdinalIgnoreCase))
                 {
                     return Task.FromResult(true);
                 }

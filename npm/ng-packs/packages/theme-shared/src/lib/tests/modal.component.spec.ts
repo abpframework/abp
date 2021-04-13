@@ -51,7 +51,7 @@ describe('ModalComponent', () => {
 
         <ng-template #abpFooter>
           <div class="footer">
-            <button id="abp-close" #abpClose></button>
+            <button id="abp-close" abpClose></button>
             <abp-button>Submit</abp-button>
           </div>
         </ng-template>
@@ -184,7 +184,7 @@ describe('ModalComponent', () => {
         reduce<Event[]>((acc, v) => acc.concat(v), []),
       )
       .subscribe(([event1, event2]) => {
-        expect(event1.returnValue).toBe(true);
+        expect(event1.returnValue).toBe(false);
         expect(event2.returnValue).toBe(false);
         done();
       });

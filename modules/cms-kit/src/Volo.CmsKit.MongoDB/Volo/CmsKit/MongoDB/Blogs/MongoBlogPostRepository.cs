@@ -64,14 +64,15 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
             var token = GetCancellationToken(cancellationToken);
             var dbContext = await GetDbContextAsync(token);
-            var blogPostQueryable = dbContext.Collection<BlogPost>().AsQueryable();
+            var blogPostQueryable = await GetQueryableAsync();
+            
             var usersQueryable = dbContext.Collection<CmsUser>().AsQueryable();
 
             var queryable = blogPostQueryable
                 .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
                 .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter));
 
-            queryable = queryable.OrderBy(sorting ?? $"{nameof(BlogPost.CreationTime)} desc");
+            queryable = queryable.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(BlogPost.CreationTime)} desc" : sorting);
 
             var combinedQueryable = queryable
                                     .Join(

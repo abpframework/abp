@@ -72,6 +72,21 @@ export class ConfigStateService {
     return this.store.sliceState(state => state.features?.values?.[key]);
   }
 
+  getFeatures(keys: string[]) {
+    const { features } = this.store.state;
+    if (!features) return;
+
+    return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
+  }
+
+  getFeatures$(keys: string[]) {
+    return this.store.sliceState(({ features }) => {
+      if (!features?.values) return;
+
+      return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
+    });
+  }
+
   getSetting(key: string) {
     return this.store.state.setting?.values?.[key];
   }

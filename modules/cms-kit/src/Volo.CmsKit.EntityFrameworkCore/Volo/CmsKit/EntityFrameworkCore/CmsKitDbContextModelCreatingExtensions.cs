@@ -44,6 +44,10 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.HasIndex(x => new { x.TenantId, x.Email });
                 });
             }
+            else
+            {
+                builder.Ignore<CmsUser>();
+            }
 
             if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
             {

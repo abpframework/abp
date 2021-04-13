@@ -11,6 +11,7 @@ namespace Volo.Abp.Aspects
         public const string Auditing = "AbpAuditing";
         public const string UnitOfWork = "AbpUnitOfWork";
         public const string FeatureChecking = "AbpFeatureChecking";
+        public const string GlobalFeatureChecking = "AbpGlobalFeatureChecking";
 
         public static void AddApplied(object obj, params string[] concerns)
         {

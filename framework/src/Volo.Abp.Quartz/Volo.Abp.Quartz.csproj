@@ -15,9 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Quartz" Version="3.2.3" />
-    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.2.3" />
-    <PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.2.3" />
+    <PackageReference Include="Quartz" Version="3.2.4" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.2.4" />
+    <PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.2.4" />
   </ItemGroup>
 
   <ItemGroup>
