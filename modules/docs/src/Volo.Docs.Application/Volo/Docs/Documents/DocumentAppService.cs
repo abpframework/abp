@@ -201,21 +201,24 @@ namespace Volo.Docs.Documents
 
             foreach (var project in projects)
             {
-                if (project.ShortName == "ABP Commercial" || project.Name == "ABP Commercial")
-                {
-                    continue;
-                }
-                
                 var documents = await _documentRepository.GetListByProjectId(project.Id);
 
                 foreach (var document in documents)
                 {
-                    var navigationNode = await GetNavigationAsync(new GetNavigationDocumentInput
+                    var version = GetProjectVersionPrefixIfExist(project) + document.Version;
+                    var navigationDocument = await GetDocumentWithDetailsDtoAsync(
+                        project,
+                        project.NavigationDocumentName,
+                        document.LanguageCode,
+                        version
+                    );
+
+                    if (!DocsJsonSerializerHelper.TryDeserialize<NavigationNode>(navigationDocument.Content,
+                        out var navigationNode))
                     {
-                        ProjectId = project.Id,
-                        LanguageCode = document.LanguageCode,
-                        Version = document.Version
-                    });
+                        throw new UserFriendlyException(
+                            $"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
+                    }
                     
                     navigationNode.Items?.ForEach(node =>
                     {
