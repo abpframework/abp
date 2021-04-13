@@ -1,0 +1,6 @@
+{
+  "culture": "FR",
+  "texts": {
+    "Volo.GlobalFeature:010001": "Le service \"{ServiceName}\" doit activer la fonction \"{GlobalFeatureName}\"."
+  }
+}
