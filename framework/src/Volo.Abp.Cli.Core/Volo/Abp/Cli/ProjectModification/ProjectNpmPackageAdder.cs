@@ -118,7 +118,6 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 TryDetectAbpVersion(Path.Combine(directory, "package.json"), ref version);
             }
-            Console.WriteLine(version);
 
             var versionPostfix = version != null ? $"@{version}" : string.Empty;
 
