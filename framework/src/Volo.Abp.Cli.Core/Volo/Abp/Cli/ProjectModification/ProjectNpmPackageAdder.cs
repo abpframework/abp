@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
@@ -113,6 +114,12 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
 
 
+            if (version == null)
+            {
+                TryDetectAbpVersion(Path.Combine(directory, "package.json"), ref version);
+            }
+            Console.WriteLine(version);
+
             var versionPostfix = version != null ? $"@{version}" : string.Empty;
 
             using (DirectoryHelper.ChangeCurrentDirectory(directory))
@@ -130,6 +137,30 @@ namespace Volo.Abp.Cli.ProjectModification
             }
 
             return Task.CompletedTask;
+        }
+
+        private void TryDetectAbpVersion(string packageJsonFile, ref string version)
+        {
+            var packageJsonFileContent = File.ReadAllText(packageJsonFile);
+
+            var packageJsonObject = JObject.Parse(packageJsonFileContent);
+            var dependenciesObject = (JObject) packageJsonObject["dependencies"];
+
+            if (dependenciesObject == null)
+            {
+                return;
+            }
+
+            var packages = dependenciesObject.Children<JProperty>();
+
+            foreach (var package in packages)
+            {
+                if (package.Name.StartsWith("@abp/") || package.Name.StartsWith("@volo/"))
+                {
+                    version = package.Value.ToString();
+                    return;
+                }
+            }
         }
 
         private async Task<NpmPackageInfo> FindNpmPackageInfoAsync(string packageName)
