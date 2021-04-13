@@ -1,5 +1,5 @@
 {
-  "culture": "FR",
+  "culture": "fr",
   "texts": {
     "Volo.AbpIo.Domain:010004": "Nombre maximum de membres atteint!",
     "Volo.AbpIo.Domain:010005": "Nombre maximum de propriétaires atteint!",

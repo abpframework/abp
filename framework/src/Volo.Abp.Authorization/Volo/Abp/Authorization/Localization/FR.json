@@ -1,5 +1,5 @@
 {
-  "culture": "FR",
+  "culture": "fr",
   "texts": {
     "Volo.Authorization:010001": "L'autorisation à échouée! Compte tenu de la politique n'a pas accordé.",
     "Volo.Authorization:010002": "L'autorisation à échouée! La politique donnée n'a pas accordé: {PolicyName}",

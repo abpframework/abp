@@ -1,5 +1,5 @@
 {
-  "culture": "FR",
+  "culture": "fr",
   "texts": {
     "Hello <b>{0}</b>.": "Bonjour <b> {0} </b>.",
     "Car": "Voiture",

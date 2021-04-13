@@ -1,5 +1,5 @@
 {
-  "culture": "FR",
+  "culture": "fr",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Le nom de la ressource d'identité existe déjà: {Name}",
     "Volo.IdentityServer:DuplicateApiResourceName": "Le nom de la ressource Api existe déjà: {Name}",
