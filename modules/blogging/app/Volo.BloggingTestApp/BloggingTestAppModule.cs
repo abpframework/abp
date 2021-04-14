@@ -165,6 +165,7 @@ namespace Volo.BloggingTestApp
             });
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseAbpRequestLocalization();
 
