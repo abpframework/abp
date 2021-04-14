@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
@@ -193,6 +195,30 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MyProjectNameEntityFrameworkCoreCollectionFixtureBase",
                 "MyProjectNameMongoDbCollectionFixtureBase"
             );
+
+            if (context.BuildArgs.PublicWebSite)
+            {
+                ChangeProjectReference(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/MyCompanyName.MyProjectName.Web.Public.csproj",
+                    "EntityFrameworkCore.DbMigrations",
+                    "MongoDB"
+                );
+
+                ChangeNamespaceAndKeyword(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/MyProjectNameWebPublicModule.cs",
+                    "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                    "MyCompanyName.MyProjectName.MongoDB",
+                    "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                    "MyProjectNameMongoDbModule"
+                );
+
+                ChangeConnectionStringToMongoDb(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/appsettings.json"
+                );
+            }
         }
 
         private void ChangeProjectReference(
