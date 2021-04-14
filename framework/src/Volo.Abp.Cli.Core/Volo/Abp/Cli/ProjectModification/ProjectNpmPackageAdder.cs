@@ -43,7 +43,8 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<ProjectNpmPackageAdder>.Instance;
         }
 
-        public async Task AddAngularPackageAsync(string directory, string npmPackageName, string version = null, bool withSourceCode = false)
+        public async Task AddAngularPackageAsync(string directory, string npmPackageName, string version = null,
+            bool withSourceCode = false)
         {
             await AddAngularPackageAsync(
                 directory,
@@ -53,7 +54,8 @@ namespace Volo.Abp.Cli.ProjectModification
             );
         }
 
-        public async Task AddAngularPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null, bool withSourceCode = false)
+        public async Task AddAngularPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
+            bool withSourceCode = false)
         {
             var packageJsonFilePath = Path.Combine(directory, "package.json");
             if (!File.Exists(packageJsonFilePath))
@@ -86,9 +88,11 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        protected virtual async Task DownloadAngularSourceCode(string angularDirectory, NpmPackageInfo package, string version = null)
+        protected virtual async Task DownloadAngularSourceCode(string angularDirectory, NpmPackageInfo package,
+            string version = null)
         {
-            var targetFolder = Path.Combine(angularDirectory, "projects", package.Name.RemovePreFix("@").Replace("/","-"));
+            var targetFolder = Path.Combine(angularDirectory, "projects",
+                package.Name.RemovePreFix("@").Replace("/", "-"));
 
             if (Directory.Exists(targetFolder))
             {
@@ -102,7 +106,8 @@ namespace Volo.Abp.Cli.ProjectModification
             );
         }
 
-        public Task AddMvcPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null, bool skipGulpCommand = false)
+        public Task AddMvcPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
+            bool skipGulpCommand = false)
         {
             var packageJsonFilePath = Path.Combine(directory, "package.json");
             if (!File.Exists(packageJsonFilePath) ||
@@ -116,7 +121,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (version == null)
             {
-                TryDetectAbpVersion(Path.Combine(directory, "package.json"), ref version);
+                version = DetectAbpVersionOrNull(Path.Combine(directory, "package.json"));
             }
 
             var versionPostfix = version != null ? $"@{version}" : string.Empty;
@@ -138,33 +143,45 @@ namespace Volo.Abp.Cli.ProjectModification
             return Task.CompletedTask;
         }
 
-        private void TryDetectAbpVersion(string packageJsonFile, ref string version)
+        private string DetectAbpVersionOrNull(string packageJsonFile)
         {
-            var packageJsonFileContent = File.ReadAllText(packageJsonFile);
-
-            var packageJsonObject = JObject.Parse(packageJsonFileContent);
-            var dependenciesObject = (JObject) packageJsonObject["dependencies"];
-
-            if (dependenciesObject == null)
+            if (string.IsNullOrEmpty(packageJsonFile) ||
+                !File.Exists(packageJsonFile))
             {
-                return;
+                return null;
             }
 
-            var packages = dependenciesObject.Children<JProperty>();
-
-            foreach (var package in packages)
+            try
             {
-                if (package.Name.StartsWith("@abp/") || package.Name.StartsWith("@volo/"))
+                var packageJsonFileContent = File.ReadAllText(packageJsonFile);
+                var packageJsonObject = JObject.Parse(packageJsonFileContent);
+                var dependenciesObject = (JObject) packageJsonObject["dependencies"];
+
+                if (dependenciesObject == null)
                 {
-                    version = package.Value.ToString();
-                    return;
+                    return null;
+                }
+
+                var packages = dependenciesObject.Children<JProperty>();
+
+                foreach (var package in packages)
+                {
+                    if (package.Name.StartsWith("@abp/") || package.Name.StartsWith("@volo/"))
+                    {
+                        return package.Value.ToString();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("Cannot detect ABP package version. " + ex.Message);
+            }
+
+            return null;
         }
 
         private async Task<NpmPackageInfo> FindNpmPackageInfoAsync(string packageName)
         {
-
             var url = $"{CliUrls.WwwAbpIo}api/app/npmPackage/byName/?name=" + packageName;
             var client = _cliHttpClientFactory.CreateClient();
 
