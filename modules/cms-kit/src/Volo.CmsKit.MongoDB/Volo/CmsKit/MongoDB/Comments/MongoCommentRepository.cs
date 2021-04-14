@@ -27,13 +27,16 @@ namespace Volo.CmsKit.MongoDB.Comments
             var commentQueryable = await GetMongoQueryableAsync(cancellationToken);
             var userQueryable = dbContext.Collection<CmsUser>();
 
-            var joined = commentQueryable.Join(userQueryable, x => x.CreatorId, x => x.Id, (comment, user) => new
-            {
-                Comment = comment,
-                User = user
-            });
+            var query = from comment in (await GetMongoQueryableAsync(cancellationToken))
+                        join user in (await GetDbContextAsync(cancellationToken)).CmsUsers on comment.CreatorId equals user.Id
+                        where id == comment.Id
+                        select new
+                        {
+                            Comment = comment,
+                            Author = user
+                        };
 
-            var commentWithAuthor = await joined.FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+            var commentWithAuthor = await query.FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
             if (commentWithAuthor == null)
             {
@@ -43,7 +46,7 @@ namespace Volo.CmsKit.MongoDB.Comments
             return new CommentWithAuthorQueryResultItem()
             {
                 Comment = commentWithAuthor.Comment,
-                Author = commentWithAuthor.User
+                Author = commentWithAuthor.Author
             };
         }
 
