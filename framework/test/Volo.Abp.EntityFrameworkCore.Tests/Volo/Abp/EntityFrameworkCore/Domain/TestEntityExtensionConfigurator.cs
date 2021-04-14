@@ -29,6 +29,12 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                         "Established"
                     ).MapEfCoreProperty<City, Guid>(
                         "Guid"
+                    ).MapEfCoreProperty<City, ExtraProperties_Tests.Color?>(
+                        "EnumNumber"
+                    ).MapEfCoreProperty<City, ExtraProperties_Tests.Color>(
+                        "EnumNumberString"
+                    ).MapEfCoreProperty<City, ExtraProperties_Tests.Color>(
+                        "EnumLiteral"
                     );
             });
         }
