@@ -43,10 +43,12 @@ namespace Volo.Abp.Cli
 
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
 
+#if !DEBUG
             if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
             {
                 await CheckCliVersionAsync();
             }
+#endif
 
             var commandType = CommandSelector.Select(commandLineArgs);
 
