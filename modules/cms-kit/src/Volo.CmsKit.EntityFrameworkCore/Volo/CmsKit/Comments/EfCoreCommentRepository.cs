@@ -47,7 +47,6 @@ namespace Volo.CmsKit.Comments
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
             string filter = null,
             string entityType = null,
-            string entityId = null,
             Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
@@ -62,7 +61,6 @@ namespace Volo.CmsKit.Comments
             var query = await GetListQueryAsync(
                 filter,
                 entityType,
-                entityId,
                 repliedCommentId,
                 authorUsername,
                 creationStartDate,
@@ -83,7 +81,6 @@ namespace Volo.CmsKit.Comments
         public async Task<long> GetCountAsync(
             string text = null,
             string entityType = null,
-            string entityId = null,
             Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
@@ -95,7 +92,6 @@ namespace Volo.CmsKit.Comments
             var query = await GetListQueryAsync(
                 text,
                 entityType,
-                entityId,
                 repliedCommentId,
                 authorUsername,
                 creationStartDate,
@@ -148,7 +144,6 @@ namespace Volo.CmsKit.Comments
         protected virtual async Task<IQueryable<CommentWithAuthorQueryResultItem>> GetListQueryAsync(
             string filter = null,
             string entityType = null,
-            string entityId = null,
             Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
@@ -170,7 +165,6 @@ namespace Volo.CmsKit.Comments
 
             return query.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Comment.Text.Contains(filter))
                 .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.Comment.EntityType.Contains(entityType))
-                .WhereIf(!entityId.IsNullOrWhiteSpace(), c => c.Comment.EntityId.Contains(entityId))
                 .WhereIf(repliedCommentId.HasValue, c => c.Comment.RepliedCommentId == repliedCommentId)
                 .WhereIf(!authorUsername.IsNullOrWhiteSpace(),c=>c.Author.UserName.Contains(authorUsername))
                 .WhereIf(creationStartDate.HasValue, c => c.Comment.CreationTime >= creationStartDate)

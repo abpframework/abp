@@ -14,7 +14,6 @@ namespace Volo.CmsKit.Comments
         Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
             string filter = null,
             string entityType = null,
-            string entityId = null,
             Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
@@ -28,7 +27,6 @@ namespace Volo.CmsKit.Comments
         Task<long> GetCountAsync(
             string text = null,
             string entityType = null,
-            string entityId = null,
             Guid? repliedCommentId = null,
             string authorUsername = null,
             DateTime? creationStartDate = null,
