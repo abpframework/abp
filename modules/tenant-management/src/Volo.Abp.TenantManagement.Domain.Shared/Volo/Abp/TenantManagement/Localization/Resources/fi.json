@@ -1,0 +1,23 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Menu:TenantManagement": "Vuokralaisten hallinta",
+    "Tenants": "Vuokralaiset",
+    "NewTenant": "Uusi vuokralainen",
+    "TenantName": "Vuokralaisen nimi",
+    "DisplayName:TenantName": "Vuokralaisen nimi",
+    "TenantDeletionConfirmationMessage": "Vuokralainen {0} poistetaan. Vahvistatko sen?",
+    "ConnectionStrings": "Yhteysjonot",
+    "DisplayName:DefaultConnectionString": "Oletusyhteysmerkkijono",
+    "DisplayName:UseSharedDatabase": "Käytä jaettua tietokantaa",
+    "ManageHostFeatures": "Hallinnoi isäntäominaisuuksia",
+    "Permission:TenantManagement": "Vuokralaisten hallinta",
+    "Permission:Create": "Luoda",
+    "Permission:Edit": "Muokata",
+    "Permission:Delete": "Poistaa",
+    "Permission:ManageConnectionStrings": "Hallitse yhteysmerkkijonoja",
+    "Permission:ManageFeatures": "Hallitse ominaisuuksia",
+    "DisplayName:AdminEmailAddress": "Järjestelmänvalvojan sähköpostiosoite",
+    "DisplayName:AdminPassword": "Järjestelmänvalvojan salasana"
+  }
+}

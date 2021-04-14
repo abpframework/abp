@@ -1,0 +1,7 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Salasanan pituuden on oltava yli {0} merkkiä.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Salasanassa on oltava vähintään yksi ei-aakkosnumeerinen merkki."
+  }
+}

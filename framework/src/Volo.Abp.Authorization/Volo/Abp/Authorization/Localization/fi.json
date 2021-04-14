@@ -1,0 +1,10 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Volo.Authorization:010001": "Käyttöoikeuden varmistus epäonnistui! Annettua politiikkaa ei ole myönnetty.",
+    "Volo.Authorization:010002": "Käyttöoikeuden varmistus epäonnistui! Annettua käytäntöä ei ole myönnetty: {PolicyName}",
+    "Volo.Authorization:010003": "Käyttöoikeuden varmistus epäonnistui! Annettua käytäntöä ei ole myönnetty tietylle resurssille: {ResourceName}",
+    "Volo.Authorization:010004": "Käyttöoikeuden varmistus epäonnistui! Annettua vaatimusta ei ole annettu tietylle resurssille: {ResourceName}",
+    "Volo.Authorization:010005": "Käyttöoikeuden varmistus epäonnistui! Annettuja vaatimuksia ei ole annettu tietylle resurssille: {ResourceName}"
+  }
+}
