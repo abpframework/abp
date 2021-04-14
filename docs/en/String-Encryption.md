@@ -15,7 +15,7 @@ If installation is needed, it is suggested to use the [ABP CLI](https://docs.abp
 Open a command line window in the folder of the project (.csproj file) and type the following command:
 
 ```bash
-abp add-package Volo.Abp.GlobalFeatures
+abp add-package Volo.Abp.Security
 ```
 
 ### Manual Installation
