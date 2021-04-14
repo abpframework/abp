@@ -27,7 +27,6 @@ namespace Volo.CmsKit.Admin.Comments
             var totalCount = await CommentRepository.GetCountAsync(
                 input.Text,
                 input.EntityType,
-                input.EntityId,
                 input.RepliedCommentId,
                 input.Author,
                 input.CreationStartDate,
@@ -36,7 +35,6 @@ namespace Volo.CmsKit.Admin.Comments
             var comments = await CommentRepository.GetListAsync(
                 input.Text,
                 input.EntityType,
-                input.EntityId,
                 input.RepliedCommentId,
                 input.Author,
                 input.CreationStartDate,

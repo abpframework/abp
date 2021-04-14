@@ -22,7 +22,7 @@ export class LocalizationService {
    * Returns currently selected language
    */
   get currentLang(): string {
-    return this.latestLang;
+    return this.latestLang || this.sessionState.getLanguage();
   }
 
   get languageChange$(): Observable<string> {
