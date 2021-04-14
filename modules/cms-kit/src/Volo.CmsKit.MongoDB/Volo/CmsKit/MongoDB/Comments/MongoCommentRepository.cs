@@ -23,14 +23,18 @@ namespace Volo.CmsKit.MongoDB.Comments
 
         public async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            var dbContext = await GetDbContextAsync();
+            var commentQueryable = await GetMongoQueryableAsync(cancellationToken);
+            var userQueryable = dbContext.Collection<CmsUser>();
+
             var query = from comment in (await GetMongoQueryableAsync(cancellationToken))
-                join user in (await GetDbContextAsync(cancellationToken)).CmsUsers on comment.CreatorId equals user.Id
-                where id == comment.Id
-                select new CommentWithAuthorQueryResultItem
-                {
-                    Comment = comment,
-                    Author = user
-                };
+                        join user in (await GetDbContextAsync(cancellationToken)).CmsUsers on comment.CreatorId equals user.Id
+                        where id == comment.Id
+                        select new
+                        {
+                            Comment = comment,
+                            Author = user
+                        };
 
             var commentWithAuthor = await query.FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
@@ -39,7 +43,11 @@ namespace Volo.CmsKit.MongoDB.Comments
                 throw new EntityNotFoundException(typeof(Comment), id);
             }
 
-            return commentWithAuthor;
+            return new CommentWithAuthorQueryResultItem()
+            {
+                Comment = commentWithAuthor.Comment,
+                Author = commentWithAuthor.Author
+            };
         }
 
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
