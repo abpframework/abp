@@ -351,7 +351,7 @@ namespace Volo.Abp.EntityFrameworkCore
                         }
                         else if (conversionType.IsEnum)
                         {
-                            entryProperty.CurrentValue = Enum.ToObject(conversionType, entityProperty);
+                            entryProperty.CurrentValue = Enum.Parse(conversionType, entityProperty.ToString(), ignoreCase: true);
                         }
                         else
                         {
