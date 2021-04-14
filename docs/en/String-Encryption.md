@@ -22,7 +22,7 @@ abp add-package Volo.Abp.Security
 
 If you want to manually install;
 
-1. Add the [Volo.Abp.Security]([NuGet Gallery | Volo.Abp.Security 4.2.2](https://www.nuget.org/packages/Volo.Abp.Security)) NuGet package to your project:
+1. Add the [Volo.Abp.Security](https://www.nuget.org/packages/Volo.Abp.Security) NuGet package to your project:
 
    `Install-Package Volo.Abp.Security`
 
