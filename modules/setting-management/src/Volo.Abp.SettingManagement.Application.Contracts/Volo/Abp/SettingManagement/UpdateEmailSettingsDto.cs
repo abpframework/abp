@@ -35,3 +35,4 @@ namespace Volo.Abp.SettingManagement
         public string DefaultFromDisplayName { get; set; }
     }
 }
+
