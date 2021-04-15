@@ -21,7 +21,7 @@ namespace Volo.CmsKit.MongoDB.Comments
         {
         }
 
-        public async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
             var commentQueryable = await GetMongoQueryableAsync(cancellationToken);
@@ -50,7 +50,7 @@ namespace Volo.CmsKit.MongoDB.Comments
             };
         }
 
-        public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
+        public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
             string filter = null, 
             string entityType = null,
             Guid? repliedCommentId = null,
@@ -98,7 +98,7 @@ namespace Volo.CmsKit.MongoDB.Comments
                         }).ToList();
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             string text = null, 
             string entityType = null,
             Guid? repliedCommentId = null, 
@@ -121,7 +121,7 @@ namespace Volo.CmsKit.MongoDB.Comments
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
+        public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
             string entityType,
             string entityId,
             CancellationToken cancellationToken = default)
@@ -152,7 +152,7 @@ namespace Volo.CmsKit.MongoDB.Comments
                         }).ToList();
         }
 
-        public async Task DeleteWithRepliesAsync(
+        public virtual async Task DeleteWithRepliesAsync(
             Comment comment,
             CancellationToken cancellationToken = default)
         {
