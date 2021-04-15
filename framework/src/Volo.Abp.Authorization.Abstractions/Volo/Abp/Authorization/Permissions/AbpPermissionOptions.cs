@@ -8,10 +8,13 @@ namespace Volo.Abp.Authorization.Permissions
 
         public ITypeList<IPermissionValueProvider> ValueProviders { get; }
 
+        public ITypeList<IPermissionStateProvider> GlobalStateProviders { get; }
+
         public AbpPermissionOptions()
         {
             DefinitionProviders = new TypeList<IPermissionDefinitionProvider>();
             ValueProviders = new TypeList<IPermissionValueProvider>();
+            GlobalStateProviders = new TypeList<IPermissionStateProvider>();
         }
     }
 }

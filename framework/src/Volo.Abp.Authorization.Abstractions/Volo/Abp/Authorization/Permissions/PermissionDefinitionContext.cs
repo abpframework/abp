@@ -10,16 +10,16 @@ namespace Volo.Abp.Authorization.Permissions
     {
         public IServiceProvider ServiceProvider { get; }
 
-        internal Dictionary<string, PermissionGroupDefinition> Groups { get; }
+        public Dictionary<string, PermissionGroupDefinition> Groups { get; }
 
-        internal PermissionDefinitionContext(IServiceProvider serviceProvider)
+        public PermissionDefinitionContext(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
             Groups = new Dictionary<string, PermissionGroupDefinition>();
         }
 
         public virtual PermissionGroupDefinition AddGroup(
-            string name, 
+            string name,
             ILocalizableString displayName = null,
             MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
