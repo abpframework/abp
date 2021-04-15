@@ -15,12 +15,18 @@ namespace Volo.Abp.Http.Client.DynamicProxying
     {
         public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
-            var urlBuilder = new StringBuilder(action.Url);
+            // The ASP.NET Core route value provider and query string value provider:
+            //  Treat values as invariant culture.
+            //  Expect that URLs are culture-invariant.
+            using (CultureHelper.Use(CultureInfo.InvariantCulture))
+            {
+                var urlBuilder = new StringBuilder(action.Url);
 
-            ReplacePathVariables(urlBuilder, action.Parameters, methodArguments, apiVersion);
-            AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments, apiVersion);
+                ReplacePathVariables(urlBuilder, action.Parameters, methodArguments, apiVersion);
+                AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments, apiVersion);
 
-            return urlBuilder.ToString();
+                return urlBuilder.ToString();
+            }
         }
 
         private static void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
@@ -128,15 +134,12 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private static string ConvertValueToString([NotNull] object value)
         {
-            using (CultureHelper.Use(CultureInfo.InvariantCulture))
+            if (value is DateTime dateTimeValue)
             {
-                if (value is DateTime dateTimeValue)
-                {
-                    return dateTimeValue.ToUniversalTime().ToString("u");
-                }
-
-                return value.ToString();
+                return dateTimeValue.ToUniversalTime().ToString("O");
             }
+
+            return value.ToString();
         }
     }
 }
