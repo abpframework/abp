@@ -2,8 +2,6 @@
 
 ABP Framework provides string encryption feature that allows to **Encrypt** and **Decrypt** strings.
 
-
-
 ##  Installation
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
@@ -38,8 +36,6 @@ If you want to manually install;
    }
    ```
 
-
-
 ## Using String Encryption
 
 All encryption operations are included in `IStringEncryptionService`. You can inject it and start to use.
@@ -68,13 +64,9 @@ All encryption operations are included in `IStringEncryptionService`. You can in
  }
 ```
 
-
-
 ### Using Custom PassPhrase
 
 `IStringEncryptionService` methods has **passPharase** parameter with default value and it uses default PassPhrase when you don't pass passPhrase parameter. 
-
-Default value is `gsKnGZ041HLL4IM8`
 
 ```csharp
 StringEncryptionService.Encrypt(value); // Default Pass Phrase
@@ -84,13 +76,9 @@ StringEncryptionService.Encrypt(value, "MyCustomPassPhrase"); // Custom Pass Phr
 StringEncryptionService.Decrypt(value, "MyCustomPassPhrase");
 ```
 
-
-
 ### Using Custom Salt
 
 `IStringEncryptionService` methods has **salt** parameter with default value and it uses default Salt when you don't pass the parameter.
-
-Default value is `Encoding.ASCII.GetBytes("hgt!16kl")`
 
 ```csharp
 StringEncryptionService.Encrypt(value); // Default Salt
@@ -99,8 +87,6 @@ StringEncryptionService.Encrypt(value, salt: Encoding.UTF8.GetBytes("MyCustomSal
 // Encrypt & Decrypt have same parameters.
 StringEncryptionService.Decrypt(value,  salt: Encoding.UTF8.GetBytes("MyCustomSalt"));
 ```
-
-
 
 ***
 
@@ -117,8 +103,6 @@ Configure<AbpStringEncryptionOptions>(opts =>
     opts.Keysize = 512;
 });
 ```
-
-
 
 - **DefaultPassPhrase**: Default password to encrypt/decrypt texts. It's recommended to set to another value for security. Default value: `gsKnGZ041HLL4IM8`
 
