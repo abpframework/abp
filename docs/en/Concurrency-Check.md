@@ -14,7 +14,7 @@ Concurrency check is not a standalone feature. It's part of Repositories and Dom
 
 Each Db Provider implements concurrency check itself.
 
-## Define Conurrency Stamp
+## Define Concurrency Stamp
 
 There are two way to use this feature.
 
