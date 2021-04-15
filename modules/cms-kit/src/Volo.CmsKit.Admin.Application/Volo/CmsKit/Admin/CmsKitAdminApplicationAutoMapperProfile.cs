@@ -27,6 +27,8 @@ namespace Volo.CmsKit.Admin
             CreateMap<Page, PageDto>();
 
             CreateMap<BlogPost, BlogPostDto>(MemberList.Destination);
+            CreateMap<BlogPost, BlogPostListDto>()
+                .Ignore(d => d.BlogName);
             CreateMap<CreateBlogPostDto, BlogPost>(MemberList.Source);
             CreateMap<UpdateBlogPostDto, BlogPost>(MemberList.Source);
 

@@ -92,17 +92,12 @@ namespace Volo.CmsKit.Admin.Blogs
 
             var count = await BlogPostRepository.GetCountAsync(input.Filter);
 
-            var dtoList = blogPosts.Select(x => new BlogPostListDto {
-                Id = x.Id,
-                BlogId = x.BlogId,
-                BlogName = blogs[x.BlogId].Name,
-                Title = x.Title,
-                Slug = x.Slug,
-                ShortDescription = x.ShortDescription,
-                Content = x.Content,
-                CoverImageMediaId = x.CoverImageMediaId,
-                CreationTime = x.CreationTime,
-                LastModificationTime = x.LastModificationTime
+            var dtoList = blogPosts.Select(x =>
+            {
+                var dto = ObjectMapper.Map<BlogPost, BlogPostListDto>(x);
+                dto.BlogName = blogs[x.BlogId].Name;
+
+                return dto;
             }).ToList();
             
             return new PagedResultDto<BlogPostListDto>(count, dtoList);
