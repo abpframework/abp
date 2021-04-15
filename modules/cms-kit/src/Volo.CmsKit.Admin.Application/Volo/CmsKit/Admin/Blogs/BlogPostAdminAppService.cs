@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
@@ -83,15 +84,28 @@ namespace Volo.CmsKit.Admin.Blogs
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual async Task<PagedResultDto<BlogPostDto>> GetListAsync(BlogPostGetListInput input)
+        public virtual async Task<PagedResultDto<BlogPostListDto>> GetListAsync(BlogPostGetListInput input)
         {
+            var blogs = (await BlogRepository.GetListAsync()).ToDictionary(x => x.Id);
+            
             var blogPosts = await BlogPostRepository.GetListAsync(input.Filter, input.BlogId, input.MaxResultCount, input.SkipCount, input.Sorting);
 
             var count = await BlogPostRepository.GetCountAsync(input.Filter);
 
-            var dtoList = ObjectMapper.Map<List<BlogPost>, List<BlogPostDto>>(blogPosts);
+            var dtoList = blogPosts.Select(x => new BlogPostListDto {
+                Id = x.Id,
+                BlogId = x.BlogId,
+                BlogName = blogs[x.BlogId].Name,
+                Title = x.Title,
+                Slug = x.Slug,
+                ShortDescription = x.ShortDescription,
+                Content = x.Content,
+                CoverImageMediaId = x.CoverImageMediaId,
+                CreationTime = x.CreationTime,
+                LastModificationTime = x.LastModificationTime
+            }).ToList();
             
-            return new PagedResultDto<BlogPostDto>(count, dtoList);
+            return new PagedResultDto<BlogPostListDto>(count, dtoList);
         }
 
         [Authorize(CmsKitAdminPermissions.BlogPosts.Delete)]
