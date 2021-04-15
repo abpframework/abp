@@ -54,6 +54,21 @@ namespace Microsoft.Extensions.DependencyInjection
                             }
                         });
 
+                        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                        {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "oauth2"
+                                    }
+                                },
+                                Array.Empty<string>()
+                            }
+                        });
+
                         setupAction?.Invoke(options);
                     });
         }
