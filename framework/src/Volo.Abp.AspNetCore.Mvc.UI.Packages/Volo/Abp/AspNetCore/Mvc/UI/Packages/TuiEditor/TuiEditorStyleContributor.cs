@@ -14,8 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/tui-editor/tui-editor.min.css");
-            context.Files.AddIfNotContains("/libs/tui-editor/tui-editor-contents.min.css");
+            context.Files.AddIfNotContains("/libs/tui-editor/toastui-editor.css");
         }
     }
 }
