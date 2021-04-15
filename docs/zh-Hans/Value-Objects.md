@@ -1,106 +1,75 @@
-## Value Objects
+## 值对象
 
-### 什么是值对象
-
-> 当一个对象用于对事务进行描述而**没有唯一标识时**，它被称作值对象（Value Object）。
+> 一个对象，表示领域的描述方面，没有概念上的身份被称为 值对象。
 >
-> 值对象通常是用来**度量和描述事物**。我们可以非常容易的对其进行创建，测试，使用，优化和维护，所以在建模时，我们尽量采用值对象来建模。
+> (Eric Evans)
 
-```java
-@Data
-public class ColorInfo{
-    private String name;
-    private String css;
-    private String width;
-}
-```
+属性相同但`Id`不同的两个[实体](https://docs.abp.io/zh-Hans/abp/latest/Entities) 被视为不同的实体。但是，值对象没有`Id`
 
-```
+## 值对象的类
+
+值对象是一个抽象类，可以继承它来创建值对象类
+
+**示例: An Address class**
+
+```c#
+public class Address : ValueObject
 {
-	"name":"yellow",
-	"css":"#FFFF00",
-	"width":"100px"
+    public Guid CityId { get; private set; }
+
+    public string Street { get; private set; }
+
+    public int Number { get; private set; }
+
+    private Address()
+    {
+        
+    }
+    
+    public Address(
+        Guid cityId,
+        string street,
+        int number)
+    {
+        CityId = cityId;
+        Street = street;
+        Number = number;
+    }
+
+    protected override IEnumerable<object> GetAtomicValues()
+    {
+        yield return Street;
+        yield return CityId;
+        yield return Number;
+    }
 }
 ```
 
+- 值对象类必须实现 `GetAtomicValues()`方法来返回原始值
 
+### 等价值
 
-### 有哪些属性可以归为值对象
+`ValueObject.ValueEquals(...)` 用于检测两个值是否相等
 
-> 常见的值对象有数字、文本字符串、日期时间、人的全名、货币、颜色、地址等等。
+**示例: Check if two addresses are equals**
 
+```c#
+Address address1 = ...
+Address address2 = ...
 
-
-### 值对象的特征
-
-当你考虑一个对象是否能够作为值对象时，你需要考量它是否有一下特征：
-
-- 它度量或者描述了领域中的一件东西
-- 它可以作为不变量
-  - 例如String类，它的所有改变自身属性的方法都是返回一个新的String对象实现。
-- 它将不同的相关的属性组合成了一个概念整体
-- 当度量和描述改变时，可以用另外一个值对象予以替换
-- 它可以与其他值对象进行相等性比较
-- 它不会对协作对象造成副作用
-  - 因为值对象是不可变的，所以不存在对对象产生修改的副作用（简单的说不会有set方法的输入）
-
-如果想修改值对象时改如何处理？
-
-```java
-public class ColorInfoManager {
-
-    @Getter
-    private ColorInfo yellow;
-
-    @Getter
-    private ColorInfo dark;
-
-    private void setYellow(ColorInfo yellow) {
-        this.yellow = yellow;
-    }
-
-    private void setDark(ColorInfo dark) {
-        this.dark = dark;
-    }
-
-    public ColorInfoManager() {
-
-    }
-
-
-    public ColorInfoManager(ColorInfo yellow, ColorInfo dark) {
-        this.setYellow(yellow);
-        this.setDark(dark);
-    }
-
-    public ColorInfoManager(ColorInfo yellow) {
-        this.setYellow(yellow);
-    }
-
-    public ColorInfoManager addYellowColorInfo(ColorInfo colorInfo) {
-        return new ColorInfoManager(colorInfo);
-    }
-
-    public ColorInfoManager addDarkColorInfo(ColorInfo colorInfo) {
-        return new ColorInfoManager(yellow, colorInfo);
-    }
-
+if (address1.ValueEquals(address2)) //Check equality
+{
+    ...
 }
 ```
 
-> 如上诉代码，当需要修改值对象的某个属性的时候在方法中重新构造一个新的对象返回，这样可以保证值对象的不变性。
+## 最佳的做法
 
+以下是使用值对象时的一些最佳实践:
 
+-  如果没有充分的理由将值对象设计为可变的，则将其设计为**不可变**（如上面的地址）。
+- 构成一个值对象的属性应该形成一个概念整体。例如：CityId、Street和Number不应是个人实体的单独属性。这也使Person实体更简单。
 
-### 值对象和实体对比
+## 另请参见
 
-| 类型   | 是否需要唯一标记 | 是否可变 | 是否能持有实体引用(不同聚合根) | 是否可替换 |
-| ------ | ---------------- | -------- | ------------------------------ | ---------- |
-| 实体   | 是               | 是       | 否                             | 否         |
-| 值对象 | 否               | 否       | 否                             | 是         |
-
-- 业务建模的时候什么东西建成实体，什么东西建成值对象?
-
-> 如何一个模型是需要有生命周期(有持久化和后续重建修改) 的需求那么应该建模成实体，否则应该建模成值对象
->
-> 比如：一个商品的下单时间、下单人，你是无法修改的，
+- [实体类](https://docs.abp.io/zh-Hans/abp/latest/Entities)
