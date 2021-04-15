@@ -23,10 +23,6 @@ namespace Volo.CmsKit.MongoDB.Comments
 
         public virtual async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var dbContext = await GetDbContextAsync();
-            var commentQueryable = await GetMongoQueryableAsync(cancellationToken);
-            var userQueryable = dbContext.Collection<CmsUser>();
-
             var query = from comment in (await GetMongoQueryableAsync(cancellationToken))
                         join user in (await GetDbContextAsync(cancellationToken)).CmsUsers on comment.CreatorId equals user.Id
                         where id == comment.Id
