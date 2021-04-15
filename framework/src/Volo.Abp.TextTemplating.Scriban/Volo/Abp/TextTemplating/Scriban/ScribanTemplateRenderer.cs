@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Scriban;
 using Scriban.Runtime;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating.Scriban
 {
-    public class TemplateRenderer : ITemplateRenderer, ITransientDependency
+    public class ScribanTemplateRenderer : ITemplateRenderer, ITransientDependency
     {
         private readonly ITemplateContentProvider _templateContentProvider;
         private readonly ITemplateDefinitionManager _templateDefinitionManager;
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
-        public TemplateRenderer(
+        public ScribanTemplateRenderer(
             ITemplateContentProvider templateContentProvider,
             ITemplateDefinitionManager templateDefinitionManager,
             IStringLocalizerFactory stringLocalizerFactory)
@@ -140,7 +138,7 @@ namespace Volo.Abp.TextTemplating
             var localizer = GetLocalizerOrNull(templateDefinition);
             if (localizer != null)
             {
-                scriptObject.SetValue("L", new TemplateLocalizer(localizer), true);
+                scriptObject.SetValue("L", new ScribanTemplateLocalizer(localizer), true);
             }
 
             context.PushGlobal(scriptObject);

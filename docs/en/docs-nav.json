@@ -334,7 +334,17 @@
         },
         {
           "text": "Text Templating",
-          "path": "Text-Templating.md"
+          "path": "Text-Templating.md",
+          "items": [
+            {
+              "text": "Razor Integration",
+              "path": "Text-Templating-Razor.md"
+            },
+            {
+              "text": "Scriban Integration",
+              "path": "Text-Templating-Scriban.md"
+            }
+          ]
         },
         {
           "text": "Timing",

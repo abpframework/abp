@@ -1,25 +1,27 @@
 ﻿using Shouldly;
+using Volo.Abp.Modularity;
 using Xunit;
 
 namespace Volo.Abp.TextTemplating
 {
-    public class TemplateDefinitionTests : AbpTextTemplatingTestBase
+    public abstract class TemplateDefinitionTests<TStartupModule> : AbpTextTemplatingTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        private readonly ITemplateDefinitionManager _templateDefinitionManager;
+        protected readonly ITemplateDefinitionManager TemplateDefinitionManager;
 
-        public TemplateDefinitionTests()
+        protected TemplateDefinitionTests()
         {
-            _templateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
+            TemplateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
         }
 
         [Fact]
         public void Should_Retrieve_Template_Definition_By_Name()
         {
-            var welcomeEmailTemplate = _templateDefinitionManager.Get(TestTemplates.WelcomeEmail);
+            var welcomeEmailTemplate = TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail);
             welcomeEmailTemplate.Name.ShouldBe(TestTemplates.WelcomeEmail);
             welcomeEmailTemplate.IsInlineLocalized.ShouldBeFalse();
 
-            var forgotPasswordEmailTemplate = _templateDefinitionManager.Get(TestTemplates.ForgotPasswordEmail);
+            var forgotPasswordEmailTemplate = TemplateDefinitionManager.Get(TestTemplates.ForgotPasswordEmail);
             forgotPasswordEmailTemplate.Name.ShouldBe(TestTemplates.ForgotPasswordEmail);
             forgotPasswordEmailTemplate.IsInlineLocalized.ShouldBeTrue();
         }
@@ -27,14 +29,14 @@ namespace Volo.Abp.TextTemplating
         [Fact]
         public void Should_Get_Null_If_Template_Not_Found()
         {
-            var definition = _templateDefinitionManager.GetOrNull("undefined-template");
+            var definition = TemplateDefinitionManager.GetOrNull("undefined-template");
             definition.ShouldBeNull();
         }
 
         [Fact]
         public void Should_Retrieve_All_Template_Definitions()
         {
-            var definitions = _templateDefinitionManager.GetAll();
+            var definitions = TemplateDefinitionManager.GetAll();
             definitions.Count.ShouldBeGreaterThan(1);
         }
     }

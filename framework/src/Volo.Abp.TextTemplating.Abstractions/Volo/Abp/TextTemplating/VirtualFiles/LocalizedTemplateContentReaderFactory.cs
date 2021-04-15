@@ -64,7 +64,8 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 
             if (fileInfo.IsDirectory)
             {
-                var folderReader = new VirtualFolderLocalizedTemplateContentReader();
+                //TODO: Configure file extensions.
+                var folderReader = new VirtualFolderLocalizedTemplateContentReader(new[] {".tpl", ".cshtml"});
                 await folderReader.ReadContentsAsync(VirtualFileProvider, virtualPath);
                 return folderReader;
             }

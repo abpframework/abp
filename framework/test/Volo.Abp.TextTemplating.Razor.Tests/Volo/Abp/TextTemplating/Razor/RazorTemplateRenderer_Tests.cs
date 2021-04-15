@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
-namespace Volo.Abp.TextTemplating
+namespace Volo.Abp.TextTemplating.Razor
 {
-    public class TemplateRenderer_Tests : AbpTextTemplatingTestBase
+    public class RazorTemplateRenderer_Tests : AbpTextTemplatingTestBase<RazorTextTemplatingTestModule>
     {
         private readonly ITemplateRenderer _templateRenderer;
 
-        public TemplateRenderer_Tests()
+        public RazorTemplateRenderer_Tests()
         {
             _templateRenderer = GetRequiredService<ITemplateRenderer>();
         }
@@ -19,18 +18,18 @@ namespace Volo.Abp.TextTemplating
         {
             (await _templateRenderer.RenderAsync(
                 TestTemplates.WelcomeEmail,
-                model: new
+                model: new WelcomeEmailModel()
                 {
-                    name = "John"
+                    Name = "John"
                 },
                 cultureName: "en"
             )).ShouldBe("Welcome John to the abp.io!");
 
             (await _templateRenderer.RenderAsync(
                 TestTemplates.WelcomeEmail,
-                model: new
+                model: new WelcomeEmailModel()
                 {
-                    name = "John"
+                    Name = "John"
                 },
                 cultureName: "tr"
             )).ShouldBe("Merhaba John, abp.io'ya hoşgeldiniz!");
@@ -38,9 +37,9 @@ namespace Volo.Abp.TextTemplating
             //"en-US" fallbacks to "en" since "en-US" doesn't exists and "en" is the fallback culture
             (await _templateRenderer.RenderAsync(
                 TestTemplates.WelcomeEmail,
-                model: new
+                model: new WelcomeEmailModel()
                 {
-                    name = "John"
+                    Name = "John"
                 },
                 cultureName: "en-US"
             )).ShouldBe("Welcome John to the abp.io!");
@@ -48,9 +47,9 @@ namespace Volo.Abp.TextTemplating
             //"fr" fallbacks to "en" since "fr" doesn't exists and "en" is the default culture
             (await _templateRenderer.RenderAsync(
                 TestTemplates.WelcomeEmail,
-                model: new
+                model: new WelcomeEmailModel()
                 {
-                    Name = "John" //Intentionally written as PascalCase since Scriban supports it
+                    Name = "John"
                 },
                 cultureName: "fr"
             )).ShouldBe("Welcome John to the abp.io!");
@@ -67,16 +66,6 @@ namespace Volo.Abp.TextTemplating
         }
 
         [Fact]
-        public async Task Should_Get_Rendered_Localized_Template_Content_With_Dictionary_Model()
-        {
-            (await _templateRenderer.RenderAsync(
-                TestTemplates.WelcomeEmail,
-                model: new Dictionary<string, object>() { { "name", "John" } },
-                cultureName: "en"
-            )).ShouldBe("Welcome John to the abp.io!");
-        }
-
-        [Fact]
         public async Task Should_Get_Rendered_Inline_Localized_Template()
         {
             (await _templateRenderer.RenderAsync(
@@ -87,28 +76,28 @@ namespace Volo.Abp.TextTemplating
 
             (await _templateRenderer.RenderAsync(
                 TestTemplates.ForgotPasswordEmail,
-                model: new Dictionary<string, object>() { { "name", "John" } },
+                new ForgotPasswordEmailModel("John"),
                 cultureName: "tr"
             )).ShouldBe("*BEGIN*Merhaba John, nasılsın?. Please click to the following link to get an email to reset your password!*END*");
         }
-        
+
         [Fact]
         public async Task Should_Get_Localized_Numbers()
         {
             (await _templateRenderer.RenderAsync(
                 TestTemplates.ShowDecimalNumber,
-                new Dictionary<string, decimal>(new List<KeyValuePair<string, decimal>> {new("amount", 123.45M)}),
+                new ShowDecimalNumberModel(123.45M),
                 cultureName: "en"
             )).ShouldBe("*BEGIN*123.45*END*");
 
             (await _templateRenderer.RenderAsync(
                 TestTemplates.ShowDecimalNumber,
-                new Dictionary<string, decimal>(new List<KeyValuePair<string, decimal>> {new("amount", 123.45M)}),
+                new ShowDecimalNumberModel(123.45M),
                 cultureName: "de"
             )).ShouldBe("*BEGIN*123,45*END*");
         }
 
-        private class WelcomeEmailModel
+        public class WelcomeEmailModel
         {
             public string Name { get; set; }
 
@@ -123,7 +112,7 @@ namespace Volo.Abp.TextTemplating
             }
         }
 
-        private class ForgotPasswordEmailModel
+        public class ForgotPasswordEmailModel
         {
             public string Name { get; set; }
 
@@ -135,6 +124,21 @@ namespace Volo.Abp.TextTemplating
             public ForgotPasswordEmailModel(string name)
             {
                 Name = name;
+            }
+        }
+
+        public class ShowDecimalNumberModel
+        {
+            public decimal Amount { get; set; }
+
+            public ShowDecimalNumberModel()
+            {
+
+            }
+
+            public ShowDecimalNumberModel(decimal amount)
+            {
+                Amount = amount;
             }
         }
     }
