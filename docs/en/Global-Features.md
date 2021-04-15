@@ -89,58 +89,57 @@ public class PaymentController : AbpController
 
 ## Grouping Features of a Module
 
-It is common to group global features of a module to allow the final application developer easily discover and configure the features.
+It is common to group global features of a module to allow the final application developer easily discover and configure the features. Following example shows how to group features of a module.
 
-Following example shows how to group features of a module.
+Assume that we've defined a global feature for `Subscription` feature of an `Ecommerce` module:
 
 ```csharp
 [GlobalFeatureName("Ecommerce.Subscription")]
 public class SubscriptionFeature : GlobalFeature
 {
-  public SubscriptionFeature(GlobalModuleFeatures module) : base(module)
-  {
-  }
+    public SubscriptionFeature(GlobalModuleFeatures module)
+        : base(module)
+    {
+    }
 }
 ```
 
-All features of a module have to be defined in a Global Module Features class.
+You can define as many features as you need in your module. Then define a class to group these features together:
 
 ```csharp
 public class GlobalEcommerceFeatures : GlobalModuleFeatures
 {
-  public const string ModuleName = "Ecommerce";
+    public const string ModuleName = "Ecommerce";
 
-  public SubscriptionFeature Subscription => GetFeature<SubscriptionFeature>();
+    public SubscriptionFeature Subscription => GetFeature<SubscriptionFeature>();
 	
-  public GlobalEcommerceFeatures(GlobalFeatureManager featureManager) : base(featureManager)
-  {
-    // Added features will be used for EnableAll() & DisableAll() actions for this module.
-    AddFeature(new SubscriptionFeature(this));
-  }
+    public GlobalEcommerceFeatures(GlobalFeatureManager featureManager)
+        : base(featureManager)
+    {
+        AddFeature(new SubscriptionFeature(this));
+    }
 }
 ```
 
-An extension method will be better to discover Global Module Features class
+Finally, you can create an extension method on `GlobalModuleFeaturesDictionary`:
 
 ```csharp
 public static class GlobalModuleFeaturesDictionaryEcommerceExtensions
 {
-  public static GlobalEcommerceFeatures Ecommerce([NotNull] this GlobalModuleFeaturesDictionary modules)
-  {
-    Check.NotNull(modules, nameof(modules));
-
-    return modules
-      .GetOrAdd(
-      GlobalEcommerceFeatures.ModuleName,
-      _ => new GlobalEcommerceFeatures(modules.FeatureManager)
-    )
-      as GlobalEcommerceFeatures;
+    public static GlobalEcommerceFeatures Ecommerce(
+        this GlobalModuleFeaturesDictionary modules)
+    {
+        return modules.GetOrAdd(
+            GlobalEcommerceFeatures.ModuleName,
+            _ => new GlobalEcommerceFeatures(modules.FeatureManager)
+        ) as GlobalEcommerceFeatures;
   }
 ```
 
-Final usage will be like below:
+Then `GlobalFeatureManager.Instance.Modules.Ecommerce()` can be used to access the global features of your module. Examples usages:
 
 ```csharp
 GlobalFeatureManager.Instance.Modules.Ecommerce().Subscription.Enable();
+GlobalFeatureManager.Instance.Modules.Ecommerce().EnableAll();
 ```
 
