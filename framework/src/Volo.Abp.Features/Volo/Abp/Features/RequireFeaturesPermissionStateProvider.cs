@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.Permissions;
 
@@ -7,19 +6,27 @@ namespace Volo.Abp.Features
 {
     public class RequireFeaturesPermissionStateProvider : IPermissionStateProvider
     {
-        private readonly List<string> _requireFeatures = new List<string>();
+        private readonly string[] _featureNames;
+        private readonly bool _requiresAll;
 
-        public RequireFeaturesPermissionStateProvider(params string[] requireFeatures)
+        public RequireFeaturesPermissionStateProvider(params string[] featureNames)
+            : this(true, featureNames)
         {
-            Check.NotNullOrEmpty(requireFeatures, nameof(requireFeatures));
+            
+        }
 
-            _requireFeatures.AddRange(requireFeatures);
+        public RequireFeaturesPermissionStateProvider(bool requiresAll, params string[] featureNames)
+        {
+            Check.NotNullOrEmpty(featureNames, nameof(featureNames));
+
+            _requiresAll = requiresAll;
+            _featureNames = featureNames;
         }
 
         public async Task<bool> IsEnabledAsync(PermissionStateContext context)
         {
             var feature = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
-            return await feature.IsEnabledAsync(true, _requireFeatures.ToArray());
+            return await feature.IsEnabledAsync(_requiresAll, _featureNames);
         }
     }
 }

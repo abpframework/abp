@@ -25,18 +25,14 @@ namespace Volo.Abp.Authorization.Permissions
                 var context = new PermissionStateContext
                 {
                     Permission = permission,
-                    ServiceProvider = scope.ServiceProvider
+                    ServiceProvider = scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>()
                 };
 
-                var providers = permission.GetStateProviders();
-                if (providers != null && providers.Any())
+                foreach (var provider in permission.StateProviders)
                 {
-                    foreach (var provider in providers)
+                    if (!await provider.IsEnabledAsync(context))
                     {
-                        if (!await provider.IsEnabledAsync(context))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
 

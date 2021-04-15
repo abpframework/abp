@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 
@@ -7,18 +6,29 @@ namespace Volo.Abp.GlobalFeatures
 {
     public class RequireGlobalFeaturesPermissionStateProvider : IPermissionStateProvider
     {
-        private readonly List<string> _requireGlobalFeatures = new List<string>();
+        private readonly string[] _globalFeatureNames;
+        private readonly bool _requiresAll;
 
-        public RequireGlobalFeaturesPermissionStateProvider(params string[] requireGlobalFeatures)
+        public RequireGlobalFeaturesPermissionStateProvider(params string[] globalFeatureNames)
+            : this(true, globalFeatureNames)
         {
-            Check.NotNullOrEmpty(requireGlobalFeatures, nameof(requireGlobalFeatures));
+        }
+        
+        public RequireGlobalFeaturesPermissionStateProvider(bool requiresAll, params string[] globalFeatureNames)
+        {
+            Check.NotNullOrEmpty(globalFeatureNames, nameof(globalFeatureNames));
 
-            _requireGlobalFeatures.AddRange(requireGlobalFeatures);
+            _requiresAll = requiresAll;
+            _globalFeatureNames = globalFeatureNames;
         }
 
         public Task<bool> IsEnabledAsync(PermissionStateContext context)
         {
-            return Task.FromResult(_requireGlobalFeatures.All(x => GlobalFeatureManager.Instance.IsEnabled(x)));
+            bool isEnabled = _requiresAll
+                ? _globalFeatureNames.All(x => GlobalFeatureManager.Instance.IsEnabled(x))
+                : _globalFeatureNames.Any(x => GlobalFeatureManager.Instance.IsEnabled(x));
+            
+            return Task.FromResult(isEnabled);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Volo.Abp.Authorization
         public async Task PermissionState_Test()
         {
             var myPermission1 = PermissionDefinitionManager.Get("MyPermission1");
-            myPermission1.GetStateProviders().ShouldContain(x => x.GetType() == typeof(TestRequireEditionPermissionStateProvider));
+            myPermission1.StateProviders.ShouldContain(x => x.GetType() == typeof(TestRequireEditionPermissionStateProvider));
 
             (await PermissionStateManager.IsEnabledAsync(myPermission1)).ShouldBeFalse();
 
