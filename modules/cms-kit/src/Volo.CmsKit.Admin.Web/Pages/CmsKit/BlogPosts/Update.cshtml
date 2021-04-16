@@ -46,7 +46,11 @@
     <abp-card-body>
 
         <div class="form-group">
-            <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" />
+            @if (Model.ViewModel.CoverImageMediaId != null)
+            {
+                <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" />
+                <br />
+            }
             <label>@L["CoverImage"]</label>
             <input type="file" id="BlogPostCoverImage" class="form-control" />
         </div>
