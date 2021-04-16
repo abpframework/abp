@@ -351,6 +351,10 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text":"String Encryption",
+          "path":"String-Encryption.md"
+        },
+        {
           "text": "Text Templating",
           "path": "Text-Templating.md",
           "items": [
