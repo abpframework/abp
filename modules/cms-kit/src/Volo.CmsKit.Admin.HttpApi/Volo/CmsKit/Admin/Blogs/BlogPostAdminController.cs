@@ -49,7 +49,7 @@ namespace Volo.CmsKit.Admin.Blogs
 
         [HttpGet]
         [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
-        public virtual Task<PagedResultDto<BlogPostDto>> GetListAsync(BlogPostGetListInput input)
+        public virtual Task<PagedResultDto<BlogPostListDto>> GetListAsync(BlogPostGetListInput input)
         {
             return BlogPostAdminAppService.GetListAsync(input);
         }
