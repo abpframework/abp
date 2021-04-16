@@ -1,0 +1,19 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Settings": "asetukset",
+    "SuccessfullySaved": "Tallentaminen onnistui",
+    "Permission:SettingManagement": "Asetusten hallinta",
+    "Permission:Emailing": "Sähköpostiviestit",
+    "Menu:Emailing": "Sähköpostiviestit",
+    "SmtpHost": "Isäntä",
+    "SmtpPort": "Satama",
+    "SmtpUserName": "Käyttäjänimi",
+    "SmtpPassword": "Salasana",
+    "SmtpDomain": "Verkkotunnus",
+    "SmtpEnableSsl": "Ota käyttöön ssl",
+    "SmtpUseDefaultCredentials": "Käytä oletusarvoisia tunnistetietoja",
+    "DefaultFromAddress": "Oletus osoitteesta",
+    "DefaultFromDisplayName": "Oletus näyttönimestä"
+  }
+}

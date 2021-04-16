@@ -18,6 +18,8 @@
     "401Message": "Non autorisé",
     "403Message": "Interdit",
     "404Message": "Page introuvable",
-    "500Message": "Erreur Interne du Serveur"
+    "500Message": "Erreur Interne du Serveur",
+    "403MessageDetail": "Vous n'êtes pas autorisé à effectuer cette opération!",
+    "404MessageDetail": "Désolé, il n'y a rien à cette adresse."
   }
 }

@@ -189,46 +189,32 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return await base.OnPostExternalLogin(provider);
         }
 
-        private async Task<IActionResult> ProcessWindowsLoginAsync()
+        protected virtual async Task<IActionResult> ProcessWindowsLoginAsync()
         {
             var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
-            if (!(result?.Principal is WindowsPrincipal windowsPrincipal))
+            if (result.Succeeded)
             {
-                return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
+                var props = new AuthenticationProperties()
+                {
+                    RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new {ReturnUrl, ReturnUrlHash}),
+                    Items =
+                    {
+                        {
+                            "LoginProvider", AccountOptions.WindowsAuthenticationSchemeName
+                        },
+                    }
+                };
+
+                var id = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
+                id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)));
+                id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)));
+
+                await HttpContext.SignInAsync(IdentityConstants.ExternalScheme, new ClaimsPrincipal(id), props);
+
+                return Redirect(props.RedirectUri);
             }
 
-            var props = new AuthenticationProperties
-            {
-                RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash }),
-                Items =
-                {
-                    {"scheme", AccountOptions.WindowsAuthenticationSchemeName},
-                }
-            };
-
-            var identity = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
-            identity.AddClaim(new Claim(JwtClaimTypes.Subject, windowsPrincipal.Identity.Name));
-            identity.AddClaim(new Claim(JwtClaimTypes.Name, windowsPrincipal.Identity.Name));
-
-            //TODO: Consider to add Windows groups the the identity
-            //if (_accountOptions.IncludeWindowsGroups)
-            //{
-            //    var windowsIdentity = windowsPrincipal.Identity as WindowsIdentity;
-            //    if (windowsIdentity != null)
-            //    {
-            //        var groups = windowsIdentity.Groups?.Translate(typeof(NTAccount));
-            //        var roles = groups.Select(x => new Claim(JwtClaimTypes.Role, x.Value));
-            //        identity.AddClaims(roles);
-            //    }
-            //}
-
-            await HttpContext.SignInAsync(
-                IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme,
-                new ClaimsPrincipal(identity),
-                props
-            );
-
-            return RedirectSafely(props.RedirectUri);
+            return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
         }
     }
 }

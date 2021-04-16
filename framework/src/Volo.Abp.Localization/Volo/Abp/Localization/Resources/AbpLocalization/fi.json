@@ -1,0 +1,7 @@
+{
+  "culture": "fi",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Oletuskieli",
+    "Description:Abp.Localization.DefaultLanguage": "Sovelluksen oletuskieli."
+  }
+}
