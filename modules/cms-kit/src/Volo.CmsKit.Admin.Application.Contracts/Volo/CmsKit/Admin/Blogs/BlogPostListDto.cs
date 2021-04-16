@@ -5,9 +5,11 @@ using Volo.Abp.Auditing;
 namespace Volo.CmsKit.Admin.Blogs
 {
     [Serializable]
-    public class BlogPostDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTime
+    public class BlogPostListDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTime
     {
         public Guid BlogId { get; set; }
+
+        public string BlogName { get; set; }
 
         public string Title { get; set; }
 
