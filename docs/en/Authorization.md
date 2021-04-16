@@ -236,6 +236,25 @@ When you write this code inside your permission definition provider, it finds th
 
 > Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined.
 
+### Permission depending on a Condition
+
+Permission states can be managed according to a condition such as a Feature, Global Feature, or a custom condition. Any condition which implements `IPermissionStateProvider` can be added via calling `AddStateProvider()` method for **PermissionDefinition**.
+
+See an example below:
+
+```csharp
+myGroup.AddPermission("Author_Management")
+    // To depend on Global Feature
+    .AddStateProviders(new RequireGlobalFeaturesPermissionStateProvider("AuthorManagementFeature"));
+	// To depend on Feature
+    .AddStateProviders(new RequireFeaturesPermissionStateProvider("BookStore.AuthorManagement"));
+	// To depend on your custom implementation
+    .AddStateProviders(new MyCustomPermissionStateProvider());
+	
+```
+
+If condition is not met, permission won't be displayed and all checks for that permission will return `false`. 
+
 ## IAuthorizationService
 
 ASP.NET Core provides the `IAuthorizationService` that can be used to check for authorization. Once you inject, you can use it in your code to conditionally control the authorization.
