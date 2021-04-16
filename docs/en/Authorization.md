@@ -397,7 +397,7 @@ This is already done for the startup template integration tests.
 
 Abp abstracts the way that authentication creates `ClaimsPrincipal`. You can provide a custom `IAbpClaimsPrincipalContributor` to add additional claims.
 
-Example of add `SocialSecurityNumber` of current tenant to user claims:
+Example of add `SocialSecurityNumber` of current user to claims:
 
 ```csharp
 public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
