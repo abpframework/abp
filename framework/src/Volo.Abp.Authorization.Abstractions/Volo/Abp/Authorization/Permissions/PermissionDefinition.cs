@@ -31,6 +31,8 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
 
+        public List<IPermissionStateProvider> StateProviders { get; }
+
         public ILocalizableString DisplayName
         {
             get => _displayName;
@@ -86,6 +88,7 @@ namespace Volo.Abp.Authorization.Permissions
 
             Properties = new Dictionary<string, object>();
             Providers = new List<string>();
+            StateProviders = new List<IPermissionStateProvider>();
             _children = new List<PermissionDefinition>();
         }
 

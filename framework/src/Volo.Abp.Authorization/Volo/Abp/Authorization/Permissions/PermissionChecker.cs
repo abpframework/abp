@@ -15,17 +15,20 @@ namespace Volo.Abp.Authorization.Permissions
         protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IPermissionValueProviderManager PermissionValueProviderManager { get; }
+        protected IPermissionStateManager PermissionStateManager { get; }
 
         public PermissionChecker(
             ICurrentPrincipalAccessor principalAccessor,
             IPermissionDefinitionManager permissionDefinitionManager,
             ICurrentTenant currentTenant,
-            IPermissionValueProviderManager permissionValueProviderManager)
+            IPermissionValueProviderManager permissionValueProviderManager,
+            IPermissionStateManager permissionStateManager)
         {
             PrincipalAccessor = principalAccessor;
             PermissionDefinitionManager = permissionDefinitionManager;
             CurrentTenant = currentTenant;
             PermissionValueProviderManager = permissionValueProviderManager;
+            PermissionStateManager = permissionStateManager;
         }
 
         public virtual async Task<bool> IsGrantedAsync(string name)
@@ -42,6 +45,11 @@ namespace Volo.Abp.Authorization.Permissions
             var permission = PermissionDefinitionManager.Get(name);
 
             if (!permission.IsEnabled)
+            {
+                return false;
+            }
+
+            if (!await PermissionStateManager.IsEnabledAsync(permission))
             {
                 return false;
             }
@@ -103,7 +111,9 @@ namespace Volo.Abp.Authorization.Permissions
 
                 result.Result.Add(name, PermissionGrantResult.Undefined);
 
-                if (permission.IsEnabled && permission.MultiTenancySide.HasFlag(multiTenancySide))
+                if (permission.IsEnabled &&
+                    await PermissionStateManager.IsEnabledAsync(permission) &&
+                    permission.MultiTenancySide.HasFlag(multiTenancySide))
                 {
                     permissionDefinitions.Add(permission);
                 }

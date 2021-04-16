@@ -63,6 +63,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.TestBase",
     "framework/src/Volo.Abp.Auditing",
     "framework/src/Volo.Abp.Authorization",
+    "framework/src/Volo.Abp.Authorization.Abstractions",
     "framework/src/Volo.Abp.Autofac",
     "framework/src/Volo.Abp.Autofac.WebAssembly",
     "framework/src/Volo.Abp.AutoMapper",

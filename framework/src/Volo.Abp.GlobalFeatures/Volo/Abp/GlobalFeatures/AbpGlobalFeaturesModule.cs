@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization;
 using Volo.Abp.GlobalFeatures.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -9,7 +10,8 @@ namespace Volo.Abp.GlobalFeatures
 {
     [DependsOn(
         typeof(AbpLocalizationModule),
-        typeof(AbpVirtualFileSystemModule)
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpAuthorizationAbstractionsModule)
     )]
     public class AbpGlobalFeaturesModule : AbpModule
     {
