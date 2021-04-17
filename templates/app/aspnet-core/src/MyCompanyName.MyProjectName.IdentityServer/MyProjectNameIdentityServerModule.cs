@@ -180,13 +180,14 @@ namespace MyCompanyName.MyProjectName
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
+            app.UseUnitOfWork();
+            app.UseAbpDynamicClaims();
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
-            app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseAuditing();

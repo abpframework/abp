@@ -201,6 +201,8 @@ namespace MyCompanyName.MyProjectName
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
+            app.UseUnitOfWork();
+            app.UseAbpDynamicClaims();
 
             if (MultiTenancyConsts.IsEnabled)
             {
@@ -222,7 +224,6 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseUnitOfWork();
             app.UseConfiguredEndpoints();
         }
     }

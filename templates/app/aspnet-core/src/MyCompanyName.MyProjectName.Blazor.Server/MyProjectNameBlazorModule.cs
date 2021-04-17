@@ -257,13 +257,14 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             app.UseRouting();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
+            app.UseUnitOfWork();
+            app.UseAbpDynamicClaims();
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
-            app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseConfiguredEndpoints();

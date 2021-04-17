@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -151,6 +153,7 @@ namespace MyCompanyName.MyProjectName.Web
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
 
+                    options.Scope.Add("Tenant");
                     options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
@@ -248,6 +251,7 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseUnitOfWork();
 
             if (MultiTenancyConsts.IsEnabled)
             {

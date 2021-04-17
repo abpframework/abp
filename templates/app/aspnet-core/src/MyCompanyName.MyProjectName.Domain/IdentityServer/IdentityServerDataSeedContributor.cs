@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using Volo.Abp.Authorization.Permissions;
@@ -70,20 +71,10 @@ namespace MyCompanyName.MyProjectName.IdentityServer
 
         private async Task CreateApiResourcesAsync()
         {
-            var commonApiUserClaims = new[]
-            {
-                "email",
-                "email_verified",
-                "name",
-                "phone_number",
-                "phone_number_verified",
-                "role"
-            };
-
-            await CreateApiResourceAsync("MyProjectName", commonApiUserClaims);
+            await CreateApiResourceAsync("MyProjectName");
         }
 
-        private async Task<ApiResource> CreateApiResourceAsync(string name, IEnumerable<string> claims)
+        private async Task<ApiResource> CreateApiResourceAsync(string name)
         {
             var apiResource = await _apiResourceRepository.FindByNameAsync(name);
             if (apiResource == null)
@@ -96,14 +87,6 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     ),
                     autoSave: true
                 );
-            }
-
-            foreach (var claim in claims)
-            {
-                if (apiResource.FindClaim(claim) == null)
-                {
-                    apiResource.AddUserClaim(claim);
-                }
             }
 
             return await _apiResourceRepository.UpdateAsync(apiResource);
@@ -131,12 +114,13 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         {
             var commonScopes = new[]
             {
-                "email",
-                "openid",
-                "profile",
+                IdentityServerConstants.StandardScopes.OpenId,
+                IdentityServerConstants.StandardScopes.Email,
+                IdentityServerConstants.StandardScopes.Profile,
+                IdentityServerConstants.StandardScopes.Phone,
+                IdentityServerConstants.StandardScopes.Address,
                 "role",
-                "phone",
-                "address",
+                "Tenant",
                 "MyProjectName"
             };
 
@@ -161,7 +145,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
-            
+
             //</TEMPLATE-REMOVE>
 
             //Console Test / Angular Client
@@ -181,7 +165,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
-            
+
             //<TEMPLATE-REMOVE IF-NOT='ui:blazor'>
 
             // Blazor Client
@@ -201,11 +185,11 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     corsOrigins: new[] { blazorRootUrl.RemovePostFix("/") }
                 );
             }
-            
+
             //</TEMPLATE-REMOVE>
-            
+
             //<TEMPLATE-REMOVE IF-NOT='ui:blazor-server&&tiered'>
-            
+
             //Blazor Server Tiered Client
             var blazorServerTieredClientId = configurationSection["MyProjectName_BlazorServerTiered:ClientId"];
             if (!blazorServerTieredClientId.IsNullOrWhiteSpace())
@@ -228,7 +212,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             }
 
             //</TEMPLATE-REMOVE>
-            
+
             // Swagger Client
             var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
             if (!swaggerClientId.IsNullOrWhiteSpace())

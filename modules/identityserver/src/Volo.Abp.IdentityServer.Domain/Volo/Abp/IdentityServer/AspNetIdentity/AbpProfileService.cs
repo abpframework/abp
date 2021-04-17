@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Security.Principal;
 using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
@@ -14,13 +16,17 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
     {
         protected ICurrentTenant CurrentTenant { get; }
 
+        protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
+
         public AbpProfileService(
             IdentityUserManager userManager,
             IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory)
             : base(userManager, claimsFactory)
         {
             CurrentTenant = currentTenant;
+            AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
         }
 
         [UnitOfWork]
@@ -39,6 +45,14 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             {
                 await base.IsActiveAsync(context);
             }
+        }
+
+        [UnitOfWork]
+        protected override async Task<ClaimsPrincipal> GetUserClaimsAsync(IdentityUser user)
+        {
+            var claimsPrincipal = await base.GetUserClaimsAsync(user);
+            await AbpClaimsPrincipalFactory.DynamicCreateAsync(claimsPrincipal);
+            return claimsPrincipal;
         }
     }
 }

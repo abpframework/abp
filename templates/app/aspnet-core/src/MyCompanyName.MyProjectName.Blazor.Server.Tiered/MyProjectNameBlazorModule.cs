@@ -109,7 +109,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
         }
-        
+
         private void ConfigureCache()
         {
             Configure<AbpDistributedCacheOptions>(options =>
@@ -143,7 +143,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 );
             });
         }
-        
+
         private void ConfigureMultiTenancy()
         {
             Configure<AbpMultiTenancyOptions>(options =>
@@ -249,7 +249,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
-            
+
             Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new MyProjectNameToolbarContributor());
@@ -271,7 +271,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.AddMaps<MyProjectNameBlazorModule>();
             });
         }
-        
+
         private void ConfigureSwaggerServices(IServiceCollection services)
         {
             services.AddSwaggerGen(
@@ -319,6 +319,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseUnitOfWork();
+            app.UseAbpDynamicClaims();
 
             if (MultiTenancyConsts.IsEnabled)
             {

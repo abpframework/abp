@@ -54,15 +54,12 @@ namespace Volo.Abp.IdentityServer
                 options.EtoMappings.Add<IdentityResource, IdentityResourceEto>(typeof(AbpIdentityServerDomainModule));
             });
 
-            Configure<AbpClaimsServiceOptions>(options =>
-            {
-                options.RequestedClaims.AddRange(new []{
-                    AbpClaimTypes.TenantId,
-                    AbpClaimTypes.EditionId
-                });
-            });
-
             AddIdentityServer(context.Services);
+
+            Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+            {
+                options.DynamicContributors.Add<IdentityServerClaimsPrincipalContributor>();
+            });
         }
 
         private static void AddIdentityServer(IServiceCollection services)

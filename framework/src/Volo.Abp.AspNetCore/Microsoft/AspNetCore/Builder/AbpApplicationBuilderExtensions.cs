@@ -88,5 +88,10 @@ namespace Microsoft.AspNetCore.Builder
         {
             return app.UseMiddleware<AbpSecurityHeadersMiddleware>();
         }
+
+        public static IApplicationBuilder UseAbpDynamicClaims(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<AbpDynamicClaimsMiddleware>();
+        }
     }
 }

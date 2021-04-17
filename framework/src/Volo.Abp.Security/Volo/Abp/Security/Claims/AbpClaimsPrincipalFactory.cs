@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Security.Claims
@@ -23,6 +24,16 @@ namespace Volo.Abp.Security.Claims
 
         public virtual async Task<ClaimsPrincipal> CreateAsync(ClaimsPrincipal existsClaimsPrincipal = null)
         {
+            return await InternalCreateAsync(Options.Contributors, existsClaimsPrincipal);
+        }
+
+        public virtual async Task<ClaimsPrincipal> DynamicCreateAsync(ClaimsPrincipal existsClaimsPrincipal = null)
+        {
+            return await InternalCreateAsync(Options.DynamicContributors, existsClaimsPrincipal);
+        }
+
+        protected virtual async Task<ClaimsPrincipal> InternalCreateAsync(ITypeList<IAbpClaimsPrincipalContributor> contributorTypes, ClaimsPrincipal existsClaimsPrincipal = null)
+        {
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var claimsPrincipal = existsClaimsPrincipal ?? new ClaimsPrincipal(new ClaimsIdentity(
@@ -32,7 +43,7 @@ namespace Volo.Abp.Security.Claims
 
                 var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, scope.ServiceProvider);
 
-                foreach (var contributorType in Options.Contributors)
+                foreach (var contributorType in contributorTypes)
                 {
                     var contributor = (IAbpClaimsPrincipalContributor) scope.ServiceProvider.GetRequiredService(contributorType);
                     await contributor.ContributeAsync(context);

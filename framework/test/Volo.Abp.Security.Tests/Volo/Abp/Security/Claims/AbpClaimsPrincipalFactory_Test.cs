@@ -27,6 +27,17 @@ namespace Volo.Abp.Security.Claims
 
         protected override void AfterAddApplication(IServiceCollection services)
         {
+            services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+            {
+                options.Contributors.Add<TestAbpClaimsPrincipalContributor>();
+                options.Contributors.Add<Test2AbpClaimsPrincipalContributor>();
+                options.Contributors.Add<Test3AbpClaimsPrincipalContributor>();
+
+                options.DynamicContributors.Add<TestAbpClaimsPrincipalContributor>();
+                options.DynamicContributors.Add<Test2AbpClaimsPrincipalContributor>();
+                options.DynamicContributors.Add<Test3AbpClaimsPrincipalContributor>();
+            });
+
             services.AddTransient<TestAbpClaimsPrincipalContributor>();
             services.AddTransient<Test2AbpClaimsPrincipalContributor>();
             services.AddTransient<Test3AbpClaimsPrincipalContributor>();
@@ -49,6 +60,30 @@ namespace Volo.Abp.Security.Claims
             claimsPrincipal.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "admin"));
 
             await _abpClaimsPrincipalFactory.CreateAsync(claimsPrincipal);
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == "123");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "admin");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "admin2@abp.io");
+            claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == "admin@abp.io");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Version && x.Value == "2.0");
+        }
+
+        [Fact]
+        public async Task DynamicCreateAsync()
+        {
+            var claimsPrincipal = await _abpClaimsPrincipalFactory.DynamicCreateAsync();
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "admin2@abp.io");
+            claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == "admin@abp.io");
+            claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Version && x.Value == "2.0");
+        }
+
+        [Fact]
+        public async Task DynamicCreate_With_Exists_ClaimsPrincipal()
+        {
+            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(TestAuthenticationType, ClaimTypes.Name, ClaimTypes.Role));
+            claimsPrincipal.Identities.First().AddClaim(new Claim(ClaimTypes.Name, "123"));
+            claimsPrincipal.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "admin"));
+
+            await _abpClaimsPrincipalFactory.DynamicCreateAsync(claimsPrincipal);
             claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == "123");
             claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Role && x.Value == "admin");
             claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "admin2@abp.io");
