@@ -43,13 +43,16 @@ namespace Volo.Abp.Identity
                         var roles = await userManager.GetRolesAsync(user);
                         foreach (var roleName in roles)
                         {
-                            identity.AddClaim(new Claim(identityOptions.ClaimsIdentity.RoleClaimType, roleName));
-                            if (roleManager.SupportsRoleClaims)
+                            if (!identity.HasClaim(x => x.Type == identityOptions.ClaimsIdentity.RoleClaimType && x.Value == roleName))
                             {
-                                var role = await roleManager.FindByNameAsync(roleName);
-                                if (role != null)
+                                identity.AddClaim(new Claim(identityOptions.ClaimsIdentity.RoleClaimType, roleName));
+                                if (roleManager.SupportsRoleClaims)
                                 {
-                                    identity.AddClaims(await roleManager.GetClaimsAsync(role));
+                                    var role = await roleManager.FindByNameAsync(roleName);
+                                    if (role != null)
+                                    {
+                                        identity.AddClaims(await roleManager.GetClaimsAsync(role));
+                                    }
                                 }
                             }
                         }
