@@ -22,7 +22,7 @@ namespace Volo.Abp.Localization.VirtualFiles
             _virtualPath = virtualPath;
         }
 
-        public void Initialize(LocalizationResourceInitializationContext context)
+        public virtual void  Initialize(LocalizationResourceInitializationContext context)
         {
             _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
         }
