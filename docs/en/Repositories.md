@@ -70,8 +70,8 @@ Generic Repositories provides some standard CRUD features out of the box:
 
 There are overloads of these methods.
 
-* Provides `Update` and `Delete` methods to update or delete an entity by entity object or it's id.
-* Provides `Delete` method to delete multiple entities by a filter.
+* Provides `UpdateAsync` and `DeleteAsync` methods to update or delete an entity by entity object or it's id.
+* Provides `DeleteAsync` method to delete multiple entities by a filter.
 
 ### Querying / LINQ over the Repositories
 
