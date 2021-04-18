@@ -5,7 +5,6 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.TextTemplating.Razor
 {
     [DependsOn(
-        typeof(AbpTextTemplatingRazorModule),
         typeof(AbpTextTemplatingTestModule)
     )]
     public class RazorTextTemplatingTestModule : AbpModule

@@ -5,11 +5,11 @@ using Xunit;
 
 namespace Volo.Abp.TextTemplating.Scriban
 {
-    public class ScribanTemplateRenderer_Tests : AbpTextTemplatingTestBase<ScribanTextTemplatingTestModule>
+    public class ScribanTemplateRendererProvider_Tests : AbpTextTemplatingTestBase<ScribanTextTemplatingTestModule>
     {
         private readonly ITemplateRenderer _templateRenderer;
 
-        public ScribanTemplateRenderer_Tests()
+        public ScribanTemplateRendererProvider_Tests()
         {
             _templateRenderer = GetRequiredService<ITemplateRenderer>();
         }

@@ -7,6 +7,12 @@ namespace Volo.Abp.TextTemplating.Scriban
     )]
     public class AbpTextTemplatingScribanModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpTemplateRendererProviderOptions>(options =>
+            {
+                options.AddProvider<ScribanTemplateRendererProvider>(ScribanTemplateRendererProvider.ProviderName);
+            });
+        }
     }
 }

@@ -4,11 +4,11 @@ using Xunit;
 
 namespace Volo.Abp.TextTemplating.Razor
 {
-    public class RazorTemplateRenderer_Tests : AbpTextTemplatingTestBase<RazorTextTemplatingTestModule>
+    public class RazorTemplateRendererProvider_Tests : AbpTextTemplatingTestBase<RazorTextTemplatingTestModule>
     {
         private readonly ITemplateRenderer _templateRenderer;
 
-        public RazorTemplateRenderer_Tests()
+        public RazorTemplateRendererProvider_Tests()
         {
             _templateRenderer = GetRequiredService<ITemplateRenderer>();
         }

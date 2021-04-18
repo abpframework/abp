@@ -14,11 +14,11 @@ namespace Volo.Abp.TextTemplating.Razor
                     new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
                         "Volo", "Abp", "TextTemplating", "Razor"))));
 
-            WelcomeEmailEnglishContent = "@inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase<Volo.Abp.TextTemplating.Razor.RazorTemplateRenderer_Tests.WelcomeEmailModel>" +
+            WelcomeEmailEnglishContent = "@inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase<Volo.Abp.TextTemplating.Razor.RazorTemplateRendererProvider_Tests.WelcomeEmailModel>" +
                              Environment.NewLine +
                              "Welcome @Model.Name to the abp.io!";
 
-            WelcomeEmailTurkishContent = "@inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase<Volo.Abp.TextTemplating.Razor.RazorTemplateRenderer_Tests.WelcomeEmailModel>" +
+            WelcomeEmailTurkishContent = "@inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase<Volo.Abp.TextTemplating.Razor.RazorTemplateRendererProvider_Tests.WelcomeEmailModel>" +
                              Environment.NewLine +
                              "Merhaba @Model.Name, abp.io'ya hoşgeldiniz!";
         }
