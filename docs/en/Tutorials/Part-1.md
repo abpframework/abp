@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -188,6 +188,8 @@ Add-Migration "Created_Book_Entity"
 ```
 
 ![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
+
+> If you get an error like "*Your startup project ... doesn't reference Microsoft.EntityFrameworkCore.Design. This package is required for the Entity Framework Core Tools to work*", right click to the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project and **Set as the Startup Project** and try again.
 
 This will create a new migration class inside the `Migrations` folder of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project.
 

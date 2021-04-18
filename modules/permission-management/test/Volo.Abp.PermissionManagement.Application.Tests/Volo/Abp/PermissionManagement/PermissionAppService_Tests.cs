@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Security.Claims;
 using Xunit;
 
 namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionManagement
@@ -13,11 +15,13 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
     {
         private readonly IPermissionAppService _permissionAppService;
         private readonly IPermissionGrantRepository _permissionGrantRepository;
+        private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
         public PermissionAppService_Tests()
         {
             _permissionAppService = GetRequiredService<IPermissionAppService>();
             _permissionGrantRepository = GetRequiredService<IPermissionGrantRepository>();
+            _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         }
 
         [Fact]
@@ -35,7 +39,15 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
             permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission2");
             permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission2.ChildPermission1");
             permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission3");
+            permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission4");
 
+            permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyPermission5");
+
+            using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "super-admin")))
+            {
+                (await _permissionAppService.GetAsync(UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString())).Groups.First().Permissions
+                    .ShouldContain(x => x.Name == "MyPermission5");
+            }
         }
 
         [Fact]

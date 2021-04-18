@@ -1,0 +1,15 @@
+﻿@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Blogs.BlogPostComment
+@using Volo.CmsKit.Localization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<CmsKitResource> L
+
+@model DefaultBlogPostCommentViewComponent.DefaultBlogPostCommentViewModel
+
+  
+        @await Component.InvokeAsync(typeof(CommentingViewComponent), new
+           {
+               entityType = Model.EntityType,
+               entityId = Model.EntityId
+           }) 

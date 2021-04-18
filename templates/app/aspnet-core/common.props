@@ -2,7 +2,14 @@
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <Version>1.0.0</Version>
-    <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
 	<AbpProjectType>app</AbpProjectType>
   </PropertyGroup>
+
+  <Target Name="NoWarnOnRazorViewImportedTypeConflicts" BeforeTargets="RazorCoreCompile">
+    <PropertyGroup>
+      <NoWarn>$(NoWarn);0436</NoWarn>
+    </PropertyGroup>
+  </Target>
+
 </Project>

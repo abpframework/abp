@@ -1,4 +1,4 @@
-﻿var abp = abp || {};
+var abp = abp || {};
 (function ($) {
 
     var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
@@ -30,7 +30,7 @@
         var htmlEncode = function (html) {
             return $('<div/>').text(html).html();
         }
-        
+
         var _createDropdownItem = function (record, fieldItem, tableInstance) {
             var $li = $('<li/>');
             var $a = $('<a/>');
@@ -78,7 +78,7 @@
                     return "";
                 }
 
-                var $button = $('<button type="button" class="btn btn-primary"></button>');
+                var $button = $('<button type="button" class="btn btn-primary abp-action-button"></button>');
 
                 if (firstItem.displayNameHtml) {
                     $button.html(firstItem.text);
@@ -90,15 +90,15 @@
                     }
                     $button.append(htmlEncode(firstItem.text));
                 }
-                
+
                 if (firstItem.enabled && !firstItem.enabled({ record: record, table: tableInstance })) {
                     $button.addClass('disabled');
                 }
-                
+
                 if (firstItem.action) {
                     $button.click(function (e) {
                         e.preventDefault();
-    
+
                         if (!$(this).hasClass('disabled')) {
                             if (firstItem.confirmMessage) {
                                 abp.message.confirm(firstItem.confirmMessage({ record: record, table: tableInstance }))
@@ -119,7 +119,7 @@
 
             var $container = $('<div/>')
                 .addClass('dropdown')
-                .addClass('action-button');
+                .addClass('abp-action-button');
 
             var $dropdownButton = $('<button/>');
 
@@ -217,7 +217,7 @@
 
         var renderRowActions = function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             var columns;
-			
+
             if (tableInstance.aoColumns) {
                 columns = tableInstance.aoColumns;
             } else {
@@ -236,9 +236,9 @@
                     var $actionContainer = _createRowAction(aData, column.rowAction, tableInstance);
                     hideEmptyColumn($actionContainer, tableInstance, colIndex);
 
-                    var $actionButton = $(cells[colIndex]).find(".action-button");
+                    var $actionButton = $(cells[colIndex]).find(".abp-action-button");
                     if ($actionButton.length === 0) {
-                        $(cells[colIndex]).append($actionContainer);
+                        $(cells[colIndex]).empty().append($actionContainer);
                     }
                 }
             }
@@ -325,7 +325,7 @@
      * AJAX extension for datatables                                         *
      *************************************************************************/
     (function () {
-        datatables.createAjax = function (serverMethod, inputAction, responseCallback) {
+        datatables.createAjax = function (serverMethod, inputAction, responseCallback, cancelPreviousRequest) {
             responseCallback = responseCallback || function(result) {
                 return {
                     recordsTotal: result.totalCount,
@@ -333,8 +333,12 @@
                     data: result.items
                 };
             }
+            var promise = null;
             return function (requestData, callback, settings) {
-                var input = inputAction ? inputAction(requestData, settings) : {};
+                var input = typeof inputAction === 'function'
+                    ? inputAction(requestData, settings)
+                    : (typeof inputAction === 'object' && inputAction)
+                        ? inputAction : {};
 
                 //Paging
                 if (settings.oInit.paging) {
@@ -365,7 +369,13 @@
                 }
 
                 if (callback) {
-                    serverMethod(input).then(function (result) {
+                    if(cancelPreviousRequest && promise && promise.jqXHR) {
+                        promise.jqXHR.abort();
+                    }
+                    promise = serverMethod(input);
+                    promise.always(function () {
+                        promise = null;
+                    }).then(function (result) {
                         callback(responseCallback(result));
                     });
                 }
@@ -403,6 +413,10 @@
                     if (render) {
                         column.render = render;
                     }
+                }
+
+                if (!column.render) {
+                    column.render = $.fn.dataTable.render.text();
                 }
 
                 if (column.rowAction) {
@@ -448,11 +462,19 @@
     };
 
     datatables.defaultRenderers['date'] = function (value) {
-        return (ISOStringToDateTimeLocaleString())(value);
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString())(value);
+        }
     };
 
     datatables.defaultRenderers['datetime'] = function (value) {
-        return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        }
     };
 
     /************************************************************************
@@ -463,7 +485,7 @@
 
     datatables.defaultConfigurations.scrollX = true;
 
-    datatables.defaultConfigurations.responsive = true; 
+    datatables.defaultConfigurations.responsive = true;
 
     datatables.defaultConfigurations.language = function () {
         return {
@@ -484,6 +506,6 @@
         };
     };
 
-    datatables.defaultConfigurations.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto"i><"col"p>>';
+    datatables.defaultConfigurations.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto mr-auto"i><"col-auto"p>>';
 
 })(jQuery);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -20,10 +21,9 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
             string name,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetDbSetAsync())
-                .FirstOrDefaultAsync(
-                x => x.ContainerId == containerId && x.Name == name,
-                GetCancellationToken(cancellationToken)
+            return  (await GetDbSetAsync())
+                .FirstOrDefault(
+                x => x.ContainerId == containerId && x.Name == name
             );
         }
 

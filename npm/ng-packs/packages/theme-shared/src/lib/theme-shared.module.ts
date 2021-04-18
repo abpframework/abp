@@ -25,6 +25,7 @@ import { TableComponent } from './components/table/table.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { DEFAULT_VALIDATION_BLUEPRINTS } from './constants/validation';
+import { EllipsisModule } from './directives/ellipsis.directive';
 import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
@@ -36,6 +37,7 @@ import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
+import { ModalCloseDirective } from './components/modal/modal-close.directive';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -54,12 +56,19 @@ const declarationsWithExports = [
   NgxDatatableListDirective,
   LoadingDirective,
   TableSortDirective,
+  ModalCloseDirective,
 ];
 
 @NgModule({
-  imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
+  imports: [
+    CoreModule,
+    NgxDatatableModule,
+    NgxValidateCoreModule,
+    NgbPaginationModule,
+    EllipsisModule,
+  ],
   declarations: [...declarationsWithExports, HttpErrorWrapperComponent, ModalContainerComponent],
-  exports: [NgxDatatableModule, ...declarationsWithExports],
+  exports: [NgxDatatableModule, EllipsisModule, ...declarationsWithExports],
   providers: [DatePipe],
   entryComponents: [
     HttpErrorWrapperComponent,

@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -124,7 +124,7 @@ Created this class inside the `Acme.BookStore.Domain.Shared` project since we wi
 
 ## AuthorManager: The Domain Service
 
-`Author` constructor and `ChangeName` method is `internal`, so they can be usable only in the domain layer. Create an `AuthorManager` class in the `Authors` folder (namespace) of the `Acme.BookStore.Domain` project:
+`Author` constructor and `ChangeName` methods are `internal`, so they can be used only in the domain layer. Create an `AuthorManager` class in the `Authors` folder (namespace) of the `Acme.BookStore.Domain` project:
 
 ````csharp
 using System;
@@ -186,7 +186,7 @@ namespace Acme.BookStore.Authors
 
 * `AuthorManager` forces to create an author and change name of an author in a controlled way. The application layer (will be introduced later) will use these methods.
 
-> **DDD tip**: Do not introduce domain service methods unless they are really needed and perform some core business rules. For this case, we needed to this service to be able to force the unique name constraint.
+> **DDD tip**: Do not introduce domain service methods unless they are really needed and perform some core business rules. For this case, we needed this service to be able to force the unique name constraint.
 
 Both methods checks if there is already an author with the given name and throws a special business exception, `AuthorAlreadyExistsException`, defined in the `Acme.BookStore.Domain` project (in the `Authors` folder) as shown below:
 
@@ -226,7 +226,7 @@ This is a unique string represents the error code thrown by your application and
 "BookStore:00001": "There is already an author with the same name: {name}"
 ````
 
-Whenever you throw an `AuthorAlreadyExistsException`, the end use will see a this message on the UI.
+Whenever you throw an `AuthorAlreadyExistsException`, the end user will see a nice error message on the UI.
 
 ## IAuthorRepository
 

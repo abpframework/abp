@@ -1,46 +1,36 @@
-<div class="row entry-row">
-  <div class="col-auto">
-    <h1 class="content-header-title">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>
-  </div>
-  <div id="breadcrumb" class="col-lg-auto pl-lg-0">
-    <abp-breadcrumb></abp-breadcrumb>
-  </div>
-  <div class="col">
-    <div class="text-lg-right pt-2" id="AbpContentToolbar"></div>
-  </div>
-</div>
-
-<div id="SettingManagementWrapper">
-  <div class="card">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-12 col-md-3">
-          <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
-            <ng-container *abpFor="let setting of settings; trackBy: trackByFn">
-              <li
-                (click)="selected = setting"
-                class="nav-item pointer"
-                *abpPermission="setting.requiredPolicy"
-              >
-                <a
-                  class="nav-link"
-                  [id]="setting.name + '-tab'"
-                  role="tab"
-                  [class.active]="setting.name === selected.name"
-                  >{{ setting.name | abpLocalization }}</a
+<abp-page [title]="'AbpSettingManagement::Settings' | abpLocalization">
+  <div id="SettingManagementWrapper">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-md-3">
+            <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
+              <ng-container *abpFor="let setting of settings; trackBy: trackByFn">
+                <li
+                  (click)="selected = setting"
+                  class="nav-item pointer"
+                  *abpPermission="setting.requiredPolicy"
                 >
-              </li>
-            </ng-container>
-          </ul>
-        </div>
-        <div class="col-12 col-md-9">
-          <div *ngIf="settings.length" class="tab-content">
-            <div class="tab-pane fade show active" [id]="selected.name + '-tab'" role="tabpanel">
-              <ng-container *ngComponentOutlet="selected.component"></ng-container>
+                  <a
+                    class="nav-link"
+                    [id]="setting.name + '-tab'"
+                    role="tab"
+                    [class.active]="setting.name === selected.name"
+                    >{{ setting.name | abpLocalization }}</a
+                  >
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+          <div class="col-12 col-md-9">
+            <div *ngIf="settings.length" class="tab-content">
+              <div class="tab-pane fade show active" [id]="selected.name + '-tab'" role="tabpanel">
+                <ng-container *ngComponentOutlet="selected.component"></ng-container>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</abp-page>

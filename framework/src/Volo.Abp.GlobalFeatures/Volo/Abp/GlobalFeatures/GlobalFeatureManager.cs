@@ -1,5 +1,5 @@
-﻿﻿using System;
- using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.GlobalFeatures
@@ -18,7 +18,7 @@ namespace Volo.Abp.GlobalFeatures
 
         protected HashSet<string> EnabledFeatures { get; }
 
-        internal GlobalFeatureManager()
+        protected internal GlobalFeatureManager()
         {
             EnabledFeatures = new HashSet<string>();
             Configuration = new Dictionary<object, object>();
@@ -26,9 +26,8 @@ namespace Volo.Abp.GlobalFeatures
         }
 
         public virtual bool IsEnabled<TFeature>()
-            where TFeature : GlobalFeature
         {
-            return IsEnabled(GlobalFeatureNameAttribute.GetName<TFeature>());
+            return IsEnabled(typeof(TFeature));
         }
 
         public virtual bool IsEnabled([NotNull] Type featureType)
@@ -40,13 +39,33 @@ namespace Volo.Abp.GlobalFeatures
         {
             return EnabledFeatures.Contains(featureName);
         }
+        
+        public virtual void Enable<TFeature>()
+        {
+            Enable(typeof(TFeature));
+        }
+        
+        public virtual void Enable([NotNull] Type featureType)
+        {
+            Enable(GlobalFeatureNameAttribute.GetName(featureType));
+        }
 
-        protected internal void Enable(string featureName)
+        public virtual void Enable(string featureName)
         {
             EnabledFeatures.AddIfNotContains(featureName);
         }
+        
+        public virtual void Disable<TFeature>()
+        {
+            Disable(typeof(TFeature));
+        }
+        
+        public virtual void Disable([NotNull] Type featureType)
+        {
+            Disable(GlobalFeatureNameAttribute.GetName(featureType));
+        }
 
-        protected internal void Disable(string featureName)
+        public virtual void Disable(string featureName)
         {
             EnabledFeatures.Remove(featureName);
         }

@@ -22,17 +22,17 @@ namespace Volo.Abp.Localization.VirtualFiles
             _virtualPath = virtualPath;
         }
 
-        public void Initialize(LocalizationResourceInitializationContext context)
+        public virtual void Initialize(LocalizationResourceInitializationContext context)
         {
             _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
         }
 
-        public LocalizedString GetOrNull(string cultureName, string name)
+        public virtual LocalizedString GetOrNull(string cultureName, string name)
         {
             return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
         }
 
-        public void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
+        public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
         {
             GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
         }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
@@ -19,13 +21,26 @@ namespace Volo.CmsKit
     {
         private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             OneTimeRunner.Run(() =>
             {
                 GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
             });
+        }
 
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddSingleton<IBlobProvider>(Substitute.For<FakeBlobProvider>());
+            
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+                {
+                    containerConfiguration.ProviderType = typeof(FakeBlobProvider);
+                });
+            });
+            
             context.Services.AddAlwaysAllowAuthorization();
         }
 
@@ -40,7 +55,7 @@ namespace Volo.CmsKit
             {
                 using (var scope = context.ServiceProvider.CreateScope())
                 {
-                    await scope.ServiceProvider
+                   await scope.ServiceProvider
                         .GetRequiredService<IDataSeeder>()
                         .SeedAsync();
                 }

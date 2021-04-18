@@ -32,7 +32,8 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             ExistingConnection = existingConnection;
 
             DbContextOptions = new DbContextOptionsBuilder()
-                .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>());
+                .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
+                .UseApplicationServiceProvider(serviceProvider);
         }
     }
 
@@ -47,13 +48,14 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             [CanBeNull] string connectionStringName,
             [CanBeNull] DbConnection existingConnection)
             : base(
-                  connectionString, 
-                  serviceProvider, 
-                  connectionStringName, 
+                  connectionString,
+                  serviceProvider,
+                  connectionStringName,
                   existingConnection)
         {
             base.DbContextOptions = new DbContextOptionsBuilder<TDbContext>()
-                .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>());
+                .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
+                .UseApplicationServiceProvider(serviceProvider);;
         }
     }
 }

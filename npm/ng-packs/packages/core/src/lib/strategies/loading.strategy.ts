@@ -52,6 +52,13 @@ export class StyleLoadingStrategy extends LoadingStrategy<HTMLLinkElement> {
 }
 
 export const LOADING_STRATEGY = {
+  AppendScriptToBody(src: string) {
+    return new ScriptLoadingStrategy(
+      src,
+      DOM_STRATEGY.AppendToBody(),
+      CROSS_ORIGIN_STRATEGY.None(),
+    );
+  },
   AppendAnonymousScriptToBody(src: string, integrity?: string) {
     return new ScriptLoadingStrategy(
       src,

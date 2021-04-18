@@ -71,6 +71,9 @@ namespace Volo.Abp.UI.Navigation
         [NotNull]
         public ApplicationMenuItemList Items { get; }
 
+        [CanBeNull]
+        public string RequiredPermissionName { get; set; }
+
         /// <summary>
         /// Can be used to store a custom object related to this menu item. Optional.
         /// </summary>
@@ -95,7 +98,8 @@ namespace Volo.Abp.UI.Navigation
             object customData = null,
             string target = null,
             string elementId = null,
-            string cssClass = null)
+            string cssClass = null,
+            string requiredPermissionName = null)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -109,6 +113,7 @@ namespace Volo.Abp.UI.Navigation
             Target = target;
             ElementId = elementId ?? GetDefaultElementId();
             CssClass = cssClass;
+            RequiredPermissionName = requiredPermissionName;
 
             Items = new ApplicationMenuItemList();
         }

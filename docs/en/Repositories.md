@@ -13,61 +13,168 @@ ABP can provide a **default generic repository** for each aggregate root or enti
 **Example usage of a default generic repository:**
 
 ````C#
-public class PersonAppService : ApplicationService
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace Demo
 {
-    private readonly IRepository<Person, Guid> _personRepository;
-
-    public PersonAppService(IRepository<Person, Guid> personRepository)
+    public class PersonAppService : ApplicationService
     {
-        _personRepository = personRepository;
-    }
+        private readonly IRepository<Person, Guid> _personRepository;
 
-    public async Task Create(CreatePersonDto input)
-    {
-        var person = new Person { Name = input.Name, Age = input.Age };
+        public PersonAppService(IRepository<Person, Guid> personRepository)
+        {
+            _personRepository = personRepository;
+        }
 
-        await _personRepository.InsertAsync(person);
-    }
+        public async Task CreateAsync(CreatePersonDto input)
+        {
+            var person = new Person(input.Name);
 
-    public List<PersonDto> GetList(string nameFilter)
-    {
-        var people = _personRepository
-            .Where(p => p.Name.Contains(nameFilter))
-            .ToList();
+            await _personRepository.InsertAsync(person);
+        }
 
-        return people
-            .Select(p => new PersonDto {Id = p.Id, Name = p.Name, Age = p.Age})
-            .ToList();
+        public async Task<int> GetCountAsync(string filter)
+        {
+            return await _personRepository.CountAsync(p => p.Name.Contains(filter));
+        }
     }
 }
 ````
 
-> See the "*IQueryable & Async Operations*" section below to understand how you can use **async extension methods**, like `ToListAsync()` (which is strongly suggested) instead of `ToList()`.
-
 In this example;
 
 * `PersonAppService` simply injects `IRepository<Person, Guid>` in it's constructor.
-* `Create` method uses `InsertAsync` to save a newly created entity.
-* `GetList` method uses the standard LINQ `Where` and `ToList` methods to filter and get a list of people from the data source.
+* `CreateAsync` method uses `InsertAsync` to save the new entity.
+* `GetCountAsync` method gets a filtered count of all people in the database.
 
-> The example above uses hand-made mapping between [entities](Entities.md) and [DTO](Data-Transfer-Objects.md)s. See [object to object mapping document](Object-To-Object-Mapping.md) for an automatic way of mapping.
+### Standard Repository Methods
 
 Generic Repositories provides some standard CRUD features out of the box:
 
-* Provides `Insert` method to save a new entity.
-* Provides `Update` and `Delete` methods to update or delete an entity by entity object or it's id.
-* Provides `Delete` method to delete multiple entities by a filter.
-* Implements `IQueryable<TEntity>`, so you can use LINQ and extension methods like `FirstOrDefault`, `Where`, `OrderBy`, `ToList` and so on...
+* `GetAsync`: Returns a single entity by its `Id` or a predicate (lambda expression).
+  * Throws `EntityNotFoundException` if the requested entity was not found.
+  * Throws `InvalidOperationException` if there are multiple entities with given predicate.
+* `FindAsync`: Returns a single entity by its `Id` or a predicate (lambda expression).
+  * Returns `null` if the requested entity was not found.
+  * Throws `InvalidOperationException` if there are multiple entities with given predicate.
+* `InsertAsync`: Inserts a new entity to the database.
+* `UpdateAsync`: Updates an existing entity in the database.
+* `DeleteAsync`: Deletes the given entity from database.
+  * This method has an overload that takes a predicate (lambda expression) to delete multiple entities satisfies the given condition.
+* `GetListAsync`: Returns the list of all entities in the database.
+* `GetPagedListAsync`: Returns a limited list of entities. Gets `skipCount`, `maxResultCount` and `sorting` parameters.
+* `GetCountAsync`: Gets count of all entities in the database.
+
+There are overloads of these methods.
+
+* Provides `UpdateAsync` and `DeleteAsync` methods to update or delete an entity by entity object or it's id.
+* Provides `DeleteAsync` method to delete multiple entities by a filter.
+
+### Querying / LINQ over the Repositories
+
+Repositories provide the `GetQueryableAsync()` method that returns an `IQueryable<TEntity>` object. You can use this object to perform LINQ queries on the entities in the database.
+
+**Example: Use LINQ with the repositories**
+
+````csharp
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace Demo
+{
+    public class PersonAppService : ApplicationService
+    {
+        private readonly IRepository<Person, Guid> _personRepository;
+
+        public PersonAppService(IRepository<Person, Guid> personRepository)
+        {
+            _personRepository = personRepository;
+        }
+
+        public async Task<List<PersonDto>> GetListAsync(string filter)
+        {
+            //Obtain the IQueryable<Person>
+            IQueryable<Person> queryable = await _personRepository.GetQueryableAsync();
+
+            //Create a query
+            var query = from person in queryable
+                where person.Name == filter
+                orderby person.Name
+                select person;
+
+            //Execute the query to get list of people
+            var people = query.ToList();
+
+            //Convert to DTO and return to the client
+            return people.Select(p => new PersonDto {Name = p.Name}).ToList();
+        }
+    }
+}
+````
+
+You could also use the LINQ extension methods:
+
+````csharp
+public async Task<List<PersonDto>> GetListAsync(string filter)
+{
+    //Obtain the IQueryable<Person>
+    IQueryable<Person> queryable = await _personRepository.GetQueryableAsync();
+
+    //Execute a query
+    var people = queryable
+        .Where(p => p.Name.Contains(filter))
+        .OrderBy(p => p.Name)
+        .ToList();
+
+    //Convert to DTO and return to the client
+    return people.Select(p => new PersonDto {Name = p.Name}).ToList();
+}
+````
+
+Any standard LINQ method can be used over the `IQueryable` returned from the repository.
+
+> This sample uses `ToList()` method, but it is **strongly suggested to use the asynchronous methods** to perform database queries, like `ToListAsync()` for this example.
+>
+> See the **IQueryable & Async Operations** section to learn how you can do it.
+
+### Bulk Operations
+
+There are some methods to perform bulk operations in the database;
+
+* `InsertManyAsync`
+* `UpdateManyAsync`
+* `DeleteManyAsync`
+
+These methods work with multiple entities and can take advantage of bulk operations if supported by the underlying database provider.
+
+> Optimistic concurrency control may not be possible when you use `UpdateManyAsync` and `DeleteManyAsync` methods.
+
+### Soft / Hard Delete
+
+`DeleteAsync` method of the repository doesn't delete the entity if the entity is a **soft-delete** entity (that implements `ISoftDelete`). Soft-delete entities are marked as "deleted" in the database. Data Filter system ensures that the soft deleted entities are not retrieved from database normally.
+
+If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method to physically delete the entity from database in case of you need it.
+
+> See the [Data Filtering](Data-Filtering.md) documentation for more about soft-delete.
+
+## Other Generic Repository Types
+
+Standard `IRepository<TEntity, TKey>` interface exposes the standard `IQueryable<TEntity>` and you can freely query using the standard LINQ methods. This is fine for most of the applications. However, some ORM providers or database systems may not support standard `IQueryable` interface. If you want to use such providers, you can't rely on the `IQueryable`.
 
 ### Basic Repositories
 
-Standard `IRepository<TEntity, TKey>` interface extends standard `IQueryable<TEntity>` and you can freely query using standard LINQ methods. However, some ORM providers or database systems may not support standard `IQueryable` interface.
-
 ABP provides `IBasicRepository<TEntity, TPrimaryKey>` and `IBasicRepository<TEntity>` interfaces to support such scenarios. You can extend these interfaces (and optionally derive from `BasicRepositoryBase`) to create custom repositories for your entities.
 
-Depending on `IBasicRepository` but not depending on `IRepository` has an advantage to make possible to work with all data sources even if they don't support `IQueryable`. But major vendors, like Entity Framework, NHibernate or MongoDb already support `IQueryable`.
+Depending on `IBasicRepository` but not depending on `IRepository` has an advantage to make possible to work with all data sources even if they don't support `IQueryable`.
 
-So, working with `IRepository` is the **suggested** way for typical applications. But reusable module developers may consider `IBasicRepository` to support a wider range of data sources.
+Major vendors, like Entity Framework, NHibernate or MongoDB already support `IQueryable`. So, working with `IRepository` is the **suggested** way for typical applications. But reusable module developers may consider `IBasicRepository` to support a wider range of data sources.
 
 ### Read Only Repositories
 
@@ -78,19 +185,6 @@ There are also `IReadOnlyRepository<TEntity, TKey>` and `IReadOnlyBasicRepositor
 If your entity does not have an Id primary key (it may have a composite primary key for instance) then you cannot use the `IRepository<TEntity, TKey>` (or basic/readonly versions) defined above. In that case, you can inject and use `IRepository<TEntity>` for your entity.
 
 > `IRepository<TEntity>` has a few missing methods those normally works with the `Id` property of an entity. Because of the entity has no `Id` property in that case, these methods are not available. One example is the `Get` method that gets an id and returns the entity with given id. However, you can still use `IQueryable<TEntity>` features to query entities by standard LINQ methods.
-
-### Soft / Hard Delete
-
-`DeleteAsync` method of the repository doesn't delete the entity if the entity is a **soft-delete** entity (that implements `ISoftDelete`). Soft-delete entities are marked as "deleted" in the database. Data Filter system ensures that the soft deleted entities are not retrieved from database normally.
-
-If your entity is a soft-delete entity, you can use the `HardDeleteAsync` method to really delete the entity from database in case of you need it.
-
-See the [Data Filtering](Data-Filtering.md) documentation for more about soft-delete.
-
-## Bulk Operations
-You can execute bulk operations with `InsertManyAsync`, `UpdateManyAsync`, `DeleteManyAsync` methods.
-
-> **WARNING:** ConcurrencyStamp can't be checked at bulk operations!
 
 ## Custom Repositories
 
@@ -128,7 +222,8 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 
     public async Task<Person> FindByNameAsync(string name)
     {
-        return await DbContext.Set<Person>()
+        var dbSet = await GetDbSetAsync();
+        return await dbSet.Set<Person>()
             .Where(p => p.Name == name)
             .FirstOrDefaultAsync();
     }
@@ -141,12 +236,13 @@ You can directly access the data access provider (`DbContext` in this case) to p
 
 ## IQueryable & Async Operations
 
-`IRepository` inherits from `IQueryable`, that means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Generic Repositories*" section above.
+`IRepository` provides `GetQueryableAsync()` to obtain an `IQueryable`, that means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Querying / LINQ over the Repositories*" section above.
 
 **Example: Using the `Where(...)` and the `ToList()` extension methods**
 
 ````csharp
-var people = _personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = queryable
     .Where(p => p.Name.Contains(nameFilter))
     .ToList();
 ````
@@ -175,7 +271,8 @@ When you add the NuGet package to your project, you can take full power of the E
 **Example: Directly using the `ToListAsync()` after adding the EF Core package**
 
 ````csharp
-var people = _personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = queryable
     .Where(p => p.Name.Contains(nameFilter))
     .ToListAsync();
 ````
@@ -191,7 +288,8 @@ If you are using [MongoDB](MongoDB.md), you need to add the [Volo.Abp.MongoDB](h
 **Example: Cast `IQueryable<T>` to `IMongoQueryable<T>` and use `ToListAsync()`**
 
 ````csharp
-var people = ((IMongoQueryable<Person>)_personRepository
+var queryable = await _personRepository.GetQueryableAsync();
+var people = ((IMongoQueryable<Person>) queryable
     .Where(p => p.Name.Contains(nameFilter)))
     .ToListAsync();
 ````
@@ -218,10 +316,11 @@ The standard LINQ extension methods are supported: *AllAsync, AnyAsync, AverageA
 This approach still **has a limitation**. You need to call the extension method directly on the repository object. For example, the below usage is **not supported**:
 
 ```csharp
-var count = await _bookRepository.Where(x => x.Name.Contains("A")).CountAsync();
+var queryable = await _bookRepository.GetQueryableAsync();
+var count = await queryable.Where(x => x.Name.Contains("A")).CountAsync();
 ```
 
-This is because the object returned from the `Where` method is not a repository object, it is a standard `IQueryable` interface. See the other options for such cases.
+This is because the `CountAsync()` method in this example is called on a `IQueryable` interface, not on the repository object. See the other options for such cases.
 
 This method is suggested **wherever possible**.
 
@@ -258,8 +357,11 @@ namespace AbpDemo
 
         public async Task<ListResultDto<ProductDto>> GetListAsync(string name)
         {
+            //Obtain the IQueryable<T>
+            var queryable = await _productRepository.GetQueryableAsync();
+            
             //Create the query
-            var query = _productRepository
+            var query = queryable
                 .Where(p => p.Name.Contains(name))
                 .OrderBy(p => p.Name);
 

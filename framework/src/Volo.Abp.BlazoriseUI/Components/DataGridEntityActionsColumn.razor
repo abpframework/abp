@@ -1,0 +1,6 @@
+﻿@typeparam TItem
+@using Blazorise.DataGrid
+@inherits DataGridColumn<TItem>
+<CascadingValue Value="@this" IsFixed="true">
+    @ChildContent
+</CascadingValue>

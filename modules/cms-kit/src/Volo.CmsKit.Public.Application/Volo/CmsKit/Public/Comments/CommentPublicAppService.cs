@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
@@ -17,24 +18,21 @@ namespace Volo.CmsKit.Public.Comments
 {
     public class CommentPublicAppService : ApplicationService, ICommentPublicAppService
     {
-        protected CmsKitOptions CmsKitOptions { get; }
         protected ICommentRepository CommentRepository { get; }
         protected ICmsUserLookupService CmsUserLookupService { get; }
         public IDistributedEventBus DistributedEventBus { get; }
-        public IUnitOfWorkManager UnitOfWorkManager { get; }
+        protected CommentManager CommentManager { get; }
 
         public CommentPublicAppService(
             ICommentRepository commentRepository,
             ICmsUserLookupService cmsUserLookupService,
             IDistributedEventBus distributedEventBus,
-            IUnitOfWorkManager unitOfWorkManager,
-            IOptions<CmsKitOptions> cmsKitOptions)
+            CommentManager commentManager)
         {
-            CmsKitOptions = cmsKitOptions.Value;
             CommentRepository = commentRepository;
             CmsUserLookupService = cmsUserLookupService;
             DistributedEventBus = distributedEventBus;
-            UnitOfWorkManager = unitOfWorkManager;
+            CommentManager = commentManager;
         }
 
         public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
@@ -52,15 +50,18 @@ namespace Volo.CmsKit.Public.Comments
         {
             var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
+            if(input.RepliedCommentId.HasValue)
+            {
+                await CommentRepository.GetAsync(input.RepliedCommentId.Value);
+            }
+
             var comment = await CommentRepository.InsertAsync(
-                new Comment(
-                    GuidGenerator.Create(),
+                await CommentManager.CreateAsync(
+                    user,
                     entityType,
                     entityId,
                     input.Text,
-                    input.RepliedCommentId,
-                    user.Id,
-                    CurrentTenant.Id
+                    input.RepliedCommentId
                 )
             );
 
@@ -82,7 +83,7 @@ namespace Volo.CmsKit.Public.Comments
 
             if (comment.CreatorId != CurrentUser.GetId())
             {
-                throw new BusinessException(); //TODO: AbpAuthorizationException!
+                throw new AbpAuthorizationException();
             }
 
             comment.SetText(input.Text);
@@ -99,7 +100,7 @@ namespace Volo.CmsKit.Public.Comments
 
             if (comment.CreatorId != CurrentUser.GetId())
             {
-                throw new BusinessException(); //TODO: AbpAuthorizationException!
+                throw new AbpAuthorizationException();
             }
 
             await CommentRepository.DeleteWithRepliesAsync(comment);

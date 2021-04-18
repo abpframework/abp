@@ -8,6 +8,8 @@ namespace Volo.Docs.Models
 
         public bool IsSelected { get; set; }
 
+        public bool IsPreview { get; set; }
+
         public VersionInfoViewModel(string displayText, string version, bool isSelected = false)
         {
             DisplayText = displayText;

@@ -349,6 +349,10 @@ namespace Volo.Abp.EntityFrameworkCore
                         {
                             entryProperty.CurrentValue = TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(entityProperty.ToString());
                         }
+                        else if (conversionType.IsEnum)
+                        {
+                            entryProperty.CurrentValue = Enum.Parse(conversionType, entityProperty.ToString(), ignoreCase: true);
+                        }
                         else
                         {
                             entryProperty.CurrentValue = Convert.ChangeType(entityProperty, conversionType, CultureInfo.InvariantCulture);

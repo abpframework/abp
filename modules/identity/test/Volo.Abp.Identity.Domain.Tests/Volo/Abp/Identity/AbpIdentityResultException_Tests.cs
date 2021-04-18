@@ -28,9 +28,17 @@ namespace Volo.Abp.Identity
             using (CultureHelper.Use("tr"))
             {
                 var localizeMessage = exception.LocalizeMessage(new LocalizationContext(ServiceProvider));
-                
+
                 localizeMessage.ShouldContain("Şifre en az 6 karakter uzunluğunda olmalı.");
                 localizeMessage.ShouldContain("Şifre en az bir sayı ya da harf olmayan karakter içermeli.");
+            }
+
+            using (CultureHelper.Use("en"))
+            {
+                var localizeMessage = exception.LocalizeMessage(new LocalizationContext(ServiceProvider));
+
+                localizeMessage.ShouldContain("Password length must be greater than 6 characters.");
+                localizeMessage.ShouldContain("Password must contain at least one non-alphanumeric character.");
             }
         }
     }

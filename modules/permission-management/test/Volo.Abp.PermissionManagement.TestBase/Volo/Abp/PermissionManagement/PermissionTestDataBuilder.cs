@@ -48,6 +48,15 @@ namespace Volo.Abp.PermissionManagement
                     User1Id.ToString()
                 )
             );
+
+            await _permissionGrantRepository.InsertAsync(
+                new PermissionGrant(
+                    _guidGenerator.Create(),
+                    "MyPermission5",
+                    UserPermissionValueProvider.ProviderName,
+                    User1Id.ToString()
+                )
+            );
         }
     }
 }

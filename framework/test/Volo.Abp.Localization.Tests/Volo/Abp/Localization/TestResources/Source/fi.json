@@ -1,0 +1,11 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Hello <b>{0}</b>.": "Hei <b> {0} </b>.",
+    "Car": "Auto",
+    "CarPlural": "Autot",
+    "MaxLenghtErrorMessage": "Tämän kentän pituus voi olla enintään {0} merkkiä",
+    "Universe": "Maailmankaikkeus",
+    "FortyTwo": "Neljäkymmentäkaksi"
+  }
+}

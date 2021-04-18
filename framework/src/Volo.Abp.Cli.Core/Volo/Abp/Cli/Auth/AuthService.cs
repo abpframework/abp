@@ -22,7 +22,7 @@ namespace Volo.Abp.Cli.Auth
         {
             var configuration = new IdentityClientConfiguration(
                 CliUrls.AccountAbpIo,
-                "role email abpio abpio_www abpio_commercial offline_access", 
+                "role email abpio abpio_www abpio_commercial offline_access",
                 "abp-cli",
                 "1q2w3e*",
                 OidcConstants.GrantTypes.Password,
@@ -43,6 +43,7 @@ namespace Volo.Abp.Cli.Auth
         public Task LogoutAsync()
         {
             FileHelper.DeleteIfExists(CliPaths.AccessToken);
+            FileHelper.DeleteIfExists(CliPaths.Lic);
             return Task.CompletedTask;
         }
 

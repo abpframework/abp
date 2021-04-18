@@ -18,7 +18,7 @@ namespace Volo.Abp.PermissionManagement
         protected override void AfterAddApplication(IServiceCollection services)
         {
             var currentUser = Substitute.For<ICurrentUser>();
-            //currentUser.Id.Returns(ci => CurrentUserId);
+            currentUser.Roles.Returns(new []{ "admin" });
             currentUser.IsAuthenticated.Returns(true);
 
             services.AddSingleton(currentUser);

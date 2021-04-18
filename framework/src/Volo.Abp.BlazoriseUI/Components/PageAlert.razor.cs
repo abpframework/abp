@@ -52,7 +52,7 @@ namespace Volo.Abp.BlazoriseUI.Components
                     });
                 }
             }
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
 
         protected virtual Color GetAlertColor(AlertType alertType)

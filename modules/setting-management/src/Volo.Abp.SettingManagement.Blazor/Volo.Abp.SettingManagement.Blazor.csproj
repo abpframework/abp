@@ -10,10 +10,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.SettingManagement.Domain.Shared\Volo.Abp.SettingManagement.Domain.Shared.csproj" />
+        <ProjectReference Include="..\Volo.Abp.SettingManagement.Application.Contracts\Volo.Abp.SettingManagement.Application.Contracts.csproj" />
     </ItemGroup>
 </Project>

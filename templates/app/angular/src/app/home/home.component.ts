@@ -5,6 +5,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
   get hasLoggedIn(): boolean {
@@ -14,6 +15,6 @@ export class HomeComponent {
   constructor(private oAuthService: OAuthService, private authService: AuthService) {}
 
   login() {
-    this.authService.initLogin();
+    this.authService.navigateToLogin();
   }
 }

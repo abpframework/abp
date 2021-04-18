@@ -50,7 +50,7 @@ The simplest way of creating a bundle is to use `abp-script-bundle` or `abp-styl
 This bundle defines a style bundle with a **unique name**: `MyGlobalBundle`. It's very easy to understand how to use it. Let's see how it *works*:
 
 * ABP creates the bundle as **lazy** from the provided files when it's **first requested**. For the subsequent calls, it's returned from the **cache**. That means if you conditionally add the files to the bundle, it's executed only once and any changes of the condition will not effect the bundle for the next requests.
-* ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...).
+* ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...). See the *Bundling Mode* section to change that behavior.
 * The bundle files may be **physical** files or [**virtual/embedded** files](../../Virtual-File-System.md).
 * ABP automatically adds **version query string** to the bundle file URL to prevent browsers from caching when the bundle is being updated. (like ?_v=67872834243042 - generated from last change date of the related files). The versioning works even if the bundle files are individually added to the page (on the development environment).
 
@@ -165,7 +165,27 @@ public class MyWebExtensionModule : AbpModule
 }
 ````
 
-> It's not possible to configure unnamed bundle tag helpers by code, because their name are not known at the development time. It's suggested to always use a name for a bundle tag helper.
+You can also use the `ConfigureAll` method to configure all existing bundles:
+
+````C#
+[DependsOn(typeof(MyWebModule))]
+public class MyWebExtensionModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options
+                .ScriptBundles
+                .ConfigureAll(bundle => {
+                    bundle.AddFiles(
+                        "/scripts/my-extension-script.js"
+                    );
+                });
+        });
+    }
+}
+````
 
 ## Bundle Contributors
 
@@ -330,6 +350,45 @@ services.Configure<AbpBundlingOptions>(options =>
         });
 });
 ````
+
+## Additional Options
+
+This section shows other useful options for the bundling and minification system.
+
+### Bundling Mode
+
+ABP adds bundle files individually to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...). Most of the times this is the behavior you would want. However, you may want to manually configure it in some cases. There are four modes;
+
+* `Auto`: Automatically determines the mode based on the environment.
+* `None`: No bundling or minification.
+* `Bundle`: Bundled but not minified.
+* `BundleAndMinify`: Bundled and minified.
+
+You can configure `AbpBundlingOptions` in the `ConfigureServices` of your [module](../../Module-Development-Basics.md).
+
+**Example:**
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.Mode = BundlingMode.Bundle;
+});
+````
+
+### Ignore For Minification
+
+It is possible to ignore a specific file for the minification.
+
+**Example:**
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.MinificationIgnoredFiles.Add("/scripts/myscript.js");
+});
+````
+
+Given file is still added to the bundle, but not minified in this case.
 
 ## Themes
 

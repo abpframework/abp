@@ -1,0 +1,25 @@
+{
+  "culture": "fi",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Oletus osoitteesta",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Oletus näyttönimestä",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Isäntä",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Satama",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Käyttäjänimi",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Salasana",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Verkkotunnus",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Ota SSL käyttöön",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Käytä oletusarvoisia tunnistetietoja",
+    "Description:Abp.Mailing.DefaultFromAddress": "Oletus osoitteesta",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Oletusnimi näyttönimestä",
+    "Description:Abp.Mailing.Smtp.Host": "SMTP-tapahtumiin käytetyn isännän nimi tai IP-osoite.",
+    "Description:Abp.Mailing.Smtp.Port": "SMTP-tapahtumiin käytetty portti.",
+    "Description:Abp.Mailing.Smtp.UserName": "Käyttäjätunnuksiin liittyvä käyttäjänimi.",
+    "Description:Abp.Mailing.Smtp.Password": "Tunnistetietoihin liittyvän käyttäjänimen salasana.",
+    "Description:Abp.Mailing.Smtp.Domain": "Verkkotunnus tai tietokoneen nimi, joka tarkistaa tunnistetiedot.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Käyttääkö SmtpClient Secure Sockets Layer (SSL) -yhteyttä yhteyden salaamiseen.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Lähetetäänkö DefaultCredentials pyyntöjen kanssa.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Oletussähköpostiasettelumalli",
+    "TextTemplate:StandardEmailTemplates.Message": "Yksinkertainen viestimalli sähköpostiviesteille"
+  }
+}

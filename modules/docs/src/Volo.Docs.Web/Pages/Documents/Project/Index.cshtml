@@ -126,7 +126,7 @@
 
                             @if (Model.LanguageSelectListItems.Count > 1)
                             {
-                                <div class="col-5  @(Model.VersionSelectItems.Any()?"pl-0":"")">
+                                <div class="@(Model.VersionSelectItems.Any()? "pl-0 col-5" : "col")">
                                     <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">

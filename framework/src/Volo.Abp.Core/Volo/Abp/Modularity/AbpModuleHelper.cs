@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Modularity
 {
     internal static class AbpModuleHelper
     {
-        public static List<Type> FindAllModuleTypes(Type startupModuleType)
+        public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger logger)
         {
             var moduleTypes = new List<Type>();
-            AddModuleAndDependenciesResursively(moduleTypes, startupModuleType);
+            logger.Log(LogLevel.Information, "Loaded ABP modules:");
+            AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger);
             return moduleTypes;
         }
 
@@ -35,7 +37,11 @@ namespace Volo.Abp.Modularity
             return dependencies;
         }
 
-        private static void AddModuleAndDependenciesResursively(List<Type> moduleTypes, Type moduleType)
+        private static void AddModuleAndDependenciesRecursively(
+            List<Type> moduleTypes,
+            Type moduleType,
+            ILogger logger,
+            int depth = 0)
         {
             AbpModule.CheckAbpModuleType(moduleType);
 
@@ -45,10 +51,11 @@ namespace Volo.Abp.Modularity
             }
 
             moduleTypes.Add(moduleType);
+            logger.Log(LogLevel.Information, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
 
             foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
             {
-                AddModuleAndDependenciesResursively(moduleTypes, dependedModuleType);
+                AddModuleAndDependenciesRecursively(moduleTypes, dependedModuleType, logger, depth + 1);
             }
         }
     }

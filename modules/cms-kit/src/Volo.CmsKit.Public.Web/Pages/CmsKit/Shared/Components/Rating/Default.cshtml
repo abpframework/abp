@@ -5,57 +5,61 @@
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating.RatingViewModel
 @inject IHtmlLocalizer<CmsKitResource> L
 
-<div class="text-center text-md-left">
-    <div class="cms-rating-area d-inline-block px-2 py-1 my-2  card border-0 shadow-sm " data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId" id="cms-rating_{@Model.EntityType}_{@Model.EntityId}">
-        @if (CurrentUser.IsAuthenticated)
-        {
-            <span class="my-rating" data-rating="@(Model.CurrentRating ?? 0)" data-authenticated="@(Model.CurrentRating != null)"></span>
-            <small class="live-rating text-center d-inline-block" style="width: 24px">@(Model.CurrentRating != null ? Model.CurrentRating + "  " : 0 + "")</small>
-            @if (Model.CurrentRating != null)
-            {
-                <a href="#" class="rating-undo-link">
-                    <small class="text-muted"><i class="fa fa-undo"></i> @L["Undo"]</small>
-                </a>
-            }
-            if (Model.Ratings != null)
-            {
-                <a href="#" class="text-muted ml-1" data-toggle="modal" data-target="#ratingDetail">
-                    <i class="fas fa-info-circle"></i>
-                </a>
+<div class="row form-row">
+        <div class="col">
+            <div class="cms-rating-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId" id="cms-rating_{@Model.EntityType}_{@Model.EntityId}">
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    @if (Model.CurrentRating != null)
+                    {
+                        <a href="#" class="rating-undo-link">
+                            <small class="text-muted"><i class="fa fa-undo"></i> @L["Undo"]</small>
+                        </a>
+                    }
+                    if (Model.Ratings != null)
+                    {
+                        <a href="#" class="text-muted ml-1" data-toggle="modal" data-target="#ratingDetail">
+                            <i class="far fa-question-circle"></i>
+                        </a>
 
-                <div class="modal fade" id="ratingDetail" tabindex="-1" role="dialog" aria-labelledby="ratingDetail" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Rating Detail</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-
-                                <div class="row text-center">
-                                    @foreach (var rating in Model.Ratings)
-                                    {
-                                        <div class="col">
-                                            <label>@rating.StarCount @L["Star"]</label>
-                                            <div class="bar-container">
-                                                <div class="bar bar-@rating.StarCount" style="width: @(rating.Count * 100 / Model.TotalRating)%"></div>
-                                            </div>
-                                            <div><small class="text-muted">@rating.Count Rate(s)</small> </div>
+                        <div class="modal fade" id="ratingDetail" tabindex="-1" role="dialog" aria-labelledby="ratingDetail" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Rating Detail</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row text-center">
+                                            @foreach (var rating in Model.Ratings)
+                                            {
+                                                <div class="col">
+                                                    <label>@rating.StarCount @L["Star"]</label>
+                                                    <div class="bar-container">
+                                                        <div class="bar bar-@rating.StarCount" style="width: @(rating.Count * 100 / Model.TotalRating)%"></div>
+                                                    </div>
+                                                    <div><small class="text-muted">@rating.Count Rate(s)</small> </div>
+                                                </div>
+                                            }
                                         </div>
-                                    }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <span class="my-rating" data-authenticated="True" data-toggle="popover" data-placement="right" data-html="true" data-content="<div class='text-center'><a href='@Model.LoginUrl' class='btn btn-primary btn-block'>@L["LoginToRate"]</a></div>"></span>
-            <span class="rating-login"></span>
-        }
+                    }
+
+                    <small class="live-rating text-center d-inline-block" style="width: 24px">@(Model.CurrentRating != null ? Model.CurrentRating + "  " : 0 + "")</small>
+
+                    <span class="my-rating text-dark p-1" data-rating="@(Model.CurrentRating ?? 0)" data-authenticated="@(Model.CurrentRating != null)">
+                    </span>
+                }
+                else
+                {
+                    <span class="my-rating text-dark p-1" data-authenticated="True" data-toggle="popover" data-placement="right" data-html="true" data-content="<div class='text-center'><a href='@Model.LoginUrl' class='btn btn-primary btn-block'>@L["LoginToRate"]</a></div>"></span>
+                    <span class="rating-login"></span>
+                }
+            </div>
+        </div>
     </div>
-</div>

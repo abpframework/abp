@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Volo.Abp.Localization.Abstractions\Volo.Abp.Localization.Abstractions.csproj" />
+      <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+    </ItemGroup>
+
+</Project>

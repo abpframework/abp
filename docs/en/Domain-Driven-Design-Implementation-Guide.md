@@ -155,9 +155,9 @@ The projects have been explained before. Now, we can explain the reasons of the 
 * `Application.Contracts` depends on the `Domain.Shared`. In this way, you can reuse these types in the DTOs. For example, the same `IssueType` enum in the `Domain.Shared` can be used by a `CreateIssueDto` as a property.
 * `Application` depends on the `Application.Contracts` since it implements the Application Service interfaces and uses the DTOs inside it. It also depends on the `Domain` since the Application Services are implemented using the Domain Objects defined inside it.
 * `EntityFrameworkCore` depends on the `Domain` since it maps the Domain Objects (entities and value types) to database tables (as it is an ORM) and implements the repository interfaces defined in the `Domain`.
-* `HttpApi` depends on the `Application.Contacts` since the Controllers inside it inject and use the Application Service interfaces as explained before.
-* `HttpApi.Client` depends on the `Application.Contacts` since it can consume the Application Services as explained before.
-* `Web` depends on the `HttpApi` since it serves the HTTP APIs defined inside it. Also, in this way, it indirectly depends on the `Application.Contacts` project to consume the Application Services in the Pages/Components.
+* `HttpApi` depends on the `Application.Contracts` since the Controllers inside it inject and use the Application Service interfaces as explained before.
+* `HttpApi.Client` depends on the `Application.Contracts` since it can consume the Application Services as explained before.
+* `Web` depends on the `HttpApi` since it serves the HTTP APIs defined inside it. Also, in this way, it indirectly depends on the `Application.Contracts` project to consume the Application Services in the Pages/Components.
 
 #### Dashed Dependencies
 
@@ -754,7 +754,8 @@ namespace IssueTracking.Issues
         {
             var daysAgo30 = DateTime.Now.Subtract(TimeSpan.FromDays(30));
 
-            return await DbSet.Where(i =>
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.Where(i =>
 
                 //Open
                 !i.IsClosed &&
@@ -906,7 +907,8 @@ public class EfCoreIssueRepository :
 
     public async Task<List<Issue>> GetIssuesAsync(ISpecification<Issue> spec)
     {
-        return await DbSet
+        var dbSet = await GetDbSetAsync();
+        return await dbSet
             .Where(spec.ToExpression())
             .ToListAsync();
     }
@@ -952,8 +954,9 @@ public class IssueAppService : ApplicationService, IIssueAppService
 
     public async Task DoItAsync()
     {
+        var queryable = await _issueRepository.GetQueryableAsync();
         var issues = AsyncExecuter.ToListAsync(
-            _issueRepository.Where(new InActiveIssueSpecification())
+            queryable.Where(new InActiveIssueSpecification())
         );
     }
 }
@@ -996,8 +999,9 @@ public class IssueAppService : ApplicationService, IIssueAppService
 
     public async Task DoItAsync(Guid milestoneId)
     {
+        var queryable = await _issueRepository.GetQueryableAsync();
         var issues = AsyncExecuter.ToListAsync(
-            _issueRepository
+            queryable
                 .Where(
                     new InActiveIssueSpecification()
                         .And(new MilestoneSpecification(milestoneId))
@@ -1797,7 +1801,7 @@ Such a design makes it even more important to distinguish between Domain logic a
 
 To be more clear about the implementation, you can create different projects (`.csproj`) for each application types. For example;
 
-* `IssueTracker.Admin.Application` & `IssueTracker.Admin.Application.Contacts` projects for the Back Office (admin) Application.
+* `IssueTracker.Admin.Application` & `IssueTracker.Admin.Application.Contracts` projects for the Back Office (admin) Application.
 * `IssueTracker.Public.Application` & `IssueTracker.Public.Application.Contracts` projects for the Public Web Application.
 * `IssueTracker.Mobile.Application` & `IssueTracker.Mobile.Application.Contracts` projects for the Mobile Application.
 

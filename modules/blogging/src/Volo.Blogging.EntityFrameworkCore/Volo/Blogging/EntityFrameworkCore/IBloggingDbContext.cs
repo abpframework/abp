@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.MultiTenancy;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Posts;
@@ -9,19 +10,20 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
+    [IgnoreMultiTenancy]
     [ConnectionStringName(BloggingDbProperties.ConnectionStringName)]
     public interface IBloggingDbContext : IEfCoreDbContext
     {
         DbSet<BlogUser> Users { get; }
 
-        DbSet<Blog> Blogs { get; set; }
+        DbSet<Blog> Blogs { get; }
 
-        DbSet<Post> Posts { get; set; }
+        DbSet<Post> Posts { get; }
 
-        DbSet<Comment> Comments { get; set; }
+        DbSet<Comment> Comments { get; }
 
-        DbSet<PostTag> PostTags { get; set; }
+        DbSet<PostTag> PostTags { get; }
 
-        DbSet<Tag> Tags { get; set; }
+        DbSet<Tag> Tags { get; }
     }
 }

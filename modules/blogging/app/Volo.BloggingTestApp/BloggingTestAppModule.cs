@@ -154,7 +154,7 @@ namespace Volo.BloggingTestApp
                 app.UseErrorPage();
             }
 
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -165,6 +165,7 @@ namespace Volo.BloggingTestApp
             });
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseAbpRequestLocalization();
 

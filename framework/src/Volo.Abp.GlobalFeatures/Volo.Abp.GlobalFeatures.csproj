@@ -15,7 +15,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+        <None Remove="Volo\Abp\GlobalFeatures\Localization\*.json" />
+        <EmbeddedResource Include="Volo\Abp\GlobalFeatures\Localization\*.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+        <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

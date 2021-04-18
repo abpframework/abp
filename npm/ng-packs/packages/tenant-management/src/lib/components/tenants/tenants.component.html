@@ -40,7 +40,7 @@
   </ng-template>
 
   <ng-template #abpFooter>
-    <button #abpClose type="button" class="btn btn-secondary">
+    <button abpClose type="button" class="btn btn-secondary">
       {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
     </button>
     <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="isDisabledSaveButton">{{
@@ -52,37 +52,6 @@
 <ng-template #tenantModalTemplate>
   <form [formGroup]="tenantForm" (ngSubmit)="save()" validateOnSubmit>
     <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
-  </form>
-</ng-template>
-
-<ng-template #connectionStringModalTemplate>
-  <form [formGroup]="defaultConnectionStringForm" (ngSubmit)="save()" validateOnSubmit>
-    <div class="form-group">
-      <div class="custom-checkbox custom-control mb-2">
-        <input
-          id="useSharedDatabase"
-          type="checkbox"
-          class="custom-control-input"
-          formControlName="useSharedDatabase"
-          autofocus
-          (ngModelChange)="onSharedDatabaseChange($event)"
-        />
-        <label for="useSharedDatabase" class="custom-control-label">{{
-          'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
-        }}</label>
-      </div>
-    </div>
-    <div class="form-group" *ngIf="!useSharedDatabase">
-      <label for="defaultConnectionString">{{
-        'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
-      }}</label>
-      <input
-        type="text"
-        id="defaultConnectionString"
-        class="form-control"
-        formControlName="defaultConnectionString"
-      />
-    </div>
   </form>
 </ng-template>
 

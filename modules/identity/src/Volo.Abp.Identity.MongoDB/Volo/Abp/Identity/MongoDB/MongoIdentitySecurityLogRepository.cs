@@ -44,10 +44,11 @@ namespace Volo.Abp.Identity.MongoDB
                 userId,
                 userName,
                 clientId,
-                correlationId
+                correlationId,
+                cancellationToken
             );
 
-            return await query.OrderBy(sorting ?? nameof(IdentitySecurityLog.CreationTime) + " desc")
+            return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
                 .As<IMongoQueryable<IdentitySecurityLog>>()
                 .PageBy<IdentitySecurityLog, IMongoQueryable<IdentitySecurityLog>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -74,7 +75,8 @@ namespace Volo.Abp.Identity.MongoDB
                 userId,
                 userName,
                 clientId,
-                correlationId
+                correlationId,
+                cancellationToken
             );
 
             return await query.As<IMongoQueryable<IdentitySecurityLog>>()
@@ -98,9 +100,10 @@ namespace Volo.Abp.Identity.MongoDB
             Guid? userId = null,
             string userName = null,
             string clientId = null,
-            string correlationId = null)
+            string correlationId = null,
+            CancellationToken cancellationToken = default)
         {
-            return (await GetMongoQueryableAsync())
+            return (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime.Value)
                 .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime < endTime.Value.AddDays(1).Date)
                 .WhereIf(!applicationName.IsNullOrWhiteSpace(),

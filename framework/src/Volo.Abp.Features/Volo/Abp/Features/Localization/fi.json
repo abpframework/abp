@@ -1,0 +1,8 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Volo.Feature:010001": "Ominaisuus ei ole käytössä: {FeatureName}",
+    "Volo.Feature:010002": "Vaaditut ominaisuudet eivät ole käytössä. Kaikkien näiden ominaisuuksien on oltava käytössä: {FeatureNames}",
+    "Volo.Feature:010003": "Vaaditut ominaisuudet eivät ole käytössä. Ainakin yhden näistä ominaisuuksista on oltava käytössä: {FeatureNames}"
+  }
+}
