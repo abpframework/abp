@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
@@ -13,13 +14,23 @@ namespace Volo.Abp.Identity
     {
         private readonly IdentityUserManager _identityUserManager;
         private readonly AbpUserClaimsPrincipalFactory _abpUserClaimsPrincipalFactory;
+        private readonly IAbpClaimsPrincipalFactory _abpClaimsPrincipalFactory;
         private readonly IdentityTestData _testData;
 
         public AbpUserClaimsPrincipalFactory_Tests()
         {
             _identityUserManager = GetRequiredService<IdentityUserManager>();
             _abpUserClaimsPrincipalFactory = GetRequiredService<AbpUserClaimsPrincipalFactory>();
+            _abpClaimsPrincipalFactory = GetRequiredService<IAbpClaimsPrincipalFactory>();
             _testData = GetRequiredService<IdentityTestData>();
+        }
+
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+            {
+                options.Contributors.Add<TestAbpClaimsPrincipalContributor>();
+            });
         }
 
         [Fact]
@@ -33,12 +44,12 @@ namespace Volo.Abp.Identity
                 var claimsPrincipal = await _abpUserClaimsPrincipalFactory.CreateAsync(user);
 
                 claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.NameIdentifier && x.Value == user.Id.ToString());
-                claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == user.UserName);
-
                 claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Uri && x.Value =="www.abp.io");
-
                 claimsPrincipal.Claims.ShouldNotContain(x => x.Type == ClaimTypes.Email && x.Value == user.Email);
                 claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Email && x.Value == "replaced@abp.io");
+
+                claimsPrincipal = await _abpClaimsPrincipalFactory.DynamicCreateAsync(claimsPrincipal);
+                claimsPrincipal.Claims.ShouldContain(x => x.Type == ClaimTypes.Name && x.Value == user.UserName);
             });
         }
 
