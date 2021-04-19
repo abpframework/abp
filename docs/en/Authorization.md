@@ -395,9 +395,9 @@ This is already done for the startup template integration tests.
 
 ### Claims Principal Factory
 
-Abp abstracts the way that authentication creates `ClaimsPrincipal`. You can provide a custom `IAbpClaimsPrincipalContributor` to add additional claims.
+Claims are important elements of authentication and authorization. ABP uses the `IAbpClaimsPrincipalFactory` service to create claims on authentication. This service was designed as extensible. If you need to add your custom claims to the authentication ticket, you can implement the `IAbpClaimsPrincipalContributor` in your application.
 
-Example of add `SocialSecurityNumber` of current user to claims:
+**Example: Add a `SocialSecurityNumber` claim:**
 
 ```csharp
 public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
@@ -410,21 +410,17 @@ public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipa
             var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
             if (currentUser.Id.HasValue)
             {
-                var userManager = context.ServiceProvider.GetRequiredService<IdentityUserManager>();
-                var user = await userManager.GetByIdAsync(currentUser.Id.Value);
-                if (user?.SocialSecurityNumber != null)
+                var userService = context.ServiceProvider.GetRequiredService<IUserService>(); //Your custom service
+                var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(currentUser.Id.Value);
+                if (userService != null)
                 {
-                    identity.AddOrReplace(new Claim("SocialSecurityNumber", user.SocialSecurityNumber));
+                    identity.AddOrReplace(new Claim("SocialSecurityNumber", userService));
                 }
             }
         }
     }
 }
 ```
-
-The `SocialSecurityNumberClaimsPrincipalContributor` will participate in it when the `CreateAsync` method of `IAbpClaimsPrincipalFactory` is called. 
-
-> The [Identity module](https://docs.abp.io/en/abp/latest/Modules/Identity) has integrated it.
 
 ## See Also
 
