@@ -393,6 +393,39 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 This is already done for the startup template integration tests.
 
+### Claims Principal Factory
+
+Abp abstracts the way that authentication creates `ClaimsPrincipal`. You can provide a custom `IAbpClaimsPrincipalContributor` to add additional claims.
+
+Example of add `SocialSecurityNumber` of current user to claims:
+
+```csharp
+public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+{
+    public async Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+    {
+        var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        if (identity != null)
+        {
+            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
+            if (currentUser.Id.HasValue)
+            {
+                var userManager = context.ServiceProvider.GetRequiredService<IdentityUserManager>();
+                var user = await userManager.GetByIdAsync(currentUser.Id.Value);
+                if (user?.SocialSecurityNumber != null)
+                {
+                    identity.AddOrReplace(new Claim("SocialSecurityNumber", user.SocialSecurityNumber));
+                }
+            }
+        }
+    }
+}
+```
+
+The `SocialSecurityNumberClaimsPrincipalContributor` will participate in it when the `CreateAsync` method of `IAbpClaimsPrincipalFactory` is called. 
+
+> The [Identity module](https://docs.abp.io/en/abp/latest/Modules/Identity) has integrated it.
+
 ## See Also
 
 * [Permission Management Module](Modules/Permission-Management.md)
