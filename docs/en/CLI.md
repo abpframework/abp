@@ -113,6 +113,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
   * `SqlServer`
   * `MySQL`
   * `SQLite`
+  * `Oracle`
   * `Oracle-Devart`
   * `PostgreSQL`
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
