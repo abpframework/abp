@@ -227,7 +227,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             string oldReference,
             string newReference)
         {
-            var file = context.GetFile(targetProjectFilePath);
+            var file = context.FindFile(targetProjectFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 
@@ -253,7 +258,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             string oldKeyword,
             string newKeyword)
         {
-            var file = context.GetFile(targetModuleFilePath);
+            var file = context.FindFile(targetModuleFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 
@@ -278,7 +288,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ProjectBuildContext context,
             string appsettingFilePath)
         {
-            var file = context.GetFile(appsettingFilePath);
+            var file = context.FindFile(appsettingFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 
