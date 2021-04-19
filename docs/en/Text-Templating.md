@@ -24,6 +24,8 @@ ABP Framework provides two types of engines;
 * **[Razor](Text-Templating-Razor.md)**
 * **[Scriban](Text-Templating-Scriban.md)**
 
+You can use different template engines at the same time, or even create a new template engine.
+
 ## Source Code
 
 Get [the source code of the sample application](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo) developed and referred through this document.
