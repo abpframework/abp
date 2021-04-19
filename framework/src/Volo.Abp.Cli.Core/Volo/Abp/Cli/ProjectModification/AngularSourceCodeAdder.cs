@@ -246,6 +246,12 @@ namespace Volo.Abp.Cli.ProjectModification
                     var foldersUnderProject = Directory.GetDirectories(Path.Combine(folder, "projects"));
                     foreach (var folderUnderProject in foldersUnderProject)
                     {
+                        if (Path.GetFileName(folderUnderProject) == "dev-app")
+                        {
+                            Directory.Delete(folderUnderProject, true);
+                            continue;
+                        }
+
                         if (Directory.Exists(Path.Combine(folder, Path.GetFileName(folderUnderProject))))
                         {
                             continue;
