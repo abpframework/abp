@@ -5,30 +5,28 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Authorization.Permissions
+namespace Volo.Abp.State
 {
-    public class PermissionStateManager : IPermissionStateManager, ITransientDependency
+    public class StateManager<TState> : IStateManager<TState>
+        where TState : IHasState<TState>
     {
         protected IServiceProvider ServiceProvider { get; }
-        protected AbpPermissionOptions Options { get; }
 
-        public PermissionStateManager(IServiceProvider serviceProvider, IOptions<AbpPermissionOptions> options)
+        protected AbpStateOptions<TState> Options { get; }
+
+        public StateManager(IServiceProvider serviceProvider, IOptions<AbpStateOptions<TState>> options)
         {
             ServiceProvider = serviceProvider;
             Options = options.Value;
         }
 
-        public async Task<bool> IsEnabledAsync(PermissionDefinition permission)
+        public virtual async Task<bool> IsEnabledAsync(TState state)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
-                var context = new PermissionStateContext
-                {
-                    Permission = permission,
-                    ServiceProvider = scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>()
-                };
+                var context = new StateCheckContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);
 
-                foreach (var provider in permission.StateProviders)
+                foreach (var provider in state.StateProviders)
                 {
                     if (!await provider.IsEnabledAsync(context))
                     {
@@ -36,7 +34,7 @@ namespace Volo.Abp.Authorization.Permissions
                     }
                 }
 
-                foreach (IPermissionStateProvider provider in Options.GlobalStateProviders.Select(x => ServiceProvider.GetRequiredService(x)))
+                foreach (IStateProvider<TState> provider in Options.GlobalStateProviders.Select(x => ServiceProvider.GetRequiredService(x)))
                 {
                     if (!await provider.IsEnabledAsync(context))
                     {

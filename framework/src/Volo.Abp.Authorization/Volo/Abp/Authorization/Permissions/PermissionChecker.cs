@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.State;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -15,14 +16,14 @@ namespace Volo.Abp.Authorization.Permissions
         protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IPermissionValueProviderManager PermissionValueProviderManager { get; }
-        protected IPermissionStateManager PermissionStateManager { get; }
+        protected IStateManager<PermissionDefinition> PermissionStateManager { get; }
 
         public PermissionChecker(
             ICurrentPrincipalAccessor principalAccessor,
             IPermissionDefinitionManager permissionDefinitionManager,
             ICurrentTenant currentTenant,
             IPermissionValueProviderManager permissionValueProviderManager,
-            IPermissionStateManager permissionStateManager)
+            IStateManager<PermissionDefinition> permissionStateManager)
         {
             PrincipalAccessor = principalAccessor;
             PermissionDefinitionManager = permissionDefinitionManager;

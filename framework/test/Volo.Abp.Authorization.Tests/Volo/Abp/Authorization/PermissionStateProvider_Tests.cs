@@ -5,19 +5,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.State;
 using Xunit;
 
 namespace Volo.Abp.Authorization
 {
     public abstract class PermissionStateProvider_Tests : AuthorizationTestBase
     {
-        protected IPermissionStateManager PermissionStateManager { get; }
+        protected IStateManager<PermissionDefinition> PermissionStateManager { get; }
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
         protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
 
         public PermissionStateProvider_Tests()
         {
-            PermissionStateManager = GetRequiredService<IPermissionStateManager>();
+            PermissionStateManager = GetRequiredService<IStateManager<PermissionDefinition>>();
             PermissionDefinitionManager = GetRequiredService<IPermissionDefinitionManager>();
             CurrentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         }
@@ -44,7 +45,10 @@ namespace Volo.Abp.Authorization
     {
         protected override void AfterAddApplication(IServiceCollection services)
         {
-            services.Configure<AbpPermissionOptions>(options => options.GlobalStateProviders.Add<TestGlobalRequireRolePermissionStateProvider>());
+            services.Configure<AbpStateOptions<PermissionDefinition>>(options =>
+            {
+                options.GlobalStateProviders.Add<TestGlobalRequireRolePermissionStateProvider>();
+            });
         }
 
         [Fact]

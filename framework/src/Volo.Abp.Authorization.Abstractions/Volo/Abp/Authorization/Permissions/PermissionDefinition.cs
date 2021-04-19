@@ -3,10 +3,11 @@ using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.State;
 
 namespace Volo.Abp.Authorization.Permissions
 {
-    public class PermissionDefinition
+    public class PermissionDefinition : IHasState<PermissionDefinition>
     {
         /// <summary>
         /// Unique name of the permission.
@@ -31,7 +32,7 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
 
-        public List<IPermissionStateProvider> StateProviders { get; }
+        public List<IStateProvider<PermissionDefinition>> StateProviders { get; }
 
         public ILocalizableString DisplayName
         {
@@ -88,7 +89,7 @@ namespace Volo.Abp.Authorization.Permissions
 
             Properties = new Dictionary<string, object>();
             Providers = new List<string>();
-            StateProviders = new List<IPermissionStateProvider>();
+            StateProviders = new List<IStateProvider<PermissionDefinition>>();
             _children = new List<PermissionDefinition>();
         }
 
