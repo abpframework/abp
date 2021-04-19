@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 
@@ -13,7 +14,7 @@ namespace Volo.Abp.GlobalFeatures
             : this(true, globalFeatureNames)
         {
         }
-        
+
         public RequireGlobalFeaturesPermissionStateProvider(bool requiresAll, params string[] globalFeatureNames)
         {
             Check.NotNullOrEmpty(globalFeatureNames, nameof(globalFeatureNames));
@@ -22,12 +23,20 @@ namespace Volo.Abp.GlobalFeatures
             _globalFeatureNames = globalFeatureNames;
         }
 
+        public RequireGlobalFeaturesPermissionStateProvider(bool requiresAll, params Type[] globalFeatureNames)
+        {
+            Check.NotNullOrEmpty(globalFeatureNames, nameof(globalFeatureNames));
+
+            _requiresAll = requiresAll;
+            _globalFeatureNames = globalFeatureNames.Select(GlobalFeatureNameAttribute.GetName).ToArray();
+        }
+
         public Task<bool> IsEnabledAsync(PermissionStateContext context)
         {
             bool isEnabled = _requiresAll
                 ? _globalFeatureNames.All(x => GlobalFeatureManager.Instance.IsEnabled(x))
                 : _globalFeatureNames.Any(x => GlobalFeatureManager.Instance.IsEnabled(x));
-            
+
             return Task.FromResult(isEnabled);
         }
     }
