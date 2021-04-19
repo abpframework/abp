@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
-export type AppConfigInitErrorFn = (error: any) => void;
+export type AppInitErrorFn = (error: any) => void;
 
-export const APP_CONFIG_INITIALIZATION_ERROR = new InjectionToken<AppConfigInitErrorFn[]>(
-  'APP_CONFIG_INITIALIZATION_ERROR',
+export const APP_INIT_ERROR_HANDLERS = new InjectionToken<AppInitErrorFn[]>(
+  'APP_INIT_ERROR_HANDLERS',
 );

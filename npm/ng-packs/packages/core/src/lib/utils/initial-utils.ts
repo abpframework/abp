@@ -13,7 +13,7 @@ import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
 import { clearOAuthStorage } from '../strategies/auth-flow.strategy';
 import { CORE_OPTIONS } from '../tokens/options.token';
-import { APP_CONFIG_INITIALIZATION_ERROR } from '../tokens/app-config.token';
+import { APP_INIT_ERROR_HANDLERS } from '../tokens/app-config.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
 
@@ -41,9 +41,9 @@ export function getInitialData(injector: Injector) {
           injector.get(SessionStateService).setTenant(currentTenant);
         }),
         catchError(error => {
-          const appConfig = injector.get(APP_CONFIG_INITIALIZATION_ERROR);
-          if (appConfig && appConfig.length) {
-            appConfig.forEach(fn => fn(error));
+          const appInitErrorHandlers = injector.get(APP_INIT_ERROR_HANDLERS);
+          if (appInitErrorHandlers && appInitErrorHandlers.length) {
+            appInitErrorHandlers.forEach(fn => fn(error));
           }
 
           return throwError(error);
