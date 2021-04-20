@@ -43,7 +43,7 @@ export function getInitialData(injector: Injector) {
         catchError(error => {
           const appInitErrorHandlers = injector.get(APP_INIT_ERROR_HANDLERS, null);
           if (appInitErrorHandlers && appInitErrorHandlers.length) {
-            appInitErrorHandlers.forEach(fn => fn(error));
+            appInitErrorHandlers.forEach(func => func(error));
           }
 
           return throwError(error);
