@@ -41,7 +41,7 @@ export function getInitialData(injector: Injector) {
           injector.get(SessionStateService).setTenant(currentTenant);
         }),
         catchError(error => {
-          const appInitErrorHandlers = injector.get(APP_INIT_ERROR_HANDLERS);
+          const appInitErrorHandlers = injector.get(APP_INIT_ERROR_HANDLERS, null);
           if (appInitErrorHandlers && appInitErrorHandlers.length) {
             appInitErrorHandlers.forEach(fn => fn(error));
           }
