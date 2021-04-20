@@ -238,22 +238,54 @@ When you write this code inside your permission definition provider, it finds th
 
 ### Permission depending on a Condition
 
-Permission states can be managed according to a condition such as a Feature, Global Feature, or a custom condition. Any condition which implements `IPermissionStateProvider` can be added via calling `AddStateProvider()` method for **PermissionDefinition**.
+You may want to disable a permission based on a condition. Disabled permissions are not visible on the UI and always returns `prohibited` when you check them
 
-See an example below:
+Permission conditions can be managed according to a condition such as a Feature, Global Feature, or a custom condition. Any condition which implements `IPermissionStateProvider` can be added via calling `AddStateProvider()` method for **PermissionDefinition**.
 
-```csharp
-myGroup.AddPermission("Author_Management")
-    // To depend on Global Feature
-    .AddStateProviders(new RequireGlobalFeaturesPermissionStateProvider("AuthorManagementFeature"));
-	// To depend on Feature
-    .AddStateProviders(new RequireFeaturesPermissionStateProvider("BookStore.AuthorManagement"));
-	// To depend on your custom implementation
-    .AddStateProviders(new MyCustomPermissionStateProvider());
-	
-```
+See examples below:
 
-If condition is not met, permission won't be displayed and all checks for that permission will return `false`. 
+- To depend on a Global Feature
+
+  ```csharp
+  var authorPermission = myGroup.AddPermission("Author_Management");
+  
+  // There are a couple of ways to do:
+  authorPermission.RequireGlobalFeatures("AuthorManagementFeature");
+  authorPermission.RequireGlobalFeatures(typeof(AuthorManagementFeature));
+  authorPermission.AddStateProviders(new RequireGlobalFeaturesPermissionStateProvider("AuthorManagementFeature"));
+  
+  // Even it can be depend on multiple:
+  authorPermission.RequireGlobalFeatures("BookStoreFeature", "AuthorManagementFeature");
+  authorPermission.RequireGlobalFeatures(requiresAll: true, "BookStoreFeature", "AuthorManagementFeature");
+  authorPermission.RequireGlobalFeatures(requiresAll: true, typeof(BookStoreFeature), (AuthorManagementFeature);
+  ```
+
+- To depend on a Feature
+
+  ```csharp
+  var authorPermission = myGroup.AddPermission("Author_Management");
+  
+  // Pre-defined State Provider can be used:
+  authorPermission.AddStateProviders(new RequireFeaturesPermissionStateProvider("BookStore.AuthorManagement"));
+  
+  // Also can be depend on multiple features
+  authorPermission.AddStateProviders(
+      new RequireFeaturesPermissionStateProvider("BookStore.Authors","BookStore.AuthorManagement"));
+  
+  authorPermission.AddStateProviders(
+      new RequireFeaturesPermissionStateProvider(requiresAll: true, "BookStore.Authors","BookStore.AuthorManagement"));
+  ```
+
+- To depend on a Custom Condition
+
+  ```csharp
+  var authorPermission = myGroup.AddPermission("Author_Management");
+  
+  // To depend on your custom condition
+  authorPermission.AddStateProviders(new MyCustomPermissionStateProvider());
+  ```
+
+  Custom condition class have to implement `IPermissionStateProvider`
 
 ## IAuthorizationService
 
