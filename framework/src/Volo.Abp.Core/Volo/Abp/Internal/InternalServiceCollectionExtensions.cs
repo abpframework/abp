@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
-using Volo.Abp.State;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Internal
 {
@@ -41,7 +41,7 @@ namespace Volo.Abp.Internal
 
             services.AddAssemblyOf<IAbpApplication>();
 
-            services.AddTransient(typeof(IStateManager<>), typeof(StateManager<>));
+            services.AddTransient(typeof(ISimpleStateCheckerManager<>), typeof(SimpleStateCheckerManager<>));
 
             services.Configure<AbpModuleLifecycleOptions>(options =>
             {

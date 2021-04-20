@@ -3,13 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.State;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization
 {
-    public class TestGlobalRequireRolePermissionStateProvider : IStateProvider<PermissionDefinition>, ITransientDependency
+    public class TestGlobalRequireRolePermissionSimpleStateChecker : ISimpleStateChecker<PermissionDefinition>, ITransientDependency
     {
-        public Task<bool> IsEnabledAsync(StateCheckContext<PermissionDefinition> context)
+        public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
         {
             var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
             return Task.FromResult(currentPrincipalAccessor.Principal != null && currentPrincipalAccessor.Principal.IsInRole("admin"));

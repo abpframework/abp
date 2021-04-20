@@ -5,16 +5,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.State
+namespace Volo.Abp.SimpleStateChecking
 {
-    public class StateManager<TState> : IStateManager<TState>
-        where TState : IHasState<TState>
+    public class SimpleStateCheckerManager<TState> : ISimpleStateCheckerManager<TState>
+        where TState : IHasSimpleStateCheckers<TState>
     {
         protected IServiceProvider ServiceProvider { get; }
 
-        protected AbpStateOptions<TState> Options { get; }
+        protected AbpSimpleStateCheckerOptions<TState> Options { get; }
 
-        public StateManager(IServiceProvider serviceProvider, IOptions<AbpStateOptions<TState>> options)
+        public SimpleStateCheckerManager(IServiceProvider serviceProvider, IOptions<AbpSimpleStateCheckerOptions<TState>> options)
         {
             ServiceProvider = serviceProvider;
             Options = options.Value;
@@ -24,9 +24,9 @@ namespace Volo.Abp.State
         {
             using (var scope = ServiceProvider.CreateScope())
             {
-                var context = new StateCheckContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);
+                var context = new SimpleStateCheckerContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);
 
-                foreach (var provider in state.StateProviders)
+                foreach (var provider in state.SimpleStateCheckers)
                 {
                     if (!await provider.IsEnabledAsync(context))
                     {
@@ -34,7 +34,7 @@ namespace Volo.Abp.State
                     }
                 }
 
-                foreach (IStateProvider<TState> provider in Options.GlobalStateProviders.Select(x => ServiceProvider.GetRequiredService(x)))
+                foreach (ISimpleStateChecker<TState> provider in Options.GlobalSimpleStateCheckers.Select(x => ServiceProvider.GetRequiredService(x)))
                 {
                     if (!await provider.IsEnabledAsync(context))
                     {

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -16,18 +17,18 @@ namespace Volo.Abp.PermissionManagement
         protected PermissionManagementOptions Options { get; }
         protected IPermissionManager PermissionManager { get; }
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
-        protected IPermissionStateManager PermissionStateManager { get; }
+        protected ISimpleStateCheckerManager<PermissionDefinition> SimpleStateCheckerManager { get; }
 
         public PermissionAppService(
             IPermissionManager permissionManager,
             IPermissionDefinitionManager permissionDefinitionManager,
             IOptions<PermissionManagementOptions> options,
-            IPermissionStateManager permissionStateManager)
+            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager)
         {
             Options = options.Value;
             PermissionManager = permissionManager;
             PermissionDefinitionManager = permissionDefinitionManager;
-            PermissionStateManager = permissionStateManager;
+            SimpleStateCheckerManager = simpleStateCheckerManager;
         }
 
         public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
@@ -58,7 +59,7 @@ namespace Volo.Abp.PermissionManagement
                         continue;
                     }
 
-                    if (!await PermissionStateManager.IsEnabledAsync(permission))
+                    if (!await SimpleStateCheckerManager.IsEnabledAsync(permission))
                     {
                         continue;
                     }

@@ -1,5 +1,5 @@
 ﻿using JetBrains.Annotations;
-using Volo.Abp.State;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -7,12 +7,12 @@ namespace Volo.Abp.Authorization.Permissions
     {
         public static PermissionDefinition AddStateProviders(
             [NotNull] this PermissionDefinition permissionDefinition,
-            [NotNull] params IStateProvider<PermissionDefinition>[] permissionStateProviders)
+            [NotNull] params ISimpleStateChecker<PermissionDefinition>[] permissionStateProviders)
         {
             Check.NotNull(permissionDefinition, nameof(permissionDefinition));
             Check.NotNull(permissionStateProviders, nameof(permissionStateProviders));
 
-            permissionDefinition.StateProviders.AddRange(permissionStateProviders);
+            permissionDefinition.SimpleStateCheckers.AddRange(permissionStateProviders);
 
             return permissionDefinition;
         }
