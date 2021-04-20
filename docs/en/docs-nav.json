@@ -325,6 +325,10 @@
           "path": "Features.md"
         },
         {
+          "text": "Global Features",
+          "path": "Global-Features.md"
+        },
+        {
           "text": "GUID Generation",
           "path": "Guid-Generation.md"
         },
