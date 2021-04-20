@@ -9,42 +9,41 @@ namespace Volo.Abp.DependencyInjection
         IServiceCollection Services { get; }
 
         /// <summary>
-        /// Registers default repositories for this DbContext.
+        /// Registers default repositories for all the entities in this DbContext.
         /// </summary>
         /// <param name="includeAllEntities">
         /// Registers repositories only for aggregate root entities by default.
-        /// set <paramref name="includeAllEntities"/> to true to include all entities.
+        /// Set <paramref name="includeAllEntities"/> to true to include all entities.
         /// </param>
         IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(bool includeAllEntities = false);
 
         /// <summary>
-        /// Registers default repositories for this DbContext.
+        /// Registers default repositories for all the entities in this DbContext.
         /// Default repositories will use given <see cref="TDefaultRepositoryDbContext"/>.
         /// </summary>
         /// <typeparam name="TDefaultRepositoryDbContext">DbContext type that will be used by default repositories</typeparam>
         /// <param name="includeAllEntities">
         /// Registers repositories only for aggregate root entities by default.
-        /// set <see cref="includeAllEntities"/> to true to include all entities.
+        /// Set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
         IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false);
 
         /// <summary>
-        /// Registers default repositories for this DbContext.
+        /// Registers default repositories for all the entities in this DbContext.
         /// Default repositories will use given <see cref="defaultRepositoryDbContextType"/>.
         /// </summary>
         /// <param name="defaultRepositoryDbContextType">DbContext type that will be used by default repositories</param>
         /// <param name="includeAllEntities">
         /// Registers repositories only for aggregate root entities by default.
-        /// set <see cref="includeAllEntities"/> to true to include all entities.
+        /// Set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
         IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(Type defaultRepositoryDbContextType, bool includeAllEntities = false);
 
         /// <summary>
-        /// Registers custom repository for a specific entity.
+        /// Registers default repository for a specific entity.
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
         IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository<TEntity>();
-
 
         /// <summary>
         /// Registers default repository for a specific entity.

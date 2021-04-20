@@ -77,17 +77,25 @@ namespace Volo.Abp.Cli.Bundling
                     BundleName = bundleConfig.Name.IsNullOrEmpty() ? "global" : bundleConfig.Name,
                     Minify = bundleConfig.Mode == BundlingMode.BundleAndMinify
                 };
-
+                
+                Logger.LogInformation("Generating style bundle...");
                 styleDefinitions = StyleBundler.Bundle(options, styleContext);
+                Logger.LogInformation($"Style bundle has been generated successfully.");
+                
+                Logger.LogInformation("Generating script bundle...");
                 scriptDefinitions = ScriptBundler.Bundle(options, scriptContext);
+                Logger.LogInformation($"Script bundle has been generated successfully.");
             }
             else
             {
+                Logger.LogInformation("Generating style references...");
                 styleDefinitions = GenerateStyleDefinitions(styleContext);
+                Logger.LogInformation("Generating script references...");
                 scriptDefinitions = GenerateScriptDefinitions(scriptContext);
             }
-
+            
             await UpdateDependenciesInHtmlFileAsync(directory, styleDefinitions, scriptDefinitions);
+            Logger.LogInformation("Script and style references in the index.html file have been updated.");
         }
 
         private BundleContext GetScriptContext(List<BundleTypeDefinition> bundleDefinitions,

@@ -13,41 +13,48 @@ namespace Volo.CmsKit.Permissions
         {
             var cmsGroup = context.GetGroupOrNull(CmsKitAdminPermissions.GroupName) ?? context.AddGroup(CmsKitAdminPermissions.GroupName, L("Permission:CmsKit"));
 
-            if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
-            {
-                var contentGroup = cmsGroup.AddPermission(CmsKitAdminPermissions.Comments.Default, L("Permission:Comments"));
-                contentGroup.AddChild(CmsKitAdminPermissions.Comments.Delete, L("Permission:Comments.Delete"));
-            }
-            
-            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
-            {
-                var tagGroup = cmsGroup.AddPermission(CmsKitAdminPermissions.Tags.Default, L("Permission:TagManagement"));
-                tagGroup.AddChild(CmsKitAdminPermissions.Tags.Create, L("Permission:TagManagement.Create"));
-                tagGroup.AddChild(CmsKitAdminPermissions.Tags.Update, L("Permission:TagManagement.Update"));
-                tagGroup.AddChild(CmsKitAdminPermissions.Tags.Delete, L("Permission:TagManagement.Delete"));
-            }
+            var contentGroup = cmsGroup.AddPermission(CmsKitAdminPermissions.Comments.Default, L("Permission:Comments"))
+                .RequireGlobalFeatures(typeof(CommentsFeature));
+            contentGroup.AddChild(CmsKitAdminPermissions.Comments.Delete, L("Permission:Comments.Delete"))
+                .RequireGlobalFeatures(typeof(CommentsFeature));
 
-            if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
-            {
-                var pageManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.Pages.Default, L("Permission:PageManagement"));
-                pageManagement.AddChild(CmsKitAdminPermissions.Pages.Create, L("Permission:PageManagement:Create"));
-                pageManagement.AddChild(CmsKitAdminPermissions.Pages.Update, L("Permission:PageManagement:Update"));
-                pageManagement.AddChild(CmsKitAdminPermissions.Pages.Delete, L("Permission:PageManagement:Delete"));
-            }
+            var tagGroup = cmsGroup.AddPermission(CmsKitAdminPermissions.Tags.Default, L("Permission:TagManagement"))
+                .RequireGlobalFeatures(typeof(TagsFeature));
+            tagGroup.AddChild(CmsKitAdminPermissions.Tags.Create, L("Permission:TagManagement.Create"))
+                .RequireGlobalFeatures(typeof(TagsFeature));
+            tagGroup.AddChild(CmsKitAdminPermissions.Tags.Update, L("Permission:TagManagement.Update"))
+                .RequireGlobalFeatures(typeof(TagsFeature));
+            tagGroup.AddChild(CmsKitAdminPermissions.Tags.Delete, L("Permission:TagManagement.Delete"))
+                .RequireGlobalFeatures(typeof(TagsFeature));
 
-            if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
-            {
-                var blogManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.Blogs.Default, L("Permission:BlogManagement"));
-                blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Create, L("Permission:BlogManagement.Create"));
-                blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Update, L("Permission:BlogManagement.Update"));
-                blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Delete, L("Permission:BlogManagement.Delete"));
-                blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Features, L("Permission:BlogManagement.Features"));
+            var pageManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.Pages.Default, L("Permission:PageManagement"))
+                .RequireGlobalFeatures(typeof(PagesFeature));
+            pageManagement.AddChild(CmsKitAdminPermissions.Pages.Create, L("Permission:PageManagement:Create"))
+                .RequireGlobalFeatures(typeof(PagesFeature));
+            pageManagement.AddChild(CmsKitAdminPermissions.Pages.Update, L("Permission:PageManagement:Update"))
+                .RequireGlobalFeatures(typeof(PagesFeature));
+            pageManagement.AddChild(CmsKitAdminPermissions.Pages.Delete, L("Permission:PageManagement:Delete"))
+                .RequireGlobalFeatures(typeof(PagesFeature));
 
-                var blogPostManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.BlogPosts.Default, L("Permission:BlogPostManagement"));
-                blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Create, L("Permission:BlogPostManagement.Create"));
-                blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Update, L("Permission:BlogPostManagement.Update"));
-                blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Delete, L("Permission:BlogPostManagement.Delete"));
-            }
+            var blogManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.Blogs.Default, L("Permission:BlogManagement"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
+            blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Create, L("Permission:BlogManagement.Create"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
+            blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Update, L("Permission:BlogManagement.Update"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
+            blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Delete, L("Permission:BlogManagement.Delete"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
+            blogManagement.AddChild(CmsKitAdminPermissions.Blogs.Features, L("Permission:BlogManagement.Features"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
+
+            var blogPostManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.BlogPosts.Default, L("Permission:BlogPostManagement"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
+            blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Create, L("Permission:BlogPostManagement.Create"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
+            blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Update, L("Permission:BlogPostManagement.Update"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
+            blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Delete, L("Permission:BlogPostManagement.Delete"))
+                .RequireGlobalFeatures(typeof(BlogsFeature));
         }
 
         private static LocalizableString L(string name)
