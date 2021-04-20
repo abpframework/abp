@@ -405,17 +405,14 @@ public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipa
     public async Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
         var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
-        if (identity != null)
+        var userId = identity?.FindUserId();
+        if (userId.HasValue)
         {
-            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
-            if (currentUser.Id.HasValue)
+            var userService = context.ServiceProvider.GetRequiredService<IUserService>(); //Your custom service
+            var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(userId.Value);
+            if (socialSecurityNumber != null)
             {
-                var userService = context.ServiceProvider.GetRequiredService<IUserService>(); //Your custom service
-                var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(currentUser.Id.Value);
-                if (userService != null)
-                {
-                    identity.AddOrReplace(new Claim("SocialSecurityNumber", userService));
-                }
+                identity.AddOrReplace(new Claim("SocialSecurityNumber", socialSecurityNumber));
             }
         }
     }
