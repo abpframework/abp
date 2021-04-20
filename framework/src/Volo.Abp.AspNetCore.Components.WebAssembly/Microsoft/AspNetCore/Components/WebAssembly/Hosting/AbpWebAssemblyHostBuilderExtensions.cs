@@ -48,17 +48,12 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             Check.NotNull(application, nameof(application));
             Check.NotNull(serviceProvider, nameof(serviceProvider));
 
-            var serviceProviderAccessor = (ComponentsClientScopeServiceProviderAccessor)
-                serviceProvider.GetRequiredService<IClientScopeServiceProviderAccessor>();
-            serviceProviderAccessor.ServiceProvider = serviceProvider;
+            ((ComponentsClientScopeServiceProviderAccessor) serviceProvider
+                .GetRequiredService<IClientScopeServiceProviderAccessor>()).ServiceProvider = serviceProvider;
 
             application.Initialize(serviceProvider);
-
-            using (var scope = serviceProvider.CreateScope())
-            {
-                await InitializeModulesAsync(scope.ServiceProvider);
-                await SetCurrentLanguageAsync(scope);
-            }
+            await InitializeModulesAsync(serviceProvider);
+            await SetCurrentLanguageAsync(serviceProvider);
         }
 
         private static async Task InitializeModulesAsync(IServiceProvider serviceProvider)
@@ -69,11 +64,11 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             }
         }
 
-        private static async Task SetCurrentLanguageAsync(IServiceScope scope)
+        private static async Task SetCurrentLanguageAsync(IServiceProvider serviceProvider)
         {
-            var configurationClient = scope.ServiceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
-            var utilsService = scope.ServiceProvider.GetRequiredService<IAbpUtilsService>();
-            var configuration = configurationClient.Get();
+            var configurationClient = serviceProvider.GetRequiredService<ICachedApplicationConfigurationClient>();
+            var utilsService = serviceProvider.GetRequiredService<IAbpUtilsService>();
+            var configuration = await configurationClient.GetAsync();
             var cultureName = configuration.Localization?.CurrentCulture?.CultureName;
             if (!cultureName.IsNullOrEmpty())
             {
