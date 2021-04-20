@@ -28,7 +28,7 @@ export function registerLocale(
     return new Promise((resolve, reject) => {
       return import(
         /* webpackChunkName: "_locale-[request]"*/
-        /* webpackInclude: /[/\\](ar|cs|en|en-GB|fr|pt|tr|ru|hu|sl|zh-Hans|zh-Hant).js/ */
+        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fr|pt|tr|ru|hu|sl|zh-Hans|zh-Hant).js/ */
         /* webpackExclude: /[/\\]global|extra/ */
         `@angular/common/locales/${localeMap[locale] || locale}.js`
       )
