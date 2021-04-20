@@ -2,14 +2,21 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AuthConfig, OAuthInfoEvent, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
+import {
+  AuthConfig,
+  OAuthErrorEvent,
+  OAuthInfoEvent,
+  OAuthService,
+  OAuthStorage,
+} from 'angular-oauth2-oidc';
 import { from, Observable, of } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
-import { SessionStateService } from '../services/session-state.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
+import { SessionStateService } from '../services/session-state.service';
+import { noop } from '../utils/common-utils';
 
 export interface LoginParams {
   username: string;
@@ -28,6 +35,8 @@ export abstract class AuthFlowStrategy {
   protected configState: ConfigStateService;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
+  protected appConfigService: AbpApplicationConfigurationService;
+
   abstract checkIfInternalAuth(): boolean;
   abstract navigateToLogin(queryParams?: Params): void;
   abstract logout(): Observable<any>;
@@ -40,7 +49,10 @@ export abstract class AuthFlowStrategy {
     this.environment = injector.get(EnvironmentService);
     this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService);
+    this.appConfigService = injector.get(AbpApplicationConfigurationService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
+
+    this.listenToOauthErrors();
   }
 
   async init(): Promise<any> {
@@ -66,6 +78,18 @@ export abstract class AuthFlowStrategy {
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => clearOAuthStorage());
   }
+
+  protected listenToOauthErrors() {
+    this.oAuthService.events
+      .pipe(
+        filter(event => event instanceof OAuthErrorEvent),
+        tap(() => clearOAuthStorage()),
+        switchMap(() => this.appConfigService.get()),
+      )
+      .subscribe(res => {
+        this.configState.setState(res);
+      });
+  }
 }
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
@@ -74,7 +98,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   async init() {
     return super
       .init()
-      .then(() => this.oAuthService.tryLogin())
+      .then(() => this.oAuthService.tryLogin().catch(noop))
       .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
 
@@ -101,7 +125,6 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = true;
   private cookieKey = 'rememberMe';
   private storageKey = 'passwordFlow';
-  private appConfigService = this.injector.get(AbpApplicationConfigurationService);
 
   private listenToTokenExpiration() {
     this.oAuthService.events

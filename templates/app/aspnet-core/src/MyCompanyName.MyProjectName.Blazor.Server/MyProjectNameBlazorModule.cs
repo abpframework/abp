@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Blazor.Server.Menus;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
@@ -86,6 +87,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureLocalizationServices();
+            ConfigureSwaggerServices(context.Services);
             ConfigureAutoApiControllers();
             ConfigureHttpClient(context);
             ConfigureBlazorise(context);
@@ -187,6 +189,18 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             });
         }
 
+        private void ConfigureSwaggerServices(IServiceCollection services)
+        {
+            services.AddSwaggerGen(
+                options =>
+                {
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
+                    options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
+                }
+            );
+        }
+
         private static void ConfigureHttpClient(ServiceConfigurationContext context)
         {
             context.Services.AddTransient(sp => new HttpClient
@@ -266,6 +280,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseAbpSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+            });
             app.UseConfiguredEndpoints();
         }
     }
