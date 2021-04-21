@@ -23,8 +23,10 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var file = File.ReadAllText(path);
 
-            var namespaces = moduleConfiguration.Split(", ").Select(GetNamespace);
-            var configurationLines = moduleConfiguration.Split(", ").Select(GetLineToAdd);
+            var parsedModuleConfiguration = moduleConfiguration.Split(", ");
+
+            var namespaces = parsedModuleConfiguration.Select(GetNamespace);
+            var configurationLines = parsedModuleConfiguration.Select(GetLineToAdd);
 
             var indexToInsert = FindIndexToInsert(file);
 
