@@ -45,7 +45,7 @@ namespace Volo.Abp.UI.Navigation.Urls
 
         protected virtual async Task<string> GetConfiguredUrl(string appName, string urlName)
         {
-            var url = await GetUrlOrDefaultAsync(appName, urlName);
+            var url = await GetUrlOrNullAsync(appName, urlName);
             if (!url.IsNullOrEmpty())
             {
                 return url;
@@ -108,7 +108,7 @@ namespace Volo.Abp.UI.Navigation.Urls
             return CurrentTenant.Name;
         }
 
-        public Task<string> GetUrlOrDefaultAsync([NotNull] string appName, [CanBeNull] string urlName = null)
+        public Task<string> GetUrlOrNullAsync([NotNull] string appName, [CanBeNull] string urlName = null)
         {
             var app = Options.Applications[appName];
 
