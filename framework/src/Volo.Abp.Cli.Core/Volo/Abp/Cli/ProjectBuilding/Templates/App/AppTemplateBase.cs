@@ -169,7 +169,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new ChangePublicAuthPortStep());
             }
 
-            if (!context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit") && IsCmsKitSupportedForTargetVersion(context))
+            if (context.BuildArgs.PublicWebSite && !context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit") && IsCmsKitSupportedForTargetVersion(context))
             {
                 context.Symbols.Add("CMS-KIT");
             }
