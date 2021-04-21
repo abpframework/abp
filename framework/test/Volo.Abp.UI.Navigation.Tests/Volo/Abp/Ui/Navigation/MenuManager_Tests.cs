@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Testing;
 using Xunit;
@@ -73,8 +74,8 @@ namespace Volo.Abp.UI.Navigation
 
                 var administration = context.Menu.GetAdministration();
 
-                administration.AddItem(new ApplicationMenuItem("Administration.UserManagement", "User Management", url: "/admin/users", requiredPermissionName: "Administration.UserManagement"));
-                administration.AddItem(new ApplicationMenuItem("Administration.RoleManagement", "Role Management", url: "/admin/roles", requiredPermissionName: "Administration.RoleManagement"));
+                administration.AddItem(new ApplicationMenuItem("Administration.UserManagement", "User Management", url: "/admin/users").RequirePermissions("Administration.UserManagement"));
+                administration.AddItem(new ApplicationMenuItem("Administration.RoleManagement", "Role Management", url: "/admin/roles").RequirePermissions("Administration.RoleManagement"));
 
                 return Task.CompletedTask;
             }
@@ -94,16 +95,16 @@ namespace Volo.Abp.UI.Navigation
                     return Task.CompletedTask;
                 }
 
-                context.Menu.Items.Insert(0, new ApplicationMenuItem("Dashboard", "Dashboard", url: "/dashboard", requiredPermissionName: "Dashboard"));
+                context.Menu.Items.Insert(0, new ApplicationMenuItem("Dashboard", "Dashboard", url: "/dashboard").RequirePermissions("Dashboard"));
 
                 var administration = context.Menu.GetAdministration();
 
-                administration.AddItem(new ApplicationMenuItem("Administration.DashboardSettings", "Dashboard Settings", url: "/admin/settings/dashboard", requiredPermissionName: "Administration.DashboardSettings"));
+                administration.AddItem(new ApplicationMenuItem("Administration.DashboardSettings", "Dashboard Settings", url: "/admin/settings/dashboard").RequirePermissions("Administration.DashboardSettings"));
 
                 administration.AddItem(
                     new ApplicationMenuItem("Administration.SubMenu1", "Sub menu 1", url: "/submenu1")
-                        .AddItem(new ApplicationMenuItem("Administration.SubMenu1.1", "Sub menu 1.1", url: "/submenu1/submenu1_1", requiredPermissionName: "Administration.SubMenu1.1"))
-                        .AddItem(new ApplicationMenuItem("Administration.SubMenu1.2", "Sub menu 1.2", url: "/submenu1/submenu1_2", requiredPermissionName: "Administration.SubMenu1.2"))
+                        .AddItem(new ApplicationMenuItem("Administration.SubMenu1.1", "Sub menu 1.1", url: "/submenu1/submenu1_1").RequirePermissions("Administration.SubMenu1.1"))
+                        .AddItem(new ApplicationMenuItem("Administration.SubMenu1.2", "Sub menu 1.2", url: "/submenu1/submenu1_2").RequirePermissions("Administration.SubMenu1.2"))
                 );
 
                 return Task.CompletedTask;
