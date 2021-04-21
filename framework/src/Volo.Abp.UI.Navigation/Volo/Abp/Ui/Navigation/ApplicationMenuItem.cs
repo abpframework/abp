@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.UI.Navigation
@@ -74,7 +73,7 @@ namespace Volo.Abp.UI.Navigation
         public ApplicationMenuItemList Items { get; }
 
         [CanBeNull]
-        [Obsolete("Use SimpleStateCheckers")]
+        [Obsolete("Use RequirePermissions extension method.")]
         public string RequiredPermissionName { get; set; }
 
         public List<ISimpleStateChecker<ApplicationMenuItem>> SimpleStateCheckers { get; }

@@ -61,17 +61,20 @@ namespace Volo.Abp.UI.Navigation
 
             var checkPermissionsMenuItems = allMenuItems.Where(x => x.SimpleStateCheckers.Any()).ToArray();
 
-            var toBeDeleted = new HashSet<ApplicationMenuItem>();
-            var result =  await SimpleStateCheckerManager.IsEnabledAsync(checkPermissionsMenuItems);
-            foreach (var menu in checkPermissionsMenuItems)
+            if (checkPermissionsMenuItems.Any())
             {
-                if (!result[menu])
+                var toBeDeleted = new HashSet<ApplicationMenuItem>();
+                var result =  await SimpleStateCheckerManager.IsEnabledAsync(checkPermissionsMenuItems);
+                foreach (var menu in checkPermissionsMenuItems)
                 {
-                    toBeDeleted.Add(menu);
+                    if (!result[menu])
+                    {
+                        toBeDeleted.Add(menu);
+                    }
                 }
-            }
 
-            RemoveMenus(menuWithItems, toBeDeleted);
+                RemoveMenus(menuWithItems, toBeDeleted);
+            }
         }
 
         protected virtual void GetAllMenuItems(IHasMenuItems menuWithItems, List<ApplicationMenuItem> output)
