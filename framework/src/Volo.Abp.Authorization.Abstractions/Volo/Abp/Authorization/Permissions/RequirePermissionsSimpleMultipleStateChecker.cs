@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +6,7 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions
 {
-    public class RequirePermissionsSimpleMultipleStateChecker<TState> : ISimpleMultipleStateChecker<TState>
+    public class RequirePermissionsSimpleMultipleStateChecker<TState> : SimpleMultipleStateCheckerBase<TState>
         where TState : IHasSimpleStateCheckers<TState>
     {
         public static readonly RequirePermissionsSimpleMultipleStateChecker<TState> Instance = new RequirePermissionsSimpleMultipleStateChecker<TState>();
@@ -27,7 +26,7 @@ namespace Volo.Abp.Authorization.Permissions
             return this;
         }
 
-        public virtual async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleMultipleStateCheckerContext<TState> context)
+        public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleMultipleStateCheckerContext<TState> context)
         {
             var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
 

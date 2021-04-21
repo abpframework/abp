@@ -5,7 +5,7 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.GlobalFeatures
 {
-    public class RequireGlobalFeaturesSimpleStateChecker<TState> : ISimpleSingleStateChecker<TState>
+    public class RequireGlobalFeaturesSimpleStateChecker<TState> : ISimpleStateChecker<TState>
         where TState : IHasSimpleStateCheckers<TState>
     {
         private readonly string[] _globalFeatureNames;
@@ -32,7 +32,7 @@ namespace Volo.Abp.GlobalFeatures
             _globalFeatureNames = globalFeatureNames.Select(GlobalFeatureNameAttribute.GetName).ToArray();
         }
 
-        public Task<bool> IsEnabledAsync(SimpleSingleStateCheckerContext<TState> context)
+        public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<TState> context)
         {
             var isEnabled = _requiresAll
                 ? _globalFeatureNames.All(x => GlobalFeatureManager.Instance.IsEnabled(x))

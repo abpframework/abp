@@ -1,31 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.SimpleStateChecking
 {
-    public class SimpleStateChecker_Tests : AbpIntegratedTest<AbpTestModule>
+    public class SimpleStateChecker_Tests : SimpleStateCheckerTestBase
     {
-        private readonly ISimpleStateCheckerManager<MyStateEntity> _simpleStateCheckerManager;
-
-        public SimpleStateChecker_Tests()
-        {
-            _simpleStateCheckerManager = GetRequiredService<ISimpleStateCheckerManager<MyStateEntity>>();
-        }
-
         protected override void AfterAddApplication(IServiceCollection services)
         {
             services.Configure<AbpSimpleStateCheckerOptions<MyStateEntity>>(options =>
             {
-                options.GlobalSimpleStateCheckers.Add<MyGlobalSimpleSingleStateChecker>();
+                options.GlobalSimpleStateCheckers.Add<MyGlobalSimpleStateChecker>();
                 options.GlobalSimpleStateCheckers.Add<MyGlobalSimpleMultipleStateChecker>();
             });
+
+            base.AfterAddApplication(services);
         }
 
         [Fact]
@@ -36,13 +28,13 @@ namespace Volo.Abp.SimpleStateChecking
                 CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture),
                 LastModificationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
             };
-            myStateEntity.AddSimpleStateChecker(new MySimpleSingleStateChecker());
+            myStateEntity.AddSimpleStateChecker(new MySimpleStateChecker());
 
-            (await _simpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
 
             myStateEntity.CreationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
 
-            (await _simpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
         }
 
         [Fact]
@@ -53,11 +45,11 @@ namespace Volo.Abp.SimpleStateChecking
                 CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
             };
 
-            (await _simpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
 
             myStateEntity.LastModificationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
 
-            (await _simpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
         }
 
         [Fact]
@@ -85,14 +77,14 @@ namespace Volo.Abp.SimpleStateChecking
                 myStateEntity.AddSimpleStateChecker(checker);
             }
 
-            //(await _simpleStateCheckerManager.IsEnabledAsync(myStateEntities)).ShouldAllBe(x => x.Value);
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities)).ShouldAllBe(x => x.Value);
 
             foreach (var myStateEntity in myStateEntities)
             {
                 myStateEntity.CreationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
             }
 
-            (await _simpleStateCheckerManager.IsEnabledAsync(myStateEntities)).ShouldAllBe(x => !x.Value);
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities)).ShouldAllBe(x => !x.Value);
         }
 
         [Fact]
@@ -103,77 +95,11 @@ namespace Volo.Abp.SimpleStateChecking
                 CreationTime = DateTime.Parse("2021-01-01", CultureInfo.InvariantCulture)
             };
 
-            (await _simpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeFalse();
 
             myStateEntity.LastModificationTime = DateTime.Parse("2001-01-01", CultureInfo.InvariantCulture);
 
-            (await _simpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
-        }
-    }
-
-    public class MyStateEntity : IHasSimpleStateCheckers<MyStateEntity>
-    {
-        public DateTime CreationTime { get; set; }
-
-        public DateTime? LastModificationTime { get; set; }
-
-        public List<ISimpleStateChecker<MyStateEntity>> SimpleStateCheckers { get; }
-
-        public MyStateEntity()
-        {
-            SimpleStateCheckers = new List<ISimpleStateChecker<MyStateEntity>>();
-        }
-
-        public MyStateEntity AddSimpleStateChecker(ISimpleStateChecker<MyStateEntity> checker)
-        {
-            SimpleStateCheckers.Add(checker);
-            return this;
-        }
-    }
-
-    public class MySimpleSingleStateChecker : ISimpleSingleStateChecker<MyStateEntity>
-    {
-        public Task<bool> IsEnabledAsync(SimpleSingleStateCheckerContext<MyStateEntity> context)
-        {
-            return Task.FromResult(context.State.CreationTime > DateTime.Parse("2020-01-01", CultureInfo.InvariantCulture));
-        }
-    }
-
-    public class MyGlobalSimpleSingleStateChecker : ISimpleSingleStateChecker<MyStateEntity>, ITransientDependency
-    {
-        public Task<bool> IsEnabledAsync(SimpleSingleStateCheckerContext<MyStateEntity> context)
-        {
-            return Task.FromResult(context.State.LastModificationTime.HasValue);
-        }
-    }
-
-    public class MySimpleMultipleStateChecker : ISimpleMultipleStateChecker<MyStateEntity>
-    {
-        public Task<SimpleStateCheckerResult<MyStateEntity>> IsEnabledAsync(SimpleMultipleStateCheckerContext<MyStateEntity> context)
-        {
-            var result = new SimpleStateCheckerResult<MyStateEntity>(context.States);
-
-            foreach (var x in result)
-            {
-                result[x.Key] = x.Key.CreationTime > DateTime.Parse("2020-01-01", CultureInfo.InvariantCulture);
-            }
-
-            return Task.FromResult(result);
-        }
-    }
-
-    public class MyGlobalSimpleMultipleStateChecker : ISimpleMultipleStateChecker<MyStateEntity>, ITransientDependency
-    {
-        public Task<SimpleStateCheckerResult<MyStateEntity>> IsEnabledAsync(SimpleMultipleStateCheckerContext<MyStateEntity> context)
-        {
-            var result = new SimpleStateCheckerResult<MyStateEntity>(context.States);
-
-            foreach (var x in result)
-            {
-                result[x.Key] = x.Key.LastModificationTime.HasValue;
-            }
-
-            return Task.FromResult(result);
+            (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntity)).ShouldBeTrue();
         }
     }
 }

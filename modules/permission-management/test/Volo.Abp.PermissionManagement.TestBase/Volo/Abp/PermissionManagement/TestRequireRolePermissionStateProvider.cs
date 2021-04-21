@@ -8,7 +8,7 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement
 {
-    public class TestRequireRolePermissionStateProvider : ISimpleSingleStateChecker<PermissionDefinition>
+    public class TestRequireRolePermissionStateProvider : ISimpleStateChecker<PermissionDefinition>
     {
         private readonly List<string> _allowRoles = new List<string>();
 
@@ -17,7 +17,7 @@ namespace Volo.Abp.PermissionManagement
             _allowRoles.AddRange(roles);
         }
 
-        public Task<bool> IsEnabledAsync(SimpleSingleStateCheckerContext<PermissionDefinition> context)
+        public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
         {
             var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
             return Task.FromResult(currentPrincipalAccessor.Principal != null && _allowRoles.Any(role => currentPrincipalAccessor.Principal.IsInRole(role)));

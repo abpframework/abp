@@ -7,9 +7,9 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization
 {
-    public class TestRequireEditionPermissionSimpleStateChecker : ISimpleSingleStateChecker<PermissionDefinition>
+    public class TestRequireEditionPermissionSimpleStateChecker : ISimpleStateChecker<PermissionDefinition>
     {
-        public Task<bool> IsEnabledAsync(SimpleSingleStateCheckerContext<PermissionDefinition> context)
+        public Task<bool> IsEnabledAsync(SimpleStateCheckerContext<PermissionDefinition> context)
         {
             var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
             return Task.FromResult(currentPrincipalAccessor.Principal?.FindEditionId() != null);
