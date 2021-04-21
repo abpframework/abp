@@ -8,8 +8,6 @@ import { LocalizationService } from '../services/localization.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { CONFIG_STATE_DATA } from './config-state.service.spec';
 
-const shouldReuseRoute = () => true;
-
 describe('LocalizationService', () => {
   let spectator: SpectatorService<LocalizationService>;
   let sessionState: SpyObject<SessionStateService>;
@@ -37,8 +35,6 @@ describe('LocalizationService', () => {
     spectator = createService();
     sessionState = spectator.inject(SessionStateService);
     configState = spectator.inject(ConfigStateService);
-    router = spectator.inject(Router);
-    router.routeReuseStrategy = { shouldReuseRoute } as any;
     service = spectator.service;
 
     configState.setState(CONFIG_STATE_DATA);
@@ -72,23 +68,11 @@ describe('LocalizationService', () => {
   });
 
   describe('#registerLocale', () => {
-    it('should return registerLocale and then call setRouteReuse', () => {
-      router.navigateByUrl.andCallFake(url => {
-        return new Promise(resolve => resolve({ catch: () => null }));
-      });
-
-      service.registerLocale('tr');
-
-      expect(router.navigated).toBe(false);
-      expect(router.routeReuseStrategy.shouldReuseRoute).not.toEqual(shouldReuseRoute);
-    });
-
     it('should throw an error message when service have an otherInstance', async () => {
       try {
         const instance = new LocalizationService(
           sessionState,
           spectator.inject(Injector),
-          null,
           null,
           null,
           {} as any,
