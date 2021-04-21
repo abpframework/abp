@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Docs.Localization;
 
 namespace Volo.Docs.Admin.Navigation
@@ -27,8 +28,8 @@ namespace Volo.Docs.Admin.Navigation
 
             administrationMenu.AddItem(rootMenuItem);
 
-            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects", requiredPermissionName: DocsAdminPermissions.Projects.Default));
-            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Documents, l["Menu:DocumentManagement"], "~/Docs/Admin/Documents", requiredPermissionName: DocsAdminPermissions.Documents.Default));
+            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects").RequirePermissions(DocsAdminPermissions.Projects.Default));
+            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Documents, l["Menu:DocumentManagement"], "~/Docs/Admin/Documents").RequirePermissions(DocsAdminPermissions.Documents.Default));
 
             return Task.CompletedTask;
         }

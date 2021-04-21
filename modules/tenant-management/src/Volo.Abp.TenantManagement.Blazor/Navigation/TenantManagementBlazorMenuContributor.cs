@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.TenantManagement.Localization;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Authorization.Permissions;
 
 namespace Volo.Abp.TenantManagement.Blazor.Navigation
 {
@@ -27,9 +28,8 @@ namespace Volo.Abp.TenantManagement.Blazor.Navigation
             tenantManagementMenuItem.AddItem(new ApplicationMenuItem(
                 TenantManagementMenuNames.Tenants,
                 l["Tenants"],
-                url: "~/tenant-management/tenants",
-                requiredPermissionName: TenantManagementPermissions.Tenants.Default
-            ));
+                url: "~/tenant-management/tenants"
+            ).RequirePermissions(TenantManagementPermissions.Tenants.Default));
 
             return Task.CompletedTask;
         }
