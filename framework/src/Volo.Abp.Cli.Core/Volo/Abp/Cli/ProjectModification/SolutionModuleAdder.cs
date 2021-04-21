@@ -135,24 +135,25 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
         {
-            module.NugetPackages.RemoveAll(np => IsPackageInCompatible(np, version));
+            module.NugetPackages.RemoveAll(np => IsPackageInCompatible(np.MinVersion, np.MaxVersion, version));
+            module.NpmPackages.RemoveAll(np => IsPackageInCompatible(np.MinVersion, np.MaxVersion, version));
             return module;
         }
 
-        private bool IsPackageInCompatible(NugetPackageInfo package, string version)
+        private bool IsPackageInCompatible(string minVersion, string maxVersion, string version)
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(package.MinVersion))
+                if (!string.IsNullOrWhiteSpace(minVersion))
                 {
-                    if (SemanticVersion.Parse(package.MinVersion) > SemanticVersion.Parse(version))
+                    if (SemanticVersion.Parse(minVersion) > SemanticVersion.Parse(version))
                     {
                         return true;
                     }
                 }
-                if (!string.IsNullOrWhiteSpace(package.MaxVersion))
+                if (!string.IsNullOrWhiteSpace(maxVersion))
                 {
-                    if (SemanticVersion.Parse(package.MaxVersion) < SemanticVersion.Parse(version))
+                    if (SemanticVersion.Parse(maxVersion) < SemanticVersion.Parse(version))
                     {
                         return true;
                     }
