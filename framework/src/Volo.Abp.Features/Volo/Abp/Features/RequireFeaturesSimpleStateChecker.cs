@@ -4,7 +4,7 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Features
 {
-    public class RequireFeaturesSimpleStateChecker<TState> : ISimpleStateChecker<TState>
+    public class RequireFeaturesSimpleStateChecker<TState> : ISimpleSingleStateChecker<TState>
         where TState : IHasSimpleStateCheckers<TState>
     {
         private readonly string[] _featureNames;
@@ -23,7 +23,7 @@ namespace Volo.Abp.Features
             _featureNames = featureNames;
         }
 
-        public async Task<bool> IsEnabledAsync(SimpleStateCheckerContext<TState> context)
+        public async Task<bool> IsEnabledAsync(SimpleSingleStateCheckerContext<TState> context)
         {
             var feature = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
             return await feature.IsEnabledAsync(_requiresAll, _featureNames);

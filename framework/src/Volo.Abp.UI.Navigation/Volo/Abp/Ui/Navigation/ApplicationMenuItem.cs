@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.UI.Navigation
 {
-    public class ApplicationMenuItem : IHasMenuItems
+    public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<ApplicationMenuItem>
     {
         private string _displayName;
 
@@ -72,7 +74,10 @@ namespace Volo.Abp.UI.Navigation
         public ApplicationMenuItemList Items { get; }
 
         [CanBeNull]
+        [Obsolete("Use SimpleStateCheckers")]
         public string RequiredPermissionName { get; set; }
+
+        public List<ISimpleStateChecker<ApplicationMenuItem>> SimpleStateCheckers { get; }
 
         /// <summary>
         /// Can be used to store a custom object related to this menu item. Optional.
@@ -114,7 +119,7 @@ namespace Volo.Abp.UI.Navigation
             ElementId = elementId ?? GetDefaultElementId();
             CssClass = cssClass;
             RequiredPermissionName = requiredPermissionName;
-
+            SimpleStateCheckers = new List<ISimpleStateChecker<ApplicationMenuItem>>();
             Items = new ApplicationMenuItemList();
         }
 

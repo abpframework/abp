@@ -22,11 +22,19 @@ namespace Volo.Abp.SimpleStateChecking
 
         public virtual async Task<bool> IsEnabledAsync(TState state)
         {
+            if (!state.SimpleStateCheckers.Any(x => x is ISimpleSingleStateChecker<TState>) &&
+                !Options.GlobalSimpleStateCheckers.Any(x => typeof(ISimpleSingleStateChecker<TState>).IsAssignableFrom(x)))
+            {
+                return true;
+            }
+
             using (var scope = ServiceProvider.CreateScope())
             {
-                var context = new SimpleStateCheckerContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);
+                var context = new SimpleSingleStateCheckerContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);
 
-                foreach (var provider in state.SimpleStateCheckers)
+                foreach (var provider in state.SimpleStateCheckers
+                    .Where(x => x is ISimpleSingleStateChecker<TState>)
+                    .Cast<ISimpleSingleStateChecker<TState>>())
                 {
                     if (!await provider.IsEnabledAsync(context))
                     {
@@ -34,7 +42,9 @@ namespace Volo.Abp.SimpleStateChecking
                     }
                 }
 
-                foreach (ISimpleStateChecker<TState> provider in Options.GlobalSimpleStateCheckers.Select(x => ServiceProvider.GetRequiredService(x)))
+                foreach (ISimpleSingleStateChecker<TState> provider in Options.GlobalSimpleStateCheckers
+                    .Where(x => typeof(ISimpleSingleStateChecker<TState>).IsAssignableFrom(x))
+                    .Select(x => ServiceProvider.GetRequiredService(x)))
                 {
                     if (!await provider.IsEnabledAsync(context))
                     {
@@ -43,6 +53,47 @@ namespace Volo.Abp.SimpleStateChecking
                 }
 
                 return true;
+            }
+        }
+
+        public virtual async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(TState[] states)
+        {
+            var result = new SimpleStateCheckerResult<TState>(states);
+
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var multipleStateCheckers = states.SelectMany(x => x.SimpleStateCheckers)
+                    .Where(x => x is ISimpleMultipleStateChecker<TState>)
+                    .Cast<ISimpleMultipleStateChecker<TState>>()
+                    .GroupBy(x => x)
+                    .Select(x => x.Key);
+
+                foreach (var state in multipleStateCheckers)
+                {
+                    var context = new SimpleMultipleStateCheckerContext<TState>(
+                        scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(),
+                        states.Where(x => x.SimpleStateCheckers.Contains(state)).ToArray());
+
+                    foreach (var x in await state.IsEnabledAsync(context))
+                    {
+                        result[x.Key] = x.Value;
+                    }
+
+                    if (result.Values.All(x => !x))
+                    {
+                        return result;
+                    }
+                }
+
+                foreach (var state in states)
+                {
+                    if (result[state])
+                    {
+                        result[state] = await IsEnabledAsync(state);
+                    }
+                }
+
+                return result;
             }
         }
     }
