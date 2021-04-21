@@ -32,15 +32,15 @@ namespace Volo.Abp.SimpleStateChecking
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                var multipleStateCheckers = states.SelectMany(x => x.SimpleStateCheckers)
-                    .Where(x => x is ISimpleMultipleStateChecker<TState>)
-                    .Cast<ISimpleMultipleStateChecker<TState>>()
+                var batchStateCheckers = states.SelectMany(x => x.SimpleStateCheckers)
+                    .Where(x => x is ISimpleBatchStateChecker<TState>)
+                    .Cast<ISimpleBatchStateChecker<TState>>()
                     .GroupBy(x => x)
                     .Select(x => x.Key);
 
-                foreach (var stateChecker in multipleStateCheckers)
+                foreach (var stateChecker in batchStateCheckers)
                 {
-                    var context = new SimpleMultipleStateCheckerContext<TState>(
+                    var context = new SimpleBatchStateCheckerContext<TState>(
                         scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(),
                         states.Where(x => x.SimpleStateCheckers.Contains(stateChecker)).ToArray());
 
@@ -55,11 +55,11 @@ namespace Volo.Abp.SimpleStateChecking
                     }
                 }
 
-                foreach (ISimpleMultipleStateChecker<TState> globalStateChecker in Options.GlobalSimpleStateCheckers
-                    .Where(x => typeof(ISimpleMultipleStateChecker<TState>).IsAssignableFrom(x))
+                foreach (ISimpleBatchStateChecker<TState> globalStateChecker in Options.GlobalSimpleStateCheckers
+                    .Where(x => typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
                     .Select(x => ServiceProvider.GetRequiredService(x)))
                 {
-                    var context = new SimpleMultipleStateCheckerContext<TState>(
+                    var context = new SimpleBatchStateCheckerContext<TState>(
                         scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(),
                         states.Where(x => result.Any(y => y.Key.Equals(x) && y.Value)).ToArray());
 
@@ -81,13 +81,13 @@ namespace Volo.Abp.SimpleStateChecking
             }
         }
 
-        protected virtual async Task<bool> InternalIsEnabledAsync(TState state, bool useMultipleStateChecker)
+        protected virtual async Task<bool> InternalIsEnabledAsync(TState state, bool useBatchChecker)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
                 var context = new SimpleStateCheckerContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);
 
-                foreach (var provider in state.SimpleStateCheckers.WhereIf(!useMultipleStateChecker, x => x is not ISimpleMultipleStateChecker<TState>))
+                foreach (var provider in state.SimpleStateCheckers.WhereIf(!useBatchChecker, x => x is not ISimpleBatchStateChecker<TState>))
                 {
                     if (!await provider.IsEnabledAsync(context))
                     {
@@ -96,7 +96,7 @@ namespace Volo.Abp.SimpleStateChecking
                 }
 
                 foreach (ISimpleStateChecker<TState> provider in Options.GlobalSimpleStateCheckers
-                    .WhereIf(!useMultipleStateChecker, x => !typeof(ISimpleMultipleStateChecker<TState>).IsAssignableFrom(x))
+                    .WhereIf(!useBatchChecker, x => !typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
                     .Select(x => ServiceProvider.GetRequiredService(x)))
                 {
                     if (!await provider.IsEnabledAsync(context))

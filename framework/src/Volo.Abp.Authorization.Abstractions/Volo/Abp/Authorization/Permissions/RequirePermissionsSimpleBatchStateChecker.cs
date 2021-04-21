@@ -6,19 +6,19 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions
 {
-    public class RequirePermissionsSimpleMultipleStateChecker<TState> : SimpleMultipleStateCheckerBase<TState>
+    public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStateCheckerBase<TState>
         where TState : IHasSimpleStateCheckers<TState>
     {
-        public static readonly RequirePermissionsSimpleMultipleStateChecker<TState> Instance = new RequirePermissionsSimpleMultipleStateChecker<TState>();
+        public static readonly RequirePermissionsSimpleBatchStateChecker<TState> Instance = new RequirePermissionsSimpleBatchStateChecker<TState>();
 
-        private readonly List<RequirePermissionsSimpleStateCheckerModel<TState>> _models;
+        private readonly List<RequirePermissionsSimpleBatchStateCheckerModel<TState>> _models;
 
-        public RequirePermissionsSimpleMultipleStateChecker()
+        public RequirePermissionsSimpleBatchStateChecker()
         {
-            _models = new List<RequirePermissionsSimpleStateCheckerModel<TState>>();
+            _models = new List<RequirePermissionsSimpleBatchStateCheckerModel<TState>>();
         }
 
-        public RequirePermissionsSimpleMultipleStateChecker<TState> AddCheckModels(params RequirePermissionsSimpleStateCheckerModel<TState>[] models)
+        public RequirePermissionsSimpleBatchStateChecker<TState> AddCheckModels(params RequirePermissionsSimpleBatchStateCheckerModel<TState>[] models)
         {
             Check.NotNullOrEmpty(models, nameof(models));
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.Authorization.Permissions
             return this;
         }
 
-        public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleMultipleStateCheckerContext<TState> context)
+        public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleBatchStateCheckerContext<TState> context)
         {
             var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
 

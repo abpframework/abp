@@ -14,7 +14,7 @@ namespace Volo.Abp.SimpleStateChecking
             services.Configure<AbpSimpleStateCheckerOptions<MyStateEntity>>(options =>
             {
                 options.GlobalSimpleStateCheckers.Add<MyGlobalSimpleStateChecker>();
-                options.GlobalSimpleStateCheckers.Add<MyGlobalSimpleMultipleStateChecker>();
+                options.GlobalSimpleStateCheckers.Add<MyGlobalSimpleBatchStateChecker>();
             });
 
             base.AfterAddApplication(services);
@@ -37,7 +37,7 @@ namespace Volo.Abp.SimpleStateChecking
                 }
             };
 
-            myStateEntities[0].AddSimpleStateChecker(new MySimpleMultipleStateChecker());
+            myStateEntities[0].AddSimpleStateChecker(new MySimpleBatchStateChecker());
             myStateEntities[1].AddSimpleStateChecker(new MySimpleStateChecker());
 
             (await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities[0])).ShouldBeTrue();
@@ -72,7 +72,7 @@ namespace Volo.Abp.SimpleStateChecking
                 }
             };
 
-            myStateEntities[0].AddSimpleStateChecker(new MySimpleMultipleStateChecker());
+            myStateEntities[0].AddSimpleStateChecker(new MySimpleBatchStateChecker());
             myStateEntities[1].AddSimpleStateChecker(new MySimpleStateChecker());
 
             var result = await SimpleStateCheckerManager.IsEnabledAsync(myStateEntities);

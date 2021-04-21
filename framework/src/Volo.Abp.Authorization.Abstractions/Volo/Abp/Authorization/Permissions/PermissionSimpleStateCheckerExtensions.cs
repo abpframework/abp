@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions
@@ -12,7 +10,7 @@ namespace Volo.Abp.Authorization.Permissions
             params string[] permissions)
             where TState : IHasSimpleStateCheckers<TState>
         {
-            state.RequirePermissions(true, permissions);
+            state.RequirePermissions(requiresAll: true, batchCheck: true, permissions);
             return state;
         }
 
@@ -22,13 +20,31 @@ namespace Volo.Abp.Authorization.Permissions
             params string[] permissions)
             where TState : IHasSimpleStateCheckers<TState>
         {
+            state.RequirePermissions(requiresAll: requiresAll, batchCheck: true, permissions);
+            return state;
+        }
+
+        public static TState RequirePermissions<TState>(
+            [NotNull] this TState state,
+            bool requiresAll,
+            bool batchCheck = true,
+            params string[] permissions)
+            where TState : IHasSimpleStateCheckers<TState>
+        {
             Check.NotNull(state, nameof(state));
             Check.NotNullOrEmpty(permissions, nameof(permissions));
 
-            lock (state)
+            if (batchCheck)
             {
-                RequirePermissionsSimpleMultipleStateChecker<TState>.Instance.AddCheckModels(new RequirePermissionsSimpleStateCheckerModel<TState>(state, permissions, requiresAll));
-                state.SimpleStateCheckers.Add(RequirePermissionsSimpleMultipleStateChecker<TState>.Instance);
+                lock (state)
+                {
+                    RequirePermissionsSimpleBatchStateChecker<TState>.Instance.AddCheckModels(new RequirePermissionsSimpleBatchStateCheckerModel<TState>(state, permissions, requiresAll));
+                    state.SimpleStateCheckers.Add(RequirePermissionsSimpleBatchStateChecker<TState>.Instance);
+                }
+            }
+            else
+            {
+                state.SimpleStateCheckers.Add(new RequirePermissionsSimpleStateChecker<TState>(new RequirePermissionsSimpleBatchStateCheckerModel<TState>(state, permissions, requiresAll)));
             }
 
             return state;

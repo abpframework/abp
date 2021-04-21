@@ -62,9 +62,9 @@ namespace Volo.Abp.SimpleStateChecking
             }
         }
 
-        public class MySimpleMultipleStateChecker : SimpleMultipleStateCheckerBase<SimpleStateCheckerTestBase.MyStateEntity>
+        public class MySimpleBatchStateChecker : SimpleBatchStateCheckerBase<SimpleStateCheckerTestBase.MyStateEntity>
         {
-            public override Task<SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>> IsEnabledAsync(SimpleMultipleStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
+            public override Task<SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>> IsEnabledAsync(SimpleBatchStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
             {
                 foreach (var state in context.States)
                 {
@@ -82,9 +82,9 @@ namespace Volo.Abp.SimpleStateChecking
             }
         }
 
-        public class MyGlobalSimpleMultipleStateChecker : SimpleMultipleStateCheckerBase<SimpleStateCheckerTestBase.MyStateEntity>, ITransientDependency
+        public class MyGlobalSimpleBatchStateChecker : SimpleBatchStateCheckerBase<SimpleStateCheckerTestBase.MyStateEntity>, ITransientDependency
         {
-            public override Task<SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>> IsEnabledAsync(SimpleMultipleStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
+            public override Task<SimpleStateCheckerResult<SimpleStateCheckerTestBase.MyStateEntity>> IsEnabledAsync(SimpleBatchStateCheckerContext<SimpleStateCheckerTestBase.MyStateEntity> context)
             {
                 foreach (var state in context.States)
                 {

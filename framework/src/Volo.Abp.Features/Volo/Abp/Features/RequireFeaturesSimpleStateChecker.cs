@@ -25,8 +25,8 @@ namespace Volo.Abp.Features
 
         public async Task<bool> IsEnabledAsync(SimpleStateCheckerContext<TState> context)
         {
-            var feature = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
-            return await feature.IsEnabledAsync(_requiresAll, _featureNames);
+            var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+            return await featureChecker.IsEnabledAsync(_requiresAll, _featureNames);
         }
     }
 }
