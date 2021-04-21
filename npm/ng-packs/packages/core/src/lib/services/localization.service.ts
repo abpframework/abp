@@ -1,5 +1,5 @@
 import { registerLocaleData } from '@angular/common';
-import { Injectable, Injector, isDevMode, NgZone, Optional, SkipSelf } from '@angular/core';
+import { Injectable, Injector, isDevMode, Optional, SkipSelf } from '@angular/core';
 import { from, Observable, Subject } from 'rxjs';
 import { filter, map, mapTo, switchMap, tap } from 'rxjs/operators';
 import { ABP } from '../models/common';
@@ -31,7 +31,6 @@ export class LocalizationService {
   constructor(
     private sessionState: SessionStateService,
     private injector: Injector,
-    private ngZone: NgZone,
     @Optional()
     @SkipSelf()
     otherInstance: LocalizationService,
