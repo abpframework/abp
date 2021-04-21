@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -42,36 +43,24 @@ namespace Volo.Abp.UI.Navigation.Urls
             return Options.RedirectAllowedUrls.Any(url.StartsWith);
         }
 
-        protected virtual Task<string> GetConfiguredUrl(string appName, string urlName)
+        protected virtual async Task<string> GetConfiguredUrl(string appName, string urlName)
         {
-            var app = Options.Applications[appName];
-
-            if (urlName.IsNullOrEmpty())
+            var url = await GetUrlOrNullAsync(appName, urlName);
+            if (!url.IsNullOrEmpty())
             {
-                if (app.RootUrl.IsNullOrEmpty())
-                {
-                    throw new AbpException(
-                        $"RootUrl for the application '{appName}' was not configured. Use {nameof(AppUrlOptions)} to configure it!"
-                    );
-                }
-
-                return Task.FromResult(app.RootUrl);
+                return url;
             }
 
-            var url = app.Urls.GetOrDefault(urlName);
-            if (url.IsNullOrEmpty())
+            if (!urlName.IsNullOrEmpty())
             {
                 throw new AbpException(
                     $"Url, named '{urlName}', for the application '{appName}' was not configured. Use {nameof(AppUrlOptions)} to configure it!"
                 );
             }
 
-            if (app.RootUrl == null)
-            {
-                return Task.FromResult(url);
-            }
-
-            return Task.FromResult(app.RootUrl.EnsureEndsWith('/') + url);
+            throw new AbpException(
+                $"RootUrl for the application '{appName}' was not configured. Use {nameof(AppUrlOptions)} to configure it!"
+            );
         }
 
         protected virtual async Task<string> ReplacePlaceHoldersAsync(string url)
@@ -117,6 +106,25 @@ namespace Volo.Abp.UI.Navigation.Urls
             }
 
             return CurrentTenant.Name;
+        }
+
+        public Task<string> GetUrlOrNullAsync([NotNull] string appName, [CanBeNull] string urlName = null)
+        {
+            var app = Options.Applications[appName];
+
+            if (urlName.IsNullOrEmpty())
+            {
+                return Task.FromResult(app.RootUrl);
+            }
+
+            var url = app.Urls.GetOrDefault(urlName);
+
+            if (app.RootUrl == null)
+            {
+                return Task.FromResult(url);
+            }
+
+            return Task.FromResult(app.RootUrl.EnsureEndsWith('/') + url);
         }
     }
 }
