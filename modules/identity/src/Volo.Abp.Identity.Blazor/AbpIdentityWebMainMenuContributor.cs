@@ -27,7 +27,6 @@ namespace Volo.Abp.Identity.Blazor
                     l["Roles"],
                     url: "~/identity/roles").RequirePermissions(IdentityPermissions.Roles.Default));
 
-
             identityMenuItem.AddItem(new ApplicationMenuItem(
                 IdentityMenuNames.Users,
                 l["Users"],

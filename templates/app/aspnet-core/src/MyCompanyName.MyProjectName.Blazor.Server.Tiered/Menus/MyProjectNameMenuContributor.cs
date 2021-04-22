@@ -6,6 +6,7 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Identity.Blazor;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.SettingManagement.Blazor.Menus;
 using Volo.Abp.TenantManagement.Blazor.Navigation;
 using Volo.Abp.UI.Navigation;
@@ -69,16 +70,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus
         {
             var l = context.GetLocalizer<MyProjectNameResource>();
             var accountStringLocalizer = context.GetLocalizer<AccountResource>();
-            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
-
             var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";
 
-            if (currentUser.IsAuthenticated)
-            {
-                context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["ManageYourProfile"],
-                    $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}", icon: "fa fa-cog", order: 1000, null, "_blank"));
-                context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", l["Logout"], url: "~/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000));
-            }
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["ManageYourProfile"],
+                    $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}", icon: "fa fa-cog", order: 1000, null, "_blank").RequireAuthenticated());
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", l["Logout"], url: "~/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000).RequireAuthenticated());
 
             return Task.CompletedTask;
         }
