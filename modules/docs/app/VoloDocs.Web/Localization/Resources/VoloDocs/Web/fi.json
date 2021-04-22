@@ -1,0 +1,10 @@
+{
+  "culture": "fi",
+  "texts": {
+    "DocsTitle": "VoloDocs",
+    "WelcomeVoloDocs": "Tervetuloa VoloDocsiin!",
+    "NoProjectWarning": "Ei vielä määritelty projektia!",
+    "CreateYourFirstProject": "Aloita ensimmäinen projekti napsauttamalla tätä",
+    "NoProject": "Ei projektia!"
+  }
+}

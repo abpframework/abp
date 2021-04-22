@@ -1,0 +1,11 @@
+{
+  "culture": "fr",
+  "texts": {
+    "Hello <b>{0}</b>.": "Bonjour <b> {0} </b>.",
+    "Car": "Voiture",
+    "CarPlural": "Voitures",
+    "MaxLenghtErrorMessage": "La longueur de ce champ peut être au maximum de \"{0}\" caractères",
+    "Universe": "Univers",
+    "FortyTwo": "Quarante-deux"
+  }
+}

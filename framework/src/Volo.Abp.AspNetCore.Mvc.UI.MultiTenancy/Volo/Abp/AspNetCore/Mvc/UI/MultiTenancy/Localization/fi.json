@@ -1,0 +1,12 @@
+{
+  "culture": "fi",
+  "texts": {
+    "GivenTenantIsNotAvailable": "Annettua vuokralaista ei ole saatavilla: {0}",
+    "Tenant": "Vuokralainen",
+    "Switch": "vaihtaa",
+    "Name": "Nimi",
+    "SwitchTenantHint": "Jätä nimikenttä tyhjäksi, jos haluat vaihtaa isäntäpuolelle.",
+    "SwitchTenant": "Vaihda vuokralainen",
+    "NotSelected": "Ei valittu"
+  }
+}

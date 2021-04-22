@@ -1,37 +1,36 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 using Shouldly;
+using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Xunit;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
 {
-    public class LocalizedTemplateContentReaderFactory_Tests: AbpTextTemplatingTestBase
+    public abstract class LocalizedTemplateContentReaderFactory_Tests<TStartupModule> : AbpTextTemplatingTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
     {
-        private readonly ITemplateDefinitionManager _templateDefinitionManager;
+        protected readonly ITemplateDefinitionManager TemplateDefinitionManager;
+        protected LocalizedTemplateContentReaderFactory LocalizedTemplateContentReaderFactory;
+        protected string WelcomeEmailEnglishContent;
+        protected string WelcomeEmailTurkishContent;
 
-        public LocalizedTemplateContentReaderFactory_Tests()
+        protected LocalizedTemplateContentReaderFactory_Tests()
         {
-            _templateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
+            TemplateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
         }
 
         [Fact]
         public async Task Create_Should_Work_With_PhysicalFileProvider()
         {
-            var localizedTemplateContentReaderFactory = new LocalizedTemplateContentReaderFactory(
-                new PhysicalFileVirtualFileProvider(
-                    new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
-                        "Volo", "Abp", "TextTemplating"))));
+            var reader = await LocalizedTemplateContentReaderFactory.CreateAsync(TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail));
 
-            var reader = await localizedTemplateContentReaderFactory.CreateAsync(_templateDefinitionManager.Get(TestTemplates.WelcomeEmail));
-
-            reader.GetContentOrNull("en").ShouldBe("Welcome {{model.name}} to the abp.io!");
-            reader.GetContentOrNull("tr").ShouldBe("Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!");
+            reader.GetContentOrNull("en").ShouldBe(WelcomeEmailEnglishContent);
+            reader.GetContentOrNull("tr").ShouldBe(WelcomeEmailTurkishContent);
         }
 
-        class PhysicalFileVirtualFileProvider : IVirtualFileProvider
+        public class PhysicalFileVirtualFileProvider : IVirtualFileProvider
         {
             private readonly PhysicalFileProvider _physicalFileProvider;
 

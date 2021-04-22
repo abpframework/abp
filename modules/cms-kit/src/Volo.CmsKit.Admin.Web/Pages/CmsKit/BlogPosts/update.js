@@ -157,8 +157,6 @@
     var fileUploadUri = "/api/cms-kit-admin/media/blogpost";
     var fileUriPrefix = "/api/cms-kit/media/";
 
-    var editorDataKey = "tuiEditor";
-
     initAllEditors();
 
     function initAllEditors() {
@@ -173,7 +171,8 @@
         var $editorInput = $('#' + inputName);
         var initialValue = $editorInput.val();
 
-        var editor = $editorContainer.tuiEditor({
+        var editor = new toastui.Editor({
+            el: $editorContainer[0],
             usageStatistics: false,
             useCommandShortcut: true,
             initialValue: initialValue,
@@ -191,7 +190,7 @@
                     $editorInput.trigger("change");
                 }
             }
-        }).data(editorDataKey);
+        });
     }
 
     function uploadFile(blob, callback, source) {

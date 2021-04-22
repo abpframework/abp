@@ -1,0 +1,6 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Volo.GlobalFeature:010001": "Palvelun {ServiceName} on oltava käytössä {GlobalFeatureName} -ominaisuus."
+  }
+}

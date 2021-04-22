@@ -1,0 +1,14 @@
+{
+  "culture": "fi",
+  "texts": {
+    "VirtualFileExplorer": "Virtuaalinen tiedostojen selain",
+    "VirtualFileType": "Virtuaalitiedostotyyppi",
+    "Menu:VirtualFileExplorer": "Virtuaalinen tiedostojen selain",
+    "LastUpdateTime": "Viimeisin päivitysaika",
+    "VirtualFileName": "Virtuaalitiedoston nimi",
+    "FileContent": "Tiedoston sisältö",
+    "Size": "Koko",
+    "BackToRoot": "Takaisin juuriin",
+    "EmptyFileInfoList": "Virtuaalitiedostoja ei ole"
+  }
+}

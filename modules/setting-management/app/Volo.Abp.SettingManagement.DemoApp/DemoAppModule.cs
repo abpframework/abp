@@ -84,6 +84,8 @@ namespace Volo.Abp.SettingManagement.DemoApp
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
             });
 
             Configure<AbpMultiTenancyOptions>(options =>
