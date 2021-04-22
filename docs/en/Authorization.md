@@ -285,7 +285,38 @@ See examples below:
   authorPermission.AddStateProviders(new MyCustomPermissionStateProvider());
   ```
 
-  Custom condition class have to implement `IPermissionStateProvider`
+  Custom condition class have to implement `IPermissionStateProvider`.
+  
+  - Also State Providers can be configured globally via using `GlobalStateProviders` in **AbpPermissionOptions**
+  
+    ```csharp
+    Configure<AbpPermissionOptions>(options =>
+    {
+    	options.GlobalStateProviders.Add<MyCustomPermissionStateProvider>();
+        
+        // Or type can be pass as parameter:
+        options.GlobalStateProviders.Add(typeof(MyCustomPermissionStateProvider));
+    });
+    ```
+  
+  Content of **MyCustomPermissionStateProvider** looks like:
+  
+  ```csharp
+  public class MyCustomPermissionStateProvider : IPermissionStateProvider
+  {
+      public Task<bool> IsEnabledAsync(PermissionStateContext context)
+      {
+          // You can implement your own logic here. 
+          // That check works globally for each permission.
+          return Task.FromResult(
+              context.Permission.Name.StartsWith("Acme.BookStore"));
+      }
+  }
+  ```
+  
+  
+
+
 
 ## IAuthorizationService
 
