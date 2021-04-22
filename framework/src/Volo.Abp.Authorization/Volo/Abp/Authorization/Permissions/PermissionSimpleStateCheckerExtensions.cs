@@ -5,6 +5,13 @@ namespace Volo.Abp.Authorization.Permissions
 {
     public static class PermissionSimpleStateCheckerExtensions
     {
+        public static TState RequireAuthenticated<TState>([NotNull] this TState state)
+            where TState : IHasSimpleStateCheckers<TState>
+        {
+            state.SimpleStateCheckers.Add(new RequireAuthenticatedSimpleStateChecker<TState>());
+            return state;
+        }
+
         public static TState RequirePermissions<TState>(
             [NotNull] this TState state,
             params string[] permissions)
