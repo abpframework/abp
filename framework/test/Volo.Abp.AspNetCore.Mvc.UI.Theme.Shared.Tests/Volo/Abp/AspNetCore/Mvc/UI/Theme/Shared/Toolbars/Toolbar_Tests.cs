@@ -11,6 +11,7 @@ using NSubstitute;
 using Shouldly;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Security.Claims;
 using Xunit;
 
@@ -71,8 +72,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.Volo.Abp.AspNetCore.Mvc.
                     return Task.CompletedTask;
                 }
 
-                context.Toolbar.Items.Add(new ToolbarItem(typeof(MyComponent1), requiredPermissionName: "MyComponent1"));
-                context.Toolbar.Items.Add(new ToolbarItem(typeof(MyComponent2), requiredPermissionName: "MyComponent2"));
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(MyComponent1)).RequirePermissions("MyComponent1"));
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(MyComponent2)).RequirePermissions("MyComponent2"));
 
                 return Task.CompletedTask;
             }
@@ -87,7 +88,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.Volo.Abp.AspNetCore.Mvc.
                     return Task.CompletedTask;
                 }
 
-                context.Toolbar.Items.Add(new ToolbarItem(typeof(MyComponent3), requiredPermissionName: "MyComponent3"));
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(MyComponent3)).RequirePermissions("MyComponent3"));
                 context.Toolbar.Items.Add(new ToolbarItem(typeof(MyComponent4)));
 
                 return Task.CompletedTask;
