@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Kafka;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -34,8 +36,9 @@ namespace Volo.Abp.EventBus.Kafka
             IKafkaMessageConsumerFactory messageConsumerFactory,
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IKafkaSerializer serializer,
-            IProducerPool producerPool)
-            : base(serviceScopeFactory, currentTenant)
+            IProducerPool producerPool,
+            IEventErrorHandler errorHandler)
+            : base(serviceScopeFactory, currentTenant, errorHandler)
         {
             AbpKafkaEventBusOptions = abpKafkaEventBusOptions.Value;
             AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
@@ -54,6 +57,7 @@ namespace Volo.Abp.EventBus.Kafka
                 AbpKafkaEventBusOptions.GroupId,
                 AbpKafkaEventBusOptions.ConnectionName);
 
+            Consumer.Consume();
             Consumer.OnMessageReceived(ProcessEventAsync);
 
             SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
@@ -68,9 +72,10 @@ namespace Volo.Abp.EventBus.Kafka
                 return;
             }
 
-            var eventData = Serializer.Deserialize(message.Value, eventType);
+            var eventMessage = Serializer.Deserialize<LocalEventMessage>(message.Value);
 
-            await TriggerHandlersAsync(eventType, eventData);
+            await TriggerHandlersAsync(eventType, eventMessage,
+                context => { context.SetProperty(KafkaEventErrorHandler.HeadersKey, message.Headers); });
         }
 
         public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
@@ -148,6 +153,11 @@ namespace Volo.Abp.EventBus.Kafka
 
         public override async Task PublishAsync(Type eventType, object eventData)
         {
+            await PublishAsync(eventType, eventData, null);
+        }
+
+        public virtual async Task PublishAsync(Type eventType, object eventData, Headers headers)
+        {
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 
@@ -157,7 +167,7 @@ namespace Volo.Abp.EventBus.Kafka
                 AbpKafkaEventBusOptions.TopicName,
                 new Message<string, byte[]>
                 {
-                    Key = eventName, Value = body
+                    Key = eventName, Value = body, Headers = headers
                 });
         }
 

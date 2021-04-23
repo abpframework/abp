@@ -63,7 +63,6 @@ namespace Volo.Abp.Kafka
             GroupId = groupId;
 
             AsyncHelper.RunSync(CreateTopicAsync);
-            Consume();
         }
 
         public virtual void OnMessageReceived(Func<Message<string, byte[]>, Task> callback)
@@ -98,7 +97,7 @@ namespace Volo.Abp.Kafka
             }
         }
 
-        protected virtual void Consume()
+        public virtual void Consume()
         {
             Consumer = ConsumerPool.Get(GroupId, ConnectionName);
 

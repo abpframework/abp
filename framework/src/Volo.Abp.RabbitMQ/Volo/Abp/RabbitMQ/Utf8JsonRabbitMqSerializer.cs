@@ -23,5 +23,10 @@ namespace Volo.Abp.RabbitMQ
         {
             return _jsonSerializer.Deserialize(type, Encoding.UTF8.GetString(value));
         }
+
+        public T Deserialize<T>(byte[] value)
+        {
+            return _jsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(value));
+        }
     }
 }

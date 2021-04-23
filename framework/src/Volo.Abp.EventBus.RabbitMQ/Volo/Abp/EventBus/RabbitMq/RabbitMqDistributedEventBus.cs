@@ -41,8 +41,9 @@ namespace Volo.Abp.EventBus.RabbitMq
             IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             IRabbitMqMessageConsumerFactory messageConsumerFactory,
-            ICurrentTenant currentTenant)
-            : base(serviceScopeFactory, currentTenant)
+            ICurrentTenant currentTenant,
+            IEventErrorHandler errorHandler)
+            : base(serviceScopeFactory, currentTenant, errorHandler)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
