@@ -3,6 +3,14 @@
     "src": {},
     "test": {}
   },
+  "imports": {
+    "Volo.Abp.Identity": {
+      "path": "../identity/Volo.Abp.Identity.abpmdl.json"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "path": "../permission-management/Volo.Abp.PermissionManagement.abpmdl.json"
+    }
+  },
   "packages": {
     "Volo.Abp.Account.Application.Contracts": {
       "path": "src/Volo.Abp.Account.Application.Contracts/Volo.Abp.Account.Application.Contracts.csproj",

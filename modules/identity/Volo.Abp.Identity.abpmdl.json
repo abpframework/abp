@@ -3,6 +3,14 @@
     "src": {},
     "test": {}
   },
+  "imports": {
+    "Volo.Abp.Users": {
+      "path": "../users/Volo.Abp.Users.abpmdl.json"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "path": "../permission-management/Volo.Abp.PermissionManagement.abpmdl.json"
+    }
+  },
   "packages": {
     "Volo.Abp.Identity.Domain.Shared": {
       "path": "src/Volo.Abp.Identity.Domain.Shared/Volo.Abp.Identity.Domain.Shared.csproj",
@@ -48,10 +56,7 @@
     },
     "Volo.Abp.Identity.AspNetCore": {
       "path": "src/Volo.Abp.Identity.AspNetCore/Volo.Abp.Identity.AspNetCore.csproj",
-      "folder": "src",
-      "includes": {
-        "lib": {}
-      }
+      "folder": "src"
     },
     "Volo.Abp.Identity.HttpApi": {
       "path": "src/Volo.Abp.Identity.HttpApi/Volo.Abp.Identity.HttpApi.csproj",
@@ -97,10 +102,7 @@
     },
     "Volo.Abp.PermissionManagement.Domain.Identity": {
       "path": "src/Volo.Abp.PermissionManagement.Domain.Identity/Volo.Abp.PermissionManagement.Domain.Identity.csproj",
-      "folder": "src",
-      "includes": {
-        "lib": {}
-      }
+      "folder": "src"
     },
     "Volo.Abp.Identity.TestBase": {
       "path": "test/Volo.Abp.Identity.TestBase/Volo.Abp.Identity.TestBase.csproj",
