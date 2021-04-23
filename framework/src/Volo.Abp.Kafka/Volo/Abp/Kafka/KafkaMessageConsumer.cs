@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Confluent.Kafka;
@@ -36,6 +37,9 @@ namespace Volo.Abp.Kafka
 
         protected string TopicName { get; private set; }
 
+
+        protected string DeadLetterTopicName { get; private set; }
+
         public KafkaMessageConsumer(
             IConsumerPool consumerPool,
             IExceptionNotifier exceptionNotifier,
@@ -53,16 +57,20 @@ namespace Volo.Abp.Kafka
 
         public virtual void Initialize(
             [NotNull] string topicName,
+            [NotNull] string deadLetterTopicName,
             [NotNull] string groupId,
             string connectionName = null)
         {
             Check.NotNull(topicName, nameof(topicName));
+            Check.NotNull(deadLetterTopicName, nameof(deadLetterTopicName));
             Check.NotNull(groupId, nameof(groupId));
             TopicName = topicName;
+            DeadLetterTopicName = deadLetterTopicName;
             ConnectionName = connectionName ?? KafkaConnections.DefaultConnectionName;
             GroupId = groupId;
 
             AsyncHelper.RunSync(CreateTopicAsync);
+            Consume();
         }
 
         public virtual void OnMessageReceived(Func<Message<string, byte[]>, Task> callback)
@@ -74,22 +82,34 @@ namespace Volo.Abp.Kafka
         {
             using (var adminClient = new AdminClientBuilder(Options.Connections.GetOrDefault(ConnectionName)).Build())
             {
-                var topic = new TopicSpecification
+                var topics = new List<TopicSpecification>
                 {
-                    Name = TopicName,
-                    NumPartitions = 1,
-                    ReplicationFactor = 1
+                    new()
+                    {
+                        Name = TopicName,
+                        NumPartitions = 1,
+                        ReplicationFactor = 1
+                    },
+                    new()
+                    {
+                        Name = DeadLetterTopicName,
+                        NumPartitions = 1,
+                        ReplicationFactor = 1
+                    }
                 };
 
-                Options.ConfigureTopic?.Invoke(topic);
+                topics.ForEach(topic =>
+                {
+                    Options.ConfigureTopic?.Invoke(topic);
+                });
 
                 try
                 {
-                    await adminClient.CreateTopicsAsync(new[] {topic});
+                    await adminClient.CreateTopicsAsync(topics);
                 }
                 catch (CreateTopicsException e)
                 {
-                    if(e.Results.First().Error.Code != ErrorCode.TopicAlreadyExists)
+                    if(e.Results.Any(x => x.Error.Code != ErrorCode.TopicAlreadyExists))
                     {
                         throw;
                     }
@@ -97,7 +117,7 @@ namespace Volo.Abp.Kafka
             }
         }
 
-        public virtual void Consume()
+        protected virtual void Consume()
         {
             Consumer = ConsumerPool.Get(GroupId, ConnectionName);
 

@@ -20,6 +20,7 @@ namespace Volo.Abp.EventBus.Kafka
     [ExposeServices(typeof(IDistributedEventBus), typeof(KafkaDistributedEventBus))]
     public class KafkaDistributedEventBus : EventBusBase, IDistributedEventBus, ISingletonDependency
     {
+        protected AbpEventBusOptions AbpEventBusOptions { get; }
         protected AbpKafkaEventBusOptions AbpKafkaEventBusOptions { get; }
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected IKafkaMessageConsumerFactory MessageConsumerFactory { get; }
@@ -28,6 +29,7 @@ namespace Volo.Abp.EventBus.Kafka
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
         protected ConcurrentDictionary<string, Type> EventTypes { get; }
         protected IKafkaMessageConsumer Consumer { get; private set; }
+        protected string DeadLetterTopicName { get; }
 
         public KafkaDistributedEventBus(
             IServiceScopeFactory serviceScopeFactory,
@@ -37,14 +39,17 @@ namespace Volo.Abp.EventBus.Kafka
             IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
             IKafkaSerializer serializer,
             IProducerPool producerPool,
-            IEventErrorHandler errorHandler)
+            IEventErrorHandler errorHandler,
+            IOptions<AbpEventBusOptions> abpEventBusOptions)
             : base(serviceScopeFactory, currentTenant, errorHandler)
         {
             AbpKafkaEventBusOptions = abpKafkaEventBusOptions.Value;
             AbpDistributedEventBusOptions = abpDistributedEventBusOptions.Value;
+            AbpEventBusOptions = abpEventBusOptions.Value;
             MessageConsumerFactory = messageConsumerFactory;
             Serializer = serializer;
             ProducerPool = producerPool;
+            DeadLetterTopicName = AbpEventBusOptions.DeadLetterQueue ?? AbpKafkaEventBusOptions.TopicName + "_error";
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
@@ -56,8 +61,6 @@ namespace Volo.Abp.EventBus.Kafka
                 AbpKafkaEventBusOptions.TopicName,
                 AbpKafkaEventBusOptions.GroupId,
                 AbpKafkaEventBusOptions.ConnectionName);
-
-            Consumer.Consume();
             Consumer.OnMessageReceived(ProcessEventAsync);
 
             SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
@@ -158,13 +161,23 @@ namespace Volo.Abp.EventBus.Kafka
 
         public virtual async Task PublishAsync(Type eventType, object eventData, Headers headers)
         {
+            await PublishAsync(AbpKafkaEventBusOptions.TopicName, eventType, eventData, headers);
+        }
+
+        public virtual async Task PublishToDeadLetterAsync(Type eventType, object eventData, Headers headers)
+        {
+            await PublishAsync(DeadLetterTopicName, eventType, eventData, headers);
+        }
+
+        private async Task PublishAsync(string topicName, Type eventType, object eventData, Headers headers)
+        {
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 
             var producer = ProducerPool.Get(AbpKafkaEventBusOptions.ConnectionName);
 
             await producer.ProduceAsync(
-                AbpKafkaEventBusOptions.TopicName,
+                topicName,
                 new Message<string, byte[]>
                 {
                     Key = eventName, Value = body, Headers = headers

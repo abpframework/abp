@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Data;
 
 namespace Volo.Abp.EventBus
 {
@@ -9,7 +7,7 @@ namespace Volo.Abp.EventBus
     {
         protected AbpEventBusOptions Options { get; }
 
-        public EventErrorHandlerBase(IOptions<AbpEventBusOptions> options)
+        protected EventErrorHandlerBase(IOptions<AbpEventBusOptions> options)
         {
             Options = options.Value;
         }
@@ -27,12 +25,12 @@ namespace Volo.Abp.EventBus
                 return;
             }
 
-            await MoveToErrorQueue(context);
+            await MoveToDeadLetter(context);
         }
 
         protected abstract Task Retry(EventExecutionErrorContext context);
 
-        protected abstract Task MoveToErrorQueue(EventExecutionErrorContext context);
+        protected abstract Task MoveToDeadLetter(EventExecutionErrorContext context);
 
         protected virtual bool ShouldHandle(EventExecutionErrorContext context)
         {
@@ -51,7 +49,7 @@ namespace Volo.Abp.EventBus
 
         protected virtual bool ShouldRetry(EventExecutionErrorContext context)
         {
-            return Options.RetryStrategyOptions == null && false;
+            return Options.RetryStrategyOptions != null;
         }
     }
 }

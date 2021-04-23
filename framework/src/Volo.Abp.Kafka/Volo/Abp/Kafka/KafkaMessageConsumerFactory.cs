@@ -16,6 +16,7 @@ namespace Volo.Abp.Kafka
 
         public IKafkaMessageConsumer Create(
             string topicName,
+            string deadLetterTopicName,
             string groupId,
             string connectionName = null)
         {

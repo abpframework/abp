@@ -14,26 +14,14 @@ namespace Volo.Abp.EventBus.Kafka
 
         protected IKafkaSerializer Serializer { get; }
         protected KafkaDistributedEventBus EventBus { get; }
-        protected IProducerPool ProducerPool { get; }
-        protected AbpKafkaEventBusOptions AbpKafkaEventBusOptions { get; }
-
-        protected string ErrorTopicName { get; }
 
         public KafkaEventErrorHandler(
             IOptions<AbpEventBusOptions> options,
             IKafkaSerializer serializer,
-            KafkaDistributedEventBus eventBus,
-            IKafkaMessageConsumerFactory consumerFactory,
-            IProducerPool producerPool,
-            IOptions<AbpKafkaEventBusOptions> abpKafkaEventBusOptions) : base(options)
+            KafkaDistributedEventBus eventBus) : base(options)
         {
             Serializer = serializer;
             EventBus = eventBus;
-            ProducerPool = producerPool;
-            AbpKafkaEventBusOptions = abpKafkaEventBusOptions.Value;
-
-            ErrorTopicName = options.Value.ErrorQueue ?? abpKafkaEventBusOptions.Value.TopicName + "_error";
-            consumerFactory.Create(ErrorTopicName, string.Empty, abpKafkaEventBusOptions.Value.ConnectionName);
         }
 
         protected override async Task Retry(EventExecutionErrorContext context)
@@ -52,19 +40,12 @@ namespace Volo.Abp.EventBus.Kafka
             await EventBus.PublishAsync(context.EventType, context.EventData, headers);
         }
 
-        protected override async Task MoveToErrorQueue(EventExecutionErrorContext context)
+        protected override async Task MoveToDeadLetter(EventExecutionErrorContext context)
         {
-            var producer = ProducerPool.Get(AbpKafkaEventBusOptions.ConnectionName);
-            var eventName = EventNameAttribute.GetNameOrDefault(context.EventType);
-            var body = Serializer.Serialize(context.EventData);
-
-            await producer.ProduceAsync(
-                AbpKafkaEventBusOptions.TopicName,
-                new Message<string, byte[]>
-                {
-                    Key = eventName, Value = body,
-                    Headers = new Headers {{"exceptions", Serializer.Serialize(context.Exceptions)}}
-                });
+            await EventBus.PublishToDeadLetterAsync(context.EventType, context.EventData, new Headers
+            {
+                {"exceptions", Serializer.Serialize(context.Exceptions)}
+            });
         }
 
         protected override bool ShouldRetry(EventExecutionErrorContext context)
@@ -75,14 +56,13 @@ namespace Volo.Abp.EventBus.Kafka
             }
 
             var headers = context.GetProperty<Headers>(HeadersKey);
-            var index = 1;
 
             if (headers == null)
             {
                 return true;
             }
 
-            index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
+            var index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
 
             return Options.RetryStrategyOptions.Count < index;
         }

@@ -34,7 +34,7 @@ namespace Volo.Abp.EventBus.Local
                 new LocalEventMessage(messageId, context.EventData, context.EventType));
         }
 
-        protected override Task MoveToErrorQueue(EventExecutionErrorContext context)
+        protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
         {
             if (context.Exceptions.Count == 1)
             {
