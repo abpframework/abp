@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Application;
+using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -9,7 +10,8 @@ namespace Volo.Docs.Admin
 {
     [DependsOn(
         typeof(DocsDomainSharedModule),
-        typeof(AbpDddApplicationModule)
+        typeof(AbpDddApplicationContractsModule),
+        typeof(AbpAuthorizationAbstractionsModule)
         )]
     public class DocsAdminApplicationContractsModule : AbpModule
     {
