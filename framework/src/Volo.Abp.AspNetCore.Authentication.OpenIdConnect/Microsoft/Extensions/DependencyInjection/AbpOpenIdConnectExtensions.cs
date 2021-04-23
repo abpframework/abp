@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Volo.Abp.AspNetCore.MultiTenancy;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -34,6 +35,17 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     SetAbpTenantId(receivedContext);
                     return authorizationCodeReceived.Invoke(receivedContext);
+                };
+
+                options.Events.OnRemoteFailure = remoteFailureContext =>
+                {
+                    if (remoteFailureContext.Failure is OpenIdConnectProtocolException &&
+                        remoteFailureContext.Failure.Message.Contains("access_denied"))
+                    {
+                        remoteFailureContext.HandleResponse();
+                        remoteFailureContext.Response.Redirect($"{remoteFailureContext.Request.PathBase}/");
+                    }
+                    return Task.CompletedTask;
                 };
             });
         }
