@@ -95,11 +95,11 @@
         "lib.ui.blazor-wasm": {}
       }
     },
-    "Volo.Abp.Identity.HttpApi.Host": {      
-      "path": "src/Volo.Abp.Identity.HttpApi.Host/Volo.Abp.Identity.HttpApi.Host.csproj",
+    "Volo.Abp.PermissionManagement.Domain.Identity": {
+      "path": "src/Volo.Abp.PermissionManagement.Domain.Identity/Volo.Abp.PermissionManagement.Domain.Identity.csproj",
       "folder": "src",
       "includes": {
-        "host.http-api": {}
+        "lib": {}
       }
     },
     "Volo.Abp.Identity.TestBase": {
