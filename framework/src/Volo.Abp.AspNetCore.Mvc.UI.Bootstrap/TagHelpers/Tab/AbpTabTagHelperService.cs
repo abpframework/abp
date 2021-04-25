@@ -13,9 +13,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         {
             SetPlaceholderForNameIfNotProvided();
 
-            var innerContent = await output.GetChildContentAsync();
+            var childContent = await output.GetChildContentAsync();
             var tabHeader = GetTabHeaderItem(context, output);
-            var tabContent = GetTabContentItem(context, output, innerContent.GetContent());
+            var tabContent = GetTabContentItem(context, output, childContent);
 
             var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);
 
@@ -83,7 +83,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             }
         }
 
-        protected virtual string GetTabContentItem(TagHelperContext context, TagHelperOutput output, string content)
+        protected virtual string GetTabContentItem(TagHelperContext context, TagHelperOutput output, TagHelperContent content)
         {
             var headerId = TagHelper.Name + "-tab";
             var id = TagHelper.Name;

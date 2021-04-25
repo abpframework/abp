@@ -42,7 +42,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             NormalizeTagMode(context, output);
 
-            var childContent = (await output.GetChildContentAsync()).GetContent();
+            var childContent = await output.GetChildContentAsync();
 
             await ConvertToMvcForm(context, output);
 
@@ -93,7 +93,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.Attributes.AddIfNotContains("method", "post");
         }
 
-        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, List<FormGroupItem> items, string childContent)
+        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, List<FormGroupItem> items, TagHelperContent childContent)
         {
             var contentBuilder = new StringBuilder("");
 
