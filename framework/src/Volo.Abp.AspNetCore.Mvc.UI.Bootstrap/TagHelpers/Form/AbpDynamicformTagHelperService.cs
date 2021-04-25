@@ -102,16 +102,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 contentBuilder.AppendLine(item.HtmlContent);
             }
 
-            if (childContent.Contains(AbpFormContentPlaceHolder))
+            var content = childContent.GetContent();
+            if (content.Contains(AbpFormContentPlaceHolder))
             {
-                childContent = childContent.Replace(AbpFormContentPlaceHolder, contentBuilder.ToString());
+                content = content.Replace(AbpFormContentPlaceHolder, contentBuilder.ToString());
             }
             else
             {
-                childContent = contentBuilder + childContent;
+                content = contentBuilder + content;
             }
 
-            output.Content.SetHtmlContent(childContent);
+            output.Content.SetHtmlContent(content);
         }
 
         protected virtual async Task SetSubmitButton(TagHelperContext context, TagHelperOutput output)
