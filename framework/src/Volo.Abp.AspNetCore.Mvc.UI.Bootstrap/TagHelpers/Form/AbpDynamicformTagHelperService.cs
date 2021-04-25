@@ -78,8 +78,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             await formTagOutput.GetChildContentAsync();
 
-            output.PostContent.SetHtmlContent(output.PostContent.GetContent() + formTagOutput.PostContent.GetContent());
-            output.PreContent.SetHtmlContent(output.PreContent.GetContent() + formTagOutput.PreContent.GetContent());
+            output.PostContent.AppendHtml(formTagOutput.PostContent);
+            output.PreContent.AppendHtml(formTagOutput.PreContent);
         }
 
         protected virtual void NormalizeTagMode(TagHelperContext context, TagHelperOutput output)
@@ -123,7 +123,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var buttonHtml = await ProcessSubmitButtonAndGetContentAsync(context, output);
 
-            output.PostContent.SetHtmlContent(output.PostContent.GetContent() + buttonHtml);
+            output.PostContent.AppendHtml(buttonHtml);
         }
 
         protected virtual List<FormGroupItem> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)
