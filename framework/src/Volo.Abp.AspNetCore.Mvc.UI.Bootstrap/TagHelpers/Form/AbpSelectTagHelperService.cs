@@ -97,6 +97,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
 
+            selectTagHelperOutput.Content.SetHtmlContent(await output.GetChildContentAsync());
             selectTagHelperOutput.Attributes.AddClass("form-control");
             selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
             AddDisabledAttribute(selectTagHelperOutput);
