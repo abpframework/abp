@@ -92,6 +92,8 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
       * `blazor`: Blazor. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
+      * `blazor-server`: Blazor-Server. There are some additional options for this template:
+        * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
       * `none`: Without UI. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
     * `--mobile` or `-m`: Specifies the mobile application framework. If not specified, no mobile application will be created. Available options:
