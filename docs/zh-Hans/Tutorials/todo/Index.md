@@ -119,8 +119,8 @@ npm start
 
 ## Domain Layer 领域层
 
-此应用程序只有一个 [entity](../../Entities.md) and we are starting by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project:
-我们开始创建它. 在*TodoApp.Domain*项目中创建一个新的 `TodoItem` 类:
+此应用程序只有一个 [entity 实体](../../Entities.md) 我们开始创建它. 在*TodoApp.Domain*项目中创建一个新的 `TodoItem` 类:
+
 ````csharp
 using System;
 using Volo.Abp.Domain.Entities;
@@ -135,6 +135,7 @@ namespace TodoApp
 ````
 
 `BasicAggregateRoot` 是创建根实体的最简单的基类之一,`Guid` 是这里实体的主键 (`Id`).
+
 ## Database Integration 数据库集成
 
 {{if DB=="EF"}}
@@ -212,9 +213,9 @@ modelBuilder.Entity<TodoItem>(b =>
 
 [Application Service应用服务](../../Application-Services.md) 用于执行应用程序的用例.我们需要执行以下用例;
 
-* 获取待办事项列表
+* 获取todo列表
 * 创建新的todo项
-* 删除现有的todo项目
+* 删除现有的todo项
 
 ### Application Service Interface 应用服务接口
 
@@ -239,7 +240,7 @@ namespace TodoApp
 
 ### Data Transfer Object 数据传输对象
 
-`GetListAsync` and `CreateAsync` methods return `TodoItemDto`. Applications Services typically gets and returns DTOs ([Data Transfer Objects](../../Data-Transfer-Objects.md)) instead of entities. So, we should define the DTO class here. Create a new `TodoItemDto` class inside the *TodoApp.Application.Contracts* project:
+`GetListAsync` 和 `CreateAsync` 方法返回 `TodoItemDto`. 通常应用服务获取或返回的是 DTOs ([Data Transfer Objects 数据传输对象](../../Data-Transfer-Objects.md)) 而不是直接获取或返回实体对象. 所以，我们应该在此定义 DTO(数据传输对象) 类. 在 *TodoApp.Application.Contracts* 项目中创建一个名为 `TodoItemDto` 的类:
 
 ````csharp
 using System;
@@ -254,7 +255,7 @@ namespace TodoApp
 }
 ````
 
-这是一个非常简单的DTO类,与我们的 `TodoItem` 实体匹配.我们接下来实现 `ITodoAppService` 接口.
+这是一个非常简单的DTO类,与我们的 `TodoItem` 实体相对应.我们接下来实现 `ITodoAppService` 接口.
 
 ### Application Service Implementation 应用服务实现
 
@@ -284,7 +285,7 @@ namespace TodoApp
 }
 ````
 
-该类继承自ABP框架的 `ApplicationService` 类,并实现之前定义的 `ITodoAppService`接口.ABP为实体提供默认的通用 [repositories存储库](../repositories.md).我们可以使用它们来执行基本的数据库操作.此类 [injects 注入](../Dependency-Injection.md) `IRepository<TodoItem, Guid>` 是 `TodoItem` 实体的默认存储库.我们将使用它来实现之前描述的用例.
+该类继承自ABP框架的 `ApplicationService` 类,并实现了之前定义的 `ITodoAppService`接口.ABP为实体提供默认的通用的 [repositories 存储库](../repositories.md).我们可以使用它们来执行基本的数据库操作.此类 [injects 注入](../Dependency-Injection.md) `IRepository<TodoItem, Guid>` 它是 `TodoItem` 实体的默认存储库.我们将使用它来实现之前描述的用例.
 
 #### 获取所有Todo项列表
 
@@ -324,9 +325,9 @@ public async Task<TodoItemDto> CreateAsync(string text)
 }
 ````
 
-Repository的 `InsertAsync` 方法将给定的 `TodoItem` 插入数据库,并返回相同的 `TodoItem` 对象.它还设置 `Id`,因此我们可以在返回对象上使用它.我们只是通过从新的 `TodoItem` 实体创建返回 `TodoItemDto`.
+Repository的 `InsertAsync` 方法将给定的 `TodoItem` 插入数据库,并返回相同的 `TodoItem` 对象.它还设置了 `Id`,因此我们可以在返回对象上使用它.我们只是通过从新的 `TodoItem` 实体创建和返回 `TodoItemDto`.
 
-#### 删除一个子项
+#### 删除一个todo子项
 
 最后,我们可以将 `DeleteAsync` 实现为以下代码块:
 
@@ -337,11 +338,11 @@ public async Task DeleteAsync(Guid id)
 }
 ````
 
-应用程序服务已准备好从UI层使用.
+至此，应用程序服务已准备好了让UI层来使用.
 
 ## User Interface Layer 用户界面层
 
-是时候在UI上显示待办事项了!在开始编写代码之前,最好记住我们正在尝试构建的内容.这是最终UI的示例屏幕截图:
+是时候在UI上显示todo项了!在开始编写代码之前,最好记住我们正在尝试构建的内容.这是最终UI的示例屏幕截图:
 
 ![todo-list](todo-list.png)
 
@@ -378,7 +379,7 @@ namespace TodoApp.Web.Pages
 }
 ````
 
-此类使用 `ITodoAppService` 获取todo项目列表并分配 `TodoItems` 属性.我们将用它来渲染razor页面上的待办事项.
+此类使用 `ITodoAppService` 获取todo项目列表并将它赋值给 `TodoItems` 属性.我们将用它来渲染razor页面上的todo项目列表.
 
 ### Index.cshtml
 
@@ -461,15 +462,15 @@ $(function () {
 });
 ````
 
-在第一部分中,我们在todo项目附近注册点击垃圾图标的事件,删除服务器上的相关项目并在UI上显示通知.另外,我们从DOM中删除已删除的项目,因此我们不需要刷新页面.
+在第一部分中,我们在todo项目附近注册点击删除图标所要触发的事件,删除服务器上的相关todo项并在UI上显示通知.另外,我们从DOM中删除已删除的项,因此我们不需要刷新页面.
 
-在第二部分中,我们在服务器上创建一个新的todo事项.如果成功,我们将操纵DOM以将新的 `<li>` 元素插入todo列表.这样,创建新的todo条目后就不用刷新整个页面了.
+在第二部分中,我们在服务器上创建一个新的todo项.如果成功,我们将操纵DOM以将新的 `<li>` 元素插入todo列表.这样,创建新的todo项后就不用刷新整个页面了.
 
 这里有趣的部分是我们如何与服务器通信.请参阅 *Dynamic JavaScript Proxies & Auto API Controllers 动态JavaScript代理和自动API控制器* 部分,以了解其工作原理.但是现在让我们继续并完成申请.
 
 ### Index.css
 
-最后要做的,请打开 *TodoApp.Web* 项目的 `Pages` 文件夹中的 `Index.css` 文件,并替换为以下内容:
+来到最后要做的工作,请打开 *TodoApp.Web* 项目的 `Pages` 文件夹中的 `Index.css` 文件,并替换为以下内容:
 
 ````css
 #TodoList{
@@ -506,7 +507,7 @@ $(function () {
 
 在 `Index.js` 文件中,我们使用了 `todoApp.todo.delete(...)` 和 `todoApp.todo.create(...)` 函数与服务器通信.这些函数是由ABP框架动态创建的,这要归功于 [Dynamic JavaScript Client Proxy 动态JavaScript客户端代理](../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) 系统.他们对服务器执行HTTP API调用并返回承诺,因此你可以像上面所做的那样注册对 `then` 函数的回调.
 
-但是,你可能会问我们还没有创建任何API控制器,那么服务器如何处理这些请求？这个问题给我们带来了ABP框架的 [Auto API Controller 自动API控制器](../API/Auto-API-Controllers.md) 功能.它通过约定自动将应用程序服务转换为API Controllers(API控制器).
+但是,你可能会问我们还没有创建任何API控制器,那么服务器如何处理这些请求呢? 这个问题为我们引出了ABP框架的 [Auto API Controller 自动API控制器](../API/Auto-API-Controllers.md) 功能.它通过约定自动将应用程序服务转换为API Controllers(API控制器).
 
 如果通过在应用程序中输入 `/swagger` URL来打开 [swagger UI](https://swagger.io/tools/ Swagger-ui/),则可以看到Todo API:
 
@@ -645,11 +646,11 @@ namespace TodoApp.Blazor.Pages
 
 ### Dynamic C# Proxies & Auto API Controllers 动态C#代理和自动应用编程接口控制器
 
-在 `Index.razor.cs` 文件中,我们已经注入 (使用 `[Inject]` 特性),并像使用本地服务一样使用 `ITodoAppService`.请记住,当此应用程序服务的实现在服务器上运行时,Blazor应用程序正在浏览器上运行.
+在 `Index.razor.cs` 文件中,我们已经注入(使用 `[Inject]` 特性做的)并像使用本地服务一样使用 `ITodoAppService`.请记住,当此应用程序服务的实例在服务器上运行的同时,Blazor应用程序正在浏览器上运行.
 
 这个神奇的过程是由ABP框架的 [Dynamic C# Client Proxy 动态C#客户端代理](../API/Dynamic-CSharp-API-Clients.md) 系统完成的.它使用标准的 `HttpClient` 并向远程服务器执行HTTP API请求.它还为我们处理所有标准任务,包括授权,JSON序列化和异常处理.
 
-但是,你可能会问我们还没有创建任何API控制器,那么服务器如何处理这些请求？这个问题给我们带来了ABP框架的 [Auto API Controller 自动API控制器](../API/Auto-API-Controllers.md) 功能.它通过约定自动将应用程序服务转换为API控制器.
+但是,你可能会问我们还没有创建任何API控制器,那么服务器如何处理这些请求呢? 这个问题为我们引出了ABP框架的 [Auto API Controller 自动API控制器](../API/Auto-API-Controllers.md) 功能.它通过约定自动将应用程序服务转换为API控制器.
 
 如果你运行 `TodoApp.HttpApi.Host` 应用程序,你可以看到Todo API:
 
@@ -733,7 +734,7 @@ export class HomeComponent implements OnInit {
 
 ````
 
-我们已经使用 `todoService` 来获取todo项目的列表,并将返回值分配给 `todoItems` 数组.我们还添加了 `create`和 `delete` 方法.这些方法将在视图端使用.
+我们已经实现了使用 `todoService` 来获取todo项目列表,并将返回值赋值给 `todoItems` 数组.我们还添加了 `create`和 `delete` 方法.这些方法将在视图端使用.
 
 ### home.component.html
 
@@ -808,11 +809,11 @@ export class HomeComponent implements OnInit {
 
 ## 总结
 
-在本教程中,我们构建了一个非常简单的应用程序来抢先探究ABP框架的新特性.如果你想构建一个现实的应用程序,请查看 [应用程序开发教程](../Part-1.md),其中涵盖了实际web应用程序开发的所有方面.
+在本教程中,我们构建了一个非常简单的应用程序来抢先探究ABP框架的新特性.如果你想构建一个实际场景的应用程序,请查看 [应用程序开发教程](../Part-1.md),其中涵盖了实际web应用程序开发的所有方面.
 
 ## 源代码
 
-你可以找到完成的应用程序的源代码 [这里](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
+你可以获取到完整的应用程序源代码 [在这里](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
 ## 另请参见
 
