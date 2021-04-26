@@ -844,6 +844,7 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 @page "/authors"
 @using Acme.BookStore.Authors
 @using Acme.BookStore.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inherits BookStoreComponentBase
 @inject IAuthorAppService AuthorAppService
 @inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
