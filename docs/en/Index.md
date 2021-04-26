@@ -10,9 +10,13 @@ ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to 
 
 ### UI Framework Options
 
+ABP Framework can work with any UI framework, while the following frameworks are supported out of the box:
+
 <img width="500" src="images/ui-options.png">
 
 ### Database Provider Options
+
+ABP Framework can work with any database provider, while the following providers are supported out of the box:
 
 <img width="500" src="images/db-options.png">
 
