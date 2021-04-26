@@ -526,7 +526,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     {
                         foreach (var npmPackage in mvcNpmPackages)
                         {
-                            await ProjectNpmPackageAdder.AddMvcPackageAsync(Path.GetDirectoryName(targetProject), npmPackage, null, true);
+                            await ProjectNpmPackageAdder.AddMvcPackageAsync(Path.GetDirectoryName(targetProject), npmPackage);
                         }
                     }
                 }
