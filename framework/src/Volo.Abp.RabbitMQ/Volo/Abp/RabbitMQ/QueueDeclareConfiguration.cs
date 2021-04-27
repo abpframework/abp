@@ -8,6 +8,8 @@ namespace Volo.Abp.RabbitMQ
     {
         [NotNull] public string QueueName { get; }
 
+        [NotNull] public string DeadLetterQueueName { get; }
+
         public bool Durable { get; set; }
 
         public bool Exclusive { get; set; }
@@ -18,12 +20,14 @@ namespace Volo.Abp.RabbitMQ
 
         public QueueDeclareConfiguration(
             [NotNull] string queueName,
+            [NotNull] string deadLetterQueueName,
             bool durable = true,
             bool exclusive = false,
             bool autoDelete = false,
             Dictionary<string, object> arguments = null)
         {
             QueueName = queueName;
+            DeadLetterQueueName = deadLetterQueueName;
             Durable = durable;
             Exclusive = exclusive;
             AutoDelete = autoDelete;

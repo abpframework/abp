@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
@@ -65,19 +66,16 @@ namespace Volo.Abp.EventBus.RabbitMq
             Consumer = MessageConsumerFactory.Create(
                 new ExchangeDeclareConfiguration(
                     AbpRabbitMqEventBusOptions.ExchangeName,
+                    AbpRabbitMqEventBusOptions.ExchangeName + suffix,
                     type: "direct",
                     durable: true
                 ),
                 new QueueDeclareConfiguration(
                     AbpRabbitMqEventBusOptions.ClientName,
+                    AbpEventBusOptions.DeadLetterName ?? AbpRabbitMqEventBusOptions.ClientName + suffix,
                     durable: true,
                     exclusive: false,
-                    autoDelete: false,
-                    arguments: new Dictionary<string, object>
-                    {
-                        {"x-dead-letter-exchange", AbpRabbitMqEventBusOptions.ExchangeName + suffix},
-                        {"x-dead-letter-routing-key", AbpEventBusOptions.DeadLetterName ?? AbpRabbitMqEventBusOptions.ClientName + suffix}
-                    }
+                    autoDelete: false
                 ),
                 AbpRabbitMqEventBusOptions.ConnectionName
             );
@@ -98,7 +96,10 @@ namespace Volo.Abp.EventBus.RabbitMq
 
             var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
 
-            await TriggerHandlersAsync(eventType, eventData);
+            await TriggerHandlersAsync(eventType, eventData, errorContext =>
+            {
+                errorContext.SetProperty("headers", ea.BasicProperties);
+            });
         }
 
         public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
@@ -179,35 +180,12 @@ namespace Volo.Abp.EventBus.RabbitMq
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
-        public override Task PublishAsync(Type eventType, object eventData)
+        public override async Task PublishAsync(Type eventType, object eventData)
         {
-            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-            var body = Serializer.Serialize(eventData);
-
-            using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
-            {
-                channel.ExchangeDeclare(
-                    AbpRabbitMqEventBusOptions.ExchangeName,
-                    "direct",
-                    durable: true
-                );
-
-                var properties = channel.CreateBasicProperties();
-                properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
-
-                channel.BasicPublish(
-                   exchange: AbpRabbitMqEventBusOptions.ExchangeName,
-                    routingKey: eventName,
-                    mandatory: true,
-                    basicProperties: properties,
-                    body: body
-                );
-            }
-
-            return Task.CompletedTask;
+            await PublishAsync(eventType, eventData, null);
         }
 
-        public  Task PublishAsync(Type eventType, object eventData, Dictionary<string, object> headers)
+        public Task PublishAsync(Type eventType, object eventData, IBasicProperties properties)
         {
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
@@ -220,9 +198,12 @@ namespace Volo.Abp.EventBus.RabbitMq
                     durable: true
                 );
 
-                var properties = channel.CreateBasicProperties();
-                properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
-                properties.Headers = headers;
+                if (properties == null)
+                {
+                    properties = channel.CreateBasicProperties();
+                    properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
+                    properties.MessageId = Guid.NewGuid().ToString("N");
+                }
 
                 channel.BasicPublish(
                     exchange: AbpRabbitMqEventBusOptions.ExchangeName,
@@ -253,9 +234,11 @@ namespace Volo.Abp.EventBus.RabbitMq
         {
             var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
 
-            foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+            foreach (var handlerFactory in
+                HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
             {
-                handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+                handlerFactoryList.Add(
+                    new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
             }
 
             return handlerFactoryList.ToArray();

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 
@@ -25,23 +27,20 @@ namespace Volo.Abp.EventBus.RabbitMq
                 await Task.Delay(Options.RetryStrategyOptions.IntervalMillisecond);
             }
 
-            var headers = context.GetProperty<Dictionary<string, object>>(HeadersKey) ??
-                          new Dictionary<string, object>();
+            var properties = context.GetProperty(HeadersKey).As<IBasicProperties>();
+            var headers = properties.Headers ?? new Dictionary<string, object>();
 
-            var index = 1;
+            var index = 0;
             if (headers.ContainsKey(RetryIndexKey))
             {
                 index = (int) headers[RetryIndexKey];
-                headers[RetryIndexKey] = ++index;
-            }
-            else
-            {
-                headers[RetryIndexKey] = index;
             }
 
-            headers["exceptions"] = context.Exceptions;
+            headers[RetryIndexKey] = ++index;
+            headers["exceptions"] = context.Exceptions.Select(x => x.ToString()).ToList();
+            properties.Headers = headers;
 
-            await context.EventBus.As<RabbitMqDistributedEventBus>().PublishAsync(context.EventType, context.EventData, headers);
+            await context.EventBus.As<RabbitMqDistributedEventBus>().PublishAsync(context.EventType, context.EventData, properties);
         }
 
         protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
@@ -63,14 +62,14 @@ namespace Volo.Abp.EventBus.RabbitMq
                 return false;
             }
 
-            var headers = context.GetProperty<Dictionary<string, object>>(HeadersKey);
+            var properties = context.GetProperty(HeadersKey).As<IBasicProperties>();
 
-            if (headers == null || !headers.ContainsKey(RetryIndexKey))
+            if (properties.Headers == null || !properties.Headers.ContainsKey(RetryIndexKey))
             {
                 return true;
             }
 
-            var index = (int) headers[RetryIndexKey];
+            var index = (int) properties.Headers[RetryIndexKey];
 
             return Options.RetryStrategyOptions.MaxRetryAttempts > index;
         }

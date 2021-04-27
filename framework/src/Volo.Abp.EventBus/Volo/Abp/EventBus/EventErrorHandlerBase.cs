@@ -52,7 +52,7 @@ namespace Volo.Abp.EventBus
                 return Options.ErrorHandleSelector.Invoke(context.EventType);
             }
 
-            return false;
+            return true;
         }
 
         protected virtual bool ShouldRetry(EventExecutionErrorContext context)

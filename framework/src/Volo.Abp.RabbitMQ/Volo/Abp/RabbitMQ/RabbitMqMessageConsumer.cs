@@ -156,21 +156,26 @@ namespace Volo.Abp.RabbitMQ
                     arguments: Exchange.Arguments
                 );
 
-                if (Queue.Arguments.ContainsKey("x-dead-letter-exchange") &&
-                    Queue.Arguments.ContainsKey("x-dead-letter-routing-key"))
+                if (!Exchange.DeadLetterExchangeName.IsNullOrWhiteSpace() &&
+                    !Queue.DeadLetterQueueName.IsNullOrWhiteSpace())
                 {
                     Channel.ExchangeDeclare(
-                        Exchange.Arguments["x-dead-letter-exchange"].ToString(),
+                        Exchange.DeadLetterExchangeName,
                         Exchange.Type,
                         Exchange.Durable,
                         Exchange.AutoDelete
                     );
 
                     Channel.QueueDeclare(
-                        Queue.Arguments["x-dead-letter-routing-key"].ToString(),
+                        Queue.DeadLetterQueueName,
                         Queue.Durable,
                         Queue.Exclusive,
                         Queue.AutoDelete);
+
+                    Queue.Arguments["x-dead-letter-exchange"] = Exchange.DeadLetterExchangeName;
+                    Queue.Arguments["x-dead-letter-routing-key"] = Queue.DeadLetterQueueName;
+
+                    Channel.QueueBind(Queue.DeadLetterQueueName, Exchange.DeadLetterExchangeName, Queue.DeadLetterQueueName);
                 }
 
                 Channel.QueueDeclare(

@@ -32,7 +32,7 @@ namespace Volo.Abp.EventBus.Kafka
 
             var headers = context.GetProperty<Headers>(HeadersKey) ?? new Headers();
 
-            var index = 1;
+            var index = 0;
             if (headers.Any(x => x.Key == RetryIndexKey))
             {
                 index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
