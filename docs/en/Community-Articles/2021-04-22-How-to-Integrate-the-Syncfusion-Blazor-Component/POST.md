@@ -1,4 +1,4 @@
-## Using SyncFusion UI Components With the ABP Framework
+## Integrationg SyncFusion UI with the ABP Framework Blazor UI
 
 Hi, in this step by step article, I will show you how to integrate [Syncfusion](https://www.syncfusion.com/blazor-components), a blazor UI components into ABP Framework-based applications.
 
