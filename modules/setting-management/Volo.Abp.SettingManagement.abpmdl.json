@@ -1,0 +1,120 @@
+{
+  "folders": {
+    "src": {},
+    "test": {}
+  },
+  "packages": {
+    "Volo.Abp.SettingManagement.Domain.Shared": {
+      "path": "src/Volo.Abp.SettingManagement.Domain.Shared/Volo.Abp.SettingManagement.Domain.Shared.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.domain.shared": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.Domain": {
+      "path": "src/Volo.Abp.SettingManagement.Domain/Volo.Abp.SettingManagement.Domain.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.domain": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.Application.Contracts": {
+      "path": "src/Volo.Abp.SettingManagement.Application.Contracts/Volo.Abp.SettingManagement.Application.Contracts.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.application.contracts": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.Application": {
+      "path": "src/Volo.Abp.SettingManagement.Application/Volo.Abp.SettingManagement.Application.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.application": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.SettingManagement.EntityFrameworkCore/Volo.Abp.SettingManagement.EntityFrameworkCore.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ef": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.MongoDB": {
+      "path": "src/Volo.Abp.SettingManagement.MongoDB/Volo.Abp.SettingManagement.MongoDB.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.mongodb": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.HttpApi": {
+      "path": "src/Volo.Abp.SettingManagement.HttpApi/Volo.Abp.SettingManagement.HttpApi.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.http-api": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.HttpApi.Client": {
+      "path": "src/Volo.Abp.SettingManagement.HttpApi.Client/Volo.Abp.SettingManagement.HttpApi.Client.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.http-api-client": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.Web": {
+      "path": "src/Volo.Abp.SettingManagement.Web/Volo.Abp.SettingManagement.Web.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.mvc": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.Blazor": {
+      "path": "src/Volo.Abp.SettingManagement.Blazor/Volo.Abp.SettingManagement.Blazor.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.blazor": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.Blazor.Server": {
+      "path": "src/Volo.Abp.SettingManagement.Blazor.Server/Volo.Abp.SettingManagement.Blazor.Server.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.blazor-server": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.Blazor.WebAssembly": {
+      "path": "src/Volo.Abp.SettingManagement.Blazor.WebAssembly/Volo.Abp.SettingManagement.Blazor.WebAssembly.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.blazor-wasm": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.TestBase": {
+      "path": "test/Volo.Abp.SettingManagement.TestBase/Volo.Abp.SettingManagement.TestBase.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.Domain.Tests": {
+      "path": "test/Volo.Abp.SettingManagement.Domain.Tests/Volo.Abp.SettingManagement.Domain.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.SettingManagement.EntityFrameworkCore.Tests/Volo.Abp.SettingManagement.EntityFrameworkCore.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.SettingManagement.MongoDB.Tests": {
+      "path": "test/Volo.Abp.SettingManagement.MongoDB.Tests/Volo.Abp.SettingManagement.MongoDB.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    }
+  }
+}
