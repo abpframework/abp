@@ -5,12 +5,14 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TextTemplating.Localization;
 using Volo.Abp.TextTemplating.Razor;
+using Volo.Abp.TextTemplating.Scriban;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating
 {
     [DependsOn(
-        typeof(AbpTextTemplatingModule),
+        typeof(AbpTextTemplatingScribanModule),
+        typeof(AbpTextTemplatingRazorModule),
         typeof(AbpTestBaseModule),
         typeof(AbpAutofacModule),
         typeof(AbpLocalizationModule)

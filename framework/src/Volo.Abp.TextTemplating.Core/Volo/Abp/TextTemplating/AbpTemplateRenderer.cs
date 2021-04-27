@@ -4,22 +4,21 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.TextTemplating.Scriban;
 
 namespace Volo.Abp.TextTemplating
 {
     public class AbpTemplateRenderer : ITemplateRenderer, ITransientDependency
     {
-        protected IServiceProvider ServiceProvider { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected ITemplateDefinitionManager TemplateDefinitionManager { get; }
-        protected AbpTemplateRendererProviderOptions Options { get; }
+        protected AbpTextTemplatingOptions Options { get; }
 
         public AbpTemplateRenderer(
-            IServiceProvider serviceProvider,
+            IServiceScopeFactory serviceScopeFactory,
             ITemplateDefinitionManager templateDefinitionManager,
-            IOptions<AbpTemplateRendererProviderOptions> options)
+            IOptions<AbpTextTemplatingOptions> options)
         {
-            ServiceProvider = serviceProvider;
+            ServiceScopeFactory = serviceScopeFactory;
             TemplateDefinitionManager = templateDefinitionManager;
             Options = options.Value;
         }
@@ -36,18 +35,21 @@ namespace Volo.Abp.TextTemplating
 
             if (renderEngine.IsNullOrWhiteSpace())
             {
-                renderEngine = ScribanTemplateRendererProvider.ProviderName;
+                renderEngine = Options.DefaultRenderingEngine;
             }
 
-            var providerType = Options.GetProviderTypeOrNull(renderEngine);
+            var providerType = Options.RenderingEngines.GetOrDefault(renderEngine);
 
-            if (providerType != null)
+            if (providerType != null && typeof(ITemplateRenderingEngine).IsAssignableFrom(providerType))
             {
-                var templateRendererProvider = (ITemplateRendererProvider)ServiceProvider.GetRequiredService(providerType);
-                return await templateRendererProvider.RenderAsync(templateName, model, cultureName, globalContext);
+                using (var scope = ServiceScopeFactory.CreateScope())
+                {
+                    var templateRenderingEngine = (ITemplateRenderingEngine)scope.ServiceProvider.GetRequiredService(providerType);
+                    return await templateRenderingEngine.RenderAsync(templateName, model, cultureName, globalContext);
+                }
             }
 
-            throw new AbpException("There is no render engine found with template name: " + templateName);
+            throw new AbpException("There is no rendering engine found with template name: " + templateName);
         }
     }
 }

@@ -9,12 +9,12 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.TextTemplating.Scriban
 {
-    public class ScribanTemplateRendererProvider : TemplateRendererProviderBase, ITransientDependency
+    public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITransientDependency
     {
-        public const string ProviderName = "Scriban";
-        public override string Name => ProviderName;
+        public const string EngineName = "Scriban";
+        public override string Name => EngineName;
 
-        public ScribanTemplateRendererProvider(
+        public ScribanTemplateRenderingEngine(
             ITemplateDefinitionManager templateDefinitionManager,
             ITemplateContentProvider templateContentProvider,
             IStringLocalizerFactory stringLocalizerFactory)

@@ -38,7 +38,7 @@ namespace Volo.Abp.TextTemplating
         public string DefaultCultureName { get; }
 
         [CanBeNull]
-        public string RenderEngine { get; protected set; }
+        public string RenderEngine { get; set; }
 
         /// <summary>
         /// Gets/sets a key-value on the <see cref="Properties"/>.

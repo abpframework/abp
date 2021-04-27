@@ -45,7 +45,7 @@ namespace Volo.Abp.TextTemplating
                     layout: null
                 )
                 .WithVirtualFilePath("/SampleTemplates/TestScribanTemplate.tpl", true)
-                .WithRenderEngine(ScribanTemplateRendererProvider.ProviderName)
+                .WithScribanTemplate()
             );
 
             context.Add(
@@ -55,7 +55,7 @@ namespace Volo.Abp.TextTemplating
                     layout: null
                 )
                 .WithVirtualFilePath("/SampleTemplates/TestRazorTemplate.cshtml", true)
-                .WithRenderEngine(RazorTemplateRendererProvider.ProviderName)
+                .WithRazorTemplate()
             );
         }
     }

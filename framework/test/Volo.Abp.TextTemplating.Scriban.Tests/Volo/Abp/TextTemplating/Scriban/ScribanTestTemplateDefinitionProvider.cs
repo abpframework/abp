@@ -6,19 +6,19 @@
         {
             context.GetOrNull(TestTemplates.WelcomeEmail)?
                 .WithVirtualFilePath("/SampleTemplates/WelcomeEmail", false)
-                .WithRenderEngine(ScribanTemplateRendererProvider.ProviderName);
+                .WithScribanTemplate();
 
             context.GetOrNull(TestTemplates.ForgotPasswordEmail)?
                 .WithVirtualFilePath("/SampleTemplates/ForgotPasswordEmail.tpl", true)
-                .WithRenderEngine(ScribanTemplateRendererProvider.ProviderName);
+                .WithScribanTemplate();
 
             context.GetOrNull(TestTemplates.TestTemplateLayout1)?
                 .WithVirtualFilePath("/SampleTemplates/TestTemplateLayout1.tpl", true)
-                .WithRenderEngine(ScribanTemplateRendererProvider.ProviderName);
+                .WithScribanTemplate();
 
             context.GetOrNull(TestTemplates.ShowDecimalNumber)?
                 .WithVirtualFilePath("/SampleTemplates/ShowDecimalNumber.tpl", true)
-                .WithRenderEngine(ScribanTemplateRendererProvider.ProviderName);
+                .WithScribanTemplate();
         }
     }
 }

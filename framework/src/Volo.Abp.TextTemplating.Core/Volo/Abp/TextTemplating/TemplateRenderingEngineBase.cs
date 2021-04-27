@@ -4,7 +4,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.TextTemplating
 {
-    public abstract class TemplateRendererProviderBase : ITemplateRendererProvider
+    public abstract class TemplateRenderingEngineBase : ITemplateRenderingEngine
     {
         public abstract string Name { get; }
 
@@ -12,7 +12,7 @@ namespace Volo.Abp.TextTemplating
         protected readonly ITemplateContentProvider TemplateContentProvider;
         protected readonly IStringLocalizerFactory StringLocalizerFactory;
 
-        public TemplateRendererProviderBase(
+        public TemplateRenderingEngineBase(
             ITemplateDefinitionManager templateDefinitionManager,
             ITemplateContentProvider templateContentProvider,
             IStringLocalizerFactory stringLocalizerFactory)

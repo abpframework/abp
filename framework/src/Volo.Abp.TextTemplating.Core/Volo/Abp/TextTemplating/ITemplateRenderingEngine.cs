@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.TextTemplating
 {
-    public interface ITemplateRendererProvider
+    public interface ITemplateRenderingEngine
     {
         string Name { get; }
 

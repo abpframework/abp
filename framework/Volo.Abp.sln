@@ -385,7 +385,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Authorization.Abstractions", "src\Volo.Abp.Authorization.Abstractions\Volo.Abp.Authorization.Abstractions.csproj", "{87B0C2A8-FE95-4779-8B9C-2181AA52B3FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Abstractions", "src\Volo.Abp.TextTemplating.Abstractions\Volo.Abp.TextTemplating.Abstractions.csproj", "{184E859A-282D-44D7-B8E9-FEA874644013}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Core", "src\Volo.Abp.TextTemplating.Core\Volo.Abp.TextTemplating.Core.csproj", "{184E859A-282D-44D7-B8E9-FEA874644013}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Scriban", "src\Volo.Abp.TextTemplating.Scriban\Volo.Abp.TextTemplating.Scriban.csproj", "{228723E6-FA6D-406B-B8F8-C9BCC547AF8E}"
 EndProject

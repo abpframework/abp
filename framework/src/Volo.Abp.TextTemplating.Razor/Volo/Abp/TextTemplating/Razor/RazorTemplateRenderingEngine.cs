@@ -12,15 +12,15 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.TextTemplating.Razor
 {
-    public class RazorTemplateRendererProvider : TemplateRendererProviderBase, ITransientDependency
+    public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransientDependency
     {
-        public const string ProviderName = "Razor";
-        public override string Name => ProviderName;
+        public const string EngineName = "Razor";
+        public override string Name => EngineName;
 
         protected readonly IServiceScopeFactory ServiceScopeFactory;
         protected readonly IAbpCompiledViewProvider AbpCompiledViewProvider;
 
-        public RazorTemplateRendererProvider(
+        public RazorTemplateRenderingEngine(
             IServiceScopeFactory serviceScopeFactory,
             IAbpCompiledViewProvider abpCompiledViewProvider,
             ITemplateDefinitionManager templateDefinitionManager,

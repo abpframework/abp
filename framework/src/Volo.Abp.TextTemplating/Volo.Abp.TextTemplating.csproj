@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.TextTemplating.Scriban\Volo.Abp.TextTemplating.Scriban.csproj" />
-    <ProjectReference Include="..\Volo.Abp.TextTemplating.Razor\Volo.Abp.TextTemplating.Razor.csproj" />
   </ItemGroup>
 
 </Project>

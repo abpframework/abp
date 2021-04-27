@@ -1,17 +1,22 @@
-﻿using Volo.Abp.Modularity;
+﻿using System;
+using Volo.Abp.Modularity;
 
 namespace Volo.Abp.TextTemplating.Razor
 {
     [DependsOn(
-        typeof(AbpTextTemplatingAbstractionsModule)
+        typeof(AbpTextTemplatingCoreModule)
     )]
     public class AbpTextTemplatingRazorModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpTemplateRendererProviderOptions>(options =>
+            Configure<AbpTextTemplatingOptions>(options =>
             {
-                options.AddProvider<RazorTemplateRendererProvider>(RazorTemplateRendererProvider.ProviderName);
+                if (options.DefaultRenderingEngine.IsNullOrWhiteSpace())
+                {
+                    options.DefaultRenderingEngine = RazorTemplateRenderingEngine.EngineName;
+                }
+                options.RenderingEngines[RazorTemplateRenderingEngine.EngineName] = typeof(RazorTemplateRenderingEngine);
             });
         }
     }
