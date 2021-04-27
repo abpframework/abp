@@ -104,7 +104,7 @@ namespace Volo.Abp.EventBus
 
             if (exceptions.Any())
             {
-                var context = new EventExecutionErrorContext(exceptions, eventData, eventType);
+                var context = new EventExecutionErrorContext(exceptions, eventData, eventType, this);
                 onErrorAction?.Invoke(context);
                 await ErrorHandler.Handle(context);
             }
@@ -219,11 +219,6 @@ namespace Volo.Abp.EventBus
                 IEventDataMayHaveTenantId eventDataMayHaveTenantId when eventDataMayHaveTenantId.IsMultiTenant(out var tenantId) => tenantId,
                 _ => CurrentTenant.Id
             };
-        }
-
-        protected virtual void OnErrorHandle(EventExecutionErrorContext context)
-        {
-
         }
 
         protected class EventTypeWithEventHandlerFactories

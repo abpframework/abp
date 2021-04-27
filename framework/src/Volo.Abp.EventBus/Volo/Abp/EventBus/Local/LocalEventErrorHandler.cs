@@ -9,15 +9,12 @@ namespace Volo.Abp.EventBus.Local
 {
     public class LocalEventErrorHandler : EventErrorHandlerBase, ISingletonDependency
     {
-        protected ILocalEventBus LocalEventBus { get; }
         protected Dictionary<Guid, int> RetryTracking { get; }
 
         public LocalEventErrorHandler(
-            IOptions<AbpEventBusOptions> options,
-            ILocalEventBus localEventBus)
+            IOptions<AbpEventBusOptions> options)
             : base(options)
         {
-            LocalEventBus = localEventBus;
             RetryTracking = new Dictionary<Guid, int>();
         }
 
@@ -30,8 +27,9 @@ namespace Volo.Abp.EventBus.Local
 
             var messageId = context.GetProperty<Guid>("messageId");
 
-            await LocalEventBus.PublishAsync(context.EventType,
-                new LocalEventMessage(messageId, context.EventData, context.EventType));
+            await context.EventBus.As<LocalEventBus>().PublishAsync(new LocalEventMessage(messageId, context.EventData, context.EventType));
+
+            RetryTracking.Remove(messageId);
         }
 
         protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
@@ -57,7 +55,7 @@ namespace Volo.Abp.EventBus.Local
 
             var index = RetryTracking.GetOrDefault(messageId);
 
-            if (Options.RetryStrategyOptions.MaxRetryAttempts >= index)
+            if (Options.RetryStrategyOptions.MaxRetryAttempts <= index)
             {
                 RetryTracking.Remove(messageId);
                 return false;

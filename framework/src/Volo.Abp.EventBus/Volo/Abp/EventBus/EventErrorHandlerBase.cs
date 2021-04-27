@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.EventBus
@@ -16,7 +17,14 @@ namespace Volo.Abp.EventBus
         {
             if (!ShouldHandle(context))
             {
-                return;
+                if (context.Exceptions.Count == 1)
+                {
+                    context.Exceptions[0].ReThrow();
+                }
+
+                throw new AggregateException(
+                    "More than one error has occurred while triggering the event: " + context.EventType,
+                    context.Exceptions);
             }
 
             if (ShouldRetry(context))

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Volo.Abp.EventBus.Local;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EventBus
@@ -13,11 +12,14 @@ namespace Volo.Abp.EventBus
 
         public Type EventType { get; }
 
-        public EventExecutionErrorContext(List<Exception> exceptions, object eventData, Type eventType)
+        public IEventBus EventBus { get; }
+
+        public EventExecutionErrorContext(List<Exception> exceptions, object eventData, Type eventType, IEventBus eventBus)
         {
             Exceptions = exceptions;
             EventData = eventData;
             EventType = eventType;
+            EventBus = eventBus;
         }
     }
 }

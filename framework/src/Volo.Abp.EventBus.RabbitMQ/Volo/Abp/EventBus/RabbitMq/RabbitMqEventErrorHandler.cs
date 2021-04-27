@@ -12,14 +12,10 @@ namespace Volo.Abp.EventBus.RabbitMq
         public const string HeadersKey = "headers";
         public const string RetryIndexKey = "retryIndex";
 
-        protected RabbitMqDistributedEventBus EventBus { get; }
-
         public RabbitMqEventErrorHandler(
-            IOptions<AbpEventBusOptions> options,
-            RabbitMqDistributedEventBus eventBus)
+            IOptions<AbpEventBusOptions> options)
             : base(options)
         {
-            EventBus = eventBus;
         }
 
         protected override async Task Retry(EventExecutionErrorContext context)
@@ -45,7 +41,7 @@ namespace Volo.Abp.EventBus.RabbitMq
 
             headers["exceptions"] = context.Exceptions;
 
-            await EventBus.PublishAsync(context.EventType, context.EventData, headers);
+            await context.EventBus.As<RabbitMqDistributedEventBus>().PublishAsync(context.EventType, context.EventData, headers);
         }
 
         protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
@@ -76,7 +72,7 @@ namespace Volo.Abp.EventBus.RabbitMq
 
             var index = (int) headers[RetryIndexKey];
 
-            return Options.RetryStrategyOptions.MaxRetryAttempts < index;
+            return Options.RetryStrategyOptions.MaxRetryAttempts > index;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Confluent.Kafka;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
@@ -13,15 +15,12 @@ namespace Volo.Abp.EventBus.Kafka
         public const string RetryIndexKey = "retryIndex";
 
         protected IKafkaSerializer Serializer { get; }
-        protected KafkaDistributedEventBus EventBus { get; }
 
         public KafkaEventErrorHandler(
             IOptions<AbpEventBusOptions> options,
-            IKafkaSerializer serializer,
-            KafkaDistributedEventBus eventBus) : base(options)
+            IKafkaSerializer serializer) : base(options)
         {
             Serializer = serializer;
-            EventBus = eventBus;
         }
 
         protected override async Task Retry(EventExecutionErrorContext context)
@@ -32,17 +31,22 @@ namespace Volo.Abp.EventBus.Kafka
             }
 
             var headers = context.GetProperty<Headers>(HeadersKey) ?? new Headers();
-            var index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
+
+            var index = 1;
+            if (headers.Any(x => x.Key == RetryIndexKey))
+            {
+                index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
+            }
 
             headers.Remove(RetryIndexKey);
             headers.Add(RetryIndexKey, Serializer.Serialize(++index));
 
-            await EventBus.PublishAsync(context.EventType, context.EventData, headers);
+            await context.EventBus.As<KafkaDistributedEventBus>().PublishAsync(context.EventType, context.EventData, headers);
         }
 
         protected override async Task MoveToDeadLetter(EventExecutionErrorContext context)
         {
-            await EventBus.PublishToDeadLetterAsync(context.EventType, context.EventData, new Headers
+            await context.EventBus.As<KafkaDistributedEventBus>().PublishToDeadLetterAsync(context.EventType, context.EventData, new Headers
             {
                 {"exceptions", Serializer.Serialize(context.Exceptions)}
             });
@@ -64,7 +68,7 @@ namespace Volo.Abp.EventBus.Kafka
 
             var index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
 
-            return Options.RetryStrategyOptions.MaxRetryAttempts < index;
+            return Options.RetryStrategyOptions.MaxRetryAttempts > index;
         }
     }
 }

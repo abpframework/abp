@@ -14,6 +14,7 @@ namespace Volo.Abp.EventBus
 
         public void UseRetryStrategy(Action<AbpEventBusRetryStrategyOptions> action = null)
         {
+            EnabledErrorHandle = true;
             RetryStrategyOptions = new AbpEventBusRetryStrategyOptions();
             action?.Invoke(RetryStrategyOptions);
         }
