@@ -1,0 +1,127 @@
+{
+  "folders": {
+    "src": {},
+    "test": {}
+  },
+  "packages": {
+    "Volo.Abp.PermissionManagement.Domain.Shared": {
+      "path": "src/Volo.Abp.PermissionManagement.Domain.Shared/Volo.Abp.PermissionManagement.Domain.Shared.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.domain.shared": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Domain": {
+      "path": "src/Volo.Abp.PermissionManagement.Domain/Volo.Abp.PermissionManagement.Domain.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.domain": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Application.Contracts": {
+      "path": "src/Volo.Abp.PermissionManagement.Application.Contracts/Volo.Abp.PermissionManagement.Application.Contracts.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.application.contracts": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Application": {
+      "path": "src/Volo.Abp.PermissionManagement.Application/Volo.Abp.PermissionManagement.Application.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.application": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.PermissionManagement.EntityFrameworkCore/Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ef": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.MongoDB": {
+      "path": "src/Volo.Abp.PermissionManagement.MongoDB/Volo.Abp.PermissionManagement.MongoDB.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.mongodb": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.HttpApi": {
+      "path": "src/Volo.Abp.PermissionManagement.HttpApi/Volo.Abp.PermissionManagement.HttpApi.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.http-api": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.HttpApi.Client": {
+      "path": "src/Volo.Abp.PermissionManagement.HttpApi.Client/Volo.Abp.PermissionManagement.HttpApi.Client.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.http-api-client": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Web": {
+      "path": "src/Volo.Abp.PermissionManagement.Web/Volo.Abp.PermissionManagement.Web.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.mvc": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Blazor": {
+      "path": "src/Volo.Abp.PermissionManagement.Blazor/Volo.Abp.PermissionManagement.Blazor.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.blazor": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Blazor.Server": {
+      "path": "src/Volo.Abp.PermissionManagement.Blazor.Server/Volo.Abp.PermissionManagement.Blazor.Server.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.blazor-server": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Blazor.WebAssembly": {
+      "path": "src/Volo.Abp.PermissionManagement.Blazor.WebAssembly/Volo.Abp.PermissionManagement.Blazor.WebAssembly.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.blazor-wasm": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.TestBase": {
+      "path": "test/Volo.Abp.PermissionManagement.TestBase/Volo.Abp.PermissionManagement.TestBase.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Domain.Tests": {
+      "path": "test/Volo.Abp.PermissionManagement.Domain.Tests/Volo.Abp.PermissionManagement.Domain.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.PermissionManagement.EntityFrameworkCore.Tests/Volo.Abp.PermissionManagement.EntityFrameworkCore.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.MongoDB.Tests": {
+      "path": "test/Volo.Abp.PermissionManagement.MongoDB.Tests/Volo.Abp.PermissionManagement.MongoDB.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.PermissionManagement.Application.Tests": {
+      "path": "test/Volo.Abp.PermissionManagement.Application.Tests/Volo.Abp.PermissionManagement.Application.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    }
+  }
+}
