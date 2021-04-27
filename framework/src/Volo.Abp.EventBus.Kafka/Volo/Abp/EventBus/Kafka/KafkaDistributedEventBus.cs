@@ -49,7 +49,7 @@ namespace Volo.Abp.EventBus.Kafka
             MessageConsumerFactory = messageConsumerFactory;
             Serializer = serializer;
             ProducerPool = producerPool;
-            DeadLetterTopicName = AbpEventBusOptions.DeadLetterQueue ?? AbpKafkaEventBusOptions.TopicName + "_error";
+            DeadLetterTopicName = AbpEventBusOptions.DeadLetterName ?? AbpKafkaEventBusOptions.TopicName + "_dead_letter";
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();

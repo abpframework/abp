@@ -2,9 +2,8 @@
 {
     public class AbpEventBusRetryStrategyOptions
     {
-
         public int IntervalMillisecond { get; set; } = 3000;
 
-        public int Count { get; set; } = 3;
+        public int MaxRetryAttempts { get; set; } = 3;
     }
 }

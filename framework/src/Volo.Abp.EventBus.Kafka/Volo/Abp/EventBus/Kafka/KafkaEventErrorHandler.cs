@@ -64,7 +64,7 @@ namespace Volo.Abp.EventBus.Kafka
 
             var index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
 
-            return Options.RetryStrategyOptions.Count < index;
+            return Options.RetryStrategyOptions.MaxRetryAttempts < index;
         }
     }
 }

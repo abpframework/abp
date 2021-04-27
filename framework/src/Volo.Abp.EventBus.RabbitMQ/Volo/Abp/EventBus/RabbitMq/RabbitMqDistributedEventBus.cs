@@ -25,6 +25,7 @@ namespace Volo.Abp.EventBus.RabbitMq
     {
         protected AbpRabbitMqEventBusOptions AbpRabbitMqEventBusOptions { get; }
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
+        protected AbpEventBusOptions AbpEventBusOptions { get; }
         protected IConnectionPool ConnectionPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
 
@@ -42,12 +43,14 @@ namespace Volo.Abp.EventBus.RabbitMq
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             IRabbitMqMessageConsumerFactory messageConsumerFactory,
             ICurrentTenant currentTenant,
-            IEventErrorHandler errorHandler)
+            IEventErrorHandler errorHandler,
+            IOptions<AbpEventBusOptions> abpEventBusOptions)
             : base(serviceScopeFactory, currentTenant, errorHandler)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
             MessageConsumerFactory = messageConsumerFactory;
+            AbpEventBusOptions = abpEventBusOptions.Value;
             AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             AbpRabbitMqEventBusOptions = options.Value;
 
@@ -57,6 +60,8 @@ namespace Volo.Abp.EventBus.RabbitMq
 
         public void Initialize()
         {
+            const string suffix = "_dead_letter";
+
             Consumer = MessageConsumerFactory.Create(
                 new ExchangeDeclareConfiguration(
                     AbpRabbitMqEventBusOptions.ExchangeName,
@@ -67,7 +72,12 @@ namespace Volo.Abp.EventBus.RabbitMq
                     AbpRabbitMqEventBusOptions.ClientName,
                     durable: true,
                     exclusive: false,
-                    autoDelete: false
+                    autoDelete: false,
+                    arguments: new Dictionary<string, object>
+                    {
+                        {"x-dead-letter-exchange", AbpRabbitMqEventBusOptions.ExchangeName + suffix},
+                        {"x-dead-letter-routing-key", AbpEventBusOptions.DeadLetterName ?? AbpRabbitMqEventBusOptions.ClientName + suffix}
+                    }
                 ),
                 AbpRabbitMqEventBusOptions.ConnectionName
             );
@@ -187,6 +197,35 @@ namespace Volo.Abp.EventBus.RabbitMq
 
                 channel.BasicPublish(
                    exchange: AbpRabbitMqEventBusOptions.ExchangeName,
+                    routingKey: eventName,
+                    mandatory: true,
+                    basicProperties: properties,
+                    body: body
+                );
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public  Task PublishAsync(Type eventType, object eventData, Dictionary<string, object> headers)
+        {
+            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+            var body = Serializer.Serialize(eventData);
+
+            using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
+            {
+                channel.ExchangeDeclare(
+                    AbpRabbitMqEventBusOptions.ExchangeName,
+                    "direct",
+                    durable: true
+                );
+
+                var properties = channel.CreateBasicProperties();
+                properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
+                properties.Headers = headers;
+
+                channel.BasicPublish(
+                    exchange: AbpRabbitMqEventBusOptions.ExchangeName,
                     routingKey: eventName,
                     mandatory: true,
                     basicProperties: properties,

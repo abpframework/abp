@@ -147,6 +147,7 @@ namespace Volo.Abp.RabbitMQ
                 Channel = ConnectionPool
                     .Get(ConnectionName)
                     .CreateModel();
+
                 Channel.ExchangeDeclare(
                     exchange: Exchange.ExchangeName,
                     type: Exchange.Type,
@@ -154,6 +155,23 @@ namespace Volo.Abp.RabbitMQ
                     autoDelete: Exchange.AutoDelete,
                     arguments: Exchange.Arguments
                 );
+
+                if (Queue.Arguments.ContainsKey("x-dead-letter-exchange") &&
+                    Queue.Arguments.ContainsKey("x-dead-letter-routing-key"))
+                {
+                    Channel.ExchangeDeclare(
+                        Exchange.Arguments["x-dead-letter-exchange"].ToString(),
+                        Exchange.Type,
+                        Exchange.Durable,
+                        Exchange.AutoDelete
+                    );
+
+                    Channel.QueueDeclare(
+                        Queue.Arguments["x-dead-letter-routing-key"].ToString(),
+                        Queue.Durable,
+                        Queue.Exclusive,
+                        Queue.AutoDelete);
+                }
 
                 Channel.QueueDeclare(
                     queue: Queue.QueueName,
@@ -194,14 +212,10 @@ namespace Volo.Abp.RabbitMQ
             {
                 try
                 {
-                    Channel.BasicNack(
-                        basicDeliverEventArgs.DeliveryTag,
-                        multiple: false,
-                        requeue: true
-                    );
+                    Channel.BasicReject(basicDeliverEventArgs.DeliveryTag, false);
                 }
                 catch { }
-                
+
                 Logger.LogException(ex);
                 await ExceptionNotifier.NotifyAsync(ex);
             }

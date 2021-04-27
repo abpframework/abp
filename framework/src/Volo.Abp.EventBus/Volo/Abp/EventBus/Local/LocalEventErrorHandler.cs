@@ -57,7 +57,7 @@ namespace Volo.Abp.EventBus.Local
 
             var index = RetryTracking.GetOrDefault(messageId);
 
-            if (Options.RetryStrategyOptions.Count >= index)
+            if (Options.RetryStrategyOptions.MaxRetryAttempts >= index)
             {
                 RetryTracking.Remove(messageId);
                 return false;

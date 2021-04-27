@@ -8,7 +8,7 @@ namespace Volo.Abp.EventBus
 
         public Func<Type, bool> ErrorHandleSelector { get; set; }
 
-        public string DeadLetterQueue { get; set; }
+        public string DeadLetterName { get; set; }
 
         public AbpEventBusRetryStrategyOptions RetryStrategyOptions { get; set; }
 
