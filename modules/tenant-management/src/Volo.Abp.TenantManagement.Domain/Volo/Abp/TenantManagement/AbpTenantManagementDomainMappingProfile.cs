@@ -22,7 +22,8 @@ namespace Volo.Abp.TenantManagement
 
                         return connStrings;
                     });
-                });
+                })
+                .ForMember(x => x.IsActive, x => x.UseDestinationValue());
 
             CreateMap<Tenant, TenantEto>();
         }

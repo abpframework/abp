@@ -20,7 +20,7 @@ namespace Pages.Abp.MultiTenancy
         protected AbpAspNetCoreMultiTenancyOptions Options { get; }
 
         public TenantSwitchModalModel(
-            ITenantStore tenantStore, 
+            ITenantStore tenantStore,
             IOptions<AbpAspNetCoreMultiTenancyOptions> options)
         {
             TenantStore = tenantStore;
@@ -48,7 +48,7 @@ namespace Pages.Abp.MultiTenancy
             else
             {
                 var tenant = await TenantStore.FindAsync(Input.Name);
-                if (tenant == null)
+                if (tenant == null || !tenant.IsActive)
                 {
                     throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name]);
                 }
