@@ -1,0 +1,7 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Wachtwoord moet langer zijn dan {0} tekens.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Wachtwoord moet minstens één niet-alfanumeriek teken bevatten."
+  }
+}

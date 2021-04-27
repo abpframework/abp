@@ -19,7 +19,6 @@
     <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Application.Contracts\Volo.Abp.PermissionManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.Abstractions\Volo.Abp.Users.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
   </ItemGroup>
 
 </Project>

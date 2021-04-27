@@ -393,6 +393,32 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 This is already done for the startup template integration tests.
 
+### Claims Principal Factory
+
+Claims are important elements of authentication and authorization. ABP uses the `IAbpClaimsPrincipalFactory` service to create claims on authentication. This service was designed as extensible. If you need to add your custom claims to the authentication ticket, you can implement the `IAbpClaimsPrincipalContributor` in your application.
+
+**Example: Add a `SocialSecurityNumber` claim:**
+
+```csharp
+public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+{
+    public async Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+    {
+        var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        var userId = identity?.FindUserId();
+        if (userId.HasValue)
+        {
+            var userService = context.ServiceProvider.GetRequiredService<IUserService>(); //Your custom service
+            var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(userId.Value);
+            if (socialSecurityNumber != null)
+            {
+                identity.AddOrReplace(new Claim("SocialSecurityNumber", socialSecurityNumber));
+            }
+        }
+    }
+}
+```
+
 ## See Also
 
 * [Permission Management Module](Modules/Permission-Management.md)

@@ -275,6 +275,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp suite");
             sb.AppendLine("  abp suite install");
             sb.AppendLine("  abp suite install --preview");
+            sb.AppendLine("  abp suite install --version 4.2.2");            
             sb.AppendLine("  abp suite update");
             sb.AppendLine("  abp suite update --preview");
             sb.AppendLine("  abp suite remove");

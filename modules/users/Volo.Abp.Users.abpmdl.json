@@ -1,0 +1,31 @@
+{
+  "packages": {
+    "Volo.Abp.Users.Abstractions": {
+      "path": "src/Volo.Abp.Users.Abstractions/Volo.Abp.Users.Abstractions.csproj"
+    },
+    "Volo.Abp.Users.Domain.Shared": {
+      "path": "src/Volo.Abp.Users.Domain.Shared/Volo.Abp.Users.Domain.Shared.csproj",
+      "includes": {
+        "lib.domain.shared": {}
+      }
+    },
+    "Volo.Abp.Users.Domain": {
+      "path": "src/Volo.Abp.Users.Domain/Volo.Abp.Users.Domain.csproj",
+      "includes": {
+        "lib.domain": {}
+      }
+    },
+    "Volo.Abp.Users.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.Users.EntityFrameworkCore/Volo.Abp.Users.EntityFrameworkCore.csproj",
+      "includes": {
+        "lib.ef": {}
+      }
+    },
+    "Volo.Abp.Users.MongoDB": {
+      "path": "src/Volo.Abp.Users.MongoDB/Volo.Abp.Users.MongoDB.csproj",
+      "includes": {
+        "lib.mongodb": {}
+      }
+    }
+  }
+}

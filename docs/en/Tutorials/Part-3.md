@@ -1408,6 +1408,7 @@ Here the complete code to create the book management CRUD page, that has been de
 @using Acme.BookStore.Books
 @using Acme.BookStore.Localization
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Components.Web
 @inject IStringLocalizer<BookStoreResource> L
 @inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
 @inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>

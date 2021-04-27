@@ -97,7 +97,9 @@
 <div class="demo-with-code">
     <div class="demo-area">
         <abp-input asp-for="@Model.MyModel.EmailAddress" label="Email Address" placeholder="name@example.com" />
-        <abp-select asp-for="@Model.MyModel.City" asp-items="@Model.CityList" label="City" />
+        <abp-select asp-for="@Model.MyModel.City" asp-items="@Model.CityList" label="City">
+            <option value="">Choose a city</option>
+        </abp-select>
         <abp-select asp-for="@Model.MyModel.Cities" asp-items="@Model.CityList" label="Cities" />
         <abp-input asp-for="@Model.MyModel.Description" label="Description" />
     </div>
@@ -140,7 +142,9 @@
             <abp-tab title="Tag Helper" active="true">
                 <pre><code>
 &lt;abp-input asp-for=&quot;@@Model.MyModel.EmailAddress&quot; label=&quot;Email Address&quot; placeholder=&quot;name@example.com&quot; /&gt;
-&lt;abp-select asp-for=&quot;@@Model.MyModel.City&quot; asp-items=&quot;@@Model.CityList&quot; label=&quot;City&quot; /&gt;
+&lt;abp-select asp-for=&quot;@@Model.MyModel.City&quot; asp-items=&quot;@@Model.CityList&quot; label=&quot;City&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;Choose a city&lt;/option&gt;
+&lt;/abp-select&gt;
 &lt;abp-select asp-for=&quot;@@Model.MyModel.Cities&quot; asp-items=&quot;@@Model.CityList&quot; label=&quot;Cities&quot; /&gt;
 &lt;abp-input asp-for=&quot;@@Model.MyModel.Description&quot; label=&quot;Description&quot; /&gt;
 </code></pre>
@@ -155,6 +159,7 @@
     &lt;div class=&quot;form-group&quot;&gt;
         &lt;label for=&quot;MyModel_City&quot;&gt;City&lt;/label&gt;
         &lt;select id=&quot;MyModel_City&quot; name=&quot;MyModel.City&quot; class=&quot;form-control&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;Choose a city&lt;/option&gt;
             &lt;option value=&quot;NY&quot;&gt;New York&lt;/option&gt;
             &lt;option value=&quot;LDN&quot;&gt;London&lt;/option&gt;
             &lt;option value=&quot;IST&quot;&gt;Istanbul&lt;/option&gt;

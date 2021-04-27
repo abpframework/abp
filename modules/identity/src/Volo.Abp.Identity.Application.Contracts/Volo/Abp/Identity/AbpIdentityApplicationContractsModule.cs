@@ -1,5 +1,4 @@
-﻿using Volo.Abp.Application;
-using Volo.Abp.Authorization;
+﻿using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -13,7 +12,6 @@ namespace Volo.Abp.Identity
         typeof(AbpIdentityDomainSharedModule),
         typeof(AbpUsersAbstractionModule),
         typeof(AbpAuthorizationModule),
-        typeof(AbpDddApplicationModule),
         typeof(AbpPermissionManagementApplicationContractsModule)
         )]
     public class AbpIdentityApplicationContractsModule : AbpModule
