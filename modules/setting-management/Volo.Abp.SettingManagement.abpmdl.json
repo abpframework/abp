@@ -95,8 +95,8 @@
         "lib.test": {}
       }
     },
-    "Volo.Abp.SettingManagement.Domain.Tests": {
-      "path": "test/Volo.Abp.SettingManagement.Domain.Tests/Volo.Abp.SettingManagement.Domain.Tests.csproj",
+    "Volo.Abp.SettingManagement.Tests": {
+      "path": "test/Volo.Abp.SettingManagement.Tests/Volo.Abp.SettingManagement.Tests.csproj",
       "folder": "test",
       "includes": {
         "lib.test": {}
