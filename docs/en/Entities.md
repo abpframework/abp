@@ -1,6 +1,6 @@
 # Entities
 
-Entities are one of the core concepts of DDD (Domain Driven Design). Eric Evans describe it as "*An object that is not fundamentally defined by its attributes, but rather by a thread of continuity and identity*".
+Entities are one of the core concepts of DDD (Domain Driven Design). Eric Evans describes  it as "*An object that is not fundamentally defined by its attributes, but rather by a thread of continuity and identity*".
 
 An entity is generally mapped to a table in a relational database.
 
@@ -19,7 +19,7 @@ public class Book : Entity<Guid>
 
 > If you do not want to derive your entity from the base `Entity<TKey>` class, you can directly implement `IEntity<TKey>` interface.
 
-`Entity<TKey>` class just defines an `Id` property with the given primary **key type**, which is `Guid` in the example above. It can be other types like `string`, `int`, `long` or whatever you need.
+`Entity<TKey>` class just defines an `Id` property with the given primary **key type**, which is `Guid` in the example above. It can be other types like `string`, `int`, `long`, or whatever you need.
 
 ### Entities with GUID Keys
 
@@ -226,7 +226,7 @@ While this example may not implement all the best practices of an aggregate root
 * `Order` has a public constructor that takes **minimal requirements** to construct an `Order` instance. So, it's not possible to create an order without an id and reference number. The **protected/private** constructor is only necessary to **deserialize** the object while reading from a data source.
 * `OrderLine` constructor is internal, so it is only allowed to be created by the domain layer. It's used inside of the `Order.AddProduct` method.
 * `Order.AddProduct` implements the business rule to add a product to an order.
-* All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For exmple, it would be dangerous to set `TotalItemCount` without adding a new product to the order. It's value is maintained by the `AddProduct` method.
+* All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For example, it would be dangerous to set `TotalItemCount` without adding a new product to the order. It's value is maintained by the `AddProduct` method.
 
 ABP Framework does not force you to apply any DDD rule or patterns. However, it tries to make it possible and easier when you do want to apply them. The documentation also follows the same principle.
 

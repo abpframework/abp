@@ -13,10 +13,10 @@ If you add the account module to your project;
 Install the `@abp/ng.account` NPM package by running the below command:
 
 ```bash
-npm install @abp/ng.account@next
+npm install @abp/ng.account
 ```
 
-> Make sure v4.3-rc or higher version is installed.
+> Make sure v4.3 or higher version is installed.
 
 Open the `app.module.ts` and add `AccountConfigModule.forRoot()` to the imports array as shown below:
 
@@ -52,12 +52,12 @@ export class AppRoutingModule {}
 
 ### Account Public Module Implementation for Commercial Templates
 
-The pro startup template comes with `@volo/abp.ng.account` package. You should update the package version to v4.3-rc or higher version. The package can be updated by running the following command:
+The pro startup template comes with `@volo/abp.ng.account` package. You should update the package version to v4.3 or higher version. The package can be updated by running the following command:
 
 ```bash
-npm install @volo/abp.ng.account@next
+npm install @volo/abp.ng.account
 ```
-> Make sure v4.3-rc or higher version is installed.
+> Make sure v4.3 or higher version is installed.
 
 Open the `app.module.ts` and add `AccountPublicConfigModule.forRoot()` to the imports array as shown below:
 
