@@ -76,10 +76,12 @@ namespace Volo.Abp.EventBus.Kafka
                 return;
             }
 
-            var eventMessage = Serializer.Deserialize(message.Value, eventType);
+            var eventData = Serializer.Deserialize(message.Value, eventType);
 
-            await TriggerHandlersAsync(eventType, eventMessage,
-                context => { context.SetProperty(KafkaEventErrorHandler.HeadersKey, message.Headers); });
+            await TriggerHandlersAsync(eventType, eventData, errorContext =>
+            {
+                errorContext.SetProperty(KafkaEventErrorHandler.HeadersKey, message.Headers);
+            });
         }
 
         public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
