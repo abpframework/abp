@@ -20,18 +20,17 @@ namespace Volo.Abp.RabbitMQ
 
         public QueueDeclareConfiguration(
             [NotNull] string queueName,
-            string deadLetterQueueName,
             bool durable = true,
             bool exclusive = false,
             bool autoDelete = false,
-            Dictionary<string, object> arguments = null)
+            string deadLetterQueueName = null)
         {
             QueueName = queueName;
             DeadLetterQueueName = deadLetterQueueName;
             Durable = durable;
             Exclusive = exclusive;
             AutoDelete = autoDelete;
-            Arguments = arguments ?? new Dictionary<string, object>();
+            Arguments = new Dictionary<string, object>();
         }
 
         public virtual QueueDeclareOk Declare(IModel channel)

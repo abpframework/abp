@@ -66,16 +66,16 @@ namespace Volo.Abp.EventBus.RabbitMq
             Consumer = MessageConsumerFactory.Create(
                 new ExchangeDeclareConfiguration(
                     AbpRabbitMqEventBusOptions.ExchangeName,
-                    AbpRabbitMqEventBusOptions.ExchangeName + suffix,
                     type: "direct",
-                    durable: true
+                    durable: true,
+                    deadLetterExchangeName: AbpRabbitMqEventBusOptions.ExchangeName + suffix
                 ),
                 new QueueDeclareConfiguration(
                     AbpRabbitMqEventBusOptions.ClientName,
-                    AbpEventBusOptions.DeadLetterName ?? AbpRabbitMqEventBusOptions.ClientName + suffix,
                     durable: true,
                     exclusive: false,
-                    autoDelete: false
+                    autoDelete: false,
+                    AbpEventBusOptions.DeadLetterName ?? AbpRabbitMqEventBusOptions.ClientName + suffix
                 ),
                 AbpRabbitMqEventBusOptions.ConnectionName
             );

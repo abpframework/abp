@@ -18,10 +18,10 @@ namespace Volo.Abp.RabbitMQ
 
         public ExchangeDeclareConfiguration(
             string exchangeName,
-            string deadLetterExchangeName,
             string type,
             bool durable = false,
-            bool autoDelete = false)
+            bool autoDelete = false,
+            string deadLetterExchangeName = null)
         {
             ExchangeName = exchangeName;
             DeadLetterExchangeName = deadLetterExchangeName;
