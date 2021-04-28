@@ -2,14 +2,20 @@
 # yarn lockfile v1
 
 
+"@abp/ng.account@~4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@abp/ng.account/-/ng.account-4.3.0.tgz#d13e237f933a45d108a8bedce96d3ee41c3207eb"
+  integrity sha512-WRUbExtryzHKQfP+QkjUG2n8PmJVV7oVEYrDHfP8QLdxwg0uxG4lQ4de5eXYO8ROd5RdE2QDeHgLqxASRx0ARw==
+  dependencies:
+    "@abp/ng.theme.shared" "~4.3.0"
+    tslib "^2.0.0"
+
 "@abp/ng.components@~4.3.0":
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/@abp/ng.components/-/ng.components-4.3.0.tgz#0dd6b982945a3b1c3cac1da95f09ffaa9fd3dfd4"
   integrity sha512-rZ/NgxW6LfqKLFhXSoadVlv6n7bdsWOiwK0rDj+8wUp5bKyCPUFNkRuBsxkY6RVk6xHC/QX1JNd0Py3YK9OihA==
   dependencies:
     ng-zorro-antd "^11.0.0"
-    
-    
     tslib "^2.0.0"
 
 "@abp/ng.core@~4.3.0":
@@ -19,8 +25,6 @@
   dependencies:
     "@abp/utils" "^4.3.0-rc.2"
     "@angular/localize" "~10.0.10"
-    "@ngxs/router-plugin" "^3.7.0"
-    "@ngxs/storage-plugin" "^3.7.0"
     "@ngxs/store" "^3.7.0"
     angular-oauth2-oidc "^10.0.0"
     just-clone "^3.1.0"
@@ -100,7 +104,7 @@
     "@abp/ng.core" "~4.3.0"
     "@fortawesome/fontawesome-free" "^5.14.0"
     "@ng-bootstrap/ng-bootstrap" "^7.0.0"
-    "@ngx-validate/core" "^0.0.12"
+    "@ngx-validate/core" "^0.0.13"
     "@swimlane/ngx-datatable" "^17.1.0"
     bootstrap "~4.6.0"
     chart.js "^2.9.3"
