@@ -87,7 +87,6 @@ namespace Volo.Abp.Kafka
         {
             await CreateTopicAsync();
             Consume();
-
             Timer.Stop();
         }
 

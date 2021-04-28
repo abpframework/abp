@@ -6,7 +6,7 @@ namespace Volo.Abp.RabbitMQ
     {
         public string ExchangeName { get; }
 
-        public string DeadLetterExchangeName { get; }
+        public string DeadLetterExchangeName { get; set; }
 
         public string Type { get; }
 

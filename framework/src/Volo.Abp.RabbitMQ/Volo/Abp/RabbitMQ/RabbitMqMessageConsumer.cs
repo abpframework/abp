@@ -6,6 +6,7 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using RabbitMQ.Client.Exceptions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
@@ -178,7 +179,7 @@ namespace Volo.Abp.RabbitMQ
                     Channel.QueueBind(Queue.DeadLetterQueueName, Exchange.DeadLetterExchangeName, Queue.DeadLetterQueueName);
                 }
 
-                Channel.QueueDeclare(
+                var result = Channel.QueueDeclare(
                     queue: Queue.QueueName,
                     durable: Queue.Durable,
                     exclusive: Queue.Exclusive,
@@ -197,6 +198,17 @@ namespace Volo.Abp.RabbitMQ
             }
             catch (Exception ex)
             {
+                if (ex is OperationInterruptedException operationInterruptedException &&
+                    operationInterruptedException.ShutdownReason.ReplyCode == 406 &&
+                    operationInterruptedException.Message.Contains("arg 'x-dead-letter-exchange'"))
+                {
+                    Exchange.DeadLetterExchangeName = null;
+                    Queue.DeadLetterQueueName = null;
+                    Queue.Arguments.Remove("x-dead-letter-exchange");
+                    Queue.Arguments.Remove("x-dead-letter-routing-key");
+                    Logger.LogWarning("Unable to bind the dead letter queue to an existing queue. You can delete the queue or add policy. See: https://www.rabbitmq.com/parameters.html");
+                }
+
                 Logger.LogException(ex, LogLevel.Warning);
                 await ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning);
             }

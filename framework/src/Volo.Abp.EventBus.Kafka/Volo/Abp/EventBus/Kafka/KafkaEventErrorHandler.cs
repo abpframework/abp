@@ -12,7 +12,7 @@ namespace Volo.Abp.EventBus.Kafka
     public class KafkaEventErrorHandler : EventErrorHandlerBase, ISingletonDependency
     {
         public const string HeadersKey = "headers";
-        public const string RetryIndexKey = "retryIndex";
+        public const string RetryAttemptKey = "retryAttempt";
 
         protected IKafkaSerializer Serializer { get; }
 
@@ -30,26 +30,25 @@ namespace Volo.Abp.EventBus.Kafka
                 await Task.Delay(Options.RetryStrategyOptions.IntervalMillisecond);
             }
 
-            var headers = context.GetProperty<Headers>(HeadersKey) ?? new Headers();
+            var headers = context.GetProperty(HeadersKey).As<Headers>();
 
-            var index = 0;
-            if (headers.Any(x => x.Key == RetryIndexKey))
+            var retryAttempt = 0;
+            if (headers.Any(x => x.Key == RetryAttemptKey))
             {
-                index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
+                retryAttempt = Serializer.Deserialize<int>(headers.GetLastBytes(RetryAttemptKey));
             }
 
-            headers.Remove(RetryIndexKey);
-            headers.Add(RetryIndexKey, Serializer.Serialize(++index));
+            headers.Remove(RetryAttemptKey);
+            headers.Add(RetryAttemptKey, Serializer.Serialize(++retryAttempt));
 
             await context.EventBus.As<KafkaDistributedEventBus>().PublishAsync(context.EventType, context.EventData, headers);
         }
 
         protected override async Task MoveToDeadLetter(EventExecutionErrorContext context)
         {
-            await context.EventBus.As<KafkaDistributedEventBus>().PublishToDeadLetterAsync(context.EventType, context.EventData, new Headers
-            {
-                {"exceptions", Serializer.Serialize(context.Exceptions)}
-            });
+            var headers = context.GetProperty(HeadersKey).As<Headers>();
+            headers.Add("exceptions", Serializer.Serialize(context.Exceptions.Select(x => x.ToString()).ToList()));
+            await context.EventBus.As<KafkaDistributedEventBus>().PublishToDeadLetterAsync(context.EventType, context.EventData, headers);
         }
 
         protected override bool ShouldRetry(EventExecutionErrorContext context)
@@ -59,16 +58,16 @@ namespace Volo.Abp.EventBus.Kafka
                 return false;
             }
 
-            var headers = context.GetProperty<Headers>(HeadersKey);
+            var headers = context.GetProperty(HeadersKey).As<Headers>();
 
-            if (headers == null)
+            if (headers.All(x => x.Key != RetryAttemptKey))
             {
                 return true;
             }
 
-            var index = Serializer.Deserialize<int>(headers.GetLastBytes(RetryIndexKey));
+            var retryAttempt = Serializer.Deserialize<int>(headers.GetLastBytes(RetryAttemptKey));
 
-            return Options.RetryStrategyOptions.MaxRetryAttempts > index;
+            return Options.RetryStrategyOptions.MaxRetryAttempts > retryAttempt;
         }
     }
 }

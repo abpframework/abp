@@ -13,26 +13,27 @@ namespace Volo.Abp.EventBus.Rebus
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var abpEventBusOptions = context.Services.ExecutePreConfiguredActions<AbpEventBusOptions>();
+            var options = context.Services.ExecutePreConfiguredActions<AbpRebusEventBusOptions>();;
 
             context.Services.AddTransient(typeof(IHandleMessages<>), typeof(RebusDistributedEventHandlerAdapter<>));
 
             Configure<AbpRebusEventBusOptions>(rebusOptions =>
             {
                 context.Services.ExecutePreConfiguredActions(rebusOptions);
+            });
 
-                context.Services.AddRebus(configure =>
+            context.Services.AddRebus(configure =>
+            {
+                if (abpEventBusOptions.RetryStrategyOptions != null)
                 {
-                    if (abpEventBusOptions.RetryStrategyOptions != null)
-                    {
-                        configure.Options(b =>
-                            b.SimpleRetryStrategy(
-                                errorQueueAddress: abpEventBusOptions.DeadLetterName ?? rebusOptions.InputQueueName + "_dead_letter",
-                                maxDeliveryAttempts: abpEventBusOptions.RetryStrategyOptions.MaxRetryAttempts));
-                    }
+                    configure.Options(b =>
+                        b.SimpleRetryStrategy(
+                            errorQueueAddress: abpEventBusOptions.DeadLetterName ?? options.InputQueueName + "_dead_letter",
+                            maxDeliveryAttempts: abpEventBusOptions.RetryStrategyOptions.MaxRetryAttempts));
+                }
 
-                    rebusOptions.Configurer?.Invoke(configure);
-                    return configure;
-                });
+                options.Configurer?.Invoke(configure);
+                return configure;
             });
         }
 

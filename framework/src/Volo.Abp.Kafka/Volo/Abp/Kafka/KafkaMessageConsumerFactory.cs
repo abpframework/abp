@@ -21,7 +21,7 @@ namespace Volo.Abp.Kafka
             string connectionName = null)
         {
             var consumer = ServiceScope.ServiceProvider.GetRequiredService<KafkaMessageConsumer>();
-            consumer.Initialize(topicName, groupId, connectionName);
+            consumer.Initialize(topicName, deadLetterTopicName, groupId, connectionName);
             return consumer;
         }
 

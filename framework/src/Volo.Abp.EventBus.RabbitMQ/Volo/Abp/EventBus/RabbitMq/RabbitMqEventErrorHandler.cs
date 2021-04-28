@@ -12,7 +12,7 @@ namespace Volo.Abp.EventBus.RabbitMq
     public class RabbitMqEventErrorHandler : EventErrorHandlerBase, ISingletonDependency
     {
         public const string HeadersKey = "headers";
-        public const string RetryIndexKey = "retryIndex";
+        public const string RetryAttemptKey = "retryAttempt";
 
         public RabbitMqEventErrorHandler(
             IOptions<AbpEventBusOptions> options)
@@ -30,13 +30,13 @@ namespace Volo.Abp.EventBus.RabbitMq
             var properties = context.GetProperty(HeadersKey).As<IBasicProperties>();
             var headers = properties.Headers ?? new Dictionary<string, object>();
 
-            var index = 0;
-            if (headers.ContainsKey(RetryIndexKey))
+            var retryAttempt = 0;
+            if (headers.ContainsKey(RetryAttemptKey))
             {
-                index = (int) headers[RetryIndexKey];
+                retryAttempt = (int) headers[RetryAttemptKey];
             }
 
-            headers[RetryIndexKey] = ++index;
+            headers[RetryAttemptKey] = ++retryAttempt;
             headers["exceptions"] = context.Exceptions.Select(x => x.ToString()).ToList();
             properties.Headers = headers;
 
@@ -64,14 +64,14 @@ namespace Volo.Abp.EventBus.RabbitMq
 
             var properties = context.GetProperty(HeadersKey).As<IBasicProperties>();
 
-            if (properties.Headers == null || !properties.Headers.ContainsKey(RetryIndexKey))
+            if (properties.Headers == null || !properties.Headers.ContainsKey(RetryAttemptKey))
             {
                 return true;
             }
 
-            var index = (int) properties.Headers[RetryIndexKey];
+            var retryAttempt = (int) properties.Headers[RetryAttemptKey];
 
-            return Options.RetryStrategyOptions.MaxRetryAttempts > index;
+            return Options.RetryStrategyOptions.MaxRetryAttempts > retryAttempt;
         }
     }
 }

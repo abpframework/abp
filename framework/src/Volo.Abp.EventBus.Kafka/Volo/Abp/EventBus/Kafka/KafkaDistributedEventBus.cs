@@ -9,7 +9,6 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.EventBus.Local;
 using Volo.Abp.Kafka;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -49,7 +48,8 @@ namespace Volo.Abp.EventBus.Kafka
             MessageConsumerFactory = messageConsumerFactory;
             Serializer = serializer;
             ProducerPool = producerPool;
-            DeadLetterTopicName = AbpEventBusOptions.DeadLetterName ?? AbpKafkaEventBusOptions.TopicName + "_dead_letter";
+            DeadLetterTopicName =
+                AbpEventBusOptions.DeadLetterName ?? AbpKafkaEventBusOptions.TopicName + "_dead_letter";
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
@@ -59,6 +59,7 @@ namespace Volo.Abp.EventBus.Kafka
         {
             Consumer = MessageConsumerFactory.Create(
                 AbpKafkaEventBusOptions.TopicName,
+                DeadLetterTopicName,
                 AbpKafkaEventBusOptions.GroupId,
                 AbpKafkaEventBusOptions.ConnectionName);
             Consumer.OnMessageReceived(ProcessEventAsync);
@@ -75,7 +76,7 @@ namespace Volo.Abp.EventBus.Kafka
                 return;
             }
 
-            var eventMessage = Serializer.Deserialize<LocalEventMessage>(message.Value);
+            var eventMessage = Serializer.Deserialize(message.Value, eventType);
 
             await TriggerHandlersAsync(eventType, eventMessage,
                 context => { context.SetProperty(KafkaEventErrorHandler.HeadersKey, message.Headers); });
@@ -156,7 +157,7 @@ namespace Volo.Abp.EventBus.Kafka
 
         public override async Task PublishAsync(Type eventType, object eventData)
         {
-            await PublishAsync(eventType, eventData, null);
+            await PublishAsync(eventType, eventData, new Headers {{"messageId", Serializer.Serialize(Guid.NewGuid())}});
         }
 
         public virtual async Task PublishAsync(Type eventType, object eventData, Headers headers)

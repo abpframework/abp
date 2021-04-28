@@ -8,7 +8,7 @@ namespace Volo.Abp.RabbitMQ
     {
         [NotNull] public string QueueName { get; }
 
-        [NotNull] public string DeadLetterQueueName { get; }
+        public string DeadLetterQueueName { get; set; }
 
         public bool Durable { get; set; }
 
@@ -20,7 +20,7 @@ namespace Volo.Abp.RabbitMQ
 
         public QueueDeclareConfiguration(
             [NotNull] string queueName,
-            [NotNull] string deadLetterQueueName,
+            string deadLetterQueueName,
             bool durable = true,
             bool exclusive = false,
             bool autoDelete = false,
