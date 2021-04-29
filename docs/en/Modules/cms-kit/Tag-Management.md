@@ -9,7 +9,7 @@ CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Featu
 ```csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 {
-    cmsKit.Tags.Disable();
+    cmsKit.Tags.Enable();
 });
 ```
 
