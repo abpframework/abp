@@ -10,6 +10,8 @@ To avoid manual effort, we might use a tool like [NSWAG](https://github.com/Rico
 
 ABP introduces an endpoint that exposes server-side method contracts. When the `generate-proxy` command is run, ABP CLI makes an HTTP request to this endpoint and generates better-aligned client proxies in TypeScript. It organizes folders according to namespaces, adds barrel exports, and reflects method signatures in Angular services.
 
+> Before you start, please make sure you start the backend application with `dotnet run`. There is a [known limitation about Visual Studio](#known-limitations), so please do not run the project using its built-in web server.
+
 Run the following command in the **root folder** of the angular application:
 
 ```bash

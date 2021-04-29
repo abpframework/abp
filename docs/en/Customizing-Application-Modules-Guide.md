@@ -75,6 +75,7 @@ There are some low level systems that you can control entity actions, table colu
 Entity action extension system allows you to add a new action to the action menu for an entity on the user interface;
 
 * [Entity Action Extensions for ASP.NET Core UI](UI/AspNetCore/Entity-Action-Extensions.md)
+* [Entity Action Extensions for Blazor UI](UI/Blazor/Entity-Action-Extensions.md)
 * [Entity Action Extensions for Angular](UI/Angular/Entity-Action-Extensions.md)
 
 #### Data Table Column Extensions
@@ -82,6 +83,7 @@ Entity action extension system allows you to add a new action to the action menu
 Data table column extension system allows you to add a new column in the data table on the user interface;
 
 * [Data Table Column Extensions for ASP.NET Core UI](UI/AspNetCore/Data-Table-Column-Extensions.md)
+* [Data Table Column Extensions for Blazor UI](UI/Blazor/Data-Table-Column-Extensions.md)
 * [Data Table Column Extensions for Angular](UI/Angular/Data-Table-Column-Extensions.md)
 
 #### Page Toolbar
@@ -89,6 +91,7 @@ Data table column extension system allows you to add a new column in the data ta
 Page toolbar system allows you to add components to the toolbar of a page;
 
 * [Page Toolbar Extensions for ASP.NET Core UI](UI/AspNetCore/Page-Toolbar-Extensions.md)
+* [Page Toolbar Extensions for Blazor UI](UI/Blazor/Page-Toolbar-Extensions.md)
 * [Page Toolbar Extensions for Angular](UI/Angular/Page-Toolbar-Extensions.md)
 
 #### Others

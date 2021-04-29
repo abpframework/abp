@@ -12,6 +12,11 @@
         <h1>Welcome to the Application</h1>
 
         <p class="lead px-lg-5 mx-lg-5">@L["LongWelcomeMessage"]</p>
+        
+        @if (!CurrentUser.IsAuthenticated)
+        {
+            <a class="btn btn-primary" href="/Account/Login" ><i class="fa fa-sign-in"></i> @L["Login"]</a>
+        }
     </div>
 
     <div class="my-3 text-center">

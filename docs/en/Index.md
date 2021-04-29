@@ -4,14 +4,19 @@ ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to 
 
 ## Getting Started
 
-* [Getting Started Guide](Getting-Started.md) is the easiest way to start a new web application with the ABP Framework.
-* [Web Application Development Tutorial](Tutorials/Part-1.md) is a complete tutorial to develop a full stack web application.
+* [Quick Start](Tutorials/Todo/Index.md) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to quickly understand how ABP works.
+* [Getting Started](Getting-Started.md) guide can be used to create and run ABP based solutions with different options and details.
+* [Web Application Development Tutorial](Tutorials/Part-1.md) is a complete tutorial to develop a full stack web application with all aspects of a real-life solution.
 
 ### UI Framework Options
+
+ABP Framework can work with any UI framework, while the following frameworks are supported out of the box:
 
 <img width="500" src="images/ui-options.png">
 
 ### Database Provider Options
+
+ABP Framework can work with any database provider, while the following providers are supported out of the box:
 
 <img width="500" src="images/db-options.png">
 

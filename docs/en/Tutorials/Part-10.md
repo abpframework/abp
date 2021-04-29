@@ -949,10 +949,11 @@ This command will update the service proxy files under the `/src/app/proxy/` fol
 
 Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:
 
-````js
+````html
 <ngx-datatable-column
   [name]="'::Author' | abpLocalization"
   prop="authorName"
+  [sortable]="false"
 ></ngx-datatable-column>
 ````
 

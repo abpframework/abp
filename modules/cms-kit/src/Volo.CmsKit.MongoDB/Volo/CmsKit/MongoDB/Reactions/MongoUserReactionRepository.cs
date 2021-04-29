@@ -18,7 +18,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
         {
         }
 
-        public async Task<UserReaction> FindAsync(
+        public virtual async Task<UserReaction> FindAsync(
             Guid userId,
             string entityType,
             string entityId,
@@ -38,7 +38,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<UserReaction>> GetListForUserAsync(
+        public virtual async Task<List<UserReaction>> GetListForUserAsync(
             Guid userId,
             string entityType,
             string entityId,
@@ -55,7 +55,7 @@ namespace Volo.CmsKit.MongoDB.Reactions
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(
+        public virtual async Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(
             string entityType,
             string entityId,
             CancellationToken cancellationToken = default)

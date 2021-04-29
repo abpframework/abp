@@ -73,7 +73,6 @@
                                 commentsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        abp.notify.info(l("SuccessfullyDeleted"));
                                         _dataTable.ajax.reload();
                                     });
                             }
@@ -88,7 +87,7 @@
                 data: "author.userName",
                 render: function (data) {
                     if (data !== null) {
-                        return GetFilterableDatatableContent('#Author', data);
+                        return GetFilterableDatatableContent('#Author', $.fn.dataTable.render.text().display(data)); //prevent against possible XSS
                     }
                     return "";
                 }
@@ -98,7 +97,7 @@
                 data: "text",
                 orderable: false,
                 render: function (data) {
-                    data = data || "";
+                    data = $.fn.dataTable.render.text().display(data || "");
 
                     var maxChars = 64;
 

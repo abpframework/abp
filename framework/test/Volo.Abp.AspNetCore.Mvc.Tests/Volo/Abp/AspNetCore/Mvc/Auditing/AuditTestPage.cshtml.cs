@@ -34,5 +34,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         {
             throw new UserFriendlyException("Exception occurred!");
         }
+
+        public IActionResult OnGetAuditActivateFailed([FromServices] AbpAuditingOptions options)
+        {
+            return new OkResult();
+        }
     }
 }

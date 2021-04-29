@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
 using Volo.Abp.UI.Navigation;
 
@@ -10,6 +11,9 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
     {
         [Inject]
         protected IMenuManager MenuManager { get; set; }
+        
+        [Inject]
+        protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         protected ApplicationMenu Menu { get; set; }
 
@@ -18,6 +22,12 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
             Menu = await MenuManager.GetAsync(StandardMenus.User);
 
             Navigation.LocationChanged += OnLocationChanged;
+
+            AuthenticationStateProvider.AuthenticationStateChanged += async (task) =>
+            {
+                Menu = await MenuManager.GetAsync(StandardMenus.User);
+                await InvokeAsync(StateHasChanged);
+            };
         }
 
         protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)

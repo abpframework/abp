@@ -8,7 +8,7 @@
     "BlogPosts": "Blog Posts",
     "Blogs": "Blogs",
     "ChoosePreference": "Choose Preference...",
-    "Cms": "Cms",
+    "Cms": "CMS",
     "CmsKit.Comments": "Comments",
     "CmsKit.Ratings": "Ratings",
     "CmsKit.Reactions": "Reactions",
@@ -52,8 +52,10 @@
     "Menu:CMS": "CMS",
     "Message": "Message",
     "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
-    "Name": "Name",
-    "New": "New",
+    "NewPage": "New Page",
+    "NewBlog": "New Blog",
+    "NewBlogPost": "New Blog Post",
+    "NewTag": "New Tag",
     "OK": "OK",
     "PageDeletionConfirmationMessage": "Are you sure to delete this page?",
     "Pages": "Pages",
@@ -110,7 +112,6 @@
     "SubjectPlaceholder": "Please type a subject",
     "Submit": "Submit",
     "Subscribe": "Subscribe",
-    "SuccessfullyDeleted": "Successfully deleted!",
     "SuccessfullySaved": "Successfully saved!",
     "TagDeletionConfirmationMessage": "Are you sure to delete '{0}' tag?",
     "Tags": "Tags",
@@ -128,6 +129,7 @@
     "YourEmailAddress": "Your e-mail address",
     "YourFullName": "Your full name",
     "YourMessage": "Your Message",
-    "YourReply": "Your reply"
+    "YourReply": "Your reply",
+    "LastModificationTime": "Last Modification Time"
   }
 }

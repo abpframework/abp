@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Volo.Abp.BlobStoring.Database": {
+      "path": "Volo.Abp.BlobStoring.Database.abpmdl.json"
+    }
+  }
+}

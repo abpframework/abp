@@ -447,7 +447,11 @@ For more information, see the [RoutesService document](../UI/Angular/Modifying-t
 
 [ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
 
-Run the following command in the `angular` folder:
+> **Warning**: There is a problem with IIS Express; it doesn't allow to connect to the application from another process. If you are using Visual Studio, select the `Acme.BookStore.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
+
+![vs-run-without-iisexpress](images/vs-run-without-iisexpress.png)
+
+Once the host application is running, execute the following command in the `angular` folder:
 
 ```bash
 abp generate-proxy

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Blazor.Server.Menus;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
@@ -86,6 +87,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureLocalizationServices();
+            ConfigureSwaggerServices(context.Services);
             ConfigureAutoApiControllers();
             ConfigureHttpClient(context);
             ConfigureBlazorise(context);
@@ -120,6 +122,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
                     bundle =>
                     {
                         bundle.AddFiles("/blazor-global-styles.css");
+                        //You can remove the following line if you don't use Blazor CSS isolation for components
+                        bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.styles.css");
                     }
                 );
             });
@@ -173,6 +177,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
@@ -182,6 +187,18 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
                 options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
                 options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             });
+        }
+
+        private void ConfigureSwaggerServices(IServiceCollection services)
+        {
+            services.AddSwaggerGen(
+                options =>
+                {
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
+                    options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
+                }
+            );
         }
 
         private static void ConfigureHttpClient(ServiceConfigurationContext context)
@@ -263,6 +280,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
             app.UseUnitOfWork();
             app.UseIdentityServer();
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseAbpSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+            });
             app.UseConfiguredEndpoints();
         }
     }

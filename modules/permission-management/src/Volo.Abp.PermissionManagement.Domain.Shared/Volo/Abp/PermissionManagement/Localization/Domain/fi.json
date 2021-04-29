@@ -1,0 +1,10 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Permissions": "Käyttöoikeudet",
+    "OnlyProviderPermissons": "Vain tämä palveluntarjoaja",
+    "All": "Kaikki",
+    "SelectAllInAllTabs": "Myönnä kaikki käyttöoikeudet",
+    "SelectAllInThisTab": "Valitse kaikki"
+  }
+}

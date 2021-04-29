@@ -33,6 +33,7 @@
 @section styles {
     <abp-style-bundle>
         <abp-style type="typeof(TuiEditorStyleContributor)"/>
+        <abp-style src="/Pages/CmsKit/BlogPosts/update.css"/>
     </abp-style-bundle>
 }
 
@@ -41,11 +42,15 @@
 }
 
 <abp-card>
-    <abp-card-header title="@L["Update"].Value"></abp-card-header>
+    <abp-card-header title="@L["Edit"].Value"></abp-card-header>
     <abp-card-body>
 
         <div class="form-group">
-            <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" />
+            @if (Model.ViewModel.CoverImageMediaId != null)
+            {
+                <img height="120" src="/api/cms-kit/media/@Model.ViewModel.CoverImageMediaId" />
+                <br />
+            }
             <label>@L["CoverImage"]</label>
             <input type="file" id="BlogPostCoverImage" class="form-control" />
         </div>
@@ -59,7 +64,7 @@
 
             <abp-form-content />
         
-            <div class="content-editor" 
+            <div class="content-editor cms-kit-editor" 
                  id="ContentEditor" 
                  data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
                  data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">

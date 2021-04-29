@@ -31,6 +31,9 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
             london.ExtraProperties["ZipCode"] = null;
             london.ExtraProperties["Established"] = DateTime.MinValue;
             london.ExtraProperties["Guid"] = "a7ae2efe-d8d6-466b-92e3-da14aa6e1c5b";
+            london.ExtraProperties["EnumNumber"] = 2L;
+            london.ExtraProperties["EnumNumberString"] = "2";
+            london.ExtraProperties["EnumLiteral"] = "White";
             await CityRepository.UpdateAsync(london);
 
             var london2 = await CityRepository.FindByNameAsync("London");
@@ -39,6 +42,9 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
             london2.GetProperty<string>("ZipCode").ShouldBe(null);
             london2.GetProperty<DateTime?>("Established").ShouldBe(DateTime.MinValue);
             london2.GetProperty<Guid>("Guid").ShouldBe(new Guid("a7ae2efe-d8d6-466b-92e3-da14aa6e1c5b"));
+            london2.GetProperty<Color>("EnumNumber").ShouldBe(Color.White);
+            london2.GetProperty<Color>("EnumNumberString").ShouldBe(Color.White);
+            london2.GetProperty<Color>("EnumLiteral").ShouldBe(Color.White);
         }
 
         [Fact]
@@ -51,6 +57,13 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                 indexes.ShouldNotBeEmpty();
                 indexes.ShouldContain(x => x.IsUnique);
             });
+        }
+
+        public enum Color
+        {
+            Red = 0,
+            Blue = 1,
+            White = 2
         }
     }
 }

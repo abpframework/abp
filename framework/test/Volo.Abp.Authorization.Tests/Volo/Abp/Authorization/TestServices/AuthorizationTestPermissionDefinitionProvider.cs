@@ -12,10 +12,13 @@ namespace Volo.Abp.Authorization.TestServices
             {
                 getGroup = context.AddGroup("TestGetGroup");
             }
-            
+
             var group = context.AddGroup("TestGroup");
 
             group.AddPermission("MyAuthorizedService1");
+
+            group.AddPermission("MyPermission1").AddStateProviders(new TestRequireEditionPermissionStateProvider());
+            group.AddPermission("MyPermission2");
 
             group.GetPermissionOrNull("MyAuthorizedService1").ShouldNotBeNull();
 

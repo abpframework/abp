@@ -55,7 +55,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **UseCredentials** (bool): Use [credentials](https://docs.aws.amazon.com/AmazonS3/latest/dev/AuthUsingAcctOrUserCredentials.html) to access AWS services,default : `false`.
 * **UseTemporaryCredentials** (bool): Use [temporary credentials](https://docs.aws.amazon.com/AmazonS3/latest/dev/AuthUsingTempSessionToken.html) to access AWS services,default : `false`.
 * **UseTemporaryFederatedCredentials** (bool): Use [federated user temporary credentials](https://docs.aws.amazon.com/AmazonS3/latest/dev/AuthUsingTempFederationToken.html) to access AWS services, default : `false`.
-* **ProfileName** (string): The [name of the profile]((https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html)) to get credentials from.
+* **ProfileName** (string): The [name of the profile](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html) to get credentials from.
 * **ProfilesLocation** (string): The path to the aws credentials file to look at.
 * **Region** (string): The system name of the service.
 * **Policy** (string): An IAM policy in JSON format that you want to use as an inline session policy.

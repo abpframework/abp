@@ -137,6 +137,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                     bundle =>
                     {
                         bundle.AddFiles("/blazor-global-styles.css");
+                        //You can remove the following line if you don't use Blazor CSS isolation for components
+                        bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.Tiered.styles.css");
                     }
                 );
             });
@@ -214,6 +216,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
                 options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
                 options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));

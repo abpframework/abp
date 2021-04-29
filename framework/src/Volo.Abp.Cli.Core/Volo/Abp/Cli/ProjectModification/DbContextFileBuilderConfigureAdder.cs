@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
@@ -22,25 +23,33 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var file = File.ReadAllText(path);
 
-            file = UsingStatementAdder.Add(file, GetNamespace(moduleConfiguration));
+            var parsedModuleConfiguration = moduleConfiguration.Split(", ");
 
-            var stringToAdd = GetLineToAdd(moduleConfiguration);
-            if (!file.Contains(stringToAdd))
-            {
-                var indexToInsert = FindIndexToInsert(file);
+            var namespaces = parsedModuleConfiguration.Select(GetNamespace);
+            var configurationLines = parsedModuleConfiguration.Select(GetLineToAdd);
 
-                if (indexToInsert <= 0 || indexToInsert >= file.Length)
-                {
-                    Logger.LogWarning($"\"OnModelCreating(ModelBuilder builder)\" method couldn't be found in {path}");
-                    return false;
-                }
-                file = file.Insert(indexToInsert, "    " + stringToAdd + Environment.NewLine + "        ");
-            }
-            else
+            var indexToInsert = FindIndexToInsert(file);
+
+            if (indexToInsert <= 0 || indexToInsert >= file.Length)
             {
+                Logger.LogWarning($"\"OnModelCreating(ModelBuilder builder)\" method couldn't be found in {path}");
                 return false;
             }
 
+            foreach (var configurationLine in configurationLines)
+            {
+                if (file.Contains(configurationLine))
+                {
+                    continue;
+                }
+
+                file = file.Insert(indexToInsert, "    " + configurationLine + Environment.NewLine + "        ");
+            }
+
+            foreach (var namespaceOfConfiguration in namespaces)
+            {
+                file = UsingStatementAdder.Add(file, namespaceOfConfiguration);
+            }
 
             File.WriteAllText(path, file);
             return true;
@@ -49,7 +58,8 @@ namespace Volo.Abp.Cli.ProjectModification
         protected int FindIndexToInsert(string file)
         {
             var indexOfMethodDeclaration = file.IndexOf("OnModelCreating(", StringComparison.Ordinal);
-            var indexOfOpeningBracket = indexOfMethodDeclaration + file.Substring(indexOfMethodDeclaration).IndexOf('{');
+            var indexOfOpeningBracket =
+                indexOfMethodDeclaration + file.Substring(indexOfMethodDeclaration).IndexOf('{');
 
             var stack = 1;
             var index = indexOfOpeningBracket;

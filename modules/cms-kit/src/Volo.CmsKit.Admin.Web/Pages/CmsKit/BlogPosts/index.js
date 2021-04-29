@@ -15,11 +15,10 @@ $(function () {
         serverSide: true,
         paging: true,
         searching: false,
-        autoWidth: false,
         scrollCollapse: true,
         scrollX: true,
         ordering: true,
-        order: [[1, "desc"]],
+        order: [[2, "desc"]],
         ajax: abp.libs.datatables.createAjax(blogsService.getList, getFilter),
         columnDefs: [
             {
@@ -44,13 +43,17 @@ $(function () {
                                 blogsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        abp.notify.info(l("SuccessfullyDeleted"));
                                         dataTable.ajax.reload();
                                     });
                             }
                         }
                     ]
                 }
+            },
+            {
+                title: l("Blog"),
+                orderable: false,
+                data: "blogName"
             },
             {
                 title: l("Title"),
@@ -61,6 +64,12 @@ $(function () {
                 title: l("Slug"),
                 orderable: true,
                 data: "slug"
+            },
+            {
+                title: l("CreationTime"),
+                orderable: true,
+                data: 'creationTime',
+                dataFormat: "datetime"
             }
         ]
     }));

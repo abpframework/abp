@@ -92,7 +92,7 @@ namespace Volo.CmsKit.Admin.Web
                     toolbar =>
                     {
                         toolbar.AddButton(
-                            LocalizableString.Create<CmsKitResource>("New"),
+                            LocalizableString.Create<CmsKitResource>("NewTag"),
                             icon: "plus",
                             name: "NewButton",
                             requiredPolicyName: CmsKitAdminPermissions.Tags.Create
@@ -104,7 +104,7 @@ namespace Volo.CmsKit.Admin.Web
                     toolbar =>
                     {
                         toolbar.AddButton(
-                            LocalizableString.Create<CmsKitResource>("New"),
+                            LocalizableString.Create<CmsKitResource>("NewPage"),
                             icon: "plus",
                             name: "CreatePage",
                             requiredPolicyName: CmsKitAdminPermissions.Pages.Create
@@ -115,7 +115,7 @@ namespace Volo.CmsKit.Admin.Web
                     toolbar =>
                     {
                         toolbar.AddButton(
-                            LocalizableString.Create<CmsKitResource>("New"),
+                            LocalizableString.Create<CmsKitResource>("NewBlog"),
                             icon: "plus",
                             name: "CreateBlog",
                             id: "CreateBlog",
@@ -127,7 +127,7 @@ namespace Volo.CmsKit.Admin.Web
                     toolbar =>
                     {
                         toolbar.AddButton(
-                            LocalizableString.Create<CmsKitResource>("New"),
+                            LocalizableString.Create<CmsKitResource>("NewBlogPost"),
                             icon: "plus",
                             name: "CreateBlogPost",
                             id: "CreateBlogPost",

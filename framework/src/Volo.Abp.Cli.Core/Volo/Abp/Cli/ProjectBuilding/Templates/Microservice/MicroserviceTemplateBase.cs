@@ -42,6 +42,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
 
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.ProductService.Blazor",
+                        "/services/product/MyCompanyName.MyProjectName.ProductService.sln",
+                        "/services/product/src/MyCompanyName.MyProjectName.ProductService.Blazor"));
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server",null,
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                     steps.Add(new RemoveFolderStep("/apps/blazor"));
@@ -60,6 +63,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
 
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",null,
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.ProductService.Blazor",
+                        "/services/product/MyCompanyName.MyProjectName.ProductService.sln",
+                        "/services/product/src/MyCompanyName.MyProjectName.ProductService.Blazor"));
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server",null,
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                     steps.Add(new RemoveFolderStep("/apps/blazor"));
@@ -113,6 +119,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Microservice
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server",null,
                         "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.ProductService.Blazor",
+                        "/services/product/MyCompanyName.MyProjectName.ProductService.sln",
+                        "/services/product/src/MyCompanyName.MyProjectName.ProductService.Blazor"));
                     steps.Add(new RemoveFolderStep("/apps/blazor"));
                     steps.Add(new RemoveProjectFromTyeStep("blazor"));
                     steps.Add(new RemoveProjectFromTyeStep("blazor-server"));

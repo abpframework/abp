@@ -169,9 +169,40 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new ChangePublicAuthPortStep());
             }
 
-            if (!context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit") && IsCmsKitSupportedForTargetVersion(context))
+            if (context.BuildArgs.PublicWebSite && !context.BuildArgs.ExtraProperties.ContainsKey("without-cms-kit") && IsCmsKitSupportedForTargetVersion(context))
             {
                 context.Symbols.Add("CMS-KIT");
+            }
+            else
+            {
+                RemoveCmsKitDependenciesFromPackageJsonFiles(steps);
+            }
+        }
+
+        private static void RemoveCmsKitDependenciesFromPackageJsonFiles(List<ProjectBuildPipelineStep> steps)
+        {
+            var adminCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
+            {
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/package.json"
+            };
+
+            var publicCmsPackageInstalledProjectsPackageJsonFiles = new List<string>
+            {
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/package.json",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public.Host/package.json"
+            };
+
+            foreach (var packageJsonFile in adminCmsPackageInstalledProjectsPackageJsonFiles)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFile, "@volo/cms-kit-pro.admin"));
+            }
+
+            foreach (var packageJsonFile in publicCmsPackageInstalledProjectsPackageJsonFiles)
+            {
+                steps.Add(new RemoveDependencyFromPackageJsonFileStep(packageJsonFile, "@volo/cms-kit-pro.public"));
             }
         }
 
@@ -179,10 +210,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         {
             if (string.IsNullOrWhiteSpace(context.BuildArgs.Version))
             {
-                // We'll return true after 4.3.0 stable release. see https://github.com/abpframework/abp/issues/8394
-                // return true;
-
-                return context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long);
+                return true;
             }
 
             return SemanticVersion.Parse(context.BuildArgs.Version) > SemanticVersion.Parse("4.2.9");

@@ -148,6 +148,7 @@ namespace Volo.Abp.IdentityServer
             };
 
             client.AddCorsOrigin("https://client1-origin.com");
+            client.AddCorsOrigin("https://{0}.abp.io");
             client.AddClaim(nameof(ClientClaim.Value), nameof(ClientClaim.Type));
             client.AddGrantType(nameof(ClientGrantType.GrantType));
             client.AddIdentityProviderRestriction(nameof(ClientIdPRestriction.Provider));

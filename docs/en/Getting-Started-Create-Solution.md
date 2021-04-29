@@ -15,7 +15,7 @@
 
 We will use the ABP CLI to create a new ABP project.
 
-> Alternatively, you can **create and download** projects from [ABP Framework website](https://abp.io/get-started) by easily selecting the all the options from the page.
+> Alternatively, you can **create and download** projects from the [ABP Framework website](https://abp.io/get-started) by easily selecting all options from the page.
 
 Use the `new` command of the ABP CLI to create a new project:
 
@@ -41,6 +41,12 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 > [ABP CLI document](./CLI.md) covers all of the available commands and options.
 
+## Mobile Development
+
+If you want to include a [React Native](https://reactnative.dev/) project in your solution, add `-m react-native` (or `--mobile react-native`) argument to project creation command. This is a basic React Native startup template to develop mobile applications integrated to your ABP based backends.
+
+See the [Getting Started with the React Native](Getting-Started-React-Native.md) document to learn how to configure and run the React Native application.
+
 ### The Solution Structure
 
 The solution has a layered structure (based on the [Domain Driven Design](Domain-Driven-Design.md)) and contains unit & integration test projects. See the [application template document](Startup-Templates/Application.md) to understand the solution structure in details. 
@@ -49,7 +55,7 @@ The solution has a layered structure (based on the [Domain Driven Design](Domain
 
 #### MongoDB Transactions
 
-The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable the it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
+The [startup template](Startup-templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectMongoDbModule* class's `ConfigureServices` method:
 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>

@@ -25,11 +25,11 @@
                                     if (action.ConfirmationMessage != null)
                                     {
                                         <EntityAction TItem="TItem"
-                                                      Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
+                                                      Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.Primary)"
                                                       Icon="@action.Icon"
                                                       Clicked="async () => await action.Clicked(context)"
                                                       ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
-                                                      Visible="@(action.Visible!=null ? action.Visible(context) : true)"
+                                                      Visible="@(action.Visible != null ? action.Visible(context) : true)"
                                                       Text="@action.Text">
                                         </EntityAction>
                                     }
@@ -37,9 +37,9 @@
                                     {
                                         <EntityAction TItem="TItem"
                                                       Clicked="async () => await action.Clicked(context)"
-                                                      Color="@(action.Color!=null ? (Blazorise.Color)action.Color : Blazorise.Color.None)"
+                                                      Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.None)"
                                                       Icon="@action.Icon"
-                                                      Visible="@(action.Visible!=null ? action.Visible(context) : true)"
+                                                      Visible="@(action.Visible != null ? action.Visible(context) : true)"
                                                       Text="@action.Text">
                                         </EntityAction>
                                     }
@@ -62,7 +62,26 @@
                     {
                         if (!ExtensionPropertiesRegex.IsMatch(column.Data))
                         {
-                            <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title"/>
+                            @if (column.ValueConverter == null)
+                            {
+                                <DataGridColumn TItem="TItem" 
+                                                Field="@column.Data" 
+                                                Caption="@column.Title" 
+                                                Sortable="@column.Sortable" 
+                                                DisplayFormat="@column.DisplayFormat" 
+                                                DisplayFormatProvider="@column.DisplayFormatProvider"/>
+                            }
+                            else
+                            {
+                                <DataGridColumn TItem="TItem" 
+                                                Field="@column.Data" 
+                                                Caption="@column.Title" 
+                                                Sortable="@column.Sortable">
+                                    <DisplayTemplate>
+                                        @(GetConvertedFieldValue(context, column))
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+                            }
                         }
                         else
                         {
@@ -87,14 +106,7 @@
                                         {
                                             if (column.ValueConverter != null)
                                             {
-                                                if (column.DisplayFormat == null)
-                                                {
-                                                    @(column.ValueConverter(propertyValue))
-                                                }
-                                                else
-                                                {
-                                                    @(string.Format(column.DisplayFormat, column.ValueConverter(propertyValue)))
-                                                }
+                                                @(GetConvertedFieldValue(context, column))
                                             }
                                             else
                                             {
@@ -104,10 +116,9 @@
                                                 }
                                                 else
                                                 {
-                                                    @(string.Format(column.DisplayFormat, propertyValue))
+                                                    @(string.Format(column.DisplayFormatProvider, column.DisplayFormat, propertyValue))
                                                 }
                                             }
-                                            
                                         }
                                     }
                                 </DisplayTemplate>
