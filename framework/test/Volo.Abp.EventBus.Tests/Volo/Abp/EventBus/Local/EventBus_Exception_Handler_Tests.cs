@@ -10,11 +10,10 @@ namespace Volo.Abp.EventBus.Local
         [Fact]
         public async Task Should_Not_Handle_Exception()
         {
-            MySimpleEventData data = null;
+            var retryAttempt = 0;
             LocalEventBus.Subscribe<MySimpleEventData>(eventData =>
             {
-                ++eventData.Value;
-                data = eventData;
+                retryAttempt++;
                 throw new Exception("This exception is intentionally thrown!");
             });
 
@@ -23,20 +22,21 @@ namespace Volo.Abp.EventBus.Local
                 await LocalEventBus.PublishAsync(new MySimpleEventData(1));
             });
 
-            data.Value.ShouldBe(2);
+            retryAttempt.ShouldBe(1);
             appException.Message.ShouldBe("This exception is intentionally thrown!");
         }
 
         [Fact]
         public async Task Should_Handle_Exception()
         {
-            MyExceptionHandleEventData data = null;
+            var retryAttempt = 0;
             LocalEventBus.Subscribe<MyExceptionHandleEventData>(eventData =>
             {
-                ++eventData.RetryAttempts;
-                data = eventData;
+                eventData.Value.ShouldBe(0);
 
-                if (eventData.RetryAttempts < 2)
+                retryAttempt++;
+                eventData.Value++;
+                if (retryAttempt < 2)
                 {
                     throw new Exception("This exception is intentionally thrown!");
                 }
@@ -46,17 +46,20 @@ namespace Volo.Abp.EventBus.Local
             });
 
             await LocalEventBus.PublishAsync(new MyExceptionHandleEventData(0));
-            data.RetryAttempts.ShouldBe(2);
+            retryAttempt.ShouldBe(2);
         }
 
         [Fact]
         public async Task Should_Throw_Exception_After_Error_Handle()
         {
-            MyExceptionHandleEventData data = null;
+            var retryAttempt = 0;
             LocalEventBus.Subscribe<MyExceptionHandleEventData>(eventData =>
             {
-                ++eventData.RetryAttempts;
-                data = eventData;
+                eventData.Value.ShouldBe(0);
+
+                retryAttempt++;
+                eventData.Value++;
+
                 throw new Exception("This exception is intentionally thrown!");
             });
 
@@ -65,7 +68,7 @@ namespace Volo.Abp.EventBus.Local
                 await LocalEventBus.PublishAsync(new MyExceptionHandleEventData(0));
             });
 
-            data.RetryAttempts.ShouldBe(4);
+            retryAttempt.ShouldBe(4);
             appException.Message.ShouldBe("This exception is intentionally thrown!");
         }
     }

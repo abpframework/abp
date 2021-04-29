@@ -2,11 +2,11 @@
 {
     public class MyExceptionHandleEventData
     {
-        public int RetryAttempts { get; set; }
+        public int Value { get; set; }
 
-        public MyExceptionHandleEventData(int retryAttempts)
+        public MyExceptionHandleEventData(int value)
         {
-            RetryAttempts = retryAttempts;
+            Value = value;
         }
     }
 }

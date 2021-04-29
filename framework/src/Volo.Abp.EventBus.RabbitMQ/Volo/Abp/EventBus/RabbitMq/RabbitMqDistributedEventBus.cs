@@ -98,7 +98,16 @@ namespace Volo.Abp.EventBus.RabbitMq
 
             await TriggerHandlersAsync(eventType, eventData, errorContext =>
             {
-                errorContext.SetProperty("headers", ea.BasicProperties);
+                var retryAttempt = 0;
+                if (ea.BasicProperties.Headers != null &&
+                    ea.BasicProperties.Headers.ContainsKey(EventErrorHandlerBase.RetryAttemptKey))
+                {
+                    retryAttempt = (int)ea.BasicProperties.Headers[EventErrorHandlerBase.RetryAttemptKey];
+                }
+
+                errorContext.EventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
+                errorContext.SetProperty(EventErrorHandlerBase.HeadersKey, ea.BasicProperties);
+                errorContext.SetProperty(EventErrorHandlerBase.RetryAttemptKey, retryAttempt);
             });
         }
 
@@ -185,8 +194,9 @@ namespace Volo.Abp.EventBus.RabbitMq
             await PublishAsync(eventType, eventData, null);
         }
 
-        public Task PublishAsync(Type eventType, object eventData, IBasicProperties properties)
+        public Task PublishAsync(Type eventType, object eventData, IBasicProperties properties, Dictionary<string, object> headersArguments = null)
         {
+
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 
@@ -205,6 +215,8 @@ namespace Volo.Abp.EventBus.RabbitMq
                     properties.MessageId = Guid.NewGuid().ToString("N");
                 }
 
+                SetEventMessageHeaders(properties, headersArguments);
+
                 channel.BasicPublish(
                     exchange: AbpRabbitMqEventBusOptions.ExchangeName,
                     routingKey: eventName,
@@ -215,6 +227,21 @@ namespace Volo.Abp.EventBus.RabbitMq
             }
 
             return Task.CompletedTask;
+        }
+
+        private void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object> headersArguments)
+        {
+            if (headersArguments == null)
+            {
+                return;
+            }
+
+            properties.Headers ??= new Dictionary<string, object>();
+
+            foreach (var header in headersArguments)
+            {
+                properties.Headers[header.Key] = header.Value;
+            }
         }
 
         private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)

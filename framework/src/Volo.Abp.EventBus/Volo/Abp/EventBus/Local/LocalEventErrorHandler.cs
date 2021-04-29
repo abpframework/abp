@@ -7,6 +7,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EventBus.Local
 {
+    [ExposeServices(typeof(LocalEventErrorHandler), typeof(IEventErrorHandler))]
     public class LocalEventErrorHandler : EventErrorHandlerBase, ISingletonDependency
     {
         protected Dictionary<Guid, int> RetryTracking { get; }
@@ -25,7 +26,10 @@ namespace Volo.Abp.EventBus.Local
                 await Task.Delay(Options.RetryStrategyOptions.IntervalMillisecond);
             }
 
-            var messageId = context.GetProperty<Guid>("messageId");
+            var messageId = context.GetProperty<Guid>(nameof(LocalEventMessage.MessageId));
+
+            context.TryGetRetryAttempt(out var retryAttempt);
+            RetryTracking[messageId] = ++retryAttempt;
 
             await context.EventBus.As<LocalEventBus>().PublishAsync(new LocalEventMessage(messageId, context.EventData, context.EventType));
 
@@ -34,36 +38,23 @@ namespace Volo.Abp.EventBus.Local
 
         protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
         {
-            if (context.Exceptions.Count == 1)
-            {
-                context.Exceptions[0].ReThrow();
-            }
+            ThrowOriginalExceptions(context);
 
-            throw new AggregateException(
-                "More than one error has occurred while triggering the event: " + context.EventType,
-                context.Exceptions);
+            return Task.CompletedTask;
         }
 
         protected override bool ShouldRetry(EventExecutionErrorContext context)
         {
-            if (!base.ShouldRetry(context))
+            var messageId = context.GetProperty<Guid>(nameof(LocalEventMessage.MessageId));
+            context.SetProperty(RetryAttemptKey, RetryTracking.GetOrDefault(messageId));
+
+            if (base.ShouldRetry(context))
             {
-                return false;
+                return true;
             }
 
-            var messageId = context.GetProperty<Guid>("messageId");
-
-            var index = RetryTracking.GetOrDefault(messageId);
-
-            if (Options.RetryStrategyOptions.MaxRetryAttempts <= index)
-            {
-                RetryTracking.Remove(messageId);
-                return false;
-            }
-
-            RetryTracking[messageId] = ++index;
-
-            return true;
+            RetryTracking.Remove(messageId);
+            return false;
         }
     }
 }

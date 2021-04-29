@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Collections;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.EventBus.Local;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 
@@ -104,7 +103,7 @@ namespace Volo.Abp.EventBus
 
             if (exceptions.Any())
             {
-                var context = new EventExecutionErrorContext(exceptions, eventData, eventType, this);
+                var context = new EventExecutionErrorContext(exceptions, eventType, this);
                 onErrorAction?.Invoke(context);
                 await ErrorHandler.Handle(context);
             }

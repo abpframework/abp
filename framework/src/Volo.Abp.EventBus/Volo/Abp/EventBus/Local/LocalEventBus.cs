@@ -11,6 +11,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.EventBus.Local
 {
@@ -29,13 +30,17 @@ namespace Volo.Abp.EventBus.Local
 
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
 
+        protected IJsonSerializer Serializer { get; }
+
         public LocalEventBus(
             IOptions<AbpLocalEventBusOptions> options,
             IServiceScopeFactory serviceScopeFactory,
             ICurrentTenant currentTenant,
-            IEventErrorHandler errorHandler)
+            IEventErrorHandler errorHandler,
+            IJsonSerializer serializer)
             : base(serviceScopeFactory, currentTenant, errorHandler)
         {
+            Serializer = serializer;
             Options = options.Value;
             Logger = NullLogger<LocalEventBus>.Instance;
 
@@ -126,9 +131,11 @@ namespace Volo.Abp.EventBus.Local
 
         public virtual async Task PublishAsync(LocalEventMessage localEventMessage)
         {
+            var rawEventData = Serializer.Serialize(localEventMessage.EventData);
             await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData, errorContext =>
             {
-                errorContext.SetProperty("messageId", localEventMessage.MessageId);
+                errorContext.EventData = Serializer.Deserialize(localEventMessage.EventType, rawEventData);
+                errorContext.SetProperty(nameof(LocalEventMessage.MessageId), localEventMessage.MessageId);
             });
         }
 

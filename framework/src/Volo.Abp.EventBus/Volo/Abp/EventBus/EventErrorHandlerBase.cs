@@ -6,6 +6,9 @@ namespace Volo.Abp.EventBus
 {
     public abstract class EventErrorHandlerBase : IEventErrorHandler
     {
+        public const string HeadersKey = "headers";
+        public const string RetryAttemptKey = "retryAttempt";
+
         protected AbpEventBusOptions Options { get; }
 
         protected EventErrorHandlerBase(IOptions<AbpEventBusOptions> options)
@@ -17,14 +20,7 @@ namespace Volo.Abp.EventBus
         {
             if (!ShouldHandle(context))
             {
-                if (context.Exceptions.Count == 1)
-                {
-                    context.Exceptions[0].ReThrow();
-                }
-
-                throw new AggregateException(
-                    "More than one error has occurred while triggering the event: " + context.EventType,
-                    context.Exceptions);
+                ThrowOriginalExceptions(context);
             }
 
             if (ShouldRetry(context))
@@ -47,17 +43,34 @@ namespace Volo.Abp.EventBus
                 return false;
             }
 
-            if (Options.ErrorHandleSelector != null)
-            {
-                return Options.ErrorHandleSelector.Invoke(context.EventType);
-            }
-
-            return true;
+            return Options.ErrorHandleSelector == null || Options.ErrorHandleSelector.Invoke(context.EventType);
         }
 
         protected virtual bool ShouldRetry(EventExecutionErrorContext context)
         {
-            return Options.RetryStrategyOptions != null;
+            if (Options.RetryStrategyOptions == null)
+            {
+                return false;
+            }
+
+            if (!context.TryGetRetryAttempt(out var retryAttempt))
+            {
+                return false;
+            }
+
+            return Options.RetryStrategyOptions.MaxRetryAttempts > retryAttempt;
+        }
+
+        protected virtual void ThrowOriginalExceptions(EventExecutionErrorContext context)
+        {
+            if (context.Exceptions.Count == 1)
+            {
+                context.Exceptions[0].ReThrow();
+            }
+
+            throw new AggregateException(
+                "More than one error has occurred while triggering the event: " + context.EventType,
+                context.Exceptions);
         }
     }
 }

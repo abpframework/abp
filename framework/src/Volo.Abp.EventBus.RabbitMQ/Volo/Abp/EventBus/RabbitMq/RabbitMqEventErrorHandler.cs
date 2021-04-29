@@ -11,9 +11,6 @@ namespace Volo.Abp.EventBus.RabbitMq
 {
     public class RabbitMqEventErrorHandler : EventErrorHandlerBase, ISingletonDependency
     {
-        public const string HeadersKey = "headers";
-        public const string RetryAttemptKey = "retryAttempt";
-
         public RabbitMqEventErrorHandler(
             IOptions<AbpEventBusOptions> options)
             : base(options)
@@ -27,51 +24,24 @@ namespace Volo.Abp.EventBus.RabbitMq
                 await Task.Delay(Options.RetryStrategyOptions.IntervalMillisecond);
             }
 
-            var properties = context.GetProperty(HeadersKey).As<IBasicProperties>();
-            var headers = properties.Headers ?? new Dictionary<string, object>();
+            context.TryGetRetryAttempt(out var retryAttempt);
 
-            var retryAttempt = 0;
-            if (headers.ContainsKey(RetryAttemptKey))
-            {
-                retryAttempt = (int) headers[RetryAttemptKey];
-            }
-
-            headers[RetryAttemptKey] = ++retryAttempt;
-            headers["exceptions"] = context.Exceptions.Select(x => x.ToString()).ToList();
-            properties.Headers = headers;
-
-            await context.EventBus.As<RabbitMqDistributedEventBus>().PublishAsync(context.EventType, context.EventData, properties);
+            await context.EventBus.As<RabbitMqDistributedEventBus>().PublishAsync(
+                context.EventType,
+                context.EventData,
+                context.GetProperty(HeadersKey).As<IBasicProperties>(),
+                new Dictionary<string, object>
+                {
+                    {RetryAttemptKey, ++retryAttempt},
+                    {"exceptions", context.Exceptions.Select(x => x.ToString()).ToList()}
+                });
         }
 
         protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
         {
-            if (context.Exceptions.Count == 1)
-            {
-                context.Exceptions[0].ReThrow();
-            }
+            ThrowOriginalExceptions(context);
 
-            throw new AggregateException(
-                "More than one error has occurred while triggering the event: " + context.EventType,
-                context.Exceptions);
-        }
-
-        protected override bool ShouldRetry(EventExecutionErrorContext context)
-        {
-            if (!base.ShouldRetry(context))
-            {
-                return false;
-            }
-
-            var properties = context.GetProperty(HeadersKey).As<IBasicProperties>();
-
-            if (properties.Headers == null || !properties.Headers.ContainsKey(RetryAttemptKey))
-            {
-                return true;
-            }
-
-            var retryAttempt = (int) properties.Headers[RetryAttemptKey];
-
-            return Options.RetryStrategyOptions.MaxRetryAttempts > retryAttempt;
+            return Task.CompletedTask;
         }
     }
 }
