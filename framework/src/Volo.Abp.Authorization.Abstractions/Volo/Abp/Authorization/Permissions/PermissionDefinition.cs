@@ -123,7 +123,7 @@ namespace Volo.Abp.Authorization.Permissions
         }
 
         /// <summary>
-        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// Sets <see cref="StateProviders"/>.
         /// This is a shortcut for nested calls on this object.
         /// </summary>
         public virtual PermissionDefinition WithProviders(params string[] providers)
