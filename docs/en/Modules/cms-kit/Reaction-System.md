@@ -4,7 +4,7 @@ CMS kit provides a **reaction** system to add reactions feature to any kind of r
 
 ## Feature
 
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with the public website option. If you're installing the CMS kit manually or want to enable reaction management feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
+CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with the public website option. If you're installing the CMS kit manually or want to enable reaction feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
 
 ```csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
@@ -42,7 +42,7 @@ Configure<CmsKitReactionOptions>(options =>
                 new ReactionDefinition(StandardReactions.Victory),
                 new ReactionDefinition(StandardReactions.Rock),
             }));
-}
+});
 ```
 
 > If you're using the comment or blog features, the ABP framework defines predefined reactions for these features automatically. You can easily override or remove the predefined reactions in `Configure` method like shown above.
