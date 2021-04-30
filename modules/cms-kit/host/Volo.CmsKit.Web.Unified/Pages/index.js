@@ -42,8 +42,9 @@
             }
         });
     };
-   
-   editor.tuiEditor({
+
+    new toastui.Editor({
+        el: editor[0],
         usageStatistics: false,
         useCommandShortcut: true,
         initialEditType: 'wysiwyg',
@@ -54,5 +55,5 @@
         hooks: {
             addImageBlobHook: uploadImage,
        },
-   });
+    });
 });

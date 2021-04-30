@@ -320,7 +320,7 @@ Open `DocsProjects` in your database, and insert a new record with the following
 * **ShortName**: A short and URL friendly name that will be used in your docs URL.
 * **Format**: The format of the document (for Markdown: `md`, for HTML: `html`)
 * **DefaultDocumentName**: The document for the initial page.
-* **NavigationDocumentName**: The document to be used for the navigation menu (index).
+* **NavigationDocumentName**: The document to be used for the navigation menu (Index).
 * **MinimumVersion**: The minimum version to show the docs. Below version will not be listed.
 * **DocumentStoreType**: The source of the documents (for GitHub:`GitHub`, for file system`FileSystem`)
 * **ExtraProperties**: A serialized `JSON` that stores special configuration for the selected `DocumentStoreType`. 

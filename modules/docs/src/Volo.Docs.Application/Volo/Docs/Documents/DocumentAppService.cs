@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -193,6 +194,93 @@ namespace Volo.Docs.Documents
             return await Task.FromResult(_docsElasticSearchOptions.Enable);
         }
 
+        public async Task<List<string>> GetUrlsAsync(string prefix)
+        {
+            var documentUrls = new List<string>();
+            var projects = await _projectRepository.GetListAsync();
+
+            foreach (var project in projects)
+            {
+                var documents = await _documentRepository.GetListByProjectId(project.Id);
+
+                foreach (var document in documents)
+                {
+                    var version = GetProjectVersionPrefixIfExist(project) + document.Version;
+                    var navigationDocument = await GetDocumentWithDetailsDtoAsync(
+                        project,
+                        project.NavigationDocumentName,
+                        document.LanguageCode,
+                        version
+                    );
+
+                    if (!DocsJsonSerializerHelper.TryDeserialize<NavigationNode>(navigationDocument.Content,
+                        out var navigationNode))
+                    {
+                        throw new UserFriendlyException(
+                            $"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
+                    }
+                    
+                    navigationNode.Items?.ForEach(node =>
+                    {
+                        documentUrls.AddIfNotContains(
+                            GetDocumentLinks(node, documentUrls, prefix, project.ShortName, document)
+                        );
+                    });
+                }
+            }
+
+            return documentUrls;
+        }
+
+        private List<string> GetDocumentLinks(NavigationNode node, List<string> documentUrls, string prefix, 
+            string shortName, Document document)
+        {
+            if (!IsExternalLink(node.Path))
+            {
+                documentUrls.AddIfNotContains(
+                    NormalizePath(prefix, node.Path, shortName, document)
+                );
+            }
+
+            node.Items?.ForEach(childNode =>
+            {
+                GetDocumentLinks(childNode, documentUrls, prefix, shortName, document);
+            });
+
+            return documentUrls;
+        }
+
+        private string NormalizePath(string prefix, string path, string shortName, Document document)
+        {
+            var pathWithoutFileExtension = RemoveFileExtensionFromPath(path, document.Format);
+            var normalizedPath = prefix + document.LanguageCode + "/" + shortName + "/" + document.Version + "/" + pathWithoutFileExtension;
+
+            return normalizedPath;
+        }
+
+        private string RemoveFileExtensionFromPath(string path, string format)
+        {
+            if (path == null)
+            {
+                return null;
+            }
+
+            return path.EndsWith("." + format)
+                ? path.Left(path.Length - format.Length - 1)
+                : path;
+        }
+
+        private static bool IsExternalLink(string path)
+        {
+            if (path.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            return path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                   path.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
@@ -353,7 +441,6 @@ namespace Volo.Docs.Documents
             }
 
             return project.ExtraProperties["VersionBranchPrefix"].ToString();
-
         }
 
         private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)

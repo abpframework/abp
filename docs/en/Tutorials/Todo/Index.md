@@ -428,7 +428,7 @@ Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project 
 </div>
 ````
 
-We are using ABP's [card tag helper](../../UI/AspNetCore/Tag-Helpers/Cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers]() make it much easier and type safe.
+We are using ABP's [card tag helper](../../UI/AspNetCore/Tag-Helpers/Cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../UI/AspNetCore/Tag-Helpers/Index.md) make it much easier and type safe.
 
 This page imports a CSS and a JavaScript file, so we should also create them.
 

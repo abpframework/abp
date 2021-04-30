@@ -1,0 +1,65 @@
+{
+  "folders": {
+    "src": {},
+    "test": {}
+  },
+  "imports": {
+    "Volo.Abp.Identity": {
+      "path": "../identity/Volo.Abp.Identity.abpmdl.json"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "path": "../permission-management/Volo.Abp.PermissionManagement.abpmdl.json"
+    }
+  },
+  "packages": {
+    "Volo.Abp.Account.Application.Contracts": {
+      "path": "src/Volo.Abp.Account.Application.Contracts/Volo.Abp.Account.Application.Contracts.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.application.contracts": {}
+      }
+    },
+    "Volo.Abp.Account.Application": {
+      "path": "src/Volo.Abp.Account.Application/Volo.Abp.Account.Application.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.application": {}
+      }
+    },
+    "Volo.Abp.Account.HttpApi": {
+      "path": "src/Volo.Abp.Account.HttpApi/Volo.Abp.Account.HttpApi.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.http-api": {}
+      }
+    },
+    "Volo.Abp.Account.HttpApi.Client": {
+      "path": "src/Volo.Abp.Account.HttpApi.Client/Volo.Abp.Account.HttpApi.Client.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.http-api-client": {}
+      }
+    },
+    "Volo.Abp.Account.Web": {
+      "path": "src/Volo.Abp.Account.Web/Volo.Abp.Account.Web.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.mvc": {}
+      }
+    },
+    "Volo.Abp.Account.Web.IdentityServer": {
+      "path": "src/Volo.Abp.Account.IdentityServer/Volo.Abp.Account.IdentityServer.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ui.mvc": {}
+      }
+    },
+    "Volo.Abp.Account.Application.Tests": {
+      "path": "test/Volo.Abp.Account.Application.Tests/Volo.Abp.Account.Application.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "folders": {
+    "src": {},
+    "test": {}
+  },
+  "packages": {
+    "Volo.Abp.BlobStoring.Database.Domain.Shared": {
+      "path": "src/Volo.Abp.BlobStoring.Database.Domain.Shared/Volo.Abp.BlobStoring.Database.Domain.Shared.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.domain.shared": {}
+      }
+    },
+    "Volo.Abp.BlobStoring.Database.Domain": {
+      "path": "src/Volo.Abp.BlobStoring.Database.Domain/Volo.Abp.BlobStoring.Database.Domain.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.domain": {}
+      }
+    },
+    "Volo.Abp.BlobStoring.Database.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.BlobStoring.Database.EntityFrameworkCore/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ef": {}
+      }
+    },
+    "Volo.Abp.BlobStoring.Database.MongoDB": {
+      "path": "src/Volo.Abp.BlobStoring.Database.MongoDB/Volo.Abp.BlobStoring.Database.MongoDB.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.mongodb": {}
+      }
+    },
+    "Volo.Abp.BlobStoring.Database.TestBase": {
+      "path": "test/Volo.Abp.BlobStoring.Database.TestBase/Volo.Abp.BlobStoring.Database.TestBase.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.BlobStoring.Database.Domain.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Database.Domain.Tests/Volo.Abp.BlobStoring.Database.Domain.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.BlobStoring.Database.MongoDB.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Database.MongoDB.Tests/Volo.Abp.BlobStoring.Database.MongoDB.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    }
+  }
+}

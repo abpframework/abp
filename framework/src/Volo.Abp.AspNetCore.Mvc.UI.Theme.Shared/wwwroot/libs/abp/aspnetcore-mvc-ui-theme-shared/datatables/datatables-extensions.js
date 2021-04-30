@@ -132,7 +132,7 @@ var abp = abp || {};
             }
 
             if (field.text) {
-                $dropdownButton.append(htmlEncode(fieldItem.text));
+                $dropdownButton.append(htmlEncode(field.text));
             } else {
                 $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }
@@ -462,11 +462,19 @@ var abp = abp || {};
     };
 
     datatables.defaultRenderers['date'] = function (value) {
-        return (ISOStringToDateTimeLocaleString())(value);
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString())(value);
+        }
     };
 
     datatables.defaultRenderers['datetime'] = function (value) {
-        return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        if(!value) {
+            return value;
+        } else {
+            return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+        }
     };
 
     /************************************************************************

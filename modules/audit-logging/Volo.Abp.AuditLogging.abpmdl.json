@@ -1,0 +1,64 @@
+{
+  "folders": {
+    "src": {},
+    "test": {}
+  },
+  "packages": {
+    "Volo.Abp.AuditLogging.Domain.Shared": {
+      "path": "src/Volo.Abp.AuditLogging.Domain.Shared/Volo.Abp.AuditLogging.Domain.Shared.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.domain.shared": {}
+      }
+    },
+    "Volo.Abp.AuditLogging.Domain": {
+      "path": "src/Volo.Abp.AuditLogging.Domain/Volo.Abp.AuditLogging.Domain.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.domain": {}
+      }
+    },
+    "Volo.Abp.AuditLogging.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.AuditLogging.EntityFrameworkCore/Volo.Abp.AuditLogging.EntityFrameworkCore.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.ef": {}
+      }
+    },
+    "Volo.Abp.AuditLogging.MongoDB": {
+      "path": "src/Volo.Abp.AuditLogging.MongoDB/Volo.Abp.AuditLogging.MongoDB.csproj",
+      "folder": "src",
+      "includes": {
+        "lib.mongodb": {}
+      }
+    },
+    "Volo.Abp.AuditLogging.TestBase": {
+      "path": "test/Volo.Abp.AuditLogging.TestBase/Volo.Abp.AuditLogging.TestBase.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.AuditLogging.Tests": {
+      "path": "test/Volo.Abp.AuditLogging.Tests/Volo.Abp.AuditLogging.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.AuditLogging.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.AuditLogging.EntityFrameworkCore.Tests/Volo.Abp.AuditLogging.EntityFrameworkCore.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    },
+    "Volo.Abp.AuditLogging.MongoDB.Tests": {
+      "path": "test/Volo.Abp.AuditLogging.MongoDB.Tests/Volo.Abp.AuditLogging.MongoDB.Tests.csproj",
+      "folder": "test",
+      "includes": {
+        "lib.test": {}
+      }
+    }
+  }
+}

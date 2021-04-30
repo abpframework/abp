@@ -10,7 +10,7 @@ namespace Volo.CmsKit.Public.Pages
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-public/pages")]
-    public class PagesPublicController : IPagePublicAppService
+    public class PagesPublicController : CmsKitPublicControllerBase, IPagePublicAppService
     {
         protected IPagePublicAppService PageAppService { get; }
 
