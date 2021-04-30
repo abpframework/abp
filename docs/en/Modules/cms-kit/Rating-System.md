@@ -1,10 +1,10 @@
 # Rating System
 
-CMS kit provides a **rating** system to to add ratings feature to any kind of resource like blog posts, comments etc. This section describes the details of the rating system. 
+CMS kit provides a **rating** system to to add ratings feature to any kind of resource like blog posts, comments, etc. This section describes the details of the rating system. 
 
 ## Feature
 
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with the public website option. If you're installing the CMS kit manually or want to enable rating feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
+CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with the public website option. If you're installing the CMS kit manually or want to enable the rating feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
 
 ```csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
@@ -17,7 +17,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 
 ## CmsKitRatingOptions
 
-You can use the rating system to to add ratings to any kind of resource, like blog posts or comments etc.The rating system provides a mechanism to group ratings by entity types. For example, if you want to use rating system for products, you need to define a entity type named `Product`, and then add ratings under the defined entity type.
+You can use the rating system to to add ratings to any kind of resource, like blog posts, comments, etc. The rating system provides a mechanism to group ratings by entity types. For example, if you want to use the rating system for products, you need to define an entity type named `Product` and then add ratings under the defined entity type.
 
 `CmsKitRatingOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
 
@@ -34,7 +34,7 @@ Configure<CmsKitRatingOptions>(options =>
 
 - `EntityTypes`: List of defined entity types(`RatingEntityTypeDefinition`) in the rating system.
 
-`RatingEntityTypeDefinition` properties:asdas
+`RatingEntityTypeDefinition` properties:
 
 - `EntityType`: Name of the entity type.
 
@@ -111,6 +111,6 @@ The ratings system provides a rating widget to allow users send ratings to resou
   entityId = "entityId"
 })
 ```
-You need to specify entity type and entity ID parameters. Entity type represents the group name you specified while defining the reactions in the domain module. Entity ID represents the unique identifier for the resource that users give ratings to such as blog post ID or product ID.
+You need to specify entity type and entity ID parameters. Entity type represents the group name you specified while defining the reactions in the domain module. Entity ID represents the unique identifier for the resource that users give ratings to, such as blog post ID or product ID.
 
 For more information about widgets see [widgets](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) documentation.

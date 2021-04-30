@@ -17,7 +17,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 
 ## CmsKitReactionOptions
 
-You can use the reaction system to to add reactions feature to any kind of resource, like blog posts or comments etc.The reaction system provides a mechanism to group reactions by entity types. For example, if you want to use reaction system for products, you need to define a entity type named `Product`, and then add reactions under the defined entity type.
+You can use the reaction system to to add reactions feature to any kind of resource, like blog posts or comments, etc. The reaction system provides a mechanism to group reactions by entity types. For example, if you want to use the reaction system for products, you need to define an entity type named `Product`, and then add reactions under the defined entity type.
 
 `CmsKitReactionOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
 
@@ -34,13 +34,7 @@ Configure<CmsKitReactionOptions>(options =>
                 new ReactionDefinition(StandardReactions.ThumbsDown),
                 new ReactionDefinition(StandardReactions.Confused),
                 new ReactionDefinition(StandardReactions.Eyes),
-                new ReactionDefinition(StandardReactions.Heart),
-                new ReactionDefinition(StandardReactions.HeartBroken),
-                new ReactionDefinition(StandardReactions.Wink),
-                new ReactionDefinition(StandardReactions.Pray),
-                new ReactionDefinition(StandardReactions.Rocket),
-                new ReactionDefinition(StandardReactions.Victory),
-                new ReactionDefinition(StandardReactions.Rock),
+                new ReactionDefinition(StandardReactions.Heart)
             }));
 });
 ```
@@ -120,7 +114,7 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 ### MVC UI
 
-The reaction system provides a reaction widget to allow users send reactions to resources in public websites. You can simply place the widget to the like below. 
+The reaction system provides a reaction widget to allow users to send reactions to resources on public websites. You can place the widget on a page like below. 
 
 ```csharp
 @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
@@ -129,6 +123,6 @@ The reaction system provides a reaction widget to allow users send reactions to 
   entityId = "entityId"
 })
 ```
-You need to specify entity type and entity ID parameters. Entity type represents the group name you specified while defining the reactions in the domain module. Entity ID represents the unique identifier for the resource that users give reactions to such as blog post ID or product ID.
+You need to specify entity type and entity ID parameters. Entity type represents the group name you specified while defining the reactions in the domain module. Entity ID represents the unique identifier for the resource that users give reactions to, such as blog post ID or product ID.
 
 For more information about widgets see [widgets](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) documentation.

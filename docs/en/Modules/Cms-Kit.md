@@ -2,12 +2,12 @@
 
 This module provides CMS(Content Management System) capabilities for your application.
 
-* Provides a **page** management system to manage dynamic pages.
-* Provides a **blog** system to create blogs and publish posts.
-* Provides a **tag** system to tag any kind of resources, like blog posts.
-* Provides a **comment** system to add comments feature to any kind of resource, like blog posts.
-* Provides a **reaction** system to add reactions feature to any kind of resource, like blog posts or comments.
-* Provides a **rating** system to add ratings feature to any kind of resource.
+* Provides a [**page**](cms-kit/) management system to manage dynamic pages.
+* Provides a [**blog**](cms-kit/) system to create blogs and publish posts.
+* Provides a [**tag**](cms-kit/Tag-Management.md) system to tag any kind of resources, like blog posts.
+* Provides a [**comment**](cms-kit/Comment-System.md) system to add comments feature to any kind of resource, like blog posts, products, etc.
+* Provides a [**reaction**](cms-kit/Reaction-System.md) system to add reactions feature to any kind of resource, like blog posts or comments.
+* Provides a [**rating**](cms-kit/Rating-System.md) system to add rating feature to any kind of resource.
 
 ## How to install
 
@@ -38,9 +38,9 @@ For example,
  - `Volo.CmsKit.Public.Application`: Contains functionality required by public websites.
  - `Volo.CmsKit.Application` : Unified package dependent on both public and admin packages.
 
-If you want to want to separate admin and public website codes, you can use the admin and public packages. However, if you want to keep admin and public website codes in a shared project, you can use the unified packages to include both admin and public packages. 
+If you want to separate admin and public website codes, you can use the admin and public packages. However, if you want to keep admin and public website codes in a shared project, you can use the unified packages to include admin and public packages. 
 
-It is recommeded to use the unified packages instead of adding both admin and public packages.
+It is recommended to use the unified packages instead of adding both admin and public packages.
 
 ## Feature System
 
@@ -154,6 +154,6 @@ You can also customize the reaction icons shown in the reaction component.
 
 ### Ratings
 
-You can use the rating component to add rating a mechanism to your content. Here how the rating component looks on  a sample page.
+You can use the rating component to add rating a mechanism to your content. Here how the rating component looks on a sample page.
 
 ![ratings](../images/cmskit-module-ratings.png)

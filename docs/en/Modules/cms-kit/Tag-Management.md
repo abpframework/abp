@@ -4,7 +4,7 @@ CMS kit provides a **tag** system to tag any kind of resources, like blog posts.
 
 ## Feature
 
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with public website option. If you're installing the CMS kit manually or want to enable tag management feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
+CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with public website option. If you're installing the CMS kit manually or want to enable the tag management feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
 
 ```csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
@@ -17,16 +17,18 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 
 ## CmsKitTagOptions
 
-You can use the tag system to tag any kind of resources, like blog posts, products etc. Tag system provides a mechanism to group tags by entity types. For example, if you want to use tag system for blog posts and products, you need to define two entity types named BlogPosts and Product, and add tags under these entity types.
+You can use the tag system to tag any kind of resources, like blog posts, products, etc. The tag system provides a mechanism to group tags by entity types. For example, if you want to use the tag system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product` and add tags under these entity types.
 
 `CmsKitTagOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
 
 ```csharp
 Configure<CmsKitTagOptions>(options =>
 {
-    //Set options here...
+    options.EntityTypes.Add(new TagEntityTypeDefiniton("Product"));
 });
 ```
+
+> If you're using the blog feature, the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
 
 `CmsKitTagOptions` properties:
 
@@ -120,7 +122,7 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 ### MVC UI
 
-Tag system provides a tag widget to display associated tags of the resource in public websites. You can simply place the widget to the like below. 
+The tag system provides a tag widget to display associated tags of the resource on public websites. You can simply place the widget on a page like below. 
 
 ```csharp
 @await Component.InvokeAsync(typeof(TagViewComponent), new
