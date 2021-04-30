@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Admin.Tags
 {
     [Authorize(CmsKitAdminPermissions.Tags.Default)]
+    [RequiresGlobalFeature(typeof(TagsFeature))]
     public class TagAdminAppService : CmsKitAppServiceBase, ITagAdminAppService
     {
         protected ITagRepository Repository { get; }
