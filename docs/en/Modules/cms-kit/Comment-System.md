@@ -103,7 +103,7 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 ### MVC UI
 
-The comment system provides a commenting widget to allow users to send comments to resources on public websites. You can simply place the widget to the like below. 
+The comment system provides a commenting widget to allow users to send comments to resources on public websites. You can simply place the widget on a page like below. 
 
 ```csharp
 @await Component.InvokeAsync(typeof(CommentingViewComponent), new

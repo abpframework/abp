@@ -102,7 +102,7 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 ### MVC UI
 
-The ratings system provides a rating widget to allow users send ratings to resources in public websites. You can simply place the widget to the like below. 
+The ratings system provides a rating widget to allow users send ratings to resources in public websites. You can simply place the widget on a page like below. 
 
 ```csharp
 @await Component.InvokeAsync(typeof(RatingViewComponent), new
