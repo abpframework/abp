@@ -4,7 +4,7 @@ using Volo.Abp.TextTemplating.Scriban;
 
 namespace Volo.Abp.TextTemplating
 {
-    [Obsolete("Use AbpTextTemplatingScribanModule or AbpTextTemplatingRazorModule, This module will remove in the future.")]
+    [Obsolete("This module will be removed in the future. Please use AbpTextTemplatingScribanModule or AbpTextTemplatingRazorModule.")]
     [DependsOn(typeof(AbpTextTemplatingScribanModule))]
     public class AbpTextTemplatingModule : AbpModule
     {

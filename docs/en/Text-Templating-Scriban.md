@@ -49,7 +49,7 @@ public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
                     "/Demos/Hello/Hello.tpl", //template content path
                     isInlineLocalized: true
                 )
-                .WithScribanTemplate()
+                .WithScribanEngine()
         );
     }
 }
@@ -178,7 +178,7 @@ context.Add(
             "PasswordReset", //Template name
             typeof(DemoResource) //LOCALIZATION RESOURCE
         )
-        .WithScribanTemplate()
+        .WithScribanEngine()
         .WithVirtualFilePath(
             "/Demos/PasswordReset/PasswordReset.tpl", //template content path
             isInlineLocalized: true
@@ -227,7 +227,7 @@ context.Add(
             name: "WelcomeEmail",
             defaultCultureName: "en"
         )
-        .WithScribanTemplate()
+        .WithScribanEngine()
         .WithVirtualFilePath(
             "/Demos/WelcomeEmail/Templates", //template content folder
             isInlineLocalized: false
@@ -290,7 +290,7 @@ context.Add(
         "EmailLayout",
         isLayout: true //SET isLayout!
     )
-    .WithScribanTemplate()
+    .WithScribanEngine()
     .WithVirtualFilePath(
         "/Demos/EmailLayout/EmailLayout.tpl",
         isInlineLocalized: true
@@ -307,7 +307,7 @@ context.Add(
             defaultCultureName: "en",
             layout: "EmailLayout" //Set the LAYOUT
         )
-        .WithScribanTemplate()
+        .WithScribanEngine()
         .WithVirtualFilePath(
             "/Demos/WelcomeEmail/Templates",
             isInlineLocalized: false

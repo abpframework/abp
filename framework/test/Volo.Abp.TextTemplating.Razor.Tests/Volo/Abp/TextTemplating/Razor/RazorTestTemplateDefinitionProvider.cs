@@ -8,19 +8,19 @@ namespace Volo.Abp.TextTemplating.Razor
         {
             context.GetOrNull(TestTemplates.WelcomeEmail)?
                 .WithVirtualFilePath("/SampleTemplates/WelcomeEmail", false)
-                .WithRazorTemplate();
+                .WithRazorEngine();
 
             context.GetOrNull(TestTemplates.ForgotPasswordEmail)?
                 .WithVirtualFilePath("/SampleTemplates/ForgotPasswordEmail.cshtml", true)
-                .WithRazorTemplate();
+                .WithRazorEngine();
 
             context.GetOrNull(TestTemplates.TestTemplateLayout1)?
                 .WithVirtualFilePath("/SampleTemplates/TestTemplateLayout1.cshtml", true)
-                .WithRazorTemplate();
+                .WithRazorEngine();
 
             context.GetOrNull(TestTemplates.ShowDecimalNumber)?
                 .WithVirtualFilePath("/SampleTemplates/ShowDecimalNumber.cshtml", true)
-                .WithRazorTemplate();
+                .WithRazorEngine();
 
             context.Add(new TemplateDefinition(RazorTestTemplates.TestTemplate).WithVirtualFilePath("/SampleTemplates/TestTemplate.cshtml", true));
         }

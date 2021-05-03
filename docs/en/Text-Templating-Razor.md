@@ -84,7 +84,7 @@ public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
     {
         context.Add(
             new TemplateDefinition("Hello") //template name: "Hello"
-                .WithRazorTemplate()
+                .WithRazorEngine()
                 .WithVirtualFilePath(
                     "/Demos/Hello/Hello.cshtml", //template content path
                     isInlineLocalized: true
@@ -226,7 +226,7 @@ context.Add(
             "PasswordReset", //Template name
             typeof(DemoResource) //LOCALIZATION RESOURCE
         )
-        .WithRazorTemplate()
+        .WithRazorEngine()
         .WithVirtualFilePath(
             "/Demos/PasswordReset/PasswordReset.cshtml", //template content path
             isInlineLocalized: true
@@ -275,7 +275,7 @@ context.Add(
             name: "WelcomeEmail",
             defaultCultureName: "en"
         )
-        .WithRazorTemplate()
+        .WithRazorEngine()
         .WithVirtualFilePath(
             "/Demos/WelcomeEmail/Templates", //template content folder
             isInlineLocalized: false
@@ -339,7 +339,7 @@ context.Add(
         "EmailLayout",
         isLayout: true //SET isLayout!
     )
-    .WithRazorTemplate()
+    .WithRazorEngine()
     .WithVirtualFilePath(
         "/Demos/EmailLayout/EmailLayout.cshtml",
         isInlineLocalized: true
@@ -356,7 +356,7 @@ context.Add(
             defaultCultureName: "en",
             layout: "EmailLayout" //Set the LAYOUT
         )
-        .WithRazorTemplate()
+        .WithRazorEngine()
         .WithVirtualFilePath(
             "/Demos/WelcomeEmail/Templates",
             isInlineLocalized: false
