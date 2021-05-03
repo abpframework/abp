@@ -76,6 +76,9 @@ While there is no Razor Pages & MongoDB combination, you can check both document
 * **DevExtreme MVC / Razor Pages Component Integration**: How to install and use DevExtreme components in the ABP Framework MVC / Razor Pages UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Mvc)
   * [Article](https://community.abp.io/articles/using-devextreme-components-with-the-abp-framework-zb8z7yqv)
+* **Syncfusion Blazor Integration**: Shows how to install and integrate Syncfusion UI with ABP Framework Blazor UI.
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/SyncfusionSample)
+  * [Article](https://community.abp.io/articles/using-syncfusion-components-with-the-abp-framework-5ccvi8kc)
 * **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with the ABP Framework installed.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)
   * [Documentation](../Getting-Started-AspNetCore-Application.md)
