@@ -12,27 +12,27 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.TextTemplating.Razor
 {
-    [Dependency(ReplaceServices = true)]
-    public class RazorTemplateRenderer : ITemplateRenderer, ITransientDependency
+    public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransientDependency
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly IAbpCompiledViewProvider _abpCompiledViewProvider;
-        private readonly ITemplateDefinitionManager _templateDefinitionManager;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        public const string EngineName = "Razor";
+        public override string Name => EngineName;
 
-        public RazorTemplateRenderer(
+        protected readonly IServiceScopeFactory ServiceScopeFactory;
+        protected readonly IAbpCompiledViewProvider AbpCompiledViewProvider;
+
+        public RazorTemplateRenderingEngine(
             IServiceScopeFactory serviceScopeFactory,
             IAbpCompiledViewProvider abpCompiledViewProvider,
             ITemplateDefinitionManager templateDefinitionManager,
+            ITemplateContentProvider templateContentProvider,
             IStringLocalizerFactory stringLocalizerFactory)
+            : base(templateDefinitionManager, templateContentProvider, stringLocalizerFactory)
         {
-            _serviceScopeFactory = serviceScopeFactory;
-            _templateDefinitionManager = templateDefinitionManager;
-            _stringLocalizerFactory = stringLocalizerFactory;
-            _abpCompiledViewProvider = abpCompiledViewProvider;
+            ServiceScopeFactory = serviceScopeFactory;
+            AbpCompiledViewProvider = abpCompiledViewProvider;
         }
 
-        public virtual async Task<string> RenderAsync(
+        public override async Task<string> RenderAsync(
             [NotNull] string templateName,
             [CanBeNull] object model = null,
             [CanBeNull] string cultureName = null,
@@ -74,7 +74,7 @@ namespace Volo.Abp.TextTemplating.Razor
             Dictionary<string, object> globalContext,
             object model = null)
         {
-            var templateDefinition = _templateDefinitionManager.Get(templateName);
+            var templateDefinition = TemplateDefinitionManager.Get(templateName);
 
             var renderedContent = await RenderSingleTemplateAsync(
                 templateDefinition,
@@ -115,11 +115,11 @@ namespace Volo.Abp.TextTemplating.Razor
             Dictionary<string, object> globalContext,
             object model = null)
         {
-            var assembly = await _abpCompiledViewProvider.GetAssemblyAsync(templateDefinition);
+            var assembly = await AbpCompiledViewProvider.GetAssemblyAsync(templateDefinition);
             var templateType = assembly.GetType(AbpRazorTemplateConsts.TypeName);
             var template = (IRazorTemplatePage) Activator.CreateInstance(templateType);
 
-            using (var scope = _serviceScopeFactory.CreateScope())
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var modelType = templateType
                     .GetInterfaces()
@@ -153,16 +153,6 @@ namespace Volo.Abp.TextTemplating.Razor
             {
                 razorTemplatePageWithModel.Model = (TModel)model;
             }
-        }
-
-        private IStringLocalizer GetLocalizerOrNull(TemplateDefinition templateDefinition)
-        {
-            if (templateDefinition.LocalizationResource != null)
-            {
-                return _stringLocalizerFactory.Create(templateDefinition.LocalizationResource);
-            }
-
-            return _stringLocalizerFactory.CreateDefaultOrNull();
         }
     }
 }

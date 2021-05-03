@@ -15,7 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating.Razor\Volo.Abp.TextTemplating.Razor.csproj" />
         <ProjectReference Include="..\Volo.Abp.TextTemplating.Tests\Volo.Abp.TextTemplating.Tests.csproj" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     </ItemGroup>

@@ -9,23 +9,20 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.TextTemplating.Scriban
 {
-    public class ScribanTemplateRenderer : ITemplateRenderer, ITransientDependency
+    public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITransientDependency
     {
-        private readonly ITemplateContentProvider _templateContentProvider;
-        private readonly ITemplateDefinitionManager _templateDefinitionManager;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        public const string EngineName = "Scriban";
+        public override string Name => EngineName;
 
-        public ScribanTemplateRenderer(
-            ITemplateContentProvider templateContentProvider,
+        public ScribanTemplateRenderingEngine(
             ITemplateDefinitionManager templateDefinitionManager,
+            ITemplateContentProvider templateContentProvider,
             IStringLocalizerFactory stringLocalizerFactory)
+            : base(templateDefinitionManager, templateContentProvider, stringLocalizerFactory)
         {
-            _templateContentProvider = templateContentProvider;
-            _templateDefinitionManager = templateDefinitionManager;
-            _stringLocalizerFactory = stringLocalizerFactory;
         }
 
-        public virtual async Task<string> RenderAsync(
+        public override async Task<string> RenderAsync(
             [NotNull] string templateName,
             [CanBeNull] object model = null,
             [CanBeNull] string cultureName = null,
@@ -64,7 +61,7 @@ namespace Volo.Abp.TextTemplating.Scriban
             Dictionary<string, object> globalContext,
             object model = null)
         {
-            var templateDefinition = _templateDefinitionManager.Get(templateName);
+            var templateDefinition = TemplateDefinitionManager.Get(templateName);
 
             var renderedContent = await RenderSingleTemplateAsync(
                 templateDefinition,
@@ -89,10 +86,7 @@ namespace Volo.Abp.TextTemplating.Scriban
             Dictionary<string, object> globalContext,
             object model = null)
         {
-            var rawTemplateContent = await _templateContentProvider
-                .GetContentOrNullAsync(
-                    templateDefinition
-                );
+            var rawTemplateContent = await GetContentOrNullAsync(templateDefinition);
 
             return await RenderTemplateContentWithScribanAsync(
                 templateDefinition,
@@ -145,16 +139,6 @@ namespace Volo.Abp.TextTemplating.Scriban
             context.PushCulture(System.Globalization.CultureInfo.CurrentCulture);
 
             return context;
-        }
-
-        private IStringLocalizer GetLocalizerOrNull(TemplateDefinition templateDefinition)
-        {
-            if (templateDefinition.LocalizationResource != null)
-            {
-                return _stringLocalizerFactory.Create(templateDefinition.LocalizationResource);
-            }
-
-            return _stringLocalizerFactory.CreateDefaultOrNull();
         }
     }
 }

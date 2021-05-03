@@ -11,7 +11,7 @@ namespace Volo.Abp.TextTemplating
         typeof(AbpVirtualFileSystemModule),
         typeof(AbpLocalizationAbstractionsModule)
         )]
-    public class AbpTextTemplatingAbstractionsModule : AbpModule
+    public class AbpTextTemplatingCoreModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {

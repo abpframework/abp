@@ -37,6 +37,9 @@ namespace Volo.Abp.TextTemplating
         [CanBeNull]
         public string DefaultCultureName { get; }
 
+        [CanBeNull]
+        public string RenderEngine { get; set; }
+
         /// <summary>
         /// Gets/sets a key-value on the <see cref="Properties"/>.
         /// </summary>
@@ -82,6 +85,15 @@ namespace Volo.Abp.TextTemplating
         public virtual TemplateDefinition WithProperty(string key, object value)
         {
             Properties[key] = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the Render Engine of <see cref="TemplateDefinition"/>.
+        /// </summary>
+        public virtual TemplateDefinition WithRenderEngine(string renderEngine)
+        {
+            RenderEngine = renderEngine;
             return this;
         }
     }

@@ -49,6 +49,7 @@ public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
                     "/Demos/Hello/Hello.tpl", //template content path
                     isInlineLocalized: true
                 )
+                .WithScribanTemplate()
         );
     }
 }
@@ -58,6 +59,7 @@ public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
 * `TemplateDefinition` is the class represents a template. Each template must have a unique name (that will be used while you are rendering the template).
 * `/Demos/Hello/Hello.tpl` is the path of the template file.
 * `isInlineLocalized` is used to declare if you are using a single template for all languages (`true`) or different templates for each language (`false`). See the Localization section below for more.
+* `WithRenderEngine` method is used to set the render engine of the template.
 
 ### The Template Content
 
@@ -175,7 +177,9 @@ context.Add(
     new TemplateDefinition(
             "PasswordReset", //Template name
             typeof(DemoResource) //LOCALIZATION RESOURCE
-        ).WithVirtualFilePath(
+        )
+        .WithScribanTemplate()
+        .WithVirtualFilePath(
             "/Demos/PasswordReset/PasswordReset.tpl", //template content path
             isInlineLocalized: true
         )
@@ -223,6 +227,7 @@ context.Add(
             name: "WelcomeEmail",
             defaultCultureName: "en"
         )
+        .WithScribanTemplate()
         .WithVirtualFilePath(
             "/Demos/WelcomeEmail/Templates", //template content folder
             isInlineLocalized: false
@@ -284,7 +289,9 @@ context.Add(
     new TemplateDefinition(
         "EmailLayout",
         isLayout: true //SET isLayout!
-    ).WithVirtualFilePath(
+    )
+    .WithScribanTemplate()
+    .WithVirtualFilePath(
         "/Demos/EmailLayout/EmailLayout.tpl",
         isInlineLocalized: true
     )
@@ -299,7 +306,9 @@ context.Add(
             name: "WelcomeEmail",
             defaultCultureName: "en",
             layout: "EmailLayout" //Set the LAYOUT
-        ).WithVirtualFilePath(
+        )
+        .WithScribanTemplate()
+        .WithVirtualFilePath(
             "/Demos/WelcomeEmail/Templates",
             isInlineLocalized: false
         )

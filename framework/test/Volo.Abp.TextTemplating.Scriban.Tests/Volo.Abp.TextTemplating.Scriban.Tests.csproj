@@ -6,7 +6,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace />
     </PropertyGroup>
-    
+
     <ItemGroup>
         <EmbeddedResource Include="Volo\Abp\TextTemplating\Scriban\SampleTemplates\**\*.tpl">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -15,7 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating.Scriban\Volo.Abp.TextTemplating.Scriban.csproj" />
         <ProjectReference Include="..\Volo.Abp.TextTemplating.Tests\Volo.Abp.TextTemplating.Tests.csproj" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     </ItemGroup>
