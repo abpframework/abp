@@ -121,8 +121,17 @@ namespace Volo.Abp.Authorization.Permissions
 
             foreach (var provider in PermissionValueProviderManager.ValueProviders)
             {
+                var permissions = permissionDefinitions
+                    .Where(x => !x.Providers.Any() || x.Providers.Contains(provider.Name))
+                    .ToList();
+
+                if (permissions.IsNullOrEmpty())
+                {
+                    break;
+                }
+
                 var context = new PermissionValuesCheckContext(
-                    permissionDefinitions.Where(x => !x.Providers.Any() || x.Providers.Contains(provider.Name)).ToList(),
+                    permissions,
                     claimsPrincipal);
 
                 var multipleResult = await provider.CheckAsync(context);
