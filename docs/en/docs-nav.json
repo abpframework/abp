@@ -321,6 +321,10 @@
           ]
         },
         {
+          "text": "JSON",
+          "path": "JSON.md"
+        },
+        {
           "text": "Features",
           "path": "Features.md"
         },
