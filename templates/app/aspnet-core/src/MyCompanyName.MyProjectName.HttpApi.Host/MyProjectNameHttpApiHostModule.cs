@@ -103,6 +103,11 @@ namespace MyCompanyName.MyProjectName
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                     options.Audience = "MyProjectName";
+                    var validIssuersString = configuration.GetSection("AuthServer:ValidIssuers").Get<string>();
+                    if (!string.IsNullOrWhiteSpace(validIssuersString))
+                    {
+                        options.TokenValidationParameters.ValidIssuers = validIssuersString.Replace(" ", string.Empty).Split(",");
+                    }
                 });
         }
 
