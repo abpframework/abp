@@ -41,33 +41,76 @@ namespace Volo.Abp.Cli
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
 
-            var commandLineArgs = CommandLineArgumentParser.Parse(args);
-
 #if !DEBUG
             if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
             {
                 await CheckCliVersionAsync();
             }
 #endif
+            var commandLineArgs = CommandLineArgumentParser.Parse(args);
+            
+            try
+            {
+                if (commandLineArgs.IsCommand("batch"))
+                {
+                    await RunBatchAsync(commandLineArgs);
+                }
+                else
+                {
+                    await RunInternalAsync(commandLineArgs);
+                }
+            }
+            catch (CliUsageException usageException)
+            {
+                Logger.LogWarning(usageException.Message);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+        }
 
+        private async Task RunBatchAsync(CommandLineArgs commandLineArgs)
+        {
+            var targetFile = commandLineArgs.Target;
+            if (targetFile.IsNullOrWhiteSpace())
+            {
+                throw new CliUsageException(
+                    "Must provide a file name/path that contains a list of commands" +
+                    Environment.NewLine + Environment.NewLine +
+                    "Example: " +
+                    "  abp batch commands.txt"
+                    );
+            }
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), targetFile);
+            var fileLines = File.ReadAllLines(filePath);
+            foreach (var line in fileLines)
+            {
+                var lineText = line;
+                if (lineText.IsNullOrWhiteSpace() || lineText.StartsWith("#"))
+                {
+                    continue;
+                }
+
+                if (lineText.Contains('#'))
+                {
+                    lineText = lineText.Substring(0, lineText.IndexOf('#'));
+                }
+
+                var args = CommandLineArgumentParser.Parse(lineText.Split(' '));
+                await RunInternalAsync(args);
+            }
+        }
+
+        private async Task RunInternalAsync(CommandLineArgs commandLineArgs)
+        {
             var commandType = CommandSelector.Select(commandLineArgs);
 
             using (var scope = ServiceScopeFactory.CreateScope())
             {
-                var command = (IConsoleCommand)scope.ServiceProvider.GetRequiredService(commandType);
-
-                try
-                {
-                    await command.ExecuteAsync(commandLineArgs);
-                }
-                catch (CliUsageException usageException)
-                {
-                    Logger.LogWarning(usageException.Message);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogException(ex);
-                }
+                var command = (IConsoleCommand) scope.ServiceProvider.GetRequiredService(commandType);
+                await command.ExecuteAsync(commandLineArgs);
             }
         }
 
