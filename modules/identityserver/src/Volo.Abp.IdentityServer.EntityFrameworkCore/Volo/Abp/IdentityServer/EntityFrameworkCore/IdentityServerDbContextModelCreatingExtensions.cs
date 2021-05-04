@@ -419,6 +419,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             });
 
             #endregion
+
+            builder.TryConfigureObjectExtensions<IdentityServerDbContext>();
         }
 
         private static bool IsDatabaseProvider(

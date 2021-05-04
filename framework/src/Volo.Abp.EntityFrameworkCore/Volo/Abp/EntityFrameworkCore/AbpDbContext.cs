@@ -31,10 +31,12 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency
+    public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency, IHasExtraProperties
         where TDbContext : DbContext
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
+        public ExtraPropertyDictionary ExtraProperties { get; }
 
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
@@ -86,7 +88,7 @@ namespace Volo.Abp.EntityFrameworkCore
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
-
+            ExtraProperties = new ExtraPropertyDictionary();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -72,6 +72,8 @@ namespace Volo.Docs.EntityFrameworkCore
 
                 b.HasKey(x => new { x.DocumentId, x.Username });
             });
+
+            builder.TryConfigureObjectExtensions<DocsDbContext>();
         }
     }
 }

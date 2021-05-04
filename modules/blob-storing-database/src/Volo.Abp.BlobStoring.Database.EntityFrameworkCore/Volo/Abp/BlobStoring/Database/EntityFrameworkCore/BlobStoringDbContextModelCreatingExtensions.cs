@@ -46,6 +46,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 
                 b.HasIndex(x => new {x.TenantId, x.ContainerId, x.Name});
             });
+
+            builder.TryConfigureObjectExtensions<BlobStoringDbContext>();
         }
     }
 }

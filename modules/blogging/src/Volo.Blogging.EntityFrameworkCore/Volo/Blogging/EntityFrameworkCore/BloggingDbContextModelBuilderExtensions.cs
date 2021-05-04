@@ -107,6 +107,8 @@ namespace Volo.Blogging.EntityFrameworkCore
 
                 b.HasKey(x => new { x.PostId, x.TagId });
             });
+
+            builder.TryConfigureObjectExtensions<BloggingDbContext>();
         }
     }
 }

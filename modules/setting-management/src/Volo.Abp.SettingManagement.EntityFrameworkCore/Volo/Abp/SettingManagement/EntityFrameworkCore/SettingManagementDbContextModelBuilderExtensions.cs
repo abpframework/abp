@@ -55,6 +55,8 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 
                 b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
             });
+
+            builder.TryConfigureObjectExtensions<SettingManagementDbContext>();
         }
     }
 }

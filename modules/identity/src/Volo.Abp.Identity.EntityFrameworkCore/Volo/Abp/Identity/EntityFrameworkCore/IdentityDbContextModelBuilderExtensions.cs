@@ -253,6 +253,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     }).IsUnique();
                 });
             }
+
+            builder.TryConfigureObjectExtensions<IdentityDbContext>();
         }
     }
 }

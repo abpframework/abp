@@ -40,6 +40,8 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 
                 b.HasIndex(x => new { x.IsAbandoned, x.NextTryTime });
             });
+
+            builder.TryConfigureObjectExtensions<BackgroundJobsDbContext>();
         }
     }
 }

@@ -32,6 +32,8 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 
                 b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
             });
+
+            builder.TryConfigureObjectExtensions<PermissionManagementDbContext>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
 
@@ -16,10 +17,10 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
         public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
 
         public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
-        
+
         public DbSet<Author> Author { get; set; }
 
-        public TestAppDbContext(DbContextOptions<TestAppDbContext> options) 
+        public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
             : base(options)
         {
 
@@ -30,6 +31,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
             modelBuilder.Owned<District>();
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
 
             modelBuilder.Entity<Phone>(b =>
             {

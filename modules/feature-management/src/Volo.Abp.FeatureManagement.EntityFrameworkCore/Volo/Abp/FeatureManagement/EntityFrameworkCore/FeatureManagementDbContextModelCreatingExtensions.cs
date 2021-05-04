@@ -37,6 +37,8 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 
                 b.HasIndex(x => new { x.Name, x.ProviderName, x.ProviderKey });
             });
+
+            builder.TryConfigureObjectExtensions<FeatureManagementDbContext>();
         }
     }
 }

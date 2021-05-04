@@ -194,7 +194,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogPostConsts.MaxSlugLength);
                     b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
                     b.Property(p => p.Content).HasMaxLength(BlogPostConsts.MaxContentLength);
-                    
+
                     b.HasIndex(x => new { x.Slug, x.BlogId });
                 });
 
@@ -232,6 +232,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
             {
                 builder.Ignore<MediaDescriptor>();
             }
+
+            builder.TryConfigureObjectExtensions<CmsKitDbContext>();
         }
     }
 }

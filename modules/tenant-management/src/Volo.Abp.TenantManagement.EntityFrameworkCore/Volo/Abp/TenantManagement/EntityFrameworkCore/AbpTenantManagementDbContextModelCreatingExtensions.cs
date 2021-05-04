@@ -49,6 +49,8 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                 b.Property(cs => cs.Name).IsRequired().HasMaxLength(TenantConnectionStringConsts.MaxNameLength);
                 b.Property(cs => cs.Value).IsRequired().HasMaxLength(TenantConnectionStringConsts.MaxValueLength);
             });
+
+            builder.TryConfigureObjectExtensions<TenantManagementDbContext>();
         }
     }
 }
