@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.UI.Navigation
 {
@@ -13,13 +13,16 @@ namespace Volo.Abp.UI.Navigation
     {
         protected AbpNavigationOptions Options { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected ISimpleStateCheckerManager<ApplicationMenuItem> SimpleStateCheckerManager { get; }
 
         public MenuManager(
             IOptions<AbpNavigationOptions> options,
-            IHybridServiceScopeFactory serviceScopeFactory)
+            IHybridServiceScopeFactory serviceScopeFactory,
+            ISimpleStateCheckerManager<ApplicationMenuItem> simpleStateCheckerManager)
         {
-            ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
+            ServiceScopeFactory = serviceScopeFactory;
+            SimpleStateCheckerManager = simpleStateCheckerManager;
         }
 
         public async Task<ApplicationMenu> GetAsync(string name)
@@ -45,18 +48,26 @@ namespace Volo.Abp.UI.Navigation
 
         protected virtual async Task CheckPermissionsAsync(IServiceProvider serviceProvider, IHasMenuItems menuWithItems)
         {
-            var requiredPermissionItems = new List<ApplicationMenuItem>();
-            GetRequiredPermissionNameMenus(menuWithItems, requiredPermissionItems);
+            var allMenuItems = new List<ApplicationMenuItem>();
+            GetAllMenuItems(menuWithItems, allMenuItems);
 
-            if (requiredPermissionItems.Any())
+            foreach (var item in allMenuItems)
             {
-                var permissionChecker = serviceProvider.GetRequiredService<IPermissionChecker>();
-                var grantResult = await permissionChecker.IsGrantedAsync(requiredPermissionItems.Select(x => x.RequiredPermissionName).Distinct().ToArray());
-
-                var toBeDeleted = new HashSet<ApplicationMenuItem>();
-                foreach (var menu in requiredPermissionItems)
+                if (!item.RequiredPermissionName.IsNullOrWhiteSpace())
                 {
-                    if (grantResult.Result[menu.RequiredPermissionName!] != PermissionGrantResult.Granted)
+                    item.RequirePermissions(item.RequiredPermissionName);
+                }
+            }
+
+            var checkPermissionsMenuItems = allMenuItems.Where(x => x.SimpleStateCheckers.Any()).ToArray();
+
+            if (checkPermissionsMenuItems.Any())
+            {
+                var toBeDeleted = new HashSet<ApplicationMenuItem>();
+                var result =  await SimpleStateCheckerManager.IsEnabledAsync(checkPermissionsMenuItems);
+                foreach (var menu in checkPermissionsMenuItems)
+                {
+                    if (!result[menu])
                     {
                         toBeDeleted.Add(menu);
                     }
@@ -66,16 +77,12 @@ namespace Volo.Abp.UI.Navigation
             }
         }
 
-        protected virtual void GetRequiredPermissionNameMenus(IHasMenuItems menuWithItems, List<ApplicationMenuItem> output)
+        protected virtual void GetAllMenuItems(IHasMenuItems menuWithItems, List<ApplicationMenuItem> output)
         {
             foreach (var item in menuWithItems.Items)
             {
-                if (!item.RequiredPermissionName.IsNullOrWhiteSpace())
-                {
-                    output.Add(item);
-                }
-
-                GetRequiredPermissionNameMenus(item, output);
+                output.Add(item);
+                GetAllMenuItems(item, output);
             }
         }
 

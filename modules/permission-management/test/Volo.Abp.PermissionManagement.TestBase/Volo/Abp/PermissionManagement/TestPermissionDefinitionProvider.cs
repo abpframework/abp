@@ -19,7 +19,7 @@ namespace Volo.Abp.PermissionManagement
 
             testGroup.AddPermission("MyPermission4", multiTenancySide: MultiTenancySides.Host).WithProviders(UserPermissionValueProvider.ProviderName);
 
-            testGroup.AddPermission("MyPermission5").AddStateProviders(new TestRequireRolePermissionStateProvider("super-admin"));
+            testGroup.AddPermission("MyPermission5").SimpleStateCheckers.Add(new TestRequireRolePermissionStateProvider("super-admin"));
         }
     }
 }

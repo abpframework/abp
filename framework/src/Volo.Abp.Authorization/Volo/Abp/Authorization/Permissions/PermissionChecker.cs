@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -15,20 +16,20 @@ namespace Volo.Abp.Authorization.Permissions
         protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IPermissionValueProviderManager PermissionValueProviderManager { get; }
-        protected IPermissionStateManager PermissionStateManager { get; }
+        protected ISimpleStateCheckerManager<PermissionDefinition> PermissionSimpleStateCheckerManager { get; }
 
         public PermissionChecker(
             ICurrentPrincipalAccessor principalAccessor,
             IPermissionDefinitionManager permissionDefinitionManager,
             ICurrentTenant currentTenant,
             IPermissionValueProviderManager permissionValueProviderManager,
-            IPermissionStateManager permissionStateManager)
+            ISimpleStateCheckerManager<PermissionDefinition> permissionSimpleStateCheckerManager)
         {
             PrincipalAccessor = principalAccessor;
             PermissionDefinitionManager = permissionDefinitionManager;
             CurrentTenant = currentTenant;
             PermissionValueProviderManager = permissionValueProviderManager;
-            PermissionStateManager = permissionStateManager;
+            PermissionSimpleStateCheckerManager = permissionSimpleStateCheckerManager;
         }
 
         public virtual async Task<bool> IsGrantedAsync(string name)
@@ -49,7 +50,7 @@ namespace Volo.Abp.Authorization.Permissions
                 return false;
             }
 
-            if (!await PermissionStateManager.IsEnabledAsync(permission))
+            if (!await PermissionSimpleStateCheckerManager.IsEnabledAsync(permission))
             {
                 return false;
             }
@@ -112,7 +113,7 @@ namespace Volo.Abp.Authorization.Permissions
                 result.Result.Add(name, PermissionGrantResult.Undefined);
 
                 if (permission.IsEnabled &&
-                    await PermissionStateManager.IsEnabledAsync(permission) &&
+                    await PermissionSimpleStateCheckerManager.IsEnabledAsync(permission) &&
                     permission.MultiTenancySide.HasFlag(multiTenancySide))
                 {
                     permissionDefinitions.Add(permission);

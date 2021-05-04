@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Blogging.Localization;
 
 namespace Volo.Blogging.Admin
@@ -18,9 +19,9 @@ namespace Volo.Blogging.Admin
         {
             var l = context.GetLocalizer<BloggingResource>();
 
-            var managementRootMenuItem = new ApplicationMenuItem("BlogManagement", l["Menu:BlogManagement"], requiredPermissionName: BloggingPermissions.Blogs.Management);
+            var managementRootMenuItem = new ApplicationMenuItem("BlogManagement", l["Menu:BlogManagement"]).RequirePermissions(BloggingPermissions.Blogs.Management);
 
-            managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Blogging/Admin/Blogs", requiredPermissionName: BloggingPermissions.Blogs.Management));
+            managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Blogging/Admin/Blogs").RequirePermissions(BloggingPermissions.Blogs.Management));
 
             context.Menu.GetAdministration().AddItem(managementRootMenuItem);
 
