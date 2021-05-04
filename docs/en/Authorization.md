@@ -236,87 +236,66 @@ When you write this code inside your permission definition provider, it finds th
 
 > Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined.
 
-### Permission depending on a Condition
+### Permission Depending on a Condition
 
-You may want to disable a permission based on a condition. Disabled permissions are not visible on the UI and always returns `prohibited` when you check them
+You may want to disable a permission based on a condition. Disabled permissions are not visible on the UI and always returns `prohibited` when you check them. There are two built-in conditional dependencies for a permission definition;
 
-Permission conditions can be managed according to a condition such as a Feature, Global Feature, or a custom condition. Any condition which implements `IPermissionStateProvider` can be added via calling `AddStateProvider()` method for **PermissionDefinition**.
+* A permission can be automatically disabled if a [Feature](Features.md) was disabled.
+* A permission can be automatically disabled if a [Global Feature](Global-Features.md) was disabled.
 
-See examples below:
+In addition, you can create your custom extensions.
 
-- To depend on a Global Feature
+#### Depending on a Features
 
-  ```csharp
-  var authorPermission = myGroup.AddPermission("Author_Management");
-  
-  // There are a couple of ways to do:
-  authorPermission.RequireGlobalFeatures("AuthorManagementFeature");
-  authorPermission.RequireGlobalFeatures(typeof(AuthorManagementFeature));
-  authorPermission.AddStateProviders(new RequireGlobalFeaturesPermissionStateProvider("AuthorManagementFeature"));
-  
-  // Even it can be depend on multiple:
-  authorPermission.RequireGlobalFeatures("BookStoreFeature", "AuthorManagementFeature");
-  authorPermission.RequireGlobalFeatures(requiresAll: true, "BookStoreFeature", "AuthorManagementFeature");
-  authorPermission.RequireGlobalFeatures(requiresAll: true, typeof(BookStoreFeature), (AuthorManagementFeature);
-  ```
+Use the `RequireFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
 
-- To depend on a Feature
+````csharp
+myGroup.AddPermission("Book_Creation")
+    .RequireFeatures("BookManagement");
+````
 
-  ```csharp
-  var authorPermission = myGroup.AddPermission("Author_Management");
-  
-  // Pre-defined State Provider can be used:
-  authorPermission.AddStateProviders(new RequireFeaturesPermissionStateProvider("BookStore.AuthorManagement"));
-  
-  // Also can be depend on multiple features
-  authorPermission.AddStateProviders(
-      new RequireFeaturesPermissionStateProvider("BookStore.Authors","BookStore.AuthorManagement"));
-  
-  authorPermission.AddStateProviders(
-      new RequireFeaturesPermissionStateProvider(requiresAll: true, "BookStore.Authors","BookStore.AuthorManagement"));
-  ```
+#### Depending on a Global Feature
 
-- To depend on a Custom Condition
+Use the `RequireFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
 
-  ```csharp
-  var authorPermission = myGroup.AddPermission("Author_Management");
-  
-  // To depend on your custom condition
-  authorPermission.AddStateProviders(new MyCustomPermissionStateProvider());
-  ```
+````csharp
+myGroup.AddPermission("Book_Creation")
+    .RequireGlobalFeatures("BookManagement");
+````
 
-  Custom condition class have to implement `IPermissionStateProvider`.
-  
-  - Also State Providers can be configured globally via using `GlobalStateProviders` in **AbpPermissionOptions**
-  
-    ```csharp
-    Configure<AbpPermissionOptions>(options =>
+#### Creating a Custom Permission Dependency
+
+Any class implements the `IPermissionStateProvider` interface can disable a permission based on a custom condition.
+
+**Example:**
+
+````csharp
+public class MyCustomPermissionStateProvider : IPermissionStateProvider
+{
+    public Task<bool> IsEnabledAsync(PermissionStateContext context)
     {
-    	options.GlobalStateProviders.Add<MyCustomPermissionStateProvider>();
-        
-        // Or type can be pass as parameter:
-        options.GlobalStateProviders.Add(typeof(MyCustomPermissionStateProvider));
-    });
-    ```
-  
-  Content of **MyCustomPermissionStateProvider** looks like:
-  
-  ```csharp
-  public class MyCustomPermissionStateProvider : IPermissionStateProvider
-  {
-      public Task<bool> IsEnabledAsync(PermissionStateContext context)
-      {
-          // You can implement your own logic here. 
-          // That check works globally for each permission.
-          return Task.FromResult(
-              context.Permission.Name.StartsWith("Acme.BookStore"));
-      }
-  }
-  ```
-  
-  
+        // You can implement your own logic here. 
+        return Task.FromResult(
+            context.Permission.Name.StartsWith("Acme.BookStore"));
+    }
+}
+````
 
+Then you can add `MyCustomPermissionStateProvider` to any permission definition, using the `AddStateProviders` extension method:
 
+````csharp
+myGroup.AddPermission("Book_Creation")
+    .AddStateProviders(new MyCustomPermissionStateProvider());
+````
+
+Or you can globally add your custom provider to make it working for all permissions:
+
+````csharp
+Configure<AbpPermissionOptions>(options =>
+{
+	options.GlobalStateProviders.Add<MyCustomPermissionStateProvider>();
+});
+````
 
 ## IAuthorizationService
 
