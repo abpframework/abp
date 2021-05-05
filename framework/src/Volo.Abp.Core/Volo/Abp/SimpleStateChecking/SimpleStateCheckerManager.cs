@@ -32,7 +32,7 @@ namespace Volo.Abp.SimpleStateChecking
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                var batchStateCheckers = states.SelectMany(x => x.SimpleStateCheckers)
+                var batchStateCheckers = states.SelectMany(x => x.StateCheckers)
                     .Where(x => x is ISimpleBatchStateChecker<TState>)
                     .Cast<ISimpleBatchStateChecker<TState>>()
                     .GroupBy(x => x)
@@ -42,7 +42,7 @@ namespace Volo.Abp.SimpleStateChecking
                 {
                     var context = new SimpleBatchStateCheckerContext<TState>(
                         scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(),
-                        states.Where(x => x.SimpleStateCheckers.Contains(stateChecker)).ToArray());
+                        states.Where(x => x.StateCheckers.Contains(stateChecker)).ToArray());
 
                     foreach (var x in await stateChecker.IsEnabledAsync(context))
                     {
@@ -55,7 +55,7 @@ namespace Volo.Abp.SimpleStateChecking
                     }
                 }
 
-                foreach (ISimpleBatchStateChecker<TState> globalStateChecker in Options.GlobalSimpleStateCheckers
+                foreach (ISimpleBatchStateChecker<TState> globalStateChecker in Options.GlobalStateCheckers
                     .Where(x => typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
                     .Select(x => ServiceProvider.GetRequiredService(x)))
                 {
@@ -87,7 +87,7 @@ namespace Volo.Abp.SimpleStateChecking
             {
                 var context = new SimpleStateCheckerContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);
 
-                foreach (var provider in state.SimpleStateCheckers.WhereIf(!useBatchChecker, x => x is not ISimpleBatchStateChecker<TState>))
+                foreach (var provider in state.StateCheckers.WhereIf(!useBatchChecker, x => x is not ISimpleBatchStateChecker<TState>))
                 {
                     if (!await provider.IsEnabledAsync(context))
                     {
@@ -95,7 +95,7 @@ namespace Volo.Abp.SimpleStateChecking
                     }
                 }
 
-                foreach (ISimpleStateChecker<TState> provider in Options.GlobalSimpleStateCheckers
+                foreach (ISimpleStateChecker<TState> provider in Options.GlobalStateCheckers
                     .WhereIf(!useBatchChecker, x => !typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
                     .Select(x => ServiceProvider.GetRequiredService(x)))
                 {

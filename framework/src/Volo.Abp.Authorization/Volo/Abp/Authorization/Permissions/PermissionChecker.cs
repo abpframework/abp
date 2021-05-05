@@ -16,20 +16,20 @@ namespace Volo.Abp.Authorization.Permissions
         protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IPermissionValueProviderManager PermissionValueProviderManager { get; }
-        protected ISimpleStateCheckerManager<PermissionDefinition> PermissionSimpleStateCheckerManager { get; }
+        protected ISimpleStateCheckerManager<PermissionDefinition> StateCheckerManager { get; }
 
         public PermissionChecker(
             ICurrentPrincipalAccessor principalAccessor,
             IPermissionDefinitionManager permissionDefinitionManager,
             ICurrentTenant currentTenant,
             IPermissionValueProviderManager permissionValueProviderManager,
-            ISimpleStateCheckerManager<PermissionDefinition> permissionSimpleStateCheckerManager)
+            ISimpleStateCheckerManager<PermissionDefinition> stateCheckerManager)
         {
             PrincipalAccessor = principalAccessor;
             PermissionDefinitionManager = permissionDefinitionManager;
             CurrentTenant = currentTenant;
             PermissionValueProviderManager = permissionValueProviderManager;
-            PermissionSimpleStateCheckerManager = permissionSimpleStateCheckerManager;
+            StateCheckerManager = stateCheckerManager;
         }
 
         public virtual async Task<bool> IsGrantedAsync(string name)
@@ -50,7 +50,7 @@ namespace Volo.Abp.Authorization.Permissions
                 return false;
             }
 
-            if (!await PermissionSimpleStateCheckerManager.IsEnabledAsync(permission))
+            if (!await StateCheckerManager.IsEnabledAsync(permission))
             {
                 return false;
             }
@@ -113,7 +113,7 @@ namespace Volo.Abp.Authorization.Permissions
                 result.Result.Add(name, PermissionGrantResult.Undefined);
 
                 if (permission.IsEnabled &&
-                    await PermissionSimpleStateCheckerManager.IsEnabledAsync(permission) &&
+                    await StateCheckerManager.IsEnabledAsync(permission) &&
                     permission.MultiTenancySide.HasFlag(multiTenancySide))
                 {
                     permissionDefinitions.Add(permission);

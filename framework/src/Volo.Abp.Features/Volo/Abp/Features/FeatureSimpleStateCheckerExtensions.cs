@@ -23,7 +23,7 @@ namespace Volo.Abp.Features
             Check.NotNull(state, nameof(state));
             Check.NotNullOrEmpty(features, nameof(features));
 
-            state.SimpleStateCheckers.Add(new RequireFeaturesSimpleStateChecker<TState>(requiresAll, features));
+            state.StateCheckers.Add(new RequireFeaturesSimpleStateChecker<TState>(requiresAll, features));
             return state;
         }
     }

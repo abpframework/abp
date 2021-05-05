@@ -23,7 +23,7 @@ namespace Volo.Abp.GlobalFeatures
             Check.NotNull(state, nameof(state));
             Check.NotNullOrEmpty(globalFeatures, nameof(globalFeatures));
 
-            state.SimpleStateCheckers.Add(new RequireGlobalFeaturesSimpleStateChecker<TState>(requiresAll, globalFeatures));
+            state.StateCheckers.Add(new RequireGlobalFeaturesSimpleStateChecker<TState>(requiresAll, globalFeatures));
             return state;
         }
 
@@ -44,7 +44,7 @@ namespace Volo.Abp.GlobalFeatures
             Check.NotNull(state, nameof(state));
             Check.NotNullOrEmpty(globalFeatures, nameof(globalFeatures));
 
-            state.SimpleStateCheckers.Add(new RequireGlobalFeaturesSimpleStateChecker<TState>(requiresAll, globalFeatures));
+            state.StateCheckers.Add(new RequireGlobalFeaturesSimpleStateChecker<TState>(requiresAll, globalFeatures));
             return state;
         }
     }
