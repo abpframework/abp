@@ -2,6 +2,7 @@
 
 namespace Volo.Abp.DependencyInjection
 {
+    [AttributeUsage(AttributeTargets.Class)]
     public class ReplaceDbContextAttribute : Attribute
     {
         public Type[] ReplacedDbContextTypes { get; }
