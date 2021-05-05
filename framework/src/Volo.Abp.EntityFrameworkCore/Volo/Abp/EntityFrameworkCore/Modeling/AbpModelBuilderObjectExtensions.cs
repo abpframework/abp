@@ -3,7 +3,7 @@ using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
 {
-    public static class AbpModelBuilderExtensions
+    public static class AbpModelBuilderObjectExtensions
     {
         public static void TryConfigureObjectExtensions<TDbContext>(this ModelBuilder modelBuilder)
             where TDbContext : DbContext
