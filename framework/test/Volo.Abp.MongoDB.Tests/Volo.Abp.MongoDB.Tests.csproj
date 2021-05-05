@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MongoDB.Tests.SecondContext\Volo.Abp.MongoDB.Tests.SecondContext.csproj" />
     <ProjectReference Include="..\Volo.Abp.TestApp\Volo.Abp.TestApp.csproj" />
   </ItemGroup>
 

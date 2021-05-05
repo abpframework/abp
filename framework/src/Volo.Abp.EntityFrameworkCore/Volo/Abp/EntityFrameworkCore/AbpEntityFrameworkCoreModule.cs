@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow.EntityFrameworkCore;
 
@@ -9,6 +11,11 @@ namespace Volo.Abp.EntityFrameworkCore
     [DependsOn(typeof(AbpDddDomainModule))]
     public class AbpEntityFrameworkCoreModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddConventionalRegistrar(new AbpDbContextConventionalRegistrar());
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpDbContextOptions>(options =>
