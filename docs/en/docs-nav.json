@@ -379,6 +379,10 @@
         {
           "text": "Cancellation Token Provider",
           "path": "Cancellation-Token-Provider.md"
+        },
+        {
+          "text": "Simple State Checker",
+          "path": "SimpleStateChecker.md"
         }
       ]
     },
