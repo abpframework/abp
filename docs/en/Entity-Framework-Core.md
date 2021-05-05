@@ -706,7 +706,19 @@ One advantage of using an interface for a DbContext is then it will be replaceab
 
 ### Replace Other DbContextes
 
-Once you properly define and use an interface for DbContext, then any other implementation can replace it using the `ReplaceDbContext` option:
+Once you properly define and use an interface for DbContext, then any other implementation can use the following ways to replace it:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreDbContext))]
+public class OtherDbContext : AbpDbContext<OtherDbContext>, IBookStoreDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ````csharp
 context.Services.AddAbpDbContext<OtherDbContext>(options =>

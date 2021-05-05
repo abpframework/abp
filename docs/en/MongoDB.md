@@ -373,7 +373,19 @@ One advantage of using interface for a MongoDbContext is then it becomes replace
 
 #### Replace Other DbContextes
 
-Once you properly define and use an interface for a MongoDbContext , then any other implementation can replace it using the `ReplaceDbContext` option:
+Once you properly define and use an interface for a MongoDbContext , then any other implementation can use the following ways to replace it:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreMongoDbContext))]
+public class OtherMongoDbContext : AbpMongoDbContext, IBookStoreMongoDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ```csharp
 context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
