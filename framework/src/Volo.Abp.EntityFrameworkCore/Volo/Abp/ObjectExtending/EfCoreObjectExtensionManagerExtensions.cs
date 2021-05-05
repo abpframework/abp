@@ -12,7 +12,7 @@ namespace Volo.Abp.ObjectExtending
         public static ObjectExtensionManager MapEfCoreDbContext<TDbContext>(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] Action<ModelBuilder> modelBuilderAction)
-            where TDbContext: DbContext
+            where TDbContext:  DbContext , IHasExtraProperties
         {
             return objectExtensionManager.AddOrUpdate(
                 typeof(TDbContext),
@@ -25,7 +25,7 @@ namespace Volo.Abp.ObjectExtending
         public static ObjectExtensionManager MapEfCoreEntity<TEntity>(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] Action<EntityTypeBuilder> entityTypeBuildAction)
-            where TEntity : IEntity
+            where TEntity : IHasExtraProperties, IEntity
         {
             return MapEfCoreEntity(
                 objectExtensionManager,
