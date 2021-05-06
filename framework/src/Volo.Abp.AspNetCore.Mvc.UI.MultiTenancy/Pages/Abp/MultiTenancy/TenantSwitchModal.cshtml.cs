@@ -48,7 +48,12 @@ namespace Pages.Abp.MultiTenancy
             else
             {
                 var tenant = await TenantStore.FindAsync(Input.Name);
-                if (tenant == null || !tenant.IsActive)
+                if (tenant == null)
+                {
+                    throw new UserFriendlyException(L["GivenTenantIsNotExist", Input.Name]);
+                }
+
+                if (!tenant.IsActive)
                 {
                     throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name]);
                 }
