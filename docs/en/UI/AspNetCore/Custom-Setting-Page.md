@@ -24,7 +24,7 @@ public class MySettingGroupViewComponent : AbpViewComponent
 
 ### Default.cshtml
 
-Create `Default.cshtml` file under the `MySettingGroup` folder.
+Create a `Default.cshtml` file under the `MySettingGroup` folder.
 
 Open the `Default.cshtml` and change the whole content as shown below:
 
@@ -36,7 +36,7 @@ Open the `Default.cshtml` and change the whole content as shown below:
 
 ### BookStoreSettingPageContributor
 
-Create an `BookStoreSettingPageContributor.cs` file under the `Settings` folder:
+Create a `BookStoreSettingPageContributor.cs` file under the `Settings` folder:
 
 ![BookStoreSettingPageContributor](../../images/my-setting-group-page-contributor.png)
 

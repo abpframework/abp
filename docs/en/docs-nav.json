@@ -724,6 +724,10 @@
             {
               "text": "Page Toolbar Extensions",
               "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
+            },
+            {
+              "test": "Custom Setting Page",
+              "path": "UI/AspNetCore/Custom-Setting-Page.md"
             }
           ]
         },
@@ -837,6 +841,10 @@
             {
               "text": "Routing",
               "path": "UI/Blazor/Routing.md"
+            },
+            {
+              "test": "Custom Setting Page",
+              "path": "UI/Blazor/Custom-Setting-Page.md"
             }
           ]
         },

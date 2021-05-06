@@ -464,6 +464,19 @@
             {
               "text": "主题化",
               "path": "UI/AspNetCore/Theming.md"
+            },
+            {
+              "test": "自定义设置页面",
+              "path": "UI/AspNetCore/Custom-Setting-Page.md"
+            }
+          ]
+        },
+        {
+          "text": "Blazor",
+          "items": [
+            {
+              "test": "自定义设置页面",
+              "path": "UI/Blazor/Custom-Setting-Page.md"
             }
           ]
         },
