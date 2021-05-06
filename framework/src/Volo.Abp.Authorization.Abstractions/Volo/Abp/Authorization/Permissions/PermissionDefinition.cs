@@ -32,7 +32,7 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
 
-        public List<ISimpleStateChecker<PermissionDefinition>> SimpleStateCheckers { get; }
+        public List<ISimpleStateChecker<PermissionDefinition>> StateCheckers { get; }
 
         public ILocalizableString DisplayName
         {
@@ -89,7 +89,7 @@ namespace Volo.Abp.Authorization.Permissions
 
             Properties = new Dictionary<string, object>();
             Providers = new List<string>();
-            SimpleStateCheckers = new List<ISimpleStateChecker<PermissionDefinition>>();
+            StateCheckers = new List<ISimpleStateChecker<PermissionDefinition>>();
             _children = new List<PermissionDefinition>();
         }
 

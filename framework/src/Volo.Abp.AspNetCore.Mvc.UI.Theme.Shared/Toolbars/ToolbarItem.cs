@@ -20,14 +20,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
         [Obsolete("Use RequirePermissions extension method.")]
         public string RequiredPermissionName { get; set; }
 
-        public List<ISimpleStateChecker<ToolbarItem>> SimpleStateCheckers { get; }
+        public List<ISimpleStateChecker<ToolbarItem>> StateCheckers { get; }
 
         public ToolbarItem([NotNull] Type componentType, int order = 0, string requiredPermissionName = null)
         {
             Order = order;
             ComponentType = Check.NotNull(componentType, nameof(componentType));
             RequiredPermissionName = requiredPermissionName;
-            SimpleStateCheckers = new List<ISimpleStateChecker<ToolbarItem>>();
+            StateCheckers = new List<ISimpleStateChecker<ToolbarItem>>();
         }
     }
 }

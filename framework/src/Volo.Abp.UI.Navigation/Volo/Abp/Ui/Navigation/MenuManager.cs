@@ -59,7 +59,7 @@ namespace Volo.Abp.UI.Navigation
                 }
             }
 
-            var checkPermissionsMenuItems = allMenuItems.Where(x => x.SimpleStateCheckers.Any()).ToArray();
+            var checkPermissionsMenuItems = allMenuItems.Where(x => x.StateCheckers.Any()).ToArray();
 
             if (checkPermissionsMenuItems.Any())
             {

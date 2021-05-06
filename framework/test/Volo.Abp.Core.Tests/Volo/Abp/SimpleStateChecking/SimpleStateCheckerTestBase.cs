@@ -30,16 +30,16 @@ namespace Volo.Abp.SimpleStateChecking
 
             public DateTime? LastModificationTime { get; set; }
 
-            public List<ISimpleStateChecker<MyStateEntity>> SimpleStateCheckers { get; }
+            public List<ISimpleStateChecker<MyStateEntity>> StateCheckers { get; }
 
             public MyStateEntity()
             {
-                SimpleStateCheckers = new List<ISimpleStateChecker<MyStateEntity>>();
+                StateCheckers = new List<ISimpleStateChecker<MyStateEntity>>();
             }
 
             public MyStateEntity AddSimpleStateChecker(ISimpleStateChecker<MyStateEntity> checker)
             {
-                SimpleStateCheckers.Add(checker);
+                StateCheckers.Add(checker);
                 return this;
             }
         }

@@ -8,7 +8,7 @@ namespace Volo.Abp.Authorization.Permissions
         public static TState RequireAuthenticated<TState>([NotNull] this TState state)
             where TState : IHasSimpleStateCheckers<TState>
         {
-            state.SimpleStateCheckers.Add(new RequireAuthenticatedSimpleStateChecker<TState>());
+            state.StateCheckers.Add(new RequireAuthenticatedSimpleStateChecker<TState>());
             return state;
         }
 
@@ -34,7 +34,7 @@ namespace Volo.Abp.Authorization.Permissions
         public static TState RequirePermissions<TState>(
             [NotNull] this TState state,
             bool requiresAll,
-            bool batchCheck = true,
+            bool batchCheck,
             params string[] permissions)
             where TState : IHasSimpleStateCheckers<TState>
         {
@@ -43,15 +43,12 @@ namespace Volo.Abp.Authorization.Permissions
 
             if (batchCheck)
             {
-                lock (state)
-                {
-                    RequirePermissionsSimpleBatchStateChecker<TState>.Instance.AddCheckModels(new RequirePermissionsSimpleBatchStateCheckerModel<TState>(state, permissions, requiresAll));
-                    state.SimpleStateCheckers.Add(RequirePermissionsSimpleBatchStateChecker<TState>.Instance);
-                }
+                RequirePermissionsSimpleBatchStateChecker<TState>.Instance.AddCheckModels(new RequirePermissionsSimpleBatchStateCheckerModel<TState>(state, permissions, requiresAll));
+                state.StateCheckers.Add(RequirePermissionsSimpleBatchStateChecker<TState>.Instance);
             }
             else
             {
-                state.SimpleStateCheckers.Add(new RequirePermissionsSimpleStateChecker<TState>(new RequirePermissionsSimpleBatchStateCheckerModel<TState>(state, permissions, requiresAll)));
+                state.StateCheckers.Add(new RequirePermissionsSimpleStateChecker<TState>(new RequirePermissionsSimpleBatchStateCheckerModel<TState>(state, permissions, requiresAll)));
             }
 
             return state;

@@ -56,7 +56,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
                 item.RequirePermissions(item.RequiredPermissionName);
             }
 
-            var checkPermissionsToolbarItems = toolbar.Items.Where(x => x.SimpleStateCheckers.Any()).ToArray();
+            var checkPermissionsToolbarItems = toolbar.Items.Where(x => x.StateCheckers.Any()).ToArray();
             if (checkPermissionsToolbarItems.Any())
             {
                 var result =  await SimpleStateCheckerManager.IsEnabledAsync(checkPermissionsToolbarItems);

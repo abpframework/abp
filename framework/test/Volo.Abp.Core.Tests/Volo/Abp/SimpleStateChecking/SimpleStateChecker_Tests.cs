@@ -13,8 +13,8 @@ namespace Volo.Abp.SimpleStateChecking
         {
             services.Configure<AbpSimpleStateCheckerOptions<MyStateEntity>>(options =>
             {
-                options.GlobalSimpleStateCheckers.Add<MyGlobalSimpleStateChecker>();
-                options.GlobalSimpleStateCheckers.Add<MyGlobalSimpleBatchStateChecker>();
+                options.GlobalStateCheckers.Add<MyGlobalSimpleStateChecker>();
+                options.GlobalStateCheckers.Add<MyGlobalSimpleBatchStateChecker>();
             });
 
             base.AfterAddApplication(services);

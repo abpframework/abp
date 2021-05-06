@@ -76,7 +76,7 @@ namespace Volo.Abp.UI.Navigation
         [Obsolete("Use RequirePermissions extension method.")]
         public string RequiredPermissionName { get; set; }
 
-        public List<ISimpleStateChecker<ApplicationMenuItem>> SimpleStateCheckers { get; }
+        public List<ISimpleStateChecker<ApplicationMenuItem>> StateCheckers { get; }
 
         /// <summary>
         /// Can be used to store a custom object related to this menu item. Optional.
@@ -118,7 +118,7 @@ namespace Volo.Abp.UI.Navigation
             ElementId = elementId ?? GetDefaultElementId();
             CssClass = cssClass;
             RequiredPermissionName = requiredPermissionName;
-            SimpleStateCheckers = new List<ISimpleStateChecker<ApplicationMenuItem>>();
+            StateCheckers = new List<ISimpleStateChecker<ApplicationMenuItem>>();
             Items = new ApplicationMenuItemList();
         }
 
