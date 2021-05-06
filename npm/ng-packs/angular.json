@@ -541,6 +541,44 @@
           }
         }
       }
+    },
+    "theme-lepton-x": {
+      "projectType": "library",
+      "root": "packages/theme-lepton-x",
+      "sourceRoot": "packages/theme-lepton-x/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "packages/theme-lepton-x/tsconfig.lib.json",
+            "project": "packages/theme-lepton-x/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/theme-lepton-x/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "packages/theme-lepton-x/src/test.ts",
+            "tsConfig": "packages/theme-lepton-x/tsconfig.spec.json",
+            "karmaConfig": "packages/theme-lepton-x/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/theme-lepton-x/tsconfig.lib.json",
+              "packages/theme-lepton-x/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
     }
   },
   "cli": {
