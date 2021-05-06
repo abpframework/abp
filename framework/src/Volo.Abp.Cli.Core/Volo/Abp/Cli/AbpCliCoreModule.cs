@@ -29,6 +29,7 @@ namespace Volo.Abp.Cli
             {
                 //TODO: Define constants like done for GenerateProxyCommand.Name.
                 options.Commands["help"] = typeof(HelpCommand);
+                options.Commands["prompt"] = typeof(PromptCommand);
                 options.Commands["new"] = typeof(NewCommand);
                 options.Commands["get-source"] = typeof(GetSourceCommand);
                 options.Commands["update"] = typeof(UpdateCommand);
