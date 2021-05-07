@@ -11,11 +11,6 @@ namespace Volo.Abp.EntityFrameworkCore
     [DependsOn(typeof(AbpDddDomainModule))]
     public class AbpEntityFrameworkCoreModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddConventionalRegistrar(new AbpDbContextConventionalRegistrar());
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpDbContextOptions>(options =>

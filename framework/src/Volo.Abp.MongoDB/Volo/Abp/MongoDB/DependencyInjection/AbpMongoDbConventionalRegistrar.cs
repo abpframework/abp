@@ -24,27 +24,6 @@ namespace Volo.Abp.MongoDB.DependencyInjection
             }
 
             services.Add(ServiceDescriptor.Describe(typeof(IAbpMongoDbContext), type, ServiceLifetime.Transient));
-
-            var replaceDbContextAttribute = type.GetCustomAttribute<ReplaceDbContextAttribute>(true);
-            if (replaceDbContextAttribute == null)
-            {
-                return;
-            }
-
-            foreach (var dbContextType in replaceDbContextAttribute.ReplacedDbContextTypes)
-            {
-                services.Replace(
-                    ServiceDescriptor.Transient(
-                        dbContextType,
-                        sp => sp.GetRequiredService(type)
-                    )
-                );
-
-                services.Configure<AbpMongoDbContextOptions>(opts =>
-                {
-                    opts.DbContextReplacements[dbContextType] = type;
-                });
-            }
         }
     }
 }

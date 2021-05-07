@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MongoDB.DependencyInjection;
 
@@ -13,11 +15,17 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new AbpMongoDbContextRegistrationOptions(typeof(TMongoDbContext), services);
             optionsBuilder?.Invoke(options);
 
+            var replaceDbContextAttribute = typeof(TMongoDbContext).GetCustomAttribute<ReplaceDbContextAttribute>(true);
+            if (replaceDbContextAttribute != null)
+            {
+                options.ReplacedDbContextTypes.AddRange(replaceDbContextAttribute.ReplacedDbContextTypes);
+            }
+
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {
                 services.Replace(ServiceDescriptor.Transient(dbContextType, typeof(TMongoDbContext)));
             }
-            
+
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {
                 services.Replace(

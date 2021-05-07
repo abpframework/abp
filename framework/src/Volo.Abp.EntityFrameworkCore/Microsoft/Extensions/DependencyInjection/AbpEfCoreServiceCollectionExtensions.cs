@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
@@ -8,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class AbpEfCoreServiceCollectionExtensions
     {
         public static IServiceCollection AddAbpDbContext<TDbContext>(
-            this IServiceCollection services, 
+            this IServiceCollection services,
             Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null)
             where TDbContext : AbpDbContext<TDbContext>
         {
@@ -18,6 +20,12 @@ namespace Microsoft.Extensions.DependencyInjection
             optionsBuilder?.Invoke(options);
 
             services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
+
+            var replaceDbContextAttribute = typeof(TDbContext).GetCustomAttribute<ReplaceDbContextAttribute>(true);
+            if (replaceDbContextAttribute != null)
+            {
+                options.ReplacedDbContextTypes.AddRange(replaceDbContextAttribute.ReplacedDbContextTypes);
+            }
 
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {
