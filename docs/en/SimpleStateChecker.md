@@ -113,7 +113,7 @@ myobj2.SimpleStateCheckers.Add(myObjectBatchStateChecker);
 SimpleStateCheckerResult<MyObject> stateCheckerResult = await stateCheckerManager.IsEnabledAsync(new []{ myobj1, myobj2 });
 ````
 
-## Built-in state checker
+## Built-in State Checkers
 
 The `PermissionDefinition`, `ApplicationMenuItem` and `ToolbarItem` objects have implemented state checks and have built-in general state checkers, you can directly use their extension methods.
 
