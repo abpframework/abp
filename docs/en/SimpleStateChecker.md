@@ -58,7 +58,7 @@ services.Configure<AbpSimpleStateCheckerOptions<MyObject>>(options =>
 
 > Write this inside the `ConfigureServices` method of your module.
 
-### Check the state
+## Check the state
 
 You can inject `ISimpleStateCheckerManager<MyObject>` service to check state.
 
