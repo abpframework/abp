@@ -453,6 +453,11 @@
                 "inject": true,
                 "bundleName": "ngx-datatable-material"
               },
+              {
+                "input": "node_modules/@lepton-x/lite/styles/style.css",
+                "inject": true,
+                "bundleName": "lepton-x.min"
+              },
               "apps/dev-app/src/styles.scss"
             ],
             "scripts": []
