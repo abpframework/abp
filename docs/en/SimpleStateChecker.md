@@ -42,7 +42,7 @@ var myobj = new MyObject()
 myobj.SimpleStateCheckers.Add(new MyObjectStateChecker());
 ````
 
-## Definition global state checker.
+## Definition Global State Checkers
 
 `AbpSimpleStateCheckerOptions` is the options class that used to set the global state checkers for specific object.
 
