@@ -487,14 +487,19 @@ namespace Volo.Abp.BlazoriseUI
                 await CheckDeletePolicyAsync();
 
                 await AppService.DeleteAsync(entity.Id);
-                await GetEntitiesAsync();
-                await InvokeAsync(StateHasChanged);
+                await OnDeletedEntityAsync();
             }
             catch (Exception ex)
             {
                 await HandleErrorAsync(ex);
             }
         }
+            
+        protected virtual async Task OnDeletedEntityAsync()
+        {
+            await GetEntitiesAsync();
+            await InvokeAsync(StateHasChanged);
+        }     
 
         protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)
         {
