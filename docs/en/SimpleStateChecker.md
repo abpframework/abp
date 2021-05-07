@@ -1,6 +1,6 @@
 # Simple State Checker
 
-The **state** of some objects may depend on multiple conditions, such as some permissions are required, features need to be enabled, or it is only for special users and roles are available.
+The simple state checking system can be used to enable/disable an object based on some dynamic conditions. For example, you can disable a menu item on the user interface, if the current user has not granted for a given permission. The simple state checking system provides a generic way to define and check such conditions.
 
 ## Definition state checker.
 
