@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, Injector, Provider } from '@angular/core';
-import { NavbarService } from '../../../../src/lib/services/navbar.service';
+import { NavbarService } from '@abp/ng.theme-lepton-x';
 
 export const LPX_NAVBAR_ITEMS_PROVIDER: Provider = {
   provide: APP_INITIALIZER,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { eThemeLeptonXComponents } from '../../../../src/lib/enums';
+import { eThemeLeptonXComponents } from '@abp/ng.theme-lepton-x';
 
 @Component({
   selector: 'abp-side-menu-application-layout',
