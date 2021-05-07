@@ -13,13 +13,14 @@ namespace Microsoft.Extensions.DependencyInjection
             where TMongoDbContext : AbpMongoDbContext
         {
             var options = new AbpMongoDbContextRegistrationOptions(typeof(TMongoDbContext), services);
-            optionsBuilder?.Invoke(options);
 
             var replaceDbContextAttribute = typeof(TMongoDbContext).GetCustomAttribute<ReplaceDbContextAttribute>(true);
             if (replaceDbContextAttribute != null)
             {
                 options.ReplacedDbContextTypes.AddRange(replaceDbContextAttribute.ReplacedDbContextTypes);
             }
+
+            optionsBuilder?.Invoke(options);
 
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {

@@ -17,15 +17,16 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMemoryCache();
 
             var options = new AbpDbContextRegistrationOptions(typeof(TDbContext), services);
-            optionsBuilder?.Invoke(options);
-
-            services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
 
             var replaceDbContextAttribute = typeof(TDbContext).GetCustomAttribute<ReplaceDbContextAttribute>(true);
             if (replaceDbContextAttribute != null)
             {
                 options.ReplacedDbContextTypes.AddRange(replaceDbContextAttribute.ReplacedDbContextTypes);
             }
+
+            optionsBuilder?.Invoke(options);
+
+            services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
 
             foreach (var dbContextType in options.ReplacedDbContextTypes)
             {
