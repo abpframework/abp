@@ -2,7 +2,6 @@
 The ABP Framework provides an abstraction to work with JSON. Having such an abstraction has some benefits;
 
 * You can write library independent code. Therefore, you can change the underlying library with the minimum effort and code change.
-* You can easily change the underlying JSON library (System.Text.Json, Newtonsoft.Json, etc.) by configuring the options.
 * You can use the predefined converters defined in the ABP without worrying about the underlying library's internal details.
 
 > The JSON serialization system is implemented with the [Volo.Abp.Json](https://www.nuget.org/packages/Volo.Abp.Json) NuGet package. Most of the time, you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Json) since it comes pre-installed with the [application startup template](Startup-Templates/Application.md).
@@ -47,5 +46,4 @@ Properties:
 * **DefaultDateTimeFormat(`string`)**: Default `DateTime` format.
 * **UseHybridSerializer(`bool`)**: True by default. Boolean field indicating whether the ABP Framework uses the hybrid approach or not. If the field is true, it will try to use `System.Json.Text` to handle JSON if it can otherwise use the `Newtonsoft.Json.`
 * **Providers(`ITypeList<IJsonSerializerProvider>`)**: List of JSON serializer providers implementing the `IJsonSerializerProvider` interface. You can create and add custom serializers to the list, and the ABP Framework uses them automatically. When the `Serialize` or `Deserialize` method is called on the `IJsonSerializer` interface, the ABP Framework calls the `CanHandle` methods of the given providers in reverse order and uses the first provider that returns `true` to do the JSON operation.
-
 
