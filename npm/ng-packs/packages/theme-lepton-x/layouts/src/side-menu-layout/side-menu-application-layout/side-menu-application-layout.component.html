@@ -1,0 +1,45 @@
+<lpx-layout>
+  <ng-template lpx-navbar-panel>
+    <lpx-navbar
+      *abpReplaceableTemplate="{
+        componentKey: navbarKey
+      }"
+    >
+      <ng-template lpx-navbar-routes let-items let-menuFilter="menuFilter">
+        <lpx-navbar-routes
+          *abpReplaceableTemplate="{
+            componentKey: routesKey,
+            inputs: {
+              navbarItems: items,
+              menuFilter: menuFilter
+            }
+          }"
+          [navbarItems]="items"
+          [menuFilter]="menuFilter"
+        >
+        </lpx-navbar-routes>
+      </ng-template>
+    </lpx-navbar>
+  </ng-template>
+  <router-outlet></router-outlet>
+  <ng-template lpx-toolbar-panel>
+    <lpx-toolbar
+      *abpReplaceableTemplate="{
+        componentKey: toolbarKey
+      }"
+    >
+      <ng-template lpx-toolbar-items let-items>
+        <lpx-toolbar-items
+          *abpReplaceableTemplate="{
+            componentKey: toolbarKey,
+            inputs: {
+              items: items
+            }
+          }"
+          [items]="items"
+        >
+        </lpx-toolbar-items>
+      </ng-template>
+    </lpx-toolbar>
+  </ng-template>
+</lpx-layout>

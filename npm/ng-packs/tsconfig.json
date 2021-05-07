@@ -35,6 +35,7 @@
       "@abp/ng.permission-management": ["packages/permission-management/src/public-api.ts"],
       "@abp/ng.feature-management": ["packages/feature-management/src/public-api.ts"],
       "@abp/ng.theme-lepton-x": ["packages/theme-lepton-x/src/public-api.ts"],
+      "@abp/ng.theme-lepton-x/layouts": ["packages/theme-lepton-x/layouts/src/public-api.ts"],
       "@proxy": ["apps/dev-app/src/app/proxy/index.ts"],
       "@proxy/*": ["apps/dev-app/src/app/proxy/*"]
     }
