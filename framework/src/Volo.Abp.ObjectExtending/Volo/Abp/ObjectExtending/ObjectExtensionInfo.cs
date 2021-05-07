@@ -23,7 +23,7 @@ namespace Volo.Abp.ObjectExtending
 
         public ObjectExtensionInfo([NotNull] Type type)
         {
-            Type = Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
+            Type = type;
             Properties = new ConcurrentDictionary<string, ObjectExtensionPropertyInfo>();
             Configuration = new ConcurrentDictionary<object, object>();
             Validators = new List<Action<ObjectExtensionValidationContext>>();
