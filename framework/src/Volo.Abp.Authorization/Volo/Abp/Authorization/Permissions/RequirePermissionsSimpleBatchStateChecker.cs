@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +22,16 @@ namespace Volo.Abp.Authorization.Permissions
         {
             Check.NotNullOrEmpty(models, nameof(models));
 
-            _models.AddRange(models);
+            foreach (var model in models)
+            {
+                if (!_models.Any(x => x.State.GetType() == model.State.GetType() &&
+                                                x.RequiresAll == model.RequiresAll &&
+                                                x.Permissions.SequenceEqual(model.Permissions)))
+                {
+                    _models.Add(model);
+                }
+            }
+
             return this;
         }
 
