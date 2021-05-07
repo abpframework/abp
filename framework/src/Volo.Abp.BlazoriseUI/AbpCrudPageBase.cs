@@ -485,7 +485,7 @@ namespace Volo.Abp.BlazoriseUI
             try
             {
                 await CheckDeletePolicyAsync();
-
+                await OnDeletingEntityAsync();
                 await AppService.DeleteAsync(entity.Id);
                 await OnDeletedEntityAsync();
             }
@@ -493,6 +493,11 @@ namespace Volo.Abp.BlazoriseUI
             {
                 await HandleErrorAsync(ex);
             }
+        }
+            
+        protected virtual Task OnDeletingEntityAsync()
+        {
+            return Task.CompletedTask;
         }
             
         protected virtual async Task OnDeletedEntityAsync()
