@@ -7,4 +7,6 @@ export const enum eThemeLeptonXComponents {
   NavItems = 'Theme.NavItemsComponent',
   CurrentUser = 'Theme.CurrentUserComponent',
   Languages = 'Theme.LanguagesComponent',
+  Navbar = 'Theme.NavbarComponent',
+  Sidebar = 'Theme.Sidebar',
 }
