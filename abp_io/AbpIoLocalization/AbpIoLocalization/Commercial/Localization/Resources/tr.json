@@ -31,6 +31,9 @@
     "SuccessfullyAddedToNewsletter": "Bültenimize abone olduğunuz için teşekkürler!",
     "MyProfile": "Profilim",
     "EmailNotValid": "Lütfen uygun bir e-posta adresi giriniz",
-    "InvalidReCaptchaErrorMessage": "ReCAPTCHA doğrulanırken hata oluştu, lütfen tekrar deneyin."
+    "InvalidReCaptchaErrorMessage": "ReCAPTCHA doğrulanırken hata oluştu, lütfen tekrar deneyin.",
+    "FullName": "Ad soyad",
+    "CompanyName": "Şirket adı",
+    "YourCompanyName": "Şirket adınız"
   }
 }
