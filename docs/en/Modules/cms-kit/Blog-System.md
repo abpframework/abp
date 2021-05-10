@@ -56,7 +56,7 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 ##### Admin
 
 - `BlogAdminAppService` _(implements `IBlogAdminAppService`)_: Implements use cases of blog management.
-- `BlogFeatureAdminAppService` _(implements `IBlogFeatureAdminAppService`)_: Implements use cases of Blog Feature Management.
+- `BlogFeatureAdminAppService` _(implements `IBlogFeatureAdminAppService`)_: Implements use cases of blog feature management.
 - `BlogPostAdminAppService` _(implements `IBlogPostAdminAppService`)_: Implements use cases of blog post management.
 
 ##### Common
