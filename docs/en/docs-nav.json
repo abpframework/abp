@@ -26,31 +26,6 @@
       ]
     },
     {
-      "text": "Startup Templates",
-      "items": [
-        {
-          "text": "Overall",
-          "path": "Startup-Templates/Index.md"
-        },
-        {
-          "text": "Application",
-          "path": "Startup-Templates/Application.md"
-        },
-        {
-          "text": "Module",
-          "path": "Startup-Templates/Module.md"
-        },
-        {
-          "text": "Console",
-          "path": "Startup-Templates/Console.md"
-        },
-        {
-          "text": "WPF",
-          "path": "Startup-Templates/WPF.md"
-        }
-      ]
-    },
-    {
       "text": "Tutorials",
       "items": [
         {
@@ -105,6 +80,35 @@
         {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
+        }
+      ]
+    },
+    {
+      "text": "CLI",
+      "path": "CLI.md"
+    },
+    {
+      "text": "Startup Templates",
+      "items": [
+        {
+          "text": "Overall",
+          "path": "Startup-Templates/Index.md"
+        },
+        {
+          "text": "Application",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "Module",
+          "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "Console",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
         }
       ]
     },
@@ -1097,15 +1101,6 @@
         {
           "text": "Migration Guides",
           "path": "Migration-Guides/Index.md"
-        }
-      ]
-    },
-    {
-      "text": "Reference",
-      "items": [
-        {
-          "text": "CLI",
-          "path": "CLI.md"
         }
       ]
     },
