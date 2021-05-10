@@ -65,7 +65,7 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 ##### Public
 
-- `BlogPostPublicAppService` _(implements `IBlogPostPublicAppService`)_: Implements public blog post displaying operations.
+- `BlogPostPublicAppService` _(implements `IBlogPostPublicAppService`)_: Implements use cases of blog posts management on public websites.
 
 ### Database providers
 
