@@ -23,7 +23,7 @@ This module follows the [Entity Best Practices & Conventions](https://docs.abp.i
 
 - `Blog` _(aggregate root)_: Presents blogs of application.
 - `BlogPost`_(aggregate root)_: Presents blog posts in blogs.
-- `BlogFeauture`:_(aggregate root)_: Presents blog features enabled/disabled state. Such as reactions, ratings, comments etc.
+- `BlogFeature`:_(aggregate root)_: Presents blog features enabled/disabled state. Such as reactions, ratings, comments, etc.
 
 #### Repositories
 
