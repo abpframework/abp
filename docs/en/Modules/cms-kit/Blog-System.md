@@ -22,7 +22,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
 
 - `Blog` _(aggregate root)_: Presents blogs of application.
-- `BlogPost`_(aggregate root)_: Presents Blog Posts by Blogs
+- `BlogPost`_(aggregate root)_: Presents blog posts in blogs.
 - `BlogFeauture`:_(aggregate root)_: Presents blog features enabled/disabled state. Such as reactions, ratings, comments etc.
 
 #### Repositories
