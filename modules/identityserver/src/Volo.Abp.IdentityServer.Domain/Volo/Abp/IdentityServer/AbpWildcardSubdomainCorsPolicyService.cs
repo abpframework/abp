@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Configuration;
 using Microsoft.Extensions.Options;
@@ -32,7 +33,8 @@ namespace Volo.Abp.IdentityServer
                 var extractResult = FormattedStringValueExtracter.Extract(origin, url, ignoreCase: true);
                 if (extractResult.IsMatch)
                 {
-                    return true;
+                    return extractResult.Matches.Aggregate(url, (current, nameValue) => current.Replace($"{{{nameValue.Name}}}", nameValue.Value))
+                        .Contains(origin, StringComparison.OrdinalIgnoreCase);
                 }
 
                 if (url.Replace("{0}.", "").Contains(origin, StringComparison.OrdinalIgnoreCase))
