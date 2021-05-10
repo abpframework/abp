@@ -12,7 +12,6 @@ describe('LocalizationService', () => {
   let spectator: SpectatorService<LocalizationService>;
   let sessionState: SpyObject<SessionStateService>;
   let configState: SpyObject<ConfigStateService>;
-  let router: SpyObject<Router>;
   let service: LocalizationService;
 
   const createService = createServiceFactory({
