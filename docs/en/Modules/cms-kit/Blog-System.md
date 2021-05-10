@@ -4,7 +4,7 @@ CMS kit provides a **Blog** system to to add Blogs & Posts to public website. Th
 
 ## Feature
 
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS Kit related features are enabled by default, if you create the solution with the public website option. If you're installing the CMS Kit manually or want to enable the rating feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure `method.
+CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS Kit-related features are enabled by default, if you create the solution with the public website option. If you're installing the CMS Kit manually or want to enable the blog feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure `method.
 
 ```csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
@@ -122,4 +122,3 @@ Blog features can be configured with following modal.
 #### Managing Blog Posts
 
 Blog Posts can be managed from **Cms -> Blog Posts** menu. All blog posts will be listed in Public website at `blogs/{blog}`.
-
