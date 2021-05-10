@@ -79,22 +79,16 @@ If you need to replace the template of any part, you can use the following sub-c
 
 ```html
 <abp-page>
-  <abp-page-title-container>
-    <div class="col">
-      <h2>Custom Title</h2>
-    </div>
+  <abp-page-title-container class="col">
+    <h2>Custom Title</h2>
   </abp-page-title-container>
 
-  <abp-page-breacrumb-container>
-    <div class="col">
-      <my-breadcrumb></my-breadcrumb>
-    </div>
+  <abp-page-breacrumb-container class="col">
+    <my-breadcrumb></my-breadcrumb>
   </abp-page-breacrumb-container>
 
-  <abp-page-toolbar-container>
-    <div class="col">
-      <!-- ... -->
-    </div>
+  <abp-page-toolbar-container class="col">
+    <button (click)="doSth()">Some Action</button>
   </abp-page-toolbar-container>
 </abp-page>
 ```
