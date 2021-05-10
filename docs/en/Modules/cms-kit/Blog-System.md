@@ -1,6 +1,6 @@
 # Blog System
 
-CMS kit provides a **Blog** system to to add Blogs & Posts to public website. This section describes the details of the Blog system.
+CMS kit provides a **blog** system to add blogs & posts to a public website. This section describes the details of the blog system.
 
 ## Feature
 
