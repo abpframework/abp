@@ -11,7 +11,7 @@ Let's look at the following example without `abp-page` component.
 ```html
 <div class="row entry-row">
   <div class="col-auto">
-    <h1 class="content-header-title">{{ '::Dashboard' | abpLocalization }}</h1>
+    <h1 class="content-header-title">{%{{ '::Dashboard' | abpLocalization }}%}</h1>
   </div>
   <div id="breadcrumb" class="col-lg-auto pl-lg-0">
     <abp-breadcrumb></abp-breadcrumb>
