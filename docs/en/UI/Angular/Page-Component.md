@@ -26,7 +26,7 @@ Let's look at the following example without `abp-page` component.
 </div>
 ```
 
-## Page Parts
+## Page Parts
 
 PageComponent divides the template shown above into three parts, `title`, `breadcrumb`, `toolbar`. Each can be configured separately. There, also, is an enum exported from the package that describes each part.
 
@@ -67,13 +67,13 @@ And change the template of `dashboard.component.ts` to the following:
 </abp-page>
 ```
 
-## Inputs
+## Inputs
 
 * title: `string`: Will be be rendered within `h1.content-header-title`. If not provided, the parent `div` will not be rendered
 * breadcrumb: `boolean`: Determines whether to render `abp-breadcrumb`. Default is `true`.
 * toolbar: `any`: Will be passed into `abp-page-toolbar` component through `record` input. If your page does not contain `abp-page-toolbar`, you can simply omit this field.
 
-## Overriding template
+## Overriding template
 
 If you need to replace the template of any part, you can use the following sub-components. 
 
@@ -101,7 +101,7 @@ If you need to replace the template of any part, you can use the following sub-c
 
 You do not have to provide them all. You can just use which one you need to replace. These components have priority over the inputs declared above. If you use these components, you can omit the inputs.
 
-## PagePartDirective
+## PagePartDirective
 
 `PageModule` provides a structural directive that is used internally within `PageComponent` and can also be used externally.
 
