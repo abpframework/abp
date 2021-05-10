@@ -40,7 +40,7 @@ Following custom repositories are defined for this feature:
 This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
 
 - `BlogManager`: Includes some operations for `Blog` aggreate root to keep data consistency.
-  - `CreateAsync`: Creates a new Blog entity and makes sure slug is used one time.
+  - `CreateAsync`: Creates a new `Blog` entity and makes sure slug is used one time.
   - `UpdateAsync`: Updates existing Blog entity and makes sure slug is used one time.
 - `BlogPostManager`: Includes some operations for `BlogPost` aggreagate root such as creating & updating.
   - `CreateAsync`: Creates a new BlogPost and makes sure slug is used only one time.
