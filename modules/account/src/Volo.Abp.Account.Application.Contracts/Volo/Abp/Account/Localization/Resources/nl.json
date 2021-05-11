@@ -60,6 +60,8 @@
     "Volo.Account:InvalidEmailAddress": "Kan het opgegeven e-mailadres '{0}' niet vinden",
     "PasswordReset": "Wachtwoord opnieuw instellen",
     "PasswordResetInfoInEmail": "We hebben een verzoek ontvangen om uw wachtwoord opnieuw in te stellen. Als u dit verzoek heeft ingediend, klikt u op de volgende link om een nieuw wachtwoord in te stellen.",
-    "ResetMyPassword": "Reset mijn wachtwoord"
+    "ResetMyPassword": "Reset mijn wachtwoord",
+    "AccessDenied": "Toegang geweigerd!",
+    "AccessDeniedMessage": "U heeft geen toegang tot deze bron."
   }
 }

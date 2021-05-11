@@ -447,11 +447,12 @@ namespace EventOrganizer.Events
 
         public async Task<List<EventDto>> GetUpcomingAsync()
         {
-            var events = await AsyncExecuter.ToListAsync(
-                _eventRepository
-                    .Where(x => x.StartTime > Clock.Now)
-                    .OrderBy(x => x.StartTime)
-            );
+            var queryable = await _eventRepository.GetQueryableAsync();
+            var query = queryable
+                .Where(x => x.StartTime > Clock.Now)
+                .OrderBy(x => x.StartTime);
+
+            var events = await AsyncExecuter.ToListAsync(query);
 
             return ObjectMapper.Map<List<Event>, List<EventDto>>(events);
         }
@@ -653,11 +654,12 @@ namespace EventOrganizer.Events
 
         public async Task<List<EventDto>> GetUpcomingAsync()
         {
-            var events = await AsyncExecuter.ToListAsync(
-                _eventRepository
-                    .Where(x => x.StartTime > Clock.Now)
-                    .OrderBy(x => x.StartTime)
-            );
+            var queryable = await _eventRepository.GetQueryableAsync();
+            var query = queryable
+                .Where(x => x.StartTime > Clock.Now)
+                .OrderBy(x => x.StartTime);
+
+            var events = await AsyncExecuter.ToListAsync(query);
 
             return ObjectMapper.Map<List<Event>, List<EventDto>>(events);
         }
@@ -666,7 +668,12 @@ namespace EventOrganizer.Events
         {
             var @event = await _eventRepository.GetAsync(id);
             var attendeeIds = @event.Attendees.Select(a => a.UserId).ToList();
-            var attendees = (await AsyncExecuter.ToListAsync(_userRepository.Where(u => attendeeIds.Contains(u.Id))))
+
+            var queryable = await _userRepository.GetQueryableAsync();
+            var query = queryable
+                .Where(u => attendeeIds.Contains(u.Id));
+
+            var attendees = (await AsyncExecuter.ToListAsync(query))
                 .ToDictionary(x => x.Id);
 
             var result = ObjectMapper.Map<Event, EventDetailDto>(@event);
