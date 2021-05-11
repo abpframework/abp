@@ -167,7 +167,7 @@ namespace Volo.Abp.ObjectExtending
 
             foreach (var efCoreEntityMapping in efCoreEntityMappings)
             {
-                efCoreEntityMapping?.EntityTypeBuildAction?.Invoke(typeBuilder);
+                efCoreEntityMapping.EntityTypeBuildAction?.Invoke(typeBuilder);
             }
 
             foreach (var property in objectExtension.GetProperties())
@@ -211,7 +211,7 @@ namespace Volo.Abp.ObjectExtending
 
             foreach (var efCoreDbContextMapping in efCoreDbContextMappings)
             {
-                efCoreDbContextMapping?.ModelBuildAction?.Invoke(modelBuilder);
+                efCoreDbContextMapping.ModelBuildAction?.Invoke(modelBuilder);
             }
         }
     }
