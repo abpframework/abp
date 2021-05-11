@@ -70,13 +70,13 @@ All encryption operations are included in `IStringEncryptionService`. You can in
 
 ```csharp
 // Default Pass Phrase
-StringEncryptionService.Encrypt(value);
+var encryptedValue = StringEncryptionService.Encrypt(value);
 
 // Custom Pass Phrase
-StringEncryptionService.Encrypt(value, "MyCustomPassPhrase");
+var encryptedValue = StringEncryptionService.Encrypt(value, "MyCustomPassPhrase");
 
 // Encrypt & Decrypt have same parameters.
-StringEncryptionService.Decrypt(value, "MyCustomPassPhrase");
+var decryptedValue = StringEncryptionService.Decrypt(value, "MyCustomPassPhrase");
 ```
 
 ### Using Custom Salt
@@ -85,13 +85,13 @@ StringEncryptionService.Decrypt(value, "MyCustomPassPhrase");
 
 ```csharp
 // Default Salt
-StringEncryptionService.Encrypt(value);
+var encryptedValue = StringEncryptionService.Encrypt(value);
 
 // Custom Salt
-StringEncryptionService.Encrypt(value, salt: Encoding.UTF8.GetBytes("MyCustomSalt")); 
+var encryptedValue = StringEncryptionService.Encrypt(value, salt: Encoding.UTF8.GetBytes("MyCustomSalt")); 
 
 // Encrypt & Decrypt have same parameters.
-StringEncryptionService.Decrypt(value,  salt: Encoding.UTF8.GetBytes("MyCustomSalt"));
+var decryptedValue = StringEncryptionService.Decrypt(value,  salt: Encoding.UTF8.GetBytes("MyCustomSalt"));
 ```
 
 ***
