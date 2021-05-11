@@ -40,31 +40,6 @@
       ]
     },
     {
-      "text": "Startup Templates",
-      "items": [
-        {
-          "text": "Overall",
-          "path": "Startup-Templates/Index.md"
-        },
-        {
-          "text": "Application",
-          "path": "Startup-Templates/Application.md"
-        },
-        {
-          "text": "Module",
-          "path": "Startup-Templates/Module.md"
-        },
-        {
-          "text": "Console",
-          "path": "Startup-Templates/Console.md"
-        },
-        {
-          "text": "WPF",
-          "path": "Startup-Templates/WPF.md"
-        }
-      ]
-    },
-    {
       "text": "Tutorials",
       "items": [
         {
@@ -119,6 +94,45 @@
         {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
+        }
+      ]
+    },
+    {
+      "text": "CLI",
+      "path": "CLI.md",
+      "items": [
+        {
+          "text": "Build Command",
+          "path": "CLI-BuildCommand.md"
+        },
+        {
+          "text": "Create Solution Sample Commands",
+          "path": "CLI-New-Command-Samples.md"
+        }
+      ]
+    },
+    {
+      "text": "Startup Templates",
+      "items": [
+        {
+          "text": "Overall",
+          "path": "Startup-Templates/Index.md"
+        },
+        {
+          "text": "Application",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "Module",
+          "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "Console",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "WPF",
+          "path": "Startup-Templates/WPF.md"
         }
       ]
     },
@@ -1287,25 +1301,6 @@
             {
               "text": "Upgrading the Startup Template",
               "path": "Migration-Guides/Upgrading-Startup-Template.md"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "text": "Reference",
-      "items": [
-        {
-          "text": "CLI",
-          "path": "CLI.md",
-          "items": [
-            {
-              "text": "Build Command",
-              "path": "CLI-BuildCommand.md"
-            },
-            {
-              "text": "Create Solution Sample Commands",
-              "path": "CLI-New-Command-Samples.md"
             }
           ]
         }
