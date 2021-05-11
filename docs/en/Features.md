@@ -146,9 +146,9 @@ A feature should be defined to be able to check it.
 
 ### FeatureDefinitionProvider
 
-Create a class inheriting the `FeatureDefinitionProvider` to define permissions.
+Create a class inheriting the `FeatureDefinitionProvider` to define features.
 
-**Example: Defining permissions**
+**Example: Defining features**
 
 ```csharp
 using Volo.Abp.Features;
