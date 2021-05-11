@@ -61,6 +61,11 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
+            if (ProjectNameValidator.IsContainsBannedProjectName(projectName) || ProjectNameValidator.IsContainsControlOrSurrogateCharacter(projectName))
+            {
+                throw new CliUsageException("The project name is not valid! Please specify a different name.");
+            }
+
             Logger.LogInformation("Creating your project...");
             Logger.LogInformation("Project name: " + projectName);
 
