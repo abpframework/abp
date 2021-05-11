@@ -12,7 +12,7 @@ namespace Volo.Abp.Cli.Utils
             "CON", "AUX", "PRN", "COM1", "LPT2", ".."
         };
         
-        public static bool IsContainsBannedProjectName(string projectName)
+        public static bool IsContainsBannedWord(string projectName)
         {
             return BannedProjectNames.Contains(projectName);
         }
