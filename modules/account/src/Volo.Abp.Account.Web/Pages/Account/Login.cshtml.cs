@@ -265,7 +265,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
 
-            var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
+            var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id) { IsExternal = true };
 
             CheckIdentityErrors(await UserManager.CreateAsync(user));
             CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
