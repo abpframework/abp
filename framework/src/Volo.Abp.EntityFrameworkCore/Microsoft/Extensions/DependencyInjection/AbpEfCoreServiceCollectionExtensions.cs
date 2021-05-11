@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.DependencyInjection;
@@ -18,10 +19,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var options = new AbpDbContextRegistrationOptions(typeof(TDbContext), services);
 
-            var replaceDbContextAttribute = typeof(TDbContext).GetCustomAttribute<ReplaceDbContextAttribute>(true);
-            if (replaceDbContextAttribute != null)
+            var replacedDbContextTypes = typeof(TDbContext).GetCustomAttributes<ReplaceDbContextAttribute>(true)
+                .SelectMany( x => x.ReplacedDbContextTypes).ToList();
+
+            foreach (var dbContextType in replacedDbContextTypes)
             {
-                options.ReplacedDbContextTypes.AddRange(replaceDbContextAttribute.ReplacedDbContextTypes);
+                options.ReplaceDbContext(dbContextType);
             }
 
             optionsBuilder?.Invoke(options);
