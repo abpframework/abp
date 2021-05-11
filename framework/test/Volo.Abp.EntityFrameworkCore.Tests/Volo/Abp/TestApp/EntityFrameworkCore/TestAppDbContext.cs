@@ -32,8 +32,6 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
-
             modelBuilder.Entity<Phone>(b =>
             {
                 b.HasKey(p => new {p.PersonId, p.Number});
@@ -54,6 +52,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
                     d.HasKey(x => new {x.CityId, x.Name});
                 });
             });
+
+            modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
         }
     }
 }

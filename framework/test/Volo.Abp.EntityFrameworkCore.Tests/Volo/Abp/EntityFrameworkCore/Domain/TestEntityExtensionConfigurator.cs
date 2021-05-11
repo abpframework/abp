@@ -40,7 +40,12 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                     ).MapEfCoreEntity<City>(b =>
                     {
                         b.As<EntityTypeBuilder<City>>()
-                            .Property(x=>x.Name).IsRequired().HasMaxLength(200);
+                            .Property(x=>x.Name).IsRequired();
+
+                    }).MapEfCoreEntity<City>(b =>
+                    {
+                        b.As<EntityTypeBuilder<City>>()
+                            .Property(x=>x.Name).HasMaxLength(200);
 
                     }).MapEfCoreEntity(typeof(Person), b =>
                     {
@@ -51,6 +56,11 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                 ObjectExtensionManager.Instance.MapEfCoreDbContext<TestAppDbContext>(b =>
                 {
                     b.Entity<City>().Property(x => x.Name).IsRequired();
+                });
+
+                ObjectExtensionManager.Instance.MapEfCoreDbContext<TestAppDbContext>(b =>
+                {
+                    b.Entity<Author>().Property(x => x.Name).IsRequired();
                 });
             });
         }

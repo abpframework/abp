@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -82,10 +84,19 @@ namespace Volo.Abp.ObjectExtending
         {
             Check.NotNull(objectExtensionInfo, nameof(objectExtensionInfo));
 
-            objectExtensionInfo.Configuration[EfCoreEntityConfigurationName] =
+            var mappingOptionList = new List<ObjectExtensionInfoEfCoreMappingOptions>
+            {
                 new ObjectExtensionInfoEfCoreMappingOptions(
                     objectExtensionInfo,
-                    entityTypeBuildAction);
+                    entityTypeBuildAction)
+            };
+
+            objectExtensionInfo.Configuration.AddOrUpdate(EfCoreEntityConfigurationName, mappingOptionList,
+                (k, v) =>
+                {
+                    v.As<List<ObjectExtensionInfoEfCoreMappingOptions>>().Add(mappingOptionList.First());
+                    return v;
+                });
 
             return objectExtensionInfo;
         }
@@ -96,40 +107,39 @@ namespace Volo.Abp.ObjectExtending
         {
             Check.NotNull(objectExtensionInfo, nameof(objectExtensionInfo));
 
-            objectExtensionInfo.Configuration[EfCoreDbContextConfigurationName] =
+            var mappingOptionList = new List<ObjectExtensionInfoEfCoreMappingOptions>
+            {
                 new ObjectExtensionInfoEfCoreMappingOptions(
                     objectExtensionInfo,
-                    modelBuildAction);
+                    modelBuildAction)
+            };
+
+            objectExtensionInfo.Configuration.AddOrUpdate(EfCoreDbContextConfigurationName, mappingOptionList,
+                (k, v) =>
+                {
+                    v.As<List<ObjectExtensionInfoEfCoreMappingOptions>>().Add(mappingOptionList.First());
+                    return v;
+                });
 
             return objectExtensionInfo;
         }
 
-        [CanBeNull]
-        public static ObjectExtensionInfoEfCoreMappingOptions GetEfCoreEntityMappingOrNull(
+        public static List<ObjectExtensionInfoEfCoreMappingOptions> GetEfCoreEntityMappings(
             [NotNull] this ObjectExtensionInfo objectExtensionInfo)
         {
             Check.NotNull(objectExtensionInfo, nameof(objectExtensionInfo));
 
-            if (!objectExtensionInfo.Configuration.TryGetValue(EfCoreEntityConfigurationName, out var options))
-            {
-                return null;
-            }
-
-            return options as ObjectExtensionInfoEfCoreMappingOptions;
+            return !objectExtensionInfo.Configuration.TryGetValue(EfCoreEntityConfigurationName, out var options) ?
+                new List<ObjectExtensionInfoEfCoreMappingOptions>() : options.As<List<ObjectExtensionInfoEfCoreMappingOptions>>();
         }
 
-        [CanBeNull]
-        public static ObjectExtensionInfoEfCoreMappingOptions GetEfCoreDbContextMappingOrNull(
+        public static List<ObjectExtensionInfoEfCoreMappingOptions> GetEfCoreDbContextMappings(
             [NotNull] this ObjectExtensionInfo objectExtensionInfo)
         {
             Check.NotNull(objectExtensionInfo, nameof(objectExtensionInfo));
 
-            if (!objectExtensionInfo.Configuration.TryGetValue(EfCoreDbContextConfigurationName, out var options))
-            {
-                return null;
-            }
-
-            return options as ObjectExtensionInfoEfCoreMappingOptions;
+            return !objectExtensionInfo.Configuration.TryGetValue(EfCoreDbContextConfigurationName, out var options) ?
+                new List<ObjectExtensionInfoEfCoreMappingOptions>() : options.As<List<ObjectExtensionInfoEfCoreMappingOptions>>();
         }
     }
 }

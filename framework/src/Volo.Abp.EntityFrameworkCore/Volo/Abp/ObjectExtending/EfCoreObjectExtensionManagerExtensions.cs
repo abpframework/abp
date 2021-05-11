@@ -163,8 +163,12 @@ namespace Volo.Abp.ObjectExtending
                 return;
             }
 
-            var efCoreEntityMapping = objectExtension.GetEfCoreEntityMappingOrNull();
-            efCoreEntityMapping?.EntityTypeBuildAction?.Invoke(typeBuilder);
+            var efCoreEntityMappings = objectExtension.GetEfCoreEntityMappings();
+
+            foreach (var efCoreEntityMapping in efCoreEntityMappings)
+            {
+                efCoreEntityMapping?.EntityTypeBuildAction?.Invoke(typeBuilder);
+            }
 
             foreach (var property in objectExtension.GetProperties())
             {
@@ -203,9 +207,12 @@ namespace Volo.Abp.ObjectExtending
                 return;
             }
 
-            var efCoreDbContextMapping = objectExtension.GetEfCoreDbContextMappingOrNull();
+            var efCoreDbContextMappings = objectExtension.GetEfCoreDbContextMappings();
 
-            efCoreDbContextMapping?.ModelBuildAction?.Invoke(modelBuilder);
+            foreach (var efCoreDbContextMapping in efCoreDbContextMappings)
+            {
+                efCoreDbContextMapping?.ModelBuildAction?.Invoke(modelBuilder);
+            }
         }
     }
 }
