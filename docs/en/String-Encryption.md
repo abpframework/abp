@@ -43,9 +43,9 @@ All encryption operations are included in `IStringEncryptionService`. You can in
 ```csharp
  public class MyService : DomainService
  {
-     public IStringEncryptionService StringEncryptionService { get; }
+     protected IStringEncryptionService StringEncryptionService { get; }
 
-     public MyAppService(IStringEncryptionService stringEncryptionService)
+     public MyService(IStringEncryptionService stringEncryptionService)
      {
          StringEncryptionService = stringEncryptionService;
      }
@@ -69,8 +69,11 @@ All encryption operations are included in `IStringEncryptionService`. You can in
 `IStringEncryptionService` methods has **passPharase** parameter with default value and it uses default PassPhrase when you don't pass passPhrase parameter. 
 
 ```csharp
-StringEncryptionService.Encrypt(value); // Default Pass Phrase
-StringEncryptionService.Encrypt(value, "MyCustomPassPhrase"); // Custom Pass Phrase
+// Default Pass Phrase
+StringEncryptionService.Encrypt(value);
+
+// Custom Pass Phrase
+StringEncryptionService.Encrypt(value, "MyCustomPassPhrase");
 
 // Encrypt & Decrypt have same parameters.
 StringEncryptionService.Decrypt(value, "MyCustomPassPhrase");
@@ -81,8 +84,11 @@ StringEncryptionService.Decrypt(value, "MyCustomPassPhrase");
 `IStringEncryptionService` methods has **salt** parameter with default value and it uses default Salt when you don't pass the parameter.
 
 ```csharp
-StringEncryptionService.Encrypt(value); // Default Salt
-StringEncryptionService.Encrypt(value, salt: Encoding.UTF8.GetBytes("MyCustomSalt")); // Custom Salt
+// Default Salt
+StringEncryptionService.Encrypt(value);
+
+// Custom Salt
+StringEncryptionService.Encrypt(value, salt: Encoding.UTF8.GetBytes("MyCustomSalt")); 
 
 // Encrypt & Decrypt have same parameters.
 StringEncryptionService.Decrypt(value,  salt: Encoding.UTF8.GetBytes("MyCustomSalt"));
