@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Guids;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
@@ -19,12 +21,14 @@ namespace Volo.Docs.Admin.Projects
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentFullSearch _elasticSearchService;
         private readonly IGuidGenerator _guidGenerator;
+        private readonly IBackgroundJobManager _backgroundJobManager;
 
         public ProjectAdminAppService(
             IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentFullSearch elasticSearchService,
-            IGuidGenerator guidGenerator)
+            IGuidGenerator guidGenerator,
+            IBackgroundJobManager backgroundJobManager)
         {
             ObjectMapperContext = typeof(DocsAdminApplicationModule);
             LocalizationResource = typeof(DocsResource);
@@ -33,6 +37,7 @@ namespace Volo.Docs.Admin.Projects
             _documentRepository = documentRepository;
             _elasticSearchService = elasticSearchService;
             _guidGenerator = guidGenerator;
+            _backgroundJobManager = backgroundJobManager;
         }
 
         public async Task<PagedResultDto<ProjectDto>> GetListAsync(PagedAndSortedResultRequestDto input)
@@ -120,45 +125,55 @@ namespace Volo.Docs.Admin.Projects
         public async Task ReindexAsync(ReindexInput input)
         {
             _elasticSearchService.ValidateElasticSearchEnabled();
-
-            await ReindexProjectAsync(input.ProjectId);
-        }
-
-        private async Task ReindexProjectAsync(Guid projectId)
-        {
-            var project = await _projectRepository.FindAsync(projectId);
-            if (project == null)
+            if (!_backgroundJobManager.IsAvailable())
             {
-                throw new Exception("Cannot find the project with the Id " + projectId);
+                throw new UserFriendlyException("Background Job Manager is not available!");
             }
 
-            var docs = await _documentRepository.GetListByProjectId(project.Id);
-            await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
-
-            foreach (var doc in docs)
-            {
-                if (doc.FileName == project.NavigationDocumentName)
-                {
-                    continue;
-                }
-
-                if (doc.FileName == project.ParametersDocumentName)
-                {
-                    continue;
-                }
-
-                await _elasticSearchService.AddOrUpdateAsync(doc);
-            }
+            await _backgroundJobManager.EnqueueAsync(new ProjectIndexBackgroundWorkerArgs(input.ProjectId));
         }
+
+        //private async Task ReindexProjectAsync(Guid projectId)
+        //{
+        //    var project = await _projectRepository.FindAsync(projectId);
+        //    if (project == null)
+        //    {
+        //        throw new Exception("Cannot find the project with the Id " + projectId);
+        //    }
+
+        //    var docs = await _documentRepository.GetListByProjectId(project.Id);
+        //    await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
+
+        //    foreach (var doc in docs)
+        //    {
+        //        if (doc.FileName == project.NavigationDocumentName)
+        //        {
+        //            continue;
+        //        }
+
+        //        if (doc.FileName == project.ParametersDocumentName)
+        //        {
+        //            continue;
+        //        }
+
+        //        await _elasticSearchService.AddOrUpdateAsync(doc);
+        //    }
+        //}
 
         public async Task ReindexAllAsync()
         {
             _elasticSearchService.ValidateElasticSearchEnabled();
+            if (!_backgroundJobManager.IsAvailable())
+            {
+                throw new UserFriendlyException("Background Job Manager is not available!");
+            }
+
             var projects = await _projectRepository.GetListAsync();
-         
             foreach (var project in projects)
             {
-                await ReindexProjectAsync(project.Id);
+                await _backgroundJobManager.EnqueueAsync(new ProjectIndexBackgroundWorkerArgs(project.Id));
+
+                //await ReindexProjectAsync(project.Id);
             }
         }
     }

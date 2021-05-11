@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Localization;
@@ -21,7 +22,8 @@ namespace Volo.Docs
     [DependsOn(
         typeof(DocsDomainSharedModule),
         typeof(AbpDddDomainModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpAutoMapperModule),
+        typeof(AbpBackgroundJobsModule)
         )]
     public class DocsDomainModule : AbpModule
     {
@@ -62,6 +64,11 @@ namespace Volo.Docs
             context.Services.AddHttpClient(GithubRepositoryManager.HttpClientName, client =>
             {
                 client.Timeout = TimeSpan.FromMilliseconds(15000);
+            });
+
+            Configure<AbpBackgroundJobWorkerOptions>(options =>
+            {
+                options.DefaultTimeout = 7200 ; //2 hours
             });
         }
 
