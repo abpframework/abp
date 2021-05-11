@@ -291,8 +291,12 @@
     "PayViaAmexCard": "我如何通过我的AMEX卡付款？",
     "PayViaAmexCardDescription": "由于安全措施，默认付款网关“ Iyzico”可能会拒绝某些AMEX信用卡。 在这种情况下，您可以通过备用付款网关“ 2Checkout”付款。",
     "InvalidReCaptchaErrorMessage": "验证reCAPTCHA时出错，请重试。",
-    "FullName": "全名",
     "CompanyName": "公司名称",
-    "YourCompanyName": "您的公司名称"
+    "YourCompanyName": "您的公司名称",
+    "FirstName": "名",
+    "LastName": "姓",
+    "Optional": "可选的",
+    "YourFirstName": "你的名字",
+    "YourLastName": "你的姓氏"
   }
 }

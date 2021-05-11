@@ -35,8 +35,12 @@
     "WouldLikeToReceiveMarketingMaterials": "I would like to receive marketing materials e.g. product deals & special offers.",
     "StartUsingYourLicenseNow": "Start using your license now!",
     "WelcomePage": "Welcome Page",
-    "FullName": "Full name",
     "CompanyName": "Company name",
-    "YourCompanyName": "Your company name"
+    "YourCompanyName": "Your company name",
+    "FirstName": "First name",
+    "LastName": "Last name",
+    "Optional": "Optional",
+    "YourFirstName": "Your first name",
+    "YourLastName": "Your last name"
   }
 }
