@@ -27,7 +27,7 @@ connection.on("receiveNotificationMessage", function (message) {
 });
 
 var showNotification = function(notification) {
-    abp.notify.info(notification.message);
+    abp.message.success(notification.message);
 };
 
 docsNotificationManager
