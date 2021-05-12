@@ -1,6 +1,7 @@
 {
   "culture": "es",
   "texts": {
+    "GivenTenantIsNotExist": "El inquilino {0} no existe",
     "GivenTenantIsNotAvailable": "El inquilino {0} no está disponible",
     "Tenant": "Inquilino",
     "Switch": "cambiar",
