@@ -66,15 +66,10 @@ namespace Volo.Docs.Admin
             Configure<AbpSignalROptions>(options =>
             {
                 options.Hubs.AddOrUpdate(
-                    typeof(UiNotificationHub), //Hub type
-                    config => //Additional configuration
+                    typeof(UiNotificationHub),
+                    config =>
                     {
-                        config.RoutePattern = "/document-notification-hub"; //override the default route
-                        //config.ConfigureActions.Add(hubOptions =>
-                        //{
-                        //    //Additional options
-                        //    hubOptions.LongPolling.PollTimeout = TimeSpan.FromSeconds(30);
-                        //});
+                        config.RoutePattern = "/document-notification-hub";
                     }
                 );
             });
