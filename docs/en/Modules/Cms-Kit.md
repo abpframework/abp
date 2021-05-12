@@ -3,7 +3,7 @@
 This module provides CMS(Content Management System) capabilities for your application.
 
 * Provides a **page** management system to manage dynamic pages.
-* Provides a **blog** system to create blogs and publish posts.
+* Provides a [**blog**](cms-kit/Blog-System.md) system to create blogs and publish posts.
 * Provides a [**tag**](cms-kit/Tag-Management.md) system to tag any kind of resources, like blog posts.
 * Provides a [**comment**](cms-kit/Comment-System.md) system to add comments feature to any kind of resource, like blog posts, products, etc.
 * Provides a [**reaction**](cms-kit/Reaction-System.md) system to add reactions feature to any kind of resource, like blog posts or comments.
