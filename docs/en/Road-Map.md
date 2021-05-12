@@ -15,7 +15,7 @@ This version will focus on **documentation** and **improvements** of current fea
 * Pre-configured test project for the [Blazor UI](UI/Blazor/Overall.md) ([#5516](https://github.com/abpframework/abp/issues/5516))
 * Razor engine support for text templating ([#8373](https://github.com/abpframework/abp/issues/8373))
 
-**Planned release date**: End of Quarter 2, 2021.
+**Planned release date**: End of Quarter 2, 2021. See the [4.4 milestone](https://github.com/abpframework/abp/milestone/52) to track the progress.
 
 ### v5.0
 
@@ -30,7 +30,7 @@ We planned to focus on the ABP Framework v5.0 after the 4.4 release. This versio
 * Performance optimizations; Enabling .NET Trimming, using source generators and reducing reflection, etc.
 * Improving the abp.io platform and work more on contents and documents
 
-**Planned release date**: End of Quarter 4, 2021.
+**Planned release date**: End of Quarter 4, 2021. See the [5.0 milestone](https://github.com/abpframework/abp/milestone/51) to track the progress.
 
 ## Backlog Items
 
