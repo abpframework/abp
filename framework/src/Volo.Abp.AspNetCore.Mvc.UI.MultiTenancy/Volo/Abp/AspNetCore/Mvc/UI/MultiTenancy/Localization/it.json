@@ -1,0 +1,13 @@
+{
+  "culture": "it",
+  "texts": {
+    "GivenTenantIsNotExist": "Il tenant specificato non esiste: {0}",
+    "GivenTenantIsNotAvailable": "Il tenant specificato non è disponibile: {0}",
+    "Tenant": "Inquilino",
+    "Switch": "interruttore",
+    "Name": "Nome",
+    "SwitchTenantHint": "Lascia vuoto il campo del nome per passare al lato host.",
+    "SwitchTenant": "Cambia inquilino",
+    "NotSelected": "Non selezionato"
+  }
+}
