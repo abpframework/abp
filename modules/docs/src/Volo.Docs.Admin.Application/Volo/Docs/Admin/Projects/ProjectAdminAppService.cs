@@ -7,7 +7,6 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Guids;
-using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Localization;
 using Volo.Docs.Projects;
@@ -18,14 +17,12 @@ namespace Volo.Docs.Admin.Projects
     public class ProjectAdminAppService : ApplicationService, IProjectAdminAppService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentFullSearch _elasticSearchService;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IBackgroundJobManager _backgroundJobManager;
 
         public ProjectAdminAppService(
             IProjectRepository projectRepository,
-            IDocumentRepository documentRepository,
             IDocumentFullSearch elasticSearchService,
             IGuidGenerator guidGenerator,
             IBackgroundJobManager backgroundJobManager)
@@ -34,7 +31,6 @@ namespace Volo.Docs.Admin.Projects
             LocalizationResource = typeof(DocsResource);
 
             _projectRepository = projectRepository;
-            _documentRepository = documentRepository;
             _elasticSearchService = elasticSearchService;
             _guidGenerator = guidGenerator;
             _backgroundJobManager = backgroundJobManager;
@@ -130,7 +126,7 @@ namespace Volo.Docs.Admin.Projects
                 throw new UserFriendlyException("Background Job Manager is not available!");
             }
 
-            await _backgroundJobManager.EnqueueAsync(new ProjectIndexBackgroundWorkerArgs(input.ProjectId));
+            await _backgroundJobManager.EnqueueAsync(new ProjectIndexingBackgroundJob.ProjectIndexBackgroundWorkerArgs(input.ProjectId));
         }
 
         //private async Task ReindexProjectAsync(Guid projectId)
@@ -171,7 +167,7 @@ namespace Volo.Docs.Admin.Projects
             var projects = await _projectRepository.GetListAsync();
             foreach (var project in projects)
             {
-                await _backgroundJobManager.EnqueueAsync(new ProjectIndexBackgroundWorkerArgs(project.Id));
+                await _backgroundJobManager.EnqueueAsync(new ProjectIndexingBackgroundJob.ProjectIndexBackgroundWorkerArgs(project.Id));
 
                 //await ReindexProjectAsync(project.Id);
             }

@@ -40,6 +40,7 @@
     "RemoveFromCache": "Remove from cache",
     "Reindex": "Reindex",
     "ReindexCompleted": "Reindex completed",
+    "ReindexStarted": "Indexing has been started. You'll get notification when it completes.",
     "RemovedFromCache": "Removed from cache",
     "RemoveFromCacheConfirmation": "Are you sure you want to remove this item from cache?",
     "ReIndexDocumentConfirmation": "Are you sure you want to reindex this item?",

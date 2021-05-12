@@ -1,45 +1,45 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
+using Volo.Docs.Admin.Notification;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
+using Volo.Docs.Localization;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin
 {
-    public class ProjectIndexBackgroundWorkerArgs
-    {
-        public Guid ProjectId { get; set; }
-
-        public ProjectIndexBackgroundWorkerArgs(Guid projectId)
-        {
-            ProjectId = projectId;
-        }
-    }
-
-    public class ProjectIndexBackgroundJob : AsyncBackgroundJob<ProjectIndexBackgroundWorkerArgs>, ITransientDependency
+    public class ProjectIndexingBackgroundJob : AsyncBackgroundJob<ProjectIndexingBackgroundJob.ProjectIndexBackgroundWorkerArgs>, ITransientDependency
     {
         private readonly IDocumentRepository _documentRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentFullSearch _elasticSearchService;
+        private readonly IUiNotificationClient _notificationClient;
+        private readonly IStringLocalizer<DocsResource> _localizer;
 
-        public ProjectIndexBackgroundJob(
+        public ProjectIndexingBackgroundJob(
             IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
-            IDocumentFullSearch elasticSearchService)
+            IDocumentFullSearch elasticSearchService,
+            IUiNotificationClient notificationClient,
+            IStringLocalizer<DocsResource> localizer)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
             _elasticSearchService = elasticSearchService;
+            _notificationClient = notificationClient;
+            _localizer = localizer;
         }
 
         public override async Task ExecuteAsync(ProjectIndexBackgroundWorkerArgs args)
         {
-            await ReindexProjectAsync(args.ProjectId);
+            var project = await ReindexProjectAsync(args.ProjectId);
+            await _notificationClient.SendNotification(_localizer.GetString("SuccessfullyReIndexProject", project.Name));
         }
 
-        private async Task ReindexProjectAsync(Guid projectId)
+        private async Task<Project> ReindexProjectAsync(Guid projectId)
         {
             var project = await _projectRepository.FindAsync(projectId);
             if (project == null)
@@ -59,6 +59,8 @@ namespace Volo.Docs.Admin
 
                 await _elasticSearchService.AddOrUpdateAsync(doc);
             }
+
+            return project;
         }
 
         private static bool ShouldIgnoreDocument(Document doc, Project project)
@@ -75,5 +77,16 @@ namespace Volo.Docs.Admin
 
             return false;
         }
+
+        public class ProjectIndexBackgroundWorkerArgs
+        {
+            public Guid ProjectId { get; set; }
+
+            public ProjectIndexBackgroundWorkerArgs(Guid projectId)
+            {
+                ProjectId = projectId;
+            }
+        }
     }
+
 }
