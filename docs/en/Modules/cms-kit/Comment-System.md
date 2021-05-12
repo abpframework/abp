@@ -1,6 +1,6 @@
 # Comment System
 
-CMS kit provides a **rating** system to add comments feature to any kind of resource, like blog posts, products, etc. This section describes the details of the comments system.
+CMS kit provides a **comment** system to add comments feature to any kind of resource, like blog posts, products, etc. This section describes the details of the comments system.
 
 ## Feature
 
