@@ -25,7 +25,7 @@ namespace Volo.Abp.RabbitMQ
         {
             connectionName ??= RabbitMqConnections.DefaultConnectionName;
 
-            return Connections.GetOrAdd(
+            var lazyConnection = Connections.GetOrAdd(
                 connectionName, () => new Lazy<IConnection>(() =>
                 {
                     var connection = Options.Connections.GetOrDefault(connectionName);
@@ -34,7 +34,14 @@ namespace Volo.Abp.RabbitMQ
                     return hostnames.Length == 1 ? connection.CreateConnection() : connection.CreateConnection(hostnames);
 
                 })
-            ).Value;
+            );
+
+            if (!lazyConnection.IsValueCreated)
+            {
+                Connections.TryRemove(connectionName, out _);
+            }
+
+            return lazyConnection.Value;
         }
 
         public void Dispose()
