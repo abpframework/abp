@@ -3,9 +3,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
@@ -141,11 +143,11 @@ namespace Volo.Abp.Cli
                     lineText = lineText.Substring(0, lineText.IndexOf('#'));
                 }
 
-                var args = CommandLineArgumentParser.Parse(lineText.Split(' '));
+                var args = CommandLineArgumentParser.Parse(lineText);
                 await RunInternalAsync(args);
             }
         }
-
+        
         private async Task RunInternalAsync(CommandLineArgs commandLineArgs)
         {
             var commandType = CommandSelector.Select(commandLineArgs);
