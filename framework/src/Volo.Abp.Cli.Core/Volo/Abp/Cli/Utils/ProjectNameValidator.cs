@@ -44,11 +44,11 @@ namespace Volo.Abp.Cli.Utils
             {
                 if (projectName.Contains(illegalWord))
                 {
-                    return false;
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         }
 
         private static bool HasSurrogateOrControlChar(string projectName)
@@ -66,7 +66,7 @@ namespace Volo.Abp.Cli.Utils
                 }
             }
 
-            return true;
+            return false;
         }
 
         public static bool IsValid(string projectName)
