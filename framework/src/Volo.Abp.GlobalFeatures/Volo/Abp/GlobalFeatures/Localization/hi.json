@@ -1,0 +1,6 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Volo.GlobalFeature:010001": "'{ServiceName}' सेवा को '{GlobalFeatureName}' सुविधा को सक्षम करने की आवश्यकता है।"
+  }
+}

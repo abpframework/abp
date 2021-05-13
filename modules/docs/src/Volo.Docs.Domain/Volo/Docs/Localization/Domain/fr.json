@@ -1,7 +1,7 @@
 {
   "culture": "fr",
   "texts": {
-    "Documents": "Des documents",
+    "Documents": "Documents",
     "BackToWebsite": "Retour au site",
     "Contributors": "Contributeurs",
     "ShareOn": "Partager sur",
@@ -19,7 +19,7 @@
     "SuccessfullyReIndexAllProject": "Réindexation réussie pour tous les projets",
     "InThisDocument": "Dans ce document",
     "GoToTop": "Haut de la page",
-    "Projects": "Projets)",
+    "Projects": "Projet(s)",
     "NoProjectWarning": "Il n'y a pas encore de projets!",
     "DocumentNotFound": "Oups, le document demandé est introuvable!",
     "ProjectNotFound": "Oups, le projet demandé est introuvable!",

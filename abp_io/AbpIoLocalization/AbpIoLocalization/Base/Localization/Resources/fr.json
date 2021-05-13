@@ -14,7 +14,7 @@
     "Volo.AbpIo.Domain:020002": "Impossible de supprimer ce package NPM car les modules \"{Modules}\" utilisent ce package.",
     "Volo.AbpIo.Domain:020003": "Impossible de supprimer ce package NPM car les modules \"{Modules}\" utilisent ce package et les packages Nuget \"{NugetPackages}\" dépendent de ce package.",
     "Volo.AbpIo.Domain:020004": "Impossible de supprimer ce package Nuget car les modules \"{Modules}\" utilisent ce package.",
-    "WantToLearn?": "Vouloir apprendre?",
+    "WantToLearn?": "Vous voulez apprendre?",
     "ReadyToGetStarted?": "Prêt à commencer?",
     "JoinOurCommunity": "Rejoignez notre communauté",
     "GetStartedUpper": "COMMENCER",
