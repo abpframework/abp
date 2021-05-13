@@ -28,6 +28,16 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return actionList;
         }
+        
+        public static void DisableAbpClassInterceptors(this IServiceCollection services)
+        {
+            GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled = true;
+        }
+        
+        public static bool IsAbpClassInterceptorsDisabled(this IServiceCollection services)
+        {
+            return GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled;
+        }
 
         // OnExposing
 

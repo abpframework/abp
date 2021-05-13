@@ -203,30 +203,7 @@ namespace Volo.Abp.Cli.Commands.Services
                 return false;
             }
 
-            if (zipEntryName.Contains(Path.Combine("angular/e2e")))
-            {
-                return true;
-            }
-            if (zipEntryName.Contains(Path.Combine("angular/src")))
-            {
-                return true;
-            }
-            if (zipEntryName.Contains(Path.Combine("angular/node_modules")))
-            {
-                return true;
-            }
-            if (zipEntryName.Contains(Path.Combine("angular/scripts")))
-            {
-                return true;
-            }
-            if (zipEntryName.Contains(Path.Combine("angular/source-code-requirements")))
-            {
-                return true;
-            }
-
-            var fileName = Path.GetFileName(zipEntryName);
-
-            if (!string.IsNullOrEmpty(fileName) && zipEntryName.Equals("angular/" + fileName))
+            if (zipEntryName.StartsWith("angular/") && !zipEntryName.StartsWith("angular/projects"))
             {
                 return true;
             }

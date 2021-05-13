@@ -8,7 +8,7 @@
     "BlogPosts": "Blog Yazıları",
     "Blogs": "Bloglar",
     "ChoosePreference": "Tercih seçiniz...",
-    "Cms": "Cms",
+    "Cms": "CMS",
     "Content": "İçerik",
     "Script": "Script Kodları",
     "Style": "Stil Kodları",
@@ -120,6 +120,7 @@
     "YourEmailAddress": "Email adresiniz",
     "YourFullName": "Tam adınız",
     "YourMessage": "Mesajınız",
-    "YourReply": "Cevabınız"
+    "YourReply": "Cevabınız",
+    "LastModificationTime": "Son Güncelleme Zamanı"
   }
 }

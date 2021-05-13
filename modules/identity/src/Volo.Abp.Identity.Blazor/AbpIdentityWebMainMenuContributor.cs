@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Authorization.Permissions;
 
 namespace Volo.Abp.Identity.Blazor
 {
@@ -24,15 +25,12 @@ namespace Volo.Abp.Identity.Blazor
             identityMenuItem.AddItem(new ApplicationMenuItem(
                     IdentityMenuNames.Roles,
                     l["Roles"],
-                    url: "~/identity/roles",
-                    requiredPermissionName: IdentityPermissions.Roles.Default));
-
+                    url: "~/identity/roles").RequirePermissions(IdentityPermissions.Roles.Default));
 
             identityMenuItem.AddItem(new ApplicationMenuItem(
                 IdentityMenuNames.Users,
                 l["Users"],
-                url: "~/identity/users",
-                requiredPermissionName: IdentityPermissions.Users.Default));
+                url: "~/identity/users").RequirePermissions(IdentityPermissions.Users.Default));
 
             return Task.CompletedTask;
         }

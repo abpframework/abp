@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
-using Volo.Abp.UI;
 using Xunit;
 
 namespace Volo.Abp.TenantManagement

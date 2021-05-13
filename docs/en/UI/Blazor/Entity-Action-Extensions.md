@@ -16,14 +16,14 @@ First, add a new C# file to your solution. We added inside the `/Pages/Identity/
 
 ![user-action-extension-on-solution](../../images/user-action-extension-on-blazor-project.png)
 
-We will use the [component override system](Customization-Overriding-Components.md) in the Blazor. After creating a class inherits from the `UserManagement` component, we will override the `SetToolbarItemsAsync` method and add the entity action programmatically.
+We will use the [component override system](Customization-Overriding-Components.md) in the Blazor. After creating a class inherits from the `UserManagement` component, we will override the `SetEntityActionsAsync` method and add the entity action programmatically.
 
-Here, the content of the overridden `SetToolbarItemsAsync` method.
+Here, the content of the overridden `SetEntityActionsAsync` method.
 
 ```csharp
-protected override async ValueTask SetToolbarItemsAsync()
+protected override async ValueTask SetEntityActionsAsync()
 {
-    await base.SetToolbarItemsAsync();
+    await base.SetEntityActionsAsync();
     var clickMeAction = new EntityAction()
     {
         Text = "Click Me!",
@@ -42,6 +42,7 @@ protected override async ValueTask SetToolbarItemsAsync()
 In the `Clicked` property, you can do anything you need.
 
 Here, the entire content of the file. 
+
 ```csharp
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
@@ -54,9 +55,9 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages.Identity
     [Dependency(ReplaceServices = true)]
     public class CustomizedUserManagement : UserManagement
     {
-        protected override async ValueTask SetToolbarItemsAsync()
+        protected override async ValueTask SetEntityActionsAsync()
         {
-            await base.SetToolbarItemsAsync();
+            await base.SetEntityActionsAsync();
             var clickMeAction = new EntityAction()
             {
                 Text = "Click Me!",

@@ -236,6 +236,67 @@ When you write this code inside your permission definition provider, it finds th
 
 > Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined.
 
+### Permission Depending on a Condition
+
+You may want to disable a permission based on a condition. Disabled permissions are not visible on the UI and always returns `prohibited` when you check them. There are two built-in conditional dependencies for a permission definition;
+
+* A permission can be automatically disabled if a [Feature](Features.md) was disabled.
+* A permission can be automatically disabled if a [Global Feature](Global-Features.md) was disabled.
+
+In addition, you can create your custom extensions.
+
+#### Depending on a Features
+
+Use the `RequireFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
+
+````csharp
+myGroup.AddPermission("Book_Creation")
+    .RequireFeatures("BookManagement");
+````
+
+#### Depending on a Global Feature
+
+Use the `RequireFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
+
+````csharp
+myGroup.AddPermission("Book_Creation")
+    .RequireGlobalFeatures("BookManagement");
+````
+
+#### Creating a Custom Permission Dependency
+
+Any class implements the `IPermissionStateProvider` interface can disable a permission based on a custom condition.
+
+**Example:**
+
+````csharp
+public class MyCustomPermissionStateProvider : IPermissionStateProvider
+{
+    public Task<bool> IsEnabledAsync(PermissionStateContext context)
+    {
+        // You can implement your own logic here. 
+        return Task.FromResult(
+            context.Permission.Name.StartsWith("Acme.BookStore"));
+    }
+}
+````
+
+Then you can add `MyCustomPermissionStateProvider` to any permission definition, using the `AddStateProviders` extension method:
+
+````csharp
+myGroup.AddPermission("Book_Creation")
+    .AddStateProviders(new MyCustomPermissionStateProvider());
+````
+
+Or you can globally add your custom provider to make it working for all permissions:
+
+````csharp
+Configure<AbpPermissionOptions>(options =>
+{
+	options.GlobalStateProviders.Add<MyCustomPermissionStateProvider>();
+});
+````
+
 ## IAuthorizationService
 
 ASP.NET Core provides the `IAuthorizationService` that can be used to check for authorization. Once you inject, you can use it in your code to conditionally control the authorization.
@@ -392,6 +453,32 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 ```
 
 This is already done for the startup template integration tests.
+
+### Claims Principal Factory
+
+Claims are important elements of authentication and authorization. ABP uses the `IAbpClaimsPrincipalFactory` service to create claims on authentication. This service was designed as extensible. If you need to add your custom claims to the authentication ticket, you can implement the `IAbpClaimsPrincipalContributor` in your application.
+
+**Example: Add a `SocialSecurityNumber` claim:**
+
+```csharp
+public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+{
+    public async Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+    {
+        var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        var userId = identity?.FindUserId();
+        if (userId.HasValue)
+        {
+            var userService = context.ServiceProvider.GetRequiredService<IUserService>(); //Your custom service
+            var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(userId.Value);
+            if (socialSecurityNumber != null)
+            {
+                identity.AddOrReplace(new Claim("SocialSecurityNumber", socialSecurityNumber));
+            }
+        }
+    }
+}
+```
 
 ## See Also
 

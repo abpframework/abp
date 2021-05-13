@@ -35,7 +35,11 @@ namespace Autofac.Builder
             return registrationBuilder;
         }
 
-        private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, ServiceRegistrationActionList registrationActionList, Type serviceType, Type implementationType) 
+        private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(
+            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, 
+            ServiceRegistrationActionList registrationActionList, 
+            Type serviceType,
+            Type implementationType) 
             where TActivatorData : ReflectionActivatorData
         {
             var serviceRegistredArgs = new OnServiceRegistredContext(serviceType, implementationType);
@@ -48,6 +52,7 @@ namespace Autofac.Builder
             if (serviceRegistredArgs.Interceptors.Any())
             {
                 registrationBuilder = registrationBuilder.AddInterceptors(
+                    registrationActionList,
                     serviceType,
                     serviceRegistredArgs.Interceptors
                 );
@@ -71,10 +76,12 @@ namespace Autofac.Builder
             return registrationBuilder;
         }
 
-        private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> AddInterceptors<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, 
-            Type serviceType,
-            IEnumerable<Type> interceptors)
+        private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle>
+            AddInterceptors<TLimit, TActivatorData, TRegistrationStyle>(
+                this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+                ServiceRegistrationActionList serviceRegistrationActionList,
+                Type serviceType,
+                IEnumerable<Type> interceptors)
             where TActivatorData : ReflectionActivatorData
         {
             if (serviceType.IsInterface)
@@ -83,6 +90,11 @@ namespace Autofac.Builder
             }
             else
             {
+                if (serviceRegistrationActionList.IsClassInterceptorsDisabled)
+                {
+                    return registrationBuilder;
+                }
+                
                 (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableClassInterceptors();
             }
 

@@ -22,7 +22,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
         {
         }
 
-        public async Task<BlogPost> GetBySlugAsync(Guid blogId, [NotNull] string slug,
+        public virtual async Task<BlogPost> GetBySlugAsync(Guid blogId, [NotNull] string slug,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(slug, nameof(slug));
@@ -41,7 +41,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
             return blogPost;
         }
 
-        public async Task<int> GetCountAsync(
+        public virtual async Task<int> GetCountAsync(
             string filter = null, 
             Guid? blogId = null, 
             CancellationToken cancellationToken = default)
@@ -54,7 +54,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<BlogPost>> GetListAsync(
+        public virtual async Task<List<BlogPost>> GetListAsync(
             string filter = null,
             Guid? blogId = null,
             int maxResultCount = int.MaxValue,
@@ -92,7 +92,7 @@ namespace Volo.CmsKit.MongoDB.Blogs
                                         }).ToList();
         }
 
-        public async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
+        public virtual async Task<bool> SlugExistsAsync(Guid blogId, [NotNull] string slug,
             CancellationToken cancellationToken = default)
         {
             Check.NotNullOrEmpty(slug, nameof(slug));

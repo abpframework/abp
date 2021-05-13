@@ -36,6 +36,7 @@ namespace Volo.Abp.Cli
                 options.Commands["add-module"] = typeof(AddModuleCommand);
                 options.Commands["list-modules"] = typeof(ListModulesCommand);
                 options.Commands["login"] = typeof(LoginCommand);
+                options.Commands["login-info"] = typeof(LoginInfoCommand);
                 options.Commands["logout"] = typeof(LogoutCommand);
                 options.Commands[GenerateProxyCommand.Name] = typeof(GenerateProxyCommand);
                 options.Commands[RemoveProxyCommand.Name] = typeof(RemoveProxyCommand);
