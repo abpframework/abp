@@ -24,12 +24,10 @@ namespace Volo.Abp.Authorization.Permissions
 
             foreach (var model in models)
             {
-                if (!_models.Any(x => x.State.GetType() == model.State.GetType() &&
-                                                x.RequiresAll == model.RequiresAll &&
-                                                x.Permissions.SequenceEqual(model.Permissions)))
-                {
-                    _models.Add(model);
-                }
+                _models.RemoveAll(x => x.State.GetType() == model.State.GetType() &&
+                                       x.RequiresAll == model.RequiresAll &&
+                                       x.Permissions.SequenceEqual(model.Permissions));
+                _models.Add(model);
             }
 
             return this;
