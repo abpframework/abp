@@ -31,6 +31,8 @@ namespace Volo.Abp.UI.Navigation
 
             using (var scope = ServiceScopeFactory.CreateScope())
             {
+                RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>.Instance.ClearCheckModels();
+
                 var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
 
                 foreach (var contributor in Options.MenuContributors)

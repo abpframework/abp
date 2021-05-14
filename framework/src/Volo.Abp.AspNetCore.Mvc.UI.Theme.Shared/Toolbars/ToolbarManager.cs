@@ -36,6 +36,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 
             using (var scope = ServiceProvider.CreateScope())
             {
+                RequirePermissionsSimpleBatchStateChecker<ToolbarItem>.Instance.ClearCheckModels();
+
                 var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
 
                 foreach (var contributor in Options.Contributors)
