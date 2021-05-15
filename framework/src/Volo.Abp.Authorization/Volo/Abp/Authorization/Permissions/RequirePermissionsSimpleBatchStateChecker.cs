@@ -22,15 +22,13 @@ namespace Volo.Abp.Authorization.Permissions
         {
             Check.NotNullOrEmpty(models, nameof(models));
 
-            foreach (var model in models)
-            {
-                _models.RemoveAll(x => x.State.GetType() == model.State.GetType() &&
-                                       x.RequiresAll == model.RequiresAll &&
-                                       x.Permissions.SequenceEqual(model.Permissions));
-                _models.Add(model);
-            }
-
+            _models.AddRange(models);
             return this;
+        }
+
+        public void ClearCheckModels()
+        {
+            _models.Clear();
         }
 
         public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleBatchStateCheckerContext<TState> context)
