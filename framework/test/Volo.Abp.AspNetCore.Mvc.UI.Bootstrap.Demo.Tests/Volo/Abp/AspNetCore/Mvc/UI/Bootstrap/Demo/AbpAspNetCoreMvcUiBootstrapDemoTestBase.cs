@@ -18,10 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
         {
             return CalculateContentRootPath(
                 "Volo.Abp.sln",
-                string.Format(
-                    "test{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo",
-                    Path.DirectorySeparatorChar
-                )
+                $"test{Path.DirectorySeparatorChar}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo"
             );
         }
 
