@@ -1,6 +1,6 @@
 # LEPTON NEXT GENERATION
 
-We are delighted and proud to announce that the next generation of [Lepton Theme](https://leptontheme.com/) which will be referred as `LeptonX` is on the way. It will be compatible with Bootstrap v4; it is because Bootstrap v5 is still on beta versions. We've decided that it would be a good idea to start with a stable Bootstrap version and also to make it extremely easy for ABP users to switch to the `LeptonX` since ABP packages are already dependant on Bootstrap v4.
+We are delighted and proud to announce that the next generation of [Lepton Theme](https://leptontheme.com/) which will be referred as `LeptonX` is on the way. The initial version is built upon Bootstrap v4. It is because, when we started working on this project, Bootstrap v5 was still on beta versions. We've decided that it would be a good idea to start with a stable Bootstrap version and also to make it extremely easy for ABP users to switch to the `LeptonX` since ABP packages are already dependant on Bootstrap v4.
 
 ![An image showing a tablet, a mobile, and a laptop device with LeptonX theme on their screens](./all-devices.png)
 
@@ -8,7 +8,7 @@ We are delighted and proud to announce that the next generation of [Lepton Theme
 
 The previous version of Lepton Theme has been only available to Commercial ABP customers and it has never been as a standalone template. With `LeptonX`, we aim at a broader audience. With this goal in mind, `LeptonX` will come in different shapes as follows:
 - A template with HTML, VanillaJS, CSS
-  - You can just download this like any other template and start editing.
+  - You can just download this like any other template and start developing your application.
 - An angular library (npm package)
   - An upgradeable angular package contains layouts, components, directives, and services for you to build any application you'd like. If you choose this option, you'll be able to stay up-to-date with `LeptonX` as we will continue to introduce new features. 
 - A standalone Angular template that contains code of the npm package above
@@ -20,15 +20,13 @@ The previous version of Lepton Theme has been only available to Commercial ABP c
 - Commercial ABP packages for all of the clients available, MVC, Blazor, and Angular that utilizes Pro packages
   - Client-specific packages that employ, provide and extend all of the features that `LeptonX-Pro` packages have.
 
-## Responsive (Lite and Pro)
-
-Since `LeptonX` is built on top of Bootstrap, it follows same responsive principles. 
+As is seen above, `LeptonX` environment contains multiple projects that are designed for different kinds of users. 
 
 ## Mobile-First (Pro Only)
 
 When people talk about Responsive Web Applications, they usually refer to a side menu or top menu that shrinks down into a hamburger menu which does not provide a good user experience for mobile users. 
 
-Widely used native mobile applications usually employ a tab menu stick to the bottom of the screen. People have become acquainted with this type of experience. With this UX in mind, menus in the `LeptonX` theme switches to the tab menu on mobile resolution as opposed to the hamburger menu. 
+On the other hand, widely used native mobile applications usually employ a tab menu stick to the bottom of the screen. People have become acquainted with this type of experience. With this UX in mind, menus in the `LeptonX` theme switches to the tab menu on mobile resolution as opposed to the hamburger menu. 
 
 ![An iPhone image showing LeptonX theme mobile application](./mobile1.png)
 
@@ -38,6 +36,7 @@ Widely used native mobile applications usually employ a tab menu stick to the bo
 
 Following the latest trends, `LeptonX` comes with three built-in themes, `dark`, `dim`, `light`.
 A theme builder is also provided with the `LeptonX` which you can run with your brand colors and create your own theme.
+It is built with CSS variables which enables runtime theme building. Your users will be able to choose colors and change the application to their liking. 
 
 ** The only theme that will available to the lite version is the `dim` theme.  
 
@@ -49,7 +48,7 @@ The following layout will be provided as default for both lite and pro versions.
 
 ## Multiple Layouts (Pro Only)
 
-`LeptonX` is being developed with such an architecture that it will be easy to replace the layout. You will be given many options to choose any layout you like.
+`LeptonX` is being developed with such an architecture that it will be easy to replace the layout. You will be given many options to choose any layout you prefer.
 
 Take a look at the example below:
 
