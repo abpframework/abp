@@ -40,15 +40,15 @@ namespace Volo.Abp.Cli.Utils
 
         private static bool HasIllegalChar(string projectName)
         {
-            foreach (var illegalWord in IllegalChars)
+            foreach (var illegalChar in IllegalChars)
             {
-                if (projectName.Contains(illegalWord))
+                if (projectName.Contains(illegalChar))
                 {
-                    return false;
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         }
 
         private static bool HasSurrogateOrControlChar(string projectName)
@@ -66,7 +66,7 @@ namespace Volo.Abp.Cli.Utils
                 }
             }
 
-            return true;
+            return false;
         }
 
         public static bool IsValid(string projectName)
