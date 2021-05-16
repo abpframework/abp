@@ -40,9 +40,9 @@ namespace Volo.Abp.Cli.Utils
 
         private static bool HasIllegalChar(string projectName)
         {
-            foreach (var illegalWord in IllegalChars)
+            foreach (var illegalChar in IllegalChars)
             {
-                if (projectName.Contains(illegalWord))
+                if (projectName.Contains(illegalChar))
                 {
                     return true;
                 }
