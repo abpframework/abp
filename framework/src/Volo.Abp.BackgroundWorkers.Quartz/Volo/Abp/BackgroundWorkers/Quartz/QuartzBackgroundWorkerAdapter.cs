@@ -75,7 +75,7 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
                 }
                 case PeriodicBackgroundWorkerBase syncWorker:
                 {
-                    _doWorkMethod?.Invoke(syncWorker, new object[]{workerContext});
+                    _doWorkMethod?.Invoke(syncWorker, new object[] {workerContext});
 
                     break;
                 }
