@@ -20,10 +20,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
         public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
             await _dateTimeModelBinder.BindModelAsync(bindingContext);
-            if (bindingContext.Result.IsModelSet)
+            if (bindingContext.Result.IsModelSet && bindingContext.Result.Model is DateTime dateTime)
             {
-                // ReSharper disable once PossibleNullReferenceException
-                bindingContext.Result = ModelBindingResult.Success(_clock.Normalize((DateTime) bindingContext.Result.Model));
+                bindingContext.Result = ModelBindingResult.Success(_clock.Normalize(dateTime));
             }
         }
     }
