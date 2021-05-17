@@ -46,7 +46,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var dateTime1 = new DateTime(2020, 04, 19, 19, 05, 01);
             var result = await _controller.GetWithDateTimeParameterAsync(dateTime1);
-            result.ShouldBe(dateTime1);
+            result.ToUniversalTime().ShouldBe(dateTime1.ToUniversalTime());
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace Volo.Abp.Http.DynamicProxying
             {
                 var dateTime1 = new DateTime(2020, 04, 19, 19, 05, 01);
                 var result = await _controller.GetWithDateTimeParameterAsync(dateTime1);
-                result.ShouldBe(dateTime1);
+                result.ToUniversalTime().ShouldBe(dateTime1.ToUniversalTime());
             }
         }
 
