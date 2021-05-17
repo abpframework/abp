@@ -120,7 +120,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
 
                     return sourceBuilder.ToString();
                 }
-                else sourceBuilder?.AppendLine(line);
+                else 
+                {
+                    sourceBuilder?.AppendLine(line);
+                }
             }
 
             throw new AbpException($"Could not find {Title} demo section inside {ViewPath}");
