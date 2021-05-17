@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -8,6 +9,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 {
@@ -17,6 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
         protected AbpToolbarOptions Options { get; }
         protected IServiceProvider ServiceProvider { get; }
         protected ISimpleStateCheckerManager<ToolbarItem> SimpleStateCheckerManager { get; }
+        protected SemaphoreSlim SyncSemaphore { get; }
 
         public ToolbarManager(
             IOptions<AbpToolbarOptions> options,
@@ -28,6 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
             SimpleStateCheckerManager = simpleStateCheckerManager;
             ServiceProvider = serviceProvider;
             Options = options.Value;
+            SyncSemaphore = new SemaphoreSlim(1, 1);
         }
 
         public async Task<Toolbar> GetAsync(string name)
@@ -36,16 +40,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                RequirePermissionsSimpleBatchStateChecker<ToolbarItem>.Instance.ClearCheckModels();
-
-                var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
-
-                foreach (var contributor in Options.Contributors)
+                using (await SyncSemaphore.LockAsync())
                 {
-                    await contributor.ConfigureToolbarAsync(context);
-                }
+                    RequirePermissionsSimpleBatchStateChecker<ToolbarItem>.Instance.ClearCheckModels();
 
-                await CheckPermissionsAsync(scope.ServiceProvider, toolbar);
+                    var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
+
+                    foreach (var contributor in Options.Contributors)
+                    {
+                        await contributor.ConfigureToolbarAsync(context);
+                    }
+
+                    await CheckPermissionsAsync(scope.ServiceProvider, toolbar);
+                }
             }
 
             return toolbar;

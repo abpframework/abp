@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.UI.Navigation
 {
@@ -14,6 +16,7 @@ namespace Volo.Abp.UI.Navigation
         protected AbpNavigationOptions Options { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
         protected ISimpleStateCheckerManager<ApplicationMenuItem> SimpleStateCheckerManager { get; }
+        protected SemaphoreSlim SyncSemaphore { get; }
 
         public MenuManager(
             IOptions<AbpNavigationOptions> options,
@@ -23,6 +26,7 @@ namespace Volo.Abp.UI.Navigation
             Options = options.Value;
             ServiceScopeFactory = serviceScopeFactory;
             SimpleStateCheckerManager = simpleStateCheckerManager;
+            SyncSemaphore = new SemaphoreSlim(1, 1);
         }
 
         public async Task<ApplicationMenu> GetAsync(string name)
@@ -31,16 +35,19 @@ namespace Volo.Abp.UI.Navigation
 
             using (var scope = ServiceScopeFactory.CreateScope())
             {
-                RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>.Instance.ClearCheckModels();
-
-                var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
-
-                foreach (var contributor in Options.MenuContributors)
+                using (await SyncSemaphore.LockAsync())
                 {
-                    await contributor.ConfigureMenuAsync(context);
-                }
+                    RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>.Instance.ClearCheckModels();
 
-                await CheckPermissionsAsync(scope.ServiceProvider, menu);
+                    var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
+
+                    foreach (var contributor in Options.MenuContributors)
+                    {
+                        await contributor.ConfigureMenuAsync(context);
+                    }
+
+                    await CheckPermissionsAsync(scope.ServiceProvider, menu);
+                }
             }
 
             NormalizeMenu(menu);
