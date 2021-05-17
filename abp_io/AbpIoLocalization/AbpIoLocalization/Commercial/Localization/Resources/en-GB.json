@@ -41,6 +41,27 @@
     "LastName": "Last name",
     "Optional": "Optional",
     "YourFirstName": "Your first name",
-    "YourLastName": "Your last name"
+    "YourLastName": "Your last name",
+    "SpecialOffer": "Special Offer",
+    "SpecialOfferMessage": "Hurry up! Prices are valid for a limited time.",
+    "DiscountRequest": "Discount Request",
+    "DiscountRequestDescribeCustomerQuestion": "Which of the following describes you?",
+    "DiscountRequestStudentEmailMessage": "Email Address must contain 'edu'.",
+    "DiscountRequestDeveloperCount": "How many developers are you?",
+    "DiscountRequestDeveloperCountExceedMessage": "We don't provide discounted license for companies that has over {0} developers.",
+    "DiscountRequestOrganizationName": "Company/organization/school name",
+    "Website": "Website",
+    "GithubUsername": "GitHub username",
+    "PhoneNumber": "Phone number",
+    "Country": "Country",
+    "DescribeABPCommercialUsage": "Describe the project you are planning to develop based on APB Commercial",
+    "DiscountRequestCertifyInformationMessage": "I certify all information is true and correct.",
+    "DiscountRequestReceived": "We have received your discount request.",
+    "DiscountRequestStatusMessage": "We will respond to you after checking the information you have provided.",
+    "MVCOrRazorPages": "MVC (Razor Pages)",
+    "Angular": "Angular",
+    "Blazor": "Blazor",
+    "New": "New",
+    "MongoDB": "MongoDB"
   }
 }
