@@ -473,7 +473,7 @@ public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipa
             var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(userId.Value);
             if (socialSecurityNumber != null)
             {
-                identity.AddOrReplace(new Claim("SocialSecurityNumber", socialSecurityNumber));
+                identity.AddClaim(new Claim("SocialSecurityNumber", socialSecurityNumber));
             }
         }
     }
