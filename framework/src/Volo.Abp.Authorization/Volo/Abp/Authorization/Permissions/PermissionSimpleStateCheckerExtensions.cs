@@ -43,8 +43,8 @@ namespace Volo.Abp.Authorization.Permissions
 
             if (batchCheck)
             {
-                RequirePermissionsSimpleBatchStateChecker<TState>.Instance.AddCheckModels(new RequirePermissionsSimpleBatchStateCheckerModel<TState>(state, permissions, requiresAll));
-                state.StateCheckers.Add(RequirePermissionsSimpleBatchStateChecker<TState>.Instance);
+                RequirePermissionsSimpleBatchStateChecker<TState>.Current.AddCheckModels(new RequirePermissionsSimpleBatchStateCheckerModel<TState>(state, permissions, requiresAll));
+                state.StateCheckers.Add(RequirePermissionsSimpleBatchStateChecker<TState>.Current);
             }
             else
             {
