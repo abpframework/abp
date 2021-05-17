@@ -39,32 +39,6 @@ namespace Volo.Abp.Cli
         }
 
         [Fact]
-        public async Task ContainsIllegalChar_Test()
-        {
-            var illegalChars = new[]
-            {
-                '/',
-                '?',
-                ':',
-                '&',
-                '\\',
-                '*',
-                '\'',
-                '<',
-                '>',
-                '|',
-                '#',
-                '%',
-            };
-
-            foreach (var illegalChar in illegalChars)
-            {
-                var args = new CommandLineArgs("new", "Test" + illegalChar);
-                await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
-            }
-        }
-
-        [Fact]
         public async Task ParentDirectoryContain_Test()
         {
 

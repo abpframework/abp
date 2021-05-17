@@ -17,38 +17,9 @@ namespace Volo.Abp.Cli.Utils
             "LPT2"
         };
 
-        private static readonly char[] IllegalChars = new[]
-        {
-            '/',
-            '?',
-            ':',
-            '&',
-            '\\',
-            '*',
-            '\'',
-            '<',
-            '>',
-            '|',
-            '#',
-            '%',
-        };
-
         private static bool HasParentDirectoryString(string projectName)
         {
             return projectName.Contains("..");
-        }
-
-        private static bool HasIllegalChar(string projectName)
-        {
-            foreach (var illegalChar in IllegalChars)
-            {
-                if (projectName.Contains(illegalChar))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private static bool HasSurrogateOrControlChar(string projectName)
@@ -74,11 +45,6 @@ namespace Volo.Abp.Cli.Utils
             if (projectName == null)
             {
                 throw new CliUsageException("Project name cannot be empty!");
-            }
-
-            if (HasIllegalChar(projectName))
-            {
-                return false;
             }
 
             if (HasSurrogateOrControlChar(projectName))
