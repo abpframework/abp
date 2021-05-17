@@ -20,7 +20,6 @@ namespace Volo.Abp.Authorization
         public void Switch_Current_Checker_Test()
         {
             var checker = RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Current;
-            checker.ShouldNotBeNull();
 
             using (RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Use(new RequirePermissionsSimpleBatchStateChecker<MyStateEntity>()))
             {
