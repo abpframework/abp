@@ -329,7 +329,19 @@ public class BookRepository
 
 ##### 替换其他的DbContexts
 
-一旦你正确定义并为MongoDbContext使用了接口,其他的实现就可以使用`ReplaceDbContext`来替换:
+一旦你正确定义并为MongoDbContext使用了接口,任何其他实现都可以使用以下方法替换它:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreMongoDbContext))]
+public class OtherMongoDbContext : AbpMongoDbContext, IBookStoreMongoDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ```csharp
 context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>

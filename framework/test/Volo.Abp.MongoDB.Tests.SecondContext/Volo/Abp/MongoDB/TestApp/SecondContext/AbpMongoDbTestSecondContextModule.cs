@@ -1,27 +1,27 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
-using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
+using Volo.Abp.MongoDB.TestApp.FourthContext;
+using Volo.Abp.MongoDB.TestApp.ThirdDbContext;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
+namespace Volo.Abp.MongoDB.TestApp.SecondContext
 {
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
-    public class AbpEfCoreTestSecondContextModule : AbpModule
+    [DependsOn(typeof(AbpMongoDbModule))]
+    public class AbpMongoDbTestSecondContextModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAbpDbContext<SecondDbContext>(options =>
+            context.Services.AddMongoDbContext<SecondDbContext>(options =>
             {
                 options.AddDefaultRepositories();
             });
 
-            context.Services.AddAbpDbContext<ThirdDbContext.ThirdDbContext>(options =>
+            context.Services.AddMongoDbContext<ThirdDbContext.ThirdDbContext>(options =>
             {
                 options.AddDefaultRepositories<IThirdDbContext>();
             });
 
-            context.Services.AddAbpDbContext<FourthDbContext>(options =>
+            context.Services.AddMongoDbContext<FourthDbContext>(options =>
             {
                 options.AddDefaultRepositories<IFourthDbContext>();
             });
