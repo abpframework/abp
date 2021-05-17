@@ -17,6 +17,19 @@ namespace Volo.Abp.Authorization
         }
 
         [Fact]
+        public void Switch_Current_Checker_Test()
+        {
+            var checker = RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Current;
+            checker.ShouldNotBeNull();
+
+            using (RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Use(new RequirePermissionsSimpleBatchStateChecker<MyStateEntity>()))
+            {
+                RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Current.ShouldNotBeNull();
+                RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Current.ShouldNotBe(checker);
+            }
+        }
+
+        [Fact]
         public async Task RequirePermissionsSimpleBatchStateChecker_Test()
         {
             var myStateEntities = new MyStateEntity[]

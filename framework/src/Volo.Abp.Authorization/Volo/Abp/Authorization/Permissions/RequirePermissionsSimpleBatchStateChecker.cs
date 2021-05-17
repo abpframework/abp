@@ -16,6 +16,11 @@ namespace Volo.Abp.Authorization.Permissions
 
         private readonly List<RequirePermissionsSimpleBatchStateCheckerModel<TState>> _models;
 
+        static RequirePermissionsSimpleBatchStateChecker()
+        {
+            _current.Value = new RequirePermissionsSimpleBatchStateChecker<TState>();
+        }
+
         public RequirePermissionsSimpleBatchStateChecker()
         {
             _models = new List<RequirePermissionsSimpleBatchStateCheckerModel<TState>>();
