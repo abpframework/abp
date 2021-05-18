@@ -1,70 +1,61 @@
 # CMS Kit Module
 
-This module provides CMS(Content Management System) capabilities for your application.
+This module provides CMS (Content Management System) capabilities for your application. It provides **core building blocks** and fully working **sub-systems** to create your own website with CMS features enabled, or use the building blocks in your web sites with any purpose.
 
-* Provides a **page** management system to manage dynamic pages.
-* Provides a [**blog**](cms-kit/Blog-System.md) system to create blogs and publish posts.
-* Provides a [**tag**](cms-kit/Tag-Management.md) system to tag any kind of resources, like blog posts.
-* Provides a [**comment**](cms-kit/Comment-System.md) system to add comments feature to any kind of resource, like blog posts, products, etc.
-* Provides a [**reaction**](cms-kit/Reaction-System.md) system to add reactions feature to any kind of resource, like blog posts or comments.
+> **This module currently available only for the MVC UI**. While there is no official Blazor package, it can also work in a Blazor Server UI since a Blazor Server UI application is actually a hybrid application that runs within the MVC UI.
+
+The following features are currently available:
+
+* Provides a [**page**](cms-kit/Pages.md) management system to manage dynamic pages with dynamic URLs.
+* Provides a [**blog**](cms-kit/Blog-System.md) system to create publish blog posts with multiple blog support.
+* Provides a [**tagging**](cms-kit/Tag-Management.md) system to tag any kind of resource, like a blog post.
+* Provides a [**comment**](cms-kit/Comment-System.md) system to add comments feature to any kind of resource, like blog post or a product review page.
+* Provides a [**reaction**](cms-kit/Reaction-System.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
 * Provides a [**rating**](cms-kit/Rating-System.md) system to add rating feature to any kind of resource.
 
-## How to install
+Click to a feature to understand and learn how to use it.
 
-The ABP CLI allows adding a module to a solution using `add-module` command. CMS kit module can be added using the command below;
+All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, by the help of the [Global Features](../Global-Features.md) system.
+
+## How to Install
+
+[ABP CLI](../CLI.md) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
 
 ```bash
 abp add-module Volo.CmsKit
 ```
-Open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure` method to enable all features in the CMS kit module.
+After the installation process, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project of your solution and place the following code into the `Configure` method to enable all the features in the CMS Kit module.
 
 ```csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 {
     cmsKit.EnableAll();
 });
-
 ```
 
-> If you are using EntityFrameworkCore, do not forget to add a new migration and update your database.
+Instead of enabling all, you may prefer to enable the features one by one. The following example enables only the [tags](cms-kit/Tag-Management.md) and [comments](cms-kit/Comment-System.md) features:
 
-## Packages
+````csharp
+GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
+{
+    cmsKit.Tags.Enable();
+    cmsKit.Comments.Enable();
+});
+````
+
+> If you are using Entity Framework Core, do not forget to add a new migration and update your database.
+
+## The Packages
 
 This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
-CMS kit packages are designed for various usage scenarios. When you visit the [CMS kit package list page](https://www.nuget.org/packages?q=Volo.CmsKit), you will see that packages have admin, public and unified versions. 
-For example,
- - `Volo.CmsKit.Admin.Application`: Contains functionality required by admin websites.
- - `Volo.CmsKit.Public.Application`: Contains functionality required by public websites.
- - `Volo.CmsKit.Application` : Unified package dependent on both public and admin packages.
+CMS kit packages are designed for various usage scenarios. When you visit the [CMS kit package list page](https://www.nuget.org/packages?q=Volo.CmsKit), you will see that packages have admin, public and unified versions:
 
-If you want to separate admin and public website codes, you can use the admin and public packages. However, if you want to keep admin and public website codes in a shared project, you can use the unified packages to include admin and public packages. 
+ - `Volo.CmsKit.Admin.*` packages contain the functionalities required by admin (back office) applications.
+ - `Volo.CmsKit.Public.*` packages contain the functionalities used in public websites where users read blog posts or leave comments.
+ - `Volo.CmsKit.*` (without Admin/Public suffix) packages are called as unified packages. Unified packages are shortcuts for adding Admin & Public packages (of the related layer) separately. If you have a single application for administration and public web site, you can use these packages.
 
-It is recommended to use the unified packages instead of adding both admin and public packages.
-
-## Feature System
-
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. You can use the global feature system to enable all features or only enabled specific features easily.
-
-To enable all features in the CMS kit, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project.
-
-```csharp
-GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-{
-    cmsKit.EnableAll();
-});
-```
-
-You can only enable specific features such as pages, like below.
-
-```csharp
-GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-{
-    cmsKit.Pages.Enable();
-});
-```
-
-## User interface
+## The User Interface
 
 ### Menu items
 

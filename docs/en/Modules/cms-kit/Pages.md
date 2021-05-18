@@ -1,0 +1,3 @@
+# CMS Kit: Pages
+
+This document is in progress...
