@@ -1,13 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
 
 namespace Volo.Abp.TestApp.EntityFrameworkCore
 {
-    public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext
+    [ReplaceDbContext(typeof(IFourthDbContext))]
+    public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext, IFourthDbContext
     {
+        private DbSet<FourthDbContextDummyEntity> _dummyEntities;
+        private DbSet<FourthDbContextDummyEntity> _dummyEntities1;
         public DbSet<Person> People { get; set; }
 
         public DbSet<City> Cities { get; set; }
@@ -19,6 +24,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
         public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
 
         public DbSet<Author> Author { get; set; }
+
+        public DbSet<FourthDbContextDummyEntity> FourthDummyEntities { get; set; }
 
         public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
             : base(options)

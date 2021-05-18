@@ -9,8 +9,10 @@ using IdentityModel;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IdentityModel;
+using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Auth
@@ -18,21 +20,54 @@ namespace Volo.Abp.Cli.Auth
     public class AuthService : ITransientDependency
     {
         protected IIdentityModelAuthenticationService AuthenticationService { get; }
-        protected ILogger<NewCommand> Logger { get; }
+        protected ILogger<AuthService> Logger { get; }
         protected CliHttpClientFactory CliHttpClientFactory { get; }
+        public RemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+        public IJsonSerializer JsonSerializer { get; }
         public ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public AuthService(
             IIdentityModelAuthenticationService authenticationService,
-            ILogger<NewCommand> logger,
+            ILogger<AuthService> logger,
             ICancellationTokenProvider cancellationTokenProvider,
-            CliHttpClientFactory cliHttpClientFactory
+            CliHttpClientFactory cliHttpClientFactory,
+            RemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            IJsonSerializer jsonSerializer
         )
         {
             AuthenticationService = authenticationService;
             Logger = logger;
             CancellationTokenProvider = cancellationTokenProvider;
             CliHttpClientFactory = cliHttpClientFactory;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            JsonSerializer = jsonSerializer;
+        }
+
+        public async Task<LoginInfo> GetLoginInfoAsync()
+        {
+            if (!IsLoggedIn())
+            {
+                return null;
+            }
+
+            var url = $"{CliUrls.WwwAbpIo}api/license/login-info";
+
+            var client = CliHttpClientFactory.CreateClient();
+
+            using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    Logger.LogError("Remote server returns '{response.StatusCode}'");
+                    return null;
+                }
+
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<LoginInfo>(responseContent);
+            }
         }
 
         public async Task LoginAsync(string userName, string password, string organizationName = null)

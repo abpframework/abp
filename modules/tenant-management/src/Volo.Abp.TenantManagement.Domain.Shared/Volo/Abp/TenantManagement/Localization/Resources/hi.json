@@ -1,0 +1,23 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Menu:TenantManagement": "किरायेदार प्रबंधन",
+    "Tenants": "किरायेदारों",
+    "NewTenant": "नया किरायेदार",
+    "TenantName": "किरायेदार का नाम",
+    "DisplayName:TenantName": "किरायेदार का नाम",
+    "TenantDeletionConfirmationMessage": "किरायेदार '{0}' हटा दिया जाएगा। क्या आप इसकी पुष्टि करते हैं?",
+    "ConnectionStrings": "कनेक्शन स्ट्रिंग्स",
+    "DisplayName:DefaultConnectionString": "डिफ़ॉल्ट कनेक्शन स्ट्रिंग",
+    "DisplayName:UseSharedDatabase": "साझा डेटाबेस का उपयोग करें",
+    "ManageHostFeatures": "होस्ट सुविधाएँ प्रबंधित करें",
+    "Permission:TenantManagement": "किरायेदार प्रबंधन",
+    "Permission:Create": "सृजन करना",
+    "Permission:Edit": "संपादित करें",
+    "Permission:Delete": "हटाएं",
+    "Permission:ManageConnectionStrings": "कनेक्शन स्ट्रिंग्स प्रबंधित करें",
+    "Permission:ManageFeatures": "सुविधाओं को प्रबंधित करें",
+    "DisplayName:AdminEmailAddress": "ईमेल पता",
+    "DisplayName:AdminPassword": "व्यवस्थापक का पारण शब्द"
+  }
+}

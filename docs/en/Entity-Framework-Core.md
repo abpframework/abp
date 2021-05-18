@@ -626,6 +626,24 @@ See the "*ConfigureByConvention Method*" section above for more information.
 
 ## Advanced Topics
 
+### Controlling the Multi-Tenancy
+
+If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
+
+**Example:**
+
+````csharp
+[IgnoreMultiTenancy]
+public class MyDbContext : AbpDbContext<MyDbContext>
+{
+    ...
+}
+````
+
+Do not use the `[IgnoreMultiTenancy]` attribute if any one of your entities in your `DbContext` can be persisted in a tenant database.
+
+> When you use repositories, ABP already uses the host database for the entities don't implement the `IMultiTenant` interface. So, most of time you don't need to `[IgnoreMultiTenancy]` attribute if you are using the repositories to work with the database.
+
 ### Set Default Repository Classes
 
 Default generic repositories are implemented by `EfCoreRepository` class by default. You can create your own implementation and use it for all the default repository implementations.
@@ -706,7 +724,19 @@ One advantage of using an interface for a DbContext is then it will be replaceab
 
 ### Replace Other DbContextes
 
-Once you properly define and use an interface for DbContext, then any other implementation can replace it using the `ReplaceDbContext` option:
+Once you properly define and use an interface for DbContext, then any other implementation can use the following ways to replace it:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreDbContext))]
+public class OtherDbContext : AbpDbContext<OtherDbContext>, IBookStoreDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ````csharp
 context.Services.AddAbpDbContext<OtherDbContext>(options =>

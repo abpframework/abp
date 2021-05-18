@@ -84,7 +84,7 @@ namespace Acme.BookStore.Books
 }
 ````
 
-* ABP为实体提供了两个基本的基类: `AggregateRoot`和`Entity`. **Aggregate Root**是[**领域驱动设计**](./Domain-Driven-Design.md) 概念之一. 可以视为直接查询和处理的根实体(请参阅[实体文档](./Entities.md)).
+* ABP为实体提供了两个基本的基类: `AggregateRoot`和`Entity`. **Aggregate Root**是[**领域驱动设计**](./Domain-Driven-Design.md) 概念之一. 可以视为直接查询和处理的根实体(请参阅[实体文档](../Entities.md)).
 * `Book`实体继承了`AuditedAggregateRoot`,`AuditedAggregateRoot`类在`AggregateRoot`类的基础上添加了一些审计属性(`CreationTime`, `CreatorId`, `LastModificationTime` 等). ABP框架自动为你管理这些属性.
 * `Guid`是`Book`实体的主键类型.
 

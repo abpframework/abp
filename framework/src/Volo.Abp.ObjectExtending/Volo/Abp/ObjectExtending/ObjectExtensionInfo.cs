@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
 
@@ -68,7 +69,9 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public virtual ImmutableList<ObjectExtensionPropertyInfo> GetProperties()
         {
-            return Properties.Values.ToImmutableList();
+            return Properties.OrderBy(t=>t.Key)
+                            .Select(t=>t.Value)
+                            .ToImmutableList();
         }
 
         [CanBeNull]

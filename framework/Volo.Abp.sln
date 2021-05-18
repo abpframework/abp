@@ -395,6 +395,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Raz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TextTemplating.Scriban.Tests", "test\Volo.Abp.TextTemplating.Scriban.Tests\Volo.Abp.TextTemplating.Scriban.Tests.csproj", "{75D8DADB-3FA9-4C1D-B23A-DBFD08133B7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MongoDB.Tests.SecondContext", "test\Volo.Abp.MongoDB.Tests.SecondContext\Volo.Abp.MongoDB.Tests.SecondContext.csproj", "{90B1866A-EF99-40B9-970E-B898E5AA523F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1177,6 +1179,10 @@ Global
 		{75D8DADB-3FA9-4C1D-B23A-DBFD08133B7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75D8DADB-3FA9-4C1D-B23A-DBFD08133B7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75D8DADB-3FA9-4C1D-B23A-DBFD08133B7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B1866A-EF99-40B9-970E-B898E5AA523F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B1866A-EF99-40B9-970E-B898E5AA523F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B1866A-EF99-40B9-970E-B898E5AA523F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B1866A-EF99-40B9-970E-B898E5AA523F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1376,6 +1382,7 @@ Global
 		{42EA6F06-2D78-4D18-8AC4-8F2AB7E6DA19} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{C996F458-98FB-483D-9306-4701290E2FC1} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{75D8DADB-3FA9-4C1D-B23A-DBFD08133B7C} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{90B1866A-EF99-40B9-970E-B898E5AA523F} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

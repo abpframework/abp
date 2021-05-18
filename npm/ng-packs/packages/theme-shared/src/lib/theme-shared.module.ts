@@ -38,6 +38,7 @@ import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 import { ModalCloseDirective } from './components/modal/modal-close.directive';
+import { initDatepickerConfig } from './handlers/datepicker-config';
 
 const declarationsWithExports = [
   BreadcrumbComponent,
@@ -109,6 +110,12 @@ export class ThemeSharedModule {
           multi: true,
           deps: [Injector],
           useFactory: initLazyStyleHandler,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [Injector],
+          useFactory: initDatepickerConfig,
         },
         { provide: HTTP_ERROR_CONFIG, useValue: httpErrorConfig },
         {
