@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
@@ -9,9 +11,15 @@ namespace Volo.Abp.Authorization.Permissions
     public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStateCheckerBase<TState>
         where TState : IHasSimpleStateCheckers<TState>
     {
-        public static readonly RequirePermissionsSimpleBatchStateChecker<TState> Instance = new RequirePermissionsSimpleBatchStateChecker<TState>();
+        public static RequirePermissionsSimpleBatchStateChecker<TState> Current => _current.Value;
+        private static readonly AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>> _current = new AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>>();
 
         private readonly List<RequirePermissionsSimpleBatchStateCheckerModel<TState>> _models;
+
+        static RequirePermissionsSimpleBatchStateChecker()
+        {
+            _current.Value = new RequirePermissionsSimpleBatchStateChecker<TState>();
+        }
 
         public RequirePermissionsSimpleBatchStateChecker()
         {
@@ -26,9 +34,11 @@ namespace Volo.Abp.Authorization.Permissions
             return this;
         }
 
-        public void ClearCheckModels()
+        public static IDisposable Use(RequirePermissionsSimpleBatchStateChecker<TState> checker)
         {
-            _models.Clear();
+            var previousValue = Current;
+            _current.Value = checker;
+            return new DisposeAction(() => _current.Value = previousValue);
         }
 
         public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleBatchStateCheckerContext<TState> context)
