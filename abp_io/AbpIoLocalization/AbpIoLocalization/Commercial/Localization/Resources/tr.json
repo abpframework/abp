@@ -38,6 +38,27 @@
     "LastName": "Soyad",
     "Optional": "Opsiyonel",
     "YourFirstName": "Adınız",
-    "YourLastName": "Soyadınız"
+    "YourLastName": "Soyadınız",
+    "SpecialOffer": "Özel Teklif",
+    "SpecialOfferMessage": "Acele et! Fiyatlar sınırlı bir süre için geçerlidir.",
+    "DiscountRequest": "İndirim İsteği",
+    "DiscountRequestDescribeCustomerQuestion": "Aşağıdakilerden hangisi sizi tanımlar?",
+    "DiscountRequestStudentEmailMessage": "E-posta Adresi \".edu\" içermelidir.",
+    "DiscountRequestDeveloperCount": "Kaç geliştiriciye sahipsiniz?",
+    "DiscountRequestDeveloperCountExceedMessage": "{0}'ten fazla geliştiricisi olan şirketler için indirimli lisans sağlamıyoruz.",
+    "DiscountRequestOrganizationName": "Şirket/organizasyon/okul adı",
+    "Website": "İnternet sitesi",
+    "GithubUsername": "GitHub kullanıcı adı",
+    "PhoneNumber": "Telefon numarası",
+    "Country": "Ülke",
+    "DescribeABPCommercialUsage": "ABP Commercial kullanarak geliştirmeyi planladığınız projeyi tanımlayın",
+    "DiscountRequestCertifyInformationMessage": "Tüm bilgilerin gerçek ve doğru olduğunu onaylıyorum.",
+    "DiscountRequestReceived": "İndirim talebinizi aldık.",
+    "DiscountRequestStatusMessage": "Verdiğiniz bilgileri kontrol ettikten sonra size cevap vereceğiz.",
+    "MVCOrRazorPages": "MVC (Razor Pages)",
+    "Angular": "Angular",
+    "Blazor": "Blazor",
+    "New": "Yeni",
+    "MongoDB": "MongoDB"
   }
 }
