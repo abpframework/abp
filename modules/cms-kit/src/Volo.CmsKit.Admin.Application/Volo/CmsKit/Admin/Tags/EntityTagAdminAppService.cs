@@ -1,10 +1,11 @@
-﻿using System.Linq;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Admin.Tags
 {
+    [RequiresGlobalFeature(typeof(TagsFeature))]
     public class EntityTagAdminAppService : CmsKitAdminAppServiceBase, IEntityTagAdminAppService
     {
         protected ITagDefinitionStore TagDefinitionStore { get; }
