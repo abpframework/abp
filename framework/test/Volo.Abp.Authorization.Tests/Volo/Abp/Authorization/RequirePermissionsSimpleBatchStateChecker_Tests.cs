@@ -19,13 +19,20 @@ namespace Volo.Abp.Authorization
         [Fact]
         public void Switch_Current_Checker_Test()
         {
-            var checker = RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Current;
+            var checker = RequirePermissionsSimpleBatchStateChecker<MyStateEntity2>.Current;
+            checker.ShouldNotBeNull();
 
-            using (RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Use(new RequirePermissionsSimpleBatchStateChecker<MyStateEntity>()))
+            RequirePermissionsSimpleBatchStateChecker<MyStateEntity2> checker2 = null;
+
+            using (RequirePermissionsSimpleBatchStateChecker<MyStateEntity2>.Use(new RequirePermissionsSimpleBatchStateChecker<MyStateEntity2>()))
             {
-                RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Current.ShouldNotBeNull();
-                RequirePermissionsSimpleBatchStateChecker<MyStateEntity>.Current.ShouldNotBe(checker);
+                checker2 = RequirePermissionsSimpleBatchStateChecker<MyStateEntity2>.Current;
+                checker2.ShouldNotBeNull();
+                checker2.ShouldNotBe(checker);
             }
+
+            checker2.ShouldNotBeNull();
+            checker2.ShouldNotBe(checker);
         }
 
         [Fact]
@@ -56,6 +63,16 @@ namespace Volo.Abp.Authorization
             public MyStateEntity()
             {
                 StateCheckers = new List<ISimpleStateChecker<MyStateEntity>>();
+            }
+        }
+
+        class MyStateEntity2 : IHasSimpleStateCheckers<MyStateEntity2>
+        {
+            public List<ISimpleStateChecker<MyStateEntity2>> StateCheckers { get; }
+
+            public MyStateEntity2()
+            {
+                StateCheckers = new List<ISimpleStateChecker<MyStateEntity2>>();
             }
         }
     }
