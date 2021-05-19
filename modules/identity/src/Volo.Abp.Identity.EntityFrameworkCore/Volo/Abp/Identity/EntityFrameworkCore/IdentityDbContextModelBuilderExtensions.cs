@@ -60,6 +60,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasIndex(u => u.NormalizedEmail);
                 b.HasIndex(u => u.UserName);
                 b.HasIndex(u => u.Email);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserClaim>(b =>
@@ -74,6 +76,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityUserClaimConsts.MaxClaimValueLength);
 
                 b.HasIndex(uc => uc.UserId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserRole>(b =>
@@ -88,6 +92,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
 
                 b.HasIndex(ur => new {ur.RoleId, ur.UserId});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserLogin>(b =>
@@ -106,6 +112,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     .HasMaxLength(IdentityUserLoginConsts.MaxProviderDisplayNameLength);
 
                 b.HasIndex(l => new {l.LoginProvider, l.ProviderKey});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserToken>(b =>
@@ -119,6 +127,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength)
                     .IsRequired();
                 b.Property(ul => ul.Name).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityRole>(b =>
@@ -136,6 +146,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
 
                 b.HasIndex(r => r.NormalizedName);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityRoleClaim>(b =>
@@ -150,6 +162,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityRoleClaimConsts.MaxClaimValueLength);
 
                 b.HasIndex(uc => uc.RoleId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             if (builder.IsHostDatabase())
@@ -165,6 +179,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     b.Property(uc => uc.Regex).HasMaxLength(IdentityClaimTypeConsts.MaxRegexLength);
                     b.Property(uc => uc.RegexDescription).HasMaxLength(IdentityClaimTypeConsts.MaxRegexDescriptionLength);
                     b.Property(uc => uc.Description).HasMaxLength(IdentityClaimTypeConsts.MaxDescriptionLength);
+
+                    b.ApplyObjectExtensionMappings();
                 });
             }
 
@@ -183,6 +199,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(ou => ou.Roles).WithOne().HasForeignKey(our => our.OrganizationUnitId).IsRequired();
 
                 b.HasIndex(ou => ou.Code);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<OrganizationUnitRole>(b =>
@@ -196,6 +214,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ou => ou.RoleId).IsRequired();
 
                 b.HasIndex(ou => new {ou.RoleId, ou.OrganizationUnitId});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityUserOrganizationUnit>(b =>
@@ -209,6 +229,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasOne<OrganizationUnit>().WithMany().HasForeignKey(ou => ou.OrganizationUnitId).IsRequired();
 
                 b.HasIndex(ou => new {ou.UserId, ou.OrganizationUnitId});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentitySecurityLog>(b =>
@@ -234,6 +256,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasIndex(x => new { x.TenantId, x.Identity });
                 b.HasIndex(x => new { x.TenantId, x.Action });
                 b.HasIndex(x => new { x.TenantId, x.UserId });
+
+                b.ApplyObjectExtensionMappings();
             });
 
             if (builder.IsHostDatabase())
@@ -251,6 +275,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         LinkedUserId = x.TargetUserId,
                         LinkedTenantId = x.TargetTenantId
                     }).IsUnique();
+
+                    b.ApplyObjectExtensionMappings();
                 });
             }
 

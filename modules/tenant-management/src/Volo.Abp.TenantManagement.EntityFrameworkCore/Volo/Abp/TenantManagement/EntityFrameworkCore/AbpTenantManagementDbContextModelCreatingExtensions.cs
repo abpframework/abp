@@ -36,6 +36,8 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                 b.HasMany(u => u.ConnectionStrings).WithOne().HasForeignKey(uc => uc.TenantId).IsRequired();
 
                 b.HasIndex(u => u.Name);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<TenantConnectionString>(b =>
@@ -48,6 +50,8 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 
                 b.Property(cs => cs.Name).IsRequired().HasMaxLength(TenantConnectionStringConsts.MaxNameLength);
                 b.Property(cs => cs.Value).IsRequired().HasMaxLength(TenantConnectionStringConsts.MaxValueLength);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.TryConfigureObjectExtensions<TenantManagementDbContext>();

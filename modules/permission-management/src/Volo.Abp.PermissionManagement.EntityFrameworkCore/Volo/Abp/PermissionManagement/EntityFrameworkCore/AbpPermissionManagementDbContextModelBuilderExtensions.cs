@@ -31,6 +31,8 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
                 b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
 
                 b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.TryConfigureObjectExtensions<PermissionManagementDbContext>();

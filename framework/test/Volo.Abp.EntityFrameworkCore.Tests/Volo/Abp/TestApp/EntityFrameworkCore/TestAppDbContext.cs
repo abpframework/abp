@@ -42,6 +42,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
             modelBuilder.Entity<Phone>(b =>
             {
                 b.HasKey(p => new {p.PersonId, p.Number});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             modelBuilder
@@ -49,6 +51,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
                 {
                     p.HasNoKey();
                     p.ToView("View_PersonView");
+
+                    p.ApplyObjectExtensionMappings();
                 });
 
             modelBuilder.Entity<City>(b =>
@@ -58,6 +62,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
                     d.WithOwner().HasForeignKey(x => x.CityId);
                     d.HasKey(x => new {x.CityId, x.Name});
                 });
+
+                b.ApplyObjectExtensionMappings();
             });
 
             modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();

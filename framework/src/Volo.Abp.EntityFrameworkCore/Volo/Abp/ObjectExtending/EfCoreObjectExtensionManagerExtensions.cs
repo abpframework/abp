@@ -150,7 +150,7 @@ namespace Volo.Abp.ObjectExtending
             );
         }
 
-        public static void ConfigureEfCoreEntity(
+        public static void ConfigureEfCoreEntityProperties(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] EntityTypeBuilder typeBuilder)
         {
@@ -161,13 +161,6 @@ namespace Volo.Abp.ObjectExtending
             if (objectExtension == null)
             {
                 return;
-            }
-
-            var efCoreEntityMappings = objectExtension.GetEfCoreEntityMappings();
-
-            foreach (var efCoreEntityMapping in efCoreEntityMappings)
-            {
-                efCoreEntityMapping.EntityTypeBuildAction?.Invoke(typeBuilder);
             }
 
             foreach (var property in objectExtension.GetProperties())
@@ -190,6 +183,27 @@ namespace Volo.Abp.ObjectExtending
 #pragma warning disable 618
                 efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
 #pragma warning restore 618
+            }
+        }
+
+        public static void ConfigureEfCoreEntity(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] EntityTypeBuilder typeBuilder)
+        {
+            Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+            Check.NotNull(typeBuilder, nameof(typeBuilder));
+
+            var objectExtension = objectExtensionManager.GetOrNull(typeBuilder.Metadata.ClrType);
+            if (objectExtension == null)
+            {
+                return;
+            }
+
+            var efCoreEntityMappings = objectExtension.GetEfCoreEntityMappings();
+
+            foreach (var efCoreEntityMapping in efCoreEntityMappings)
+            {
+                efCoreEntityMapping.EntityTypeBuildAction?.Invoke(typeBuilder);
             }
         }
 
