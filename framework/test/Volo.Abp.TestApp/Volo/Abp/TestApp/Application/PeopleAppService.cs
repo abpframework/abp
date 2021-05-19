@@ -33,6 +33,15 @@ namespace Volo.Abp.TestApp.Application
             );
         }
 
+        public Task<List<string>> GetPhones(GetPersonPhonesFilter input1, GetPersonPhonesFilter input2)
+        {
+            return Task.FromResult(new List<string>()
+            {
+                input1.Type.ToString(),
+                input2.Type.ToString()
+            });
+        }
+
         public Task<List<string>> GetParams(IEnumerable<Guid> ids, string[] names)
         {
             var @params = ids.Select(id => id.ToString("N")).ToList();

@@ -87,7 +87,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     continue;
                 }
 
-                if (AddQueryStringParameter(urlBuilder, isFirstParam, queryStringParameter.Name, value))
+                var parameterName = queryStringParameter.DescriptorName.IsNullOrWhiteSpace()
+                    ? queryStringParameter.Name
+                    : $"{queryStringParameter.NameOnMethod}.{queryStringParameter.Name}";
+
+                if (AddQueryStringParameter(urlBuilder, isFirstParam, parameterName, value))
                 {
                     isFirstParam = false;
                 }

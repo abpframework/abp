@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
@@ -257,17 +255,13 @@ namespace Volo.Abp.AspNetCore.Mvc
                 .Select(GetMethodParamName)
                 .ToArray();
 
-            var matchedMethodParamNames = ArrayMatcher.Match(
-                parameterDescriptionNames,
-                methodParameterNames
-            );
-
             for (var i = 0; i < apiDescription.ParameterDescriptions.Count; i++)
             {
                 var parameterDescription = apiDescription.ParameterDescriptions[i];
-                var matchedMethodParamName = matchedMethodParamNames.Length > i
-                    ? matchedMethodParamNames[i]
-                    : parameterDescription.Name;
+
+                var matchedMethodParamName = parameterDescription.ModelMetadata?.ContainerType == null
+                    ? parameterDescription.Name
+                    : parameterDescription.ParameterDescriptor.Name;
 
                 actionModel.AddParameter(ParameterApiDescriptionModel.Create(
                         parameterDescription.Name,

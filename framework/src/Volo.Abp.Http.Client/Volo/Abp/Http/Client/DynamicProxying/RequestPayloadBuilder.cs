@@ -79,6 +79,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                         continue;
                     }
 
+                    var parameterName = parameter.NameOnMethod == parameter.Name
+                        ? parameter.Name
+                        : $"{parameter.NameOnMethod}.{parameter.Name}";
+
                     if (value is IRemoteStreamContent remoteStreamContent)
                     {
                         var stream = remoteStreamContent.GetStream();
@@ -91,7 +95,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                         {
                             streamContent.Headers.ContentType = new MediaTypeHeaderValue(remoteStreamContent.ContentType);
                         }
-                        formData.Add(streamContent, parameter.Name, parameter.Name);
+
+                        formData.Add(streamContent, parameterName, parameterName);
                     }
                     else if (value is IEnumerable<IRemoteStreamContent> remoteStreamContents)
                     {
@@ -107,12 +112,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                             {
                                 streamContent.Headers.ContentType = new MediaTypeHeaderValue(content.ContentType);
                             }
-                            formData.Add(streamContent, parameter.Name, parameter.Name);
+
+                            formData.Add(streamContent, parameterName, parameterName);
                         }
                     }
                     else
                     {
-                        formData.Add(new StringContent(value.ToString(), Encoding.UTF8), parameter.Name);
+
+                        formData.Add(new StringContent(value.ToString(), Encoding.UTF8), parameterName);
                     }
                 }
 

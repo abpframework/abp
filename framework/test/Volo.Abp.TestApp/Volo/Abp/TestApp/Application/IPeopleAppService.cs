@@ -12,6 +12,8 @@ namespace Volo.Abp.TestApp.Application
     {
         Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter);
 
+        Task<List<string>> GetPhones(GetPersonPhonesFilter input1, GetPersonPhonesFilter input2);
+
         Task<List<string>> GetParams(IEnumerable<Guid> ids, string[] names);
 
         Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto);

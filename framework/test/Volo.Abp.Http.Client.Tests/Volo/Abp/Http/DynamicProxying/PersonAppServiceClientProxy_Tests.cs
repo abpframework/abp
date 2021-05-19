@@ -53,6 +53,23 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         [Fact]
+        public async Task GetPhones()
+        {
+            var types = await _peopleAppService.GetPhones(
+                new GetPersonPhonesFilter()
+                {
+                    Type = PhoneType.Home
+                },
+                new GetPersonPhonesFilter()
+                {
+                    Type = PhoneType.Mobile
+                });
+
+            types.ShouldContain(x => x == PhoneType.Home.ToString());
+            types.ShouldContain(x => x == PhoneType.Mobile.ToString());
+        }
+
+        [Fact]
         public async Task GetParams()
         {
             var id1 = Guid.NewGuid();
