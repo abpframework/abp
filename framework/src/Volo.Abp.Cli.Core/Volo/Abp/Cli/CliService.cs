@@ -42,6 +42,8 @@ namespace Volo.Abp.Cli
         public async Task RunAsync(string[] args)
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
+            
+            var commandLineArgs = CommandLineArgumentParser.Parse(args);
 
 #if !DEBUG
             if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
@@ -49,8 +51,6 @@ namespace Volo.Abp.Cli
                 await CheckCliVersionAsync();
             }
 #endif
-            var commandLineArgs = CommandLineArgumentParser.Parse(args);
-
             try
             {
                 if (commandLineArgs.IsCommand("prompt"))
