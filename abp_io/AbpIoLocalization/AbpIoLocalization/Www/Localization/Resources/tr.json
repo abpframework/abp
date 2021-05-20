@@ -193,8 +193,6 @@
     "ClientSideDevelopmentDocumentationMessage": "Kullanıcı arayüzü (istemci tarafı) geliştirmeyle ilgili temel noktaları öğrenmek için {0} belgesine bakın.",
     "DatabaseProviderDocumentationMessage": "Veritabanı katmanı geliştirmeyle ilgili temel noktaları öğrenmek için {0} belgesine bakın.",
     "ABPCommercialExplanationMessage": "ABP Commercial, ABP Framework için premium modüller, temalar, araçlar ve destek sağlar.",
-    "FreeDDDBook": "Ücretsiz DDD Kitabı",
-    "New": "Yeni",
     "IntroducingDDD": "Domain Driven Design ile Tanışın",
     "DDDBookExplanation": "ABP Framework ile Domain Driven Design'ın uygulanması için pratik bir kılavuz.",
     "Overview": "Genel Bakış",

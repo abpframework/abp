@@ -231,8 +231,6 @@
     "ClientSideDevelopmentDocumentationMessage": "See the {0} document  to learn key points for user interface (client side) development.",
     "DatabaseProviderDocumentationMessage": "See {0} document   to learn key points for database layer development.",
     "ABPCommercialExplanationMessage": "ABP Commercial provides premium modules, themes, tooling and support for the ABP Framework.",
-    "FreeDDDBook": "Free DDD E-book",
-    "New": "New",
     "IntroducingDDD": "Introducing Domain Driven Design",
     "DDDBookExplanation": "A practical guide for implementing the Domain Driven Design with the ABP Framework.",
     "Overview": "Overview",
