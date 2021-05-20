@@ -6,20 +6,20 @@ This module provides CMS (Content Management System) capabilities for your appli
 
 The following features are currently available:
 
-* Provides a [**page**](cms-kit/Pages.md) management system to manage dynamic pages with dynamic URLs.
-* Provides a [**blog**](cms-kit/Blog-System.md) system to create publish blog posts with multiple blog support.
-* Provides a [**tagging**](cms-kit/Tag-Management.md) system to tag any kind of resource, like a blog post.
-* Provides a [**comment**](cms-kit/Comment-System.md) system to add comments feature to any kind of resource, like blog post or a product review page.
-* Provides a [**reaction**](cms-kit/Reaction-System.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
-* Provides a [**rating**](cms-kit/Rating-System.md) system to add rating feature to any kind of resource.
+* Provides a [**page**](Pages.md) management system to manage dynamic pages with dynamic URLs.
+* Provides a [**blog**](Blog-System.md) system to create publish blog posts with multiple blog support.
+* Provides a [**tagging**](Tag-Management.md) system to tag any kind of resource, like a blog post.
+* Provides a [**comment**](Comment-System.md) system to add comments feature to any kind of resource, like blog post or a product review page.
+* Provides a [**reaction**](Reaction-System.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
+* Provides a [**rating**](Rating-System.md) system to add rating feature to any kind of resource.
 
 Click to a feature to understand and learn how to use it.
 
-All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, by the help of the [Global Features](../Global-Features.md) system.
+All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, by the help of the [Global Features](../../Global-Features.md) system.
 
 ## How to Install
 
-[ABP CLI](../CLI.md) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
+[ABP CLI](../../CLI.md) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
 
 ```bash
 abp add-module Volo.CmsKit
@@ -33,7 +33,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 });
 ```
 
-Instead of enabling all, you may prefer to enable the features one by one. The following example enables only the [tags](cms-kit/Tag-Management.md) and [comments](cms-kit/Comment-System.md) features:
+Instead of enabling all, you may prefer to enable the features one by one. The following example enables only the [tags](Tag-Management.md) and [comments](Comment-System.md) features:
 
 ````csharp
 GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
