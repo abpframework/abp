@@ -1,6 +1,7 @@
 {
  "culture": "fr",
  "texts": {
+  "GivenTenantIsNotExist": "Adott bérlő nem létezik: {0}",
   "GivenTenantIsNotAvailable": "Le Tenant donné n'est pas disponible: {0}",
   "Tenant": "Tenant",
   "Switch": "Changer",

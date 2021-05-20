@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@abp/ng.core": "~4.3.1",
+    "@abp/ng.account": "~4.3.1",
     "@abp/ng.feature-management": "~4.3.1",
     "@abp/ng.identity": "~4.3.1",
     "@abp/ng.permission-management": "~4.3.1",

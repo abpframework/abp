@@ -1,13 +1,12 @@
-﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using Microsoft.Extensions.Localization
+﻿@using Microsoft.Extensions.Localization
 @using Volo.Abp.Users
 @using Volo.Abp.MultiTenancy
 @using global::Localization.Resources.AbpUi
+@inherits AbpComponentBase
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
-@inject SignOutSessionStateManager SignOutManager
 @inject IStringLocalizer<AbpUiResource> UiLocalizer
 <AuthorizeView>
     <Authorized>
@@ -39,23 +38,3 @@
         <a class="nav-link" href="authentication/login">@UiLocalizer["Login"]</a>
     </NotAuthorized>
 </AuthorizeView>
-@code{
-
-    private async Task NavigateToAsync(string uri, string target = null)
-    {
-        if (target == "_blank")
-        {
-            await JsRuntime.InvokeVoidAsync("open", uri, target);
-        }
-        else
-        {
-            Navigation.NavigateTo(uri);
-        }
-    }
-
-    private async Task BeginSignOut()
-    {
-        await SignOutManager.SetSignOutState();
-        await NavigateToAsync("authentication/logout");
-    }
-}

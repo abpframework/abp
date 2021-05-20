@@ -2,6 +2,18 @@
   "culture": "nl",
   "texts": {
     "Settings": "Instellingen",
-    "SuccessfullySaved": "Succesvol opgeslagen"
+    "SuccessfullySaved": "Succesvol opgeslagen",
+    "Permission:SettingManagement": "Instellingenbeheer",
+    "Permission:Emailing": "E-mail",
+    "Menu:Emailing": "E-mail",
+    "SmtpHost": "Host",
+    "SmtpPort": "Poort",
+    "SmtpUserName": "Gebruikersnaam",
+    "SmtpPassword": "Wachtwoord",
+    "SmtpDomain": "Domein",
+    "SmtpEnableSsl": "Gebruik ssl",
+    "SmtpUseDefaultCredentials": "Gebruik standaard inloggegevens",
+    "DefaultFromAddress": "Standaard 'van'-adres",
+    "DefaultFromDisplayName": "Standaard 'van'-adres weergavenaam"
   }
 }

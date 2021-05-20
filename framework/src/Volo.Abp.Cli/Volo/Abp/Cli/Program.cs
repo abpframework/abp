@@ -40,8 +40,10 @@ namespace Volo.Abp.Cli
                 await application.ServiceProvider
                     .GetRequiredService<CliService>()
                     .RunAsync(args);
-
+                
                 application.Shutdown();
+                
+                Log.CloseAndFlush();
             }
         }
     }
