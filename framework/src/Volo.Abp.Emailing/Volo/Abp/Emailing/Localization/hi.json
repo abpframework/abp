@@ -1,0 +1,25 @@
+{
+  "culture": "hi",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "पते से डिफ़ॉल्ट",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "प्रदर्शन नाम से डिफ़ॉल्ट",
+    "DisplayName:Abp.Mailing.Smtp.Host": "मेज़बान",
+    "DisplayName:Abp.Mailing.Smtp.Port": "बंदरगाह",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "उपयोगकर्ता नाम",
+    "DisplayName:Abp.Mailing.Smtp.Password": "कुंजिका",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "डोमेन",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "SSL सक्षम करें",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "डिफ़ॉल्ट क्रेडेंशियल्स का उपयोग करें",
+    "Description:Abp.Mailing.DefaultFromAddress": "पते से डिफ़ॉल्ट",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "प्रदर्शन नाम से डिफ़ॉल्ट",
+    "Description:Abp.Mailing.Smtp.Host": "SMTP लेनदेन के लिए उपयोग किए गए होस्ट का नाम या IP पता।",
+    "Description:Abp.Mailing.Smtp.Port": "SMTP लेनदेन के लिए उपयोग किया जाने वाला पोर्ट।",
+    "Description:Abp.Mailing.Smtp.UserName": "उपयोगकर्ता नाम क्रेडेंशियल्स के साथ जुड़ा हुआ है।",
+    "Description:Abp.Mailing.Smtp.Password": "क्रेडेंशियल्स के साथ जुड़े उपयोगकर्ता नाम का पासवर्ड।",
+    "Description:Abp.Mailing.Smtp.Domain": "डोमेन या कंप्यूटर का नाम जो क्रेडेंशियल्स को सत्यापित करता है।",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "क्या SmtpClient कनेक्शन को एन्क्रिप्ट करने के लिए सिक्योर सॉकेट्स लेयर (एसएसएल) का उपयोग करता है।",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "क्या DefaultCredentials अनुरोधों के साथ भेजे जाते हैं।",
+    "TextTemplate:StandardEmailTemplates.Layout": "डिफ़ॉल्ट ईमेल लेआउट टेम्पलेट",
+    "TextTemplate:StandardEmailTemplates.Message": "ईमेल के लिए सरल संदेश टेम्पलेट"
+  }
+}

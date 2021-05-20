@@ -39,6 +39,11 @@ namespace Volo.Abp.EntityFrameworkCore
             DefaultConfigureAction = action;
         }
 
+        public bool IsConfiguredDefault()
+        {
+            return DefaultConfigureAction != null;
+        }
+
         public void PreConfigure<TDbContext>([NotNull] Action<AbpDbContextConfigurationContext<TDbContext>> action)
             where TDbContext : AbpDbContext<TDbContext>
         {
@@ -59,6 +64,16 @@ namespace Volo.Abp.EntityFrameworkCore
             Check.NotNull(action, nameof(action));
 
             ConfigureActions[typeof(TDbContext)] = action;
+        }
+        
+        public bool IsConfigured<TDbContext>()
+        {
+            return IsConfigured(typeof(TDbContext));
+        }
+        
+        public bool IsConfigured(Type dbContextType)
+        {
+            return ConfigureActions.ContainsKey(dbContextType);
         }
 
         internal Type GetReplacedTypeOrSelf(Type dbContextType)

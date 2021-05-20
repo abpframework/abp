@@ -272,6 +272,11 @@
     "PaymentProduct": "Payment Product",
     "ProductName": "Product Name",
     "Code": "Code",
-    "GenerateInvoice": "Generate Invoice"
+    "GenerateInvoice": "Generate Invoice",
+    "ExportOrganizationsToExcel": "Export to Excel",
+    "ThisExtensionIsNotAllowed": "This extension is not allowed.",
+    "TheFileIsTooLarge": "The file is too large!",
+    "ArticleDeletionConfirmationMessage": "Are you sure you want to hard delete this article?",
+    "ChooseCoverImage": "Choose a cover image..."
   }
 }

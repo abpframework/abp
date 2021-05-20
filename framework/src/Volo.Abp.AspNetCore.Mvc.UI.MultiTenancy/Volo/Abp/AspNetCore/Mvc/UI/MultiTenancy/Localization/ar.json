@@ -1,6 +1,7 @@
 ﻿{
   "culture": "ar",
   "texts": {
+    "GivenTenantIsNotExist": "المستأجر المحدد غير موجود: {0}",
     "GivenTenantIsNotAvailable": "الجهة المحددة غير متاحة: {0}",
     "Tenant": "الجهة",
     "Switch": "تغيير",

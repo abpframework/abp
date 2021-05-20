@@ -1,0 +1,46 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.IdentityServer.Domain": {
+      "path": "src/Volo.Abp.IdentityServer.Domain/Volo.Abp.IdentityServer.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.IdentityServer.Domain.Shared": {
+      "path": "src/Volo.Abp.IdentityServer.Domain.Shared/Volo.Abp.IdentityServer.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.IdentityServer.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.IdentityServer.EntityFrameworkCore/Volo.Abp.IdentityServer.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.IdentityServer.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.IdentityServer.EntityFrameworkCore.Tests/Volo.Abp.IdentityServer.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.IdentityServer.MongoDB": {
+      "path": "src/Volo.Abp.IdentityServer.MongoDB/Volo.Abp.IdentityServer.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.IdentityServer.TestBase": {
+      "path": "test/Volo.Abp.IdentityServer.TestBase/Volo.Abp.IdentityServer.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.IdentityServer.MongoDB.Tests": {
+      "path": "test/Volo.Abp.IdentityServer.MongoDB.Tests/Volo.Abp.IdentityServer.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.IdentityServer.Domain.Tests": {
+      "path": "test/Volo.Abp.IdentityServer.Domain.Tests/Volo.Abp.IdentityServer.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.PermissionManagement.Domain.IdentityServer": {
+      "path": "src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo.Abp.PermissionManagement.Domain.IdentityServer.abppkg.json",
+      "folder": "src"
+    }
+  }
+}

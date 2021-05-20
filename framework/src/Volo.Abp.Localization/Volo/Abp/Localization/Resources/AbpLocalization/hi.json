@@ -1,0 +1,7 @@
+{
+  "culture": "hi",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "डिफ़ॉल्ट भाषा",
+    "Description:Abp.Localization.DefaultLanguage": "एप्लिकेशन की डिफ़ॉल्ट भाषा।"
+  }
+}

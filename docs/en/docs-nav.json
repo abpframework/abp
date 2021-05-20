@@ -9,7 +9,21 @@
       "items": [
         {
           "text": "Web Application",
-          "path": "Getting-Started.md"
+          "path": "Getting-Started.md",
+          "items": [
+            {
+              "text": "1: Setup Your Development Environment",
+              "path": "Getting-Started-Setup-Environment.md"
+            },
+            {
+              "text": "2: Creating a New Solution",
+              "path": "Getting-Started-Create-Solution.md"
+            },
+            {
+              "text": "3: Running the Solution",
+              "path": "Getting-Started-Running-Solution.md"
+            }
+          ]
         },
         {
           "text": "Console Application",
@@ -85,7 +99,17 @@
     },
     {
       "text": "CLI",
-      "path": "CLI.md"
+      "path": "CLI.md",
+      "items": [
+        {
+          "text": "Build Command",
+          "path": "CLI-BuildCommand.md"
+        },
+        {
+          "text": "Create Solution Sample Commands",
+          "path": "CLI-New-Command-Samples.md"
+        }
+      ]
     },
     {
       "text": "Startup Templates",
@@ -350,7 +374,17 @@
         },
         {
           "text": "Text Templating",
-          "path": "Text-Templating.md"
+          "path": "Text-Templating.md",
+          "items": [
+            {
+              "text": "Razor Integration",
+              "path": "Text-Templating-Razor.md"
+            },
+            {
+              "text": "Scriban Integration",
+              "path": "Text-Templating-Scriban.md"
+            }
+          ]
         },
         {
           "text": "Timing",
@@ -363,6 +397,10 @@
         {
           "text": "Cancellation Token Provider",
           "path": "Cancellation-Token-Provider.md"
+        },
+        {
+          "text": "Simple State Checker",
+          "path": "SimpleStateChecker.md"
         }
       ]
     },
@@ -385,8 +423,69 @@
               "path": "Customizing-Application-Modules-Guide.md"
             },
             {
+              "text": "Customizing/Extending Entities",
+              "path": "Customizing-Application-Modules-Extending-Entities.md"
+            },
+            {
+              "text": "Customizing/Overriding Services",
+              "path": "Customizing-Application-Modules-Overriding-Services.md"
+            },
+            {
+              "text": "Module Entity Extensions",
+              "path": "Module-Entity-Extensions.md"
+            },
+            {
               "text": "Best Practices",
-              "path": "Best-Practices/Index.md"
+              "path": "Best-Practices/Index.md",
+              "items": [
+                {
+                  "text": "Module Architecture",
+                  "path": "Best-Practices/Module-Architecture.md"
+                },
+                {
+                  "text": "Domain Layer",
+                  "items": [
+                    {
+                      "text": "Entities",
+                      "path": "Best-Practices/Entities.md"
+                    },
+                    {
+                      "text": "Repositories",
+                      "path": "Best-Practices/Repositories.md"
+                    },
+                    {
+                      "text": "Domain Services",
+                      "path": "Best-Practices/Domain-Services.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "Application Layer",
+                  "items": [
+                    {
+                      "text": "Application Services",
+                      "path": "Best-Practices/Application-Services.md"
+                    },
+                    {
+                      "text": "Data Transfer Objects",
+                      "path": "Best-Practices/Data-Transfer-Objects.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "Data Access",
+                  "items": [
+                    {
+                      "text": "Entity Framework Core Integration",
+                      "path": "Best-Practices/Entity-Framework-Core-Integration.md"
+                    },
+                    {
+                      "text": "MongoDB Integration",
+                      "path": "Best-Practices/MongoDB-Integration.md"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -403,6 +502,10 @@
                 {
                   "text": "Entities & Aggregate Roots",
                   "path": "Entities.md"
+                },
+                {
+                  "text": "Multi Lingual Entities",
+                  "path": "Multi-Lingual-Entities.md"
                 },
                 {
                   "text": "Value Objects",
@@ -631,6 +734,18 @@
             {
               "text": "Customize/Extend the UI",
               "path": "UI/AspNetCore/Customization-User-Interface.md"
+            },
+            {
+              "text": "Entity Action Extensions",
+              "path": "UI/AspNetCore/Entity-Action-Extensions.md"
+            },
+            {
+              "text": "Data Table Column Extensions",
+              "path": "UI/AspNetCore/Data-Table-Column-Extensions.md"
+            },
+            {
+              "text": "Page Toolbar Extensions",
+              "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
             }
           ]
         },
@@ -817,6 +932,10 @@
                 {
                   "text": "Multi Tenancy",
                   "path": "UI/Angular/Multi-Tenancy.md"
+                },
+                {
+                  "text": "Account Module",
+                  "path": "UI/Angular/Account-Module"
                 }
               ]
             },
@@ -870,12 +989,36 @@
                 {
                   "text": "Ellipsis",
                   "path": "UI/Angular/Ellipsis-Directive.md"
+                },
+                {
+                  "text": "Context Strategy",
+                  "path": "UI/Angular/Context-Strategy.md"
+                },
+                {
+                  "text": "Cross Origin Strategy",
+                  "path": "UI/Angular/Cross-Origin-Strategy.md"
+                },
+                {
+                  "text": "Dom Strategy",
+                  "path": "UI/Angular/Dom-Strategy.md"
+                },
+                {
+                  "text": "Container Strategy",
+                  "path": "UI/Angular/Container-Strategy.md"
+                },
+                {
+                  "text": "Content Security Strategy",
+                  "path": "UI/Angular/Content-Security-Strategy.md"
                 }
               ]
             },
             {
               "text": "Customization",
               "items": [
+                {
+                  "text": "Customization Guide",
+                  "path": "UI/Angular/Customization-User-Interface.md"
+                },
                 {
                   "text": "Modifying the Menu",
                   "path": "UI/Angular/Modifying-the-Menu.md"
@@ -935,6 +1078,10 @@
           "text": "Common",
           "items": [
             {
+              "text": "Overriding the User Interface",
+              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+            },
+            {
               "text": "Utilities",
               "items": [
                 {
@@ -976,7 +1123,17 @@
                 },
                 {
                   "text": "To Oracle",
-                  "path": "Entity-Framework-Core-Oracle.md"
+                  "path": "Entity-Framework-Core-Oracle.md",
+                  "items": [
+                    {
+                      "text": "Oracle",
+                      "path": "Entity-Framework-Core-Oracle-Official.md"
+                    },
+                    {
+                      "text": "Oracle Devart",
+                      "path": "Entity-Framework-Core-Oracle-Devart.md"
+                    }
+                  ]
                 },
                 {
                   "text": "To SQLite",
@@ -1104,7 +1261,56 @@
         },
         {
           "text": "Migration Guides",
-          "path": "Migration-Guides/Index.md"
+          "path": "Migration-Guides/Index.md",
+          "items": [
+            {
+              "text": "MVC / Razor Pages",
+              "items": [
+                {
+                  "text": "3.3 to 4.0",
+                  "path": "Migration-Guides/Abp-4_0-MVC-Razor-Pages.md"
+                }
+              ]
+            },
+            {
+              "text": "Blazor",
+              "items": [
+                {
+                  "text": "3.2 to 3.3",
+                  "path": "Migration-Guides/BlazorUI-3_3.md"
+                },
+                {
+                  "text": "3.3 to 4.0",
+                  "path": "Migration-Guides/Abp-4_0-Blazor.md"
+                }
+              ]
+            },
+            {
+              "text": "Angular",
+              "items": [
+                {
+                  "text": "3.3 to 4.0",
+                  "path": "Migration-Guides/Abp-4_0-Angular.md"
+                }
+              ]
+            },
+            {
+              "text": "3.3 to 4.0",
+              "path": "Migration-Guides/Abp-4_0.md"
+            },
+            {
+              "text": "4.2",
+              "path": "Migration-Guides/Abp-4_2.md"
+            },
+            {
+              "text": "4.x to 4.3",
+              "path": "Migration-Guides/Abp-4_3.md"
+            },
+            {
+              "text": "Upgrading the Startup Template",
+              "path": "Migration-Guides/Upgrading-Startup-Template.md"
+            }
+          ]
         }
       ]
     },

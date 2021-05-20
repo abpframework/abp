@@ -21,7 +21,7 @@
     "CmsKit:BlogPost:0001": "Aynı url etiketi zaten mevcut.",
     "CmsKit:Comments:0001": "{0} ögesi yorumlanabilir değil.",
     "CmsKit:Media:0002": "Bu öge için medya eklenemez.",
-    "CmsKit:Page:0001": "Girilen url ({0}) kullanımdadır.",
+    "CmsKit:Page:0001": "Girilen url ({Slug}) kullanımdadır. Başka bir url giriniz.",
     "CmsKit:Rating:0001": "{EntityType}, puanlanabilir değil.",
     "CmsKit:Reaction:0001": "Bu ögeye tepki verilemez.",
     "CmsKit:Tag:0002": "Bu öge etiketlenebilir değil.",
