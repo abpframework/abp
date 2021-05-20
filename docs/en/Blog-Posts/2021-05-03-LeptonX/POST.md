@@ -1,10 +1,10 @@
 # LEPTON NEXT GENERATION
 
-We are delighted and proud to announce that the next generation of [Lepton Theme](https://leptontheme.com/) which will be referred as `LeptonX` is on the way. The initial version is built upon Bootstrap v4. It is because, when we started working on this project, Bootstrap v5 was still on beta versions. We've decided that it would be a good idea to start with a stable Bootstrap version and also to make it extremely easy for ABP users to switch to the `LeptonX` since ABP packages are already dependant on Bootstrap v4.
+We are delighted and proud to announce that the next generation of [Lepton Theme](https://leptontheme.com/) which will be referred as `LeptonX` is on the way. The initial version has been built upon Bootstrap v4. It is because, when we started working on this project, Bootstrap v5 was still on beta versions. We've decided that it would be a good idea to start with a stable Bootstrap version and also to make it extremely easy for ABP users to switch to the `LeptonX` since ABP packages are already dependant on Bootstrap v4.
 
 ![An image showing a tablet, a mobile, and a laptop device with LeptonX theme on their screens](./all-devices.png)
 
-## Lite vs Pro
+## Lite vs Pro
 
 The previous version of Lepton Theme has been only available to Commercial ABP customers and it has never been as a standalone template. With `LeptonX`, we aim at a broader audience. With this goal in mind, `LeptonX` will come in different shapes as follows:
 - A template with HTML, VanillaJS, CSS
@@ -28,7 +28,8 @@ When people talk about Responsive Web Applications, they usually refer to a side
 
 On the other hand, widely used native mobile applications usually employ a tab menu stick to the bottom of the screen. People have become acquainted with this type of experience. With this UX in mind, menus in the `LeptonX` theme switches to the tab menu on mobile resolution as opposed to the hamburger menu. 
 
-![An iPhone image showing LeptonX theme mobile application](./mobile1.png)
+![Three iPhones showing LeptonX theme for mobile resolution in dark, dim and light themes](./mobiles.png)
+![Three iPads showing LeptonX theme for tablet resolution in dark, dim and light themes](./tablets.png)
 
 ** In the Lite version, a hamburger menu will take its place and behave like a standard RWA.
 
@@ -45,6 +46,8 @@ It is built with CSS variables which enables runtime theme building. Your users 
 The following layout will be provided as default for both lite and pro versions. 
 
 ![An image showing default layout for LeptonX lite and pro packages](./default-layout.png)
+
+** The Context Menu shown on the side is only available in Pro.
 
 ## Multiple Layouts (Pro Only)
 
