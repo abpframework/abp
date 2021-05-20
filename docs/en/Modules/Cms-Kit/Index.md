@@ -62,8 +62,6 @@ CMS kit packages are designed for various usage scenarios. If you check the [CMS
 CMS Kit module admin side adds the following items to the main menu, under the *CMS* menu item:
 
 * **Pages**: Page management page.
-* **Blogs**: Blog management page.
-* **Blog Posts**: Blog post management page.
 * **Tags**: Tag management page.
 * **Comments**: Comment management page.
 
@@ -148,3 +146,15 @@ You can also customize the reaction icons shown in the reaction component.
 You can use the rating component to add rating a mechanism to your content. Here how the rating component looks on a sample page.
 
 ![ratings](../../images/cmskit-module-ratings.png)
+
+## Internals
+
+### Table / collection prefix & schema
+
+All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+
+### Connection string
+
+This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
+
+See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.

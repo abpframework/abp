@@ -1,21 +1,17 @@
-# Blog System
+# CMS Kit: Blogging
 
-CMS kit provides a **blog** system to add blogs & posts to a public website. This section describes the details of the blog system.
+The blogging feature provides the necessary UI to manage and render blogs and blog posts.
 
-## Feature
+## Internals
 
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS Kit-related features are enabled by default, if you create the solution with the public website option. If you're installing the CMS Kit manually or want to enable the blog feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure `method.
+Menu Items
 
-```csharp
-GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-{
-	cmsKit.Blogs.Enable();
-});
-```
+The following menu items are added by the blogging feature to the admin application:
 
-# Internals
+* **Blogs**: Blog management page.
+* **Blog Posts**: Blog post management page.
 
-## Domain Layer
+### Domain Layer
 
 #### Aggregates
 
@@ -27,9 +23,7 @@ This module follows the [Entity Best Practices & Conventions](https://docs.abp.i
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
-
-Following custom repositories are defined for this feature:
+This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide. The following repositories are defined for this feature:
 
 - `IBlogRepository`
 - `IBlogPostRepository`
@@ -39,47 +33,29 @@ Following custom repositories are defined for this feature:
 
 This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
 
-- `BlogManager`: Includes some operations for `Blog` aggreate root to keep data consistency.
-  - `CreateAsync`: Creates a new `Blog` entity and makes sure slug is used one time.
-  - `UpdateAsync`: Updates existing `Blog` entity and makes sure slug is used one time.
-- `BlogPostManager`: Includes some operations for `BlogPost` aggreagate root such as creating & updating.
-  - `CreateAsync`: Creates a new BlogPost and makes sure slug is used only one time.
-  - `SetSlugUrlAsync`: Sets `UrlSlug` property of BlogPost entity and makes sure slug isn't duplicated in same blog.
+- `BlogManager`: Includes some operations for `Blog` aggregate root to keep data consistency.
+- `BlogPostManager`: Includes some operations for `BlogPost` aggregate root such as creating & updating.
 - `BlogFeatureManager`: Includes some operations for managing blog features.
-  - `SetAsync`: Sets a feature enabled/disabled for a Blog.
-  - `SetDefaultsAsync`: Resets all feature configuration for a Blog.
 
 ### Application layer
 
 #### Application Services
 
-##### Admin
-
-- `BlogAdminAppService` _(implements `IBlogAdminAppService`)_: Implements use cases of blog management.
-- `BlogFeatureAdminAppService` _(implements `IBlogFeatureAdminAppService`)_: Implements use cases of blog feature management.
-- `BlogPostAdminAppService` _(implements `IBlogPostAdminAppService`)_: Implements use cases of blog post management.
-
 ##### Common
 
-- `BlogFeatureAppService` _(implements I`BlogFeatureAppService`)_: Implements feature checking operations.
+- `BlogFeatureAppService` _(implements I`BlogFeatureAppService`)_
+
+##### Admin
+
+- `BlogAdminAppService` _(implements `IBlogAdminAppService`)_
+- `BlogFeatureAdminAppService` _(implements `IBlogFeatureAdminAppService`)_
+- `BlogPostAdminAppService` _(implements `IBlogPostAdminAppService`)_
 
 ##### Public
 
-- `BlogPostPublicAppService` _(implements `IBlogPostPublicAppService`)_: Implements use cases of blog posts management on public websites.
+- `BlogPostPublicAppService` _(implements `IBlogPostPublicAppService`)_
 
 ### Database providers
-
-#### Common
-
-##### Table / collection prefix & schema
-
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
-
-##### Connection string
-
-This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
-
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
 
 #### Entity Framework Core
 
