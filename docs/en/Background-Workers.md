@@ -7,6 +7,15 @@ Background workers are simple independent threads in the application running in 
 * A background worker can run periodically to **delete old logs**.
 * A background worker can run periodically to **determine inactive users** and **send emails** to get users to return to your application.
 
+## Installation
+
+### Using NuGet
+
+Open a command line window in the folder of the project (.csproj file) and type the following command:
+
+````bash
+Install-package Volo.Abp.BackgroundWorkers
+````
 
 ## Create a Background Worker
 
