@@ -12,10 +12,13 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public HashSet<Type> IgnoredControllersOnModelExclusion { get; }
 
+        public bool AutoModelValidation { get; set; }
+
         public AbpAspNetCoreMvcOptions()
         {
             ConventionalControllers = new AbpConventionalControllerOptions();
             IgnoredControllersOnModelExclusion = new HashSet<Type>();
+            AutoModelValidation = true;
         }
     }
 }
