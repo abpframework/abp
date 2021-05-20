@@ -21,6 +21,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
             if (context.Template.Name == AppProTemplate.TemplateName ||
                 context.Template.Name == MicroserviceProTemplate.TemplateName ||
+                context.Template.Name == MicroserviceServiceProTemplate.TemplateName ||
                 context.Template.Name == ModuleProTemplate.TemplateName)
             {
                 pipeline.Steps.Add(new LicenseCodeReplaceStep()); // todo: move to custom steps?
