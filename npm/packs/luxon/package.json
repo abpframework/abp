@@ -1,11 +1,11 @@
 {
-  "version": "4.3.0",
+  "version": "4.3.1",
   "name": "@abp/luxon",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~4.3.0",
+    "@abp/core": "~4.3.1",
     "luxon": "^1.24.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
