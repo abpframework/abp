@@ -37,7 +37,7 @@ namespace Volo.Abp.BlobStoring.Aws
                 containerName = Regex.Replace(containerName, "-$", string.Empty);
                 containerName = Regex.Replace(containerName, "^\\.", string.Empty);
                 containerName = Regex.Replace(containerName, "\\.$", string.Empty);
-                containerName = Regex.Replace(containerName, "^(?:(?:^|\\.)(?:2(?:5[0-5]|[0-4]\\d)|1?\\d?\\d)){4}$", "");
+                containerName = Regex.Replace(containerName, "^(?:(?:^|\\.)(?:2(?:5[0-5]|[0-4]\\d)|1?\\d?\\d)){4}$", string.Empty);
 
                 if (containerName.Length < 3)
                 {
