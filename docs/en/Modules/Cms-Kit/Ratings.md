@@ -27,7 +27,7 @@ Configure<CmsKitRatingOptions>(options =>
 
 - `EntityType`: Name of the entity type.
 
-## MVC UI
+## The Rating Widget
 
 The ratings system provides a rating widget to allow users send ratings to resources in public websites. You can simply place the widget on a page like below. 
 

@@ -18,10 +18,11 @@ CMS Kit module admin side adds the following items to the main menu, under the *
 
 Pages page is used to manage dynamic pages in the system.
 
-![pages-page](D:\Github\abp\docs\en\images\cmskit-module-pages-page.png)
+![pages-page](../../images/cmskit-module-pages-page.png)
 
 You can create or edit an existing page on this page.
 
-![pages-edit](D:\Github\abp\docs\en\images\cmskit-module-pages-edit.png)
+![pages-edit](../../images/cmskit-module-pages-edit.png)
 
 When you create a page, you can access the created page via `/pages/{slug}` URL.
+
