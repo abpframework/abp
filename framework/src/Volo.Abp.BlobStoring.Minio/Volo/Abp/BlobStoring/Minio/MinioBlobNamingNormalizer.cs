@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
@@ -17,17 +18,28 @@ namespace Volo.Abp.BlobStoring.Minio
                 // All letters in a container name must be lowercase.
                 containerName = containerName.ToLower();
 
-                // Container names can contain only letters, numbers, and the dash (-) character.
-                containerName = Regex.Replace(containerName, "[^a-z0-9-]", string.Empty);
+                // Container names must be from 3 through 63 characters long.
+                if (containerName.Length > 63)
+                {
+                    containerName = containerName.Substring(0, 63);
+                }
 
-                // Every dash (-) character must be immediately preceded and followed by a letter or number;
-                // consecutive dashes are not permitted in container names.
-                // Container names must start or end with a letter or number
-                containerName = Regex.Replace(containerName, "-{2,}", "-");
+                // Bucket names can consist only of lowercase letters, numbers, dots (.), and hyphens (-).
+                containerName = Regex.Replace(containerName, "[^a-z0-9-.]", string.Empty);
+
+                // Bucket names must begin and end with a letter or number.
+                // Bucket names must not be formatted as an IP address (for example, 192.168.5.4).
+                // Bucket names can't start or end with hyphens adjacent to period
+                // Bucket names can't start or end with dots adjacent to period
+                containerName = Regex.Replace(containerName, "\\.{2,}", ".");
+                containerName = Regex.Replace(containerName, "-\\.", string.Empty);
+                containerName = Regex.Replace(containerName, "\\.-", string.Empty);
                 containerName = Regex.Replace(containerName, "^-", string.Empty);
                 containerName = Regex.Replace(containerName, "-$", string.Empty);
+                containerName = Regex.Replace(containerName, "^\\.", string.Empty);
+                containerName = Regex.Replace(containerName, "\\.$", string.Empty);
+                containerName = Regex.Replace(containerName, "^(?:(?:^|\\.)(?:2(?:5[0-5]|[0-4]\\d)|1?\\d?\\d)){4}$", String.Empty);
 
-                // Container names must be from 3 through 63 characters long.
                 if (containerName.Length < 3)
                 {
                     var length = containerName.Length;
@@ -35,11 +47,6 @@ namespace Volo.Abp.BlobStoring.Minio
                     {
                         containerName += "0";
                     }
-                }
-
-                if (containerName.Length > 63)
-                {
-                    containerName = containerName.Substring(0, 63);
                 }
 
                 return containerName;

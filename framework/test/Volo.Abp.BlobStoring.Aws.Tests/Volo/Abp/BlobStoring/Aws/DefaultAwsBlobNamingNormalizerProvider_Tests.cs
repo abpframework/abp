@@ -71,5 +71,15 @@ namespace Volo.Abp.BlobStoring.Aws
             filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.ShouldBe("this.is.my.container.name");
         }
+
+
+        [Fact]
+        public void NormalizeContainerName_Max_Length_Dash()
+        {
+            var filename = "-this-is-my-container-name-abpabpabpabpabpabpabpabp-a-b-p-a--b-p-";
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
+            filename.ShouldBe("this-is-my-container-name-abpabpabpabpabpabpabpabp-a-b-p-a--b");
+        }
+
     }
 }
