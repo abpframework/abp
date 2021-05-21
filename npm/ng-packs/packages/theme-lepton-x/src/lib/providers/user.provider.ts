@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, Injector } from '@angular/core';
-import { AbpUserProfileService } from '../services';
+import { AbpUserProfileService } from '../services/user-profile.service';
 
 export const LPX_USER_PROVIDER = {
   provide: APP_INITIALIZER,

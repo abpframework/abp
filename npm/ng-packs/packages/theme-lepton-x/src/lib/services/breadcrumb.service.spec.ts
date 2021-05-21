@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AbpLanguageService } from './language.service';
+import { AbpBreadcrumbService } from './breadcrumb.service';
 
-describe('LanguageService', () => {
-  let service: AbpLanguageService;
+describe('BreadcrumbService', () => {
+  let service: AbpBreadcrumbService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AbpLanguageService);
+    service = TestBed.inject(AbpBreadcrumbService);
   });
 
   it('should be created', () => {

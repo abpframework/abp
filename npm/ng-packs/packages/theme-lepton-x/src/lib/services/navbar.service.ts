@@ -5,7 +5,7 @@ import { NavbarItem, NavbarService as LeptonNavbarService } from '@lepton-x/comm
 @Injectable({
   providedIn: 'root',
 })
-export class NavbarService {
+export class AbpNavbarService {
   constructor(
     private routes: RoutesService,
     private navbarService: LeptonNavbarService,
