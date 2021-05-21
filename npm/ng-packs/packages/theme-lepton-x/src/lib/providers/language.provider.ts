@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, Injector } from '@angular/core';
-import { AbpLanguageService } from '../services';
+import { AbpLanguageService } from '../services/language.service';
 
 export const LPX_LANGUAGE_PROVIDER = {
   provide: APP_INITIALIZER,

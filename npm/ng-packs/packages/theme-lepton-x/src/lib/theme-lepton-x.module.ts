@@ -4,6 +4,7 @@ import { LeptonXCommonSettings } from '@lepton-x/common';
 import { ValidationErrorModule } from './components/validation-error';
 import { LPX_USER_PROVIDER } from './providers/user.provider';
 import { LPX_LANGUAGE_PROVIDER } from './providers/language.provider';
+import { LPX_BREADCRUMB_PROVIDER } from './providers/breadcrumb.provider';
 
 @NgModule({
   declarations: [],
@@ -19,6 +20,7 @@ export class ThemeLeptonXModule {
         ValidationErrorModule.forRoot().providers,
         LPX_USER_PROVIDER,
         LPX_LANGUAGE_PROVIDER,
+        LPX_BREADCRUMB_PROVIDER
       ],
     };
   }
