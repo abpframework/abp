@@ -33,17 +33,17 @@ Blog feature uses some of the other CMS Kit features. You can enable or disable 
 
 You can select/deselect the desired features for blog posts. 
 
-![features-dialog](D:\Github\abp\docs\en\images\cmskit-module-features-dialog.png)
+![features-dialog](../../images/cmskit-module-features-dialog.png)
 
 ### Blog Post Management
 
 When you create blogs, you can manage blog posts on this page.
 
-![blog-posts-page](D:\Github\abp\docs\en\images\cmskit-module-blog-posts-page.png)
+![blog-posts-page](../../images/cmskit-module-blog-posts-page.png)
 
 You can create and edit an existing blog post on this page. If you enable specific features such as tags, you can set tags for the blog post on this page.
 
-![blog-post-edit](D:\Github\abp\docs\en\images\cmskit-module-blog-post-edit.png)
+![blog-post-edit](../../images/cmskit-module-blog-post-edit.png)
 
 ## Internals
 
