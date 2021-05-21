@@ -28,7 +28,7 @@ If you want to make it in your solution with today, follow the steps in this art
 
 ## All the Changes in one PR!
 
-I've created a new solution with v4.3, then made all the changes in a pull request, so you can see all the changes line by line.  While this article will cover all, you may want to check the changes done in this PR **(TODO: LINK)** if you have problems with the implementation.
+I've created a new solution with v4.3, then made all the changes in a pull request, so you can see all the changes line by line.  While this article will cover all, you may want to [check the changes done in this PR](https://github.com/abpframework/abp-samples/pull/88) if you have problems with the implementation.
 
 ## The Steps
 
@@ -204,6 +204,26 @@ In this example, I had to change references and usages in the `DbMigrator`, `Web
 
 ### 6) Remove AppUser Entity
 
-We need to remove the `AppUser` entity, because EF Core can't map two classes to single table without an inheritance relation. So, remove this class and all the usages. You can replace the usages with `IdentityUser` if you need to query users in your application code.
+We need to remove the `AppUser` entity, because EF Core can't map two classes to single table without an inheritance relation. So, remove this class and all the usages. You can replace the usages with `IdentityUser` if you need to query users in your application code. See The AppUser Entity & Custom Properties section for more info.
+
+### 7) Create or move the migrations
+
+We've removed the `EntityFrameworkCore.DbMigrations` project. What about the migrations created and applied into the database until now? If you want to keep your migrations history, copy all the migrations from the `EntityFrameworkCore.DbMigrations` project to the `EntityFrameworkCore` project and manually change the `DbContext` type in the designer classes.
+
+If you want to clear the migrations history, but continue with the migrations already applied to the database, create a new database migration in the `EntityFrameworkCore` project, executing the following command in a command-line terminal in the directory of that project:
+
+````bash
+dotnet ef migrations add InitialUnified
+````
+
+You can specify a different migration name, surely. This will create a migration class that contains all the database tables you already have in the database. Keep calm and delete all the content in the `Up` and `Down` methods. Then you can apply the migration to the database:
+
+````bash
+dotnet ef database update
+````
+
+Your database won't have any change, because the migration is just empty and does nothing. From now, you can create new migrations as you change your entities, just like you normally do.
+
+## The AppUser Entity & Custom Properties
 
 TODO
