@@ -77,7 +77,7 @@ namespace Volo.Abp.BlobStoring.Minio
         {
             var filename = "-this-is-my-container-name-abpabpabpabpabpabpabpabp-a-b-p-a--b-p-";
             filename = _blobNamingNormalizer.NormalizeContainerName(filename);
-            filename.ShouldBe("this-is-my-container-name-abpabpabpabpabpabpabpabp-a-b-p--a-b");
+            filename.ShouldBe("this-is-my-container-name-abpabpabpabpabpabpabpabp-a-b-p-a--b");
         }
     }
 }
