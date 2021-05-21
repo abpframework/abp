@@ -86,13 +86,13 @@ builder.Entity<Book>(b =>
 
 ### Add New EF Core Migration
 
-Run the following command in the Package Manager Console (of the Visual Studio) to add a new database migration:
+The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
+
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project and type the following command:
 
 ````bash
-Add-Migration "Added_AuthorId_To_Book"
+dotnet ef migrations add Added_AuthorId_To_Book
 ````
-
-> Ensure that the `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the Default project and the `Acme.BookStore.DbMigrator` is the startup project, as always.
 
 This should create a new migration class with the following code in its `Up` method:
 
@@ -120,6 +120,8 @@ migrationBuilder.AddForeignKey(
 * Adds an `AuthorId` field to the `AppBooks` table.
 * Creates an index on the `AuthorId` field.
 * Declares the foreign key to the `AppAuthors` table.
+
+> If you are using Visual Studio, you may want to use `Add-Migration Added_AuthorId_To_Book -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
 
 {{end}}
 
