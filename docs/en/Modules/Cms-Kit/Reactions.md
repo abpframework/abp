@@ -1,23 +1,16 @@
 # Reaction System
 
-CMS kit provides a **reaction** system to add reactions feature to any kind of resource, like blog posts or comments. This section describes the details of the reaction system. 
+CMS kit provides a **reaction** system to add reactions feature to any kind of resource, like blog posts or comments.
 
-## Feature
+Reaction component allows users to react to your content via pre-defined icons/emojis. Here how the reactions component may looks like: 
 
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with the public website option. If you're installing the CMS kit manually or want to enable reaction feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
+![reactions](../../images/cmskit-module-reactions.png)
 
-```csharp
-GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-{
-    cmsKit.Reactions.Enable();
-});
-```
+You can also customize the reaction icons shown in the reaction component.
 
-# Options
+## Options
 
-## CmsKitReactionOptions
-
-You can use the reaction system to to add reactions feature to any kind of resource, like blog posts or comments, etc. The reaction system provides a mechanism to group reactions by entity types. For example, if you want to use the reaction system for products, you need to define an entity type named `Product`, and then add reactions under the defined entity type.
+Reaction system provides a mechanism to group reactions by entity types. For example, if you want to use the reaction system for products, you need to define an entity type named `Product`, and then add reactions under the defined entity type.
 
 `CmsKitReactionOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
 
@@ -39,16 +32,30 @@ Configure<CmsKitReactionOptions>(options =>
 });
 ```
 
-> If you're using the comment or blog features, the ABP framework defines predefined reactions for these features automatically. You can easily override or remove the predefined reactions in `Configure` method like shown above.
+> If you're using the comment or blog features, the ABP framework defines predefined reactions for these features automatically.
 
 `CmsKitReactionOptions` properties:
 
-- `EntityTypes`: List of defined entity types(`CmsKitReactionOptions`) in the reaction system.
+- `EntityTypes`: List of defined entity types (`CmsKitReactionOptions`) in the reaction system.
 
-`ReactionEntityTypeDefinition` properties:asdas
+`ReactionEntityTypeDefinition` properties:
 
 - `EntityType`: Name of the entity type.
-- `Reactions`: List of defined reactions(`ReactionDefinition`) in the entity type.
+- `Reactions`: List of defined reactions (`ReactionDefinition`) in the entity type.
+
+## The Reactions Widget
+
+The reaction system provides a reaction widget to allow users to send reactions to resources. You can place the widget on a page like below:
+
+```csharp
+@await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
+{
+  entityType = "Product",
+  entityId = "..."
+})
+```
+
+`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
 
 # Internals
 
@@ -111,18 +118,3 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 ##### Collections
 
 - **CmsUserReactions**
-
-### MVC UI
-
-The reaction system provides a reaction widget to allow users to send reactions to resources on public websites. You can place the widget on a page like below. 
-
-```csharp
-@await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new
-{
-  entityType = "entityType",
-  entityId = "entityId"
-})
-```
-You need to specify entity type and entity ID parameters. Entity type represents the group name you specified while defining the reactions in the domain module. Entity ID represents the unique identifier for the resource that users give reactions to, such as blog post ID or product ID.
-
-For more information about widgets see [widgets](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) documentation.
