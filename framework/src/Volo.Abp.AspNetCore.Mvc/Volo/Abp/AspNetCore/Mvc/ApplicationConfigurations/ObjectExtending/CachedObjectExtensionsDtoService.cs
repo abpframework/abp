@@ -141,17 +141,22 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                     OnTable = new ExtensionPropertyUiTableDto
                     {
                         IsVisible = propertyConfig.UI.OnTable.IsVisible
-                    },
-                    Lookup = new ExtensionPropertyUiLookupDto
-                    {
-                        Url = propertyConfig.UI.Lookup.Url,
-                        ResultListPropertyName = propertyConfig.UI.Lookup.ResultListPropertyName,
-                        DisplayPropertyName = propertyConfig.UI.Lookup.DisplayPropertyName,
-                        ValuePropertyName = propertyConfig.UI.Lookup.ValuePropertyName,
-                        FilterParamName = propertyConfig.UI.Lookup.FilterParamName
                     }
                 }
             };
+
+            if (!propertyConfig.UI.Lookup.Url.IsNullOrEmpty())
+            {
+                extensionPropertyDto.Ui.Lookup = new ExtensionPropertyUiLookupDto
+                {
+                    Url = propertyConfig.UI.Lookup.Url,
+                    ResultListPropertyName = propertyConfig.UI.Lookup.ResultListPropertyName,
+                    DisplayPropertyName = propertyConfig.UI.Lookup.DisplayPropertyName,
+                    ValuePropertyName = propertyConfig.UI.Lookup.ValuePropertyName,
+                    FilterParamName = propertyConfig.UI.Lookup.FilterParamName
+                };
+            }
+
 
             foreach (var attribute in propertyConfig.Attributes)
             {
