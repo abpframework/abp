@@ -43,7 +43,7 @@
     "Description:Abp.Account.EnableLocalLogin": "Indica se il server consentirà agli utenti di autenticarsi con un account locale.",
     "LoggedOutTitle": "Disconnesso",
     "LoggedOutText": "Sei stato disconnesso e verrai reindirizzato presto.",
-    "ReturnToText": "Fai clic qui per reindirizzare a {0}",
+    "ReturnToText": "Fare clic qui per tornare all'applicazione",
     "OrLoginWith": "Oppure accedi con:",
     "ForgotPassword": "Ha dimenticato la password?",
     "SendPasswordResetLink_Information": "Un link per reimpostare la password verrà inviato alla tua e-mail per reimpostare la password. Se non ricevi un'email entro pochi minuti, riprova.",
