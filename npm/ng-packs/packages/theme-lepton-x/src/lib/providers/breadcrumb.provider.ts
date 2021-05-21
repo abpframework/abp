@@ -9,8 +9,8 @@ export const LPX_BREADCRUMB_PROVIDER = {
 };
 
 function initBreadcrumb(injector: Injector) {
-  const userProfile = injector.get(AbpBreadcrumbService);
+  const breadcrumbService = injector.get(AbpBreadcrumbService);
   return () => {
-    userProfile.listenRouter();
+    breadcrumbService.listenRouter();
   };
 }
