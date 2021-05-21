@@ -54,7 +54,7 @@ namespace Volo.Abp.AuditLogging
                                           ?? new List<RemoteServiceErrorInfo>();
 
             var exceptions = remoteServiceErrorInfos.Any()
-                ? JsonSerializer.Serialize(remoteServiceErrorInfos, indented: false)
+                ? JsonSerializer.Serialize(remoteServiceErrorInfos, indented: true)
                 : null;
 
             var comments = auditLogInfo
