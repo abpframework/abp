@@ -1,25 +1,14 @@
 # Tag Management
 
-CMS kit provides a **tag** system to tag any kind of resources, like blog posts. This section describes the details of the tag system. 
+CMS kit provides a **tag** system to tag any kind of resources, like a blog post.
 
-## Feature
+## Options
 
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with public website option. If you're installing the CMS kit manually or want to enable the tag management feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
+The tag system provides a mechanism to group tags by entity types. For example, if you want to use the tag system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product` and add tags under these entity types.
 
-```csharp
-GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-{
-    cmsKit.Tags.Enable();
-});
-```
+`CmsKitTagOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics) class.
 
-# Options
-
-## CmsKitTagOptions
-
-You can use the tag system to tag any kind of resources, like blog posts, products, etc. The tag system provides a mechanism to group tags by entity types. For example, if you want to use the tag system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product` and add tags under these entity types.
-
-`CmsKitTagOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+**Example: Adding tagging support for products**
 
 ```csharp
 Configure<CmsKitTagOptions>(options =>
@@ -28,7 +17,7 @@ Configure<CmsKitTagOptions>(options =>
 });
 ```
 
-> If you're using the blog feature, the ABP framework defines an entity type for the blog feature automatically. You can easily override or remove the predefined entity types in `Configure` method like shown above.
+> If you're using the blog feature, the ABP framework defines an entity type for the blog feature automatically.
 
 `CmsKitTagOptions` properties:
 
@@ -38,13 +27,47 @@ Configure<CmsKitTagOptions>(options =>
 
 - `EntityType`: Name of the entity type.
 - `DisplayName`: Display name of the entity type. You can use a user friendly display name to show entity type definition on the admin website.
-- `CreatePolicies`: List of policy names allowing users to create tags under the entity type.
-- `UpdatePolicies`: List of policy names allowing users to update tags under the entity type.
-- `DeletePolicies`: List of policy names allowing users to delete tags under the entity type.
+- `CreatePolicies`: List of policy/permission names allowing users to create tags under the entity type.
+- `UpdatePolicies`: List of policy/permission names allowing users to update tags under the entity type.
+- `DeletePolicies`: List of policy/permission names allowing users to delete tags under the entity type.
 
-# Internals
+## The Tag Widget
 
-## Domain Layer
+The tag system provides a tag [widget](../../UI/AspNetCore/Widgets.md) to display associated tags of a resource that was configured for tagging. You can simply place the widget on a page like below:
+
+```csharp
+@await Component.InvokeAsync(typeof(TagViewComponent), new
+{
+  entityType = "Product",
+  entityId = "..."
+})
+```
+
+`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
+
+## User Interface
+
+### Menu Items
+
+The following menu items are added by the tagging feature to the admin application:
+
+* **Tags**: Opens the tag management page.
+
+### Pages
+
+#### Tag Management
+
+This page can be used to create, edit and delete tags for the entity types.
+
+![tags-page](../../images/cmskit-module-tags-page.png)
+
+You can create or edit an existing tag on this page.
+
+![tag-edit](../../images/cmskit-module-tag-edit.png)
+
+## Internals
+
+### Domain Layer
 
 #### Aggregates
 
@@ -87,9 +110,9 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 #### Application services
 
-- `TagAdminAppService` (implements `ITagAdminAppService`): Implements the use cases of tag management.
-- `EntityTagAdminAppService` (implements `IEntityTagAdminAppService`): Implements the use cases of entity tag relationship.
-- `TagAppService` (implements `ITagAppService`): Implements the use cases of entity tag relationship for public websites.
+- `TagAdminAppService` (implements `ITagAdminAppService`).
+- `EntityTagAdminAppService` (implements `IEntityTagAdminAppService`).
+- `TagAppService` (implements `ITagAppService`).
 
 ### Database providers
 
@@ -111,7 +134,6 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 - CmsTags
 - CmsEntityTags
-  - CmsTags
 
 #### MongoDB
 
@@ -119,17 +141,3 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 - **CmsTags**
 - **CmsEntityTags**
-
-### MVC UI
-
-The tag system provides a tag widget to display associated tags of the resource on public websites. You can simply place the widget on a page like below. 
-
-```csharp
-@await Component.InvokeAsync(typeof(TagViewComponent), new
-{
-  entityType = "entityType",
-  entityId = "entityId"
-})
-```
-
-For more information about widgets see [widgets](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) documentation.

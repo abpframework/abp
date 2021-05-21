@@ -185,23 +185,19 @@ namespace Acme.BookStore.EntityFrameworkCore
 
 ### 添加数据迁移
 
-启动模板使用[EF Core Code First Migrations](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/)创建和维护数据库架构. 打开菜单*工具 > NuGet包管理器*下的**程序包管理控制台 (PMC)**.
+启动模板使用[EF Core Code First Migrations](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/)创建和维护数据库架构. 我们应该创建一个新的迁移并且应用到数据库.
 
-![Open Package Manager Console](images/bookstore-open-package-manager-console.png)
-
-选择 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 做为**默认项目**然后执行以下命令:
+在 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 目录打开命令行终端输入以下命令:
 
 ```bash
-Add-Migration "Created_Book_Entity"
+dotnet ef migrations add Created_Book_Entity
 ```
 
-![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
+它会添加新迁移类到项目中:
 
-它会在 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 项目中的 `Migrations` 文件内创建一个新的迁移类.
+![bookstore-efcore-migration](./images/bookstore-efcore-migration.png)
 
-在更新数据库之前,请阅读下面的部分了解如何将一些初始数据插入到数据库.
-
-> 如果你使用其他IDE而不是Visual Studio, 你可以使用 [`dotnet-ef`](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration) 工具.
+> 如果你使用Visual Studio, 你也许想要在*包管理控制台(PMC)*中使用 `Add-Migration Created_Book_Entity -c BookStoreMigrationsDbContext` 和 `Update-Database -c BookStoreMigrationsDbContext` 命令. 确保 {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} 是启动项目并且 `Acme.BookStore.EntityFrameworkCore.DbMigrations` 是 PMC 的*默认项目*.
 
 {{end}}
 
