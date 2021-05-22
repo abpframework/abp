@@ -2,6 +2,10 @@
 
 This article shows how to remove the `EntityFrameworkCore.DbMigrations` project from your solution to have a single `DbContext` for your database mappings and code first migrations.
 
+## Source Code
+
+You can find source of the example solution used in this article [here](https://github.com/abpframework/abp-samples/tree/master/UnifiedEfCoreMigrations).
+
 ## Motivation
 
 If you create a new solution with **Entity Framework Core** as the database provider, you see two projects related to EF Core:
@@ -26,13 +30,11 @@ If you want to make it in your solution with today, follow the steps in this art
 
 > If you are using **ABP Commercial**, ABP Suite code generation won't work correctly with the new design. In this case, we suggest to wait for the next version.
 
-## All the Changes in one PR!
-
-I've created a new solution with v4.3, then made all the changes in a pull request, so you can see all the changes line by line.  While this article will cover all, you may want to [check the changes done in this PR](https://github.com/abpframework/abp-samples/pull/88) if you have problems with the implementation.
-
 ## The Steps
 
 Our goal to enable database migrations in the `EntityFrameworkCore` project, remove the `EntityFrameworkCore.DbMigrations` project and revisit the code depending on that package.
+
+> I've created a new solution with v4.3, then made all the changes in a pull request, so you can see all the changes line by line.  While this article will cover all, you may want to [check the changes done in this PR](https://github.com/abpframework/abp-samples/pull/88) if you have problems with the implementation.
 
 ### 1) Add Microsoft.EntityFrameworkCore.Tools package to the EntityFrameworkCore project
 
@@ -224,6 +226,229 @@ dotnet ef database update
 
 Your database won't have any change, because the migration is just empty and does nothing. From now, you can create new migrations as you change your entities, just like you normally do.
 
+All the changes are done. The next section explains how to add custom properties to entities of depending modules with this design.
+
 ## The AppUser Entity & Custom Properties
 
-TODO
+The database mapping logic, solution structure and migrations become much simpler and easier to manage with that new setup.
+
+As a drawback, we had to remove the `AppUser` entity, which was sharing the `AbpUsers` table with the `IdentityUser` entity of the Identity Module. Fortunately, ABP provides a flexible system to [extend existing entities](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) in case of you need to define some custom properties. In this section, I will show how to add a custom property to the `IdentityUser` entity and use it in your application code and database queries.
+
+I've done all the changes in this part as a single PR, so you may want to [check the changes done in this PR](https://github.com/abpframework/abp-samples/pull/89) if you have problems with the implementation.
+
+### Defining a Custom Property
+
+The application startup template provides a point to configure the custom properties for existing entities, which is located under `Domain.Shared` project, in the `...ModuleExtensionConfigurator.cs` (`...` standard for your project name) class. Open that class and add the following code into the `ConfigureExtraProperties` method:
+
+````csharp
+ObjectExtensionManager.Instance.Modules()
+    .ConfigureIdentity(identity =>
+    {
+        identity.ConfigureUser(user =>
+        {
+            user.AddOrUpdateProperty<string>( //property type: string
+                "SocialSecurityNumber", //property name
+                property =>
+                {
+                    //validation rules
+                    property.Attributes.Add(new RequiredAttribute());
+                    property.Attributes.Add(new StringLengthAttribute(64));
+                }
+            );
+        });
+    });
+````
+
+After that setup, just run the application to see the new property on the Users table:
+
+![new-prop-on-table](new-prop-on-table.png)
+
+The new `SocialSecurityNumber` property will also be available on the create and edit modals with the validation rules.
+
+> See the [Module Entity Extensions](https://docs.abp.io/en/abp/latest/Module-Entity-Extensions) document to understand and control the new custom property with all the details.
+
+### Mapping to the Database Table
+
+By default, ABP saves all custom properties inside the `ExtraProperties` field as a single JSON object. If you prefer to create a table field for a custom property, you can configure it in the `...EfCoreEntityExtensionMappings.cs` (`...` standard for your project name) class in the `EntityFrameworkCore` project. You can write the following code inside this class (in the `OneTimeRunner.Run`):
+
+````csharp
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        (entityBuilder, propertyBuilder) =>
+        {
+            propertyBuilder.HasMaxLength(64).IsRequired().HasDefaultValue("");
+        }
+    );
+````
+
+After that, you can just run the following command in a command-line terminal to add a new database migration (in the directory of the `EntityFrameworkCore` project):
+
+````bash
+dotnet ef migrations add Added_SocialSecurityNumber_To_IdentityUser
+````
+
+This will add a new migration class to your project. You can then run the following command (or run the `.DbMigrator` application) to apply changes to the database:
+
+````bash
+dotnet ef database update
+````
+
+This will add a `SocialSecurityNumber` field to the `AbpUsers` table in the database.
+
+### Using Custom Properties in the Application Code
+
+Now, we can use `GetProperty` and `SetProperty` methods on the `IdentityUser` entity to work with the new property. The following code demonstrates to get/set the custom property:
+
+````csharp
+public class MyUserService : ITransientDependency
+{
+    private readonly IRepository<IdentityUser, Guid> _userRepository;
+
+    public MyUserService(IRepository<IdentityUser, Guid> userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public async Task SetSocialSecurityNumberDemoAsync(string userName, string number)
+    {
+        var user = await _userRepository.GetAsync(u => u.UserName == userName);
+        user.SetProperty("SocialSecurityNumber", number);
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task<string> GetSocialSecurityNumberDemoAsync(string userName)
+    {
+        var user = await _userRepository.GetAsync(u => u.UserName == userName);
+        return user.GetProperty<string>("SocialSecurityNumber");
+    }
+}
+````
+
+Tip: Using `SetProperty` and `GetProperty` with a string property name everywhere could be tedious and error-prone. I suggest you to create the following extension methods:
+
+````csharp
+public static class MyUserExtensions
+{
+    public const string SocialSecurityNumber = "SocialSecurityNumber";
+
+    public static void SetSocialSecurityNumber(this IdentityUser user, string number)
+    {
+        user.SetProperty(SocialSecurityNumber, number);
+    }
+    
+    public static string GetSocialSecurityNumber(this IdentityUser user)
+    {
+        return user.GetProperty<string>(SocialSecurityNumber);
+    }
+}
+````
+
+Then we can change the previous demo method as shown below:
+
+````csharp
+public async Task SetSocialSecurityNumberDemoAsync(string userName, string number)
+{
+    var user = await _userRepository.GetAsync(u => u.UserName == userName);
+    user.SetSocialSecurityNumber(number); //Using the new extension property
+    await _userRepository.UpdateAsync(user);
+}
+
+public async Task<string> GetSocialSecurityNumberDemoAsync(string userName)
+{
+    var user = await _userRepository.GetAsync(u => u.UserName == userName);
+    return user.GetSocialSecurityNumber(); //Using the new extension property
+}
+````
+
+### Querying Based on a Custom Property
+
+You may want to query users based on `SocialSecurityNumber`. We will use Entity Framework's API to accomplish that. You have two options to use EF Core API in your application code:
+
+1. Reference to the [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) NuGet package from your project (domain or application layer, depending on where you want to use the EF Core API).
+2. Create a [repository](https://docs.abp.io/en/abp/latest/Repositories) interface in the domain layer and implement it in your `EntityFrameworkCore` project.
+
+I will prefer the second approach, so I am defining a new repository interface in the `Domain` project:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
+
+namespace UnifiedContextsDemo.Users
+{
+    public interface IMyUserRepository : IRepository<IdentityUser, Guid>
+    {
+        Task<IdentityUser> FindBySocialSecurityNumber(string number);
+    }
+}
+````
+
+Then implementing it in the `EntityFrameworkCore` project:
+
+````csharp
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using UnifiedContextsDemo.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity;
+
+namespace UnifiedContextsDemo.Users
+{
+    public class MyUserRepository 
+        : EfCoreRepository<UnifiedContextsDemoDbContext, IdentityUser, Guid>, 
+          IMyUserRepository
+    {
+        public MyUserRepository(
+            IDbContextProvider<UnifiedContextsDemoDbContext> dbContextProvider) 
+            : base(dbContextProvider)
+        {
+        }
+
+        public async Task<IdentityUser> FindBySocialSecurityNumber(string number)
+        {
+            var dbContext = await GetDbContextAsync();
+            return await dbContext.Set<IdentityUser>()
+                .Where(u => EF.Property<string>(u, "SocialSecurityNumber") == number)
+                .FirstOrDefaultAsync();
+        }
+    }
+}
+````
+
+Tip: Use the constant instead of `SocialSecurityNumber` as a magic string.
+
+Now, I can use that repository method in my service by injecting the `IMyUserRepository`:
+
+````csharp
+public class MyUserService : ITransientDependency
+{
+    private readonly IMyUserRepository _userRepository;
+
+    public MyUserService(IMyUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    //...other methods
+
+    public async Task<IdentityUser> FindBySocialSecurityNumberDemoAsync(string number)
+    {
+        return await _userRepository.FindBySocialSecurityNumber(number);
+    }
+}
+````
+
+I changed `IRepository<IdentityUser, Guid>` dependency to `IMyUserRepository`.
+
+## Conclusion
+
+With this article, I wanted to show you how to remove the `EntityFrameworkCore.DbMigrations` project from your solution to simplify your database mappings, database migrations and your application code. In the next version (4.4), this [will be](https://github.com/abpframework/abp/issues/8776) the default approach.
+
+### Source Code
+
+You can find source of the example solution used in this article [here](https://github.com/abpframework/abp-samples/tree/master/UnifiedEfCoreMigrations).
