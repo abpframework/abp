@@ -43,7 +43,7 @@
     "Description:Abp.Account.EnableLocalLogin": "Ilmaisee, salliko palvelin käyttäjien todentamisen paikallisella tilillä.",
     "LoggedOutTitle": "Kirjautui ulos",
     "LoggedOutText": "Sinut on kirjautunut ulos ja sinut ohjataan pian.",
-    "ReturnToText": "Napsauta tätä ja ohjaa uudelleen osoitteeseen {0}",
+    "ReturnToText": "Napsauta tätä palataksesi sovellukseen",
     "OrLoginWith": "Tai kirjaudu sisään:",
     "ForgotPassword": "Unohtuiko salasana?",
     "SendPasswordResetLink_Information": "Salasanan vaihtamislinkki lähetetään sähköpostiisi salasanan vaihtamiseksi. Jos et saa sähköpostia muutamassa minuutissa, yritä uudelleen.",
