@@ -14,7 +14,7 @@ There are some **free and open source** application modules developed and mainta
 * [**Account**](Account.md): Provides UI for the account management and allows user to login/register to the application.
 * [**Audit Logging**](Audit-Logging.md): Persists audit logs to a database.
 * [**Background Jobs**](Background-Jobs.md): Persist background jobs when using the default background job manager.
-* [**CMS Kit**](Cms-Kit.md): A set of reusable *Content Management System* features.
+* [**CMS Kit**](Cms-Kit/Index.md): A set of reusable *Content Management System* features.
 * [**Docs**](Docs.md): Used to create technical documentation website. ABP's [own documentation](https://docs.abp.io) already using this module.
 * [**Feature Management**](Feature-Management.md): Used to persist and manage the [features](../Features.md).
 * **[Identity](Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
