@@ -6,9 +6,7 @@ At Volosoft, we care about developer experience as much as user experience. Thus
 
 The initial version has been built upon Bootstrap v4. Bootstrap v5 has been recently published and the ecosystem has not caught up yet. In addition, ABP packages are already depend on Bootstrap v4, it will be easy to switch from the [Basic Theme](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme) or from the [Lepton Theme](https://commercial.abp.io/themes) to the LeptonX. 
 
-We believe that the bigger the community is, the better the framework turns out to be. As we have done in our other products, we will release a free-to-use version of LeptonX, a.k.a LeptonX-lite which will contain most of the basic features. With LeptonX-lite, free ABP [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application)s will come with a production-ready theme, and existing applications will be able to switch from the Basic Theme the LeptonX-lite with ease.   
-
-![An image showing a tablet, a mobile, and a laptop device with LeptonX theme on their screens](./all-devices.png)
+We believe that the bigger the community is, the better the framework turns out to be. As we have done in our other products, we will release a free-to-use version of LeptonX, a.k.a LeptonX-lite which will contain most of the basic features. With LeptonX-lite, free ABP [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application)s will come with a production-ready theme, and existing applications will be able to switch from the Basic Theme the LeptonX-lite with ease.
 
 ## Highlights
 
