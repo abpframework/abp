@@ -1,6 +1,6 @@
 # Introducing the Lepton Theme Next Generation!
 
-We are delighted and proud to announce that the next generation of [Lepton Theme](https://leptontheme.com/) which will be referred to as `LeptonX` is on the way. 
+We are delighted and proud to announce that the next generation of [Lepton Theme](https://leptontheme.com/) which will be referred to as LeptonX is on the way. 
 
 At Volosoft, we care about developer experience as much as user experience. Thus, LeptonX is following the latest trends for a better user experience and provides highly customizable features that will be easy to use. Our APIs follow a strict guideline to be easy-to-use, intuitive, extendable, and replaceable. In short, we'd like LeptonX to grow into such a platform that developers (not just ABP developers) love to build their applications on top of, and end-users love to interact with. 
 
