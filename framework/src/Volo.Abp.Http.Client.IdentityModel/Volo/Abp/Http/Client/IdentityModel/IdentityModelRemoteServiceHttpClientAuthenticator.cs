@@ -20,7 +20,7 @@ namespace Volo.Abp.Http.Client.IdentityModel
         {
             await IdentityModelAuthenticationService.TryAuthenticateAsync(
                 context.Client,
-                context.RemoteService.GetIdentityClient()
+                context.RemoteService.GetIdentityClient() ?? context.RemoteServiceName
             );
         }
     }
