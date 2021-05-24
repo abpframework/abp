@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Modularity;
@@ -40,6 +41,11 @@ namespace Volo.Abp.SettingManagement.Web
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpSettingManagementWebModule>();
+            });
+
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizePage("/SettingManagement/Index", SettingManagementPermissions.Emailing);
             });
 
             Configure<AbpBundlingOptions>(options =>
