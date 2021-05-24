@@ -193,7 +193,7 @@
     "ClientSideDevelopmentDocumentationMessage": "Kullanıcı arayüzü (istemci tarafı) geliştirmeyle ilgili temel noktaları öğrenmek için {0} belgesine bakın.",
     "DatabaseProviderDocumentationMessage": "Veritabanı katmanı geliştirmeyle ilgili temel noktaları öğrenmek için {0} belgesine bakın.",
     "ABPCommercialExplanationMessage": "ABP Commercial, ABP Framework için premium modüller, temalar, araçlar ve destek sağlar.",
-    "IntroducingDDD": "Domain Driven Design ile Tanışın",
+    "ImplementingDDD": "Domain Driven Design'ı Uygulayın",
     "DDDBookExplanation": "ABP Framework ile Domain Driven Design'ın uygulanması için pratik bir kılavuz.",
     "Overview": "Genel Bakış",
     "DDDBookPracticalGuide": "Bu kitap Domain Driven Design'ın uygulanması için pratik bir kılavuz görevi görür. Uygulama ayrıntıları ABP Framework altyapısına dayanırken, temel kavramlar, prensipler ve modeller bir .NET çözümü olmasa bile her türlü çözümde uygulanabilir.",
@@ -219,6 +219,15 @@
     "CompanyName": "Şirket adı",
     "DoYouAgreePrivacyPolicy": "Şartlar & Koşulları ve <a href=\"https://commercial.abp.io/Privacy\">Gizlilik Politikasını</a> kabul ediyorum.",
     "VolosoftMarketingInformationMessage": "İşletmeler ve Organizasyonlar için çözümler ve diğer Volosoft ürün ve hizmetleri hakkında bilgi, ipucu ve teklifler almak istiyorum.",
-    "VolosoftSharingInformationMessage": "Volosoft'un ürünlerimi seçkin ortaklarla paylaşmasını kabul ediyorum, böylece ilgili ortakların ürünleri ve hizmetleri hakkında ilgili bilgileri alabilirim."
+    "VolosoftSharingInformationMessage": "Volosoft'un ürünlerimi seçkin ortaklarla paylaşmasını kabul ediyorum, böylece ilgili ortakların ürünleri ve hizmetleri hakkında ilgili bilgileri alabilirim.",
+    "Free": "Ücretsiz",
+    "DDDEBook": "DDD E-kitap",
+    "PracticalGuideForImplementingDDD": "Bu kitap ABP Framework ile birlikte Domain Driven Design'ın uygulanması için pratik bir kılavuz görevi görür.",
+    "IntroducingDDD": "Domain Driven Design Ile Tanışın",
+    "DDDLayersAndCleanArchitecture": "DDD Katmanları & Clean Architecture",
+    "LayeringOfADotnetSolution": "Bir .NET Uygulamasının Katmanlı Yapısı",
+    "ImplementingDDDBuildingBlocks": "DDD Yapı Taşlarının Uygulanması",
+    "DomainVsApplicationLogic": "Domain Mantığı vs Uygulama Mantığı",
+    "SamplesAndDiscussions": "Örnekler & Tartışmalar"
   }
 }
