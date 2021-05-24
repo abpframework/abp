@@ -64,7 +64,6 @@
     "AccessDenied": "Access denied!",
     "AccessDeniedMessage": "You do not have access to this resource.",
     "LockedOut": "Locked Out",
-    "AccountDisabledTitle": "Your account is not enabled!",
     "AccountLockedOutTitle": "Your account is locked!",
     "AccountLockedOutText": "Please contact to admin."
   }

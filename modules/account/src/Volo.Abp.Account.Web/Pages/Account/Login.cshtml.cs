@@ -220,7 +220,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
             if (result.IsNotAllowed)
             {
                 Logger.LogWarning($"External login callback error: User is Not Allowed!");
-                return RedirectToPage("./LockedOut");
+                return RedirectToPage("./ConfirmUser", new
+                {
+                    returnUrl = ReturnUrl,
+                    returnUrlHash = ReturnUrlHash
+                });
             }
 
             if (result.Succeeded)

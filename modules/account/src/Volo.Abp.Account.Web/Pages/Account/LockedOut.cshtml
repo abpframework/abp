@@ -2,29 +2,17 @@
 @model Volo.Abp.Account.Web.Pages.Account.LockedOut
 @using Volo.Abp.Account.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.Identity.Settings
 @using Volo.Abp.Settings
 @inject IHtmlLocalizer<AccountResource> L
 @inject Volo.Abp.AspNetCore.Mvc.UI.Layout.IPageLayout PageLayout
 @inject ISettingProvider SettingProvider
 @{
     PageLayout.Content.Title = L["LockedOut"].Value;
-    var requireConfirmedEmail = await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail);
-    var requireConfirmedPhoneNumber = await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber);
-    bool isAccountDisabled = requireConfirmedEmail || requireConfirmedPhoneNumber;
 
 }
 <abp-card>
     <abp-card-body>
-        @if (isAccountDisabled)
-        {
-            <abp-card-title>@L["AccountDisabledTitle"]</abp-card-title>
-            <abp-card-text>@L["LoginIsNotAllowed"]</abp-card-text>
-        }
-        else
-        {
             <abp-card-title>@L["AccountLockedOutTitle"]</abp-card-title>
             <abp-card-text>@L["AccountLockedOutText"]</abp-card-text>
-        }
     </abp-card-body>
 </abp-card>
