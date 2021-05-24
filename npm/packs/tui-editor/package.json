@@ -1,14 +1,14 @@
 {
-  "version": "4.3.0",
+  "version": "4.3.1",
   "name": "@abp/tui-editor",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/codemirror": "~4.3.0",
-    "@abp/highlight.js": "~4.3.0",
-    "@abp/jquery": "~4.3.0",
-    "@abp/markdown-it": "~4.3.0",
+    "@abp/codemirror": "~4.3.1",
+    "@abp/highlight.js": "~4.3.1",
+    "@abp/jquery": "~4.3.1",
+    "@abp/markdown-it": "~4.3.1",
     "tui-code-snippet": "^2.3.2",
     "@toast-ui/editor": "^2.5.1"
   },

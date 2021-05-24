@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Volo.Abp.TextTemplating.Abstractions\Volo.Abp.TextTemplating.Abstractions.csproj" />
+      <ProjectReference Include="..\Volo.Abp.TextTemplating.Core\Volo.Abp.TextTemplating.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

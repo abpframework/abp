@@ -1,64 +1,63 @@
 {
   "folders": {
-    "src": {},
-    "test": {}
+    "items": {
+      "src": {},
+      "test": {},
+      "app": {}
+    }
   },
   "packages": {
     "Volo.Abp.BackgroundJobs.Domain.Shared": {
-      "path": "src/Volo.Abp.BackgroundJobs.Domain.Shared/Volo.Abp.BackgroundJobs.Domain.Shared.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.domain.shared": {}
-      }
+      "path": "src/Volo.Abp.BackgroundJobs.Domain.Shared/Volo.Abp.BackgroundJobs.Domain.Shared.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.BackgroundJobs.Domain": {
-      "path": "src/Volo.Abp.BackgroundJobs.Domain/Volo.Abp.BackgroundJobs.Domain.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.domain": {}
-      }
+      "path": "src/Volo.Abp.BackgroundJobs.Domain/Volo.Abp.BackgroundJobs.Domain.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.BackgroundJobs.EntityFrameworkCore": {
-      "path": "src/Volo.Abp.BackgroundJobs.EntityFrameworkCore/Volo.Abp.BackgroundJobs.EntityFrameworkCore.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.ef": {}
-      }
+      "path": "src/Volo.Abp.BackgroundJobs.EntityFrameworkCore/Volo.Abp.BackgroundJobs.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.BackgroundJobs.MongoDB": {
-      "path": "src/Volo.Abp.BackgroundJobs.MongoDB/Volo.Abp.BackgroundJobs.MongoDB.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.mongodb": {}
-      }
+      "path": "src/Volo.Abp.BackgroundJobs.MongoDB/Volo.Abp.BackgroundJobs.MongoDB.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.BackgroundJobs.TestBase": {
-      "path": "test/Volo.Abp.BackgroundJobs.TestBase/Volo.Abp.BackgroundJobs.TestBase.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.BackgroundJobs.TestBase/Volo.Abp.BackgroundJobs.TestBase.abppkg.json",
+      "folder": "test"
     },
     "Volo.Abp.BackgroundJobs.Domain.Tests": {
-      "path": "test/Volo.Abp.BackgroundJobs.Domain.Tests/Volo.Abp.BackgroundJobs.Domain.Tests.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.BackgroundJobs.Domain.Tests/Volo.Abp.BackgroundJobs.Domain.Tests.abppkg.json",
+      "folder": "test"
     },
     "Volo.Abp.BackgroundJobs.EntityFrameworkCore.Tests": {
-      "path": "test/Volo.Abp.BackgroundJobs.EntityFrameworkCore.Tests/Volo.Abp.BackgroundJobs.EntityFrameworkCore.Tests.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.BackgroundJobs.EntityFrameworkCore.Tests/Volo.Abp.BackgroundJobs.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
     },
     "Volo.Abp.BackgroundJobs.MongoDB.Tests": {
-      "path": "test/Volo.Abp.BackgroundJobs.MongoDB.Tests/Volo.Abp.BackgroundJobs.MongoDB.Tests.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.BackgroundJobs.MongoDB.Tests/Volo.Abp.BackgroundJobs.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.BackgroundJobs.DemoApp": {
+      "path": "app/Volo.Abp.BackgroundJobs.DemoApp/Volo.Abp.BackgroundJobs.DemoApp.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Abp.BackgroundJobs.DemoApp.Shared": {
+      "path": "app/Volo.Abp.BackgroundJobs.DemoApp.Shared/Volo.Abp.BackgroundJobs.DemoApp.Shared.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Abp.BackgroundJobs.DemoApp.HangFire": {
+      "path": "app/Volo.Abp.BackgroundJobs.DemoApp.HangFire/Volo.Abp.BackgroundJobs.DemoApp.HangFire.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Abp.BackgroundJobs.DemoApp.RabbitMq": {
+      "path": "app/Volo.Abp.BackgroundJobs.DemoApp.RabbitMq/Volo.Abp.BackgroundJobs.DemoApp.RabbitMq.abppkg.json",
+      "folder": "app"
+    },
+    "Volo.Abp.BackgroundJobs.DemoApp.Quartz": {
+      "path": "app/Volo.Abp.BackgroundJobs.DemoApp.Quartz/Volo.Abp.BackgroundJobs.DemoApp.Quartz.abppkg.json",
+      "folder": "app"
     }
   }
 }

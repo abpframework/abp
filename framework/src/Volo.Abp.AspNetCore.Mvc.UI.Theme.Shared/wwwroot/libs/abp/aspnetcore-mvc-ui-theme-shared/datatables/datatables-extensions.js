@@ -132,7 +132,7 @@ var abp = abp || {};
             }
 
             if (field.text) {
-                $dropdownButton.append(htmlEncode(fieldItem.text));
+                $dropdownButton.append(htmlEncode(field.text));
             } else {
                 $dropdownButton.append(htmlEncode(localize("DatatableActionDropdownDefaultText")));
             }

@@ -10,12 +10,22 @@
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\TextTemplating\Localization\**\*.json" />
     <None Remove="Volo\Abp\TextTemplating\Localization\**\*.json" />
+    <EmbeddedResource Include="Volo\Abp\TextTemplating\SampleTemplates\**\*.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Volo\Abp\TextTemplating\SampleTemplates\**\*.cshtml" />
+    <EmbeddedResource Include="Volo\Abp\TextTemplating\SampleTemplates\**\*.tpl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Remove="Volo\Abp\TextTemplating\SampleTemplates\**\*.tpl" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating.Abstractions\Volo.Abp.TextTemplating.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating\Volo.Abp.TextTemplating.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating.Scriban\Volo.Abp.TextTemplating.Scriban.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.TextTemplating.Razor\Volo.Abp.TextTemplating.Razor.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
   </ItemGroup>

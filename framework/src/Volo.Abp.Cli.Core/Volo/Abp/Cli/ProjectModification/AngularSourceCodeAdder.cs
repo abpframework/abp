@@ -52,7 +52,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 var projects = new List<string>
                 {
-                    package.Name.RemovePreFix("@").Replace("/","-")
+                    package.Name.RemovePreFix("@").Replace("/", "-")
                 };
 
                 await AddPathsToTsConfigAsync(angularPath, angularProjectsPath, projects);
@@ -125,13 +125,15 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var scriptsJobject = (JObject) json["scripts"];
 
-            if (scriptsJobject == null || scriptsJobject["postinstall"] != null || scriptsJobject["compile:ivy"] != null)
+            if (scriptsJobject == null || scriptsJobject["postinstall"] != null ||
+                scriptsJobject["compile:ivy"] != null)
             {
                 return;
             }
 
             scriptsJobject["postinstall"] = "npm run compile:ivy";
-            scriptsJobject["compile:ivy"] = "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules";
+            scriptsJobject["compile:ivy"] =
+                "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules";
 
             File.WriteAllText(packageJsonFilePath, json.ToString(Formatting.Indented));
         }
@@ -195,11 +197,16 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 foreach (var publicApi in publicApis)
                 {
-                    var subFolderName = publicApi.RemovePreFix($"projects/{project}/").Split("/")[0];
+                    var foldersAndFileName = publicApi.RemovePreFix($"projects/{project}/").Split("/");
+                    var subFolderName = string.Join("/", foldersAndFileName.Take(foldersAndFileName.Length - 1));
 
                     if (subFolderName == "src")
                     {
                         subFolderName = "";
+                    }
+                    else if (subFolderName.EndsWith("/src"))
+                    {
+                        subFolderName = $"/{subFolderName}".RemovePostFix("/src");
                     }
                     else
                     {

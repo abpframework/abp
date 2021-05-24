@@ -301,13 +301,21 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private async Task RemoveProjectFromSolutionAsync(string moduleSolutionFile, string projectName)
         {
-                await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, projectName);
+            await SolutionFileModifier.RemoveProjectFromSolutionFileAsync(moduleSolutionFile, projectName);
 
-                var projectFolderPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "src", projectName);
+            var projectFolderPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "src", projectName);
+            if (Directory.Exists(projectFolderPath))
+            {
+                Directory.Delete(projectFolderPath, true);
+            }
+            else
+            {
+                projectFolderPath = Path.Combine(Path.GetDirectoryName(moduleSolutionFile), "test", projectName);
                 if (Directory.Exists(projectFolderPath))
                 {
                     Directory.Delete(projectFolderPath, true);
                 }
+            }
         }
 
         private void ChangeDomainTestReferenceToMongoDB(ModuleWithMastersInfo module, string moduleSolutionFile)

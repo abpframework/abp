@@ -6,7 +6,7 @@ This document provides a road map, release schedule and planned features for the
 
 ### v4.4
 
-This version will focus on **documentation** and **improvements** of current features. In addition, the following features are planned;
+This version will focus on **documentation** and **improvements** of current features. In addition, the following features are planned:
 
 * Publishing distributed events as transactional ([#6126](https://github.com/abpframework/abp/issues/6126))
 * Revisit the microservice demo solution ([#8385](https://github.com/abpframework/abp/issues/8385))
@@ -15,26 +15,22 @@ This version will focus on **documentation** and **improvements** of current fea
 * Pre-configured test project for the [Blazor UI](UI/Blazor/Overall.md) ([#5516](https://github.com/abpframework/abp/issues/5516))
 * Razor engine support for text templating ([#8373](https://github.com/abpframework/abp/issues/8373))
 
-**Planned release date**: End of Quarter 2, 2021.
-
-### v4.5
-
-We planned to focus on v5.0 after 4.4 release. However, we may release v4.5 if we see it necessary.
+**Planned release date**: End of Quarter 2, 2021. See the [4.4 milestone](https://github.com/abpframework/abp/milestone/52) to track the progress.
 
 ### v5.0
 
-This version will focus on .NET 6 and performance improvements.
+We planned to focus on the ABP Framework v5.0 after the 4.4 release. This version will focus on the following works:
 
-* Upgrading to .NET 6
-* .NET Trimming compatibility
-* Using source generators and reducing reflection usage
-* Performance improvements
-* Improving the abp.io platform
+* Upgrading to .NET 6.0 ([#9004](https://github.com/abpframework/abp/issues/9004))
+* Upgrading to Bootstrap 5.x ([#8922](https://github.com/abpframework/abp/issues/8922))
+* Alternative to IdentityServer4 ([#7221](https://github.com/abpframework/abp/issues/7221))
+* Dapr integration ([#2183](https://github.com/abpframework/abp/issues/2183))
+* Resource based authorization system ([#236](https://github.com/abpframework/abp/issues/236))
 * API Versioning system: finalize & document ([#497](https://github.com/abpframework/abp/issues/497))
+* Performance optimizations; Enabling .NET Trimming, using source generators and reducing reflection, etc.
+* Improving the abp.io platform and work more on contents and documents
 
-**Planned release date**: End of Quarter 4, 2021.
-
-> Note: v5.0 features will be more clear in the next months. We will consider to add new features from the *Backlog Items*.
+**Planned release date**: End of Quarter 4, 2021. See the [5.0 milestone](https://github.com/abpframework/abp/milestone/51) to track the progress.
 
 ## Backlog Items
 
@@ -42,13 +38,10 @@ The *Next Versions* section above shows the main focus of the planned versions. 
 
 Here, a list of major items in the backlog we are considering to work on in the next versions.
 
-* [#2183](https://github.com/abpframework/abp/issues/2183) / Dapr integration
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](https://docs.abp.io/en/abp/latest/Modules/Index))
-* [#633](https://github.com/abpframework/abp/issues/633) / Realtime notification system
-* [#236](https://github.com/abpframework/abp/issues/236) / Resource based authorization system
 * [#1754](https://github.com/abpframework/abp/issues/1754) / Multi-lingual entities
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
-* [#336](https://github.com/abpframework/abp/issues/336) / Health Check abstraction
+* [#336](https://github.com/abpframework/abp/issues/336) / Health Check abstractions
 * [#2532](https://github.com/abpframework/abp/issues/2532), [#2564](https://github.com/abpframework/abp/issues/2465) / CosmosDB integration with EF Core and MongoDB API
 * [#4223](https://github.com/abpframework/abp/issues/4223) / WebHook system
 * [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB Integration for multitenancy
