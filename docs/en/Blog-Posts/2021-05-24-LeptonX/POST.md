@@ -4,9 +4,9 @@ We are delighted and proud to announce that the next generation of [Lepton Theme
 
 At Volosoft, we care about developer experience as much as user experience. Thus, LeptonX is following the latest trends for a better user experience and provides highly customizable features that will be easy to use. Our APIs follow a strict guideline to be easy-to-use, intuitive, extendable, and replaceable. In short, we'd like LeptonX to grow into such a platform that developers (not just ABP developers) love to build their applications on top of, and end-users love to interact with. 
 
-The initial version has been built upon Bootstrap v4. Bootstrap v5 has been recently published and the ecosystem has not caught up yet. In addition, ABP packages are already depend on Bootstrap v4, it will be easy to switch from the [Basic Theme](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme) or from the [Lepton Theme](https://commercial.abp.io/themes) to the LeptonX. 
+The initial version has been built upon Bootstrap v4. Bootstrap v5 has been recently published and the ecosystem has not caught up yet. In addition, ABP packages are already dependent on Bootstrap v4, it will be easy to switch from the [Basic Theme](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme) or from the [Lepton Theme](https://commercial.abp.io/themes) to the LeptonX. 
 
-We believe that the bigger the community is, the better the framework turns out to be. As we have done in our other products, we will release a free-to-use version of LeptonX, a.k.a LeptonX-lite which will contain most of the basic features. With LeptonX-lite, free ABP [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application)s will come with a production-ready theme, and existing applications will be able to switch from the Basic Theme the LeptonX-lite with ease.
+We believe that the bigger the community is, the better the framework turns out to be. As we have done in our other products, we will release a free-to-use version of LeptonX, a.k.a LeptonX-lite which will contain most of the basic features. With LeptonX-lite, free ABP [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application)s will come with a production-ready theme, and existing applications will be able to switch from the Basic Theme to the LeptonX-lite with ease.
 
 ## Highlights
 
@@ -56,7 +56,7 @@ As is seen above, the LeptonX ecosystem contains multiple projects that are desi
 
 ## The LeptonX-lite
 
-As mentioned above, there will be a free-to-use version of LeptonX. It will contain most of the basic features and components that the pro version has. It will be also one-line change to upgrade from the lite version to the pro (full) version. Here, some of the differences between the lite and pro versions: 
+As mentioned above, there will be a free-to-use version of LeptonX. It will contain most of the basic features and components that the pro version has. It will be also a one-line change to upgrade from the lite version to the pro (full) version. Here, some of the differences between the lite and pro versions: 
 
 - The mobile tab navigation bar shown above will be only available to pro. In the lite version, a hamburger menu will take its place.
 - The lite version will be released just with the side menu layout although we may release more in the future as our infrastructure makes it easy to develop and replace layouts. 
@@ -64,6 +64,6 @@ As mentioned above, there will be a free-to-use version of LeptonX. It will cont
 
 ## Alpha Version
 
-As we have mentioned above, both user and developer experience mean a great deal to us. Therefore, we will release an alpha version of the LeptonX-lite package and the free ABP-based Angular package soon to start collecting feedback from our users. Once the packages are released, we would like you to try them out and give us feedback. It will help us improve the LeptonX greatly. We plan to release a stable version later this year. 
+As we have mentioned above, both user and developer experience means a great deal to us. Therefore, we will release an alpha version of the LeptonX-lite package and the free ABP-based Angular package soon to start collecting feedback from our users. Once the packages are released, we would like you to try them out and give us feedback. It will help us improve the LeptonX greatly. We plan to release a stable version later this year. 
 
 To stay up-to-date with LeptonX and be notified once the alpha version is ready, follow our [Twitter account](https://twitter.com/volosoftcompany).
