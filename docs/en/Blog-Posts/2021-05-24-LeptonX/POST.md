@@ -58,7 +58,7 @@ As is seen above, the LeptonX ecosystem contains multiple projects that are desi
 
 ## The LeptonX-lite
 
-As mentioned above, there will be a free-to-use version of `LeptonX`. It will contain most of the basic features and components that the pro version has. It will be also one-line change to upgrade from the lite version to the pro (full) version. Here, some of the differences between the lite and pro versions: 
+As mentioned above, there will be a free-to-use version of LeptonX. It will contain most of the basic features and components that the pro version has. It will be also one-line change to upgrade from the lite version to the pro (full) version. Here, some of the differences between the lite and pro versions: 
 
 - The mobile tab navigation bar shown above will be only available to pro. In the lite version, a hamburger menu will take its place.
 - The lite version will be released just with the side menu layout although we may release more in the future as our infrastructure makes it easy to develop and replace layouts. 
