@@ -228,6 +228,11 @@
     "LayeringOfADotnetSolution": "Bir .NET Uygulamasının Katmanlı Yapısı",
     "ImplementingDDDBuildingBlocks": "DDD Yapı Taşlarının Uygulanması",
     "DomainVsApplicationLogic": "Domain Mantığı vs Uygulama Mantığı",
-    "SamplesAndDiscussions": "Örnekler & Tartışmalar"
+    "SamplesAndDiscussions": "Örnekler & Tartışmalar",
+    "EmailNotValid": "Lütfen geçerli bir email adresi giriniz.",
+    "WeWillSendYouADownloadLink": "{0} adresine email gönderilmiştir.",
+    "GoHome": "Anasayfaya Dön",
+    "InvalidFormInputs": "Lütfen formda belirtilen geçerli bilgileri yazınız.",
+    "DDDBookEmailBody": "Teşekkürler. <br /> Kitabı indirmek için, <a href=\"{0}\">buraya tıklayınız</a>."
   }
 }

@@ -266,6 +266,11 @@
     "LayeringOfADotnetSolution": "Layering of a .NET Solution",
     "ImplementingDDDBuildingBlocks": "Implementing DDD Building Blocks",
     "DomainVsApplicationLogic": "Domain Logic vs Application Logic",
-    "SamplesAndDiscussions": "Samples & Discussions"
+    "SamplesAndDiscussions": "Samples & Discussions",
+    "EmailNotValid": "Please enter a valid email address.",
+    "WeWillSendYouADownloadLink": "We've sent the file to {0}.",
+    "GoHome": "Go Home",
+    "InvalidFormInputs": "Please, type the valid information specified on the form.",
+    "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>."
   }
 }

@@ -94,6 +94,9 @@
     "Surname": "Soyad",
     "DoYouAgreePrivacyPolicy": "Şartlar & Koşulları ve <a href=\"https://commercial.abp.io/Privacy\">Gizlilik Politikasını</a> kabul ediyorum.",
     "VolosoftMarketingInformationMessage": "İşletmeler ve Organizasyonlar için çözümler ve diğer Volosoft ürün ve hizmetleri hakkında bilgi, ipucu ve teklifler almak istiyorum.",
-    "VolosoftSharingInformationMessage": "Volosoft'un ürünlerimi seçkin ortaklarla paylaşmasını kabul ediyorum, böylece ilgili ortakların ürünleri ve hizmetleri hakkında ilgili bilgileri alabilirim."
+    "VolosoftSharingInformationMessage": "Volosoft'un ürünlerimi seçkin ortaklarla paylaşmasını kabul ediyorum, böylece ilgili ortakların ürünleri ve hizmetleri hakkında ilgili bilgileri alabilirim.",
+    "WeWillSendYouADownloadLink": "{0} adresine email gönderilmiştir.",
+    "InvalidFormInputs": "Lütfen formda belirtilen geçerli bilgileri yazınız.",
+    "DDDBookEmailBody": "Teşekkürler. <br /> Kitabı indirmek için, <a href=\"{0}\">buraya tıklayınız</a>."
   }
 }
