@@ -36,7 +36,7 @@
     "PasswordChanged": "Salasana vaihdettu",
     "NewPasswordConfirmFailed": "Vahvista uusi salasana.",
     "Manage": "Hallitse",
-    "ManageYourProfile": "Hallitse profiiliasi",
+    "MyAccount": "Tilini",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Onko itserekisteröinti käytössä",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Voiko käyttäjä rekisteröidä tilin itse.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Todennus paikallisella tilillä",

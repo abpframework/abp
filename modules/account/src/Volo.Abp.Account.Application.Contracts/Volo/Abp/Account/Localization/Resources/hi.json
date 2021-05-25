@@ -36,7 +36,7 @@
     "PasswordChanged": "पासवर्ड बदला गया",
     "NewPasswordConfirmFailed": "कृपया नए पासवर्ड की पुष्टि करें।",
     "Manage": "प्रबंधित",
-    "ManageYourProfile": "अपनी प्रोफ़ाइल प्रबंधित करें",
+    "MyAccount": "मेरा खाता",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "क्या स्व-पंजीकरण सक्षम है",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "उपयोगकर्ता चाहे तो स्वयं या अपने द्वारा खाता पंजीकृत कर सकता है।",
     "DisplayName:Abp.Account.EnableLocalLogin": "एक स्थानीय खाते के साथ प्रमाणीकरण",
