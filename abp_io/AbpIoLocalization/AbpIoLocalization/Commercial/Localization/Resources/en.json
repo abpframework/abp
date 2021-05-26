@@ -352,10 +352,10 @@
     "Or": "Or",
     "TellUsAboutYourself": "Tell us little bit about yourself",
     "Surname": "Surname",
-    "DoYouAgreePrivacyPolicy": "I agree to the Terms & Conditions and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
+    "DoYouAgreePrivacyPolicy": "I agree to the <a href=\"/TermsConditions\">Terms & Conditions<a/> and <a href=\"/Privacy\">Privacy Policy</a>.",
     "VolosoftMarketingInformationMessage": "I would like information, tips, and offers about Solutions for Businesses and Organizations and other Volosoft products and services.",
     "VolosoftSharingInformationMessage": "I would like Volosoft to share my information with select partners so I can receive relevant information about their products and services.",
-    "WeWillSendYouADownloadLink": "We've sent the file to {0}.",
+    "WeWillSendYouADownloadLink": "A link to download the e-book has been sent to {0}.<br/> Check your inbox / junk / spam boxes!",
     "InvalidFormInputs": "Please, type the valid information specified on the form.",
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>."
   }
