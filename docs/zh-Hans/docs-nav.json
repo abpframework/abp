@@ -464,19 +464,6 @@
             {
               "text": "主题化",
               "path": "UI/AspNetCore/Theming.md"
-            },
-            {
-              "test": "自定义设置页面",
-              "path": "UI/AspNetCore/Custom-Setting-Page.md"
-            }
-          ]
-        },
-        {
-          "text": "Blazor",
-          "items": [
-            {
-              "test": "自定义设置页面",
-              "path": "UI/Blazor/Custom-Setting-Page.md"
             }
           ]
         },
@@ -530,10 +517,6 @@
             {
               "text": "替换组件",
               "path": "UI/Angular/Component-Replacement.md"
-            },
-            {
-              "text": "自定义设置页",
-              "path": "UI/Angular/Custom-Setting-Page.md"
             },
             {
               "text": "懒加载Scripts与Styles",

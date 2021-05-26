@@ -724,10 +724,6 @@
             {
               "text": "Page Toolbar Extensions",
               "path": "UI/AspNetCore/Page-Toolbar-Extensions.md"
-            },
-            {
-              "test": "Custom Setting Page",
-              "path": "UI/AspNetCore/Custom-Setting-Page.md"
             }
           ]
         },
@@ -841,10 +837,6 @@
             {
               "text": "Routing",
               "path": "UI/Blazor/Routing.md"
-            },
-            {
-              "test": "Custom Setting Page",
-              "path": "UI/Blazor/Custom-Setting-Page.md"
             }
           ]
         },
@@ -1012,10 +1004,6 @@
                 {
                   "text": "Component Replacement",
                   "path": "UI/Angular/Component-Replacement.md"
-                },
-                {
-                  "text": "Custom Setting Page",
-                  "path": "UI/Angular/Custom-Setting-Page.md"
                 },
                 {
                   "text": "Extensions",
