@@ -366,35 +366,6 @@
         }
       }
     },
-    "schematics": {
-      "projectType": "library",
-      "root": "packages/schematics",
-      "sourceRoot": "packages/schematics/src",
-      "prefix": "abp",
-      "architect": {
-        "build": {
-          "options": {
-            "tsConfig": "packages/schematics/tsconfig.lib.json",
-            "project": "packages/schematics/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-builders/jest:run",
-          "options": {
-            "tsConfig": "tsconfig.json",
-            "coverage": true,
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["packages/schematics/tsconfig.json"],
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
-    },
     "dev-app": {
       "projectType": "application",
       "schematics": {
@@ -414,7 +385,6 @@
             "main": "apps/dev-app/src/main.ts",
             "polyfills": "apps/dev-app/src/polyfills.ts",
             "tsConfig": "apps/dev-app/tsconfig.dev.json",
-            "aot": true,
             "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "styles": [
@@ -455,7 +425,13 @@
               },
               "apps/dev-app/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "tsConfig": "apps/dev-app/tsconfig.prod.json",
