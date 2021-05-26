@@ -34,8 +34,8 @@ namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
                 return new DynamicRangeAttributeAdapter((DynamicRangeAttribute) attribute, stringLocalizer);
             }
 
-            //DataAnnotationsClientModelValidatorProvider wiil add a default '[Required]' validator for generating HTML if necessary.
-            if (type == typeof(RequiredAttribute))
+            //DataAnnotationsClientModelValidatorProvider will add a default '[Required]' validator for generating HTML if necessary.
+            if (type == typeof(RequiredAttribute) && attribute.ErrorMessage == null)
             {
                 ValidationAttributeHelper.SetDefaultErrorMessage(attribute);
             }
