@@ -6,7 +6,7 @@
     "NewTenant": "Nuevo inquilino",
     "TenantName": "Nombre del inquilino",
     "DisplayName:TenantName": "Nombre del inquilino",
-    "TenantDeletionConfirmationMessage": "Se eliminará el inquilino '{0}'. Confirmas eso?",
+    "TenantDeletionConfirmationMessage": "Se eliminará el inquilino '{0}'. Esta seguro?",
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Connection String predeterminado",
     "DisplayName:UseSharedDatabase": "Usar la base de datos compartida",
@@ -17,7 +17,7 @@
     "Permission:Delete": "Borrar",
     "Permission:ManageConnectionStrings": "Gestión de cadenas de conexión",
     "Permission:ManageFeatures": "Gestión de características",
-    "DisplayName:AdminEmailAddress": "Dirección de e-mail de administrador",
+    "DisplayName:AdminEmailAddress": "Dirección e-mail de administrador",
     "DisplayName:AdminPassword": "Contraseña de administrador"
   }
 }

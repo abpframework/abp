@@ -43,7 +43,7 @@
     "Description:Abp.Account.EnableLocalLogin": "Sunucunun, kullanıcıların yerel bir hesapla kimlik doğrulamasına izin verip vermeyeceğini belirtir.",
     "LoggedOutTitle": "Çıkış Yaptınız",
     "LoggedOutText": "Çıkış yaptınız ve birazdan yönlendirileceksiniz.",
-    "ReturnToText": "{0} uygulamasına dönmek için tıklayın.",
+    "ReturnToText": "Uygulamaya dönmek için tıklayın.",
     "OrLoginWith": "Veya bunlarla giriş yap:",
     "ForgotPassword": "Şifremi unuttum",
     "SendPasswordResetLink_Information": "E-posta adresinize bir şifre sıfırlama bağlantısı gönderilecektir. Birkaç dakika içerisinde bir e-posta almazsanız lütfen tekrar deneyin.",

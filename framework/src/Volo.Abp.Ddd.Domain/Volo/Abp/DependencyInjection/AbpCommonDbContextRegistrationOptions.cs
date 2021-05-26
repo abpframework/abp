@@ -55,7 +55,7 @@ namespace Volo.Abp.DependencyInjection
                 throw new AbpException($"{OriginalDbContextType.AssemblyQualifiedName} should inherit/implement {otherDbContextType.AssemblyQualifiedName}!");
             }
 
-            ReplacedDbContextTypes.Add(otherDbContextType);
+            ReplacedDbContextTypes.AddIfNotContains(otherDbContextType);
 
             return this;
         }
@@ -93,9 +93,9 @@ namespace Volo.Abp.DependencyInjection
         public IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepository(Type entityType)
         {
             EntityHelper.CheckEntity(entityType);
-            
+
             SpecifiedDefaultRepositories.AddIfNotContains(entityType);
-            
+
             return this;
         }
 

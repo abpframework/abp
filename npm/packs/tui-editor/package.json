@@ -9,8 +9,8 @@
     "@abp/highlight.js": "~4.3.1",
     "@abp/jquery": "~4.3.1",
     "@abp/markdown-it": "~4.3.1",
-    "tui-code-snippet": "1.5.2",
-    "tui-editor": "^1.4.10"
+    "tui-code-snippet": "^2.3.2",
+    "@toast-ui/editor": "^2.5.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
