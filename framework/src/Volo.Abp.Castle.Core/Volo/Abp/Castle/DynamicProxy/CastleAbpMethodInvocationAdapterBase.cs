@@ -20,7 +20,11 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         public MethodInfo Method => Invocation.MethodInvocationTarget ?? Invocation.Method;
 
-        public object ReturnValue { get; set; }
+        public object ReturnValue
+        {
+            get => Invocation.ReturnValue;
+            set => Invocation.ReturnValue = value;
+        }
 
         protected IInvocation Invocation { get; }
 

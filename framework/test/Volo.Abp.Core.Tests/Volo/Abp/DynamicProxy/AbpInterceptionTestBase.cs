@@ -81,6 +81,20 @@ namespace Volo.Abp.DynamicProxy
 		    target.Logs[6].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
 	    }
 
+        [Fact]
+        public void Should_Cache_Results()
+        {
+            //Arrange
+
+            var target = ServiceProvider.GetService<CachedTestObject>();
+
+            //Act & Assert
+
+            (target.GetValue(42)).ShouldBe(42); //First run, not cached yet
+            (target.GetValue(43)).ShouldBe(42); //First run, cached previous value
+            (target.GetValue(44)).ShouldBe(42); //First run, cached previous value
+        }
+
 	    [Fact]
 	    public async Task Should_Cache_Results_Async()
 	    {
