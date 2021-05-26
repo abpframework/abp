@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
@@ -31,6 +32,12 @@ namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
             if (type == typeof(DynamicRangeAttribute))
             {
                 return new DynamicRangeAttributeAdapter((DynamicRangeAttribute) attribute, stringLocalizer);
+            }
+
+            //DataAnnotationsClientModelValidatorProvider wiil add a default '[Required]' validator for generating HTML if necessary.
+            if (type == typeof(RequiredAttribute))
+            {
+                ValidationAttributeHelper.SetDefaultErrorMessage(attribute);
             }
 
             return _defaultAdapter.GetAttributeAdapter(attribute, stringLocalizer);
