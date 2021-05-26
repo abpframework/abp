@@ -1,4 +1,6 @@
 ﻿@page "/setting-management"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(SettingManagementPermissions.Emailing)]
 
 @* ************************* PAGE HEADER ************************* *@
 <PageHeader Title="@L["Settings"]" BreadcrumbItems="@BreadcrumbItems">
