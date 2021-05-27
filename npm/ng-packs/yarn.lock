@@ -2506,6 +2506,13 @@
     enhanced-resolve "5.6.0"
     webpack-sources "2.2.0"
 
+"@ngx-validate/core@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.12.tgz#4924247c363e0e876e6d63794215914ac9232e8d"
+  integrity sha512-AhHfb44M2E2Wc37IX9DxAWjgSIZMNrzzpjnPL+VXMNJQj9GqynBjqw0zQtrGYANsAYeFPFhn7UuX6uqrkRvHtQ==
+  dependencies:
+    tslib "^1.9.0"
+
 "@ngx-validate/core@^0.0.13":
   version "0.0.13"
   resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.13.tgz#954c6d247df8107668f23a39db24ca45c274f3d9"
@@ -2524,6 +2531,20 @@
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/@ngxs/logger-plugin/-/logger-plugin-3.7.1.tgz#045b1b7efbef82d47488f925be8af77cf66ee906"
   integrity sha512-+iUwPnKFa0SPvT5duzPKaRZvql49lWPh5/kxE7U6BLnEZd87MrVUmVRDWalyvyiw7/ZiYeEk1aM8OgkmMKgwnQ==
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngxs/router-plugin@^3.7.0":
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/@ngxs/router-plugin/-/router-plugin-3.7.1.tgz#cd73224d5dd54ee070dd54cc26ba09a1fde189a8"
+  integrity sha512-5Pg+Ija4Z4eCYTLtVgZYxsbYqN35YD+Tak/WhHFXvOqFpt0zPMt8VQbgfEFXKOgoUsJYQ4qz/EWqc0GaRXL+Jw==
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngxs/storage-plugin@^3.7.0":
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/@ngxs/storage-plugin/-/storage-plugin-3.7.1.tgz#39fbce9cf6585cc094d74e5efd54daae3fcd334d"
+  integrity sha512-2e/iHu2Ax/Z7hEfGZPCuUIPNiTb33e9kIM7xIho5BG18liKy1MTeZ7BS5PQKmMc7oY9Ji90ZjhU9uXnex/Em2w==
   dependencies:
     tslib "^1.9.0"
 

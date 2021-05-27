@@ -43,7 +43,7 @@
     "Description:Abp.Account.EnableLocalLogin": "服务器是否将允许用户使用本地帐户进行身份验证。",
     "LoggedOutTitle": "注销",
     "LoggedOutText": "你已成功注销并将马上返回.",
-    "ReturnToText": "点击此处返回到 {0}",
+    "ReturnToText": "单击此处返回到应用程序",
     "OrLoginWith": "或登录:",
     "ForgotPassword": "忘记密码?",
     "SendPasswordResetLink_Information": "密码重置链接将发送到您的电子邮件以重置密码. 如果您在几分钟内没有收到电子邮件,请重试.",

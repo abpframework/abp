@@ -5,7 +5,7 @@ using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Account.Blazor;
+using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
@@ -13,6 +13,8 @@ using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Blazor.WebAssembly;
 using Volo.Abp.Modularity;
+using Volo.Abp.SettingManagement.Blazor.WebAssembly;
+using Volo.Abp.TenantManagement.Blazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
 namespace MyCompanyName.MyProjectName.Blazor.Host
@@ -20,8 +22,10 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
     [DependsOn(
         typeof(AbpAutofacWebAssemblyModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
+        typeof(AbpAccountApplicationContractsModule),
         typeof(AbpIdentityBlazorWebAssemblyModule),
-        typeof(AbpAccountBlazorModule),
+        typeof(AbpTenantManagementBlazorWebAssemblyModule),
+        typeof(AbpSettingManagementBlazorWebAssemblyModule),
         typeof(MyProjectNameBlazorModule)
     )]
     public class MyProjectNameBlazorHostModule : AbpModule
@@ -52,7 +56,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
         {
             Configure<AbpNavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameHostMenuContributor());
+                options.MenuContributors.Add(new MyProjectNameHostMenuContributor(context.Services.GetConfiguration()));
             });
         }
 

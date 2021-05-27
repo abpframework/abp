@@ -104,7 +104,6 @@ There are more options of a menu item (the constructor of the `ApplicationMenuIt
 * `target` (`string`): Target of the menu item. Can be `null` (default), "\_*blank*", "\_*self*", "\_*parent*", "\_*top*" or a frame name for web applications.
 * `elementId` (`string`): Can be used to render the element with a specific HTML `id` attribute.
 * `cssClass` (`string`): Additional string classes for the menu item.
-* `RequiredPermissionName` (`string`): The required permission name, this menu item will be removed if this permission is not granted.
 
 ### Authorization
 
@@ -121,21 +120,21 @@ if (await context.IsGrantedAsync("MyPermissionName"))
 }
 ````
 
-For the authorization, you can use `RequiredPermissionName` as a shortcut. It is also more performant, ABP optimizes the permission check for all the items.
+For the authorization, you can use `RequirePermissions` extension method as a shortcut. It is also more performant, ABP optimizes the permission check for all the items.
 
 ````csharp
 context.Menu.AddItem(
     new ApplicationMenuItem("MyProject.Crm", l["Menu:CRM"])
         .AddItem(new ApplicationMenuItem(
-            name: "MyProject.Crm.Customers", 
-            displayName: l["Menu:Customers"], 
-            url: "/crm/customers",
-            requiredPermissionName: "MyProject.Crm.Customers")
+                name: "MyProject.Crm.Customers",
+                displayName: l["Menu:Customers"],
+                url: "/crm/customers")
+            .RequirePermissions("MyProject.Crm.Customers")
         ).AddItem(new ApplicationMenuItem(
-            name: "MyProject.Crm.Orders", 
-            displayName: l["Menu:Orders"],
-            url: "/crm/orders",
-            requiredPermissionName: "MyProject.Crm.Orders")
+                name: "MyProject.Crm.Orders",
+                displayName: l["Menu:Orders"],
+                url: "/crm/orders")
+            .RequirePermissions("MyProject.Crm.Orders")
         )
 );
 ````
