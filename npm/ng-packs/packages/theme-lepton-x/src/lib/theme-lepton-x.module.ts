@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { LeptonXModule } from '@lepton-x/lite';
-import { LeptonXCommonSettings } from '@lepton-x/common';
+import { LeptonXModule } from '@volo/ngx-lepton-x.lite';
+import { LeptonXCoreSettings } from '@volo/ngx-lepton-x.core';
 import { ValidationErrorModule } from './components/validation-error';
 import { LPX_USER_PROVIDER } from './providers/user.provider';
 import { LPX_LANGUAGE_PROVIDER } from './providers/language.provider';
@@ -12,7 +12,7 @@ import { LPX_BREADCRUMB_PROVIDER } from './providers/breadcrumb.provider';
   exports: [],
 })
 export class ThemeLeptonXModule {
-  static forRoot(settings?: LeptonXCommonSettings): ModuleWithProviders<ThemeLeptonXModule> {
+  static forRoot(settings?: LeptonXCoreSettings): ModuleWithProviders<ThemeLeptonXModule> {
     return {
       ngModule: ThemeLeptonXModule,
       providers: [
@@ -20,7 +20,7 @@ export class ThemeLeptonXModule {
         ValidationErrorModule.forRoot().providers,
         LPX_USER_PROVIDER,
         LPX_LANGUAGE_PROVIDER,
-        LPX_BREADCRUMB_PROVIDER
+        LPX_BREADCRUMB_PROVIDER,
       ],
     };
   }

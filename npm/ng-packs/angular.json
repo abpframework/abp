@@ -454,7 +454,7 @@
                 "bundleName": "ngx-datatable-material"
               },
               {
-                "input": "node_modules/@lepton-x/lite/styles/sidemenu-layout.css",
+                "input": "node_modules/@volo/ngx-lepton-x.lite/styles/sidemenu-layout.min.css",
                 "inject": true,
                 "bundleName": "lepton-x.min"
               },

@@ -7,7 +7,7 @@ import {
   LocalizationService,
   NAVIGATE_TO_MANAGE_PROFILE,
 } from '@abp/ng.core';
-import { UserProfileService } from '@lepton-x/common';
+import { UserProfileService } from '@volo/ngx-lepton-x.core';
 import { filter } from 'rxjs/operators';
 import { OAuthService } from 'angular-oauth2-oidc';
 
