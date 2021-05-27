@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ABP, LocalizationService, RoutesService, TreeNode } from '@abp/ng.core';
-import { NavbarItem, NavbarService as LeptonNavbarService } from '@lepton-x/common';
+import { NavbarItem, NavbarService as LeptonNavbarService } from '@volo/ngx-lepton-x.core';
 
 @Injectable({
   providedIn: 'root',

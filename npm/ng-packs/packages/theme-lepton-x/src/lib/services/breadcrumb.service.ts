@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ABP, getRoutePath, LocalizationService, RoutesService, TreeNode } from '@abp/ng.core';
 import { filter, map } from 'rxjs/operators';
-import { BreadcrumbItem, BreadcrumbService } from '@lepton-x/common';
+import { BreadcrumbItem, BreadcrumbService } from '@volo/ngx-lepton-x.core';
 import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
 
 @Injectable({

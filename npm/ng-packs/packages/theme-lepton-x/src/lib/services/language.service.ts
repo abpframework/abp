@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConfigStateService, LanguageInfo, SessionStateService } from '@abp/ng.core';
 import { filter } from 'rxjs/operators';
-import { Language, LanguageService } from '@lepton-x/common';
+import { Language, LanguageService } from '@volo/ngx-lepton-x.core';
 
 @Injectable({
   providedIn: 'root',
