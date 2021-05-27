@@ -58,13 +58,8 @@ namespace Microsoft.AspNetCore.Builder
                 .UseMiddleware<AbpCorrelationIdMiddleware>();
         }
 
-        public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app,
-            Action<RequestLocalizationOptions> optionsAction = null)
+        public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app)
         {
-            app.ApplicationServices
-                .GetRequiredService<IAbpRequestLocalizationOptionsProvider>()
-                .InitLocalizationOptions(optionsAction);
-
             return app.UseMiddleware<AbpRequestLocalizationMiddleware>();
         }
 
