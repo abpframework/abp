@@ -16,7 +16,7 @@ namespace Volo.CmsKit.Admin.MediaDescriptors
         [DynamicStringLength(typeof(MediaDescriptorConsts), nameof(MediaDescriptorConsts.MaxNameLength))]
         public string Name { get; set; }
 
-        public CreateMediaInputStream(Stream stream) : base(stream)
+        public CreateMediaInputStream(Stream stream, string contentType) : base(stream, contentType)
         {
         }
     }
