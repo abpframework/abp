@@ -37,9 +37,6 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.Url).HasMaxLength(AuditLogConsts.MaxUrlLength).HasColumnName(nameof(AuditLog.Url));
                 b.Property(x => x.HttpStatusCode).HasColumnName(nameof(AuditLog.HttpStatusCode));
 
-                if (builder.IsUsingOracle()) { AuditLogConsts.MaxExceptionsLengthValue = 2000; }
-                b.Property(x => x.Exceptions).HasMaxLength(AuditLogConsts.MaxExceptionsLengthValue).HasColumnName(nameof(AuditLog.Exceptions));
-                
                 b.Property(x => x.Comments).HasMaxLength(AuditLogConsts.MaxCommentsLength).HasColumnName(nameof(AuditLog.Comments));
                 b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLog.ExecutionDuration));
                 b.Property(x => x.ImpersonatorTenantId).HasColumnName(nameof(AuditLog.ImpersonatorTenantId));
@@ -67,7 +64,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.Parameters).HasMaxLength(AuditLogActionConsts.MaxParametersLength).HasColumnName(nameof(AuditLogAction.Parameters));
                 b.Property(x => x.ExecutionTime).HasColumnName(nameof(AuditLogAction.ExecutionTime));
                 b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLogAction.ExecutionDuration));
-                
+
                 b.HasIndex(x => new { x.AuditLogId });
                 b.HasIndex(x => new { x.TenantId, x.ServiceName, x.MethodName, x.ExecutionTime });
             });

@@ -28,7 +28,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host.Migrations
                     BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     HttpMethod = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     Url = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Exceptions = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
+                    Exceptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Comments = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     HttpStatusCode = table.Column<int>(type: "int", nullable: true),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),

@@ -106,7 +106,7 @@ namespace Volo.Abp.AuditLogging
             ExtraProperties = extraPropertyDictionary;
             EntityChanges = entityChanges;
             Actions = actions;
-            Exceptions = exceptions.Truncate(AuditLogConsts.MaxExceptionsLengthValue);
+            Exceptions = exceptions;
             Comments = comments.Truncate(AuditLogConsts.MaxCommentsLength);
         }
     }
