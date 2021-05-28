@@ -137,7 +137,9 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                         var twoFactorCode = context.Request?.Raw?["TwoFactorCode"];
                         if (!twoFactorProvider.IsNullOrWhiteSpace() && !twoFactorCode.IsNullOrWhiteSpace())
                         {
-                            if (await UserManager.VerifyTwoFactorTokenAsync(user, twoFactorProvider, twoFactorCode))
+                            var providers = await UserManager.GetValidTwoFactorProvidersAsync(user);
+                            if (providers.Contains(twoFactorProvider) &&
+                                await UserManager.VerifyTwoFactorTokenAsync(user, twoFactorProvider, twoFactorCode))
                             {
                                 await SetSuccessResultAsync();
                                 return;
