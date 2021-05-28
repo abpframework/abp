@@ -357,6 +357,7 @@
     "VolosoftSharingInformationMessage": "I would like Volosoft to share my information with select partners so I can receive relevant information about their products and services.",
     "WeWillSendYouADownloadLink": "A link to download the e-book has been sent to {0}.<br/> Check your inbox / junk / spam boxes!",
     "InvalidFormInputs": "Please, type the valid information specified on the form.",
-    "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>."
+    "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
+    "FreeDDDEBook": "Free DDD E-Book"
   }
 }
