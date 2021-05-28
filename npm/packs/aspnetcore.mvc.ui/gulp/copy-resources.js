@@ -4,7 +4,7 @@
 
     var gulp = require("gulp"),
         merge = require("merge-stream"),
-        fse = require('fs-extra'),
+        fs = require('fs'),
         glob = require('glob'),
         micromatch = require('micromatch'),
         path = require("path"),
@@ -47,10 +47,19 @@
     function cleanDirsAndFiles(patterns) {
         const { dirs, files } = findDirsAndFiles(patterns);
 
-        files.forEach(file => fse.unlinkSync(file));
-        dirs.forEach(dir => {
+        files.forEach(file => {
             try {
-                fse.rmdirSync(dir);
+                fs.unlinkSync(file);
+            } catch (_) {}
+        });
+
+        dirs.sort((a, b) => a < b ? 1 : -1);
+
+        dirs.forEach(dir => {
+            if (fs.readdirSync(dir).length) return;
+
+            try {
+                fs.rmdirSync(dir, {});
             } catch (_) {}
         });
     }
@@ -66,9 +75,9 @@
         });
 
         matches.forEach(match => {
-            if (!fse.pathExistsSync(match)) return;
+            if (!fs.existsSync(match)) return;
 
-            (fse.statSync(match).isDirectory() ? dirs : files).push(match);
+            (fs.statSync(match).isDirectory() ? dirs : files).push(match);
         });
 
         return { dirs, files };
@@ -144,8 +153,10 @@
         if (resourceMapping.mappings) {
             for (var mapping in resourceMapping.mappings) {
                 if (resourceMapping.mappings.hasOwnProperty(mapping)) {
-                    var source = replaceAliases(mapping);
                     var destination = replaceAliases(resourceMapping.mappings[mapping]);
+                    if (fs.existsSync(destination)) continue;
+
+                    var source = replaceAliases(mapping);
                     tasks.push(
                         gulp.src(source).pipe(gulp.dest(destination))
                     );

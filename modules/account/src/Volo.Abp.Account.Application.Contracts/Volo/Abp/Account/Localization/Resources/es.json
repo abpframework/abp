@@ -43,7 +43,7 @@
     "Description:Abp.Account.EnableLocalLogin": "Indica si el servidor permitirá a los usuarios autenticarse con una cuenta local.",
     "LoggedOutTitle": "Sesión cerrada",
     "LoggedOutText": "La sesión ha sido cerrada y serás redireccionado en breve.",
-    "ReturnToText": "Haz click aquí para redirigirte a {0}",
+    "ReturnToText": "Haga clic aquí para volver a la aplicación.",
     "OrLoginWith": "O inicia sesión con:",
     "ForgotPassword": "¿Olvidaste tu contraseña?",
     "SendPasswordResetLink_Information": "Se le enviara un enlace a su e-mail para restablecer la contraseña. Si no recibes el e-mail en unos minutos, por favor vuelve a intentarlo.",

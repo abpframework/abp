@@ -43,7 +43,7 @@
     "Description:Abp.Account.EnableLocalLogin": "Gibt an, ob der Server Benutzern die Authentifizierung mit einem lokalen Konto ermöglicht.",
     "LoggedOutTitle": "Abgemeldet",
     "LoggedOutText": "Sie wurden abgemeldet und werden bald weitergeleitet.",
-    "ReturnToText": "Klicken Sie hier, um zu {0} umzuleiten",
+    "ReturnToText": "Klicken Sie hier, um zur Anwendung zurückzukehren",
     "OrLoginWith": "Oder melden Sie sich an mit:",
     "ForgotPassword": "Passwort vergessen?",
     "SendPasswordResetLink_Information": "Ein Link zum Zurücksetzen des Passworts wird an Ihre E-Mail gesendet. Wenn Sie innerhalb weniger Minuten keine E-Mail erhalten, versuchen Sie es erneut.",

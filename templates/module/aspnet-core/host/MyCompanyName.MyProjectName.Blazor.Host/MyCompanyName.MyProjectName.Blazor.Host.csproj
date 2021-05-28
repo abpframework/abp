@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Blazorise.Bootstrap" Version="0.9.3.5" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.3.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly"  Version="5.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.*" />
   </ItemGroup>
 
@@ -20,8 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\modules\account\src\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Blazor.WebAssembly\Volo.Abp.Identity.Blazor.WebAssembly.csproj" />
-    <ProjectReference Include="..\..\..\..\..\modules\account\src\Volo.Abp.Account.Blazor\Volo.Abp.Account.Blazor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Blazor.WebAssembly\Volo.Abp.TenantManagement.Blazor.WebAssembly.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Blazor.WebAssembly\Volo.Abp.SettingManagement.Blazor.WebAssembly.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,6 +35,7 @@ export abstract class AuthFlowStrategy {
   protected configState: ConfigStateService;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
+  protected sessionState: SessionStateService;
   protected appConfigService: AbpApplicationConfigurationService;
 
   abstract checkIfInternalAuth(): boolean;
@@ -50,6 +51,7 @@ export abstract class AuthFlowStrategy {
     this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService);
     this.appConfigService = injector.get(AbpApplicationConfigurationService);
+    this.sessionState = injector.get(SessionStateService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
 
     this.listenToOauthErrors();
@@ -103,7 +105,9 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   navigateToLogin(queryParams?: Params) {
-    this.oAuthService.initCodeFlow(null, queryParams);
+    const lang = this.sessionState.getLanguage();
+    const culture = { culture: lang, 'ui-culture': lang };
+    this.oAuthService.initCodeFlow(null, { ...(lang && culture), ...queryParams });
   }
 
   checkIfInternalAuth() {
@@ -180,9 +184,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   login(params: LoginParams): Observable<any> {
-    const sessionState = this.injector.get(SessionStateService);
     const router = this.injector.get(Router);
-    const tenant = sessionState.getTenant();
+    const tenant = this.sessionState.getTenant();
 
     return from(
       this.oAuthService.fetchTokenUsingPasswordFlow(

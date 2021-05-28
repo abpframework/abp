@@ -1,23 +1,10 @@
-# Comment System
+# CMS Kit: Comments
 
-CMS kit provides a **comment** system to add comments feature to any kind of resource, like blog posts, products, etc. This section describes the details of the comments system.
+CMS kit provides a **comment** system to add comments feature to any kind of resource, like blog posts, products, etc.
 
-## Feature
+## Options
 
-CMS kit uses the [global feature](https://docs.abp.io/en/abp/latest/Global-Features) system for all implemented features. Commercial startup templates come with all the CMS kit related features are enabled by default, if you create the solution with public website option. If you're installing the CMS kit manually or want to enable the comment feature individually, open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure ` method.
-
-```csharp
-GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-{
-    cmsKit.Comments.Enable();
-});
-```
-
-# Options
-
-## CmsKitCommentOptions
-
-You can use the comment system to add comments to any kind of resources, like blog posts, products etc. Comment system provides a mechanism to group comment definitions by entity types. For example, if you want to use comment system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product`, and add comments under these entity types.
+The comment system provides a mechanism to group comment definitions by entity types. For example, if you want to use comment system for blog posts and products, you need to define two entity types named `BlogPosts` and `Product`, and add comments under these entity types.
 
 `CmsKitCommentOptions` can be configured in the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
 
@@ -38,9 +25,43 @@ Configure<CmsKitCommentOptions>(options =>
 
 - `EntityType`: Name of the entity type.
 
-# Internals
+## The Comments Widget
 
-## Domain Layer
+The comment system provides a commenting [widget](../../UI/AspNetCore/Widgets.md) to allow users to send comments to resources on public websites. You can simply place the widget on a page like below. 
+
+```csharp
+@await Component.InvokeAsync(typeof(CommentingViewComponent), new
+{
+  entityType = "Product",
+  entityId = "..."
+})
+```
+
+`entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
+
+## User Interface
+
+### Menu Items
+
+The following menu items are added by the commenting feature to the admin application:
+
+* **Comments**: Opens the comment management page.
+
+### Pages
+
+#### Comment Management
+
+You can view and manage comments on this page.
+
+![comment-page](../../images/cmskit-module-comment-page.png)
+
+You can also view and manage replies on this page.
+
+![comments-detail](../../images/cmskit-module-comments-detail.png)
+
+## Internals
+
+### Domain Layer
 
 #### Aggregates
 
@@ -101,17 +122,3 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 
 - **CmsComments**
 
-### MVC UI
-
-The comment system provides a commenting widget to allow users to send comments to resources on public websites. You can simply place the widget on a page like below. 
-
-```csharp
-@await Component.InvokeAsync(typeof(CommentingViewComponent), new
-{
-  entityType = "entityType",
-  entityId = "entityId"
-})
-```
-You need to specify entity type and entity ID parameters. Entity type represents the group name you specified while defining the comments in the domain module. Entity ID represents the unique identifier for the resource that users send comments to, such as blog post ID or product ID.
-
-For more information about widgets see [widgets](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) documentation.

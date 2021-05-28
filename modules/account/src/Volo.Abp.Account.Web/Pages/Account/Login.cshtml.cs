@@ -213,7 +213,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (result.IsLockedOut)
             {
+                Logger.LogWarning($"External login callback error: user is locked out!");
                 throw new UserFriendlyException("Cannot proceed because user is locked out!");
+            }
+            
+            if (result.IsNotAllowed)
+            {
+                Logger.LogWarning($"External login callback error: user is not allowed!");
+                throw new UserFriendlyException("Cannot proceed because user is not allowed!");
             }
 
             if (result.Succeeded)
