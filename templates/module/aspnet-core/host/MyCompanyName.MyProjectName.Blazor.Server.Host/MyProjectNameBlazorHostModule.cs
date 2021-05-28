@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Blazor.Server.Host.Menus;
+using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
@@ -50,6 +51,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName.Blazor.Server.Host
 {
     [DependsOn(
+        typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
