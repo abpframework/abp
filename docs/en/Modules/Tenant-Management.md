@@ -14,6 +14,10 @@ The [SaaS Module](https://commercial.abp.io/modules/Volo.Saas) is an alternative
 
 This module comes as pre-installed (as NuGet packages) when you [create a new solution](https://abp.io/get-started) with the ABP Framework. You can continue to use it via NuGet packages and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../CLI.md) command) to develop your custom module.
 
+### The Source Code
+
+The source code of this module can be accessed [here](https://github.com/abpframework/abp/tree/dev/modules/tenant-management). The source code is licensed with [MIT](https://choosealicense.com/licenses/mit/), so you can freely use and customize it.
+
 ## User Interface
 
 This module adds "*Administration -> Tenant Management -> Tenants*" menu item to the main menu of the application, which opens the page shown below:
@@ -46,9 +50,56 @@ The Features action opens a modal to enable/disable/set [features](../Features.m
 
 ## Internals
 
-This section can be used as a reference if you want to [customize](../Customizing-Application-Modules-Guide.md) this module without changing it source code.
+This section can be used as a reference if you want to [customize](../Customizing-Application-Modules-Guide.md) this module without changing [its source code](https://github.com/abpframework/abp/tree/dev/modules/tenant-management).
 
-*TODO: Internals*
+### Domain Layer
+
+#### Aggregates
+
+* `Tenant`
+
+#### Repositories
+
+* `ITenantRepository`
+
+#### Domain Services
+
+* `TenantManager`
+
+### Application Layer
+
+#### Application Services
+
+* `TenantAppService`
+
+#### Permissions
+
+- `AbpTenantManagement.Tenants`: Tenant management.
+- `AbpTenantManagement.Tenants.Create`: Creating a new tenant.
+- `AbpTenantManagement.Tenants.Update`: Editing an existing tenant.
+- `AbpTenantManagement.Tenants.Delete`: Deleting an existing tenant.
+- `AbpTenantManagement.Tenants.ManageFeatures`: Manage features of the tenants.
+
+### Entity Framework Core Integration
+
+* `TenantManagementDbContext` (implements `ITenantManagementDbContext`)
+
+**Database Tables:**
+
+* `AbpTenants`
+* `AbpTenantConnectionStrings`
+
+### MongoDB Integration
+
+* `TenantManagementMongoDbContext` (implements `ITenantManagementMongoDbContext`)
+
+**Database Collections:**
+
+* `AbpTenants` (also includes the connection string)
+
+## Notices
+
+ABP Framework allows to use *database per tenant* approach that allows a tenant can have a dedicated database. This module has the fundamental infrastructure to make that implementation possible (see its source code), however it doesn't implement the application layer and UI functionalities to provide it as an out of the box implementation. You can implement these features yourself, or consider to use the [ABP Commercial Saas Module](https://docs.abp.io/en/commercial/latest/modules/saas) that fully implements it and provides much more business features.
 
 ## See Also
 
