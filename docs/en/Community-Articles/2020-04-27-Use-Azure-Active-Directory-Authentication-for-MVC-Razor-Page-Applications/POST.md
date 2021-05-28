@@ -6,15 +6,108 @@ Adding Azure Active Directory is pretty straightforward in ABP framework. Couple
 
 Two different **alternative approaches** for AzureAD integration will be demonstrated for better coverage.
 
-1. ~~**AddAzureAD**: This approach uses Microsoft [AzureAD UI nuget package](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.AzureAD.UI/) which is very popular when users search the web about how to integrate AzureAD to their web application.~~ Now marked **Obsolete** (see https://github.com/aspnet/Announcements/issues/439). 
-2. **AddOpenIdConnect**: This approach uses default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for not only AzureAD but for all OpenId connections.
+1. **AddOpenIdConnect**: This approach uses default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for not only AzureAD but for all OpenId connections.
 3. **AddMicrosoftIdentityWebAppAuthentication:** This approach uses newly introduced [Microsoft.Identity.Web nuget package](https://www.nuget.org/packages/Microsoft.Identity.Web/) to replace AddAzureAD.
+3. ~~**AddAzureAD**: This approach uses Microsoft [AzureAD UI nuget package](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.AzureAD.UI/) which is very popular when users search the web about how to integrate AzureAD to their web application.~~ Now marked **Obsolete** (see https://github.com/aspnet/Announcements/issues/439). 
 
 > There is **no difference** in functionality between these approaches. AddAzureAD is an abstracted way of OpenIdConnection ([source](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADAuthenticationBuilderExtensions.cs#L122)) with predefined cookie settings.
 >
 > However there are key differences in integration to ABP applications because of default configurated signin schemes which will be explained below.
 
-## 1. AddAzureAD
+## 1. AddOpenIdConnect 
+
+If you don't want to use an extra nuget package in your application, you can use the straight default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for all OpenId connections including AzureAD external authentication.
+
+You don't have to use `appsettings.json` configuration but it is a good practice to set AzureAD information in the `appsettings.json`. 
+
+To get the AzureAD information from `appsettings.json`, which will be used in `OpenIdConnectOptions` configuration, simply add a new section to `appsettings.json` located in your **.Web** project:
+
+````json
+  "AzureAd": {
+    "Instance": "https://login.microsoftonline.com/",
+    "TenantId": "<your-tenant-id>",
+    "ClientId": "<your-client-id>",
+    "Domain": "domain.onmicrosoft.com",
+    "CallbackPath": "/signin-azuread-oidc"	
+  }
+````
+
+Then, In your **.Web** project; you can modify the  `ConfigureAuthentication` method located in your **ApplicationWebModule** with the following:
+
+````csharp
+private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
+        {
+            context.Services.AddAuthentication()
+                ... //Omitted other third party configurations
+                .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
+                 {
+                    options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"] + "/v2.0/";
+                    options.ClientId = configuration["AzureAd:ClientId"];
+                    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+                    options.CallbackPath = configuration["AzureAd:CallbackPath"];
+                    options.ClientSecret = configuration["AzureAd:ClientSecret"];
+                    options.RequireHttpsMetadata = false;
+                    options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.Scope.Add("email");
+
+                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+                 });
+        }
+````
+
+> **Don't forget to:**
+>
+> * Add  `options.Scope.Add("email");` since [default signin scheme is `AzureADOpenID`](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADOpenIdConnectOptionsConfiguration.cs#L35).
+> * Add `options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");`. Mapping this to [ClaimTypes.NameIdentifier](https://github.com/dotnet/runtime/blob/6d395de48ac718a913e567ae80961050f2a9a4fa/src/libraries/System.Security.Claims/src/System/Security/Claims/ClaimTypes.cs#L59) is important since default SignIn Manager behavior uses this claim type for external login information.
+
+
+
+And that's it, integration is completed. Keep on mind that you can connect any other external authentication providers. 
+
+## 2. Alternative Approach: AddMicrosoftIdentityWebApp
+
+With .Net 5.0, AzureAd is marked [obsolete](https://github.com/dotnet/aspnetcore/issues/25807) and will not be supported in the near future. However its expanded functionality is available in [microsoft-identity-web](https://github.com/AzureAD/microsoft-identity-web/wiki) packages.
+
+Add (or replace with) the new nuget package Microsoft.Identity.Web nuget package](https://www.nuget.org/packages/Microsoft.Identity.Web/).
+
+In your **.Web** project; you update the  `ConfigureAuthentication` method located in your **ApplicationWebModule** with the following while having the AzureAd appsettings section as defined before:
+
+````csharp
+private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
+        {
+    		context.Services.AddAuthentication()
+                ... //Omitted other third party configurations
+            .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"));
+    
+    		context.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"] + "/v2.0/";
+                options.ClientId = configuration["AzureAd:ClientId"];
+                options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+                options.CallbackPath = configuration["AzureAd:CallbackPath"];
+                options.ClientSecret = configuration["AzureAd:ClientSecret"];
+                options.RequireHttpsMetadata = false;
+                options.SaveTokens = false;
+                options.GetClaimsFromUserInfoEndpoint = true;
+
+                options.SignInScheme = IdentityConstants.ExternalScheme;
+                
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+            });
+		}
+````
+
+And that's all to add new Microsoft-Identity-Web. 
+
+> **Don't forget to:**
+>
+> * Add `options.SignInScheme = IdentityConstants.ExternalScheme` since [default signin scheme is `AzureADOpenID`](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADOpenIdConnectOptionsConfiguration.cs#L35).
+> * Add `options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");`. Mapping this to [ClaimTypes.NameIdentifier](https://github.com/dotnet/runtime/blob/6d395de48ac718a913e567ae80961050f2a9a4fa/src/libraries/System.Security.Claims/src/System/Security/Claims/ClaimTypes.cs#L59) is important since default SignIn Manager behavior uses this claim type for external login information.
+
+Keep in mind that [Microsoft-Identity-Web](https://github.com/AzureAD/microsoft-identity-web) is relatively new and keeps getting new enhancements, features and documentation.
+
+## 3. Obsolete Alternative Approach: AddAzureAD
 
 This approach uses the most common way to integrate AzureAD by using the [Microsoft AzureAD UI nuget package](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.AzureAD.UI/). 
 
@@ -45,15 +138,8 @@ In your **.Web** project, locate your **ApplicationWebModule** and modify `Confi
 ````csharp
 private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
             context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "Acme.BookStore";
-                })
+            ... //Omitted other third party configurations
             .AddAzureAD(options => configuration.Bind("AzureAd", options));
 
             context.Services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
@@ -70,6 +156,8 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
                 options.SignInScheme = IdentityConstants.ExternalScheme;
 
                 options.Scope.Add("email");
+                
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
             });
 		}
 ````
@@ -77,99 +165,11 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 > **Don't forget to:**
 >
 > * Add `.AddAzureAD(options => configuration.Bind("AzureAd", options))` after `.AddAuthentication()`. This binds your AzureAD appsettings and easy to miss out.
-> * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()`. This will disable the default Microsoft claim type mapping.
-> * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier)`. Mapping this to [ClaimTypes.NameIdentifier](https://github.com/dotnet/runtime/blob/6d395de48ac718a913e567ae80961050f2a9a4fa/src/libraries/System.Security.Claims/src/System/Security/Claims/ClaimTypes.cs#L59) is important since default SignIn Manager behavior uses this claim type for external login information.
+> * Add `options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");`. Mapping this to [ClaimTypes.NameIdentifier](https://github.com/dotnet/runtime/blob/6d395de48ac718a913e567ae80961050f2a9a4fa/src/libraries/System.Security.Claims/src/System/Security/Claims/ClaimTypes.cs#L59) is important since default SignIn Manager behavior uses this claim type for external login information.
 > * Add `options.SignInScheme = IdentityConstants.ExternalScheme` since [default signin scheme is `AzureADOpenID`](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADOpenIdConnectOptionsConfiguration.cs#L35).
 > * Add `options.Scope.Add("email")` if you are using **v2.0** endpoint of AzureAD since v2.0 endpoint doesn't return the `email` claim as default. The [Account Module](https://docs.abp.io/en/abp/latest/Modules/Account) uses `email` claim to [register external users](https://github.com/abpframework/abp/blob/be32a55449e270d2d456df3dabdc91f3ffdd4fa9/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L215). 
 
 You are done and integration is completed.
-
-## 2. Alternative Approach: AddOpenIdConnect 
-
-If you don't want to use an extra nuget package in your application, you can use the straight default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for all OpenId connections including AzureAD external authentication.
-
-You don't have to use `appsettings.json` configuration but it is a good practice to set AzureAD information in the `appsettings.json`. 
-
-To get the AzureAD information from `appsettings.json`, which will be used in `OpenIdConnectOptions` configuration, simply add a new section to `appsettings.json` located in your **.Web** project:
-
-````json
-  "AzureAd": {
-    "Instance": "https://login.microsoftonline.com/",
-    "TenantId": "<your-tenant-id>",
-    "ClientId": "<your-client-id>",
-    "Domain": "domain.onmicrosoft.com",
-    "CallbackPath": "/signin-azuread-oidc"	
-  }
-````
-
-Then, In your **.Web** project; you can modify the  `ConfigureAuthentication` method located in your **ApplicationWebModule** with the following:
-
-````csharp
-private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-        {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
-
-            context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "BookStore";
-                })
-                .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
-                 {
-                     options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"] + "/v2.0/";
-                     options.ClientId = configuration["AzureAd:ClientId"];
-                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-                     options.CallbackPath = configuration["AzureAd:CallbackPath"];
-                     options.RequireHttpsMetadata = false;
-                     options.SaveTokens = true;
-                     options.GetClaimsFromUserInfoEndpoint = true;
-                     
-                     options.Scope.Add("email");
-                 });
-        }
-````
-
-And that's it, integration is completed. Keep on mind that you can connect any other external authentication providers. 
-
-## 3. AddMicrosoftIdentityWebAppAuthentication
-
-With .Net 5.0, AzureAd is marked [obsolete](https://github.com/dotnet/aspnetcore/issues/25807) and will not be supported in the near future. However its expanded functionality is available in [microsoft-identity-web](https://github.com/AzureAD/microsoft-identity-web/wiki) packages.
-
-Add (or replace with) the new nuget package Microsoft.Identity.Web nuget package](https://www.nuget.org/packages/Microsoft.Identity.Web/).
-
-In your **.Web** project; you update the  `ConfigureAuthentication` method located in your **ApplicationWebModule** with the following while having the AzureAd appsettings section as defined before:
-
-````csharp
-private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-        {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
-            context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "Acme.BookStore";
-                });
-            
-    			context.Services.AddMicrosoftIdentityWebAppAuthentication(
-                    configuration: configuration,
-                    configSectionName: "AzureAd",
-                    openIdConnectScheme:"AzureAD",
-                    cookieScheme:null);
-		}
-````
-
-And that's all to add new Microsoft-Identity-Web. 
-
-> **Don't forget to:**
->
-> * Pass **cookieScheme** parameter as **null** or your [*GetExternalLoginInfoAsync* method will always return null](https://github.com/AzureAD/microsoft-identity-web/issues/133#). 
-
-Keep in mind that [Microsoft-Identity-Web](https://github.com/AzureAD/microsoft-identity-web) is relatively new and keeps getting new enhancements, features and documentation.
 
 ## The Source Code
 
@@ -247,3 +247,14 @@ You can find the source code of the completed example [here](https://github.com/
       	await Task.CompletedTask;
       });
     ````
+  
+* I get page not found error on redirection to **https://login.live.com/oauth20_authorize.srf?**!
+
+  * Probably you are trying to login with Microsoft account to Azure portal instead of the Azure AD account. Try azure AD user account for login instead of microsoft account. You can also check the answers for [this question](https://answers.microsoft.com/en-us/msoffice/forum/msoffice_o365admin-mso_dirservices-mso_o365b/cant-login-in-loginlivecom-with-a-ms-account-valid/6da991e6-9528-461a-9638-9c5680e95888) and [this question](https://docs.microsoft.com/en-us/answers/questions/34806/azure-ad-404-error-when-login-with-microsoft-accou.html) for more details.
+
+# May 2021 Update
+
+- **AddOpenIdConnect**: Removed `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();` and added `sub`  claim mapping in ClaimActions rather than global mapping.
+- Updated `AddMicrosoftIdentityWebAppAuthentication ` to `AddMicrosoftIdentityWebApp`.
+- Updated OpenIdConnect and AddMicrosoftIdentityWebApp configurations.
+- Obsolete approach moved to third place in the list.
