@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
@@ -130,6 +131,30 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 var result = await SignInManager.CheckPasswordSignInAsync(user, context.Password, true);
                 if (result.Succeeded)
                 {
+                    if (await IsTfaEnabled(user))
+                    {
+                        var twoFactorProvider = context.Request?.Raw?["TwoFactorProvider"];
+                        var twoFactorCode = context.Request?.Raw?["TwoFactorCode"];
+                        if (!twoFactorProvider.IsNullOrWhiteSpace() && !twoFactorCode.IsNullOrWhiteSpace())
+                        {
+                            if (await UserManager.VerifyTwoFactorTokenAsync(user, twoFactorProvider, twoFactorCode))
+                            {
+                                await SetSuccessResultAsync();
+                                return;
+                            }
+                        }
+
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: RequiresTwoFactor", context.UserName);
+                        var twoFactorToken = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, nameof(SignInResult.RequiresTwoFactor));
+                        context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, nameof(SignInResult.RequiresTwoFactor),
+                            new Dictionary<string, object>()
+                            {
+                                {"userId", user.Id},
+                                {"twoFactorToken", twoFactorToken}
+                            });
+                        return;
+                    }
+
                     await SetSuccessResultAsync();
                     return;
                 }
@@ -195,6 +220,11 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
 
             context.UserName = userByEmail.UserName;
         }
+
+        protected virtual async Task<bool> IsTfaEnabled(IdentityUser user)
+            => UserManager.SupportsUserTwoFactor &&
+               await UserManager.GetTwoFactorEnabledAsync(user) &&
+               (await UserManager.GetValidTwoFactorProvidersAsync(user)).Count > 0;
 
         protected virtual Task AddCustomClaimsAsync(List<Claim> customClaims, IdentityUser user, ResourceOwnerPasswordValidationContext context)
         {
