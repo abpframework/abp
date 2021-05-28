@@ -112,10 +112,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 /* returning a class that holds a reference to response
                  * content just to be sure that GC does not dispose of
                  * it before we finish doing our work with the stream */
-                return (T)(object)new RemoteStreamContent(await responseContent.ReadAsStreamAsync())
-                {
-                    ContentType = responseContent.Headers.ContentType?.ToString()
-                };
+                return (T)(object)new RemoteStreamContent(await responseContent.ReadAsStreamAsync(), responseContent.Headers.ContentType?.ToString(), responseContent.Headers.ContentLength);
             }
 
             var stringContent = await responseContent.ReadAsStringAsync();

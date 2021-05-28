@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Volo.Abp.Content
 {
-    public interface IRemoteStreamContent
+    public interface IRemoteStreamContent : IDisposable
     {
         string ContentType { get; }
 

@@ -82,15 +82,12 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     if (value is IRemoteStreamContent remoteStreamContent)
                     {
                         var stream = remoteStreamContent.GetStream();
-                        if (stream.CanSeek)
-                        {
-                            stream.Position = 0;
-                        }
                         var streamContent = new StreamContent(stream);
                         if (!remoteStreamContent.ContentType.IsNullOrWhiteSpace())
                         {
                             streamContent.Headers.ContentType = new MediaTypeHeaderValue(remoteStreamContent.ContentType);
                         }
+                        streamContent.Headers.ContentLength = stream.GetNullableLength() - stream.GetNullablePosition();
                         formData.Add(streamContent, parameter.Name, parameter.Name);
                     }
                     else if (value is IEnumerable<IRemoteStreamContent> remoteStreamContents)
@@ -98,15 +95,12 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                         foreach (var content in remoteStreamContents)
                         {
                             var stream = content.GetStream();
-                            if (stream.CanSeek)
-                            {
-                                stream.Position = 0;
-                            }
                             var streamContent = new StreamContent(stream);
                             if (!content.ContentType.IsNullOrWhiteSpace())
                             {
                                 streamContent.Headers.ContentType = new MediaTypeHeaderValue(content.ContentType);
                             }
+                            streamContent.Headers.ContentLength = stream.GetNullableLength() - stream.GetNullablePosition();
                             formData.Add(streamContent, parameter.Name, parameter.Name);
                         }
                     }

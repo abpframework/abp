@@ -108,12 +108,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 
                     if (file.Name.Equals(modelName, StringComparison.OrdinalIgnoreCase))
                     {
-                        postedFiles.Add(new RemoteStreamContent(file.OpenReadStream())
-                        {
-                            ContentType = file.ContentType
-                        });
+                        postedFiles.Add(new RemoteStreamContent(file.OpenReadStream(), file.ContentType, file.Length));
                     }
                 }
+            }
+            else if (bindingContext.IsTopLevelObject)
+            {
+                postedFiles.Add(new RemoteStreamContent(request.Body, request.ContentType, request.ContentLength));
             }
         }
     }

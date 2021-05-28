@@ -30,11 +30,31 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
                 var streamContent = new StreamContent(memoryStream);
                 streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/rtf");
 
-                requestMessage.Content = new MultipartFormDataContent {{streamContent, "file", "file"}};
+                requestMessage.Content = new MultipartFormDataContent { { streamContent, "file", "file" } };
 
                 var response = await Client.SendAsync(requestMessage);
 
                 (await response.Content.ReadAsStringAsync()).ShouldBe("UploadAsync:application/rtf");
+            }
+        }
+
+        [Fact]
+        public async Task UploadRawAsync()
+        {
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/remote-stream-content-test/upload-raw"))
+            {
+                var memoryStream = new MemoryStream();
+                var text = @"{ ""hello"": ""world"" }";
+                await memoryStream.WriteAsync(Encoding.UTF8.GetBytes(text));
+                memoryStream.Position = 0;
+
+                var streamContent = new StreamContent(memoryStream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                requestMessage.Content = streamContent;
+
+                var response = await Client.SendAsync(requestMessage);
+                (await response.Content.ReadAsStringAsync()).ShouldBe($"{text}:application/json");
             }
         }
     }

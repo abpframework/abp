@@ -72,11 +72,9 @@ namespace Volo.Abp.TestApp.Application
         {
             var memoryStream = new MemoryStream();
             await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
+            memoryStream.Position = 0;
 
-            return new RemoteStreamContent(memoryStream)
-            {
-                ContentType = "application/rtf"
-            };
+            return new RemoteStreamContent(memoryStream, "application/rtf");
         }
 
         public async Task<string> UploadAsync(IRemoteStreamContent streamContent)

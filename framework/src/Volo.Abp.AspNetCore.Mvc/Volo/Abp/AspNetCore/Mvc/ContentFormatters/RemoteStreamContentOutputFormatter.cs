@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
@@ -28,11 +29,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ContentFormatters
 
                 using (var stream = remoteStream.GetStream())
                 {
-                    if (stream.CanSeek)
-                    {
-                        stream.Position = 0;
-                    }
-
                     await stream.CopyToAsync(context.HttpContext.Response.Body);
                 }
             }
