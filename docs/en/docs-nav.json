@@ -440,8 +440,8 @@
               ]
             },
             {
-              "text": "Guide: Implementing DDD",
-              "path": "Domain-Driven-Design-Implementation-Guide.md"
+              "text": "E-Book: Implementing DDD",
+              "path": "https://abp.io/books/implementing-domain-driven-design"
             }
           ]
         },
