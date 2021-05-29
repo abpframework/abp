@@ -63,7 +63,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Bundles all third party styles and scripts required by modules and updates index.html file.";
+            return "Restore all npm packages and copy to libs.";
         }
 
         public static class Options

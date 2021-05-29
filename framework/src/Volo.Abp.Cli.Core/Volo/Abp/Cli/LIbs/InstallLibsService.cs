@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.FileSystemGlobbing;
+using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
@@ -77,7 +80,7 @@ namespace Volo.Abp.Cli.LIbs
 
                     mapping.ReplaceAliases();
 
-                    resourceMapping.Clean.AddRange(mapping.Clean);
+                    mapping.Clean.ForEach(c => resourceMapping.Clean.AddIfNotContains(c));
                     mapping.Aliases.ToList().ForEach(x =>
                     {
                         resourceMapping.Aliases.AddIfNotContains(new KeyValuePair<string, string>(x.Key, x.Value));
@@ -97,24 +100,21 @@ namespace Volo.Abp.Cli.LIbs
         {
             foreach (var mapping in resourceMapping.Mappings)
             {
-                var sourcePath = Path.Combine(fileDirectory, mapping.Key);
                 var destPath = Path.Combine(fileDirectory, mapping.Value);
 
-                if (Path.HasExtension(sourcePath) && File.Exists(sourcePath))
-                {
-                    Directory.CreateDirectory(Path.GetFullPath(destPath));
-                    File.Copy(sourcePath, Path.Combine(destPath, Path.GetFileName(sourcePath)), true);
-                }
-                else
-                {
-                    var files = Directory.GetFiles(fileDirectory, mapping.Key);
+                var files = FindFiles(fileDirectory, mapping.Key);
 
-                    Directory.CreateDirectory(Path.GetFullPath(destPath));
-
-                    foreach (var file in files)
+                foreach (var file in files)
+                {
+                    var destFilePath = Path.Combine(destPath, Path.GetFileName(file));
+                    if (File.Exists(destFilePath))
                     {
-                        File.Copy(file, Path.Combine(destPath, Path.GetFileName(file)), true);
+                        continue;
                     }
+
+                    Directory.CreateDirectory(Path.GetFullPath(destPath));
+                    File.Copy(file, destFilePath);
+
                 }
             }
         }
@@ -133,23 +133,56 @@ namespace Volo.Abp.Cli.LIbs
 
         private void CleanDirsAndFiles(string directory, ResourceMapping resourceMapping)
         {
-            foreach (var cleanPattern in resourceMapping.Clean)
+            var files = FindFiles(directory, resourceMapping.Clean.ToArray());
+
+            foreach (var file in files)
             {
-                CleanDirsAndFiles(directory, cleanPattern);
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                }
+            }
+
+            foreach (var directoryInfo in Directory.GetDirectories(Path.Combine(directory, resourceMapping.Clean.First()),"*", SearchOption.AllDirectories).Reverse())
+            {
+                if (!Directory.EnumerateFileSystemEntries(directoryInfo).Any())
+                {
+                    Directory.Delete(directoryInfo);
+                }
             }
         }
 
-        private void CleanDirsAndFiles(string directory, string patterns)
+        private string[] FindFiles(string directory, params string[] patterns)
         {
-            foreach (var file in Directory.GetFiles(directory, patterns))
+            var matcher = new Matcher();
+
+            foreach (var pattern in patterns)
             {
-                File.Delete(file);
+                if (pattern.StartsWith("!"))
+                {
+                    matcher.AddExclude(NormalizeGlob(pattern).TrimStart('!'));
+                }
+                else
+                {
+                    matcher.AddInclude(NormalizeGlob(pattern));
+                }
             }
 
-            foreach (var dir in Directory.GetDirectories(directory, patterns))
+            var result = matcher.Execute(new DirectoryInfoWrapper(new DirectoryInfo(directory)));
+
+            return result.Files.Select(x => Path.Combine(directory, x.Path)).ToArray();
+        }
+
+        private string NormalizeGlob(string pattern)
+        {
+            pattern = pattern.Replace("//", "/");
+
+            if (!Path.HasExtension(pattern) && !pattern.EndsWith("*"))
             {
-                Directory.Delete(dir, true);
+                return pattern.EnsureEndsWith('/') + "**";
             }
+
+            return pattern;
         }
 
         private void RunNpmInstall(string directory)
