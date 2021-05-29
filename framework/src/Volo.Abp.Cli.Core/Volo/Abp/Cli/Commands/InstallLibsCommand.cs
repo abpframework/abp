@@ -63,7 +63,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Restore all npm packages and copy to libs.";
+            return "Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.";
         }
 
         public static class Options

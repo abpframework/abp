@@ -39,6 +39,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
 * **`logout`**: 在你的计算机注销认证.
+* **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
 ### help
 
@@ -339,3 +340,19 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 ```
 abp logout
 ```
+
+### install-libs
+
+为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包, 它的 **执行目录** 或者传递的 ```--working-directory``` 目录必须包含一个项目文件(*.csproj).
+
+`install-libs` 命令读取 `abp.resourcemapping.js` 来管理包. 参阅[客户端包管理](UI/AspNetCore/Client-Side-Package-Management.md)了解更多细节.
+
+用法:
+
+````bash
+abp install-libs [options]
+````
+
+#### Options
+
+* ```--working-directory``` 或 ```-wd```: 指定工作目录, 当执行目录不包含项目文件时会很有用.
