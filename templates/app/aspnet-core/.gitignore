@@ -260,3 +260,13 @@ src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/Logs/*
 src/MyCompanyName.MyProjectName.DbMigrator/Logs/*
 src/MyCompanyName.MyProjectName.Blazor.Server/Logs/*
 src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/Logs/*
+
+# appsettings.secrets.json
+src/MyCompanyName.MyProjectName.Web/appsettings.secrets.json
+src/MyCompanyName.MyProjectName.Web.Host/appsettings.secrets.json
+src/MyCompanyName.MyProjectName.IdentityServer/appsettings.secrets.json
+src/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.secrets.json
+src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/appsettings.secrets.json
+src/MyCompanyName.MyProjectName.DbMigrator/appsettings.secrets.json
+src/MyCompanyName.MyProjectName.Blazor.Server/appsettings.secrets.json
+src/MyCompanyName.MyProjectName.Blazor.Server.Tiered/appsettings.secrets.json

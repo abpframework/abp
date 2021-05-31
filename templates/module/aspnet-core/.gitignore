@@ -256,3 +256,11 @@ host/MyCompanyName.MyProjectName.IdentityServer/Logs/logs.txt
 host/MyCompanyName.MyProjectName.HttpApi.Host/Logs/logs.txt
 host/MyCompanyName.MyProjectName.Web.Host/Logs/logs.txt
 host/MyCompanyName.MyProjectName.Web.Unified/Logs/logs.txt
+host/MyCompanyName.MyProjectName.Blazor.Server.Host/Logs/logs.txt
+
+# appsettings.secrets.json
+host/MyCompanyName.MyProjectName.IdentityServer/appsettings.secrets.json
+host/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.secrets.json
+host/MyCompanyName.MyProjectName.Web.Host/appsettings.secrets.json
+host/MyCompanyName.MyProjectName.Web.Unified/appsettings.secrets.json
+host/MyCompanyName.MyProjectName.Blazor.Server.Host/appsettings.secrets.json
