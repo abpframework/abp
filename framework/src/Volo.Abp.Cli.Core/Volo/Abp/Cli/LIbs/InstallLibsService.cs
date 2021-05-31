@@ -16,6 +16,8 @@ namespace Volo.Abp.Cli.LIbs
 {
     public class InstallLibsService : IInstallLibsService, ITransientDependency
     {
+        public const string LibsDirectory = "./wwwroot/libs";
+
         public ILogger<InstallLibsService> Logger { get; set; }
 
         private readonly IJsonSerializer _jsonSerializer;
@@ -26,7 +28,7 @@ namespace Volo.Abp.Cli.LIbs
             Logger = NullLogger<InstallLibsService>.Instance;
         }
 
-        public async Task InstallLibs(string directory)
+        public async Task InstallLibsAsync(string directory)
         {
             var projectFiles = Directory.GetFiles(directory, "*.csproj");
             if (!projectFiles.Any())
@@ -65,7 +67,7 @@ namespace Volo.Abp.Cli.LIbs
             var mappingFiles = Directory.GetFiles(fileDirectory, "abp.resourcemapping.js", SearchOption.AllDirectories);
             var resourceMapping = new ResourceMapping
             {
-                Clean = new List<string> {"./wwwroot/libs"}
+                Clean = new List<string> {LibsDirectory}
             };
 
             foreach (var mappingFile in mappingFiles)
@@ -92,8 +94,15 @@ namespace Volo.Abp.Cli.LIbs
                 }
             }
 
+            EnsureLibsFolderExists(fileDirectory, LibsDirectory);
+
             CleanDirsAndFiles(fileDirectory, resourceMapping);
             CopyResourcesToLibs(fileDirectory, resourceMapping);
+        }
+
+        private void EnsureLibsFolderExists(string fileDirectory, string libsDirectory)
+        {
+            Directory.CreateDirectory(Path.Combine(fileDirectory, libsDirectory));
         }
 
         private void CopyResourcesToLibs(string fileDirectory, ResourceMapping resourceMapping)
