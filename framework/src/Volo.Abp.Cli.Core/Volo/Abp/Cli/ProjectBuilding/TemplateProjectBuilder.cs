@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using NuGet.Versioning;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
@@ -110,6 +111,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 templateFile,
                 args
             );
+
+            if (context.Template is AppTemplateBase appTemplateBase)
+            {
+                appTemplateBase.HasDbMigrations = SemanticVersion.Parse(templateFile.Version) >= new SemanticVersion(4, 4, 0);
+            }
 
             TemplateProjectBuildPipelineBuilder.Build(context).Execute();
 

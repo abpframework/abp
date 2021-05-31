@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
@@ -14,7 +12,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                new[] {"EntityFrameworkCore.DbMigrations", "EntityFrameworkCore"},
                 "MongoDB"
             );
 
@@ -23,7 +21,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                new[] {"MyProjectNameEntityFrameworkCoreDbMigrationsModule", "MyProjectNameEntityFrameworkCoreModule"},
                 "MyProjectNameMongoDbModule"
             );
 
@@ -37,7 +35,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyCompanyName.MyProjectName.IdentityServer.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                new[] {"EntityFrameworkCore.DbMigrations", "EntityFrameworkCore"},
                 "MongoDB"
             );
 
@@ -46,7 +44,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                new[] {"MyProjectNameEntityFrameworkCoreDbMigrationsModule", "MyProjectNameEntityFrameworkCoreModule"},
                 "MyProjectNameMongoDbModule"
             );
 
@@ -60,7 +58,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyCompanyName.MyProjectName.HttpApi.Host.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                new[] {"EntityFrameworkCore.DbMigrations", "EntityFrameworkCore"},
                 "MongoDB"
             );
 
@@ -69,7 +67,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                new[] {"MyProjectNameEntityFrameworkCoreDbMigrationsModule", "MyProjectNameEntityFrameworkCoreModule"},
                 "MyProjectNameMongoDbModule"
             );
 
@@ -83,7 +81,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                new[] {"EntityFrameworkCore.DbMigrations", "EntityFrameworkCore"},
                 "MongoDB"
             );
 
@@ -92,7 +90,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                new[] {"MyProjectNameEntityFrameworkCoreDbMigrationsModule", "MyProjectNameEntityFrameworkCoreModule"},
                 "MyProjectNameMongoDbModule"
             );
 
@@ -106,7 +104,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyCompanyName.MyProjectName.HttpApi.HostWithIds.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                new[] {"EntityFrameworkCore.DbMigrations", "EntityFrameworkCore"},
                 "MongoDB"
             );
 
@@ -115,7 +113,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                new[] {"MyProjectNameEntityFrameworkCoreDbMigrationsModule", "MyProjectNameEntityFrameworkCoreModule"},
                 "MyProjectNameMongoDbModule"
             );
 
@@ -129,7 +127,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/MyCompanyName.MyProjectName.DbMigrator.csproj",
-                "EntityFrameworkCore.DbMigrations",
+                new[] {"EntityFrameworkCore.DbMigrations", "EntityFrameworkCore"},
                 "MongoDB"
             );
 
@@ -138,7 +136,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/MyProjectNameDbMigratorModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                new[] {"MyProjectNameEntityFrameworkCoreDbMigrationsModule", "MyProjectNameEntityFrameworkCoreModule"},
                 "MyProjectNameMongoDbModule"
             );
 
@@ -152,7 +150,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyCompanyName.MyProjectName.Domain.Tests.csproj",
-                "EntityFrameworkCore.Tests",
+                new[] {"EntityFrameworkCore.Tests"},
                 "MongoDB.Tests"
             );
 
@@ -201,7 +199,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 ChangeProjectReference(
                     context,
                     "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/MyCompanyName.MyProjectName.Web.Public.csproj",
-                    "EntityFrameworkCore.DbMigrations",
+                    new[] {"EntityFrameworkCore.DbMigrations", "EntityFrameworkCore"},
                     "MongoDB"
                 );
 
@@ -210,7 +208,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/MyProjectNameWebPublicModule.cs",
                     "MyCompanyName.MyProjectName.EntityFrameworkCore",
                     "MyCompanyName.MyProjectName.MongoDB",
-                    "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                    new []{"MyProjectNameEntityFrameworkCoreDbMigrationsModule","MyProjectNameEntityFrameworkCoreModule"},
                     "MyProjectNameMongoDbModule"
                 );
 
@@ -227,6 +225,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             string oldReference,
             string newReference)
         {
+            ChangeProjectReference(context, targetProjectFilePath, new[] {oldReference}, newReference);
+        }
+
+        private void ChangeProjectReference(
+            ProjectBuildContext context,
+            string targetProjectFilePath,
+            string[] oldReferences,
+            string newReference)
+        {
             var file = context.FindFile(targetProjectFilePath);
 
             if (file == null)
@@ -239,15 +246,27 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             var lines = file.GetLines();
             for (var i = 0; i < lines.Length; i++)
             {
-                if (lines[i].Contains("ProjectReference") && lines[i].Contains(oldReference))
+                if (lines[i].Contains("ProjectReference"))
                 {
-                    lines[i] = lines[i].Replace(oldReference, newReference);
-                    file.SetLines(lines);
-                    return;
+                    var changed = false;
+                    foreach (var oldReference in oldReferences)
+                    {
+                        if (lines[i].Contains(oldReference))
+                        {
+                            lines[i] = lines[i].Replace(oldReference, newReference);
+                            file.SetLines(lines);
+                            changed = true;
+                        }
+                    }
+
+                    if (changed)
+                    {
+                        return;
+                    }
                 }
             }
 
-            throw new ApplicationException($"Could not find the '{oldReference}' reference in the project '{targetProjectFilePath}'!");
+            throw new ApplicationException($"Could not find the '{string.Join(",", oldReferences)}' reference in the project '{targetProjectFilePath}'!");
         }
 
         private void ChangeNamespaceAndKeyword(
@@ -256,6 +275,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             string oldNamespace,
             string newNamespace,
             string oldKeyword,
+            string newKeyword)
+        {
+            ChangeNamespaceAndKeyword(context, targetModuleFilePath, oldNamespace, newNamespace, new[] {oldKeyword}, newKeyword);
+        }
+
+        private void ChangeNamespaceAndKeyword(
+            ProjectBuildContext context,
+            string targetModuleFilePath,
+            string oldNamespace,
+            string newNamespace,
+            string[] oldKeywords,
             string newKeyword)
         {
             var file = context.FindFile(targetModuleFilePath);
@@ -275,9 +305,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 {
                     lines[i] = $"using {newNamespace};";
                 }
-                else if (lines[i].Contains(oldKeyword))
+                else
                 {
-                    lines[i] = lines[i].Replace(oldKeyword, newKeyword);
+                    foreach (var oldKeyword in oldKeywords)
+                    {
+                        if (lines[i].Contains(oldKeyword))
+                        {
+                            lines[i] = lines[i].Replace(oldKeyword, newKeyword);
+                        }
+                    }
                 }
             }
 
