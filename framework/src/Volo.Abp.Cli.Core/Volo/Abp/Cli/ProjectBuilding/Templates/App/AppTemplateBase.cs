@@ -75,7 +75,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         {
             if (context.BuildArgs.DatabaseProvider == DatabaseProvider.MongoDb)
             {
-                steps.Add(new AppTemplateSwitchEntityFrameworkCoreToMongoDbStep());
+                steps.Add(new AppTemplateSwitchEntityFrameworkCoreToMongoDbStep(HasDbMigrations));
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
