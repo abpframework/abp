@@ -46,7 +46,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server
 {
     [DependsOn(
         typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
+        typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(MyProjectNameHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
