@@ -150,7 +150,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeProjectReference(
                 context,
                 "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyCompanyName.MyProjectName.Domain.Tests.csproj",
-                new[] {"EntityFrameworkCore.Tests"},
+                "EntityFrameworkCore.Tests",
                 "MongoDB.Tests"
             );
 
@@ -256,6 +256,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                             lines[i] = lines[i].Replace(oldReference, newReference);
                             file.SetLines(lines);
                             changed = true;
+                            break;
                         }
                     }
 
@@ -312,6 +313,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                         if (lines[i].Contains(oldKeyword))
                         {
                             lines[i] = lines[i].Replace(oldKeyword, newKeyword);
+                            break;
                         }
                     }
                 }

@@ -9,7 +9,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 {
     public abstract class AppTemplateBase : TemplateInfo
     {
-        public bool HasDbMigrations { get; set; } = false;
+        public bool HasDbMigrations { get; set; }
 
         protected AppTemplateBase(string templateName)
             : base(templateName, DatabaseProvider.EntityFrameworkCore, UiFramework.Mvc)
