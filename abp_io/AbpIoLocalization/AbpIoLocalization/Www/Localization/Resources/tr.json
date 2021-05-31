@@ -218,8 +218,6 @@
     "Surname": "Soyad",
     "CompanyName": "Şirket adı",
     "DoYouAgreePrivacyPolicy": "Şartlar & Koşulları ve <a href=\"https://commercial.abp.io/Privacy\">Gizlilik Politikasını</a> kabul ediyorum.",
-    "VolosoftMarketingInformationMessage": "İşletmeler ve Organizasyonlar için çözümler ve diğer Volosoft ürün ve hizmetleri hakkında bilgi, ipucu ve teklifler almak istiyorum.",
-    "VolosoftSharingInformationMessage": "Volosoft'un ürünlerimi seçkin ortaklarla paylaşmasını kabul ediyorum, böylece ilgili ortakların ürünleri ve hizmetleri hakkında ilgili bilgileri alabilirim.",
     "Free": "Ücretsiz",
     "DDDEBook": "DDD E-kitap",
     "PracticalGuideForImplementingDDD": "Bu kitap ABP Framework ile birlikte Domain Driven Design'ın uygulanması için pratik bir kılavuz görevi görür.",
@@ -233,6 +231,8 @@
     "WeWillSendYouADownloadLink": "{0} adresine email gönderilmiştir.",
     "GoHome": "Anasayfaya Dön",
     "InvalidFormInputs": "Lütfen formda belirtilen geçerli bilgileri yazınız.",
-    "DDDBookEmailBody": "Teşekkürler. <br /> Kitabı indirmek için, <a href=\"{0}\">buraya tıklayınız</a>."
+    "DDDBookEmailBody": "Teşekkürler. <br /> Kitabı indirmek için, <a href=\"{0}\">buraya tıklayınız</a>.",
+    "SubscribeToNewsletter": "ABP.IO Platform'u ile ilgili yeni haberler, makaleler, teklifler ve daha fazlası gibi gelişmeler hakkında bilgi almak için bültene abone olun.",
+    "FirstEdition": "İlk Baskı"
   }
 }
