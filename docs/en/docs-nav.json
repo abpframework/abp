@@ -1028,10 +1028,6 @@
                   "path": "UI/Angular/Component-Replacement.md"
                 },
                 {
-                  "text": "Custom Setting Page",
-                  "path": "UI/Angular/Custom-Setting-Page.md"
-                },
-                {
                   "text": "Extensions",
                   "items": [
                     {

@@ -17,6 +17,11 @@ namespace Volo.Abp.Cli.Utils
             "LPT2"
         };
 
+        private static readonly string[] IllegalKeywords = new[]
+        {
+            "Blazor"
+        };
+
         private static bool HasParentDirectoryString(string projectName)
         {
             return projectName.Contains("..");
@@ -32,6 +37,19 @@ namespace Volo.Abp.Cli.Utils
             foreach (var illegalProjectName in IllegalProjectNames)
             {
                 if (projectName.Equals(illegalProjectName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool HasIllegalKeywords(string projectName)
+        {
+            foreach (var illegalKeyword in IllegalKeywords)
+            {
+                if (projectName.Contains(illegalKeyword))
                 {
                     return true;
                 }
@@ -58,6 +76,11 @@ namespace Volo.Abp.Cli.Utils
             }
 
             if (IsIllegalProjectName(projectName))
+            {
+                return false;
+            }
+
+            if (HasIllegalKeywords(projectName))
             {
                 return false;
             }
