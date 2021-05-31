@@ -42,6 +42,7 @@ Here, the list of all available commands before explaining their details:
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`logout`**: Logouts from your computer if you've authenticated before.
 * **`bundle`**: Generates script and style references for an ABP Blazor project. 
+* **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 
 ### help
 
@@ -433,3 +434,18 @@ abp bundle [options]
 
 `bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
 
+### install-libs
+
+This command install NPM Packages for MVC / Razor Pages and Blazor Server UI types. Its **executing directory** or passed ```--working-directory``` parameter's directory must contain a project file(*.csproj).
+
+`install-libs` command reads the `abp.resourcemapping.js` file to manage package. For more details see [Client Side Package Management](UI/AspNetCore/Client-Side-Package-Management.md).
+
+Usage:
+
+````bash
+abp install-libs [options]
+````
+
+#### Options
+
+* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a project file.
