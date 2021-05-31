@@ -36,6 +36,11 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
                 b.HasKey(p => new {p.PersonId, p.Number});
             });
 
+            modelBuilder.Entity<Person>(b =>
+            {
+                b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate();
+            });
+
             modelBuilder
                 .Entity<PersonView>(p =>
                 {

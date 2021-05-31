@@ -23,9 +23,10 @@ namespace Volo.Abp.TestApp.Domain
 
         public virtual Collection<Phone> Phones { get; set; }
 
+        public virtual DateTime? LastActiveTime { get; set; }
+
         private Person()
         {
-            
         }
 
         public Person(Guid id, string name, int age, Guid? tenantId = null, Guid? cityId = null)
