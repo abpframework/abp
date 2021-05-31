@@ -23,7 +23,7 @@ namespace Volo.Abp.TestApp.Domain
 
         public virtual Collection<Phone> Phones { get; set; }
 
-        public virtual DateTime? LastActiveTime { get; set; }
+        public virtual DateTime LastActiveTime { get; set; }
 
         private Person()
         {
