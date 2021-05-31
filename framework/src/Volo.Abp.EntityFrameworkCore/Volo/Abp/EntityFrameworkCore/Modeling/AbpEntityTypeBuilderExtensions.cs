@@ -78,7 +78,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         {
             if (b.Metadata.ClrType.IsAssignableTo<IHasExtraProperties>())
             {
-                ObjectExtensionManager.Instance.ConfigureEfCoreEntityProperties(b);
+                ObjectExtensionManager.Instance.ConfigureEfCoreEntity(b);
             }
         }
 
