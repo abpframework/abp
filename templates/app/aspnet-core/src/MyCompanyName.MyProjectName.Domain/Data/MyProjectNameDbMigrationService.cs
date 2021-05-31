@@ -144,14 +144,14 @@ namespace MyCompanyName.MyProjectName.Data
 
         private bool DbMigrationsProjectExists()
         {
-            var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
+            var dbMigrationsProjectFolder = GetEntityFrameworkCoreProjectFolderPath();
 
             return dbMigrationsProjectFolder != null;
         }
 
         private bool MigrationsFolderExists()
         {
-            var dbMigrationsProjectFolder = GetDbMigrationsProjectFolderPath();
+            var dbMigrationsProjectFolder = GetEntityFrameworkCoreProjectFolderPath();
 
             return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "Migrations"));
         }
@@ -175,7 +175,7 @@ namespace MyCompanyName.MyProjectName.Data
             }
 
             var procStartInfo = new ProcessStartInfo(fileName,
-                $"{argumentPrefix} \"abp create-migration-and-run-migrator \"{GetDbMigrationsProjectFolderPath()}\"\""
+                $"{argumentPrefix} \"abp create-migration-and-run-migrator \"{GetEntityFrameworkCoreProjectFolderPath()}\"\""
             );
 
             try
@@ -188,7 +188,7 @@ namespace MyCompanyName.MyProjectName.Data
             }
         }
 
-        private string GetDbMigrationsProjectFolderPath()
+        private string GetEntityFrameworkCoreProjectFolderPath()
         {
             var slnDirectoryPath = GetSolutionDirectoryPath();
 
@@ -200,7 +200,7 @@ namespace MyCompanyName.MyProjectName.Data
             var srcDirectoryPath = Path.Combine(slnDirectoryPath, "src");
 
             return Directory.GetDirectories(srcDirectoryPath)
-                .FirstOrDefault(d => d.EndsWith(".DbMigrations"));
+                .FirstOrDefault(d => d.EndsWith(".EntityFrameworkCore"));
         }
 
         private string GetSolutionDirectoryPath()
