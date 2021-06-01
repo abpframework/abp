@@ -40,7 +40,7 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            await InstallLibsService.InstallLibs(workingDirectory);
+            await InstallLibsService.InstallLibsAsync(workingDirectory);
         }
 
         public string GetUsageInfo()
