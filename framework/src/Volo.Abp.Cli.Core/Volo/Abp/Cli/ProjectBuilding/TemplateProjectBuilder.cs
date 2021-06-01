@@ -114,7 +114,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             if (context.Template is AppTemplateBase appTemplateBase)
             {
-                appTemplateBase.HasDbMigrations = SemanticVersion.Parse(templateFile.Version) >= new SemanticVersion(4, 4, 0);
+                appTemplateBase.HasDbMigrations = SemanticVersion.Parse(templateFile.Version) < new SemanticVersion(4, 4, 0);
             }
 
             TemplateProjectBuildPipelineBuilder.Build(context).Execute();
