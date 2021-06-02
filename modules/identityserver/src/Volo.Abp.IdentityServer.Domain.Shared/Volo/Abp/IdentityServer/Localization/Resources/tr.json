@@ -8,6 +8,7 @@
     "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",
     "LoginIsNotAllowed": "Giriş yapamazsınız! E-posta adresinizi ya da telefon numaranızı doğrulamanız gerekiyor.",
     "InvalidUsername": "Kullanıcı adı ya da şifre geçersiz!",
+    "InvalidAuthenticatorCode": "Geçersiz kimlik doğrulama kodu!",
     "TheTargetUserIsNotLinkedToYou": "Hedef kullanıcı sizinle bağlantılı değil!"
   }
 }
