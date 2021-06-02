@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,6 +25,12 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                 return;
             }
 
+            var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+            if (!await featureChecker.IsEnabledAsync(SettingManagementFeatures.Enable))
+            {
+                return;
+            }
+
             var settingManagementPageOptions = context.ServiceProvider.GetRequiredService<IOptions<SettingManagementPageOptions>>().Value;
             var settingPageCreationContext = new SettingPageCreationContext(context.ServiceProvider);
             if (!settingManagementPageOptions.Contributors.Any() ||
@@ -45,7 +49,7 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                         l["Settings"],
                         "~/SettingManagement",
                         icon: "fa fa-cog"
-                    ).RequireFeatures(SettingManagementFeatures.Enable)
+                    )
                 );
         }
 

@@ -20,6 +20,12 @@ namespace Volo.Abp.SettingManagement.Blazor.Menus
 
         private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
+            var featureChecker = context.ServiceProvider.GetRequiredService<IFeatureChecker>();
+            if (!await featureChecker.IsEnabledAsync(SettingManagementFeatures.Enable))
+            {
+                return;
+            }
+
             var settingManagementPageOptions = context.ServiceProvider.GetRequiredService<IOptions<SettingManagementComponentOptions>>().Value;
             var settingPageCreationContext = new SettingComponentCreationContext(context.ServiceProvider);
             if (!settingManagementPageOptions.Contributors.Any() ||
@@ -43,7 +49,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Menus
                         l["Settings"],
                         "~/setting-management",
                         icon: "fa fa-cog"
-                    ).RequireFeatures(SettingManagementFeatures.Enable)
+                    )
                 );
         }
 
