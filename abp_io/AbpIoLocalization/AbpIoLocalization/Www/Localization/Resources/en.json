@@ -244,7 +244,7 @@
     "ExampleUseCase": "Example Use Case",
     "DomainAndApplicationLogic": "Domain Logic & Application Logic",
     "Author": "Author",
-    "Page": "Page",
+    "Pages": "Pages",
     "PublishedOn": "Published on",
     "FreeEBook": "Free E-Book",
     "Download": "Download",
@@ -271,6 +271,8 @@
     "InvalidFormInputs": "Please, type the valid information specified on the form.",
     "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
     "SubscribeToNewsletter": "Subscribe to the newsletter to get information about happenings in the ABP.IO Platform, like new releases, articles, offers, and more.",
-    "FirstEdition": "First Edition"
+    "FirstEdition": "First Edition",
+	"ThankYou": "Thank you!",
+	"CheckboxMandatory": "You need to check this to proceed!"
   }
 }
