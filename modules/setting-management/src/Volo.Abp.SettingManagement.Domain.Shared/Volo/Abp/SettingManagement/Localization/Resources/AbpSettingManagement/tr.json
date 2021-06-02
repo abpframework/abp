@@ -14,6 +14,9 @@
     "SmtpEnableSsl": "Ssl'i aktif et",
     "SmtpUseDefaultCredentials": "Varsayılan yetkilendirmeleri kullan",
     "DefaultFromAddress": "Varsayılan gönderici görünen isim",
-    "DefaultFromDisplayName": "Varsayılan gönderici email adresi"
+    "DefaultFromDisplayName": "Varsayılan gönderici email adresi",
+    "Feature:SettingManagementGroup": "Ayar yönetimi",
+    "Feature:SettingManagementEnable": "Ayar yönetimini etkinleştir",
+    "Feature:SettingManagementEnableDescription": "Uygulamada ayar yönetim sistemini etkinleştirin."
   }
 }
