@@ -209,6 +209,7 @@
     "Waiting": "Waiting",
     "Completed": "Completed",
     "Failed": "Failed",
-    "PaymentRequestDeletionWarningMessage": "This payment request will be deleted. Do you confirm that?"
+    "PaymentRequestDeletionWarningMessage": "This payment request will be deleted. Do you confirm that?",
+    "Payment": "Payment"
   }
 }

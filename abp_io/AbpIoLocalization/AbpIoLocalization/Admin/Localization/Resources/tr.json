@@ -239,6 +239,7 @@
     "Waiting": "Bekliyor",
     "Completed": "Tamamlandı",
     "Failed": "Başarısız Oldu",
-    "PaymentRequestDeletionWarningMessage": "Bu ödeme isteği silinecek. Bunu onaylıyor musun?"
+    "PaymentRequestDeletionWarningMessage": "Bu ödeme isteği silinecek. Bunu onaylıyor musun?",
+    "Payment": "Ödeme"
   }
 }
