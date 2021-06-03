@@ -11,6 +11,8 @@ using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
+using Volo.CmsKit.Menus;
+using Volo.CmsKit.Admin.Menus;
 
 namespace Volo.CmsKit.Admin
 {
@@ -39,6 +41,14 @@ namespace Volo.CmsKit.Admin
             CreateMap<Tag, TagDto>();
 
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
+
+            CreateMap<Menu, MenuDto>();
+            CreateMap<MenuItem, MenuItemDto>();
+
+            CreateMap<MenuCreateInput, Menu>()
+                .Ignore(d => d.Items);
+
+            CreateMap<MenuItemCreateInput, MenuItem>();
         }
     }
 }

@@ -45,6 +45,7 @@
     "Features": "Features",
     "GenericDeletionConfirmationMessage": "Are you sure to delete '{0}'?",
     "LastModification": "Last Modification",
+    "LastModificationTime": "Last Modification Time",
     "LoginToAddComment": "Login to add comment",
     "LoginToRate": "Login to rate",
     "LoginToReact": "Login to react",
@@ -52,9 +53,9 @@
     "Menu:CMS": "CMS",
     "Message": "Message",
     "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
-    "NewPage": "New Page",
     "NewBlog": "New Blog",
     "NewBlogPost": "New Blog Post",
+    "NewPage": "New Page",
     "NewTag": "New Tag",
     "OK": "OK",
     "PageDeletionConfirmationMessage": "Are you sure to delete this page?",
@@ -79,6 +80,10 @@
     "Permission:MediaDescriptorManagement": "Media Management",
     "Permission:MediaDescriptorManagement:Create": "Create",
     "Permission:MediaDescriptorManagement:Delete": "Delete",
+    "Permission:Menus": "Menu Management",
+    "Permission:Menus.Create": "Create",
+    "Permission:Menus.Delete": "Delete",
+    "Permission:Menus.Update": "Update",
     "Permission:PageManagement": "Page Management",
     "Permission:PageManagement:Create": "Create",
     "Permission:PageManagement:Delete": "Delete",
@@ -129,7 +134,6 @@
     "YourEmailAddress": "Your e-mail address",
     "YourFullName": "Your full name",
     "YourMessage": "Your Message",
-    "YourReply": "Your reply",
-    "LastModificationTime": "Last Modification Time"
+    "YourReply": "Your reply"
   }
 }
