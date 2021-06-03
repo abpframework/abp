@@ -41,14 +41,6 @@ namespace Volo.CmsKit.Admin
             CreateMap<Tag, TagDto>();
 
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
-
-            CreateMap<Menu, MenuDto>();
-            CreateMap<MenuItem, MenuItemDto>();
-
-            CreateMap<MenuCreateInput, Menu>()
-                .Ignore(d => d.Items);
-
-            CreateMap<MenuItemCreateInput, MenuItem>();
         }
     }
 }

@@ -32,48 +32,10 @@ namespace Volo.CmsKit.Admin.Menus
             PageRepository = pageRepository;
         }
 
-
         [Authorize(CmsKitAdminPermissions.Menus.Create)]
-        public async Task<MenuDto> CreateAsync(MenuCreateInput input)
+        public Task<MenuDto> CreateAsync(MenuCreateInput input)
         {
-            var menu = ObjectMapper.Map<MenuCreateInput, Menu>(input);
-
-            foreach (var item in input.Items)
-            {
-                menu.Items.Add(await MapToMenuItemAsync(item));
-            }
-
-            await MenuRepository.InsertAsync(menu);
-
-            return ObjectMapper.Map<Menu, MenuDto>(menu);
-        }
-
-        private async Task<MenuItem> MapToMenuItemAsync(MenuItemCreateInput dto)
-        {
-            var menuItem = new MenuItem(
-                GuidGenerator.Create(),
-                dto.MenuId,
-                dto.DisplayName,
-                dto.Url,
-                dto.IsActive,
-                dto.ParentMenuId)
-
-            menuItem.SetDisplayName(dto.DisplayName);
-            menuItem.SetUrl(dto.Url);
-
-            if (dto.PageId.HasValue)
-            {
-                var page = await PageRepository.GetAsync(dto.PageId.Value, includeDetails: false);
-
-                MenuManager.SetPageUrl(menuItem, page);
-            }
-
-            foreach (var item in dto.MenuItems)
-            {
-                menuItem.MenuItems.Add(await MapToMenuItemAsync(item));
-            }
-
-            return menuItem;
+            throw new NotImplementedException();
         }
 
         [Authorize(CmsKitAdminPermissions.Menus.Delete)]
