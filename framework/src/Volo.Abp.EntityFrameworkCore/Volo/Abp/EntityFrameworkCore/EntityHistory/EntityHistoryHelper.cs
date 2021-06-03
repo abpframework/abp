@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Json;
@@ -244,6 +245,26 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             if (propertyInfo != null && IsBaseAuditProperty(propertyInfo, entityType))
             {
                 return false;
+            }
+
+            if (propertyEntry.OriginalValue is ExtraPropertyDictionary originalValue && propertyEntry.CurrentValue is ExtraPropertyDictionary currentValue)
+            {
+                if (originalValue.IsNullOrEmpty() && currentValue.IsNullOrEmpty())
+                {
+                    return false;
+                }
+
+                if (!originalValue.Select(x => x.Key).SequenceEqual(currentValue.Select(x => x.Key)))
+                {
+                    return true;
+                }
+
+                if (!originalValue.Select(x => x.Value).SequenceEqual(currentValue.Select(x => x.Value)))
+                {
+                    return true;
+                }
+
+                return defaultValue;
             }
 
             var isModified = !(propertyEntry.OriginalValue?.Equals(propertyEntry.CurrentValue) ?? propertyEntry.CurrentValue == null);
