@@ -311,3 +311,5 @@ abp-build-config.json
 
 # Identity Server temp signature file
 tempkey.jwk
+/framework/src/Volo.Abp.AspNetCore.Components.Server/Properties/launchSettings.json
+/framework/src/Volo.Abp.AspNetCore.Components.Server.Theming/Properties/launchSettings.json
