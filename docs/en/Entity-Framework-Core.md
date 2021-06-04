@@ -643,34 +643,34 @@ If you are building a reusable module and want to allow application developers t
 ````csharp
 public static class QADbContextModelCreatingExtensions
 {
-	public static void ConfigureQA(
-		this ModelBuilder builder,
-		Action<QAModelBuilderConfigurationOptions> optionsAction = null)
-	{
-		Check.NotNull(builder, nameof(builder));
+    public static void ConfigureQA(
+        this ModelBuilder builder,
+        Action<QAModelBuilderConfigurationOptions> optionsAction = null)
+    {
+        Check.NotNull(builder, nameof(builder));
 
-		var options = new QAModelBuilderConfigurationOptions(
-			QADatabaseDbProperties.DbTablePrefix,
-			QADatabaseDbProperties.DbSchema
-		);
+        var options = new QAModelBuilderConfigurationOptions(
+            QADatabaseDbProperties.DbTablePrefix,
+            QADatabaseDbProperties.DbSchema
+        );
 
-		optionsAction?.Invoke(options);
+        optionsAction?.Invoke(options);
 
-		builder.Entity<QA_Question>(b =>
-		{
-			b.ToTable(options.TablePrefix + "Questions", options.Schema);
-			b.ConfigureByConvention();
+        builder.Entity<QA_Question>(b =>
+        {
+            b.ToTable(options.TablePrefix + "Questions", options.Schema);
+            b.ConfigureByConvention();
             //...
 
             //Call this in the end of buildAction.
-			b.ApplyObjectExtensionMappings();
-		});
+            b.ApplyObjectExtensionMappings();
+        });
 
         //...
 
         //Call this in the end of ConfigureQA.
-		builder.TryConfigureObjectExtensions<QADbContext>();
-	}
+        builder.TryConfigureObjectExtensions<QADbContext>();
+    }
 }
 ````
 
