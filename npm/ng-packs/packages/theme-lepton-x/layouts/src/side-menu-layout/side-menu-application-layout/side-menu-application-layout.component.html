@@ -9,21 +9,26 @@
       }"
       (toggleSidebarHover)="layout.toggleSidebarHover()"
     >
-      <ng-template lpx-navbar-routes let-items let-menuFilter="menuFilter">
+      <ng-template lpx-navbar-routes let-items>
         <lpx-navbar-routes
           *abpReplaceableTemplate="{
             componentKey: routesKey,
             inputs: {
-              navbarItems: items,
-              menuFilter: menuFilter
+              navbarItems: items
             }
           }"
           [navbarItems]="items"
-          [menuFilter]="menuFilter"
         >
         </lpx-navbar-routes>
       </ng-template>
     </lpx-navbar>
+  </ng-template>
+  <ng-template lpx-topbar-content>
+    <abp-nav-items
+      *abpReplaceableTemplate="{
+        componentKey: toolbarItemsKey
+      }"
+    ></abp-nav-items>
   </ng-template>
   <router-outlet></router-outlet>
 </lpx-layout>

@@ -7,7 +7,6 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { InspectorModule } from '@ngneat/inspector';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { AccountConfigModule } from '@abp/ng.account/config';
@@ -15,13 +14,10 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
-import { ThemeLeptonXModule } from '@abp/ng.theme-lepton-x';
-import { SideMenuLayoutModule } from '@abp/ng.theme-lepton-x/layouts';
+import { ThemeLeptonXModule } from '@abp/ng.theme.lepton-x';
+import { SideMenuLayoutModule } from '@abp/ng.theme.lepton-x/layouts';
 
-const INSPECTION_TOOLS = [
-  NgxsLoggerPluginModule.forRoot({ disabled: true }),
-  InspectorModule.forRoot(),
-];
+const INSPECTION_TOOLS = [NgxsLoggerPluginModule.forRoot({ disabled: true })];
 
 @NgModule({
   imports: [

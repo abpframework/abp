@@ -1,5 +1,5 @@
 {
-  "name": "theme-lepton-x",
+  "name": "@abp/ng.theme.lepton-x",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^11.1.2",
