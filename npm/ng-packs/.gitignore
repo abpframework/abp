@@ -50,3 +50,5 @@ Thumbs.db
 
 !**/[Pp]ackages/*
 *.internal.*
+
+.npmrc
