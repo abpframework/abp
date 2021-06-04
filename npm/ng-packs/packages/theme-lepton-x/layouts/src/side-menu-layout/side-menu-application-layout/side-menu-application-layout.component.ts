@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { eThemeLeptonXComponents } from '@abp/ng.theme-lepton-x';
+import { eThemeLeptonXComponents } from '@abp/ng.theme.lepton-x';
 
 @Component({
   selector: 'abp-side-menu-application-layout',
@@ -10,6 +10,7 @@ export class SideMenuApplicationLayoutComponent implements OnInit {
   navbarKey = eThemeLeptonXComponents.Sidebar;
   routesKey = eThemeLeptonXComponents.Routes;
   toolbarItemsKey = eThemeLeptonXComponents.NavItems;
+
   constructor() {}
 
   ngOnInit(): void {}
