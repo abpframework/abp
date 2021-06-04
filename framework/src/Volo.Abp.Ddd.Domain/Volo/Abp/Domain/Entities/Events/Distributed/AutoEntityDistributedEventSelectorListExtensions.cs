@@ -50,6 +50,19 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
             );
         }
         
+        public static bool Remove<TEntity>(
+            [NotNull] this IAutoEntityDistributedEventSelectorList selectors) where TEntity : IEntity
+        {
+            Check.NotNull(selectors, nameof(selectors));
+
+            var selectorName = "Entity:" + typeof(TEntity).FullName;
+            if (selectors.Any(s => s.Name == selectorName))
+            {
+                return selectors.RemoveAll(s => s.Name == selectorName).Count > 0;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Adds all entity types.
         /// </summary>
