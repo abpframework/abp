@@ -21,7 +21,7 @@ export class AbpLanguageService {
       this.languageService.init(langs.map(this.mapLang));
     });
 
-    this.languageService.language$.pipe(filter<LanguageInfo>(Boolean)).subscribe(lang => {
+    this.languageService.selectedLanguage$.pipe(filter<LanguageInfo>(Boolean)).subscribe(lang => {
       this.sessionState.setLanguage(lang.cultureName);
     });
   }
@@ -30,7 +30,6 @@ export class AbpLanguageService {
     return {
       cultureName: lang.cultureName,
       displayName: lang.displayName,
-      flagIcon: lang.flagIcon,
       selected: this.sessionState.getLanguage() === lang.cultureName,
     };
   };

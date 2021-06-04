@@ -2,12 +2,8 @@
   <ng-template lpx-navbar-panel>
     <lpx-navbar
       *abpReplaceableTemplate="{
-        componentKey: navbarKey,
-        outputs: {
-          toggleSidebarHover: layout.toggleSidebarHover
-        }
+        componentKey: navbarKey
       }"
-      (toggleSidebarHover)="layout.toggleSidebarHover()"
     >
       <ng-template lpx-navbar-routes let-items>
         <lpx-navbar-routes
