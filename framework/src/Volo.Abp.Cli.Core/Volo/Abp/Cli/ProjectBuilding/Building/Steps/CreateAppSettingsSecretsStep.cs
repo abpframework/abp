@@ -11,7 +11,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         public override void Execute(ProjectBuildContext context)
         {
-            var appSettingsFiles = context.Files.Where(x => x.Name.EndsWith(AppSettingsFileName) && NotTestProject(x.Name) && NotBlazorWasmProject(x.Name)).ToList();
+            var appSettingsFiles = context.Files
+                .Where(x =>
+                    x.Name.EndsWith(AppSettingsFileName) &&
+                    NotTestProject(x.Name) &&
+                    NotBlazorWasmProject(x.Name) &&
+                    NotMigratorProject(x.Name))
+                .ToList();
 
             var content = context.Template.IsPro()
                 ? $"{{{Environment.NewLine}  \"AbpLicenseCode\": \"<LICENSE_CODE/>\" {Environment.NewLine}}}"
@@ -26,14 +32,19 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             }
         }
 
-        private bool NotTestProject(string fileName)
+        private static bool NotTestProject(string fileName)
         {
             return !fileName.StartsWith("/aspnet-core/test");
         }
 
-        private bool NotBlazorWasmProject(string fileName)
+        private static bool NotBlazorWasmProject(string fileName)
         {
             return !fileName.Contains("Blazor/wwwroot") && !fileName.Contains("Blazor.Host/wwwroot");
+        }
+
+        public static bool NotMigratorProject(string fileName)
+        {
+            return !fileName.Contains("DbMigrator");
         }
     }
 }
