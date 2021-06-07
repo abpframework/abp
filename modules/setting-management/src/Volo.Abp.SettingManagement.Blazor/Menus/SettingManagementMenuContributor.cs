@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Features;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.UI.Navigation;
 
@@ -33,7 +34,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Menus
             /* This may happen if MVC UI is being used in the same application.
              * In this case, we are removing the MVC setting management UI. */
             context.Menu.GetAdministration().TryRemoveMenuItem(SettingManagementMenus.GroupName);
-            
+
             context.Menu
                 .GetAdministration()
                 .AddItem(
@@ -42,7 +43,7 @@ namespace Volo.Abp.SettingManagement.Blazor.Menus
                         l["Settings"],
                         "~/setting-management",
                         icon: "fa fa-cog"
-                    )
+                    ).RequireFeatures(SettingManagementFeatures.Enable)
                 );
         }
 

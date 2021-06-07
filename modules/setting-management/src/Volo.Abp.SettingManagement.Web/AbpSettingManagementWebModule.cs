@@ -43,11 +43,6 @@ namespace Volo.Abp.SettingManagement.Web
                 options.FileSets.AddEmbedded<AbpSettingManagementWebModule>();
             });
 
-            Configure<RazorPagesOptions>(options =>
-            {
-                options.Conventions.AuthorizePage("/SettingManagement/Index", SettingManagementPermissions.Emailing);
-            });
-
             Configure<AbpBundlingOptions>(options =>
             {
                 options.ScriptBundles

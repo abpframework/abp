@@ -54,7 +54,11 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
                 b.Property(x => x.ProviderKey).HasMaxLength(SettingConsts.MaxProviderKeyLength);
 
                 b.HasIndex(x => new {x.Name, x.ProviderName, x.ProviderKey});
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<SettingManagementDbContext>();
         }
     }
 }

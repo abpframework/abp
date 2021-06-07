@@ -255,8 +255,6 @@
     "Surname": "Surname",
     "CompanyName": "Company Name",
     "DoYouAgreePrivacyPolicy": "I agree to the Terms & Conditions and <a href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
-    "VolosoftMarketingInformationMessage": "I would like information, tips, and offers about Solutions for Businesses and Organizations and other Volosoft products and services.",
-    "VolosoftSharingInformationMessage": "I would like Volosoft to share my information with select partners so I can receive relevant information about their products and services.",
     "Free": "Free",
     "DDDEBook": "DDD E-book",
     "PracticalGuideForImplementingDDD": "This book is a practical guide for implementing the Domain Driven Design with the ABP Framework.",
@@ -270,6 +268,8 @@
     "WeWillSendYouADownloadLink": "We've sent the file to {0}.",
     "GoHome": "Go Home",
     "InvalidFormInputs": "Please, type the valid information specified on the form.",
-    "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>."
+    "DDDBookEmailBody": "Thank you. <br /> To download your book, <a href=\"{0}\">click here</a>.",
+    "SubscribeToNewsletter": "Subscribe to the newsletter to get information about happenings in the ABP.IO Platform, like new releases, articles, offers, and more.",
+    "FirstEdition": "First Edition"
   }
 }
