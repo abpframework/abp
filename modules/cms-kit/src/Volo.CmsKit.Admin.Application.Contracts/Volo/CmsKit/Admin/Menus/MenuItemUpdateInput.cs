@@ -3,12 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Volo.CmsKit.Admin.Menus
 {
-    public class MenuItemCreateInput
+    public class MenuItemUpdateInput
     {
-        public Guid MenuId { get; set; }
-
-        public Guid? ParentId { get; set; }
-
         [Required]
         public string DisplayName { get; set; }
 

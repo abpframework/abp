@@ -21,11 +21,11 @@ namespace Volo.CmsKit.Admin
         public CmsKitAdminApplicationAutoMapperProfile()
         {
             CreateMap<CmsUser, Comments.CmsUserDto>();
-            
+
             CreateMap<Comment, CommentDto>();
             CreateMap<Comment, CommentWithAuthorDto>()
-                .Ignore(x=> x.Author);
-            
+                .Ignore(x => x.Author);
+
             CreateMap<Page, PageDto>();
 
             CreateMap<BlogPost, BlogPostDto>(MemberList.Destination);
@@ -41,6 +41,11 @@ namespace Volo.CmsKit.Admin
             CreateMap<Tag, TagDto>();
 
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
+
+            CreateMap<Menu, MenuDto>();
+            CreateMap<Menu, MenuWithDetailsDto>();
+            CreateMap<MenuItem, MenuItemDto>()
+                .Ignore(x => x.ParentId);
         }
     }
 }

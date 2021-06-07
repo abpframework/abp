@@ -15,5 +15,11 @@ namespace Volo.CmsKit.Menus
             menuItem.SetPageId(page.Id);
             menuItem.SetUrl(page.Slug.EnsureStartsWith('/'));
         }
+
+        public virtual Task MoveAsync(Guid menuId, Guid menuItemId, Guid newParentId)
+        {
+            // TODO: Implement move method
+            throw new NotImplementedException();
+        }
     }
 }

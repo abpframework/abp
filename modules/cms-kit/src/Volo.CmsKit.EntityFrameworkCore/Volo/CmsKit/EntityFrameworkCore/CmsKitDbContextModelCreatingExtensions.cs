@@ -263,6 +263,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.ToTable(options.TablePrefix + "Menus", options.Schema);
 
                     b.ConfigureByConvention();
+
+                    b.HasMany(x => x.Items).WithOne().HasForeignKey(fk => fk.MenuId);
                 });
 
                 builder.Entity<MenuItem>(b =>

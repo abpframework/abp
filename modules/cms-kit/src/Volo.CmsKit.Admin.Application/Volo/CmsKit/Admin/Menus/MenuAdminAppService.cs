@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
@@ -32,32 +33,114 @@ namespace Volo.CmsKit.Admin.Menus
             PageRepository = pageRepository;
         }
 
+        public async Task<MenuWithDetailsDto> GetAsync(Guid id)
+        {
+            var menu = await MenuRepository.GetAsync(id, includeDetails: true);
+            return ObjectMapper.Map<Menu, MenuWithDetailsDto>(menu);
+        }
+
         [Authorize(CmsKitAdminPermissions.Menus.Create)]
-        public Task<MenuDto> CreateAsync(MenuCreateInput input)
+        public async Task<MenuDto> CreateAsync(MenuCreateInput input)
         {
-            throw new NotImplementedException();
-        }
+            var menu = new Menu(GuidGenerator.Create(), input.Name);
 
-        [Authorize(CmsKitAdminPermissions.Menus.Delete)]
-        public Task DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+            await MenuRepository.InsertAsync(menu);
 
-        public Task<MenuDto> GetAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PagedResultDto<MenuDto>> GetListAsync(PagedAndSortedResultRequestDto input)
-        {
-            throw new NotImplementedException();
+            return ObjectMapper.Map<Menu, MenuDto>(menu);
         }
 
         [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        public Task<MenuDto> UpdateAsync(Guid id, MenuCreateInput input)
+        public async Task<MenuDto> UpdateAsync(Guid menuId, MenuUpdateInput input)
         {
-            throw new NotImplementedException();
+            var menu = await MenuRepository.GetAsync(menuId);
+
+            menu.SetName(input.Name);
+
+            await MenuRepository.UpdateAsync(menu);
+
+            return ObjectMapper.Map<Menu, MenuDto>(menu);
+        }
+
+        [Authorize(CmsKitAdminPermissions.Menus.Delete)]
+        public virtual Task DeleteAsync(Guid menuId)
+        {
+            return MenuRepository.DeleteAsync(menuId);
+        }
+
+        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Create)]
+        public virtual async Task<MenuItemDto> CreateMenuItemAsync(Guid menuId, MenuItemCreateInput input)
+        {
+            var menu = await MenuRepository.GetAsync(menuId, includeDetails: true);
+
+            var menuItem =
+                new MenuItem(
+                    GuidGenerator.Create(),
+                    menuId,
+                    input.DisplayName,
+                    input.Url,
+                    input.IsActive,
+                    input.ParentId,
+                    input.Icon,
+                    input.Order,
+                    input.Target,
+                    input.ElementId,
+                    input.CssClass,
+                    input.RequiredPermissionName);
+
+            menu.Items.Add(menuItem);
+
+            await MenuRepository.UpdateAsync(menu);
+
+            return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
+        }
+
+        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Update)]
+        public virtual async Task<MenuItemDto> UpdateMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemUpdateInput input)
+        {
+            var menu = await MenuRepository.GetAsync(menuId, includeDetails: true);
+
+            var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId);
+
+            if (input.PageId.HasValue)
+            {
+                MenuManager.SetPageUrl(menuItem, await PageRepository.GetAsync(input.PageId.Value));
+            }
+            else
+            {
+                menuItem.SetUrl(input.Url);
+            }
+
+            menuItem.SetDisplayName(input.DisplayName);
+            menuItem.IsActive = input.IsActive;
+            menuItem.Icon = input.Icon;
+            menuItem.Order = input.Order;
+            menuItem.Target = input.Target;
+            menuItem.ElementId = input.ElementId;
+            menuItem.CssClass = input.CssClass;
+            menuItem.RequiredPermissionName = input.RequiredPermissionName;
+
+            await MenuRepository.UpdateAsync(menu);
+
+            return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
+        }
+
+        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Delete)]
+        public virtual async Task DeleteMenuItemAsync(Guid menuId, Guid menuItemId)
+        {
+            var menu = await MenuRepository.GetAsync(menuId, includeDetails: true);
+
+            var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId)
+                ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
+
+            menu.Items.Remove(menuItem);
+
+            await MenuRepository.UpdateAsync(menu);
+        }
+
+        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Update)]
+        public virtual Task MoveMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemMoveInput input)
+        {
+            return MenuManager.MoveAsync(menuId, menuItemId, input.NewParentId);
         }
     }
 }

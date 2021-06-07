@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Menus
 {
-    public class MenuDto : EntityDto<Guid>
+    public class MenuItemMoveInput
     {
-        public string Name { get; set; }
+        public Guid NewParentId { get; set; }
     }
 }

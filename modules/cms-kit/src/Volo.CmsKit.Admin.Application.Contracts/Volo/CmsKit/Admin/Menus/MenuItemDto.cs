@@ -7,7 +7,7 @@ namespace Volo.CmsKit.Admin.Menus
     public class MenuItemDto : AuditedEntityDto<Guid>
     {
         public Guid MenuId { get; set; }
-        public Guid? ParentMenuId { get; set; }
+        public Guid? ParentId { get; set; }
         public string DisplayName { get; set; }
         public bool IsActive { get; set; }
         public string Url { get; set; }
@@ -17,7 +17,6 @@ namespace Volo.CmsKit.Admin.Menus
         public string ElementId { get; set; }
         public string CssClass { get; set; }
         public string RequiredPermissionName { get; set; }
-
-        public List<MenuItemDto> SubMenuItems { get; set; }
+        public Guid? PageId { get; set; }
     }
 }

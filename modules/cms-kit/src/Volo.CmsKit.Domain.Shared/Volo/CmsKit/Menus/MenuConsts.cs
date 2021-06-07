@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Volo.CmsKit.Admin.Menus
+namespace Volo.CmsKit.Menus
 {
-    public class MenuCreateInput
+    public static class MenuConsts
     {
-        public string Name { get; set; }
+        public const int MaxNameLength = 128;   
     }
 }

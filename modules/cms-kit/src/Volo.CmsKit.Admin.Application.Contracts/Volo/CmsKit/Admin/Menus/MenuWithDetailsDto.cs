@@ -7,8 +7,9 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Menus
 {
-    public class MenuDto : EntityDto<Guid>
+    public class MenuWithDetailsDto : FullAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
+        public List<MenuItemDto> Items { get; set; }
     }
 }

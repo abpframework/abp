@@ -21,7 +21,7 @@ namespace Volo.CmsKit.Menus
         /// Presents another <see cref="MenuItem"/> Id.
         /// If it's <see langword="null"/>, then it's a root menu item.
         /// </summary>
-        public Guid? ParentMenuId { get; set; }
+        public Guid? ParentId { get; set; }
 
         [NotNull]
         public string DisplayName { get; protected set; }
@@ -51,9 +51,9 @@ namespace Volo.CmsKit.Menus
                         [NotNull] string displayName,
                         [NotNull] string url,
                         bool isActive = true,
-                        [CanBeNull] Guid? parentMenuId = null,
+                        [CanBeNull] Guid? parentId = null,
                         [CanBeNull] string icon = null,
-                        int order = 1000,
+                        int order = 0,
                         [CanBeNull] string target = null,
                         [CanBeNull] string elementId = null,
                         [CanBeNull] string cssClass = null,
@@ -63,7 +63,7 @@ namespace Volo.CmsKit.Menus
             MenuId = menuId;
             SetDisplayName(displayName);
             IsActive = isActive;
-            ParentMenuId = parentMenuId;
+            ParentId = parentId;
             SetUrl(url);
             Icon = icon;
             Order = order;
