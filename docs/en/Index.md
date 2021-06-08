@@ -29,7 +29,7 @@ ABP has a **comprehensive documentation** that not only explains the ABP Framewo
 ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](Domain-Driven-Design.md) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
 
 * See the [Modularity](Module-Development-Basics.md) document to understand the module system.
-* [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design) is an ultimate guide for who want to understand and implement the DDD with the ABP Framework.
+* [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design?ref=doc) is an ultimate guide for who want to understand and implement the DDD with the ABP Framework.
 * [Microservice Architecture](Microservice-Architecture.md) document explains how ABP helps to create a microservice solution.
 * [Multi-Tenancy](Multi-Tenancy.md) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
 
