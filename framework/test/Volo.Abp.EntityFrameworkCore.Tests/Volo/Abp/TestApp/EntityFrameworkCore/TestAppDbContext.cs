@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
@@ -16,10 +17,10 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
         public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
 
         public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
-        
+
         public DbSet<Author> Author { get; set; }
 
-        public TestAppDbContext(DbContextOptions<TestAppDbContext> options) 
+        public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
             : base(options)
         {
 
@@ -34,6 +35,11 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
             modelBuilder.Entity<Phone>(b =>
             {
                 b.HasKey(p => new {p.PersonId, p.Number});
+            });
+
+            modelBuilder.Entity<Person>(b =>
+            {
+                b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder
