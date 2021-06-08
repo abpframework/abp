@@ -543,8 +543,8 @@
               ]
             },
             {
-              "text": "Guide: Implementing DDD",
-              "path": "Domain-Driven-Design-Implementation-Guide.md"
+              "text": "E-Book: Implementing DDD",
+              "path": "https://abp.io/books/implementing-domain-driven-design"
             }
           ]
         },
@@ -1026,10 +1026,6 @@
                 {
                   "text": "Component Replacement",
                   "path": "UI/Angular/Component-Replacement.md"
-                },
-                {
-                  "text": "Custom Setting Page",
-                  "path": "UI/Angular/Custom-Setting-Page.md"
                 },
                 {
                   "text": "Extensions",
