@@ -33,6 +33,16 @@ namespace Volo.CmsKit.Admin.Menus
             PageRepository = pageRepository;
         }
 
+        public async Task<PagedResultDto<MenuDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        {
+            var menus = await MenuRepository.GetPagedListAsync(input.SkipCount, input.MaxResultCount, input.Sorting);
+
+            return new PagedResultDto<MenuDto>(
+                    await MenuRepository.GetCountAsync(),
+                    ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus)
+                    );
+        }
+
         public async Task<MenuWithDetailsDto> GetAsync(Guid id)
         {
             var menu = await MenuRepository.GetAsync(id, includeDetails: true);

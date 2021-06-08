@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
 
 namespace Volo.CmsKit.Admin.Menus
 {
-    public interface IMenuAdminAppService
+    public interface IMenuAdminAppService : IApplicationService
     {
+        Task<PagedResultDto<MenuDto>> GetListAsync(PagedAndSortedResultRequestDto input);
+
         Task<MenuWithDetailsDto> GetAsync(Guid id);
 
         Task<MenuDto> CreateAsync(MenuCreateInput input);
