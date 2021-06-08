@@ -29,7 +29,7 @@ ABP has a **comprehensive documentation** that not only explains the ABP Framewo
 ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](Domain-Driven-Design.md) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
 
 * See the [Modularity](Module-Development-Basics.md) document to understand the module system.
-* [Implementing Domain Driven Design Book](https://abp.io/books/implementing-domain-driven-design) is an ultimate guide for who want to understand and implement the DDD.
+* [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design) is an ultimate guide for who want to understand and implement the DDD with the ABP Framework.
 * [Microservice Architecture](Microservice-Architecture.md) document explains how ABP helps to create a microservice solution.
 * [Multi-Tenancy](Multi-Tenancy.md) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
 
@@ -62,7 +62,7 @@ The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio 
 
 A **practical guide** for implementing Domain Driven Design (DDD). While the implementation details are **based on the ABP Framework** infrastructure, the basic concepts, principles and models can be applied to any solution, even if it is not a .NET solution.
 
-[Click here to get your free copy](https://abp.io/books/implementing-domain-driven-design).
+[Click here to get your free copy](https://abp.io/books/implementing-domain-driven-design?ref=doc).
 
 ## ABP Community
 
