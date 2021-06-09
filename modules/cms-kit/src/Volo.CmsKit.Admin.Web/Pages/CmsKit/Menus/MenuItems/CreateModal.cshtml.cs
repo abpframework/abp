@@ -61,6 +61,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 
             public string Icon { get; set; }
 
+            [HiddenInput]
             public int Order { get; set; }
 
             public string Target { get; set; }
