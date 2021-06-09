@@ -4,16 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.CmsKit.Menus
 {
-    public class Menu : FullAuditedAggregateRoot<Guid>
+    public class Menu : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public string Name { get; protected set; }
+
+        public Guid? TenantId { get; protected set; }
+
         public ICollection<MenuItem> Items { get; protected set; }
 
-        public Menu(Guid id, [NotNull] string name) : base(id)
+        public Menu(Guid id, Guid? tenantId, [NotNull] string name) : base(id)
         {
+            TenantId = tenantId;
             SetName(name);
             Items = new HashSet<MenuItem>();
         }

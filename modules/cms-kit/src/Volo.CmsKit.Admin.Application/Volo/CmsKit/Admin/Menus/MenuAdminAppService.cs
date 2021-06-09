@@ -58,7 +58,7 @@ namespace Volo.CmsKit.Admin.Menus
         [Authorize(CmsKitAdminPermissions.Menus.Create)]
         public async Task<MenuDto> CreateAsync(MenuCreateInput input)
         {
-            var menu = new Menu(GuidGenerator.Create(), input.Name);
+            var menu = new Menu(GuidGenerator.Create(), CurrentTenant.Id, input.Name);
 
             await MenuRepository.InsertAsync(menu);
 

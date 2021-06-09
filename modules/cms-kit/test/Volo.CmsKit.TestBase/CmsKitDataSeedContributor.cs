@@ -415,7 +415,7 @@ namespace Volo.CmsKit
 
         private async Task SeedMenusAsync()
         {
-            var menu = new Menu(_cmsKitTestData.Menu_1_Id, _cmsKitTestData.Menu_1_Name);
+            var menu = new Menu(_cmsKitTestData.Menu_1_Id, null, _cmsKitTestData.Menu_1_Name);
 
             menu.Items.Add(
                 new MenuItem(
