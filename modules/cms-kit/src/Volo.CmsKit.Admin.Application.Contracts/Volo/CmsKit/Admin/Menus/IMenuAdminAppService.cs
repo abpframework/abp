@@ -11,6 +11,8 @@ namespace Volo.CmsKit.Admin.Menus
 
         Task<MenuWithDetailsDto> GetAsync(Guid id);
 
+        Task<MenuDto> GetSimpleAsync(Guid id);
+
         Task<MenuDto> CreateAsync(MenuCreateInput input);
 
         Task<MenuDto> UpdateAsync(Guid menuId, MenuUpdateInput input);

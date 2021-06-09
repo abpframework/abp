@@ -11,7 +11,7 @@
 @model IndexModel
 
 @{
-    PageLayout.Content.Title = L["Blogs"].Value;
+    PageLayout.Content.Title = L["MenuItems"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
     PageLayout.Content.BreadCrumb.Add(L["Menu:Menus"].Value, "/Cms/Menus");
     PageLayout.Content.MenuItemName = CmsKitAdminMenus.Menus.MenusMenu;
@@ -35,26 +35,11 @@
     @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
 }
 
-  <div id="jstree">
-    <!-- in this example the tree is populated from inline HTML -->
-    <ul>
-      <li>Root node 1
-        <ul>
-          <li id="child_node_1">Child node 1</li>
-          <li>Child node 2</li>
-        </ul>
-      </li>
-      <li>Root node 2</li>
-    </ul>
-  </div>
-
-<hr />
-
 <div id="CmsKitMenuItemsWrapper" data-menu-id="@Model.Id">
     <abp-card>
         <abp-card-body>
             <abp-card-title>
-                @L["MenuItems"]
+               @Model.Menu.Name @L["MenuItems"]
             </abp-card-title>
 
             <div id="MenuItemsEditTree"></div>

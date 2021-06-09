@@ -27,9 +27,9 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus
 
         public async Task OnGetAsync()
         {
-            var menu = await MenuAdminAppService.GetAsync(Id);
+            var menu = await MenuAdminAppService.GetSimpleAsync(Id);
 
-            ViewModel = ObjectMapper.Map<MenuWithDetailsDto, UpdateMenuViewModel>(menu);
+            ViewModel = ObjectMapper.Map<MenuDto, UpdateMenuViewModel>(menu);
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -41,7 +41,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus
             return NoContent();
         }
 
-        [AutoMap(typeof(MenuWithDetailsDto))]
+        [AutoMap(typeof(MenuDto))]
         [AutoMap(typeof(MenuUpdateInput), ReverseMap = true)]
         public class UpdateMenuViewModel
         {

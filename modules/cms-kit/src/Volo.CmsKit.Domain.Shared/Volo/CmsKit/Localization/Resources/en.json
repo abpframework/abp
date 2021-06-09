@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "AddSubMenuItem": "Add sub menu item",
+    "AddSubMenuItem": "New Sub-MenuItem",
     "AreYouSure": "Are You Sure?",
     "BlogDeletionConfirmationMessage": "The blog '{0}' will be deleted. Are you sure?",
     "BlogFeatureNotAvailable": "This feature is not available now. Enable with 'GlobalFeatureManager' to use it.",
@@ -63,6 +63,7 @@
     "NewBlog": "New Blog",
     "NewBlogPost": "New Blog Post",
     "NewMenu": "New Menu",
+    "NewMenuItem": "New Menu Item",
     "NewPage": "New Page",
     "NewTag": "New Tag",
     "NoMenuItems": "There is no menu item yet!",

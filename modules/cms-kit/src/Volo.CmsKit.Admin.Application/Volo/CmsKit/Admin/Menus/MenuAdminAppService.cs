@@ -49,6 +49,12 @@ namespace Volo.CmsKit.Admin.Menus
             return ObjectMapper.Map<Menu, MenuWithDetailsDto>(menu);
         }
 
+        public async Task<MenuDto> GetSimpleAsync(Guid id)
+        {
+            var menu = await MenuRepository.GetAsync(id, includeDetails: false);
+            return ObjectMapper.Map<Menu, MenuDto>(menu);
+        }
+
         [Authorize(CmsKitAdminPermissions.Menus.Create)]
         public async Task<MenuDto> CreateAsync(MenuCreateInput input)
         {
@@ -99,6 +105,8 @@ namespace Volo.CmsKit.Admin.Menus
 
             menu.Items.Add(menuItem);
 
+            MenuManager.OrganizeTreeOrderForMenuItem(menu, menuItem);
+            
             await MenuRepository.UpdateAsync(menu);
 
             return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
@@ -109,7 +117,8 @@ namespace Volo.CmsKit.Admin.Menus
         {
             var menu = await MenuRepository.GetAsync(menuId, includeDetails: true);
 
-            var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId);
+            var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId)
+                ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
 
             if (input.PageId.HasValue)
             {
@@ -123,7 +132,6 @@ namespace Volo.CmsKit.Admin.Menus
             menuItem.SetDisplayName(input.DisplayName);
             menuItem.IsActive = input.IsActive;
             menuItem.Icon = input.Icon;
-            menuItem.Order = input.Order;
             menuItem.Target = input.Target;
             menuItem.ElementId = input.ElementId;
             menuItem.CssClass = input.CssClass;
@@ -150,7 +158,7 @@ namespace Volo.CmsKit.Admin.Menus
         [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Update)]
         public virtual Task MoveMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemMoveInput input)
         {
-            return MenuManager.MoveAsync(menuId, menuItemId, input.NewParentId);
+            return MenuManager.MoveAsync(menuId, menuItemId, input.NewParentId, input.Position);
         }
     }
 }

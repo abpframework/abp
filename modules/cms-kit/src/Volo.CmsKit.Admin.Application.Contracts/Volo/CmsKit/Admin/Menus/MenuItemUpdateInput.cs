@@ -15,8 +15,6 @@ namespace Volo.CmsKit.Admin.Menus
 
         public string Icon { get; set; }
 
-        public int Order { get; set; }
-
         public string Target { get; set; }
 
         public string ElementId { get; set; }

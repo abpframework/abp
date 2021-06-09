@@ -146,7 +146,7 @@ $(function () {
             return items;
         },
 
-        addItem: function () {
+        addItem: function (parentId) {
             var instance = $.jstree.reference(menuTree.$tree);
 
             createModal.open({
@@ -239,7 +239,8 @@ $(function () {
                                 if (isConfirmed) {
                                     menuService
                                         .moveMenuItem(menuId, data.node.id, {
-                                            newParentId: data.parent === '#' ? null : data.parent
+                                            newParentId: data.parent === '#' ? null : data.parent,
+                                            position: data.position
                                         })
                                         .done(function () {
                                             menuTree.reload();
@@ -271,7 +272,7 @@ $(function () {
                         },
 
                         sort: function (node1, node2) {
-                           if (this.get_node(node2).original.displayName < this.get_node(node1).original.displayName) {
+                           if (this.get_node(node2).original.order < this.get_node(node1).original.order) {
                                return 1;
                            }
 

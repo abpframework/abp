@@ -8,6 +8,8 @@ namespace Volo.CmsKit.Admin.Menus
 {
     public class MenuItemMoveInput
     {
-        public Guid NewParentId { get; set; }
+        public Guid? NewParentId { get; set; }
+
+        public int Position { get; set; }
     }
 }

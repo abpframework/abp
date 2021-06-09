@@ -44,8 +44,7 @@ namespace Volo.CmsKit.Admin
 
             CreateMap<Menu, MenuDto>();
             CreateMap<Menu, MenuWithDetailsDto>();
-            CreateMap<MenuItem, MenuItemDto>()
-                .Ignore(x => x.ParentId);
+            CreateMap<MenuItem, MenuItemDto>();
         }
     }
 }
