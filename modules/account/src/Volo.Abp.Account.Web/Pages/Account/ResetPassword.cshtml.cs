@@ -67,17 +67,15 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             try
             {
-                using (CurrentTenant.Change(TenantId))
-                {
-                    await AccountAppService.ResetPasswordAsync(
-                        new ResetPasswordDto
-                        {
-                            UserId = UserId,
-                            ResetToken = ResetToken,
-                            Password = Password
-                        }
-                    );
-                }
+                await AccountAppService.ResetPasswordAsync(
+                    new ResetPasswordDto
+                    {
+                        UserId = UserId,
+                        ResetToken = ResetToken,
+                        Password = Password,
+                        TenantId = TenantId
+                    }
+                );
             }
             catch (AbpIdentityResultException e)
             {
