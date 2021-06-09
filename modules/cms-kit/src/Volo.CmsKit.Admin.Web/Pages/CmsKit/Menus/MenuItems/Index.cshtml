@@ -20,6 +20,7 @@
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-style type="typeof(JsTreeStyleContributor)" />
+        <abp-script src="/Pages/CmsKit/Menus/MenuItems/index.css" />
     </abp-style-bundle>
 }
 
@@ -34,12 +35,28 @@
     @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
 }
 
+  <div id="jstree">
+    <!-- in this example the tree is populated from inline HTML -->
+    <ul>
+      <li>Root node 1
+        <ul>
+          <li id="child_node_1">Child node 1</li>
+          <li>Child node 2</li>
+        </ul>
+      </li>
+      <li>Root node 2</li>
+    </ul>
+  </div>
+
+<hr />
+
 <div id="CmsKitMenuItemsWrapper" data-menu-id="@Model.Id">
     <abp-card>
         <abp-card-body>
             <abp-card-title>
                 @L["MenuItems"]
             </abp-card-title>
+
             <div id="MenuItemsEditTree"></div>
             <div id="MenuItemsTreeEmptyInfo" class="text-muted">@L["NoMenuItems"]</div>
         </abp-card-body>

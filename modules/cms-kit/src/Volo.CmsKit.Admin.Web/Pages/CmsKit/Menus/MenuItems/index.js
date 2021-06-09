@@ -94,7 +94,7 @@ $(function () {
                 edit: {
                     label: l('Edit'),
                     icon: 'fa fa-pencil',
-                    _disabled: abp.auth.isGranted('CmsKit.Menus.Items.Update'),
+                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Items.Update'),
                     action: function (data) {
                         var instance = $.jstree.reference(data.reference);
 
@@ -108,7 +108,7 @@ $(function () {
                 addSubMenuItem: {
                     label: l('AddSubMenuItem'),
                     icon: 'fa fa-plus',
-                    _disabled: abp.auth.isGranted('CmsKit.Menus.Items.Create'),
+                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Items.Create'),
                     action: function () {
                         menuTree.addItem(node.id);
                     }
@@ -117,7 +117,7 @@ $(function () {
                 'delete': {
                     label: l('Delete'),
                     icon: 'fa fa-remove',
-                    _disabled: abp.auth.isGranted('CmsKit.Menus.Items.Delete'),
+                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Items.Delete'),
                     action: function (data) {
                         var instance = $.jstree.reference(data.reference);
 
@@ -146,7 +146,7 @@ $(function () {
             return items;
         },
 
-        addItem: function (parentId) {
+        addItem: function () {
             var instance = $.jstree.reference(menuTree.$tree);
 
             createModal.open({
@@ -262,34 +262,34 @@ $(function () {
                             multiple: false,
                             check_callback: function (operation, node, node_parent, node_position, more) {
                                 return true;
-                            },
+                            }
+                        },
 
-                            contextmenu: {
-                                items: menuTree.contextMenu,
-                                'select_node': false
-                            },
+                        contextmenu: {
+                            items: menuTree.contextMenu,
+                            'select_node': false
+                        },
 
-                            //sort: function (node1, node2) {
-                            //    if (this.get_node(node2).original.displayName < this.get_node(node1).original.displayName) {
-                            //        return 1;
-                            //    }
+                        sort: function (node1, node2) {
+                           if (this.get_node(node2).original.displayName < this.get_node(node1).original.displayName) {
+                               return 1;
+                           }
 
-                            //    return -1;
-                            //},
+                           return -1;
+                        },
 
-                            plugins: [
-                                'types',
-                                'contextmenu',
-                                'wholerow',
-                                'sort',
-                                'dnd'
-                            ]
-                        }
+                        plugins: [
+                            'types',
+                            'contextmenu',
+                            'wholerow',
+                            'sort',
+                            'dnd'
+                        ]
                     });
 
                 $('button[name=CreateMenuItem]').click(function (e) {
                     e.preventDefault();
-                    createModal.open({ menuId: menuId });
+                    createModal.open({menuId: menuId});
                 });
 
                 createModal.onResult(function () {
@@ -300,15 +300,13 @@ $(function () {
                     menuTree.reload();
                 });
 
-                //menuTree.$tree.on('click', '.ou-text .fa-caret-down', function (e) {
-                //    e.preventDefault();
-                //    debugger;
-                //    var id = $(this).closest('.ou-text').attr('data-menuitem-id');
-                //    setTimeout(function () {
-                //        debugger;
-                //        menuTree.$tree.jstree('show_contextmenu', id);
-                //    }, 100);
-                //});
+                menuTree.$tree.on('click', '.ou-text .fa-caret-down', function (e) {
+                   e.preventDefault();
+                   var id = $(this).closest('.ou-text').attr('data-menuitem-id');
+                   setTimeout(function () {
+                       menuTree.$tree.jstree('show_contextmenu', id);
+                   }, 100);
+                });
             });
         },
 
@@ -371,7 +369,7 @@ $(function () {
         $('table>tbody>').find('input[type="checkbox"]').prop("checked", true);
         let selectedItems = $(`input[name="${selectedCheckboxNames}"]:checked`);
         selectedIds = [];
-        for (var i = 0; typeof (selectedItems[i]) != 'undefined'; selectedIds.push(selectedItems[i++].getAttribute('id')));
+        for (var i = 0; typeof (selectedItems[i]) != 'undefined'; selectedIds.push(selectedItems[i++].getAttribute('id'))) ;
     };
 
     const uncheckAndRemoveAll = function () {
