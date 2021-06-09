@@ -5,6 +5,7 @@ using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MyCompanyName.MyProjectName.Blazor.WebAssembly;
 using Volo.Abp.Account.Blazor;
 using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
@@ -22,7 +23,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Host
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
         typeof(AbpIdentityBlazorWebAssemblyModule),
         typeof(AbpAccountBlazorModule),
-        typeof(MyProjectNameBlazorModule)
+        typeof(MyProjectNameBlazorWebAssemblyModule)
     )]
     public class MyProjectNameBlazorHostModule : AbpModule
     {
