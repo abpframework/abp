@@ -1,0 +1,7 @@
+{
+  "culture": "hi",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "समय क्षेत्र",
+    "Description:Abp.Timing.Timezone": "आवेदन समय क्षेत्र"
+  }
+}

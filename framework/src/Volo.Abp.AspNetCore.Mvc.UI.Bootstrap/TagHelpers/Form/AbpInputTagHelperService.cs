@@ -57,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 output.Attributes.AddClass(isCheckBox ? "custom-checkbox" : "form-group");
                 output.Attributes.AddClass(isCheckBox ? "custom-control" : "");
                 output.Attributes.AddClass(isCheckBox ? "mb-2" : "");
-                output.Content.SetHtmlContent(output.Content.GetContent() + innerHtml);
+                output.Content.AppendHtml(innerHtml);
             }
         }
 

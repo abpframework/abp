@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepare": "node prepare",
-    "start": "docker-compose rm -f && docker-compose build --build-arg next_version=\"4.1.0\" && docker-compose up"
+    "start": "yarn prepare && docker-compose rm -f && docker-compose build --build-arg next_version=\"4.1.0\" && docker-compose up"
   },
   "keywords": [],
   "author": "",

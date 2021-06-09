@@ -1,0 +1,6 @@
+{
+  "culture": "hi",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} {1} से अधिक नहीं हो सकता! अधिक परिणाम की अनुमति देने के लिए सर्वर पक्ष पर {2}। {3} बढ़ाएँ।"
+  }
+}

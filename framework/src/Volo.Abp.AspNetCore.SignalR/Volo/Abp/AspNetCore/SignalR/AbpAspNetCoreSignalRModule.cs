@@ -30,7 +30,9 @@ namespace Volo.Abp.AspNetCore.SignalR
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddSignalR();
+            var signalRServerBuilder = context.Services.AddSignalR();
+
+            context.Services.ExecutePreConfiguredActions(signalRServerBuilder);
 
             Configure<AbpEndpointRouterOptions>(options =>
             {

@@ -5,19 +5,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SimpleStateChecking;
 using Xunit;
 
 namespace Volo.Abp.Authorization
 {
     public abstract class PermissionStateProvider_Tests : AuthorizationTestBase
     {
-        protected IPermissionStateManager PermissionStateManager { get; }
+        protected ISimpleStateCheckerManager<PermissionDefinition> StateCheckerManager { get; }
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
         protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
 
         public PermissionStateProvider_Tests()
         {
-            PermissionStateManager = GetRequiredService<IPermissionStateManager>();
+            StateCheckerManager = GetRequiredService<ISimpleStateCheckerManager<PermissionDefinition>>();
             PermissionDefinitionManager = GetRequiredService<IPermissionDefinitionManager>();
             CurrentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         }
@@ -29,13 +30,13 @@ namespace Volo.Abp.Authorization
         public async Task PermissionState_Test()
         {
             var myPermission1 = PermissionDefinitionManager.Get("MyPermission1");
-            myPermission1.StateProviders.ShouldContain(x => x.GetType() == typeof(TestRequireEditionPermissionStateProvider));
+            myPermission1.StateCheckers.ShouldContain(x => x.GetType() == typeof(TestRequireEditionPermissionSimpleStateChecker));
 
-            (await PermissionStateManager.IsEnabledAsync(myPermission1)).ShouldBeFalse();
+            (await StateCheckerManager.IsEnabledAsync(myPermission1)).ShouldBeFalse();
 
             using (CurrentPrincipalAccessor.Change(new Claim(AbpClaimTypes.EditionId, Guid.NewGuid().ToString())))
             {
-                (await PermissionStateManager.IsEnabledAsync(myPermission1)).ShouldBeTrue();
+                (await StateCheckerManager.IsEnabledAsync(myPermission1)).ShouldBeTrue();
             }
         }
     }
@@ -44,7 +45,10 @@ namespace Volo.Abp.Authorization
     {
         protected override void AfterAddApplication(IServiceCollection services)
         {
-            services.Configure<AbpPermissionOptions>(options => options.GlobalStateProviders.Add<TestGlobalRequireRolePermissionStateProvider>());
+            services.Configure<AbpSimpleStateCheckerOptions<PermissionDefinition>>(options =>
+            {
+                options.GlobalStateCheckers.Add<TestGlobalRequireRolePermissionSimpleStateChecker>();
+            });
         }
 
         [Fact]
@@ -52,11 +56,11 @@ namespace Volo.Abp.Authorization
         {
             var myPermission2 = PermissionDefinitionManager.Get("MyPermission2");
 
-            (await PermissionStateManager.IsEnabledAsync(myPermission2)).ShouldBeFalse();
+            (await StateCheckerManager.IsEnabledAsync(myPermission2)).ShouldBeFalse();
 
             using (CurrentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "admin")))
             {
-                (await PermissionStateManager.IsEnabledAsync(myPermission2)).ShouldBeTrue();
+                (await StateCheckerManager.IsEnabledAsync(myPermission2)).ShouldBeTrue();
             }
         }
     }

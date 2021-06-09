@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Volo.Abp.PermissionManagement": {
+      "path": "Volo.Abp.PermissionManagement.abpmdl.json"
+    }
+  }
+}
