@@ -40,7 +40,7 @@ export abstract class AuthFlowStrategy {
 
   abstract checkIfInternalAuth(): boolean;
   abstract navigateToLogin(queryParams?: Params): void;
-  abstract logout(): Observable<any>;
+  abstract logout(queryParams?: Params): Observable<any>;
   abstract login(params?: LoginParams): Observable<any>;
 
   private catchError = err => this.store.dispatch(new RestOccurError(err));
@@ -115,8 +115,8 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     return false;
   }
 
-  logout() {
-    return from(this.oAuthService.revokeTokenAndLogout());
+  logout(queryParams?: Params) {
+    return from(this.oAuthService.revokeTokenAndLogout(queryParams));
   }
 
   login() {
@@ -203,10 +203,10 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     );
   }
 
-  logout() {
+  logout(queryParams?: Params) {
     const router = this.injector.get(Router);
 
-    return from(this.oAuthService.revokeTokenAndLogout()).pipe(
+    return from(this.oAuthService.revokeTokenAndLogout(queryParams)).pipe(
       switchMap(() => this.appConfigService.get()),
       tap(res => {
         this.configState.setState(res);
