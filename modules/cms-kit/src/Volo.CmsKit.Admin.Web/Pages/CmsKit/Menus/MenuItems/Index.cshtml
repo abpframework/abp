@@ -11,7 +11,7 @@
 @model IndexModel
 
 @{
-    PageLayout.Content.Title = L["MenuItems"].Value;
+    PageLayout.Content.Title = @Model.Menu.Name + " - " + L["MenuItems"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
     PageLayout.Content.BreadCrumb.Add(L["Menu:Menus"].Value, "/Cms/Menus");
     PageLayout.Content.MenuItemName = CmsKitAdminMenus.Menus.MenusMenu;
@@ -19,27 +19,27 @@
 
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style type="typeof(JsTreeStyleContributor)" />
-        <abp-script src="/Pages/CmsKit/Menus/MenuItems/index.css" />
+        <abp-style type="typeof(JsTreeStyleContributor)"/>
+        <abp-script src="/Pages/CmsKit/Menus/MenuItems/index.css"/>
     </abp-style-bundle>
 }
 
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-style type="typeof(JsTreeScriptContributor)" />
-        <abp-script src="/Pages/CmsKit/Menus/MenuItems/index.js" />
+        <abp-style type="typeof(JsTreeScriptContributor)"/>
+        <abp-script src="/Pages/CmsKit/Menus/MenuItems/index.js"/>
     </abp-script-bundle>
 }
 
 @section content_toolbar {
-    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
+    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new {pageName = typeof(IndexModel).FullName})
 }
 
 <div id="CmsKitMenuItemsWrapper" data-menu-id="@Model.Id">
     <abp-card>
         <abp-card-body>
             <abp-card-title>
-               @Model.Menu.Name @L["MenuItems"]
+                @Model.Menu.Name
             </abp-card-title>
 
             <div id="MenuItemsEditTree"></div>

@@ -19,6 +19,8 @@ namespace Volo.CmsKit.Admin.Menus
 
         Task DeleteAsync(Guid menuId);
 
+        Task<MenuItemDto> GetMenuItemAsync(Guid menuId, Guid menuItemId);
+        
         Task<MenuItemDto> CreateMenuItemAsync(Guid menuId, MenuItemCreateInput input);
 
         Task<MenuItemDto> UpdateMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemUpdateInput input);

@@ -83,6 +83,16 @@ namespace Volo.CmsKit.Admin.Menus
             return MenuRepository.DeleteAsync(menuId);
         }
 
+        public async Task<MenuItemDto> GetMenuItemAsync(Guid menuId, Guid menuItemId)
+        {
+            var menu = await MenuRepository.GetAsync(menuId);
+
+            var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId)
+                ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
+
+            return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
+        }
+
         [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Create)]
         public virtual async Task<MenuItemDto> CreateMenuItemAsync(Guid menuId, MenuItemCreateInput input)
         {

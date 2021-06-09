@@ -34,6 +34,14 @@ namespace Volo.CmsKit.Admin.Menus
             return MenuAdminAppService.CreateAsync(input);
         }
 
+        [Route("{menuId}/menu-items/{menuItemId}")]        
+        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Default)]
+        [HttpGet]
+        public Task<MenuItemDto> GetMenuItemAsync(Guid menuId, Guid menuItemId)
+        {
+            return MenuAdminAppService.GetMenuItemAsync(menuId, menuItemId);
+        }
+
         [Route("{menuId}/menu-items")]
         [HttpPost]
         [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Create)]
