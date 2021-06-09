@@ -1,0 +1,6 @@
+{
+  "culture": "fi",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} voi olla enintään {1}! Lisää palvelimen puolella {2}. {3}, jotta saat enemmän tuloksia."
+  }
+}

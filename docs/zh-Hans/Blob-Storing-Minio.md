@@ -42,7 +42,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 * **EndPoint** (string): 你的Minio对象存储服务的URL, 查看文档：https://docs.min.io/docs/dotnet-client-quickstart-guide.html
 * **AccessKey** (string): Access key是唯一标识你的账户的用户ID, 
-* **SecretKey** (string): Access key是唯一标识你的账户的用户ID
+* **SecretKey** (string): Secret Key是你的账户的密码
 * **BucketName** (string):你可以指定bucket名称,如果没有指定,将使用 `BlobContainerName` 属性定义的BLOB容器的名称(查阅[BLOB storing document](Blob-Storing.md)),MinIO完全兼容S3标准,所以有一些 **bucket命名规则**,必须符合[规则](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
     * Bucket名称必须介于 3 到 63 个字符之间.
     * Bucket名称只能由小写字母、数字、句点 (.) 和连字符 (-) 组成.

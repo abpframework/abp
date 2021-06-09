@@ -43,6 +43,6 @@
     "Description:Abp.Account.EnableLocalLogin": "Označuje, zda server umožní uživatelům ověřovat se pomocí místního účtu.",
     "LoggedOutTitle": "Odhlášeno",
     "LoggedOutText": "Byli jste odhlášeni a brzy budete přesměrováni.",
-    "ReturnToText": "Kliknutím sem přejdete na {0}"
+    "ReturnToText": "Kliknutím sem se vrátíte do aplikace"
   }
 }

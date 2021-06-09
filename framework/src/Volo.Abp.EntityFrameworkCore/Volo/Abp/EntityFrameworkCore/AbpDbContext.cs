@@ -86,7 +86,6 @@ namespace Volo.Abp.EntityFrameworkCore
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

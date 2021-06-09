@@ -7,7 +7,7 @@ namespace MyCompanyName.MyProjectName
     {
         public void SayHello()
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("\tHello World!");
         }
     }
 }
