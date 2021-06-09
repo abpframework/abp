@@ -40,7 +40,7 @@
     "PostDeletionWarningMessage": "पोस्ट हटा दी जाएगी।",
     "BlogDeletionWarningMessage": "ब्लॉग डिलीट हो जाएगा।",
     "AreYouSure": "क्या आपको यकीन है?",
-    "CommentWithCount": "{शून्य टिप्पणियां",
+    "CommentWithCount": "{0} comments",
     "Comment": "टिप्पणी",
     "ShareOnTwitter": "ट्विटर पर साझा करें",
     "CoverImage": "कवर छवि",

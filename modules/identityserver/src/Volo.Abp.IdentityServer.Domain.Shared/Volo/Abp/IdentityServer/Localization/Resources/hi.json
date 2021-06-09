@@ -1,9 +1,9 @@
 {
   "culture": "hi",
   "texts": {
-    "Volo.IdentityServer:DuplicateIdentityResourceName": "पहचान संसाधन नाम पहले से मौजूद है: {नाम}",
-    "Volo.IdentityServer:DuplicateApiResourceName": "आपी संसाधन नाम पहले से मौजूद है: {नाम}",
-    "Volo.IdentityServer:DuplicateApiScopeName": "आपी स्कोप नाम पहले से मौजूद है: {नाम}",
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "पहचान संसाधन नाम पहले से मौजूद है: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "आपी संसाधन नाम पहले से मौजूद है: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "आपी स्कोप नाम पहले से मौजूद है: {Name}",
     "Volo.IdentityServer:DuplicateClientId": "ClientId पहले से मौजूद है: {ClientId}",
     "UserLockedOut": "अमान्य लॉगिन प्रयासों के कारण उपयोगकर्ता खाता बंद कर दिया गया है। कृपया थोड़ी देर प्रतीक्षा करें और पुन: प्रयास करें।",
     "InvalidUserNameOrPassword": "अमान्य उपयोगकर्ता नाम या पासवर्ड!",
