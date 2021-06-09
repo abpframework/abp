@@ -59,5 +59,13 @@ namespace Volo.CmsKit.Admin.Pages
         {
             return PageAdminAppService.DeleteAsync(id);
         }
+
+        [HttpGet]
+        [Route("lookup")]
+        [AllowAnonymous] // TODO: Find a way to get lookup
+        public virtual Task<PagedResultDto<PageLookupDto>> GetLookupAsync(GetPagesInputDto input)
+        {
+            return PageAdminAppService.GetLookupAsync(input);
+        }
     }
 }

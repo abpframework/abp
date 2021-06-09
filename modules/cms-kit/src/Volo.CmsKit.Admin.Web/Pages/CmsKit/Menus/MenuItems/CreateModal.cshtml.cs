@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.CmsKit.Admin.Menus;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
@@ -53,10 +54,9 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
             public string DisplayName { get; set; }
 
             public bool IsActive { get; set; }
-
-            [Required]
+            
             public string Url { get; set; }
-
+            
             public Guid? PageId { get; set; }
 
             public string Icon { get; set; }

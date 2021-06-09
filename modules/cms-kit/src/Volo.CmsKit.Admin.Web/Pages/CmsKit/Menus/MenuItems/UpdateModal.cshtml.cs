@@ -52,8 +52,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
             public string DisplayName { get; set; }
 
             public bool IsActive { get; set; }
-
-            [Required]
+            
             public string Url { get; set; }
 
             public string Icon { get; set; }

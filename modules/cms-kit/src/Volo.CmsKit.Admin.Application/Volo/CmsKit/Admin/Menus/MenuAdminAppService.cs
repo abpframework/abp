@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -103,7 +102,7 @@ namespace Volo.CmsKit.Admin.Menus
                     GuidGenerator.Create(),
                     menuId,
                     input.DisplayName,
-                    input.Url,
+                    input.Url.IsNullOrEmpty() ? "#" : input.Url,
                     input.IsActive,
                     input.ParentId,
                     input.Icon,
@@ -113,6 +112,12 @@ namespace Volo.CmsKit.Admin.Menus
                     input.CssClass,
                     input.RequiredPermissionName);
 
+            if (input.PageId.HasValue)
+            {
+                var page = await PageRepository.GetAsync(input.PageId.Value);
+                MenuManager.SetPageUrl(menuItem, page);
+            }
+            
             menu.Items.Add(menuItem);
 
             MenuManager.OrganizeTreeOrderForMenuItem(menu, menuItem);

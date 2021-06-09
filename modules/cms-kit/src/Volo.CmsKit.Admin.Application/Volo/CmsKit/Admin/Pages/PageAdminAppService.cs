@@ -82,5 +82,22 @@ namespace Volo.CmsKit.Admin.Pages
         {
             await PageRepository.DeleteAsync(id);
         }
+
+        public virtual async Task<PagedResultDto<PageLookupDto>> GetLookupAsync(GetPagesInputDto input)
+        {
+            var count = await PageRepository.GetCountAsync(input.Filter);
+            
+            var pages = await PageRepository.GetListAsync(
+                input.Filter,
+                input.MaxResultCount,
+                input.SkipCount,
+                input.Sorting
+            );
+
+            return new PagedResultDto<PageLookupDto>(
+                count,
+                ObjectMapper.Map<List<Page>, List<PageLookupDto>>(pages)
+            );
+        }
     }
 }

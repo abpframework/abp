@@ -12,12 +12,35 @@
     Layout = null;
 }
 
-<abp-dynamic-form abp-model="ViewModel" asp-page="/CmsKit/Menus/MenuItems/CreateModal">
+<form asp-page="/CmsKit/Menus/MenuItems/CreateModal">
     <abp-modal>
         <abp-modal-header title="@L["New"].Value"></abp-modal-header>
         <abp-modal-body>
-            <abp-form-content />
+
+            <div class="form-group">
+                <label asp-for="ViewModel.PageId"></label>
+
+                <select class="form-control" asp-for="ViewModel.PageId"></select>
+
+                <span asp-validation-for="ViewModel.PageId"></span>
+            </div>
+
+            <abp-button id="page-id-clear-button" button-type="Outline_Danger" text="@L["Clear"]"/>
+
+            <hr/>
+
+            <abp-input asp-for="ViewModel.MenuId"/>
+            <abp-input asp-for="ViewModel.ParentId"/>
+            <abp-input asp-for="ViewModel.DisplayName"/>
+            <abp-input asp-for="ViewModel.IsActive"/>
+            <abp-input asp-for="ViewModel.Url"/>
+            <abp-input asp-for="ViewModel.Icon"/>
+            <abp-input asp-for="ViewModel.Order"/>
+            <abp-input asp-for="ViewModel.Target"/>
+            <abp-input asp-for="ViewModel.ElementId"/>
+            <abp-input asp-for="ViewModel.CssClass"/>
+            <abp-input asp-for="ViewModel.RequiredPermissionName"/>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
-</abp-dynamic-form>
+</form>

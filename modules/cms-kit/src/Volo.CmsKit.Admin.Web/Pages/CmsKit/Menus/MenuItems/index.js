@@ -6,8 +6,8 @@ $(function () {
 
     var menuService = volo.cmsKit.admin.menus.menuAdmin;
 
-    var createModal = new abp.ModalManager(abp.appPath + 'CmsKit/Menus/MenuItems/CreateModal');
-    var updateModal = new abp.ModalManager(abp.appPath + 'CmsKit/Menus/MenuItems/UpdateModal');
+    var createModal = new abp.ModalManager({ viewUrl: abp.appPath + 'CmsKit/Menus/MenuItems/CreateModal', modalClass: 'createMenuItem' });
+    var updateModal = new abp.ModalManager({ viewUrl: abp.appPath + 'CmsKit/Menus/MenuItems/UpdateModal', modalClass: 'updateMenuItem'});
 
     var menuTree = {
 
