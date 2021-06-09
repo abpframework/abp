@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.UI.Navigation;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Menus;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Menus
@@ -92,6 +94,14 @@ namespace Volo.CmsKit.Admin.Menus
         public Task MoveMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemMoveInput input)
         {
             return MenuAdminAppService.MoveMenuItemAsync(menuId, menuItemId, input);
+        }
+        
+        [Route("{menuId}/main-menu")]
+        [HttpPut]        
+        [Authorize(CmsKitAdminPermissions.Menus.Update)]
+        public Task UpdateMainMenuAsync(Guid menuId, UpdateMainMenuInput input)
+        {
+            return MenuAdminAppService.UpdateMainMenuAsync(menuId, input);
         }
 
         [Route("{menuId}")]

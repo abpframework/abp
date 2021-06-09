@@ -10,5 +10,6 @@ namespace Volo.CmsKit.Admin.Menus
     public class MenuDto : EntityDto<Guid>
     {
         public string Name { get; set; }
+        public bool IsMainMenu { get; set; }
     }
 }

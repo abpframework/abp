@@ -30,6 +30,32 @@
                             }
                         },
                         {
+                            text: l('MakeMainMenu'),
+                            visible: function(data){
+                               return abp.auth.isGranted('CmsKit.Menus.Update') && !data.isMainMenu
+                            },
+                            action: function (data) {
+                                menusService
+                                    .updateMainMenu(data.record.id, { isMainMenu: true})
+                                    .then(function () {
+                                        dataTable.ajax.reload();
+                                    });
+                            }
+                        },
+                        {
+                            text: l('UnMakeMainMenu'),
+                            visible: function(data){
+                               return abp.auth.isGranted('CmsKit.Menus.Update') && data.isMainMenu
+                            },
+                            action: function (data) {
+                                menusService
+                                    .updateMainMenu(data.record.id, { isMainMenu: false})
+                                    .then(function () {
+                                        dataTable.ajax.reload();
+                                    });
+                            }
+                        },
+                        {
                             text: l('Edit'),
                             visible: abp.auth.isGranted('CmsKit.Menus.Update'),
                             action: function (data) {
@@ -56,7 +82,21 @@
             {
                 title: l("Name"),
                 orderable: true,
-                data: "name"
+                data: "name",
+                render: function (data, val ,record) {
+                    
+                    if (record.isMainMenu) {
+                        return (
+                            '<strong>'
+                            +
+                            data
+                            +
+                            '</strong>'
+                        );
+                    } else {
+                        return data;
+                    }
+                }
             }
         ]
     }));

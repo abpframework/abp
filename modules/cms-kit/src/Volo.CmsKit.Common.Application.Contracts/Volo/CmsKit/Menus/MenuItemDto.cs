@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.CmsKit.Admin.Menus
+namespace Volo.CmsKit.Menus
 {
     public class MenuItemDto : AuditedEntityDto<Guid>
     {

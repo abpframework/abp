@@ -416,7 +416,8 @@ namespace Volo.CmsKit
         private async Task SeedMenusAsync()
         {
             var menu = new Menu(_cmsKitTestData.Menu_1_Id, null, _cmsKitTestData.Menu_1_Name);
-
+            menu.IsMainMenu = true;
+            
             menu.Items.Add(
                 new MenuItem(
                     _cmsKitTestData.MenuItem_1_Id,
@@ -432,6 +433,12 @@ namespace Volo.CmsKit
                     _cmsKitTestData.MenuItem_2_Url));
 
             await _menuRepository.InsertAsync(menu);
+
+            await _menuRepository.InsertAsync(
+                new Menu(
+                    _cmsKitTestData.Menu_2_Id, 
+                    null, 
+                    _cmsKitTestData.Menu_2_Name));
         }
     }
 }

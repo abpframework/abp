@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.CmsKit.Admin.Menus;
+using Volo.CmsKit.Menus;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 {

@@ -175,5 +175,17 @@ namespace Volo.CmsKit.Admin.Menus
         {
             return MenuManager.MoveAsync(menuId, menuItemId, input.NewParentId, input.Position);
         }
+
+        public virtual  async Task UpdateMainMenuAsync(Guid menuId, UpdateMainMenuInput input)
+        {
+            if (input.IsMainMenu)
+            {
+                await MenuManager.SetMainMenuAsync(menuId);
+            }
+            else
+            {
+                await MenuManager.UnSetMainMenuAsync(menuId);
+            }
+        }
     }
 }

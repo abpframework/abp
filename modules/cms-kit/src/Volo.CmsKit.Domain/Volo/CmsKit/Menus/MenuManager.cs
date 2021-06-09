@@ -31,7 +31,7 @@ namespace Volo.CmsKit.Menus
             var menu = await MenuRepository.GetAsync(menuId, includeDetails: true);
 
             var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId)
-                ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
+                           ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
 
             if (newParentId.HasValue && !menu.Items.Any(a => a.Id == newParentId.Value))
             {
@@ -40,7 +40,7 @@ namespace Volo.CmsKit.Menus
 
             menuItem.ParentId = newParentId;
             menuItem.Order = position;
-            
+
             OrganizeTreeOrderForMenuItem(menu, menuItem);
 
             await MenuRepository.UpdateAsync(menu);
@@ -51,13 +51,34 @@ namespace Volo.CmsKit.Menus
             var sameTree = menu.Items.Where(x => x.ParentId == menuItem.ParentId).OrderBy(x => x.Order).ToList();
 
             sameTree.Remove(menuItem); // Remove if exists
-            
+
             sameTree.Insert(menuItem.Order, menuItem);
 
             for (int i = 0; i < sameTree.Count; i++)
             {
                 sameTree[i].Order = i;
             }
+        }
+
+        public virtual async Task SetMainMenuAsync(Guid menuId)
+        {
+            var menus = await MenuRepository.GetListAsync(includeDetails: false);
+
+            foreach (var menu in menus)
+            {
+                menu.IsMainMenu = menuId == menu.Id;
+            }
+
+            await MenuRepository.UpdateManyAsync(menus);
+        }
+
+        public virtual async Task UnSetMainMenuAsync(Guid menuId)
+        {
+            var menu = await MenuRepository.GetAsync(menuId, includeDetails: false);
+
+            menu.IsMainMenu = false;
+
+            await MenuRepository.UpdateAsync(menu);
         }
     }
 }

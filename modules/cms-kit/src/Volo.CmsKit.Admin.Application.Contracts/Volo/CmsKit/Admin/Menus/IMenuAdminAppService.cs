@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.CmsKit.Menus;
 
 namespace Volo.CmsKit.Admin.Menus
 {
@@ -28,5 +29,7 @@ namespace Volo.CmsKit.Admin.Menus
         Task DeleteMenuItemAsync(Guid menuId, Guid menuItemId);
 
         Task MoveMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemMoveInput input);
+
+        Task UpdateMainMenuAsync(Guid menuId, UpdateMainMenuInput input);
     }
 }

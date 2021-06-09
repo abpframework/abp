@@ -12,6 +12,8 @@ namespace Volo.CmsKit.Menus
     {
         public string Name { get; protected set; }
 
+        public bool IsMainMenu { get; internal set; }
+
         public Guid? TenantId { get; protected set; }
 
         public ICollection<MenuItem> Items { get; protected set; }

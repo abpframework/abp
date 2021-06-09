@@ -123,5 +123,10 @@ namespace Volo.CmsKit
 
         public string MenuItem_2_Name { get; } = "Our Team";
         public string MenuItem_2_Url { get; } = "/team";
+        
+        
+        public Guid Menu_2_Id { get; } = Guid.NewGuid();
+
+        public string Menu_2_Name { get; } = "DraftMenu";
     }
 }
