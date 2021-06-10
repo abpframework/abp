@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
@@ -7,20 +8,38 @@ using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Menus
 {
-    public class PageChangedHandler: ILocalEventHandler<EntityCreatedEventData<Page>>,
+    public class PageChangedHandler: ILocalEventHandler<EntityUpdatedEventData<Page>>,
         ITransientDependency
     {
         protected IMenuRepository MenuRepository { get; }
-        
-        public PageChangedHandler(IMenuRepository menuRepository)
+        protected MenuManager MenuManager { get; }
+
+        public PageChangedHandler(
+            IMenuRepository menuRepository, 
+            MenuManager menuManager)
         {
             MenuRepository = menuRepository;
+            MenuManager = menuManager;
         }
         
-        public Task HandleEventAsync(EntityCreatedEventData<Page> eventData)
+        public async Task HandleEventAsync(EntityUpdatedEventData<Page> eventData)
         {
-            // TODO: Find a way to get affected MenuItems.
-            throw new NotImplementedException();
+            // TODO: Write a repository query.
+            var allMenus = await MenuRepository.GetListAsync(includeDetails: true);
+
+            var affectedMenus = allMenus
+                .Where(menu => menu.Items.Any(x => x.PageId == eventData.Entity.Id))
+                .ToArray();
+
+            var affectedMenuItems =
+                affectedMenus.SelectMany(sm => sm.Items).Where(mItem => mItem.PageId == eventData.Entity.Id);
+
+            foreach (var menuItem in affectedMenuItems)
+            {
+                MenuManager.SetPageUrl(menuItem, eventData.Entity);
+            }
+
+            await MenuRepository.UpdateManyAsync(affectedMenus);
         }
     }
 }

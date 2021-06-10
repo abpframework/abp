@@ -119,7 +119,6 @@ namespace Volo.CmsKit.Admin.Menus
         {
             return MenuAdminAppService.UpdateMenuItemAsync(menuId, menuItemId, input);
         }
-        
 
         [HttpGet]
         [Route("lookup/pages")]
