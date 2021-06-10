@@ -22,7 +22,7 @@ namespace Volo.CmsKit.Menus
         public virtual void SetPageUrl(MenuItem menuItem, Page page)
         {
             menuItem.SetPageId(page.Id);
-            menuItem.SetUrl(page.Slug.EnsureStartsWith('/'));
+            menuItem.SetUrl(PageConsts.UrlPrefix + page.Slug);
         }
 
         [UnitOfWork]
@@ -46,11 +46,11 @@ namespace Volo.CmsKit.Menus
             await MenuRepository.UpdateAsync(menu);
         }
 
-        public void OrganizeTreeOrderForMenuItem(Menu menu, MenuItem menuItem)
+        public virtual void OrganizeTreeOrderForMenuItem(Menu menu, MenuItem menuItem)
         {
             var sameTree = menu.Items.Where(x => x.ParentId == menuItem.ParentId).OrderBy(x => x.Order).ToList();
 
-            sameTree.Remove(menuItem); // Remove if exists
+            sameTree.Remove(menuItem); // Remove if exists to prevent misordering with same order number
 
             sameTree.Insert(menuItem.Order, menuItem);
 

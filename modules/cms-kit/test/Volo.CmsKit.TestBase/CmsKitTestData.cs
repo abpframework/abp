@@ -115,18 +115,26 @@ namespace Volo.CmsKit
         public string Menu_1_Name { get; } = "MainMenu";
 
         public Guid MenuItem_1_Id { get; } = Guid.NewGuid();
-
+        
         public string MenuItem_1_Name { get; } = "About Us";
+        
         public string MenuItem_1_Url { get; } = "/about-us";
 
         public Guid MenuItem_2_Id { get; } = Guid.NewGuid();
-
+        
         public string MenuItem_2_Name { get; } = "Our Team";
+        
         public string MenuItem_2_Url { get; } = "/team";
         
         
         public Guid Menu_2_Id { get; } = Guid.NewGuid();
 
         public string Menu_2_Name { get; } = "DraftMenu";
+        
+        public Guid MenuItem_3_Id { get; } = Guid.NewGuid();
+        
+        public string MenuItem_3_Name { get; } = "Products";
+        
+        public string MenuItem_3_Url { get; } = "/products";
     }
 }

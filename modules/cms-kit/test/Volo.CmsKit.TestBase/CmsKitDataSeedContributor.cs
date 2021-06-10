@@ -434,11 +434,19 @@ namespace Volo.CmsKit
 
             await _menuRepository.InsertAsync(menu);
 
-            await _menuRepository.InsertAsync(
-                new Menu(
-                    _cmsKitTestData.Menu_2_Id, 
-                    null, 
-                    _cmsKitTestData.Menu_2_Name));
+            var menu2 = new Menu(
+                _cmsKitTestData.Menu_2_Id,
+                null,
+                _cmsKitTestData.Menu_2_Name);
+            
+            menu2.Items.Add(
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_3_Id, 
+                    menu2.Id,
+                    _cmsKitTestData.MenuItem_3_Name,
+                    _cmsKitTestData.MenuItem_3_Url));
+            
+            await _menuRepository.InsertAsync(menu2);
         }
     }
 }

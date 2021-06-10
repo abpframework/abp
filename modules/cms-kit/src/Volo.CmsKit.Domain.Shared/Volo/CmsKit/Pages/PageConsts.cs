@@ -1,4 +1,6 @@
-﻿namespace Volo.CmsKit.Pages
+﻿using System;
+
+namespace Volo.CmsKit.Pages
 {
     public class PageConsts
     {
@@ -13,5 +15,12 @@
         public static int MaxScriptLength { get; set; } = int.MaxValue;
 
         public static int MaxStyleLength { get; set; } = int.MaxValue;
+        
+        private static string _urlPrefix = "/pages/";
+        public static string UrlPrefix
+        {
+            get => _urlPrefix;
+            set => _urlPrefix = value.EnsureEndsWith('/').EnsureStartsWith('/');
+        }
     }
 }

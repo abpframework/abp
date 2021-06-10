@@ -9,6 +9,7 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
+using Volo.CmsKit.Pages;
 using Volo.CmsKit.Public.Web.Menus;
 using Volo.CmsKit.Web;
 
@@ -72,7 +73,7 @@ namespace Volo.CmsKit.Public.Web
             {
                 Configure<RazorPagesOptions>(options =>
                 {
-                    options.Conventions.AddPageRoute("/Public/CmsKit/Pages/Index", @"/pages/{slug:minlength(1)}");
+                    options.Conventions.AddPageRoute("/Public/CmsKit/Pages/Index", @"{PageConsts.UrlPrefix}{slug:minlength(1)}");
                     options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/Index", @"/blogs/{blogSlug:minlength(1)}");
                     options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
                 });
