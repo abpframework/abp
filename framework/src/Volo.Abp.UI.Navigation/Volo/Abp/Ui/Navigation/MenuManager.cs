@@ -27,7 +27,7 @@ namespace Volo.Abp.UI.Navigation
 
         public Task<ApplicationMenu> GetAsync(string name)
         {
-            return GetInternalAsync(StandardMenus.Main);
+            return GetInternalAsync(name);
         }
 
         public Task<ApplicationMenu> GetMainMenuAsync()
