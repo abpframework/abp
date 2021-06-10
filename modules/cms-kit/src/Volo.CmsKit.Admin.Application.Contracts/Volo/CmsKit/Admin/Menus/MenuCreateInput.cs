@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Volo.CmsKit.Admin.Menus
 {
+    [Serializable]
     public class MenuCreateInput
     {
         public string Name { get; set; }

@@ -31,7 +31,7 @@ namespace Volo.CmsKit.Public.Web.Menus
                 if (mainMenu != null)
                 {
                     // TODO: Consider about not to remove existing static menus.
-                    context.Menu.Items.Clear();
+                    // context.Menu.Items.Clear();
                     
                     foreach (var menuItemDto in mainMenu.Items.Where(x => x.ParentId == null))
                     {

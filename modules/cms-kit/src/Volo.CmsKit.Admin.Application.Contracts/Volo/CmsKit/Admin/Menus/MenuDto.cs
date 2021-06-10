@@ -7,6 +7,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Admin.Menus
 {
+    [Serializable]
     public class MenuDto : EntityDto<Guid>
     {
         public string Name { get; set; }

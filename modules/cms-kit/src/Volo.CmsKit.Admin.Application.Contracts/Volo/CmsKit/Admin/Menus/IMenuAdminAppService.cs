@@ -31,5 +31,8 @@ namespace Volo.CmsKit.Admin.Menus
         Task MoveMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemMoveInput input);
 
         Task UpdateMainMenuAsync(Guid menuId, UpdateMainMenuInput input);
+        
+        
+        Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input);
     }
 }

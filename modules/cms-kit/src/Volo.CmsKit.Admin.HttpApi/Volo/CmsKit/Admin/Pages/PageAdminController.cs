@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
 
@@ -58,14 +59,6 @@ namespace Volo.CmsKit.Admin.Pages
         public virtual Task DeleteAsync(Guid id)
         {
             return PageAdminAppService.DeleteAsync(id);
-        }
-
-        [HttpGet]
-        [Route("lookup")]
-        [AllowAnonymous] // TODO: Find a way to get lookup
-        public virtual Task<PagedResultDto<PageLookupDto>> GetLookupAsync(GetPagesInputDto input)
-        {
-            return PageAdminAppService.GetLookupAsync(input);
         }
     }
 }

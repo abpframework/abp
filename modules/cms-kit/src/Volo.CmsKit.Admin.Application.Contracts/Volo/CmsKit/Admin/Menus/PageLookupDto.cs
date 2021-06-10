@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Volo.CmsKit.Admin.Pages
+namespace Volo.CmsKit.Admin.Menus
 {
     public class PageLookupDto : EntityDto<Guid>
     {

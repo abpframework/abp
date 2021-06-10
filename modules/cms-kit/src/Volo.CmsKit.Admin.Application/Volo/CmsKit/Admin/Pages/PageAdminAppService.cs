@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Permissions;
@@ -81,23 +82,6 @@ namespace Volo.CmsKit.Admin.Pages
         public virtual async Task DeleteAsync(Guid id)
         {
             await PageRepository.DeleteAsync(id);
-        }
-
-        public virtual async Task<PagedResultDto<PageLookupDto>> GetLookupAsync(GetPagesInputDto input)
-        {
-            var count = await PageRepository.GetCountAsync(input.Filter);
-            
-            var pages = await PageRepository.GetListAsync(
-                input.Filter,
-                input.MaxResultCount,
-                input.SkipCount,
-                input.Sorting
-            );
-
-            return new PagedResultDto<PageLookupDto>(
-                count,
-                ObjectMapper.Map<List<Page>, List<PageLookupDto>>(pages)
-            );
         }
     }
 }

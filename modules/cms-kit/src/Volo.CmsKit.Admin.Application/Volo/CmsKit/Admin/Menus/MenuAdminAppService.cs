@@ -37,9 +37,9 @@ namespace Volo.CmsKit.Admin.Menus
             var menus = await MenuRepository.GetPagedListAsync(input.SkipCount, input.MaxResultCount, input.Sorting);
 
             return new PagedResultDto<MenuDto>(
-                    await MenuRepository.GetCountAsync(),
-                    ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus)
-                    );
+                await MenuRepository.GetCountAsync(),
+                ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus)
+            );
         }
 
         public async Task<MenuWithDetailsDto> GetAsync(Guid id)
@@ -87,7 +87,7 @@ namespace Volo.CmsKit.Admin.Menus
             var menu = await MenuRepository.GetAsync(menuId);
 
             var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId)
-                ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
+                           ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
 
             return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
         }
@@ -117,23 +117,24 @@ namespace Volo.CmsKit.Admin.Menus
                 var page = await PageRepository.GetAsync(input.PageId.Value);
                 MenuManager.SetPageUrl(menuItem, page);
             }
-            
+
             menu.Items.Add(menuItem);
 
             MenuManager.OrganizeTreeOrderForMenuItem(menu, menuItem);
-            
+
             await MenuRepository.UpdateAsync(menu);
 
             return ObjectMapper.Map<MenuItem, MenuItemDto>(menuItem);
         }
 
         [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Update)]
-        public virtual async Task<MenuItemDto> UpdateMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemUpdateInput input)
+        public virtual async Task<MenuItemDto> UpdateMenuItemAsync(Guid menuId, Guid menuItemId,
+            MenuItemUpdateInput input)
         {
             var menu = await MenuRepository.GetAsync(menuId, includeDetails: true);
 
             var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId)
-                ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
+                           ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
 
             if (input.PageId.HasValue)
             {
@@ -163,7 +164,7 @@ namespace Volo.CmsKit.Admin.Menus
             var menu = await MenuRepository.GetAsync(menuId, includeDetails: true);
 
             var menuItem = menu.Items.FirstOrDefault(x => x.Id == menuItemId)
-                ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
+                           ?? throw new EntityNotFoundException(typeof(MenuItem), menuItemId);
 
             menu.Items.Remove(menuItem);
 
@@ -176,7 +177,7 @@ namespace Volo.CmsKit.Admin.Menus
             return MenuManager.MoveAsync(menuId, menuItemId, input.NewParentId, input.Position);
         }
 
-        public virtual  async Task UpdateMainMenuAsync(Guid menuId, UpdateMainMenuInput input)
+        public virtual async Task UpdateMainMenuAsync(Guid menuId, UpdateMainMenuInput input)
         {
             if (input.IsMainMenu)
             {
@@ -186,6 +187,23 @@ namespace Volo.CmsKit.Admin.Menus
             {
                 await MenuManager.UnSetMainMenuAsync(menuId);
             }
+        }
+
+        public virtual async Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input)
+        {
+            var count = await PageRepository.GetCountAsync(input.Filter);
+
+            var pages = await PageRepository.GetListAsync(
+                input.Filter,
+                input.MaxResultCount,
+                input.SkipCount,
+                input.Sorting
+            );
+
+            return new PagedResultDto<PageLookupDto>(
+                count,
+                ObjectMapper.Map<List<Page>, List<PageLookupDto>>(pages)
+            );
         }
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Volo.CmsKit.Admin.Menus
 {
+    [Serializable]
     public class MenuItemUpdateInput
     {
         [Required]

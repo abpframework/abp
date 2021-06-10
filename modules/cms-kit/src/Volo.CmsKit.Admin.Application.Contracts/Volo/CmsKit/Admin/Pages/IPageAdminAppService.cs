@@ -8,6 +8,5 @@ namespace Volo.CmsKit.Admin.Pages
 {
     public interface IPageAdminAppService : ICrudAppService<PageDto, PageDto, Guid, GetPagesInputDto, CreatePageInputDto, UpdatePageInputDto>
     {
-        Task<PagedResultDto<PageLookupDto>> GetLookupAsync(GetPagesInputDto input);
     }
 }

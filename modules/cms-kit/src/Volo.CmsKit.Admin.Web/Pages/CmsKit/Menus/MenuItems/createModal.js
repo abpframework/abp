@@ -35,7 +35,7 @@ $(function () {
             })
             
             function initSelectPageId() {
-                $pageId.data('autocompleteApiUrl', '/api/cms-kit-admin/pages/lookup');
+                $pageId.data('autocompleteApiUrl', '/api/cms-kit-admin/menus/lookup/pages');
                 $pageId.data('autocompleteDisplayProperty', 'title');
                 $pageId.data('autocompleteValueProperty', 'id');
                 $pageId.data('autocompleteItemsProperty', 'items');
