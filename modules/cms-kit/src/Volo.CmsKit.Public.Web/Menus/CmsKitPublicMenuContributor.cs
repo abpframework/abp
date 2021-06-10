@@ -33,7 +33,7 @@ namespace Volo.CmsKit.Public.Web.Menus
                     // TODO: Consider about not to remove existing static menus.
                     // context.Menu.Items.Clear();
                     
-                    foreach (var menuItemDto in mainMenu.Items.Where(x => x.ParentId == null))
+                    foreach (var menuItemDto in mainMenu.Items.Where(x => x.ParentId == null && x.IsActive))
                     {
                         var applicationMenuItem = CreateApplicationMenu(menuItemDto);
                         context.Menu.Items.Add(applicationMenuItem);
@@ -64,7 +64,7 @@ namespace Volo.CmsKit.Public.Web.Menus
             var applicationMenuItem = CreateApplicationMenu(menuItem);
             parent.Items.Add(applicationMenuItem);
 
-            foreach (var item in source.Where(x => x.ParentId == menuItem.Id))
+            foreach (var item in source.Where(x => x.ParentId == menuItem.Id && x.IsActive))
             {
                 AddChildItems(applicationMenuItem, item, source);
             }
