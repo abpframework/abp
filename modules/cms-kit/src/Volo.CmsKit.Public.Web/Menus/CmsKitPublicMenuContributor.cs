@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Public.Web.Menus
     {
         public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
-            if (context.Menu.Name == StandardMenus.Main)
+            if (context.Menu.Name == CmsKitMenus.Public)
             {
                 await ConfigureMainMenuAsync(context);
             }
@@ -30,12 +30,9 @@ namespace Volo.CmsKit.Public.Web.Menus
 
                 if (mainMenu != null)
                 {
-                    // TODO: Consider about not to remove existing static menus.
-                    // context.Menu.Items.Clear();
-                    
                     foreach (var menuItemDto in mainMenu.Items.Where(x => x.ParentId == null && x.IsActive))
                     {
-                        var applicationMenuItem = CreateApplicationMenu(menuItemDto);
+                        var applicationMenuItem = CreateApplicationMenuItem(menuItemDto);
                         context.Menu.Items.Add(applicationMenuItem);
                         AddChildItems(applicationMenuItem, menuItemDto, mainMenu.Items);
                     }
@@ -43,7 +40,18 @@ namespace Volo.CmsKit.Public.Web.Menus
             }
         }
 
-        private ApplicationMenuItem CreateApplicationMenu(MenuItemDto menuItem)
+        private void AddChildItems(ApplicationMenuItem parent, MenuItemDto menuItem, List<MenuItemDto> source)
+        {
+            var applicationMenuItem = CreateApplicationMenuItem(menuItem);
+            parent.Items.Add(applicationMenuItem);
+
+            foreach (var item in source.Where(x => x.ParentId == menuItem.Id && x.IsActive))
+            {
+                AddChildItems(applicationMenuItem, item, source);
+            }
+        }
+        
+        private ApplicationMenuItem CreateApplicationMenuItem(MenuItemDto menuItem)
         {
             return new ApplicationMenuItem(
                 menuItem.DisplayName,
@@ -57,17 +65,6 @@ namespace Volo.CmsKit.Public.Web.Menus
                 menuItem.CssClass,
                 menuItem.RequiredPermissionName
             );
-        }
-
-        private void AddChildItems(ApplicationMenuItem parent, MenuItemDto menuItem, List<MenuItemDto> source)
-        {
-            var applicationMenuItem = CreateApplicationMenu(menuItem);
-            parent.Items.Add(applicationMenuItem);
-
-            foreach (var item in source.Where(x => x.ParentId == menuItem.Id && x.IsActive))
-            {
-                AddChildItems(applicationMenuItem, item, source);
-            }
         }
     }
 }

@@ -44,6 +44,7 @@ namespace Volo.CmsKit.Public.Web
             Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new CmsKitPublicMenuContributor());
+                options.MainMenuNames.Add(CmsKitMenus.Public);
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>
