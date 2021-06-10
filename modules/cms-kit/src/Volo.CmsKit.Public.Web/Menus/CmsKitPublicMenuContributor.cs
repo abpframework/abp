@@ -34,23 +34,23 @@ namespace Volo.CmsKit.Public.Web.Menus
                     {
                         var applicationMenuItem = CreateApplicationMenuItem(menuItemDto);
                         context.Menu.Items.Add(applicationMenuItem);
-                        AddChildItems(applicationMenuItem, menuItemDto, mainMenu.Items);
+                        AddChildItems(menuItemDto, mainMenu.Items);
                     }
                 }
             }
         }
 
-        private void AddChildItems(ApplicationMenuItem parent, MenuItemDto menuItem, List<MenuItemDto> source)
+        private void AddChildItems(MenuItemDto menuItem, List<MenuItemDto> source, ApplicationMenuItem parent = null)
         {
             var applicationMenuItem = CreateApplicationMenuItem(menuItem);
-            parent.Items.Add(applicationMenuItem);
+            parent?.Items.Add(applicationMenuItem);
 
             foreach (var item in source.Where(x => x.ParentId == menuItem.Id && x.IsActive))
             {
-                AddChildItems(applicationMenuItem, item, source);
+                AddChildItems(item, source, applicationMenuItem);
             }
         }
-        
+
         private ApplicationMenuItem CreateApplicationMenuItem(MenuItemDto menuItem)
         {
             return new ApplicationMenuItem(
