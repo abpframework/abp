@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -140,5 +141,13 @@ namespace Volo.Abp.Http.DynamicProxying
 
         [FromQuery]
         public DateTime FirstReleaseDate { get; set; }
+
+        [FromQuery]
+        public List<string> Colors { get; set; }
+
+        public Car()
+        {
+            Colors = new List<string>();
+        }
     }
 }

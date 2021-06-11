@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.MongoDB
@@ -20,15 +22,21 @@ namespace Volo.Abp.Uow.MongoDB
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        private readonly ICurrentTenant _currentTenant;
+        private readonly AbpMongoDbContextOptions _options;
 
         public UnitOfWorkMongoDbContextProvider(
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            ICurrentTenant currentTenant, 
+            IOptions<AbpMongoDbContextOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
             _cancellationTokenProvider = cancellationTokenProvider;
+            _currentTenant = currentTenant;
+            _options = options.Value;
 
             Logger = NullLogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>>.Instance;
         }
@@ -36,7 +44,8 @@ namespace Volo.Abp.Uow.MongoDB
         [Obsolete("Use CreateDbContextAsync")]
         public TMongoDbContext GetDbContext()
         {
-            if (!UnitOfWork.DisableObsoleteDbContextCreationWarning.Value)
+            if (UnitOfWork.EnableObsoleteDbContextCreationWarning &&
+                !UnitOfWorkManager.DisableObsoleteDbContextCreationWarning.Value)
             {
                 Logger.LogWarning(
                     "UnitOfWorkDbContextProvider.GetDbContext is deprecated. Use GetDbContextAsync instead! " +
@@ -53,8 +62,9 @@ namespace Volo.Abp.Uow.MongoDB
                     $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
             }
 
-            var connectionString = _connectionStringResolver.Resolve<TMongoDbContext>();
-            var dbContextKey = $"{typeof(TMongoDbContext).FullName}_{connectionString}";
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+            var connectionString = ResolveConnectionString(targetDbContextType);
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var mongoUrl = new MongoUrl(connectionString);
             var databaseName = mongoUrl.DatabaseName;
@@ -66,9 +76,9 @@ namespace Volo.Abp.Uow.MongoDB
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
-                () => new MongoDbDatabaseApi<TMongoDbContext>(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
+                () => new MongoDbDatabaseApi(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
 
-            return ((MongoDbDatabaseApi<TMongoDbContext>) databaseApi).DbContext;
+            return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
         }
 
         public async Task<TMongoDbContext> GetDbContextAsync(CancellationToken cancellationToken = default)
@@ -80,8 +90,9 @@ namespace Volo.Abp.Uow.MongoDB
                     $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
             }
 
-            var connectionString = await _connectionStringResolver.ResolveAsync<TMongoDbContext>();
-            var dbContextKey = $"{typeof(TMongoDbContext).FullName}_{connectionString}";
+            var targetDbContextType = _options.GetReplacedTypeOrSelf(typeof(TMongoDbContext));
+            var connectionString = await ResolveConnectionStringAsync(targetDbContextType);
+            var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
 
             var mongoUrl = new MongoUrl(connectionString);
             var databaseName = mongoUrl.DatabaseName;
@@ -94,7 +105,7 @@ namespace Volo.Abp.Uow.MongoDB
             var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
             if (databaseApi == null)
             {
-                databaseApi = new MongoDbDatabaseApi<TMongoDbContext>(
+                databaseApi = new MongoDbDatabaseApi(
                     await CreateDbContextAsync(
                         unitOfWork,
                         mongoUrl,
@@ -106,7 +117,7 @@ namespace Volo.Abp.Uow.MongoDB
                 unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
             }
 
-            return ((MongoDbDatabaseApi<TMongoDbContext>) databaseApi).DbContext;
+            return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
         }
 
         [Obsolete("Use CreateDbContextAsync")]
@@ -177,7 +188,10 @@ namespace Volo.Abp.Uow.MongoDB
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
-                    new MongoDbTransactionApi(session)
+                    new MongoDbTransactionApi(
+                        session,
+                        _cancellationTokenProvider
+                    )
                 );
 
                 dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
@@ -214,7 +228,10 @@ namespace Volo.Abp.Uow.MongoDB
 
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
-                    new MongoDbTransactionApi(session)
+                    new MongoDbTransactionApi(
+                        session,
+                        _cancellationTokenProvider
+                    )
                 );
 
                 dbContext.ToAbpMongoDbContext().InitializeDatabase(database, client, session);
@@ -225,6 +242,35 @@ namespace Volo.Abp.Uow.MongoDB
             }
 
             return dbContext;
+        }
+
+        private async Task<string> ResolveConnectionStringAsync(Type dbContextType)
+        {
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TMongoDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (_currentTenant.Change(null))
+                {
+                    return await _connectionStringResolver.ResolveAsync(dbContextType);
+                }
+            }
+
+            return await _connectionStringResolver.ResolveAsync(dbContextType);
+        }
+
+        [Obsolete("Use ResolveConnectionStringAsync method.")]
+        private string ResolveConnectionString(Type dbContextType)
+        {
+            // Multi-tenancy unaware contexts should always use the host connection string
+            if (typeof(TMongoDbContext).IsDefined(typeof(IgnoreMultiTenancyAttribute), false))
+            {
+                using (_currentTenant.Change(null))
+                {
+                    return _connectionStringResolver.Resolve(dbContextType);
+                }
+            }
+
+            return _connectionStringResolver.Resolve(dbContextType);
         }
 
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)

@@ -38,16 +38,11 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
-
             var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
             var newProTemplate = !string.IsNullOrEmpty(template) && template == ModuleProTemplate.TemplateName;
-
             var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
-
-            var skipDbMigrations = newTemplate || newProTemplate || Convert.ToBoolean(
-                commandLineArgs.Options.GetOrNull(Options.DbMigrations.Skip) ?? "false");
-
+            var skipDbMigrations = newTemplate || newProTemplate || Convert.ToBoolean(commandLineArgs.Options.GetOrNull(Options.DbMigrations.Skip) ?? "false");
             var solutionFile = GetSolutionFile(commandLineArgs);
 
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
@@ -59,7 +54,6 @@ namespace Volo.Abp.Cli.Commands
             await SolutionModuleAdder.AddAsync(
                 solutionFile,
                 commandLineArgs.Target,
-                commandLineArgs.Options.GetOrNull(Options.StartupProject.Short, Options.StartupProject.Long),
                 version,
                 skipDbMigrations,
                 withSourceCode,
@@ -165,12 +159,6 @@ namespace Volo.Abp.Cli.Commands
             public static class DbMigrations
             {
                 public const string Skip = "skip-db-migrations";
-            }
-
-            public static class StartupProject
-            {
-                public const string Short = "sp";
-                public const string Long = "startup-project";
             }
 
             public static class SourceCode

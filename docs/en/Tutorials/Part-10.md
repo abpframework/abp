@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -86,13 +86,13 @@ builder.Entity<Book>(b =>
 
 ### Add New EF Core Migration
 
-Run the following command in the Package Manager Console (of the Visual Studio) to add a new database migration:
+The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
+
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project and type the following command:
 
 ````bash
-Add-Migration "Added_AuthorId_To_Book"
+dotnet ef migrations add Added_AuthorId_To_Book
 ````
-
-> Ensure that the `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the Default project and the `Acme.BookStore.DbMigrator` is the startup project, as always.
 
 This should create a new migration class with the following code in its `Up` method:
 
@@ -120,6 +120,8 @@ migrationBuilder.AddForeignKey(
 * Adds an `AuthorId` field to the `AppBooks` table.
 * Creates an index on the `AuthorId` field.
 * Declares the foreign key to the `AppAuthors` table.
+
+> If you are using Visual Studio, you may want to use `Add-Migration Added_AuthorId_To_Book -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
 
 {{end}}
 
@@ -326,6 +328,7 @@ Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Acme.BookStore.Authors;
 using Acme.BookStore.Permissions;
@@ -364,10 +367,11 @@ namespace Acme.BookStore.Books
 
         public override async Task<BookDto> GetAsync(Guid id)
         {
-            await CheckGetPolicyAsync();
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
-            var query = from book in Repository
+            var query = from book in queryable
                 join author in _authorRepository on book.AuthorId equals author.Id
                 where book.Id == id
                 select new { book, author };
@@ -384,18 +388,19 @@ namespace Acme.BookStore.Books
             return bookDto;
         }
 
-        public override async Task<PagedResultDto<BookDto>> GetListAsync(
-            PagedAndSortedResultRequestDto input)
+        public override async Task<PagedResultDto<BookDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            await CheckGetListPolicyAsync();
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
-            var query = from book in Repository
+            var query = from book in queryable
                 join author in _authorRepository on book.AuthorId equals author.Id
-                orderby input.Sorting
                 select new {book, author};
 
+            //Paging
             query = query
+                .OrderBy(NormalizeSorting(input.Sorting))
                 .Skip(input.SkipCount)
                 .Take(input.MaxResultCount);
 
@@ -427,6 +432,25 @@ namespace Acme.BookStore.Books
                 ObjectMapper.Map<List<Author>, List<AuthorLookupDto>>(authors)
             );
         }
+
+        private static string NormalizeSorting(string sorting)
+        {
+            if (sorting.IsNullOrEmpty())
+            {
+                return $"book.{nameof(Book.Name)}";
+            }
+
+            if (sorting.Contains("authorName", StringComparison.OrdinalIgnoreCase))
+            {
+                return sorting.Replace(
+                    "authorName",
+                    "author.Name", 
+                    StringComparison.OrdinalIgnoreCase
+                );
+            }
+
+            return $"book.{sorting}";
+        }
     }
 }
 ```
@@ -437,7 +461,7 @@ Let's see the changes we've done:
 * Injected `IAuthorRepository` to query from the authors.
 * Overrode the `GetAsync` method of the base `CrudAppService`, which returns a single `BookDto` object with the given `id`.
   * Used a simple LINQ expression to join books and authors and query them together for the given book id.
-  * Used `AsyncExecuter.FirstOrDefaultAsync(...)` to execute the query and get a result. `AsyncExecuter` was previously used in the `AuthorAppService`. Check the [repository documentation](../Repositories.md) to understand why we've used it.
+  * Used `AsyncExecuter.FirstOrDefaultAsync(...)` to execute the query and get a result. It is a way to use asynchronous LINQ extensions without depending on the database provider API. Check the [repository documentation](../Repositories.md) to understand why we've used it.
   * Throws an `EntityNotFoundException` which results an `HTTP 404` (not found) result if requested book was not present in the database.
   * Finally, created a `BookDto` object using the `ObjectMapper`, then assigning the `AuthorName` manually.
 * Overrode the `GetListAsync` method of the base `CrudAppService`, which returns a list of books. The logic is similar to the previous method, so you can easily understand the code.
@@ -487,8 +511,6 @@ namespace Acme.BookStore.Books
 
         public async override Task<BookDto> GetAsync(Guid id)
         {
-            await CheckGetPolicyAsync();
-
             var book = await Repository.GetAsync(id);
             var bookDto = ObjectMapper.Map<Book, BookDto>(book);
 
@@ -501,17 +523,18 @@ namespace Acme.BookStore.Books
         public async override Task<PagedResultDto<BookDto>>
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            await CheckGetListPolicyAsync();
-
             //Set a default sorting, if not provided
             if (input.Sorting.IsNullOrWhiteSpace())
             {
                 input.Sorting = nameof(Book.Name);
             }
+            
+            //Get the IQueryable<Book> from the repository
+            var queryable = await Repository.GetQueryableAsync();
 
             //Get the books
             var books = await AsyncExecuter.ToListAsync(
-                Repository
+                queryable
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount)
@@ -553,8 +576,10 @@ namespace Acme.BookStore.Books
                 .Distinct()
                 .ToArray();
 
+            var queryable = await _authorRepository.GetQueryableAsync();
+            
             var authors = await AsyncExecuter.ToListAsync(
-                _authorRepository.Where(a => authorIds.Contains(a.Id))
+                queryable.Where(a => authorIds.Contains(a.Id))
             );
 
             return authors.ToDictionary(x => x.Id, x => x);
@@ -926,10 +951,11 @@ This command will update the service proxy files under the `/src/app/proxy/` fol
 
 Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:
 
-````js
+````html
 <ngx-datatable-column
   [name]="'::Author' | abpLocalization"
   prop="authorName"
+  [sortable]="false"
 ></ngx-datatable-column>
 ````
 
@@ -1069,7 +1095,7 @@ That's all. Just run the application and try to create or edit an author.
 
 {{end}}
 
-{{if UI == "Blazor"}}
+{{if UI == "Blazor" || UI == "BlazorServer"}}
 
 ### The Book List
 

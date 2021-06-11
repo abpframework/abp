@@ -1,0 +1,7 @@
+{
+  "culture": "it",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "La lunghezza della password deve essere maggiore di {0} caratteri.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "La password deve contenere almeno un carattere non alfanumerico."
+  }
+}

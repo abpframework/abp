@@ -9,7 +9,10 @@ namespace System.IO
         {
             using (var memoryStream = new MemoryStream())
             {
-                stream.Position = 0;
+                if (stream.CanSeek)
+                {
+                    stream.Position = 0;
+                }
                 stream.CopyTo(memoryStream);
                 return memoryStream.ToArray();
             }
@@ -19,7 +22,10 @@ namespace System.IO
         {
             using (var memoryStream = new MemoryStream())
             {
-                stream.Position = 0;
+                if (stream.CanSeek)
+                {
+                    stream.Position = 0;
+                }
                 await stream.CopyToAsync(memoryStream, cancellationToken);
                 return memoryStream.ToArray();
             }
@@ -27,7 +33,10 @@ namespace System.IO
 
         public static Task CopyToAsync(this Stream stream, Stream destination, CancellationToken cancellationToken)
         {
-            stream.Position = 0;
+            if (stream.CanSeek)
+            {
+                stream.Position = 0;
+            }
             return stream.CopyToAsync(
                 destination,
                 81920, //this is already the default value, but needed to set to be able to pass the cancellationToken

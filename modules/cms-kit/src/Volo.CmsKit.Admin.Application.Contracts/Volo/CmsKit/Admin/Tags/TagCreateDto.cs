@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Tags;
 
 namespace Volo.CmsKit.Admin.Tags
 {
+    [Serializable]
     public class TagCreateDto
     {
         [Required]

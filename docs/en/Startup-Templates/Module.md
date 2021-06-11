@@ -1,4 +1,4 @@
-﻿# MVC Module Startup Template
+﻿# Module Startup Template
 
 This template can be used to create a **reusable [application module](../Modules/Index.md)** based on the [module development best practices & conventions](../Best-Practices/Index.md). It is also suitable for creating **microservices** (with or without UI).
 
@@ -19,6 +19,20 @@ abp new Acme.IssueManagement -t module
 ```
 
 - `Acme.IssueManagement` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
+
+### Specify the UI Framework
+
+This template provides multiple UI frameworks:
+
+* `mvc`: ASP.NET Core MVC UI with Razor Pages (default)
+* `blazor`: Blazor UI
+* `angular`: Angular UI
+
+Use `-u` or `--ui` option to specify the UI framework:
+
+````bash
+abp new Acme.IssueManagement -t module -u angular
+````
 
 ### Without User Interface
 
@@ -160,3 +174,91 @@ You should run the application with the given order:
 - First, run the `.IdentityServer` since other applications depends on it.
 - Then run the `.HttpApi.Host` since it is used by the `.Web.Host` application.
 - Finally, you can run the `.Web.Host` project and login to the application using `admin` as the username and `1q2w3E*` as the password.
+
+## UI
+
+### Angular UI
+
+If you choose `Angular` as the UI framework (using the `-u angular` option), the solution will have a folder called `angular` in it. This is where the client-side code is located. When you open that folder in an IDE, the folder structure will look like below:
+
+![Folder structure of ABP Angular module project](../images/angular-module-folder-structure.png)
+
+* _angular/projects/issue-management_ folder contains the Angular module project.
+* _angular/projects/dev-app_ folder contains a development application that runs your module.
+
+The server-side is similar to the solution described above. `*.HttpApi.Host` project serves the API and the `Angular` demo application consumes it. You will not need to run the `.Web.Host` project though.
+
+#### How to Run the Angular Development App
+
+For module development, you will need the `dev-app` project up and running. So, here is how we can start the development server.
+
+First, we need to install dependencies:
+
+1. Open your terminal at the root folder, i.e. `angular`.
+2. Run `yarn` or `npm install`.
+
+The dependencies will be installed and some of them are ABP modules published as NPM packages. To see all ABP packages, you can run the following command in the `angular` folder:
+
+```bash
+yarn list --pattern abp
+```
+
+> There is no equivalent of this command in npm.
+
+The module you will develop depends on two of these ABP packages: _@abp/ng.core_ and _@abp/ng.theme.shared_. Rest of the ABP modules are included in _package.json_ because of the `dev-app` project.
+
+Once all dependencies are installed, follow the steps below to serve your development app:
+
+1. Make sure `.IdentityServer` and `*.HttpApi.Host` projects are up and running.
+2. Open your terminal at the root folder, i.e. `angular`.
+3. Run `yarn start` or `npm start`.
+
+![ABP Angular module dev-app project](../images/angular-module-dev-app-project.png)
+
+The issue management page is empty in the beginning. You may change the content in `IssueManagementComponent` at the _angular/projects/issue-management/src/lib/issue-management.component.ts_ path and observe that the view changes accordingly.
+
+Now, let's have a closer look at some key elements of your project.
+
+#### Main Module
+
+`IssueManagementModule` at the _angular/projects/issue-management/src/lib/issue-management.module.ts_ path is the main module of your module project. There are a few things worth mentioning in it:
+
+- Essential ABP modules, i.e. `CoreModule` and `ThemeSharedModule`, are imported.
+- `IssueManagementRoutingModule` is imported.
+- `IssueManagementComponent` is declared.
+- It is prepared for configurability. The `forLazy` static method enables [a configuration to be passed to the module when it is loaded by the router](https://volosoft.com/blog/how-to-configure-angular-modules-loaded-by-the-router).
+
+
+#### Main Routing Module
+
+`IssueManagementRoutingModule` at the _angular/projects/issue-management/src/lib/issue-management-routing.module.ts_ path is the main routing module of your module project. It currently does two things:
+
+- Loads `DynamicLayoutComponent` at base path it is given.
+- Loads `IssueManagementComponent` as child to the layout, again at the given base path.
+
+You can rearrange this module to load more than one component at different routes, but you need to update the route provider at _angular/projects/issue-management/config/src/providers/route.provider.ts_ to match the new routing structure with the routes in the menu. Please check [Modifying the Menu](../UI/Angular/Modifying-the-Menu.md) to see how route providers work.
+
+#### Config Module
+
+There is a config module at the _angular/projects/issue-management/config/src/issue-management-config.module.ts_ path. The static `forRoot` method of this module is supposed to be called at the route level. So, you may assume the following will take place:
+
+```js
+@NgModule({
+  imports: [
+    /* other imports */
+
+    IssueManagementConfigModule.forRoot(),
+  ],
+
+  /* rest of the module meta data */
+})
+export class AppModule {}
+```
+
+You can use this static method to configure an application that uses your module project. An example of such configuration is already implemented and the `ISSUE_MANAGEMENT_ROUTE_PROVIDERS` token is provided here. The method can take options which enables further configuration possibilities.
+
+The difference between the `forRoot` method of the config module and the `forLazy` method of the main module is that, for smallest bundle size, the former should only be used when you have to configure an app before your module is even loaded.
+
+#### Testing Angular UI
+
+Please see the [testing document](../UI/Angular/Testing.md).

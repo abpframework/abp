@@ -211,7 +211,7 @@ public async override Task DeleteAsync(
 
 #### 访问MongoDB API
 
-大多数情况下,你想要将MongoDB API隐藏在仓储后面(这是仓储的主要目的).如果你想在仓储之上访问MongoDB API,你可以使用`GetDatabase()`或`GetCollection()`方法.例如:
+大多数情况下,你想要将MongoDB API隐藏在仓储后面(这是仓储的主要目的).如果你想在仓储之上访问MongoDB API,你可以使用`GetDatabaseAsync()`, `GetAggregateAsync()` 或`GetCollectionAsync()`方法.例如:
 
 ```csharp
 public class BookService
@@ -223,10 +223,11 @@ public class BookService
         _bookRepository = bookRepository;
     }
 
-    public void Foo()
+    public async Task FooAsync()
     {
-        IMongoDatabase database = _bookRepository.GetDatabase();
-        IMongoCollection<Book> books = _bookRepository.GetCollection();
+        IMongoDatabase database = await _bookRepository.GetDatabaseAsync();
+        IMongoCollection<Book> books = await _bookRepository.GetCollectionAsync();
+        IAggregateFluent<Book> bookAggregate = await _bookRepository.GetAggregateAsync();
     }
 }
 ```
@@ -328,7 +329,19 @@ public class BookRepository
 
 ##### 替换其他的DbContexts
 
-一旦你正确定义并为MongoDbContext使用了接口,其他的实现就可以使用`ReplaceDbContext`来替换:
+一旦你正确定义并为MongoDbContext使用了接口,任何其他实现都可以使用以下方法替换它:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreMongoDbContext))]
+public class OtherMongoDbContext : AbpMongoDbContext, IBookStoreMongoDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ```csharp
 context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>

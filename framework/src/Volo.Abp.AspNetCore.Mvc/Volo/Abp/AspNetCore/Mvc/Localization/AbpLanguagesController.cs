@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
+﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization
@@ -20,12 +20,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
                 throw new AbpException("Unknown language: " + culture + ". It must be a valid culture!");
             }
 
-            string cookieValue = CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture, uiCulture));
-
-            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName, cookieValue, new CookieOptions
-            {
-                Expires = Clock.Now.AddYears(2)
-            });
+            AbpRequestCultureCookieHelper.SetCultureCookie(
+                HttpContext,
+                new RequestCulture(culture, uiCulture)
+            );
 
             if (!string.IsNullOrWhiteSpace(returnUrl))
             {

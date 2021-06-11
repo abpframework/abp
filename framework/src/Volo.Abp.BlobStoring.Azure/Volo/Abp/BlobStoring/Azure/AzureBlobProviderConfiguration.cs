@@ -17,7 +17,7 @@
         public string ContainerName
         {
             get => _containerConfiguration.GetConfigurationOrDefault<string>(AzureBlobProviderConfigurationNames.ContainerName);
-            set => _containerConfiguration.SetConfiguration(AzureBlobProviderConfigurationNames.ContainerName, Check.NotNullOrWhiteSpace(value, nameof(value)));
+            set => _containerConfiguration.SetConfiguration(AzureBlobProviderConfigurationNames.ContainerName, value);
         }
 
         /// <summary>

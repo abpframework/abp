@@ -19,7 +19,7 @@ namespace Volo.CmsKit.Reactions
         [Fact]
         public async Task GetReactionsAsync()
         {
-            var reactions = await _reactionManager.GetReactionsAsync();
+            var reactions = await _reactionManager.GetReactionsAsync(_cmsKitTestData.EntityType1);
 
             reactions.Count.ShouldBe(12);
 
@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Reactions
         [Fact]
         public async Task CreateAsync()
         {
-            var reaction = await _reactionManager.CreateAsync(
+            var reaction = await _reactionManager.GetOrCreateAsync(
                 _cmsKitTestData.User2Id,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId2,

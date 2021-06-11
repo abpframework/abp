@@ -1,21 +1,14 @@
 ﻿@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
 
-@using Microsoft.AspNetCore.Mvc.RazorPages
-@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Contents
+@using Volo.CmsKit.Public.Web.Renderers
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs
+
+@inject IMarkdownToHtmlRenderer MarkdownRenderer
+
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Pages.PageViewModel
 
 <abp-card>
-    <abp-card-header>
-        <h3>
-            @Model.Title
-        </h3>
-    </abp-card-header>
-    
     <abp-card-body>
-        <p>
-            @Model.Description
-        </p>
-        
-        @await Component.InvokeAsync(typeof(ContentViewComponent), new { entityType = nameof(Page), entityId = Model.Id.ToString() })
+        @Html.Raw(await MarkdownRenderer.RenderAsync(Model.Content))
     </abp-card-body>
 </abp-card>

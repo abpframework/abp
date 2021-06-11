@@ -18,6 +18,8 @@
     "401Message": "未授權",
     "403Message": "禁止訪問",
     "404Message": "網頁未找到",
-    "500Message": "內部伺服器錯誤"
+    "500Message": "內部伺服器錯誤",
+    "403MessageDetail": "你不被授權執行此操作",
+    "404MessageDetail": "對不起，地址是空的"
   }
 }

@@ -1,10 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {
     public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
     {
+        [Obsolete("This will be removed in next versions.")]
+        public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
+
         public IUnitOfWork Current => GetCurrentUnitOfWork();
 
         private readonly IServiceScopeFactory _serviceScopeFactory;

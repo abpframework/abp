@@ -3,6 +3,7 @@ import { map } from 'rxjs/operators';
 import snq from 'snq';
 import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { ConfigStateService } from './config-state.service';
+import { ABP } from '../models/common';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
@@ -17,6 +18,23 @@ export class PermissionService {
   getGrantedPolicy(key: string) {
     const policies = this.getSnapshot();
     return this.isPolicyGranted(key, policies);
+  }
+
+  filterItemsByPolicy<T extends ABP.HasPolicy>(items: Array<T>) {
+    const policies = this.getSnapshot();
+    return items.filter(
+      item => !item.requiredPolicy || this.isPolicyGranted(item.requiredPolicy, policies),
+    );
+  }
+
+  filterItemsByPolicy$<T extends ABP.HasPolicy>(items: Array<T>) {
+    return this.getStream().pipe(
+      map(policies =>
+        items.filter(
+          item => !item.requiredPolicy || this.isPolicyGranted(item.requiredPolicy, policies),
+        ),
+      ),
+    );
   }
 
   protected isPolicyGranted(key: string, grantedPolicies: Record<string, boolean>) {

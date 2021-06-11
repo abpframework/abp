@@ -10,7 +10,7 @@ In Angular, unit tests use [Karma](https://karma-runner.github.io/) and [Jasmine
 
 An over-simplified spec file looks like this:
 
-```ts
+```js
 import { CoreTestingModule } from "@abp/ng.core/testing";
 import { ThemeBasicTestingModule } from "@abp/ng.theme.basic/testing";
 import { ThemeSharedTestingModule } from "@abp/ng.theme.shared/testing";
@@ -59,7 +59,7 @@ Although you can test your code with Angular TestBed, you may find [Angular Test
 
 The simple example above can be written with Angular Testing Library as follows:
 
-```ts
+```js
 import { CoreTestingModule } from "@abp/ng.core/testing";
 import { ThemeBasicTestingModule } from "@abp/ng.theme.basic/testing";
 import { ThemeSharedTestingModule } from "@abp/ng.theme.shared/testing";
@@ -95,7 +95,7 @@ describe("MyComponent", () => {
 
 Very similar, as you can see. The real difference kicks in when we use queries and fire events.
 
-```ts
+```js
 // other imports
 import { getByLabelText, screen } from "@testing-library/angular";
 import userEvent from "@testing-library/user-event";
@@ -131,7 +131,7 @@ One thing to remember is that Karma runs tests in real browser instances. That m
 
 We have prepared a simple function with which you can clear any leftover DOM elements after each test.
 
-```ts
+```js
 // other imports
 import { clearPage } from "@abp/ng.core/testing";
 
@@ -159,7 +159,7 @@ Some components, modals, in particular, work off-detection-cycle. In other words
 
 For this purpose, we have prepared a `wait` function.
 
-```ts
+```js
 // other imports
 import { wait } from "@abp/ng.core/testing";
 
@@ -187,7 +187,7 @@ The `wait` function takes a second parameter, i.e. timeout (default: `0`). Try n
 
 Here is an example test suite. It doesn't cover all, but gives quite a good idea about what the testing experience will be like.
 
-```ts
+```js
 import { clearPage, CoreTestingModule, wait } from "@abp/ng.core/testing";
 import { ThemeBasicTestingModule } from "@abp/ng.theme.basic/testing";
 import { ThemeSharedTestingModule } from "@abp/ng.theme.shared/testing";
@@ -374,3 +374,7 @@ Finally, don't forget to run your CI tests with the following command:
 ```sh
 npm test -- --prod
 ```
+
+## See Also
+
+* [ABP Community Video - Unit Testing with the Angular UI](https://community.abp.io/articles/unit-testing-with-the-angular-ui-p4l550q3)

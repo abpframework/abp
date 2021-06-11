@@ -1,6 +1,11 @@
 ﻿using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
+using Volo.CmsKit.Blogs;
+using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.MediaDescriptors;
+using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit
 {

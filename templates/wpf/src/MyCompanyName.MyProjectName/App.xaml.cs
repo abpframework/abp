@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,19 +18,6 @@ namespace MyCompanyName.MyProjectName
 
         public App()
         {
-            _host = Host
-                .CreateDefaultBuilder(null)
-                .UseAutofac()
-                .UseSerilog()
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddApplication<MyProjectNameModule>();
-                }).Build();
-            _application = _host.Services.GetService<IAbpApplicationWithExternalServiceProvider>();
-        }
-
-        protected async override void OnStartup(StartupEventArgs e)
-        {
             Log.Logger = new LoggerConfiguration()
 #if DEBUG
                 .MinimumLevel.Debug()
@@ -47,6 +29,12 @@ namespace MyCompanyName.MyProjectName
                 .WriteTo.Async(c => c.File("Logs/logs.txt"))
                 .CreateLogger();
 
+            _host = CreateHostBuilder();
+            _application = _host.Services.GetService<IAbpApplicationWithExternalServiceProvider>();
+        }
+
+        protected override async void OnStartup(StartupEventArgs e)
+        {
             try
             {
                 Log.Information("Starting WPF host.");
@@ -60,22 +48,31 @@ namespace MyCompanyName.MyProjectName
             {
                 Log.Fatal(ex, "Host terminated unexpectedly!");
             }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
         }
 
-        protected async override void OnExit(ExitEventArgs e)
+        protected override async void OnExit(ExitEventArgs e)
         {
             _application.Shutdown();
             await _host.StopAsync();
             _host.Dispose();
+            Log.CloseAndFlush();
         }
 
         private void Initialize(IServiceProvider serviceProvider)
         {
             _application.Initialize(serviceProvider);
+        }
+
+        private IHost CreateHostBuilder()
+        {
+            return Host
+                .CreateDefaultBuilder(null)
+                .UseAutofac()
+                .UseSerilog()
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddApplication<MyProjectNameModule>();
+                }).Build();
         }
     }
 }

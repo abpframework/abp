@@ -19,6 +19,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Identity\LocalizationExtensions\*.json" />
+    <Content Remove="Volo\Abp\Identity\LocalizationExtensions\*.json" />
   </ItemGroup>
 
 </Project>

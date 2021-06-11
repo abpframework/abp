@@ -63,14 +63,14 @@ namespace Volo.Abp.IdentityServer.ApiResources
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||
                          x.DisplayName.Contains(filter))
-                .OrderBy(sorting ?? "name desc")
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiResource.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
                     x => x.Name.Contains(filter) ||
                             x.Description.Contains(filter) ||

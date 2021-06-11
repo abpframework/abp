@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Localization;
+using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Identity;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
@@ -18,6 +19,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         public IdentityUserManager UserManager { get; set; }
         public IdentitySecurityLogManager IdentitySecurityLogManager { get; set; }
         public IOptions<IdentityOptions> IdentityOptions { get; set; }
+        public IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; set; }
 
         protected AccountPageModel()
         {
@@ -41,6 +43,16 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 throw new ApplicationException($"Current tenant is different than given tenant. CurrentTenant.Id: {CurrentTenant.Id}, given tenantId: {tenantId}");
             }
+        }
+
+        protected virtual string GetLocalizeExceptionMessage(Exception exception)
+        {
+            if (exception is ILocalizeErrorMessage || exception is IHasErrorCode)
+            {
+                return ExceptionToErrorInfoConverter.Convert(exception, false).Message;
+            }
+
+            return exception.Message;
         }
     }
 }

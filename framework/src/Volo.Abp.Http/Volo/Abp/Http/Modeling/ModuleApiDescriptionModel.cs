@@ -41,17 +41,17 @@ namespace Volo.Abp.Http.Modeling
 
         public ControllerApiDescriptionModel AddController(ControllerApiDescriptionModel controller)
         {
-            if (Controllers.ContainsKey(controller.ControllerName))
+            if (Controllers.ContainsKey(controller.Type))
             {
-                throw new AbpException($"There is already a controller with name: {controller.ControllerName} in module: {RootPath}");
+                throw new AbpException($"There is already a controller with type: {controller.Type} in module: {RootPath}");
             }
 
-            return Controllers[controller.ControllerName] = controller;
+            return Controllers[controller.Type] = controller;
         }
 
-        public ControllerApiDescriptionModel GetOrAddController(string uniqueName, string name, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+        public ControllerApiDescriptionModel GetOrAddController(string name, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
         {
-            return Controllers.GetOrAdd(uniqueName, () => ControllerApiDescriptionModel.Create(name, type, ignoredInterfaces));
+            return Controllers.GetOrAdd(type.FullName, () => ControllerApiDescriptionModel.Create(name, type, ignoredInterfaces));
         }
 
         public ModuleApiDescriptionModel CreateSubModel(string[] controllers, string[] actions)

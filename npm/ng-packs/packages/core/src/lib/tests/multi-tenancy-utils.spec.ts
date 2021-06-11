@@ -20,11 +20,10 @@ const environment = {
   },
   oAuthConfig: {
     issuer: 'https://{0}.api.volosoft.com',
+    redirectUri: 'https://{0}.volosoft.com',
     clientId: 'MyProjectName_App',
-    dummyClientSecret: '1q2w3e*',
-    scope: 'MyProjectName',
-    oidc: false,
-    requireHttps: true,
+    responseType: 'code',
+    scope: 'offline_access MyProjectName',
   },
   apis: {
     default: {
@@ -91,7 +90,11 @@ describe('MultiTenancyUtils', () => {
       const replacedEnv = {
         ...environment,
         application: { ...environment.application, baseUrl: 'https://abp.volosoft.com' },
-        oAuthConfig: { ...environment.oAuthConfig, issuer: 'https://abp.api.volosoft.com' },
+        oAuthConfig: {
+          ...environment.oAuthConfig,
+          issuer: 'https://abp.api.volosoft.com',
+          redirectUri: 'https://abp.volosoft.com',
+        },
         apis: {
           default: {
             url: 'https://abp.api.volosoft.com',

@@ -1,18 +1,18 @@
-﻿using System;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.GlobalFeatures;
-using Volo.CmsKit.Comments;
-using Volo.CmsKit.Reactions;
-using Volo.CmsKit.Users;
 using Volo.Abp.Users.EntityFrameworkCore;
-using Volo.CmsKit.Contents;
+using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Pages;
 using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -31,8 +31,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            //TODO: What if only CMSKit Pro features are enabled? This is kinda workaround for now
-            if (GlobalFeatureManager.Instance.Modules.CmsKit().GetFeatures().Any(f => f.IsEnabled))
+            if (GlobalFeatureManager.Instance.IsEnabled<CmsUserFeature>())
             {
                 builder.Entity<CmsUser>(b =>
                 {
@@ -43,7 +42,13 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     b.HasIndex(x => new { x.TenantId, x.UserName });
                     b.HasIndex(x => new { x.TenantId, x.Email });
+
+                    b.ApplyObjectExtensionMappings();
                 });
+            }
+            else
+            {
+                builder.Ignore<CmsUser>();
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
@@ -58,9 +63,15 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.EntityId).IsRequired().HasMaxLength(UserReactionConsts.MaxEntityIdLength);
                     b.Property(x => x.ReactionName).IsRequired().HasMaxLength(UserReactionConsts.MaxReactionNameLength);
 
-                    b.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId, x.ReactionName});
-                    b.HasIndex(x => new {x.TenantId, x.CreatorId, x.EntityType, x.EntityId, x.ReactionName});
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId, x.ReactionName });
+                    b.HasIndex(x => new { x.TenantId, x.CreatorId, x.EntityType, x.EntityId, x.ReactionName });
+
+                    b.ApplyObjectExtensionMappings();
                 });
+            }
+            else
+            {
+                builder.Ignore<UserReaction>();
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
@@ -76,9 +87,15 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength);
                     b.Property(x => x.RepliedCommentId);
 
-                    b.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId});
-                    b.HasIndex(x => new {x.TenantId, x.RepliedCommentId});
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
+                    b.HasIndex(x => new { x.TenantId, x.RepliedCommentId });
+
+                    b.ApplyObjectExtensionMappings();
                 });
+            }
+            else
+            {
+                builder.Ignore<Comment>();
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
@@ -94,23 +111,13 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     r.Property(x => x.EntityId).IsRequired().HasMaxLength(RatingConsts.MaxEntityIdLength);
 
                     r.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId, x.CreatorId });
+
+                    r.ApplyObjectExtensionMappings();
                 });
             }
-
-            if (GlobalFeatureManager.Instance.IsEnabled<ContentsFeature>())
+            else
             {
-                builder.Entity<Content>(b =>
-                {
-                    b.ToTable(options.TablePrefix + "Contents", options.Schema);
-
-                    b.ConfigureByConvention();
-
-                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(ContentConsts.MaxEntityTypeLength);
-                    b.Property(x => x.EntityId).IsRequired().HasMaxLength(ContentConsts.MaxEntityIdLength);
-                    b.Property(x => x.Value).IsRequired().HasMaxLength(ContentConsts.MaxValueLength);
-
-                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
-                });
+                builder.Ignore<Rating>();
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
@@ -129,6 +136,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
                         x.TenantId,
                         x.Name
                     });
+
+                    b.ApplyObjectExtensionMappings();
                 });
 
                 builder.Entity<EntityTag>(b =>
@@ -143,7 +152,14 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.Property(x => x.TagId).IsRequired();
 
                     b.HasIndex(x => new { x.TenantId, x.EntityId, x.TagId });
+
+                    b.ApplyObjectExtensionMappings();
                 });
+            }
+            else
+            {
+                builder.Ignore<EntityTag>();
+                builder.Ignore<Tag>();
             }
 
             if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
@@ -155,57 +171,91 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     b.ConfigureByConvention();
 
                     b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
-                    b.Property(x => x.Url).IsRequired().HasMaxLength(PageConsts.MaxUrlLength);
-                    b.Property(x => x.Description).HasMaxLength(PageConsts.MaxDescriptionLength);
+                    b.Property(x => x.Slug).IsRequired().HasMaxLength(PageConsts.MaxSlugLength);
+                    b.Property(x => x.Content).HasMaxLength(PageConsts.MaxContentLength);
 
-                    b.HasIndex(x => new { x.TenantId, x.Url });
+                    b.HasIndex(x => new { x.TenantId, Url = x.Slug });
+
+                    b.ApplyObjectExtensionMappings();
                 });
             }
-
-            if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
+            else
             {
-                builder.Entity<Tag>(b =>
-                {
-                    b.ToTable(options.TablePrefix + "Tags", options.Schema);
-
-                    b.ConfigureByConvention();
-
-                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(TagConsts.MaxEntityTypeLength);
-                    b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength);
-
-                    b.HasIndex(x => new {x.TenantId, x.Name});
-                });
-
-                builder.Entity<EntityTag>(b =>
-                {
-                    b.ToTable(options.TablePrefix + "EntityTags", options.Schema);
-
-                    b.ConfigureByConvention();
-
-                    b.HasKey(x => new {x.EntityId, x.TagId});
-
-                    b.Property(x => x.EntityId).IsRequired();
-                    b.Property(x => x.TagId).IsRequired();
-
-                    b.HasIndex(x => new {x.TenantId, x.EntityId, x.TagId});
-                });
+                builder.Ignore<Page>();
             }
 
-            if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
+            if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
             {
-                builder.Entity<Page>(b =>
+                builder.Entity<Blog>(b =>
                 {
-                    b.ToTable(options.TablePrefix + "Pages", options.Schema);
+                    b.ToTable(options.TablePrefix + "Blogs", options.Schema);
 
                     b.ConfigureByConvention();
 
-                    b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
-                    b.Property(x => x.Url).IsRequired().HasMaxLength(PageConsts.MaxUrlLength);
-                    b.Property(x => x.Description).HasMaxLength(PageConsts.MaxDescriptionLength);
+                    b.Property(p => p.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength);
 
-                    b.HasIndex(x => new {x.TenantId, x.Url});
+                    b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogConsts.MaxSlugLength);
+
+                    b.ApplyObjectExtensionMappings();
+                });
+
+                builder.Entity<BlogPost>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "BlogPosts", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(p => p.AuthorId).IsRequired();
+                    b.Property(p => p.Title).IsRequired().HasMaxLength(BlogPostConsts.MaxTitleLength);
+                    b.Property(p => p.Slug).IsRequired().HasMaxLength(BlogPostConsts.MaxSlugLength);
+                    b.Property(p => p.ShortDescription).HasMaxLength(BlogPostConsts.MaxShortDescriptionLength);
+                    b.Property(p => p.Content).HasMaxLength(BlogPostConsts.MaxContentLength);
+
+                    b.HasIndex(x => new { x.Slug, x.BlogId });
+
+                    b.ApplyObjectExtensionMappings();
+                });
+
+                builder.Entity<BlogFeature>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "BlogFeatures", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(p => p.FeatureName).IsRequired().HasMaxLength(BlogFeatureConsts.MaxFeatureNameLenth);
+
+                    b.ApplyObjectExtensionMappings();
                 });
             }
+            else
+            {
+                builder.Ignore<Blog>();
+                builder.Ignore<BlogPost>();
+                builder.Ignore<BlogFeature>();
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<MediaFeature>())
+            {
+                builder.Entity<MediaDescriptor>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "MediaDescriptors", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxEntityTypeLength);
+                    b.Property(x => x.Name).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxNameLength);
+                    b.Property(x => x.MimeType).IsRequired().HasMaxLength(MediaDescriptorConsts.MaxMimeTypeLength);
+                    b.Property(x => x.Size).HasMaxLength(MediaDescriptorConsts.MaxSizeLength);
+
+                    b.ApplyObjectExtensionMappings();
+                });
+            }
+            else
+            {
+                builder.Ignore<MediaDescriptor>();
+            }
+
+            builder.TryConfigureObjectExtensions<CmsKitDbContext>();
         }
     }
 }

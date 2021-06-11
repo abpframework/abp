@@ -1,7 +1,6 @@
 import { registerLocaleData } from '@angular/common';
-import { Injectable, Injector, isDevMode, NgZone, Optional, SkipSelf } from '@angular/core';
-import { Router } from '@angular/router';
-import { noop, Observable, Subject } from 'rxjs';
+import { Injectable, Injector, isDevMode, Optional, SkipSelf } from '@angular/core';
+import { from, Observable, Subject } from 'rxjs';
 import { filter, map, mapTo, switchMap, tap } from 'rxjs/operators';
 import { ABP } from '../models/common';
 import { Config } from '../models/config';
@@ -22,7 +21,7 @@ export class LocalizationService {
    * Returns currently selected language
    */
   get currentLang(): string {
-    return this.latestLang;
+    return this.latestLang || this.sessionState.getLanguage();
   }
 
   get languageChange$(): Observable<string> {
@@ -32,7 +31,6 @@ export class LocalizationService {
   constructor(
     private sessionState: SessionStateService,
     private injector: Injector,
-    private ngZone: NgZone,
     @Optional()
     @SkipSelf()
     otherInstance: LocalizationService,
@@ -57,29 +55,17 @@ export class LocalizationService {
             .pipe(tap(res => this.configState.setState(res)))
             .pipe(mapTo(lang)),
         ),
+        switchMap(lang => from(this.registerLocale(lang).then(() => lang))),
       )
-      .subscribe(lang => {
-        this.registerLocale(lang);
-        this._languageChange$.next(lang);
-      });
+      .subscribe(lang => this._languageChange$.next(lang));
   }
 
   registerLocale(locale: string) {
-    const router = this.injector.get(Router);
-    const { shouldReuseRoute } = router.routeReuseStrategy;
-    router.routeReuseStrategy.shouldReuseRoute = () => false;
-    router.navigated = false;
-
     const { registerLocaleFn }: ABP.Root = this.injector.get(CORE_OPTIONS);
 
     return registerLocaleFn(locale).then(module => {
       if (module?.default) registerLocaleData(module.default);
       this.latestLang = locale;
-
-      this.ngZone.run(async () => {
-        await router.navigateByUrl(router.url).catch(noop);
-        router.routeReuseStrategy.shouldReuseRoute = shouldReuseRoute;
-      });
     });
   }
 

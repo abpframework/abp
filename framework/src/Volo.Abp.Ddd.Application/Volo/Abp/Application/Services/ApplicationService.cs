@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Guids;
 using Volo.Abp.Linq;
 using Volo.Abp.Localization;
@@ -31,10 +33,12 @@ namespace Volo.Abp.Application.Services
         IValidationEnabled,
         IUnitOfWorkEnabled,
         IAuditingEnabled,
+        IGlobalFeatureCheckingEnabled,
         ITransientDependency
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
+        [Obsolete("Use LazyServiceProvider instead.")]
         public IServiceProvider ServiceProvider { get; set; }
 
         public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
@@ -51,11 +55,13 @@ namespace Volo.Abp.Application.Services
                 ? provider.GetRequiredService<IObjectMapper>()
                 : (IObjectMapper) provider.GetRequiredService(typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext)));
 
-        public IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
+        protected IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
         protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
         protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+        
+        protected IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
         protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
 

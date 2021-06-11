@@ -459,7 +459,7 @@ function getPermissions(groups: PermissionManagement.Group[]): PermissionManagem
       </div>
     </ng-template>
     <ng-template #abpFooter>
-      <button type="button" class="btn btn-secondary" #abpClose>
+      <button type="button" class="btn btn-secondary" abpClose>
         {%{{{ 'AbpIdentity::Cancel' | abpLocalization }}}%}
       </button>
       <abp-button iconClass="fa fa-check" (click)="submit()">{%{{{

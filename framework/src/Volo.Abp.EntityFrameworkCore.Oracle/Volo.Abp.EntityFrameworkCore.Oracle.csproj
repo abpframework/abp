@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-    <!--<PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.80" />-->
+        <PackageReference Include="Oracle.EntityFrameworkCore" Version="5.21.1" />
     </ItemGroup>
 
 </Project>

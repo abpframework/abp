@@ -15,7 +15,7 @@ namespace Volo.Blogging.Users
         {
         }
 
-        public async Task<List<BlogUser>> GetUsersAsync(int maxCount, string filter, CancellationToken cancellationToken)
+        public async Task<List<BlogUser>> GetUsersAsync(int maxCount, string filter, CancellationToken cancellationToken = default)
         {
             var query = await GetMongoQueryableAsync(cancellationToken);
 
@@ -24,7 +24,7 @@ namespace Volo.Blogging.Users
                 query = query.Where(x => x.UserName.Contains(filter));
             }
 
-            return await query.Take(maxCount).ToListAsync(cancellationToken);
+            return await query.Take(maxCount).ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

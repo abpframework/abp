@@ -25,7 +25,12 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
         {
-            var hostName = httpContext.Request.Host.Host.RemovePreFix(ProtocolPrefixes);
+            if (!httpContext.Request.Host.HasValue)
+            {
+                return Task.FromResult<string>(null);
+            }
+
+            var hostName = httpContext.Request.Host.Value.RemovePreFix(ProtocolPrefixes);
             var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
 
             context.Handled = true;

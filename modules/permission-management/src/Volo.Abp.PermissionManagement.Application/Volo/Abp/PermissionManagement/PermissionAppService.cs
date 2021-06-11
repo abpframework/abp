@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -15,18 +15,20 @@ namespace Volo.Abp.PermissionManagement
     public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         protected PermissionManagementOptions Options { get; }
-
         protected IPermissionManager PermissionManager { get; }
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
+        protected ISimpleStateCheckerManager<PermissionDefinition> SimpleStateCheckerManager { get; }
 
         public PermissionAppService(
-            IPermissionManager permissionManager, 
+            IPermissionManager permissionManager,
             IPermissionDefinitionManager permissionDefinitionManager,
-            IOptions<PermissionManagementOptions> options)
+            IOptions<PermissionManagementOptions> options,
+            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager)
         {
             Options = options.Value;
             PermissionManager = permissionManager;
             PermissionDefinitionManager = permissionDefinitionManager;
+            SimpleStateCheckerManager = simpleStateCheckerManager;
         }
 
         public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
@@ -53,6 +55,11 @@ namespace Volo.Abp.PermissionManagement
                 foreach (var permission in group.GetPermissionsWithChildren())
                 {
                     if (!permission.IsEnabled)
+                    {
+                        continue;
+                    }
+
+                    if (!await SimpleStateCheckerManager.IsEnabledAsync(permission))
                     {
                         continue;
                     }

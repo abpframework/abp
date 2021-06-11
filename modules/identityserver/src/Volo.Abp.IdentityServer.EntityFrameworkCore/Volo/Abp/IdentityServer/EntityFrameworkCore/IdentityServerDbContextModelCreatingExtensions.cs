@@ -19,6 +19,11 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new IdentityServerModelBuilderConfigurationOptions(
                 AbpIdentityServerDbProperties.DbTablePrefix,
                 AbpIdentityServerDbProperties.DbSchema
@@ -58,6 +63,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
 
                 b.HasIndex(x => x.ClientId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientGrantType>(b =>
@@ -69,6 +76,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ClientId, x.GrantType});
 
                 b.Property(x => x.GrantType).HasMaxLength(ClientGrantTypeConsts.GrantTypeMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientRedirectUri>(b =>
@@ -85,6 +94,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 }
 
                 b.Property(x => x.RedirectUri).HasMaxLength(ClientRedirectUriConsts.RedirectUriMaxLengthValue).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientPostLogoutRedirectUri>(b =>
@@ -103,6 +114,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.PostLogoutRedirectUri)
                     .HasMaxLength(ClientPostLogoutRedirectUriConsts.PostLogoutRedirectUriMaxLengthValue)
                     .IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientScope>(b =>
@@ -114,6 +127,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ClientId, x.Scope});
 
                 b.Property(x => x.Scope).HasMaxLength(ClientScopeConsts.ScopeMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientSecret>(b =>
@@ -131,6 +146,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 }
                 b.Property(x => x.Value).HasMaxLength(ClientSecretConsts.ValueMaxLength).IsRequired();
                 b.Property(x => x.Description).HasMaxLength(ClientSecretConsts.DescriptionMaxLength);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientClaim>(b =>
@@ -143,6 +160,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.Property(x => x.Type).HasMaxLength(ClientClaimConsts.TypeMaxLength).IsRequired();
                 b.Property(x => x.Value).HasMaxLength(ClientClaimConsts.ValueMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientIdPRestriction>(b =>
@@ -154,6 +173,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ClientId, x.Provider});
 
                 b.Property(x => x.Provider).HasMaxLength(ClientIdPRestrictionConsts.ProviderMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientCorsOrigin>(b =>
@@ -165,6 +186,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ClientId, x.Origin});
 
                 b.Property(x => x.Origin).HasMaxLength(ClientCorsOriginConsts.OriginMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ClientProperty>(b =>
@@ -181,6 +204,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                     ClientPropertyConsts.ValueMaxLength = 300;
                 }
                 b.Property(x => x.Value).HasMaxLength(ClientPropertyConsts.ValueMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             #endregion
@@ -199,6 +224,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
                 b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityResourceClaim>(b =>
@@ -210,6 +237,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.IdentityResourceId, x.Type});
 
                 b.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentityResourceProperty>(b =>
@@ -226,6 +255,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                     IdentityResourcePropertyConsts.ValueMaxLength = 300;
                 }
                 b.Property(x => x.Value).HasMaxLength(IdentityResourcePropertyConsts.ValueMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             #endregion
@@ -247,6 +278,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ApiResourceSecret>(b =>
@@ -266,6 +299,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Value).HasMaxLength(ApiResourceSecretConsts.ValueMaxLength).IsRequired();
 
                 b.Property(x => x.Description).HasMaxLength(ApiResourceSecretConsts.DescriptionMaxLength);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ApiResourceClaim>(b =>
@@ -277,6 +312,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ApiResourceId, x.Type});
 
                 b.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ApiResourceScope>(b =>
@@ -288,6 +325,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ApiResourceId, x.Scope});
 
                 b.Property(x => x.Scope).HasMaxLength(ApiResourceScopeConsts.ScopeMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ApiResourceProperty>(b =>
@@ -304,6 +343,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                     ApiResourcePropertyConsts.ValueMaxLength = 300;
                 }
                 b.Property(x => x.Value).HasMaxLength(ApiResourcePropertyConsts.ValueMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             #endregion
@@ -322,6 +363,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
                 b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ApiScopeClaim>(b =>
@@ -333,6 +376,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ApiScopeId, x.Type});
 
                 b.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<ApiScopeProperty>(b =>
@@ -349,6 +394,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                     ApiScopePropertyConsts.ValueMaxLength = 300;
                 }
                 b.Property(x => x.Value).HasMaxLength(ApiScopePropertyConsts.ValueMaxLength).IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             #endregion
@@ -381,6 +428,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasIndex(x => new {x.SubjectId, x.ClientId, x.Type});
                 b.HasIndex(x => new {x.SubjectId, x.SessionId, x.Type});
                 b.HasIndex(x => x.Expiration);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             #endregion
@@ -411,9 +460,13 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasIndex(x => new {x.UserCode});
                 b.HasIndex(x => x.DeviceCode).IsUnique();
                 b.HasIndex(x => x.Expiration);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             #endregion
+
+            builder.TryConfigureObjectExtensions<IdentityServerDbContext>();
         }
 
         private static bool IsDatabaseProvider(

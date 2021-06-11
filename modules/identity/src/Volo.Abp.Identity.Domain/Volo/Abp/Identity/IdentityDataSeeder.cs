@@ -49,12 +49,11 @@ namespace Volo.Abp.Identity
             Check.NotNullOrWhiteSpace(adminEmail, nameof(adminEmail));
             Check.NotNullOrWhiteSpace(adminPassword, nameof(adminPassword));
 
-            await IdentityOptions.SetAsync();
-
-            var result = new IdentityDataSeedResult();
-
             using (CurrentTenant.Change(tenantId))
             {
+                await IdentityOptions.SetAsync();
+
+                var result = new IdentityDataSeedResult();
                 //"admin" user
                 const string adminUserName = "admin";
                 var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
@@ -76,12 +75,13 @@ namespace Volo.Abp.Identity
                     Name = adminUserName
                 };
 
-                (await UserManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
+                (await UserManager.CreateAsync(adminUser, adminPassword, validatePassword: false)).CheckErrors();
                 result.CreatedAdminUser = true;
 
                 //"admin" role
                 const string adminRoleName = "admin";
-                var adminRole = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
+                var adminRole =
+                    await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
                 if (adminRole == null)
                 {
                     adminRole = new IdentityRole(

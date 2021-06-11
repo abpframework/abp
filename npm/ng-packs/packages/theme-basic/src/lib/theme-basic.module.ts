@@ -19,6 +19,7 @@ import { RoutesComponent } from './components/routes/routes.component';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
 import { BASIC_THEME_NAV_ITEM_PROVIDERS } from './providers/nav-item.provider';
 import { BASIC_THEME_STYLES_PROVIDERS } from './providers/styles.provider';
+import { PageAlertContainerComponent } from './components/page-alert-container/page-alert-container.component';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -31,6 +32,7 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     RoutesComponent,
     CurrentUserComponent,
     LanguagesComponent,
+    PageAlertContainerComponent,
   ],
   exports: [
     ...LAYOUTS,
@@ -40,6 +42,7 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     RoutesComponent,
     CurrentUserComponent,
     LanguagesComponent,
+    PageAlertContainerComponent,
   ],
   imports: [
     CoreModule,

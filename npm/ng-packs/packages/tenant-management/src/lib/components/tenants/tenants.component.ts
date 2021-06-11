@@ -84,9 +84,6 @@ export class TenantsComponent implements OnInit {
   @ViewChild('tenantModalTemplate')
   tenantModalTemplate: TemplateRef<any>;
 
-  @ViewChild('connectionStringModalTemplate')
-  connectionStringModalTemplate: TemplateRef<any>;
-
   get isDisabledSaveButton(): boolean {
     if (!this.selectedModalContent) return false;
 
@@ -144,28 +141,6 @@ export class TenantsComponent implements OnInit {
     };
 
     this.isModalVisible = true;
-  }
-
-  onEditConnectionString(id: string) {
-    this.store
-      .dispatch(new GetTenantById(id))
-      .pipe(
-        pluck('TenantManagementState', 'selectedItem'),
-        switchMap(selected => {
-          this.selected = selected;
-          return this.tenantService.getDefaultConnectionString(id);
-        }),
-      )
-      .subscribe(fetchedConnectionString => {
-        this._useSharedDatabase = fetchedConnectionString ? false : true;
-        this.defaultConnectionString = fetchedConnectionString ? fetchedConnectionString : '';
-        this.createDefaultConnectionStringForm();
-        this.openModal(
-          'AbpTenantManagement::ConnectionStrings',
-          this.connectionStringModalTemplate,
-          'saveConnStr',
-        );
-      });
   }
 
   addTenant() {

@@ -2,6 +2,7 @@
 
 namespace Volo.CmsKit.Public.Ratings
 {
+    [Serializable]
     public class RatingDto
     {
         public Guid Id { get; set; }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.UI.Navigation
 {
@@ -11,13 +13,15 @@ namespace Volo.Abp.UI.Navigation
     {
         protected AbpNavigationOptions Options { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
-
+        protected ISimpleStateCheckerManager<ApplicationMenuItem> SimpleStateCheckerManager { get; }
         public MenuManager(
-            IOptions<AbpNavigationOptions> options, 
-            IHybridServiceScopeFactory serviceScopeFactory)
+            IOptions<AbpNavigationOptions> options,
+            IHybridServiceScopeFactory serviceScopeFactory,
+            ISimpleStateCheckerManager<ApplicationMenuItem> simpleStateCheckerManager)
         {
-            ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
+            ServiceScopeFactory = serviceScopeFactory;
+            SimpleStateCheckerManager = simpleStateCheckerManager;
         }
 
         public async Task<ApplicationMenu> GetAsync(string name)
@@ -26,11 +30,16 @@ namespace Volo.Abp.UI.Navigation
 
             using (var scope = ServiceScopeFactory.CreateScope())
             {
-                var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
-
-                foreach (var contributor in Options.MenuContributors)
+                using (RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>()))
                 {
-                    await contributor.ConfigureMenuAsync(context);
+                    var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
+
+                    foreach (var contributor in Options.MenuContributors)
+                    {
+                        await contributor.ConfigureMenuAsync(context);
+                    }
+
+                    await CheckPermissionsAsync(scope.ServiceProvider, menu);
                 }
             }
 
@@ -39,11 +48,61 @@ namespace Volo.Abp.UI.Navigation
             return menu;
         }
 
+        protected virtual async Task CheckPermissionsAsync(IServiceProvider serviceProvider, IHasMenuItems menuWithItems)
+        {
+            var allMenuItems = new List<ApplicationMenuItem>();
+            GetAllMenuItems(menuWithItems, allMenuItems);
+
+            foreach (var item in allMenuItems)
+            {
+                if (!item.RequiredPermissionName.IsNullOrWhiteSpace())
+                {
+                    item.RequirePermissions(item.RequiredPermissionName);
+                }
+            }
+
+            var checkPermissionsMenuItems = allMenuItems.Where(x => x.StateCheckers.Any()).ToArray();
+
+            if (checkPermissionsMenuItems.Any())
+            {
+                var toBeDeleted = new HashSet<ApplicationMenuItem>();
+                var result =  await SimpleStateCheckerManager.IsEnabledAsync(checkPermissionsMenuItems);
+                foreach (var menu in checkPermissionsMenuItems)
+                {
+                    if (!result[menu])
+                    {
+                        toBeDeleted.Add(menu);
+                    }
+                }
+
+                RemoveMenus(menuWithItems, toBeDeleted);
+            }
+        }
+
+        protected virtual void GetAllMenuItems(IHasMenuItems menuWithItems, List<ApplicationMenuItem> output)
+        {
+            foreach (var item in menuWithItems.Items)
+            {
+                output.Add(item);
+                GetAllMenuItems(item, output);
+            }
+        }
+
+        protected virtual void RemoveMenus(IHasMenuItems menuWithItems, HashSet<ApplicationMenuItem> toBeDeleted)
+        {
+            menuWithItems.Items.RemoveAll(toBeDeleted.Contains);
+
+            foreach (var item in menuWithItems.Items)
+            {
+                RemoveMenus(item, toBeDeleted);
+            }
+        }
+
         protected virtual void NormalizeMenu(IHasMenuItems menuWithItems)
         {
-            foreach (var menuItem in menuWithItems.Items)
+            foreach (var item in menuWithItems.Items)
             {
-                NormalizeMenu(menuItem);
+                NormalizeMenu(item);
             }
 
             menuWithItems.Items.Normalize();

@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Security;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
@@ -7,12 +8,12 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
     public class WebAssemblyCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ITransientDependency
     {
-        protected AbpWebAssemblyClaimsCache ClaimsCache { get; }
+        protected AbpComponentsClaimsCache ClaimsCache { get; }
 
         public WebAssemblyCurrentPrincipalAccessor(
-            AbpWebAssemblyClaimsCache claimsCache)
+            IClientScopeServiceProviderAccessor clientScopeServiceProviderAccessor)
         {
-            ClaimsCache = claimsCache;
+            ClaimsCache = clientScopeServiceProviderAccessor.ServiceProvider.GetRequiredService<AbpComponentsClaimsCache>();
         }
 
         protected override ClaimsPrincipal GetClaimsPrincipal()

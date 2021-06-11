@@ -12,11 +12,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -31,14 +33,17 @@ namespace Volo.Abp.Cli.Commands
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
         public ITemplateInfoProvider TemplateInfoProvider { get; }
+        public ConnectionStringProvider ConnectionStringProvider { get; }
 
         public NewCommand(TemplateProjectBuilder templateProjectBuilder
             , ITemplateInfoProvider templateInfoProvider,
-            EfCoreMigrationManager efCoreMigrationManager)
+            EfCoreMigrationManager efCoreMigrationManager,
+            ConnectionStringProvider connectionStringProvider)
         {
             _efCoreMigrationManager = efCoreMigrationManager;
             TemplateProjectBuilder = templateProjectBuilder;
             TemplateInfoProvider = templateInfoProvider;
+            ConnectionStringProvider = connectionStringProvider;
 
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -54,6 +59,11 @@ namespace Volo.Abp.Cli.Commands
                     Environment.NewLine + Environment.NewLine +
                     GetUsageInfo()
                 );
+            }
+
+            if (!ProjectNameValidator.IsValid(projectName))
+            {
+                throw new CliUsageException("The project name is invalid! Please specify a different name.");
             }
 
             Logger.LogInformation("Creating your project...");
@@ -84,7 +94,7 @@ namespace Volo.Abp.Cli.Commands
             var preview = commandLineArgs.Options.ContainsKey(Options.Preview.Long);
             if (preview)
             {
-                Logger.LogInformation("Preview: yes if any exist for next version.");
+                Logger.LogInformation("Preview: yes");
             }
 
             var databaseProvider = GetDatabaseProvider(commandLineArgs);
@@ -142,19 +152,34 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var createSolutionFolder = GetCreateSolutionFolderPreference(commandLineArgs);
-            if (!createSolutionFolder)
-            {
-                Logger.LogInformation("Create Solution Folder: no");
-            }
 
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
 
             var outputFolderRoot =
                 outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory();
 
-            outputFolder = createSolutionFolder ?
-                Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
-                outputFolderRoot;
+            SolutionName solutionName;
+            if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
+            {
+                var microserviceSolutionName = FindMicroserviceSolutionName(outputFolderRoot);
+
+                if (microserviceSolutionName == null)
+                {
+                    throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
+                }
+
+                solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
+                outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, projectName);
+                uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;
+            }
+            else
+            {
+                solutionName = SolutionName.Parse(projectName);
+
+                outputFolder = createSolutionFolder ?
+                    Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
+                    outputFolderRoot;
+            }
 
             Volo.Abp.IO.DirectoryHelper.CreateIfNotExists(outputFolder);
 
@@ -164,14 +189,14 @@ namespace Volo.Abp.Cli.Commands
                 databaseManagementSystem != DatabaseManagementSystem.NotSpecified &&
                 databaseManagementSystem != DatabaseManagementSystem.SQLServer)
             {
-                connectionString = GetNewConnectionStringByDbms(databaseManagementSystem, outputFolder);
+                connectionString = ConnectionStringProvider.GetByDbms(databaseManagementSystem, outputFolder);
             }
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
             var result = await TemplateProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
-                    SolutionName.Parse(projectName),
+                    solutionName,
                     template,
                     version,
                     databaseProvider,
@@ -226,8 +251,6 @@ namespace Volo.Abp.Cli.Commands
                 }
             }
 
-            DeleteMigrationsIfNeeded(databaseProvider, databaseManagementSystem, outputFolder);
-
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
 
 
@@ -236,41 +259,40 @@ namespace Volo.Abp.Cli.Commands
                 var isCommercial = template == AppProTemplate.TemplateName;
                 OpenThanksPage(uiFramework, databaseProvider, isTiered || commandLineArgs.Options.ContainsKey("separate-identity-server"), isCommercial);
             }
-        }
-
-        private string GetNewConnectionStringByDbms(DatabaseManagementSystem databaseManagementSystem, string outputFolder)
-        {
-            switch (databaseManagementSystem)
+            else if (MicroserviceTemplateBase.IsMicroserviceTemplate(template))
             {
-                case DatabaseManagementSystem.MySQL:
-                    return "Server=localhost;Port=3306;Database=MyProjectName;Uid=root;Pwd=myPassword;";
-                case DatabaseManagementSystem.PostgreSQL:
-                    return "User ID=root;Password=myPassword;Host=localhost;Port=5432;Database=MyProjectName;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;";
-                //case DatabaseManagementSystem.Oracle:
-                case DatabaseManagementSystem.OracleDevart:
-                    return "Data Source=MyProjectName;Integrated Security=yes;";
-                case DatabaseManagementSystem.SQLite:
-                    return $"Data Source={Path.Combine(outputFolder,"database\\MyProjectName.db")};Version=3;";
-                default:
-                    return null;
+                OpenMicroserviceDocumentPage();
             }
         }
 
-        private void DeleteMigrationsIfNeeded(DatabaseProvider databaseProvider, DatabaseManagementSystem databaseManagementSystem, string outputFolder)
+        private string FindMicroserviceSolutionName(string outputFolderRoot)
         {
-            if (databaseManagementSystem == DatabaseManagementSystem.NotSpecified || databaseManagementSystem == DatabaseManagementSystem.SQLServer)
+            var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+
+            if (slnFile == null)
             {
-                return;
+                return null;
             }
 
-            if (databaseProvider != DatabaseProvider.NotSpecified && databaseProvider != DatabaseProvider.EntityFrameworkCore)
+            return Path.GetFileName(slnFile).RemovePostFix(".sln");
+        }
+
+        private UiFramework FindMicroserviceSolutionUiFramework(string outputFolderRoot)
+        {
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "apps", "blazor")))
             {
-                return;
+                return UiFramework.Blazor;
+            }
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "apps", "web")))
+            {
+                return UiFramework.Mvc;
+            }
+            if (Directory.Exists(Path.Combine(outputFolderRoot, "apps", "angular")))
+            {
+                return UiFramework.Angular;
             }
 
-            Logger.LogInformation($"Deleting migrations...");
-
-            _efCoreMigrationManager.RemoveAllMigrations(outputFolder);
+            return UiFramework.None;
         }
 
         private void OpenThanksPage(UiFramework uiFramework, DatabaseProvider databaseProvider, bool tiered, bool commercial)
@@ -282,19 +304,14 @@ namespace Volo.Abp.Cli.Commands
             var tieredYesNo = tiered ? "yes" : "no";
             var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                url = url.Replace("&", "^&");
-                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Process.Start("xdg-open", url);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                Process.Start("open", url);
-            }
+            CmdHelper.OpenWebPage(url);
+        }
+
+        private void OpenMicroserviceDocumentPage()
+        {
+            var url = "https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index";
+
+            CmdHelper.OpenWebPage(url);
         }
 
         private bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
@@ -407,8 +424,8 @@ namespace Volo.Abp.Cli.Commands
                     return DatabaseManagementSystem.OracleDevart;
                 case "sqlite":
                     return DatabaseManagementSystem.SQLite;
-                case "oracle": // Currently disabled. See https://github.com/abpframework/abp/issues/6513
-                    // return DatabaseManagementSystem.Oracle;
+                case "oracle":
+                    return DatabaseManagementSystem.Oracle;
                 default:
                     return DatabaseManagementSystem.NotSpecified;
             }
@@ -416,6 +433,11 @@ namespace Volo.Abp.Cli.Commands
 
         protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
         {
+            if (commandLineArgs.Options.ContainsKey("no-ui"))
+            {
+                return UiFramework.None;
+            }
+
             var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
             switch (optionValue)
             {
@@ -427,6 +449,8 @@ namespace Volo.Abp.Cli.Commands
                     return UiFramework.Angular;
                 case "blazor":
                     return UiFramework.Blazor;
+                case "blazor-server":
+                    return UiFramework.BlazorServer;
                 default:
                     return UiFramework.NotSpecified;
             }

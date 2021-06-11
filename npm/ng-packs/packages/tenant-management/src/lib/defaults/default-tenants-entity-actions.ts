@@ -12,14 +12,6 @@ export const DEFAULT_TENANTS_ENTITY_ACTIONS = EntityAction.createMany<TenantDto>
     permission: 'AbpTenantManagement.Tenants.Update',
   },
   {
-    text: 'AbpTenantManagement::Permission:ManageConnectionStrings',
-    action: data => {
-      const component = data.getInjected(TenantsComponent);
-      component.onEditConnectionString(data.record.id);
-    },
-    permission: 'AbpTenantManagement.Tenants.ManageConnectionStrings',
-  },
-  {
     text: 'AbpTenantManagement::Permission:ManageFeatures',
     action: data => {
       const component = data.getInjected(TenantsComponent);

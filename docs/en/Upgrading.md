@@ -29,13 +29,17 @@ If `Add-Migration` generates an empty migration, you can use `Remove-Migration` 
 
 ## The Blog Posts & Guides
 
-Sometimes we introduce new features/changes that requires to make changes in the startup template. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your solution.
-
 Whenever you upgrade your solution, it is strongly suggested to check the [ABP BLOG](https://blog.abp.io/) to learn the new features and changes coming with the new version. We regularly publish posts and write these kind of changes.
 
 ### Migration Guides
 
 We prepare migration guides if the new version brings breaking changes for existing applications. See the [Migration Guides](Migration-Guides/Index.md) page for all the guides.
+
+### Upgrading the Startup Template
+
+Sometimes we introduce new features/changes that requires to **make changes in the startup template**. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your existing solution.
+
+It is not practical to document the necessary changes line by line. In this case, we suggest you to create an example solution, one with your existing version and one with the new version and compare them using a diff tool. You can [see this guide](Migration-Guides/Upgrading-Startup-Template.md) to learn how you can do it using WinMerge application.
 
 ## Semantic Versioning & Breaking Changes
 

@@ -16,6 +16,7 @@ namespace MyCompanyName.MyProjectName.Web.Menus
         private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             //Add main menu items.
+            context.Menu.AddItem(new ApplicationMenuItem(MyProjectNameMenus.Prefix, displayName: "MyProjectName", "~/MyProjectName", icon: "fa fa-globe"));
 
             return Task.CompletedTask;
         }

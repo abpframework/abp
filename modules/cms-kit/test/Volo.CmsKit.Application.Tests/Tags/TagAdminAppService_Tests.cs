@@ -32,8 +32,8 @@ namespace Volo.CmsKit.Tags
         {
             var list = await _tagAdminAppService.CreateAsync(new TagCreateDto
             {
-                EntityType = "any_new_type",
-                Name = "1",
+                EntityType = _cmsKitTestData.EntityType1,
+                Name = "My First Tag",
             });
 
             list.Id.ShouldNotBe(Guid.Empty);
@@ -47,6 +47,16 @@ namespace Volo.CmsKit.Tags
                 EntityType = _cmsKitTestData.Content_1_EntityType,
                 Name = _cmsKitTestData.Content_1_Tags[0],
             }));
+        }
+
+        public async Task GetTagDefinitionsAsync_ShouldWorkProperly_WithoutParameters()
+        {
+            var definitions = await _tagAdminAppService.GetTagDefinitionsAsync();
+
+            definitions.ShouldNotBeNull();
+            definitions.ShouldNotBeEmpty();
+            definitions.Count.ShouldBeGreaterThan(1);
+            definitions.ShouldContain(x => x.EntityType == _cmsKitTestData.TagDefinition_1_EntityType);
         }
     }
 }

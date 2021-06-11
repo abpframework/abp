@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
@@ -74,6 +76,29 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ChangeConnectionStringToMongoDb(
                 context,
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.json"
+            );
+
+            //MyCompanyName.MyProjectName.Blazor.Server
+
+            ChangeProjectReference(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj",
+                "EntityFrameworkCore.DbMigrations",
+                "MongoDB"
+            );
+
+            ChangeNamespaceAndKeyword(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
+                "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                "MyCompanyName.MyProjectName.MongoDB",
+                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                "MyProjectNameMongoDbModule"
+            );
+
+            ChangeConnectionStringToMongoDb(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/appsettings.json"
             );
 
             //MyCompanyName.MyProjectName.HttpApi.HostWithIds
@@ -170,6 +195,30 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "MyProjectNameEntityFrameworkCoreCollectionFixtureBase",
                 "MyProjectNameMongoDbCollectionFixtureBase"
             );
+
+            if (context.BuildArgs.PublicWebSite)
+            {
+                ChangeProjectReference(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/MyCompanyName.MyProjectName.Web.Public.csproj",
+                    "EntityFrameworkCore.DbMigrations",
+                    "MongoDB"
+                );
+
+                ChangeNamespaceAndKeyword(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/MyProjectNameWebPublicModule.cs",
+                    "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                    "MyCompanyName.MyProjectName.MongoDB",
+                    "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                    "MyProjectNameMongoDbModule"
+                );
+
+                ChangeConnectionStringToMongoDb(
+                    context,
+                    "/aspnet-core/src/MyCompanyName.MyProjectName.Web.Public/appsettings.json"
+                );
+            }
         }
 
         private void ChangeProjectReference(
@@ -178,7 +227,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             string oldReference,
             string newReference)
         {
-            var file = context.GetFile(targetProjectFilePath);
+            var file = context.FindFile(targetProjectFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 
@@ -204,7 +258,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             string oldKeyword,
             string newKeyword)
         {
-            var file = context.GetFile(targetModuleFilePath);
+            var file = context.FindFile(targetModuleFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 
@@ -229,7 +288,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             ProjectBuildContext context,
             string appsettingFilePath)
         {
-            var file = context.GetFile(appsettingFilePath);
+            var file = context.FindFile(appsettingFilePath);
+
+            if (file == null)
+            {
+                return;
+            }
 
             file.NormalizeLineEndings();
 

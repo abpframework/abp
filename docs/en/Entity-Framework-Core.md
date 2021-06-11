@@ -236,7 +236,8 @@ public class BookRepository
 
     public async Task DeleteBooksByType(BookType type)
     {
-        await DbContext.Database.ExecuteSqlRawAsync(
+        var dbContext = await GetDbContextAsync();
+        await dbContext.Database.ExecuteSqlRawAsync(
             $"DELETE FROM Books WHERE Type = {(int)type}"
         );
     }
@@ -344,7 +345,7 @@ You have different options when you want to load the related entities while quer
 
 #### Repository.WithDetails
 
-`IRepository.WithDetails(...)` can be used to include one relation collection/property to the query.
+`IRepository.WithDetailsAsync(...)` can be used to get an `IQueryable<T>` by including one relation collection/property.
 
 **Example: Get an order with lines**
 
@@ -355,7 +356,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 
-namespace MyCrm
+namespace AbpDemo.Orders
 {
     public class OrderManager : DomainService
     {
@@ -368,35 +369,39 @@ namespace MyCrm
 
         public async Task TestWithDetails(Guid id)
         {
-            var query = _orderRepository
-                .WithDetails(x => x.Lines)
-                .Where(x => x.Id == id);
-
+            //Get a IQueryable<T> by including sub collections
+            var queryable = await _orderRepository.WithDetailsAsync(x => x.Lines);
+            
+            //Apply additional LINQ extension methods
+            var query = queryable.Where(x => x.Id == id);
+            
+            //Execute the query and get the result
             var order = await AsyncExecuter.FirstOrDefaultAsync(query);
         }
     }
 }
 ````
 
-> `AsyncExecuter` is used to execute async LINQ extensions without depending on the EF Core. If you add EF Core NuGet package reference to your project, then you can directly use `await _orderRepository.WithDetails(x => x.Lines).FirstOrDefaultAsync()`. But, this time you depend on the EF Core in your domain layer. See the [repository document](Repositories.md) to learn more.
+> `AsyncExecuter` is used to execute async LINQ extensions without depending on the EF Core. If you add EF Core NuGet package reference to your project, then you can directly use `await query.FirstOrDefaultAsync()`. But, this time you depend on the EF Core in your domain layer. See the [repository document](Repositories.md) to learn more.
 
 **Example: Get a list of orders with their lines**
 
 ````csharp
 public async Task TestWithDetails()
 {
-    var query = _orderRepository
-        .WithDetails(x => x.Lines);
+    //Get a IQueryable<T> by including sub collections
+    var queryable = await _orderRepository.WithDetailsAsync(x => x.Lines);
 
-    var orders = await AsyncExecuter.ToListAsync(query);
+    //Execute the query and get the result
+    var orders = await AsyncExecuter.ToListAsync(queryable);
 }
 ````
 
-> `WithDetails` method can get more than one expression parameter if you need to include more than one navigation property or collection.
+> `WithDetailsAsync` method can get more than one expression parameter if you need to include more than one navigation property or collection.
 
 #### DefaultWithDetailsFunc
 
-If you don't pass any expression to the `WithDetails` method, then it includes all the details using the `DefaultWithDetailsFunc` option you provide.
+If you don't pass any expression to the `WithDetailsAsync` method, then it includes all the details using the `DefaultWithDetailsFunc` option you provide.
 
 You can configure `DefaultWithDetailsFunc` for an entity in the `ConfigureServices` method of your [module](Module-Development-Basics.md) in your `EntityFrameworkCore` project.
 
@@ -419,12 +424,15 @@ Then you can use the `WithDetails` without any parameter:
 ````csharp
 public async Task TestWithDetails()
 {
-    var query = _orderRepository.WithDetails();
-    var orders = await AsyncExecuter.ToListAsync(query);
+    //Get a IQueryable<T> by including all sub collections
+    var queryable = await _orderRepository.WithDetailsAsync();
+
+    //Execute the query and get the result
+    var orders = await AsyncExecuter.ToListAsync(queryable);
 }
 ````
 
-`WithDetails()` executes the expression you've setup as the `DefaultWithDetailsFunc`.
+`WithDetailsAsync()` executes the expression you've setup as the `DefaultWithDetailsFunc`.
 
 #### Repository Get/Find Methods
 
@@ -466,7 +474,7 @@ public async Task TestWithDetails()
 
 #### Alternatives
 
-The repository patters tries to encapsulate the EF Core, so your options are limited. If you need an advanced scenario, you can follow one of the options;
+The repository pattern tries to encapsulate the EF Core, so your options are limited. If you need an advanced scenario, you can follow one of the options;
 
 * Create a custom repository method and use the complete EF Core API.
 * Reference to the `Volo.Abp.EntityFrameworkCore` package from your project. In this way, you can directly use `Include` and `ThenInclude` in your code.
@@ -550,24 +558,15 @@ See also [lazy loading document](https://docs.microsoft.com/en-us/ef/core/queryi
 In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository pattern). However, if you want to access the `DbContext` instance over the repository, you can use `GetDbContext()` or `GetDbSet()` extension methods. Example:
 
 ````csharp
-public class BookService
+public async Task TestAsync()
 {
-    private readonly IRepository<Book, Guid> _bookRepository;
-
-    public BookService(IRepository<Book, Guid> bookRepository)
-    {
-        _bookRepository = bookRepository;
-    }
-
-    public void Foo()
-    {
-        DbContext dbContext = _bookRepository.GetDbContext();
-        DbSet<Book> books = _bookRepository.GetDbSet();
-    }
+    var dbContext = await _orderRepository.GetDbContextAsync();
+    var dbSet = await _orderRepository.GetDbSetAsync();
+    //var dbSet = dbContext.Set<Order>(); //Alternative, when you have the DbContext
 }
 ````
 
-* `GetDbContext` returns a `DbContext` reference instead of `BookStoreDbContext`. You can cast it, however in most cases you don't need it.
+* `GetDbContextAsync` returns a `DbContext` reference instead of `BookStoreDbContext`. You can cast it if you need. However, you don't need it in most cases.
 
 > Important: You must reference to the `Volo.Abp.EntityFrameworkCore` package from the project you want to access to the `DbContext`. This breaks encapsulation, but this is what you want in that case.
 
@@ -605,27 +604,99 @@ ObjectExtensionManager.Instance
     );
 ````
 
-If the related module has implemented this feature (by using the `ConfigureEfCoreEntity` explained below), then the new property is added to the model. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
+### MapEfCoreEntity
 
->`MapEfCoreProperty` method must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEfCoreEntityExtensionMappings` class that is safe to use this method inside.
+`MapEfCoreEntity` is a shortcut extension method to configure the `Entity`.
 
-### ConfigureEfCoreEntity
-
-If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureEfCoreEntity` extension method in your entity mapping. However, there is a shortcut extension method `ConfigureObjectExtensions` that can be used while configuring the entity mapping:
+**Example**: Set the max length of `Name` to the `IdentityRole` entity:
 
 ````csharp
-builder.Entity<YourEntity>(b =>
+ObjectExtensionManager.Instance
+    .MapEfCoreEntity<IdentityRole>(builder =>
+    {
+        builder.As<EntityTypeBuilder<IdentityRole>>().Property(x => x.Name).HasMaxLength(200);
+    });
+````
+
+### MapEfCoreDbContext
+
+`MapEfCoreDbContext` is a shortcut extension method to configure the `DbContext`.
+
+**Example**: Set the max length of `Name` to the `IdentityRole` entity of `IdentityDbContext`:
+
+````csharp
+ObjectExtensionManager.Instance.MapEfCoreDbContext<IdentityDbContext>(b =>
 {
-    b.ConfigureObjectExtensions();
-    //...
+    b.Entity<IdentityRole>().Property(x => x.Name).HasMaxLength(200);
 });
 ````
 
-> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` method. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
+If the related module has implemented this feature(explained below), then the new property is added to the model or the DbContext/Entity configure changed. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
+
+> The `MapEfCoreProperty`, `MapEfCoreEntity` and `MapEfCoreDbContext` methods must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEfCoreEntityExtensionMappings` class that is safe to use this method inside.
+
+### ConfigureEfCoreEntity, ApplyObjectExtensionMappings and TryConfigureObjectExtensions
+
+If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureEfCoreEntity`, `ApplyObjectExtensionMappings` and `TryConfigureObjectExtensions` extension methods in your entity mapping.
+
+**Example**:
+````csharp
+public static class QADbContextModelCreatingExtensions
+{
+    public static void ConfigureQA(
+        this ModelBuilder builder,
+        Action<QAModelBuilderConfigurationOptions> optionsAction = null)
+    {
+        Check.NotNull(builder, nameof(builder));
+
+        var options = new QAModelBuilderConfigurationOptions(
+            QADatabaseDbProperties.DbTablePrefix,
+            QADatabaseDbProperties.DbSchema
+        );
+
+        optionsAction?.Invoke(options);
+
+        builder.Entity<QA_Question>(b =>
+        {
+            b.ToTable(options.TablePrefix + "Questions", options.Schema);
+            b.ConfigureByConvention();
+            //...
+
+            //Call this in the end of buildAction.
+            b.ApplyObjectExtensionMappings();
+        });
+
+        //...
+
+        //Call this in the end of ConfigureQA.
+        builder.TryConfigureObjectExtensions<QADbContext>();
+    }
+}
+````
+
+> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` and `ConfigureEfCoreEntity` methods. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
 
 See the "*ConfigureByConvention Method*" section above for more information.
 
 ## Advanced Topics
+
+### Controlling the Multi-Tenancy
+
+If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
+
+**Example:**
+
+````csharp
+[IgnoreMultiTenancy]
+public class MyDbContext : AbpDbContext<MyDbContext>
+{
+    ...
+}
+````
+
+Do not use the `[IgnoreMultiTenancy]` attribute if any one of your entities in your `DbContext` can be persisted in a tenant database.
+
+> When you use repositories, ABP already uses the host database for the entities don't implement the `IMultiTenant` interface. So, most of time you don't need to `[IgnoreMultiTenancy]` attribute if you are using the repositories to work with the database.
 
 ### Set Default Repository Classes
 
@@ -707,7 +778,19 @@ One advantage of using an interface for a DbContext is then it will be replaceab
 
 ### Replace Other DbContextes
 
-Once you properly define and use an interface for DbContext, then any other implementation can replace it using the `ReplaceDbContext` option:
+Once you properly define and use an interface for DbContext, then any other implementation can use the following ways to replace it:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreDbContext))]
+public class OtherDbContext : AbpDbContext<OtherDbContext>, IBookStoreDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ````csharp
 context.Services.AddAbpDbContext<OtherDbContext>(options =>
@@ -742,32 +825,36 @@ If you have better logic or using an external library for bulk operations, you c
 - You may use example template below:
 
 ```csharp
-public class MyCustomEfCoreBulkOperationProvider : IEfCoreBulkOperationProvider, ITransientDependency
+public class MyCustomEfCoreBulkOperationProvider
+    : IEfCoreBulkOperationProvider, ITransientDependency
 {
-    public async Task DeleteManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
-                                                            IEnumerable<TEntity> entities,
-                                                            bool autoSave,
-                                                            CancellationToken cancellationToken)
+    public async Task DeleteManyAsync<TDbContext, TEntity>(
+        IEfCoreRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        bool autoSave,
+        CancellationToken cancellationToken)
         where TDbContext : IEfCoreDbContext
         where TEntity : class, IEntity
     {
         // Your logic here.
     }
 
-    public async Task InsertManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
-                                                            IEnumerable<TEntity> entities,
-                                                            bool autoSave,
-                                                            CancellationToken cancellationToken)
+    public async Task InsertManyAsync<TDbContext, TEntity>(
+        IEfCoreRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        bool autoSave,
+        CancellationToken cancellationToken)
         where TDbContext : IEfCoreDbContext
         where TEntity : class, IEntity
     {
         // Your logic here.
     }
 
-    public async Task UpdateManyAsync<TDbContext, TEntity>(IEfCoreRepository<TEntity> repository,
-                                                            IEnumerable<TEntity> entities,
-                                                            bool autoSave,
-                                                            CancellationToken cancellationToken)
+    public async Task UpdateManyAsync<TDbContext, TEntity>(
+        IEfCoreRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        bool autoSave,
+        CancellationToken cancellationToken)
         where TDbContext : IEfCoreDbContext
         where TEntity : class, IEntity
     {
@@ -779,3 +866,4 @@ public class MyCustomEfCoreBulkOperationProvider : IEfCoreBulkOperationProvider,
 ## See Also
 
 * [Entities](Entities.md)
+* [Repositories](Repositories.md)

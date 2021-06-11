@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.CmsKit.EntityFrameworkCore
@@ -16,6 +17,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ConfigureCmsKit();
+            modelBuilder.ConfigureBlobStoring();
         }
     }
 }

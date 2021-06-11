@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
                         x => x.Name.Contains(filter) ||
                         x.NormalizedName.Contains(filter))
-                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

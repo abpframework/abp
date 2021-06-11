@@ -50,11 +50,11 @@ namespace Volo.Abp.Users.MongoDB
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter) ||
-                        u.Name.Contains(filter) ||
-                        u.Surname.Contains(filter)
+                        (u.Email != null && u.Email.Contains(filter)) ||
+                        (u.Name != null && u.Name.Contains(filter)) ||
+                        (u.Surname != null && u.Surname.Contains(filter))
                 )
-                .OrderBy(sorting ?? nameof(IUserData.UserName))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(IUserData.UserName) : sorting)
                 .As<IMongoQueryable<TUser>>()
                 .PageBy<TUser, IMongoQueryable<TUser>>(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
@@ -68,9 +68,9 @@ namespace Volo.Abp.Users.MongoDB
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter) ||
-                        u.Name.Contains(filter) ||
-                        u.Surname.Contains(filter)
+                        (u.Email != null && u.Email.Contains(filter)) ||
+                        (u.Name != null && u.Name.Contains(filter)) ||
+                        (u.Surname != null && u.Surname.Contains(filter))
                 )
                 .LongCountAsync(cancellationToken);
         }

@@ -73,7 +73,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual void RemoveDuplicateControllers(ApplicationModel application)
         {
-            var derivedControllerModels = new List<ControllerModel>();
+            var controllerModelsToRemove = new List<ControllerModel>();
 
             foreach (var controllerModel in application.Controllers)
             {
@@ -87,19 +87,42 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                     continue;
                 }
 
+                var exposeServicesAttr = ReflectionHelper.GetSingleAttributeOrDefault<ExposeServicesAttribute>(controllerModel.ControllerType);
+                if (exposeServicesAttr.IncludeSelf)
+                {
+                    var exposedControllerModels = application.Controllers
+                        .Where(cm => exposeServicesAttr.ServiceTypes.Contains(cm.ControllerType))
+                        .ToArray();
+
+                    controllerModelsToRemove.AddRange(exposedControllerModels);
+                    Logger.LogInformation($"Removing the controller{(exposedControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(exposedControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
+                    continue;
+                }
+
                 var baseControllerTypes = controllerModel.ControllerType
                     .GetBaseClasses(typeof(Controller), includeObject: false)
                     .Where(t => !t.IsAbstract)
                     .ToArray();
 
-                if (baseControllerTypes.Length > 0)
+                if (baseControllerTypes.Length == 0)
                 {
-                    derivedControllerModels.Add(controllerModel);
-                    Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")}");
+                    continue;
                 }
+
+                var baseControllerModels = application.Controllers
+                    .Where(cm => baseControllerTypes.Contains(cm.ControllerType))
+                    .ToArray();
+
+                if (baseControllerModels.Length == 0)
+                {
+                    continue;
+                }
+
+                controllerModelsToRemove.Add(controllerModel);
+                Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")}");
             }
 
-            application.Controllers.RemoveAll(derivedControllerModels);
+            application.Controllers.RemoveAll(controllerModelsToRemove);
         }
 
         protected virtual void ConfigureRemoteService(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)

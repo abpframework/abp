@@ -17,6 +17,7 @@ import {
   extendsSelf,
   removeTypeModifiers,
 } from './type';
+const shouldQuote = require('should-quote');
 
 export interface ModelGeneratorParams {
   targetPath: string;
@@ -134,7 +135,8 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
     genericsCollector.reset();
 
     typeDef.properties?.forEach(prop => {
-      const name = camel(prop.name);
+      let name = prop.jsonName || camel(prop.name);
+      name = shouldQuote(name) ? `'${name}'` : name;
       const type = simplifyType(prop.typeSimple);
       const refs = parseType(prop.type).reduce(
         (acc: string[], r) => acc.concat(parseGenerics(r).toGenerics()),

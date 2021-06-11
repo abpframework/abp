@@ -7,9 +7,11 @@ using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
+    [IgnoreMultiTenancy]
     [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
     public class IdentityServerDbContext : AbpDbContext<IdentityServerDbContext>, IIdentityServerDbContext
     {

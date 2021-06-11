@@ -74,8 +74,13 @@ namespace Volo.Abp.Cli.Bundling
                 {
                     var pathFragments = definition.Source.Split('/').ToList();
                     var basePath = $"{pathFragments[0]}/{pathFragments[1]}";
-                    var path = staticAssetsDefinitions.SelectSingleNode($"//ContentRoot[@BasePath='{basePath}']")
-                        .Attributes["Path"].Value;
+                    var node = staticAssetsDefinitions.SelectSingleNode($"//ContentRoot[@BasePath='{basePath}']");
+                    if (node?.Attributes == null)
+                    {
+                        throw new AbpException("Not found: " + definition.Source);
+                    }
+                    
+                    var path = node.Attributes["Path"].Value;
                     var absolutePath = definition.Source.Replace(basePath, path);
                     content = GetFileContent(absolutePath, options.Minify);
                 }

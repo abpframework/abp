@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -21,9 +22,11 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
             Clock = clock;
         }
 
-        public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(int maxResultCount)
+        public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(
+            int maxResultCount,
+            CancellationToken cancellationToken = default)
         {
-            return await (await GetWaitingListQueryAsync(maxResultCount)).ToListAsync();
+            return await (await GetWaitingListQueryAsync(maxResultCount)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         protected virtual async Task<IQueryable<BackgroundJobRecord>> GetWaitingListQueryAsync(int maxResultCount)

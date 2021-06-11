@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -172,6 +172,7 @@ using System.Threading.Tasks;
 using Acme.BookStore.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Repositories;
 
 namespace Acme.BookStore.Authors
 {
@@ -230,12 +231,10 @@ public async Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input
         input.Filter
     );
 
-    var totalCount = await AsyncExecuter.CountAsync(
-        _authorRepository.WhereIf(
-            !input.Filter.IsNullOrWhiteSpace(),
-            author => author.Name.Contains(input.Filter)
-        )
-    );
+    var totalCount = input.Filter == null
+        ? await _authorRepository.CountAsync()
+        : await _authorRepository.CountAsync(
+            author => author.Name.Contains(input.Filter));
 
     return new PagedResultDto<AuthorDto>(
         totalCount,
@@ -246,7 +245,7 @@ public async Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input
 
 * Default sorting is "by author name" which is done in the beginning of the method in case of it wasn't sent by the client.
 * Used the `IAuthorRepository.GetListAsync` to get a paged, sorted and filtered list of authors from the database. We had implemented it in the previous part of this tutorial. Again, it actually was not needed to create such a method since we could directly query over the repository, but wanted to demonstrate how to create custom repository methods.
-* Directly queried from the `AuthorRepository` while getting the count of the authors. We preferred to use the `AsyncExecuter` service which allows us to perform async queries without depending on the EF Core. However, you could depend on the EF Core package and directly use the `_authorRepository.WhereIf(...).ToListAsync()` method. See the [repository document](../Repositories.md) to read the alternative approaches and the discussion.
+* Directly queried from the `AuthorRepository` while getting the count of the authors. If a filter is sent, then we are using it to filter entities while getting the count.
 * Finally, returning a paged result by mapping the list of `Author`s to a list of `AuthorDto`s.
 
 ### CreateAsync
@@ -268,7 +267,7 @@ public async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
 ````
 
 * `CreateAsync` requires the `BookStorePermissions.Authors.Create` permission (in addition to the `BookStorePermissions.Authors.Default` declared for the `AuthorAppService` class).
-* Used the `AuthorManeger` (domain service) to create a new author.
+* Used the `AuthorManager` (domain service) to create a new author.
 * Used the `IAuthorRepository.InsertAsync` to insert the new author to the database.
 * Used the `ObjectMapper` to return an `AuthorDto` representing the newly created author.
 

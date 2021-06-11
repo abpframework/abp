@@ -5,7 +5,7 @@
     "entryFile": "src/public-api.ts"
   },
   "deleteDestPath": false,
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "@abp/utils",
     "@angular/localize",
     "@ngxs/store",

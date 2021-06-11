@@ -1,3 +1,0 @@
-# CMS Kit Module
-
-TODO

@@ -13,5 +13,16 @@ namespace Volo.CmsKit.GlobalFeatures
             ) : base(cmsKit)
         {
         }
+
+        public override void Enable()
+        {
+            var userFeature = FeatureManager.Modules.CmsKit().User;
+            if (!userFeature.IsEnabled)
+            {
+                userFeature.Enable();
+            }
+
+            base.Enable();
+        }
     }
 }

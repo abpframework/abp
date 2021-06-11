@@ -1,10 +1,24 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
+import { Params, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AuthConfig, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
-import { Observable, of } from 'rxjs';
+import {
+  AuthConfig,
+  OAuthErrorEvent,
+  OAuthInfoEvent,
+  OAuthService,
+  OAuthStorage,
+} from 'angular-oauth2-oidc';
+import { from, Observable, of, pipe } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
+import { LoginParams } from '../models/auth';
+import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
+import { SessionStateService } from '../services/session-state.service';
+import { removeRememberMe, setRememberMe } from '../utils/auth-utils';
+import { noop } from '../utils/common-utils';
 
 export const oAuthStorage = localStorage;
 
@@ -16,10 +30,13 @@ export abstract class AuthFlowStrategy {
   protected configState: ConfigStateService;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
+  protected sessionState: SessionStateService;
+  protected appConfigService: AbpApplicationConfigurationService;
+
   abstract checkIfInternalAuth(): boolean;
-  abstract login(): void;
+  abstract navigateToLogin(queryParams?: Params): void;
   abstract logout(): Observable<any>;
-  abstract destroy(): void;
+  abstract login(params?: LoginParams): Observable<any>;
 
   private catchError = err => this.store.dispatch(new RestOccurError(err));
 
@@ -28,7 +45,11 @@ export abstract class AuthFlowStrategy {
     this.environment = injector.get(EnvironmentService);
     this.configState = injector.get(ConfigStateService);
     this.oAuthService = injector.get(OAuthService);
+    this.appConfigService = injector.get(AbpApplicationConfigurationService);
+    this.sessionState = injector.get(SessionStateService);
     this.oAuthConfig = this.environment.getEnvironment().oAuthConfig;
+
+    this.listenToOauthErrors();
   }
 
   async init(): Promise<any> {
@@ -39,7 +60,32 @@ export abstract class AuthFlowStrategy {
     if (shouldClear) clearOAuthStorage(oAuthStorage);
 
     this.oAuthService.configure(this.oAuthConfig);
-    return this.oAuthService.loadDiscoveryDocument().catch(this.catchError);
+    return this.oAuthService
+      .loadDiscoveryDocument()
+      .then(() => {
+        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
+          return Promise.resolve();
+        }
+
+        return this.refreshToken();
+      })
+      .catch(this.catchError);
+  }
+
+  protected refreshToken() {
+    return this.oAuthService.refreshToken().catch(() => clearOAuthStorage());
+  }
+
+  protected listenToOauthErrors() {
+    this.oAuthService.events
+      .pipe(
+        filter(event => event instanceof OAuthErrorEvent),
+        tap(() => clearOAuthStorage()),
+        switchMap(() => this.appConfigService.get()),
+      )
+      .subscribe(res => {
+        this.configState.setState(res);
+      });
   }
 }
 
@@ -49,19 +95,14 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   async init() {
     return super
       .init()
-      .then(() => this.oAuthService.tryLogin())
-      .then(() => {
-        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
-          return Promise.resolve();
-        }
-
-        return this.oAuthService.refreshToken() as Promise<any>;
-      })
+      .then(() => this.oAuthService.tryLogin().catch(noop))
       .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
 
-  login() {
-    this.oAuthService.initCodeFlow();
+  navigateToLogin(queryParams?: Params) {
+    const lang = this.sessionState.getLanguage();
+    const culture = { culture: lang, 'ui-culture': lang };
+    this.oAuthService.initCodeFlow(null, { ...(lang && culture), ...queryParams });
   }
 
   checkIfInternalAuth() {
@@ -70,16 +111,112 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   logout() {
-    this.oAuthService.logOut();
-    return of(null);
+    return from(this.oAuthService.revokeTokenAndLogout());
   }
 
-  destroy() {}
+  login() {
+    this.oAuthService.initCodeFlow();
+    return of(null);
+  }
+}
+
+export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
+  readonly isInternalAuth = true;
+  private cookieKey = 'rememberMe';
+  private storageKey = 'passwordFlow';
+
+  private listenToTokenExpiration() {
+    this.oAuthService.events
+      .pipe(
+        filter(
+          event =>
+            event instanceof OAuthInfoEvent &&
+            event.type === 'token_expires' &&
+            event.info === 'access_token',
+        ),
+      )
+      .subscribe(() => {
+        if (this.oAuthService.getRefreshToken()) {
+          this.refreshToken();
+        } else {
+          this.oAuthService.logOut();
+          removeRememberMe();
+          this.appConfigService.get().subscribe(res => {
+            this.configState.setState(res);
+          });
+        }
+      });
+  }
+
+  async init() {
+    if (!getCookieValueByName(this.cookieKey) && localStorage.getItem(this.storageKey)) {
+      this.oAuthService.logOut();
+    }
+
+    return super.init().then(() => this.listenToTokenExpiration());
+  }
+
+  navigateToLogin(queryParams?: Params) {
+    const router = this.injector.get(Router);
+    router.navigate(['/account/login'], { queryParams });
+  }
+
+  checkIfInternalAuth() {
+    return true;
+  }
+
+  login(params: LoginParams): Observable<any> {
+    const tenant = this.sessionState.getTenant();
+
+    return from(
+      this.oAuthService.fetchTokenUsingPasswordFlow(
+        params.username,
+        params.password,
+        new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
+      ),
+    ).pipe(this.pipeToLogin(params));
+  }
+
+  pipeToLogin(params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>) {
+    const router = this.injector.get(Router);
+
+    return pipe(
+      switchMap(() => this.appConfigService.get()),
+      tap(res => {
+        this.configState.setState(res);
+        setRememberMe(params.rememberMe);
+        if (params.redirectUrl) router.navigate([params.redirectUrl]);
+      }),
+    );
+  }
+
+  logout() {
+    const router = this.injector.get(Router);
+
+    return from(this.oAuthService.revokeTokenAndLogout()).pipe(
+      switchMap(() => this.appConfigService.get()),
+      tap(res => {
+        this.configState.setState(res);
+        router.navigateByUrl('/');
+        removeRememberMe();
+      }),
+    );
+  }
+
+  protected refreshToken() {
+    return this.oAuthService.refreshToken().catch(() => {
+      clearOAuthStorage();
+      removeRememberMe();
+    });
+  }
 }
 
 export const AUTH_FLOW_STRATEGY = {
   Code(injector: Injector) {
     return new AuthCodeFlowStrategy(injector);
+  },
+  Password(injector: Injector) {
+    return new AuthPasswordFlowStrategy(injector);
   },
 };
 
@@ -112,4 +249,9 @@ function shouldStorageClear(clientId: string, storage: OAuthStorage): boolean {
   const shouldClear = storage.getItem(key) !== clientId;
   if (shouldClear) storage.setItem(key, clientId);
   return shouldClear;
+}
+
+function getCookieValueByName(name: string) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : '';
 }

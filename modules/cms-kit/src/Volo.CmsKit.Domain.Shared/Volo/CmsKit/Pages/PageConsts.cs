@@ -2,10 +2,16 @@
 {
     public class PageConsts
     {
-        public static int MaxTitleLength = 256;
+        public const string EntityType = "Page";
+
+        public static int MaxTitleLength { get; set; } = 256;
+
+        public static int MaxSlugLength { get; set; } = 256;
         
-        public static int MaxUrlLength = 256;
-        
-        public static int MaxDescriptionLength = 515;
+        public static int MaxContentLength { get; set; } = int.MaxValue;
+
+        public static int MaxScriptLength { get; set; } = int.MaxValue;
+
+        public static int MaxStyleLength { get; set; } = int.MaxValue;
     }
 }

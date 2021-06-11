@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow.EntityFrameworkCore
 {
@@ -14,32 +15,33 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
         public IEfCoreDbContext StarterDbContext { get; }
         public List<IEfCoreDbContext> AttendedDbContexts { get; }
 
-        public EfCoreTransactionApi(IDbContextTransaction dbContextTransaction, IEfCoreDbContext starterDbContext)
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
+        public EfCoreTransactionApi(
+            IDbContextTransaction dbContextTransaction,
+            IEfCoreDbContext starterDbContext,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
             DbContextTransaction = dbContextTransaction;
             StarterDbContext = starterDbContext;
+            CancellationTokenProvider = cancellationTokenProvider;
             AttendedDbContexts = new List<IEfCoreDbContext>();
         }
 
-        public Task CommitAsync()
+        public async Task CommitAsync()
         {
-            Commit();
-            return Task.CompletedTask;
-        }
-        
-        protected void Commit()
-        {
-            DbContextTransaction.Commit();
-
             foreach (var dbContext in AttendedDbContexts)
             {
-                if (dbContext.As<DbContext>().HasRelationalTransactionManager())
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager() &&
+                    dbContext.Database.GetDbConnection() == DbContextTransaction.GetDbTransaction().Connection)
                 {
-                    continue; //Relational databases use the shared transaction
+                    continue; //Relational databases use the shared transaction if they are using the same connection
                 }
 
-                dbContext.Database.CommitTransaction();
+                await dbContext.Database.CommitTransactionAsync(CancellationTokenProvider.Token);
             }
+            
+            await DbContextTransaction.CommitAsync(CancellationTokenProvider.Token);
         }
 
         public void Dispose()
@@ -47,15 +49,20 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             DbContextTransaction.Dispose();
         }
 
-        public void Rollback()
+        public async Task RollbackAsync(CancellationToken cancellationToken)
         {
-            DbContextTransaction.Rollback();
-        }
+            foreach (var dbContext in AttendedDbContexts)
+            {
+                if (dbContext.As<DbContext>().HasRelationalTransactionManager() &&
+                    dbContext.Database.GetDbConnection() == DbContextTransaction.GetDbTransaction().Connection)
+                {
+                    continue; //Relational databases use the shared transaction if they are using the same connection
+                }
 
-        public Task RollbackAsync(CancellationToken cancellationToken)
-        {
-            DbContextTransaction.Rollback();
-            return Task.CompletedTask;
+                await dbContext.Database.RollbackTransactionAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
+            }
+            
+            await DbContextTransaction.RollbackAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
     }
 }

@@ -12,13 +12,18 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new BackgroundJobsModelBuilderConfigurationOptions(
                 BackgroundJobsDbProperties.DbTablePrefix,
                 BackgroundJobsDbProperties.DbSchema
             );
 
             optionsAction?.Invoke(options);
-            
+
             builder.Entity<BackgroundJobRecord>(b =>
             {
                 b.ToTable(options.TablePrefix + "BackgroundJobs", options.Schema);
@@ -32,9 +37,13 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
                 b.Property(x => x.LastTryTime);
                 b.Property(x => x.IsAbandoned).HasDefaultValue(false);
                 b.Property(x => x.Priority).HasDefaultValue(BackgroundJobPriority.Normal);
-                
+
                 b.HasIndex(x => new { x.IsAbandoned, x.NextTryTime });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<BackgroundJobsDbContext>();
         }
     }
 }

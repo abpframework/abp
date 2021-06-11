@@ -43,7 +43,7 @@ namespace Volo.Abp.Http.Modeling
 
         public ApplicationApiDescriptionModel CreateSubModel(string[] modules = null, string[] controllers = null, string[] actions = null)
         {
-            var subModel = new ApplicationApiDescriptionModel();
+            var subModel = ApplicationApiDescriptionModel.Create();;
 
             foreach (var module in Modules.Values)
             {

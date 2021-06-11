@@ -18,6 +18,8 @@
     "401Message": "未授权",
     "403Message": "禁止访问",
     "404Message": "网页未找到",
-    "500Message": "内部服务器错误"
+    "500Message": "内部服务器错误",
+    "403MessageDetail": "您没有权限执行此操作",
+    "404MessageDetail": "抱歉, 这个地址是空的"
   }
 }

@@ -20,8 +20,10 @@ namespace Volo.Abp.Domain.Repositories
     {
         /// <summary>
         /// Get a single entity by the given <paramref name="predicate"/>.
-        /// It returns null if no entity with the given <paramref name="predicate"/>.
+        /// <para>
+        /// It returns null if there is no entity with the given <paramref name="predicate"/>.
         /// It throws <see cref="InvalidOperationException"/> if there are multiple entities with the given <paramref name="predicate"/>.
+        /// </para>
         /// </summary>
         /// <param name="predicate">A condition to find the entity</param>
         /// <param name="includeDetails">Set true to include all children of this entity</param>
@@ -34,8 +36,10 @@ namespace Volo.Abp.Domain.Repositories
 
         /// <summary>
         /// Get a single entity by the given <paramref name="predicate"/>.
+        /// <para>
         /// It throws <see cref="EntityNotFoundException"/> if there is no entity with the given <paramref name="predicate"/>.
         /// It throws <see cref="InvalidOperationException"/> if there are multiple entities with the given <paramref name="predicate"/>.
+        /// </para>
         /// </summary>
         /// <param name="predicate">A condition to filter entities</param>
         /// <param name="includeDetails">Set true to include all children of this entity</param>
@@ -47,10 +51,11 @@ namespace Volo.Abp.Domain.Repositories
         );
 
         /// <summary>
-        /// Deletes many entities by function.
-        /// Notice that: All entities fits to given predicate are retrieved and deleted.
-        /// This may cause major performance problems if there are too many entities with
-        /// given predicate.
+        /// Deletes many entities by the given <paramref name="predicate"/>.
+        /// <para>
+        /// Please note: This may cause major performance problems if there are too many entities returned for a
+        /// given predicate and the database provider doesn't have a way to efficiently delete many entities.
+        /// </para>
         /// </summary>
         /// <param name="predicate">A condition to filter entities</param>
         /// <param name="autoSave">

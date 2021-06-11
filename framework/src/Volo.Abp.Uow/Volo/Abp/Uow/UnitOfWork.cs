@@ -11,8 +11,10 @@ namespace Volo.Abp.Uow
 {
     public class UnitOfWork : IUnitOfWork, ITransientDependency
     {
-        [Obsolete("This will be removed in next versions.")]
-        public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
+        /// <summary>
+        /// Default: false.
+        /// </summary>
+        public static bool EnableObsoleteDbContextCreationWarning { get; } = false;
 
         public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
 
@@ -87,6 +89,11 @@ namespace Volo.Abp.Uow
 
         public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            if (_isRolledback)
+            {
+                return;
+            }
+
             foreach (var databaseApi in GetAllActiveDatabaseApis())
             {
                 if (databaseApi is ISupportsSavingChanges)
@@ -257,27 +264,6 @@ namespace Volo.Abp.Uow
             if (IsCompleted || _isCompleting)
             {
                 throw new AbpException("Complete is called before!");
-            }
-        }
-
-        protected virtual void RollbackAll()
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                try
-                {
-                    (databaseApi as ISupportsRollback)?.Rollback();
-                }
-                catch { }
-            }
-
-            foreach (var transactionApi in GetAllActiveTransactionApis())
-            {
-                try
-                {
-                    (transactionApi as ISupportsRollback)?.Rollback();
-                }
-                catch { }
             }
         }
 

@@ -55,13 +55,16 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
                 return;
             }
 
-            //Begin a new, independent unit of work
             using (var uow = unitOfWorkManager.Begin(options))
             {
                 var result = await next();
                 if (Succeed(result))
                 {
                     await uow.CompleteAsync(context.HttpContext.RequestAborted);
+                }
+                else
+                {
+                    await uow.RollbackAsync(context.HttpContext.RequestAborted);
                 }
             }
         }

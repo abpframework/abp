@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Auditing;
-using Volo.Abp.AspNetCore.Mvc.Content;
+using Volo.Abp.AspNetCore.Mvc.ContentFormatters;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Features;
@@ -10,6 +13,7 @@ using Volo.Abp.AspNetCore.Mvc.ModelBinding;
 using Volo.Abp.AspNetCore.Mvc.Response;
 using Volo.Abp.AspNetCore.Mvc.Uow;
 using Volo.Abp.AspNetCore.Mvc.Validation;
+using Volo.Abp.Content;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -27,7 +31,6 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static void AddFormatters(MvcOptions options)
         {
-            options.InputFormatters.Insert(0, new RemoteStreamContentInputFormatter());
             options.OutputFormatters.Insert(0, new RemoteStreamContentOutputFormatter());
         }
 
@@ -60,13 +63,19 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             options.ModelBinderProviders.Insert(0, new AbpDateTimeModelBinderProvider());
             options.ModelBinderProviders.Insert(1, new AbpExtraPropertiesDictionaryModelBinderProvider());
+            options.ModelBinderProviders.Insert(2, new AbpRemoteStreamContentModelBinderProvider());
         }
 
         private static void AddMetadataProviders(MvcOptions options, IServiceCollection services)
         {
-            options.ModelMetadataDetailsProviders.Add(
-                new AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(services)
-            );
+            options.ModelMetadataDetailsProviders.Add(new AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(services));
+
+            options.ModelMetadataDetailsProviders.Add(new BindingSourceMetadataProvider(typeof(IRemoteStreamContent), BindingSource.FormFile));
+            options.ModelMetadataDetailsProviders.Add(new BindingSourceMetadataProvider(typeof(IEnumerable<IRemoteStreamContent>), BindingSource.FormFile));
+            options.ModelMetadataDetailsProviders.Add(new BindingSourceMetadataProvider(typeof(RemoteStreamContent), BindingSource.FormFile));
+            options.ModelMetadataDetailsProviders.Add(new BindingSourceMetadataProvider(typeof(IEnumerable<RemoteStreamContent>), BindingSource.FormFile));
+            options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(IRemoteStreamContent)));
+            options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(RemoteStreamContent)));
         }
     }
 }

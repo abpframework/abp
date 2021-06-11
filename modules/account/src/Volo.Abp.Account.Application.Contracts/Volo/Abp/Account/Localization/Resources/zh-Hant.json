@@ -43,7 +43,8 @@
     "Description:Abp.Account.EnableLocalLogin": "伺服器是否允許使用者使用本地帳號進行身份驗證。",
     "LoggedOutTitle": "註銷",
     "LoggedOutText": "你已成功註銷並將馬上返回.",
-    "ReturnToText": "點擊此處返回到 {0}",
+    "ReturnToText": "單擊此處返回到應用程序",
+    "OrLoginWith": "或是登入用:",
     "ForgotPassword": "忘記密碼?",
     "SendPasswordResetLink_Information": "密碼重置鏈接將發送到您的電子郵件以重置密碼. 如果您在幾分鐘內沒有收到電子郵件,請重試.",
     "PasswordResetMailSentMessage": "帳戶恢復電子郵件已發送到您的電子郵件地址. 如果您在15分鐘內未在收件箱中看到此電子郵件,請檢查垃圾郵件,並標記為非垃圾郵件.",
@@ -58,6 +59,8 @@
     "ReturnToApplication": "返回到應用程序",
     "PasswordReset": "重設密碼",
     "PasswordResetInfoInEmail": "我們收到了帳戶恢復請求!如果你發起了此請求,請單擊以下鏈接以重置密碼.",
-    "ResetMyPassword": "重置我的密碼"
+    "ResetMyPassword": "重置我的密碼",
+    "AccessDenied": "拒絕訪問!",
+    "AccessDeniedMessage": "您無權訪問此資源."
   }
 }

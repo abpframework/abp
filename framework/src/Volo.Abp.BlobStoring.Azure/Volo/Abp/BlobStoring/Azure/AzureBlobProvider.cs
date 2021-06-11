@@ -9,10 +9,14 @@ namespace Volo.Abp.BlobStoring.Azure
     public class AzureBlobProvider : BlobProviderBase, ITransientDependency
     {
         protected IAzureBlobNameCalculator AzureBlobNameCalculator { get; }
+        protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
-        public AzureBlobProvider(IAzureBlobNameCalculator azureBlobNameCalculator)
+        public AzureBlobProvider(
+            IAzureBlobNameCalculator azureBlobNameCalculator,
+            IBlobNormalizeNamingService blobNormalizeNamingService)
         {
             AzureBlobNameCalculator = azureBlobNameCalculator;
+            BlobNormalizeNamingService = blobNormalizeNamingService;
         }
 
         public override async Task SaveAsync(BlobProviderSaveArgs args)
@@ -87,22 +91,22 @@ namespace Volo.Abp.BlobStoring.Azure
             await blobContainerClient.CreateIfNotExistsAsync();
         }
 
-        private async Task<bool> BlobExistsAsync(BlobProviderArgs args, string blobName)
+        protected virtual async Task<bool> BlobExistsAsync(BlobProviderArgs args, string blobName)
         {
             // Make sure Blob Container exists.
             return await ContainerExistsAsync(GetBlobContainerClient(args)) &&
                    (await GetBlobClient(args, blobName).ExistsAsync()).Value;
         }
 
-        private static string GetContainerName(BlobProviderArgs args)
+        protected virtual string GetContainerName(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetAzureConfiguration();
             return configuration.ContainerName.IsNullOrWhiteSpace()
                 ? args.ContainerName
-                : configuration.ContainerName;
+                : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
         }
 
-        private static async Task<bool> ContainerExistsAsync(BlobContainerClient blobContainerClient)
+        protected virtual async Task<bool> ContainerExistsAsync(BlobContainerClient blobContainerClient)
         {
             return (await blobContainerClient.ExistsAsync()).Value;
         }

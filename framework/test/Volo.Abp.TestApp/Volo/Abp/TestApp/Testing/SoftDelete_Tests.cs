@@ -56,6 +56,23 @@ namespace Volo.Abp.TestApp.Testing
                 douglas.DeletionTime.ShouldNotBeNull();
             }
         }
+
+        [Fact]
+        public async Task Should_Cancel_Deletion_For_Soft_Delete_Many_Entities_ById()
+        {
+            await PersonRepository.DeleteManyAsync(new []{ TestDataBuilder.UserDouglasId });
+
+            var douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+            douglas.ShouldBeNull();
+
+            using (DataFilter.Disable<ISoftDelete>())
+            {
+                douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+                douglas.ShouldNotBeNull();
+                douglas.IsDeleted.ShouldBeTrue();
+                douglas.DeletionTime.ShouldNotBeNull();
+            }
+        }
         
         [Fact]
         public async Task Should_Handle_Deletion_On_Update_For_Soft_Delete_Entities()

@@ -31,6 +31,7 @@ Here, the list of all available commands before explaining their details:
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
+* **`list-modules`**: Lists names of open-source application modules.
 * **`get-source`**: Downloads the source code of a module.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.
@@ -40,8 +41,8 @@ Here, the list of all available commands before explaining their details:
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`logout`**: Logouts from your computer if you've authenticated before.
-* **`build`**: Builds a GIT repository and depending repositories or a single .NET solution.
 * **`bundle`**: Generates script and style references for an ABP Blazor project. 
+* **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 
 ### help
 
@@ -79,6 +80,8 @@ abp new Acme.BookStore
 * `Acme.BookStore` is the solution name here.
 * Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
 
+For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Samples.md)
+
 #### Options
 
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
@@ -110,6 +113,7 @@ abp new Acme.BookStore
   * `SqlServer`
   * `MySQL`
   * `SQLite`
+  * `Oracle`
   * `Oracle-Devart`
   * `PostgreSQL`
 * `--local-framework-ref --abp-path`: Uses local projects references to the ABP framework instead of using the NuGet packages. This can be useful if you download the ABP Framework source code and have a local reference to the framework from your application.
@@ -163,6 +167,8 @@ abp add-package Volo.Abp.MongoDB
 #### Options
 
 * `--project` or `-p`: Specifies the project (.csproj) file path. If not specified, CLI tries to find a .csproj file in the current directory.
+* `--with-source-code`: Downloads the source code of the package to your solution folder and uses local project references instead of NuGet/NPM packages.
+* `--add-to-solution-file`: Adds the downloaded package to your solution file, so you will also see the package when you open the solution on a IDE. (only available when `--with-source-code` is True.)
 
 ### add-module
 
@@ -201,6 +207,26 @@ abp add-module ProductManagement --new --add-to-solution-file
 * `--new`: Creates a fresh new module (customized for your solution) and adds it to your solution.
 * `--with-source-code`: Downloads the source code of the module to your solution folder and uses local project references instead of NuGet/NPM packages. This options is always `True` if `--new` is used.
 * `--add-to-solution-file`: Adds the downloaded/created module to your solution file, so you will also see the projects of the module when you open the solution on a IDE. (only available when `--with-source-code` is `True`.)
+
+### list-modules
+
+Lists names of open-source application modules.
+
+Usage
+
+````bash
+abp list-modules [options]
+````
+
+Example:
+
+```bash
+abp list-modules
+```
+
+#### Options
+
+* `--include-pro-modules`: Includes commercial (pro) modules in the output.
 
 ### get-source
 
@@ -381,25 +407,6 @@ Logs you out by removing the session token from your computer.
 abp logout
 ```
 
-### build
-
-This command builds a GIT repository and it's depending repositories or a single .NET solution File. In order ```build``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain one of;
-
-* A .NET solution file (*.sln)
-* abp-build-config.json (suggested to add this to .gitignore)
-
-Usage:
-
-````bash
-abp build [options]
-````
-
-Example:
-
-```
-abp build --build-name "prod" --dotnet-build-arguments "\"--no-dependencies\""
-```
-
 #### Options
 
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
@@ -410,9 +417,9 @@ abp build --build-name "prod" --dotnet-build-arguments "\"--no-dependencies\""
 For more details, see [build command documentation](CLI-BuildCommand.md).
 
 
-#### bundle
+### bundle
 
-This command generates script and style references for an ABP Blazor project and updates the **index.html** file. It helps developers to manage dependencies required by ABP modules easily.  In order ```bundle``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain a Blazor project file(*.csproj).
+This command generates script and style references for an ABP Blazor WebAssembly project and updates the **index.html** file. It helps developers to manage dependencies required by ABP modules easily.  In order ```bundle``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain a Blazor project file(*.csproj).
 
 Usage:
 
@@ -427,3 +434,18 @@ abp bundle [options]
 
 `bundle` command reads the `appsettings.json` file inside the Blazor project for bundling options. For more details about managing style and script references in Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
 
+### install-libs
+
+This command install NPM Packages for MVC / Razor Pages and Blazor Server UI types. Its **executing directory** or passed ```--working-directory``` parameter's directory must contain a project file(*.csproj).
+
+`install-libs` command reads the `abp.resourcemapping.js` file to manage package. For more details see [Client Side Package Management](UI/AspNetCore/Client-Side-Package-Management.md).
+
+Usage:
+
+````bash
+abp install-libs [options]
+````
+
+#### Options
+
+* ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a project file.

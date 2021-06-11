@@ -9,7 +9,7 @@ import { parseGenerics } from './tree';
 export function createTypeSimplifier() {
   const parseType = createTypeParser(t => {
     let type = t.replace(
-      /System\.([0-9A-Za-z.]+)/g,
+      /(?<![^<, ])System\.([0-9A-Za-z.]+)/g,
       (_, match) => SYSTEM_TYPES.get(match) ?? 'any',
     );
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -33,11 +33,6 @@ namespace Volo.Abp.IdentityServer
             });
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            SeedTestData(context);
-        }
-
         private static SqliteConnection CreateDatabaseAndGetConnection()
         {
             var connection = new SqliteConnection("Data Source=:memory:");
@@ -52,16 +47,6 @@ namespace Volo.Abp.IdentityServer
             ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
             return connection;
-        }
-
-        private static void SeedTestData(ApplicationInitializationContext context)
-        {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                AsyncHelper.RunSync(() => scope.ServiceProvider
-                    .GetRequiredService<AbpIdentityServerTestDataBuilder>()
-                    .BuildAsync());
-            }
         }
     }
 }

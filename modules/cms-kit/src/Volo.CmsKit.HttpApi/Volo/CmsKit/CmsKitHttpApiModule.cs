@@ -5,8 +5,8 @@ using Volo.CmsKit.Public;
 namespace Volo.CmsKit
 {
     [DependsOn(
-        typeof(CmsKitAdminApplicationModule),
-        typeof(CmsKitPublicApplicationModule),
+        typeof(CmsKitAdminHttpApiModule),
+        typeof(CmsKitPublicHttpApiModule),
         typeof(CmsKitApplicationContractsModule)
         )]
     public class CmsKitHttpApiModule : AbpModule

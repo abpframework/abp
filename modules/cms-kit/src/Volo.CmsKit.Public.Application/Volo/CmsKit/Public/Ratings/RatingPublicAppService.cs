@@ -1,23 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Ratings
 {
-    public class RatingPublicAppService : ApplicationService, IRatingPublicAppService
+    [RequiresGlobalFeature(typeof(RatingsFeature))]
+    public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicAppService
     {
         protected IRatingRepository RatingRepository { get; }
         public ICmsUserLookupService CmsUserLookupService { get; }
+        protected RatingManager RatingManager { get; }
 
-        public RatingPublicAppService(IRatingRepository ratingRepository, ICmsUserLookupService cmsUserLookupService)
+        public RatingPublicAppService(
+            IRatingRepository ratingRepository,
+            ICmsUserLookupService cmsUserLookupService,
+            RatingManager ratingManager)
         {
             RatingRepository = ratingRepository;
             CmsUserLookupService = cmsUserLookupService;
+            RatingManager = ratingManager;
         }
 
         [Authorize]
@@ -27,26 +34,7 @@ namespace Volo.CmsKit.Public.Ratings
             var userId = CurrentUser.GetId();
             var user = await CmsUserLookupService.GetByIdAsync(userId);
 
-            var currentUserRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, userId);
-
-            if (currentUserRating != null)
-            {
-                currentUserRating.SetStarCount(input.StarCount);
-                var updatedRating = await RatingRepository.UpdateAsync(currentUserRating);
-
-                return ObjectMapper.Map<Rating, RatingDto>(updatedRating);
-            }
-
-            var rating = await RatingRepository.InsertAsync(
-                new Rating(
-                    GuidGenerator.Create(),
-                    entityType,
-                    entityId,
-                    input.StarCount,
-                    user.Id,
-                    CurrentTenant.Id
-                )
-            );
+            var rating = await RatingManager.SetStarAsync(user, entityType, entityId, input.StarCount);
 
             return ObjectMapper.Map<Rating, RatingDto>(rating);
         }

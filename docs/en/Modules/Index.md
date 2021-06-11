@@ -14,9 +14,7 @@ There are some **free and open source** application modules developed and mainta
 * [**Account**](Account.md): Provides UI for the account management and allows user to login/register to the application.
 * [**Audit Logging**](Audit-Logging.md): Persists audit logs to a database.
 * [**Background Jobs**](Background-Jobs.md): Persist background jobs when using the default background job manager.
-* [**Blogging**](Blogging.md): Used to create fancy blogs. ABP's [own blog](https://blog.abp.io/) already using this module.
-* [**Client Simulation**](Client-Simulation.md): A simple web UI to stress test HTTP APIs by simulating concurrent clients.
-* [**CMS Kit**](Cms-Kit.md): A set of reusable *Content Management System* features.
+* [**CMS Kit**](Cms-Kit/Index.md): A set of reusable *Content Management System* features.
 * [**Docs**](Docs.md): Used to create technical documentation website. ABP's [own documentation](https://docs.abp.io) already using this module.
 * [**Feature Management**](Feature-Management.md): Used to persist and manage the [features](../Features.md).
 * **[Identity](Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
@@ -24,7 +22,6 @@ There are some **free and open source** application modules developed and mainta
 * [**Permission Management**](Permission-Management.md): Used to persist permissions.
 * **[Setting Management](Setting-Management.md)**: Used to persist and manage the [settings](../Settings.md).
 * [**Tenant Management**](Tenant-Management.md): Manages tenants for a [multi-tenant](../Multi-Tenancy.md) application.
-* [**Users**](Users.md): Abstract users, so other modules can depend on this module instead of the Identity module.
 * [**Virtual File Explorer**](Virtual-File-Explorer.md): Provided a simple UI to view files in [virtual file system](../Virtual-File-System.md).
 
 See [the GitHub repository](https://github.com/abpframework/abp/tree/master/modules) for source code of all modules.

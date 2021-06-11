@@ -12,6 +12,10 @@ export namespace ABP {
     sendNullsAsQueryParam?: boolean;
   }
 
+  export interface HasPolicy {
+    requiredPolicy?: string;
+  }
+
   export interface Test extends Partial<Root> {
     baseHref?: string;
     listQueryDebounceTime?: number;

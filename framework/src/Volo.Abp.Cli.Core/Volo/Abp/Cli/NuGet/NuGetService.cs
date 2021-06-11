@@ -23,6 +23,7 @@ namespace Volo.Abp.Cli.NuGet
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
         private readonly IApiKeyService _apiKeyService;
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
         private List<string> _proPackageList;
         private DeveloperApiKeyResult _apiKeyResult;
 
@@ -30,12 +31,14 @@ namespace Volo.Abp.Cli.NuGet
             IJsonSerializer jsonSerializer,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
             ICancellationTokenProvider cancellationTokenProvider,
-            IApiKeyService apiKeyService)
+            IApiKeyService apiKeyService,
+            CliHttpClientFactory cliHttpClientFactory)
         {
             JsonSerializer = jsonSerializer;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             CancellationTokenProvider = cancellationTokenProvider;
             _apiKeyService = apiKeyService;
+            _cliHttpClientFactory = cliHttpClientFactory;
             Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
         }
 
@@ -93,18 +96,17 @@ namespace Volo.Abp.Cli.NuGet
                 url = $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
             }
 
-            using (var client = new CliHttpClient(setBearerToken: false))
+            var client = _cliHttpClientFactory.CreateClient(needsAuthentication: false);
+
+            using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
+                url,
+                cancellationToken: CancellationTokenProvider.Token,
+                logger: Logger
+            ))
             {
-                using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
-                    url,
-                    cancellationToken: CancellationTokenProvider.Token,
-                    logger: Logger
-                ))
-                {
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-                    var responseContent = await responseMessage.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
-                }
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<NuGetVersionResultDto>(responseContent).Versions;
             }
         }
 
@@ -120,9 +122,8 @@ namespace Volo.Abp.Cli.NuGet
 
         private async Task<List<string>> GetProPackageListAsync()
         {
-            using var client = new CliHttpClient();
-
             var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/proPackageNames";
+            var client = _cliHttpClientFactory.CreateClient(needsAuthentication: true);
 
             using (var responseMessage = await client.GetHttpResponseMessageWithRetryAsync(
                 url: url,

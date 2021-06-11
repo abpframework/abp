@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
@@ -12,6 +13,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             pipeline.Steps.Add(new ProjectReferenceReplaceStep());
             pipeline.Steps.Add(new ReplaceCommonPropsStep());
             pipeline.Steps.Add(new ReplaceConfigureAwaitPropsStep());
+            pipeline.Steps.Add(new UpdateNuGetConfigStep("/NuGet.Config"));
             pipeline.Steps.Add(new CreateProjectResultZipStep());
 
             return pipeline;

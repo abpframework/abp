@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.CmsKit.Public.Comments
 {
+    [Serializable]
     public class CommentWithDetailsDto
     {
         public Guid Id { get; set; }

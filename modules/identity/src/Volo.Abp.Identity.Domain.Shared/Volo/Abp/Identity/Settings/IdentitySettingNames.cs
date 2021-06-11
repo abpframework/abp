@@ -48,14 +48,5 @@
 
             public const string MaxUserMembershipCount = OrganizationUnitPrefix + ".MaxUserMembershipCount";
         }
-
-        public static class TwoFactor
-        {
-            private const string TwoFactorPrefix = Prefix + ".TwoFactor";
-
-            public const string Behaviour = TwoFactorPrefix + ".Behaviour";
-
-            public const string UsersCanChange = TwoFactorPrefix + ".UsersCanChange";
-        }
     }
 }

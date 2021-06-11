@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -16,6 +18,18 @@ namespace Volo.Abp.Domain.Repositories
         /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>Entity</returns>
         Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets a list entities by the given <paramref name="predicate"/>.
+        /// </summary>
+        /// <param name="predicate">A condition to find the entity</param>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Entity</returns>
+        Task<List<TEntity>> GetListAsync(
+            [NotNull] Expression<Func<TEntity, bool>> predicate,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets total count of all entities.

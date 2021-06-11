@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
-    internal static class AbpActionContextExtensions
+    public static class AbpActionContextExtensions
     {
         public static T GetRequiredService<T>(this FilterContext context)
             where T : class

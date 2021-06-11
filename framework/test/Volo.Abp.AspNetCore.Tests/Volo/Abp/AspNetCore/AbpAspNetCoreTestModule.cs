@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore
             var app = context.GetApplicationBuilder();
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
         }
 
         private string FindProjectPath(IWebHostEnvironment hostEnvironment)

@@ -313,7 +313,8 @@
               "path": "Module-Development-Basics.md"
             },
             {
-              "text": "模块插件"
+              "text": "模块插件",
+              "path": "PlugIn-Modules.md"
             },
             {
               "text": "自定义应用模块",
@@ -516,10 +517,6 @@
             {
               "text": "替换组件",
               "path": "UI/Angular/Component-Replacement.md"
-            },
-            {
-              "text": "自定义设置页",
-              "path": "UI/Angular/Custom-Setting-Page.md"
             },
             {
               "text": "懒加载Scripts与Styles",

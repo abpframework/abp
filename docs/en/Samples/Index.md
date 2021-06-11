@@ -17,6 +17,9 @@ A simple CRUD application to show basic principles of developing an application 
 * **Book Store: Razor Pages UI & Entity Framework Core**
   * [Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* **Book Store: Blazor UI & Entity Framework Core**
+  * [Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=Blazor&DB=EF)
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * **Book Store: Angular UI & MongoDB**
   * [Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=NG&DB=Mongo)
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)

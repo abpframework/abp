@@ -90,29 +90,30 @@ namespace Volo.Abp.RabbitMQ
 
                     lock (ChannelSendSyncLock)
                     {
-                        QueueBindCommands.TryPeek(out var command);
-
-                        switch (command.Type)
+                        if (QueueBindCommands.TryPeek(out var command))
                         {
-                            case QueueBindType.Bind:
-                                Channel.QueueBind(
-                                    queue: Queue.QueueName,
-                                    exchange: Exchange.ExchangeName,
-                                    routingKey: command.RoutingKey
-                                );
-                                break;
-                            case QueueBindType.Unbind:
-                                Channel.QueueUnbind(
-                                    queue: Queue.QueueName,
-                                    exchange: Exchange.ExchangeName,
-                                    routingKey: command.RoutingKey
-                                );
-                                break;
-                            default:
-                                throw new AbpException($"Unknown {nameof(QueueBindType)}: {command.Type}");
-                        }
+                            switch (command.Type)
+                            {
+                                case QueueBindType.Bind:
+                                    Channel.QueueBind(
+                                        queue: Queue.QueueName,
+                                        exchange: Exchange.ExchangeName,
+                                        routingKey: command.RoutingKey
+                                    );
+                                    break;
+                                case QueueBindType.Unbind:
+                                    Channel.QueueUnbind(
+                                        queue: Queue.QueueName,
+                                        exchange: Exchange.ExchangeName,
+                                        routingKey: command.RoutingKey
+                                    );
+                                    break;
+                                default:
+                                    throw new AbpException($"Unknown {nameof(QueueBindType)}: {command.Type}");
+                            }
 
-                        QueueBindCommands.TryDequeue(out command);
+                            QueueBindCommands.TryDequeue(out command);
+                        }
                     }
                 }
             }
@@ -191,6 +192,16 @@ namespace Volo.Abp.RabbitMQ
             }
             catch (Exception ex)
             {
+                try
+                {
+                    Channel.BasicNack(
+                        basicDeliverEventArgs.DeliveryTag,
+                        multiple: false,
+                        requeue: true
+                    );
+                }
+                catch { }
+                
                 Logger.LogException(ex);
                 await ExceptionNotifier.NotifyAsync(ex);
             }

@@ -180,15 +180,19 @@ namespace Volo.Abp.Validation
         {
             //Valid
             ValidationHelper.IsValidEmailAddress("john.doe@domain.com").ShouldBe(true);
+            ValidationHelper.IsValidEmailAddress("john-doe1@domain.co").ShouldBe(true);
             ValidationHelper.IsValidEmailAddress("ip@1.2.3.123").ShouldBe(true);
             ValidationHelper.IsValidEmailAddress("pharaoh@egyptian.museum").ShouldBe(true);
             ValidationHelper.IsValidEmailAddress("john.doe+regexbuddy@gmail.com").ShouldBe(true);
             ValidationHelper.IsValidEmailAddress("Mike.O'Dell@ireland.com").ShouldBe(true);
+            ValidationHelper.IsValidEmailAddress("admin@localhost").ShouldBe(true);
+            ValidationHelper.IsValidEmailAddress("j@h.c").ShouldBe(true);
 
             //Invalid
-            ValidationHelper.IsValidEmailAddress("1024x768@60Hz").ShouldBe(false);
             ValidationHelper.IsValidEmailAddress("not.a.valid.email").ShouldBe(false);
             ValidationHelper.IsValidEmailAddress("john@aol...com").ShouldBe(false);
+            ValidationHelper.IsValidEmailAddress("john@aol@domain.com").ShouldBe(false);
+            ValidationHelper.IsValidEmailAddress("jack@domain.").ShouldBe(false);
         }
 
         [DependsOn(typeof(AbpAutofacModule))]

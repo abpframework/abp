@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.Components.Alerts;
+using Volo.Abp.AspNetCore.Components.ExceptionHandling;
 using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.Components.Notifications;
 using Volo.Abp.Localization;
@@ -55,12 +57,15 @@ namespace Volo.Abp.AspNetCore.Components
 
         protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
         private ICurrentUser _currentUser;
-
+        
         protected IUiMessageService Message => LazyGetNonScopedRequiredService(ref _message);
         private IUiMessageService _message;
 
         protected IUiNotificationService Notify => LazyGetNonScopedRequiredService(ref _notify);
         private IUiNotificationService _notify;
+        
+        protected IUserExceptionInformer UserExceptionInformer => LazyGetNonScopedRequiredService(ref _userExceptionInformer);
+        private IUserExceptionInformer _userExceptionInformer;
 
         protected IAlertManager AlertManager => LazyGetNonScopedRequiredService(ref _alertManager);
         private IAlertManager _alertManager;
@@ -103,6 +108,18 @@ namespace Volo.Abp.AspNetCore.Components
 
             return reference;
         }
+        
+        protected TService LazyGetService<TService>(ref TService reference) => LazyGetService(typeof(TService), ref reference);
+
+        protected TRef LazyGetService<TRef>(Type serviceType, ref TRef reference)
+        {
+            if (reference == null)
+            {
+                reference = (TRef)ScopedServices.GetService(serviceType);
+            }
+
+            return reference;
+        }
 
         protected TService LazyGetNonScopedRequiredService<TService>(ref TService reference) => LazyGetNonScopedRequiredService(typeof(TService), ref reference);
 
@@ -111,6 +128,18 @@ namespace Volo.Abp.AspNetCore.Components
             if (reference == null)
             {
                 reference = (TRef)NonScopedServices.GetRequiredService(serviceType);
+            }
+
+            return reference;
+        }
+        
+        protected TService LazyGetNonScopedService<TService>(ref TService reference) => LazyGetNonScopedService(typeof(TService), ref reference);
+
+        protected TRef LazyGetNonScopedService<TRef>(Type serviceType, ref TRef reference)
+        {
+            if (reference == null)
+            {
+                reference = (TRef)NonScopedServices.GetService(serviceType);
             }
 
             return reference;
@@ -133,6 +162,16 @@ namespace Volo.Abp.AspNetCore.Components
             }
 
             return localizer;
+        }
+        
+        protected async Task HandleErrorAsync(Exception exception)
+        {
+            Logger.LogException(exception);
+            await InvokeAsync(async () =>
+            {
+                await UserExceptionInformer.InformAsync(new UserExceptionInformerContext(exception));
+                StateHasChanged();
+            });
         }
     }
 }

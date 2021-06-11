@@ -21,7 +21,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         public async Task<List<PersistedGrant>> GetListAsync(string subjectId, string sessionId, string clientId, string type, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await (await FilterAsync(subjectId, sessionId, clientId, type))
+            return await (await FilterAsync(subjectId, sessionId, clientId, type, cancellationToken))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -57,7 +57,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             string type = null,
             CancellationToken cancellationToken = default)
         {
-            var persistedGrants = await (await FilterAsync(subjectId, sessionId, clientId, type))
+            var persistedGrants = await (await FilterAsync(subjectId, sessionId, clientId, type, cancellationToken))
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
             foreach (var persistedGrant in persistedGrants)
@@ -86,9 +86,10 @@ namespace Volo.Abp.IdentityServer.MongoDB
             string subjectId,
             string sessionId,
             string clientId,
-            string type)
+            string type,
+            CancellationToken cancellationToken = default)
         {
-            return (await GetMongoQueryableAsync())
+            return (await GetMongoQueryableAsync(cancellationToken))
                 .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
                 .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
                 .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)

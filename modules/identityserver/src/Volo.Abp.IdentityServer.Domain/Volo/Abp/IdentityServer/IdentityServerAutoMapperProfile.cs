@@ -88,7 +88,6 @@ namespace Volo.Abp.IdentityServer
                 .ForMember(dest => dest.Type, opt => opt.Condition(srs => srs != null))
                 .ReverseMap();
 
-            CreateMap<ApiResource, ApiResourceEto>();
             CreateMap<Client, ClientEto>();
         }
 
@@ -103,6 +102,9 @@ namespace Volo.Abp.IdentityServer
                 .ConstructUsing(x => x.Scope)
                 .ReverseMap()
                 .ForMember(dest => dest.Scope, opt => opt.MapFrom(src => src));
+
+            CreateMap<ApiResourceProperty, KeyValuePair<string, string>>()
+                .ReverseMap();
 
             CreateMap<ApiResource, ApiResourceEto>();
         }

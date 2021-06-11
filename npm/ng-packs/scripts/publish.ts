@@ -23,11 +23,7 @@ program.parse(process.argv);
     process.exit(1);
   }
 
-  const registry =
-    program.registry ||
-    (program.preview
-      ? 'https://www.myget.org/F/abp-nightly/auth/8f2a5234-1bce-4dc7-b976-2983078590a9/npm/'
-      : 'https://registry.npmjs.org');
+  const registry = program.registry || 'https://registry.npmjs.org';
 
   try {
     await fse.remove('../dist');

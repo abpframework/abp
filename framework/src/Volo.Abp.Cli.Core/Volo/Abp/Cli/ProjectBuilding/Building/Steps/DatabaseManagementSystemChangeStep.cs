@@ -29,6 +29,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                         ChangeEntityFrameworkCoreDependency(context,"Volo.Abp.EntityFrameworkCore.Oracle",
                             "Volo.Abp.EntityFrameworkCore.Oracle",
                             "AbpEntityFrameworkCoreOracleModule");
+                        AdjustOracleDbContextOptionsBuilder(context);
                         ChangeUseSqlServer(context,"UseOracle");
                         break;
 
@@ -54,15 +55,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         private void AdjustOracleDbContextOptionsBuilder(ProjectBuildContext context)
         {
-            var dbContextFactoryFile = context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
+            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith("MigrationsDbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
+                ?? context.Files.FirstOrDefault(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
 
-            dbContextFactoryFile.ReplaceText("new DbContextOptionsBuilder",
+            dbContextFactoryFile?.ReplaceText("new DbContextOptionsBuilder",
                 $"(DbContextOptionsBuilder<{context.BuildArgs.SolutionName.ProjectName}MigrationsDbContext>) new DbContextOptionsBuilder");
         }
 
         private void AddMySqlServerVersion(ProjectBuildContext context)
         {
-            var dbContextFactoryFile = context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
+            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith("MigrationsDbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
+                                       ?? context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
 
             dbContextFactoryFile.ReplaceText("configuration.GetConnectionString(\"Default\")",
                 "configuration.GetConnectionString(\"Default\"), MySqlServerVersion.LatestSupportedServerVersion");
@@ -90,7 +93,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             var efCoreModuleClass = context.Files.First(f => f.Name.EndsWith("EntityFrameworkCoreModule.cs", StringComparison.OrdinalIgnoreCase));
             efCoreModuleClass.ReplaceText(oldUseMethod, newUseMethodForEfModule);
 
-            var dbContextFactoryFile = context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
+            var dbContextFactoryFile = context.Files.FirstOrDefault(f => f.Name.EndsWith("MigrationsDbContextFactoryBase.cs", StringComparison.OrdinalIgnoreCase))
+                                       ?? context.Files.First(f => f.Name.EndsWith("MigrationsDbContextFactory.cs", StringComparison.OrdinalIgnoreCase));
             dbContextFactoryFile.ReplaceText(oldUseMethod, newUseMethodForDbContext);
         }
     }

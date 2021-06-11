@@ -25,6 +25,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
+                .OrderBy(t => t.Id)
                 .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken));
         }
 
@@ -33,6 +34,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             return DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(t => t.Id)
                 .FirstOrDefault(t => t.Name == name);
         }
 
@@ -41,6 +43,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             return DbSet
                 .IncludeDetails(includeDetails)
+                .OrderBy(t => t.Id)
                 .FirstOrDefault(t => t.Id == id);
         }
 
@@ -59,7 +62,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                     u =>
                         u.Name.Contains(filter)
                 )
-                .OrderBy(sorting ?? nameof(Tenant.Name))
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

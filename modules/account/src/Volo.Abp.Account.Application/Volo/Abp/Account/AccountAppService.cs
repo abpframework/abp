@@ -6,6 +6,7 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Account
@@ -42,6 +43,8 @@ namespace Volo.Abp.Account
 
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.EmailAddress, CurrentTenant.Id);
 
+            input.MapExtraPropertiesTo(user);
+
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
             await UserManager.SetEmailAsync(user,input.EmailAddress);
@@ -59,16 +62,19 @@ namespace Volo.Abp.Account
 
         public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
         {
-            await IdentityOptions.SetAsync();
-
-            var user = await UserManager.GetByIdAsync(input.UserId);
-            (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
-
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            using (CurrentTenant.Change(input.TenantId))
             {
-                Identity = IdentitySecurityLogIdentityConsts.Identity,
-                Action = IdentitySecurityLogActionConsts.ChangePassword
-            });
+                await IdentityOptions.SetAsync();
+
+                var user = await UserManager.GetByIdAsync(input.UserId);
+                (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
+
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.Identity,
+                    Action = IdentitySecurityLogActionConsts.ChangePassword
+                });
+            }
         }
 
         protected virtual async Task<IdentityUser> GetUserByEmail(string email)

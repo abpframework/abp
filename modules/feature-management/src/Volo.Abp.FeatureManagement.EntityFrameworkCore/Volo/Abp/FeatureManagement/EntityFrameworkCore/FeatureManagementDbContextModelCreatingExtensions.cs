@@ -12,6 +12,11 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new FeatureManagementModelBuilderConfigurationOptions(
                 FeatureManagementDbProperties.DbTablePrefix,
                 FeatureManagementDbProperties.DbSchema
@@ -31,7 +36,11 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
                 b.Property(x => x.ProviderKey).HasMaxLength(FeatureValueConsts.MaxProviderKeyLength);
 
                 b.HasIndex(x => new { x.Name, x.ProviderName, x.ProviderKey });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<FeatureManagementDbContext>();
         }
     }
 }

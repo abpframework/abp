@@ -9,7 +9,7 @@ namespace Volo.CmsKit.Tags
     {
         public TagAlreadyExistException([NotNull] string entityType, [NotNull] string name)
         {
-            Code = CmsKitErrorCodes.TagAlreadyExist;
+            Code = CmsKitErrorCodes.Tags.TagAlreadyExist;
             WithData(nameof(Tag.EntityType), entityType);
             WithData(nameof(Tag.Name), name);
         }

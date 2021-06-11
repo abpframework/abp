@@ -145,3 +145,18 @@ Let's talk about why.
 First, take a look at [Angular's code](https://github.com/angular/angular/blob/master/packages/common/http/src/xsrf.ts#L81)
 
 It does not intercept any request that starts with `http://` or `https://`. There is a good reason for that. Any cross-site request does not need this token for security. This verification is only valid if the request is made to the same domain from which the web page is served. So, simply put, if you serve everything from a single domain, you just use a relative path.
+
+If you serve your APIs from the root, i.e. no context root (https://testdomain.com/api/identity/users), leave `url` empty as follows: 
+
+```typescript
+export const environment = {
+  production: true,
+  // ....
+  apis: {
+    default: {
+      url: '', // <- should be empty string, not '/'
+     // ...
+    },
+  },
+} as Config.Environment;
+```

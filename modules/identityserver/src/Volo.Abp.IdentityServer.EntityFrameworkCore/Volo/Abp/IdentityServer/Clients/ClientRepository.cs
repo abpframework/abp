@@ -36,14 +36,14 @@ namespace Volo.Abp.IdentityServer.Clients
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
-                .OrderBy(sorting ?? nameof(Client.ClientName) + " desc")
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(Client.ClientName) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }

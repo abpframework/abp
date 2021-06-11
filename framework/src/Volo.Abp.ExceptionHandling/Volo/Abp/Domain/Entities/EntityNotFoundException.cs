@@ -49,7 +49,7 @@ namespace Volo.Abp.Domain.Entities
         public EntityNotFoundException(Type entityType, object id, Exception innerException)
             : base(
                 id == null
-                    ? $"There is no such an entity given given id. Entity type: {entityType.FullName}"
+                    ? $"There is no such an entity given id. Entity type: {entityType.FullName}"
                     : $"There is no such an entity. Entity type: {entityType.FullName}, id: {id}",
                 innerException)
         {

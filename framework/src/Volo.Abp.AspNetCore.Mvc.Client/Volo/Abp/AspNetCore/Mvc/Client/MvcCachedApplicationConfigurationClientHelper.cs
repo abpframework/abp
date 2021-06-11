@@ -7,7 +7,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
     {
         public static string CreateCacheKey(ICurrentUser currentUser)
         {
-            return $"ApplicationConfiguration_{currentUser.Id?.ToString("N") ?? "Anonymous"}_{CultureInfo.CurrentUICulture.Name}";
+            var userKey = currentUser.Id?.ToString("N") ?? "Anonymous";
+            return $"ApplicationConfiguration_{userKey}_{CultureInfo.CurrentUICulture.Name}";
         }
     }
 }

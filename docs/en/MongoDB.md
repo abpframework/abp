@@ -149,7 +149,7 @@ public class Book : AggregateRoot<Guid>
 }
 ```
 
-(`BookType` is a simple enum here) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
+(`BookType` is a simple `enum` here) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
 
 ```csharp
 public class BookManager : DomainService
@@ -215,7 +215,8 @@ public class BookRepository :
         BookType type,
         CancellationToken cancellationToken = default(CancellationToken))
     {
-        await Collection.DeleteManyAsync(
+        var collection = await GetCollectionAsync(cancellationToken);
+        await collection.DeleteManyAsync(
             Builders<Book>.Filter.Eq(b => b.Type, type),
             cancellationToken
         );
@@ -253,7 +254,7 @@ public async override Task DeleteAsync(
 
 ### Access to the MongoDB API
 
-In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabase()` or `GetCollection()` extension methods. Example:
+In most cases, you want to hide MongoDB APIs behind a repository (this is the main purpose of the repository). However, if you want to access the MongoDB API over the repository, you can use `GetDatabaseAsync()`, `GetCollectionAsync()` or `GetAggregateAsync()` extension methods. Example:
 
 ```csharp
 public class BookService
@@ -265,10 +266,11 @@ public class BookService
         _bookRepository = bookRepository;
     }
 
-    public void Foo()
+    public async Task FooAsync()
     {
-        IMongoDatabase database = _bookRepository.GetDatabase();
-        IMongoCollection<Book> books = _bookRepository.GetCollection();
+        IMongoDatabase database = await _bookRepository.GetDatabaseAsync();
+        IMongoCollection<Book> books = await _bookRepository.GetCollectionAsync();
+        IAggregateFluent<Book> bookAggregate = await _bookRepository.GetAggregateAsync();
     }
 }
 ```
@@ -289,6 +291,24 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 > Or you can delete this code since this is already the default behavior.
 
 ### Advanced Topics
+
+### Controlling the Multi-Tenancy
+
+If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
+
+**Example:**
+
+````csharp
+[IgnoreMultiTenancy]
+public class MyDbContext : AbpMongoDbContext
+{
+    ...
+}
+````
+
+Do not use the `[IgnoreMultiTenancy]` attribute if any one of your entities in your `DbContext` can be persisted in a tenant database.
+
+> When you use repositories, ABP already uses the host database for the entities don't implement the `IMultiTenant` interface. So, most of time you don't need to `[IgnoreMultiTenancy]` attribute if you are using the repositories to work with the database.
 
 #### Set Default Repository Classes
 
@@ -371,7 +391,19 @@ One advantage of using interface for a MongoDbContext is then it becomes replace
 
 #### Replace Other DbContextes
 
-Once you properly define and use an interface for a MongoDbContext , then any other implementation can replace it using the `ReplaceDbContext` option:
+Once you properly define and use an interface for a MongoDbContext , then any other implementation can use the following ways to replace it:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreMongoDbContext))]
+public class OtherMongoDbContext : AbpMongoDbContext, IBookStoreMongoDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ```csharp
 context.Services.AddMongoDbContext<OtherMongoDbContext>(options =>
@@ -390,36 +422,45 @@ If you have better logic or using an external library for bulk operations, you c
 - You may use example template below:
 
 ```csharp
-public class MyCustomMongoDbBulkOperationProvider : IMongoDbBulkOperationProvider, ITransientDependency
+public class MyCustomMongoDbBulkOperationProvider
+    : IMongoDbBulkOperationProvider, ITransientDependency
 {
-    public async Task DeleteManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
-                                                IEnumerable<TEntity> entities,
-                                                IClientSessionHandle sessionHandle,
-                                                bool autoSave,
-                                                CancellationToken cancellationToken)
+    public async Task DeleteManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
         where TEntity : class, IEntity
     {
         // Your logic here.
     }
 
-    public async Task InsertManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
-                                                IEnumerable<TEntity> entities,
-                                                IClientSessionHandle sessionHandle,
-                                                bool autoSave,
-                                                CancellationToken cancellationToken)
+    public async Task InsertManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
         where TEntity : class, IEntity
     {
         // Your logic here.
     }
 
-    public async Task UpdateManyAsync<TEntity>(IMongoDbRepository<TEntity> repository,
-                                                IEnumerable<TEntity> entities,
-                                                IClientSessionHandle sessionHandle,
-                                                bool autoSave,
-                                                CancellationToken cancellationToken)
+    public async Task UpdateManyAsync<TEntity>(
+        IMongoDbRepository<TEntity> repository,
+        IEnumerable<TEntity> entities,
+        IClientSessionHandle sessionHandle,
+        bool autoSave,
+        CancellationToken cancellationToken)
         where TEntity : class, IEntity
     {
         // Your logic here.
     }
 }
 ```
+
+## See Also
+
+* [Entities](Entities.md)
+* [Repositories](Repositories.md)

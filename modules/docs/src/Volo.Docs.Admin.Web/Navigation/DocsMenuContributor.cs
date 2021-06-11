@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Docs.Localization;
 
 namespace Volo.Docs.Admin.Navigation
@@ -17,7 +18,7 @@ namespace Volo.Docs.Admin.Navigation
             }
         }
 
-        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var administrationMenu = context.Menu.GetAdministration();
 
@@ -27,15 +28,10 @@ namespace Volo.Docs.Admin.Navigation
 
             administrationMenu.AddItem(rootMenuItem);
 
-            if (await context.IsGrantedAsync(DocsAdminPermissions.Projects.Default))
-            {
-                rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects"));
-            }
+            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects").RequirePermissions(DocsAdminPermissions.Projects.Default));
+            rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Documents, l["Menu:DocumentManagement"], "~/Docs/Admin/Documents").RequirePermissions(DocsAdminPermissions.Documents.Default));
 
-            if (await context.IsGrantedAsync(DocsAdminPermissions.Documents.Default))
-            {
-                rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Documents, l["Menu:DocumentManagement"], "~/Docs/Admin/Documents"));
-            }
+            return Task.CompletedTask;
         }
     }
 }

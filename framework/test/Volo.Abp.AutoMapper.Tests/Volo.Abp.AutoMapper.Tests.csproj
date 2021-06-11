@@ -11,8 +11,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-    <ProjectReference Include="..\Volo.Abp.ObjectExtending.Tests\Volo.Abp.ObjectExtending.Tests.csproj" />
+    <ProjectReference Include="..\..\test\Volo.Abp.ObjectExtending.Tests\Volo.Abp.ObjectExtending.Tests.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
+    <ProjectReference Include="..\Volo.Abp.MultiLingualObjects.Tests\Volo.Abp.MultiLingualObjects.Tests.csproj" />
   </ItemGroup>
 
 </Project>

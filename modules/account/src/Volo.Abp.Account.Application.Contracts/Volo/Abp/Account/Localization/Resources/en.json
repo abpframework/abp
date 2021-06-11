@@ -43,7 +43,7 @@
     "Description:Abp.Account.EnableLocalLogin": "Indicates if the server will allow users to authenticate with a local account.",
     "LoggedOutTitle": "Signed Out",
     "LoggedOutText": "You have been signed out and you will be redirected soon.",
-    "ReturnToText": "Click here to redirect to {0}",
+    "ReturnToText": "Click here to return to the application",
     "OrLoginWith": "Or login with:",
     "ForgotPassword": "Forgot password?",
     "SendPasswordResetLink_Information": "A password reset link will be sent to your email to reset your password. If you don't get an email within a few minutes, please re-try.",
@@ -60,6 +60,8 @@
     "Volo.Account:InvalidEmailAddress": "Can not find the given email address: {0}",
     "PasswordReset": "Password reset",
     "PasswordResetInfoInEmail": "We received an account recovery request! If you initiated this request, click the following link to reset your password.",
-    "ResetMyPassword": "Reset my password"
+    "ResetMyPassword": "Reset my password",
+    "AccessDenied": "Access denied!",
+    "AccessDeniedMessage": "You do not have access to this resource."
   }
 }

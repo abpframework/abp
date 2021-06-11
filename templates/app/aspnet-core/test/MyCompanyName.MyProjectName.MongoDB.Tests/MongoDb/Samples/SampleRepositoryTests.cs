@@ -32,8 +32,7 @@ namespace MyCompanyName.MyProjectName.MongoDB.Samples
             await WithUnitOfWorkAsync(async () =>
             {
                 //Act
-                var adminUser = await _appUserRepository
-                    .GetMongoQueryable()
+                var adminUser = await (await _appUserRepository.GetMongoQueryableAsync())
                     .FirstOrDefaultAsync(u => u.UserName == "admin");
 
                 //Assert

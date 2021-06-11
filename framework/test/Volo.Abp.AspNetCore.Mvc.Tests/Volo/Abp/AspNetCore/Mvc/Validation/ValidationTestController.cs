@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.Validation
@@ -40,6 +41,31 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
         {
             ModelState.IsValid.ShouldBeTrue(); //AbpValidationFilter throws exception otherwise
             return Task.FromResult(model.Value1);
+        }
+
+        [HttpGet]
+        [Route("disable-validation-object-result-action")]
+        [DisableValidation]
+        public Task<string> DisableValidationObjectResultAction(ValidationTest1Model model)
+        {
+            ModelState.IsValid.ShouldBeFalse();
+            return Task.FromResult("ModelState.IsValid: " + ModelState.IsValid.ToString().ToLowerInvariant());
+        }
+
+        [HttpGet]
+        [Route("object-result-action2")]
+        public virtual Task<string> ObjectResultAction2(ValidationTest1Model model)
+        {
+            ModelState.IsValid.ShouldBeTrue(); //AbpValidationFilter throws exception otherwise
+            return Task.FromResult(model.Value1);
+        }
+
+        [HttpGet]
+        [Route("object-result-action3")]
+        public virtual Task<string> ObjectResultAction3(ValidationTest1Model model)
+        {
+            ModelState.IsValid.ShouldBeFalse();
+            return Task.FromResult("ModelState.IsValid: " + ModelState.IsValid.ToString().ToLowerInvariant());
         }
 
         public class ValidationTest1Model
@@ -105,6 +131,25 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
                     yield return new ValidationResult("Value1 should be hello");
                 }
             }
+        }
+    }
+
+    [DisableValidation]
+    [Route("api/sub1-validation-test")]
+    public class Sub1ValidationTestController : ValidationTestController
+    {
+
+    }
+
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(ValidationTestController))]
+    public class Sub2ValidationTestController : ValidationTestController
+    {
+        [DisableValidation]
+        public override Task<string> ObjectResultAction2(ValidationTest1Model model)
+        {
+            ModelState.IsValid.ShouldBeFalse();
+            return Task.FromResult("ModelState.IsValid: " + ModelState.IsValid.ToString().ToLowerInvariant());
         }
     }
 }

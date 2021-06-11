@@ -109,7 +109,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Throws exception if service is not registered.
         /// This method should be used only after dependency injection registration phase completed.
         /// </summary>
-        internal static T GetRequiredService<T>(this IServiceCollection services)
+        public static T GetRequiredService<T>(this IServiceCollection services)
         {
             return services
                 .GetSingletonInstance<IAbpApplication>()
@@ -122,7 +122,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Throws exception if service is not registered.
         /// This method should be used only after dependency injection registration phase completed.
         /// </summary>
-        internal static object GetRequiredService(this IServiceCollection services, Type type)
+        public static object GetRequiredService(this IServiceCollection services, Type type)
         {
             return services
                 .GetSingletonInstance<IAbpApplication>()

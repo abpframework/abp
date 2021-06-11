@@ -527,6 +527,198 @@ namespace Volo.Abp.Caching
             return value;
         }
 
+        public KeyValuePair<TCacheKey, TCacheItem>[] GetOrAddMany(
+            IEnumerable<TCacheKey> keys,
+            Func<IEnumerable<TCacheKey>, List<KeyValuePair<TCacheKey, TCacheItem>>> factory,
+            Func<DistributedCacheEntryOptions> optionsFactory = null,
+            bool? hideErrors = null,
+            bool considerUow = false)
+        {
+
+            KeyValuePair<TCacheKey, TCacheItem>[] result;
+            var keyArray = keys.ToArray();
+
+            var cacheSupportsMultipleItems = Cache as ICacheSupportsMultipleItems;
+            if (cacheSupportsMultipleItems == null)
+            {
+                result = GetManyFallback(
+                    keyArray,
+                    hideErrors,
+                    considerUow
+                );
+            }
+            else
+            {
+                var notCachedKeys = new List<TCacheKey>();
+                var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+                if (ShouldConsiderUow(considerUow))
+                {
+                    var uowCache = GetUnitOfWorkCache();
+                    foreach (var key in keyArray)
+                    {
+                        var value = uowCache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
+                        if (value != null)
+                        {
+                            cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
+                        }
+                    }
+
+                    notCachedKeys = keyArray.Except(cachedValues.Select(x => x.Key)).ToList();
+                    if (!notCachedKeys.Any())
+                    {
+                        return cachedValues.ToArray();
+                    }
+                }
+
+                hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+                byte[][] cachedBytes;
+
+                var readKeys = notCachedKeys.Any() ? notCachedKeys.ToArray() : keyArray;
+                try
+                {
+                    cachedBytes = cacheSupportsMultipleItems.GetMany(readKeys.Select(NormalizeKey));
+                }
+                catch (Exception ex)
+                {
+                    if (hideErrors == true)
+                    {
+                        HandleException(ex);
+                        return ToCacheItemsWithDefaultValues(keyArray);
+                    }
+
+                    throw;
+                }
+
+                result = cachedValues.Concat(ToCacheItems(cachedBytes, readKeys)).ToArray();
+            }
+
+            if (result.All(x => x.Value != null))
+            {
+                return result;
+            }
+
+            var missingKeys = new List<TCacheKey>();
+            var missingValuesIndex = new List<int>();
+            for (var i = 0; i < keyArray.Length; i++)
+            {
+                if (result[i].Value != null)
+                {
+                    continue;
+                }
+
+                missingKeys.Add(keyArray[i]);
+                missingValuesIndex.Add(i);
+            }
+
+            var missingValues = factory.Invoke(missingKeys).ToArray();
+            var valueQueue = new Queue<KeyValuePair<TCacheKey, TCacheItem>>(missingValues);
+
+            SetMany(missingValues, optionsFactory?.Invoke(), hideErrors, considerUow);
+
+            foreach (var index in missingValuesIndex)
+            {
+                result[index] = valueQueue.Dequeue();
+            }
+
+            return result;
+        }
+
+
+        public async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetOrAddManyAsync(
+            IEnumerable<TCacheKey> keys,
+            Func<IEnumerable<TCacheKey>, Task<List<KeyValuePair<TCacheKey, TCacheItem>>>> factory,
+            Func<DistributedCacheEntryOptions> optionsFactory = null,
+            bool? hideErrors = null,
+            bool considerUow = false,
+            CancellationToken token = default)
+        {
+            KeyValuePair<TCacheKey, TCacheItem>[] result;
+            var keyArray = keys.ToArray();
+
+            var cacheSupportsMultipleItems = Cache as ICacheSupportsMultipleItems;
+            if (cacheSupportsMultipleItems == null)
+            {
+                result = await GetManyFallbackAsync(
+                    keyArray,
+                    hideErrors,
+                    considerUow, token);
+            }
+            else
+            {
+                var notCachedKeys = new List<TCacheKey>();
+                var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+                if (ShouldConsiderUow(considerUow))
+                {
+                    var uowCache = GetUnitOfWorkCache();
+                    foreach (var key in keyArray)
+                    {
+                        var value = uowCache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
+                        if (value != null)
+                        {
+                            cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
+                        }
+                    }
+
+                    notCachedKeys = keyArray.Except(cachedValues.Select(x => x.Key)).ToList();
+                    if (!notCachedKeys.Any())
+                    {
+                        return cachedValues.ToArray();
+                    }
+                }
+
+                hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+                byte[][] cachedBytes;
+
+                var readKeys = notCachedKeys.Any() ? notCachedKeys.ToArray() : keyArray;
+                try
+                {
+                    cachedBytes = await cacheSupportsMultipleItems.GetManyAsync(readKeys.Select(NormalizeKey), token);
+                }
+                catch (Exception ex)
+                {
+                    if (hideErrors == true)
+                    {
+                        await HandleExceptionAsync(ex);
+                        return ToCacheItemsWithDefaultValues(keyArray);
+                    }
+
+                    throw;
+                }
+
+                result = cachedValues.Concat(ToCacheItems(cachedBytes, readKeys)).ToArray();
+            }
+
+            if (result.All(x => x.Value != null))
+            {
+                return result;
+            }
+
+            var missingKeys = new List<TCacheKey>();
+            var missingValuesIndex = new List<int>();
+            for (var i = 0; i < keyArray.Length; i++)
+            {
+                if (result[i].Value != null)
+                {
+                    continue;
+                }
+
+                missingKeys.Add(keyArray[i]);
+                missingValuesIndex.Add(i);
+            }
+
+            var missingValues = (await factory.Invoke(missingKeys)).ToArray();
+            var valueQueue = new Queue<KeyValuePair<TCacheKey, TCacheItem>>(missingValues);
+
+            await SetManyAsync(missingValues, optionsFactory?.Invoke(), hideErrors, considerUow, token);
+
+            foreach (var index in missingValuesIndex)
+            {
+                result[index] = valueQueue.Dequeue();
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Sets the cache item value for the provided key.
         /// </summary>
@@ -924,6 +1116,71 @@ namespace Volo.Abp.Caching
             }
         }
 
+        public virtual void RefreshMany(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null)
+        {
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                if (Cache is ICacheSupportsMultipleItems cacheSupportsMultipleItems)
+                {
+                    cacheSupportsMultipleItems.RefreshMany(keys.Select(NormalizeKey));
+                }
+                else
+                {
+                    foreach (var key in keys)
+                    {
+                        Cache.Refresh(NormalizeKey(key));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    HandleException(ex);
+                    return;
+                }
+
+                throw;
+            }
+        }
+
+        public virtual async Task RefreshManyAsync(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null,
+            CancellationToken token = default)
+        {
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                if (Cache is ICacheSupportsMultipleItems cacheSupportsMultipleItems)
+                {
+                    await cacheSupportsMultipleItems.RefreshManyAsync(keys.Select(NormalizeKey), token);
+                }
+                else
+                {
+                    foreach (var key in keys)
+                    {
+                        await Cache.RefreshAsync(NormalizeKey(key), token);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    await HandleExceptionAsync(ex);
+                    return;
+                }
+
+                throw;
+            }
+        }
+
         /// <summary>
         /// Removes the cache item for given key from cache.
         /// </summary>
@@ -1024,6 +1281,130 @@ namespace Volo.Abp.Caching
             else
             {
                 await RemoveRealCache();
+            }
+        }
+
+        public void RemoveMany(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null,
+            bool considerUow = false)
+        {
+            var keyArray = keys.ToArray();
+
+            if (Cache is ICacheSupportsMultipleItems cacheSupportsMultipleItems)
+            {
+                void RemoveRealCache()
+                {
+                    hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+                    try
+                    {
+                        cacheSupportsMultipleItems.RemoveMany(
+                            keyArray.Select(NormalizeKey)
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        if (hideErrors == true)
+                        {
+                            HandleException(ex);
+                            return;
+                        }
+
+                        throw;
+                    }
+                }
+
+                if (ShouldConsiderUow(considerUow))
+                {
+                    var uowCache = GetUnitOfWorkCache();
+
+                    foreach (var key in keyArray)
+                    {
+                        if (uowCache.TryGetValue(key, out _))
+                        {
+                            uowCache[key].RemoveValue();
+                        }
+                    }
+
+                    // ReSharper disable once PossibleNullReferenceException
+                    UnitOfWorkManager.Current.OnCompleted(() =>
+                    {
+                        RemoveRealCache();
+                        return Task.CompletedTask;
+                    });
+                }
+                else
+                {
+                    RemoveRealCache();
+                }
+            }
+            else
+            {
+                foreach (var key in keyArray)
+                {
+                    Remove(key, hideErrors, considerUow);
+                }
+            }
+        }
+
+        public async Task RemoveManyAsync(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null,
+            bool considerUow = false,
+            CancellationToken token = default)
+        {
+            var keyArray = keys.ToArray();
+
+            if (Cache is ICacheSupportsMultipleItems cacheSupportsMultipleItems)
+            {
+                async Task RemoveRealCache()
+                {
+                    hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+                    try
+                    {
+                        await cacheSupportsMultipleItems.RemoveManyAsync(
+                            keyArray.Select(NormalizeKey), token);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (hideErrors == true)
+                        {
+                            await HandleExceptionAsync(ex);
+                            return;
+                        }
+
+                        throw;
+                    }
+                }
+
+                if (ShouldConsiderUow(considerUow))
+                {
+                    var uowCache = GetUnitOfWorkCache();
+
+                    foreach (var key in keyArray)
+                    {
+                        if (uowCache.TryGetValue(key, out _))
+                        {
+                            uowCache[key].RemoveValue();
+                        }
+                    }
+
+                    // ReSharper disable once PossibleNullReferenceException
+                    UnitOfWorkManager.Current.OnCompleted(RemoveRealCache);
+                }
+                else
+                {
+                    await RemoveRealCache();
+                }
+            }
+            else
+            {
+                foreach (var key in keyArray)
+                {
+                    await RemoveAsync(key, hideErrors, considerUow, token);
+                }
             }
         }
 

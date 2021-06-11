@@ -18,7 +18,7 @@ Abp Framework offers startup templates to get into the work faster. We can creat
 
 `abp new CustomizeUserDemo`
 
-> In this article, I will go through the MVC application, but it will work also in the [Angular](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No) application.
+> In this article, I will go through the MVC application, but it will work also in the [Angular](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No), [Blazor Server](https://docs.abp.io/en/abp/latest/Getting-Started?UI=BlazorServer&DB=EF&Tiered=No), and [Blazor WebAssembly](https://docs.abp.io/en/abp/latest/Getting-Started?UI=Blazor&DB=EF&Tiered=No) application.
 
 After the download is finished, we can run **CustomizeUserDemo.DbMigrator** project to create the database migrations and seed the initial data (admin user, role, etc). Then we can run `CustomizeUserDemo.Web` to see that our application is working.
 
@@ -78,7 +78,7 @@ public static class CustomizeUserDemoEfCoreEntityExtensionMappings
                     nameof(AppUser.Title),
                     (entityBuilder, propertyBuilder) =>
                     {
-                        propertyBuilder.IsRequired();
+                        propertyBuilder.HasDefaultValue("");
                         propertyBuilder.HasMaxLength(UserConsts.MaxTitleLength);
                     }
                 ).MapEfCoreProperty<IdentityUser, int>(

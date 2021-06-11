@@ -149,7 +149,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         (u.Surname != null && u.Surname.Contains(filter)) ||
                         (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
-                .OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

@@ -1,15 +1,8 @@
 import { ApplicationLocalizationConfigurationDto, ConfigStateService } from '@abp/ng.core';
-import { DatePipe } from '@angular/common';
-import { Injectable, Optional } from '@angular/core';
+import { formatDate } from '@angular/common';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-
-function padNumber(value: number) {
-  if (isNumber(value)) {
-    return `0${value}`.slice(-2);
-  } else {
-    return '';
-  }
-}
+import snq from 'snq';
 
 function isNumber(value: any): boolean {
   return !isNaN(toInteger(value));
@@ -21,7 +14,7 @@ function toInteger(value: any): number {
 
 @Injectable()
 export class DateParserFormatter extends NgbDateParserFormatter {
-  constructor(@Optional() private datePipe: DatePipe, private configState: ConfigStateService) {
+  constructor(private configState: ConfigStateService, @Inject(LOCALE_ID) private locale: string) {
     super();
   }
 
@@ -49,21 +42,15 @@ export class DateParserFormatter extends NgbDateParserFormatter {
   }
 
   format(date: NgbDateStruct): string {
-    const { shortDatePattern } = (this.configState.getOne(
-      'localization',
-    ) as ApplicationLocalizationConfigurationDto).currentCulture.dateTimeFormat;
+    if (!date) return '';
 
-    if (date && this.datePipe) {
-      return this.datePipe.transform(
-        new Date(date.year, date.month - 1, date.day),
-        shortDatePattern,
-      );
-    } else {
-      return date
-        ? `${date.year}-${isNumber(date.month) ? padNumber(date.month) : ''}-${
-            isNumber(date.day) ? padNumber(date.day) : ''
-          }`
-        : '';
-    }
+    const localization: ApplicationLocalizationConfigurationDto = this.configState.getOne(
+      'localization',
+    );
+
+    const dateFormat =
+      snq(() => localization.currentCulture.dateTimeFormat.shortDatePattern) || 'yyyy-MM-dd';
+
+    return formatDate(new Date(date.year, date.month - 1, date.day), dateFormat, this.locale);
   }
 }

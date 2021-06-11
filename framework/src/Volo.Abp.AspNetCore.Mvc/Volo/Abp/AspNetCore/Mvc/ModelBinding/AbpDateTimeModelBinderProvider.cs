@@ -1,48 +1,56 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 {
-
     public class AbpDateTimeModelBinderProvider : IModelBinderProvider
     {
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            if (context.Metadata.ModelType != typeof(DateTime) &&
-                context.Metadata.ModelType != typeof(DateTime?))
+            var modelType = context.Metadata.UnderlyingOrModelType;
+            if (modelType == typeof(DateTime))
             {
-                return null;
-            }
-
-            if (context.Metadata.ContainerType == null)
-            {
-                if (context.Metadata is DefaultModelMetadata defaultModelMetadata &&
-                    defaultModelMetadata.Attributes.Attributes.All(x => x.GetType() != typeof(DisableDateTimeNormalizationAttribute)))
+                if (context.Metadata.ContainerType == null)
                 {
-                    return new AbpDateTimeModelBinder(context);
+                    if (context.Metadata is DefaultModelMetadata defaultModelMetadata &&
+                        defaultModelMetadata.Attributes.Attributes.All(x => x.GetType() != typeof(DisableDateTimeNormalizationAttribute)))
+                    {
+                        return CreateAbpDateTimeModelBinder(context);
+                    }
                 }
-            }
-            else
-            {
-                var dateNormalizationDisabledForClass =
-                    context.Metadata.ContainerType.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
-
-                var dateNormalizationDisabledForProperty = context.Metadata.ContainerType
-                    .GetProperty(context.Metadata.PropertyName)
-                    ?.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
-
-                if (!dateNormalizationDisabledForClass &&
-                    dateNormalizationDisabledForProperty != null &&
-                    !dateNormalizationDisabledForProperty.Value)
+                else
                 {
-                    return new AbpDateTimeModelBinder(context);
+                    var dateNormalizationDisabledForClass =
+                        context.Metadata.ContainerType.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
+
+                    var dateNormalizationDisabledForProperty = context.Metadata.ContainerType
+                        .GetProperty(context.Metadata.PropertyName)
+                        ?.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
+
+                    if (!dateNormalizationDisabledForClass &&
+                        dateNormalizationDisabledForProperty != null &&
+                        !dateNormalizationDisabledForProperty.Value)
+                    {
+                        return CreateAbpDateTimeModelBinder(context);
+                    }
                 }
             }
 
             return null;
+        }
+
+        protected virtual AbpDateTimeModelBinder CreateAbpDateTimeModelBinder(ModelBinderProviderContext context)
+        {
+            const DateTimeStyles supportedStyles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AdjustToUniversal;
+            var dateTimeModelBinder = new DateTimeModelBinder(supportedStyles, context.Services.GetRequiredService<ILoggerFactory>());
+            return new AbpDateTimeModelBinder(context.Services.GetRequiredService<IClock>(), dateTimeModelBinder);
         }
     }
 }

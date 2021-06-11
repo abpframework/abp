@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
@@ -13,7 +14,9 @@ namespace Volo.Blogging
     [DependsOn(
         typeof(BloggingDomainSharedModule),
         typeof(AbpDddDomainModule),
-        typeof(AbpAutoMapperModule))]
+        typeof(AbpAutoMapperModule),
+        typeof(AbpCachingModule)
+    )]
     public class BloggingDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

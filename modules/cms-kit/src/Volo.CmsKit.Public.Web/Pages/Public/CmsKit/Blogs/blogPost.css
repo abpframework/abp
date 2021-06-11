@@ -1,0 +1,23 @@
+﻿.card-body img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.badge.badge-light {
+    color: #757575;
+    background: #f2f2f2;
+}
+
+.reaction-in-comment span.area-title {
+    display: none;
+}
+
+span.area-title {
+    font-weight: 600;
+    padding: 3px;
+    display: block;
+}
+.popover {
+    min-width: 276px;
+}

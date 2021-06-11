@@ -43,7 +43,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             }
             catch (UserFriendlyException e)
             {
-                Alerts.Danger(e.Message);
+                Alerts.Danger(GetLocalizeExceptionMessage(e));
                 return Page();
             }
 

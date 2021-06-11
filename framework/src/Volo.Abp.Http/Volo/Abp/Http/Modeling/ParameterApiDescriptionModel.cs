@@ -10,6 +10,8 @@ namespace Volo.Abp.Http.Modeling
 
         public string Name { get; set; }
 
+        public string JsonName { get; set; }
+
         public string Type { get; set; }
 
         public string TypeSimple { get; set; }
@@ -29,11 +31,12 @@ namespace Volo.Abp.Http.Modeling
 
         }
 
-        public static ParameterApiDescriptionModel Create(string name, string nameOnMethod, Type type, bool isOptional = false, object defaultValue = null, string[] constraintTypes = null, string bindingSourceId = null, string descriptorName = null)
+        public static ParameterApiDescriptionModel Create(string name, string jsonName, string nameOnMethod, Type type, bool isOptional = false, object defaultValue = null, string[] constraintTypes = null, string bindingSourceId = null, string descriptorName = null)
         {
             return new ParameterApiDescriptionModel
             {
                 Name = name,
+                JsonName = jsonName,
                 NameOnMethod = nameOnMethod,
                 Type = type != null ? TypeHelper.GetFullNameHandlingNullableAndGenerics(type) : null,
                 TypeSimple = type != null ? ApiTypeNameHelper.GetSimpleTypeName(type) : null,

@@ -1,4 +1,4 @@
-# Multi Tenancy in Angular UI
+# Multi-Tenancy in Angular UI
 
 ABP Angular UI supports the multi-tenancy. The following features related to multi-tenancy are available in the startup templates.
 
@@ -8,7 +8,7 @@ ABP Angular UI supports the multi-tenancy. The following features related to mul
 
 On the page above, you can;
 
-- See the all tenants.
+- See all tenants.
 - Create a new tenant.
 - Edit an existing tenant.
 - Delete a tenant.
@@ -17,9 +17,11 @@ On the page above, you can;
 
 <p style="font-size:small;text-align:center;">Tenant Switching Component</p>
 
-You can switch between existing tenants by using the tenant switching component in the child pages of the `AccountLayoutComponent` (like Login page). Angular UI sends the selected tenant id to the backend as `__tenant` header on each request.
+You can switch between existing tenants by using the tenant switching box in the child pages of the MVC Account Public Module (like Login page). Angular UI gets selected tenant from `application-configuration` response and sends the tenant id to the backend as `__tenant` header on each request.
 
-## Domain Tenant Resolver
+## Domain/Subdomain Tenant Resolver
+
+> **Note:** If you are going to implement the steps below, you should also implement the domain/subdomain tenant resolver feature for the backend. See the [Domain/Subdomain Tenant Resolver section in Multi-Tenancy document](../../Multi-Tenancy#domain-subdomain-tenant-resolver) to learn the backend implementation.
 
 Angular UI can get the tenant name from the app running URL. You can determine the current tenant by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). To do this, you need to set the `application.baseUrl` property in the environment:
 
@@ -89,10 +91,10 @@ export const environment = {
 
 > **Important Note:** The `application.baseUrl` and the `{0}` placeholder in the value of the `baseUrl` property are required to be able to get tenant from running URL. Other placeholders in API URLs are optional.
 
-After the configuration above, if your app runs on the `mytenant1.mydomain.com`, the app will get tenant name as **mytenant1** and replace the environment object in `ConfigState` on app initialization as follows:
+After the configuration above, if your app runs on the `mytenant1.mydomain.com`, the app will get tenant name as **mytenant1** and replace the environment object in `EnvironmentService` on app initialization as follows:
 
 ```js
-// environment object in ConfigState
+// environment object in EnvironmentService
 
 {
   //...

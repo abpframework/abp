@@ -2,7 +2,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -117,7 +117,7 @@ Finally, edit the localization file (`en.json` under the `Localization/BookStore
 "Permission:Books.Delete": "Deleting the books"
 ````
 
-> Localization key names are arbitrary and no forcing rule. But we prefer the convention used above.
+> Localization key names are arbitrary and there is no forcing rule. But we prefer the convention used above.
 
 ### Permission Management UI
 
@@ -516,7 +516,7 @@ Wrap the *New Book* button by an `if` block as shown below:
 
 #### Hide the Edit/Delete Actions
 
-`EntityAction` component defines `RequiredPolicy` attribute (parameter) to conditionally show the action based on the user permissions.
+`EntityAction` component defines `Visible` attribute (parameter) to conditionally show the action.
 
 Update the `EntityActions` section as shown below:
 
@@ -524,11 +524,11 @@ Update the `EntityActions` section as shown below:
 <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
     <EntityAction TItem="BookDto"
                   Text="@L["Edit"]"
-                  RequiredPolicy="@UpdatePolicyName"
+                  Visible=HasUpdatePermission
                   Clicked="() => OpenEditModalAsync(context)" />
     <EntityAction TItem="BookDto"
                   Text="@L["Delete"]"
-                  RequiredPolicy="@DeletePolicyName"
+                  Visible=HasDeletePermission
                   Clicked="() => DeleteEntityAsync(context)"
                   ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
 </EntityActions>

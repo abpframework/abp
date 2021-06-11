@@ -9,7 +9,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             var publicAppSettings = context.Files
                 .FirstOrDefault(f => f.Name.Contains("MyCompanyName.MyProjectName.Web.Public") && f.Name.EndsWith("appsettings.json"));
 
-            publicAppSettings?.SetContent(publicAppSettings.Content.Replace("localhost:44303","localhost:44305"));
+            if (context.BuildArgs.UiFramework == UiFramework.BlazorServer)
+            {
+                publicAppSettings?.SetContent(publicAppSettings.Content.Replace("localhost:44303","localhost:44313"));
+            }
+            else
+            {
+                publicAppSettings?.SetContent(publicAppSettings.Content.Replace("localhost:44303","localhost:44305"));
+            }
         }
     }
 }
