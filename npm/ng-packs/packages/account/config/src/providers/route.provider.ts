@@ -10,7 +10,7 @@ export function configureRoutes(routes: RoutesService) {
   return () => {
     routes.add([
       {
-        path: '/account',
+        path: undefined,
         name: eAccountRouteNames.Account,
         invisible: true,
         layout: eLayoutType.application,
