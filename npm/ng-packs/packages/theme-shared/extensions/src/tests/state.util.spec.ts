@@ -148,7 +148,7 @@ function createMockEntities(): Record<string, ObjectExtensions.EntityExtensionDt
             onEditForm: {
               isVisible: true,
             },
-            lookup: {},
+            lookup: null,
           },
           attributes: [
             {
@@ -192,7 +192,7 @@ function createMockEntities(): Record<string, ObjectExtensions.EntityExtensionDt
             onEditForm: {
               isVisible: true,
             },
-            lookup: {},
+            lookup: null,
           },
           attributes: [],
           configuration: {},
@@ -227,7 +227,7 @@ function createMockEntities(): Record<string, ObjectExtensions.EntityExtensionDt
             onEditForm: {
               isVisible: false,
             },
-            lookup: {},
+            lookup: null,
           },
           attributes: [],
           configuration: {},
@@ -259,7 +259,7 @@ function createMockEntities(): Record<string, ObjectExtensions.EntityExtensionDt
             onEditForm: {
               isVisible: false,
             },
-            lookup: {},
+            lookup: null,
           },
           attributes: [
             {

@@ -16,17 +16,19 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Autofac.WebAssembly\Volo.Abp.Autofac.WebAssembly.csproj" />
-    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\modules\account\src\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Blazor.WebAssembly\Volo.Abp.Identity.Blazor.WebAssembly.csproj" />
-    <ProjectReference Include="..\..\..\..\..\modules\account\src\Volo.Abp.Account.Blazor\Volo.Abp.Account.Blazor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Blazor.WebAssembly\Volo.Abp.TenantManagement.Blazor.WebAssembly.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Blazor.WebAssembly\Volo.Abp.SettingManagement.Blazor.WebAssembly.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MyCompanyName.MyProjectName.Host.Shared\MyCompanyName.MyProjectName.Host.Shared.csproj" />
-    <ProjectReference Include="..\..\src\MyCompanyName.MyProjectName.Blazor\MyCompanyName.MyProjectName.Blazor.csproj" />
+    <ProjectReference Include="..\..\src\MyCompanyName.MyProjectName.Blazor.WebAssembly\MyCompanyName.MyProjectName.Blazor.WebAssembly.csproj" />
   </ItemGroup>
 
 </Project>

@@ -31,18 +31,21 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddTransient(DbContextOptionsFactory.Create<TDbContext>);
 
-            foreach (var dbContextType in options.ReplacedDbContextTypes)
+            foreach (var entry in options.ReplacedDbContextTypes)
             {
+                var originalDbContextType = entry.Key;
+                var targetDbContextType = entry.Value ?? typeof(TDbContext);
+                
                 services.Replace(
                     ServiceDescriptor.Transient(
-                        dbContextType,
-                        sp => sp.GetRequiredService(typeof(TDbContext))
+                        originalDbContextType,
+                        sp => sp.GetRequiredService(targetDbContextType)
                     )
                 );
 
                 services.Configure<AbpDbContextOptions>(opts =>
                 {
-                    opts.DbContextReplacements[dbContextType] = typeof(TDbContext);
+                    opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
                 });
             }
 

@@ -45,5 +45,23 @@ namespace Volo.Abp.Cli
             var args = new CommandLineArgs("new", "Test..Test");
             await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
         }
+
+
+        [Fact]
+        public async Task Has_Illegel_Keyword_Test()
+        {
+            var illegalKeywords = new[]
+            {
+               "Acme.Blazor",
+               "MyBlazor",
+            };
+
+            foreach (var illegalKeyword in illegalKeywords)
+            {
+                var args = new CommandLineArgs("new", illegalKeyword);
+                await _newCommand.ExecuteAsync(args).ShouldThrowAsync<CliUsageException>();
+            }
+        }
+
     }
 }
