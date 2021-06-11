@@ -51,7 +51,6 @@ namespace MyCompanyName.MyProjectName
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {
-        private const string DefaultCorsPolicyName = "Default";
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -132,7 +131,7 @@ namespace MyCompanyName.MyProjectName
 
             context.Services.AddCors(options =>
             {
-                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                options.AddDefaultPolicy(builder =>
                 {
                     builder
                         .WithOrigins(
@@ -169,7 +168,7 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName);
+            app.UseCors();
             app.UseAuthentication();
             if (MultiTenancyConsts.IsEnabled)
             {
