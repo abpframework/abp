@@ -5,10 +5,10 @@
     "Volo.IdentityServer:DuplicateApiResourceName": "El nombre de recurso de Api ya existe: {Name}",
     "Volo.IdentityServer:DuplicateApiScopeName": "El nombre de ámbito de Api ya existe: {Name}",
     "Volo.IdentityServer:DuplicateClientId": "ClientId ya existe: {ClientId}",
-    "UserLockedOut": "La cuenta de usuario ha sido bloqueada debido a inicios de sesión no validos. Por favor, espera un rato e intentalo de nuevo.",
-    "InvalidUserNameOrPassword": "Nombre de usuario o contraseña no válido!",
+    "UserLockedOut": "La cuenta de usuario ha sido bloqueada debido a inicios de sesión no validos. Por favor, espera un momento e intentalo de nuevo.",
+    "InvalidUserNameOrPassword": "Nombre de usuario o contraseña incorrecto!",
     "LoginIsNotAllowed": "No puedes iniciar sesión!, necesitas confirmar tu e-mail/ número de teléfono.",
-    "InvalidUsername": "",
-    "TheTargetUserIsNotLinkedToYou": "El usuario de destino no está asociado a tí"
+    "InvalidUsername": "Nombre de usuario icorrecto",
+    "TheTargetUserIsNotLinkedToYou": "El usuario de destino no está asociado a usted."
   }
 }

@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
   </ItemGroup>
 
 </Project>

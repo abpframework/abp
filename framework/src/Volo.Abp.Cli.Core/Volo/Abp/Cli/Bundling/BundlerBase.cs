@@ -75,7 +75,7 @@ namespace Volo.Abp.Cli.Bundling
                     var pathFragments = definition.Source.Split('/').ToList();
                     var basePath = $"{pathFragments[0]}/{pathFragments[1]}";
                     var node = staticAssetsDefinitions.SelectSingleNode($"//ContentRoot[@BasePath='{basePath}']");
-                    if (node == null || node.Attributes == null)
+                    if (node?.Attributes == null)
                     {
                         throw new AbpException("Not found: " + definition.Source);
                     }

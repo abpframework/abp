@@ -9,6 +9,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -18,7 +19,7 @@ namespace Volo.Abp.PermissionManagement
 
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
-        protected IPermissionStateManager PermissionStateManager { get; }
+        protected ISimpleStateCheckerManager<PermissionDefinition> SimpleStateCheckerManager { get; }
 
         protected IGuidGenerator GuidGenerator { get; }
 
@@ -34,7 +35,7 @@ namespace Volo.Abp.PermissionManagement
 
         public PermissionManager(
             IPermissionDefinitionManager permissionDefinitionManager,
-            IPermissionStateManager permissionStateManager,
+            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager,
             IPermissionGrantRepository permissionGrantRepository,
             IServiceProvider serviceProvider,
             IGuidGenerator guidGenerator,
@@ -45,7 +46,7 @@ namespace Volo.Abp.PermissionManagement
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
             Cache = cache;
-            PermissionStateManager = permissionStateManager;
+            SimpleStateCheckerManager = simpleStateCheckerManager;
             PermissionGrantRepository = permissionGrantRepository;
             PermissionDefinitionManager = permissionDefinitionManager;
             Options = options.Value;
@@ -80,7 +81,7 @@ namespace Volo.Abp.PermissionManagement
         {
             var permission = PermissionDefinitionManager.Get(permissionName);
 
-            if (!permission.IsEnabled || !await PermissionStateManager.IsEnabledAsync(permission))
+            if (!permission.IsEnabled || !await SimpleStateCheckerManager.IsEnabledAsync(permission))
             {
                 //TODO: BusinessException
                 throw new ApplicationException($"The permission named '{permission.Name}' is disabled!");
@@ -150,7 +151,7 @@ namespace Volo.Abp.PermissionManagement
                 return result;
             }
 
-            if (!await PermissionStateManager.IsEnabledAsync(permission))
+            if (!await SimpleStateCheckerManager.IsEnabledAsync(permission))
             {
                 return result;
             }

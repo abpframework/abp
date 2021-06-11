@@ -15,6 +15,7 @@ export const environment = {
     clientId: 'MyProjectName_App',
     responseType: 'code',
     scope: 'offline_access MyProjectName',
+    requireHttps: true
   },
   apis: {
     default: {

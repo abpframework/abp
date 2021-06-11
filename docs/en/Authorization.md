@@ -265,37 +265,7 @@ myGroup.AddPermission("Book_Creation")
 
 #### Creating a Custom Permission Dependency
 
-Any class implements the `IPermissionStateProvider` interface can disable a permission based on a custom condition.
-
-**Example:**
-
-````csharp
-public class MyCustomPermissionStateProvider : IPermissionStateProvider
-{
-    public Task<bool> IsEnabledAsync(PermissionStateContext context)
-    {
-        // You can implement your own logic here. 
-        return Task.FromResult(
-            context.Permission.Name.StartsWith("Acme.BookStore"));
-    }
-}
-````
-
-Then you can add `MyCustomPermissionStateProvider` to any permission definition, using the `AddStateProviders` extension method:
-
-````csharp
-myGroup.AddPermission("Book_Creation")
-    .AddStateProviders(new MyCustomPermissionStateProvider());
-````
-
-Or you can globally add your custom provider to make it working for all permissions:
-
-````csharp
-Configure<AbpPermissionOptions>(options =>
-{
-	options.GlobalStateProviders.Add<MyCustomPermissionStateProvider>();
-});
-````
+`PermissionDefinition` supports state check, Please refer to [Simple State Checker's documentation](SimpleStateChecker.md) 
 
 ## IAuthorizationService
 

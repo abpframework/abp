@@ -1,0 +1,10 @@
+{
+  "culture": "hi",
+  "texts": {
+    "DocsTitle": "VoloDocs",
+    "WelcomeVoloDocs": "VoloDocs में आपका स्वागत है!",
+    "NoProjectWarning": "अभी तक कोई परिभाषित परियोजना नहीं है!",
+    "CreateYourFirstProject": "अपना पहला प्रोजेक्ट शुरू करने के लिए यहां क्लिक करें",
+    "NoProject": "कोई प्रोजेक्ट नहीं!"
+  }
+}
