@@ -156,7 +156,6 @@ namespace Volo.Abp.AspNetCore.Mvc
             context.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             //Use DI to create controllers
-            context.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
             var innerControllerActivatorType = context.Services.Last(x => x.ServiceType == typeof(IControllerActivator)).ImplementationType;
             Debug.Assert(innerControllerActivatorType != null, "innerControllerActivatorType != null");
             context.Services.AddScoped(innerControllerActivatorType);
