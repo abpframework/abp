@@ -150,9 +150,9 @@ export default `
   box-shadow: none;
 }
 ngb-typeahead-window {
-  width: 100%;
   max-height: 25em;
   overflow-y: scroll !important;
+  z-index: 1050;
 }
 
 @keyframes fadeInTop {

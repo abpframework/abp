@@ -15,6 +15,7 @@ export const environment = {
     clientId: 'MyProjectName_App',
     responseType: 'code',
     scope: 'offline_access openid profile role email phone MyProjectName',
+    requireHttps: true
   },
   apis: {
     default: {

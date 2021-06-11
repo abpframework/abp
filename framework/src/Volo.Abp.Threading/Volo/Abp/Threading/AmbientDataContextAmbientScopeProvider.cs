@@ -62,8 +62,7 @@ namespace Volo.Abp.Threading
 
         private ScopeItem GetCurrentItem(string contextKey)
         {
-            var objKey = _dataContext.GetData(contextKey) as string;
-            return objKey != null ? ScopeDictionary.GetOrDefault(objKey) : null;
+            return _dataContext.GetData(contextKey) is string objKey ? ScopeDictionary.GetOrDefault(objKey) : null;
         }
 
         private class ScopeItem

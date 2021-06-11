@@ -75,9 +75,17 @@ namespace Volo.Abp.DependencyInjection
         IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>();
 
         /// <summary>
-        /// Replaces given DbContext type with this DbContext type.
+        /// Replaces given DbContext type with the target DbContext type.
+        /// </summary>
+        /// <typeparam name="TOtherDbContext">The DbContext type to be replaced</typeparam>
+        /// <typeparam name="TTargetDbContext">The target DbContext type</typeparam>
+        IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext, TTargetDbContext>();
+
+        /// <summary>
+        /// Replaces given DbContext type with the given or this DbContext type.
         /// </summary>
         /// <param name="otherDbContextType">The DbContext type to be replaced</param>
-        IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType);
+        /// <param name="targetDbContextType">The target DbContext type (optional, used this DbContext type if not provided)</param>
+        IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null);
     }
 }

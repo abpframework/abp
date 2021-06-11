@@ -8,6 +8,7 @@ $solutions = (
     "modules/account",
     "modules/audit-logging",
     "modules/background-jobs",
+    "modules/basic-theme",
     "modules/blogging",
     "modules/client-simulation",
     "modules/docs",
@@ -36,13 +37,10 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Components.Server",
     "framework/src/Volo.Abp.AspNetCore.Components.Web",
     "framework/src/Volo.Abp.AspNetCore.Components.Web.Theming",
-    "framework/src/Volo.Abp.AspNetCore.Components.Web.BasicTheme",
     "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly",
     "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming",
-    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme",
     "framework/src/Volo.Abp.AspNetCore.Components.Server",
     "framework/src/Volo.Abp.AspNetCore.Components.Server.Theming",
-    "framework/src/Volo.Abp.AspNetCore.Components.Server.BasicTheme",
     "framework/src/Volo.Abp.AspNetCore.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Client",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Client.Common",
@@ -54,7 +52,6 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages",
-    "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Widgets",
@@ -174,6 +171,12 @@ $projects = (
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain.Shared",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.EntityFrameworkCore",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.MongoDB",
+
+    # modules/basic-theme
+    "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.Server.BasicTheme",
+    "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.Web.BasicTheme",
+    "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme",
+    "modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
 
     # modules/blogging
     "modules/blogging/src/Volo.Blogging.Application.Contracts.Shared",

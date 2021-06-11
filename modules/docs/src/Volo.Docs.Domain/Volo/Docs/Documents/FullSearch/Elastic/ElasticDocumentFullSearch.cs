@@ -56,8 +56,6 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         public virtual async Task AddOrUpdateAsync(Document document, CancellationToken cancellationToken = default)
         {
-            ValidateElasticSearchEnabled();
-
             var client = _clientProvider.GetClient();
 
             var esDocument = new EsDocument
@@ -71,15 +69,13 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 Version = NormalizeField(document.Version)
             };
 
-            await client.IndexAsync(esDocument , x=>x.Index(_options.IndexName), cancellationToken);
+            await client.IndexAsync(esDocument, x => x.Index(_options.IndexName), cancellationToken);
         }
 
         public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            ValidateElasticSearchEnabled();
-
             HandleError(await _clientProvider.GetClient()
-                .DeleteAsync(DocumentPath<Document>.Id( NormalizeField(id)), x => x.Index(_options.IndexName), cancellationToken));
+                .DeleteAsync(DocumentPath<Document>.Id(NormalizeField(id)), x => x.Index(_options.IndexName), cancellationToken));
         }
 
         public virtual async Task DeleteAllAsync(CancellationToken cancellationToken = default)
@@ -210,7 +206,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             }
         }
 
-        protected virtual void ValidateElasticSearchEnabled()
+        public virtual void ValidateElasticSearchEnabled()
         {
             if (!_options.Enable)
             {

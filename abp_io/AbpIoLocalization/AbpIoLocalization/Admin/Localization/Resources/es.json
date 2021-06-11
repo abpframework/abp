@@ -7,7 +7,7 @@
     "Permission:DiscountManage": "Gestionar solicitudes de descuento",
     "Permission:Disable": "Desactivar",
     "Permission:Enable": "Activar",
-    "Permission:EnableSendEmail": "Activar enviar email",
+    "Permission:EnableSendEmail": "Activar envio de email",
     "Permission:SendEmail": "Enviar email",
     "Permission:NpmPackages": "Paquetes NPM",
     "Permission:NugetPackages": "Paquetes Nuget",

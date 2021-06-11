@@ -168,6 +168,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
         {
+            if (TagHelper.SuppressLabel)
+            {
+                return string.Empty;
+            }
+
             if (!string.IsNullOrEmpty(TagHelper.Label))
             {
                 var label = new TagBuilder("label");

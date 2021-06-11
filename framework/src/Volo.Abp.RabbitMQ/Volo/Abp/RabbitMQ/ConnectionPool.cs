@@ -25,16 +25,26 @@ namespace Volo.Abp.RabbitMQ
         {
             connectionName ??= RabbitMqConnections.DefaultConnectionName;
 
-            return Connections.GetOrAdd(
-                connectionName, () => new Lazy<IConnection>(() =>
-                {
-                    var connection = Options.Connections.GetOrDefault(connectionName);
-                    var hostnames = connection.HostName.TrimEnd(';').Split(';');
-                    // Handle Rabbit MQ Cluster.
-                    return hostnames.Length == 1 ? connection.CreateConnection() : connection.CreateConnection(hostnames);
+            try
+            {
+                var lazyConnection = Connections.GetOrAdd(
+                    connectionName, () => new Lazy<IConnection>(() =>
+                    {
+                        var connection = Options.Connections.GetOrDefault(connectionName);
+                        var hostnames = connection.HostName.TrimEnd(';').Split(';');
+                        // Handle Rabbit MQ Cluster.
+                        return hostnames.Length == 1 ? connection.CreateConnection() : connection.CreateConnection(hostnames);
 
-                })
-            ).Value;
+                    })
+                );
+
+                return lazyConnection.Value;
+            }
+            catch (Exception)
+            {
+                Connections.TryRemove(connectionName, out _);
+                throw;
+            }
         }
 
         public void Dispose()

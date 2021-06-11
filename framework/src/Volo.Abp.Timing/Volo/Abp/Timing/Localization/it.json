@@ -1,0 +1,7 @@
+{
+  "culture": "it",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "Fuso orario",
+    "Description:Abp.Timing.Timezone": "Fuso orario dell'applicazione"
+  }
+}

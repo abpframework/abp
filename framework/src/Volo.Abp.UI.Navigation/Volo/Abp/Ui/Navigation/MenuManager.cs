@@ -14,7 +14,6 @@ namespace Volo.Abp.UI.Navigation
         protected AbpNavigationOptions Options { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
         protected ISimpleStateCheckerManager<ApplicationMenuItem> SimpleStateCheckerManager { get; }
-
         public MenuManager(
             IOptions<AbpNavigationOptions> options,
             IHybridServiceScopeFactory serviceScopeFactory,
@@ -31,14 +30,17 @@ namespace Volo.Abp.UI.Navigation
 
             using (var scope = ServiceScopeFactory.CreateScope())
             {
-                var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
-
-                foreach (var contributor in Options.MenuContributors)
+                using (RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>()))
                 {
-                    await contributor.ConfigureMenuAsync(context);
-                }
+                    var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
 
-                await CheckPermissionsAsync(scope.ServiceProvider, menu);
+                    foreach (var contributor in Options.MenuContributors)
+                    {
+                        await contributor.ConfigureMenuAsync(context);
+                    }
+
+                    await CheckPermissionsAsync(scope.ServiceProvider, menu);
+                }
             }
 
             NormalizeMenu(menu);

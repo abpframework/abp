@@ -93,6 +93,8 @@ These libraries are selected as the base libraries and available to the applicat
 
 > Bootstrap's JavaScript part is not used since the Blazorise library already provides the necessary functionalities to the Bootstrap components in a native way.
 
+> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/blazorise-commercial-going-live/) for the announcement.
+
 ### The Layout
 
 The themes provide the layout. So, you have a responsive layout with the standard features already implemented. The screenshot below has taken from the layout of the [Basic Theme](Basic-Theme.md):
