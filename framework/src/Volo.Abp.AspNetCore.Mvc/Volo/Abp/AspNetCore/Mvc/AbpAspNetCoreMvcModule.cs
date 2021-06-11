@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -36,10 +37,8 @@ using Volo.Abp.Http;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Modeling;
-using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Mvc
@@ -158,6 +157,12 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             //Use DI to create controllers
             context.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
+            var innerControllerActivatorType = context.Services.Last(x => x.ServiceType == typeof(IControllerActivator)).ImplementationType;
+            Debug.Assert(innerControllerActivatorType != null, "innerControllerActivatorType != null");
+            context.Services.AddScoped(innerControllerActivatorType);
+            context.Services.Replace(ServiceDescriptor.Singleton<IControllerActivator>(
+                sp => new AbpServiceBasedControllerActivator(innerControllerActivatorType)
+            ));
 
             //Use DI to create view components
             context.Services.Replace(ServiceDescriptor.Singleton<IViewComponentActivator, ServiceBasedViewComponentActivator>());
