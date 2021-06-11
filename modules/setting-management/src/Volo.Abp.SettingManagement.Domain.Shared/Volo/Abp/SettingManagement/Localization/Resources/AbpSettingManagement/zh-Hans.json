@@ -14,6 +14,9 @@
     "SmtpEnableSsl": "启用ssl",
     "SmtpUseDefaultCredentials": "使用默认证书",
     "DefaultFromAddress": "默认发件人",
-    "DefaultFromDisplayName": "默认显示名称"
+    "DefaultFromDisplayName": "默认显示名称",
+    "Feature:SettingManagementGroup": "设置管理",
+    "Feature:SettingManagementEnable": "启用设置管理",
+    "Feature:SettingManagementEnableDescription": "在应用程序中启用设置管理系统."
   }
 }

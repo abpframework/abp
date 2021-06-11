@@ -25,23 +25,21 @@ namespace Microsoft.Extensions.DependencyInjection
 
             optionsBuilder?.Invoke(options);
 
-            foreach (var dbContextType in options.ReplacedDbContextTypes)
+            foreach (var entry in options.ReplacedDbContextTypes)
             {
-                services.Replace(ServiceDescriptor.Transient(dbContextType, typeof(TMongoDbContext)));
-            }
-
-            foreach (var dbContextType in options.ReplacedDbContextTypes)
-            {
+                var originalDbContextType = entry.Key;
+                var targetDbContextType = entry.Value ?? typeof(TMongoDbContext);
+                
                 services.Replace(
                     ServiceDescriptor.Transient(
-                        dbContextType,
-                        sp => sp.GetRequiredService(typeof(TMongoDbContext))
+                        originalDbContextType,
+                        sp => sp.GetRequiredService(targetDbContextType)
                     )
                 );
 
                 services.Configure<AbpMongoDbContextOptions>(opts =>
                 {
-                    opts.DbContextReplacements[dbContextType] = typeof(TMongoDbContext);
+                    opts.DbContextReplacements[originalDbContextType] = targetDbContextType;
                 });
             }
 

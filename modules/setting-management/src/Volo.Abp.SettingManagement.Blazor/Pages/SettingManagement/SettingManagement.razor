@@ -1,6 +1,6 @@
 ﻿@page "/setting-management"
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(SettingManagementPermissions.Emailing)]
+@using Volo.Abp.Features
+@attribute [RequiresFeature(SettingManagementFeatures.Enable)]
 
 @* ************************* PAGE HEADER ************************* *@
 <PageHeader Title="@L["Settings"]" BreadcrumbItems="@BreadcrumbItems">

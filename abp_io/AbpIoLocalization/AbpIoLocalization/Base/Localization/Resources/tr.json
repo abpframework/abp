@@ -28,6 +28,7 @@
     "Commercial": "Ticari",
     "SeeDocuments": "Dokümanlara Göz Atın",
     "FreeDDDBook": "Ücretsiz DDD Kitabı",
-    "New": "Yeni"
+    "New": "Yeni",
+    "Volo.AbpIo.Domain:020005": "Lisans uzatma yılı {MinExtendLicenseYear} yıldan az {MaxExtendLicenseYear} yıldan fazla olamaz."
   }
 }

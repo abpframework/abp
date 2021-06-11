@@ -18,9 +18,17 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddSingleton(options.DefaultRepositoryDbContextType, sp => sp.GetRequiredService<TMemoryDbContext>());
             }
 
-            foreach (var dbContextType in options.ReplacedDbContextTypes)
+            foreach (var entry in options.ReplacedDbContextTypes)
             {
-                services.Replace(ServiceDescriptor.Singleton(dbContextType, sp => sp.GetRequiredService<TMemoryDbContext>()));
+                var originalDbContextType = entry.Key;
+                var targetDbContextType = entry.Value ?? typeof(TMemoryDbContext);
+                
+                services.Replace(
+                    ServiceDescriptor.Singleton(
+                        originalDbContextType,
+                        sp => sp.GetRequiredService(targetDbContextType)
+                    )
+                );
             }
 
             new MemoryDbRepositoryRegistrar(options).AddRepositories();

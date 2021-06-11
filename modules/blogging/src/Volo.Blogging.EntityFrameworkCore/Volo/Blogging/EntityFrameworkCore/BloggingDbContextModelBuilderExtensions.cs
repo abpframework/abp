@@ -38,6 +38,8 @@ namespace Volo.Blogging.EntityFrameworkCore
 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Blog>(b =>
@@ -49,6 +51,8 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength).HasColumnName(nameof(Blog.Name));
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(BlogConsts.MaxShortNameLength).HasColumnName(nameof(Blog.ShortName));
                 b.Property(x => x.Description).IsRequired(false).HasMaxLength(BlogConsts.MaxDescriptionLength).HasColumnName(nameof(Blog.Description));
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Post>(b =>
@@ -67,6 +71,8 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.HasMany(p => p.Tags).WithOne().HasForeignKey(qt => qt.PostId);
 
                 b.HasOne<Blog>().WithMany().IsRequired().HasForeignKey(p => p.BlogId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Comment>(b =>
@@ -81,6 +87,8 @@ namespace Volo.Blogging.EntityFrameworkCore
 
                 b.HasOne<Comment>().WithMany().HasForeignKey(p => p.RepliedCommentId);
                 b.HasOne<Post>().WithMany().IsRequired().HasForeignKey(p => p.PostId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Tag>(b =>
@@ -94,6 +102,8 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.Property(x => x.UsageCount).HasColumnName(nameof(Tag.UsageCount));
 
                 b.HasMany<PostTag>().WithOne().HasForeignKey(qt => qt.TagId);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<PostTag>(b =>
@@ -106,7 +116,11 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.Property(x => x.TagId).HasColumnName(nameof(PostTag.TagId));
 
                 b.HasKey(x => new { x.PostId, x.TagId });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<BloggingDbContext>();
         }
     }
 }
