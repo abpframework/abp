@@ -126,6 +126,12 @@ Module are reusable sub applications used by your main project. Using ABP Module
   ```bash
   abp new Acme.IssueManagement -t module --no-ui
   ```
+  
+* Creates the module and adds it to your solution
+
+  ```bash
+  abp new Acme.IssueManagement -t module --add-to-solution-file
+  ```
 
 ## Create a solution from a specific version
 

@@ -1,6 +1,7 @@
 ﻿{
   "culture": "cs",
   "texts": {
+    "GivenTenantIsNotExist": "Vybraný tenant neexistuje: {0}",
     "GivenTenantIsNotAvailable": "Zvolený tenant není dostupný: {0}",
     "Tenant": "Tenant",
     "Switch": "změnit",

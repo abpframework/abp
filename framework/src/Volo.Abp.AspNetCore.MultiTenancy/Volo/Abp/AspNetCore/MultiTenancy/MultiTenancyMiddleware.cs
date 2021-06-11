@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -16,18 +20,31 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     {
         private readonly ITenantConfigurationProvider _tenantConfigurationProvider;
         private readonly ICurrentTenant _currentTenant;
+        private readonly AbpAspNetCoreMultiTenancyOptions _options;
 
         public MultiTenancyMiddleware(
             ITenantConfigurationProvider tenantConfigurationProvider,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            IOptions<AbpAspNetCoreMultiTenancyOptions> options)
         {
             _tenantConfigurationProvider = tenantConfigurationProvider;
             _currentTenant = currentTenant;
+            _options = options.Value;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
+            TenantConfiguration tenant;
+            try
+            {
+                tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
+            }
+            catch (Exception e)
+            {
+                await _options.MultiTenancyMiddlewareErrorPageBuilder(context, e);
+                return;
+            }
+
             if (tenant?.Id != _currentTenant.Id)
             {
                 using (_currentTenant.Change(tenant?.Id, tenant?.Name))

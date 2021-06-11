@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+<Import Project="..\..\..\common.test.props" />
+
+<PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <RootNamespace />
+</PropertyGroup>
+
+<ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
+</ItemGroup>
+
+</Project>

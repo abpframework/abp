@@ -23,20 +23,9 @@ This means your application will be using AzureAD user store for authentication.
 Lets start with adding OpenId connection. Open the **HttpApiHostModule.cs** and update the **ConfigureAuthentication** method as below:
 
 ```csharp
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
 
 context.Services.AddAuthentication()
-    .AddIdentityServerAuthentication(options =>
-    {
-        options.Authority = configuration["AuthServer:Authority"];
-        options.RequireHttpsMetadata = false;
-        options.ApiName = "NonTieredAngular";
-        options.JwtBackChannelHandler = new HttpClientHandler()
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        };
-    })
+    ... //Omitted other third party configurations
     .AddOpenIdConnect("AzureOpenId", "Azure AD OpenId", options =>
     {
         options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"] + "/v2.0/";
@@ -48,6 +37,8 @@ context.Services.AddAuthentication()
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.Scope.Add("email");
+        
+        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
     });
 ```
 
@@ -58,10 +49,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 {
     var hostingEnvironment = context.Services.GetHostingEnvironment();
     var configuration = context.Services.GetConfiguration();
-   
-    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
-    
+        
     context.Services.AddAuthentication()
         .AddOpenIdConnect("AzureOpenId", "Azure AD OpenId", options =>
         {
@@ -120,3 +108,8 @@ Next time you hit login, you should be seeing login screen enabled Azure AD like
 
 * But I don't want my users to see default login screen. I want my users to login **only** from AzureAD.
   * You can **mimic** this behaviour by customizing the login page and instantly trigger Azure AD provider click. For more info, you can check [this article](https://community.abp.io/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd).
+
+# May 2021 Update
+
+- **AddOpenIdConnect**: Removed `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();` and added `sub`  claim mapping in ClaimActions rather than global mapping.
+- Updated OpenIdConnect configurations.

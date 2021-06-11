@@ -13,12 +13,15 @@ namespace Volo.Abp.MultiTenancy
 
         public ConnectionStrings ConnectionStrings { get; set; }
 
+        public bool IsActive { get; set; }
+
         public TenantConfiguration()
         {
-
+            IsActive = true;
         }
 
         public TenantConfiguration(Guid id, [NotNull] string name)
+            : this()
         {
             Check.NotNull(name, nameof(name));
 

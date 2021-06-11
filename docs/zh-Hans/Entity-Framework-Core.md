@@ -433,7 +433,19 @@ public class BookRepository : EfCoreRepository<IBookStoreDbContext, Book, Guid>,
 
 ### 替换其他仓储
 
-正确定义并使用DbContext接口后,任何其他实现都可以使用以下ReplaceDbContext options 替换它:
+正确定义并使用DbContext接口后,任何其他实现都可以使用以下方法替换它:
+
+**ReplaceDbContextAttribute**
+
+```csharp
+[ReplaceDbContext(typeof(IBookStoreDbContext))]
+public class OtherDbContext : AbpDbContext<OtherDbContext>, IBookStoreDbContext
+{
+    //...
+}
+```
+
+**ReplaceDbContext option**
 
 ````csharp
 context.Services.AddAbpDbContext<OtherDbContext>(options =>

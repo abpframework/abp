@@ -120,6 +120,4 @@ export const environment = {
 } as Config.Environment;
 ```
 
-> Note: The resource owner password flow does not support the two-factor authentication for some technical reasons.
-
 See the [Authorization in Angular UI](./Authorization.md) document for more details.

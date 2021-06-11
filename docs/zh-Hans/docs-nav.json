@@ -519,10 +519,6 @@
               "path": "UI/Angular/Component-Replacement.md"
             },
             {
-              "text": "自定义设置页",
-              "path": "UI/Angular/Custom-Setting-Page.md"
-            },
-            {
               "text": "懒加载Scripts与Styles",
               "path": "UI/Angular/Lazy-Load-Service.md"
             },

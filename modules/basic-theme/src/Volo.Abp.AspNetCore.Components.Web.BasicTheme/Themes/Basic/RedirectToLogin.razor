@@ -1,0 +1,17 @@
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+@code { 
+    protected override void OnInitialized()
+    {
+        bool isWebAssembly = JSRuntime is IJSInProcessRuntime;
+        if (isWebAssembly)
+        {
+            Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+        }
+        else
+        {
+            Navigation.NavigateTo($"account/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}", true);
+        }
+    } 
+}

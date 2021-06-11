@@ -3,10 +3,11 @@ using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions
 {
-    public class PermissionDefinition
+    public class PermissionDefinition : IHasSimpleStateCheckers<PermissionDefinition>
     {
         /// <summary>
         /// Unique name of the permission.
@@ -31,7 +32,7 @@ namespace Volo.Abp.Authorization.Permissions
         /// </summary>
         public List<string> Providers { get; } //TODO: Rename to AllowedProviders?
 
-        public List<IPermissionStateProvider> StateProviders { get; }
+        public List<ISimpleStateChecker<PermissionDefinition>> StateCheckers { get; }
 
         public ILocalizableString DisplayName
         {
@@ -88,7 +89,7 @@ namespace Volo.Abp.Authorization.Permissions
 
             Properties = new Dictionary<string, object>();
             Providers = new List<string>();
-            StateProviders = new List<IPermissionStateProvider>();
+            StateCheckers = new List<ISimpleStateChecker<PermissionDefinition>>();
             _children = new List<PermissionDefinition>();
         }
 
@@ -123,7 +124,7 @@ namespace Volo.Abp.Authorization.Permissions
         }
 
         /// <summary>
-        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// Set the <see cref="StateProviders"/> property.
         /// This is a shortcut for nested calls on this object.
         /// </summary>
         public virtual PermissionDefinition WithProviders(params string[] providers)

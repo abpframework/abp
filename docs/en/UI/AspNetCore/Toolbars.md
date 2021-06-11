@@ -61,10 +61,10 @@ if (await context.IsGrantedAsync("MyPermissionName"))
 }
 ````
 
-You can use `RequiredPermissionName` as a shortcut. It is also more performant, ABP optimizes the permission check for all the items.
+You can use `RequirePermissions` extension method as a shortcut. It is also more performant, ABP optimizes the permission check for all the items.
 
 ````csharp
-context.Toolbar.Items.Insert(0, new ToolbarItem(typeof(NotificationViewComponent), requiredPermissionName: "MyPermissionName"));
+context.Toolbar.Items.Insert(0, new ToolbarItem(typeof(NotificationViewComponent)).RequirePermissions("MyPermissionName"));
 ````
 
 This class adds the `NotificationViewComponent` as the first item in the `Main` toolbar.
