@@ -28,14 +28,14 @@ $(function () {
                     items: [
                         {
                             text: l('Edit'),
-                            visible: abp.auth.isGranted('CmsKit.Blogs.Update'),
+                            visible: abp.auth.isGranted('CmsKit.BlogPosts.Update'),
                             action: function (data) {
                                 location.href = "BlogPosts/Update/" + data.record.id
                             }
                         },
                         {
                             text: l('Delete'),
-                            visible: abp.auth.isGranted('CmsKit.Blogs.Delete'),
+                            visible: abp.auth.isGranted('CmsKit.BlogPosts.Delete'),
                             confirmMessage: function (data) {
                                 return l("BlogPostDeletionConfirmationMessage", data.record.title)
                             },

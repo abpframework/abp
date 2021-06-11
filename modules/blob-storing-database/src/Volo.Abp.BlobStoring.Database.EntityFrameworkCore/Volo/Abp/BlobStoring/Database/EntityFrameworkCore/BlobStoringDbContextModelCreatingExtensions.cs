@@ -30,6 +30,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
                 b.HasMany<DatabaseBlob>().WithOne().HasForeignKey(p => p.ContainerId);
 
                 b.HasIndex(x => new {x.TenantId, x.Name});
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<DatabaseBlob>(b =>
@@ -45,7 +47,11 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
                 b.HasOne<DatabaseBlobContainer>().WithMany().HasForeignKey(p => p.ContainerId);
 
                 b.HasIndex(x => new {x.TenantId, x.ContainerId, x.Name});
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<BlobStoringDbContext>();
         }
     }
 }

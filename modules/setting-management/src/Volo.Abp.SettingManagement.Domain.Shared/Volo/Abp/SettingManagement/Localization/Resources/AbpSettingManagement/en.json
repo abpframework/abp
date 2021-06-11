@@ -14,6 +14,9 @@
     "SmtpEnableSsl": "Enable ssl",
     "SmtpUseDefaultCredentials": "Use default credentials",
     "DefaultFromAddress": "Default from address",
-    "DefaultFromDisplayName": "Default from display name"
+    "DefaultFromDisplayName": "Default from display name",
+    "Feature:SettingManagementGroup": "Setting Management",
+    "Feature:SettingManagementEnable": "Enable setting management",
+    "Feature:SettingManagementEnableDescription": "Enable setting management system in the application."
   }
 }

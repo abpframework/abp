@@ -604,23 +604,77 @@ ObjectExtensionManager.Instance
     );
 ````
 
-If the related module has implemented this feature (by using the `ConfigureEfCoreEntity` explained below), then the new property is added to the model. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
+### MapEfCoreEntity
 
->`MapEfCoreProperty` method must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEfCoreEntityExtensionMappings` class that is safe to use this method inside.
+`MapEfCoreEntity` is a shortcut extension method to configure the `Entity`.
 
-### ConfigureEfCoreEntity
-
-If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureEfCoreEntity` extension method in your entity mapping. However, there is a shortcut extension method `ConfigureObjectExtensions` that can be used while configuring the entity mapping:
+**Example**: Set the max length of `Name` to the `IdentityRole` entity:
 
 ````csharp
-builder.Entity<YourEntity>(b =>
+ObjectExtensionManager.Instance
+    .MapEfCoreEntity<IdentityRole>(builder =>
+    {
+        builder.As<EntityTypeBuilder<IdentityRole>>().Property(x => x.Name).HasMaxLength(200);
+    });
+````
+
+### MapEfCoreDbContext
+
+`MapEfCoreDbContext` is a shortcut extension method to configure the `DbContext`.
+
+**Example**: Set the max length of `Name` to the `IdentityRole` entity of `IdentityDbContext`:
+
+````csharp
+ObjectExtensionManager.Instance.MapEfCoreDbContext<IdentityDbContext>(b =>
 {
-    b.ConfigureObjectExtensions();
-    //...
+    b.Entity<IdentityRole>().Property(x => x.Name).HasMaxLength(200);
 });
 ````
 
-> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` method. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
+If the related module has implemented this feature(explained below), then the new property is added to the model or the DbContext/Entity configure changed. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
+
+> The `MapEfCoreProperty`, `MapEfCoreEntity` and `MapEfCoreDbContext` methods must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEfCoreEntityExtensionMappings` class that is safe to use this method inside.
+
+### ConfigureEfCoreEntity, ApplyObjectExtensionMappings and TryConfigureObjectExtensions
+
+If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureEfCoreEntity`, `ApplyObjectExtensionMappings` and `TryConfigureObjectExtensions` extension methods in your entity mapping.
+
+**Example**:
+````csharp
+public static class QADbContextModelCreatingExtensions
+{
+    public static void ConfigureQA(
+        this ModelBuilder builder,
+        Action<QAModelBuilderConfigurationOptions> optionsAction = null)
+    {
+        Check.NotNull(builder, nameof(builder));
+
+        var options = new QAModelBuilderConfigurationOptions(
+            QADatabaseDbProperties.DbTablePrefix,
+            QADatabaseDbProperties.DbSchema
+        );
+
+        optionsAction?.Invoke(options);
+
+        builder.Entity<QA_Question>(b =>
+        {
+            b.ToTable(options.TablePrefix + "Questions", options.Schema);
+            b.ConfigureByConvention();
+            //...
+
+            //Call this in the end of buildAction.
+            b.ApplyObjectExtensionMappings();
+        });
+
+        //...
+
+        //Call this in the end of ConfigureQA.
+        builder.TryConfigureObjectExtensions<QADbContext>();
+    }
+}
+````
+
+> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` and `ConfigureEfCoreEntity` methods. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
 
 See the "*ConfigureByConvention Method*" section above for more information.
 
