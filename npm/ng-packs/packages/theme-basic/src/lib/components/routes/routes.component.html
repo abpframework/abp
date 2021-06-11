@@ -62,12 +62,14 @@
   </ng-template>
 
   <ng-template #defaultChild let-child>
-    <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
-      <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
-        <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
-        {{ child.name | abpLocalization }}</a
-      >
-    </div>
+    <ng-container *ngIf="child.path">
+      <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
+        <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
+          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
+          {{ child.name | abpLocalization }}</a
+        >
+      </div>
+    </ng-container>
   </ng-template>
 
   <ng-template #dropdownChild let-child>
