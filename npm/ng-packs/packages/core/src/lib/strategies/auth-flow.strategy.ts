@@ -2,13 +2,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import {
-  AuthConfig,
-  OAuthErrorEvent,
-  OAuthInfoEvent,
-  OAuthService,
-  OAuthStorage,
-} from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthErrorEvent, OAuthInfoEvent, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { from, Observable, of } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
@@ -116,7 +110,9 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   logout(queryParams?: Params) {
-    return from(this.oAuthService.revokeTokenAndLogout(queryParams));
+    const lang = this.sessionState.getLanguage();
+    const culture = { culture: lang, 'ui-culture': lang };
+    return from(this.oAuthService.revokeTokenAndLogout({ ...(lang && culture), ...queryParams }));
   }
 
   login() {
