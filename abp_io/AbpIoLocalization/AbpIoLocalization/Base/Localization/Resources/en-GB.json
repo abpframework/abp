@@ -30,6 +30,9 @@
     "Permission:License": "License",
     "Permission:UserInfo": "User info",
     "SeeDocuments": "See Documents",
-    "Samples": "Samples"
+    "Samples": "Samples",
+    "FreeDDDBook": "Free DDD E-book",
+    "New": "New",
+    "Volo.AbpIo.Domain:020005": "License extend year can not be lower than {MinExtendLicenseYear} year and greater than {MaxExtendLicenseYear} years "
   }
 }

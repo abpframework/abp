@@ -32,6 +32,6 @@ DDD mostly interest in the **Domain** and the **Application** layers, rather tha
   * [Data Transfer Objects (DTOs)](Data-Transfer-Objects.md)
   * [Unit of Work](Unit-Of-Work.md)
 
-## The Ultimate DDD Implementation Guide
+## Free E-Book: Implementing DDD
 
-See the [Implementing Domain Driven Design](Domain-Driven-Design-Implementation-Guide.md) guide as a **complete reference**. The Guide explains the Domain Driven Design and introduces explicit **rules and examples** to give a deep understanding of the **implementation details**.
+See the [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design) as a **complete reference**. This book explains the Domain Driven Design and introduces explicit **rules and examples** to give a deep understanding of the **implementation details**.

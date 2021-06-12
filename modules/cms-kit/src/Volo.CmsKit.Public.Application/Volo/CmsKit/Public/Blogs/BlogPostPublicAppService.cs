@@ -1,14 +1,14 @@
 ﻿using JetBrains.Annotations;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.BlobStoring;
-using Volo.Abp.Content;
+using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Public.Blogs
 {
+    [RequiresGlobalFeature(typeof(BlogsFeature))]
     public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPublicAppService
     {
         protected IBlogRepository BlogRepository { get; }
@@ -36,7 +36,7 @@ namespace Volo.CmsKit.Public.Blogs
         {
             var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
-            var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id,input.MaxResultCount, input.SkipCount, input.Sorting);
+            var blogPosts = await BlogPostRepository.GetListAsync(null, blog.Id, input.MaxResultCount, input.SkipCount, input.Sorting);
 
             return new PagedResultDto<BlogPostPublicDto>(
                 await BlogPostRepository.GetCountAsync(blogId: blog.Id),

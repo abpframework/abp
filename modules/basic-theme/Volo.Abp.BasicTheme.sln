@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0BC55E3B-4964-48E3-A390-2ADD37980149}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Server.BasicTheme", "src\Volo.Abp.AspNetCore.Components.Server.BasicTheme\Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj", "{C8068E7F-4A04-4755-8976-C2A4C0ADC708}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.Web.BasicTheme", "src\Volo.Abp.AspNetCore.Components.Web.BasicTheme\Volo.Abp.AspNetCore.Components.Web.BasicTheme.csproj", "{655C0CF7-7BFA-45E4-A157-E868A97FB45B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme", "src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj", "{95954B0B-9FE0-4351-B1F2-53DDF03F0738}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", "src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj", "{21E20CC4-E82B-451B-BB73-141997C81C56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo", "test\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.csproj", "{7DFA95DB-F3A1-4883-AB03-9B02E540A134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo", "test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj", "{51B491ED-F959-4974-A876-528B5F16BC92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests", "test\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests.csproj", "{8C336CB8-F7A9-4203-AE55-D8F5FDB2A958}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8068E7F-4A04-4755-8976-C2A4C0ADC708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8068E7F-4A04-4755-8976-C2A4C0ADC708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8068E7F-4A04-4755-8976-C2A4C0ADC708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8068E7F-4A04-4755-8976-C2A4C0ADC708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{655C0CF7-7BFA-45E4-A157-E868A97FB45B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{655C0CF7-7BFA-45E4-A157-E868A97FB45B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{655C0CF7-7BFA-45E4-A157-E868A97FB45B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{655C0CF7-7BFA-45E4-A157-E868A97FB45B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95954B0B-9FE0-4351-B1F2-53DDF03F0738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95954B0B-9FE0-4351-B1F2-53DDF03F0738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95954B0B-9FE0-4351-B1F2-53DDF03F0738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95954B0B-9FE0-4351-B1F2-53DDF03F0738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21E20CC4-E82B-451B-BB73-141997C81C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21E20CC4-E82B-451B-BB73-141997C81C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21E20CC4-E82B-451B-BB73-141997C81C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21E20CC4-E82B-451B-BB73-141997C81C56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DFA95DB-F3A1-4883-AB03-9B02E540A134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DFA95DB-F3A1-4883-AB03-9B02E540A134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DFA95DB-F3A1-4883-AB03-9B02E540A134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DFA95DB-F3A1-4883-AB03-9B02E540A134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51B491ED-F959-4974-A876-528B5F16BC92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B491ED-F959-4974-A876-528B5F16BC92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B491ED-F959-4974-A876-528B5F16BC92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B491ED-F959-4974-A876-528B5F16BC92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C336CB8-F7A9-4203-AE55-D8F5FDB2A958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C336CB8-F7A9-4203-AE55-D8F5FDB2A958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C336CB8-F7A9-4203-AE55-D8F5FDB2A958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C336CB8-F7A9-4203-AE55-D8F5FDB2A958}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C8068E7F-4A04-4755-8976-C2A4C0ADC708} = {ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}
+		{655C0CF7-7BFA-45E4-A157-E868A97FB45B} = {ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}
+		{95954B0B-9FE0-4351-B1F2-53DDF03F0738} = {ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}
+		{21E20CC4-E82B-451B-BB73-141997C81C56} = {ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}
+		{7DFA95DB-F3A1-4883-AB03-9B02E540A134} = {0BC55E3B-4964-48E3-A390-2ADD37980149}
+		{51B491ED-F959-4974-A876-528B5F16BC92} = {0BC55E3B-4964-48E3-A390-2ADD37980149}
+		{8C336CB8-F7A9-4203-AE55-D8F5FDB2A958} = {0BC55E3B-4964-48E3-A390-2ADD37980149}
+	EndGlobalSection
+EndGlobal

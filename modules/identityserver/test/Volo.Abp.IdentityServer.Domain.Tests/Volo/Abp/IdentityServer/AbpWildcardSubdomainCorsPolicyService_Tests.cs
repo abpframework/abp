@@ -35,6 +35,8 @@ namespace Volo.Abp.IdentityServer
             (await _corsPolicyService.IsOriginAllowedAsync("https://abp.io")).ShouldBeTrue();
             (await _corsPolicyService.IsOriginAllowedAsync("https://t1.abp.io")).ShouldBeTrue();
             (await _corsPolicyService.IsOriginAllowedAsync("https://t1.ng.abp.io")).ShouldBeTrue();
+
+            (await _corsPolicyService.IsOriginAllowedAsync("https://t1.abp.io.mydomain.com")).ShouldBeFalse();
         }
     }
 }

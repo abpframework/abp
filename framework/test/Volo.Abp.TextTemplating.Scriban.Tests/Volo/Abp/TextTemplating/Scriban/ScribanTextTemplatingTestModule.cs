@@ -4,7 +4,6 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.TextTemplating.Scriban
 {
     [DependsOn(
-        typeof(AbpTextTemplatingScribanModule),
         typeof(AbpTextTemplatingTestModule)
     )]
     public class ScribanTextTemplatingTestModule : AbpModule

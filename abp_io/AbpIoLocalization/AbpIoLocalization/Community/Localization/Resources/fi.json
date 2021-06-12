@@ -118,7 +118,7 @@
     "CreatePostCoverInfo": "Lisää kansikuva, jotta voit luoda tehokkaan viestin. Lataa 16: 9-kuvasuhteen kuvat parhaan näkymän saamiseksi. Tiedoston enimmäiskoko: 1 Mt.",
     "ThankYouForContribution": "Kiitos osallistumisesta ABP-yhteisöön.",
     "GithubArticle": "Github-artikkeli",
-    "GithubArticleSubmitStepOne": "<span class = \"font-weight-bold\"> 1. </span> Kirjoita artikkeli mistä tahansa julkisesta GitHub-arkistosta Markdown-muodossa. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/fi/Community-Articles/2020-12-04-Event-Organizer/Post.md\"> esimerkki </a>",
+    "GithubArticleSubmitStepOne": "<span class=\"font-weight-bold\">1.</span> Kirjoita artikkeli mistä tahansa julkisesta GitHub-arkistosta Markdown-muodossa. <a target=\"_blank\" href=\"https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2020-12-04-Event-Organizer/Post.md\"> esimerkki </a>",
     "GithubArticleSubmitStepTwo": "<span class = \"font-weight-bold\"> 2. </span> Lähetä artikkelin URL-osoite lomaketta käyttämällä.",
     "GithubArticleSubmitStepThree": "<span class = \"font-weight-bold\"> 3. </span> Artikkelisi renderöidään tällä verkkosivustolla.",
     "YoutubeVideo": "Youtube-video",

@@ -26,6 +26,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Features\Volo.Abp.Features.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>
 
 </Project>

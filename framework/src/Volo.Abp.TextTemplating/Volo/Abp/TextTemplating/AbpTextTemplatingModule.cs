@@ -1,11 +1,11 @@
-﻿using Volo.Abp.Modularity;
+﻿using System;
+using Volo.Abp.Modularity;
 using Volo.Abp.TextTemplating.Scriban;
 
 namespace Volo.Abp.TextTemplating
 {
-    [DependsOn(
-        typeof(AbpTextTemplatingScribanModule)
-    )]
+    [Obsolete("This module will be removed in the future. Please use AbpTextTemplatingScribanModule or AbpTextTemplatingRazorModule.")]
+    [DependsOn(typeof(AbpTextTemplatingScribanModule))]
     public class AbpTextTemplatingModule : AbpModule
     {
 

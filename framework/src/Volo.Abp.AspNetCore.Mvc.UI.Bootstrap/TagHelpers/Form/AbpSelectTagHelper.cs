@@ -12,6 +12,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public string Label { get; set; }
 
+        public bool SuppressLabel { get; set; }
+
         public IEnumerable<SelectListItem> AspItems { get; set; }
 
         public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;

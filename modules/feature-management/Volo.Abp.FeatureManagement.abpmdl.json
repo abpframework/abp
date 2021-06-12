@@ -1,127 +1,78 @@
 {
   "folders": {
-    "src": {},
-    "test": {}
+    "items": {
+      "src": {},
+      "test": {}
+    }
   },
   "packages": {
     "Volo.Abp.FeatureManagement.Domain.Shared": {
-      "path": "src/Volo.Abp.FeatureManagement.Domain.Shared/Volo.Abp.FeatureManagement.Domain.Shared.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.domain.shared": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.Domain.Shared/Volo.Abp.FeatureManagement.Domain.Shared.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.Domain": {
-      "path": "src/Volo.Abp.FeatureManagement.Domain/Volo.Abp.FeatureManagement.Domain.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.domain": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.Domain/Volo.Abp.FeatureManagement.Domain.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.Application.Contracts": {
-      "path": "src/Volo.Abp.FeatureManagement.Application.Contracts/Volo.Abp.FeatureManagement.Application.Contracts.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.application.contracts": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.Application.Contracts/Volo.Abp.FeatureManagement.Application.Contracts.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.Application": {
-      "path": "src/Volo.Abp.FeatureManagement.Application/Volo.Abp.FeatureManagement.Application.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.application": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.Application/Volo.Abp.FeatureManagement.Application.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.EntityFrameworkCore": {
-      "path": "src/Volo.Abp.FeatureManagement.EntityFrameworkCore/Volo.Abp.FeatureManagement.EntityFrameworkCore.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.ef": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.EntityFrameworkCore/Volo.Abp.FeatureManagement.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.MongoDB": {
-      "path": "src/Volo.Abp.FeatureManagement.MongoDB/Volo.Abp.FeatureManagement.MongoDB.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.mongodb": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.MongoDB/Volo.Abp.FeatureManagement.MongoDB.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.HttpApi": {
-      "path": "src/Volo.Abp.FeatureManagement.HttpApi/Volo.Abp.FeatureManagement.HttpApi.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.http-api": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.HttpApi/Volo.Abp.FeatureManagement.HttpApi.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.HttpApi.Client": {
-      "path": "src/Volo.Abp.FeatureManagement.HttpApi.Client/Volo.Abp.FeatureManagement.HttpApi.Client.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.http-api-client": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.HttpApi.Client/Volo.Abp.FeatureManagement.HttpApi.Client.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.Web": {
-      "path": "src/Volo.Abp.FeatureManagement.Web/Volo.Abp.FeatureManagement.Web.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.ui.mvc": {}
-      }
-    },
-    "Volo.Abp.FeatureManagement.Blazor": {
-      "path": "src/Volo.Abp.FeatureManagement.Blazor/Volo.Abp.FeatureManagement.Blazor.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.ui.blazor": {}
-      }
-    },
-    "Volo.Abp.FeatureManagement.Blazor.Server": {
-      "path": "src/Volo.Abp.FeatureManagement.Blazor.Server/Volo.Abp.FeatureManagement.Blazor.Server.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.ui.blazor-server": {}
-      }
-    },
-    "Volo.Abp.FeatureManagement.Blazor.WebAssembly": {
-      "path": "src/Volo.Abp.FeatureManagement.Blazor.WebAssembly/Volo.Abp.FeatureManagement.Blazor.WebAssembly.csproj",
-      "folder": "src",
-      "includes": {
-        "lib.ui.blazor-wasm": {}
-      }
+      "path": "src/Volo.Abp.FeatureManagement.Web/Volo.Abp.FeatureManagement.Web.abppkg.json",
+      "folder": "src"
     },
     "Volo.Abp.FeatureManagement.TestBase": {
-      "path": "test/Volo.Abp.FeatureManagement.TestBase/Volo.Abp.FeatureManagement.TestBase.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.FeatureManagement.TestBase/Volo.Abp.FeatureManagement.TestBase.abppkg.json",
+      "folder": "test"
     },
     "Volo.Abp.FeatureManagement.Domain.Tests": {
-      "path": "test/Volo.Abp.FeatureManagement.Domain.Tests/Volo.Abp.FeatureManagement.Domain.Tests.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.FeatureManagement.Domain.Tests/Volo.Abp.FeatureManagement.Domain.Tests.abppkg.json",
+      "folder": "test"
     },
     "Volo.Abp.FeatureManagement.EntityFrameworkCore.Tests": {
-      "path": "test/Volo.Abp.FeatureManagement.EntityFrameworkCore.Tests/Volo.Abp.FeatureManagement.EntityFrameworkCore.Tests.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.FeatureManagement.EntityFrameworkCore.Tests/Volo.Abp.FeatureManagement.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
     },
     "Volo.Abp.FeatureManagement.MongoDB.Tests": {
-      "path": "test/Volo.Abp.FeatureManagement.MongoDB.Tests/Volo.Abp.FeatureManagement.MongoDB.Tests.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.FeatureManagement.MongoDB.Tests/Volo.Abp.FeatureManagement.MongoDB.Tests.abppkg.json",
+      "folder": "test"
     },
     "Volo.Abp.FeatureManagement.Application.Tests": {
-      "path": "test/Volo.Abp.FeatureManagement.Application.Tests/Volo.Abp.FeatureManagement.Application.Tests.csproj",
-      "folder": "test",
-      "includes": {
-        "lib.test": {}
-      }
+      "path": "test/Volo.Abp.FeatureManagement.Application.Tests/Volo.Abp.FeatureManagement.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.FeatureManagement.Blazor": {
+      "path": "src/Volo.Abp.FeatureManagement.Blazor/Volo.Abp.FeatureManagement.Blazor.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.FeatureManagement.Blazor.Server": {
+      "path": "src/Volo.Abp.FeatureManagement.Blazor.Server/Volo.Abp.FeatureManagement.Blazor.Server.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.FeatureManagement.Blazor.WebAssembly": {
+      "path": "src/Volo.Abp.FeatureManagement.Blazor.WebAssembly/Volo.Abp.FeatureManagement.Blazor.WebAssembly.abppkg.json",
+      "folder": "src"
     }
   }
 }

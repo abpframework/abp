@@ -37,6 +37,7 @@ import { selfFactory } from '../../utils/factory.util';
       #timepicker
       [formControlName]="prop.name"
       (ngModelChange)="setDate($event)"
+      [meridian]="meridian"
     ></ngb-timepicker>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,6 +59,7 @@ import { selfFactory } from '../../utils/factory.util';
 })
 export class DateTimePickerComponent {
   @Input() prop: FormProp;
+  @Input() meridian = false;
 
   @ViewChild(NgbInputDatepicker) date: NgbInputDatepicker;
   @ViewChild(NgbTimepicker) time: NgbTimepicker;

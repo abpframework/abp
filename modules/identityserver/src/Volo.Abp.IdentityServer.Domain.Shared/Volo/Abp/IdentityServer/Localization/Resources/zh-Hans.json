@@ -9,6 +9,7 @@
     "InvalidUserNameOrPassword": "用户名或密码错误!",
     "LoginIsNotAllowed": "无法登录!你需要验证邮箱地址/手机号.",
     "InvalidUsername": "用户名或密码错误!",
+    "InvalidAuthenticatorCode": "验证码无效!",
     "TheTargetUserIsNotLinkedToYou": "目标用户未和你有关联!"
   }
 }

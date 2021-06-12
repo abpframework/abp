@@ -1,5 +1,8 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Shouldly;
 using Volo.Abp.Http;
 using Volo.Abp.Localization;
@@ -89,6 +92,46 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
 
             result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action-dynamic-length?value1=123458&value3[0]=53&value3[1]=54&value4=2&value5=1.2&value6=2004-05-04", HttpStatusCode.BadRequest); //value4 has max date of 3/4/2004.
             result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task Should_Disable_Validate()
+        {
+            var result = await GetResponseAsStringAsync("/api/validation-test/disable-validation-object-result-action");
+            result.ShouldBe("ModelState.IsValid: false");
+        }
+
+        [Fact] public async Task SubClass_Should_Disable_Validate_If_Class_Has_DisableValidationAttribute()
+        {
+            var result = await GetResponseAsStringAsync("/api/sub1-validation-test/disable-validation-object-result-action");
+            result.ShouldBe("ModelState.IsValid: false");
+        }
+
+        [Fact]
+        public async Task SubClass_Should_Disable_Validate_If_Action_Has_DisableValidationAttribute()
+        {
+            var result = await GetResponseAsStringAsync("/api/validation-test/object-result-action2");
+            result.ShouldBe("ModelState.IsValid: false");
+        }
+    }
+
+    public class DisableAutoModelValidationTestController_Tests : AspNetCoreMvcTestBase
+    {
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+        {
+            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.AutoModelValidation = false;
+            });
+
+            base.ConfigureServices(context, services);
+        }
+
+        [Fact]
+        public async Task Should_Disable_Validate_If_AutoModelValidation_Is_False()
+        {
+            var result = await GetResponseAsStringAsync("/api/validation-test/object-result-action3");
+            result.ShouldBe("ModelState.IsValid: false");
         }
     }
 }

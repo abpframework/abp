@@ -236,6 +236,37 @@ When you write this code inside your permission definition provider, it finds th
 
 > Tip: It is better to check the value returned by the `GetPermissionOrNull` method since it may return null if the given permission was not defined.
 
+### Permission Depending on a Condition
+
+You may want to disable a permission based on a condition. Disabled permissions are not visible on the UI and always returns `prohibited` when you check them. There are two built-in conditional dependencies for a permission definition;
+
+* A permission can be automatically disabled if a [Feature](Features.md) was disabled.
+* A permission can be automatically disabled if a [Global Feature](Global-Features.md) was disabled.
+
+In addition, you can create your custom extensions.
+
+#### Depending on a Features
+
+Use the `RequireFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
+
+````csharp
+myGroup.AddPermission("Book_Creation")
+    .RequireFeatures("BookManagement");
+````
+
+#### Depending on a Global Feature
+
+Use the `RequireFeatures` extension method on your permission definition to make the permission available only if a given feature is enabled:
+
+````csharp
+myGroup.AddPermission("Book_Creation")
+    .RequireGlobalFeatures("BookManagement");
+````
+
+#### Creating a Custom Permission Dependency
+
+`PermissionDefinition` supports state check, Please refer to [Simple State Checker's documentation](SimpleStateChecker.md) 
+
 ## IAuthorizationService
 
 ASP.NET Core provides the `IAuthorizationService` that can be used to check for authorization. Once you inject, you can use it in your code to conditionally control the authorization.
@@ -412,7 +443,7 @@ public class SocialSecurityNumberClaimsPrincipalContributor : IAbpClaimsPrincipa
             var socialSecurityNumber = await userService.GetSocialSecurityNumberAsync(userId.Value);
             if (socialSecurityNumber != null)
             {
-                identity.AddOrReplace(new Claim("SocialSecurityNumber", socialSecurityNumber));
+                identity.AddClaim(new Claim("SocialSecurityNumber", socialSecurityNumber));
             }
         }
     }

@@ -43,7 +43,7 @@
     "Description:Abp.Account.EnableLocalLogin": "Jelzi, hogy a szerver engedélyezi-e a felhasználóknak a hitelesítést egy helyi fiókkal.",
     "LoggedOutTitle": "Kijelentkezett",
     "LoggedOutText": "Kijelentkeztünk, és hamarosan átirányítjuk.",
-    "ReturnToText": "Kattintson ide a(z) {0} címre történő átirányításhoz",
+    "ReturnToText": "Kattintson ide az alkalmazáshoz való visszatéréshez",
     "OrLoginWith": "Vagy jelentkezzen be:",
     "ForgotPassword": "Elfelejtette a jelszavát?",
     "SendPasswordResetLink_Information": "Jelszó-visszaállítási linket küldünk az e-mailre a jelszó visszaállításához. Ha néhány percen belül nem kap e-mailt, próbálkozzon újra.",

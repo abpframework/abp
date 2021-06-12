@@ -33,7 +33,7 @@
     "Upd": "Päivitykset",
     "NewExplanation": "Luotu kahden viime viikon aikana.",
     "UpdatedExplanation": "Päivitetty kahden viime viikon aikana.",
-    "Volo.Docs.Domain:010002": "Lyhytnimi {Lyhytnimi} on jo olemassa.",
+    "Volo.Docs.Domain:010002": "Lyhytnimi {ShortName} on jo olemassa.",
     "Preview": "esikatselu",
     "Search": "Hae",
     "SearchResults": "Hakutulokset"

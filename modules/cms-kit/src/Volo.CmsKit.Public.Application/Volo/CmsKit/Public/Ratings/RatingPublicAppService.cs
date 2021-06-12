@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Ratings
 {
-    public class RatingPublicAppService : ApplicationService, IRatingPublicAppService
+    [RequiresGlobalFeature(typeof(RatingsFeature))]
+    public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicAppService
     {
         protected IRatingRepository RatingRepository { get; }
         public ICmsUserLookupService CmsUserLookupService { get; }
