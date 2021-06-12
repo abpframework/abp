@@ -56,7 +56,7 @@
     "LoginToReply": "Login to reply",
     "MakeMainMenu": "Make Main Menu",
     "Menu:CMS": "CMS",
-    "Menu:Menus": "Menus",
+    "Menus": "Menus",
     "MenuDeletionConfirmationMessage": "The menu '{0}' will be deleted. Are you sure?",
     "MenuItemDeletionConfirmationMessage": "Are sure to delete this menu item?",
     "MenuItemMoveConfirmMessage": "Are you sure you want to move '{0}' under '{1}'?",

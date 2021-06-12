@@ -55,7 +55,7 @@
     "LoginToReply": "Cevap vermek için giriş yap",
     "MakeMainMenu": "Ana Menü Yap",
     "Menu:CMS": "CMS",
-    "Menu:Menus": "Menüler",
+    "Menus": "Menüler",
     "MenuDeletionConfirmationMessage": "'{0}' isimli menü silinecek. Emin misiniz?",
     "MenuItemDeletionConfirmationMessage": "Bu menü elemanını silmek istediğinize emin misiniz?",
     "MenuItems": "Menü Elemanları",
