@@ -66,7 +66,7 @@ export interface ExtensionPropertyUiDto {
   onTable: ExtensionPropertyUiTableDto;
   onCreateForm: ExtensionPropertyUiFormDto;
   onEditForm: ExtensionPropertyUiFormDto;
-  lookup: ExtensionPropertyUiLookupDto;
+  lookup?: ExtensionPropertyUiLookupDto;
 }
 
 export interface ExtensionPropertyUiFormDto {
