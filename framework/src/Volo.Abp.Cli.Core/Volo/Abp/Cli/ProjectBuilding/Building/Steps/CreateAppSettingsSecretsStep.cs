@@ -8,15 +8,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
     {
         private const string FileName = "appsettings.secrets.json";
         private const string AppSettingsFileName = "appsettings.json";
+        private const string AppSettingsPlaceholder = "<!--APPSETTINGS-SECRETS-->";
 
         public override void Execute(ProjectBuildContext context)
         {
             var appSettingsFiles = context.Files
                 .Where(x =>
                     x.Name.EndsWith(AppSettingsFileName) &&
-                    NotTestProject(x.Name) &&
-                    NotBlazorWasmProject(x.Name) &&
-                    NotMigratorProject(x.Name))
+                    NotBlazorWasmProject(x.Name))
                 .ToList();
 
             var content = context.Template.IsPro()
@@ -30,11 +29,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     content.GetBytes(),
                     false));
             }
-        }
 
-        private static bool NotTestProject(string fileName)
-        {
-            return !fileName.StartsWith("/aspnet-core/test");
+            var projectFiles = context.Files.Where(x => x.Content.Contains(AppSettingsPlaceholder)).ToList();
+
+            foreach (var projectFile in projectFiles)
+            {
+                projectFile.SetContent(ReplaceAppSettingsSecretsPlaceholder(projectFile.Content));
+            }
         }
 
         private static bool NotBlazorWasmProject(string fileName)
@@ -42,9 +43,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             return !fileName.Contains("Blazor/wwwroot") && !fileName.Contains("Blazor.Host/wwwroot");
         }
 
-        public static bool NotMigratorProject(string fileName)
+        private static string ReplaceAppSettingsSecretsPlaceholder(string content)
         {
-            return !fileName.Contains("DbMigrator");
+            var replaceContent = $"<None Remove=\"{FileName}\" />{Environment.NewLine}" +
+                    $"    <Content Include=\"{FileName}\">{Environment.NewLine}" +
+                    $"      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>{Environment.NewLine}" +
+                    $"      <CopyToOutputDirectory>Always</CopyToOutputDirectory>{Environment.NewLine}" +
+                    "    </Content>";
+            return content.Replace(AppSettingsPlaceholder, replaceContent);
         }
     }
 }
