@@ -156,14 +156,17 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             AddHeaders(invocation, action, requestMessage, apiVersion);
 
-            await ClientAuthenticator.Authenticate(
-                new RemoteServiceHttpClientAuthenticateContext(
-                    client,
-                    requestMessage,
-                    remoteServiceConfig,
-                    clientConfig.RemoteServiceName
-                )
-            );
+            if (action.AllowAnonymous != true)
+            {
+                await ClientAuthenticator.Authenticate(
+                    new RemoteServiceHttpClientAuthenticateContext(
+                        client,
+                        requestMessage,
+                        remoteServiceConfig,
+                        clientConfig.RemoteServiceName
+                    )
+                );
+            }
 
             var response = await client.SendAsync(
                 requestMessage,

@@ -15,7 +15,7 @@ namespace Volo.Abp.DependencyInjection
 
         public IServiceCollection Services { get; }
 
-        public List<Type> ReplacedDbContextTypes { get; }
+        public Dictionary<Type, Type> ReplacedDbContextTypes { get; }
 
         public Type DefaultRepositoryDbContextType { get; protected set; }
 
@@ -39,7 +39,7 @@ namespace Volo.Abp.DependencyInjection
             Services = services;
             DefaultRepositoryDbContextType = originalDbContextType;
             CustomRepositories = new Dictionary<Type, Type>();
-            ReplacedDbContextTypes = new List<Type>();
+            ReplacedDbContextTypes = new Dictionary<Type, Type>();
             SpecifiedDefaultRepositories = new List<Type>();
         }
 
@@ -47,15 +47,20 @@ namespace Volo.Abp.DependencyInjection
         {
             return ReplaceDbContext(typeof(TOtherDbContext));
         }
+        
+        public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext, TTargetDbContext>()
+        {
+            return ReplaceDbContext(typeof(TOtherDbContext), typeof(TTargetDbContext));
+        }
 
-        public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType)
+        public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null)
         {
             if (!otherDbContextType.IsAssignableFrom(OriginalDbContextType))
             {
                 throw new AbpException($"{OriginalDbContextType.AssemblyQualifiedName} should inherit/implement {otherDbContextType.AssemblyQualifiedName}!");
             }
 
-            ReplacedDbContextTypes.AddIfNotContains(otherDbContextType);
+            ReplacedDbContextTypes[otherDbContextType] = targetDbContextType;
 
             return this;
         }

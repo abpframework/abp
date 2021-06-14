@@ -155,7 +155,7 @@
     "Code": "Code",
     "Result": "Résultat",
     "SeeTheDocumentForMoreInformation": "Consultez le <a href=\"{1}\"> {0} document </a> pour plus d'informations",
-    "IndexPageHeroSection": "<span class = \"first-line shine\"> <strong> open source </strong> </span> <span class = \"second-line text-uppercase\"> Application Web <br /> Framework </span> <span class = \"troisième ligne shine2\"> <strong> pour asp.net core </strong> </span>",
+    "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>open source</strong></span><span class=\"second-line text-uppercase\">Web Application<br />Framework </span><span class=\"third-line shine2\"><strong>for asp.net core</strong></span>",
     "UiFramework": "Framework de l'interface utilisateur",
     "EmailAddress": "Adresse e-mail",
     "Mobile": "Mobile",
