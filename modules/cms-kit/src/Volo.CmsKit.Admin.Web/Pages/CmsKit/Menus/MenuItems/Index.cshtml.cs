@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.CmsKit.Admin.Menus;
+using Volo.CmsKit.Menus;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 {
@@ -20,11 +21,11 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
         [BindProperty(SupportsGet = true)] 
         public Guid Id { get; set; }
 
-        public MenuDto Menu { get; protected set; }
+        public MenuWithDetailsDto Menu { get; protected set; }
 
         public async Task OnGetAsync()
         {
-            Menu = await MenuAdminAppService.GetSimpleAsync(Id);
+            Menu = await MenuAdminAppService.GetAsync(Id);
         }
     }
 }

@@ -57,7 +57,6 @@ $(function () {
                     menuTree.selectedMenuItem.Target = null;
                     menuTree.selectedMenuItem.ElementId = null;
                     menuTree.selectedMenuItem.CssClass = null;
-                    menuTree.selectedMenuItem.RequiredPermissionName = null;
                     menuTree.selectedMenuItem.PageId = null;
                 } else {
                     menuTree.selectedMenuItem.id = menuItemOnTree.id;
@@ -69,7 +68,6 @@ $(function () {
                     menuTree.selectedMenuItem.Target = menuItemOnTree.original.Target;
                     menuTree.selectedMenuItem.ElementId = menuItemOnTree.original.ElementId;
                     menuTree.selectedMenuItem.CssClass = menuItemOnTree.original.CssClass;
-                    menuTree.selectedMenuItem.RequiredPermissionName = menuItemOnTree.original.RequiredPermissionName;
                     menuTree.selectedMenuItem.PageId = menuItemOnTree.original.PageId;
                 }
 
@@ -83,7 +81,6 @@ $(function () {
                     target: menuTree.selectedMenuItem.Target,
                     elementId: menuTree.selectedMenuItem.ElementId,
                     cssClass: menuTree.selectedMenuItem.CssClass,
-                    requiredPermissionName: menuTree.selectedMenuItem.RequiredPermissionName,
                     pageId: menuTree.selectedMenuItem.PageId
                 });
             }
@@ -94,7 +91,7 @@ $(function () {
                 edit: {
                     label: l('Edit'),
                     icon: 'fa fa-pencil',
-                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Items.Update'),
+                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Update'),
                     action: function (data) {
                         var instance = $.jstree.reference(data.reference);
 
@@ -108,7 +105,7 @@ $(function () {
                 addSubMenuItem: {
                     label: l('AddSubMenuItem'),
                     icon: 'fa fa-plus',
-                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Items.Create'),
+                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Update'),
                     action: function () {
                         menuTree.addItem(node.id);
                     }
@@ -117,7 +114,7 @@ $(function () {
                 'delete': {
                     label: l('Delete'),
                     icon: 'fa fa-remove',
-                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Items.Delete'),
+                    _disabled: !abp.auth.isGranted('CmsKit.Menus.Update'),
                     action: function (data) {
                         var instance = $.jstree.reference(data.reference);
 
@@ -167,7 +164,6 @@ $(function () {
                         target: newMenuItem.target,
                         elementId: newMenuItem.elementId,
                         cssClass: newMenuItem.cssClass,
-                        requiredPermissionName: newMenuItem.requiredPermissionName,
                         pageId: newMenuItem.pageId,
                         state: {
                             opened: true
@@ -199,7 +195,6 @@ $(function () {
                         target: item.target,
                         elementId: item.elementId,
                         cssClass: item.cssClass,
-                        requiredPermissionName: item.requiredPermissionName,
                         pageId: item.pageId,
                         text: menuTree.generateTextOnTree(item),
                         state: {

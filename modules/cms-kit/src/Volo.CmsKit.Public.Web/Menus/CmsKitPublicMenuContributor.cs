@@ -32,23 +32,22 @@ namespace Volo.CmsKit.Public.Web.Menus
                 {
                     foreach (var menuItemDto in mainMenu.Items.Where(x => x.ParentId == null && x.IsActive))
                     {
-                        var applicationMenuItem = CreateApplicationMenuItem(menuItemDto);
-                        context.Menu.Items.Add(applicationMenuItem);
-                        AddChildItems(menuItemDto, mainMenu.Items);
+                        AddChildItems(menuItemDto, mainMenu.Items, context.Menu);
                     }
                 }
             }
         }
 
-        private void AddChildItems(MenuItemDto menuItem, List<MenuItemDto> source, ApplicationMenuItem parent = null)
+        private void AddChildItems(MenuItemDto menuItem, List<MenuItemDto> source, IHasMenuItems parent = null)
         {
             var applicationMenuItem = CreateApplicationMenuItem(menuItem);
-            parent?.Items.Add(applicationMenuItem);
 
             foreach (var item in source.Where(x => x.ParentId == menuItem.Id && x.IsActive))
             {
                 AddChildItems(item, source, applicationMenuItem);
             }
+            
+            parent?.Items.Add(applicationMenuItem);
         }
 
         private ApplicationMenuItem CreateApplicationMenuItem(MenuItemDto menuItem)
@@ -62,8 +61,7 @@ namespace Volo.CmsKit.Public.Web.Menus
                 customData: null,
                 menuItem.Target,
                 menuItem.ElementId,
-                menuItem.CssClass,
-                menuItem.RequiredPermissionName
+                menuItem.CssClass
             );
         }
     }

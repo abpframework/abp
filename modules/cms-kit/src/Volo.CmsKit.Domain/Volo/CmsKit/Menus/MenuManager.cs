@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Uow;
@@ -17,6 +19,29 @@ namespace Volo.CmsKit.Menus
         public MenuManager(IMenuRepository menuRepository)
         {
             MenuRepository = menuRepository;
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="Menu"/> without inserting into database.
+        /// </summary>
+        /// <param name="tenantId">Tenant Id of Menu.</param>
+        /// <param name="name">Name of Menu.</param>
+        /// <returns>Created instance.</returns>
+        public virtual async Task<Menu> CreateAsync(Guid? tenantId, [NotNull] string name)
+        {
+            var menu = new Menu(
+                GuidGenerator.Create(), 
+                tenantId, 
+                Check.NotNullOrEmpty(name, nameof(name), MenuConsts.MaxNameLength));
+            
+            var existingMenuCount = await MenuRepository.GetCountAsync();
+
+            if (existingMenuCount == 0)
+            {
+                menu.IsMainMenu = true;
+            }
+
+            return menu;
         }
 
         public virtual void SetPageUrl(MenuItem menuItem, Page page)
@@ -62,7 +87,7 @@ namespace Volo.CmsKit.Menus
 
         public virtual async Task SetMainMenuAsync(Guid menuId)
         {
-            var menus = await MenuRepository.GetListAsync(includeDetails: false);
+            var menus = await MenuRepository.GetCurrentAndNextMainMenusAsync(menuId ,includeDetails: false);
 
             foreach (var menu in menus)
             {

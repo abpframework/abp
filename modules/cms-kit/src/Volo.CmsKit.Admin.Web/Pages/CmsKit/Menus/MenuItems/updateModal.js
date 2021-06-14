@@ -7,33 +7,27 @@ $(function () {
             var $pageId = $('#ViewModel_PageId');
             var $url = $('#ViewModel_Url');
             var $displayName = $('#ViewModel_DisplayName');
-            var $pageIdClearButton = $('#page-id-clear-button');
+            var $pageIdClearButton = $('#url-tab');
 
             initSelectPageId();
 
             $pageId.on('change', function (params) {
                 $url.prop('disabled', $pageId.val());
 
-                if ($pageId.val())
-                {
-                    $pageIdClearButton.show();
-                    if (!$displayName.val()){
+                if ($pageId.val()) {
+                    if (!$displayName.val()) {
                         $displayName.val($pageId.text());
                     }
-                }
-                else
-                {
-                    $pageIdClearButton.hide();
                 }
             })
 
             $pageId.trigger('change');
-            
-            $pageIdClearButton.click(function (){
+
+            $pageIdClearButton.click(function () {
                 $pageId.val('');
                 $pageId.trigger('change');
             });
-            
+
             function initSelectPageId() {
                 $pageId.data('autocompleteApiUrl', '/api/cms-kit-admin/menus/lookup/pages');
                 $pageId.data('autocompleteDisplayProperty', 'title');

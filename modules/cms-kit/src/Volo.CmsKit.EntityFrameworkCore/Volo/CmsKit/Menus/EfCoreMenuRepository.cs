@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,13 +18,23 @@ namespace Volo.CmsKit.Menus
 
         public override async Task<IQueryable<Menu>> WithDetailsAsync()
         {
-            return (await base.WithDetailsAsync()).Include(i => i.Items);
+            return (await base.WithDetailsAsync()).IncludeDetails();
         }
 
-        public async Task<Menu> FindMainMenuAsync(bool includeDetails = true, CancellationToken cancellationToken = default)
+        public virtual async Task<Menu> FindMainMenuAsync(bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (includeDetails ? await WithDetailsAsync() : await GetQueryableAsync())
                 .FirstOrDefaultAsync(x => x.IsMainMenu, GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<Menu>> GetCurrentAndNextMainMenusAsync(
+            Guid nextMainMenuId, 
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return await (includeDetails ? await WithDetailsAsync() : await GetQueryableAsync())
+                .Where(x => x.IsMainMenu || x.Id == nextMainMenuId)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

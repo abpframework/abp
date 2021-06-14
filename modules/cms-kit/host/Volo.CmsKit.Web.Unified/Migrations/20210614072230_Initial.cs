@@ -765,7 +765,6 @@ namespace Volo.CmsKit.Migrations
                     Target = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ElementId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CssClass = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RequiredPermissionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),

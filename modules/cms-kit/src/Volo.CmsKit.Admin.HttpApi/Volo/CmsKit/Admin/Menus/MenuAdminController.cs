@@ -31,13 +31,13 @@ namespace Volo.CmsKit.Admin.Menus
 
         [HttpPost]
         [Authorize(CmsKitAdminPermissions.Menus.Create)]
-        public Task<MenuDto> CreateAsync(MenuCreateInput input)
+        public Task<MenuWithDetailsDto> CreateAsync(MenuCreateInput input)
         {
             return MenuAdminAppService.CreateAsync(input);
         }
 
         [Route("{menuId}/menu-items/{menuItemId}")]        
-        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Default)]
+        [Authorize(CmsKitAdminPermissions.Menus.Update)]
         [HttpGet]
         public Task<MenuItemDto> GetMenuItemAsync(Guid menuId, Guid menuItemId)
         {
@@ -46,7 +46,7 @@ namespace Volo.CmsKit.Admin.Menus
 
         [Route("{menuId}/menu-items")]
         [HttpPost]
-        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Create)]
+        [Authorize(CmsKitAdminPermissions.Menus.Update)]
         public Task<MenuItemDto> CreateMenuItemAsync(Guid menuId, MenuItemCreateInput input)
         {
             return MenuAdminAppService.CreateMenuItemAsync(menuId, input);
@@ -62,35 +62,28 @@ namespace Volo.CmsKit.Admin.Menus
 
         [Route("{menuId}/menu-items/{menuItemId}")]
         [HttpDelete]
-        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Delete)]
+        [Authorize(CmsKitAdminPermissions.Menus.Update)]
         public Task DeleteMenuItemAsync(Guid menuId, Guid menuItemId)
         {
             return MenuAdminAppService.DeleteMenuItemAsync(menuId, menuItemId);
         }
 
-        [Route("{menuId}/details")]
+        [Route("{menuId}")]
         [HttpGet]
         public Task<MenuWithDetailsDto> GetAsync(Guid menuId)
         {
             return MenuAdminAppService.GetAsync(menuId);
         }
 
-        [Route("{menuId}")]
         [HttpGet]
-        public Task<MenuDto> GetSimpleAsync(Guid menuId)
-        {
-            return MenuAdminAppService.GetSimpleAsync(menuId);
-        }
-
-        [HttpGet]
-        public Task<PagedResultDto<MenuDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public Task<PagedResultDto<MenuWithDetailsDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
             return MenuAdminAppService.GetListAsync(input);
         }
 
         [Route("{menuId}/menu-items/{menuItemId}/move")]
         [HttpPut]
-        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Update)]
+        [Authorize(CmsKitAdminPermissions.Menus.Update)]
         public Task MoveMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemMoveInput input)
         {
             return MenuAdminAppService.MoveMenuItemAsync(menuId, menuItemId, input);
@@ -107,14 +100,14 @@ namespace Volo.CmsKit.Admin.Menus
         [Route("{menuId}")]
         [HttpPut]
         [Authorize(CmsKitAdminPermissions.Menus.Update)]
-        public Task<MenuDto> UpdateAsync(Guid menuId, MenuUpdateInput input)
+        public Task<MenuWithDetailsDto> UpdateAsync(Guid menuId, MenuUpdateInput input)
         {
             return MenuAdminAppService.UpdateAsync(menuId, input);
         }
 
         [Route("{menuId}/menu-items/{menuItemId}")]
         [HttpPut]
-        [Authorize(CmsKitAdminPermissions.Menus.MenuItems.Update)]
+        [Authorize(CmsKitAdminPermissions.Menus.Update)]
         public Task<MenuItemDto> UpdateMenuItemAsync(Guid menuId, Guid menuItemId, MenuItemUpdateInput input)
         {
             return MenuAdminAppService.UpdateMenuItemAsync(menuId, menuItemId, input);

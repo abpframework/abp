@@ -18,7 +18,7 @@ namespace Volo.CmsKit.Menus
 
         public ICollection<MenuItem> Items { get; protected set; }
 
-        public Menu(Guid id, Guid? tenantId, [NotNull] string name) : base(id)
+        internal Menu(Guid id, Guid? tenantId, [NotNull] string name) : base(id)
         {
             TenantId = tenantId;
             SetName(name);

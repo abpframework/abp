@@ -11,7 +11,7 @@ using Volo.CmsKit.EntityFrameworkCore;
 namespace Volo.CmsKit.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20210609132819_Initial")]
+    [Migration("20210614072230_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1569,9 +1569,6 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RequiredPermissionName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Target")
                         .HasColumnType("nvarchar(max)");

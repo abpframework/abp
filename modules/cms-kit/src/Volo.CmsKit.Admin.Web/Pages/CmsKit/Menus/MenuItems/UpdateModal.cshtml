@@ -18,27 +18,29 @@
         <abp-modal-body>
             <abp-input asp-for="MenuId"/>
             <abp-input asp-for="Id"/>
-            
-            <div class="form-group">
-                <label asp-for="ViewModel.PageId"></label>
 
-                <select class="form-control" asp-for="ViewModel.PageId"></select>
+            <abp-tabs tab-style="Tab">
+                <abp-tab name="url" title="@L["Url"]">
+                    <abp-input asp-for="ViewModel.Url"/>
 
-                <span asp-validation-for="ViewModel.PageId"></span>
-            </div>
+                </abp-tab>
+                <abp-tab title="@L["Page"]">
 
-            <abp-button id="page-id-clear-button" button-type="Outline_Danger" text="@L["Clear"]"/>
+                    <label asp-for="ViewModel.PageId"></label>
+
+                    <select class="form-control" asp-for="ViewModel.PageId"></select>
+                </abp-tab>
+
+            </abp-tabs>
 
             <hr/>
 
             <abp-input asp-for="ViewModel.DisplayName"/>
             <abp-input asp-for="ViewModel.IsActive"/>
-            <abp-input asp-for="ViewModel.Url"/>
             <abp-input asp-for="ViewModel.Icon"/>
             <abp-input asp-for="ViewModel.Target"/>
             <abp-input asp-for="ViewModel.ElementId"/>
             <abp-input asp-for="ViewModel.CssClass"/>
-            <abp-input asp-for="ViewModel.RequiredPermissionName"/>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>

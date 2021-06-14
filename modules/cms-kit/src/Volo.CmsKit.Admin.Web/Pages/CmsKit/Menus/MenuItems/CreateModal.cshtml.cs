@@ -70,8 +70,6 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 
             public string CssClass { get; set; }
 
-            public string RequiredPermissionName { get; set; }
-
         }
     }
 }

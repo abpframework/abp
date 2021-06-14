@@ -37,5 +37,15 @@ namespace Volo.CmsKit.Menus
             mainMenu.Items.ShouldNotBeEmpty();
             mainMenu.Items.Count.ShouldBe(2);
         }
+
+        [Fact]
+        public async Task GetCurrentAndNextMainMenusAsync_ShouldWorkProperly()
+        {
+            var menus = await menuRepository.GetCurrentAndNextMainMenusAsync(
+                testData.Menu_2_Id);
+            
+            menus.ShouldNotBeEmpty();
+            menus.Count.ShouldBe(2);
+        }
     }
 }

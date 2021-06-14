@@ -8,15 +8,13 @@ namespace Volo.CmsKit.Admin.Menus
 {
     public interface IMenuAdminAppService : IApplicationService
     {
-        Task<PagedResultDto<MenuDto>> GetListAsync(PagedAndSortedResultRequestDto input);
+        Task<PagedResultDto<MenuWithDetailsDto>> GetListAsync(PagedAndSortedResultRequestDto input);
 
         Task<MenuWithDetailsDto> GetAsync(Guid id);
 
-        Task<MenuDto> GetSimpleAsync(Guid id);
+        Task<MenuWithDetailsDto> CreateAsync(MenuCreateInput input);
 
-        Task<MenuDto> CreateAsync(MenuCreateInput input);
-
-        Task<MenuDto> UpdateAsync(Guid menuId, MenuUpdateInput input);
+        Task<MenuWithDetailsDto> UpdateAsync(Guid menuId, MenuUpdateInput input);
 
         Task DeleteAsync(Guid menuId);
 

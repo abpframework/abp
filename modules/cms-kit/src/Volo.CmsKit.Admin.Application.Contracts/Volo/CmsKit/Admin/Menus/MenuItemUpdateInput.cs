@@ -21,8 +21,6 @@ namespace Volo.CmsKit.Admin.Menus
 
         public string CssClass { get; set; }
 
-        public string RequiredPermissionName { get; set; }
-
         public Guid? PageId { get; set; }
     }
 }

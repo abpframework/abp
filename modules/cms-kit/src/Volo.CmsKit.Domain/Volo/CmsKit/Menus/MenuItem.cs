@@ -41,8 +41,6 @@ namespace Volo.CmsKit.Menus
 
         public string CssClass { get; set; }
 
-        public string RequiredPermissionName { get; set; }
-
         public Guid? PageId { get; protected set; }
 
 
@@ -56,8 +54,7 @@ namespace Volo.CmsKit.Menus
                         int order = 0,
                         [CanBeNull] string target = null,
                         [CanBeNull] string elementId = null,
-                        [CanBeNull] string cssClass = null,
-                        [CanBeNull] string requiredPermissionName = null) 
+                        [CanBeNull] string cssClass = null) 
             :base(id)
         {
             MenuId = menuId;
@@ -70,7 +67,6 @@ namespace Volo.CmsKit.Menus
             Target = target;
             ElementId = elementId;
             CssClass = cssClass;
-            RequiredPermissionName = requiredPermissionName;
         }
 
         public void SetDisplayName([NotNull] string displayName)

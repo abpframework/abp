@@ -72,7 +72,7 @@ namespace Volo.CmsKit.Admin.Web
                 options.Conventions.AuthorizeFolder("/CmsKit/Menus", CmsKitAdminPermissions.Menus.Default);
                 options.Conventions.AuthorizePage("/CmsKit/Menus/CreateModal", CmsKitAdminPermissions.Menus.Create);
                 options.Conventions.AuthorizePage("/CmsKit/Menus/UpdateModal", CmsKitAdminPermissions.Menus.Update);
-                options.Conventions.AuthorizeFolder("/CmsKit/Menus/MenuItems", CmsKitAdminPermissions.Menus.MenuItems.Default);
+                options.Conventions.AuthorizeFolder("/CmsKit/Menus/MenuItems", CmsKitAdminPermissions.Menus.Update);
             });
 
             Configure<RazorPagesOptions>(options =>
@@ -161,7 +161,7 @@ namespace Volo.CmsKit.Admin.Web
                             icon: "plus",
                             name: "CreateMenuItem",
                             id: "CreateMenuItem",
-                            requiredPolicyName: CmsKitAdminPermissions.Menus.MenuItems.Create
+                            requiredPolicyName: CmsKitAdminPermissions.Menus.Update
                             );
                     });
             });

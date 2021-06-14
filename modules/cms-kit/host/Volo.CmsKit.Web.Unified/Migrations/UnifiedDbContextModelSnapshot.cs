@@ -1568,9 +1568,6 @@ namespace Volo.CmsKit.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RequiredPermissionName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Target")
                         .HasColumnType("nvarchar(max)");
 

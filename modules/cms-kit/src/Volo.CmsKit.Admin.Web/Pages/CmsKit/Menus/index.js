@@ -24,19 +24,19 @@
                     items: [
                         {
                             text: l('MenuItems'),
-                            visible: abp.auth.isGranted('CmsKit.Menus.Items'),
+                            visible: abp.auth.isGranted('CmsKit.Menus.Update'),
                             action: function (data) {
                                 location.href = "/Cms/Menus/" + data.record.id + "/menu-items"
                             }
                         },
                         {
                             text: l('MakeMainMenu'),
-                            visible: function(data){
-                               return abp.auth.isGranted('CmsKit.Menus.Update') && !data.isMainMenu
+                            visible: function (data) {
+                                return abp.auth.isGranted('CmsKit.Menus.Update') && !data.isMainMenu
                             },
                             action: function (data) {
                                 menusService
-                                    .updateMainMenu(data.record.id, { isMainMenu: true})
+                                    .updateMainMenu(data.record.id, {isMainMenu: true})
                                     .then(function () {
                                         dataTable.ajax.reload();
                                     });
@@ -44,12 +44,12 @@
                         },
                         {
                             text: l('UnMakeMainMenu'),
-                            visible: function(data){
-                               return abp.auth.isGranted('CmsKit.Menus.Update') && data.isMainMenu
+                            visible: function (data) {
+                                return abp.auth.isGranted('CmsKit.Menus.Update') && data.isMainMenu
                             },
                             action: function (data) {
                                 menusService
-                                    .updateMainMenu(data.record.id, { isMainMenu: false})
+                                    .updateMainMenu(data.record.id, {isMainMenu: false})
                                     .then(function () {
                                         dataTable.ajax.reload();
                                     });
@@ -59,7 +59,7 @@
                             text: l('Edit'),
                             visible: abp.auth.isGranted('CmsKit.Menus.Update'),
                             action: function (data) {
-                                updateModal.open({ id: data.record.id });
+                                updateModal.open({id: data.record.id});
                             }
                         },
                         {
@@ -83,15 +83,17 @@
                 title: l("Name"),
                 orderable: true,
                 data: "name",
-                render: function (data, val ,record) {
-                    
+                render: function (data, val, record) {
+
                     if (record.isMainMenu) {
                         return (
-                            '<strong>'
-                            +
                             data
                             +
-                            '</strong>'
+                            '<span class="badge badge-pill badge-info ml-1">'
+                            +
+                                l("MainMenu")
+                            +
+                            '</span>'
                         );
                     } else {
                         return data;
