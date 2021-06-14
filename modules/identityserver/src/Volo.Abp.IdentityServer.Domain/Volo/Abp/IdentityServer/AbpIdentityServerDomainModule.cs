@@ -107,8 +107,6 @@ namespace Volo.Abp.IdentityServer
                 identityServerBuilder.AddInMemoryApiResources(configuration.GetSection("IdentityServer:ApiResources"));
                 identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
             }
-
-            identityServerBuilder.AddExtensionGrantValidator<LinkLoginExtensionGrantValidator>();
         }
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
