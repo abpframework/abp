@@ -10,6 +10,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public string EfCoreConfigureMethodName { get; set; }
 
+        public string DocumentationLinks { get; set; }
+
         public List<NugetPackageInfo> NugetPackages { get; set; }
 
         public List<NpmPackageInfo> NpmPackages { get; set; }

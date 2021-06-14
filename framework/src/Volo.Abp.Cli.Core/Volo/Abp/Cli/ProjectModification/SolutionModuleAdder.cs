@@ -131,6 +131,11 @@ namespace Volo.Abp.Cli.ProjectModification
             await RunBundleForBlazorAsync(projectFiles, module);
 
             ModifyDbContext(projectFiles, module, skipDbMigrations);
+
+            if (!string.IsNullOrWhiteSpace(module.DocumentationLinks))
+            {
+                CmdHelper.OpenWebPage(module.DocumentationLinks.Split(" ", StringSplitOptions.RemoveEmptyEntries)[0]);
+            }
         }
 
         private ModuleWithMastersInfo RemoveIncompatiblePackages(ModuleWithMastersInfo module, string version)
