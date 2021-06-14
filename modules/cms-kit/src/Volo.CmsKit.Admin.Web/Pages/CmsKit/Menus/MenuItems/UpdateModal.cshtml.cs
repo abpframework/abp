@@ -12,11 +12,6 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
     public class UpdateModalModel : CmsKitAdminPageModel
     {
         protected IMenuAdminAppService MenuAdminAppService { get; }
-     
-        public UpdateModalModel(IMenuAdminAppService menuAdminAppService)
-        {
-            MenuAdminAppService = menuAdminAppService;
-        }
 
         [BindProperty]
         public MenuItemUpdateViewModel ViewModel { get; set; }
@@ -28,6 +23,11 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
         public Guid Id { get; set; }
+     
+        public UpdateModalModel(IMenuAdminAppService menuAdminAppService)
+        {
+            MenuAdminAppService = menuAdminAppService;
+        }
 
         public async Task OnGetAsync()
         {

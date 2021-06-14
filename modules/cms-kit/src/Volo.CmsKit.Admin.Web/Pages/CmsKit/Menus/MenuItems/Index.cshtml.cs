@@ -13,15 +13,15 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
     {
         protected IMenuAdminAppService MenuAdminAppService { get; }
 
-        public IndexModel(IMenuAdminAppService menuAdminAppService)
-        {
-            MenuAdminAppService = menuAdminAppService;
-        }
-
         [BindProperty(SupportsGet = true)] 
         public Guid Id { get; set; }
 
         public MenuWithDetailsDto Menu { get; protected set; }
+
+        public IndexModel(IMenuAdminAppService menuAdminAppService)
+        {
+            MenuAdminAppService = menuAdminAppService;
+        }
 
         public async Task OnGetAsync()
         {
