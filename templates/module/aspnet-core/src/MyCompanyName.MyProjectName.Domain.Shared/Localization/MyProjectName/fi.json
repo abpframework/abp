@@ -1,7 +1,7 @@
 {
   "culture": "fi",
   "texts": {
-    "ManageYourProfile": "Hallitse profiiliasi",
+    "MyAccount": "Tilini",
     "SamplePageMessage": "Esimerkkisivu MyProjectName-moduulille"
   }
 }
