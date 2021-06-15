@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -44,6 +45,11 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
                 b.HasKey(p => new {p.PersonId, p.Number});
 
                 b.ApplyObjectExtensionMappings();
+            });
+
+            modelBuilder.Entity<Person>(b =>
+            {
+                b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder
