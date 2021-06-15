@@ -10,7 +10,11 @@ This module comes as pre-installed (as NuGet/NPM packages) when you [create a ne
 
 The source code of this module can be accessed [here](https://github.com/abpframework/abp/tree/dev/modules/identity). The source code is licensed with [MIT](https://choosealicense.com/licenses/mit/), so you can freely use and customize it.
 
-## Menu Items
+## User Interface
+
+This module provides [Blazor](../UI/Blazor/Overall.md), [Angular](../UI/Angular/Quick-Start.md) and [MVC / Razor Pages](../UI/AspNetCore/Overall.md) UI options.
+
+### Menu Items
 
 This module adds an *Identity management* menu item under the *Administration* menu:
 
@@ -22,11 +26,11 @@ The menu items and the related pages are authorized. That means the current user
 
 See the [Authorization document](../Authorization.md) to understand the permission system.
 
-## Pages
+### Pages
 
 This section introduces the main pages provided by this module.
 
-### Users
+#### Users
 
 This page is used to see the list of users. You can create/edit and delete users, assign users to roles.
 
@@ -34,7 +38,7 @@ This page is used to see the list of users. You can create/edit and delete users
 
 A user can have zero or more roles. Users inherit permissions from their roles. In addition, you can assign permissions directly to the users (by clicking the *Actions* button, then selecting the *Permissions*).
 
-### Roles
+#### Roles
 
 Roles are used to group permissions assign them to users.
 
@@ -75,17 +79,18 @@ OU code is automatically generated and maintained by the `OrganizationUnitManage
 
 "**00001.00042.00005**"
 
-This code can be used to easily query the database for all the children of an OU (recursively). There are some rules for this code:
+This code can be used to easily query the database for all the children of an OU (recursively). There are some rules for this code (automatically applied when you use `OrganizationUnitManager`):
 
-- It must be **unique** for a [tenant](../Multi-Tenancy.md).
+- It is **unique** for a [tenant](../Multi-Tenancy.md).
 - All the children of the same OU have codes that **start with the parent OU's code**.
 - It's **fixed length** and based on the level of the OU in the tree, as shown in the sample.
-- While the OU code is unique, it can be **changeable** if you move an OU.
-- You must reference an OU by Id, not Code.
+- While the OU code is unique, it can be **changed** if you move the related OU.
 
-### OrganizationUnit Manager
+Notice that you must reference an OU by Id, not Code, because the Code can be changed later.
 
-The **OrganizationUnitManager** class can be [injected](../Dependency-Injection.md) and used to manage OUs. Common use cases are:
+#### OrganizationUnit Manager
+
+The `OrganizationUnitManager` class can be [injected](../Dependency-Injection.md) and used to manage OUs. Common use cases are:
 
 - Create, Update or Delete an OU
 - Move an OU in the OU tree.
@@ -93,7 +98,7 @@ The **OrganizationUnitManager** class can be [injected](../Dependency-Injection.
 
 ### Identity Security Log
 
-The security log can record some important operations or changes about your account. You can save the security log if needed.
+The security log system records some important operations or changes about your account (like *login* and *change password*). You can also save the security log if needed.
 
 You can inject and use `IdentitySecurityLogManager` or `ISecurityLogManager` to write security logs. It will create a log object by default and fill in some common values, such as `CreationTime`, `ClientIpAddress`, `BrowserInfo`, `current user/tenant`, etc. Of course, you can override them.
 
@@ -105,7 +110,7 @@ await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
 });
 ```
 
-Configure `AbpSecurityLogOptions` to provide the application name for the log or disable this feature. **Enabled** by default.
+Configure `AbpSecurityLogOptions` to provide the application name (in case of you have multiple applications and want to distinguish the applications in the logs) for the log or disable this feature.
 
 ```cs
 Configure<AbpSecurityLogOptions>(options =>
@@ -114,6 +119,204 @@ Configure<AbpSecurityLogOptions>(options =>
 });
 ```
 
-### Options
+## Options
 
-TODO
+`IdentityOptions` is the standard [options class](../Options.md) provided by the Microsoft [Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity). So, you can set these options in the `ConfigureServices` method of your [module](../Module-Development-Basics.md) class.
+
+**Example: Set minimum required length of passwords**
+
+````csharp
+Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 5;
+});
+````
+
+ABP takes these options one step further and allows you to change them on runtime by using the [setting system](../Settings.md). You can [inject](../Dependency-Injection.md) `ISettingManager` and use one of the `Set...` methods to change the option values for a user, a tenant or globally for all users.
+
+**Example: Change minimum required length of passwords for the current tenant**
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly ISettingManager _settingManager;
+
+    public MyService(ISettingManager settingManager)
+    {
+        _settingManager = settingManager;
+    }
+
+    public async Task ChangeMinPasswordLength(int minLength)
+    {
+        await _settingManager.SetForCurrentTenantAsync(
+            IdentitySettingNames.Password.RequiredLength,
+            minLength.ToString()
+        );
+    }
+}
+````
+
+`IdentitySettingNames` class (in the `Volo.Abp.Identity.Settings` namespace) defines constants for the setting names.
+
+## Distributed Events
+
+This module defines the following ETOs (Event Transfer Objects) to allow you to subscribe to changes on the entities of the module;
+
+* `UserEto` is published on changes done on an `IdentityUser` entity.
+* `IdentityRoleEto` is published on changes done on an `IdentityRole` entity.
+* `IdentityClaimTypeEto` is published on changes done on an `IdentityClaimType` entity.
+* `OrganizationUnitEto` is published on changes done on an `OrganizationUnit` entity.
+
+**Example: Get notified when a new user has been created**
+
+````csharp
+public class MyHandler :
+    IDistributedEventHandler<EntityCreatedEto<UserEto>>,
+    ITransientDependency
+{
+    public async Task HandleEventAsync(EntityCreatedEto<UserEto> eventData)
+    {
+        UserEto user = eventData.Entity;
+        // TODO: ...
+    }
+}
+````
+
+`UserEto` and `IdentityRoleEto` are configured to automatically publish the events. You should configure yourself for the others. See the [Distributed Event Bus document](../Distributed-Event-Bus.md) to learn details of the pre-defined events.
+
+> Subscribing to the distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening events in the same process that runs the Identity Module, then subscribing to the [local events](../Local-Event-Bus.md) can be more efficient and easier.
+
+## Internals
+
+This section covers some internal details of the module that you don't need much, but may need to use in some cases.
+
+### Domain layer
+
+#### Aggregates
+
+##### User
+
+A user is generally a person logins to and uses the application.
+
+* `IdentityUser` (aggregate root): Represents a user in the system.
+  * `IdentityUserRole` (collection): Roles to the user.
+  * `IdentityUserClaim` (collection): Custom claims of the user.
+  * `IdentityUserLogin` (collection): External logins of the user.
+  * `IdentityUserToken` (collection): Tokens of the user (used by the Microsoft Identity services).
+
+##### Role
+
+A role is typically a group of permissions to assign to the users.
+
+* `IdentityRole` (aggregate root): Represents a role in the system.
+  * `IdentityRoleClaim` (collection): Custom claims of the role.
+
+##### Claim Type
+
+A claim type is a definition of a custom claim that can be assigned to other entities (like roles and users) in the system.
+
+* `IdentityClaimType` (aggregate root): Represents a claim type definition. It contains some properties (e.g. Required, Regex, Description, ValueType) to define the claim type and the validation rules.
+
+##### Identity Security Log
+
+A `IdentitySecurityLog` object represents an authentication related operation (like *login*) in the system.
+
+* `IdentitySecurityLog` (aggregate root): Represents a security log in the system.
+
+##### OrganizationUnit
+
+An Organization unit is a entity in a hierarchical structure.
+
+* ```OrganizationUnit``` (aggregate root): Represents an organization unit in the system.
+  * ```Roles``` (collection): Roles of the organization unit.
+
+#### Repositories
+
+Following custom repositories are defined for this module:
+
+* `IIdentityUserRepository`
+* `IIdentityRoleRepository`
+* `IIdentityClaimTypeRepository`
+* ```IIdentitySecurityLogRepository```
+* ```IOrganizationUnitRepository```
+
+#### Domain services
+
+##### User manager
+
+`IdentityUserManager` is used to manage users, their roles, claims, passwords, emails, etc. It is derived from Microsoft Identity's `UserManager<T>` class where `T` is `IdentityUser`.
+
+##### Role manager
+
+`IdentityRoleManager` is used to manage roles and their claims. It is derived from Microsoft Identity's `RoleManager<T>` class where `T` is `IdentityRole`.
+
+##### Claim type manager
+
+`IdenityClaimTypeManager` is used to perform some operations for the `IdentityClaimType` aggregate root.
+
+##### Organization unit manager
+
+```OrganizationUnitManager``` is used to perform some operations for the ```OrganizationUnit``` aggregate root.
+
+##### Security log manager
+
+```IdentitySecurityLogManager``` is used to save security logs.
+
+### Application Layer
+
+#### Application Services
+
+* `IdentityUserAppService` (implements `IIdentityUserAppService`): Implements the use cases of the user management UI.
+* `IdentityRoleAppService` (implement `IIdentityRoleAppService`): Implements the use cases of the role management UI.
+* `IdentityClaimTypeAppService` (implements `IIdentityClaimTypeAppService`): Implements the use cases of the claim type management UI.
+* `IdentitySettingsAppService` (implements `IIdentitySettingsAppService`): Used to get and update settings for the Identity module.
+* `IdentityUserLookupAppService` (implements `IIdentityUserLookupAppService`): Used to get information for a user by `id` or `userName`. It is aimed to be used internally by the ABP framework.
+* `ProfileAppService` (implements `IProfileAppService`): Used to change a user's profile and the password.
+* ```IdentitySecurityLogAppService``` (implements ```IIdentitySecurityLogAppService```): Implements the use cases of the security logs UI.
+* ```OrganizationUnitAppService``` (implements ```OrganizationUnitAppService```): Implements the use cases of the organization unit management UI.
+
+### Database Providers
+
+This module provides [Entity Framework Core](../Entity-Framework-Core.md) and [MongoDB](../MongoDB.md) options for the database.
+
+#### Entity Framework Core
+
+[Volo.Abp.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore) NuGet package implements the EF Core integration.
+
+##### Database Tables
+
+* **AbpRoles**
+  * AbpRoleClaims
+* **AbpUsers**
+  * AbpUserClaims
+  * AbpUserLogins
+  * AbpUserRoles
+  * AbpUserTokens
+* **AbpClaimTypes**
+* **AbpOrganizationUnits**
+  * AbpOrganizationUnitRoles
+  * AbpUserOrganizationUnits
+* **AbpSecurityLogs**
+
+#### MongoDB
+
+[Volo.Abp.Identity.MongoDB](https://www.nuget.org/packages/Volo.Abp.Identity.MongoDB) NuGet package implements the MongoDB integration.
+
+##### Database Collections
+
+* **AbpRoles**
+* **AbpUsers**
+* **AbpClaimTypes**
+* **AbpOrganizationUnits**
+* **AbpSecurityLogs**
+
+#### Common Database Properties
+
+You can set the following properties of the `AbpIdentityDbProperties` class to change the database options:
+
+* `DbTablePrefix` (`Abp` by default) is the prefix for table/collection names.
+* `DbSchema` (`null` by default) is the database schema.
+* `ConnectionStringName` (`AbpIdentity` by default) is the [connection string](../Connection-Strings.md) name for this module.
+
+These are static properties. If you want to set, do it in the beginning of your application (typically, in `Program.cs`).
+
