@@ -59,9 +59,9 @@ Some specific types are registered to dependency injection by default. Examples:
 * MVC controllers (inherit ``Controller`` or ``AbpController``) are registered as transient.
 * MVC page models (inherit ``PageModel`` or ``AbpPageModel``) are registered as transient.
 * MVC view components (inherit ``ViewComponent`` or ``AbpViewComponent``) are registered as transient.
-* Application services (implement ``IApplicationService`` interface or inherit ``ApplicationService`` class) are registered as transient.
-* Repositories (implement ``IRepository`` interface) are registered as transient.
-* Domain services (implement ``IDomainService`` interface) are registered as transient.
+* Application services (inherit ``ApplicationService`` class or its subclasses) are registered as transient.
+* Repositories (implement ``BasicRepositoryBase`` class or its subclasses) are registered as transient.
+* Domain services (implement ``IDomainService`` interface or inherit ``DomainService`` class) are registered as transient.
 
 Example:
 

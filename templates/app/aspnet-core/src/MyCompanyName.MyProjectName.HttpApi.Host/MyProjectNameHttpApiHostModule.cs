@@ -35,14 +35,12 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
+        typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)
     )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {
-        private const string DefaultCorsPolicyName = "Default";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
@@ -163,7 +161,7 @@ namespace MyCompanyName.MyProjectName
         {
             context.Services.AddCors(options =>
             {
-                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                options.AddDefaultPolicy(builder =>
                 {
                     builder
                         .WithOrigins(
@@ -201,7 +199,7 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName);
+            app.UseCors();
             app.UseAuthentication();
 
             if (MultiTenancyConsts.IsEnabled)

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MyCompanyName.MyProjectName.Users;
 using MongoDB.Driver.Linq;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Xunit;
 
 namespace MyCompanyName.MyProjectName.MongoDB.Samples
@@ -16,11 +16,11 @@ namespace MyCompanyName.MyProjectName.MongoDB.Samples
     [Collection(MyProjectNameTestConsts.CollectionDefinitionName)]
     public class SampleRepositoryTests : MyProjectNameMongoDbTestBase
     {
-        private readonly IRepository<AppUser, Guid> _appUserRepository;
+        private readonly IRepository<IdentityUser, Guid> _appUserRepository;
 
         public SampleRepositoryTests()
         {
-            _appUserRepository = GetRequiredService<IRepository<AppUser, Guid>>();
+            _appUserRepository = GetRequiredService<IRepository<IdentityUser, Guid>>();
         }
 
         [Fact]

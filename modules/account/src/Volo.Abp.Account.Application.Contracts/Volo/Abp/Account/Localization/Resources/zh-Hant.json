@@ -36,7 +36,7 @@
     "PasswordChanged": "修改密碼",
     "NewPasswordConfirmFailed": "請確認新密碼",
     "Manage": "管理",
-    "ManageYourProfile": "管理你的個人資料",
+    "MyAccount": "我的賬戶",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "啟用自行註冊",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "是否允許使用者自行註冊帳號.",
     "DisplayName:Abp.Account.EnableLocalLogin": "使用本地帳號進行身分驗證",

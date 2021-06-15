@@ -36,7 +36,7 @@ namespace Volo.CmsKit
 
             context.Menu.Items.Add(new ApplicationMenuItem(
                 "Account.Manage",
-                l["ManageYourProfile"],
+                l["MyAccount"],
                 $"{_configuration["AuthServer:Authority"].EnsureEndsWith('/')}Account/Manage",
                 icon: "fa fa-cog",
                 order: int.MaxValue - 1001,

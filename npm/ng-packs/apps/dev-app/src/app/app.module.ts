@@ -1,3 +1,4 @@
+import { AccountConfigModule } from '@abp/ng.account/config';
 import { CoreModule } from '@abp/ng.core';
 import { registerLocale } from '@abp/ng.core/locale';
 import { IdentityConfigModule } from '@abp/ng.identity/config';
@@ -11,7 +12,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InspectorModule } from '@ngneat/inspector';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { AccountConfigModule } from '@abp/ng.account/config';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';

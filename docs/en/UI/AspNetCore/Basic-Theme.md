@@ -83,7 +83,7 @@ See the [User Interface Customization Guide](Customization-User-Interface.md) to
 
 ### Copy & Customize
 
-You can download the [source code](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) of the Basic Theme, copy the project content into your solution, re-arrange the package/module dependencies (see the Installation section above to understand how it was installed to the project) and freely customize the theme based on your application requirements.
+You can download the [source code](https://github.com/abpframework/abp/tree/rel-4.3/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) of the Basic Theme, copy the project content into your solution, re-arrange the package/module dependencies (see the Installation section above to understand how it was installed to the project) and freely customize the theme based on your application requirements.
 
 ## See Also
 

@@ -110,19 +110,18 @@ namespace Volo.Abp.Cli.LIbs
             foreach (var mapping in resourceMapping.Mappings)
             {
                 var destPath = Path.Combine(fileDirectory, mapping.Value);
-
                 var files = FindFiles(fileDirectory, mapping.Key);
 
                 foreach (var file in files)
                 {
-                    var destFilePath = Path.Combine(destPath, Path.GetFileName(file));
+                    var destFilePath = Path.Combine(destPath, file.Stem);
                     if (File.Exists(destFilePath))
                     {
                         continue;
                     }
 
-                    Directory.CreateDirectory(Path.GetFullPath(destPath));
-                    File.Copy(file, destFilePath);
+                    Directory.CreateDirectory(Path.GetDirectoryName(destFilePath));
+                    File.Copy(file.Path, destFilePath);
 
                 }
             }
@@ -146,9 +145,9 @@ namespace Volo.Abp.Cli.LIbs
 
             foreach (var file in files)
             {
-                if (File.Exists(file))
+                if (File.Exists(file.Path))
                 {
-                    File.Delete(file);
+                    File.Delete(file.Path);
                 }
             }
 
@@ -161,7 +160,7 @@ namespace Volo.Abp.Cli.LIbs
             }
         }
 
-        private string[] FindFiles(string directory, params string[] patterns)
+        private List<FileMatchResult> FindFiles(string directory, params string[] patterns)
         {
             var matcher = new Matcher();
 
@@ -179,7 +178,7 @@ namespace Volo.Abp.Cli.LIbs
 
             var result = matcher.Execute(new DirectoryInfoWrapper(new DirectoryInfo(directory)));
 
-            return result.Files.Select(x => Path.Combine(directory, x.Path)).ToArray();
+            return result.Files.Select(x => new FileMatchResult(Path.Combine(directory, x.Path), x.Stem)).ToList();
         }
 
         private string NormalizeGlob(string pattern)
