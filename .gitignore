@@ -315,3 +315,6 @@ tempkey.jwk
 
 # ABP Analyzing files
 *.abppkg.analyze.json
+
+# appsettings.secrets.json
+appsettings.secrets.json

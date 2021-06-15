@@ -12,7 +12,7 @@ export function configureRoutes(routesService: RoutesService) {
   return () => {
     routesService.add([
       {
-        path: '/identity',
+        path: undefined,
         name: eIdentityRouteNames.IdentityManagement,
         parentName: eThemeSharedRouteNames.Administration,
         requiredPolicy: eIdentityPolicyNames.IdentityManagement,

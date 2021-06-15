@@ -7,10 +7,20 @@ namespace Volo.Abp.UI.Navigation
     {
         [NotNull]
         public List<IMenuContributor> MenuContributors { get; }
+        
+        /// <summary>
+        /// Includes the <see cref="StandardMenus.Main"/> by default.
+        /// </summary>
+        public List<string> MainMenuNames { get; }
 
         public AbpNavigationOptions()
         {
             MenuContributors = new List<IMenuContributor>();
+            
+            MainMenuNames = new List<string>
+            {
+                StandardMenus.Main
+            };
         }
     }
 }

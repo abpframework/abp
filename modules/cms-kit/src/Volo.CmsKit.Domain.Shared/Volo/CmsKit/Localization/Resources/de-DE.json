@@ -1,22 +1,26 @@
 {
   "culture": "de-DE",
   "texts": {
-    "PickYourReaction": "Wählen Sie Ihre Reaktion",
-    "YourComment": "Ihr Kommentar",
-    "YourReply": "Ihre Antwort",
+    "CommentAuthorizationExceptionMessage": "Diese Kommentare dürfen nicht öffentlich angezeigt werden.",
     "Comments": "Kommentare",
-    "Send": "Senden",
     "Delete": "Löschen",
-    "Reply": "Antworten",
-    "Update": "Aktualisieren",
     "Edit": "Bearbeiten",
     "LoginToAddComment": "Melden Sie sich an, um zu Kommentieren",
+    "LoginToRate": "Melden Sie sich an, um zu Bewerten",
     "LoginToReply": "Melden Sie sich an, um zu Antworten",
     "MessageDeletionConfirmationMessage": "Dieser Kommentar wird vollständig gelöscht.",
-    "CommentAuthorizationExceptionMessage": "Diese Kommentare dürfen nicht öffentlich angezeigt werden.",
-    "Undo": "Rüchkängig machen",
+    "Permission:Menus": "Menüverwaltung",
+    "Permission:Menus.Create": "Erstellen",
+    "Permission:Menus.Delete": "Löschen",
+    "Permission:Menus.Update": "Aktualisieren",
+    "PickYourReaction": "Wählen Sie Ihre Reaktion",
     "RatingUndoMessage": "Ihre Bewertung wird rückgängig gemacht.",
-    "LoginToRate": "Melden Sie sich an, um zu Bewerten",
-    "Star": "Stern"
+    "Reply": "Antworten",
+    "Send": "Senden",
+    "Star": "Stern",
+    "Undo": "Rüchkängig machen",
+    "Update": "Aktualisieren",
+    "YourComment": "Ihr Kommentar",
+    "YourReply": "Ihre Antwort"
   }
 }

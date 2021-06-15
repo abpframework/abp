@@ -26,7 +26,7 @@ namespace Volo.Abp.Authorization.Permissions
                 return PermissionGrantResult.Undefined;
             }
 
-            foreach (var role in roles)
+            foreach (var role in roles.Distinct())
             {
                 if (await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, role))
                 {
@@ -50,7 +50,7 @@ namespace Volo.Abp.Authorization.Permissions
                 return result;
             }
 
-            foreach (var role in roles)
+            foreach (var role in roles.Distinct())
             {
                 var multipleResult = await PermissionStore.IsGrantedAsync(permissionNames.ToArray(), Name, role);
 
