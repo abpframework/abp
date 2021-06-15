@@ -495,7 +495,7 @@ export class NavItemsComponent implements AfterViewInit {
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
         <a class="dropdown-item" routerLink="/account/manage-profile"
-          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}}%}</a
+          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::MyAccount' | abpLocalization }}}%}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
           ><i class="fa fa-power-off mr-1"></i>{%{{{ 'AbpUi::Logout' | abpLocalization }}}%}</a

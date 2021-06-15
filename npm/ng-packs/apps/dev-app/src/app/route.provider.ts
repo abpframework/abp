@@ -1,4 +1,4 @@
-import { RoutesService, eLayoutType } from '@abp/ng.core';
+import { eLayoutType, RoutesService } from '@abp/ng.core';
 import { APP_INITIALIZER } from '@angular/core';
 
 export const APP_ROUTE_PROVIDER = [

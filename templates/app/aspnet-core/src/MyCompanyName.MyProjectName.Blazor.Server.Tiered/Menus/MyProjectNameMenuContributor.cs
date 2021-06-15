@@ -72,7 +72,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus
             var accountStringLocalizer = context.GetLocalizer<AccountResource>();
             var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";
 
-            context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["ManageYourProfile"],
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["MyAccount"],
                     $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage?returnUrl={_configuration["App:SelfUrl"]}", icon: "fa fa-cog", order: 1000, null, "_blank").RequireAuthenticated());
             context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", l["Logout"], url: "~/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000).RequireAuthenticated());
 

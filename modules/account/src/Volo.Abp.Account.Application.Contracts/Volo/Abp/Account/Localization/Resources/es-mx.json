@@ -33,6 +33,6 @@
     "PasswordChanged": "Cambia la contraseña",
     "NewPasswordConfirmFailed": "Por favor, confirme la nueva contraseña.",
     "Manage": "Administrar",
-    "ManageYourProfile": "Gestionar tu perfil"
+    "MyAccount": "Mi cuenta"
   }
 }
