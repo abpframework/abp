@@ -135,7 +135,6 @@ namespace Volo.Abp.Cli.ProjectModification
             var documentationLink = module.GetFirstDocumentationLinkOrNull();
             if (documentationLink != null)
             {
-
                 CmdHelper.OpenWebPage(documentationLink);
             }
         }
