@@ -132,9 +132,11 @@ namespace Volo.Abp.Cli.ProjectModification
 
             ModifyDbContext(projectFiles, module, skipDbMigrations);
 
-            if (!string.IsNullOrWhiteSpace(module.DocumentationLinks))
+            var documentationLink = module.GetFirstDocumentationLinkOrNull();
+            if (documentationLink != null)
             {
-                CmdHelper.OpenWebPage(module.DocumentationLinks.Split(" ", StringSplitOptions.RemoveEmptyEntries)[0]);
+
+                CmdHelper.OpenWebPage(documentationLink);
             }
         }
 
@@ -214,7 +216,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 {
                     projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.BlazorWebAssembly, isProjectTiered));
 
-                    webPackagesWillBeAddedToBlazorServerProject = module.NugetPackages.All(np=> np.Target != NuGetPackageTarget.BlazorServer && np.TieredTarget != NuGetPackageTarget.BlazorServer);
+                    webPackagesWillBeAddedToBlazorServerProject = module.NugetPackages.All(np => np.Target != NuGetPackageTarget.BlazorServer && np.TieredTarget != NuGetPackageTarget.BlazorServer);
                 }
                 else
                 {
@@ -255,7 +257,7 @@ namespace Volo.Abp.Cli.ProjectModification
         private bool IsReferencedByAnotherModuleProject(string moduleDirectory, List<string> projectsToRemove, string projectToRemove)
         {
             var moduleProjects = Directory.GetFiles(moduleDirectory, "*.csproj", SearchOption.AllDirectories);
-            var projectsToKeep = moduleProjects.Where(mp=> !projectsToRemove.Contains(Path.GetFileName(mp).RemovePostFix(".csproj"))).ToList();
+            var projectsToKeep = moduleProjects.Where(mp => !projectsToRemove.Contains(Path.GetFileName(mp).RemovePostFix(".csproj"))).ToList();
             return projectsToKeep.Select(File.ReadAllText).Any(content => content.Contains($"\"{projectToRemove}\""));
         }
 
@@ -283,7 +285,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return projectsToRemove;
         }
 
-        private async  Task<List<string>> FindProjectsToRemoveByPostFix(string moduleDirectory, string targetFolder,
+        private async Task<List<string>> FindProjectsToRemoveByPostFix(string moduleDirectory, string targetFolder,
             string postFix)
         {
             var projectsToRemove = new List<string>();
