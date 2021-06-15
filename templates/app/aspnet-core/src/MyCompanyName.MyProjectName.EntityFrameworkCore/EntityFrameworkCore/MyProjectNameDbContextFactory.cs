@@ -7,18 +7,18 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
     /* This class is needed for EF Core console commands
      * (like Add-Migration and Update-Database commands) */
-    public class MyProjectNameMigrationsDbContextFactory : IDesignTimeDbContextFactory<MyProjectNameMigrationsDbContext>
+    public class MyProjectNameDbContextFactory : IDesignTimeDbContextFactory<MyProjectNameDbContext>
     {
-        public MyProjectNameMigrationsDbContext CreateDbContext(string[] args)
+        public MyProjectNameDbContext CreateDbContext(string[] args)
         {
             MyProjectNameEfCoreEntityExtensionMappings.Configure();
 
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<MyProjectNameMigrationsDbContext>()
+            var builder = new DbContextOptionsBuilder<MyProjectNameDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 
-            return new MyProjectNameMigrationsDbContext(builder.Options);
+            return new MyProjectNameDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()

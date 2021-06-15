@@ -43,7 +43,7 @@ namespace MyCompanyName.MyProjectName.Web
     [DependsOn(
         typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
+        typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpSettingManagementWebModule),
