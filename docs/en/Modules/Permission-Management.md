@@ -60,6 +60,50 @@ public class MyService : ITransientDependency
 }
 ````
 
+## Permission Management Providers
+
+Permission Management Module is extensible, just like the [permission system](../Authorization.md).  You can extend it by defining permission management providers.
+
+[Identity Module](Identity.md) defines the following permission management providers:
+
+* `UserPermissionManagementProvider`: Manages user-based permissions.
+* `RolePermissionManagementProvider`: Manages role-based permissions.
+
+`IPermissionManager` uses these providers when you get/set permissions. You can define your own provider by implementing the `IPermissionManagementProvider` or inheriting from the `PermissionManagementProvider` base class.
+
+**Example:**
+
+````csharp
+public class CustomPermissionManagementProvider : PermissionManagementProvider
+{
+    public override string Name => "Custom";
+
+    public CustomPermissionManagementProvider(
+        IPermissionGrantRepository permissionGrantRepository,
+        IGuidGenerator guidGenerator,
+        ICurrentTenant currentTenant)
+        : base(
+            permissionGrantRepository,
+            guidGenerator,
+            currentTenant)
+    {
+    }
+}
+````
+
+`PermissionManagementProvider` base class makes the default implementation (using the `IPermissionGrantRepository`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each feature value record).
+
+Once you create your provider class, you should register it using the `FeatureManagementOptions` [options class](../Options.md):
+
+````csharp
+Configure<PermissionManagementOptions>(options =>
+{
+    options.ManagementProviders.Add<CustomPermissionManagementProvider>();
+});
+````
+
+The order of the providers are important. Providers are executed in the reverse order. That means the `CustomPermissionManagementProvider` is executed first for this example. You can insert your provider in any order in the `Providers` list.
+
 ## See Also
 
 * [Authorization](../Authorization.md)

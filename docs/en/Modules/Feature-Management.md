@@ -98,7 +98,7 @@ Configure<FeatureManagementOptions>(options =>
 });
 ````
 
-The order of the providers are important. Providers are executed in the reverse order. That means the `CustomSettingProvider` is executed first for this example. You can insert your provider in any order in the `Providers` list.
+The order of the providers are important. Providers are executed in the reverse order. That means the `CustomFeatureProvider` is executed first for this example. You can insert your provider in any order in the `Providers` list.
 
 ## See Also
 
