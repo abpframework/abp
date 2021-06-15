@@ -50,11 +50,11 @@ See the [Customization / Overriding Components](Customization-Overriding-Compone
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../CLI.md) commands to copy the source code to your solution:
+You can run the following [ABP CLI](../../CLI.md) command in **Blazor WebAssembly** project directory to copy the source code to your solution:
 
 `abp add-package Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme --with-source-code --add-to-solution-file`
 
-Then, navigate to downloaded `Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme` project folder and run:
+Then, navigate to downloaded `Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme` project directory and run:
 
 `abp add-package Volo.Abp.AspNetCore.Components.Web.BasicTheme --with-source-code --add-to-solution-file`
 
