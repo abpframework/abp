@@ -54,3 +54,7 @@ This module uses `AbpAuditLogging` for the connection string name. If you don't 
 ##### Collections
 
 - **AbpAuditLogs**
+
+## See Also
+
+* [Audit logging system](../Audit-Logging.md)
