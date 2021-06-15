@@ -16,7 +16,7 @@ The source code of this module can be accessed [here](https://github.com/abpfram
 
 ### Feature Management Dialog
 
-Feature management module provides a reusable dialog to manage features related to an object. For example, the [Tenant Management Module](Tenant-Management.md) uses it to manage permissions of tenants in the Tenant Management page.
+Feature management module provides a reusable dialog to manage features related to an object. For example, the [Tenant Management Module](Tenant-Management.md) uses it to manage features of tenants in the Tenant Management page.
 
 ![features-module-opening](../images/features-module-opening.png)
 
