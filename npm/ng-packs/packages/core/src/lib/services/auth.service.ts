@@ -41,8 +41,8 @@ export class AuthService {
       .toPromise();
   }
 
-  logout(): Observable<any> {
-    return this.strategy.logout();
+  logout(queryParams?: Params): Observable<any> {
+    return this.strategy.logout(queryParams);
   }
 
   /**
