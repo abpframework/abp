@@ -85,6 +85,37 @@ Setting Management module is extensible, just like the [setting system](../Setti
 
 `ISettingManager` uses the setting management providers on get/set methods. Typically, every setting management provider defines extension methods on the `ISettingManagement` service (like `SetForUserAsync` defined by the user setting management provider).
 
+If you want to create your own provider, implement the `ISettingManagementProvider` interface or inherit from the `SettingManagementProvider` base class:
+
+````csharp
+public class CustomSettingProvider : SettingManagementProvider
+{
+    public override string Name => "Custom";
+
+    public CustomSettingProvider(ISettingManagementStore store) 
+        : base(store)
+    {
+    }
+}
+````
+
+`SettingManagementProvider` base class makes the default implementation (using the `ISettingManagementStore`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each feature value record).
+
+Once you create your provider class, you should register it using the `SettingManagementOptions` [options class](../Options.md):
+
+````csharp
+Configure<SettingManagementOptions>(options =>
+{
+    options.Providers.Add<CustomSettingProvider>();
+});
+````
+
+The order of the providers are important. Providers are executed in the reverse order. That means the `CustomSettingProvider` is executed first for this example. You can insert your provider in any order in the `Providers` list.
+
+## See Also
+
+* [Settings](../Settings.md)
+
 ## Setting Management UI
 
 Setting Mangement module provided the email setting UI by default, and it is extensible; You can add your tabs to this page for your application settings.
@@ -272,3 +303,4 @@ export class AppComponent {
 Navigate to `/setting-management` route to see the changes:
 
 ![Custom Settings Tab](../images/custom-settings.png)
+

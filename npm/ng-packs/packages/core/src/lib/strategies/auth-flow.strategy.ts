@@ -33,10 +33,10 @@ export abstract class AuthFlowStrategy {
   protected sessionState: SessionStateService;
   protected appConfigService: AbpApplicationConfigurationService;
 
-  abstract checkIfInternalAuth(): boolean;
+  abstract checkIfInternalAuth(queryParams?: Params): boolean;
   abstract navigateToLogin(queryParams?: Params): void;
-  abstract logout(): Observable<any>;
-  abstract login(params?: LoginParams): Observable<any>;
+  abstract logout(queryParams?: Params): Observable<any>;
+  abstract login(params?: LoginParams | Params): Observable<any>;
 
   private catchError = err => this.store.dispatch(new RestOccurError(err));
 
@@ -100,23 +100,27 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   navigateToLogin(queryParams?: Params) {
-    const lang = this.sessionState.getLanguage();
-    const culture = { culture: lang, 'ui-culture': lang };
-    this.oAuthService.initCodeFlow(null, { ...(lang && culture), ...queryParams });
+    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
   }
 
-  checkIfInternalAuth() {
-    this.oAuthService.initCodeFlow();
+  checkIfInternalAuth(queryParams?: Params) {
+    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
     return false;
   }
 
-  logout() {
-    return from(this.oAuthService.revokeTokenAndLogout());
+  logout(queryParams?: Params) {
+    return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
   }
 
-  login() {
-    this.oAuthService.initCodeFlow();
+  login(queryParams?: Params) {
+    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
     return of(null);
+  }
+
+  private getCultureParams(queryParams?: Params) {
+    const lang = this.sessionState.getLanguage();
+    const culture = { culture: lang, 'ui-culture': lang };
+    return { ...(lang && culture), ...queryParams };
   }
 }
 
@@ -190,10 +194,10 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     );
   }
 
-  logout() {
+  logout(queryParams?: Params) {
     const router = this.injector.get(Router);
 
-    return from(this.oAuthService.revokeTokenAndLogout()).pipe(
+    return from(this.oAuthService.revokeTokenAndLogout(queryParams)).pipe(
       switchMap(() => this.appConfigService.get()),
       tap(res => {
         this.configState.setState(res);
