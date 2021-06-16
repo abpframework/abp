@@ -17,20 +17,18 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Extensibility
     {
         public IHttpClientFactory HttpClientFactory { get; }
         public IRemoteServiceHttpClientAuthenticator HttpClientAuthenticator { get; }
-
-        public AbpRemoteServiceOptions RemoteServiceOptions { get; }
-
+        public IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
         public ICurrentTenant CurrentTenant { get; }
 
         public WebAssemblyLookupApiRequestService(IHttpClientFactory httpClientFactory,
             IRemoteServiceHttpClientAuthenticator httpClientAuthenticator,
             ICurrentTenant currentTenant,
-            IOptions<AbpRemoteServiceOptions> remoteServiceOptions)
+            IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
         {
             HttpClientFactory = httpClientFactory;
             HttpClientAuthenticator = httpClientAuthenticator;
-            RemoteServiceOptions = remoteServiceOptions.Value;
             CurrentTenant = currentTenant;
+            RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
         }
 
         public async Task<string> SendAsync(string url)
@@ -42,7 +40,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Extensibility
             var uri = new Uri(url, UriKind.RelativeOrAbsolute);
             if (!uri.IsAbsoluteUri)
             {
-                var remoteServiceConfig = RemoteServiceOptions.RemoteServices.GetConfigurationOrDefault("Default");
+                var remoteServiceConfig = RemoteServiceConfigurationProvider.GetConfigurationOrDefault("Default");
                 client.BaseAddress = new Uri(remoteServiceConfig.BaseUrl);
                 await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(remoteServiceConfig.BaseUrl), string.Empty));
             }
