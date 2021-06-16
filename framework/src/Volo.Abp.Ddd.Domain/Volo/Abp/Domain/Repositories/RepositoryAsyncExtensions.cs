@@ -34,6 +34,7 @@ namespace Volo.Abp.Domain.Repositories
             var queryable = await repository.GetQueryableAsync();
             return await repository.AsyncExecuter.AnyAsync(queryable, cancellationToken);
         }
+
         public static async Task<bool> AnyAsync<T>(
             [NotNull] this IReadOnlyRepository<T> repository,
             [NotNull] Expression<Func<T, bool>> predicate,
