@@ -63,10 +63,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual async Task<IActionResult> OnPostAsync()
         {
-            ValidateModel();
-
             try
             {
+                ValidateModel();
+
                 await AccountAppService.ResetPasswordAsync(
                     new ResetPasswordDto
                     {
@@ -86,6 +86,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 }
 
                 throw;
+            }
+            catch (AbpValidationException e)
+            {
+                return Page();
             }
 
             //TODO: Try to automatically login!
