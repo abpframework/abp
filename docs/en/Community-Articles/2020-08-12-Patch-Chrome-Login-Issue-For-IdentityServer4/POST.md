@@ -121,6 +121,10 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
 
 It's all! You are ready to go!
 
+> Attention: This problem can't be solved if the user/browser/operating system blocked third-party cookies.
+
+![Block-Third-Party-Cookies](Block-Third-Party-Cookies.png)
+
 ---
 
 Referenced from https://devblogs.microsoft.com/aspnet/upcoming-samesite-cookie-changes-in-asp-net-and-asp-net-core/
