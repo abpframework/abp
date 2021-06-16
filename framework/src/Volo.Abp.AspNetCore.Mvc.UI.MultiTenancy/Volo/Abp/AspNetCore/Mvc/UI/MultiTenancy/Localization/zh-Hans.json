@@ -1,6 +1,7 @@
 {
     "culture": "zh-Hans",
     "texts": {
+      "GivenTenantIsNotExist": "给定的租户不存在: {0}",
       "GivenTenantIsNotAvailable": "给定的租户不可用: {0}",
       "Tenant": "租户",
       "Switch": "切换",

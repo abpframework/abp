@@ -1,4 +1,4 @@
-import { ABP, AbpValidators, TrackByService } from '@abp/ng.core';
+import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -82,6 +82,12 @@ export class ExtensibleFormPropComponent implements OnChanges {
 
   typeaheadFormatter = (option: ABP.Option<any>) => option.key;
 
+  get meridian() {
+    return (
+      this.configState.getDeep('localization.currentCulture.dateTimeFormat.shortTimePattern') || ''
+    ).includes('tt');
+  }
+
   get isInvalid() {
     const control = this.form.get(this.prop.name);
     return control.touched && control.invalid;
@@ -90,6 +96,7 @@ export class ExtensibleFormPropComponent implements OnChanges {
   constructor(
     public readonly cdRef: ChangeDetectorRef,
     public readonly track: TrackByService,
+    protected configState: ConfigStateService,
     groupDirective: FormGroupDirective,
   ) {
     this.form = groupDirective.form;

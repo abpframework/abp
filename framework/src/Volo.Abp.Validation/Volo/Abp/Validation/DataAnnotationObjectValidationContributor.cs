@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
@@ -120,9 +121,10 @@ namespace Volo.Abp.Validation
                 MemberName = property.Name
             };
 
+            var attributeValidationResultProvider = ServiceProvider.GetRequiredService<IAttributeValidationResultProvider>();
             foreach (var attribute in validationAttributes)
             {
-                var result = attribute.GetValidationResult(property.GetValue(validatingObject), validationContext);
+                var result = attributeValidationResultProvider.GetOrDefault(attribute, property.GetValue(validatingObject), validationContext);
                 if (result != null)
                 {
                     errors.Add(result);

@@ -55,6 +55,16 @@ namespace Volo.CmsKit.Permissions
                 .RequireGlobalFeatures(typeof(BlogsFeature));
             blogPostManagement.AddChild(CmsKitAdminPermissions.BlogPosts.Delete, L("Permission:BlogPostManagement.Delete"))
                 .RequireGlobalFeatures(typeof(BlogsFeature));
+
+            var menuManagement = cmsGroup.AddPermission(CmsKitAdminPermissions.Menus.Default, L("Permission:MenuManagement"))
+                .RequireGlobalFeatures(typeof(MenuFeature));
+
+            menuManagement.AddChild(CmsKitAdminPermissions.Menus.Create, L("Permission:MenuManagement.Create"))
+                .RequireGlobalFeatures(typeof(MenuFeature));
+            menuManagement.AddChild(CmsKitAdminPermissions.Menus.Update, L("Permission:MenuManagement.Update"))
+                .RequireGlobalFeatures(typeof(MenuFeature));
+            menuManagement.AddChild(CmsKitAdminPermissions.Menus.Delete, L("Permission:MenuManagement.Delete"))
+                .RequireGlobalFeatures(typeof(MenuFeature));
         }
 
         private static LocalizableString L(string name)

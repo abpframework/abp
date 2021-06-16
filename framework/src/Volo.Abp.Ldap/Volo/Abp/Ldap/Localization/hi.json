@@ -1,0 +1,15 @@
+{
+  "culture": "hi",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "सर्वर होस्ट",
+    "Description:Abp.Ldap.ServerHost": "सर्वर होस्ट",
+    "DisplayName:Abp.Ldap.ServerPort": "सर्वर पोर्ट",
+    "Description:Abp.Ldap.ServerPort": "सर्वर पोर्ट",
+    "DisplayName:Abp.Ldap.BaseDc": "बेस डोमेन घटक",
+    "Description:Abp.Ldap.BaseDc": "बेस डोमेन घटक",
+    "DisplayName:Abp.Ldap.UserName": "उपयोगकर्ता नाम",
+    "Description:Abp.Ldap.UserName": "उपयोगकर्ता नाम",
+    "DisplayName:Abp.Ldap.Password": "कुंजिका",
+    "Description:Abp.Ldap.Password": "कुंजिका"
+  }
+}

@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -14,21 +15,29 @@ namespace Volo.Abp.AspNetCore.Components.Web.Security
     {
         public ClaimsPrincipal Principal { get; private set; }
 
+        [CanBeNull]
         private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-        public AbpComponentsClaimsCache(IClientScopeServiceProviderAccessor clientScopeServiceProviderAccessor)
+        public AbpComponentsClaimsCache(
+            IClientScopeServiceProviderAccessor serviceProviderAccessor)
         {
-            _authenticationStateProvider = clientScopeServiceProviderAccessor.ServiceProvider.GetRequiredService<AuthenticationStateProvider>();
-            _authenticationStateProvider.AuthenticationStateChanged += async (task) =>
+            _authenticationStateProvider = serviceProviderAccessor.ServiceProvider.GetService<AuthenticationStateProvider>();
+            if (_authenticationStateProvider != null)
             {
-                Principal = (await task).User;
-            };
+                _authenticationStateProvider.AuthenticationStateChanged += async (task) =>
+                {
+                    Principal = (await task).User;
+                };
+            }
         }
 
         public virtual async Task InitializeAsync()
         {
-            var authenticationState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            Principal = authenticationState.User;
+            if (_authenticationStateProvider != null)
+            {
+                var authenticationState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+                Principal = authenticationState.User;
+            }
         }
     }
 }

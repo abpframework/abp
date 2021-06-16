@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -102,6 +103,16 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             Logger.LogDebug($"ActionApiDescriptionModel.Create: {controllerModel.ControllerName}.{uniqueMethodName}");
 
+            bool? allowAnonymous = null;
+            if (apiDescription.ActionDescriptor.EndpointMetadata.Any(x => x is IAllowAnonymous))
+            {
+                allowAnonymous = true;
+            }
+            else if (apiDescription.ActionDescriptor.EndpointMetadata.Any(x => x is IAuthorizeData))
+            {
+                allowAnonymous = false;
+            }
+
             var actionModel = controllerModel.AddAction(
                 uniqueMethodName,
                 ActionApiDescriptionModel.Create(
@@ -109,7 +120,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                     method,
                     apiDescription.RelativePath,
                     apiDescription.HttpMethod,
-                    GetSupportedVersions(controllerType, method, setting)
+                    GetSupportedVersions(controllerType, method, setting),
+                    allowAnonymous
                 )
             );
 

@@ -1,0 +1,13 @@
+{
+  "folders": {
+    "items": {
+      "src": {}
+    }
+  },
+  "packages": {
+    "BlobStoring.Database.Host.ConsoleApp.ConsoleApp": {
+      "path": "src/BlobStoring.Database.Host.ConsoleApp.ConsoleApp/BlobStoring.Database.Host.ConsoleApp.ConsoleApp.abppkg.json",
+      "folder": "src"
+    }
+  }
+}

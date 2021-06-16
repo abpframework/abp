@@ -58,8 +58,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual Task<IActionResult> OnGetAsync()
         {
-            //TODO: It would be good to try to switch tenant if needed
-            CheckCurrentTenant(TenantId);
             return Task.FromResult<IActionResult>(Page());
         }
 
@@ -74,7 +72,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     {
                         UserId = UserId,
                         ResetToken = ResetToken,
-                        Password = Password
+                        Password = Password,
+                        TenantId = TenantId
                     }
                 );
             }
@@ -101,7 +100,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             if (!Equals(Password, ConfirmPassword))
             {
-                ModelState.AddModelError("ConfirmPassword", L["'{0}' and '{1}' do not match.", "ConfirmPassword", "Password"]);
+                ModelState.AddModelError("ConfirmPassword",
+                    L["'{0}' and '{1}' do not match.", "ConfirmPassword", "Password"]);
             }
 
             base.ValidateModel();

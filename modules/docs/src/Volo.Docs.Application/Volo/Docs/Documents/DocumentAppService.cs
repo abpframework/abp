@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -143,7 +144,9 @@ namespace Volo.Docs.Documents
             input.Version = string.IsNullOrWhiteSpace(input.Version) ? project.LatestVersionBranchName : input.Version;
             input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
 
-            var cacheKey = CacheKeyGenerator.GenerateDocumentResourceCacheKey(project, input.Name, input.LanguageCode,input.Version);
+            var cacheKey =
+                CacheKeyGenerator.GenerateDocumentResourceCacheKey(project, input.Name, input.LanguageCode,
+                    input.Version);
 
             async Task<DocumentResource> GetResourceAsync()
             {
@@ -179,18 +182,137 @@ namespace Volo.Docs.Documents
                 await _documentFullSearch.SearchAsync(input.Context, project.Id, input.LanguageCode, input.Version);
 
             return esDocs.Select(esDoc => new DocumentSearchOutput //TODO: auto map
-            {
-                Name = esDoc.Name,
-                FileName = esDoc.FileName,
-                Version = esDoc.Version,
-                LanguageCode = esDoc.LanguageCode,
-                Highlight = esDoc.Highlight
-            }).Where(x => x.FileName != project.NavigationDocumentName && x.FileName != project.ParametersDocumentName).ToList();
+                {
+                    Name = esDoc.Name,
+                    FileName = esDoc.FileName,
+                    Version = esDoc.Version,
+                    LanguageCode = esDoc.LanguageCode,
+                    Highlight = esDoc.Highlight
+                }).Where(x =>
+                    x.FileName != project.NavigationDocumentName && x.FileName != project.ParametersDocumentName)
+                .ToList();
         }
 
         public async Task<bool> FullSearchEnabledAsync()
         {
             return await Task.FromResult(_docsElasticSearchOptions.Enable);
+        }
+
+        public async Task<List<string>> GetUrlsAsync(string prefix)
+        {
+            var documentUrls = new List<string>();
+            var projects = await _projectRepository.GetListAsync();
+
+            foreach (var project in projects)
+            {
+                var documents = await _documentRepository.GetListByProjectId(project.Id);
+
+                foreach (var document in documents)
+                {
+                    try
+                    {
+                        await AddDocumentToUrls(prefix, project, document, documentUrls);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogException(ex);
+                    }
+                }
+            }
+
+            return documentUrls;
+        }
+
+        private async Task AddDocumentToUrls(string prefix, Project project, Document document,
+            List<string> documentUrls)
+        {
+            var navigationNodes = await GetNavigationNodesAsync(prefix, project, document);
+            AddDocumentUrls(prefix, navigationNodes, documentUrls, project, document);
+        }
+
+        private void AddDocumentUrls(string prefix,
+            List<NavigationNode> navigationNodes,
+            List<string> documentUrls,
+            Project project,
+            Document document)
+        {
+            navigationNodes?.ForEach(node =>
+            {
+                documentUrls.AddIfNotContains(
+                    GetDocumentLinks(node, documentUrls, prefix, project.ShortName, document)
+                );
+            });
+        }
+
+        private async Task<List<NavigationNode>> GetNavigationNodesAsync(string prefix, Project project,
+            Document document)
+        {
+            var version = GetProjectVersionPrefixIfExist(project) + document.Version;
+            var navigationDocument = await GetDocumentWithDetailsDtoAsync(
+                project,
+                project.NavigationDocumentName,
+                document.LanguageCode,
+                version
+            );
+
+            if (!DocsJsonSerializerHelper.TryDeserialize<NavigationNode>(navigationDocument.Content,
+                out var navigationNode))
+            {
+                throw new UserFriendlyException(
+                    $"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
+            }
+
+            return navigationNode.Items;
+        }
+
+        private List<string> GetDocumentLinks(NavigationNode node, List<string> documentUrls, string prefix,
+            string shortName, Document document)
+        {
+            if (!IsExternalLink(node.Path))
+            {
+                documentUrls.AddIfNotContains(
+                    NormalizePath(prefix, node.Path, shortName, document)
+                );
+            }
+
+            node.Items?.ForEach(childNode =>
+            {
+                GetDocumentLinks(childNode, documentUrls, prefix, shortName, document);
+            });
+
+            return documentUrls;
+        }
+
+        private string NormalizePath(string prefix, string path, string shortName, Document document)
+        {
+            var pathWithoutFileExtension = RemoveFileExtensionFromPath(path, document.Format);
+            var normalizedPath = prefix + document.LanguageCode + "/" + shortName + "/" + document.Version + "/" +
+                                 pathWithoutFileExtension;
+
+            return normalizedPath;
+        }
+
+        private string RemoveFileExtensionFromPath(string path, string format)
+        {
+            if (path == null)
+            {
+                return null;
+            }
+
+            return path.EndsWith("." + format)
+                ? path.Left(path.Length - format.Length - 1)
+                : path;
+        }
+
+        private static bool IsExternalLink(string path)
+        {
+            if (path.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            return path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                   path.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
         }
 
         public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
@@ -213,7 +335,8 @@ namespace Volo.Docs.Documents
                     input.Version
                 );
 
-                if (!DocsJsonSerializerHelper.TryDeserialize<DocumentParametersDto>(document.Content,out var documentParameters))
+                if (!DocsJsonSerializerHelper.TryDeserialize<DocumentParametersDto>(document.Content,
+                    out var documentParameters))
                 {
                     throw new UserFriendlyException(
                         $"Cannot validate document parameters file '{project.ParametersDocumentName}' for the project {project.Name}.");
@@ -275,7 +398,8 @@ namespace Volo.Docs.Documents
             var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
 
             documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
-            documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
+            documentDto.Contributors =
+                ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
 
             return documentDto;
         }
@@ -286,7 +410,8 @@ namespace Volo.Docs.Documents
             Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the source...");
 
             var source = _documentStoreFactory.Create(project.DocumentStoreType);
-            var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version, oldDocument?.LastSignificantUpdateTime);
+            var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version,
+                oldDocument?.LastSignificantUpdateTime);
 
             await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode,
                 sourceDocument.Version);
@@ -353,7 +478,6 @@ namespace Volo.Docs.Documents
             }
 
             return project.ExtraProperties["VersionBranchPrefix"].ToString();
-
         }
 
         private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)

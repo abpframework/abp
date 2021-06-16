@@ -10,5 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.MultiTenancy
         public Guid? TenantId { get; set; }
 
         public string Name { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }
