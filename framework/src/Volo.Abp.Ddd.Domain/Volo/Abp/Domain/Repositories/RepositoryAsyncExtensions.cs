@@ -28,6 +28,14 @@ namespace Volo.Abp.Domain.Repositories
 
         public static async Task<bool> AnyAsync<T>(
             [NotNull] this IReadOnlyRepository<T> repository,
+            CancellationToken cancellationToken = default)
+            where T : class, IEntity
+        {
+            var queryable = await repository.GetQueryableAsync();
+            return await repository.AsyncExecuter.AnyAsync(queryable, cancellationToken);
+        }
+        public static async Task<bool> AnyAsync<T>(
+            [NotNull] this IReadOnlyRepository<T> repository,
             [NotNull] Expression<Func<T, bool>> predicate,
             CancellationToken cancellationToken = default)
             where T : class, IEntity
