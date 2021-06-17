@@ -102,7 +102,14 @@
     chart.js "^2.9.3"
     tslib "^2.0.0"
 
-"@abp/utils@^4.3.1", "@abp/utils@^4.3.2":
+"@abp/utils@^4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-4.3.1.tgz#cc9163a545526d1970d2d2b85803f345bb38b4a0"
+  integrity sha512-k4PtGsrRE/hBkNULXPEHZURcw7C2qgmCnIe2fYaEdLMGLHpu4sUuYkegj1nCVVOA76omhoFi5mwqUYZTuhpS8Q==
+  dependencies:
+    just-compare "^1.3.0"
+
+"@abp/utils@^4.3.2":
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-4.3.2.tgz#ff8fa921aadf8ec6d1d8eb0572133907c19ac6e5"
   integrity sha512-xUycN1bW+gTVfD0WJHXG5UbqAqAg/dVrZ/pXlnEGixp04vXwTI+o5oWTV2rQYiOyLbPzmpjSAZmxrkIcAgIQ1A==
