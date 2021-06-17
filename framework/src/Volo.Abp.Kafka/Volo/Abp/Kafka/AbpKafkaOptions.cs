@@ -14,8 +14,6 @@ namespace Volo.Abp.Kafka
 
         public Action<TopicSpecification> ConfigureTopic { get; set; }
 
-        public bool ReQueue { get; set; } = true;
-
         public AbpKafkaOptions()
         {
             Connections = new KafkaConnections();
