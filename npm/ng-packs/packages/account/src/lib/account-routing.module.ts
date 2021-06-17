@@ -69,6 +69,7 @@ const routes: Routes = [
             component: ReplaceableRouteContainerComponent,
             canActivate: [AuthenticationFlowGuard],
             data: {
+              tenantBoxVisible: false,
               replaceableComponent: {
                 key: eAccountComponents.ResetPassword,
                 defaultComponent: ResetPasswordComponent,
