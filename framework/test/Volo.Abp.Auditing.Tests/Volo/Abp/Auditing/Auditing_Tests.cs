@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
 using Volo.Abp.Auditing.App.Entities;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
@@ -44,7 +45,7 @@ namespace Volo.Abp.Auditing
 
             await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
-        
+
         [Fact]
         public async Task Should_Write_AuditLog_For_Classes_That_Implement_IAuditingEnabled_Without_An_Explicit_Scope()
         {
@@ -280,6 +281,37 @@ namespace Volo.Abp.Auditing
                                                                               .Where(y => y.PropertyName != nameof(AppEntityWithAuditedAndHasCustomAuditingProperties
                                                                                   .ExtraProperties))
                                                                               .All(y => GetBaseAuditPropertyNames().Contains(y.PropertyName))));
+#pragma warning restore 4014
+        }
+
+        [Fact]
+        public virtual async Task Should_Write_AuditLog_Without_ExtraPropertyDictionary()
+        {
+            var entityId = Guid.NewGuid();
+            var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithAudited, Guid>>();
+            var appEntityWithAudited = new AppEntityWithAudited(entityId, "test name");
+            appEntityWithAudited.SetProperty("No", 123456);
+            await repository.InsertAsync(appEntityWithAudited);
+
+            using (var scope = _auditingManager.BeginScope())
+            {
+                using (var uow = _unitOfWorkManager.Begin())
+                {
+                    var entity = await repository.GetAsync(entityId);
+                    entity.Name = "new test name";
+
+                    await repository.UpdateAsync(entity);
+
+                    await uow.CompleteAsync();
+                }
+
+                await scope.SaveAsync();
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1
+                                                                          && x.EntityChanges[0].PropertyChanges.Count == 1
+                                                                          && x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithAudited.Name)));
 #pragma warning restore 4014
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.ExceptionHandling;
@@ -58,14 +59,19 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
             exception = TryToGetActualException(exception);
 
-            if (exception is EntityNotFoundException)
-            {
-                return CreateEntityNotFoundError(exception as EntityNotFoundException);
-            }
-
             if (exception is AbpRemoteCallException remoteCallException)
             {
                 return remoteCallException.Error;
+            }
+
+            if (exception is AbpDbConcurrencyException)
+            {
+                return new RemoteServiceErrorInfo(L["AbpDbConcurrencyErrorMessage"]);
+            }
+
+            if (exception is EntityNotFoundException)
+            {
+                return CreateEntityNotFoundError(exception as EntityNotFoundException);
             }
 
             var errorInfo = new RemoteServiceErrorInfo();
@@ -169,7 +175,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
             return new RemoteServiceErrorInfo(exception.Message);
         }
-
+        
         protected virtual Exception TryToGetActualException(Exception exception)
         {
             if (exception is AggregateException && exception.InnerException != null)

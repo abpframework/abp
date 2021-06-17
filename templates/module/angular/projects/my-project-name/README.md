@@ -1,6 +1,6 @@
 # MyProjectName
 
-This is a startup project based on the ABP framework. For more information, visit <a href="https://abp.io/" target="_blank">abp.io</a
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.4.
 
 ## Code scaffolding
 
@@ -21,4 +21,4 @@ Run `ng test my-project-name` to execute the unit tests via [Karma](https://karm
 
 ## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

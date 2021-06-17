@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using JetBrains.Annotations;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Users
 {
@@ -29,6 +30,36 @@ namespace Volo.Abp.Users
             Debug.Assert(currentUser.Id != null, "currentUser.Id != null");
 
             return currentUser.Id.Value;
+        }
+
+        public static Guid? FindImpersonatorTenantId([NotNull] this ICurrentUser currentUser)
+        {
+            var impersonatorTenantId = currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorTenantId);
+            if (impersonatorTenantId == null || impersonatorTenantId.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+            if (Guid.TryParse(impersonatorTenantId, out var guid))
+            {
+                return guid;
+            }
+
+            return null;
+        }
+
+        public static Guid? FindImpersonatorUserId([NotNull] this ICurrentUser currentUser)
+        {
+            var impersonatorUserId = currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorUserId);
+            if (impersonatorUserId == null || impersonatorUserId.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+            if (Guid.TryParse(impersonatorUserId, out var guid))
+            {
+                return guid;
+            }
+
+            return null;
         }
     }
 }
