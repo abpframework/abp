@@ -15,14 +15,14 @@ namespace Volo.Abp.EventBus.Rebus
         {
         }
 
-        protected override Task Retry(EventExecutionErrorContext context)
+        protected override Task RetryAsync(EventExecutionErrorContext context)
         {
             ThrowOriginalExceptions(context);
 
             return Task.CompletedTask;
         }
 
-        protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
+        protected override Task MoveToDeadLetterAsync(EventExecutionErrorContext context)
         {
             ThrowOriginalExceptions(context);
 

@@ -16,49 +16,49 @@ namespace Volo.Abp.EventBus
             Options = options.Value;
         }
 
-        public virtual async Task Handle(EventExecutionErrorContext context)
+        public virtual async Task HandleAsync(EventExecutionErrorContext context)
         {
-            if (!ShouldHandle(context))
+            if (!await ShouldHandleAsync(context))
             {
                 ThrowOriginalExceptions(context);
             }
 
-            if (ShouldRetry(context))
+            if (await ShouldRetryAsync(context))
             {
-                await Retry(context);
+                await RetryAsync(context);
                 return;
             }
 
-            await MoveToDeadLetter(context);
+            await MoveToDeadLetterAsync(context);
         }
 
-        protected abstract Task Retry(EventExecutionErrorContext context);
+        protected abstract Task RetryAsync(EventExecutionErrorContext context);
 
-        protected abstract Task MoveToDeadLetter(EventExecutionErrorContext context);
+        protected abstract Task MoveToDeadLetterAsync(EventExecutionErrorContext context);
 
-        protected virtual bool ShouldHandle(EventExecutionErrorContext context)
+        protected virtual Task<bool> ShouldHandleAsync(EventExecutionErrorContext context)
         {
             if (!Options.EnabledErrorHandle)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
-            return Options.ErrorHandleSelector == null || Options.ErrorHandleSelector.Invoke(context.EventType);
+            return Task.FromResult(Options.ErrorHandleSelector == null || Options.ErrorHandleSelector.Invoke(context.EventType));
         }
 
-        protected virtual bool ShouldRetry(EventExecutionErrorContext context)
+        protected virtual Task<bool> ShouldRetryAsync(EventExecutionErrorContext context)
         {
             if (Options.RetryStrategyOptions == null)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             if (!context.TryGetRetryAttempt(out var retryAttempt))
             {
-                return false;
+                return Task.FromResult(false);
             }
 
-            return Options.RetryStrategyOptions.MaxRetryAttempts > retryAttempt;
+            return Task.FromResult(Options.RetryStrategyOptions.MaxRetryAttempts > retryAttempt);
         }
 
         protected virtual void ThrowOriginalExceptions(EventExecutionErrorContext context)

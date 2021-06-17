@@ -4,6 +4,6 @@ namespace Volo.Abp.EventBus
 {
     public interface IEventErrorHandler
     {
-        Task Handle(EventExecutionErrorContext context);
+        Task HandleAsync(EventExecutionErrorContext context);
     }
 }

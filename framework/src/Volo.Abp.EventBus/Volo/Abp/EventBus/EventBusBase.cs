@@ -105,7 +105,7 @@ namespace Volo.Abp.EventBus
             {
                 var context = new EventExecutionErrorContext(exceptions, eventType, this);
                 onErrorAction?.Invoke(context);
-                await ErrorHandler.Handle(context);
+                await ErrorHandler.HandleAsync(context);
             }
         }
 

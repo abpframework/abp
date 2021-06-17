@@ -21,7 +21,7 @@ namespace Volo.Abp.EventBus.Kafka
             Logger = NullLogger<KafkaEventErrorHandler>.Instance;
         }
 
-        protected override async Task Retry(EventExecutionErrorContext context)
+        protected override async Task RetryAsync(EventExecutionErrorContext context)
         {
             if (Options.RetryStrategyOptions.IntervalMillisecond > 0)
             {
@@ -37,7 +37,7 @@ namespace Volo.Abp.EventBus.Kafka
                 new Dictionary<string, object> {{RetryAttemptKey, ++retryAttempt}});
         }
 
-        protected override async Task MoveToDeadLetter(EventExecutionErrorContext context)
+        protected override async Task MoveToDeadLetterAsync(EventExecutionErrorContext context)
         {
             Logger.LogException(
                 context.Exceptions.Count == 1 ? context.Exceptions.First() : new AggregateException(context.Exceptions),

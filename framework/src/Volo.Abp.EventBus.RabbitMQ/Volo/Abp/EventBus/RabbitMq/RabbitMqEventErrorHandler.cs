@@ -17,7 +17,7 @@ namespace Volo.Abp.EventBus.RabbitMq
         {
         }
 
-        protected override async Task Retry(EventExecutionErrorContext context)
+        protected override async Task RetryAsync(EventExecutionErrorContext context)
         {
             if (Options.RetryStrategyOptions.IntervalMillisecond > 0)
             {
@@ -37,7 +37,7 @@ namespace Volo.Abp.EventBus.RabbitMq
                 });
         }
 
-        protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
+        protected override Task MoveToDeadLetterAsync(EventExecutionErrorContext context)
         {
             ThrowOriginalExceptions(context);
 

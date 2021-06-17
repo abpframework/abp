@@ -19,7 +19,7 @@ namespace Volo.Abp.EventBus.Local
             RetryTracking = new Dictionary<Guid, int>();
         }
 
-        protected override async Task Retry(EventExecutionErrorContext context)
+        protected override async Task RetryAsync(EventExecutionErrorContext context)
         {
             if (Options.RetryStrategyOptions.IntervalMillisecond > 0)
             {
@@ -36,19 +36,19 @@ namespace Volo.Abp.EventBus.Local
             RetryTracking.Remove(messageId);
         }
 
-        protected override Task MoveToDeadLetter(EventExecutionErrorContext context)
+        protected override Task MoveToDeadLetterAsync(EventExecutionErrorContext context)
         {
             ThrowOriginalExceptions(context);
 
             return Task.CompletedTask;
         }
 
-        protected override bool ShouldRetry(EventExecutionErrorContext context)
+        protected override async Task<bool> ShouldRetryAsync(EventExecutionErrorContext context)
         {
             var messageId = context.GetProperty<Guid>(nameof(LocalEventMessage.MessageId));
             context.SetProperty(RetryAttemptKey, RetryTracking.GetOrDefault(messageId));
 
-            if (base.ShouldRetry(context))
+            if (await base.ShouldRetryAsync(context))
             {
                 return true;
             }
