@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Tracing;
 
@@ -142,17 +143,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)
         {
-            return NormalizeTypeName(actionParameter.TypeAsString) ==
-                   NormalizeTypeName(methodParameter.ParameterType.GetFullNameWithAssemblyName());
+            // make it lower-coupled, see https://github.com/abpframework/abp/issues/9357
+            return actionParameter.Type == TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType);
         }
 
-        protected virtual string NormalizeTypeName(string typeName)
-        {
-            const string placeholder = "%COREFX%";
-            const string netCoreLib = "System.Private.CoreLib";
-            const string netFxLib = "mscorlib";
-
-            return typeName.Replace(netCoreLib, placeholder).Replace(netFxLib, placeholder);
-        }
     }
 }
