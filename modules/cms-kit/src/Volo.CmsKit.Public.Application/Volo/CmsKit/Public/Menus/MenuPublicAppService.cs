@@ -13,11 +13,11 @@ namespace Volo.CmsKit.Public.Menus
     {
         protected IMenuRepository MenuRepository { get; }
 
-        protected IDistributedCache<MenuWithDetailsDto, MainMenuCacheKey> DistributedCache { get; }
+        protected IDistributedCache<MenuWithDetailsDto> DistributedCache { get; }
 
         public MenuPublicAppService(
             IMenuRepository menuRepository,
-            IDistributedCache<MenuWithDetailsDto, MainMenuCacheKey> distributedCache)
+            IDistributedCache<MenuWithDetailsDto> distributedCache)
         {
             MenuRepository = menuRepository;
             DistributedCache = distributedCache;
@@ -26,7 +26,7 @@ namespace Volo.CmsKit.Public.Menus
         public async Task<MenuWithDetailsDto> GetMainMenuAsync()
         {
             var cachedMenu = await DistributedCache.GetOrAddAsync(
-                new MainMenuCacheKey(),
+                MenuApplicationConsts.MainMenuCacheKey,
                 async () =>
                 {
                     var menu = await MenuRepository.FindMainMenuAsync(includeDetails: true);
