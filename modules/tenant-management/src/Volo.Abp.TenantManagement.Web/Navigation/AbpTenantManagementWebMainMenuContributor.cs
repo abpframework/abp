@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.TenantManagement.Localization;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Authorization.Permissions;
 
 namespace Volo.Abp.TenantManagement.Web.Navigation
 {
@@ -23,7 +24,7 @@ namespace Volo.Abp.TenantManagement.Web.Navigation
             var tenantManagementMenuItem = new ApplicationMenuItem(TenantManagementMenuNames.GroupName, l["Menu:TenantManagement"], icon: "fa fa-users");
             administrationMenu.AddItem(tenantManagementMenuItem);
 
-            tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "~/TenantManagement/Tenants", requiredPermissionName: TenantManagementPermissions.Tenants.Default));
+            tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "~/TenantManagement/Tenants").RequirePermissions(TenantManagementPermissions.Tenants.Default));
 
             return Task.CompletedTask;
         }

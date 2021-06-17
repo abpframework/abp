@@ -62,6 +62,13 @@ namespace Volo.Docs.Documents
         }
 
         [HttpGet]
+        [Route("links")]
+        public Task<List<string>> GetUrlsAsync(string prefix)
+        {
+            return DocumentAppService.GetUrlsAsync(prefix);
+        }
+
+        [HttpGet]
         [Route("parameters")]
         public Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
         {

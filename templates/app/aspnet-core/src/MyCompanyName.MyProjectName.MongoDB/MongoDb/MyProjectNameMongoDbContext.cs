@@ -1,6 +1,4 @@
-﻿using MongoDB.Driver;
-using MyCompanyName.MyProjectName.Users;
-using Volo.Abp.Data;
+﻿using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
 namespace MyCompanyName.MyProjectName.MongoDB
@@ -8,18 +6,18 @@ namespace MyCompanyName.MyProjectName.MongoDB
     [ConnectionStringName("Default")]
     public class MyProjectNameMongoDbContext : AbpMongoDbContext
     {
-        public IMongoCollection<AppUser> Users => Collection<AppUser>();
+        /* Add mongo collections here. Example:
+         * public IMongoCollection<Question> Questions => Collection<Question>();
+         */
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.Entity<AppUser>(b =>
-            {
-                /* Sharing the same "AbpUsers" collection
-                 * with the Identity module's IdentityUser class. */
-                b.CollectionName = "AbpUsers";
-            });
+            //builder.Entity<YourEntity>(b =>
+            //{
+            //    //...
+            //});
         }
     }
 }

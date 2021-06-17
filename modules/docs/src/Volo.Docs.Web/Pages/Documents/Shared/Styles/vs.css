@@ -22,7 +22,7 @@
       border-radius: 5px;
       overflow: hidden; }
     .docs-page .docs-sidebar .docs-sidebar-wrapper {
-      width: 270px;
+      width: 300px;
       float: right; }
       .docs-page .docs-sidebar .docs-sidebar-wrapper input.form-control {
         border: 0; }
@@ -70,7 +70,7 @@
           margin-right: 12px !important;
           margin-top: 20px !important; }
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul {
-          font-size: .9em;
+          font-size: 14px;
           list-style: none;
           padding: 0 1rem;
           margin: 0; }
@@ -554,6 +554,9 @@ div.code-toolbar > .toolbar span {
 
 div.code-toolbar > .toolbar a {
   cursor: copy; }
+
+.logo-nav ul {
+  width: 300px !important; }
 
 @media (max-width: 767px) {
   body {

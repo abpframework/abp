@@ -221,6 +221,25 @@
     "PaymentProduct": "Ödeme Ürünü",
     "ProductName": "Ürün İsmi",
     "Code": "Kod",
-    "GenerateInvoice": "Fatura Oluştur"
+    "GenerateInvoice": "Fatura Oluştur",
+    "ExportOrganizationsToExcel": "Excel'e aktar",
+    "ThisExtensionIsNotAllowed": "Bu uzantıya izin verilmiyor.",
+    "TheFileIsTooLarge": "Dosya çok büyük.",
+    "ArticleDeletionConfirmationMessage": "Bu makaleyi kalıcı olarak silmek istediğinizden emin misiniz?",
+    "ChooseCoverImage": "Bir kapak resmi seçin...",
+    "CoverImage": "Kapak Resmi",
+    "Menu:Quotation": "Fiyatlandırma",
+    "Menu:Invoice": "Fatura",
+    "Menu:PaymentRequests": "Ödeme İstekleri",
+    "Permission:PaymentRequests": "Ödeme İstekleri",
+    "PaymentRequests": "Ödeme İstekleri",
+    "Creator": "Oluşturan",
+    "ExtraProperties": "Ekstra Özellikler",
+    "Organization": "Organizasyon",
+    "Waiting": "Bekliyor",
+    "Completed": "Tamamlandı",
+    "Failed": "Başarısız Oldu",
+    "PaymentRequestDeletionWarningMessage": "Bu ödeme isteği silinecek. Bunu onaylıyor musun?",
+    "Payment": "Ödeme"
   }
 }

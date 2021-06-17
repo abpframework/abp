@@ -9,21 +9,16 @@ import {
   OAuthService,
   OAuthStorage,
 } from 'angular-oauth2-oidc';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable, of, pipe } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
+import { LoginParams } from '../models/auth';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
+import { removeRememberMe, setRememberMe } from '../utils/auth-utils';
 import { noop } from '../utils/common-utils';
-
-export interface LoginParams {
-  username: string;
-  password: string;
-  rememberMe?: boolean;
-  redirectUrl?: string;
-}
 
 export const oAuthStorage = localStorage;
 
@@ -149,25 +144,12 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
           this.refreshToken();
         } else {
           this.oAuthService.logOut();
-          this.removeRememberMe();
+          removeRememberMe();
           this.appConfigService.get().subscribe(res => {
             this.configState.setState(res);
           });
         }
       });
-  }
-
-  private setRememberMe(remember: boolean) {
-    this.removeRememberMe();
-    localStorage.setItem(this.storageKey, 'true');
-    document.cookie = `${this.cookieKey}=true; path=/${
-      remember ? ' ;expires=Fri, 31 Dec 9999 23:59:59 GMT' : ''
-    }`;
-  }
-
-  private removeRememberMe() {
-    localStorage.removeItem(this.storageKey);
-    document.cookie = this.cookieKey + '= ; path=/; expires = Thu, 01 Jan 1970 00:00:00 GMT';
   }
 
   async init() {
@@ -188,7 +170,6 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   login(params: LoginParams): Observable<any> {
-    const router = this.injector.get(Router);
     const tenant = this.sessionState.getTenant();
 
     return from(
@@ -197,11 +178,17 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
         params.password,
         new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
       ),
-    ).pipe(
+    ).pipe(this.pipeToLogin(params));
+  }
+
+  pipeToLogin(params: Pick<LoginParams, 'redirectUrl' | 'rememberMe'>) {
+    const router = this.injector.get(Router);
+
+    return pipe(
       switchMap(() => this.appConfigService.get()),
       tap(res => {
         this.configState.setState(res);
-        this.setRememberMe(params.rememberMe);
+        setRememberMe(params.rememberMe);
         if (params.redirectUrl) router.navigate([params.redirectUrl]);
       }),
     );
@@ -215,7 +202,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       tap(res => {
         this.configState.setState(res);
         router.navigateByUrl('/');
-        this.removeRememberMe();
+        removeRememberMe();
       }),
     );
   }
@@ -223,7 +210,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => {
       clearOAuthStorage();
-      this.removeRememberMe();
+      removeRememberMe();
     });
   }
 }

@@ -1,0 +1,90 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Volo.Abp.Identity.Domain.Shared": {
+      "path": "src/Volo.Abp.Identity.Domain.Shared/Volo.Abp.Identity.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.Domain": {
+      "path": "src/Volo.Abp.Identity.Domain/Volo.Abp.Identity.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.Application.Contracts": {
+      "path": "src/Volo.Abp.Identity.Application.Contracts/Volo.Abp.Identity.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.Application": {
+      "path": "src/Volo.Abp.Identity.Application/Volo.Abp.Identity.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.Identity.EntityFrameworkCore/Volo.Abp.Identity.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.HttpApi": {
+      "path": "src/Volo.Abp.Identity.HttpApi/Volo.Abp.Identity.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.HttpApi.Client": {
+      "path": "src/Volo.Abp.Identity.HttpApi.Client/Volo.Abp.Identity.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.Web": {
+      "path": "src/Volo.Abp.Identity.Web/Volo.Abp.Identity.Web.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.Application.Tests": {
+      "path": "test/Volo.Abp.Identity.Application.Tests/Volo.Abp.Identity.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Identity.MongoDB": {
+      "path": "src/Volo.Abp.Identity.MongoDB/Volo.Abp.Identity.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.MongoDB.Tests": {
+      "path": "test/Volo.Abp.Identity.MongoDB.Tests/Volo.Abp.Identity.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Identity.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.Identity.EntityFrameworkCore.Tests/Volo.Abp.Identity.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Identity.TestBase": {
+      "path": "test/Volo.Abp.Identity.TestBase/Volo.Abp.Identity.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Identity.Domain.Tests": {
+      "path": "test/Volo.Abp.Identity.Domain.Tests/Volo.Abp.Identity.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Identity.AspNetCore": {
+      "path": "src/Volo.Abp.Identity.AspNetCore/Volo.Abp.Identity.AspNetCore.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.PermissionManagement.Domain.Identity": {
+      "path": "src/Volo.Abp.PermissionManagement.Domain.Identity/Volo.Abp.PermissionManagement.Domain.Identity.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.AspNetCore.Tests": {
+      "path": "test/Volo.Abp.Identity.AspNetCore.Tests/Volo.Abp.Identity.AspNetCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Volo.Abp.Identity.Blazor": {
+      "path": "src/Volo.Abp.Identity.Blazor/Volo.Abp.Identity.Blazor.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.Blazor.Server": {
+      "path": "src/Volo.Abp.Identity.Blazor.Server/Volo.Abp.Identity.Blazor.Server.abppkg.json",
+      "folder": "src"
+    },
+    "Volo.Abp.Identity.Blazor.WebAssembly": {
+      "path": "src/Volo.Abp.Identity.Blazor.WebAssembly/Volo.Abp.Identity.Blazor.WebAssembly.abppkg.json",
+      "folder": "src"
+    }
+  }
+}

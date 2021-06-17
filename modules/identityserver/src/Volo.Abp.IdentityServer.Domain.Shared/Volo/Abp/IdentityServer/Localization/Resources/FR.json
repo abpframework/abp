@@ -1,0 +1,14 @@
+{
+  "culture": "fr",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Le nom de la ressource d'identité existe déjà: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Le nom de la ressource Api existe déjà: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Le nom de l'API Scope existe déjà: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId existe déjà: {ClientId}",
+    "UserLockedOut": "Le compte utilisateur a été verrouillé en raison de tentatives de connexion non valides. Veuillez patienter un instant et réessayer.",
+    "InvalidUserNameOrPassword": "Nom d'utilisateur ou mot de passe invalide!",
+    "LoginIsNotAllowed": "Vous n'êtes pas autorisé à vous connecter! Vous devez confirmer votre adresse e-mail / numéro de téléphone.",
+    "InvalidUsername": "Nom d'utilisateur ou mot de passe invalide!",
+    "TheTargetUserIsNotLinkedToYou": "L'utilisateur cible n'est pas lié à vous!"
+  }
+}

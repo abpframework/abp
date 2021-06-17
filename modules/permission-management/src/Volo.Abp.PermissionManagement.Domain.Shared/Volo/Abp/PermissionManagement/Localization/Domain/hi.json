@@ -1,0 +1,10 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Permissions": "अनुमतियां",
+    "OnlyProviderPermissons": "केवल यह प्रदाता",
+    "All": "सब",
+    "SelectAllInAllTabs": "सभी अनुमतियां प्रदान करें",
+    "SelectAllInThisTab": "सभी का चयन करे"
+  }
+}

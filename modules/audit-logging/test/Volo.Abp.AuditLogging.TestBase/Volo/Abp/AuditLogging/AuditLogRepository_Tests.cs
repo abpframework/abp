@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic;
 using Shouldly;
 using Volo.Abp.Auditing;
-using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 using Xunit;
 
@@ -17,12 +14,12 @@ namespace Volo.Abp.AuditLogging
         where TStartupModule : IAbpModule
     {
         protected IAuditLogRepository AuditLogRepository { get; }
-        protected IGuidGenerator GuidGenerator { get; }
+        protected IAuditLogInfoToAuditLogConverter AuditLogInfoToAuditLogConverter { get; }
 
         protected AuditLogRepository_Tests()
         {
             AuditLogRepository = GetRequiredService<IAuditLogRepository>();
-            GuidGenerator = GetRequiredService<IGuidGenerator>();
+            AuditLogInfoToAuditLogConverter = GetRequiredService<IAuditLogInfoToAuditLogConverter>();
         }
 
         [Fact]
@@ -119,8 +116,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             //Assert
             var logs = await AuditLogRepository.GetListAsync();
@@ -223,8 +220,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             //Assert
             var logs = await AuditLogRepository.GetCountAsync();
@@ -325,8 +322,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             //Assert
             var date = DateTime.Parse("2020-01-01");
@@ -428,8 +425,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             //Assert
             var entityChanges = await AuditLogRepository.GetEntityChangeListAsync();
@@ -534,8 +531,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             var entityChanges = await AuditLogRepository.GetEntityChangeListAsync();
             var entityChange =
@@ -641,8 +638,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             //Assert
             var entityChangesDesc = await AuditLogRepository.GetEntityChangeListAsync();
@@ -754,8 +751,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             //Assert
             var entityChanges = await AuditLogRepository.GetEntityChangeListAsync(changeType: EntityChangeType.Created);
@@ -864,8 +861,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             //Assert
             var entityHistory = await AuditLogRepository.GetEntityChangesWithUsernameAsync(entityId, entityType);
@@ -976,8 +973,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log1));
+            await AuditLogRepository.InsertAsync(await AuditLogInfoToAuditLogConverter.ConvertAsync(log2));
 
             var entityChanges = await AuditLogRepository.GetEntityChangeListAsync();
             var entityHistory =

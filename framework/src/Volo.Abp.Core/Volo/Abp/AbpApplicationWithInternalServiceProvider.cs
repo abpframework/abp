@@ -31,11 +31,22 @@ namespace Volo.Abp
             Services.AddSingleton<IAbpApplicationWithInternalServiceProvider>(this);
         }
 
-        public void Initialize()
+        public IServiceProvider CreateServiceProvider()
         {
+            if (ServiceProvider != null)
+            {
+                return ServiceProvider;
+            }
+            
             ServiceScope = Services.BuildServiceProviderFromFactory().CreateScope();
             SetServiceProvider(ServiceScope.ServiceProvider);
             
+            return ServiceProvider;
+        }
+
+        public void Initialize()
+        {
+            CreateServiceProvider();
             InitializeModules();
         }
 

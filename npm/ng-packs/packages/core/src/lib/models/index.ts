@@ -1,4 +1,5 @@
 export * from './application-configuration';
+export * from './auth';
 export * from './common';
 export * from './config';
 export * from './dtos';

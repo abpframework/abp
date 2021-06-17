@@ -23,6 +23,11 @@ namespace Volo.Abp.EntityFrameworkCore
             return queryable.ContainsAsync(item, cancellationToken);
         }
 
+        public Task<bool> AnyAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+        {
+            return queryable.AnyAsync(cancellationToken);
+        }
+
         public Task<bool> AnyAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return queryable.AnyAsync(predicate, cancellationToken);

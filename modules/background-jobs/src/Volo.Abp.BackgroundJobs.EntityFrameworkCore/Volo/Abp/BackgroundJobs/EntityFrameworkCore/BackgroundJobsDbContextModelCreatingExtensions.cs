@@ -39,7 +39,11 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
                 b.Property(x => x.Priority).HasDefaultValue(BackgroundJobPriority.Normal);
 
                 b.HasIndex(x => new { x.IsAbandoned, x.NextTryTime });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<BackgroundJobsDbContext>();
         }
     }
 }

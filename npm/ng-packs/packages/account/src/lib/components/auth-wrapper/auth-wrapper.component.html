@@ -1,6 +1,6 @@
 <div class="row">
   <div class="mx-auto col col-md-5">
-    <ng-container *ngIf="(isMultiTenancyEnabled$ | async) && multiTenancy.isTenantBoxVisible">
+    <ng-container *ngIf="(isMultiTenancyEnabled$ | async) && isTenantBoxVisible">
       <abp-tenant-box *abpReplaceableTemplate="{ componentKey: tenantBoxKey }"></abp-tenant-box>
     </ng-container>
 

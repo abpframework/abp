@@ -12,6 +12,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             var pipeline = new ProjectBuildPipeline(context);
 
             pipeline.Steps.Add(new FileEntryListReadStep());
+            pipeline.Steps.Add(new CreateAppSettingsSecretsStep());
 
             pipeline.Steps.AddRange(context.Template.GetCustomSteps(context));
 
