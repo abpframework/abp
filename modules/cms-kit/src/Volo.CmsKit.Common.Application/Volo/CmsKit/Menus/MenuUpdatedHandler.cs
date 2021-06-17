@@ -1,26 +1,24 @@
 using System.Threading.Tasks;
+using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-using Volo.Abp.EventBus.Distributed;
+using Volo.CmsKit.Public.Menus;
 
 namespace Volo.CmsKit.Menus
 {
-    public class MenuUpdatedHandler : ILocalEventHandler<EntityUpdatedEventData<Menu>>, ITransientDependency
+    public class MenuUpdatedHandler :  ILocalEventHandler<EntityUpdatedEventData<Menu>>, ITransientDependency
     {
-        public IDistributedEventBus EventBus { get; }
-
-        public MenuUpdatedHandler(IDistributedEventBus eventBus)
+        protected IDistributedCache<MenuWithDetailsDto, MainMenuCacheKey> DistributedCache { get; }
+        
+        public MenuUpdatedHandler(IDistributedCache<MenuWithDetailsDto, MainMenuCacheKey> distributedCache)
         {
-            EventBus = eventBus;
+            DistributedCache = distributedCache;
         }
 
         public async Task HandleEventAsync(EntityUpdatedEventData<Menu> eventData)
         {
-            await EventBus.PublishAsync(new MenuUpdatedEto
-            {
-                MenuId = eventData.Entity.Id
-            });
+            await DistributedCache.RemoveAsync(new MainMenuCacheKey());
         }
     }
 }

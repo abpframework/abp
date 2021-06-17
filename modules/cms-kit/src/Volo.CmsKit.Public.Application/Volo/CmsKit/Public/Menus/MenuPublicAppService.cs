@@ -33,16 +33,11 @@ namespace Volo.CmsKit.Public.Menus
                     
                     if (menu == null)
                     {
-                        return null;
+                        return new MenuWithDetailsDto(); 
                     }
 
                     return ObjectMapper.Map<Menu, MenuWithDetailsDto>(menu);
                 });
-
-            if (cachedMenu == null)
-            {
-                return null;
-            }
 
             return cachedMenu;
         }
