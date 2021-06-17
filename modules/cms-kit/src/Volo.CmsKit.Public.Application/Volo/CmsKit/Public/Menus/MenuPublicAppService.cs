@@ -1,30 +1,50 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Caching;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Menus;
 
 namespace Volo.CmsKit.Public.Menus
-{    
+{
     [RequiresGlobalFeature(typeof(MenuFeature))]
     public class MenuPublicAppService : CmsKitPublicAppServiceBase, IMenuPublicAppService
     {
         protected IMenuRepository MenuRepository { get; }
 
-        public MenuPublicAppService(IMenuRepository menuRepository)
+        protected IDistributedCache<MenuWithDetailsDto, MainMenuCacheKey> DistributedCache { get; }
+
+        public MenuPublicAppService(
+            IMenuRepository menuRepository,
+            IDistributedCache<MenuWithDetailsDto, MainMenuCacheKey> distributedCache)
         {
             MenuRepository = menuRepository;
+            DistributedCache = distributedCache;
         }
-        
+
         public async Task<MenuWithDetailsDto> GetMainMenuAsync()
         {
-            var menu = await MenuRepository.FindMainMenuAsync(includeDetails: true);
+            var cachedMenu = await DistributedCache.GetOrAddAsync(
+                new MainMenuCacheKey(),
+                async () =>
+                {
+                    var menu = await MenuRepository.FindMainMenuAsync(includeDetails: true);
+                    
+                    if (menu == null)
+                    {
+                        return null;
+                    }
 
-            if (menu == null)
+                    return ObjectMapper.Map<Menu, MenuWithDetailsDto>(menu);
+                });
+
+            if (cachedMenu == null)
             {
                 return null;
             }
-            
-            return ObjectMapper.Map<Menu, MenuWithDetailsDto>(menu);
+
+            return cachedMenu;
         }
     }
 }

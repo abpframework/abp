@@ -7,9 +7,11 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Menus
 {
+    [Serializable]
     public class MenuWithDetailsDto : FullAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
+        
         
         public bool IsMainMenu { get; set; }
         
