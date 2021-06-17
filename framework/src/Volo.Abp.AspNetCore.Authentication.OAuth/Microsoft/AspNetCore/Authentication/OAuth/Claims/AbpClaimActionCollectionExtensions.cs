@@ -11,12 +11,14 @@ namespace Microsoft.AspNetCore.Authentication.OAuth.Claims
             {
                 claimActions.MapJsonKey(AbpClaimTypes.UserName, "name");
                 claimActions.DeleteClaim("name");
+                claimActions.RemoveDuplicate(AbpClaimTypes.UserName);
             }
 
             if (AbpClaimTypes.Email != "email")
             {
                 claimActions.MapJsonKey(AbpClaimTypes.Email, "email");
                 claimActions.DeleteClaim("email");
+                claimActions.RemoveDuplicate(AbpClaimTypes.Email);
             }
 
             if (AbpClaimTypes.EmailVerified != "email_verified")
@@ -38,11 +40,18 @@ namespace Microsoft.AspNetCore.Authentication.OAuth.Claims
             {
                 claimActions.MapJsonKeyMultiple(AbpClaimTypes.Role, "role");
             }
+            
+            claimActions.RemoveDuplicate(AbpClaimTypes.Name);
         }
 
         public static void MapJsonKeyMultiple(this ClaimActionCollection claimActions, string claimType, string jsonKey)
         {
             claimActions.Add(new MultipleClaimAction(claimType, jsonKey));
+        }
+        
+        public static void RemoveDuplicate(this ClaimActionCollection claimActions, string claimType)
+        {
+            claimActions.Add(new RemoveDuplicateClaimAction(claimType));
         }
     }
 }

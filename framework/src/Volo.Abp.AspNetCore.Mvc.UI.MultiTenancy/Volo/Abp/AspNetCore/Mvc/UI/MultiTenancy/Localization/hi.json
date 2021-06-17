@@ -1,0 +1,13 @@
+{
+  "culture": "hi",
+  "texts": {
+    "GivenTenantIsNotExist": "किरायेदार मौजूद नहीं है: {0}",
+    "GivenTenantIsNotAvailable": "उपलब्ध किरायेदार उपलब्ध नहीं है: {0}",
+    "Tenant": "किरायेदार",
+    "Switch": "स्विच",
+    "Name": "नाम",
+    "SwitchTenantHint": "होस्ट फ़ील्ड पर जाने के लिए नाम फ़ील्ड रिक्त छोड़ें।",
+    "SwitchTenant": "किरायेदार स्विच करें",
+    "NotSelected": "नहीं चुने गए"
+  }
+}

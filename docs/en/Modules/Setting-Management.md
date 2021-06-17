@@ -115,3 +115,192 @@ The order of the providers are important. Providers are executed in the reverse 
 ## See Also
 
 * [Settings](../Settings.md)
+
+## Setting Management UI
+
+Setting Mangement module provided the email setting UI by default, and it is extensible; You can add your tabs to this page for your application settings.
+
+### MVC UI
+
+#### Create a setting View Component
+
+Create `MySettingGroup` folder under the `Components` folder. Add a new view component. Name it as `MySettingGroupViewComponent`:
+
+![MySettingGroupViewComponent](../images/my-setting-group-view-component.png)
+
+Open the `MySettingGroupViewComponent.cs` and change the whole content as shown below:
+
+```csharp
+public class MySettingGroupViewComponent : AbpViewComponent
+{
+    public virtual IViewComponentResult Invoke()
+    {
+        return View("~/Components/MySettingGroup/Default.cshtml");
+    }
+}
+```
+
+> You can also use the `InvokeAsync` method, In this example, we use the `Invoke` method.
+
+#### Default.cshtml
+
+Create a `Default.cshtml` file under the `MySettingGroup` folder.
+
+Open the `Default.cshtml` and change the whole content as shown below:
+
+```html
+<div>
+  <p>My setting group page</p>
+</div>
+```
+
+#### BookStoreSettingPageContributor
+
+Create a `BookStoreSettingPageContributor.cs` file under the `Settings` folder:
+
+![BookStoreSettingPageContributor](../images/my-setting-group-page-contributor.png)
+
+The content of the file is shown below:
+
+```csharp
+public class BookStoreSettingPageContributor : ISettingPageContributor
+{
+    public Task ConfigureAsync(SettingPageCreationContext context)
+    {
+        context.Groups.Add(
+            new SettingPageGroup(
+                "Volo.Abp.MySettingGroup",
+                "MySettingGroup",
+                typeof(MySettingGroupViewComponent)
+            )
+        );
+
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> CheckPermissionsAsync(SettingPageCreationContext context)
+    {
+        // You can check the permissions here
+        return Task.FromResult(true);
+    }
+}
+```
+
+Open the `BookStoreWebModule.cs` file and add the following code:
+
+```csharp
+Configure<SettingManagementPageOptions>(options =>
+{
+    options.Contributors.Add(new BookStoreSettingPageContributor());
+});
+```
+
+#### Run the Application
+
+Navigate to `/SettingManagement` route to see the changes:
+
+![Custom Settings Tab](../images/my-setting-group-ui.png)
+
+### Blazor UI
+
+#### Create a Razor Component
+
+Create `MySettingGroup` folder under the `Pages` folder. Add a new razor component. Name it as `MySettingGroupComponent`:
+
+![MySettingGroupComponent](../images/my-setting-group-component.png)
+
+Open the `MySettingGroupComponent.razor` and change the whole content as shown below:
+
+```csharp
+<Row>
+    <p>my setting group</p>
+</Row>
+```
+
+#### BookStoreSettingComponentContributor
+
+Create a `BookStoreSettingComponentContributor.cs` file under the `Settings` folder:
+
+![BookStoreSettingComponentContributor](../images/my-setting-group-component-contributor.png)
+
+The content of the file is shown below:
+
+```csharp
+public class BookStoreSettingComponentContributor : ISettingComponentContributor
+{
+    public Task ConfigureAsync(SettingComponentCreationContext context)
+    {
+        context.Groups.Add(
+            new SettingComponentGroup(
+                "Volo.Abp.MySettingGroup",
+                "MySettingGroup",
+                typeof(MySettingGroupComponent)
+            )
+        );
+
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> CheckPermissionsAsync(SettingComponentCreationContext context)
+    {
+        // You can check the permissions here
+        return Task.FromResult(true);
+    }
+}
+```
+
+Open the `BookStoreBlazorModule.cs` file and add the following code:
+
+```csharp
+Configure<SettingManagementComponentOptions>(options =>
+{
+    options.Contributors.Add(new BookStoreSettingComponentContributor());
+});
+```
+
+#### Run the Application
+
+Navigate to `/setting-management` route to see the changes:
+
+![Custom Settings Tab](../images/my-setting-group-blazor.png)
+
+### Angular UI
+
+#### Create a Component
+
+Create a component with the following command:
+
+```bash
+yarn ng generate component my-settings
+```
+
+Open the `app.component.ts` and modify the file as shown below:
+
+```js
+import { Component } from '@angular/core';
+import { SettingTabsService } from '@abp/ng.core'; // imported SettingTabsService
+import { MySettingsComponent } from './my-settings/my-settings.component'; // imported MySettingsComponent
+
+@Component(/* component metadata */)
+export class AppComponent {
+  constructor(private settingTabs: SettingTabsService) // injected MySettingsComponent
+  {
+    // added below
+    settingTabs.add([
+      {
+        name: 'MySettings',
+        order: 1,
+        requiredPolicy: 'policy key here',
+        component: MySettingsComponent,
+      },
+    ]);
+  }
+}
+```
+
+#### Run the Application
+
+Navigate to `/setting-management` route to see the changes:
+
+![Custom Settings Tab](../images/custom-settings.png)
+

@@ -82,6 +82,11 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             }
         }
 
+        public static void ApplyObjectExtensionMappings(this EntityTypeBuilder b)
+        {
+            ObjectExtensionManager.Instance.ConfigureEfCoreEntity(b);
+        }
+
         public static void ConfigureSoftDelete<T>(this EntityTypeBuilder<T> b)
             where T : class, ISoftDelete
         {

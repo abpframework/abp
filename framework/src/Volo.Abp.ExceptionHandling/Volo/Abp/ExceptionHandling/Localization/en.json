@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Resource not found!",
     "DefaultErrorMessage404Detail": "The resource requested could not found on the server!",
     "EntityNotFoundErrorMessage": "There is no entity {0} with id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "The data you have submitted has already changed by another user/client. Please discard the changes you've done and try from the beginning.",
     "Error": "Error",
     "UnhandledException": "Unhandled exception!",
     "401Message": "Unauthorized",

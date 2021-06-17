@@ -114,6 +114,11 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             return "FeatureGroup_" + name.Replace(".", "_");
         }
 
+        protected virtual string GetFeatureStyles(FeatureDto feature)
+        {
+            return $"margin-left: {feature.Depth * 20}px";
+        }
+
         protected virtual bool IsDisabled(string providerName)
         {
             return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
@@ -131,9 +136,55 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
             }
         }
 
-        protected virtual void SelectedValueChanged(string featureName, string value)
+        protected virtual Task OnSelectedValueChangedAsync(bool value, FeatureDto feature)
         {
-            SelectionStringValues[featureName] = value;
+            ToggleValues[feature.Name] = value;
+
+            if (value)
+            {
+                CheckParents(feature.ParentName);
+            }
+            else
+            {
+                UncheckChildren(feature.Name);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        protected virtual void CheckParents(string parentName)
+        {
+            if (parentName.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            foreach (var featureGroupDto in Groups)
+            {
+                foreach (var featureDto in featureGroupDto.Features)
+                {
+                    if (featureDto.Name == parentName && ToggleValues.ContainsKey(featureDto.Name))
+                    {
+                        ToggleValues[featureDto.Name] = true;
+                        CheckParents(featureDto.ParentName);
+                    }
+                }
+            }
+        }
+
+        protected virtual void UncheckChildren(string featureName)
+        {
+            foreach (var featureGroupDto in Groups)
+            {
+                foreach (var featureDto in featureGroupDto.Features)
+                {
+                    if (featureDto.ParentName == featureName && ToggleValues.ContainsKey(featureDto.Name))
+                    {
+                        ToggleValues[featureDto.Name] = false;
+                        UncheckChildren(featureDto.Name);
+                    }
+                }
+            }
         }
 
         protected virtual IStringLocalizer CreateStringLocalizer(string resourceName)

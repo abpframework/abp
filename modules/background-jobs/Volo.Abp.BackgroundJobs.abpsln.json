@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Volo.Abp.BackgroundJobs": {
+      "path": "Volo.Abp.BackgroundJobs.abpmdl.json"
+    }
+  }
+}

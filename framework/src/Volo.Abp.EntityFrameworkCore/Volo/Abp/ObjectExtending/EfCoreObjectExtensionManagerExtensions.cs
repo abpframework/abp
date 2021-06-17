@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
@@ -8,6 +9,45 @@ namespace Volo.Abp.ObjectExtending
 {
     public static class EfCoreObjectExtensionManagerExtensions
     {
+        public static ObjectExtensionManager MapEfCoreDbContext<TDbContext>(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] Action<ModelBuilder> modelBuilderAction)
+            where TDbContext : DbContext
+        {
+            return objectExtensionManager.AddOrUpdate(
+                typeof(TDbContext),
+                options =>
+                {
+                    options.MapEfCoreDbContext(modelBuilderAction);
+                });
+        }
+
+        public static ObjectExtensionManager MapEfCoreEntity<TEntity>(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] Action<EntityTypeBuilder> entityTypeBuildAction)
+            where TEntity : IEntity
+        {
+            return MapEfCoreEntity(
+                objectExtensionManager,
+                typeof(TEntity),
+                entityTypeBuildAction);
+        }
+
+        public static ObjectExtensionManager MapEfCoreEntity(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] Type entityType,
+            [NotNull] Action<EntityTypeBuilder> entityTypeBuildAction)
+        {
+            Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+
+            return objectExtensionManager.AddOrUpdate(
+                entityType,
+                options =>
+                {
+                    options.MapEfCoreEntity(entityTypeBuildAction);
+                });
+        }
+
         public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] string propertyName)
@@ -32,10 +72,7 @@ namespace Volo.Abp.ObjectExtending
                 entityType,
                 propertyType,
                 propertyName,
-                options =>
-                {
-                    options.MapEfCore();
-                }
+                options => { options.MapEfCore(); }
             );
         }
 
@@ -126,6 +163,13 @@ namespace Volo.Abp.ObjectExtending
                 return;
             }
 
+            var efCoreEntityMappings = objectExtension.GetEfCoreEntityMappings();
+
+            foreach (var efCoreEntityMapping in efCoreEntityMappings)
+            {
+                efCoreEntityMapping.EntityTypeBuildAction?.Invoke(typeBuilder);
+            }
+
             foreach (var property in objectExtension.GetProperties())
             {
                 var efCoreMapping = property.GetEfCoreMappingOrNull();
@@ -146,6 +190,28 @@ namespace Volo.Abp.ObjectExtending
 #pragma warning disable 618
                 efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
 #pragma warning restore 618
+            }
+        }
+
+        public static void ConfigureEfCoreDbContext<TDbContext>(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] ModelBuilder modelBuilder)
+            where TDbContext : DbContext
+        {
+            Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+            Check.NotNull(modelBuilder, nameof(modelBuilder));
+
+            var objectExtension = objectExtensionManager.GetOrNull(typeof(TDbContext));
+            if (objectExtension == null)
+            {
+                return;
+            }
+
+            var efCoreDbContextMappings = objectExtension.GetEfCoreDbContextMappings();
+
+            foreach (var efCoreDbContextMapping in efCoreDbContextMappings)
+            {
+                efCoreDbContextMapping.ModelBuildAction?.Invoke(modelBuilder);
             }
         }
     }

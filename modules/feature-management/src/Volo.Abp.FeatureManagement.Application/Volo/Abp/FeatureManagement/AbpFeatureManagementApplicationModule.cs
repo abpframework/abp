@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
@@ -7,7 +8,8 @@ namespace Volo.Abp.FeatureManagement
     [DependsOn(
         typeof(AbpFeatureManagementDomainModule),
         typeof(AbpFeatureManagementApplicationContractsModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpAutoMapperModule),
+        typeof(AbpDddApplicationModule)
         )]
     public class AbpFeatureManagementApplicationModule : AbpModule
     {

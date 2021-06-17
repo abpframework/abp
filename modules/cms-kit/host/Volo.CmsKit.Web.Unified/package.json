@@ -8,6 +8,7 @@
     "@abp/tui-editor": "^4.3.3",
     "tui-code-snippet": "1.5.2",
     "@abp/uppy": "^4.3.3",
-    "slugify": "1.4.6"
+    "slugify": "1.4.6",
+    "@abp/jstree": "4.3.3"
   }
 }

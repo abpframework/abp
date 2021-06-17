@@ -33,14 +33,6 @@
         public static int MaxBrowserInfoLength { get; set; } = 512;
 
         /// <summary>
-        /// Default value: 4000
-        /// </summary>
-        public static int MaxExceptionsLength { get; set; } = 4000;
-
-        //TODO: Replace with MaxExceptionsLength in v3.0
-        public static int MaxExceptionsLengthValue { get; set; } = MaxExceptionsLength; 
-
-        /// <summary>
         /// Default value: 256
         /// </summary>
         public static int MaxCommentsLength { get; set; } = 256;
