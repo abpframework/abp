@@ -67,5 +67,15 @@ namespace Volo.Abp.Security.Claims
         /// Default: "client_id".
         /// </summary>
         public static string ClientId { get; set; } = "client_id";
+
+        /// <summary>
+        /// Default: "impersonator_tenantid".
+        /// </summary>
+        public static string ImpersonatorTenantId { get; set; } = "impersonator_tenantid";
+
+        /// <summary>
+        /// Default: "impersonator_userid".
+        /// </summary>
+        public static string ImpersonatorUserId { get; set; } = "impersonator_userid";
     }
 }
