@@ -10,7 +10,7 @@
             <CloseButton Clicked="CloseModal" />
         </ModalHeader>
         <ModalBody MaxHeight="50">
-            @if (Groups == null)
+            @if (Groups == null || !Groups.Any())
             {
                 <span>@L["NoFeatureFoundMessage"]</span>
             }

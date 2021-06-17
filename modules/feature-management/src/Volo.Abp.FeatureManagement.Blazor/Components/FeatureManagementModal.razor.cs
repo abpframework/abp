@@ -47,9 +47,14 @@ namespace Volo.Abp.FeatureManagement.Blazor.Components
                 ToggleValues = new Dictionary<string, bool>();
                 SelectionStringValues = new Dictionary<string, string>();
 
-                Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey)).Groups;
+                Groups = (await FeatureAppService.GetAsync(ProviderName, ProviderKey))?.Groups;
 
-                SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
+                Groups ??= new List<FeatureGroupDto>();
+
+                if (Groups.Any())
+                {
+                    SelectedTabName = GetNormalizedGroupName(Groups.First().Name);
+                }
 
                 foreach (var featureGroupDto in Groups)
                 {
