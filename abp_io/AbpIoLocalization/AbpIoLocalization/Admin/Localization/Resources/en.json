@@ -290,6 +290,19 @@
     "Completed": "Completed",
     "Failed": "Failed",
     "PaymentRequestDeletionWarningMessage": "This payment request will be deleted. Do you confirm that?",
-    "Payment": "Payment"
+    "Payment": "Payment",
+    "AddPayment": "Add Payment",
+    "Enum:PurchaseType:1": "New License",
+    "Enum:PurchaseType:2": "License Extend",
+    "Enum:PurchaseType:3": "License Upgrade",
+    "Enum:PurchaseType:4": "Additional Developer",
+    "LicenceType": "License Type",
+    "PurchaseType": "Purchase Type",
+    "ReceiptNo": "Receipt No",
+    "PaymentTime": "Payment Time",
+    "ProductPrice": "Product Price",
+    "AdditionalDeveloper": "Additional developer",
+    "ThisPaymentHasBeenAlreadyUsed": "This payment has been already used",
+    "PaymentTimeCannotBeFutureTime": "Payment time cannot be future time"
   }
 }
