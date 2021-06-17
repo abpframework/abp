@@ -36,7 +36,7 @@ dotnet ef migrations add Initial
 
 > Default admin username is **admin** and password is **1q2w3E***
 
-## Creating First Workflow - Console Activity
+## Let's Create The First Workflow (Console Activity)
 
 We can start with creating our first workflow. Let's get started with creating a basic hello-world workflow by using console activity. In this example, we will **programmatically** define a workflow definition that displays the text **"Hello World from Elsa!"** to the console using Elsa's Workflow Builder API and run this workflow when the application initialized.
 
@@ -113,7 +113,7 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
 
 ## Creating A Workflow By Using Http Activities
 
-In this example, we will create a workflow that uses **Http Activities**. It will basically listen the specified route for incoming HTTP Request and write back a simple response.
+In this example, we will create a workflow that uses **Http Activities**. It will basically listen the specified route for incoming HTTP Request and writes back a simple response.
 
 ### Add Elsa.Activities.Http Package
 
@@ -240,7 +240,10 @@ private void ConfigureElsa(ServiceConfigurationContext context, IConfiguration c
         .AllowAnyOrigin()
         .WithExposedHeaders("Content-Disposition"))
     );
-
+    
+    //register controllers inside elsa
+    context.Services.AddAssemblyOf<Elsa.Server.Api.Endpoints.WorkflowRegistry.Get>();
+    
     //Disable antiforgery validation for elsa
     Configure<AbpAntiForgeryOptions>(options =>
     {
@@ -440,8 +443,6 @@ namespace ElsaDemo.Web.Menus
 ## Result
 
 * Let's run the application and see how it looks like.
-
-![workflow-main-menu-item](./workflow-main-menu.jpg)
 
 > If the account you are logged in has the **ElsaDemoPermissions.ElsaDashboard** permission, you should see the **Workflow** menu item. If you do not see this menu item, please be assured that your logged-in account has that permission.
 
