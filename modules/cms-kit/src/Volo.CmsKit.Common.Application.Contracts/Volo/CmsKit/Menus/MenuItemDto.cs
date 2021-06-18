@@ -4,6 +4,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Menus
 {
+    [Serializable]
     public class MenuItemDto : AuditedEntityDto<Guid>
     {
         public Guid MenuId { get; set; }
