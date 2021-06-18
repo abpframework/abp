@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
@@ -10,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             SetPlaceholderForNameIfNotProvided();
-            
+
             var tabHeader = GetTabHeaderItem(context, output);
 
             var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);
@@ -30,12 +31,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
             if (!string.IsNullOrWhiteSpace(TagHelper.ParentDropdownName))
             {
-                return "<a class=\"dropdown-item\" id=\"" + id + "\" href=\"" + href + "\">" + title + "</a>";
-            }
+                var anchor = new TagBuilder("a");
+                anchor.AddCssClass("dropdown-item");
+                anchor.Attributes.Add("id", id);
+                anchor.Attributes.Add("href", href);
+                anchor.InnerHtml.AppendHtml(title);
 
-            return "<li class=\"nav-item\"><a class=\"nav-link" + AbpTabItemActivePlaceholder + "\" id=\"" + id + "\" href=\"" + href + "\">" +
-                   title +
-                   "</a></li>";
+                return anchor.ToHtmlString();
+            }
+            else
+            {
+                var anchor = new TagBuilder("a");
+                anchor.AddCssClass("nav-link " + AbpTabItemActivePlaceholder);
+                anchor.Attributes.Add("id", id);
+                anchor.Attributes.Add("href", href);
+                anchor.InnerHtml.AppendHtml(title);
+
+                var listItem = new TagBuilder("li");
+                listItem.AddCssClass("nav-item");
+                listItem.InnerHtml.AppendHtml(anchor);
+
+                return listItem.ToHtmlString();
+            }
         }
 
         protected virtual void SetPlaceholderForNameIfNotProvided()

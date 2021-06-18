@@ -2,29 +2,54 @@
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
+    [IgnoreMultiTenancy]
     [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
     public class IdentityServerDbContext : AbpDbContext<IdentityServerDbContext>, IIdentityServerDbContext
     {
+        #region ApiResource
+
         public DbSet<ApiResource> ApiResources { get; set; }
 
-        public DbSet<ApiSecret> ApiSecrets { get; set; }
+        public DbSet<ApiResourceSecret> ApiResourceSecrets { get; set; }
 
         public DbSet<ApiResourceClaim> ApiResourceClaims { get; set; }
+
+        public DbSet<ApiResourceScope> ApiResourceScopes { get; set; }
+
+        public DbSet<ApiResourceProperty> ApiResourceProperties { get; set; }
+
+        #endregion
+
+        #region ApiScope
 
         public DbSet<ApiScope> ApiScopes { get; set; }
 
         public DbSet<ApiScopeClaim> ApiScopeClaims { get; set; }
 
+        public DbSet<ApiScopeProperty> ApiScopeProperties { get; set; }
+
+        #endregion
+
+        #region IdentityResource
+
         public DbSet<IdentityResource> IdentityResources { get; set; }
 
-        public DbSet<IdentityClaim> IdentityClaims { get; set; }
+        public DbSet<IdentityResourceClaim> IdentityClaims { get; set; }
+
+        public DbSet<IdentityResourceProperty> IdentityResourceProperties { get; set; }
+
+        #endregion
+
+        #region Client
 
         public DbSet<Client> Clients { get; set; }
 
@@ -45,6 +70,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         public DbSet<ClientCorsOrigin> ClientCorsOrigins { get; set; }
 
         public DbSet<ClientProperty> ClientProperties { get; set; }
+
+        #endregion
 
         public DbSet<PersistedGrant> PersistedGrants { get; set; }
 

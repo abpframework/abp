@@ -54,6 +54,25 @@ export function createMapFromList<T extends object, R extends unknown>(
   return map;
 }
 
+export function createTreeNodeFilterCreator<T extends object>(
+  key: keyof T,
+  mapperFn: (value: any) => string,
+) {
+  return (search: string) => {
+    const regex = new RegExp('.*' + search + '.*', 'i');
+
+    return function collectNodes(nodes: TreeNode<T>[], matches = []) {
+      for (const node of nodes) {
+        if (regex.test(mapperFn(node[key]))) matches.push(node);
+
+        if (node.children.length) collectNodes(node.children, matches);
+      }
+
+      return matches;
+    };
+  };
+}
+
 export type TreeNode<T extends object> = {
   [K in keyof T]: T[K];
 } & {

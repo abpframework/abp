@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Shouldly;
 using Xunit;
 
@@ -8,6 +9,50 @@ namespace Volo.Abp.Reflection
     {
         //TODO: ...
 
+        class GetValueByPathTestClass
+        {
+            public string Name { get; set; }
+
+            public int Count { get; set; }
+
+            public DateTime Time { get; set; }
+
+            public GetValueByPathTestChildrenClass Children { get; set; }
+        }
+
+        class GetValueByPathTestChildrenClass
+        {
+            public string Name { get; set; }
+
+            public int Count { get; set; }
+        }
+
+        [Fact]
+        public void GetValueByPath_Test()
+        {
+            var value = new GetValueByPathTestClass
+            {
+                Name = "test",
+                Count = 8,
+                Time = DateTime.Parse("2020-01-01"),
+                Children = new GetValueByPathTestChildrenClass
+                {
+                    Name = "test-children",
+                    Count = 9,
+                }
+            };
+
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "Name").ShouldBe("test");
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "Volo.Abp.Reflection.ReflectionHelper_Tests+GetValueByPathTestClass.Name").ShouldBe("test");
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "Count").ShouldBe(8);
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "Time").ShouldBe(DateTime.Parse("2020-01-01"));
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "Children.Name").ShouldBe("test-children");
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "Children.Count").ShouldBe(9);
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "Volo.Abp.Reflection.ReflectionHelper_Tests+GetValueByPathTestClass.Children.Name").ShouldBe("test-children");
+
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "Children.NotExist").ShouldBeNull();
+            ReflectionHelper.GetValueByPath(value, value.GetType(), "NotExist").ShouldBeNull();
+        }
 
         [Fact]
         public void GetPublicConstantsRecursively_Test()

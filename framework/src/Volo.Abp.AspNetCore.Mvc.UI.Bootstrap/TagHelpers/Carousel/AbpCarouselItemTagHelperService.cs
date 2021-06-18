@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using System.Text.Encodings.Web;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -42,8 +42,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         protected virtual void SetInnerImgTag(TagHelperContext context, TagHelperOutput output)
         {
-            var imgTag ="<img class=\"d-block w-100\" src=\""+TagHelper.Src+ "\" alt=\"" + TagHelper.Alt + "\">";
-            output.Content.SetHtmlContent(imgTag);
+            var img = new TagBuilder("img");
+            img.AddCssClass("d-block w-100");
+            img.Attributes.Add("src", TagHelper.Src);
+            img.Attributes.Add("alt", TagHelper.Alt);
+
+            output.Content.SetHtmlContent(img);
         }
 
         protected virtual void SetActive(TagHelperContext context, TagHelperOutput output)
@@ -61,14 +65,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
                 return;
             }
 
-            var html = new StringBuilder("");
+            var title = new TagBuilder("h5");
+            title.InnerHtml.AppendHtml(TagHelper.CaptionTitle);
 
-            html.AppendLine("<div class=\"carousel-caption d-none d-md-block\">");
-            html.AppendLine("<h5>"+TagHelper.CaptionTitle+"</h5>");
-            html.AppendLine("<p>" + TagHelper.Caption + "</p>");
-            html.AppendLine("</div>");
+            var caption = new TagBuilder("p");
+            caption.InnerHtml.AppendHtml(TagHelper.Caption);
 
-            output.PostContent.SetHtmlContent(html.ToString());
+            var wrapper = new TagBuilder("div");
+            wrapper.AddCssClass("carousel-caption d-none d-md-block");
+            wrapper.InnerHtml.AppendHtml(title);
+            wrapper.InnerHtml.AppendHtml(caption);
+
+            output.PostContent.SetHtmlContent(wrapper);
         }
 
     }

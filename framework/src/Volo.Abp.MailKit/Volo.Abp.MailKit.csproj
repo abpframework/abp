@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="2.7.0" />
+    <PackageReference Include="MailKit" Version="2.11.1" />
   </ItemGroup>
 
   <ItemGroup>

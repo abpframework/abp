@@ -25,11 +25,11 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
         }
 
-        public async Task UpdateSolutionAsync(string solutionPath, bool includePreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool checkAll = false)
+        public async Task UpdateSolutionAsync(string solutionPath, bool includePreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool checkAll = false, string version = null)
         {
             var projectPaths = ProjectFinder.GetProjectFiles(solutionPath);
 
-            if (checkAll)
+            if (checkAll && version.IsNullOrWhiteSpace())
             {
                 Task.WaitAll(projectPaths.Select(projectPath => UpdateInternalAsync(projectPath, includePreviews, includeReleaseCandidates, switchToStable)).ToArray());
             }
@@ -48,7 +48,8 @@ namespace Volo.Abp.Cli.ProjectModification
                         switchToStable,
                         latestVersionFromNuget,
                         latestReleaseCandidateVersionFromNuget,
-                        latestVersionFromMyGet);
+                        latestVersionFromMyGet,
+                        version);
 
                     File.WriteAllText(filePath, updatedContent);
                 }
@@ -57,9 +58,9 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        public async Task UpdateProjectAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool checkAll = false)
+        public async Task UpdateProjectAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false, bool checkAll = false, string version = null)
         {
-            if (checkAll)
+            if (checkAll && version.IsNullOrWhiteSpace())
             {
                 await UpdateInternalAsync(projectPath, includeNightlyPreviews, includeReleaseCandidates,  switchToStable);
             }
@@ -77,7 +78,8 @@ namespace Volo.Abp.Cli.ProjectModification
                     switchToStable,
                     latestVersionFromNuget,
                     latestReleaseCandidateVersionFromNuget,
-                    latestVersionFromMyGet);
+                    latestVersionFromMyGet,
+                    version);
 
                 File.WriteAllText(projectPath, updatedContent);
             }
@@ -91,13 +93,26 @@ namespace Volo.Abp.Cli.ProjectModification
             File.WriteAllText(projectPath, updatedContent);
         }
 
+        protected virtual async Task<bool> SpecifiedVersionExists(string version, string packageId)
+        {
+            var versionList = await _nuGetService.GetPackageVersionListAsync(packageId);
+
+            if (versionList.All(v => !v.Equals(version, StringComparison.OrdinalIgnoreCase)))
+            {
+                versionList = await _nuGetService.GetPackageVersionListAsync(packageId, true);
+            }
+
+            return versionList.Any(v => v.Equals(version, StringComparison.OrdinalIgnoreCase));
+        }
+
         private async Task<string> UpdateVoloPackagesAsync(string content,
             bool includeNightlyPreviews = false,
             bool includeReleaseCandidates = false,
             bool switchToStable = false,
             SemanticVersion latestNugetVersion = null,
             SemanticVersion latestNugetReleaseCandidateVersion = null,
-            string latestMyGetVersion = null)
+            string latestMyGetVersion = null,
+            string specifiedVersion = null)
         {
             string packageId = null;
 
@@ -129,40 +144,63 @@ namespace Volo.Abp.Cli.ProjectModification
 
                         Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, currentSemanticVersion);
 
-                        if ((includeNightlyPreviews || (currentVersion.Contains("-preview") && !switchToStable)) && !includeReleaseCandidates)
+                        if (!specifiedVersion.IsNullOrWhiteSpace())
                         {
-                            var latestVersion = latestMyGetVersion ?? await GetLatestVersionFromMyGet(packageId);
-
-                            if (currentVersion != latestVersion)
+                            if (await SpecifiedVersionExists(specifiedVersion, packageId))
                             {
-                                Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentVersion, latestVersion);
-                                versionAttribute.Value = latestVersion;
+                                var specifiedSemanticVersion = SemanticVersion.Parse(specifiedVersion);
+                                if (specifiedSemanticVersion > currentSemanticVersion)
+                                {
+                                    Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentVersion, specifiedVersion);
+                                    versionAttribute.Value = specifiedVersion;
+                                }
+                                else
+                                {
+                                    Logger.LogWarning("Unable to update package \"{0}\" version v{1} to v{2}.",  packageId, currentVersion, specifiedVersion);
+                                }
                             }
                             else
                             {
-                                Logger.LogDebug("Package: \"{0}-v{1}\" is up to date.", packageId, currentVersion);
+                                Logger.LogWarning("Package \"{0}\" specified version v{1} does not exist.", packageId, specifiedVersion);
                             }
                         }
                         else
                         {
-                            SemanticVersion latestVersion;
-                            if (currentSemanticVersion.IsPrerelease && !switchToStable)
+                            if ((includeNightlyPreviews || (currentVersion.Contains("-preview") && !switchToStable)) && !includeReleaseCandidates)
                             {
-                                latestVersion = latestNugetReleaseCandidateVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: true);
-                            }
-                            else
-                            {
-                                latestVersion = latestNugetVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: includeReleaseCandidates);
-                            }
+                                var latestVersion = latestMyGetVersion ?? await GetLatestVersionFromMyGet(packageId);
 
-                            if (latestVersion != null && (currentSemanticVersion < latestVersion || (currentSemanticVersion.IsPrerelease && switchToStable)))
-                            {
-                                Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentSemanticVersion.ToString(), latestVersion.ToString());
-                                versionAttribute.Value = latestVersion.ToString();
+                                if (currentVersion != latestVersion)
+                                {
+                                    Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentVersion, latestVersion);
+                                    versionAttribute.Value = latestVersion;
+                                }
+                                else
+                                {
+                                    Logger.LogDebug("Package: \"{0}-v{1}\" is up to date.", packageId, currentVersion);
+                                }
                             }
                             else
                             {
-                                Logger.LogInformation("Package: \"{0}-v{1}\" is up to date.", packageId, currentSemanticVersion);
+                                SemanticVersion latestVersion;
+                                if (currentSemanticVersion.IsPrerelease && !switchToStable)
+                                {
+                                    latestVersion = latestNugetReleaseCandidateVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: true);
+                                }
+                                else
+                                {
+                                    latestVersion = latestNugetVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: includeReleaseCandidates);
+                                }
+
+                                if (latestVersion != null && (currentSemanticVersion < latestVersion || (currentSemanticVersion.IsPrerelease && switchToStable)))
+                                {
+                                    Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentSemanticVersion.ToString(), latestVersion.ToString());
+                                    versionAttribute.Value = latestVersion.ToString();
+                                }
+                                else
+                                {
+                                    Logger.LogInformation("Package: \"{0}-v{1}\" is up to date.", packageId, currentSemanticVersion);
+                                }
                             }
                         }
                     }

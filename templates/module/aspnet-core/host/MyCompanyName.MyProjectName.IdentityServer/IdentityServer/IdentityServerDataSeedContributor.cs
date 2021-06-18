@@ -1,50 +1,71 @@
-﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IdentityServer4.Models;
+using Microsoft.Extensions.Configuration;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
+using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
+using ApiScope = Volo.Abp.IdentityServer.ApiScopes.ApiScope;
+using Client = Volo.Abp.IdentityServer.Clients.Client;
 
 namespace MyCompanyName.MyProjectName.IdentityServer
 {
     public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         private readonly IApiResourceRepository _apiResourceRepository;
+        private readonly IApiScopeRepository _apiScopeRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IPermissionDataSeeder _permissionDataSeeder;
         private readonly IConfiguration _configuration;
+        private readonly ICurrentTenant _currentTenant;
 
         public IdentityServerDataSeedContributor(
             IClientRepository clientRepository,
             IApiResourceRepository apiResourceRepository,
+            IApiScopeRepository apiScopeRepository,
             IIdentityResourceDataSeeder identityResourceDataSeeder,
             IGuidGenerator guidGenerator,
             IPermissionDataSeeder permissionDataSeeder,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ICurrentTenant currentTenant)
         {
             _clientRepository = clientRepository;
             _apiResourceRepository = apiResourceRepository;
+            _apiScopeRepository = apiScopeRepository;
             _identityResourceDataSeeder = identityResourceDataSeeder;
             _guidGenerator = guidGenerator;
             _permissionDataSeeder = permissionDataSeeder;
             _configuration = configuration;
+            _currentTenant = currentTenant;
         }
 
         [UnitOfWork]
         public virtual async Task SeedAsync(DataSeedContext context)
         {
-            await _identityResourceDataSeeder.CreateStandardResourcesAsync();
-            await CreateApiResourcesAsync();
-            await CreateClientsAsync();
+            using (_currentTenant.Change(context?.TenantId))
+            {
+                await _identityResourceDataSeeder.CreateStandardResourcesAsync();
+                await CreateApiResourcesAsync();
+                await CreateApiScopesAsync();
+                await CreateClientsAsync();
+            }
+        }
+
+        private async Task CreateApiScopesAsync()
+        {
+            await CreateApiScopeAsync("MyProjectName");
         }
 
         private async Task CreateApiResourcesAsync()
@@ -88,10 +109,26 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             return await _apiResourceRepository.UpdateAsync(apiResource);
         }
 
+        private async Task<ApiScope> CreateApiScopeAsync(string name)
+        {
+            var apiScope = await _apiScopeRepository.GetByNameAsync(name);
+            if (apiScope == null)
+            {
+                apiScope = await _apiScopeRepository.InsertAsync(
+                    new ApiScope(
+                        _guidGenerator.Create(),
+                        name,
+                        name + " API"
+                    ),
+                    autoSave: true
+                );
+            }
+
+            return apiScope;
+        }
+
         private async Task CreateClientsAsync()
         {
-            const string commonSecret = "E5Xd4yMqjP5kjWFKrYgySBju6JVfCzMyFp7n2QmMrME=";
-
             var commonScopes = new[]
             {
                 "email",
@@ -110,25 +147,72 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             if (!webClientId.IsNullOrWhiteSpace())
             {
                 var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"].EnsureEndsWith('/');
+
+                /* MyProjectName_Web client is only needed if you created a tiered
+                 * solution. Otherwise, you can delete this client. */
+
                 await CreateClientAsync(
-                    webClientId,
-                    commonScopes,
-                    new[] { "hybrid" },
-                    commonSecret,
+                    name: webClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "hybrid" },
+                    secret: (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     redirectUri: $"{webClientRootUrl}signin-oidc",
-                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
+                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
+                    frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout",
+                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
 
-            //Console Test Client
-            var consoleClientId = configurationSection["MyProjectName_ConsoleTestApp:ClientId"];
-            if (!consoleClientId.IsNullOrWhiteSpace())
+            //Console Test / Angular Client
+            var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
+            if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
             {
+                var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
+
                 await CreateClientAsync(
-                    consoleClientId,
-                    commonScopes,
-                    new[] { "password", "client_credentials" },
-                    commonSecret
+                    name: consoleAndAngularClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "password", "client_credentials", "authorization_code" },
+                    secret: (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: webClientRootUrl,
+                    postLogoutRedirectUri: webClientRootUrl,
+                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
+                );
+            }
+
+            // Blazor Client
+            var blazorClientId = configurationSection["MyProjectName_Blazor:ClientId"];
+            if (!blazorClientId.IsNullOrWhiteSpace())
+            {
+                var blazorRootUrl = configurationSection["MyProjectName_Blazor:RootUrl"].TrimEnd('/');
+
+                await CreateClientAsync(
+                    name: blazorClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
+                    secret: configurationSection["MyProjectName_Blazor:ClientSecret"]?.Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: $"{blazorRootUrl}/authentication/login-callback",
+                    postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback",
+                    corsOrigins: new[] { blazorRootUrl.RemovePostFix("/") }
+                );
+            }
+
+            // Swagger Client
+            var swaggerClientId = configurationSection["MyProjectName_Swagger:ClientId"];
+            if (!swaggerClientId.IsNullOrWhiteSpace())
+            {
+                var swaggerRootUrl = configurationSection["MyProjectName_Swagger:RootUrl"].TrimEnd('/');
+
+                await CreateClientAsync(
+                    name: swaggerClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
+                    secret: configurationSection["MyProjectName_Swagger:ClientSecret"]?.Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
+                    corsOrigins: new[] { swaggerRootUrl.RemovePostFix("/") }
                 );
             }
         }
@@ -137,12 +221,16 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             string name,
             IEnumerable<string> scopes,
             IEnumerable<string> grantTypes,
-            string secret,
+            string secret = null,
             string redirectUri = null,
             string postLogoutRedirectUri = null,
-            IEnumerable<string> permissions = null)
+            string frontChannelLogoutUri = null,
+            bool requireClientSecret = true,
+            bool requirePkce = false,
+            IEnumerable<string> permissions = null,
+            IEnumerable<string> corsOrigins = null)
         {
-            var client = await _clientRepository.FindByCliendIdAsync(name);
+            var client = await _clientRepository.FindByClientIdAsync(name);
             if (client == null)
             {
                 client = await _clientRepository.InsertAsync(
@@ -160,7 +248,10 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                         AccessTokenLifetime = 31536000, //365 days
                         AuthorizationCodeLifetime = 300,
                         IdentityTokenLifetime = 300,
-                        RequireConsent = false
+                        RequireConsent = false,
+                        FrontChannelLogoutUri = frontChannelLogoutUri,
+                        RequireClientSecret = requireClientSecret,
+                        RequirePkce = requirePkce
                     },
                     autoSave: true
                 );
@@ -182,9 +273,12 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 }
             }
 
-            if (client.FindSecret(secret) == null)
+            if (!secret.IsNullOrEmpty())
             {
-                client.AddSecret(secret);
+                if (client.FindSecret(secret) == null)
+                {
+                    client.AddSecret(secret);
+                }
             }
 
             if (redirectUri != null)
@@ -208,8 +302,20 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 await _permissionDataSeeder.SeedAsync(
                     ClientPermissionValueProvider.ProviderName,
                     name,
-                    permissions
+                    permissions,
+                    null
                 );
+            }
+
+            if (corsOrigins != null)
+            {
+                foreach (var origin in corsOrigins)
+                {
+                    if (!origin.IsNullOrWhiteSpace() && client.FindCorsOrigin(origin) == null)
+                    {
+                        client.AddCorsOrigin(origin);
+                    }
+                }
             }
 
             return await _clientRepository.UpdateAsync(client);

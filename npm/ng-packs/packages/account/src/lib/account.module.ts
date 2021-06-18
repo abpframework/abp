@@ -11,21 +11,27 @@ import { ManageProfileComponent } from './components/manage-profile/manage-profi
 import { PersonalSettingsComponent } from './components/personal-settings/personal-settings.component';
 import { RegisterComponent } from './components/register/register.component';
 import { TenantBoxComponent } from './components/tenant-box/tenant-box.component';
-import { Options } from './models/options';
-import { ACCOUNT_OPTIONS } from './tokens/options.token';
-import { accountOptionsFactory } from './utils/factory-utils';
+import { AccountConfigOptions } from './models/config-options';
+import { ACCOUNT_CONFIG_OPTIONS } from './tokens/config-options.token';
+import { accountConfigOptionsFactory } from './utils/factory-utils';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+
+const declarations = [
+  AuthWrapperComponent,
+  LoginComponent,
+  RegisterComponent,
+  TenantBoxComponent,
+  ChangePasswordComponent,
+  ManageProfileComponent,
+  PersonalSettingsComponent,
+  ForgotPasswordComponent,
+  ResetPasswordComponent,
+];
 
 @NgModule({
-  declarations: [
-    AuthWrapperComponent,
-    LoginComponent,
-    RegisterComponent,
-    TenantBoxComponent,
-    ChangePasswordComponent,
-    ManageProfileComponent,
-    PersonalSettingsComponent,
-  ],
+  declarations: [...declarations],
   imports: [
     CoreModule,
     AccountRoutingModule,
@@ -33,25 +39,25 @@ import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
     NgbDropdownModule,
     NgxValidateCoreModule,
   ],
-  exports: [],
+  exports: [...declarations],
 })
 export class AccountModule {
-  static forChild(options: Options): ModuleWithProviders<AccountModule> {
+  static forChild(options = {} as AccountConfigOptions): ModuleWithProviders<AccountModule> {
     return {
       ngModule: AccountModule,
       providers: [
         AuthenticationFlowGuard,
-        { provide: ACCOUNT_OPTIONS, useValue: options },
+        { provide: ACCOUNT_CONFIG_OPTIONS, useValue: options },
         {
           provide: 'ACCOUNT_OPTIONS',
-          useFactory: accountOptionsFactory,
-          deps: [ACCOUNT_OPTIONS],
+          useFactory: accountConfigOptionsFactory,
+          deps: [ACCOUNT_CONFIG_OPTIONS],
         },
       ],
     };
   }
 
-  static forLazy(options: Options): NgModuleFactory<AccountModule> {
+  static forLazy(options = {} as AccountConfigOptions): NgModuleFactory<AccountModule> {
     return new LazyModuleFactory(AccountModule.forChild(options));
   }
 }

@@ -2,6 +2,21 @@
   "culture": "zh-Hans",
   "texts": {
     "Settings": "设置",
-    "SuccessfullySaved": "保存成功"
+    "SuccessfullySaved": "保存成功",
+    "Permission:SettingManagement": "设置管理",
+    "Permission:Emailing": "邮件",
+    "Menu:Emailing": "邮件",
+    "SmtpHost": "主机",
+    "SmtpPort": "端口",
+    "SmtpUserName": "用户名",
+    "SmtpPassword": "密码",
+    "SmtpDomain": "域",
+    "SmtpEnableSsl": "启用ssl",
+    "SmtpUseDefaultCredentials": "使用默认证书",
+    "DefaultFromAddress": "默认发件人",
+    "DefaultFromDisplayName": "默认显示名称",
+    "Feature:SettingManagementGroup": "设置管理",
+    "Feature:SettingManagementEnable": "启用设置管理",
+    "Feature:SettingManagementEnableDescription": "在应用程序中启用设置管理系统."
   }
 }

@@ -10,21 +10,21 @@ namespace Volo.Abp.TestApp.MemoryDb
 {
     public class CityRepository : MemoryDbRepository<TestAppMemoryDbContext, City, Guid>, ICityRepository
     {
-        public CityRepository(IMemoryDatabaseProvider<TestAppMemoryDbContext> databaseProvider) 
+        public CityRepository(IMemoryDatabaseProvider<TestAppMemoryDbContext> databaseProvider)
             : base(databaseProvider)
         {
         }
 
-        public Task<City> FindByNameAsync(string name)
+        public async Task<City> FindByNameAsync(string name)
         {
-            return Task.FromResult(Collection.FirstOrDefault(c => c.Name == name));
+            return (await GetCollectionAsync()).FirstOrDefault(c => c.Name == name);
         }
 
         public async Task<List<Person>> GetPeopleInTheCityAsync(string cityName)
         {
             var city = await FindByNameAsync(cityName);
 
-            return Database.Collection<Person>().Where(p => p.CityId == city.Id).ToList();
+            return (await GetDatabaseAsync()).Collection<Person>().Where(p => p.CityId == city.Id).ToList();
         }
     }
 }

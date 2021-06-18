@@ -47,7 +47,7 @@ The database connection string is located in `appsettings.json` of your `Acme.My
 ```json
 {
   "ConnectionStrings": {
-    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True"
   }
 }
 ```
@@ -320,7 +320,7 @@ Open `DocsProjects` in your database, and insert a new record with the following
 * **ShortName**: A short and URL friendly name that will be used in your docs URL.
 * **Format**: The format of the document (for Markdown: `md`, for HTML: `html`)
 * **DefaultDocumentName**: The document for the initial page.
-* **NavigationDocumentName**: The document to be used for the navigation menu (index).
+* **NavigationDocumentName**: The document to be used for the navigation menu (Index).
 * **MinimumVersion**: The minimum version to show the docs. Below version will not be listed.
 * **DocumentStoreType**: The source of the documents (for GitHub:`GitHub`, for file system`FileSystem`)
 * **ExtraProperties**: A serialized `JSON` that stores special configuration for the selected `DocumentStoreType`. 
@@ -446,7 +446,7 @@ As an example you can see ABP Framework documentation:
 
 #### Conditional sections feature (Using Scriban)
 
-Docs module uses [Scriban](<https://github.com/lunet-io/scriban/tree/master/doc> ) for conditionally show or hide some parts of a document. In order to use that feature, you have to create a JSON file as **Parameter document** per every language. It will contain all the key-values, as well as their display names.
+Docs module uses [Scriban](https://github.com/lunet-io/scriban/tree/master/doc) for conditionally show or hide some parts of a document. In order to use that feature, you have to create a JSON file as **Parameter document** per every language. It will contain all the key-values, as well as their display names.
 
 For example, [en/docs-params.json](https://github.com/abpio/abp-commercial-docs/blob/master/en/docs-params.json):
 
@@ -537,7 +537,7 @@ Also, **Document_Language_Code** and **Document_Version** keys are pre-defined i
 
 ------
 
-**IMPORTANT NOTICE**: Scriban uses "{{" and "}}" for syntax. Therefore, you must use escape blocks if you are going to use those in your document (an Angular document, for example). See [Scriban docs](<https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block> ) for more information.
+**IMPORTANT NOTICE**: Scriban uses "{{" and "}}" for syntax. Therefore, you must use escape blocks if you are going to use those in your document (an Angular document, for example). See [Scriban docs](https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block) for more information.
 
 ### 8- Creating the Navigation Document
 

@@ -4,7 +4,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Volo.Docs.Web</AssemblyName>
     <PackageId>Volo.Docs.Web</PackageId>
     <OutputType>Library</OutputType>
@@ -23,8 +23,8 @@
     <ProjectReference Include="..\Volo.Docs.Domain\Volo.Docs.Domain.csproj" />
     <ProjectReference Include="..\Volo.Docs.HttpApi\Volo.Docs.HttpApi.csproj" />
     <PackageReference Include="Markdig.Signed" Version="0.20.0" />
-    <PackageReference Include="Scriban" Version="2.1.3" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
+    <PackageReference Include="Scriban" Version="3.0.5" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
   </ItemGroup>
 
 

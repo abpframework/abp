@@ -3,6 +3,7 @@ import { Exception } from '../enums';
 import { Type } from '../models';
 import { interpolate } from './common';
 import { parseNamespace } from './namespace';
+const shouldQuote = require('should-quote');
 
 export interface EnumGeneratorParams {
   targetPath: string;
@@ -32,7 +33,10 @@ export function createImportRefToEnumMapper({ solution, types }: EnumGeneratorPa
       throw new SchematicsException(interpolate(Exception.NoTypeDefinition, ref));
 
     const namespace = parseNamespace(solution, ref);
-    const members = enumNames!.map((key, i) => ({ key, value: enumValues[i] }));
+    const members = enumNames!.map((key, i) => ({
+      key: shouldQuote(key) ? `'${key}'` : key,
+      value: enumValues[i],
+    }));
 
     return {
       namespace,

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -12,7 +13,7 @@ namespace Volo.Abp.Settings
 
         public string Name => ProviderName;
 
-        public TestSettingValueProvider() 
+        public TestSettingValueProvider()
         {
             _values = new Dictionary<string, string>();
         }
@@ -20,6 +21,11 @@ namespace Volo.Abp.Settings
         public Task<string> GetOrNullAsync(SettingDefinition setting)
         {
             return Task.FromResult(_values.GetOrDefault(setting.Name));
+        }
+
+        public Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings)
+        {
+            return Task.FromResult(settings.Select(x => new SettingValue(x.Name, _values.GetOrDefault(x.Name))).ToList());
         }
     }
 }

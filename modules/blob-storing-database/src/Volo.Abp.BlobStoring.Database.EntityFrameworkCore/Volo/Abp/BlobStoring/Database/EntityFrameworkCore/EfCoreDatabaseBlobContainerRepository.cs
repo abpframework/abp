@@ -10,14 +10,15 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
     public class EfCoreDatabaseBlobContainerRepository : EfCoreRepository<IBlobStoringDbContext, DatabaseBlobContainer, Guid>, IDatabaseBlobContainerRepository
     {
-        public EfCoreDatabaseBlobContainerRepository(IDbContextProvider<IBlobStoringDbContext> dbContextProvider) 
+        public EfCoreDatabaseBlobContainerRepository(IDbContextProvider<IBlobStoringDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
 
         public virtual async Task<DatabaseBlobContainer> FindAsync(string name, CancellationToken cancellationToken = default)
         {
-            return await DbSet.FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
         }
     }
 }

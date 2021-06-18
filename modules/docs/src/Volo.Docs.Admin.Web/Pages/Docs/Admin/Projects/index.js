@@ -156,8 +156,7 @@
             .confirm(l('ReIndexAllProjectConfirmationMessage'))
             .done(function (accepted) {
                 if (accepted) {
-                    volo.docs.admin.projectsAdmin
-                        .reindexAll()
+                    volo.docs.admin.projectsAdmin.reindexAll()
                         .then(function () {
                             abp.message.success(
                                 l('SuccessfullyReIndexAllProject')

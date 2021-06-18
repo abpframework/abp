@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider. 
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,9 +28,10 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 ## Introduction
@@ -188,6 +172,7 @@ using System.Threading.Tasks;
 using Acme.BookStore.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Repositories;
 
 namespace Acme.BookStore.Authors
 {
@@ -246,12 +231,10 @@ public async Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input
         input.Filter
     );
 
-    var totalCount = await AsyncExecuter.CountAsync(
-        _authorRepository.WhereIf(
-            !input.Filter.IsNullOrWhiteSpace(),
-            author => author.Name.Contains(input.Filter)
-        )
-    );
+    var totalCount = input.Filter == null
+        ? await _authorRepository.CountAsync()
+        : await _authorRepository.CountAsync(
+            author => author.Name.Contains(input.Filter));
 
     return new PagedResultDto<AuthorDto>(
         totalCount,
@@ -262,7 +245,7 @@ public async Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input
 
 * Default sorting is "by author name" which is done in the beginning of the method in case of it wasn't sent by the client.
 * Used the `IAuthorRepository.GetListAsync` to get a paged, sorted and filtered list of authors from the database. We had implemented it in the previous part of this tutorial. Again, it actually was not needed to create such a method since we could directly query over the repository, but wanted to demonstrate how to create custom repository methods.
-* Directly queried from the `AuthorRepository` while getting the count of the authors. We preferred to use the `AsyncExecuter` service which allows us to perform async queries without depending on the EF Core. However, you could depend on the EF Core package and directly use the `_authorRepository.WhereIf(...).ToListAsync()` method. See the [repository document](../Repositories.md) to read the alternative approaches and the discussion.
+* Directly queried from the `AuthorRepository` while getting the count of the authors. If a filter is sent, then we are using it to filter entities while getting the count.
 * Finally, returning a paged result by mapping the list of `Author`s to a list of `AuthorDto`s.
 
 ### CreateAsync
@@ -284,7 +267,7 @@ public async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
 ````
 
 * `CreateAsync` requires the `BookStorePermissions.Authors.Create` permission (in addition to the `BookStorePermissions.Authors.Default` declared for the `AuthorAppService` class).
-* Used the `AuthorManeger` (domain service) to create a new author.
+* Used the `AuthorManager` (domain service) to create a new author.
 * Used the `IAuthorRepository.InsertAsync` to insert the new author to the database.
 * Used the `ObjectMapper` to return an `AuthorDto` representing the newly created author.
 
@@ -318,7 +301,7 @@ public async Task UpdateAsync(Guid id, UpdateAuthorDto input)
 
 {{if DB == "EF"}}
 
-> **EF Core tip**: Entity Framework Core has a **change tracking** system and **automatically saves** any change to an entity at the end of the unit of work (You can simply think that the ABP Framework automatically calls `SaveChanges` at the end of the method). So, it will work as expected even if you don't call the `_authorRepository.UpdateAsync(...)` in the end of the method. If you don't consider to change the EF Core later, you can just remove this line.
+> **EF Core Tip**: Entity Framework Core has a **change tracking** system and **automatically saves** any change to an entity at the end of the unit of work (You can simply think that the ABP Framework automatically calls `SaveChanges` at the end of the method). So, it will work as expected even if you don't call the `_authorRepository.UpdateAsync(...)` in the end of the method. If you don't consider to change the EF Core later, you can just remove this line.
 
 {{end}}
 

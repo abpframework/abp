@@ -7,9 +7,9 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
 {
     public class AspNetCoreAbpAntiForgeryManager : IAbpAntiForgeryManager, ITransientDependency
     {
-        public AbpAntiForgeryOptions Options { get; }
+        protected AbpAntiForgeryOptions Options { get; }
 
-        public HttpContext HttpContext => _httpContextAccessor.HttpContext;
+        protected HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
         private readonly IAntiforgery _antiforgery;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -24,12 +24,16 @@ namespace Volo.Abp.AspNetCore.Mvc.AntiForgery
             Options = options.Value;
         }
 
-        public void SetCookie()
+        public virtual void SetCookie()
         {
-            HttpContext.Response.Cookies.Append(Options.TokenCookieName, GenerateToken());
+            HttpContext.Response.Cookies.Append(
+                Options.TokenCookie.Name,
+                GenerateToken(),
+                Options.TokenCookie.Build(HttpContext)
+            );
         }
 
-        public string GenerateToken()
+        public virtual string GenerateToken()
         {
             return _antiforgery.GetAndStoreTokens(_httpContextAccessor.HttpContext).RequestToken;
         }

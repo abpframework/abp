@@ -6,8 +6,6 @@ export interface CreditCardError {
 
 export function validateCreditCard(): ValidatorFn {
   return (control: AbstractControl): CreditCardError | null => {
-    if (control.pristine) return null;
-
     if (['', null, undefined].indexOf(control.value) > -1) return null;
 
     return isValidCreditCard(String(control.value)) ? null : { creditCard: true };

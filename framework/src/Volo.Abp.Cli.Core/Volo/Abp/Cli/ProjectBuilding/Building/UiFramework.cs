@@ -6,6 +6,7 @@
         None = 1,
         Mvc = 2,
         Angular = 3,
-        Blazor = 4
+        Blazor = 4,
+        BlazorServer = 5
     }
 }

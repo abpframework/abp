@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Bundling</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Bundling</PackageId>
@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions\Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Minify\Volo.Abp.Minify.csproj" />
   </ItemGroup>
 

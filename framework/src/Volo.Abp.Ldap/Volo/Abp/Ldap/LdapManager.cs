@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
+using LdapForNet;
+using LdapForNet.Native;
 using Microsoft.Extensions.Options;
-using Novell.Directory.Ldap;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
@@ -15,17 +17,16 @@ namespace Volo.Abp.Ldap
         public LdapManager(IOptions<AbpLdapOptions> ldapSettingsOptions)
         {
             LdapOptions = ldapSettingsOptions.Value;
-
             Logger = NullLogger<LdapManager>.Instance;
         }
 
-        public bool Authenticate(string username, string password)
+        public virtual async Task<bool> AuthenticateAsync(string username, string password)
         {
             try
             {
-                using (var conn = CreateLdapConnection())
+                using (var conn = await CreateLdapConnectionAsync())
                 {
-                    AuthenticateLdapConnection(conn, username, password);
+                    await AuthenticateLdapConnectionAsync(conn, username, password);
                     return true;
                 }
             }
@@ -36,22 +37,33 @@ namespace Volo.Abp.Ldap
             }
         }
 
-        protected virtual ILdapConnection CreateLdapConnection()
+        protected virtual async Task<ILdapConnection> CreateLdapConnectionAsync()
         {
             var ldapConnection = new LdapConnection();
-            ConfigureLdapConnection(ldapConnection);
-            ldapConnection.Connect(LdapOptions.ServerHost, LdapOptions.ServerPort);
+            await ConfigureLdapConnectionAsync(ldapConnection);
+            await ConnectAsync(ldapConnection);
             return ldapConnection;
         }
 
-        protected virtual void ConfigureLdapConnection(ILdapConnection connection)
+        protected virtual Task ConfigureLdapConnectionAsync(ILdapConnection ldapConnection)
         {
-
+            return Task.CompletedTask;
         }
 
-        protected virtual void AuthenticateLdapConnection(ILdapConnection connection, string username, string password)
+        protected virtual Task ConnectAsync(ILdapConnection ldapConnection)
         {
-            connection.Bind(username, password);
+            ldapConnection.Connect(LdapOptions.ServerHost, LdapOptions.ServerPort);
+
+            return Task.CompletedTask;
+        }
+
+        protected virtual async Task AuthenticateLdapConnectionAsync(ILdapConnection connection, string username, string password)
+        {
+            await connection.BindAsync(Native.LdapAuthType.Simple, new LdapCredential()
+            {
+                UserName = username,
+                Password = password
+            });
         }
     }
 }

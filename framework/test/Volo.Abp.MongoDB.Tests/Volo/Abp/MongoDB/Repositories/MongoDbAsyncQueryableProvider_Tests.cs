@@ -25,10 +25,10 @@ namespace Volo.Abp.MongoDB.Repositories
         }
 
         [Fact]
-        public void CanExecute()
+        public async Task CanExecuteAsync()
         {
             _mongoDbAsyncQueryableProvider.CanExecute(_personRepository).ShouldBeTrue();
-            _mongoDbAsyncQueryableProvider.CanExecute(_personRepository.WithDetails()).ShouldBeTrue();
+            _mongoDbAsyncQueryableProvider.CanExecute(await _personRepository.WithDetailsAsync()).ShouldBeTrue();
         }
 
         [Fact]

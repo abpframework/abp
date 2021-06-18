@@ -1,30 +1,66 @@
-﻿using System.Linq;
-using System.Text;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
     public class AbpModalTagHelperService : AbpTagHelperService<AbpModalTagHelper>
     {
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = null;
-            output.PreContent.SetHtmlContent(CreatePreContent(output));
-            output.PostContent.SetHtmlContent(CreatePostContent());
+
+            var childContent = await output.GetChildContentAsync();
+
+            SetContent(context, output, childContent);
         }
 
-        protected virtual string CreatePreContent(TagHelperOutput output)
+        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
         {
-            var sb = new StringBuilder();
+            var modalContent = GetModalContentElement(context, output, childContent);
+            var modalDialog = GetModalDialogElement(context, output, modalContent);
+            var modal = GetModal(context, output, modalDialog);
 
-            var attritubutes = output.Attributes.Select(a => " " + a.Name + "=\"" + a.Value + "\" ").ToList();
-            var attritubutesAsJoin = string.Join(" ", attritubutes.ToArray());
+            output.Content.SetHtmlContent(modal);
+        }
 
-            sb.AppendLine("<div class=\"" + GetModalClasses() + "\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\" " + attritubutesAsJoin + GetDataAttributes() + ">");
-            sb.AppendLine("    <div class=\"" + GetModalDialogClasses() + "\" role=\"document\">");
-            sb.AppendLine("        <div class=\"" + GetModalContentClasses() + "\">");
+        protected virtual TagBuilder GetModalContentElement(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
+        {
+            var element = new TagBuilder("div");
+            element.AddCssClass(GetModalContentClasses());
+            element.InnerHtml.SetHtmlContent(childContent);
+            return element;
+        }
 
-            return sb.ToString();
+        protected virtual TagBuilder GetModalDialogElement(TagHelperContext context, TagHelperOutput output, IHtmlContent innerHtml)
+        {
+            var element = new TagBuilder("div");
+            element.AddCssClass(GetModalDialogClasses());
+            element.Attributes.Add("role", "document");
+            element.InnerHtml.SetHtmlContent(innerHtml);
+            return element;
+        }
+
+        protected virtual TagBuilder GetModal(TagHelperContext context, TagHelperOutput output, IHtmlContent innerHtml)
+        {
+            var element = new TagBuilder("div");
+            element.AddCssClass(GetModalClasses());
+            element.Attributes.Add("tabindex", "-1");
+            element.Attributes.Add("role", "dialog");
+            element.Attributes.Add("aria-hidden", "true");
+
+            foreach (var attr in output.Attributes)
+            {
+                element.Attributes.Add(attr.Name, attr.Value.ToString());
+            }
+
+            SetDataAttributes(element);
+
+            element.InnerHtml.SetHtmlContent(innerHtml);
+
+            return element;
         }
 
         protected virtual string GetModalClasses()
@@ -40,6 +76,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             {
                 classNames.Append(" ");
                 classNames.Append("modal-dialog-centered");
+            }
+
+            if (TagHelper.Scrollable ?? false)
+            {
+                classNames.Append(" ");
+                classNames.Append("modal-dialog-scrollable");
             }
 
             if (TagHelper.Size != AbpModalSize.Default)
@@ -65,15 +107,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             return string.Empty;
         }
 
-        protected virtual string CreatePostContent()
+        protected virtual void SetDataAttributes(TagBuilder builder)
         {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("        </div>");
-            sb.AppendLine("    </div>");
-            sb.AppendLine("</div>");
-
-            return sb.ToString();
+            if (TagHelper.Static == true)
+            {
+                builder.Attributes.Add("data-backdrop", "static");
+            }
         }
     }
 }

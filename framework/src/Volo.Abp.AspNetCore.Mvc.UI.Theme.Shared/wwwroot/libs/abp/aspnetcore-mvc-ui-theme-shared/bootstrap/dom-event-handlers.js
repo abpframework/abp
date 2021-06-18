@@ -71,6 +71,63 @@
         $timeagos.timeago();
     }
 
+    abp.dom.initializers.initializeAutocompleteSelects = function ($autocompleteSelects) {
+        if ($autocompleteSelects.length) {
+            $autocompleteSelects.each(function () {
+                var $select = $(this);
+                var url = $(this).data("autocompleteApiUrl");
+                var displayName = $(this).data("autocompleteDisplayProperty");
+                var displayValue = $(this).data("autocompleteValueProperty");
+                var itemsPropertyName = $(this).data("autocompleteItemsProperty");
+                var filterParamName = $(this).data("autocompleteFilterParamName");
+                var selectedText = $(this).data("autocompleteSelectedItemName");
+                var name = $(this).attr("name");
+                var selectedTextInputName = name.substring(0, name.length - 1) + "_Text]";
+                var selectedTextInput = $('<input>', {
+                    type: 'hidden',
+                    id: selectedTextInputName,
+                    name: selectedTextInputName,
+                });
+                if (selectedText != "") {
+                    selectedTextInput.val(selectedText);
+                }
+                selectedTextInput.insertAfter($select);
+                $select.select2({
+                    ajax: {
+                        url: url,
+                        dataType: "json",
+                        data: function (params) {
+                            var query = {};
+                            query[filterParamName] = params.term;
+                            return query;
+                        },
+                        processResults: function (data) {
+                            var retVal = [];
+                            var items = data;
+                            if (itemsPropertyName) {
+                                items = data[itemsPropertyName];
+                            }
+
+                            items.forEach(function (item, index) {
+                                retVal.push({
+                                    id: item[displayValue],
+                                    text: item[displayName]
+                                })
+                            });
+                            return {
+                                results: retVal
+                            };
+                        }
+                    },
+                    width: '100%'
+                });
+                $select.on('select2:select', function (e) {
+                    selectedTextInput.val(e.params.data.text);
+                });
+            });
+        }
+    }
+
     abp.libs = abp.libs = abp.libs || {};
     abp.libs.bootstrapDatepicker = {
         packageName: "bootstrap-datepicker",
@@ -91,7 +148,7 @@
                     locale: abp.localization.currentCulture.name
                 }).toLocaleString();
         },
-        getOptions: function($input) { //$input may needed if developer wants to override this method
+        getOptions: function ($input) { //$input may needed if developer wants to override this method
             return {
                 todayBtn: "linked",
                 autoclose: true,
@@ -102,7 +159,7 @@
 
     abp.dom.initializers.initializeDatepickers = function ($rootElement) {
         $rootElement
-            .findWithSelf('input.datepicker,input[type=date]')
+            .findWithSelf('input.datepicker,input[type=date][abp-data-datepicker!=false]')
             .each(function () {
                 var $input = $(this);
                 $input
@@ -121,6 +178,7 @@
         abp.dom.initializers.initializeTimeAgos(args.$el.findWithSelf('.timeago'));
         abp.dom.initializers.initializeForms(args.$el.findWithSelf('form'), true);
         abp.dom.initializers.initializeScript(args.$el);
+        abp.dom.initializers.initializeAutocompleteSelects(args.$el.findWithSelf('.auto-complete-select'));
     });
 
     abp.dom.onNodeRemoved(function (args) {
@@ -139,7 +197,9 @@
         abp.dom.initializers.initializeTimeAgos($('.timeago'));
         abp.dom.initializers.initializeDatepickers($(document));
         abp.dom.initializers.initializeForms($('form'));
+        abp.dom.initializers.initializeAutocompleteSelects($('.auto-complete-select'));
         $('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
+
     });
 
 })(jQuery);

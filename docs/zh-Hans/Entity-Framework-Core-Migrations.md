@@ -235,7 +235,7 @@ public static class BackgroundJobsDbContextModelCreatingExtensions
 }
 ````
 
-此u还获取选项用于更改此模块的数据库表前缀和模式,但在这里并不重要.
+此扩展方法还提供了选项用于更改此模块的数据库表前缀和模式,但在这里并不重要.
 
 最终的应用程序在 `MigrationsDbContext` 类中调用扩展方法, 因此它可以确定此 `MigrationsDbContext` 维护的数据库中包含哪些模块. 如果要创建第二个数据库并将某些模块表移动到第二个数据库,则需要有第二个`MigrationsDbContext` 类,该类仅调用相关模块的扩展方法. 下一部分将详细介绍该主题.
 
@@ -588,7 +588,7 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True"
 }
 ````
 
@@ -596,10 +596,10 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True",
+  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True",
+  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True",
+  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True"
 }
 ````
 

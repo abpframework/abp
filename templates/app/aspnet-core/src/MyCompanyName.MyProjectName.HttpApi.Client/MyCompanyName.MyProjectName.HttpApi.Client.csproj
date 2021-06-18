@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.HttpApi.Client\Volo.Abp.PermissionManagement.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.HttpApi.Client\Volo.Abp.TenantManagement.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.HttpApi.Client\Volo.Abp.FeatureManagement.HttpApi.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.HttpApi.Client\Volo.Abp.SettingManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
 </Project>

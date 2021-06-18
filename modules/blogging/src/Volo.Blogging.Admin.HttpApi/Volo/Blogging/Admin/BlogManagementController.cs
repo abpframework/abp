@@ -5,6 +5,8 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Blogging.Admin.Blogs;
+using Volo.Blogging.Blogs;
+using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging.Admin
 {
@@ -51,6 +53,13 @@ namespace Volo.Blogging.Admin
         public async Task DeleteAsync(Guid id)
         {
             await _blogManagementAppService.DeleteAsync(id);
+        }
+
+        [HttpGet]
+        [Route("clear-cache/{id}")]
+        public async Task ClearCacheAsync(Guid id)
+        {
+            await _blogManagementAppService.ClearCacheAsync(id);
         }
     }
 }

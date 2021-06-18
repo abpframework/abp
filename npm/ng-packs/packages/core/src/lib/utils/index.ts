@@ -1,4 +1,5 @@
 export * from './array-utils';
+export * from './auth-utils';
 export * from './common-utils';
 export * from './date-utils';
 export * from './environment-utils';
@@ -6,6 +7,7 @@ export * from './factory-utils';
 export * from './file-utils';
 export * from './form-utils';
 export * from './generator-utils';
+export * from './http-utils';
 export * from './initial-utils';
 export * from './internal-store-utils';
 export * from './lazy-load-utils';

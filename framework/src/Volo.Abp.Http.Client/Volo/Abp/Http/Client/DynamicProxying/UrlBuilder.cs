@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Localization;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
@@ -16,12 +15,18 @@ namespace Volo.Abp.Http.Client.DynamicProxying
     {
         public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
         {
-            var urlBuilder = new StringBuilder(action.Url);
+            // The ASP.NET Core route value provider and query string value provider:
+            //  Treat values as invariant culture.
+            //  Expect that URLs are culture-invariant.
+            using (CultureHelper.Use(CultureInfo.InvariantCulture))
+            {
+                var urlBuilder = new StringBuilder(action.Url);
 
-            ReplacePathVariables(urlBuilder, action.Parameters, methodArguments, apiVersion);
-            AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments, apiVersion);
+                ReplacePathVariables(urlBuilder, action.Parameters, methodArguments, apiVersion);
+                AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments, apiVersion);
 
-            return urlBuilder.ToString();
+                return urlBuilder.ToString();
+            }
         }
 
         private static void ReplacePathVariables(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
@@ -82,9 +87,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     continue;
                 }
 
-                AddQueryStringParameter(urlBuilder, isFirstParam, queryStringParameter.Name, value);
-
-                isFirstParam = false;
+                if (AddQueryStringParameter(urlBuilder, isFirstParam, queryStringParameter.Name, value))
+                {
+                    isFirstParam = false;
+                }
             }
 
             if (apiVersion.ShouldSendInQueryString())
@@ -93,41 +99,47 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private static void AddQueryStringParameter(
+        private static bool AddQueryStringParameter(
             StringBuilder urlBuilder,
             bool isFirstParam,
             string name,
             [NotNull] object value)
         {
-            urlBuilder.Append(isFirstParam ? "?" : "&");
-
             if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
             {
                 var index = 0;
                 foreach (var item in (IEnumerable) value)
                 {
+                    if (index == 0)
+                    {
+                        urlBuilder.Append(isFirstParam ? "?" : "&");
+                    }
                     urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
                 }
-                //remove & at the end of the urlBuilder.
-                urlBuilder.Remove(urlBuilder.Length - 1, 1);
+
+                if (index > 0)
+                {
+                    //remove & at the end of the urlBuilder.
+                    urlBuilder.Remove(urlBuilder.Length - 1, 1);
+                    return true;
+                }
+
+                return false;
             }
-            else
-            {
-                urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
-            }
+
+            urlBuilder.Append(isFirstParam ? "?" : "&");
+            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
+            return true;
         }
 
         private static string ConvertValueToString([NotNull] object value)
         {
-            using (CultureHelper.Use(CultureInfo.InvariantCulture))
+            if (value is DateTime dateTimeValue)
             {
-                if (value is DateTime dateTimeValue)
-                {
-                    return dateTimeValue.ToUniversalTime().ToString("u");
-                }
-
-                return value.ToString();
+                return dateTimeValue.ToUniversalTime().ToString("O");
             }
+
+            return value.ToString();
         }
     }
 }

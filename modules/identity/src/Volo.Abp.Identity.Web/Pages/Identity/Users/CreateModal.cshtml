@@ -6,9 +6,11 @@
 @using Volo.Abp.Identity.Web.Pages.Identity.Users
 @using Volo.Abp.Localization
 @using Volo.Abp.ObjectExtending
+@using Volo.Abp.Data
 @model CreateModalModel
 @inject IHtmlLocalizer<IdentityResource> L
 @inject IStringLocalizerFactory StringLocalizerFactory
+
 @{
     Layout = null;
 }
@@ -26,30 +28,40 @@
                     <abp-input asp-for="UserInfo.Email" />
                     <abp-input asp-for="UserInfo.PhoneNumber" />
                     <abp-input asp-for="UserInfo.LockoutEnabled" />
-                    <abp-input asp-for="UserInfo.TwoFactorEnabled" />
-                    
+
                     @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.UserInfoViewModel>())
                     {
-                        if (propertyInfo.Type.IsEnum)
+                        if (!propertyInfo.Name.EndsWith("_Text"))
                         {
-                            <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
-                                        label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"></abp-select>
-                        }
-                        else
-                        {
-                            <abp-input type="@propertyInfo.GetInputType()"
-                                       asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
-                                       label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
-                                       asp-format="@propertyInfo.GetInputFormatOrNull()"
-                                       value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.ExtraProperties[propertyInfo.Name])" />
+                            if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                            {
+                                <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                            label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                            autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                            autocomplete-selected-item-name="@Model.UserInfo.GetProperty(propertyInfo.Name+"_Text")"
+                                            autocomplete-selected-item-value="@Model.UserInfo.GetProperty(propertyInfo.Name)"
+                                            autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                                            autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                                            autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                                            autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>
+                            }
+                            else
+                            {
+                                <abp-input type="@propertyInfo.GetInputType()"
+                                           asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                           label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                           asp-format="@propertyInfo.GetInputFormatOrNull()"
+                                           value="@propertyInfo.GetInputValueOrNull(Model.UserInfo.GetProperty(propertyInfo.Name))" />
+                            }
                         }
                     }
                 </abp-tab>
                 <abp-tab title="@L["Roles"].Value">
                     @for (var i = 0; i < Model.Roles.Length; i++)
                     {
-                        <abp-input asp-for="@Model.Roles[i].IsAssigned" label="@Model.Roles[i].Name" />
-                        <input asp-for="@Model.Roles[i].Name" />
+                        var role = Model.Roles[i];
+                        <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
+                        <input abp-id-name="@Model.Roles[i].Name" asp-for="@role.Name" />
                     }
                 </abp-tab>
             </abp-tabs>

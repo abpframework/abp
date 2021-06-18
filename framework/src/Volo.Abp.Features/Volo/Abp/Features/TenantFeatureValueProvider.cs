@@ -10,7 +10,7 @@ namespace Volo.Abp.Features
         public override string Name => ProviderName;
 
         protected ICurrentTenant CurrentTenant { get; }
-        
+
         public TenantFeatureValueProvider(IFeatureStore featureStore, ICurrentTenant currentTenant)
             : base(featureStore)
         {

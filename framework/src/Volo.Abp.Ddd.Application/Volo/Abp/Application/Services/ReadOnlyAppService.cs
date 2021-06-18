@@ -38,7 +38,7 @@ namespace Volo.Abp.Application.Services
         where TGetOutputDto : IEntityDto<TKey>
         where TGetListOutputDto : IEntityDto<TKey>
     {
-        protected new IReadOnlyRepository<TEntity, TKey> Repository { get; }
+        protected IReadOnlyRepository<TEntity, TKey> Repository { get; }
 
         protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
         : base(repository)

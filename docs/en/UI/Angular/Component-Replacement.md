@@ -45,7 +45,7 @@ Run the following command to generate a layout in `angular` folder:
 yarn ng generate component my-application-layout
 ```
 
-Add the following code in your layout template (`my-layout.component.html`) where you want the page to be loaded.
+Add the following code in your layout template (`my-application-layout.component.html`) where you want the page to be loaded.
 
 ```html
 <router-outlet></router-outlet>
@@ -84,10 +84,9 @@ export class AppComponent {
 Run the following command in `angular` folder to create a new component called `LogoComponent`.
 
 ```bash
-yarn ng generate component logo --inlineTemplate --inlineStyle --entryComponent
-
-# You don't need the --entryComponent option in Angular 9
+yarn ng generate component logo --inlineTemplate --inlineStyle
 ```
+
 
 Open the generated `logo.component.ts` in `src/app/logo` folder and replace its content with the following:
 
@@ -115,7 +114,7 @@ Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
 import { ..., ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
-import { LogoComponent } from './logo/logo.component'; // imported NavItemsComponent
+import { LogoComponent } from './logo/logo.component'; // imported LogoComponent
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents
 //...
 
@@ -151,36 +150,18 @@ yarn ng generate component routes
 Open the generated `routes.component.ts` in `src/app/routes` folder and replace its content with the following:
 
 ```js
-import { ABP } from '@abp/ng.core';
-import {
-  Component,
-  HostBinding,
-  Inject,
-  Renderer2,
-  TrackByFunction,
-  AfterViewInit,
-} from '@angular/core';
-import { fromEvent } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-routes',
   templateUrl: 'routes.component.html',
 })
-export class RoutesComponent implements AfterViewInit {
+export class RoutesComponent {
   @HostBinding('class.mx-auto')
   marginAuto = true;
 
-  smallScreen = window.innerWidth < 992;
-
-  constructor(private renderer: Renderer2) {}
-
-  ngAfterViewInit() {
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(150))
-      .subscribe(() => {
-        this.smallScreen = window.innerWidth < 992;
-      });
+  get smallScreen() {
+    return window.innerWidth < 992;
   }
 }
 ```
@@ -310,7 +291,7 @@ Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
 import { ..., ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
-import { RoutesComponent } from './routes/routes.component'; // imported NavItemsComponent
+import { RoutesComponent } from './routes/routes.component'; // imported RoutesComponent
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents
 //...
 
@@ -347,80 +328,75 @@ Open the generated `nav-items.component.ts` in `src/app/nav-items` folder and re
 
 ```js
 import {
-  ApplicationConfiguration,
   AuthService,
-  ConfigState,
-  SessionState,
-  SetLanguage,
+  ConfigStateService,
+  CurrentUserDto,
+  LanguageInfo,
+  NAVIGATE_TO_MANAGE_PROFILE,
+  SessionStateService,
 } from '@abp/ng.core';
-import { Component, AfterViewInit } from '@angular/core';
-import { Navigate, RouterState } from '@ngxs/router-plugin';
-import { Select, Store } from '@ngxs/store';
-import { Observable, fromEvent } from 'rxjs';
-import { map, debounceTime } from 'rxjs/operators';
+import { Component, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import snq from 'snq';
 
 @Component({
   selector: 'app-nav-items',
   templateUrl: 'nav-items.component.html',
 })
-export class NavItemsComponent implements AfterViewInit {
-  @Select(ConfigState.getOne('currentUser'))
-  currentUser$: Observable<ApplicationConfiguration.CurrentUser>;
+export class NavItemsComponent {
+  currentUser$: Observable<CurrentUserDto> = this.configState.getOne$('currentUser');
+  selectedTenant$ = this.sessionState.getTenant$();
 
-  @Select(ConfigState.getDeep('localization.languages'))
-  languages$: Observable<ApplicationConfiguration.Language[]>;
+  languages$: Observable<LanguageInfo[]> = this.configState.getDeep$('localization.languages');
 
-  smallScreen = window.innerWidth < 992;
+  get smallScreen(): boolean {
+    return window.innerWidth < 992;
+  }
 
   get defaultLanguage$(): Observable<string> {
     return this.languages$.pipe(
       map(
         languages =>
           snq(
-            () => languages.find(lang => lang.cultureName === this.selectedLangCulture).displayName,
+            () => languages.find(lang => lang.cultureName === this.selectedLangCulture).displayName
           ),
-        '',
-      ),
+        ''
+      )
     );
   }
 
-  get dropdownLanguages$(): Observable<ApplicationConfiguration.Language[]> {
+  get dropdownLanguages$(): Observable<LanguageInfo[]> {
     return this.languages$.pipe(
       map(
         languages =>
           snq(() => languages.filter(lang => lang.cultureName !== this.selectedLangCulture)),
-        [],
-      ),
+        []
+      )
     );
   }
 
   get selectedLangCulture(): string {
-    return this.store.selectSnapshot(SessionState.getLanguage);
+    return this.sessionState.getLanguage();
   }
 
-  constructor(private store: Store, private authService: AuthService) {}
-
-  ngAfterViewInit() {
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(150))
-      .subscribe(() => {
-        this.smallScreen = window.innerWidth < 992;
-      });
-  }
+  constructor(
+    @Inject(NAVIGATE_TO_MANAGE_PROFILE) public navigateToManageProfile,
+    private configState: ConfigStateService,
+    private authService: AuthService,
+    private sessionState: SessionStateService
+  ) {}
 
   onChangeLang(cultureName: string) {
-    this.store.dispatch(new SetLanguage(cultureName));
+    this.sessionState.setLanguage(cultureName);
+  }
+
+  navigateToLogin() {
+    this.authService.navigateToLogin();
   }
 
   logout() {
-    this.authService.logout().subscribe(() => {
-      this.store.dispatch(
-        new Navigate(['/'], null, {
-          state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
-        }),
-      );
-    });
+    this.authService.logout().subscribe();
   }
 }
 ```
@@ -445,8 +421,14 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
 ```html
 <ul class="navbar-nav">
   <input type="search" placeholder="Search" class="bg-transparent border-0 text-white" />
-  <li *ngIf="(dropdownLanguages$ | async)?.length > 0" class="nav-item">
-    <div class="dropdown" ngbDropdown #languageDropdown="ngbDropdown" display="static">
+  <li class="nav-item d-flex align-items-center">
+    <div
+      *ngIf="(dropdownLanguages$ | async)?.length > 0"
+      class="dropdown"
+      ngbDropdown
+      #languageDropdown="ngbDropdown"
+      display="static"
+    >
       <a
         ngbDropdownToggle
         class="nav-link"
@@ -474,10 +456,9 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
       </div>
     </div>
   </li>
-
-  <li class="nav-item">
+  <li class="nav-item d-flex align-items-center">
     <ng-template #loginBtn>
-      <a role="button" class="nav-link" routerLink="/account/login">{%{{{
+      <a role="button" class="nav-link pointer" (click)="navigateToLogin()">{%{{{
         'AbpAccount::Login' | abpLocalization
       }}}%}</a>
     </ng-template>
@@ -498,15 +479,19 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
         aria-haspopup="true"
         aria-expanded="false"
       >
-        {%{{{ (currentUser$ | async)?.userName }}}%}
+        <small *ngIf="(selectedTenant$ | async)?.name as tenantName"
+          ><i>{%{{{ tenantName }}}%}</i
+          >\</small
+        >
+        <strong>{%{{{ (currentUser$ | async)?.userName }}}%}</strong>
       </a>
       <div
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
-        <a class="dropdown-item" routerLink="/account/manage-profile"
-          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}}%}</a
+        <a class="dropdown-item pointer" (click)="navigateToManageProfile()"
+          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::MyAccount' | abpLocalization }}}%}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
           ><i class="fa fa-power-off mr-1"></i>{%{{{ 'AbpUi::Logout' | abpLocalization }}}%}</a
@@ -546,8 +531,5 @@ The final UI looks like below:
 
 ## See Also
 
+- [How Replaceable Components Work with Extensions](./How-Replaceable-Components-Work-with-Extensions.md)
 - [How to Replace PermissionManagementComponent](./Permission-Management-Component-Replacement.md)
-
-## What's Next?
-
-- [Custom Setting Page](./Custom-Setting-Page.md)

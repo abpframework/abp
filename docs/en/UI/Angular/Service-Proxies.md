@@ -1,16 +1,17 @@
 ## Service Proxies
 
-It is common to call a REST endpoint in the server from our Angular applications. In this case, we generally create **services** (those have methods for each service method on the server side) and **model objects** (matches to [DTOs](../../Data-Transfer-Objects) in the server side).
+Calling a REST endpoint from Angular applications is common. We usually create **services** matching server-side controllers and **interfaces** matching [DTOs](../../Data-Transfer-Objects) to interact with the server. This often results in manually transforming C# code into TypeScript equivalents and that is unfortunate, if not intolerable.
 
-In addition to manually creating such server-interacting services, we could use tools like [NSWAG](https://github.com/RicoSuter/NSwag) to generate service proxies for us. But NSWAG has the following problems we've experienced:
+To avoid manual effort, we might use a tool like [NSWAG](https://github.com/RicoSuter/NSwag) that generates service proxies. However, NSWAG has some disadvantages:
 
-- It generates a **big, single** .ts file which has some problems;
-  - It get **too large** when your application grows.
-  - It doesn't fit into the **[modular](../../Module-Development-Basics) approach** of the ABP framework.
-- It creates a bit **ugly code**. We want to have a clean code (just like if we write manually).
-- It can not generate the same **method signature** declared in the server side (because swagger.json doesn't exactly reflect the method signature of the backend service). We've created an endpoint that exposes server side method contacts to allow clients generate a better aligned client proxies.
+- It generates **a single .ts file** which gets **too large** as your application grows. Also, this single file does not fit the **[modular](../../Module-Development-Basics) approach** of ABP.
+- To be honest, the generated code is a bit **ugly**. We would like to produce code that looks as if someone wrote it.
+- Since swagger.json **does not reflect the exact method signature** of backend services, NSWAG cannot reflect them on the client-side as well.
 
-ABP CLI changes that via the `generate-proxy` command. It automatically generates the client proxies in TypeScript. by creating folders which separated by module names in the `src/app` folder.
+ABP introduces an endpoint that exposes server-side method contracts. When the `generate-proxy` command is run, ABP CLI makes an HTTP request to this endpoint and generates better-aligned client proxies in TypeScript. It organizes folders according to namespaces, adds barrel exports, and reflects method signatures in Angular services.
+
+> Before you start, please make sure you start the backend application with `dotnet run`. There is a [known limitation about Visual Studio](#known-limitations), so please do not run the project using its built-in web server.
+
 Run the following command in the **root folder** of the angular application:
 
 ```bash
@@ -19,13 +20,13 @@ abp generate-proxy
 
 The command without any parameters creates proxies only for your own application's services and places them in your default Angular application. There are several parameters you may use to modify this behavior. See the [CLI documentation](../../CLI) for details.
 
-The generated files will be placed in a folder called `proxy` at the root of target project.
+The generated files will be placed in a folder called `proxy` at the root of the target project.
 
 ![generated-files-via-generate-proxy](./images/generated-files-via-generate-proxy.png)
 
 Each folder will have models, enums, and services defined at related namespace accompanied by a barrel export, i.e. an `index.ts` file for easier imports.
 
-> The cammand is able to find application/library roots by reading `angular.json` file. Make sure you have either defined your target project as the `defaultProject` or pass the `--target` parameter to the command. This also means that you may have a monorepo workspace.
+> The command can find application/library roots by reading the `angular.json` file. Make sure you have either defined your target project as the `defaultProject` or pass the `--target` parameter to the command. This also means that you may have a monorepo workspace.
 
 ### Angular Project Configuration
 
@@ -74,9 +75,9 @@ export const environment: Config.Environment = {
 
 The `generate-proxy` command generates one service per back-end controller and a method (property with a function value actually) for each action in the controller. These methods call backend APIs via [RestService](./Http-Requests#restservice).
 
-A variable named `apiName` (available as of v2.4) is defined in each service. `apiName` matches the module's RemoteServiceName. This variable passes to the `RestService` as a parameter at each request. If there is no microservice API defined in the environment, `RestService` uses the default. See [getting a specific API endpoint from application config](./Http-Requests#how-to-get-a-specific-api-endpoint-from-application-config)
+A variable named `apiName` (available as of v2.4) is defined in each service. `apiName` matches the module's `RemoteServiceName`. This variable passes to the `RestService` as a parameter at each request. If there is no microservice API defined in the environment, `RestService` uses the default. See [getting a specific API endpoint from application config](./Http-Requests#how-to-get-a-specific-api-endpoint-from-application-config)
 
-The `providedIn` property of the services is defined as `'root'`. Therefore there is no need to provide them in a module. You can use them directly by injecting them into constructor as shown below:
+The `providedIn` property of the services is defined as `'root'`. Therefore there is no need to provide them in a module. You can use them directly by injecting them into the constructor as shown below:
 
 ```js
 import { BookService } from '@proxy/books';
@@ -114,7 +115,7 @@ export class BookComponent implements OnInit {
 
 ### Enums
 
-Enums have always been difficult to populate in the frontend. The `generate-proxy` command genarates enums in a separate file and exports a ready-to-use options constant from the same file. So you can import them as follows:
+Enums have always been difficult to populate in the frontend. The `generate-proxy` command generates enums in a separate file and exports a ready-to-use "options constant" from the same file. So you can import them as follows:
 
 ```js
 import { bookGenreOptions } from "@proxy/books";
@@ -132,13 +133,13 @@ export class BookComponent implements OnInit {
 <select formControlName="genre">
   <option [ngValue]="null">Select a genre</option>
   <option *ngFor="let genre of genres" [ngValue]="genre.value">
-      {%{{{ genre.key }}}%}
+    {%{{{ genre.key }}}%}
   </option>
 </select>
 ```
 
 > Please [see this article](https://github.com/abpframework/abp/blob/dev/docs/en/Blog-Posts/2020-09-07%20Angular-Service-Proxies/POST.md) to learn more about service proxies.
 
-## What's Next?
+### Known Limitations
 
-- [HTTP Requests](./Http-Requests)
+When you run a project on Visual Studio using IIS Express as the web server, there will be no remote access to your endpoints. This is the default behavior of IIS Express since it explicitly protects you from the security risks of running over the network. However, that will cause the proxy generator to fail because it needs a response from the `/api/abp/api-definition` endpoint. You may serve your endpoints via Kestrel to avoid this. Running `dotnet run` in your command line (at your project folder) will do that for you.

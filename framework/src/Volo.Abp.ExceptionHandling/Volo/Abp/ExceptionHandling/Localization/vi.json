@@ -1,0 +1,18 @@
+{
+  "culture": "vi",
+  "texts": {
+    "InternalServerErrorMessage": "Có một lỗi nội bộ xảy ra trong quá trình thực hiện yêu cầu của bạn!",
+    "ValidationErrorMessage": "Yêu cầu của bạn không hợp lệ!",
+    "ValidationNarrativeErrorMessageTitle": "Các lỗi sau đây đã được phát hiện trong quá trình xác nhận",
+    "DefaultErrorMessage": "Một lỗi đã xảy ra",
+    "DefaultErrorMessageDetail": "Chi tiết lỗi không được gửi bởi máy chủ",
+    "DefaultErrorMessage401": "Bạn chưa được xác thực",
+    "DefaultErrorMessage401Detail": "Bạn cần đăng nhập để thực hiện thao tác này.",
+    "DefaultErrorMessage403": "Bạn không được phép!",
+    "DefaultErrorMessage403Detail": "Bạn không được phép thực hiện thao tác này!",
+    "DefaultErrorMessage404": "Tài nguyên không tìm thấy!",
+    "DefaultErrorMessage404Detail": "Tài nguyên được yêu cầu không được tìm thấy trên máy chủ!",
+    "EntityNotFoundErrorMessage": "Không có thực thể nào {0} với id = {1}!",
+    "Error": "Lỗi"
+  }
+}

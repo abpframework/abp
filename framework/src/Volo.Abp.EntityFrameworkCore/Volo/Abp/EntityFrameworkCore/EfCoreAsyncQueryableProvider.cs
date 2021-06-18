@@ -11,7 +11,7 @@ using Volo.Abp.Linq;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public class EfCoreAsyncQueryableProvider : IAsyncQueryableProvider, ITransientDependency
+    public class EfCoreAsyncQueryableProvider : IAsyncQueryableProvider, ISingletonDependency
     {
         public bool CanExecute<T>(IQueryable<T> queryable)
         {
@@ -21,6 +21,11 @@ namespace Volo.Abp.EntityFrameworkCore
         public Task<bool> ContainsAsync<T>(IQueryable<T> queryable, T item, CancellationToken cancellationToken = default)
         {
             return queryable.ContainsAsync(item, cancellationToken);
+        }
+
+        public Task<bool> AnyAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+        {
+            return queryable.AnyAsync(cancellationToken);
         }
 
         public Task<bool> AnyAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)

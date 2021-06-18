@@ -1,0 +1,6 @@
+{
+ "culture": "fr",
+ "texts": {
+  "MaxResultCountExceededExceptionMessage": "{0} ne peut pas être plus que {1}! Augmentez {2}. {3} du côté du serveur pour permettre plus de résultats."
+ }
+}

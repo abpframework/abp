@@ -33,6 +33,7 @@
     "Upd": "Günc",
     "NewExplanation": "Son iki hafta içinde oluşturuldu.",
     "UpdatedExplanation": "Son iki hafta içinde güncellendi.",
-    "Volo.Docs.Domain:010002": "ShortName {ShortName} zaten var."
+    "Volo.Docs.Domain:010002": "ShortName {ShortName} zaten var.",
+    "Preview": "ön izleme"
   }
 }

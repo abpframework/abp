@@ -343,7 +343,7 @@ public class SystemAdminPermissionValueProvider : PermissionValueProvider
 
     public override string Name => "SystemAdmin";
 
-    public override async Task<PermissionGrantResult>
+    public async override Task<PermissionGrantResult>
            CheckAsync(PermissionValueCheckContext context)
     {
         if (context.Principal?.FindFirst("User_Type")?.Value == "SystemAdmin")

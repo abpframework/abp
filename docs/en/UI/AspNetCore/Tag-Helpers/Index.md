@@ -13,19 +13,26 @@ ABP Framework also adds some **useful features** to the standard bootstrap compo
 Here, the list of components those are wrapped by the ABP Framework:
 
 * [Alerts](Alerts.md)
+* [Badges](Badges.md)
+* [Blockquote](Blockquote.md)
+* [Borders](Borders.md)
+* [Breadcrumb](Breadcrumbs.md)
 * [Buttons](Buttons.md)
 * [Cards](Cards.md)
+* [Carousel](Carousel.md)
 * [Collapse](Collapse.md)
 * [Dropdowns](Dropdowns.md)
+* [Figures](Figure.md)
 * [Grids](Grids.md)
 * [List Groups](List-Groups.md)
 * [Modals](Modals.md)
+* [Navigation](Navs.md)
 * [Paginator](Paginator.md)
 * [Popovers](Popovers.md)
 * [Progress Bars](Progress-Bars.md)
+* [Tables](Tables.md)
 * [Tabs](Tabs.md)
 * [Tooltips](Tooltips.md)
-* ...
 
 > Until all the tag helpers are documented, you can visit https://bootstrap-taghelpers.abp.io/ to see them with live samples.
 

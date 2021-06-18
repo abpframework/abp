@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Comments;
 
 namespace Volo.CmsKit.Public.Comments
 {
+    [Serializable]
     public class UpdateCommentInput
     {
         [Required]

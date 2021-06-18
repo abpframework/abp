@@ -13,6 +13,9 @@ namespace Volo.Abp
         [NotNull]
         public PlugInSourceList PlugInSources { get; }
 
+        /// <summary>
+        /// The options in this property only take effect when IConfiguration not registered.
+        /// </summary>
         [NotNull]
         public AbpConfigurationBuilderOptions Configuration {get; }
 

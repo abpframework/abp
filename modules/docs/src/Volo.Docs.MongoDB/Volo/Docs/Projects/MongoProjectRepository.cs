@@ -9,6 +9,7 @@ using Volo.Abp.MongoDB;
 using Volo.Docs.MongoDB;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading;
 
 namespace Volo.Docs.Projects
 {
@@ -19,20 +20,20 @@ namespace Volo.Docs.Projects
         {
         }
 
-        public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount)
+        public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount, CancellationToken cancellationToken = default)
         {
-            var projects = await GetMongoQueryable().OrderBy(sorting ?? "Id desc").As<IMongoQueryable<Project>>()
+            var projects = await (await GetMongoQueryableAsync(cancellationToken)).OrderBy(sorting.IsNullOrEmpty() ? "Id desc" : sorting).As<IMongoQueryable<Project>>()
                 .PageBy<Project, IMongoQueryable<Project>>(skipCount, maxResultCount)
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             return projects;
         }
 
-        public async Task<Project> GetByShortNameAsync(string shortName)
+        public async Task<Project> GetByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
         {
             var normalizeShortName = NormalizeShortName(shortName);
-            
-            var project = await GetMongoQueryable().FirstOrDefaultAsync(p => p.ShortName == normalizeShortName);
+
+            var project = await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(p => p.ShortName == normalizeShortName, GetCancellationToken(cancellationToken));
 
             if (project == null)
             {
@@ -42,13 +43,13 @@ namespace Volo.Docs.Projects
             return project;
         }
 
-        public async Task<bool> ShortNameExistsAsync(string shortName)
+        public async Task<bool> ShortNameExistsAsync(string shortName, CancellationToken cancellationToken = default)
         {
             var normalizeShortName = NormalizeShortName(shortName);
-            
-            return await GetMongoQueryable().AnyAsync(x => x.ShortName == normalizeShortName);
+
+            return await (await GetMongoQueryableAsync(cancellationToken)).AnyAsync(x => x.ShortName == normalizeShortName, GetCancellationToken(cancellationToken));
         }
-        
+
         private string NormalizeShortName(string shortName)
         {
             return shortName.ToLower();

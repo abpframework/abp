@@ -410,3 +410,7 @@ ObjectExtensionManager.Instance
 ````
 
 See the [Entity Framework Core Integration document](Entity-Framework-Core.md) for more.
+
+## See Also
+
+* [Module Entity Extensions](Module-Entity-Extensions.md)

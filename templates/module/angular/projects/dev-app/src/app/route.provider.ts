@@ -10,9 +10,9 @@ export const APP_ROUTE_PROVIDER = [
   },
 ];
 
-function configureRoutes(routes: RoutesService) {
+function configureRoutes(routesService: RoutesService) {
   return () => {
-    routes.add([
+    routesService.add([
       {
         path: '/',
         name: 'Home',

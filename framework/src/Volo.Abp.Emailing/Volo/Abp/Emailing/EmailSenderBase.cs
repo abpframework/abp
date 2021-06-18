@@ -69,7 +69,7 @@ namespace Volo.Abp.Emailing
             );
         }
 
-        public async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
+        public virtual async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
         {
             if (!BackgroundJobManager.IsAvailable())
             {

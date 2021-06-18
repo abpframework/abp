@@ -10,6 +10,7 @@ If you're creating a bug/problem report, please include followings:
 
 * Your **ABP Framework version**.
 * Your **User Interface** type (Angular/MVC/React... etc.) if the issue is related to a specific UI
+* Your database provider(EF Core/MongoDB)
 * Exception message and **stack trace** if available (check the logs).
 * Steps needed to **reproduce** the problem.
 

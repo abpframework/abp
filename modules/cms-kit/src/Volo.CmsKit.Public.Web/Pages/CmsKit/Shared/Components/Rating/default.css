@@ -42,3 +42,29 @@
         display: none;
     }
 }
+
+.jq-star {
+    top: -2px !important;
+    position: relative;
+}
+.rating-undo-link:hover {
+    text-decoration:none;
+}
+.reaction-in-comment span.area-title {
+    display: none;
+}
+
+span.area-title {
+    font-weight: 600;
+    padding: 3px;
+    display: block;
+}
+.reaction-in-comment .card {
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.popover {
+    min-width: 276px;
+}

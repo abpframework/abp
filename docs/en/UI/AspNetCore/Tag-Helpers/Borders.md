@@ -2,11 +2,11 @@
 
 ## Introduction
 
-`abp-border` is a main element for border styling.
+`abp-border` is ABP Tag Helper attribute for border styling.
 
 Basic usage:
 
-````csharp
+````html
 <span abp-border="Default"></span>
 <span abp-border="Top"></span>
 <span abp-border="Right"></span>
@@ -124,3 +124,5 @@ A value indicates type, position and the color of the border. Should be one of t
 * `Bottom_Light_0`
 * `Bottom_Dark_0`
 * `Bottom_White_0`
+
+(Values with `_0` at the end is for [Subtractive](https://getbootstrap.com/docs/4.0/utilities/borders/#subtractive) usages)

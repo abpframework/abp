@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import compare from 'just-compare';
 import { filter, map } from 'rxjs/operators';
-import { SetEnvironment } from '../actions/config.actions';
 import { ABP } from '../models/common';
+import { EnvironmentService } from '../services/environment.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 
 @Injectable({
@@ -12,18 +11,18 @@ import { CORE_OPTIONS } from '../tokens/options.token';
 })
 export class OAuthConfigurationHandler {
   constructor(
-    private actions: Actions,
     private oAuthService: OAuthService,
+    private environmentService: EnvironmentService,
     @Inject(CORE_OPTIONS) private options: ABP.Root,
   ) {
     this.listenToSetEnvironment();
   }
 
   private listenToSetEnvironment() {
-    this.actions
-      .pipe(ofActionSuccessful(SetEnvironment))
+    this.environmentService
+      .createOnUpdateStream(state => state)
       .pipe(
-        map(({ environment }: SetEnvironment) => environment.oAuthConfig),
+        map(environment => environment.oAuthConfig),
         filter(config => !compare(config, this.options.environment.oAuthConfig)),
       )
       .subscribe(config => {

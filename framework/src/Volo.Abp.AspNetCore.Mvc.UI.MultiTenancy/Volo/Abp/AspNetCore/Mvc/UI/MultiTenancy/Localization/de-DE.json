@@ -1,0 +1,13 @@
+{
+  "culture": "de-DE",
+  "texts": {
+    "GivenTenantIsNotExist": "Der angegebene Client ist nicht vorhanden: {0}",
+    "GivenTenantIsNotAvailable": "Der angegebene Mandant ist nicht verfügbar: {0}",
+    "Tenant": "Mandant",
+    "Switch": "wechseln",
+    "Name": "Name",
+    "SwitchTenantHint": "Lassen Sie das Namensfeld leer, um zur Host-Seite zu wechseln.",
+    "SwitchTenant": "Mandant wechseln",
+    "NotSelected": "Nicht ausgewählt"
+  }
+}

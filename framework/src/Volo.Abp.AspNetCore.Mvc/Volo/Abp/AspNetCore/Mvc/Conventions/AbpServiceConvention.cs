@@ -7,24 +7,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
-using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
     public class AbpServiceConvention : IAbpServiceConvention, ITransientDependency
     {
-        private readonly AbpAspNetCoreMvcOptions _options;
+        public ILogger<AbpServiceConvention> Logger { get; set; }
 
-        public AbpServiceConvention(IOptions<AbpAspNetCoreMvcOptions> options)
+        protected AbpAspNetCoreMvcOptions Options { get; }
+        protected IConventionalRouteBuilder ConventionalRouteBuilder { get; }
+
+        public AbpServiceConvention(
+            IOptions<AbpAspNetCoreMvcOptions> options,
+            IConventionalRouteBuilder conventionalRouteBuilder)
         {
-            _options = options.Value;
+            ConventionalRouteBuilder = conventionalRouteBuilder;
+            Options = options.Value;
+
+            Logger = NullLogger<AbpServiceConvention>.Instance;
         }
 
         public void Apply(ApplicationModel application)
@@ -34,9 +43,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual void ApplyForControllers(ApplicationModel application)
         {
+            RemoveDuplicateControllers(application);
+
             foreach (var controller in application.Controllers)
             {
                 var controllerType = controller.ControllerType.AsType();
+
                 var configuration = GetControllerSettingOrNull(controllerType);
 
                 //TODO: We can remove different behaviour for ImplementsRemoteServiceInterface. If there is a configuration, then it should be applied!
@@ -57,6 +69,60 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                     }
                 }
             }
+        }
+
+        protected virtual void RemoveDuplicateControllers(ApplicationModel application)
+        {
+            var controllerModelsToRemove = new List<ControllerModel>();
+
+            foreach (var controllerModel in application.Controllers)
+            {
+                if (!controllerModel.ControllerType.IsDefined(typeof(ExposeServicesAttribute), false))
+                {
+                    continue;
+                }
+
+                if (Options.IgnoredControllersOnModelExclusion.Contains(controllerModel.ControllerType))
+                {
+                    continue;
+                }
+
+                var exposeServicesAttr = ReflectionHelper.GetSingleAttributeOrDefault<ExposeServicesAttribute>(controllerModel.ControllerType);
+                if (exposeServicesAttr.IncludeSelf)
+                {
+                    var exposedControllerModels = application.Controllers
+                        .Where(cm => exposeServicesAttr.ServiceTypes.Contains(cm.ControllerType))
+                        .ToArray();
+
+                    controllerModelsToRemove.AddRange(exposedControllerModels);
+                    Logger.LogInformation($"Removing the controller{(exposedControllerModels.Length > 1 ? "s" : "")} {exposeServicesAttr.ServiceTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")} from the application model since {(exposedControllerModels.Length > 1 ? "they are" : "it is")} replaced by the controller: {controllerModel.ControllerType.AssemblyQualifiedName}");
+                    continue;
+                }
+
+                var baseControllerTypes = controllerModel.ControllerType
+                    .GetBaseClasses(typeof(Controller), includeObject: false)
+                    .Where(t => !t.IsAbstract)
+                    .ToArray();
+
+                if (baseControllerTypes.Length == 0)
+                {
+                    continue;
+                }
+
+                var baseControllerModels = application.Controllers
+                    .Where(cm => baseControllerTypes.Contains(cm.ControllerType))
+                    .ToArray();
+
+                if (baseControllerModels.Length == 0)
+                {
+                    continue;
+                }
+
+                controllerModelsToRemove.Add(controllerModel);
+                Logger.LogInformation($"Removing the controller {controllerModel.ControllerType.AssemblyQualifiedName} from the application model since it replaces the controller(s): {baseControllerTypes.Select(c => c.AssemblyQualifiedName).JoinAsString(", ")}");
+            }
+
+            application.Controllers.RemoveAll(controllerModelsToRemove);
         }
 
         protected virtual void ConfigureRemoteService(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)
@@ -102,7 +168,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                 return false;
             }
 
-            if (_options.ConventionalControllers
+            if (Options.ConventionalControllers
                 .FormBodyBindingIgnoredTypes
                 .Any(t => t.IsAssignableFrom(parameter.ParameterInfo.ParameterType)))
             {
@@ -277,95 +343,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         [CanBeNull]
         protected virtual ConventionalControllerSetting GetControllerSettingOrNull(Type controllerType)
         {
-            return _options.ConventionalControllers.ConventionalControllerSettings.GetSettingOrNull(controllerType);
+            return Options.ConventionalControllers.ConventionalControllerSettings.GetSettingOrNull(controllerType);
         }
 
         protected virtual AttributeRouteModel CreateAbpServiceAttributeRouteModel(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
         {
             return new AttributeRouteModel(
                 new RouteAttribute(
-                    CalculateRouteTemplate(rootPath, controllerName, action, httpMethod, configuration)
-                )
-            );
-        }
-
-        protected virtual string CalculateRouteTemplate(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
-        {
-            var controllerNameInUrl = NormalizeUrlControllerName(rootPath, controllerName, action, httpMethod, configuration);
-
-            var url = $"api/{rootPath}/{controllerNameInUrl.ToCamelCase()}";
-
-            //Add {id} path if needed
-            var idParameterModel = action.Parameters.FirstOrDefault(p => p.ParameterName == "id");
-            if (idParameterModel != null)
-            {
-                if (TypeHelper.IsPrimitiveExtended(idParameterModel.ParameterType, includeEnums: true))
-                {
-                    url += "/{id}";
-                }
-                else
-                {
-                    var properties = idParameterModel
-                        .ParameterType
-                        .GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-                    foreach (var property in properties)
-                    {
-                        url += "/{" + property.Name + "}";
-                    }
-                }
-            }
-
-            //Add action name if needed
-            var actionNameInUrl = NormalizeUrlActionName(rootPath, controllerName, action, httpMethod, configuration);
-            if (!actionNameInUrl.IsNullOrEmpty())
-            {
-                url += $"/{actionNameInUrl.ToCamelCase()}";
-
-                //Add secondary Id
-                var secondaryIds = action.Parameters.Where(p => p.ParameterName.EndsWith("Id", StringComparison.Ordinal)).ToList();
-                if (secondaryIds.Count == 1)
-                {
-                    url += $"/{{{secondaryIds[0].ParameterName}}}";
-                }
-            }
-
-            return url;
-        }
-
-        protected virtual string NormalizeUrlActionName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
-        {
-            var actionNameInUrl = HttpMethodHelper
-                .RemoveHttpMethodPrefix(action.ActionName, httpMethod)
-                .RemovePostFix("Async");
-
-            if (configuration?.UrlActionNameNormalizer == null)
-            {
-                return actionNameInUrl;
-            }
-
-            return configuration.UrlActionNameNormalizer(
-                new UrlActionNameNormalizerContext(
-                    rootPath,
-                    controllerName,
-                    action,
-                    actionNameInUrl,
-                    httpMethod
-                )
-            );
-        }
-
-        protected virtual string NormalizeUrlControllerName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
-        {
-            if (configuration?.UrlControllerNameNormalizer == null)
-            {
-                return controllerName;
-            }
-
-            return configuration.UrlControllerNameNormalizer(
-                new UrlControllerNameNormalizerContext(
-                    rootPath,
-                    controllerName
+                    ConventionalRouteBuilder.Build(rootPath, controllerName, action, httpMethod, configuration)
                 )
             );
         }

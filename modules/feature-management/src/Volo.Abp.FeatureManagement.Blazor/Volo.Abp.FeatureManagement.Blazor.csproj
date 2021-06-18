@@ -4,17 +4,17 @@
     <Import Project="..\..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <RazorLangVersion>3.0</RazorLangVersion>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Features\Volo.Abp.Features.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.FeatureManagement.HttpApi.Client\Volo.Abp.FeatureManagement.HttpApi.Client.csproj" />
+        <ProjectReference Include="..\Volo.Abp.FeatureManagement.Application.Contracts\Volo.Abp.FeatureManagement.Application.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,29 @@
+﻿@typeparam TEntityType
+@typeparam TResourceType
+@using Volo.Abp.ObjectExtending
+@using Volo.Abp.Localization
+@using Volo.Abp.Data
+
+@foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<TEntityType>())
+{
+    if (!propertyInfo.Name.EndsWith("_Text"))
+    {
+        if (propertyInfo.Type.IsEnum)
+        {
+            <SelectExtensionProperty PropertyInfo="@propertyInfo" Entity="@Entity" TEntity="TEntityType" TResourceType="TResourceType" />
+        }
+        else if (!propertyInfo.Lookup.Url.IsNullOrEmpty())
+        {
+            <LookupExtensionProperty PropertyInfo="@propertyInfo" Entity="@Entity" TEntity="TEntityType" TResourceType="TResourceType" />
+        }
+        else
+        {
+            var inputType = propertyInfo.GetInputType();
+
+            __builder.OpenComponent(0, inputType.MakeGenericType(new[] { typeof(TEntityType), typeof(TResourceType) }));
+            __builder.AddAttribute(1, "PropertyInfo", propertyInfo);
+            __builder.AddAttribute(2, "Entity", Entity);
+            __builder.CloseComponent();
+        }
+    }
+}

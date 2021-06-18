@@ -76,12 +76,6 @@
     "Permission:ChangePermissions": "İzinleri değiştirme",
     "Permission:UserManagement": "Kullanıcı yönetimi",
     "Permission:UserLookup": "Kullanıcı sorgulama",
-    "Feature:IdentityGroup": "Kimlik",
-    "Feature:TwoFactor": "İki faktörlü kimlik doğrulama",
-    "Feature:TwoFactorDescription": "İki faktörlü kimlik doğrulama",
-    "Feature:TwoFactor.Optional": "İsteğe bağlı",
-    "Feature:TwoFactor.Disabled": "Devre dışı",
-    "Feature:TwoFactor.Forced": "Zorunlu",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Uzunluk gerekli",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Tekil karakter gerekli",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "Alfasayısal olmayan karakter gerekli",
@@ -109,10 +103,6 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Oturum açmak için telefon numarası gerekli",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Oturum açmak için onaylanmış bir telefon numarasının gerekli olup olmadığı.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Kullanıcı adının, kullanıcının kendisi tarafından güncellenebilirliği.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "E-posta alanının, kullanıcının kendisi tarafından güncellenebilirliği",
-    "DisplayName:Abp.Identity.TwoFactorBehaviour": "İki faktörlü kimlik doğrulama davranışı",
-    "Description:Abp.Identity.TwoFactorBehaviour": "İki faktörlü kimlik doğrulama davranışı",
-    "DisplayName:Abp.Identity.UsersCanChange": "Kullanıcıların iki faktörlü kimlik doğrulama davranışını değiştirmelerine izin verin.",
-    "Description:Abp.Identity.UsersCanChange": "Kullanıcıların iki faktörlü kimlik doğrulama davranışını değiştirmelerine izin verin"
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "E-posta alanının, kullanıcının kendisi tarafından güncellenebilirliği"
   }
 }

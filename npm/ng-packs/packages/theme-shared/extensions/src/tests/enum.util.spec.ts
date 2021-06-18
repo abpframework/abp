@@ -1,9 +1,14 @@
-import { LocalizationService } from '@abp/ng.core';
-import { Store } from '@ngxs/store';
-import { Subject } from 'rxjs';
+import { ConfigStateService, LocalizationService } from '@abp/ng.core';
+import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { PropData } from '../lib/models/props';
 import { createEnum, createEnumOptions, createEnumValueResolver } from '../lib/utils/enum.util';
+
+const mockSessionState = {
+  languageChange$: new BehaviorSubject('tr'),
+  getLanguage: () => 'tr',
+  onLanguageChange$: () => new BehaviorSubject('tr'),
+} as any;
 
 const fields = [
   { name: 'foo', value: 1 },
@@ -18,6 +23,19 @@ class MockPropData<R = any> extends PropData<R> {
     super();
   }
 }
+
+const mockL10n = {
+  values: {
+    Default: {
+      'Enum:MyEnum.foo': 'Foo',
+      'MyEnum.bar': 'Bar',
+      baz: 'Baz',
+    },
+  },
+  defaultResourceName: 'Default',
+  currentCulture: null,
+  languages: [],
+};
 
 describe('Enum Utils', () => {
   describe('#createEnum', () => {
@@ -37,27 +55,6 @@ describe('Enum Utils', () => {
   });
 
   describe('#createEnumValueResolver', () => {
-    const service = new LocalizationService(
-      new Subject().asObservable(),
-      ({
-        selectSnapshot: () => ({
-          values: {
-            Default: {
-              'Enum:MyEnum.foo': 'Foo',
-              'MyEnum.bar': 'Bar',
-              baz: 'Baz',
-            },
-          },
-          defaultResourceName: 'Default',
-          currentCulture: null,
-          languages: [],
-        }),
-      } as unknown) as Store,
-      null,
-      null,
-      null,
-    );
-
     test.each`
       value | expected
       ${1}  | ${'Foo'}
@@ -66,6 +63,7 @@ describe('Enum Utils', () => {
     `(
       'should create a resolver that returns observable $expected when enum value is $value',
       async ({ value, expected }) => {
+        const service = createMockLocalizationService();
         const valueResolver = createEnumValueResolver(
           'MyCompanyName.MyProjectName.MyEnum',
           {
@@ -78,9 +76,7 @@ describe('Enum Utils', () => {
         const propData = new MockPropData({ extraProperties: { EnumProp: value } });
         propData.getInjected = () => service as any;
 
-        const resolved = await valueResolver(propData)
-          .pipe(take(1))
-          .toPromise();
+        const resolved = await valueResolver(propData).pipe(take(1)).toPromise();
 
         expect(resolved).toBe(expected);
       },
@@ -88,28 +84,8 @@ describe('Enum Utils', () => {
   });
 
   describe('#createEnumOptions', () => {
-    const service = new LocalizationService(
-      new Subject().asObservable(),
-      ({
-        selectSnapshot: () => ({
-          values: {
-            Default: {
-              'Enum:MyEnum.foo': 'Foo',
-              'MyEnum.bar': 'Bar',
-              baz: 'Baz',
-            },
-          },
-          defaultResourceName: 'Default',
-          currentCulture: null,
-          languages: [],
-        }),
-      } as unknown) as Store,
-      null,
-      null,
-      null,
-    );
-
     it('should create a generator that returns observable options from enums', async () => {
+      const service = createMockLocalizationService();
       const options = createEnumOptions('MyCompanyName.MyProjectName.MyEnum', {
         fields,
         localizationResource: null,
@@ -119,9 +95,7 @@ describe('Enum Utils', () => {
       const propData = new MockPropData({});
       propData.getInjected = () => service as any;
 
-      const resolved = await options(propData)
-        .pipe(take(1))
-        .toPromise();
+      const resolved = await options(propData).pipe(take(1)).toPromise();
 
       expect(resolved).toEqual([
         { key: 'Foo', value: 1 },
@@ -131,3 +105,10 @@ describe('Enum Utils', () => {
     });
   });
 });
+
+function createMockLocalizationService() {
+  const configState = new ConfigStateService();
+  configState.setState({ localization: mockL10n } as any);
+
+  return new LocalizationService(mockSessionState, null, null, configState, null);
+}

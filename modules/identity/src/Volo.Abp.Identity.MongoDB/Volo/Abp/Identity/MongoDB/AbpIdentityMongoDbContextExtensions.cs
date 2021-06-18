@@ -41,6 +41,11 @@ namespace Volo.Abp.Identity.MongoDB
             {
                 b.CollectionName = options.CollectionPrefix + "SecurityLogs";
             });
+
+            builder.Entity<IdentityLinkUser>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "LinkUsers";
+            });
         }
     }
 }

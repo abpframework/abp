@@ -1,9 +1,7 @@
-import { StartLoader, StopLoader, SubscriptionService } from '@abp/ng.core';
+import { HttpWaitService, RouterWaitService, SubscriptionService } from '@abp/ng.core';
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { Actions, ofActionSuccessful } from '@ngxs/store';
-import { Subscription, timer } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { combineLatest, Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'abp-loader-bar',
@@ -43,17 +41,13 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
   progressLevel = 0;
 
-  interval: Subscription;
+  interval = new Subscription();
 
-  timer: Subscription;
+  timer = new Subscription();
 
   intervalPeriod = 350;
 
   stopDelay = 800;
-
-  @Input()
-  filter = (action: StartLoader | StopLoader) =>
-    action.payload.url.indexOf('openid-configuration') < 0;
 
   private readonly clearProgress = () => {
     this.progressLevel = 0;
@@ -78,63 +72,48 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   }
 
   constructor(
-    private actions: Actions,
     private router: Router,
     private cdRef: ChangeDetectorRef,
     private subscription: SubscriptionService,
+    private httpWaitService: HttpWaitService,
+    private routerWaitService: RouterWaitService,
   ) {}
 
-  private subscribeToLoadActions() {
-    this.subscription.addOne(
-      this.actions.pipe(ofActionSuccessful(StartLoader, StopLoader), filter(this.filter)),
-      action => {
-        if (action instanceof StartLoader) this.startLoading();
-        else this.stopLoading();
-      },
-    );
-  }
-
-  private subscribeToRouterEvents() {
-    this.subscription.addOne(
-      this.router.events.pipe(
-        filter(
-          event =>
-            event instanceof NavigationStart ||
-            event instanceof NavigationEnd ||
-            event instanceof NavigationError,
-        ),
-      ),
-      event => {
-        if (event instanceof NavigationStart) this.startLoading();
-        else this.stopLoading();
-      },
-    );
-  }
-
   ngOnInit() {
-    this.subscribeToLoadActions();
-    this.subscribeToRouterEvents();
+    this.subscribeLoading();
+  }
+
+  subscribeLoading() {
+    this.subscription.addOne(
+      combineLatest([this.httpWaitService.getLoading$(), this.routerWaitService.getLoading$()]),
+      ([httpLoading, routerLoading]) => {
+        if (httpLoading || routerLoading) this.startLoading();
+        else this.stopLoading();
+      },
+    );
   }
 
   ngOnDestroy() {
-    if (this.interval) this.interval.unsubscribe();
+    this.interval.unsubscribe();
   }
 
   startLoading() {
-    if (this.isLoading || (this.interval && !this.interval.closed)) return;
+    if (this.isLoading || !this.interval.closed) return;
 
     this.isLoading = true;
-
+    this.progressLevel = 0;
+    this.cdRef.detectChanges();
     this.interval = timer(0, this.intervalPeriod).subscribe(this.reportProgress);
+    this.timer.unsubscribe();
   }
 
   stopLoading() {
-    if (this.interval) this.interval.unsubscribe();
+    this.interval.unsubscribe();
 
     this.progressLevel = 100;
     this.isLoading = false;
 
-    if (this.timer && !this.timer.closed) return;
+    if (!this.timer.closed) return;
 
     this.timer = timer(this.stopDelay).subscribe(this.clearProgress);
   }

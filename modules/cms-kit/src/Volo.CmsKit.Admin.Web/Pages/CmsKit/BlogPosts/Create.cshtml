@@ -1,0 +1,87 @@
+﻿@page
+
+@using System.Globalization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
+@using Volo.CmsKit.Admin.Web.Pages
+@using Volo.CmsKit.Admin.Web.Menus
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags.Components.TagEditor
+@using Volo.CmsKit.Blogs
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
+
+@inherits CmsKitAdminPageBase
+
+@model CreateModel
+
+@{
+    PageLayout.Content.Title = L["BlogPosts"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
+    PageLayout.Content.MenuItemName = CmsKitAdminMenus.BlogPosts.BlogPostsMenu;
+}
+
+@section scripts {
+    <abp-script-bundle>
+        <abp-script type="typeof(TuiEditorScriptContributor)"/>
+        <abp-script type="typeof(UppyScriptContributor)"/>
+        <abp-script type="typeof(SlugifyScriptContributor)"/>
+        <abp-script src="/Pages/CmsKit/BlogPosts/create.js"/>
+    </abp-script-bundle>
+}
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style type="typeof(TuiEditorStyleContributor)"/>
+        <abp-style src="/Pages/CmsKit/BlogPosts/create.css"/>
+    </abp-style-bundle>
+}
+
+@section content_toolbar {
+    @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(CreateModel).FullName })
+}
+
+<abp-card>
+    <abp-card-header title="@L["New"].Value"></abp-card-header>
+    <abp-card-body>
+        <div class="form-group">
+            <label>@L["CoverImage"]</label>
+            <input type="file" id="BlogPostCoverImage" class="form-control" />
+        </div>
+
+        <abp-dynamic-form abp-model="ViewModel" asp-page="/CmsKit/BlogPosts/Create" id="form-blog-post-create">
+            <div class="form-group">
+                <label asp-for="ViewModel.BlogId"></label>
+                <select asp-for="ViewModel.BlogId" id="BlogSelectionSelect" class="form-control"></select>
+                <span asp-validation-for="ViewModel.BlogId"></span>
+            </div>
+
+            <abp-input asp-for="ViewModel.Title" />
+
+            <abp-input asp-for="ViewModel.Slug" />
+            
+            <abp-form-content />
+
+            <div class="content-editor cms-kit-editor" 
+                 id="ContentEditor" 
+                 data-input-id="@Html.IdFor(x => x.ViewModel.Content)"
+                 data-language="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
+            </div>
+        </abp-dynamic-form>
+
+        <div id="blog-post-tags-wrapper">
+
+            <hr />
+
+            @await Component.InvokeAsync(typeof(TagEditorViewComponent), new
+            {
+                entityType = BlogPostConsts.EntityType,
+                displaySubmitButton = false
+            })
+        </div>
+
+    </abp-card-body>
+    <abp-card-footer>
+        <abp-button button-type="Primary" type="submit" text="@L["Submit"].Value" id="button-blog-post-create" />
+    </abp-card-footer>
+</abp-card>

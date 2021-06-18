@@ -1,14 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 {
     public class AbpAccordionTagHelperService : AbpTagHelperService<AbpAccordionTagHelper>
     {
+        protected IHtmlGenerator HtmlGenerator { get; }
+
+        public AbpAccordionTagHelperService(IHtmlGenerator htmlGenerator)
+        {
+            HtmlGenerator = htmlGenerator;
+        }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             SetRandomIdIfNotProvided();
@@ -17,31 +25,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Attributes.AddClass("accordion");
             output.Attributes.Add("id",TagHelper.Id);
-            
+
             var items = InitilizeFormGroupContentsContext(context, output);
 
             await output.GetChildContentAsync();
 
-            var content = GetContent(items);
-
-            output.Content.SetHtmlContent(content);
+            SetContent(context, output, items);
         }
 
-        protected virtual string GetContent(List<string> items)
+        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, List<string> items)
         {
-            var html = new StringBuilder("");
             foreach (var item in items)
             {
-                var content = item.Replace(AbpAccordionParentIdPlaceholder, TagHelper.Id);
+                var content = item.Replace(AbpAccordionParentIdPlaceholder, HtmlGenerator.Encode(TagHelper.Id));
 
-                html.AppendLine(
-                    "<div class=\"card\">" + Environment.NewLine + 
-                        content
-                    + "</div>" + Environment.NewLine
-                );
+                var wrapper = new TagBuilder("div");
+                wrapper.AddCssClass("card");
+                wrapper.InnerHtml.AppendHtml(content);
+
+                output.Content.AppendHtml(wrapper);
             }
-
-            return html.ToString();
         }
 
         protected virtual List<string> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)

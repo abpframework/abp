@@ -1,9 +1,9 @@
-import { ConfigState, SubscriptionService, MultiTenancyService } from '@abp/ng.core';
-import { Component, Input, OnInit, TemplateRef } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { ConfigStateService, MultiTenancyService, SubscriptionService } from '@abp/ng.core';
+import { Component, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { eAccountComponents } from '../../enums/components';
-import { Account } from '../../models/account';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'abp-auth-wrapper',
@@ -11,35 +11,34 @@ import { Account } from '../../models/account';
   exportAs: 'abpAuthWrapper',
   providers: [SubscriptionService],
 })
-export class AuthWrapperComponent
-  implements Account.AuthWrapperComponentInputs, Account.AuthWrapperComponentOutputs, OnInit {
-  @Input()
-  readonly mainContentRef: TemplateRef<any>;
+export class AuthWrapperComponent {
+  isMultiTenancyEnabled$ = this.configState.getDeep$('multiTenancy.isEnabled');
 
-  @Input()
-  readonly cancelContentRef: TemplateRef<any>;
-
-  @Select(ConfigState.getDeep('multiTenancy.isEnabled'))
-  isMultiTenancyEnabled$: Observable<boolean>;
-
-  enableLocalLogin = true;
+  get enableLocalLogin$(): Observable<boolean> {
+    return this.configState
+      .getSetting$('Abp.Account.EnableLocalLogin')
+      .pipe(map(value => value?.toLowerCase() !== 'false'));
+  }
 
   tenantBoxKey = eAccountComponents.TenantBox;
+  route: ActivatedRoute;
+
+  private _tenantBoxVisible = true;
+
+  private setTenantBoxVisibility = () => {
+    this._tenantBoxVisible = this.route.snapshot.firstChild.data.tenantBoxVisible ?? true;
+  };
+
+  get isTenantBoxVisible() {
+    return this._tenantBoxVisible && this.multiTenancy.isTenantBoxVisible;
+  }
 
   constructor(
     public readonly multiTenancy: MultiTenancyService,
-    private store: Store,
-    private subscription: SubscriptionService,
-  ) {}
-
-  ngOnInit() {
-    this.subscription.addOne(
-      this.store.select(ConfigState.getSetting('Abp.Account.EnableLocalLogin')),
-      value => {
-        if (value) {
-          this.enableLocalLogin = value.toLowerCase() !== 'false';
-        }
-      },
-    );
+    private configState: ConfigStateService,
+    injector: Injector,
+  ) {
+    this.route = injector.get(ActivatedRoute);
+    this.setTenantBoxVisibility();
   }
 }

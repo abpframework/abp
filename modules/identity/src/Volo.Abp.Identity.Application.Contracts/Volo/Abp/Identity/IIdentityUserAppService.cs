@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity
 
         Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
 
-        Task<IdentityUserDto> FindByUsernameAsync(string username);
+        Task<IdentityUserDto> FindByUsernameAsync(string userName);
 
         Task<IdentityUserDto> FindByEmailAsync(string email);
     }

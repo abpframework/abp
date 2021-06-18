@@ -1,0 +1,25 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "InternalServerErrorMessage": "對不起,在處理你的請求期間,產生了一個伺服器內部錯誤!",
+    "ValidationErrorMessage": "你的請求無效!",
+    "ValidationNarrativeErrorMessageTitle": "驗證時發現以下錯誤.",
+    "DefaultErrorMessage": "發生錯誤!",
+    "DefaultErrorMessageDetail": "伺服器未發送錯誤的詳細信息.",
+    "DefaultErrorMessage401": "未通過身份驗證!",
+    "DefaultErrorMessage401Detail": "你需要進行身份認證(登入)後再執行此操作.",
+    "DefaultErrorMessage403": "你沒有權限!",
+    "DefaultErrorMessage403Detail": "你不能執行此操作!",
+    "DefaultErrorMessage404": "未找到資源!",
+    "DefaultErrorMessage404Detail": "未在服務中找到請求的資源!",
+    "EntityNotFoundErrorMessage": "實體 {0} 不存在,id = {1}!",
+    "Error": "錯誤",
+    "UnhandledException": "未處理的異常!",
+    "401Message": "未授權",
+    "403Message": "禁止訪問",
+    "404Message": "網頁未找到",
+    "500Message": "內部伺服器錯誤",
+    "403MessageDetail": "你不被授權執行此操作",
+    "404MessageDetail": "對不起，地址是空的"
+  }
+}

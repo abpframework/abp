@@ -1,8 +1,8 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
-import { AbstractNgModelComponent } from '../abstracts';
 import { timer } from 'rxjs';
+import { AbstractNgModelComponent } from '../abstracts';
 
 @Component({
   selector: 'abp-test',
@@ -10,8 +10,7 @@ import { timer } from 'rxjs';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      // tslint:disable-next-line: no-forward-ref
-      useExisting: forwardRef(() => TestComponent),
+      useExisting: TestComponent,
       multi: true,
     },
   ],

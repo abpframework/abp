@@ -1,0 +1,47 @@
+# ABP Framework 3.2 Final Has Been Released
+
+ABP Framework & ABP Commercial 3.2 have been released today.
+
+Since all the new features are already explained in details with the [3.2 RC Announcement Post](https://blog.abp.io/abp/ABP-Framework-ABP-Commercial-3.2-RC-With-The-New-Blazor-UI), I will not repeat all the details again. Please read [the RC post](https://blog.abp.io/abp/ABP-Framework-ABP-Commercial-3.2-RC-With-The-New-Blazor-UI) for **new feature and changes** you may need to do for your solution while upgrading to the version 3.2.
+
+## Creating New Solutions
+
+You can create a new solution with the ABP Framework version 3.2 by either using the `abp new` command or using the **direct download** tab on the [get started page](https://abp.io/get-started).
+
+> See the [getting started document](https://docs.abp.io/en/abp/latest/Getting-Started) for details.
+
+## How to Upgrade an Existing Solution
+
+### Install/Update the ABP CLI
+
+First of all, install the ABP CLI or upgrade to the latest version.
+
+If you haven't installed yet:
+
+````bash
+dotnet tool install -g Volo.Abp.Cli
+````
+
+To update an existing installation:
+
+```bash
+dotnet tool update -g Volo.Abp.Cli
+```
+
+### ABP UPDATE Command
+
+[ABP CLI](https://docs.abp.io/en/abp/latest/CLI) provides a handy command to update all the ABP related NuGet and NPM packages in your solution with a single command:
+
+````bash
+abp update
+````
+
+After the update command, check [the RC blog post](https://blog.abp.io/abp/ABP-Framework-ABP-Commercial-3.2-RC-With-The-New-Blazor-UI) to learn if you need to make any changes in your solution.
+
+> You may want to see the new [upgrading document](https://docs.abp.io/en/abp/latest/Upgrading).
+
+## About the Next Versions
+
+The next two versions (3.3 & 4.0) will be mostly related to completing the Blazor UI features and upgrading the ABP Framework & ecosystem to the .NET 5.0.
+
+The ultimate goal is to complete the version 4.0 with a stable Blazor UI with the fundamental features implemented and publish it just after the Microsoft lunches .NET 5 in this November.

@@ -1,0 +1,10 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Volo.Authorization:010001": "Yetkilendirme başarısız! Belirtilen izin sağlanmamış.",
+    "Volo.Authorization:010002": "Yetkilendirme başarısız! Bu izin sağlanmamış: {PolicyName}",
+    "Volo.Authorization:010003": "Yetkilendirme başarısız! Bu izin, bu kaynak için sağlanmamış: {ResourceName}",
+    "Volo.Authorization:010004": "Yetkilendirme başarısız! Bu kaynak belirtilen gerekliliği sağlamamış: {ResourceName}",
+    "Volo.Authorization:010005": "Yetkilendirme başarısız! Bu kaynak belirtilen gereklilikleri sağlamamış: {ResourceName}"
+  }
+}

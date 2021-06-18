@@ -1,7 +1,7 @@
-import { ABP, ListService, PagedResultDto } from '@abp/ng.core';
+import { ListService, PagedResultDto } from '@abp/ng.core';
 import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -14,8 +14,14 @@ import {
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
 import { GetTenantsInput, TenantDto } from '../../proxy/models';
-import { TenantManagementService } from '../../services/tenant-management.service';
+import { TenantService } from '../../proxy/tenant.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
+import {
+  EXTENSIONS_IDENTIFIER,
+  FormPropData,
+  generateFormFromProps,
+} from '@abp/ng.theme.shared/extensions';
+import { eTenantManagementComponents } from '../../enums/components';
 
 interface SelectedModalContent {
   type: 'saveConnStr' | 'saveTenant';
@@ -26,7 +32,13 @@ interface SelectedModalContent {
 @Component({
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
-  providers: [ListService],
+  providers: [
+    ListService,
+    {
+      provide: EXTENSIONS_IDENTIFIER,
+      useValue: eTenantManagementComponents.Tenants,
+    },
+  ],
 })
 export class TenantsComponent implements OnInit {
   @Select(TenantManagementState.get)
@@ -72,9 +84,6 @@ export class TenantsComponent implements OnInit {
   @ViewChild('tenantModalTemplate')
   tenantModalTemplate: TemplateRef<any>;
 
-  @ViewChild('connectionStringModalTemplate')
-  connectionStringModalTemplate: TemplateRef<any>;
-
   get isDisabledSaveButton(): boolean {
     if (!this.selectedModalContent) return false;
 
@@ -101,8 +110,9 @@ export class TenantsComponent implements OnInit {
 
   constructor(
     public readonly list: ListService<GetTenantsInput>,
+    private injector: Injector,
     private confirmationService: ConfirmationService,
-    private tenantService: TenantManagementService,
+    private tenantService: TenantService,
     private fb: FormBuilder,
     private store: Store,
   ) {}
@@ -112,18 +122,8 @@ export class TenantsComponent implements OnInit {
   }
 
   private createTenantForm() {
-    const tenantForm = this.fb.group({
-      name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
-      adminEmailAddress: [null, [Validators.required, Validators.maxLength(256), Validators.email]],
-      adminPassword: [null, [Validators.required, ...getPasswordValidators(this.store)]],
-    });
-
-    if (this.hasSelectedTenant) {
-      tenantForm.removeControl('adminEmailAddress');
-      tenantForm.removeControl('adminPassword');
-    }
-
-    this.tenantForm = tenantForm;
+    const data = new FormPropData(this.injector, this.selected);
+    this.tenantForm = generateFormFromProps(data);
   }
 
   private createDefaultConnectionStringForm() {
@@ -141,28 +141,6 @@ export class TenantsComponent implements OnInit {
     };
 
     this.isModalVisible = true;
-  }
-
-  onEditConnectionString(id: string) {
-    this.store
-      .dispatch(new GetTenantById(id))
-      .pipe(
-        pluck('TenantManagementState', 'selectedItem'),
-        switchMap(selected => {
-          this.selected = selected;
-          return this.tenantService.getDefaultConnectionString(id);
-        }),
-      )
-      .subscribe(fetchedConnectionString => {
-        this._useSharedDatabase = fetchedConnectionString ? false : true;
-        this.defaultConnectionString = fetchedConnectionString ? fetchedConnectionString : '';
-        this.createDefaultConnectionStringForm();
-        this.openModal(
-          'AbpTenantManagement::ConnectionStrings',
-          this.connectionStringModalTemplate,
-          'saveConnStr',
-        );
-      });
   }
 
   addTenant() {
@@ -205,10 +183,7 @@ export class TenantsComponent implements OnInit {
         });
     } else {
       this.tenantService
-        .updateDefaultConnectionString({
-          id: this.selected.id,
-          defaultConnectionString: this.connectionString,
-        })
+        .updateDefaultConnectionString(this.selected.id, this.connectionString)
         .pipe(
           take(1),
           finalize(() => (this.modalBusy = false)),

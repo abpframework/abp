@@ -1,0 +1,106 @@
+﻿@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.MultiTenancy
+@using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
+@using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetScripts
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles
+@using Volo.Abp.MultiTenancy
+@using Volo.Abp.Localization
+@using Volo.Abp.Ui.Branding
+@inject IBrandingProvider BrandingProvider
+@inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions
+@inject ICurrentTenant CurrentTenant
+@inject IStringLocalizer<AbpUiMultiTenancyResource> MultiTenancyStringLocalizer
+@inject ITenantResolveResultAccessor TenantResolveResultAccessor
+
+@{
+    Layout = null;
+    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
+}
+
+<!DOCTYPE html>
+
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
+<head>
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Account)
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
+
+    @if (ViewBag.Description != null)
+    {
+        <meta name="description" content="@(ViewBag.Description as string)" />
+    }
+    <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
+
+    @await RenderSectionAsync("styles", false)
+
+    @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
+
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
+</head>
+<body class="abp-account-layout bg-light @rtl">
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
+
+    @(await Component.InvokeAsync<MainNavbarViewComponent>())
+
+    <div class="@containerClass">
+        <abp-row>
+            <abp-column class="col mx-auto" style="max-width: 440px">
+                @if (MultiTenancyOptions.Value.IsEnabled &&
+                  (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
+                {
+                    <div class="card shadow-sm rounded mb-3">
+                        <div class="card-body px-5">
+                            <div class="row">
+                                <div class="col">
+                                    <span style="font-size: .8em;" class="text-uppercase text-muted">@MultiTenancyStringLocalizer["Tenant"]</span><br />
+                                    <h6 class="m-0 d-inline-block">
+                                        @if (CurrentTenant.Id == null)
+                                        {
+                                            <span>
+                                                @MultiTenancyStringLocalizer["NotSelected"]
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <strong>@(CurrentTenant.Name ?? CurrentTenant.Id.Value.ToString())</strong>
+                                        }
+                                    </h6>
+                                </div>
+                                <div class="col-auto">
+                                    <a id="AbpTenantSwitchLink" href="javascript:;" class="btn btn-sm mt-3 btn-outline-primary">@MultiTenancyStringLocalizer["Switch"]</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @(await Component.InvokeAsync<PageAlertsViewComponent>())
+                @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Account)
+                @RenderBody()
+                @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Account)
+            </abp-column>
+        </abp-row>
+    </div>
+
+    <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
+
+    <script src="~/Abp/ApplicationConfigurationScript"></script>
+    <script src="~/Abp/ServiceProxyScript"></script>
+
+    @await RenderSectionAsync("scripts", false)
+
+    @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
+
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.Last, StandardLayouts.Account)
+</body>
+</html>

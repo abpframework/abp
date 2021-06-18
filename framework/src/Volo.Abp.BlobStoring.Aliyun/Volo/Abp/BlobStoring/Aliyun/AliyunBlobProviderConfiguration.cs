@@ -81,8 +81,8 @@ namespace Volo.Abp.BlobStoring.Aliyun
         /// </summary>
         public string ContainerName
         {
-            get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.ContainerName);
-            set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.ContainerName, Check.NotNullOrWhiteSpace(value, nameof(value)));
+            get => _containerConfiguration.GetConfigurationOrDefault<string>(AliyunBlobProviderConfigurationNames.ContainerName);
+            set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.ContainerName, value);
         }
 
         /// <summary>

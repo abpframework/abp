@@ -9,7 +9,13 @@ namespace Volo.Abp.IdentityServer.ApiResources
     public interface IApiResourceRepository : IBasicRepository<ApiResource, Guid>
     {
         Task<ApiResource> FindByNameAsync(
-            string name,
+            string apiResourceName,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<List<ApiResource>> FindByNameAsync(
+            string[] apiResourceNames,
             bool includeDetails = true,
             CancellationToken cancellationToken = default
         );
@@ -29,8 +35,8 @@ namespace Volo.Abp.IdentityServer.ApiResources
             CancellationToken cancellationToken = default
         );
 
-        Task<List<ApiResource>> GetListAsync(
-            bool includeDetails = false,
+        Task<long> GetCountAsync(
+            string filter = null,
             CancellationToken cancellationToken = default
         );
 

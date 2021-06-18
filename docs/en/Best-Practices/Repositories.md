@@ -42,24 +42,6 @@ Task<IdentityUser> FindByNormalizedUserNameAsync(
 );
 ````
 
-* **Do** create a **synchronous extension** method for each asynchronous repository method. Example:
-
-````C#
-public static class IdentityUserRepositoryExtensions
-{
-    public static IdentityUser FindByNormalizedUserName(
-        this IIdentityUserRepository repository,
-        [NotNull] string normalizedUserName)
-    {
-        return AsyncHelper.RunSync(
-            () => repository.FindByNormalizedUserNameAsync(normalizedUserName)
-        );
-    }
-}
-````
-
-This will allow synchronous code to use the repository methods easier.
-
 * **Do** add an optional `bool includeDetails = true` parameter (default value is `true`) for every repository method which returns a **single entity**. Example:
 
 ````C#

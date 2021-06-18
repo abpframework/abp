@@ -1,18 +1,23 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {
     public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
     {
+        [Obsolete("This will be removed in next versions.")]
+        public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
+
         public IUnitOfWork Current => GetCurrentUnitOfWork();
 
-        private readonly IHybridServiceScopeFactory _serviceScopeFactory;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IAmbientUnitOfWork _ambientUnitOfWork;
 
         public UnitOfWorkManager(
-            IAmbientUnitOfWork ambientUnitOfWork, 
-            IHybridServiceScopeFactory serviceScopeFactory)
+            IAmbientUnitOfWork ambientUnitOfWork,
+            IServiceScopeFactory serviceScopeFactory)
         {
             _ambientUnitOfWork = ambientUnitOfWork;
             _serviceScopeFactory = serviceScopeFactory;
@@ -38,7 +43,7 @@ namespace Volo.Abp.Uow
         {
             Check.NotNull(reservationName, nameof(reservationName));
 
-            if (!requiresNew && 
+            if (!requiresNew &&
                 _ambientUnitOfWork.UnitOfWork != null &&
                 _ambientUnitOfWork.UnitOfWork.IsReservedFor(reservationName))
             {

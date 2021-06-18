@@ -87,7 +87,6 @@ The following is the list of supported scopes:
 - **core**
 - **theme-shared**
 - **theme-basic**
-- **account**
 - **identity**
 - **tenant-management**
 - **feature-management**

@@ -1,10 +1,10 @@
-import { ProfileState, UpdateProfile } from '@abp/ng.core';
+import { ProfileService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
 import { finalize } from 'rxjs/operators';
 import { Account } from '../../models/account';
+import { ManageProfileStateService } from '../../services/manage-profile.state.service';
 
 const { maxLength, required, email } = Validators;
 
@@ -24,8 +24,9 @@ export class PersonalSettingsComponent
 
   constructor(
     private fb: FormBuilder,
-    private store: Store,
     private toasterService: ToasterService,
+    private profileService: ProfileService,
+    private manageProfileState: ManageProfileStateService,
   ) {}
 
   ngOnInit() {
@@ -33,8 +34,7 @@ export class PersonalSettingsComponent
   }
 
   buildForm() {
-    const profile = this.store.selectSnapshot(ProfileState.getProfile);
-
+    const profile = this.manageProfileState.getProfile();
     this.form = this.fb.group({
       userName: [profile.userName, [required, maxLength(256)]],
       email: [profile.email, [required, email, maxLength(256)]],
@@ -47,10 +47,11 @@ export class PersonalSettingsComponent
   submit() {
     if (this.form.invalid) return;
     this.inProgress = true;
-    this.store
-      .dispatch(new UpdateProfile(this.form.value))
+    this.profileService
+      .update(this.form.value)
       .pipe(finalize(() => (this.inProgress = false)))
-      .subscribe(() => {
+      .subscribe(profile => {
+        this.manageProfileState.setProfile(profile);
         this.toasterService.success('AbpAccount::PersonalSettingsSaved', 'Success', { life: 5000 });
       });
   }

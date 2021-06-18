@@ -586,7 +586,7 @@ First step is to change the connection string section inside all the `appsetting
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True"
 }
 ````
 
@@ -594,10 +594,10 @@ Change it as shown below:
 
 ````json
 "ConnectionStrings": {
-  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True",
+  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True",
+  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True",
+  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True"
 }
 ````
 
@@ -880,6 +880,67 @@ We had a reference to the `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSec
 #### Run the Database Migrator!
 
 You can run the `.DbMigrator` application to migrate & seed the databases. To test, you can delete both databases and run the `.DbMigrator` application again to see if it creates both of the databases.
+
+## Separating Host & Tenant Database Schemas
+
+In a multi-tenant solution, you may want to separate your database schemas, so host-related tables don't locate in the tenant databases when tenants have separate databases.
+
+Some pre-built ABP modules are related only with the host side, like the [Tenant Management](Modules/Tenant-Management.md) module. So, in the tenant `DbContext` class you don't call `modelBuilder.ConfigureTenantManagement()` and that's all. 
+
+However, some modules, like the [Identity](Modules/Identity.md) module, is both used in host and tenant sides. It stores tenant users in the tenant database and host users in the host database. However, it stores some entities, like `IdentityClaimType`, only in the host side. In this case, you don't want to add these tables in the tenant database, even if they are not used and will always be empty.
+
+ABP provides a simple way to set the multi-tenancy side for a `DbContext`, so the modules can check it and decide to map tables to the database, or not.
+
+````csharp
+public class MyTenantDbContext : AbpDbContext<MyTenantDbContext>
+{
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.SetMultiTenancySide(MultiTenancySides.Tenant);
+        
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ConfigureIdentity();
+        modelBuilder.ConfigureFeatureManagement();
+        modelBuilder.ConfigureAuditLogging();
+    }
+}
+````
+
+The first line in the `OnModelCreating` sets multi-tenancy side to `Tenant`. For this example, Feature management tables are not created (because all the tables are host-specific), so calling `modelBuilder.ConfigureFeatureManagement()` has no effect. Also, `ConfigureIdentity()` call respects to the multi-tenancy side and doesn't create host-specific tables for this database.
+
+`SetMultiTenancySide` can get the following values:
+
+* `MultiTenancySides.Both` (**default value**): This `DbContext` (and the related database) is shared by host and tenant.
+* `MultiTenancySides.Host`: This `DbContext` (and the related database) is used only by the host side.
+* `MultiTenancySides.Tenant`: This `DbContext` (and the related database) is only for tenants.
+
+If you create a re-usable application module or want to check that value in your application code, you can use `modelBuilder.GetMultiTenancySide()` to check the current side.
+
+````csharp
+var side = modelBuilder.GetMultiTenancySide();
+if (!side.HasFlag(MultiTenancySides.Host))
+{
+    ...
+}
+````
+
+Or practically you can use one of the shortcut extension methods:
+
+````csharp
+if (modelBuilder.IsTenantOnlyDatabase())
+{
+    ...
+}
+````
+
+There are four methods to check the current side:
+
+* `IsHostDatabase()`: Returns `true` if you should create host-related tables. It is equivalent of checking `modelBuilder.GetMultiTenancySide().HasFlag(MultiTenancySides.Host)`.
+* `IsHostOnlyDatabase()`: Returns `true` if you should only create host-related tables, but should not create tenant-related tables. It is equivalent of checking `modelBuilder.GetMultiTenancySide() == MultiTenancySides.Host`.
+* `IsTenantDatabase()`: Returns `true` if you should create tenant-related tables. It is equivalent of checking `modelBuilder.GetMultiTenancySide().HasFlag(MultiTenancySides.Tenant)`.
+* `IsTenantOnlyDatabase()`: Returns `true` if you should only create tenant-related tables, but should not create host-related tables. It is equivalent of checking `modelBuilder.GetMultiTenancySide() == MultiTenancySides.Tenant`.
+
+All pre-built ABP [modules](Modules/Index.md) checks this value in their `modelBuilder.ConfigureXXX()` methods.
 
 ## Conclusion
 

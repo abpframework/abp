@@ -51,14 +51,17 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected IAuthenticationSchemeProvider SchemeProvider { get; }
         protected AbpAccountOptions AccountOptions { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public bool ShowCancelButton { get; set; }
 
         public LoginModel(
             IAuthenticationSchemeProvider schemeProvider,
-            IOptions<AbpAccountOptions> accountOptions)
+            IOptions<AbpAccountOptions> accountOptions,
+            IOptions<IdentityOptions> identityOptions)
         {
             SchemeProvider = schemeProvider;
+            IdentityOptions = identityOptions;
             AccountOptions = accountOptions.Value;
         }
 
@@ -90,6 +93,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
+
+            await IdentityOptions.SetAsync();
 
             var result = await SignInManager.PasswordSignInAsync(
                 LoginInput.UserNameOrEmailAddress,
@@ -181,6 +186,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return RedirectToPage("./Login");
             }
 
+            await IdentityOptions.SetAsync();
+
             var loginInfo = await SignInManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
@@ -206,7 +213,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (result.IsLockedOut)
             {
+                Logger.LogWarning($"External login callback error: user is locked out!");
                 throw new UserFriendlyException("Cannot proceed because user is locked out!");
+            }
+            
+            if (result.IsNotAllowed)
+            {
+                Logger.LogWarning($"External login callback error: user is not allowed!");
+                throw new UserFriendlyException("Cannot proceed because user is not allowed!");
             }
 
             if (result.Succeeded)
@@ -254,6 +268,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
         {
+            await IdentityOptions.SetAsync();
+
             var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
 
             var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);

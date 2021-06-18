@@ -1,12 +1,12 @@
 <div id="AbpContentToolbar"></div>
 
-<div class="card border-0 shadow-sm min-h-400" [abpLoading]="!isProfileLoaded">
+<div class="card border-0 shadow-sm min-h-400" [abpLoading]="!(profile$ | async)">
   <div class="card-body">
     <div class="row">
       <div class="col-12 col-md-3">
         <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
           <li
-            *ngIf="!hideChangePasswordTab && isProfileLoaded"
+            *ngIf="!hideChangePasswordTab && (profile$ | async)"
             class="nav-item"
             (click)="selectedTab = 0"
           >
@@ -29,7 +29,7 @@
           </li>
         </ul>
       </div>
-      <div *ngIf="isProfileLoaded" class="col-12 col-md-9">
+      <div *ngIf="profile$ | async" class="col-12 col-md-9">
         <div class="tab-content" *ngIf="selectedTab === 0" [@fadeIn]>
           <div class="tab-pane active" role="tabpanel">
             <h4>
@@ -37,7 +37,9 @@
               <hr />
             </h4>
             <abp-change-password-form
-              *abpReplaceableTemplate="{ componentKey: changePasswordKey }"
+              *abpReplaceableTemplate="{
+                componentKey: changePasswordKey
+              }"
             ></abp-change-password-form>
           </div>
         </div>
@@ -48,7 +50,9 @@
               <hr />
             </h4>
             <abp-personal-settings-form
-              *abpReplaceableTemplate="{ componentKey: personalSettingsKey }"
+              *abpReplaceableTemplate="{
+                componentKey: personalSettingsKey
+              }"
             ></abp-personal-settings-form>
           </div>
         </div>

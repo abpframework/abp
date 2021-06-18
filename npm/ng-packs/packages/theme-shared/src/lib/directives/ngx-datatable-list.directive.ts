@@ -2,14 +2,21 @@ import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   ChangeDetectorRef,
   Directive,
+  Inject,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
+  Optional,
   SimpleChanges,
 } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
+import {
+  defaultNgxDatatableMessages,
+  NgxDatatableMessages,
+  NGX_DATATABLE_MESSAGES,
+} from '../tokens/ngx-datatable-messages.token';
 
 @Directive({
   // tslint:disable-next-line
@@ -26,6 +33,7 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
     private table: DatatableComponent,
     private cdRef: ChangeDetectorRef,
     private localizationService: LocalizationService,
+    @Optional() @Inject(NGX_DATATABLE_MESSAGES) private ngxDatatableMessages: NgxDatatableMessages,
   ) {
     this.setInitialValues();
   }
@@ -33,14 +41,14 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private setInitialValues() {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
+
+    const { emptyMessage, selectedMessage, totalMessage } =
+      this.ngxDatatableMessages || defaultNgxDatatableMessages;
+
     this.table.messages = {
-      emptyMessage: this.localizationService.localizeSync(
-        'AbpUi',
-        'NoDataAvailableInDatatable',
-        'No data available',
-      ),
-      totalMessage: this.localizationService.localizeSync('AbpUi', 'Total', 'total'),
-      selectedMessage: this.localizationService.localizeSync('AbpUi', 'Selected', 'selected'),
+      emptyMessage: this.localizationService.instant(emptyMessage),
+      totalMessage: this.localizationService.instant(totalMessage),
+      selectedMessage: this.localizationService.instant(selectedMessage),
     };
   }
 
@@ -68,22 +76,22 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   private subscribeToQuery() {
-    this.querySubscription.add(
-      this.list.query$.subscribe(() => {
-        if (this.list.page !== this.table.offset) this.table.offset = this.list.page;
-      }),
-    );
+    if (!this.querySubscription.closed) this.querySubscription.unsubscribe();
+
+    this.querySubscription = this.list.query$.subscribe(() => {
+      const offset = this.list.page;
+      if (this.table.offset !== offset) this.table.offset = offset;
+    });
   }
 
   ngOnChanges({ list }: SimpleChanges) {
+    this.subscribeToQuery();
+
     if (!list.firstChange) return;
 
     const { maxResultCount, page } = list.currentValue;
     this.table.limit = maxResultCount;
     this.table.offset = page;
-
-    this.querySubscription.unsubscribe();
-    this.subscribeToQuery();
   }
 
   ngOnDestroy() {

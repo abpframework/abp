@@ -38,31 +38,37 @@ namespace Acme.BookStore
     {
         private readonly IRepository<Book, Guid> _bookRepository;
         private readonly IGuidGenerator _guidGenerator;
+        private readonly ICurrentTenant _currentTenant;
 
         public BookStoreDataSeedContributor(
             IRepository<Book, Guid> bookRepository,
-            IGuidGenerator guidGenerator)
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant)
         {
             _bookRepository = bookRepository;
             _guidGenerator = guidGenerator;
+            _currentTenant = currentTenant;
         }
         
         public async Task SeedAsync(DataSeedContext context)
         {
-            if (await _bookRepository.GetCountAsync() > 0)
+            using (_currentTenant.Change(context?.TenantId))
             {
-                return;
-            }
-            
-            var book = new Book(
-                id: _guidGenerator.Create(),
-                name: "The Hitchhiker's Guide to the Galaxy",
-                type: BookType.ScienceFiction,
-                publishDate: new DateTime(1979, 10, 12),
-                price: 42
-            );
+                if (await _bookRepository.GetCountAsync() > 0)
+                {
+                    return;
+                }
 
-            await _bookRepository.InsertAsync(book);
+                var book = new Book(
+                    id: _guidGenerator.Create(),
+                    name: "The Hitchhiker's Guide to the Galaxy",
+                    type: BookType.ScienceFiction,
+                    publishDate: new DateTime(1979, 10, 12),
+                    price: 42
+                );
+
+                await _bookRepository.InsertAsync(book);
+            }
         }
     }
 }

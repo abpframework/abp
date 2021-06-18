@@ -10,7 +10,7 @@ The new ABP Angular UI is based on Angular 10 and TypeScript 3.9, and we have dr
 
 Open a terminal at your root folder and run the following command:
 
-```sh
+```shell
 yarn ng update @angular/cli @angular/core --force
 ```
 
@@ -26,7 +26,7 @@ On the other hand, it would be better if you check which packages to update firs
 
 When Angular reports the packages above, your command would look like this:
 
-```sh
+```shell
 yarn ng update @angular/cli @angular/core ng-zorro-antd --force
 ```
 
@@ -469,9 +469,4 @@ Some interfaces have long been marked as deprecated and now they are removed.
 #### What to Do When Migrating?
 
 - Please check if you are still using [anything listed in this issue](https://github.com/abpframework/abp/issues/4281)
-
-
-## What's Next?
-
-* [Environment](./Environment.md)
 

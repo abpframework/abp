@@ -232,7 +232,7 @@ namespace Volo.Abp.IdentityModel
         {
             foreach (var pair in configuration.Where(p => p.Key.StartsWith("[o]", StringComparison.OrdinalIgnoreCase)))
             {
-                request.Parameters[pair.Key] = pair.Value;
+                request.Parameters.Add(pair);
             }
 
             return Task.CompletedTask;

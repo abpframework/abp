@@ -1,6 +1,6 @@
 # ABP Framework & ABP Commercial 3.2 RC With The New Blazor UI
 
-We are extremely excited today to release the [ABP Framework](https://abp.io/) (and the [ABP Commercial](https://commercial.abp.io/), as always) version `3.2.0-rc.1` (Release Candidate). This release includes an early preview version of the **Blazor UI** for the ABP.IO Platform.
+We are extremely excited today to release the [ABP Framework](https://abp.io/) Release Candidate (and the [ABP Commercial](https://commercial.abp.io/), as always). This release includes an early preview version of the **Blazor UI** for the ABP.IO Platform.
 
 ## The Blazor UI
 
@@ -36,7 +36,7 @@ We also have a good news: **[Mladen Macanović](https://github.com/stsrki)**, th
 
 ### The Tutorial
 
-We are currently in progress of updating the [web application development tutorial](https://docs.abp.io/en/abp/3.2/Tutorials/Part-1) for the Blazor UI. Follow the [@abpframework](https://twitter.com/abpframework) Twitter account to get informed once it's ready.
+We've **updated** the [web application development tutorial](https://docs.abp.io/en/abp/3.2/Tutorials/Part-1?UI=Blazor) for the **Blazor UI**. You can start to develop applications today! The **source code** of the BookStore application developed with this tutorial is [here](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore).
 
 ### Get started with the Blazor UI
 
@@ -44,12 +44,10 @@ If you want to try the Blazor UI today, follow the instructions below.
 
 #### Upgrade the ABP CLI
 
-> **Known issue**: When you upgrade the ABP CLI to `3.2.0-rc.1`, you won't be able to create new solutions with a stable version ([#5453](https://github.com/abpframework/abp/issues/5453)). Downgrade to `3.1.0` back after trying the preview version, if you want to create solutions with a stable version later.
-
 Install the latest [ABP CLI](https://docs.abp.io/en/abp/3.2/CLI) preview version:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 3.2.0-rc.1
+dotnet tool update Volo.Abp.Cli -g --version 3.2.0-rc.2
 ````
 
 #### Create a new Solution
@@ -69,10 +67,6 @@ Also specify the `-t app-pro` parameter if you are an ABP Commercial user.
 Open the generated solution using the latest Visual Studio 2019. You will see a solution structure like the picture below:
 
 ![visual-studio-solution-with-blazor](visual-studio-solution-with-blazor.png)
-
-> **A fix for the 3.2.0-rc.1**
->
-> There is a bug in the `3.2.0-rc.1` that prevents `HttpApi.Host` project run properly, when you try to login to the application. **Follow the steps explained in the [#5457](https://github.com/abpframework/abp/issues/5457) for the `HttpApi.Host` project** to fix it for your solution, before running it. It will be resolved with the `3.2.0-rc.2`.
 
 #### Run the Application
 
@@ -94,9 +88,37 @@ Beside the Blazor UI, there are a lot of issues have been closed with [the miles
 
 [MongoDB integration](https://docs.abp.io/en/abp/3.2/MongoDB) now supports multi-document transactions that comes with the MongoDB 4.x.
 
-> Transactions are disabled for automated integration tests coming with the application startup template, since the Mongo2Go library (we use in the test projects) has a problem with the transactions. We've sent a [Pull Request](https://github.com/Mongo2Go/Mongo2Go/pull/101) to fix it and will enable the transactions again when they merge & release it.
+We've **disabled transactions** for solutions use the MongoDB, inside the `YourProjectMongoDbModule.cs` file in the MongoDB project. If your MongoDB server **supports transactions**, you should manually enable it in this class:
+
+```csharp
+Configure<AbpUnitOfWorkDefaultOptions>(options =>
+{
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
+});
+```
+
+> Or you can delete this code since this is already the default behavior.
+
+#### Upgrade Notes
+
+If you are upgrading an existing solution and your MongoDB server doesn't support transactions, please disable it:
+
+```csharp
+Configure<AbpUnitOfWorkDefaultOptions>(options =>
+{
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+});
+```
+
+See the [Unit Of Work document](https://docs.abp.io/en/abp/3.2/Unit-Of-Work) to learn more about UOW and transactions.
+
+Also, add [this file](https://github.com/abpframework/abp/blob/rel-3.2/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.MongoDB/MongoDb/MongoDbMyProjectNameDbSchemaMigrator.cs) into your MongoDB project (remember to change `MongoDbMyProjectNameDbSchemaMigrator` and `IMyProjectNameDbSchemaMigrator` with your own project name).
+
+#### Integration Tests
+
+> Transactions are also **disabled for automated integration tests** coming with the application startup template, since the [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library (we use in the test projects) has a problem with the transactions. We've sent a [Pull Request](https://github.com/Mongo2Go/Mongo2Go/pull/101) to fix it and will enable the transactions again when they merge & release it.
 >
-> If you are upgrading an existing solution and using MongoDB, please disable transactions for the test projects by following the [Unit Of Work](https://docs.abp.io/en/abp/3.2/Unit-Of-Work) documentation.
+> If you are upgrading an existing solution and using MongoDB, please disable transactions for the test projects just as described above.
 
 ### Kafka Integration for the Distributed Event Bus
 
@@ -164,6 +186,12 @@ We will use this command to build the abp repository or a solution inside it. Ho
 And a lot of minor improvements and bug fixes. You can see [the milestone 3.2](https://github.com/abpframework/abp/milestone/39?closed=1) for all issues & PRs closed with this version.
 
 ## What's New with the ABP Commercial 3.2
+
+### Breaking Changes
+
+The new *profile picture management* feature uses the [BLOB storing](https://docs.abp.io/en/abp/3.2/Blob-Storing) system, so it needs a Storage Provider. The new **startup template comes with the [Database BLOB Provider](https://docs.abp.io/en/abp/3.2/Blob-Storing-Database) pre-installed**. You can change it if you want to use another BLOB provider (like Azure, AWS or a simple file system).
+
+**Existing solutions must configure a BLOB provider** after upgrading to the version 3.2. Follow the [BLOB Storing document](https://docs.abp.io/en/abp/3.2/Blob-Storing#blob-storage-providers) to configure the provider yourself.
 
 ### The Blazor UI
 

@@ -12,8 +12,6 @@ export interface MinAgeOptions {
 
 export function validateMinAge({ age = 18 }: MinAgeOptions = {}): ValidatorFn {
   return (control: AbstractControl): MinAgeError | null => {
-    if (control.pristine) return null;
-
     if (['', null, undefined].indexOf(control.value) > -1) return null;
 
     return isValidMinAge(control.value, age) ? null : { minAge: { age } };

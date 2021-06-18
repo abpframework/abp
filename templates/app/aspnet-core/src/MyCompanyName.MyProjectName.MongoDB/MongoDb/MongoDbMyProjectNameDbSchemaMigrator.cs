@@ -18,15 +18,15 @@ namespace MyCompanyName.MyProjectName.MongoDB
             _serviceProvider = serviceProvider;
         }
 
-        public Task MigrateAsync()
+        public async Task MigrateAsync()
         {
             var dbContexts = _serviceProvider.GetServices<IAbpMongoDbContext>();
-            var connectionStringResolver = _serviceProvider.GetService<IConnectionStringResolver>();
+            var connectionStringResolver = _serviceProvider.GetRequiredService<IConnectionStringResolver>();
 
             foreach (var dbContext in dbContexts)
             {
                 var connectionString =
-                    connectionStringResolver.Resolve(
+                    await connectionStringResolver.ResolveAsync(
                         ConnectionStringNameAttribute.GetConnStringName(dbContext.GetType()));
                 var mongoUrl = new MongoUrl(connectionString);
                 var databaseName = mongoUrl.DatabaseName;
@@ -39,8 +39,6 @@ namespace MyCompanyName.MyProjectName.MongoDB
 
                 (dbContext as AbpMongoDbContext)?.InitializeCollections(client.GetDatabase(databaseName));
             }
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -29,7 +29,7 @@ Configure<AbpBlobStoringOptions>(options =>
         {
             azure.ConnectionString = "your azure connection string";
             azure.ContainerName = "your azure container name";
-            azure.CreateContainerIfNotExists = false;
+            azure.CreateContainerIfNotExists = true;
         });
     });
 });
@@ -40,7 +40,7 @@ Configure<AbpBlobStoringOptions>(options =>
 ### 选项
 
 * **ConnectionString** (string): 连接字符串包括应用程序在运行时使用共享密钥授权访问Azure存储帐户中的数据所需的授权信息. 请参考[Azure文档](https://docs.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string).
-* **ContainerName** (string): 你可以在azure中指定容器名称. 如果没有指定它将使用 `BlogContainerName` 属性定义的BLOB容器的名称(请参阅[BLOB存储文档](Blob-Storing.md)). 请注意Azure有一些**命名容器的规则**,容器名称必须是有效的DNS名称,[符合以下命名规则](https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata#container-names):
+* **ContainerName** (string): 你可以在azure中指定容器名称. 如果没有指定它将使用 `BlobContainerName` 属性定义的BLOB容器的名称(请参阅[BLOB存储文档](Blob-Storing.md)). 请注意Azure有一些**命名容器的规则**,容器名称必须是有效的DNS名称,[符合以下命名规则](https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata#container-names):
     * 容器名称必须以字母或数字开头或结尾,并且只能包含字母,数字和破折号(-)字符.
     * 每个破折号(-)必须紧跟在字母或数字之后;容器名称中不允许使用连续的破折号.
     * 容器名称中的所有字母都必须**小写**.

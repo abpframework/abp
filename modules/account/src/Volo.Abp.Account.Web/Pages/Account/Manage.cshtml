@@ -13,6 +13,17 @@
     <abp-script-bundle name="@typeof(ManageModel).FullName"/>
 }
 
+@if (!Model.ReturnUrl.IsNullOrWhiteSpace())
+{
+    <abp-row class="mb-2">
+        <abp-column>
+            <a class="btn btn-primary" href="@Model.ReturnUrl">
+                <i class="fa fa-chevron-left mr-2"></i>@L["ReturnToApplication"]
+            </a>
+        </abp-column>
+    </abp-row>
+}
+
 <div id="ProfileManagementWrapper">
     <abp-card>
         <abp-card-body>

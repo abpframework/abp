@@ -1,0 +1,25 @@
+{
+    "culture": "hu",
+    "texts": {
+      "DisplayName:Abp.Mailing.DefaultFromAddress": "Alapértlemezett feladó címe",
+      "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Feladó alapértelmezett megjelenő neve",
+      "DisplayName:Abp.Mailing.Smtp.Host": "Kiszolgáló",
+      "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+      "DisplayName:Abp.Mailing.Smtp.UserName": "Felhasználónév",
+      "DisplayName:Abp.Mailing.Smtp.Password": "Jelszó",
+      "DisplayName:Abp.Mailing.Smtp.Domain": "Domain",
+      "DisplayName:Abp.Mailing.Smtp.EnableSsl": "SSL engedélyezése",
+      "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Használja az alapértelmezett hitelesítő adatokat",
+      "Description:Abp.Mailing.DefaultFromAddress": "Az alapértlemezett feladó címe",
+      "Description:Abp.Mailing.DefaultFromDisplayName": "A feladó alapértelmezett megjelenő neve",
+      "Description:Abp.Mailing.Smtp.Host": "Az SMTP kiszolgáló neve vagy IP címe.",
+      "Description:Abp.Mailing.Smtp.Port": "Az SMTP forgalomhoz használt port.",
+      "Description:Abp.Mailing.Smtp.UserName": "A hitelesítő adatokhoz társított felhasználói név..",
+      "Description:Abp.Mailing.Smtp.Password": "A hitelesítő adatokhoz társított felhasználói név jelszava.",
+      "Description:Abp.Mailing.Smtp.Domain": "A hitelesítő adatokat igazoló tartomány vagy számítógép neve.",
+      "Description:Abp.Mailing.Smtp.EnableSsl": "Engedélyezze, ha a levelező programja Secure Sockets Layer (SSL) protokollt használ a kapcsolat titkosításához.",
+      "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Alkalmazza, hogy a kérésekhez az alapértelmezett hitelesítést használja.",
+      "TextTemplate:StandardEmailTemplates.Layout": "Alapértelmezett e-mail elrendezési sablon",
+      "TextTemplate:StandardEmailTemplates.Message": "Egyszerű üzenet sablon az e-mailekhez"
+    }
+  }

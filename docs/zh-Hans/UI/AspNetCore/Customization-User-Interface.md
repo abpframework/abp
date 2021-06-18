@@ -36,7 +36,7 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
         {
         }
 
-        public override async Task<IActionResult> OnPostAsync()
+        public async override Task<IActionResult> OnPostAsync()
         {
             //TODO: Additional logic
             await base.OnPostAsync();
@@ -70,7 +70,7 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 
 在这种情况下;
 
-1. 像上面描述过的那术重写C#页面模型类,但不需要替换已存在的页面模型类.
+1. 像上面描述过的那样重写C#页面模型类,但不需要替换已存在的页面模型类.
 2. 像上面描述过的那样重写Razor页面,并且更改@model指向新的页面模型
 
 #### 示例
@@ -83,10 +83,10 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 public class MyLoginModel : LoginModel
 {
     public MyLoginModel(
-        IAuthenticationSchemeProvider schemeProvider, 
+        IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions
         ) : base(
-        schemeProvider, 
+        schemeProvider,
         accountOptions)
     {
 
@@ -133,7 +133,7 @@ public class MyLoginModel : LoginModel
 
 [基本主题](../../Themes/Basic.md) 为layout定义了一些视图组件. 例如上面带有红色矩形的突出显示区域称为 **Brand组件**, 你可能想添加自己的**自己的应用程序logo**来自定义此组件. 让我们来看看如何去做.
 
-首先创建你的logo并且放到你的web应用程序文件夹中,我们使用 `wwwroot/logos/bookstore-logo.png` 路径. 然后在 `Themes/Basic/Components/Brand` 文件夹下复制[Brand组件视图](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml). 结果应该是类似下面的图片:
+首先创建你的logo并且放到你的web应用程序文件夹中,我们使用 `wwwroot/logos/bookstore-logo.png` 路径. 然后在 `Themes/Basic/Components/Brand` 文件夹下复制[Brand组件视图](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml). 结果应该是类似下面的图片:
 
 ![bookstore-added-brand-files](../../images/bookstore-added-brand-files.png)
 
@@ -149,7 +149,7 @@ public class MyLoginModel : LoginModel
 
 ![bookstore-added-logo](../../images/bookstore-added-logo.png)
 
-如果你需要,你也可以仅使用依赖注入系统替换组件[背后的C#类代码](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs)
+如果你需要,你也可以仅使用依赖注入系统替换组件[背后的C#类代码](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs)
 
 ### 重写主题
 
@@ -444,7 +444,7 @@ Configure<AbpLayoutHookOptions>(options =>
 
 #### 布局位置
 
-你可以在[这里](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts)找到基本主题的布局文件. 你可以将它们作用构建自己的布局的参考,也可以在必要时覆盖它们.
+你可以在[这里](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts)找到基本主题的布局文件. 你可以将它们作用构建自己的布局的参考,也可以在必要时覆盖它们.
 
 #### ITheme
 

@@ -1,7 +1,3 @@
-/**
- * TODO: Document & prepare typescript definitions
- * TODO: Refactor & test more
- */
 var abp = abp || {};
 
 $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only for the form we are working on! Also this should be decided by the form itself!
@@ -12,7 +8,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
     abp.ModalManager = (function () {
 
-        var CallbackList = function () { //TODO: To a seperated file
+        var CallbackList = function () {
             var _callbacks = [];
 
             return {
@@ -43,7 +39,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             var _$modal = null;
             var _$form = null;
 
-            var _modalId = 'Modal_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
+            var _modalId = 'Abp_Modal_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
             var _modalObject = null;
 
             var _publicApi = null;
@@ -59,7 +55,13 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
             function _createContainer() {
                 _removeContainer();
-                _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>').appendTo('body');
+                _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>');
+                var existsModals = $('[id^="Abp_Modal_"]');
+                if (existsModals.length) {
+                    existsModals.last().after(_$modalContainer)
+                } else {
+                    $('body').prepend(_$modalContainer);
+                }
                 return _$modalContainer;
             }
 
@@ -67,12 +69,11 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _$modal = _$modalContainer.find('.modal');
                 _$form = _$modalContainer.find('form');
                 if (_$form.length) {
-                    //TODO: data-ajaxForm comparison seems wrong!
-                    if (_$form.attr('data-ajaxForm') === undefined || _$form.attr('data-ajaxForm') === false) {
+                    if (_$form.attr('data-ajaxForm') !== 'false') {
                         _$form.abpAjaxForm();
                     }
 
-                    if (_$form.attr('data-check-form-on-close') === undefined || _$form.attr('data-check-form-on-close') != 'false') {
+                    if (_$form.attr('data-check-form-on-close') !== 'false') {
                         _$form.needConfirmationOnUnsavedClose(_$modal);
                     }
 

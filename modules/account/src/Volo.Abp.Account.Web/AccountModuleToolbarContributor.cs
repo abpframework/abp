@@ -15,11 +15,10 @@ namespace Volo.Abp.Account.Web
                 return Task.CompletedTask;
             }
 
-            //TODO: Currently disabled!
-            //if (!context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
-            //{
-            //    context.Toolbar.Items.Add(new ToolbarItem(typeof(UserLoginLinkViewComponent)));
-            //}
+            if (!context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
+            {
+                context.Toolbar.Items.Add(new ToolbarItem(typeof(UserLoginLinkViewComponent)));
+            }
 
             return Task.CompletedTask;
         }

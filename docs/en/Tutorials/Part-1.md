@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider.
+* **{{DB_Value}}** as the database provider.
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,9 +28,10 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 {{if UI == "MVC" && DB == "EF"}}
@@ -193,23 +177,19 @@ namespace Acme.BookStore.EntityFrameworkCore
 
 ### Add Database Migration
 
-The startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)** under the menu *Tools > NuGet Package Manager*.
+The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-![Open Package Manager Console](images/bookstore-open-package-manager-console.png)
-
-Select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project and type the following command:
 
 ```bash
-Add-Migration "Created_Book_Entity"
+dotnet ef migrations add Created_Book_Entity
 ```
 
-![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
+This will add a new migration class to the project:
 
-This will create a new migration class inside the `Migrations` folder of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project.
+![bookstore-efcore-migration](./images/bookstore-efcore-migration.png)
 
-Before updating the database, read the section below to learn how to seed some initial data to the database.
-
-> If you are using another IDE than the Visual Studio, you can use `dotnet-ef` tool as [documented here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration).
+> If you are using Visual Studio, you may want to use `Add-Migration Created_Book_Entity -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
 
 {{end}}
 
@@ -217,7 +197,7 @@ Before updating the database, read the section below to learn how to seed some i
 
 > It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create seed data, but it is suggested to follow it to learn this useful ABP Framework feature.
 
-Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project and copy the following code:
+Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project by copying the following code:
 
 ```csharp
 using System;
@@ -417,7 +397,7 @@ namespace Acme.BookStore.Books
 
 ### BookAppService
 
-It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the Acme.BookStore.Application project:
+It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the `Acme.BookStore.Application` project:
 
 ````csharp
 using System;
@@ -457,7 +437,7 @@ ABP can [**automagically**](../API/Auto-API-Controllers.md) configures your appl
 
 ### Swagger UI
 
-The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. (Replace `<port>` with your own port number.)
+The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application ({{if UI=="MVC"}}`Acme.BookStore.Web`{{else}}`Acme.BookStore.HttpApi.Host`{{end}}) by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. Replace `<port>` with your own port number.
 
 You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints:
 

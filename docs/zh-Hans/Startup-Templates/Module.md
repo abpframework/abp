@@ -133,7 +133,7 @@ abp new Acme.IssueManagement -t module --no-ui
 
 ##### 如何运行?
 
-将其设置成启动项, 使用包管理控制台运行 `Update-Database` 命令迁移数据库,然后运行应用程序. 默认用户名: `admin` 密码: `1q2w3E*`.
+将`host/YourProjectName.Web.Unified`设置成启动项, 使用包管理控制台运行 `Update-Database` 命令迁移数据库,然后运行应用程序. 默认用户名: `admin` 密码: `1q2w3E*`.
 
 #### 分离部署&数据库 场景
 

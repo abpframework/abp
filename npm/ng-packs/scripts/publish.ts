@@ -8,13 +8,14 @@ program
     '-v, --nextVersion <version>',
     'next semantic version. Available versions: ["major", "minor", "patch", "premajor", "preminor", "prepatch", "prerelease", "or type a custom version"]',
   )
+  .option('-r, --registry <registry>', 'target npm server registry')
   .option('-p, --preview', 'publishes with preview tag')
   .option('-r, --rc', 'publishes with next tag')
   .option('-g, --skipGit', 'skips git push');
 
 program.parse(process.argv);
 
-const publish = async () => {
+(async () => {
   const versions = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
 
   if (!program.nextVersion) {
@@ -22,9 +23,7 @@ const publish = async () => {
     process.exit(1);
   }
 
-  const registry = program.preview
-    ? 'https://www.myget.org/F/abp-nightly/auth/8f2a5234-1bce-4dc7-b976-2983078590a9/npm/'
-    : 'https://registry.npmjs.org';
+  const registry = program.registry || 'https://registry.npmjs.org';
 
   try {
     await fse.remove('../dist');
@@ -88,8 +87,4 @@ const publish = async () => {
   }
 
   process.exit(0);
-};
-
-publish();
-
-export default publish;
+})();

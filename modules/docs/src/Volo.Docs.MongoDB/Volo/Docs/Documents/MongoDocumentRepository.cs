@@ -22,17 +22,17 @@ namespace Volo.Docs.Documents
 
         public async Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken);
+            return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken);
         }
 
         public async Task<Document> FindAsync(Guid projectId, string name, string languageCode, string version,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.ProjectId == projectId &&
-                                                                      x.Name == name &&
-                                                                      x.LanguageCode == languageCode &&
-                                                                      x.Version == version, cancellationToken);
+            return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.ProjectId == projectId &&
+                                                                                                    x.Name == name &&
+                                                                                                    x.LanguageCode == languageCode &&
+                                                                                                    x.Version == version, cancellationToken);
         }
 
         public async Task DeleteAsync(Guid projectId, string name, string languageCode, string version,
@@ -66,7 +66,7 @@ namespace Volo.Docs.Documents
 
             return await
                 ApplyFilterForGetAll(
-                        GetMongoQueryable(),
+                        await GetMongoQueryableAsync(cancellationToken),
                         projectId: projectId,
                         name: name,
                         version: version,
@@ -110,7 +110,7 @@ namespace Volo.Docs.Documents
 
             return await
                 ApplyFilterForGetAll(
-                        GetMongoQueryable(),
+                        await GetMongoQueryableAsync(cancellationToken),
                         projectId: projectId,
                         name: name,
                         version: version,
@@ -132,7 +132,7 @@ namespace Volo.Docs.Documents
 
         public async Task<Document> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().Where(x => x.Id == id).SingleAsync(cancellationToken);
+            return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == id).SingleAsync(cancellationToken);
         }
 
         protected virtual IMongoQueryable<Document> ApplyFilterForGetAll(

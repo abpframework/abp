@@ -1,0 +1,17 @@
+{
+  "name": "verdaccio-publish",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "node prepare",
+    "start": "yarn prepare && docker-compose rm -f && docker-compose build --build-arg next_version=\"4.1.0\" && docker-compose up"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.1"
+  },
+  "devDependencies": {}
+}

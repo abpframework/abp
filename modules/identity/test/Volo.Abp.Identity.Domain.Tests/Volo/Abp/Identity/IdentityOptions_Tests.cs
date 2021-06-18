@@ -23,28 +23,52 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
-        public void Should_Resolve_AbpIdentityOptionsFactory()
+        public void Should_Resolve_AbpIdentityOptionsManager()
         {
-            GetRequiredService<IOptionsFactory<IdentityOptions>>().ShouldBeOfType(typeof(AbpIdentityOptionsFactory));
+            GetRequiredService<IOptions<IdentityOptions>>().ShouldBeOfType(typeof(AbpIdentityOptionsManager));
         }
 
         [Fact]
-        public void Should_Get_Options_From_Custom_Settings_If_Available()
+        public async Task Should_Get_Options_From_Custom_Settings_If_Available()
         {
             using (var scope1 = ServiceProvider.CreateScope())
             {
-                var options = scope1.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>().Value;
-                options.Password.RequiredLength.ShouldBe(6); //Default value
-                options.Password.RequiredUniqueChars.ShouldBe(1); //Default value
-            }
+                var options = scope1.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>();
 
-            _settingProvider.GetOrNullAsync(IdentitySettingNames.Password.RequiredLength).Returns(Task.FromResult("42"));
+                //Can not get the values from the SettingProvider without options.SetAsync();
+
+                options.Value.Password.RequiredLength.ShouldBe(6); //Default value
+                options.Value.Password.RequiredUniqueChars.ShouldBe(1); //Default value
+            }
 
             using (var scope2 = ServiceProvider.CreateScope())
             {
-                var options = scope2.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>().Value;
-                options.Password.RequiredLength.ShouldBe(42); //Setting value
-                options.Password.RequiredUniqueChars.ShouldBe(1); //Default value
+                var options = scope2.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>();
+                var optionsValue = options.Value;
+
+                await options.SetAsync();
+
+                //Still the default values because SettingProvider has not been configured yet
+
+                optionsValue.Password.RequiredLength.ShouldBe(6); //Default value
+                optionsValue.Password.RequiredUniqueChars.ShouldBe(1); //Default value
+            }
+
+            _settingProvider
+                .GetOrNullAsync(IdentitySettingNames.Password.RequiredLength)
+                .Returns(Task.FromResult("42"));
+
+            using (var scope2 = ServiceProvider.CreateScope())
+            {
+                var options = scope2.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>();
+                var optionsValue = options.Value;
+
+                await options.SetAsync();
+
+                //Get the value from SettingProvider
+
+                optionsValue.Password.RequiredLength.ShouldBe(42); //Setting value
+                optionsValue.Password.RequiredUniqueChars.ShouldBe(1); //Default value
             }
         }
     }

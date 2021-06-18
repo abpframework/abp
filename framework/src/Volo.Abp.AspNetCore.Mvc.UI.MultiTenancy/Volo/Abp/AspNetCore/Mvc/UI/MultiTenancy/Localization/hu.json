@@ -1,0 +1,13 @@
+{
+    "culture": "hu",
+    "texts": {
+      "GivenTenantIsNotExist": "Adott bérlő nem létezik: {0}",
+      "GivenTenantIsNotAvailable": "A megadott előfizető nem érhető el: {0}",
+      "Tenant": "Előfizető",
+      "Switch": "váltás",
+      "Name": "Neve",
+      "SwitchTenantHint": "Hagyja üresen az előfizető nevet hogy a host oldalra kapcsoljon.",
+      "SwitchTenant": "Előfizető váltás",
+      "NotSelected": "Nincs kiválasztva"
+    }
+  }

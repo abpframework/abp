@@ -1,0 +1,515 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
+@model FormElementsModel
+
+@{
+    ViewData["Title"] = "Form Elements";
+}
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/css/demo.css" />
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
+            <abp-script src="/Pages/Components/highlightCode.js" />*@
+    </abp-script-bundle>
+}
+
+<link rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<h2>Form Elements</h2>
+
+<h4>Example</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-input asp-for="@Model.MyModel.Name" label="Name"/>
+        <abp-input asp-for="@Model.MyModel.Password" label="Password" />
+        <abp-input asp-for="@Model.MyModel.CheckMeOut" label="Check Me Out" />
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+ public class FormElementsModel : PageModel
+    {
+        public SampleModel MyModel { get; set; }
+
+        public void OnGet()
+        {
+            MyModel = new SampleModel();
+        }
+
+        public class SampleModel
+        {
+            [Required]
+            public string Name { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            public string Password { get; set; }
+
+            public bool CheckMeOut { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-input asp-for=&quot;@@Model.MyModel.Name&quot; label=&quot;Name&quot;/&gt;
+&lt;abp-input asp-for=&quot;@@Model.MyModel.Password&quot; label=&quot;Password&quot; /&gt;
+&lt;abp-input asp-for=&quot;@@Model.MyModel.CheckMeOut&quot; label=&quot;Check Me Out&quot; /&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;form-group&quot;&gt;
+&lt;label for=&quot;MyModel_Name&quot;&gt;Name&lt;/label&gt;
+&lt;input type=&quot;text&quot; data-val=&quot;true&quot; data-val-required=&quot;The Name field is required.&quot; id=&quot;MyModel_Name&quot; name=&quot;MyModel.Name&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+&lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.Name&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-group&quot;&gt;
+&lt;label for=&quot;MyModel_Password&quot;&gt;Password&lt;/label&gt;
+&lt;input type=&quot;password&quot; data-val=&quot;true&quot; data-val-required=&quot;The Password field is required.&quot; id=&quot;MyModel_Password&quot; name=&quot;MyModel.Password&quot; class=&quot;form-control &quot;&gt;
+&lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.Password&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-check&quot;&gt;
+&lt;input type=&quot;checkbox&quot; data-val=&quot;true&quot; data-val-required=&quot;The CheckMeOut field is required.&quot; id=&quot;MyModel_CheckMeOut&quot; name=&quot;MyModel.CheckMeOut&quot; value=&quot;true&quot; class=&quot;form-check-input &quot;&gt;&lt;input name=&quot;MyModel.CheckMeOut&quot; type=&quot;hidden&quot; value=&quot;false&quot;&gt;
+&lt;label class=&quot;form-check-label&quot; for=&quot;MyModel_CheckMeOut&quot;&gt;Check Me Out&lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Form controls</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-input asp-for="@Model.MyModel.EmailAddress" label="Email Address" placeholder="name@example.com" />
+        <abp-select asp-for="@Model.MyModel.City" asp-items="@Model.CityList" label="City">
+            <option value="">Choose a city</option>
+        </abp-select>
+        <abp-select asp-for="@Model.MyModel.Cities" asp-items="@Model.CityList" label="Cities" />
+        <abp-input asp-for="@Model.MyModel.Description" label="Description" />
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+ public class FormElementsModel : PageModel
+    {
+        public SampleModel MyModel { get; set; }
+
+        public List&lt;SelectListItem&gt; CityList { get; set; } = new List&lt;SelectListItem&gt;
+        {
+            new SelectListItem { Value = "NY", Text = "New York"},
+            new SelectListItem { Value = "LDN", Text = "London"},
+            new SelectListItem { Value = "IST", Text = "Istanbul"},
+            new SelectListItem { Value = "MOS", Text = "Moscow"}
+        };
+
+        public void OnGet()
+        {
+            MyModel = new SampleModel();
+        }
+
+        public class SampleModel
+        {
+            [Required]
+            public string EmailAddress { get; set; }
+
+            public string City { get; set; }
+
+            public List&lt;string&gt; Cities { get; set; }
+
+            [TextArea]
+            public string Description { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-input asp-for=&quot;@@Model.MyModel.EmailAddress&quot; label=&quot;Email Address&quot; placeholder=&quot;name@example.com&quot; /&gt;
+&lt;abp-select asp-for=&quot;@@Model.MyModel.City&quot; asp-items=&quot;@@Model.CityList&quot; label=&quot;City&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;Choose a city&lt;/option&gt;
+&lt;/abp-select&gt;
+&lt;abp-select asp-for=&quot;@@Model.MyModel.Cities&quot; asp-items=&quot;@@Model.CityList&quot; label=&quot;Cities&quot; /&gt;
+&lt;abp-input asp-for=&quot;@@Model.MyModel.Description&quot; label=&quot;Description&quot; /&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;MyModel_EmailAddress&quot;&gt;Email Address&lt;/label&gt;
+        &lt;input placeholder=&quot;name@example.com&quot; type=&quot;text&quot; data-val=&quot;true&quot; data-val-required=&quot;The EmailAddress field is required.&quot; id=&quot;MyModel_EmailAddress&quot; name=&quot;MyModel.EmailAddress&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.EmailAddress&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;MyModel_City&quot;&gt;City&lt;/label&gt;
+        &lt;select id=&quot;MyModel_City&quot; name=&quot;MyModel.City&quot; class=&quot;form-control&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;Choose a city&lt;/option&gt;
+            &lt;option value=&quot;NY&quot;&gt;New York&lt;/option&gt;
+            &lt;option value=&quot;LDN&quot;&gt;London&lt;/option&gt;
+            &lt;option value=&quot;IST&quot;&gt;Istanbul&lt;/option&gt;
+            &lt;option value=&quot;MOS&quot;&gt;Moscow&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;MyModel_Cities&quot;&gt;Cities&lt;/label&gt;
+        &lt;select id=&quot;MyModel_Cities&quot; multiple=&quot;multiple&quot; name=&quot;MyModel.Cities&quot; class=&quot;form-control&quot;&gt;
+            &lt;option value=&quot;NY&quot;&gt;New York&lt;/option&gt;
+            &lt;option value=&quot;LDN&quot;&gt;London&lt;/option&gt;
+            &lt;option value=&quot;IST&quot;&gt;Istanbul&lt;/option&gt;
+            &lt;option value=&quot;MOS&quot;&gt;Moscow&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;MyModel_Description&quot;&gt;Description&lt;/label&gt;
+        &lt;textarea id=&quot;MyModel_Description&quot; name=&quot;MyModel.Description&quot; class=&quot;form-control &quot;&gt;&lt;/textarea&gt;
+        &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.Description&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Sizing</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-input asp-for="@Model.MyModel.LargeInput" size="Large" />
+        <abp-input asp-for="@Model.MyModel.SmallInput" size="Small" />
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+ public class FormElementsModel : PageModel
+    {
+        public SampleModel MyModel { get; set; }
+
+        public void OnGet()
+        {
+            MyModel = new SampleModel();
+        }
+
+        public class SampleModel
+        {
+            public string LargeInput { get; set; }
+
+            public string SmallInput { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-input asp-for=&quot;@@Model.MyModel.LargeInput&quot; size=&quot;Large&quot; /&gt;
+&lt;abp-input asp-for=&quot;@@Model.MyModel.SmallInput&quot; size=&quot;Small&quot; /&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;form-group&quot;&gt;
+    &lt;label for=&quot;MyModel_LargeInput&quot;&gt;LargeInput&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;MyModel_LargeInput&quot; name=&quot;MyModel.LargeInput&quot; value=&quot;&quot; class=&quot;form-control form-control-lg&quot;&gt;
+    &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.LargeInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-group&quot;&gt;
+    &lt;label for=&quot;MyModel_SmallInput&quot;&gt;SmallInput&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;MyModel_SmallInput&quot; name=&quot;MyModel.SmallInput&quot; value=&quot;&quot; class=&quot;form-control form-control-sm&quot;&gt;
+    &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.SmallInput&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Disabled And ReadOnly</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-input asp-for="@Model.MyModel.SampleInput0" disabled="true" />
+        <abp-input asp-for="@Model.MyModel.SampleInput1" readonly="true" />
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+ public class FormElementsModel : PageModel
+    {
+        public SampleModel MyModel { get; set; }
+
+        public void OnGet()
+        {
+            MyModel = new SampleModel();
+            MyModel.SampleInput0 = "This is a disabled input.";
+            MyModel.SampleInput0 = "This is a disabled input.";
+            MyModel.SampleInput1 = "This is a readonly input.";
+        }
+
+        public class SampleModel
+        {
+            public string SampleInput0 { get; set; }
+
+            public string SampleInput1 { get; set; }
+
+            public string SampleInput2 { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-input asp-for=&quot;@@Model.MyModel.SampleInput0&quot; disabled=&quot;true&quot; /&gt;
+&lt;abp-input asp-for=&quot;@@Model.MyModel.SampleInput1&quot; readonly=&quot;True&quot; /&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;form-group&quot;&gt;
+    &lt;label for=&quot;MyModel_SampleInput0&quot;&gt;SampleInput0&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;MyModel_SampleInput0&quot; name=&quot;MyModel.SampleInput0&quot; value=&quot;This is a disabled input.&quot; disabled=&quot;&quot; class=&quot;form-control &quot;&gt;
+    &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.SampleInput0&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-group&quot;&gt;
+    &lt;label for=&quot;MyModel_SampleInput1&quot;&gt;SampleInput1&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;MyModel_SampleInput1&quot; name=&quot;MyModel.SampleInput1&quot; value=&quot;This is a readonly input.&quot; class=&quot;form-control &quot; readonly=&quot;&quot;&gt;
+    &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.SampleInput1&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Checkboxes and radios</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-input asp-for="@Model.MyModel.DefaultCheckbox"/>
+        <abp-input asp-for="@Model.MyModel.DisabledCheckbox" disabled="true"/>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+ public class FormElementsModel : PageModel
+    {
+        public SampleModel MyModel { get; set; }
+
+        public void OnGet()
+        {
+            MyModel = new SampleModel();
+        }
+
+        public class SampleModel
+        {
+            public bool DefaultCheckbox { get; set; }
+
+            public bool DisabledCheckbox { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-input asp-for=&quot;@@Model.MyModel.DefaultCheckbox&quot;/&gt;
+&lt;abp-input asp-for=&quot;@@Model.MyModel.DisabledCheckbox&quot; disabled=&quot;true&quot;/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;form-check&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; data-val=&quot;true&quot; data-val-required=&quot;The DefaultCheckbox field is required.&quot; id=&quot;MyModel_DefaultCheckbox&quot; name=&quot;MyModel.DefaultCheckbox&quot; value=&quot;true&quot; class=&quot;form-check-input &quot;&gt;&lt;input name=&quot;MyModel.DefaultCheckbox&quot; type=&quot;hidden&quot; value=&quot;false&quot;&gt;
+    &lt;label class=&quot;form-check-label&quot; for=&quot;MyModel_DefaultCheckbox&quot;&gt;DefaultCheckbox&lt;/label&gt;
+&lt;/div&gt;
+&lt;div class=&quot;form-check&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; data-val=&quot;true&quot; data-val-required=&quot;The DisabledCheckbox field is required.&quot; id=&quot;MyModel_DisabledCheckbox&quot; name=&quot;MyModel.DisabledCheckbox&quot; value=&quot;true&quot; disabled=&quot;&quot; class=&quot;form-check-input &quot;&gt;&lt;input name=&quot;MyModel.DisabledCheckbox&quot; type=&quot;hidden&quot; value=&quot;false&quot;&gt;
+    &lt;label class=&quot;form-check-label&quot; for=&quot;MyModel_DisabledCheckbox&quot;&gt;DisabledCheckbox&lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-radio asp-for="@Model.MyModel.CityRadio" asp-items="@Model.CityList" inline="true"/>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+ public class FormElementsModel : PageModel
+    {
+        public SampleModel MyModel { get; set; }
+
+        public List&quot;SelectListItem&quot; CityList { get; set; } = new List&quot;SelectListItem&quot;
+        {
+            new SelectListItem { Value = "NY", Text = "New York"},
+            new SelectListItem { Value = "LDN", Text = "London"},
+            new SelectListItem { Value = "IST", Text = "Istanbul"},
+            new SelectListItem { Value = "MOS", Text = "Moscow"}
+        };
+
+        public void OnGet()
+        {
+            MyModel = new SampleModel();
+            MyModel.CityRadio = "IST";
+        }
+
+        public class SampleModel
+        {
+            [Display(Name="City")]
+            public string CityRadio { get; set; }
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-radio asp-for=&quot;@@Model.MyModel.CityRadio&quot; asp-items=&quot;@@Model.CityList&quot; inline=&quot;true&quot;/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div&gt;
+    &lt;div class=&quot;custom-control custom-radio custom-control-inline&quot;&gt;
+        &lt;input type=&quot;radio&quot; id=&quot;MyModel.CityRadioRadioNY&quot; name=&quot;MyModel.CityRadio&quot; value=&quot;NY&quot; class=&quot;custom-control-input&quot;&gt;
+        &lt;label class=&quot;custom-control-label&quot; for=&quot;MyModel.CityRadioRadioNY&quot;&gt;New York&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;custom-control custom-radio custom-control-inline&quot;&gt;
+        &lt;input type=&quot;radio&quot; id=&quot;MyModel.CityRadioRadioLDN&quot; name=&quot;MyModel.CityRadio&quot; value=&quot;LDN&quot; class=&quot;custom-control-input&quot;&gt;
+        &lt;label class=&quot;custom-control-label&quot; for=&quot;MyModel.CityRadioRadioLDN&quot;&gt;London&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;custom-control custom-radio custom-control-inline&quot;&gt;
+        &lt;input type=&quot;radio&quot; id=&quot;MyModel.CityRadioRadioIST&quot; name=&quot;MyModel.CityRadio&quot; value=&quot;IST&quot; checked=&quot;checked&quot; class=&quot;custom-control-input&quot;&gt;
+        &lt;label class=&quot;custom-control-label&quot; for=&quot;MyModel.CityRadioRadioIST&quot;&gt;Istanbul&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;custom-control custom-radio custom-control-inline&quot;&gt;
+        &lt;input type=&quot;radio&quot; id=&quot;MyModel.CityRadioRadioMOS&quot; name=&quot;MyModel.CityRadio&quot; value=&quot;MOS&quot; class=&quot;custom-control-input&quot;&gt;
+        &lt;label class=&quot;custom-control-label&quot; for=&quot;MyModel.CityRadioRadioMOS&quot;&gt;Moscow&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Enum</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-select asp-for="@Model.MyModel.CarType"/>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+ public class FormElementsModel : PageModel
+    {
+        public SampleModel MyModel { get; set; }
+
+        public void OnGet()
+        {
+            MyModel = new SampleModel();
+        }
+
+        public class SampleModel
+        {
+            public CarType CarType { get; set; }
+        }
+
+        public enum CarType
+        {
+            Sedan,
+            Hatchback,
+            StationWagon,
+            Coupe
+        }
+    }
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-select asp-for=&quot;@Model.MyModel.CarType&quot;/&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+ &lt;div class=&quot;form-group&quot;&gt;
+     &lt;label for=&quot;MyModel_CarType&quot;&gt;CarType&lt;/label&gt;
+     &lt;select data-val=&quot;true&quot; data-val-required=&quot;The CarType field is required.&quot; id=&quot;MyModel_CarType&quot; name=&quot;MyModel.CarType&quot; class=&quot;form-control&quot;&gt;
+         &lt;option selected=&quot;selected&quot; value=&quot;0&quot;&gt;Sedan&lt;/option&gt;
+         &lt;option value=&quot;1&quot;&gt;Hatchback&lt;/option&gt;
+         &lt;option value=&quot;2&quot;&gt;StationWagon&lt;/option&gt;
+         &lt;option value=&quot;3&quot;&gt;Coupe&lt;/option&gt;
+     &lt;/select&gt;
+ &lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Suppress Label Generation</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+        <abp-input asp-for="@Model.MyModel.Name" suppress-label="true"/>
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Modal Class">
+                <pre><code>
+ public class FormElementsModel : PageModel
+ {
+     public SampleModel MyModel { get; set; }
+
+     public void OnGet()
+     {
+         MyModel = new SampleModel();
+     }
+
+     public class SampleModel
+     {
+         [Required]
+         public string Name { get; set; }
+     }
+ }
+
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-input asp-for=&quot;@@Model.MyModel.Name&quot; suppress-label=&quot;true&quot;/&gt;
+                </code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;form-group&quot;&gt;
+    &lt;input type=&quot;text&quot; id=&quot;MyModel_Name&quot; name=&quot;MyModel.Name&quot; value=&quot;&quot; class=&quot;form-control &quot;&gt;
+    &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.Name&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>

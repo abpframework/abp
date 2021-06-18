@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -37,10 +37,10 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
         {
-            var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
-            var totalCount = await RoleRepository.GetCountAsync();
+            var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+            var totalCount = await RoleRepository.GetCountAsync(input.Filter);
 
             return new PagedResultDto<IdentityRoleDto>(
                 totalCount,
@@ -57,7 +57,7 @@ namespace Volo.Abp.Identity
                 CurrentTenant.Id
             )
             {
-                IsDefault = input.IsDefault, 
+                IsDefault = input.IsDefault,
                 IsPublic = input.IsPublic
             };
 

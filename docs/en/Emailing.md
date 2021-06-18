@@ -94,7 +94,13 @@ Email sending uses the [setting system](Settings.md) to define settings and get 
 * **Abp.Mailing.Smtp.EnableSsl**: A value that indicates if the SMTP server uses SSL or not ("true" or "false". Default: "false").
 * **Abp.Mailing.Smtp.UseDefaultCredentials**: If true, uses default credentials instead of the provided username and password ("true" or "false". Default: "true").
 
-The easiest way to define these settings it to add them to the `appsettings.json` file. The [application startup template](Startup-Templates/Application.md) already has these settings in the `appsettings.json`:
+Email settings can be managed from the *Settings Page* of the [Setting Management](Modules/Setting-Management.md) module:
+
+![email-settings](images/email-settings.png)
+
+> Setting Management module is already installed if you've created your solution from the ABP Startup template.
+
+If you don't use the Setting Management module, you can simply define the settings inside your `appsettings.json` file:
 
 ````json
 "Settings": {
@@ -110,7 +116,7 @@ The easiest way to define these settings it to add them to the `appsettings.json
 }
 ````
 
-You can set/change these settings using the `ISettingManager` and store values in a database. See the [setting system document](Settings.md) to understand the setting system better.
+You can set/change these settings programmatically using the `ISettingManager` and store values in a database. See the [setting system document](Settings.md) to understand the setting system better.
 
 ### Encrypt the SMTP Password
 
@@ -223,7 +229,7 @@ Pathes of the templates in the virtual file system are shown below:
 * `/Volo/Abp/Emailing/Templates/Layout.tpl`
 * `/Volo/Abp/Emailing/Templates/Message.tpl`
 
-If you add files to the same localization in the virtual file system, your files will override them.
+If you add files to the same location in the virtual file system, your files will override them.
 
 Templates are inline localized, that means you can take the power of the [localization system](Localization.md) to make your templates multi-cultural.
 

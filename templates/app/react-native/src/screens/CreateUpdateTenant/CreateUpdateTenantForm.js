@@ -49,8 +49,6 @@ function CreateUpdateTenantForm({ editingTenant = {}, submit, remove }) {
         }),
       })}
       initialValues={{
-        lockoutEnabled: false,
-        twoFactorEnabled: false,
         ...editingTenant,
       }}
       onSubmit={values => onSubmit(values)}>
@@ -70,6 +68,7 @@ function CreateUpdateTenantForm({ editingTenant = {}, submit, remove }) {
                   onChangeText={handleChange('name')}
                   onBlur={handleBlur('name')}
                   value={values.name}
+                  autoCapitalize = 'none'
                 />
               </InputGroup>
               <ValidationMessage>{errors.name}</ValidationMessage>
@@ -87,6 +86,7 @@ function CreateUpdateTenantForm({ editingTenant = {}, submit, remove }) {
                       onChangeText={handleChange('adminEmailAddress')}
                       onBlur={handleBlur('adminEmailAddress')}
                       value={values.adminEmailAddress}
+                      autoCapitalize = 'none'
                     />
                   </InputGroup>
                   <ValidationMessage>{errors.adminEmailAddress}</ValidationMessage>
@@ -102,6 +102,7 @@ function CreateUpdateTenantForm({ editingTenant = {}, submit, remove }) {
                         onChangeText={handleChange('adminPassword')}
                         onBlur={handleBlur('adminPassword')}
                         value={values.adminPassword}
+                        autoCapitalize = 'none'
                       />
                       <Icon
                         name={showAdminPassword ? 'eye-off' : 'eye'}

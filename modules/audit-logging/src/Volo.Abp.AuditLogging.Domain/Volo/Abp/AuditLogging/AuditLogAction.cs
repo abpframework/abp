@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
@@ -25,11 +23,10 @@ namespace Volo.Abp.AuditLogging
 
         public virtual int ExecutionDuration { get; protected set; }
 
-        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
-        
+        public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
+
         protected AuditLogAction()
         {
-            ExtraProperties = new Dictionary<string, object>();
         }
 
         public AuditLogAction(Guid id, Guid auditLogId, AuditLogActionInfo actionInfo, Guid? tenantId = null)
@@ -40,7 +37,7 @@ namespace Volo.Abp.AuditLogging
             AuditLogId = auditLogId;
             ExecutionTime = actionInfo.ExecutionTime;
             ExecutionDuration = actionInfo.ExecutionDuration;
-            ExtraProperties = actionInfo.ExtraProperties.ToDictionary(pair => pair.Key, pair => pair.Value);
+            ExtraProperties = new ExtraPropertyDictionary(actionInfo.ExtraProperties);
             ServiceName = actionInfo.ServiceName.TruncateFromBeginning(AuditLogActionConsts.MaxServiceNameLength);
             MethodName = actionInfo.MethodName.TruncateFromBeginning(AuditLogActionConsts.MaxMethodNameLength);
             Parameters = actionInfo.Parameters.Length > AuditLogActionConsts.MaxParametersLength ? "" : actionInfo.Parameters;

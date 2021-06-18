@@ -1,8 +1,19 @@
-import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { GetAppConfiguration } from '../actions';
 import { RoutesService } from '../services';
+import { DummyInjector, mockActions } from './utils/common.utils';
+import { mockPermissionService } from './utils/permission-service.spec.utils';
+
+const updateStream$ = new Subject();
+
+export const mockRoutesService = (injectorPayload = {} as { [key: string]: any }) => {
+  const injector = new DummyInjector({
+    PermissionService: mockPermissionService(),
+    ConfigStateService: { createOnUpdateStream: () => updateStream$ },
+    ...injectorPayload,
+  });
+  return new RoutesService(injector);
+};
 
 describe('Routes Service', () => {
   let service: RoutesService;
@@ -14,15 +25,8 @@ describe('Routes Service', () => {
     { path: '/foo/x', name: 'x', parentName: 'foo', order: 1 },
   ];
 
-  const mockActions = new Subject();
-  const mockStore = ({
-    selectSnapshot() {
-      return true;
-    },
-  } as unknown) as Store;
-
   beforeEach(() => {
-    service = new RoutesService(mockActions, mockStore);
+    service = mockRoutesService();
   });
 
   describe('#add', () => {
@@ -164,7 +168,7 @@ describe('Routes Service', () => {
 
     it('should be called upon successful GetAppConfiguration action', () => {
       const refresh = jest.spyOn(service, 'refresh');
-      mockActions.next({ action: new GetAppConfiguration(), status: 'SUCCESSFUL' });
+      updateStream$.next();
       expect(refresh).toHaveBeenCalledTimes(1);
     });
   });

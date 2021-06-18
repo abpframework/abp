@@ -1,9 +1,11 @@
+using System.Threading.Tasks;
+
 namespace Volo.Abp.MultiTenancy
 {
     public interface ITenantResolveContributor
     {
         string Name { get; }
 
-        void Resolve(ITenantResolveContext context);
+        Task ResolveAsync(ITenantResolveContext context);
     }
 }

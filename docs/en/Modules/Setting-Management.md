@@ -75,7 +75,7 @@ Setting values are cached using the [distributed cache](../Caching.md) system. A
 
 ## Setting Management Providers
 
-Setting Management module is extensible, just like the [setting system](../Settings.md).  You can extend it by defining setting management providers. There are 5 pre-built setting management providers registered by the order below:
+Setting Management module is extensible, just like the [setting system](../Settings.md).  You can extend it by defining setting management providers. There are 5 pre-built setting management providers registered it the following order:
 
 * `DefaultValueSettingManagementProvider`: Gets the value from the default value of the setting definition. It can not set the default value since default values are hard-coded on the setting definition.
 * `ConfigurationSettingManagementProvider`: Gets the value from the [IConfiguration service](../Configuration.md). It can not set the configuration value because it is not possible to change the configuration values on runtime.
@@ -84,3 +84,223 @@ Setting Management module is extensible, just like the [setting system](../Setti
 * `UserSettingManagementProvider`: Gets the setting value for a user.
 
 `ISettingManager` uses the setting management providers on get/set methods. Typically, every setting management provider defines extension methods on the `ISettingManagement` service (like `SetForUserAsync` defined by the user setting management provider).
+
+If you want to create your own provider, implement the `ISettingManagementProvider` interface or inherit from the `SettingManagementProvider` base class:
+
+````csharp
+public class CustomSettingProvider : SettingManagementProvider
+{
+    public override string Name => "Custom";
+
+    public CustomSettingProvider(ISettingManagementStore store) 
+        : base(store)
+    {
+    }
+}
+````
+
+`SettingManagementProvider` base class makes the default implementation (using the `ISettingManagementStore`) for you. You can override base methods as you need. Every provider must have a unique name, which is `Custom` in this example (keep it short since it is saved to database for each feature value record).
+
+Once you create your provider class, you should register it using the `SettingManagementOptions` [options class](../Options.md):
+
+````csharp
+Configure<SettingManagementOptions>(options =>
+{
+    options.Providers.Add<CustomSettingProvider>();
+});
+````
+
+The order of the providers are important. Providers are executed in the reverse order. That means the `CustomSettingProvider` is executed first for this example. You can insert your provider in any order in the `Providers` list.
+
+## See Also
+
+* [Settings](../Settings.md)
+
+## Setting Management UI
+
+Setting Mangement module provided the email setting UI by default, and it is extensible; You can add your tabs to this page for your application settings.
+
+### MVC UI
+
+#### Create a setting View Component
+
+Create `MySettingGroup` folder under the `Components` folder. Add a new view component. Name it as `MySettingGroupViewComponent`:
+
+![MySettingGroupViewComponent](../images/my-setting-group-view-component.png)
+
+Open the `MySettingGroupViewComponent.cs` and change the whole content as shown below:
+
+```csharp
+public class MySettingGroupViewComponent : AbpViewComponent
+{
+    public virtual IViewComponentResult Invoke()
+    {
+        return View("~/Components/MySettingGroup/Default.cshtml");
+    }
+}
+```
+
+> You can also use the `InvokeAsync` method, In this example, we use the `Invoke` method.
+
+#### Default.cshtml
+
+Create a `Default.cshtml` file under the `MySettingGroup` folder.
+
+Open the `Default.cshtml` and change the whole content as shown below:
+
+```html
+<div>
+  <p>My setting group page</p>
+</div>
+```
+
+#### BookStoreSettingPageContributor
+
+Create a `BookStoreSettingPageContributor.cs` file under the `Settings` folder:
+
+![BookStoreSettingPageContributor](../images/my-setting-group-page-contributor.png)
+
+The content of the file is shown below:
+
+```csharp
+public class BookStoreSettingPageContributor : ISettingPageContributor
+{
+    public Task ConfigureAsync(SettingPageCreationContext context)
+    {
+        context.Groups.Add(
+            new SettingPageGroup(
+                "Volo.Abp.MySettingGroup",
+                "MySettingGroup",
+                typeof(MySettingGroupViewComponent)
+            )
+        );
+
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> CheckPermissionsAsync(SettingPageCreationContext context)
+    {
+        // You can check the permissions here
+        return Task.FromResult(true);
+    }
+}
+```
+
+Open the `BookStoreWebModule.cs` file and add the following code:
+
+```csharp
+Configure<SettingManagementPageOptions>(options =>
+{
+    options.Contributors.Add(new BookStoreSettingPageContributor());
+});
+```
+
+#### Run the Application
+
+Navigate to `/SettingManagement` route to see the changes:
+
+![Custom Settings Tab](../images/my-setting-group-ui.png)
+
+### Blazor UI
+
+#### Create a Razor Component
+
+Create `MySettingGroup` folder under the `Pages` folder. Add a new razor component. Name it as `MySettingGroupComponent`:
+
+![MySettingGroupComponent](../images/my-setting-group-component.png)
+
+Open the `MySettingGroupComponent.razor` and change the whole content as shown below:
+
+```csharp
+<Row>
+    <p>my setting group</p>
+</Row>
+```
+
+#### BookStoreSettingComponentContributor
+
+Create a `BookStoreSettingComponentContributor.cs` file under the `Settings` folder:
+
+![BookStoreSettingComponentContributor](../images/my-setting-group-component-contributor.png)
+
+The content of the file is shown below:
+
+```csharp
+public class BookStoreSettingComponentContributor : ISettingComponentContributor
+{
+    public Task ConfigureAsync(SettingComponentCreationContext context)
+    {
+        context.Groups.Add(
+            new SettingComponentGroup(
+                "Volo.Abp.MySettingGroup",
+                "MySettingGroup",
+                typeof(MySettingGroupComponent)
+            )
+        );
+
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> CheckPermissionsAsync(SettingComponentCreationContext context)
+    {
+        // You can check the permissions here
+        return Task.FromResult(true);
+    }
+}
+```
+
+Open the `BookStoreBlazorModule.cs` file and add the following code:
+
+```csharp
+Configure<SettingManagementComponentOptions>(options =>
+{
+    options.Contributors.Add(new BookStoreSettingComponentContributor());
+});
+```
+
+#### Run the Application
+
+Navigate to `/setting-management` route to see the changes:
+
+![Custom Settings Tab](../images/my-setting-group-blazor.png)
+
+### Angular UI
+
+#### Create a Component
+
+Create a component with the following command:
+
+```bash
+yarn ng generate component my-settings
+```
+
+Open the `app.component.ts` and modify the file as shown below:
+
+```js
+import { Component } from '@angular/core';
+import { SettingTabsService } from '@abp/ng.core'; // imported SettingTabsService
+import { MySettingsComponent } from './my-settings/my-settings.component'; // imported MySettingsComponent
+
+@Component(/* component metadata */)
+export class AppComponent {
+  constructor(private settingTabs: SettingTabsService) // injected MySettingsComponent
+  {
+    // added below
+    settingTabs.add([
+      {
+        name: 'MySettings',
+        order: 1,
+        requiredPolicy: 'policy key here',
+        component: MySettingsComponent,
+      },
+    ]);
+  }
+}
+```
+
+#### Run the Application
+
+Navigate to `/setting-management` route to see the changes:
+
+![Custom Settings Tab](../images/custom-settings.png)
+

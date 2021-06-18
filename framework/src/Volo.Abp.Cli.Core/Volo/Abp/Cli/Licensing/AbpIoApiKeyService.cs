@@ -25,16 +25,19 @@ namespace Volo.Abp.Cli.Licensing
 
         private readonly ILogger<AbpIoApiKeyService> _logger;
         private DeveloperApiKeyResult _apiKeyResult = null;
+        private readonly CliHttpClientFactory _cliHttpClientFactory;
 
         public AbpIoApiKeyService(
             IJsonSerializer jsonSerializer,
             ICancellationTokenProvider cancellationTokenProvider,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            ILogger<AbpIoApiKeyService> logger)
+            ILogger<AbpIoApiKeyService> logger, 
+            CliHttpClientFactory cliHttpClientFactory)
         {
             JsonSerializer = jsonSerializer;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             _logger = logger;
+            _cliHttpClientFactory = cliHttpClientFactory;
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
@@ -56,14 +59,10 @@ namespace Volo.Abp.Cli.Licensing
             }
 
             var url = $"{CliUrls.WwwAbpIo}api/license/api-key";
+            var client = _cliHttpClientFactory.CreateClient();
 
-            using (var client = new CliHttpClient())
+            using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, _logger))
             {
-                var response = await client.GetHttpResponseMessageWithRetryAsync(
-                    url: url,
-                    cancellationToken: CancellationTokenProvider.Token,
-                    logger: _logger);
-
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
@@ -72,10 +71,9 @@ namespace Volo.Abp.Cli.Licensing
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var apiKeyResult = JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);
-
-                return apiKeyResult;
+                return JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);
             }
+
         }
     }
 }

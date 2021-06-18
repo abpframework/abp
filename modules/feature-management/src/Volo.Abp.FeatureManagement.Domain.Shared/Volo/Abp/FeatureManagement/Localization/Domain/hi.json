@@ -1,0 +1,10 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Features": "विशेषताएं",
+    "NoFeatureFoundMessage": "कोई भी उपलब्ध सुविधा नहीं है।",
+    "Permission:FeatureManagement": "सुविधा प्रबंधन",
+    "Permission:FeatureManagement.ManageHostFeatures": "होस्ट सुविधाएँ प्रबंधित करें",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} सुविधा मान मान्य नहीं है!"
+  }
+}

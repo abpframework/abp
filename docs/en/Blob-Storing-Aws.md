@@ -39,7 +39,7 @@ Configure<AbpBlobStoringOptions>(options =>
             Aws.Policy = "policy";
             Aws.DurationSeconds = "expiration date";
             Aws.ContainerName = "your Aws container name";
-            Aws.CreateContainerIfNotExists = false;
+            Aws.CreateContainerIfNotExists = true;
         });
     });
 });
@@ -55,12 +55,12 @@ Configure<AbpBlobStoringOptions>(options =>
 * **UseCredentials** (bool): Use [credentials](https://docs.aws.amazon.com/AmazonS3/latest/dev/AuthUsingAcctOrUserCredentials.html) to access AWS services,default : `false`.
 * **UseTemporaryCredentials** (bool): Use [temporary credentials](https://docs.aws.amazon.com/AmazonS3/latest/dev/AuthUsingTempSessionToken.html) to access AWS services,default : `false`.
 * **UseTemporaryFederatedCredentials** (bool): Use [federated user temporary credentials](https://docs.aws.amazon.com/AmazonS3/latest/dev/AuthUsingTempFederationToken.html) to access AWS services, default : `false`.
-* **ProfileName** (string): The [name of the profile]((https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html)) to get credentials from.
+* **ProfileName** (string): The [name of the profile](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html) to get credentials from.
 * **ProfilesLocation** (string): The path to the aws credentials file to look at.
 * **Region** (string): The system name of the service.
 * **Policy** (string): An IAM policy in JSON format that you want to use as an inline session policy.
 * **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600. **note**: Using subaccounts operated OSS,if the value is 0.
-* **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlogContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
+* **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
     * Bucket names must be between **3** and **63** characters long.
     * Bucket names can consist only of **lowercase** letters, numbers, dots (.), and hyphens (-).
     * Bucket names must begin and end with a letter or number.

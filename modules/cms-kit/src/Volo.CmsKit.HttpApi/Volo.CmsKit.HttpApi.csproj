@@ -4,14 +4,14 @@
   <Import Project="..\..\..\..\configureawait.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.CmsKit.Admin.Application\Volo.CmsKit.Admin.Application.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Admin.HttpApi\Volo.CmsKit.Admin.HttpApi.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Application.Contracts\Volo.CmsKit.Application.Contracts.csproj" />
-    <ProjectReference Include="..\Volo.CmsKit.Public.Application\Volo.CmsKit.Public.Application.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Public.HttpApi\Volo.CmsKit.Public.HttpApi.csproj" />
   </ItemGroup>
 
 </Project>

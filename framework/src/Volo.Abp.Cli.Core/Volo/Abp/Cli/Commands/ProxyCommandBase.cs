@@ -2,7 +2,10 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
+using NuGet.Versioning;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -11,14 +14,23 @@ namespace Volo.Abp.Cli.Commands
 {
     public abstract class ProxyCommandBase : IConsoleCommand, ITransientDependency
     {
+        public CliService CliService { get; }
+        public ILogger<HelpCommand> Logger { get; set; }
+
         protected abstract string CommandName { get; }
 
         protected abstract string SchematicsCommandName { get; }
 
-        public Task ExecuteAsync(CommandLineArgs commandLineArgs)
+        public ProxyCommandBase(CliService cliService)
+        {
+            CliService = cliService;
+            Logger = NullLogger<HelpCommand>.Instance;
+        }
+
+        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             CheckAngularJsonFile();
-            CheckNgSchematics();
+            await CheckNgSchematicsAsync();
 
             var prompt = commandLineArgs.Options.ContainsKey("p") || commandLineArgs.Options.ContainsKey("prompt");
             var defaultValue = prompt ? null : "__default";
@@ -51,11 +63,9 @@ namespace Volo.Abp.Cli.Commands
             }
 
             CmdHelper.RunCmd(commandBuilder.ToString());
-
-            return Task.CompletedTask;
         }
 
-        private void CheckNgSchematics()
+        private async Task CheckNgSchematicsAsync()
         {
             var packageJsonPath = $"package.json";
 
@@ -68,16 +78,30 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            var schematicsPackageNode =
+            var schematicsVersion =
                 (string) JObject.Parse(File.ReadAllText(packageJsonPath))["devDependencies"]?["@abp/ng.schematics"];
 
-            if (schematicsPackageNode == null)
+            if (schematicsVersion == null)
             {
                 throw new CliUsageException(
                     "\"@abp/ng.schematics\" NPM package should be installed to the devDependencies before running this command!" +
                     Environment.NewLine +
                     GetUsageInfo()
                 );
+            }
+
+            var parseError = SemanticVersion.TryParse(schematicsVersion.TrimStart('~', '^', 'v'), out var semanticSchematicsVersion);
+            if (parseError)
+            {
+                Logger.LogWarning("Couldn't determinate version of \"@abp/ng.schematics\" package.");
+                return;
+            }
+
+            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+            if (semanticSchematicsVersion < cliVersion)
+            {
+                Logger.LogWarning("\"@abp/ng.schematics\" version is lower than ABP Cli version.");
+                return;
             }
         }
 

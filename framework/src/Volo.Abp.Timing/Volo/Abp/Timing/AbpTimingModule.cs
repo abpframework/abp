@@ -8,7 +8,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.Timing
 {
     [DependsOn(
-        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpLocalizationModule),
         typeof(AbpSettingsModule)
         )]
     public class AbpTimingModule : AbpModule

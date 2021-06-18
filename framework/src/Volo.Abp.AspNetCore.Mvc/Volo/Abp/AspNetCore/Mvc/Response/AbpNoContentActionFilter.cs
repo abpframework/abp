@@ -18,7 +18,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
 
             await next();
 
-            if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.OK)
+            if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.OK
+                && context.Result == null)
             {
                 var returnType = context.ActionDescriptor.GetReturnType();
                 if (returnType == typeof(Task) || returnType == typeof(void))

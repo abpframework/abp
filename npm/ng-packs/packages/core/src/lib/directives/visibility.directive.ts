@@ -1,10 +1,10 @@
-import { Directive, Input, Optional, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, Optional, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import snq from 'snq';
 
 /**
  *
- * @deprecated To be deleted in v3.3
+ * @deprecated To be deleted in v5.0
  */
 @Directive({
   selector: '[abpVisibility]',

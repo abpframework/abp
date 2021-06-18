@@ -8,7 +8,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Linq
 {
-    public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ITransientDependency
+    public class AsyncQueryableExecuter : IAsyncQueryableExecuter, ISingletonDependency
     {
         protected IEnumerable<IAsyncQueryableProvider> Providers { get; }
 
@@ -28,6 +28,14 @@ namespace Volo.Abp.Linq
             return provider != null
                 ? provider.ContainsAsync(queryable, item, cancellationToken)
                 : Task.FromResult(queryable.Contains(item));
+        }
+
+        public Task<bool> AnyAsync<T>(IQueryable<T> queryable,  CancellationToken cancellationToken = default)
+        {
+            var provider = FindProvider(queryable);
+            return provider != null
+                ? provider.AnyAsync(queryable, cancellationToken)
+                : Task.FromResult(queryable.Any());
         }
 
         public Task<bool> AnyAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)

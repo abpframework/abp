@@ -1,6 +1,6 @@
 <ul class="navbar-nav">
   <ng-container
-    *ngFor="let route of routes.visible$ | async; trackBy: trackByFn"
+    *ngFor="let route of routesService.visible$ | async; trackBy: trackByFn"
     [ngTemplateOutlet]="isDropdown(route) ? dropdownLink : defaultLink"
     [ngTemplateOutletContext]="{ $implicit: route }"
   >
@@ -16,37 +16,40 @@
   </ng-template>
 
   <ng-template #dropdownLink let-route>
-    <li
-      #navbarRootDropdown
-      class="nav-item dropdown"
-      display="static"
-      *ngIf="route.children?.length"
-      [abpPermission]="route.requiredPolicy"
-      (click)="
-        navbarRootDropdown.expand
-          ? (navbarRootDropdown.expand = false)
-          : (navbarRootDropdown.expand = true)
-      "
-    >
-      <a
-        class="nav-link dropdown-toggle"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-        href="javascript:void(0)"
+    <ng-container *ngIf="route.children?.length">
+      <li
+        #navbarRootDropdown
+        class="nav-item dropdown"
+        display="static"
+        *abpPermission="route.requiredPolicy"
+        (click)="
+          navbarRootDropdown.expand
+            ? (navbarRootDropdown.expand = false)
+            : (navbarRootDropdown.expand = true)
+        "
       >
-        <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
-        {{ route.name | abpLocalization }}
-      </a>
-      <div
-        #routeContainer
-        class="dropdown-menu border-0 shadow-sm"
-        (click)="$event.preventDefault(); $event.stopPropagation()"
-        [class.d-block]="smallScreen && navbarRootDropdown.expand"
-      >
-        <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: route }"></ng-container>
-      </div>
-    </li>
+        <a
+          class="nav-link dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          href="javascript:void(0)"
+        >
+          <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
+          {{ route.name | abpLocalization }}
+        </a>
+        <div
+          #routeContainer
+          class="dropdown-menu border-0 shadow-sm"
+          (click)="$event.preventDefault(); $event.stopPropagation()"
+          [class.d-block]="smallScreen && navbarRootDropdown.expand"
+        >
+          <ng-container
+            *ngTemplateOutlet="forTemplate; context: { $implicit: route }"
+          ></ng-container>
+        </div>
+      </li>
+    </ng-container>
   </ng-template>
 
   <ng-template #forTemplate let-route>
@@ -59,12 +62,14 @@
   </ng-template>
 
   <ng-template #defaultChild let-child>
-    <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
-      <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
-        <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
-        {{ child.name | abpLocalization }}</a
-      >
-    </div>
+    <ng-container *ngIf="child.path">
+      <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
+        <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
+          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
+          {{ child.name | abpLocalization }}</a
+        >
+      </div>
+    </ng-container>
   </ng-template>
 
   <ng-template #dropdownChild let-child>
@@ -74,7 +79,7 @@
       #dropdownSubmenu="ngbDropdown"
       placement="right-top"
       [autoClose]="true"
-      [abpPermission]="child.requiredPolicy"
+      *abpPermission="child.requiredPolicy"
     >
       <div ngbDropdownToggle [class.dropdown-toggle]="false">
         <a

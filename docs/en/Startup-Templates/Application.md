@@ -33,6 +33,7 @@ abp new Acme.BookStore -t app
 This template provides multiple UI frameworks:
 
 * `mvc`: ASP.NET Core MVC UI with Razor Pages (default)
+* `blazor`: Blazor UI
 * `angular`: Angular UI
 
 Use `-u` or `--ui` option to specify the UI framework:
@@ -96,7 +97,7 @@ A `BookType` enum and a `BookConsts` class (which may have some constant fields 
 
 #### .Domain Project
 
-This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value types](../Value-Types.md), [repository interfaces](../Repositories.md) and other domain objects.
+This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value objects](../Value-Objects.md), [repository interfaces](../Repositories.md) and other domain objects.
 
 A `Book` entity, a `BookManager` domain service and an `IBookRepository` interface are good candidates for this project.
 

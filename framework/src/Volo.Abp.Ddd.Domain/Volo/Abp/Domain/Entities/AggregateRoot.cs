@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
@@ -13,7 +12,7 @@ namespace Volo.Abp.Domain.Entities
         IHasExtraProperties,
         IHasConcurrencyStamp
     {
-        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
+        public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
         [DisableAuditing]
         public virtual string ConcurrencyStamp { get; set; }
@@ -21,7 +20,7 @@ namespace Volo.Abp.Domain.Entities
         protected AggregateRoot()
         {
             ConcurrencyStamp = Guid.NewGuid().ToString("N");
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
             this.SetDefaultsForExtraProperties();
         }
 
@@ -39,7 +38,7 @@ namespace Volo.Abp.Domain.Entities
         IHasExtraProperties,
         IHasConcurrencyStamp
     {
-        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
+        public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
         [DisableAuditing]
         public virtual string ConcurrencyStamp { get; set; }
@@ -47,7 +46,7 @@ namespace Volo.Abp.Domain.Entities
         protected AggregateRoot()
         {
             ConcurrencyStamp = Guid.NewGuid().ToString("N");
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
             this.SetDefaultsForExtraProperties();
         }
 
@@ -55,7 +54,7 @@ namespace Volo.Abp.Domain.Entities
             : base(id)
         {
             ConcurrencyStamp = Guid.NewGuid().ToString("N");
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
             this.SetDefaultsForExtraProperties();
         }
 

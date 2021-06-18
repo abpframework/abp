@@ -12,7 +12,7 @@ using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.MongoDB
 {
-    public class MongoDbAsyncQueryableProvider : IAsyncQueryableProvider, ITransientDependency
+    public class MongoDbAsyncQueryableProvider : IAsyncQueryableProvider, ISingletonDependency
     {
         public bool CanExecute<T>(IQueryable<T> queryable)
         {
@@ -27,6 +27,11 @@ namespace Volo.Abp.MongoDB
         public Task<bool> ContainsAsync<T>(IQueryable<T> queryable, T item, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(GetMongoQueryable(queryable).Contains(item));
+        }
+
+        public Task<bool> AnyAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+        {
+            return GetMongoQueryable(queryable).AnyAsync(cancellationToken);
         }
 
         public Task<bool> AnyAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)

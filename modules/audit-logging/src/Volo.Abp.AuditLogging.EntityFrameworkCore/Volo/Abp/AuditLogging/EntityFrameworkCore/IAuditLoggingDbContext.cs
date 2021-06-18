@@ -7,6 +7,6 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
     [ConnectionStringName(AbpAuditLoggingDbProperties.ConnectionStringName)]
     public interface IAuditLoggingDbContext : IEfCoreDbContext
     {
-        DbSet<AuditLog> AuditLogs { get; set; }
+        DbSet<AuditLog> AuditLogs { get; }
     }
 }

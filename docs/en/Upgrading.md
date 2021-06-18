@@ -16,11 +16,30 @@ Run this command in the terminal while you are in the root folder of your soluti
 
 > If your solution has the Angular UI, you probably have `aspnet-core` and `angular` folders in the solution. Run this command in the parent folder of these two folders.
 
-## The Blog Posts
+### Database Migrations
 
-Sometimes we introduce new features/changes that requires to make changes in the startup template. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your solution.
+> Warning: Be careful if you are migrating your database since you may have data loss in some cases. Carefully check the generated migration code before executing it. It is suggested to take a backup of your current database.
 
-Whenever you upgrade your solution, it is strongly suggested to check the [ABP BLOG](https://blog.abp.io/?_ga=2.177248992.411298747.1597771169-1910388957.1594128976) to learn the new features and changes coming with the new version. We regularly publish posts and write these kind of changes. If the changes are not trivial, we also provide migration guides.
+When you upgrade to a new version, it is good to check if there is a database schema change and upgrade your database schema if your database provider is **Entity Framework Core**;
+
+* Use `Add-Migration "Upgraded_To_Abp_4_1"` or a similar command in the Package Manager Console (PMC) to create a new migration (Set the `EntityFrameworkCore.DbMigrations` as the Default project in the PMC and `.DbMigrator` as the Startup Project in the Solution Explorer, in the Visual Studio).
+* Run the `.DbMigrator` application to upgrade the database and seed the initial data.
+
+If `Add-Migration` generates an empty migration, you can use `Remove-Migration` to delete it before executing the `.DbMigrator`.
+
+## The Blog Posts & Guides
+
+Whenever you upgrade your solution, it is strongly suggested to check the [ABP BLOG](https://blog.abp.io/) to learn the new features and changes coming with the new version. We regularly publish posts and write these kind of changes.
+
+### Migration Guides
+
+We prepare migration guides if the new version brings breaking changes for existing applications. See the [Migration Guides](Migration-Guides/Index.md) page for all the guides.
+
+### Upgrading the Startup Template
+
+Sometimes we introduce new features/changes that requires to **make changes in the startup template**. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your existing solution.
+
+It is not practical to document the necessary changes line by line. In this case, we suggest you to create an example solution, one with your existing version and one with the new version and compare them using a diff tool. You can [see this guide](Migration-Guides/Upgrading-Startup-Template.md) to learn how you can do it using WinMerge application.
 
 ## Semantic Versioning & Breaking Changes
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Quartz;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.BackgroundJobs.Quartz
 {
@@ -16,9 +17,12 @@ namespace Volo.Abp.BackgroundJobs.Quartz
 
         protected AbpBackgroundJobQuartzOptions Options { get; }
 
-        public QuartzBackgroundJobManager(IScheduler scheduler, IOptions<AbpBackgroundJobQuartzOptions> options)
+        protected IJsonSerializer JsonSerializer { get; }
+
+        public QuartzBackgroundJobManager(IScheduler scheduler, IOptions<AbpBackgroundJobQuartzOptions> options, IJsonSerializer jsonSerializer)
         {
             Scheduler = scheduler;
+            JsonSerializer = jsonSerializer;
             Options = options.Value;
         }
 
@@ -33,10 +37,10 @@ namespace Volo.Abp.BackgroundJobs.Quartz
         {
             var jobDataMap = new JobDataMap
             {
-                {nameof(TArgs), args},
-                {JobDataPrefix+ nameof(Options.RetryCount), retryCount},
-                {JobDataPrefix+ nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond},
-                {JobDataPrefix+ RetryIndex, 0}
+                {nameof(TArgs), JsonSerializer.Serialize(args)},
+                {JobDataPrefix+ nameof(Options.RetryCount), retryCount.ToString()},
+                {JobDataPrefix+ nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond.ToString()},
+                {JobDataPrefix+ RetryIndex, "0"}
             };
 
             var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().RequestRecovery().SetJobData(jobDataMap).Build();

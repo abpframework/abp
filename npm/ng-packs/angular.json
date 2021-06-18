@@ -148,6 +148,42 @@
         }
       }
     },
+    "permission-management": {
+      "projectType": "library",
+      "root": "packages/permission-management",
+      "sourceRoot": "packages/permission-management/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/permission-management/tsconfig.lib.json",
+            "project": "packages/permission-management/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/permission-management/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "coverage": true,
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/permission-management/tsconfig.lib.json",
+              "packages/permission-management/tsconfig.spec.json"
+            ]
+          }
+        }
+      }
+    },
     "account": {
       "projectType": "library",
       "root": "packages/account",
@@ -181,42 +217,6 @@
               "packages/account/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
-    },
-    "permission-management": {
-      "projectType": "library",
-      "root": "packages/permission-management",
-      "sourceRoot": "packages/permission-management/src",
-      "prefix": "abp",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "packages/permission-management/tsconfig.lib.json",
-            "project": "packages/permission-management/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "packages/permission-management/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-builders/jest:run",
-          "options": {
-            "coverage": true,
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "packages/permission-management/tsconfig.lib.json",
-              "packages/permission-management/tsconfig.spec.json"
-            ]
           }
         }
       }
@@ -415,7 +415,6 @@
             "polyfills": "apps/dev-app/src/polyfills.ts",
             "tsConfig": "apps/dev-app/tsconfig.dev.json",
             "aot": true,
-            "extractCss": true,
             "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "styles": [
@@ -470,7 +469,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -496,6 +494,15 @@
                   "with": "apps/dev-app/src/environments/environment.internal.ts"
                 }
               ]
+            },
+            "regression": {
+              "tsConfig": "apps/dev-app/tsconfig.dev.json",
+              "fileReplacements": [
+                {
+                  "replace": "apps/dev-app/src/environments/environment.ts",
+                  "with": "apps/dev-app/src/environments/environment.regression.ts"
+                }
+              ]
             }
           }
         },
@@ -510,6 +517,9 @@
             },
             "internal": {
               "browserTarget": "dev-app:build:internal"
+            },
+            "regression": {
+              "browserTarget": "dev-app:build:regression"
             }
           }
         },

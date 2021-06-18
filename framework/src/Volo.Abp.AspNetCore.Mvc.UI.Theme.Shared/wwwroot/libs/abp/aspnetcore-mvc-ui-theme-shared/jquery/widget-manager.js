@@ -52,8 +52,12 @@
         }
 
         function init($widgets) {
-            if(!$widgets){
-                $widgets = opts.wrapper.findWithSelf('.abp-widget-wrapper');
+            if (!$widgets) {
+                if (opts.wrapper.hasClass('abp-widget-wrapper')) {
+                    $widgets = opts.wrapper;
+                } else {
+                    $widgets = opts.wrapper.find('.abp-widget-wrapper');
+                }
             }
 
             $widgets.each(function () {
@@ -72,8 +76,12 @@
         }
 
         function refresh($widgets) {
-            if(!$widgets){
-                $widgets = opts.wrapper.findWithSelf('.abp-widget-wrapper');
+            if (!$widgets) {
+                if (opts.wrapper.hasClass('abp-widget-wrapper')) {
+                    $widgets = opts.wrapper;
+                } else {
+                    $widgets = opts.wrapper.findWithSelf('.abp-widget-wrapper');
+                }
             }
 
             $widgets.each(function () {
@@ -90,7 +98,9 @@
                     }).then(function (result) {
                         var $result = $(result);
                         $widget.replaceWith($result);
-                        init($result);
+                        if($widget.attr('data-widget-auto-init') !== "true"){
+                            init($result);
+                        }
                     });
                 } else {
                     var widgetApi = $widget.data('abp-widget-api');
@@ -114,5 +124,24 @@
 
         return publicApi;
     };
+
+    function autoInitWidgets($wrapper) {
+        $wrapper.findWithSelf('.abp-widget-wrapper[data-widget-auto-init="true"]')
+            .each(function () {
+                var widgetManager = new abp.WidgetManager({
+                    wrapper: $(this),
+                });
+
+                widgetManager.init();
+            });
+    }
+
+    abp.dom.onNodeAdded(function (args) {
+        autoInitWidgets(args.$el);
+    })
+
+    $(function () {
+        autoInitWidgets($('body'));
+    });
 
 })(jQuery);

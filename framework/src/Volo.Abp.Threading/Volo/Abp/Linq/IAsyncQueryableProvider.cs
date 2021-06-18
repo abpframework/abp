@@ -25,6 +25,10 @@ namespace Volo.Abp.Linq
 
         Task<bool> AnyAsync<T>(
             [NotNull] IQueryable<T> queryable,
+            CancellationToken cancellationToken = default);
+
+        Task<bool> AnyAsync<T>(
+            [NotNull] IQueryable<T> queryable,
             [NotNull] Expression<Func<T, bool>> predicate,
             CancellationToken cancellationToken = default);
 

@@ -12,17 +12,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 {
     public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
     {
-        protected AbpAuditingOptions Options { get; }
-        private readonly IAuditingHelper _auditingHelper;
-        private readonly IAuditingManager _auditingManager;
-
-        public AbpAuditActionFilter(IOptions<AbpAuditingOptions> options, IAuditingHelper auditingHelper, IAuditingManager auditingManager)
-        {
-            Options = options.Value;
-            _auditingHelper = auditingHelper;
-            _auditingManager = auditingManager;
-        }
-
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (!ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
@@ -63,7 +52,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             auditLog = null;
             auditLogAction = null;
 
-            if (!Options.IsEnabled)
+            var options = context.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+            if (!options.IsEnabled)
             {
                 return false;
             }
@@ -73,19 +63,20 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
                 return false;
             }
 
-            var auditLogScope = _auditingManager.Current;
+            var auditLogScope = context.GetRequiredService<IAuditingManager>().Current;
             if (auditLogScope == null)
             {
                 return false;
             }
 
-            if (!_auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
+            var auditingHelper = context.GetRequiredService<IAuditingHelper>();
+            if (!auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
             {
                 return false;
             }
 
             auditLog = auditLogScope.Log;
-            auditLogAction = _auditingHelper.CreateAuditLogAction(
+            auditLogAction = auditingHelper.CreateAuditLogAction(
                 auditLog,
                 context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
                 context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,

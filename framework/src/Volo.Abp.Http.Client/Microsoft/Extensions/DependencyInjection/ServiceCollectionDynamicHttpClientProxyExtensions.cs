@@ -97,7 +97,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Check.NotNull(type, nameof(type));
             Check.NotNullOrWhiteSpace(remoteServiceConfigurationName, nameof(remoteServiceConfigurationName));
 
-            AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName);
+            AddHttpClientFactory(services, remoteServiceConfigurationName);
 
             services.Configure<AbpHttpClientOptions>(options =>
             {
@@ -145,7 +145,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static IServiceCollection AddHttpClientFactoryAndPolicy(
+        private static IServiceCollection AddHttpClientFactory(
             [NotNull] this IServiceCollection services,
             [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName)
         {
@@ -156,14 +156,23 @@ namespace Microsoft.Extensions.DependencyInjection
                 return services;
             }
 
-            var clientBuilder = services.AddHttpClient(remoteServiceConfigurationName);
+            var clientBuilder = services.AddHttpClient(remoteServiceConfigurationName, (provider, client) =>
+            {
+                foreach (var clientBuildAction in preOptions.ProxyClientActions)
+                {
+                    clientBuildAction(remoteServiceConfigurationName, provider, client);
+                }
+            });
 
             foreach (var clientBuildAction in preOptions.ProxyClientBuildActions)
             {
                 clientBuildAction(remoteServiceConfigurationName, clientBuilder);
             }
 
-            preOptions.ConfiguredProxyClients.Add(remoteServiceConfigurationName);
+            services.PreConfigure<AbpHttpClientBuilderOptions>(options =>
+            {
+                options.ConfiguredProxyClients.Add(remoteServiceConfigurationName);
+            });
 
             return services;
         }

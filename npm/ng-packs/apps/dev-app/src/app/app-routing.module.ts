@@ -9,8 +9,7 @@ const routes: Routes = [
   },
   {
     path: 'account',
-    loadChildren: () =>
-      import('@abp/ng.account').then(m => m.AccountModule.forLazy({ redirectUrl: '/' })),
+    loadChildren: () => import('@abp/ng.account').then(m => m.AccountModule.forLazy()),
   },
   {
     path: 'identity',
@@ -29,7 +28,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -4,7 +4,7 @@ import { EMPTY, of } from 'rxjs';
 import { BOOTSTRAP } from '../constants/styles';
 import { createLazyStyleHref, initLazyStyleHandler, LazyStyleHandler } from '../handlers';
 
-const languageChange = of({ payload: 'en' });
+const languageChange$ = of({ payload: 'en' });
 
 describe('LazyStyleHandler', () => {
   let spectator: SpectatorService<LazyStyleHandler>;
@@ -16,7 +16,7 @@ describe('LazyStyleHandler', () => {
     providers: [
       {
         provide: LocalizationService,
-        useValue: { currentLang: 'en', languageChange },
+        useValue: { currentLang: 'en', languageChange$ },
       },
     ],
   });
@@ -53,7 +53,7 @@ describe('initLazyStyleHandler', () => {
     const generator = (function*() {
       yield undefined; // LAZY_STYLES
       yield { loaded: new Map() }; // LazyLoadService
-      yield { currentLang: 'en', languageChange: EMPTY }; // LocalizationService
+      yield { currentLang: 'en', languageChange$: EMPTY }; // LocalizationService
     })();
 
     const injector = {

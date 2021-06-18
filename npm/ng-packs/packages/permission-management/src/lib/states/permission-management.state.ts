@@ -3,6 +3,7 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
+import { ProviderInfoDto } from '../proxy/models';
 import { PermissionsService } from '../proxy/permissions.service';
 
 @State<PermissionManagement.State>({
@@ -26,9 +27,7 @@ export class PermissionManagementState {
   @Action(GetPermissions)
   permissionManagementGet(
     { patchState }: StateContext<PermissionManagement.State>,
-    {
-      payload: { providerKey, providerName } = {} as PermissionManagement.GrantedProvider,
-    }: GetPermissions,
+    { payload: { providerKey, providerName } = {} as ProviderInfoDto }: GetPermissions,
   ) {
     return this.service.get(providerName, providerKey).pipe(
       tap(permissionResponse =>

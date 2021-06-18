@@ -32,9 +32,9 @@ namespace Volo.Docs.Documents
         public virtual string LocalDirectory { get; set; }
 
         public virtual DateTime CreationTime { get; set; }
-        
+
         public virtual DateTime LastUpdatedTime { get; set; }
-        
+
         public virtual DateTime? LastSignificantUpdateTime { get; set; }
 
         public virtual DateTime LastCachedTime { get; set; }
@@ -44,7 +44,6 @@ namespace Volo.Docs.Documents
         protected Document()
         {
             Contributors = new List<DocumentContributor>();
-            ExtraProperties = new Dictionary<string, object>();
         }
 
         public Document(
@@ -65,8 +64,8 @@ namespace Volo.Docs.Documents
             DateTime lastCachedTime,
             DateTime? lastSignificantUpdateTime = null
         )
+            : base(id)
         {
-            Id = id;
             ProjectId = projectId;
 
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
@@ -86,12 +85,11 @@ namespace Volo.Docs.Documents
             LastSignificantUpdateTime = lastSignificantUpdateTime;
 
             Contributors = new List<DocumentContributor>();
-            ExtraProperties = new Dictionary<string, object>();
         }
 
-        public virtual void AddContributor(string username, string userProfileUrl, string avatarUrl)
+        public virtual void AddContributor(string username, string userProfileUrl, string avatarUrl, int commitCount = 1)
         {
-            Contributors.AddIfNotContains(new DocumentContributor(Id, username, userProfileUrl, avatarUrl));
+            Contributors.AddIfNotContains(new DocumentContributor(Id, username, userProfileUrl, avatarUrl, commitCount));
         }
 
         public virtual void RemoveAllContributors()

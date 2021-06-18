@@ -37,14 +37,6 @@ describe('Validators', () => {
 
       expect(control.errors).toEqual(expected);
     });
-
-    it('should return null when control is pristine', () => {
-      const invalidNumber = '5105105105105101';
-      const control = new FormControl(invalidNumber, [validateCreditCard()]);
-      // control is not dirty
-
-      expect(control.valid).toBe(true);
-    });
   });
 
   describe('Email Validator', () => {
@@ -81,14 +73,6 @@ describe('Validators', () => {
         expect(control.errors).toEqual(expected);
       },
     );
-
-    it('should return null when control is pristine', () => {
-      const invalidDate = '';
-      const control = new FormControl(invalidDate, [validateMinAge({ age: Infinity })]);
-      // control is not dirty
-
-      expect(control.valid).toBe(true);
-    });
   });
 
   describe('Range Validator', () => {
@@ -115,14 +99,6 @@ describe('Validators', () => {
         expect(control.errors).toEqual(expected);
       },
     );
-
-    it('should return null when control is pristine', () => {
-      const invalidUrl = '';
-      const control = new FormControl(invalidUrl, [validateRange({ minimum: 3 })]);
-      // control is not dirty
-
-      expect(control.valid).toBe(true);
-    });
   });
 
   describe('Required Validator', () => {
@@ -148,14 +124,6 @@ describe('Validators', () => {
         expect(control.errors).toEqual(expected);
       },
     );
-
-    it('should return null when control is pristine', () => {
-      const invalidUrl = '';
-      const control = new FormControl(invalidUrl, [validateRequired()]);
-      // control is not dirty
-
-      expect(control.valid).toBe(true);
-    });
   });
 
   describe('String Length Validator', () => {
@@ -178,14 +146,6 @@ describe('Validators', () => {
         expect(control.errors).toEqual(expected);
       },
     );
-
-    it('should return null when control is pristine', () => {
-      const invalidUrl = '';
-      const control = new FormControl(invalidUrl, [validateStringLength({ minimumLength: 3 })]);
-      // control is not dirty
-
-      expect(control.valid).toBe(true);
-    });
   });
 
   describe('Url Validator', () => {
@@ -216,14 +176,6 @@ describe('Validators', () => {
       control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
 
       expect(control.errors).toEqual(expected);
-    });
-
-    it('should return null when control is pristine', () => {
-      const invalidUrl = 'x';
-      const control = new FormControl(invalidUrl, [validateUrl()]);
-      // control is not dirty
-
-      expect(control.valid).toBe(true);
     });
   });
 });

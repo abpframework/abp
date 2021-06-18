@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +10,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public abstract class HttpTenantResolveContributorBase : TenantResolveContributorBase
     {
-        public override void Resolve(ITenantResolveContext context)
+        public override async Task ResolveAsync(ITenantResolveContext context)
         {
             var httpContext = context.GetHttpContext();
             if (httpContext == null)
@@ -19,7 +20,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
             try
             {
-                ResolveFromHttpContext(context, httpContext);
+                await ResolveFromHttpContextAsync(context, httpContext);
             }
             catch (Exception e)
             {
@@ -29,15 +30,15 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             }
         }
 
-        protected virtual void ResolveFromHttpContext(ITenantResolveContext context, HttpContext httpContext)
+        protected virtual async Task ResolveFromHttpContextAsync(ITenantResolveContext context, HttpContext httpContext)
         {
-            var tenantIdOrName = GetTenantIdOrNameFromHttpContextOrNull(context, httpContext);
+            var tenantIdOrName = await GetTenantIdOrNameFromHttpContextOrNullAsync(context, httpContext);
             if (!tenantIdOrName.IsNullOrEmpty())
             {
                 context.TenantIdOrName = tenantIdOrName;
             }
         }
 
-        protected abstract string GetTenantIdOrNameFromHttpContextOrNull([NotNull] ITenantResolveContext context, [NotNull] HttpContext httpContext);
+        protected abstract Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync([NotNull] ITenantResolveContext context, [NotNull] HttpContext httpContext);
     }
 }

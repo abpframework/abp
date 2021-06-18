@@ -1,30 +1,38 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Tracing;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
     {
         public ICancellationTokenProvider CancellationTokenProvider { get; set; }
-
         protected IApiDescriptionCache Cache { get; }
+        protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
+        protected ICorrelationIdProvider CorrelationIdProvider { get; }
+        protected ICurrentTenant CurrentTenant { get; }
 
-        private static readonly JsonSerializerSettings SharedJsonSerializerSettings = new JsonSerializerSettings
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-
-        public ApiDescriptionFinder(IApiDescriptionCache cache)
+        public ApiDescriptionFinder(
+            IApiDescriptionCache cache,
+            IOptions<AbpCorrelationIdOptions> abpCorrelationIdOptions,
+            ICorrelationIdProvider correlationIdProvider,
+            ICurrentTenant currentTenant)
         {
             Cache = cache;
+            AbpCorrelationIdOptions = abpCorrelationIdOptions.Value;
+            CorrelationIdProvider = correlationIdProvider;
+            CurrentTenant = currentTenant;
             CancellationTokenProvider = NullCancellationTokenProvider.Instance;
         }
 
@@ -77,10 +85,19 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(client, baseUrl));
         }
 
-        protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(HttpClient client, string baseUrl)
+        protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(
+            HttpClient client,
+            string baseUrl)
         {
-            var response = await client.GetAsync(
-                baseUrl.EnsureEndsWith('/') + "api/abp/api-definition",
+            var requestMessage = new HttpRequestMessage(
+                HttpMethod.Get,
+                baseUrl.EnsureEndsWith('/') + "api/abp/api-definition"
+            );
+
+            AddHeaders(requestMessage);
+
+            var response = await client.SendAsync(
+                requestMessage,
                 CancellationTokenProvider.Token
             );
 
@@ -91,11 +108,36 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             var content = await response.Content.ReadAsStringAsync();
 
-            var result = JsonConvert.DeserializeObject(
-                content,
-                typeof(ApplicationApiDescriptionModel), SharedJsonSerializerSettings);
+            var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
 
             return (ApplicationApiDescriptionModel)result;
+        }
+
+        protected virtual void AddHeaders(HttpRequestMessage requestMessage)
+        {
+            //CorrelationId
+            requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+
+            //TenantId
+            if (CurrentTenant.Id.HasValue)
+            {
+                //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+                requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            }
+
+            //Culture
+            //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
+            var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
+            if (!currentCulture.IsNullOrEmpty())
+            {
+                requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture));
+            }
+
+            //X-Requested-With
+            requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
         }
 
         protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)

@@ -1,0 +1,24 @@
+{
+    "culture": "hu",
+    "texts": {
+      "Menu:TenantManagement": "Bérlő menedzsment",
+      "Tenants": "Bérlők",
+      "NewTenant": "Új bérlő",
+      "TenantName": "Bérlő neve",
+      "DisplayName:TenantName": "Bérlő neve",
+      "TenantDeletionConfirmationMessage": "A '{0}' bérlő törlésre kerül. Megerősíti a műveletet?",
+      "ConnectionStrings": "Kapcsolat beállítás",
+      "DisplayName:DefaultConnectionString": "Alapértelmezettt kapcsolati beállítás",
+      "DisplayName:UseSharedDatabase": "Használjon megosztott adatbázist",
+      "ManageHostFeatures": "Host funkciók kezelése",
+      "Permission:TenantManagement": "Bérlő menedzsment",
+      "Permission:Create": "Létrehozás",
+      "Permission:Edit": "Szerkesztés",
+      "Permission:Delete": "Törlés",
+      "Permission:ManageConnectionStrings": "Kapcsolati beállítások kezelése",
+      "Permission:ManageFeatures": "Funkciók kezelése",
+      "DisplayName:AdminEmailAddress": "Admin email cím",
+      "DisplayName:AdminPassword": "Admin jelszó"
+    }
+  }
+  

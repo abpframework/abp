@@ -14,11 +14,6 @@ namespace Volo.Abp.Identity.Blazor
             
             CreateMap<IdentityRoleDto, IdentityRoleUpdateDto>()
                 .MapExtraProperties();
-
-            CreateMap<IdentityUserDto, IdentityUserUpdateDto>()
-                .Ignore(x => x.Password)
-                .Ignore(x => x.RoleNames)
-                .MapExtraProperties();
         }
     }
 }

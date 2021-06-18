@@ -1,16 +1,17 @@
-import { ABP, LocalizationPipe, RouterOutletComponent, RoutesService } from '@abp/ng.core';
+import {
+  ABP,
+  CORE_OPTIONS,
+  LocalizationPipe,
+  RouterOutletComponent,
+  RoutesService,
+} from '@abp/ng.core';
+import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting, SpyObject } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { Subject } from 'rxjs';
+import { mockRoutesService } from '../../../../core/src/lib/tests/routes.service.spec';
 import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
 
-const mockActions = new Subject();
-const mockStore = ({
-  selectSnapshot() {
-    return true;
-  },
-} as unknown) as Store;
 const mockRoutes: ABP.Route[] = [
   { name: 'Identity', path: '/identity' },
   { name: 'Users', path: '/identity/users', parentName: 'Identity' },
@@ -25,11 +26,12 @@ describe('BreadcrumbComponent', () => {
     component: RouterOutletComponent,
     stubsEnabled: false,
     detectChanges: false,
-    mocks: [Store],
+    mocks: [Store, HttpClient],
     providers: [
+      { provide: CORE_OPTIONS, useValue: {} },
       {
         provide: RoutesService,
-        useFactory: () => new RoutesService(mockActions, mockStore),
+        useFactory: () => mockRoutesService(),
       },
     ],
     declarations: [LocalizationPipe, BreadcrumbComponent],

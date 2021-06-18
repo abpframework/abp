@@ -2,7 +2,7 @@
 
     <Import Project="..\..\..\configureawait.props" />
     <Import Project="..\..\..\common.props" />
-    
+
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -17,8 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AWSSDK.S3" Version="3.3.111.27" />
-      <PackageReference Include="AWSSDK.SecurityToken" Version="3.3.105.30" />
+      <PackageReference Include="AWSSDK.S3" Version="3.7.0.2" />
+      <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.0.1" />
     </ItemGroup>
 
 </Project>

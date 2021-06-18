@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
@@ -61,6 +61,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
             var statusCodeFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
             var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
+            var options = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
 
             httpContext.Response.Clear();
             httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);
@@ -70,7 +71,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             await httpContext.Response.WriteAsync(
                 jsonSerializer.Serialize(
                     new RemoteServiceErrorResponse(
-                        errorInfoConverter.Convert(exception)
+                        errorInfoConverter.Convert(exception, options.SendExceptionsDetailsToClients)
                     )
                 )
             );

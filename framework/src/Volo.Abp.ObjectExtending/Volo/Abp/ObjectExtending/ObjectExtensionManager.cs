@@ -14,18 +14,17 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public ConcurrentDictionary<object, object> Configuration { get; }
 
-        protected Dictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
-        
+        protected ConcurrentDictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
+
         protected internal ObjectExtensionManager()
         {
-            ObjectsExtensions = new Dictionary<Type, ObjectExtensionInfo>();
+            ObjectsExtensions = new ConcurrentDictionary<Type, ObjectExtensionInfo>();
             Configuration = new ConcurrentDictionary<object, object>();
         }
 
         [NotNull]
         public virtual ObjectExtensionManager AddOrUpdate<TObject>(
             [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
-            where TObject : IHasExtraProperties
         {
             return AddOrUpdate(typeof(TObject), configureAction);
         }
@@ -50,11 +49,9 @@ namespace Volo.Abp.ObjectExtending
             [NotNull] Type type,
             [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
         {
-            Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
-            
             var extensionInfo = ObjectsExtensions.GetOrAdd(
                 type,
-                () => new ObjectExtensionInfo(type)
+                _ => new ObjectExtensionInfo(type)
             );
 
             configureAction?.Invoke(extensionInfo);
@@ -64,7 +61,6 @@ namespace Volo.Abp.ObjectExtending
 
         [CanBeNull]
         public virtual ObjectExtensionInfo GetOrNull<TObject>()
-            where TObject : IHasExtraProperties
         {
             return GetOrNull(typeof(TObject));
         }
@@ -72,8 +68,6 @@ namespace Volo.Abp.ObjectExtending
         [CanBeNull]
         public virtual ObjectExtensionInfo GetOrNull([NotNull] Type type)
         {
-            Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
-
             return ObjectsExtensions.GetOrDefault(type);
         }
 

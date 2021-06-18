@@ -3,9 +3,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EntityFrameworkCore.Oracle
 {
-    [DependsOn(
-        typeof(AbpEntityFrameworkCoreModule)
-        )]
+    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
     public class AbpEntityFrameworkCoreOracleModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

@@ -2,32 +2,15 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
     "DB": ["EF","Mongo"]
 }
 ````
-{{
-if UI == "MVC"
-  UI_Text="mvc"
-else if UI == "NG"
-  UI_Text="angular"
-else
-  UI_Text="?"
-end
-if DB == "EF"
-  DB_Text="Entity Framework Core"
-else if DB == "Mongo"
-  DB_Text="MongoDB"
-else
-  DB_Text="?"
-end
-}}
-
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **{{DB_Text}}** as the ORM provider. 
+* **{{DB_Value}}** as the ORM provider. 
 * **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts;
@@ -45,9 +28,10 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 ## Introduction
@@ -86,15 +70,25 @@ This is just like done for the `Book` entity before, so no need to explain again
 
 ## Create a new Database Migration
 
-Open the **Package Manager Console** on Visual Studio and ensure that the **Default project** is `Acme.BookStore.EntityFrameworkCore.DbMigrations` in the Package Manager Console, as shown on the picture below. Also, set the `Acme.BookStore.Web` as the startup project (right click it on the solution explorer and click to "Set as Startup Project").
+The startup solution is configured to use [Entity Framework Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). Since we've changed the database mapping configuration, we should create a new migration and apply changes to the database.
 
-Run the following command to create a new database migration:
+Open a command-line terminal in the directory of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project and type the following command:
 
-![bookstore-add-migration-authors](images/bookstore-add-migration-authors.png)
+````bash
+dotnet ef migrations add Added_Authors
+````
 
-This will create a new migration class. Then run the `Update-Database` command to create the table on the database.
+This will add a new migration class to the project:
 
-> See the [Microsoft's documentation](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) for more about the EF Core database migrations.
+![bookstore-efcore-migration-authors](./images/bookstore-efcore-migration-authors.png)
+
+You can apply changes to the database using the following command, in the same command-line terminal:
+
+````bash
+dotnet ef database update
+````
+
+> If you are using Visual Studio, you may want to use `Add-Migration Added_Authors -c BookStoreMigrationsDbContext` and `Update-Database -c BookStoreMigrationsDbContext` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`Acme.BookStore.HttpApi.Host`{{end}} is the startup project and `Acme.BookStore.EntityFrameworkCore.DbMigrations` is the *Default Project* in PMC.
 
 {{else if DB=="Mongo"}}
 
@@ -139,7 +133,8 @@ namespace Acme.BookStore.Authors
 
         public async Task<Author> FindByNameAsync(string name)
         {
-            return await DbSet.FirstOrDefaultAsync(author => author.Name == name);
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.FirstOrDefaultAsync(author => author.Name == name);
         }
 
         public async Task<List<Author>> GetListAsync(
@@ -148,7 +143,8 @@ namespace Acme.BookStore.Authors
             string sorting,
             string filter = null)
         {
-            return await DbSet
+            var dbSet = await GetDbSetAsync();
+            return await dbSet
                 .WhereIf(
                     !filter.IsNullOrWhiteSpace(),
                     author => author.Name.Contains(filter)
@@ -162,7 +158,7 @@ namespace Acme.BookStore.Authors
 }
 ````
 
-* Inherited from the `EfCoreAuthorRepository`, so it inherits the standard repository method implementations.
+* Inherited from the `EfCoreRepository`, so it inherits the standard repository method implementations.
 * `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 
@@ -198,8 +194,8 @@ namespace Acme.BookStore.Authors
 
         public async Task<Author> FindByNameAsync(string name)
         {
-            return await GetMongoQueryable()
-                .FirstOrDefaultAsync(author => author.Name == name);
+            var queryable = await GetMongoQueryableAsync();
+            return await queryable.FirstOrDefaultAsync(author => author.Name == name);
         }
 
         public async Task<List<Author>> GetListAsync(
@@ -208,7 +204,8 @@ namespace Acme.BookStore.Authors
             string sorting,
             string filter = null)
         {
-            return await GetMongoQueryable()
+            var queryable = await GetMongoQueryableAsync();
+            return await queryable
                 .WhereIf<Author, IMongoQueryable<Author>>(
                     !filter.IsNullOrWhiteSpace(),
                     author => author.Name.Contains(filter)
@@ -223,7 +220,7 @@ namespace Acme.BookStore.Authors
 }
 ```
 
-* Inherited from the `MongoDbAuthorRepository`, so it inherits the standard repository method implementations.
+* Inherited from the `MongoDbRepository`, so it inherits the standard repository method implementations.
 * `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 

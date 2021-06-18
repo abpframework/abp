@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
@@ -20,15 +22,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         private readonly HtmlEncoder _htmlEncoder;
         private readonly IHtmlGenerator _htmlGenerator;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IStringLocalizer<AbpUiResource> _localizer;
 
         public AbpDynamicFormTagHelperService(
             HtmlEncoder htmlEncoder,
             IHtmlGenerator htmlGenerator,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IStringLocalizer<AbpUiResource> localizer)
         {
             _htmlEncoder = htmlEncoder;
             _htmlGenerator = htmlGenerator;
             _serviceProvider = serviceProvider;
+            _localizer = localizer;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -37,7 +42,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             NormalizeTagMode(context, output);
 
-            var childContent = (await output.GetChildContentAsync()).GetContent();
+            var childContent = await output.GetChildContentAsync();
 
             await ConvertToMvcForm(context, output);
 
@@ -73,8 +78,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             await formTagOutput.GetChildContentAsync();
 
-            output.PostContent.SetHtmlContent(output.PostContent.GetContent() + formTagOutput.PostContent.GetContent());
-            output.PreContent.SetHtmlContent(output.PreContent.GetContent() + formTagOutput.PreContent.GetContent());
+            output.PostContent.AppendHtml(formTagOutput.PostContent);
+            output.PreContent.AppendHtml(formTagOutput.PreContent);
         }
 
         protected virtual void NormalizeTagMode(TagHelperContext context, TagHelperOutput output)
@@ -88,7 +93,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.Attributes.AddIfNotContains("method", "post");
         }
 
-        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, List<FormGroupItem> items, string childContent)
+        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, List<FormGroupItem> items, TagHelperContent childContent)
         {
             var contentBuilder = new StringBuilder("");
 
@@ -97,16 +102,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 contentBuilder.AppendLine(item.HtmlContent);
             }
 
-            if (childContent.Contains(AbpFormContentPlaceHolder))
+            var content = childContent.GetContent();
+            if (content.Contains(AbpFormContentPlaceHolder))
             {
-                childContent = childContent.Replace(AbpFormContentPlaceHolder, contentBuilder.ToString());
+                content = content.Replace(AbpFormContentPlaceHolder, contentBuilder.ToString());
             }
             else
             {
-                childContent = contentBuilder + childContent;
+                content = contentBuilder + content;
             }
 
-            output.Content.SetHtmlContent(childContent);
+            output.Content.SetHtmlContent(content);
         }
 
         protected virtual async Task SetSubmitButton(TagHelperContext context, TagHelperOutput output)
@@ -118,7 +124,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var buttonHtml = await ProcessSubmitButtonAndGetContentAsync(context, output);
 
-            output.PostContent.SetHtmlContent(output.PostContent.GetContent() + buttonHtml);
+            output.PostContent.AppendHtml(buttonHtml);
         }
 
         protected virtual List<FormGroupItem> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)
@@ -144,7 +150,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 }
             }
         }
-        
+
         protected virtual void RemoveFormGroupItemsNotInModel(TagHelperContext context, TagHelperOutput output, List<FormGroupItem> items)
         {
             var models = GetModels(context, output);
@@ -191,7 +197,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var abpButtonTagHelper = _serviceProvider.GetRequiredService<AbpButtonTagHelper>();
             var attributes = new TagHelperAttributeList { new TagHelperAttribute("type", "submit") };
-            abpButtonTagHelper.Text = "Submit";
+            abpButtonTagHelper.Text = _localizer["Submit"];
             abpButtonTagHelper.ButtonType = AbpButtonType.Primary;
 
             return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);

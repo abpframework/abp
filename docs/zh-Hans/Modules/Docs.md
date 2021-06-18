@@ -47,7 +47,7 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 ```json
 {
   "ConnectionStrings": {
-    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True"
   }
 }
 ```

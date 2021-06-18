@@ -10,7 +10,7 @@
     "ConnectionStrings": "Bağlantı cümlesi",
     "DisplayName:DefaultConnectionString": "Varsayılan bağlantı cümlesi",
     "DisplayName:UseSharedDatabase": "Paylaşılan veritabanını kullan",
-    "ManageHostFeatures": "Toplantı Sahibi özelliklerini yönetin",
+    "ManageHostFeatures": "Host özelliklerini yönetin",
     "Permission:TenantManagement": "Müşteri yönetimi",
     "Permission:Create": "Oluşturma",
     "Permission:Edit": "Düzenleme",

@@ -2,16 +2,22 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of, throwError } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
-import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
+import { GetAppConfiguration, PatchConfigState, SetEnvironment } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
-import { SetLanguage } from '../actions/session.actions';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
+import { ConfigStateService } from '../services/config-state.service';
+import { EnvironmentService } from '../services/environment.service';
+import { SessionStateService } from '../services/session-state.service';
 import { interpolate } from '../utils/string-utils';
-import { SessionState } from './session.state';
+import compare from 'just-compare';
+import { ApplicationConfigurationDto } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 
+/**
+ * @deprecated Use ConfigStateService instead. To be deleted in v5.0.
+ */
 @State<Config.State>({
   name: 'ConfigState',
   defaults: {} as Config.State,
@@ -26,6 +32,11 @@ export class ConfigState {
   @Selector()
   static getApplicationInfo(state: Config.State): Config.Application {
     return state.environment.application || ({} as Config.Application);
+  }
+
+  @Selector()
+  static getEnvironment(state: Config.State): Config.Environment {
+    return state.environment;
   }
 
   static getOne(key: string) {
@@ -99,6 +110,9 @@ export class ConfigState {
     return selector;
   }
 
+  /**
+   * @deprecated use PermissionService's getGrantedPolicyStream or getGrantedPolicy methods.
+   */
   static getGrantedPolicy(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State): boolean => {
       if (!key) return true;
@@ -191,7 +205,6 @@ export class ConfigState {
         return defaultValue || sourceKey;
       }
 
-      // [TODO]: next line should be removed in v3.2, breaking change!!!
       interpolateParams = interpolateParams.filter(params => params != null);
       if (localization) localization = interpolate(localization, interpolateParams);
 
@@ -203,36 +216,39 @@ export class ConfigState {
     return selector;
   }
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(
+    private http: HttpClient,
+    private store: Store,
+    private sessionState: SessionStateService,
+    private environmentService: EnvironmentService,
+    private configState: ConfigStateService,
+  ) {
+    this.syncConfigState();
+    this.syncEnvironment();
+  }
+
+  private syncConfigState() {
+    this.configState
+      .createOnUpdateStream(state => state)
+      .pipe(distinctUntilChanged(compare))
+      .subscribe(config => this.store.dispatch(new PatchConfigState(config as any)));
+  }
+
+  private syncEnvironment() {
+    this.environmentService
+      .createOnUpdateStream(state => state)
+      .pipe(distinctUntilChanged(compare))
+      .subscribe(env => this.store.dispatch(new PatchConfigState({ environment: env } as any)));
+  }
 
   @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
     const apiName = 'default';
     const api = this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
     return this.http
-      .get<ApplicationConfiguration.Response>(`${api}/api/abp/application-configuration`)
+      .get<ApplicationConfigurationDto>(`${api}/api/abp/application-configuration`)
       .pipe(
-        tap(configuration =>
-          patchState({
-            ...configuration,
-          }),
-        ),
-        switchMap(configuration => {
-          let defaultLang: string =
-            configuration.setting.values['Abp.Localization.DefaultLanguage'];
-
-          if (defaultLang.includes(';')) {
-            defaultLang = defaultLang.split(';')[0];
-          }
-
-          document.documentElement.setAttribute(
-            'lang',
-            configuration.localization.currentCulture.cultureName,
-          );
-          return this.store.selectSnapshot(SessionState.getLanguage)
-            ? of(null)
-            : dispatch(new SetLanguage(defaultLang, false));
-        }),
+        tap(configuration => this.configState.setState(configuration)),
         catchError((err: HttpErrorResponse) => {
           dispatch(new RestOccurError(err));
           return throwError(err);
@@ -241,7 +257,12 @@ export class ConfigState {
   }
 
   @Action(SetEnvironment)
-  setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
-    return patchState({ environment });
+  setEnvironment(_, { environment }: SetEnvironment) {
+    return this.environmentService.setState(environment);
+  }
+
+  @Action(PatchConfigState)
+  setConfig({ patchState, getState }: StateContext<Config.State>, { state }: PatchConfigState) {
+    patchState({ ...getState(), ...state });
   }
 }

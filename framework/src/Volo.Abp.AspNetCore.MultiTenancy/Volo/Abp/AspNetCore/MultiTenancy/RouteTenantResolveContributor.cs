@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Volo.Abp.MultiTenancy;
@@ -11,15 +12,10 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         public override string Name => ContributorName;
 
-        protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
+        protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
         {
             var tenantId = httpContext.GetRouteValue(context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey);
-            if (tenantId == null)
-            {
-                return null;
-            }
-
-            return Convert.ToString(tenantId);
+            return Task.FromResult(tenantId != null ? Convert.ToString(tenantId) : null);
         }
     }
 }

@@ -49,7 +49,7 @@ export class AppComponent {
 yarn ng generate component my-application-layout
 ```
 
-在你的布局模板(`my-layout.component.html`)中添加以下代码:
+在你的布局模板(`my-application-layout.component.html`)中添加以下代码:
 
 ```html
 <router-outlet></router-outlet>
@@ -495,7 +495,7 @@ export class NavItemsComponent implements AfterViewInit {
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
         <a class="dropdown-item" routerLink="/account/manage-profile"
-          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}}%}</a
+          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::MyAccount' | abpLocalization }}}%}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
           ><i class="fa fa-power-off mr-1"></i>{%{{{ 'AbpUi::Logout' | abpLocalization }}}%}</a

@@ -1,5 +1,5 @@
-import { ConfigState } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { ConfigState, ConfigStateService } from '@abp/ng.core';
+import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { NgxValidateCoreModule, validatePassword } from '@ngx-validate/core';
 import { NgxsModule, Store } from '@ngxs/store';
@@ -15,7 +15,7 @@ describe('ValidationUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    imports: [NgxsModule.forRoot([ConfigState]), NgxValidateCoreModule.forRoot()],
+    imports: [NgxValidateCoreModule.forRoot()],
     mocks: [HttpClient, OAuthService],
   });
 
@@ -23,22 +23,21 @@ describe('ValidationUtils', () => {
 
   describe('#getPasswordValidators', () => {
     it('should return password valdiators', () => {
-      const store = spectator.inject(Store);
-      store.reset({
-        ConfigState: {
-          setting: {
-            values: {
-              'Abp.Identity.Password.RequiredLength': '6',
-              'Abp.Identity.Password.RequiredUniqueChars': '1',
-              'Abp.Identity.Password.RequireNonAlphanumeric': 'True',
-              'Abp.Identity.Password.RequireLowercase': 'True',
-              'Abp.Identity.Password.RequireUppercase': 'True',
-              'Abp.Identity.Password.RequireDigit': 'True',
-            },
+      const configState = spectator.inject(ConfigStateService);
+      configState.setState({
+        setting: {
+          values: {
+            'Abp.Identity.Password.RequiredLength': '6',
+            'Abp.Identity.Password.RequiredUniqueChars': '1',
+            'Abp.Identity.Password.RequireNonAlphanumeric': 'True',
+            'Abp.Identity.Password.RequireLowercase': 'True',
+            'Abp.Identity.Password.RequireUppercase': 'True',
+            'Abp.Identity.Password.RequireDigit': 'True',
           },
         },
       });
-      const validators = getPasswordValidators(store);
+
+      const validators = getPasswordValidators(spectator.inject(Injector));
       const expectedValidators = [
         validatePassword(['number', 'small', 'capital', 'special']),
         Validators.minLength(6),

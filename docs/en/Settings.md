@@ -2,7 +2,7 @@
 
 [Configuration system](Configuration.md) is a good way to configure the application on startup. In addition to the configurations, ABP provides another way to set and get some application settings.
 
-A setting is a name-value pair stored in a dynamic data source, generally in a database. Setting system is extensible and there are pre-built provides for a user, a tenant, global and default.
+A setting is a name-value pair stored in a dynamic data source, generally in a database. Setting system is extensible and there are pre-built providers for a user, a tenant, global and default.
 
 ## Defining Settings
 
@@ -67,7 +67,7 @@ public class MySettingDefinitionProvider : SettingDefinitionProvider
 
 > Using constants for the setting names is a good practice and ABP packages do it. `Abp.Mailing.Smtp.Host` setting name is a constant defined by the `EmailSettingNames` class (in the `Volo.Abp.Emailing` namespace).
 
-## Reading Setting Values
+## Reading the Setting Values
 
 ### ISettingProvider
 
@@ -108,24 +108,15 @@ public class MyService
 }
 ````
 
-> `ISettingProvider` is a very common service and some base classes (like `IApplicationService`) already property-inject it. You can directly use the `SettingProvider` in such cases.
+> `ISettingProvider` is a very common service and some base classes (like `IApplicationService`) already property-inject it. You can directly use the `SettingProvider` property in such cases.
 
 ### Reading Setting Values on the Client Side
 
-If a setting is allowed to be visible on the client side, current value of the setting can also be read from the JavaScript code. Examples:
+If a setting is allowed to be visible on the client side, current value of the setting can also be read from the client code. See the following documents to understand how to get the setting values in different UI types;
 
-````js
-//Gets a value as string.
-var language = abp.setting.get('Abp.Localization.DefaultLanguage');
-
-//Gets an integer value.
-var requiredLength = abp.setting.getInt('Abp.Identity.Password.RequiredLength');
-
-//Gets a boolean value.
-var requireDigit = abp.setting.getBoolean('Abp.Identity.Password.RequireDigit');
-````
-
-In addition, use `abp.setting.values` to get a dictionary of all the setting values.
+* [MVC / Razor Pages](UI/AspNetCore/JavaScript-API/Settings.md)
+* [Angular](UI/Angular/Settings.md)
+* [Blazor](UI/Blazor/Settings.md)
 
 ## Setting Value Providers
 

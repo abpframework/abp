@@ -1,0 +1,8 @@
+{
+    "culture": "hu",
+    "texts": {
+      "DisplayName:Abp.Timing.Timezone": "Időzóna",
+      "Description:Abp.Timing.Timezone": "Alkalmazás időzónája"
+    }
+  }
+  

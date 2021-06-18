@@ -1,49 +1,50 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Modularity;
 using Xunit;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
 {
-    //TODO: Make tests running again!
-    //public class VirtualFileTemplateContributor_Tests : AbpTextTemplatingTestBase
-    //{
-    //    [Fact]
-    //    public async Task Should_Get_Localized_Content_By_Culture()
-    //    {
-    //        var contributor = new VirtualFileTemplateContentContributor(
-    //            "/SampleTemplates/WelcomeEmail"
-    //        );
+    public abstract class VirtualFileTemplateContributor_Tests<TStartupModule> : AbpTextTemplatingTestBase<TStartupModule>
+        where TStartupModule : IAbpModule
+    {
+        protected readonly ITemplateDefinitionManager TemplateDefinitionManager;
+        protected readonly VirtualFileTemplateContentContributor VirtualFileTemplateContentContributor;
+        protected string WelcomeEmailEnglishContent;
+        protected string WelcomeEmailTurkishContent;
+        protected string ForgotPasswordEmailEnglishContent;
 
-    //        contributor.Initialize(
-    //            new TemplateContentContributorInitializationContext(
-    //                new TemplateDefinition("Test"),
-    //                ServiceProvider
-    //            )
-    //        );
+        protected VirtualFileTemplateContributor_Tests()
+        {
+            TemplateDefinitionManager = GetRequiredService<ITemplateDefinitionManager>();
+            VirtualFileTemplateContentContributor = GetRequiredService<VirtualFileTemplateContentContributor>();
+        }
 
-    //        (await contributor
-    //                .GetOrNullAsync("en")).ShouldBe("Welcome {{model.name}} to the abp.io!");
+        [Fact]
+        public async Task Should_Get_Localized_Content_By_Culture()
+        {
+            (await VirtualFileTemplateContentContributor.GetOrNullAsync(
+                    new TemplateContentContributorContext(TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail),
+                        ServiceProvider,
+                        "en")))
+                .ShouldBe(WelcomeEmailEnglishContent);
 
-    //        (await contributor
-    //                .GetOrNullAsync("tr")).ShouldBe("Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!");
-    //    }
+            (await VirtualFileTemplateContentContributor.GetOrNullAsync(
+                    new TemplateContentContributorContext(TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail),
+                        ServiceProvider,
+                        "tr")))
+                .ShouldBe(WelcomeEmailTurkishContent);
+        }
 
-    //    [Fact]
-    //    public async Task Should_Get_Non_Localized_Template_Content()
-    //    {
-    //        var contributor = new VirtualFileTemplateContentContributor(
-    //            "/SampleTemplates/ForgotPasswordEmail.tpl"
-    //        );
-
-    //        contributor.Initialize(
-    //            new TemplateContentContributorInitializationContext(
-    //                new TemplateDefinition("Test"),
-    //                ServiceProvider
-    //            )
-    //        );
-
-    //        (await contributor
-    //                .GetOrNullAsync()).ShouldBe("{{l \"HelloText\"}}. Please click to the following link to get an email to reset your password!");
-    //    }
-    //}
+        [Fact]
+        public async Task Should_Get_Non_Localized_Template_Content()
+        {
+            (await VirtualFileTemplateContentContributor.GetOrNullAsync(
+                    new TemplateContentContributorContext(
+                        TemplateDefinitionManager.Get(TestTemplates.ForgotPasswordEmail),
+                        ServiceProvider,
+                        null)))
+                .ShouldBe(ForgotPasswordEmailEnglishContent);
+        }
+    }
 }

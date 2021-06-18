@@ -4,8 +4,8 @@
     {
         public string BucketName
         {
-            get => _containerConfiguration.GetConfiguration<string>(MinioBlobProviderConfigurationNames.BucketName);
-            set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.BucketName, Check.NotNullOrWhiteSpace(value, nameof(value)));
+            get => _containerConfiguration.GetConfigurationOrDefault<string>(MinioBlobProviderConfigurationNames.BucketName);
+            set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.BucketName, value);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
         {
             get => _containerConfiguration.GetConfigurationOrDefault(MinioBlobProviderConfigurationNames.WithSSL, false);
             set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.WithSSL, value);
-        } 
+        }
 
         /// <summary>
         ///Default value: false.

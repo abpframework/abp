@@ -3,13 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 using System.IO;
-using Volo.Abp.Threading;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Cli
 {
     public class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
@@ -37,13 +37,13 @@ namespace Volo.Abp.Cli
             {
                 application.Initialize();
 
-                AsyncHelper.RunSync(
-                    () => application.ServiceProvider
-                        .GetRequiredService<CliService>()
-                        .RunAsync(args)
-                );
-
+                await application.ServiceProvider
+                    .GetRequiredService<CliService>()
+                    .RunAsync(args);
+                
                 application.Shutdown();
+                
+                Log.CloseAndFlush();
             }
         }
     }

@@ -1,10 +1,13 @@
-import { Component, Injector } from '@angular/core';
+import { Component } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
 import clone from 'just-clone';
 import { BehaviorSubject } from 'rxjs';
-import { FindTenantResultDto } from '../models/find-tenant-result-dto';
-import { MultiTenancyService } from '../services/multi-tenancy.service';
+import { AbpTenantService } from '../proxy/pages/abp/multi-tenancy/abp-tenant.service';
+import {
+  CurrentTenantDto,
+  FindTenantResultDto,
+} from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
+import { EnvironmentService, MultiTenancyService } from '../services';
 import { parseTenantFromUrl } from '../utils';
 
 const environment = {
@@ -17,11 +20,10 @@ const environment = {
   },
   oAuthConfig: {
     issuer: 'https://{0}.api.volosoft.com',
+    redirectUri: 'https://{0}.volosoft.com',
     clientId: 'MyProjectName_App',
-    dummyClientSecret: '1q2w3e*',
-    scope: 'MyProjectName',
-    oidc: false,
-    requireHttps: true,
+    responseType: 'code',
+    scope: 'offline_access MyProjectName',
   },
   apis: {
     default: {
@@ -53,38 +55,46 @@ describe('MultiTenancyUtils', () => {
   let spectator: Spectator<DummyComponent>;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    mocks: [Store, MultiTenancyService],
+    mocks: [EnvironmentService, MultiTenancyService],
+    providers: [{ provide: AbpTenantService, useValue: { findTenantByName: () => {} } }],
   });
 
   beforeEach(() => (spectator = createComponent()));
 
   describe('#parseTenantFromUrl', () => {
-    test('should get the tenancyName, set replaced environment and call the findTenantByName method of MultiTenancyService', async () => {
-      const injector = spectator.inject(Injector);
-      const injectorSpy = jest.spyOn(injector, 'get');
-      const store = spectator.inject(Store);
-      const selectSnapshotSpy = jest.spyOn(store, 'selectSnapshot');
-      const dispatchSpy = jest.spyOn(store, 'dispatch');
+    test('should get the tenancyName, set replaced environment and call the findTenantByName method of AbpTenantService', async () => {
+      const environmentService = spectator.inject(EnvironmentService);
       const multiTenancyService = spectator.inject(MultiTenancyService);
-      const findTenantByNameSpy = jest.spyOn(multiTenancyService, 'findTenantByName');
+      const abpTenantService = spectator.inject(AbpTenantService);
+      const findTenantByNameSpy = jest.spyOn(abpTenantService, 'findTenantByName');
+      const getEnvironmentSpy = jest.spyOn(environmentService, 'getEnvironment');
+      const setStateSpy = jest.spyOn(environmentService, 'setState');
 
-      injectorSpy.mockReturnValueOnce(spectator.inject(Store));
-      injectorSpy.mockReturnValueOnce(multiTenancyService);
-      selectSnapshotSpy.mockReturnValue(clone(environment));
+      getEnvironmentSpy.mockReturnValue(clone(environment));
 
       setHref('https://abp.volosoft.com/');
 
-      dispatchSpy.mockReturnValue(new BehaviorSubject(true));
       findTenantByNameSpy.mockReturnValue(
         new BehaviorSubject({ name: 'abp', tenantId: '1', success: true } as FindTenantResultDto),
       );
 
-      parseTenantFromUrl(injector);
+      const mockInjector = {
+        get: arg => {
+          if (arg === EnvironmentService) return environmentService;
+          if (arg === AbpTenantService) return abpTenantService;
+          if (arg === MultiTenancyService) return multiTenancyService;
+        },
+      };
+      parseTenantFromUrl(mockInjector);
 
       const replacedEnv = {
         ...environment,
         application: { ...environment.application, baseUrl: 'https://abp.volosoft.com' },
-        oAuthConfig: { ...environment.oAuthConfig, issuer: 'https://abp.api.volosoft.com' },
+        oAuthConfig: {
+          ...environment.oAuthConfig,
+          issuer: 'https://abp.api.volosoft.com',
+          redirectUri: 'https://abp.volosoft.com',
+        },
         apis: {
           default: {
             url: 'https://abp.api.volosoft.com',
@@ -95,9 +105,12 @@ describe('MultiTenancyUtils', () => {
         },
       };
 
-      expect(dispatchSpy).toHaveBeenCalledWith({ environment: replacedEnv });
+      expect(setStateSpy).toHaveBeenCalledWith(replacedEnv);
       expect(findTenantByNameSpy).toHaveBeenCalledWith('abp', { __tenant: '' });
-      expect(multiTenancyService.domainTenant).toEqual({ id: '1', name: 'abp' });
+      expect(multiTenancyService.domainTenant).toEqual({
+        id: '1',
+        name: 'abp',
+      } as CurrentTenantDto);
     });
   });
 });

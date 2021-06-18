@@ -6,7 +6,6 @@
         /// Gets a named container.
         /// </summary>
         /// <param name="blobContainerFactory">The blob container manager</param>
-        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         /// The container object.
         /// </returns>

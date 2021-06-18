@@ -96,7 +96,7 @@
             get: _get
         };
     })();
-    
+
     function initializeObjectExtensions() {
 
         var getShortEnumTypeName = function (enumType) {
@@ -149,7 +149,7 @@
 
             return defaultValue;
         }
-        
+
         function localizeEnumMember(property, enumMemberValue) {
             var enumType = property.config.type;
             var enumInfo = abp.objectExtensions.enums[enumType];
@@ -188,10 +188,28 @@
                 var propertyName = propertyNames[i];
                 var propertyConfig = objectConfig.properties[propertyName];
                 if (propertyConfig.ui.onTable.isVisible) {
-                    tableProperties.push({
-                        name: propertyName,
-                        config: propertyConfig
-                    });
+                    if (propertyName.endsWith("_Text")) {
+                        var lookupPropertyName = propertyName.replace("_Text", "");
+                        var lookupProperty = objectConfig.properties[lookupPropertyName];
+                        if (lookupProperty) {
+                            tableProperties.push({
+                                name: propertyName,
+                                config: propertyConfig,
+                                lookupPropertyName: lookupPropertyName,
+                                lookupPropertyDisplayName: lookupProperty.displayName
+                            });
+                        } else {
+                            tableProperties.push({
+                                name: propertyName,
+                                config: propertyConfig,
+                            });
+                        }
+                    } else {
+                        tableProperties.push({
+                            name: propertyName,
+                            config: propertyConfig,
+                        });
+                    }
                 }
             }
 
@@ -199,19 +217,23 @@
         }
 
         function getValueFromRow(property, row) {
-            return row.extraProperties[property.name];;
+            return row.extraProperties[property.name];
         }
 
         function convertPropertyToColumnConfig(property) {
             var columnConfig = {
-                title: localizeDisplayName(property.name, property.config.displayName),
                 data: "extraProperties." + property.name,
                 orderable: false
             };
 
+            if (property.lookupPropertyName) {
+                columnConfig.title = localizeDisplayName(property.lookupPropertyName, property.lookupPropertyDisplayName);
+            } else {
+                columnConfig.title = localizeDisplayName(property.name, property.config.displayName);
+            }
 
             if (property.config.typeSimple === 'enum') {
-                columnConfig.render = function(data, type, row) {
+                columnConfig.render = function (data, type, row) {
                     var value = getValueFromRow(property, row);
                     return localizeEnumMember(property, value);
                 }

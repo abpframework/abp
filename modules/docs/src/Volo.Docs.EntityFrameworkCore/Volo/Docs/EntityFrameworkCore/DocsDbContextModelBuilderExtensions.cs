@@ -16,6 +16,11 @@ namespace Volo.Docs.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
+            if (builder.IsTenantOnlyDatabase())
+            {
+                return;
+            }
+
             var options = new DocsModelBuilderConfigurationOptions(
                 DocsDbProperties.DbTablePrefix,
                 DocsDbProperties.DbSchema
@@ -35,6 +40,8 @@ namespace Volo.Docs.EntityFrameworkCore
                 b.Property(x => x.NavigationDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxNavigationDocumentNameLength);
                 b.Property(x => x.ParametersDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxParametersDocumentNameLength);
                 b.Property(x => x.LatestVersionBranchName).HasMaxLength(ProjectConsts.MaxLatestVersionBranchNameLength);
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<Document>(b =>
@@ -57,6 +64,8 @@ namespace Volo.Docs.EntityFrameworkCore
                 b.HasMany(x => x.Contributors).WithOne()
                     .HasForeignKey(x => new { x.DocumentId })
                     .IsRequired();
+
+                b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<DocumentContributor>(b =>
@@ -66,7 +75,11 @@ namespace Volo.Docs.EntityFrameworkCore
                 b.ConfigureByConvention();
 
                 b.HasKey(x => new { x.DocumentId, x.Username });
+
+                b.ApplyObjectExtensionMappings();
             });
+
+            builder.TryConfigureObjectExtensions<DocsDbContext>();
         }
     }
 }

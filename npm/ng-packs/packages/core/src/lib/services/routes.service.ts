@@ -1,11 +1,10 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { Injectable, Injector, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
-import { ConfigState } from '../states/config.state';
 import { pushValueTo } from '../utils/array-utils';
 import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
+import { ConfigStateService } from './config-state.service';
+import { PermissionService } from './permission.service';
 
 export abstract class AbstractTreeService<T extends object> {
   abstract id: string;
@@ -134,9 +133,12 @@ export abstract class AbstractTreeService<T extends object> {
 }
 
 @Injectable()
-export abstract class AbstractNavTreeService<T extends ABP.Nav> extends AbstractTreeService<T>
-  implements OnDestroy {
+export abstract class AbstractNavTreeService<T extends ABP.Nav>
+  extends AbstractTreeService<T>
+  implements OnDestroy
+{
   private subscription: Subscription;
+  private permissionService: PermissionService;
   readonly id = 'name';
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);
@@ -147,16 +149,17 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav> extends Abstract
     return a.order - b.order;
   };
 
-  constructor(protected actions: Actions, protected store: Store) {
+  constructor(protected injector: Injector) {
     super();
-
-    this.subscription = this.actions
-      .pipe(ofActionSuccessful(GetAppConfiguration))
+    const configState = this.injector.get(ConfigStateService);
+    this.subscription = configState
+      .createOnUpdateStream(state => state)
       .subscribe(() => this.refresh());
+    this.permissionService = injector.get(PermissionService);
   }
 
   protected isGranted({ requiredPolicy }: T): boolean {
-    return this.store.selectSnapshot(ConfigState.getGrantedPolicy(requiredPolicy));
+    return this.permissionService.getGrantedPolicy(requiredPolicy);
   }
 
   hasChildren(identifier: string): boolean {

@@ -6,7 +6,7 @@
 
 Basic usage:
 
-````csharp
+````html
 <abp-breadcrumb>
     <abp-breadcrumb-item href="#" title="Home" />
     <abp-breadcrumb-item href="#" title="Library"/>

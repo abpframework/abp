@@ -45,19 +45,26 @@ namespace Volo.Abp.Caching.StackExchangeRedis
 
             MapMetadataMethod = type.GetMethod("MapMetadata", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            GetAbsoluteExpirationMethod = type.GetMethod("GetAbsoluteExpiration", BindingFlags.Static | BindingFlags.NonPublic);
+            GetAbsoluteExpirationMethod =
+                type.GetMethod("GetAbsoluteExpiration", BindingFlags.Static | BindingFlags.NonPublic);
 
-            GetExpirationInSecondsMethod = type.GetMethod("GetExpirationInSeconds", BindingFlags.Static | BindingFlags.NonPublic);
+            GetExpirationInSecondsMethod =
+                type.GetMethod("GetExpirationInSeconds", BindingFlags.Static | BindingFlags.NonPublic);
 
-            SetScript = type.GetField("SetScript", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).ToString();
+            SetScript = type.GetField("SetScript", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null)
+                .ToString();
 
-            AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).ToString();
+            AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)
+                ?.GetValue(null).ToString();
 
-            SlidingExpirationKey = type.GetField("SlidingExpirationKey", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).ToString();
+            SlidingExpirationKey = type.GetField("SlidingExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)
+                ?.GetValue(null).ToString();
 
-            DataKey = type.GetField("DataKey", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).ToString();
+            DataKey = type.GetField("DataKey", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null).ToString();
 
-            NotPresent = type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).To<int>();
+            // ReSharper disable once PossibleNullReferenceException
+            NotPresent = type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null)
+                .To<int>();
         }
 
         public AbpRedisCache(IOptions<RedisCacheOptions> optionsAccessor)
@@ -122,6 +129,42 @@ namespace Volo.Abp.Caching.StackExchangeRedis
             await ConnectAsync(token);
 
             await Task.WhenAll(PipelineSetMany(items, options));
+        }
+
+        public void RefreshMany(
+            IEnumerable<string> keys)
+        {
+            keys = Check.NotNull(keys, nameof(keys));
+
+            GetAndRefreshMany(keys, false);
+        }
+
+        public async Task RefreshManyAsync(
+            IEnumerable<string> keys,
+            CancellationToken token = default)
+        {
+            keys = Check.NotNull(keys, nameof(keys));
+
+            await GetAndRefreshManyAsync(keys, false, token);
+        }
+
+        public void RemoveMany(IEnumerable<string> keys)
+        {
+            keys = Check.NotNull(keys, nameof(keys));
+
+            Connect();
+
+            RedisDatabase.KeyDelete(keys.Select(key => (RedisKey)(Instance + key)).ToArray());
+        }
+
+        public async Task RemoveManyAsync(IEnumerable<string> keys, CancellationToken token = default)
+        {
+            keys = Check.NotNull(keys, nameof(keys));
+
+            token.ThrowIfCancellationRequested();
+            await ConnectAsync(token);
+
+            await RedisDatabase.KeyDeleteAsync(keys.Select(key => (RedisKey)(Instance + key)).ToArray());
         }
 
         protected virtual byte[][] GetAndRefreshMany(

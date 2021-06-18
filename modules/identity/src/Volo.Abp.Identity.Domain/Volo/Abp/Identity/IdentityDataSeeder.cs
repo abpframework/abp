@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -17,6 +18,7 @@ namespace Volo.Abp.Identity
         protected IdentityUserManager UserManager { get; }
         protected IdentityRoleManager RoleManager { get; }
         protected ICurrentTenant CurrentTenant { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public IdentityDataSeeder(
             IGuidGenerator guidGenerator,
@@ -25,7 +27,8 @@ namespace Volo.Abp.Identity
             ILookupNormalizer lookupNormalizer,
             IdentityUserManager userManager,
             IdentityRoleManager roleManager,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            IOptions<IdentityOptions> identityOptions)
         {
             GuidGenerator = guidGenerator;
             RoleRepository = roleRepository;
@@ -34,6 +37,7 @@ namespace Volo.Abp.Identity
             UserManager = userManager;
             RoleManager = roleManager;
             CurrentTenant = currentTenant;
+            IdentityOptions = identityOptions;
         }
 
         [UnitOfWork]
@@ -45,10 +49,11 @@ namespace Volo.Abp.Identity
             Check.NotNullOrWhiteSpace(adminEmail, nameof(adminEmail));
             Check.NotNullOrWhiteSpace(adminPassword, nameof(adminPassword));
 
-            var result = new IdentityDataSeedResult();
-
             using (CurrentTenant.Change(tenantId))
             {
+                await IdentityOptions.SetAsync();
+
+                var result = new IdentityDataSeedResult();
                 //"admin" user
                 const string adminUserName = "admin";
                 var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
@@ -70,12 +75,13 @@ namespace Volo.Abp.Identity
                     Name = adminUserName
                 };
 
-                (await UserManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
+                (await UserManager.CreateAsync(adminUser, adminPassword, validatePassword: false)).CheckErrors();
                 result.CreatedAdminUser = true;
 
                 //"admin" role
                 const string adminRoleName = "admin";
-                var adminRole = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
+                var adminRole =
+                    await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
                 if (adminRole == null)
                 {
                     adminRole = new IdentityRole(

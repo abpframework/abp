@@ -36,7 +36,7 @@
     "PasswordChanged": "Geslo je spremenjeno",
     "NewPasswordConfirmFailed": "Prosimo potrdite novo geslo.",
     "Manage": "Upravljaj",
-    "ManageYourProfile": "Upravljaj svoj profil",
+    "MyAccount": "Moj račun",
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je lastna registracija uporabnika omogočena",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Ali lahko uporabnik sam registrira račun.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Avtenticirajte se z lokalnim računom",
@@ -48,6 +48,10 @@
     "ConfirmPassword": "Potrditev (ponovitev) gesla",
     "ResetPassword_Information": "Prosimo vnesite vaše novo geslo.",
     "YourPasswordIsSuccessfullyReset": "Vaše geslo je uspešno ponastavljeno.",
-    "BackToLogin": "Nazaj na prijavo"
+    "BackToLogin": "Nazaj na prijavo",
+    "Volo.Account:InvalidEmailAddress": "Navedenega e-poštnega naslova ni mogoče najti: {0}",
+    "PasswordReset": "Ponastavitev gesla",
+    "PasswordResetInfoInEmail": "Prejeta je bila zahteva za obnovitev računa! V kolikor ste vi sprožili zahtevo, kliknite na sledečo povezavo, da ponastavite geslo.",
+    "ResetMyPassword": "Ponastavi geslo"
   }
 }

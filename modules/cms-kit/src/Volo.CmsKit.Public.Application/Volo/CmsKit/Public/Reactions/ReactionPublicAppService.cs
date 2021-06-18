@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit.Public.Reactions
 {
+    [RequiresGlobalFeature(typeof(ReactionsFeature))]
     public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPublicAppService
     {
         protected IReactionDefinitionStore ReactionDefinitionStore { get; }
@@ -59,7 +62,7 @@ namespace Volo.CmsKit.Public.Reactions
         [Authorize]
         public virtual async Task CreateAsync(string entityType, string entityId, string reaction)
         {
-            await ReactionManager.CreateAsync(
+            await ReactionManager.GetOrCreateAsync(
                 CurrentUser.GetId(),
                 entityType,
                 entityId,

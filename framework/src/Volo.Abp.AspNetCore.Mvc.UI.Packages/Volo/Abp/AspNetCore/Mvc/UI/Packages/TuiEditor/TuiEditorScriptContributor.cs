@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
             }
 
             context.Files.AddIfNotContains("/libs/squire-rte/squire.js");
-            context.Files.AddIfNotContains("/libs/tui-editor/tui-editor-Editor.min.js");
+            context.Files.AddIfNotContains("/libs/tui-editor/toastui-editor.js");
         }
     }
 }

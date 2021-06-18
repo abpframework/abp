@@ -12,7 +12,7 @@ describe('Validation Utils', () => {
             config: {},
           },
         ],
-      } as ObjectExtensions.Property;
+      } as ObjectExtensions.ExtensionPropertyDto;
 
       expect(getValidatorsFromProperty(property)[0]).toBe(Validators.email);
     });

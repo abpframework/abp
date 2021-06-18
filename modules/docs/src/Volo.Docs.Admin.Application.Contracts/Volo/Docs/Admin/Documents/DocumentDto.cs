@@ -7,13 +7,13 @@ namespace Volo.Docs.Admin.Documents
     [Serializable]
     public class DocumentDto : EntityDto<Guid>
     {
-        public virtual Guid ProjectId { get; protected set; }
+        public virtual Guid ProjectId { get; set; }
 
-        public virtual string Name { get; protected set; }
+        public virtual string Name { get; set; }
 
-        public virtual string Version { get; protected set; }
+        public virtual string Version { get; set; }
 
-        public virtual string LanguageCode { get; protected set; }
+        public virtual string LanguageCode { get; set; }
 
         public virtual string FileName { get; set; }
 

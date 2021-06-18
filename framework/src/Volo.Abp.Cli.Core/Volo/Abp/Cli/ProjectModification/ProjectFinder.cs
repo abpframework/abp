@@ -22,6 +22,8 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 case NuGetPackageTarget.Web:
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".Web");
+                case NuGetPackageTarget.IdentityServer:
+                    return FindProjectEndsWith(projectFiles, assemblyNames, ".IdentityServer");
                 case NuGetPackageTarget.EntityFrameworkCore:
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".EntityFrameworkCore");
                 case NuGetPackageTarget.MongoDB:
@@ -45,6 +47,20 @@ namespace Volo.Abp.Cli.ProjectModification
                     return FindProjectEndsWith(projectFiles, assemblyNames, ".SignalR") ??
                            FindProjectEndsWith(projectFiles, assemblyNames, ".Web") ??
                            FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Host");
+                case NuGetPackageTarget.Blazor:
+                    return FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+                case NuGetPackageTarget.BlazorWebAssembly:
+                    var BlazorWebAssemblyTargetProject = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+                    return BlazorWebAssemblyTargetProject != null &&
+                           !BlazorProjectTypeChecker.IsBlazorServerProject(BlazorWebAssemblyTargetProject)
+                        ? BlazorWebAssemblyTargetProject
+                        : null;
+                case NuGetPackageTarget.BlazorServer:
+                    var BlazorServerTargetProject = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+                    return BlazorServerTargetProject != null &&
+                           BlazorProjectTypeChecker.IsBlazorServerProject(BlazorServerTargetProject)
+                        ? BlazorServerTargetProject
+                        : null;
                 default:
                     return null;
             }
@@ -84,6 +100,14 @@ namespace Volo.Abp.Cli.ProjectModification
                 projects.Add(project);
             }
 
+            project = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+            if (project != null &&
+                File.Exists(project) &&
+                BlazorProjectTypeChecker.IsBlazorServerProject(project))
+            {
+                projects.Add(project);
+            }
+
             return projects.ToArray();
         }
 
@@ -103,15 +127,15 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private static string FindProjectEndsWith(
             string[] projectFiles,
-            string[] assemblyNames, 
-            string postfix, 
+            string[] assemblyNames,
+            string postfix,
             string excludePostfix = null)
         {
             for (var i = 0; i < assemblyNames.Length; i++)
             {
                 var assemblyName = assemblyNames[i];
-                if(assemblyName.EndsWith(postfix, StringComparison.OrdinalIgnoreCase) &&
-                   (excludePostfix == null || !assemblyName.EndsWith(excludePostfix)))
+                if (assemblyName.EndsWith(postfix, StringComparison.OrdinalIgnoreCase) &&
+                    (excludePostfix == null || !assemblyName.EndsWith(excludePostfix)))
                 {
                     return projectFiles[i];
                 }

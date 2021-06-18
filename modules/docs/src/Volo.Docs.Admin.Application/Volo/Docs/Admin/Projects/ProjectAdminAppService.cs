@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -18,13 +17,13 @@ namespace Volo.Docs.Admin.Projects
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentRepository _documentRepository;
-        private readonly IDocumentFullSearch _documentFullSearch;
+        private readonly IDocumentFullSearch _elasticSearchService;
         private readonly IGuidGenerator _guidGenerator;
 
         public ProjectAdminAppService(
             IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
-            IDocumentFullSearch documentFullSearch,
+            IDocumentFullSearch elasticSearchService,
             IGuidGenerator guidGenerator)
         {
             ObjectMapperContext = typeof(DocsAdminApplicationModule);
@@ -32,7 +31,7 @@ namespace Volo.Docs.Admin.Projects
 
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
-            _documentFullSearch = documentFullSearch;
+            _elasticSearchService = elasticSearchService;
             _guidGenerator = guidGenerator;
         }
 
@@ -42,9 +41,10 @@ namespace Volo.Docs.Admin.Projects
 
             var totalCount = await _projectRepository.GetCountAsync();
 
-            var dtos = ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects);
-
-            return new PagedResultDto<ProjectDto>(totalCount, dtos);
+            return new PagedResultDto<ProjectDto>(
+                totalCount,
+                ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects)
+                );
         }
 
         public async Task<ProjectDto> GetAsync(Guid id)
@@ -119,11 +119,21 @@ namespace Volo.Docs.Admin.Projects
 
         public async Task ReindexAsync(ReindexInput input)
         {
-            var project = await _projectRepository.GetAsync(input.ProjectId);
+            _elasticSearchService.ValidateElasticSearchEnabled();
 
-            await _documentFullSearch.DeleteAllByProjectIdAsync(project.Id);
+            await ReindexProjectAsync(input.ProjectId);
+        }
+
+        private async Task ReindexProjectAsync(Guid projectId)
+        {
+            var project = await _projectRepository.FindAsync(projectId);
+            if (project == null)
+            {
+                throw new Exception("Cannot find the project with the Id " + projectId);
+            }
 
             var docs = await _documentRepository.GetListByProjectId(project.Id);
+            await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
 
             foreach (var doc in docs)
             {
@@ -137,35 +147,18 @@ namespace Volo.Docs.Admin.Projects
                     continue;
                 }
 
-                await _documentFullSearch.AddOrUpdateAsync(doc);
+                await _elasticSearchService.AddOrUpdateAsync(doc);
             }
         }
 
         public async Task ReindexAllAsync()
         {
-            await _documentFullSearch.DeleteAllAsync();
-
-            var docs = await _documentRepository.GetListAsync();
+            _elasticSearchService.ValidateElasticSearchEnabled();
             var projects = await _projectRepository.GetListAsync();
-            foreach (var doc in docs)
+         
+            foreach (var project in projects)
             {
-                var project = projects.FirstOrDefault(x => x.Id == doc.ProjectId);
-                if (project == null)
-                {
-                    continue;
-                }
-
-                if (doc.FileName == project.NavigationDocumentName)
-                {
-                    continue;
-                }
-
-                if (doc.FileName == project.ParametersDocumentName)
-                {
-                    continue;
-                }
-
-                await _documentFullSearch.AddOrUpdateAsync(doc);
+                await ReindexProjectAsync(project.Id);
             }
         }
     }

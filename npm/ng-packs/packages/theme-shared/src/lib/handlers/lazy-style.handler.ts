@@ -57,14 +57,9 @@ export class LazyStyleHandler {
     const l10n = injector.get(LocalizationService);
 
     // will always listen, no need to unsubscribe
-    l10n.languageChange
-      .pipe(
-        map(({ payload }) => payload),
-        startWith(l10n.currentLang),
-      )
-      .subscribe(locale => {
-        this.dir = getLocaleDirection(locale);
-      });
+    l10n.languageChange$.pipe(startWith(l10n.currentLang)).subscribe(locale => {
+      this.dir = getLocaleDirection(locale);
+    });
   }
 
   private setBodyDir(dir: LocaleDirection) {

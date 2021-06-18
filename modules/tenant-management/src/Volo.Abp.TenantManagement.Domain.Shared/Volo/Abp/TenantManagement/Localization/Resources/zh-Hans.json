@@ -16,6 +16,8 @@
     "Permission:Edit": "编辑",
     "Permission:Delete": "删除",
     "Permission:ManageConnectionStrings": "管理连接字符串",
-    "Permission:ManageFeatures": "管理功能"
+    "Permission:ManageFeatures": "管理功能",
+    "DisplayName:AdminEmailAddress": "管理员电子邮件地址",
+    "DisplayName:AdminPassword": "管理员密码"
   }
 }

@@ -36,13 +36,6 @@ namespace Volo.CmsKit.Public.Ratings
 
         [HttpGet]
         [Route("{entityType}/{entityId}")]
-        public virtual Task<RatingDto> GetCurrentUserRatingAsync(string entityType, string entityId)
-        {
-            return RatingPublicAppService.GetCurrentUserRatingAsync(entityType, entityId);
-        }
-        
-        [HttpGet]
-        [Route("{entityType}/{entityId}")]
         public virtual Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
         {
             return RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);

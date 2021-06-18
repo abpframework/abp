@@ -143,11 +143,11 @@ namespace Volo.Abp.Identity
             [NotNull] string userName,
             [NotNull] string email,
             Guid? tenantId = null)
+            : base(id)
         {
             Check.NotNull(userName, nameof(userName));
             Check.NotNull(email, nameof(email));
 
-            Id = id;
             TenantId = tenantId;
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
@@ -161,8 +161,6 @@ namespace Volo.Abp.Identity
             Logins = new Collection<IdentityUserLogin>();
             Tokens = new Collection<IdentityUserToken>();
             OrganizationUnits = new Collection<IdentityUserOrganizationUnit>();
-
-            ExtraProperties = new Dictionary<string, object>();
         }
 
         public virtual void AddRole(Guid roleId)

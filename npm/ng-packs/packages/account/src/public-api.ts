@@ -5,3 +5,5 @@ export * from './lib/guards';
 export * from './lib/models';
 export * from './lib/services';
 export * from './lib/tokens';
+export * from './lib/proxy/account';
+export * from './lib/proxy/identity';

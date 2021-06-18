@@ -1,0 +1,70 @@
+﻿@page "/account/manage-profile"
+@using Microsoft.AspNetCore.Components.Forms 
+@inherits AbpAccountComponentBase
+
+<Row>
+    <Column ColumnSize="ColumnSize.Is12">
+        <Tabs @bind-SelectedTab="@SelectedTab" TabPosition="TabPosition.Left" Pills="true">
+            <Items>
+                <Tab Name="Password">@L["ProfileTab:Password"]</Tab>
+                <Tab Name="PersonalInfo">@L["ProfileTab:PersonalInfo"]</Tab>
+            </Items>
+            <Content>
+                @if (ChangePasswordModel != null)
+                {
+                    <TabPanel Name="Password">
+                        <EditForm id="ChangePasswordForm" Model="@ChangePasswordModel" OnValidSubmit="ChangePasswordAsync">
+                            <Field>
+                                <FieldLabel>@L["DisplayName:CurrentPassword"]</FieldLabel>
+                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.CurrentPassword"/>
+                            </Field>
+                            <Field>
+                                <FieldLabel>@L["DisplayName:NewPassword"]</FieldLabel>
+                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPassword"/>
+                            </Field>
+                            <Field>
+                                <FieldLabel>@L["DisplayName:NewPasswordConfirm"]</FieldLabel>
+                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPasswordConfirm"/>
+                            </Field>
+                            <Field>
+                                <SubmitButton Form="ChangePasswordForm" Clicked="@ChangePasswordAsync" />
+                            </Field>
+                        </EditForm>
+                    </TabPanel>
+                }
+                @if (PersonalInfoModel != null)
+                {
+                    <TabPanel Name="PersonalInfo">
+                        <EditForm id="UpdatePersonalInfoForm" Model="@PersonalInfoModel" OnValidSubmit="UpdatePersonalInfoAsync">
+                            <Field>
+                                <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                                <TextEdit @bind-Text="@PersonalInfoModel.UserName"/>
+                            </Field>
+                            <Fields>
+                                <Field ColumnSize="ColumnSize.Is6">
+                                    <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
+                                    <TextEdit @bind-Text="@PersonalInfoModel.Name"/>
+                                </Field>
+                                <Field ColumnSize="ColumnSize.Is6">
+                                    <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
+                                    <TextEdit @bind-Text="@PersonalInfoModel.Surname"/>
+                                </Field>
+                            </Fields>
+                            <Field>
+                                <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                                <TextEdit @bind-Text="@PersonalInfoModel.Email"/>
+                            </Field>
+                            <Field>
+                                <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
+                                <TextEdit @bind-Text="@PersonalInfoModel.PhoneNumber"/>
+                            </Field>
+                            <Field>
+                                <SubmitButton Form="UpdatePersonalInfoForm" Clicked="@UpdatePersonalInfoAsync" />
+                            </Field>
+                        </EditForm>
+                    </TabPanel>
+                }
+            </Content>
+        </Tabs>
+    </Column>
+</Row>

@@ -27,3 +27,11 @@ export function isArray(obj) {
 export function isObjectAndNotArray(obj) {
   return isObject(obj) && !isArray(obj);
 }
+
+export function isNode(obj) {
+  return obj instanceof Node;
+}
+
+export function isObjectAndNotArrayNotNode(obj) {
+  return isObjectAndNotArray(obj) && !isNode(obj);
+}

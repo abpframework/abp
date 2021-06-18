@@ -1,0 +1,25 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "InternalServerErrorMessage": "对不起,在处理你的请求期间,产生了一个服务器内部错误!",
+    "ValidationErrorMessage": "你的请求无效!",
+    "ValidationNarrativeErrorMessageTitle": "验证时发现以下错误.",
+    "DefaultErrorMessage": "发生错误!",
+    "DefaultErrorMessageDetail": "服务器未发送错误的详细信息.",
+    "DefaultErrorMessage401": "未通过身份验证!",
+    "DefaultErrorMessage401Detail": "你需要进行身份认证(登录)后再执行此操作.",
+    "DefaultErrorMessage403": "你没有权限!",
+    "DefaultErrorMessage403Detail": "你不能执行此操作!",
+    "DefaultErrorMessage404": "未找到资源!",
+    "DefaultErrorMessage404Detail": "未在服务中找到请求的资源!",
+    "EntityNotFoundErrorMessage": "实体 {0} 不存在,id = {1}!",
+    "Error": "错误",
+    "UnhandledException": "未处理的异常!",
+    "401Message": "未授权",
+    "403Message": "禁止访问",
+    "404Message": "网页未找到",
+    "500Message": "内部服务器错误",
+    "403MessageDetail": "您没有权限执行此操作",
+    "404MessageDetail": "抱歉, 这个地址是空的"
+  }
+}

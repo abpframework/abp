@@ -71,9 +71,11 @@
                 });
             };
 
-            $('#filter').keyup(function (e) {
+            $('#filter').on('input', (e) => {
                 filterDocumentItems(e.target.value);
+            })
 
+            $('#filter').keyup(function (e) {
                 if (e.key === 'Enter') {
                     gotoFilteredDocumentIfThereIsOnlyOne();
                 }
@@ -81,7 +83,7 @@
 
             $('#fullsearch').keyup(function (e) {
                 if (e.key === 'Enter') {
-                    window.open($(this).data('fullsearch-url') + this.value);
+                    window.open($(this).data('fullsearch-url') + "?keyword=" + encodeURIComponent(this.value));
                 }
             });
         };
@@ -105,41 +107,41 @@
             $('#TwitterShareLink').attr(
                 'href',
                 'https://twitter.com/intent/tweet?text=' +
-                    encodeURI(
-                        pageHeader +
-                            ' | ' +
-                            projectName +
-                            ' | ' +
-                            window.location.href
-                    )
+                encodeURI(
+                    pageHeader +
+                    ' | ' +
+                    projectName +
+                    ' | ' +
+                    window.location.href
+                )
             );
 
             $('#LinkedinShareLink').attr(
                 'href',
                 'https://www.linkedin.com/shareArticle?' +
-                    'url=' +
-                    encodeURI(window.location.href) +
-                    '&' +
-                    'mini=true&' +
-                    'summary=' +
-                    encodeURI(projectName) +
-                    '&' +
-                    'title=' +
-                    encodeURI(pageHeader) +
-                    '&' +
-                    'source=' +
-                    encodeURI($('#GoToMainWebSite').attr('href'))
+                'url=' +
+                encodeURI(window.location.href) +
+                '&' +
+                'mini=true&' +
+                'summary=' +
+                encodeURI(projectName) +
+                '&' +
+                'title=' +
+                encodeURI(pageHeader) +
+                '&' +
+                'source=' +
+                encodeURI($('#GoToMainWebSite').attr('href'))
             );
 
             $('#EmailShareLink').attr(
                 'href',
                 'mailto:?' +
-                    'body=' +
-                    encodeURI('I want you to look at ' + window.location.href) +
-                    '&' +
-                    'subject=' +
-                    encodeURI(pageHeader + ' | ' + projectName) +
-                    '&'
+                'body=' +
+                encodeURI('I want you to look at ' + window.location.href) +
+                '&' +
+                'subject=' +
+                encodeURI(pageHeader + ' | ' + projectName) +
+                '&'
             );
         };
 
@@ -228,126 +230,28 @@
                 );
             };
 
+            var initCookies = function () {
+                var cookie = abp.utils.getCookieValue('AbpDocsPreferences');
+
+                if (!cookie || cookie == null || cookie === null) {
+                    setCookies();
+                } else {
+                    var uri = window.location.href.toString();
+
+                    if (uri.indexOf('?') > 0) {
+                        setCookies();
+                    }
+                }
+            };
+
             $('.doc-section-combobox').change(function () {
                 setCookies();
                 clearQueryString();
                 location.reload();
             });
 
+            initCookies();
             setQueryString();
-        };
-
-        var initCrawlerLinks = function () {
-            var isCrawler = function () {
-                var crawlers = [
-                    'Google',
-                    'Googlebot',
-                    'YandexBot',
-                    'msnbot',
-                    'Rambler',
-                    'Yahoo',
-                    'AbachoBOT',
-                    'accoona',
-                    'AcoiRobot',
-                    'ASPSeek',
-                    'CrocCrawler',
-                    'Dumbot',
-                    'FAST-WebCrawler',
-                    'GeonaBot',
-                    'Gigabot',
-                    'Lycos',
-                    'MSRBOT',
-                    'Scooter',
-                    'AltaVista',
-                    'IDBot',
-                    'eStyle',
-                    'Scrubby',
-                    'Slurp',
-                    'DuckDuckBot',
-                    'Baiduspider',
-                    'VoilaBot',
-                    'ExaLead',
-                    'Search Dog',
-                    'MSN Bot',
-                    'BingBot',
-                ];
-
-                var agent = navigator.userAgent;
-
-                for (var i = 0; i < crawlers.length; i++) {
-                    if (agent.indexOf(crawlers[i]) >= 0) {
-                        return true;
-                    }
-                }
-
-                return false;
-            };
-
-            if (!isCrawler()) {
-                return;
-            }
-
-            var comboboxes = $('.doc-section-combobox');
-
-            if (comboboxes.length <= 0) {
-                return;
-            }
-
-            $('#crawler_link').show();
-
-            var html = '';
-
-            var currentUrl = window.location.href.toString();
-
-            if (currentUrl.indexOf('?') > 0) {
-                currentUrl = currentUrl.substring(0, currentUrl.indexOf('?'));
-            }
-
-            var getQueryStringsFromComboboxes = function (x) {
-                if (x >= comboboxes.length) {
-                    return [];
-                }
-
-                var key = $(comboboxes[x]).data('key');
-
-                var queryStrings = getQueryStringsFromComboboxes(x + 1);
-                var returnList = [];
-
-                $(comboboxes[x])
-                    .find('option')
-                    .each(function () {
-                        if (queryStrings.length <= 0) {
-                            returnList.push(key + '=' + $(this).val());
-                        } else {
-                            for (var k = 0; k < queryStrings.length; k++) {
-                                returnList.push(
-                                    key +
-                                        '=' +
-                                        $(this).val() +
-                                        '&' +
-                                        queryStrings[k]
-                                );
-                            }
-                        }
-                    });
-
-                return returnList;
-            };
-
-            var queryStrings = getQueryStringsFromComboboxes(0);
-
-            for (var i = 0; i < queryStrings.length; i++) {
-                html +=
-                    '<a href="' +
-                    currentUrl +
-                    '?' +
-                    queryStrings[i] +
-                    '">' +
-                    queryStrings[i] +
-                    '</a> ';
-            }
-
-            $('#crawler_link').html(html);
         };
 
         initNavigationFilter('sidebar-scroll');
@@ -357,7 +261,5 @@
         initSocialShareLinks();
 
         initSections();
-
-        initCrawlerLinks();
     });
 })(jQuery);

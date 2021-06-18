@@ -9,8 +9,10 @@ namespace Volo.Abp.MultiTenancy
 
         Task<TenantConfiguration> FindAsync(Guid id);
 
+        [Obsolete("Use FindAsync method.")]
         TenantConfiguration Find(string name);
 
+        [Obsolete("Use FindAsync method.")]
         TenantConfiguration Find(Guid id);
     }
 }

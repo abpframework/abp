@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
 
@@ -11,6 +13,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 {
     public class AbpTabsTagHelperService : AbpTagHelperService<AbpTabsTagHelper>
     {
+        protected IHtmlGenerator HtmlGenerator { get; }
+
+        public AbpTabsTagHelperService(IHtmlGenerator htmlGenerator)
+        {
+            HtmlGenerator = htmlGenerator;
+        }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             SetRandomNameIfNotProvided();
@@ -35,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             }
 
         }
-        
+
         protected virtual string CombineHeadersAndContents(TagHelperContext context, TagHelperOutput output, string headers, string contents)
         {
             var combined = new StringBuilder();
@@ -61,31 +70,34 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             var navClass = TagHelper.TabStyle == TabStyle.Tab ? " nav-tabs" : " nav-pills";
             var verticalClass = GetVerticalPillClassIfVertical();
 
-            var surroundedHeaders = "<ul class=\"nav" + verticalClass + navClass + "\" id=\"" + id + "\" role=\"tablist\">" + Environment.NewLine +
-                                   headers +
-                                   "</ul>";
+            var listElement = new TagBuilder("ul");
+            listElement.AddCssClass("nav" + verticalClass + navClass);
+            listElement.Attributes.Add("id", id);
+            listElement.Attributes.Add("role", "tablist");
+            listElement.InnerHtml.AppendHtml(headers);
 
-            return surroundedHeaders;
+            return listElement.ToHtmlString();
         }
 
         protected virtual string SurroundContents(TagHelperContext context, TagHelperOutput output, string contents)
         {
             var id = TagHelper.Name + "Content";
 
-            var surroundedContents = "<div class=\"tab-content\" id=\"" + id + "\">" + Environment.NewLine +
-                                   contents +
-                                   "   </div>";
+            var wrapper = new TagBuilder("div");
+            wrapper.AddCssClass("tab-content");
+            wrapper.Attributes.Add("id", id);
+            wrapper.InnerHtml.AppendHtml(contents);
 
-            return surroundedContents;
+            return wrapper.ToHtmlString();
         }
 
         protected virtual string PlaceInsideColumn(string contents, int columnSize)
         {
-            var surroundedContents = "<div class=\"col-md-" + columnSize + "\">" + Environment.NewLine +
-                                   contents +
-                                   "   </div>";
+            var wrapper = new TagBuilder("div");
+            wrapper.AddCssClass("col-md-" + columnSize);
+            wrapper.InnerHtml.AppendHtml(contents);
 
-            return surroundedContents;
+            return wrapper.ToHtmlString();
         }
 
         protected virtual void PlaceInsideRow(TagHelperOutput output)
@@ -213,7 +225,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
         protected virtual string SetTabItemNameIfNotProvided(string content, int index)
         {
-            return content.Replace(TabItemNamePlaceHolder, TagHelper.Name + "_" + index);
+            return content.Replace(TabItemNamePlaceHolder, HtmlGenerator.Encode(TagHelper.Name) + "_" + index);
         }
     }
 }

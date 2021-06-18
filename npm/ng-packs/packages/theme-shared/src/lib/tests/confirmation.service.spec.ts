@@ -1,4 +1,4 @@
-import { CoreModule } from '@abp/ng.core';
+import { CoreTestingModule } from '@abp/ng.core/testing';
 import { NgModule } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
@@ -13,7 +13,7 @@ import { ConfirmationService } from '../services';
   exports: [ConfirmationComponent],
   entryComponents: [ConfirmationComponent],
   declarations: [ConfirmationComponent],
-  imports: [CoreModule.forTest()],
+  imports: [CoreTestingModule.withConfig()],
 })
 export class MockModule {}
 
@@ -22,7 +22,7 @@ describe('ConfirmationService', () => {
   let service: ConfirmationService;
   const createService = createServiceFactory({
     service: ConfirmationService,
-    imports: [NgxsModule.forRoot(), CoreModule.forTest(), MockModule],
+    imports: [NgxsModule.forRoot(), CoreTestingModule.withConfig(), MockModule],
   });
 
   beforeEach(() => {
