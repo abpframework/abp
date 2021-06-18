@@ -1,7 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
@@ -51,13 +55,49 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual ITenantResolveResultAccessor TenantResolveResultAccessor { get; }
 
-        public ResetPasswordModel(ITenantResolveResultAccessor tenantResolveResultAccessor)
+        protected virtual AbpAspNetCoreMultiTenancyOptions AspNetCoreMultiTenancyOptions { get; }
+
+        protected virtual AbpMultiTenancyOptions MultiTenancyOptions { get; }
+
+        public ResetPasswordModel(
+            ITenantResolveResultAccessor tenantResolveResultAccessor,
+            IOptions<AbpAspNetCoreMultiTenancyOptions> aspNetCoreMultiTenancyOptions,
+            IOptions<AbpMultiTenancyOptions> multiTenancyOptions)
         {
             TenantResolveResultAccessor = tenantResolveResultAccessor;
+            AspNetCoreMultiTenancyOptions = aspNetCoreMultiTenancyOptions.Value;
+            MultiTenancyOptions = multiTenancyOptions.Value;
         }
 
         public virtual Task<IActionResult> OnGetAsync()
         {
+            if (MultiTenancyOptions.IsEnabled &&
+                TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true)
+            {
+                if (CurrentTenant.Id != TenantId)
+                {
+                    if (TenantId != null)
+                    {
+                        Response.Cookies.Append(
+                            AspNetCoreMultiTenancyOptions.TenantKey,
+                            TenantId.ToString(),
+                            new CookieOptions
+                            {
+                                Path = "/",
+                                HttpOnly = false,
+                                Expires = DateTimeOffset.Now.AddYears(10)
+                            }
+                        );
+                    }
+                    else
+                    {
+                        Response.Cookies.Delete(AspNetCoreMultiTenancyOptions.TenantKey);
+                    }
+
+                    return Task.FromResult<IActionResult>(Redirect(HttpContext.Request.GetEncodedUrl()));
+                }
+            }
+
             return Task.FromResult<IActionResult>(Page());
         }
 
