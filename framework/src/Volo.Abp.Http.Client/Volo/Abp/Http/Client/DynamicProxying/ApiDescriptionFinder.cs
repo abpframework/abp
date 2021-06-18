@@ -143,8 +143,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)
         {
-            // make it lower-coupled, see https://github.com/abpframework/abp/issues/9357
-            return actionParameter.Type == TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType);
+            return actionParameter.Type.ToUpper() == TypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameter.ParameterType).ToUpper();
         }
 
     }
