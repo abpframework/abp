@@ -28,29 +28,24 @@ export function pipeToLogin(
   );
 }
 
-export function pipeToTokenResponse(injector: Injector) {
+export function setTokenResponseToStorage(injector: Injector, tokenRes: TokenResponse) {
+  const { access_token, refresh_token, scope: grantedScopes, expires_in } = tokenRes;
   const storage = injector.get(OAuthStorage);
 
-  return pipe(
-    tap((res: TokenResponse) => {
-      const { access_token, refresh_token, scope: grantedScopes, expires_in } = res;
+  storage.setItem('access_token', access_token);
+  storage.setItem('refresh_token', refresh_token);
+  storage.setItem('access_token_stored_at', '' + Date.now());
 
-      storage.setItem('access_token', access_token);
-      storage.setItem('refresh_token', refresh_token);
-      storage.setItem('access_token_stored_at', '' + Date.now());
+  if (grantedScopes) {
+    storage.setItem('granted_scopes', JSON.stringify(grantedScopes.split(' ')));
+  }
 
-      if (grantedScopes) {
-        storage.setItem('granted_scopes', JSON.stringify(grantedScopes.split(' ')));
-      }
-
-      if (expires_in) {
-        const expiresInMilliSeconds = expires_in * 1000;
-        const now = new Date();
-        const expiresAt = now.getTime() + expiresInMilliSeconds;
-        storage.setItem('expires_at', '' + expiresAt);
-      }
-    }),
-  );
+  if (expires_in) {
+    const expiresInMilliSeconds = expires_in * 1000;
+    const now = new Date();
+    const expiresAt = now.getTime() + expiresInMilliSeconds;
+    storage.setItem('expires_at', '' + expiresAt);
+  }
 }
 
 export function setRememberMe(remember: boolean) {
