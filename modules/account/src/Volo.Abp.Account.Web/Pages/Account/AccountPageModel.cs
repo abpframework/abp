@@ -29,9 +29,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public ITenantResolveResultAccessor TenantResolveResultAccessor { get; set; }
 
-        public  IOptions<AbpAspNetCoreMultiTenancyOptions> AspNetCoreMultiTenancyOptions { get; set; }
+        public IOptions<AbpAspNetCoreMultiTenancyOptions> AspNetCoreMultiTenancyOptions { get; set; }
 
-        public  IOptions<AbpMultiTenancyOptions> MultiTenancyOptions { get; set; }
+        public IOptions<AbpMultiTenancyOptions> MultiTenancyOptions { get; set; }
 
         protected AccountPageModel()
         {
