@@ -8,7 +8,7 @@ This article shows how we can use this workflow library within our ABP-based app
 
 ## Source Code
 
-You can find the source of the example solution used in this article [here](https://github.com/abpframework/abp-samples/tree/elsa-demo).
+You can find the source of the example solution used in this article [here](https://github.com/abpframework/abp-samples/tree/master/ElsaDemo).
 
 ## Create the Project
 
@@ -24,13 +24,7 @@ abp new ElsaDemo
 
 * Our project boilerplate will be ready after the download is finished. Then, we can open the solution in the Visual Studio (or any other IDE).
 
-* First of all we need to create database migrations and apply these migrations to our database. So, open your terminal in the `ElsaDemo.EntityFrameworkCore.DbMigrations` project directory and run the following command to create the initial migration.
-
-```bash
-dotnet ef migrations add Initial
-```
-
-* After the initial migration created, we can run the `ElsaDemo.DbMigrator` project to apply migration into our database and seed initial data.
+* We can run the `ElsaDemo.DbMigrator` project to apply migration into our database and seed initial data.
 
 * After the database and initial data created, we can run the `ElsaDemo.Web` to see our UI working properly.
 
@@ -66,7 +60,7 @@ namespace ElsaDemo.Web.Workflows
 
 * In here we've basically implemented the `IWorkflow` interface which only has one method named **Build**. In this method, we can define our workflow's execution steps (activities).
 
-* As you can see in the example above, we've used an activity named **WriteLine**, which writes a line of text to the console. Elsa Core has many pre-defined activities like that. E.g **HttpEndpoint ** and **WriteHttpResponse** (we will see them both in the next chapter).
+* As you can see in the example above, we've used an activity named **WriteLine**, which writes a line of text to the console. Elsa Core has many pre-defined activities like that. E.g **HttpEndpoint ** and **WriteHttpResponse** (we will see them both in the next section).
 
 > "An activity is an atomic building block that represents a single executable step on the workflow." - [Elsa Core Activity Definition](https://elsa-workflows.github.io/elsa-core/docs/next/concepts/concepts-workflows#activity)
 
@@ -117,7 +111,7 @@ In this example, we will create a workflow that uses **Http Activities**. It wil
 
 ### Add Elsa.Activities.Http Package
 
-* To be able to use **HTTP Activities** we need to add `Elsa` (we've already added in the previous chapter) and `Elsa.Activities.Http` packages into our web application.
+* To be able to use **HTTP Activities** we need to add `Elsa` (we've already added in the previous section) and `Elsa.Activities.Http` packages into our web application.
 
 ```bash
 dotnet add package Elsa.Activities.Http
@@ -167,7 +161,13 @@ private void ConfigureElsa(ServiceConfigurationContext context)
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
 {
     // ...
+    app.UseAuditing();
+    app.UseAbpSerilogEnrichers();
     app.UseHttpActivities(); //add this line
+    app.UseConfiguredEndpoints();
+
+    var workflowRunner = context.ServiceProvider.GetRequiredService<IBuildsAndStartsWorkflow>();
+    workflowRunner.BuildAndStartWorkflowAsync<HelloWorldConsole>();
 }
 ```
 
@@ -191,7 +191,7 @@ dotnet add package Elsa.Persistence.EntityFramework.SqlServer
 dotnet add package Elsa.Server.Api
 ```
 
-> Also, we need to install the **Elsa** and **Elsa.Activities.Http** packages but we've already installed these packages in the previous chapters.
+> Also, we need to install the **Elsa** and **Elsa.Activities.Http** packages but we've already installed these packages in the previous sections.
 
 * We need to install one more package named `Elsa.Designer.Components.Web`. This package provides us the **Elsa Dashboard** component.
 
@@ -254,7 +254,7 @@ private void ConfigureElsa(ServiceConfigurationContext context, IConfiguration c
 
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
 {
-     app.UseCors();
+    app.UseCors();
     
     //...
 
@@ -268,6 +268,12 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
     workflowRunner.BuildAndStartWorkflowAsync<HelloWorldConsole>();
 }
 ```
+
+* In here we've specified the Elsa Server Api's assembly by using the `AddAssemblyOf<>` extension method to register the required services (controllers). These services required for the dashboard (if we create a workflow by using **Elsa Workflow Designer** it calls some services under the hook, therefore we need to be assured about these services get registered).
+
+* With [v4.4](https://github.com/abpframework/abp/pull/9299), we will no longer need to specify this line of code.
+
+> **Note:** `AddAssemblyOf<>` extension method can help you to register all your services by convention. You can check [here](https://docs.abp.io/en/abp/latest/Dependency-Injection#conventional-registration) for more information about conventional registration.
 
 * We don't need to register our workflows one by one anymore. Because now we use `.AddWorkflowsFrom<Startup>()`, and this registers workflows on our behalf. 
 
