@@ -79,3 +79,6 @@ While there is no Razor Pages & MongoDB combination, you can check both document
 * **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with the ABP Framework installed.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)
   * [Documentation](../Getting-Started-AspNetCore-Application.md)
+* **Using Elsa Workflow with ABP Framework**: Shows how we can use Elsa Core workflow library within our ABP-based application. 
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/ElsaDemo)
+  * [Article](https://community.abp.io/articles/using-elsa-workflow-with-the-abp-framework-773siqi9)
