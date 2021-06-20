@@ -60,7 +60,7 @@ namespace ElsaDemo.Web.Workflows
 
 * In here we've basically implemented the `IWorkflow` interface which only has one method named **Build**. In this method, we can define our workflow's execution steps (activities).
 
-* As you can see in the example above, we've used an activity named **WriteLine**, which writes a line of text to the console. Elsa Core has many pre-defined activities like that. E.g **HttpEndpoint ** and **WriteHttpResponse** (we will see them both in the next section).
+* As you can see in the example above, we've used an activity named **WriteLine**, which writes a line of text to the console. Elsa Core has many pre-defined activities like that. E.g **HttpEndpoint** and **WriteHttpResponse** (we will see them both in the next section).
 
 > "An activity is an atomic building block that represents a single executable step on the workflow." - [Elsa Core Activity Definition](https://elsa-workflows.github.io/elsa-core/docs/next/concepts/concepts-workflows#activity)
 
