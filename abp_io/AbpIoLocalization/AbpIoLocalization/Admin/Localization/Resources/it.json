@@ -108,12 +108,12 @@
     "LicenseStartDate": "Data di inizio della licenza",
     "LicenseEndDate": "Data di fine della licenza",
     "OrganizationNamePlaceholder": "Nome dell'organizzazione...",
-    "TotalQuestionCountPlaceholder": "Conteggio totale delle domande ...",
-    "RemainingQuestionCountPlaceholder": "Numero di domande rimanenti ...",
+    "TotalQuestionCountPlaceholder": "Conteggio totale delle domande...",
+    "RemainingQuestionCountPlaceholder": "Numero di domande rimanenti...",
     "LicenseTypePlaceholder": "Tipo di licenza...",
     "CreationDatePlaceholder": "Data di creazione...",
-    "LicenseStartDatePlaceholder": "Data di inizio della licenza ...",
-    "LicenseEndDatePlaceholder": "Data di fine della licenza ...",
+    "LicenseStartDatePlaceholder": "Data di inizio della licenza...",
+    "LicenseEndDatePlaceholder": "Data di fine della licenza...",
     "UsernameOrEmail": "Nome utente o email",
     "UsernameOrEmailPlaceholder": "Nome utente o email...",
     "Member": "Membro",
@@ -277,6 +277,6 @@
     "ThisExtensionIsNotAllowed": "Questa estensione non è consentita.",
     "TheFileIsTooLarge": "Il file è troppo grande!",
     "ArticleDeletionConfirmationMessage": "Sei sicuro di voler eliminare definitivamente questo articolo?",
-    "ChooseCoverImage": "Scegli un'immagine di copertina ..."
+    "ChooseCoverImage": "Scegli un'immagine di copertina..."
   }
 }
