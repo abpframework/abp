@@ -1,19 +1,19 @@
 {
   "culture": "it",
   "texts": {
-    "Settings": "impostazioni",
+    "Settings": "Impostazioni",
     "SuccessfullySaved": "Salvato con successo",
     "Permission:SettingManagement": "Gestione delle impostazioni",
     "Permission:Emailing": "Invio di e-mail",
     "Menu:Emailing": "Invio di e-mail",
-    "SmtpHost": "Ospite",
+    "SmtpHost": "Host",
     "SmtpPort": "Porta",
     "SmtpUserName": "Nome utente",
     "SmtpPassword": "Parola d'ordine",
     "SmtpDomain": "Dominio",
     "SmtpEnableSsl": "Abilita SSL",
     "SmtpUseDefaultCredentials": "Usa credenziali predefinite",
-    "DefaultFromAddress": "Indirizzo predefinito dall'indirizzo",
-    "DefaultFromDisplayName": "Predefinito dal nome visualizzato"
+    "DefaultFromAddress": "Indirizzo mittente predefinito",
+    "DefaultFromDisplayName": "Nome mittente visualizzato predefinito"
   }
 }

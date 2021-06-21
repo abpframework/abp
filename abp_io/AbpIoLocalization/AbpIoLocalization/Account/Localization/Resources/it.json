@@ -2,13 +2,13 @@
   "culture": "it",
   "texts": {
     "Account": "Account ABP - Accesso e registrazione | ABP.IO",
-    "Welcome": "benvenuto",
+    "Welcome": "Benvenuto",
     "UseOneOfTheFollowingLinksToContinue": "Usa uno dei seguenti link per continuare",
     "FrameworkHomePage": "Home page del framework",
     "FrameworkDocumentation": "Documentazione del framework",
     "OfficialBlog": "Blog ufficiale",
-    "CommercialHomePage": "Home page commerciale",
-    "CommercialSupportWebSite": "Sito web di supporto commerciale",
+    "CommercialHomePage": "Home page di Commercial",
+    "CommercialSupportWebSite": "Sito web supporto di Commercial",
     "CommunityWebSite": "Sito web della comunità ABP"
   }
 }
