@@ -6,12 +6,16 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.JSInterop;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
 {
     public partial class LoginDisplay : IDisposable
     {
+        [Inject]
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    
         [Inject]
         protected IMenuManager MenuManager { get; set; }
 
@@ -29,8 +33,8 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
 
             Navigation.LocationChanged += OnLocationChanged;
 
-            LazyGetService(ref AuthenticationStateProvider);
-            LazyGetService(ref SignOutManager);
+            LazyServiceProvider.LazyGetService(AuthenticationStateProvider);
+            LazyServiceProvider.LazyGetService(SignOutManager);
 
             if (AuthenticationStateProvider != null)
             {
