@@ -1,10 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.Account.Web.Pages.Account
@@ -49,15 +49,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [DisableAuditing]
         public string ConfirmPassword { get; set; }
 
-        protected virtual ITenantResolveResultAccessor TenantResolveResultAccessor { get; }
-
-        public ResetPasswordModel(ITenantResolveResultAccessor tenantResolveResultAccessor)
-        {
-            TenantResolveResultAccessor = tenantResolveResultAccessor;
-        }
-
         public virtual Task<IActionResult> OnGetAsync()
         {
+            if (SwitchTenant(TenantId))
+            {
+                return Task.FromResult<IActionResult>(Redirect(HttpContext.Request.GetEncodedUrl()));
+            }
+
             return Task.FromResult<IActionResult>(Page());
         }
 
